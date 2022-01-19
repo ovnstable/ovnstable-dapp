@@ -15,7 +15,6 @@ import Mark2Market from "../../contracts/polygon/Mark2Market.json";
 import TimelockController from "../../contracts/polygon/TimelockController.json";
 import UsdPlusToken from "../../contracts/polygon/UsdPlusToken.json";
 
-
 import ExchangeDev from "../../contracts/polygon_dev/Exchange.json";
 import OvnTokenDev from "../../contracts/polygon_dev/OvnToken.json";
 import GovernorDev from "../../contracts/polygon_dev/OvnGovernor.json";
@@ -24,6 +23,13 @@ import Mark2MarketDev from "../../contracts/polygon_dev/Mark2Market.json";
 import TimelockControllerDev from "../../contracts/polygon_dev/TimelockController.json";
 import UsdPlusTokenDev from "../../contracts/polygon_dev/UsdPlusToken.json";
 
+import ExchangeLocal from "../../contracts/local/Exchange.json";
+import OvnTokenLocal from "../../contracts/local/OvnToken.json";
+import GovernorLocal from "../../contracts/local/OvnGovernor.json";
+import PortfolioLocal from "../../contracts/local/Portfolio.json";
+import Mark2MarketLocal from "../../contracts/local/Mark2Market.json";
+import TimelockControllerLocal from "../../contracts/local/TimelockController.json";
+import UsdPlusTokenLocal from "../../contracts/local/UsdPlusToken.json";
 
 
 const state = {
@@ -177,6 +183,15 @@ const actions = {
             contracts.portfolio = _load(Portfolio, web3);
             contracts.timelockController= _load(TimelockController, web3);
             contracts.usdPlus = _load(UsdPlusToken, web3);
+        }else if (process.env.VUE_APP_POLYGON === "local"){
+
+            contracts.exchange = _load(ExchangeLocal, web3);
+            contracts.govToken = _load(OvnTokenLocal, web3);
+            contracts.governor = _load(GovernorLocal, web3);
+            contracts.mark2market = _load(Mark2MarketLocal, web3);
+            contracts.portfolio = _load(PortfolioLocal, web3);
+            contracts.timelockController= _load(TimelockControllerLocal, web3);
+            contracts.usdPlus = _load(UsdPlusTokenLocal, web3);
         }
 
         commit('setContracts', contracts)

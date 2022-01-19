@@ -27,7 +27,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install and build
-        run: npm run build-dev
+        run: npm install && npm run build-dev
 
       - name: Build/Deploy Docker Image
         run: |

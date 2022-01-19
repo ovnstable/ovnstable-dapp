@@ -1,18 +1,25 @@
 import detectEthereumProvider from "@metamask/detect-provider";
 import Web3 from "web3";
 import abiDecoder from "../../plugins/abiDecoder";
-import Exchange from "../../contracts/Exchange.json";
 import ERC20 from "../../contracts/ERC20.json";
-import OvnToken from "../../contracts/OvnToken.json";
-import Governor from "../../contracts/OvnGovernor.json";
-import Portfolio from "../../contracts/Portfolio.json";
-import Mark2Market from "../../contracts/Mark2Market.json";
-import TimelockController from "../../contracts/TimelockController.json";
-import UsdPlusToken from "../../contracts/UsdPlusToken.json";
-import contract from "@truffle/contract";
 
+import contract from "@truffle/contract";
 import OvnImage from '../../assets/ovn.json';
 import UsdPlusImage from '../../assets/usdPlus.json';
+
+
+const polygon = process.env.VUE_APP_POLYGON;
+
+console.log('Polygon: ' + polygon);
+
+const Exchange = require(`../../contracts/${polygon}/Exchange.json`)
+const OvnToken = require(`../../contracts/${polygon}/OvnToken.json`)
+const OvnGovernor = require(`../../contracts/${polygon}/OvnGovernor.json`)
+const Portfolio = require(`../../contracts/${polygon}/Portfolio.json`)
+const Mark2Market = require(`../../contracts/${polygon}/Mark2Market.json`)
+const TimelockController = require(`../../contracts/${polygon}/TimelockController.json`)
+const UsdPlusToken = require(`../../contracts/${polygon}/UsdPlusToken.json`)
+
 
 const state = {
     contracts: null,
@@ -117,7 +124,7 @@ const actions = {
 
         if (networkId === 137 || networkId === 31337) {
             dispatch('initPolygonData');
-        }else {
+        } else {
             commit('setSwitchToPolygon', true)
         }
 
@@ -142,14 +149,15 @@ const actions = {
 
         let contracts = {};
 
-        contracts.exchange = _load(Exchange, web3);
         contracts.usdc = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
         contracts.dai = _load(ERC20, web3, '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063');
+
+        contracts.exchange = _load(Exchange, web3);
         contracts.govToken = _load(OvnToken, web3);
-        contracts.governor = _load(Governor, web3);
+        contracts.governor = _load(OvnGovernor, web3);
         contracts.mark2market = _load(Mark2Market, web3);
         contracts.portfolio = _load(Portfolio, web3);
-        contracts.timelockController= _load(TimelockController, web3);
+        contracts.timelockController = _load(TimelockController, web3);
         contracts.usdPlus = _load(UsdPlusToken, web3);
 
         commit('setContracts', contracts)
@@ -203,7 +211,7 @@ const actions = {
         if (newNetworkId === 137) {
             commit('setNetworkId', newNetworkId)
             dispatch('initPolygonData')
-        }else {
+        } else {
             commit('setSwitchToPolygon', true)
         }
 
@@ -282,7 +290,7 @@ const mutations = {
     },
 
     setSwitchToPolygon(state, value) {
-        state.switchToPolygon= value;
+        state.switchToPolygon = value;
     },
 
     setLoadingWeb3(state, value) {
@@ -309,7 +317,7 @@ function _load(file, web3, address) {
     const {abi} = contractConfig
 
     if (!address) {
-       address = file.address;
+        address = file.address;
     }
 
     state.contractNames[address] = contractConfig.contractName;

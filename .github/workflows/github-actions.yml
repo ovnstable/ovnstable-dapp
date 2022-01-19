@@ -26,8 +26,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install and build
-        run: npm install && npm run build-dev
+      - name: Install npm
+        run: npm install
+
+      - name: Build npm
+        run: npm run build-dev
 
       - name: Build/Deploy Docker Image
         run: |

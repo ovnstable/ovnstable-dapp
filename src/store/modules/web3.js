@@ -1,18 +1,30 @@
 import detectEthereumProvider from "@metamask/detect-provider";
 import Web3 from "web3";
 import abiDecoder from "../../plugins/abiDecoder";
-import Exchange from "../../contracts/Exchange.json";
 import ERC20 from "../../contracts/ERC20.json";
-import OvnToken from "../../contracts/OvnToken.json";
-import Governor from "../../contracts/OvnGovernor.json";
-import Portfolio from "../../contracts/Portfolio.json";
-import Mark2Market from "../../contracts/Mark2Market.json";
-import TimelockController from "../../contracts/TimelockController.json";
-import UsdPlusToken from "../../contracts/UsdPlusToken.json";
-import contract from "@truffle/contract";
 
+import contract from "@truffle/contract";
 import OvnImage from '../../assets/ovn.json';
 import UsdPlusImage from '../../assets/usdPlus.json';
+
+import Exchange from "../../contracts/polygon/Exchange.json";
+import OvnToken from "../../contracts/polygon/OvnToken.json";
+import Governor from "../../contracts/polygon/OvnGovernor.json";
+import Portfolio from "../../contracts/polygon/Portfolio.json";
+import Mark2Market from "../../contracts/polygon/Mark2Market.json";
+import TimelockController from "../../contracts/polygon/TimelockController.json";
+import UsdPlusToken from "../../contracts/polygon/UsdPlusToken.json";
+
+
+import ExchangeDev from "../../contracts/polygon_dev/Exchange.json";
+import OvnTokenDev from "../../contracts/polygon_dev/OvnToken.json";
+import GovernorDev from "../../contracts/polygon_dev/OvnGovernor.json";
+import PortfolioDev from "../../contracts/polygon_dev/Portfolio.json";
+import Mark2MarketDev from "../../contracts/polygon_dev/Mark2Market.json";
+import TimelockControllerDev from "../../contracts/polygon_dev/TimelockController.json";
+import UsdPlusTokenDev from "../../contracts/polygon_dev/UsdPlusToken.json";
+
+
 
 const state = {
     contracts: null,
@@ -142,15 +154,30 @@ const actions = {
 
         let contracts = {};
 
-        contracts.exchange = _load(Exchange, web3);
         contracts.usdc = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
         contracts.dai = _load(ERC20, web3, '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063');
-        contracts.govToken = _load(OvnToken, web3);
-        contracts.governor = _load(Governor, web3);
-        contracts.mark2market = _load(Mark2Market, web3);
-        contracts.portfolio = _load(Portfolio, web3);
-        contracts.timelockController= _load(TimelockController, web3);
-        contracts.usdPlus = _load(UsdPlusToken, web3);
+
+
+        if (process.env.VUE_APP_POLYGON === "polygon_dev"){
+
+            contracts.exchange = _load(ExchangeDev, web3);
+            contracts.govToken = _load(OvnTokenDev, web3);
+            contracts.governor = _load(GovernorDev, web3);
+            contracts.mark2market = _load(Mark2MarketDev, web3);
+            contracts.portfolio = _load(PortfolioDev, web3);
+            contracts.timelockController= _load(TimelockControllerDev, web3);
+            contracts.usdPlus = _load(UsdPlusTokenDev, web3);
+
+        }else if (process.env.VUE_APP_POLYGON === "polygon"){
+
+            contracts.exchange = _load(Exchange, web3);
+            contracts.govToken = _load(OvnToken, web3);
+            contracts.governor = _load(Governor, web3);
+            contracts.mark2market = _load(Mark2Market, web3);
+            contracts.portfolio = _load(Portfolio, web3);
+            contracts.timelockController= _load(TimelockController, web3);
+            contracts.usdPlus = _load(UsdPlusToken, web3);
+        }
 
         commit('setContracts', contracts)
     },

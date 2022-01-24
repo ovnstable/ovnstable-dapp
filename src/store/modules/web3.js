@@ -1,5 +1,5 @@
-import detectEthereumProvider from "@metamask/detect-provider";
 import Web3 from "web3";
+import Onboard from 'bnc-onboard'
 import abiDecoder from "../../plugins/abiDecoder";
 import ERC20 from "../../contracts/ERC20.json";
 
@@ -29,13 +29,22 @@ const state = {
     networkId: null,
     switchToPolygon: false,
     loadingWeb3: true,
+    provider: null,
+    onboard: null,
 };
 
 const getters = {
 
+    provider(state) {
+        return state.provider;
+    },
 
     web3(state) {
         return state.web3;
+    },
+
+    onboard(state) {
+        return state.onboard;
     },
 
     account(state) {
@@ -66,18 +75,36 @@ const getters = {
 
 const actions = {
 
+    /* TODO: add logout with walletReset */
 
     async connectWallet({commit, dispatch, getters}) {
 
-        const provider = await detectEthereumProvider();
-        await provider.enable();
+        let onboard = Onboard({
+            dappId: 'c81e3c96-54f6-4d82-b911-87dea6376ba4',
+            networkId: 137, /* TODO: check dev network */
+            darkMode: true,
+            subscriptions: {
+                wallet: async wallet => {
+                    commit('setProvider', wallet.provider);
+
+                    await dispatch('initWeb3').then(value => {
+                        console.log(wallet.name + ' is now connected!');
+                    });
+                }
+            }
+        });
+
+        commit('setOnboard', onboard);
+
+        await getters.onboard.walletSelect();
+        await getters.onboard.walletCheck();
     },
 
 
     async initWeb3({commit, dispatch, getters, rootState}) {
         commit('setLoadingWeb3', true);
 
-        let provider = await detectEthereumProvider();
+        let provider = getters.provider;
 
         if (!provider) {
             provider = await new Web3.providers.HttpProvider("https://polygon-mainnet.infura.io/v3/66f5eb50848f458cb0f0506cc1036fea");
@@ -272,6 +299,14 @@ const actions = {
 };
 
 const mutations = {
+
+    setProvider(state, provider) {
+        state.provider = provider;
+    },
+
+    setOnboard(state, onboard) {
+        state.onboard = onboard;
+    },
 
     setWeb3(state, web3) {
         state.web3 = web3;

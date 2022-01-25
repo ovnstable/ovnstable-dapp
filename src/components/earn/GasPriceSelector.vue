@@ -1,8 +1,6 @@
 <template>
     <v-expansion-panels class="ma-0 pa-0 box">
-      <v-expansion-panel
-
-      >
+      <v-expansion-panel>
         <v-expansion-panel-header class="mt-1">
           <v-row>
             <v-col lg="5" >

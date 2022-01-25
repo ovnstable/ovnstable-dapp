@@ -4,7 +4,6 @@
 token=$1
 url=$2
 stand=$3
-tag=1
 
 
 
@@ -14,12 +13,14 @@ then
   deployments="polygon"
   build="build-production"
   dockerComposePath="/root/ovn/docker-compose.yaml"
+  tag="prod"
 elif [ "$stand" = "dev" ]
 then
-  nameDapp="dapp-dev"
+  nameDapp="dapp"
   deployments="polygon_dev"
   build="build-dev"
   dockerComposePath="/root/ovn-dev/docker-compose.yaml"
+  tag="dev"
 else
   exit
 fi
@@ -27,7 +28,7 @@ fi
 echo "$nameDapp"
 echo "$deployments"
 
-
+rm -rf dist/
 npm run $build
 
 docker build . -t cr.yandex/crpg11k469bhc8lch9gm/overnight/$nameDapp:$tag

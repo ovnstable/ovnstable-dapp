@@ -181,6 +181,7 @@ const actions = {
             walletSelect: {
                 wallets: wallets,
             },
+
             subscriptions: {
                 wallet: async wallet => {
                     commit('setProvider', wallet.provider);

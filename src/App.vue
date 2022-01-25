@@ -58,4 +58,8 @@ html {
   padding-right: 20px;
 }
 
+.bn-onboard-modal {
+    z-index: 999 !important;
+}
+
 </style>

@@ -20,6 +20,101 @@ const Mark2Market = require(`../../contracts/${polygon}/Mark2Market.json`)
 const TimelockController = require(`../../contracts/${polygon}/TimelockController.json`)
 const UsdPlusToken = require(`../../contracts/${polygon}/UsdPlusToken.json`)
 
+const wallets = [
+    { walletName: "metamask", preferred: true },
+    {
+        walletName: 'ledger',
+        rpcUrl: process.env.VUE_APP_RPC_URL,
+        preferred: true
+    },
+    {
+        walletName: "walletLink",
+        rpcUrl: process.env.VUE_APP_RPC_URL,
+        appName: process.env.VUE_APP_TITLE,
+        preferred: true
+    },
+    {
+        walletName: "torus",
+        preferred: true
+    },
+    { walletName: "authereum"},
+    {
+        walletName: "imToken",
+        rpcUrl: process.env.VUE_APP_RPC_URL
+    },
+    { walletName: "meetone" },
+    {
+        walletName: "mykey",
+        rpcUrl: process.env.VUE_APP_RPC_URL
+    },
+    {
+        walletName: "huobiwallet",
+        rpcUrl: process.env.VUE_APP_RPC_URL
+    },
+    {
+        walletName: "wallet.io",
+        rpcUrl: process.env.VUE_APP_RPC_URL
+    },
+    {
+        walletName: "trust",
+        rpcUrl: process.env.VUE_APP_RPC_URL
+    },
+    {
+        walletName: 'lattice',
+        rpcUrl: process.env.VUE_APP_RPC_URL,
+        appName: process.env.VUE_APP_TITLE
+    },
+    {
+        walletName: 'keepkey',
+        rpcUrl: process.env.VUE_APP_RPC_URL
+    },
+    {
+        walletName: 'cobovault',
+        rpcUrl: process.env.VUE_APP_RPC_URL,
+        appName: process.env.VUE_APP_TITLE,
+    },
+    {
+        walletName: 'keystone',
+        rpcUrl: process.env.VUE_APP_RPC_URL,
+        appName: process.env.VUE_APP_TITLE,
+    },
+    { walletName: "coinbase"},
+    { walletName: "hyperpay" },
+    { walletName: "atoken" },
+    { walletName: "status" },
+    { walletName: "frame" },
+    { walletName: "ownbit" },
+    { walletName: "alphawallet" },
+    { walletName: "gnosis" },
+    { walletName: "xdefi" },
+    { walletName: "bitpie" },
+    { walletName: "binance" },
+    { walletName: "liquality" },
+    { walletName: "tally" },
+    { walletName: "blankwallet" },
+    { walletName: "mathwallet" },
+    { walletName: "ronin" },
+    /*{ walletName: "opera" },
+    { walletName: "operaTouch" },*/
+    /*{
+        walletName: 'trezor',
+        appUrl: APP_URL,
+        email: CONTACT_EMAIL,
+        rpcUrl: process.env.VUE_APP_RPC_URL
+    },*/
+    /*{
+        walletName: "fortmatic",
+        apiKey: FORTMATIC_KEY,
+        preferred: true
+    },*/
+    /*{
+        walletName: "portis",
+        apiKey: PORTIS_KEY,
+        preferred: true,
+        label: 'Login with Email'
+    },*/
+];
+
 
 const state = {
     contracts: null,
@@ -83,6 +178,9 @@ const actions = {
             dappId: 'c81e3c96-54f6-4d82-b911-87dea6376ba4',
             networkId: parseInt(process.env.VUE_APP_NETWORK_ID),
             darkMode: true,
+            walletSelect: {
+                wallets: wallets,
+            },
             subscriptions: {
                 wallet: async wallet => {
                     commit('setProvider', wallet.provider);

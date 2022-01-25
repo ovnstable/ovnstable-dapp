@@ -459,4 +459,7 @@ export default {
   font-size: 18px;
 }
 
+.v-skeleton-loader {
+  z-index: 0 !important;
+}
 </style>

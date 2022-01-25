@@ -81,7 +81,7 @@ const actions = {
 
         let onboard = Onboard({
             dappId: 'c81e3c96-54f6-4d82-b911-87dea6376ba4',
-            networkId: 137, /* TODO: check dev network */
+            networkId: parseInt(process.env.VUE_APP_NETWORK_ID),
             darkMode: true,
             subscriptions: {
                 wallet: async wallet => {

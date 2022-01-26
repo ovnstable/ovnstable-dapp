@@ -18,6 +18,7 @@
     "axios": "^0.21.4",
     "bluebird": "^3.7.2",
     "bnc-onboard": "^1.37.1",
+    "discord-oauth2": "^2.9.0",
     "ethers": "^5.5.2",
     "moment": "^2.29.1",
     "prettier": "^1.18.2",

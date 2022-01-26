@@ -21,7 +21,7 @@ const TimelockController = require(`../../contracts/${polygon}/TimelockControlle
 const UsdPlusToken = require(`../../contracts/${polygon}/UsdPlusToken.json`)
 
 const wallets = [
-    { walletName: "metamask", preferred: true },
+    {walletName: "metamask", preferred: true},
     {
         walletName: 'ledger',
         rpcUrl: process.env.VUE_APP_RPC_URL,
@@ -37,12 +37,12 @@ const wallets = [
         walletName: "torus",
         preferred: true
     },
-    { walletName: "authereum"},
+    {walletName: "authereum"},
     {
         walletName: "imToken",
         rpcUrl: process.env.VUE_APP_RPC_URL
     },
-    { walletName: "meetone" },
+    {walletName: "meetone"},
     {
         walletName: "mykey",
         rpcUrl: process.env.VUE_APP_RPC_URL
@@ -78,22 +78,22 @@ const wallets = [
         rpcUrl: process.env.VUE_APP_RPC_URL,
         appName: process.env.VUE_APP_TITLE,
     },
-    { walletName: "coinbase"},
-    { walletName: "hyperpay" },
-    { walletName: "atoken" },
-    { walletName: "status" },
-    { walletName: "frame" },
-    { walletName: "ownbit" },
-    { walletName: "alphawallet" },
-    { walletName: "gnosis" },
-    { walletName: "xdefi" },
-    { walletName: "bitpie" },
-    { walletName: "binance" },
-    { walletName: "liquality" },
-    { walletName: "tally" },
-    { walletName: "blankwallet" },
-    { walletName: "mathwallet" },
-    { walletName: "ronin" },
+    {walletName: "coinbase"},
+    {walletName: "hyperpay"},
+    {walletName: "atoken"},
+    {walletName: "status"},
+    {walletName: "frame"},
+    {walletName: "ownbit"},
+    {walletName: "alphawallet"},
+    {walletName: "gnosis"},
+    {walletName: "xdefi"},
+    {walletName: "bitpie"},
+    {walletName: "binance"},
+    {walletName: "liquality"},
+    {walletName: "tally"},
+    {walletName: "blankwallet"},
+    {walletName: "mathwallet"},
+    {walletName: "ronin"},
     /*{ walletName: "opera" },
     { walletName: "operaTouch" },*/
     /*{
@@ -172,7 +172,7 @@ const actions = {
 
     /* TODO: add logout with walletReset */
 
-    async connectWallet({commit, dispatch, getters}) {
+    async initOnboard({commit, dispatch, getters}) {
 
         let onboard = Onboard({
             dappId: 'c81e3c96-54f6-4d82-b911-87dea6376ba4',
@@ -188,20 +188,33 @@ const actions = {
 
                     await dispatch('initWeb3').then(value => {
                         console.log(wallet.name + ' is now connected!');
+                        localStorage.setItem('walletName', wallet.name)
                     });
                 }
             }
         });
 
         commit('setOnboard', onboard);
+    },
 
-        await getters.onboard.walletSelect();
+    async connectWallet({commit, dispatch, getters}) {
+
+        if (!getters.onboard) {
+            await dispatch('initOnboard');
+        }
+
+        let walletName = localStorage.getItem('walletName');
+
+        await getters.onboard.walletSelect(walletName ? walletName : '');
         await getters.onboard.walletCheck();
     },
 
-
     async initWeb3({commit, dispatch, getters, rootState}) {
         commit('setLoadingWeb3', true);
+
+        if (localStorage.getItem('walletName')) {
+            await dispatch('connectWallet');
+        }
 
         let provider = getters.provider;
 

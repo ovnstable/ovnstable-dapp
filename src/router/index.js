@@ -106,6 +106,19 @@ const routes = [
         ],
     },
 
+    {
+        path: '/discord',
+        name: 'Discord Connections',
+        component: () => import('../Discord.vue'),
+        children: [
+            {
+                path: '/discord/connect_wallet',
+                name: 'Connect wallet',
+                component: () => import('../views/discord/ConnectWallet.vue')
+            }
+        ]
+    }
+
 
 ]
 

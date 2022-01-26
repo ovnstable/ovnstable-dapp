@@ -12,7 +12,7 @@
           <v-card-title>
             <v-row justify="center" class="pt-7">
               <div style="width: 60px; height: 60px">
-                <v-img :src="require('../../assets/discord/connect.png')"/>
+                <v-img :src="centerIcon"/>
               </div>
             </v-row>
           </v-card-title>
@@ -23,7 +23,7 @@
           </v-card-subtitle>
           <v-card-text>
             <v-row justify="center" class="pt-10 pb-16">
-              <v-btn min-height="50px" class="connect_button" rounded>Connect your wallet</v-btn>
+              <v-btn @click="connectBtnClick" min-height="50px" class="connect_button" rounded>Connect your wallet</v-btn>
             </v-row>
           </v-card-text>
         </v-card>
@@ -33,8 +33,34 @@
 </template>
 
 <script>
+const connectIcon = require('../../assets/discord/connect.png');
+const loadingIcon = require('../../assets/discord/loading.png');
+const successIcon = require('../../assets/discord/success.png');
+const failIcon = require('../../assets/discord/fail.png');
+
 export default {
-  name: "ConnectWallet"
+  name: "ConnectWallet",
+  data() {
+    return {
+      loading: false,
+      fail: false,
+      success: false
+    }
+  },
+  computed: {
+    centerIcon() {
+      if (!this.loading && !this.fail) return connectIcon;
+      if(this.loading && !this.fail) return loadingIcon;
+      if(this.fail) return failIcon;
+      if(this.success) return successIcon;
+      return loadingIcon;
+    }
+  },
+  methods: {
+    async connectBtnClick() {
+      this.loading = true;
+    }
+  }
 }
 </script>
 

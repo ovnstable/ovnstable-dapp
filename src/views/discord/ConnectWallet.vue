@@ -52,7 +52,7 @@ import {wallets} from '../../store/modules/web3'
 
 import Onboard from 'bnc-onboard';
 import Web3 from "web3";
-import DiscordOauth2 from "discord-oauth2";
+import {mapGetters} from 'vuex'
 
 
 export default {
@@ -100,7 +100,8 @@ export default {
       if (!this.loading && !this.fail) return connectIcon;
       if(this.loading && !this.fail) return loadingIcon;
       return loadingIcon;
-    }
+    },
+    // ...mapGetters('web3', ['wallets'])
   },
   methods: {
     async connectBtnClick() {

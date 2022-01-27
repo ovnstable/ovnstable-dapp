@@ -20,11 +20,13 @@ const Mark2Market = require(`../../contracts/${polygon}/Mark2Market.json`)
 const TimelockController = require(`../../contracts/${polygon}/TimelockController.json`)
 const UsdPlusToken = require(`../../contracts/${polygon}/UsdPlusToken.json`)
 
-const wallets = [
-    {walletName: "metamask", preferred: true},
+export const wallets = [
     {
-        walletName: 'ledger',
-        rpcUrl: process.env.VUE_APP_RPC_URL,
+        walletName: "metamask",
+        preferred: true
+    },
+    {
+        walletName: "binance",
         preferred: true
     },
     {
@@ -34,7 +36,8 @@ const wallets = [
         preferred: true
     },
     {
-        walletName: "torus",
+        walletName: 'ledger',
+        rpcUrl: process.env.VUE_APP_RPC_URL,
         preferred: true
     },
     {walletName: "authereum"},
@@ -88,7 +91,7 @@ const wallets = [
     {walletName: "gnosis"},
     {walletName: "xdefi"},
     {walletName: "bitpie"},
-    {walletName: "binance"},
+    {walletName: "torus"},
     {walletName: "liquality"},
     {walletName: "tally"},
     {walletName: "blankwallet"},

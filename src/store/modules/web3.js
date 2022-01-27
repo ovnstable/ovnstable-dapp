@@ -20,11 +20,13 @@ const Mark2Market = require(`../../contracts/${polygon}/Mark2Market.json`)
 const TimelockController = require(`../../contracts/${polygon}/TimelockController.json`)
 const UsdPlusToken = require(`../../contracts/${polygon}/UsdPlusToken.json`)
 
-const wallets = [
-    { walletName: "metamask", preferred: true },
+export const wallets = [
     {
-        walletName: 'ledger',
-        rpcUrl: process.env.VUE_APP_RPC_URL,
+        walletName: "metamask",
+        preferred: true
+    },
+    {
+        walletName: "binance",
         preferred: true
     },
     {
@@ -34,15 +36,16 @@ const wallets = [
         preferred: true
     },
     {
-        walletName: "torus",
+        walletName: 'ledger',
+        rpcUrl: process.env.VUE_APP_RPC_URL,
         preferred: true
     },
-    { walletName: "authereum"},
+    {walletName: "authereum"},
     {
         walletName: "imToken",
         rpcUrl: process.env.VUE_APP_RPC_URL
     },
-    { walletName: "meetone" },
+    {walletName: "meetone"},
     {
         walletName: "mykey",
         rpcUrl: process.env.VUE_APP_RPC_URL
@@ -78,22 +81,22 @@ const wallets = [
         rpcUrl: process.env.VUE_APP_RPC_URL,
         appName: process.env.VUE_APP_TITLE,
     },
-    { walletName: "coinbase"},
-    { walletName: "hyperpay" },
-    { walletName: "atoken" },
-    { walletName: "status" },
-    { walletName: "frame" },
-    { walletName: "ownbit" },
-    { walletName: "alphawallet" },
-    { walletName: "gnosis" },
-    { walletName: "xdefi" },
-    { walletName: "bitpie" },
-    { walletName: "binance" },
-    { walletName: "liquality" },
-    { walletName: "tally" },
-    { walletName: "blankwallet" },
-    { walletName: "mathwallet" },
-    { walletName: "ronin" },
+    {walletName: "coinbase"},
+    {walletName: "hyperpay"},
+    {walletName: "atoken"},
+    {walletName: "status"},
+    {walletName: "frame"},
+    {walletName: "ownbit"},
+    {walletName: "alphawallet"},
+    {walletName: "gnosis"},
+    {walletName: "xdefi"},
+    {walletName: "bitpie"},
+    {walletName: "torus"},
+    {walletName: "liquality"},
+    {walletName: "tally"},
+    {walletName: "blankwallet"},
+    {walletName: "mathwallet"},
+    {walletName: "ronin"},
     /*{ walletName: "opera" },
     { walletName: "operaTouch" },*/
     /*{
@@ -126,6 +129,7 @@ const state = {
     loadingWeb3: true,
     provider: null,
     onboard: null,
+    walletConnected: false,
 };
 
 const getters = {
@@ -140,6 +144,10 @@ const getters = {
 
     onboard(state) {
         return state.onboard;
+    },
+
+    walletConnected(state) {
+        return state.walletConnected;
     },
 
     account(state) {
@@ -170,9 +178,7 @@ const getters = {
 
 const actions = {
 
-    /* TODO: add logout with walletReset */
-
-    async connectWallet({commit, dispatch, getters}) {
+    async initOnboard({commit, dispatch, getters}) {
 
         let onboard = Onboard({
             dappId: 'c81e3c96-54f6-4d82-b911-87dea6376ba4',
@@ -187,6 +193,8 @@ const actions = {
                     commit('setProvider', wallet.provider);
 
                     await dispatch('initWeb3').then(value => {
+                        commit('setWalletConnected', true);
+                        localStorage.setItem('walletName', wallet.name);
                         console.log(wallet.name + ' is now connected!');
                     });
                 }
@@ -194,14 +202,47 @@ const actions = {
         });
 
         commit('setOnboard', onboard);
+    },
 
-        await getters.onboard.walletSelect();
+    async connectWallet({commit, dispatch, getters}) {
+
+        if (!getters.onboard) {
+            await dispatch('initOnboard');
+        }
+
+        let walletName = localStorage.getItem('walletName');
+
+        await getters.onboard.walletSelect(walletName ? walletName : '');
         await getters.onboard.walletCheck();
     },
 
+    async disconnectWallet({commit, dispatch, getters}) {
+
+        if (getters.onboard) {
+            await getters.onboard.walletReset();
+            localStorage.removeItem('walletName');
+
+            await dispatch('initWeb3').then(value => {
+                commit('setWalletConnected', false);
+                console.log('Wallet was disconnected');
+            });
+        }
+    },
+
+    async switchAccount({commit, dispatch, getters}) {
+        if (getters.onboard) {
+            await getters.onboard.walletSelect();
+            await getters.onboard.walletCheck();
+        }
+    },
 
     async initWeb3({commit, dispatch, getters, rootState}) {
         commit('setLoadingWeb3', true);
+        commit('setWalletConnected', false);
+
+        if (localStorage.getItem('walletName')) {
+            await dispatch('connectWallet');
+        }
 
         let provider = getters.provider;
 
@@ -405,6 +446,10 @@ const mutations = {
 
     setOnboard(state, onboard) {
         state.onboard = onboard;
+    },
+
+    setWalletConnected(state, walletConnected) {
+        state.walletConnected = walletConnected;
     },
 
     setWeb3(state, web3) {

@@ -13,7 +13,7 @@ then
   deployments="polygon"
   build="build-production"
   dockerComposePath="/root/ovn/docker-compose.yaml"
-  tag="prod"
+  tag="1"
 elif [ "$stand" = "dev" ]
 then
   nameDapp="dapp"
@@ -50,6 +50,6 @@ ssh $url docker pull cr.yandex/crpg11k469bhc8lch9gm/overnight/$nameDapp:$tag
 ssh $url docker-compose -f $dockerComposePath up -d --no-deps $nameDapp
 
 
-ssh $url docker logs ovn-$nameDapp -f
+ssh $url docker logs $nameDapp -f
 
 

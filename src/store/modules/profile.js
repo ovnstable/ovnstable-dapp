@@ -259,7 +259,7 @@ const actions = {
                 let liquidationValue = element.usdcPriceInVault / element.usdcPriceDenominator;
                 let price = element.usdcBuyPrice/ element.usdcPriceDenominator;
                 let liquidationPrice = element.usdcSellPrice / element.usdcPriceDenominator;
-                let bookPrice = element.usdcPriceInVault / element.usdcPriceDenominator ;
+                let bookPrice = (element.amountInVault  / element.usdcPriceDenominator) * (element.usdcBuyPrice / element.usdcPriceDenominator) ;
 
                 data.push({
                     symbol: symbol,

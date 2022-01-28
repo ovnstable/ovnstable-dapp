@@ -1,5 +1,5 @@
 <template>
-    <v-menu rounded="lg" offset-y>
+    <v-menu rounded="lg" offset-y min-width="180px">
         <template v-slot:activator="{ attrs, on }">
             <v-btn
                     :disabled="!isWalletConnected"
@@ -12,18 +12,18 @@
         </template>
 
         <v-list>
-            <v-list-item>
+            <v-list-item
+                    @click="switchAccountAction">
                 <label
-                        class="list-label"
-                        @click="switchAccountAction">
+                        class="list-label">
                     Switch wallet
                 </label>
             </v-list-item>
             <v-list-item
+                    @click="disconnectWalletAction"
                     style="color: #DC3545FF">
                 <label
-                        class="list-label"
-                        @click="disconnectWalletAction">
+                        class="list-label">
                     Disconnect wallet
                 </label>
             </v-list-item>

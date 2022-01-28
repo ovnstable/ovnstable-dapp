@@ -26,7 +26,10 @@ export const wallets = [
         preferred: true
     },
     {
-        walletName: "binance",
+        walletName: "walletConnect",
+        rpc: {
+            137: 'https://polygon-rpc.com/',
+        },
         preferred: true
     },
     {
@@ -36,86 +39,16 @@ export const wallets = [
         preferred: true
     },
     {
+        walletName: "binance",
+        rpcUrl: process.env.VUE_APP_RPC_URL,
+    },
+    {
         walletName: 'ledger',
         rpcUrl: process.env.VUE_APP_RPC_URL,
-        preferred: true
-    },
-    {walletName: "authereum"},
-    {
-        walletName: "imToken",
-        rpcUrl: process.env.VUE_APP_RPC_URL
-    },
-    {walletName: "meetone"},
-    {
-        walletName: "mykey",
-        rpcUrl: process.env.VUE_APP_RPC_URL
     },
     {
-        walletName: "huobiwallet",
-        rpcUrl: process.env.VUE_APP_RPC_URL
+        walletName: "ronin"
     },
-    {
-        walletName: "wallet.io",
-        rpcUrl: process.env.VUE_APP_RPC_URL
-    },
-    {
-        walletName: "trust",
-        rpcUrl: process.env.VUE_APP_RPC_URL
-    },
-    {
-        walletName: 'lattice',
-        rpcUrl: process.env.VUE_APP_RPC_URL,
-        appName: process.env.VUE_APP_TITLE
-    },
-    {
-        walletName: 'keepkey',
-        rpcUrl: process.env.VUE_APP_RPC_URL
-    },
-    {
-        walletName: 'cobovault',
-        rpcUrl: process.env.VUE_APP_RPC_URL,
-        appName: process.env.VUE_APP_TITLE,
-    },
-    {
-        walletName: 'keystone',
-        rpcUrl: process.env.VUE_APP_RPC_URL,
-        appName: process.env.VUE_APP_TITLE,
-    },
-    {walletName: "coinbase"},
-    {walletName: "hyperpay"},
-    {walletName: "atoken"},
-    {walletName: "status"},
-    {walletName: "frame"},
-    {walletName: "ownbit"},
-    {walletName: "alphawallet"},
-    {walletName: "gnosis"},
-    {walletName: "xdefi"},
-    {walletName: "bitpie"},
-    {walletName: "torus"},
-    {walletName: "liquality"},
-    {walletName: "tally"},
-    {walletName: "blankwallet"},
-    {walletName: "mathwallet"},
-    {walletName: "ronin"},
-    /*{ walletName: "opera" },
-    { walletName: "operaTouch" },*/
-    /*{
-        walletName: 'trezor',
-        appUrl: APP_URL,
-        email: CONTACT_EMAIL,
-        rpcUrl: process.env.VUE_APP_RPC_URL
-    },*/
-    /*{
-        walletName: "fortmatic",
-        apiKey: FORTMATIC_KEY,
-        preferred: true
-    },*/
-    /*{
-        walletName: "portis",
-        apiKey: PORTIS_KEY,
-        preferred: true,
-        label: 'Login with Email'
-    },*/
 ];
 
 
@@ -129,6 +62,7 @@ const state = {
     loadingWeb3: true,
     provider: null,
     onboard: null,
+    walletConnected: false,
 };
 
 const getters = {
@@ -143,6 +77,10 @@ const getters = {
 
     onboard(state) {
         return state.onboard;
+    },
+
+    walletConnected(state) {
+        return state.walletConnected;
     },
 
     account(state) {
@@ -173,8 +111,6 @@ const getters = {
 
 const actions = {
 
-    /* TODO: add logout with walletReset */
-
     async initOnboard({commit, dispatch, getters}) {
 
         let onboard = Onboard({
@@ -190,8 +126,9 @@ const actions = {
                     commit('setProvider', wallet.provider);
 
                     await dispatch('initWeb3').then(value => {
+                        commit('setWalletConnected', true);
+                        localStorage.setItem('walletName', wallet.name);
                         console.log(wallet.name + ' is now connected!');
-                        localStorage.setItem('walletName', wallet.name)
                     });
                 }
             }
@@ -212,21 +149,42 @@ const actions = {
         await getters.onboard.walletCheck();
     },
 
+    async disconnectWallet({commit, dispatch, getters}) {
+
+        if (getters.onboard) {
+            await getters.onboard.walletReset();
+            localStorage.removeItem('walletName');
+
+            await dispatch('initWeb3').then(value => {
+                commit('setWalletConnected', false);
+                console.log('Wallet was disconnected');
+            });
+        }
+    },
+
+    async switchAccount({commit, dispatch, getters}) {
+        if (getters.onboard) {
+            await getters.onboard.walletSelect();
+            await getters.onboard.walletCheck();
+        }
+    },
+
     async initWeb3({commit, dispatch, getters, rootState}) {
         commit('setLoadingWeb3', true);
+        commit('setWalletConnected', false);
 
         if (localStorage.getItem('walletName')) {
             await dispatch('connectWallet');
         }
 
-        let provider = getters.provider;
+        let web3;
 
-        if (!provider) {
-            provider = await new Web3.providers.HttpProvider("https://polygon-mainnet.infura.io/v3/66f5eb50848f458cb0f0506cc1036fea");
+        if (!getters.provider) {
+            let provider = await new Web3.providers.HttpProvider("https://polygon-mainnet.infura.io/v3/66f5eb50848f458cb0f0506cc1036fea");
+            web3 = await new Web3(provider);
+        } else {
+            web3 = await new Web3(getters.provider);
         }
-
-        console.log('Provider ' + provider)
-        let web3 = await new Web3(provider);
 
         await new Promise(resolve => setTimeout(resolve, 3000)); // 3 sec
 
@@ -234,14 +192,13 @@ const actions = {
         console.log('Network ID ' + networkId)
         commit('setNetworkId', networkId)
 
-        if (window.ethereum) {
-            let provider = window.ethereum;
-            provider.on('accountsChanged', function (accounts) {
+        if (getters.provider) {
+            getters.provider.on('accountsChanged', function (accounts) {
                 let account = accounts[0];
                 dispatch('accountChange', account)
             });
 
-            provider.on('networkChanged', function (networkId) {
+            getters.provider.on('networkChanged', function (networkId) {
                 networkId = parseInt(networkId)
                 commit('setNetworkId', networkId)
                 if (networkId === 137 || networkId === 31337) {
@@ -250,7 +207,6 @@ const actions = {
                     dispatch('profile/resetUserData', null, {root: true})
                     commit('setSwitchToPolygon', true)
                 }
-
             });
         }
 
@@ -270,6 +226,7 @@ const actions = {
             commit('setSwitchToPolygon', true)
         }
 
+        /* Account connected */
 
         commit('setLoadingWeb3', false);
     },
@@ -317,34 +274,31 @@ const actions = {
     async setNetwork({commit, dispatch, getters, rootState}, networkId) {
 
         try {
-            await window.ethereum.request({
+            await getters.provider.request({
                 method: 'wallet_switchEthereumChain',
-                params: [{chainId: getters.web3.utils.toHex(networkId)}], // chainId must be in hexadecimal numbers
+                params: [{chainId: getters.web3.utils.toHex(networkId)}],
             });
         } catch (switchError) {
-            // This error code indicates that the chain has not been added to MetaMask.
-            if (switchError.code === 4902) {
-                try {
+            try {
+                let params = {
+                    chainId: getters.web3.utils.toHex(137),
+                    rpcUrls: ['https://polygon-rpc.com/'],
+                    blockExplorerUrls: ['https://polygonscan.com/'],
+                    chainName: 'Polygon Mainnet',
+                    nativeCurrency: {
+                        symbol: 'MATIC',
+                        name: 'MATIC',
+                        decimals: 18,
+                    }
+                };
 
-                    let params = {
-                        chainId: getters.web3.utils.toHex(137),
-                        rpcUrls: ['https://polygon-rpc.com/'],
-                        blockExplorerUrls: ['https://polygonscan.com/'],
-                        chainName: 'Polygon Mainnet',
-                        nativeCurrency: {
-                            symbol: 'MATIC',
-                            name: 'MATIC',
-                            decimals: 18,
-                        }
-                    };
-
-                    await window.ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [params],
-                    });
-                } catch (addError) {
-
-                }
+                await getters.provider.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [params],
+                });
+            } catch (addError) {
+                console.error(addError);
+                dispatch('switchAccount');
             }
         }
 
@@ -361,7 +315,7 @@ const actions = {
 
     async addUsdPlusToken({commit, dispatch, getters, rootState}) {
 
-        await window.ethereum
+        await getters.provider
             .request({
                 method: 'wallet_watchAsset',
                 params: {
@@ -387,7 +341,7 @@ const actions = {
 
     async addOvnToken({commit, dispatch, getters, rootState}) {
 
-        await window.ethereum
+        await getters.provider
             .request({
                 method: 'wallet_watchAsset',
                 params: {
@@ -421,6 +375,10 @@ const mutations = {
 
     setOnboard(state, onboard) {
         state.onboard = onboard;
+    },
+
+    setWalletConnected(state, walletConnected) {
+        state.walletConnected = walletConnected;
     },
 
     setWeb3(state, web3) {

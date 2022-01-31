@@ -69,7 +69,15 @@ export default {
     }
   },
   async mounted() {
-    const resp = await axios.post('/discord/get_user', {code: this.$route.query.code});
+    const parsedParams = {};
+    this.$route.hash.split('&')
+        .map(part => part.replace(/^#/, ''))
+        .forEach(param => {
+          const parts = param.split('=');
+          parsedParams[parts[0]] = parts[1];
+        });
+    console.log(parsedParams);
+    const resp = await axios.post('/discord/get_user', parsedParams);
     localStorage.setItem('discord_backend_token', resp.data.token);
     localStorage.setItem('discord_user', JSON.stringify(resp.data.user));
 

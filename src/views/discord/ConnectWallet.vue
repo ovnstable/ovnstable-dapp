@@ -139,6 +139,9 @@ export default {
           }
         }
 
+        //FIXME solve somehow (its coz after close first metamask window we are trying to open new window immediately)
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
         await this.addUsdPlus();
         await axios.post('/discord/connect_wallet', {sig: sig, address: selectedWallet}, axiosConfig);
         this.success = true;
@@ -150,26 +153,22 @@ export default {
     },
 
     async addUsdPlus() {
-      this.account.provider.request({
-        method: 'wallet_watchAsset',
-        params: {
-          type: 'ERC20',
-          options: {
-            address: "0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f",
-            symbol: "USD+",
-            decimals: 6,
-            image: UsdPlusImage.image,
+      try {
+        await this.account.provider.request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20',
+            options: {
+              address: "0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f",
+              symbol: "USD+",
+              decimals: 6,
+              image: UsdPlusImage.image,
+            },
           },
-        },
-      })
-          .then((success) => {
-            if (success) {
-              console.log('USD+ successfully added to wallet!')
-            } else {
-              throw new Error('Something went wrong.')
-            }
-          })
-          .catch(console.error)
+        })
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }

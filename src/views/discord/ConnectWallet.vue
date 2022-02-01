@@ -57,7 +57,6 @@ import {wallets} from '../../store/modules/web3'
 
 import Onboard from 'bnc-onboard';
 import Web3 from "web3";
-import {actions} from "../../store/modules/web3"
 import {mapGetters} from 'vuex'
 
 

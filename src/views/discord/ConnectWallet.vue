@@ -150,7 +150,6 @@ export default {
     },
 
     async addUsdPlus() {
-      alert(this.account.provider);
       this.account.provider.request({
         method: 'wallet_watchAsset',
         params: {

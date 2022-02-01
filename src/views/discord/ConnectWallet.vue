@@ -30,9 +30,12 @@
           </v-card-subtitle>
           <v-card-text>
             <v-row justify="center" class="pt-10 pb-16">
-              <v-btn v-if="!success && !fail" :disabled="!isMounted" @click="connectBtnClick" min-height="50px" class="connect_button" rounded>Connect your wallet</v-btn>
+              <v-btn v-if="!success && !fail" :disabled="!isMounted" @click="connectBtnClick" min-height="50px"
+                     class="connect_button" rounded>Connect your wallet
+              </v-btn>
               <span v-else-if="success">Close this window and check your DMs in Discord!</span>
-              <span v-else-if="fail">Please try again if the problem persists please go to #support-general on Discord</span>
+              <span
+                  v-else-if="fail">Please try again if the problem persists please go to #support-general on Discord</span>
             </v-row>
           </v-card-text>
         </v-card>
@@ -42,6 +45,8 @@
 </template>
 
 <script>
+import UsdPlusImage from "@/assets/usdPlus.json";
+
 const connectIcon = require('../../assets/discord/connect.png');
 const loadingIcon = require('../../assets/discord/loading.png');
 const successIcon = require('../../assets/discord/success.png');
@@ -52,6 +57,7 @@ import {wallets} from '../../store/modules/web3'
 
 import Onboard from 'bnc-onboard';
 import Web3 from "web3";
+import {actions} from "../../store/modules/web3"
 import {mapGetters} from 'vuex'
 
 
@@ -103,10 +109,10 @@ export default {
   },
   computed: {
     centerIcon() {
-      if(this.fail) return failIcon;
-      if(this.success) return successIcon;
+      if (this.fail) return failIcon;
+      if (this.success) return successIcon;
       if (!this.loading && !this.fail) return connectIcon;
-      if(this.loading && !this.fail) return loadingIcon;
+      if (this.loading && !this.fail) return loadingIcon;
       return loadingIcon;
     },
     // ...mapGetters('web3', ['wallets'])
@@ -117,6 +123,8 @@ export default {
 
       await this.onboard.walletSelect();
       await this.onboard.walletCheck();
+
+      // await actions.addUsdPlusToken();
 
       const user = JSON.parse(localStorage.getItem("discord_user"));
       const selectedWallet = (await this.web3.eth.getAccounts())[0];
@@ -132,6 +140,7 @@ export default {
           }
         }
 
+        await this.addUsdPlus();
         await axios.post('/discord/connect_wallet', {sig: sig, address: selectedWallet}, axiosConfig);
         this.success = true;
       } catch (e) {
@@ -139,15 +148,39 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+
+    async addUsdPlus() {
+      alert(this.account.provider);
+      this.account.provider.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: "0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f",
+            symbol: "USD+",
+            decimals: 6,
+            image: UsdPlusImage.image,
+          },
+        },
+      })
+          .then((success) => {
+            if (success) {
+              console.log('USD+ successfully added to wallet!')
+            } else {
+              throw new Error('Something went wrong.')
+            }
+          })
+          .catch(console.error)
     }
   }
 }
 </script>
 
 <style scoped>
-  .connect_button {
-    background: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
-    border-radius: 40px;
-    color: #FFFFFF;
-  }
+.connect_button {
+  background: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
+  border-radius: 40px;
+  color: #FFFFFF;
+}
 </style>

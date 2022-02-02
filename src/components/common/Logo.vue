@@ -1,10 +1,11 @@
 <template>
-    <v-row dense class="logo" @click="clickLogo">
+    <v-row dense class="logo" @click="clickLogo" justify="end">
         <div style="width: 40px; height: 40px">
             <v-img :src="require('../../assets/ovn.png')"></v-img>
         </div>
-        <div class="logo-title ml-2 mt-0 hidden-md-and-down">OVERNIGHT</div>
-        <span>{{stand}}</span>
+        <label class="logo-title" @click="clickLogo">
+            Overnight<sup>&reg;{{ stand }}</sup>
+        </label>
     </v-row>
 </template>
 
@@ -14,18 +15,18 @@ export default {
 
     computed: {
 
-        stand: function (){
+        stand: function () {
 
             let hostname = window.location.hostname;
-            if (hostname === 'localhost')
+            if (hostname === 'localhost') {
                 return 'Localhost';
-            else if (hostname === 'dev.overnight.fi')
+            } else if (hostname === 'dev.overnight.fi') {
                 return 'Dev';
-            else if (hostname === 'app.overnight.fi')
+            } else if (hostname === 'app.overnight.fi') {
                 return 'Beta';
-            else
+            } else {
                 return 'UnKnown';
-
+            }
         }
     },
 
@@ -44,9 +45,15 @@ export default {
 }
 
 .logo-title {
-    color: #40404C;
-    font-size: 25px;
-    font-weight: 800;
-    letter-spacing: 3px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+    color: var(--logo-color) !important;
+}
+
+.logo-title > sup {
+    font-size: 16px;
+    font-weight: 400 !important;
+    vertical-align: super;
 }
 </style>

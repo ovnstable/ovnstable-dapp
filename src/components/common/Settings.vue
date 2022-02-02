@@ -6,6 +6,7 @@
                     class="ml-2"
                     v-bind="attrs"
                     v-on="on"
+                    color="white"
                     icon>
                 <v-icon>mdi-cog</v-icon>
             </v-btn>

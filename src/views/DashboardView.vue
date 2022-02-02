@@ -19,7 +19,7 @@
 
         <v-row>
           <v-col lg="3" class="pt-10  hidden-sm-and-down hidden-md-and-down">
-            <StatsWidget/>
+<!--            <StatsWidget/>-->
           </v-col>
           <v-col lg="1">
 

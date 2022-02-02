@@ -2,11 +2,9 @@
     <v-app id="app">
         <router-view></router-view>
     </v-app>
-
 </template>
 
 <script>
-
 
 import {mapActions, mapGetters, mapMutations} from "vuex";
 
@@ -19,12 +17,18 @@ export default {
 
     created() {
     }
-
-
 };
 </script>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+/* main variables */
+:root {
+    --main-background: #000000;
+    --logo-color: #ffffff;
+    --orange-gradient: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
+}
 
 html {
     overflow-y: auto !important;

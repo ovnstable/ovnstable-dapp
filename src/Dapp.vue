@@ -6,8 +6,8 @@
                 <router-view></router-view>
             </v-container>
         </v-main>
-        <Footer/>
         <AccountProfile width="450"/>
+        <Footer/>
     </div>
 </template>
 

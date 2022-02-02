@@ -52,7 +52,7 @@ export default {
 }
 
 .logo-title > sup {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400 !important;
     vertical-align: super;
 }

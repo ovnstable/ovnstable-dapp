@@ -276,8 +276,23 @@ export default {
         try {
           await this.refreshGasPrice();
           let approveParams = {gasPrice: this.gasPriceGwei, from: from};
-          await contracts.usdPlus.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
-          return true;
+          let tx = await contracts.usdPlus.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
+
+          let minted = true;
+          while (minted){
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
+            console.log('Check receipt: ' + receipt)
+            if (receipt){
+              if (receipt.status)
+                return true;
+              else {
+                this.failed();
+                return false;
+              }
+            }
+          }
+
         } catch (e) {
           console.log(e)
           this.failed();

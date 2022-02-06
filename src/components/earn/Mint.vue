@@ -276,39 +276,53 @@ export default {
       }
     },
 
-    async checkAllowance(sum){
+    async checkAllowance(sum) {
 
-        let contracts = this.contracts;
-        let from = this.account;
-        let self = this;
+      let contracts = this.contracts;
+      let from = this.account;
+      let self = this;
 
-        let allowanceValue = await contracts.usdc.methods.allowance(from, contracts.exchange.options.address).call();
-        console.log('Allowance value ' + allowanceValue)
+      let allowanceValue = await contracts.usdc.methods.allowance(from, contracts.exchange.options.address).call();
+      console.log('Allowance value ' + allowanceValue)
 
-        if (allowanceValue < sum) {
-            try {
-                await this.refreshGasPrice();
-                let approveParams = {gasPrice: this.gasPriceGwei, from: from};
-                await contracts.usdc.methods.approve(contracts.exchange.options.address, sum)
-                    .send(approveParams)
-                    .on('transactionHash', function (hash) {
+      if (allowanceValue < sum) {
+        try {
+          await this.refreshGasPrice();
+          let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                        let tx = {
-                            text: 'Approve USDC',
-                            hash: hash,
-                            pending: true,
-                        };
+          let tx = await contracts.usdc.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
 
-                        self.putTransaction(tx);
-                    });
+          let minted = true;
+          while (minted) {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
+            console.log('Check receipt: ' + receipt)
+            if (receipt) {
+              if (receipt.status) {
+
+                let tx = {
+                  text: 'Approve USDC',
+                  hash: receipt.transactionHash,
+                  pending: true,
+                };
+
+                self.putTransaction(tx);
+
                 return true;
-            } catch (e) {
-                console.log(e)
+              } else {
                 this.failed();
                 return false;
+              }
             }
+          }
+          return true;
+        } catch (e) {
+          console.log(e)
+          this.failed();
+          return false;
         }
-        return true;
+      }
+      return true;
     },
 
     showSuccessMintToast(sum, tx) {

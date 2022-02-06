@@ -13,6 +13,11 @@
 export default {
     name: "Logo",
 
+    components: {},
+
+    data: () => ({
+    }),
+
     computed: {
 
         stand: function () {

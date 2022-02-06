@@ -2,7 +2,7 @@
     <div>
         <Header/>
         <v-main>
-            <v-container fluid>
+            <v-container fluid class="main-container">
                 <router-view></router-view>
             </v-container>
         </v-main>
@@ -24,5 +24,9 @@ export default {
 </script>
 
 <style scoped>
+
+.main-container {
+    height: calc(100vh - 72px - 44px);
+}
 
 </style>

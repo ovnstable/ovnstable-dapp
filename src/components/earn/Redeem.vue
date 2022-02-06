@@ -1,323 +1,322 @@
 <template>
-  <v-col class="ma-0 pa-0">
-    <v-card class="mt-5 card elevation-0">
-      <v-card-text>
-        <v-row dense>
-          <v-col class="field ">
-            <v-row dense>
-              <v-col lg="4" md="5" sm="4" cols="8">
-                <v-text-field placeholder="0.00"
-                              flat
-                              solo
-                              color="#8F8F8F"
-                              class="field-sum"
-                              hide-details
-                              v-model="sum"></v-text-field>
-              </v-col>
-              <v-spacer/>
-              <v-col lg="4" md="4" sm="5" class="pt-3 hidden-xs-only" align="end">
-                <template v-if="loadingBalance">
-                  <div class="balance pt-0">
-                    <v-row class="ma-0 pa-0" justify="center">
-                      <v-skeleton-loader type="chip"></v-skeleton-loader>
-                    </v-row>
-                  </div>
-                </template>
-                <template v-else>
-                  <div class="max" @click="max">Max: {{ maxResult }}</div>
+    <v-col class="ma-0 pa-0">
+        <v-card class="mt-5 card elevation-0">
+            <v-card-text>
+                <v-row dense>
+                    <v-col class="field ">
+                        <v-row dense>
+                            <v-col lg="4" md="5" sm="4" cols="8">
+                                <v-text-field placeholder="0.00"
+                                              flat
+                                              solo
+                                              color="#8F8F8F"
+                                              class="field-sum"
+                                              hide-details
+                                              v-model="sum"></v-text-field>
+                            </v-col>
+                            <v-spacer/>
+                            <v-col lg="4" md="4" sm="5" class="pt-3 hidden-xs-only" align="end">
+                                <template v-if="loadingBalance">
+                                    <div class="balance pt-0">
+                                        <v-row class="ma-0 pa-0" justify="center">
+                                            <v-skeleton-loader type="chip"></v-skeleton-loader>
+                                        </v-row>
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <div class="max" @click="max">Max: {{ maxResult }}</div>
 
-                </template>
-              </v-col>
-              <v-col lg="4" cols="4" md="3" sm="3" align="end">
-                <v-row dense class="ma-0 pa-0" justify="end" align="center">
-                  <CurrencySelector :readonly="true" :selected-item="buyCurrency" :items="buyCurrencies"/>
+                                </template>
+                            </v-col>
+                            <v-col lg="4" cols="4" md="3" sm="3" align="end">
+                                <v-row dense class="ma-0 pa-0" justify="end" align="center">
+                                    <ItemSelector :readonly="true" :selected-item="buyCurrency"
+                                                  :items="buyCurrencies"/>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </v-col>
                 </v-row>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
 
-        <v-row class="pa-3 " align="center">
-          <v-col lg="1" md="1" sm="1" cols="2" align="center">
-            <img :src="require('../../assets/arrow.png')" height="30" width="30"/>
-          </v-col>
-          <v-col lg="5" cols="8" md="5" sm="5" class="pt-1">
-            <v-row>
-              <span class="gas-title">Gas fee: {{ 0.1 }}</span>
-              <img class="ml-2" :src="require('../../assets/poly.png')" height="20" width="20"/>
-            </v-row>
-          </v-col>
-          <v-col lg="6" class="hidden-xs-only">
-            <v-row justify="end">
-              <span class="gas-waived pr-2">Gas fee waived if >10000</span>
-            </v-row>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col class="field">
-            <v-row dense>
-              <v-col lg="4" md="5" sm="4" cols="8">
-                <div class="field-buy mt-1 ml-1">
-                  {{ sumResult }}
-                </div>
-              </v-col>
-              <v-spacer/>
-              <v-col lg="4" md="4" sm="5" class="pt-3 hidden-xs-only" align="center">
-                <template v-if="loadingBalance">
-                  <div class="balance pt-0">
-                    <v-row class="ma-0 pa-0" justify="center">
-                      <v-skeleton-loader type="chip"></v-skeleton-loader>
-                    </v-row>
-                  </div>
-                </template>
-                <template v-else>
-                  <div class="balance">Balance: {{ $utils.formatMoney(balance.usdc, 2) }}</div>
-                </template>
-              </v-col>
-              <v-col lg="4" cols="4" md="3" sm="3">
-                <v-row dense class="ma-0 pa-0" justify="end" align="end">
-                  <CurrencySelector :selected-item="currency" :items="currencies"/>
+                <v-row class="pa-3 " align="center">
+                    <v-col lg="1" md="1" sm="1" cols="2" align="center">
+                        <img :src="require('../../assets/arrow.png')" height="30" width="30"/>
+                    </v-col>
+                    <v-col lg="5" cols="8" md="5" sm="5" class="pt-1">
+                        <v-row>
+                            <span class="gas-title">Gas fee: {{ 0.1 }}</span>
+                            <img class="ml-2" :src="require('../../assets/poly.png')" height="20" width="20"/>
+                        </v-row>
+                    </v-col>
+                    <v-col lg="6" class="hidden-xs-only">
+                        <v-row justify="end">
+                            <span class="gas-waived pr-2">Gas fee waived if >10000</span>
+                        </v-row>
+                    </v-col>
                 </v-row>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
+                <v-row dense>
+                    <v-col class="field">
+                        <v-row dense>
+                            <v-col lg="4" md="5" sm="4" cols="8">
+                                <div class="field-buy mt-1 ml-1">
+                                    {{ sumResult }}
+                                </div>
+                            </v-col>
+                            <v-spacer/>
+                            <v-col lg="4" md="4" sm="5" class="pt-3 hidden-xs-only" align="center">
+                                <template v-if="loadingBalance">
+                                    <div class="balance pt-0">
+                                        <v-row class="ma-0 pa-0" justify="center">
+                                            <v-skeleton-loader type="chip"></v-skeleton-loader>
+                                        </v-row>
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <div class="balance">Balance: {{ $utils.formatMoney(balance.usdc, 2) }}</div>
+                                </template>
+                            </v-col>
+                            <v-col lg="4" cols="4" md="3" sm="3">
+                                <v-row dense class="ma-0 pa-0" justify="end" align="end">
+                                    <ItemSelector :selected-item="currency" :items="currencies"/>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </v-col>
+                </v-row>
 
-
-        <v-row dense class="pt-4">
-          <v-btn height="60" class="buy elevation-0" @click="redeem" :disabled="!isBuy">{{ buttonLabel }}</v-btn>
-        </v-row>
-        <v-row dense class="pt-4">
-          <GasPriceSelector/>
-        </v-row>
-
-      </v-card-text>
-    </v-card>
-  </v-col>
+                <v-row dense class="pt-4">
+                    <v-btn height="60" class="buy elevation-0" @click="redeem" :disabled="!isBuy">{{
+                            buttonLabel
+                        }}
+                    </v-btn>
+                </v-row>
+            </v-card-text>
+        </v-card>
+    </v-col>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
 import web3 from 'web3';
 import utils from "web3-utils";
-import CurrencySelector from "../common/CurrencySelector";
+import ItemSelector from "../common/ItemSelector";
 import GasPriceSelector from "./GasPriceSelector";
 import ToastTransaction from "../common/ToastTransaction";
 
 
 export default {
-  name: "Redeem",
-  components: {GasPriceSelector, CurrencySelector},
-  data: () => ({
-    menu: false,
-    tab: null,
-    currency: {id: 'usdc'},
+    name: "Redeem",
+    components: {GasPriceSelector, ItemSelector},
+    data: () => ({
+        menu: false,
+        tab: null,
+        currency: {id: 'usdc'},
 
-    currencies: [],
+        currencies: [],
 
-    sum: null,
+        sum: null,
 
-    gas: null,
+        gas: null,
 
-    buyCurrency: null,
-    buyCurrencies: [{
-      id: 'usdPlus',
-      title: 'USD+',
-      image: require('../../assets/usdPlus.png')
-    }],
-
-
-  }),
+        buyCurrency: null,
+        buyCurrencies: [{
+            id: 'usdPlus',
+            title: 'USD+',
+            image: require('../../assets/usdPlus.png')
+        }],
 
 
-  computed: {
-
-    ...mapGetters("profile", ['balance', 'gasPrice', 'loadingBalance']),
-    ...mapGetters("web3", ["web3", 'account', 'contracts']),
-    ...mapGetters("logTransactions", ["transactions"]),
-    ...mapGetters("gasPrice", ["gasPriceGwei"]),
+    }),
 
 
-    sumResult: function () {
-      if (!this.sum || this.sum === 0)
-        return '0.00';
-      else
-        return this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
-    },
+    computed: {
 
-    numberRule: function () {
-
-      let v = this.sum;
-
-      if (!v)
-        return false;
-
-      if (!v.trim()) return false;
-
-      v = parseFloat(v);
-
-      if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlus)) return true;
+        ...mapGetters("profile", ['balance', 'gasPrice', 'loadingBalance']),
+        ...mapGetters("web3", ["web3", 'account', 'contracts']),
+        ...mapGetters("logTransactions", ["transactions"]),
+        ...mapGetters("gasPrice", ["gasPriceGwei"]),
 
 
-      return false;
-    },
-
-    maxResult() {
-      return this.$utils.formatMoney(this.balance.usdPlus, 2);
-    },
-
-    buttonLabel: function () {
-
-      if (!this.account) {
-        return ' You need to connect to a wallet';
-      } else if (this.isBuy) {
-        return 'Press to Withdraw'
-      } else if (this.sum > parseFloat(this.balance.usdPlus)) {
-        return 'Invalid amount'
-      } else {
-        return 'Enter the amount to Withdraw';
-      }
-    },
-
-    isBuy: function () {
-      return this.account && this.sum > 0 && this.numberRule;
-    },
-  },
-
-  created() {
-
-    this.currencies.push({id: 'usdc', title: 'USDC', image: require('../../assets/currencies/usdc.png')});
-
-    this.currency = this.currencies[0];
-
-    this.buyCurrency = this.buyCurrencies[0];
-
-
-  },
-
-  methods: {
-
-    ...mapActions("profile", ['refreshAfterMintRedeem']),
-    ...mapActions("gasPrice", ['refreshGasPrice']),
-    ...mapActions("showTransactions", ['show', 'hide', 'addText', 'failed']),
-
-
-    setSum(value) {
-      this.sum = value;
-    },
-
-    max() {
-      let balanceElement = this.balance.usdPlus;
-      this.sum = balanceElement + "";
-    },
-
-    async redeem() {
-
-
-      try {
-
-        let sum = this.sum * 10 ** 6;
-        sum = Math.floor(sum);
-        let self = this;
-
-        let contracts = this.contracts;
-        let from = this.account;
-
-
-        this.show('Processing...')
-        this.addText(`Locking ${this.sum} USD+ ......  done`)
-
-
-        let allowApprove = await this.checkAllowance(sum);
-        if (!allowApprove) {
-          this.failed();
-          return;
-        } else {
-          await new Promise(resolve => setTimeout(resolve, 2000));
-        }
-
-        self.addText(`Burning ${self.sum} USD+ ......  done`);
-        self.addText(`Transferring ${self.sum} USDC to ${from.substring(1, 10)}  ......  done`);
-
-        try {
-          await this.refreshGasPrice();
-          let buyParams = {gasPrice: this.gasPriceGwei, from: from};
-          console.log(`Try redeem ${contracts.usdc.options.address} ${sum}`);
-          let redeemResult = await contracts.exchange.methods.redeem(contracts.usdc.options.address, sum).send(buyParams);
-          this.showSuccessRedeemToast(self.sum, redeemResult.transactionHash)
-        } catch (e) {
-          console.log(e)
-          this.failed();
-          return;
-        }
-
-
-        self.addText(`Completed, await blockchain, click to proceed`);
-        setTimeout(() => self.hide(), 1000);
-
-        self.refreshAfterMintRedeem();
-        self.setSum(null)
-
-      } catch (e) {
-        console.log(e)
-        this.failed();
-      }
-    },
-
-    async checkAllowance(sum) {
-
-      let contracts = this.contracts;
-      let from = this.account;
-
-      let allowanceValue = await contracts.usdPlus.methods.allowance(from, contracts.exchange.options.address).call();
-      console.log('Allowance value ' + allowanceValue)
-
-      if (allowanceValue < sum) {
-        try {
-          await this.refreshGasPrice();
-          let approveParams = {gasPrice: this.gasPriceGwei, from: from};
-          let tx = await contracts.usdPlus.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
-
-          let minted = true;
-          while (minted){
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
-            console.log('Check receipt: ' + receipt)
-            if (receipt){
-              if (receipt.status)
-                return true;
-              else {
-                this.failed();
-                return false;
-              }
-            }
-          }
-
-        } catch (e) {
-          console.log(e)
-          this.failed();
-          return false;
-        }
-      }
-
-      return true;
-    },
-
-    showSuccessRedeemToast(sum, tx) {
-      const content = {
-        component: ToastTransaction,
-        props: {
-          text: `Redeem ${sum} USDC`,
-          tx: tx,
+        sumResult: function () {
+            if (!this.sum || this.sum === 0)
+                return '0.00';
+            else
+                return this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
         },
-      }
-      this.$toast(content, {position: "top-right", type: 'success', timeout: 10000});
+
+        numberRule: function () {
+
+            let v = this.sum;
+
+            if (!v)
+                return false;
+
+            if (!v.trim()) return false;
+
+            v = parseFloat(v);
+
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlus)) return true;
+
+
+            return false;
+        },
+
+        maxResult() {
+            return this.$utils.formatMoney(this.balance.usdPlus, 2);
+        },
+
+        buttonLabel: function () {
+
+            if (!this.account) {
+                return ' You need to connect to a wallet';
+            } else if (this.isBuy) {
+                return 'Press to Withdraw'
+            } else if (this.sum > parseFloat(this.balance.usdPlus)) {
+                return 'Invalid amount'
+            } else {
+                return 'Enter the amount to Withdraw';
+            }
+        },
+
+        isBuy: function () {
+            return this.account && this.sum > 0 && this.numberRule;
+        },
     },
 
-    selectItem(item) {
-      this.currency = item;
+    created() {
+
+        this.currencies.push({id: 'usdc', title: 'USDC', image: require('../../assets/currencies/usdc.png')});
+
+        this.currency = this.currencies[0];
+
+        this.buyCurrency = this.buyCurrencies[0];
+
+
+    },
+
+    methods: {
+
+        ...mapActions("profile", ['refreshAfterMintRedeem']),
+        ...mapActions("gasPrice", ['refreshGasPrice']),
+        ...mapActions("showTransactions", ['show', 'hide', 'addText', 'failed']),
+
+
+        setSum(value) {
+            this.sum = value;
+        },
+
+        max() {
+            let balanceElement = this.balance.usdPlus;
+            this.sum = balanceElement + "";
+        },
+
+        async redeem() {
+
+
+            try {
+
+                let sum = this.sum * 10 ** 6;
+                sum = Math.floor(sum);
+                let self = this;
+
+                let contracts = this.contracts;
+                let from = this.account;
+
+
+                this.show('Processing...')
+                this.addText(`Locking ${this.sum} USD+ ......  done`)
+
+
+                let allowApprove = await this.checkAllowance(sum);
+                if (!allowApprove) {
+                    this.failed();
+                    return;
+                } else {
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                }
+
+                self.addText(`Burning ${self.sum} USD+ ......  done`);
+                self.addText(`Transferring ${self.sum} USDC to ${from.substring(1, 10)}  ......  done`);
+
+                try {
+                    await this.refreshGasPrice();
+                    let buyParams = {gasPrice: this.gasPriceGwei, from: from};
+                    console.log(`Try redeem ${contracts.usdc.options.address} ${sum}`);
+                    let redeemResult = await contracts.exchange.methods.redeem(contracts.usdc.options.address, sum).send(buyParams);
+                    this.showSuccessRedeemToast(self.sum, redeemResult.transactionHash)
+                } catch (e) {
+                    console.log(e)
+                    this.failed();
+                    return;
+                }
+
+
+                self.addText(`Completed, await blockchain, click to proceed`);
+                setTimeout(() => self.hide(), 1000);
+
+                self.refreshAfterMintRedeem();
+                self.setSum(null)
+
+            } catch (e) {
+                console.log(e)
+                this.failed();
+            }
+        },
+
+        async checkAllowance(sum) {
+
+            let contracts = this.contracts;
+            let from = this.account;
+
+            let allowanceValue = await contracts.usdPlus.methods.allowance(from, contracts.exchange.options.address).call();
+            console.log('Allowance value ' + allowanceValue)
+
+            if (allowanceValue < sum) {
+                try {
+                    await this.refreshGasPrice();
+                    let approveParams = {gasPrice: this.gasPriceGwei, from: from};
+                    let tx = await contracts.usdPlus.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
+
+                    let minted = true;
+                    while (minted) {
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
+                        console.log('Check receipt: ' + receipt)
+                        if (receipt) {
+                            if (receipt.status)
+                                return true;
+                            else {
+                                this.failed();
+                                return false;
+                            }
+                        }
+                    }
+
+                } catch (e) {
+                    console.log(e)
+                    this.failed();
+                    return false;
+                }
+            }
+
+            return true;
+        },
+
+        showSuccessRedeemToast(sum, tx) {
+            const content = {
+                component: ToastTransaction,
+                props: {
+                    text: `Redeem ${sum} USDC`,
+                    tx: tx,
+                },
+            }
+            this.$toast(content, {position: "top-right", type: 'success', timeout: 10000});
+        },
+
+        selectItem(item) {
+            this.currency = item;
+        }
     }
-  }
 }
 </script>
 
@@ -325,129 +324,129 @@ export default {
 
 
 .selector {
-  padding: 5px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  color: rgb(37, 39, 45);
-  height: 45px;
+    padding: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    color: rgb(37, 39, 45);
+    height: 45px;
 }
 
 .field-buy {
-  padding: 10px;
-  color: #8F8F8F;
-  font-size: 18px;
-  font-weight: bold;
-  background-color: #ECECEC;
-  border-radius: 10px;
-  white-space: nowrap;
+    padding: 10px;
+    color: #8F8F8F;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #ECECEC;
+    border-radius: 10px;
+    white-space: nowrap;
 }
 
 .balance {
-  font-weight: bold;
-  color: #40404C;
-  text-align: center;
-  cursor: pointer;
-  padding-top: 5px;
-  padding-bottom: 5px;
+    font-weight: bold;
+    color: #40404C;
+    text-align: center;
+    cursor: pointer;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .selector:hover {
-  color: rgb(37, 39, 45);
-  background: rgba(247, 247, 247, 1);
-  border-radius: 10px;
+    color: rgb(37, 39, 45);
+    background: rgba(247, 247, 247, 1);
+    border-radius: 10px;
 }
 
 .card {
-  border-radius: 15px;
-  border: 1px solid #BBBBBB;
+    border-radius: 15px;
+    border: 1px solid #BBBBBB;
 }
 
 .max {
-  border: 1px solid #BBBBBB;
-  border-radius: 10px;
-  font-weight: bold;
-  color: #40404C;
-  text-align: center;
-  max-width: 170px;
-  cursor: pointer;
-  padding-top: 5px;
-  padding-bottom: 5px;
+    border: 1px solid #BBBBBB;
+    border-radius: 10px;
+    font-weight: bold;
+    color: #40404C;
+    text-align: center;
+    max-width: 170px;
+    cursor: pointer;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .advanced {
-  border-radius: 10px;
-  border: 1px solid #BBBBBB;
-  box-shadow: none !important;
+    border-radius: 10px;
+    border: 1px solid #BBBBBB;
+    box-shadow: none !important;
 }
 
 .gas-waived {
-  color: #8F8F8F;
-  font-size: 15px;
+    color: #8F8F8F;
+    font-size: 15px;
 }
 
 .gas-title {
-  color: #8F8F8F;
-  font-size: 18px;
+    color: #8F8F8F;
+    font-size: 18px;
 }
 
 .switch {
-  width: 100%;
-  height: 60px;
-  border-radius: 10px;
-  padding: 5px;
-  padding-top: 17px;
-  background-color: #FDFDFD !important;
-  color: #909399 !important;
-  text-align: center;
-  border: 1px solid #BBBBBB;
-  font-weight: bold;
-  font-size: 15px;
-  cursor: pointer;
-  text-transform: none;
+    width: 100%;
+    height: 60px;
+    border-radius: 10px;
+    padding: 5px;
+    padding-top: 17px;
+    background-color: #FDFDFD !important;
+    color: #909399 !important;
+    text-align: center;
+    border: 1px solid #BBBBBB;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    text-transform: none;
 }
 
 .buy {
-  width: 100%;
-  height: 60px;
-  border-radius: 10px;
-  padding: 5px;
-  padding-top: 17px;
-  background-color: #ECECEC !important;
-  color: #40404C !important;
-  text-align: center;
-  font-weight: bold;
-  font-size: 15px;
-  cursor: pointer;
+    width: 100%;
+    height: 60px;
+    border-radius: 10px;
+    padding: 5px;
+    padding-top: 17px;
+    background-color: #ECECEC !important;
+    color: #40404C !important;
+    text-align: center;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
 
-  text-transform: none;
+    text-transform: none;
 }
 
 .field-sum {
-  font-size: 18px;
-  font-weight: bold;
-  color: #8F8F8F;
+    font-size: 18px;
+    font-weight: bold;
+    color: #8F8F8F;
 }
 
 
 .field {
-  width: 100%;
-  height: 60px;
-  border-radius: 10px;
-  border: 1px solid #BBBBBB;
+    width: 100%;
+    height: 60px;
+    border-radius: 10px;
+    border: 1px solid #BBBBBB;
 }
 
 .custom.v-text-field > .v-input__control > .v-input__slot:before {
-  border-style: none;
+    border-style: none;
 }
 
 .custom.v-text-field > .v-input__control > .v-input__slot:after {
-  border-style: none;
+    border-style: none;
 }
 
 .title-custom {
-  font-weight: bold;
-  font-size: 18px;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 </style>

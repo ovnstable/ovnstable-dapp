@@ -35,6 +35,10 @@ html {
     overflow-y: auto !important;
 }
 
+#app {
+    background-color: #000000;
+}
+
 .v-application {
     font-family: 'Lato', sans-serif !important;
 }

@@ -29,9 +29,6 @@
                     </v-col>
                 </v-row>
 
-                <!-- TODO: move button ? -->
-                <!-- <AddTokenBtn :add-token="addUsdPlusToken" text="Add USD+ to your browser wallet"/> -->
-
                 <v-row>
                     <button @click="mintTab = !mintTab">
                         <v-icon>mdi-swap-vertical</v-icon>

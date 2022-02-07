@@ -1,5 +1,5 @@
 <template>
-    <v-row justify="start">
+    <v-row justify="center">
         <div>
             <v-menu offset-y>
                 <template v-slot:activator="{ on, attrs }">
@@ -28,16 +28,6 @@
                         </v-list-item-avatar>
                         <v-list-item-title class="network-select-list-item">
                             Polygon (Matic)
-                        </v-list-item-title>
-                    </v-list-item>
-                    <v-list-item disabled>
-                        <v-list-item-avatar>
-                            <div class="list-item-icon">
-                                <v-img :src="require('@/assets/network/optimism.svg')"/>
-                            </div>
-                        </v-list-item-avatar>
-                        <v-list-item-title class="list-item-disabled">
-                            Optimism (Soon)
                         </v-list-item-title>
                     </v-list-item>
                     <v-list-item disabled>
@@ -75,7 +65,7 @@ export default {
 <style scoped>
 
 .network-select-list {
-    background-color: rgba(255, 255, 255, 0.1) !important;
+    background-color: var(--secondary) !important;
     border-radius: 10px;
     margin-top: 10px;
 }

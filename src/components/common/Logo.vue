@@ -1,5 +1,5 @@
 <template>
-    <v-row dense class="logo" @click="clickLogo" justify="end">
+    <v-row dense class="logo" @click="clickLogo" justify="center">
         <div style="width: 40px; height: 40px">
             <v-img :src="require('../../assets/ovn.png')"></v-img>
         </div>
@@ -24,7 +24,7 @@ export default {
 
             let hostname = window.location.hostname;
             if (hostname === 'localhost') {
-                return 'Localhost';
+                return 'Local';
             } else if (hostname === 'dev.overnight.fi') {
                 return 'Dev';
             } else if (hostname === 'app.overnight.fi') {
@@ -45,7 +45,6 @@ export default {
 
 <style scoped>
 .logo {
-    width: 400px;
     cursor: pointer;
 }
 

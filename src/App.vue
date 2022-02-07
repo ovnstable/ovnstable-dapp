@@ -26,9 +26,11 @@ export default {
 
 /* main variables */
 :root {
-    --main-background: #000000;
+    --main-background: #080a0c;
+    --secondary: #181E25;
     --logo-color: #ffffff;
     --orange-gradient: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
+    --link: #3d8dff;
 }
 
 html {
@@ -36,7 +38,7 @@ html {
 }
 
 #app {
-    background-color: #000000;
+    background-color: var(--main-background);
 }
 
 .v-application {

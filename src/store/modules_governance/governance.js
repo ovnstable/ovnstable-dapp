@@ -23,6 +23,8 @@ const state = {
         {id: "am3CRV", address: "0xE7a24EF0C5e95Ffb0f6684b813A78F2a3AD7D171"},
         {id: "am3CRVgauge", address: "0x19793B454D3AfC7b454F206Ffe95aDE26cA6912c"},
         {id: "wMatic", address: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"},
+        {id: "mta", address: "0xf501dd45a1198c2e1b5aef5314a68b9006d842e0"},
+        {id: "vimUsd", address: "0x32aBa856Dc5fFd5A56Bcd182b13380e5C855aa29"},
         {id: "crv", address: "0x172370d5Cd63279eFa6d502DAB29171933a610AF"}
     ]
 

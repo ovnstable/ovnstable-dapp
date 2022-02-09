@@ -9,6 +9,7 @@
                                 <label class="title-row-label ml-5 mt-3">From</label>
                             </v-row>
                             <v-row align="center">
+                                <!-- TODO: filtrate non-digits characters -->
                                 <v-text-field placeholder="0.00"
                                               flat
                                               solo
@@ -79,6 +80,7 @@
             </v-card>
         </v-row>
 
+        <!-- TODO: add Confirm Swap modal -->
         <v-row class="mt-10">
             <v-btn dark height="56" class="buy" :class="isBuy ? 'enabled-buy' : 'disabled-buy'" @click="buy"
                    :disabled="!isBuy">

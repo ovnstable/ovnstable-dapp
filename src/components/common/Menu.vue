@@ -134,22 +134,26 @@ export default {
     background: var(--orange-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 400;
     cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: .1rem;
+}
+
+.in-active-tab {
+    color: #8FA2B7;
+    font-size: 16px;
+    font-weight: 300;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: .1rem;
 }
 
 .menu-select {
     width: 150px;
     font-size: 25px;
     color: #171717;
-}
-
-.in-active-tab {
-    color: #8FA2B7;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
 }
 
 

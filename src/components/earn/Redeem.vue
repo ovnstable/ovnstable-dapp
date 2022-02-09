@@ -9,6 +9,7 @@
                                 <label class="title-row-label ml-5 mt-3">From</label>
                             </v-row>
                             <v-row align="center">
+                                <!-- TODO: filtrate non-digits characters -->
                                 <v-text-field placeholder="0.00"
                                               flat
                                               solo

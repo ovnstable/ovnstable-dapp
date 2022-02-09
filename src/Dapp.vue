@@ -1,12 +1,16 @@
 <template>
     <div>
         <Header/>
+
         <v-main>
             <v-container fluid class="main-container">
                 <router-view></router-view>
             </v-container>
         </v-main>
+
         <AccountProfile width="450"/>
+        <GasSettings width="510"/>
+
         <Footer/>
     </div>
 </template>
@@ -16,10 +20,11 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AccountProfile from "./components/common/AccountProfile";
+import GasSettings from "@/components/common/GasSettings";
 
 export default {
     name: "Dapp",
-    components: {AccountProfile, Footer, Header}
+    components: {GasSettings, AccountProfile, Footer, Header}
 }
 </script>
 

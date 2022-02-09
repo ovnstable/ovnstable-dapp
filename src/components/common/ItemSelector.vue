@@ -16,9 +16,9 @@
                 <div class="image-icon">
                     <v-img :src="selectedItem.image"/>
                 </div>
-                <span :class="textMainClass" class="ml-2">{{ selectedItem.title }}</span>
-                <v-icon v-if="!show && !readonly">mdi-arrow-down</v-icon>
-                <v-icon v-if="show && !readonly">mdi-arrow-up</v-icon>
+                <span class="label-btn ml-2">{{ selectedItem.title }}</span>
+                <v-icon class="ml-2" style="color: white" v-if="!show && !readonly">mdi-chevron-down</v-icon>
+                <v-icon class="ml-2" style="color: white" v-if="show && !readonly">mdi-chevron-up</v-icon>
             </v-btn>
         </template>
 
@@ -35,7 +35,7 @@
                         <v-img :src="item.image"/>
                     </div>
                 </v-list-item-avatar>
-                <v-list-item-title :class="textMainClass" v-text="item.title"></v-list-item-title>
+                <v-list-item-title class="text-list-item" v-text="item.title"></v-list-item-title>
             </v-list-item>
         </v-list>
     </v-menu>
@@ -53,14 +53,10 @@ export default {
 
         heightBtn: {
             type: String,
-            default: '50px'
+            default: '64px'
         },
 
         classBtn: {
-            type: String
-        },
-
-        classText: {
             type: String
         },
 
@@ -88,12 +84,8 @@ export default {
             return "main-btn" + " " + this.classBtn;
         },
 
-        textMainClass: function () {
-            return "text-btn" + " " + this.classText;
-        },
-
         textListClass: function () {
-            return this.classList;
+            return "text-list" + " " + this.classList;
         },
     },
 
@@ -113,8 +105,22 @@ export default {
 <style scoped>
 
 .image-icon {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
+}
+
+.main-btn {
+    background: none;
+    border-radius: 16px;
+    border: 1px solid #101419;
+}
+
+.label-btn {
+    color: white;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
 }
 
 .text-btn {
@@ -123,20 +129,14 @@ export default {
     font-weight: 800;
 }
 
-.main-btn {
-    background-color: rgb(255, 255, 255);
-    border-radius: 10px;
+.text-list {
+    background-color: var(--secondary) !important;
+    border-radius: 10px !important;
+    margin-top: 10px !important;
 }
 
-.main-btn:hover {
-    background-color: rgba(247, 247, 247, 1);
-}
-
-.main-btn:focus {
-    background-color: rgba(247, 247, 247, 1);
-}
-
-.main-btn:focus:before {
-    background-color: rgba(247, 247, 247, 1);
+.text-list-item {
+    cursor: pointer;
+    color: white;
 }
 </style>

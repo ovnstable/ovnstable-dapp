@@ -5,25 +5,28 @@
             @input="close"
             :persistent="persistent"
             scrollable>
-        <v-card color="container_body">
-            <v-toolbar color="container_header">
-                <v-toolbar-title>
+        <v-card class="container_body">
+            <v-toolbar class="container_header" flat>
+                <v-toolbar-title class="title">
                     Account
                 </v-toolbar-title>
-                <v-btn icon class="ml-auto" @click="close">
-                    <v-icon color="error">mdi-close</v-icon>
+                <v-btn icon class="ml-auto" @click="close" dark>
+                    <v-icon>mdi-close</v-icon>
                 </v-btn>
             </v-toolbar>
+
             <v-card-text class="px-5 pt-5">
-                <v-text-field dense label="Account" v-model="account" readonly outlined></v-text-field>
+                <v-text-field dense label="Account" v-model="account" readonly outlined dark></v-text-field>
 
                 <v-row>
                     <v-col>
-                        Recent Transactions
+                        <label class="recent-label">
+                            Recent Transactions
+                        </label>
                     </v-col>
                     <v-col class="d-flex">
                         <v-spacer></v-spacer>
-                        <v-btn small text @click="clearTransaction">clear all</v-btn>
+                        <v-btn dark small text @click="clearTransaction">clear all</v-btn>
                     </v-col>
                 </v-row>
 
@@ -37,7 +40,6 @@
                     </v-col>
                 </v-row>
             </v-card-text>
-
         </v-card>
     </v-dialog>
 </template>
@@ -86,8 +88,6 @@ export default {
             this.$emit('m-close');
         },
     },
-
-
 }
 </script>
 
@@ -97,12 +97,27 @@ export default {
     font-size: 17px;
 }
 
+.title {
+    color: white;
+    font-weight: 300;
+}
+
+.recent-label {
+    color: white !important;
+}
+
 .container_body {
-    border-radius: 20px;
+    border-radius: 24px;
+    background-color: var(--secondary);
+}
+
+.container_header {
+    background-color: var(--secondary) !important;
 }
 
 .transaction-link {
     cursor: pointer;
+    color: var(--link);
 }
 
 .transaction-link:hover {

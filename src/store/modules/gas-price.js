@@ -2,11 +2,16 @@ import {axios} from "../../plugins/http-axios";
 
 const state = {
 
+    show: false,
+
     gasPriceStation: {
         low: 10,
         standard: 20,
         fast: 30,
         ultra: 50,
+
+        suggestBaseFee: 0,
+        usdPrice: 0
     },
 
     gasPriceType: 'standard',
@@ -16,6 +21,9 @@ const state = {
 
 const getters = {
 
+    show(state) {
+        return state.show;
+    },
 
     gasPriceStation(state) {
         return state.gasPriceStation;
@@ -32,13 +40,20 @@ const getters = {
     gasPriceType(state) {
         return state.gasPriceType;
     },
-
 };
 
 const actions = {
 
+    async showGasSettings({commit, dispatch, getters, rootState}) {
+        dispatch('refreshGasPrice');
+        commit('setShow', true);
+    },
 
-    async refreshGasPrice({commit, dispatch, getters, rootState}){
+    async hideGasSettings({commit, dispatch, getters, rootState}) {
+        commit('setShow', false);
+    },
+
+    async refreshGasPrice({commit, dispatch, getters, rootState}) {
 
         axios.get('https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle').then(value => {
 
@@ -48,20 +63,27 @@ const actions = {
                 standard: result.ProposeGasPrice,
                 fast: result.FastGasPrice,
                 ultra: result.FastGasPrice * 3,
+
+                suggestBaseFee: result.suggestBaseFee,
+                usdPrice: result.UsdPrice
             }
             commit('setGasPriceStation', price);
+
             let element = price[getters.gasPriceType];
+
             commit('setGasPrice', element)
             commit('setGasPriceGwei', rootState.web3.web3.utils.toWei(element + "", 'gwei'))
         }).catch(reason => {
             console.log('Error get gas price: ' + reason)
         })
     },
-
-
 };
 
 const mutations = {
+
+    setShow(state, value) {
+        state.show = value;
+    },
 
     setGasPriceStation(state, value) {
         state.gasPriceStation = value;
@@ -79,7 +101,6 @@ const mutations = {
     setGasPriceGwei(state, value) {
         state.gasPriceGwei = value;
     }
-
 };
 
 export default {

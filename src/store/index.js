@@ -6,6 +6,7 @@ import transaction from './modules/transaction'
 import gasPrice from './modules/gas-price';
 import web3 from "./modules/web3";
 import accountProfile from './modules/account-profile';
+import mintRedeemView from './modules/mint-redeem-view';
 import governance from './modules_governance/governance';
 import ethers from './modules_governance/ethers';
 
@@ -21,10 +22,9 @@ export default new Vuex.Store({
         transaction,
         web3,
         accountProfile,
-
+        mintRedeemView,
         governance,
         ethers
-
     },
     plugins: [createPersistedState({paths: ['transaction']})]
 });

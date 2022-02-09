@@ -35,7 +35,7 @@
                         <v-img :src="item.image"/>
                     </div>
                 </v-list-item-avatar>
-                <v-list-item-title class="text-list-item" v-text="item.title"></v-list-item-title>
+                <v-list-item-title class="text-list-item" :class="item.disabled ? 'item-disabled' : ''" v-text="item.title"></v-list-item-title>
             </v-list-item>
         </v-list>
     </v-menu>
@@ -138,5 +138,10 @@ export default {
 .text-list-item {
     cursor: pointer;
     color: white;
+}
+
+.item-disabled {
+    cursor: default;
+    color: rgba(255, 255, 255, 0.15);
 }
 </style>

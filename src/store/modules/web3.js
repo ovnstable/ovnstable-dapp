@@ -63,6 +63,8 @@ const state = {
     provider: null,
     onboard: null,
     walletConnected: false,
+    walletName: null,
+    ens: null,
 };
 
 const getters = {
@@ -107,6 +109,13 @@ const getters = {
         return state.loadingWeb3;
     },
 
+    walletName(state) {
+        return state.walletName;
+    },
+
+    ens(state) {
+        return state.ens;
+    },
 };
 
 const actions = {
@@ -122,11 +131,16 @@ const actions = {
             },
 
             subscriptions: {
+                ens: async ens => {
+                    commit('setEns', ens);
+                },
+
                 wallet: async wallet => {
                     commit('setProvider', wallet.provider);
 
                     await dispatch('initWeb3').then(value => {
                         commit('setWalletConnected', true);
+                        commit('setWalletName', wallet.name);
                         localStorage.setItem('walletName', wallet.name);
                         console.log(wallet.name + ' is now connected!');
                     });
@@ -405,6 +419,13 @@ const mutations = {
         state.loadingWeb3 = value;
     },
 
+    setWalletName(state, value) {
+        state.walletName = value;
+    },
+
+    setEns(state, value) {
+        state.ens = value;
+    },
 };
 
 export default {

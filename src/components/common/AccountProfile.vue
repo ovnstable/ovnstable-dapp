@@ -16,29 +16,62 @@
             </v-toolbar>
 
             <v-card-text class="px-5 pt-5">
-                <v-text-field dense label="Account" v-model="account" readonly outlined dark></v-text-field>
+                <v-col class="pl-10 pr-10">
+                    <v-row align="center" class="account-info-row">
+                        <label class="wallet-name-label">
+                            Connected with {{ walletName }}
+                        </label>
+                        <v-spacer></v-spacer>
+                        <v-btn class="disconnect-wallet-btn" dark @click="disconnectWallet">Disconnect</v-btn>
+                    </v-row>
 
-                <v-row>
-                    <v-col>
-                        <label class="recent-label">
+                    <v-row align="center" class="account-info-row">
+                        <div class="avatar-img">
+                            <v-img :src="ens.avatar ? ens.avatar : require('@/assets/network/polygon.svg')"/>
+                        </div>
+                        <label class="account-label ml-5">{{ accountShort }}</label>
+                    </v-row>
+
+                    <v-row align="center" class="account-info-row">
+                        <a class="view-explorer-btn" @click="viewInExplorer">
+                            <v-img class="icon-img" :src="require('@/assets/icon/out.svg')"/>
+                            <label class="ml-1">View on explorer</label>
+                        </a>
+                        <a class="copy-address-btn ml-5" @click="copyAddressToClipboard">
+                            <v-img class="icon-img" :src="require('@/assets/icon/link.svg')"/>
+                            <label class="ml-1">Copy Address</label>
+                        </a>
+                        <a class="ml-5" @click="addUsdPlusToken">
+                            <label class="add-usd-btn">Add USD+</label>
+                        </a>
+                    </v-row>
+
+                    <v-row class="mt-10 mb-3" align="center">
+                        <label class="recent-label ml-5">
                             Recent Transactions
                         </label>
-                    </v-col>
-                    <v-col class="d-flex">
                         <v-spacer></v-spacer>
-                        <v-btn dark small text @click="clearTransaction">clear all</v-btn>
-                    </v-col>
-                </v-row>
+                        <v-btn class="disconnect-wallet-btn" dark @click="clearTransaction">
+                            Clear all
+                        </v-btn>
+                    </v-row>
 
-                <v-row class="row mt-2" v-for="item in transactions">
-                    <v-col lg="10">
-                        <div class="transaction-link" @click="openPolygonScan(item.hash)">{{ item.text }} ↗</div>
-                    </v-col>
-                    <v-col lg="2">
-                        <v-icon v-if="item.pending">mdi-progress-question</v-icon>
-                        <v-icon color="green" v-else>mdi-check</v-icon>
-                    </v-col>
-                </v-row>
+                    <v-row v-if="!transactions || transactions.length === 0" align="center">
+                        <label class="recent-label ml-5">
+                            Your transactions will apper here...
+                        </label>
+                    </v-row>
+
+                    <v-row class="row mt-2" v-bind:key="i" v-for="(item, i) in transactions">
+                        <v-col cols="10">
+                            <div class="transaction-link ml-5" @click="openPolygonScan(item.hash)">{{ item.text }} ↗</div>
+                        </v-col>
+                        <v-col cols="2">
+                            <v-icon v-if="item.pending">mdi-progress-question</v-icon>
+                            <v-icon color="green" v-else>mdi-check</v-icon>
+                        </v-col>
+                    </v-row>
+                </v-col>
             </v-card-text>
         </v-card>
     </v-dialog>
@@ -62,19 +95,28 @@ export default {
         },
         width: {
             type: String,
-            default: '400',
+            default: '500',
         }
     },
 
     computed: {
-        ...mapGetters('web3', ['account']),
+        ...mapGetters('web3', ['account', 'walletName', 'ens']),
         ...mapGetters('accountProfile', ['show']),
-        ...mapGetters('transaction', ['transactions'])
+        ...mapGetters('transaction', ['transactions']),
+
+        accountShort: function () {
+            if (this.account) {
+                return this.account.substring(0, 5) + '...' + this.account.substring(this.account.length - 4);
+            } else {
+                return null;
+            }
+        },
     },
 
 
     methods: {
         ...mapActions('accountProfile', ['hideAccountProfile']),
+        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken']),
         ...mapActions('transaction', ['clearTransaction']),
 
         openPolygonScan(hash) {
@@ -86,6 +128,15 @@ export default {
 
             this.$emit('input', false);
             this.$emit('m-close');
+        },
+
+        viewInExplorer() {
+            let url = 'https://polygonscan.com/address/' + this.account;
+            window.open(url, '_blank');
+        },
+
+        copyAddressToClipboard() {
+            navigator.clipboard.writeText(this.account);
         },
     },
 }
@@ -103,7 +154,88 @@ export default {
 }
 
 .recent-label {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+    color: #8FA2B7 !important;
+}
+
+.wallet-name-label {
     color: white !important;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.account-label {
+    color: white !important;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.view-explorer-btn > label, .copy-address-btn > label, .add-usd-btn > label {
+    cursor: pointer !important;
+}
+
+.view-explorer-btn {
+    cursor: pointer;
+    background: none !important;
+    color: var(--link);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    display: flex;
+}
+
+.copy-address-btn {
+    cursor: pointer;
+    background: none !important;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    display: flex;
+}
+
+.add-usd-btn {
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    background: var(--orange-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.disconnect-wallet-btn {
+    height: 40px !important;
+    background: none !important;
+    border: 1px solid var(--link);
+    border-radius: 40px;
+    text-transform: none !important;
+    color: var(--link);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.avatar-img {
+    width: 40px;
+    height: 40px;
+}
+
+.icon-img {
+    width: 24px;
+    height: 24px;
+}
+
+.account-info-row {
+    height: 56px;
 }
 
 .container_body {
@@ -118,6 +250,10 @@ export default {
 .transaction-link {
     cursor: pointer;
     color: var(--link);
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
 }
 
 .transaction-link:hover {

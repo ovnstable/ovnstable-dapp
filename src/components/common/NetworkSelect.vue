@@ -40,6 +40,36 @@
                             Arbitrum (Soon)
                         </v-list-item-title>
                     </v-list-item>
+                    <v-list-item disabled>
+                        <v-list-item-avatar>
+                            <div class="list-item-icon">
+                                <v-img :src="require('@/assets/network/avax.png')"/>
+                            </div>
+                        </v-list-item-avatar>
+                        <v-list-item-title class="list-item-disabled">
+                            Avalanche (Soon)
+                        </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item disabled>
+                        <v-list-item-avatar>
+                            <div class="list-item-icon">
+                                <v-img :src="require('@/assets/network/ftm.png')"/>
+                            </div>
+                        </v-list-item-avatar>
+                        <v-list-item-title class="list-item-disabled">
+                            Fantom (Soon)
+                        </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item disabled>
+                        <v-list-item-avatar>
+                            <div class="list-item-icon">
+                                <v-img :src="require('@/assets/currencies/eth.svg')"/>
+                            </div>
+                        </v-list-item-avatar>
+                        <v-list-item-title class="list-item-disabled">
+                            Ethereum (Soon)
+                        </v-list-item-title>
+                    </v-list-item>
                 </v-list>
             </v-menu>
         </div>

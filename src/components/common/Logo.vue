@@ -1,5 +1,5 @@
 <template>
-    <v-row dense class="logo" @click="clickLogo" justify="center">
+    <v-row dense class="logo pr-10" @click="clickLogo" justify="end">
         <div style="width: 40px; height: 40px">
             <v-img :src="require('../../assets/ovn.png')"></v-img>
         </div>

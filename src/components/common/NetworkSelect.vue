@@ -1,23 +1,18 @@
 <template>
-    <v-row justify="center">
+    <v-row justify="start">
         <div>
             <v-menu offset-y>
                 <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                            height="56px"
-                            class="network-select-btn"
-                            dark
-                            @click="openedList = !openedList"
-                            v-bind="attrs"
-                            v-on="on">
-                        <div class="btn-icon">
-                            <v-img :src="require('@/assets/network/polygon.svg')"/>
-                        </div>
-                        <span class="btn-label">Polygon</span>
-                        <v-icon>
+                    <div class="btn-icon"
+                         @click="openedList = !openedList"
+                         style="display: flex"
+                         v-bind="attrs"
+                         v-on="on">
+                        <v-img :src="require('@/assets/network/polygon.svg')"/>
+                        <v-icon color="white">
                             {{openedList ? 'mdi-chevron-up' : 'mdi-chevron-down'}}
                         </v-icon>
-                    </v-btn>
+                    </div>
                 </template>
                 <v-list class="network-select-list">
                     <v-list-item style="cursor: pointer">
@@ -120,8 +115,8 @@ export default {
 }
 
 .btn-icon {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
 }
 
 .network-select-btn {

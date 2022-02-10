@@ -1,153 +1,159 @@
 <template>
-  <v-row justify="center">
-    <div class="hidden-xs-only">
-      <span v-bind:class="activeTabSave" @click="goToAction('/')">Earn</span>
-      <span v-bind:class="activeTabDashboard" class=" ml-10"
-            @click="goToAction('/fund')">Portfolio & performance</span>
-      <span v-bind:class="activeTabStats" class="ml-10" @click="goToAction('/stats')">Stats</span>
-    </div>
-    <div class="hidden-sm-and-up mt-10">
-      <v-select class="menu-select" flat solo color="#5686B2" :items="menus" v-model="menu" item-value="to"
-                @input="pushUrl" item-text="name"/>
-    </div>
-  </v-row>
+    <v-row justify="center">
+        <div class="hidden-xs-only">
+            <span v-bind:class="activeTabSave"
+                  @click="goToAction('/')">
+                Swap
+            </span>
+
+            <span v-bind:class="activeTabDashboard"
+                  class=" ml-10"
+                  @click="goToAction('/fund')">
+                Portfolio & Performance
+            </span>
+
+            <span v-bind:class="activeTabStats"
+                  class="ml-10"
+                  @click="goToAction('/stats')">
+                Stats
+            </span>
+        </div>
+        <div class="hidden-sm-and-up mt-10">
+            <v-select class="menu-select" flat solo color="#5686B2" :items="menus" v-model="menu" item-value="to"
+                      @input="pushUrl" item-text="name"/>
+        </div>
+    </v-row>
 </template>
 
 <script>
 import {mapGetters} from "vuex";
 
 export default {
-  name: "Menu",
-  data: () => ({
-    exitAppShow: false,
-    direction: 'top',
-    fab: false,
-    tab: null,
-    currentDate: null,
-    showLimitTooltip: false,
+    name: "Menu",
+    data: () => ({
+        exitAppShow: false,
+        direction: 'top',
+        fab: false,
+        tab: null,
+        currentDate: null,
+        showLimitTooltip: false,
 
-    ethLogo: require('../../assets/currencies/eth.svg'),
-    polLogo: require('../../assets/currencies/pol.svg'),
+        ethLogo: require('../../assets/currencies/eth.svg'),
+        polLogo: require('../../assets/currencies/pol.svg'),
 
-    tabId: 1,
+        tabId: 1,
 
-    menu: null,
+        menu: null,
 
-    menus: [
-      {
-        name: 'Earn',
-        to: '/',
-        id: 1
-      },
-      {
-        name: 'Fund performance',
-        to: '/fund',
-        id: 2,
-      },
-      {
-        name: 'Stats',
-        to: '/stats',
-        id: 3,
-      },
-    ]
-  }),
-
-
-  computed: {
-
-    ...mapGetters('web3', ['account', 'web3', 'contractNames', 'networkId']),
+        menus: [
+            {
+                name: 'Earn',
+                to: '/',
+                id: 1
+            },
+            {
+                name: 'Fund performance',
+                to: '/fund',
+                id: 2,
+            },
+            {
+                name: 'Stats',
+                to: '/stats',
+                id: 3,
+            },
+        ]
+    }),
 
 
+    computed: {
 
-    activeTabSave: function () {
-      return {
-        'active-tab': this.tabId === 1,
-        'in-active-tab': this.tabId !== 1,
-      }
+        ...mapGetters('web3', ['account', 'web3', 'contractNames', 'networkId']),
+
+
+        activeTabSave: function () {
+            return {
+                'active-tab': this.tabId === 1,
+                'in-active-tab': this.tabId !== 1,
+            }
+        },
+
+        activeTabDashboard: function () {
+            return {
+                'active-tab': this.tabId === 2,
+                'in-active-tab': this.tabId !== 2,
+            }
+        },
+
+
+        activeTabStats: function () {
+            return {
+                'active-tab': this.tabId === 3,
+                'in-active-tab': this.tabId !== 3,
+            }
+        },
     },
 
-    activeTabDashboard: function () {
-      return {
-        'active-tab': this.tabId === 2,
-        'in-active-tab': this.tabId !== 2,
-      }
+
+    created() {
+        let path = this.$router.history.current.path;
+        let find = this.menus.find(value => value.to === path);
+        if (find) {
+            this.menu = find;
+            this.tabId = find.id;
+        }
     },
 
 
-    activeTabStats: function () {
-      return {
-        'active-tab': this.tabId === 3,
-        'in-active-tab': this.tabId !== 3,
-      }
-    },
-  },
+    methods: {
+        goToAction(id) {
 
+            let menu = this.menus.find(value => value.to === id);
 
-  created() {
+            if (menu === this.menu) {
+                return;
+            } else {
+                this.$router.push(id)
+                this.menu = menu;
+                this.tabId = menu.id;
+            }
+        },
 
-    let path = this.$router.history.current.path;
-    let find = this.menus.find(value => value.to === path);
-    if (find) {
-      this.menu = find;
-      this.tabId = find.id;
+        pushUrl(to) {
+            this.$router.push(to)
+        },
     }
-
-  },
-
-
-  methods: {
-
-
-    goToAction(id) {
-
-      let menu = this.menus.find(value => value.to === id);
-
-      if (menu === this.menu)
-        return;
-      else {
-        this.$router.push(id)
-        this.menu = menu;
-        this.tabId = menu.id;
-      }
-
-    },
-
-    pushUrl(to) {
-      this.$router.push(to)
-    },
-
-
-
-
-
-  }
 }
 </script>
 
 <style scoped>
 .tabs {
-  font-size: 25px;
+    font-size: 25px;
 }
 
 .active-tab {
-  color: #5686B2;
-  font-size: 25px;
-  font-weight: bold;
-  border-bottom: 4px solid #171717;
-  cursor: pointer;
-}
-
-.menu-select {
-  width: 150px;
-  font-size: 25px;
-  color: #171717;
+    background: var(--orange-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: .1rem;
 }
 
 .in-active-tab {
-  color: #5686B2;
-  font-size: 25px;
-  font-weight: bold;
-  cursor: pointer;
+    color: #8FA2B7;
+    font-size: 16px;
+    font-weight: 300;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: .1rem;
+}
+
+.menu-select {
+    width: 150px;
+    font-size: 25px;
+    color: #171717;
 }
 
 

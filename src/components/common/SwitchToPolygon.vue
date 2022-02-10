@@ -1,45 +1,42 @@
 <template>
-  <v-container>
-    <v-row justify="end">
-      <button v-on:click="goToPolygon" class="switcher"><span>Switch to Polygon</span>
-        <v-icon>mdi-login</v-icon>
-      </button>
-    </v-row>
-
-  </v-container>
-
+    <v-container>
+        <v-row justify="end">
+            <button v-on:click="goToPolygon" class="switcher-btn">
+                Switch to Polygon
+            </button>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
 import {mapActions} from "vuex";
 
 export default {
-  name: "SwitchToPolygon",
+    name: "SwitchToPolygon",
 
+    methods: {
 
-  methods: {
+        ...mapActions('web3', ['setNetwork']),
 
-    ...mapActions('web3', ['setNetwork']),
-
-    goToPolygon() {
-      this.setNetwork(137)
+        goToPolygon() {
+            this.setNetwork(137)
+        }
     }
-  }
 }
 </script>
 
 <style scoped>
 
-.switcher {
-  cursor: pointer; /* Mouse pointer on hover */
-  color: #444444;
-  width: 210px;
-  height: 45px;
-  font-weight: 600;
-  font-size: 14px;
-  border: 1px solid #c7c7c7;
-  border-radius: 10px;
-  opacity: 0.8;
+.switcher-btn:hover {
+    filter: brightness(110%);
+}
+
+.switcher-btn {
+    color: white;
+    width: 185px;
+    height: 56px;
+    border-radius: 40px;
+    background: var(--orange-gradient);
 }
 
 </style>

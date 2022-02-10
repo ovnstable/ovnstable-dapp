@@ -47,7 +47,7 @@
                     </v-row>
 
                     <v-row class="mt-10 mb-3" align="center">
-                        <label class="recent-label ml-5">
+                        <label class="recent-label ml-2">
                             Recent Transactions
                         </label>
                         <v-spacer></v-spacer>
@@ -57,14 +57,14 @@
                     </v-row>
 
                     <v-row v-if="!transactions || transactions.length === 0" align="center">
-                        <label class="recent-label ml-5">
+                        <label class="recent-label ml-2">
                             Your transactions will apper here...
                         </label>
                     </v-row>
 
                     <v-row class="row mt-2" v-bind:key="i" v-for="(item, i) in transactions">
                         <v-col cols="10">
-                            <div class="transaction-link ml-5" @click="openPolygonScan(item.hash)">{{ item.text }} ↗</div>
+                            <div class="transaction-link ml-2" @click="openPolygonScan(item.hash)">{{ item.text }} ↗</div>
                         </v-col>
                         <v-col cols="2">
                             <v-icon v-if="item.pending">mdi-progress-question</v-icon>

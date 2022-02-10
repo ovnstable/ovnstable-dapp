@@ -39,13 +39,10 @@
                                     <label class="gas-price-title">Slow</label>
                                 </v-row>
                                 <v-row>
-                                    <label class="gas-price-info">{{ (gasPriceStation['low'] * gasPriceStation.suggestBaseFee).toFixed(6) }} Matic</label>
-                                </v-row>
-                                <v-row>
                                     <label class="gas-price-info">{{ gasPriceStation['low'] }} Gwei</label>
                                 </v-row>
                                 <v-row>
-                                    <label class="gas-price-info">${{(gasPriceStation['low'] * gasPriceStation.suggestBaseFee * gasPriceStation.usdPrice).toFixed(2) }}</label>
+                                    <label class="gas-price-info">> 1 minute</label>
                                 </v-row>
                             </v-card-text>
                         </v-card>
@@ -57,13 +54,10 @@
                                     <label class="gas-price-title">Average</label>
                                 </v-row>
                                 <v-row>
-                                    <label class="gas-price-info">{{ (gasPriceStation['standard'] * gasPriceStation.suggestBaseFee).toFixed(6) }} Matic</label>
-                                </v-row>
-                                <v-row>
                                     <label class="gas-price-info">{{ gasPriceStation['standard'] }} Gwei</label>
                                 </v-row>
                                 <v-row>
-                                    <label class="gas-price-info">${{(gasPriceStation['standard'] * gasPriceStation.suggestBaseFee * gasPriceStation.usdPrice).toFixed(2) }}</label>
+                                    <label class="gas-price-info" style="">~35 seconds</label>
                                 </v-row>
                             </v-card-text>
                         </v-card>
@@ -75,13 +69,10 @@
                                     <label class="gas-price-title">Top</label>
                                 </v-row>
                                 <v-row>
-                                    <label class="gas-price-info">{{ (gasPriceStation['fast'] * gasPriceStation.suggestBaseFee).toFixed(6) }} Matic</label>
-                                </v-row>
-                                <v-row>
                                     <label class="gas-price-info">{{ gasPriceStation['fast'] }} Gwei</label>
                                 </v-row>
                                 <v-row>
-                                    <label class="gas-price-info">${{(gasPriceStation['fast'] * gasPriceStation.suggestBaseFee * gasPriceStation.usdPrice).toFixed(2) }}</label>
+                                    <label class="gas-price-info">5 - 20 seconds</label>
                                 </v-row>
                             </v-card-text>
                         </v-card>

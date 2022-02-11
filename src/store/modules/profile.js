@@ -252,25 +252,8 @@ const actions = {
             let element = value[i];
 
             try {
-
-                let symbol = element.symbol;
-                let name = element.name;
-                let bookValue = element.amountInVault / element.usdcPriceDenominator;
-                let liquidationValue = element.usdcPriceInVault / element.usdcPriceDenominator;
-                let price = element.usdcBuyPrice/ element.usdcPriceDenominator;
-                let liquidationPrice = element.usdcSellPrice / element.usdcPriceDenominator;
-                let bookPrice = (element.amountInVault  / element.usdcPriceDenominator) * (element.usdcBuyPrice / element.usdcPriceDenominator) ;
-
-                data.push({
-                    symbol: symbol,
-                    name: name,
-                    bookValue: accounting.formatMoney(bookValue, accountingConfig),
-                    price: accounting.formatMoney(price, accountingConfig),
-                    bookPrice: accounting.formatMoney(bookPrice, accountingConfig),
-                    liquidationPrice: accounting.formatMoney(liquidationPrice, accountingConfig),
-                    liquidationValue: accounting.formatMoney(liquidationValue, accountingConfig),
-                })
-            } catch (e) {
+                data.push(element);
+            }catch (e) {
                 console.log(e)
             }
         }

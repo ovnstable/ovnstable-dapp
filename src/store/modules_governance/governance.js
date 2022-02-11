@@ -212,13 +212,13 @@ const actions = {
 
     async changeWeights({commit, dispatch, getters, rootState}, weights) {
 
-        let portfolio = rootState.web3.contracts.portfolio;
+        let portfolioManager = rootState.web3.contracts.portfolioManager;
         let governor = rootState.web3.contracts.governor;
         let account = rootState.web3.account;
         let params = {from: account};
-        let abi = await portfolio.methods.setWeights(weights).encodeABI();
+        let abi = await portfolioManager.methods.setWeights(weights).encodeABI();
         let name = 'Proposal #' + getters.proposals.length + 1 + 'Change wights';
-        await governor.methods.proposeExec([portfolio.options.address], [0], [abi], name).send(params);
+        await governor.methods.proposeExec([portfolioManager.options.address], [0], [abi], name).send(params);
 
     },
 

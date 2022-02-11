@@ -45,7 +45,7 @@
                     <v-col lg="7" class="pa-0 ma-0" v-if="tab === 1">
                         <HistoryTotalData/>
                     </v-col>
-                    <v-col lg="8" class="pa-0 ma-0" v-if="tab === 2">
+                    <v-col lg="4" class="pa-0 ma-0" v-if="tab === 2">
                         <CurrentTotalData/>
                     </v-col>
                 </v-row>

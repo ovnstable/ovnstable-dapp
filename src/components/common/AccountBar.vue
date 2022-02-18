@@ -76,10 +76,17 @@ export default {
         },
     },
 
+    created() {
+        window.setInterval(() => {
+            this.refreshBalance();
+        }, 5000)
+    },
+
     methods: {
 
         ...mapActions('web3', ['connectWallet', 'disconnectWallet', 'switchAccount', 'addUsdPlusToken']),
         ...mapActions('accountProfile', ['showAccountProfile']),
+        ...mapActions('profile', ['refreshBalance']),
 
         disconnectWalletAction() {
             this.disconnectWallet();

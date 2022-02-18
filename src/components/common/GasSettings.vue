@@ -32,7 +32,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <!-- TODO: check prices calculation -->
+                        <!-- TODO: add updating -->
                         <v-card class="gas-price-card" :class="currentType === 'low' ? 'selected-type' : ''" flat>
                             <v-card-text @click="selectGasSpeed('low')">
                                 <v-row>

@@ -71,7 +71,9 @@
                                 </div>
                             </v-row>
                             <v-row>
-                                <label class="balance-label ml-5 mb-3">Balance: {{ $utils.formatMoney(balance.usdc, 2) }}</label>
+                                <label class="balance-label ml-5 mb-3">Balance: {{
+                                        $utils.formatMoney(balance.usdc, 2)
+                                    }}</label>
                             </v-row>
                         </v-col>
                     </v-row>
@@ -138,21 +140,13 @@ export default {
 
             let v = this.sum;
 
-            if (!v) {
+            if (!v || !v.trim()) {
                 return false;
             }
 
-            if (!v.trim()) {
-                return false;
-            }
+            v = parseFloat(v);
 
-            v = parseFloat(v.trim().replace(/\s/g, ''));
-
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdc)) {
-                return true;
-            }
-
-            return false
+            return !isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlus);
         },
 
         maxResult() {
@@ -178,9 +172,23 @@ export default {
     },
 
     created() {
-        this.currencies.push({id: 'usdc', title: 'USDC', image: require('../../assets/currencies/usdc.png')});
-        this.currencies.push({id: 'usdt', title: 'USDT (Soon)', disabled: true, image: require('../../assets/currencies/usdt.svg')});
-        this.currencies.push({id: 'dai', title: 'DAI (Soon)', disabled: true, image: require('../../assets/currencies/dai.svg')});
+        this.currencies.push({
+            id: 'usdc',
+            title: 'USDC',
+            image: require('../../assets/currencies/usdc.png')
+        });
+        this.currencies.push({
+            id: 'usdt',
+            title: 'USDT (Soon)',
+            disabled: true,
+            image: require('../../assets/currencies/usdt.svg')
+        });
+        this.currencies.push({
+            id: 'dai',
+            title: 'DAI (Soon)',
+            disabled: true,
+            image: require('../../assets/currencies/dai.svg')
+        });
 
         this.currency = this.currencies[0];
 
@@ -226,12 +234,24 @@ export default {
                     await new Promise(resolve => setTimeout(resolve, 2000));
                 }
 
+                /* TODO: separate approve and swap */
+
+                self.addText(`Estimating gas for transaction ......  done`);
+
+                let estimatedGasValue = await this.estimateGas(sum);
+                if (estimatedGasValue === -1) {
+                    this.failed();
+                    return;
+                } else {
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                }
+
                 self.addText(`Burning ${self.sum} USD+ ......  done`);
                 self.addText(`Transferring ${self.sum} USDC to ${from.substring(1, 10)}  ......  done`);
 
                 try {
                     await this.refreshGasPrice();
-                    let buyParams = {gasPrice: this.gasPriceGwei, from: from};
+                    let buyParams = {gasPrice: estimatedGasValue, from: from};
                     console.log(`Try redeem ${contracts.usdc.options.address} ${sum}`);
                     let redeemResult = await contracts.exchange.methods.redeem(contracts.usdc.options.address, sum).send(buyParams);
                     this.showSuccessRedeemToast(self.sum, redeemResult.transactionHash)
@@ -291,6 +311,29 @@ export default {
             }
 
             return true;
+        },
+
+        async estimateGas(sum) {
+
+            let contracts = this.contracts;
+            let from = this.account;
+
+            try {
+                let estimateOptions = {from: from, value: sum};
+
+                await contracts.usdc.methods.redeem(contracts.usdc.options.address, sum).estimateGas(estimateOptions)
+                    .then(function (gasAmount) {
+                        return gasAmount;
+                    })
+                    .catch(function (error) {
+                        this.failed();
+                        return -1;
+                    });
+            } catch (e) {
+                console.log(e)
+                this.failed();
+                return -1;
+            }
         },
 
         showSuccessRedeemToast(sum, tx) {

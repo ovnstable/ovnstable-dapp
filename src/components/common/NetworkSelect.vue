@@ -1,74 +1,72 @@
 <template>
-    <v-row justify="start">
-        <div>
-            <v-menu offset-y>
-                <template v-slot:activator="{ on, attrs }">
-                    <div class="btn-icon"
-                         @click="openedList = !openedList"
-                         style="display: flex"
-                         v-bind="attrs"
-                         v-on="on">
-                        <v-img :src="require('@/assets/network/polygon.svg')"/>
-                        <v-icon color="white">
-                            {{openedList ? 'mdi-chevron-up' : 'mdi-chevron-down'}}
-                        </v-icon>
-                    </div>
-                </template>
-                <v-list class="network-select-list">
-                    <v-list-item style="cursor: pointer">
-                        <v-list-item-avatar>
-                            <div class="list-item-icon">
-                                <v-img :src="require('@/assets/network/polygon.svg')"/>
-                            </div>
-                        </v-list-item-avatar>
-                        <v-list-item-title class="network-select-list-item">
-                            Polygon (Matic)
-                        </v-list-item-title>
-                    </v-list-item>
-                    <v-list-item disabled>
-                        <v-list-item-avatar>
-                            <div class="list-item-icon">
-                                <v-img :src="require('@/assets/network/arbitrum.svg')"/>
-                            </div>
-                        </v-list-item-avatar>
-                        <v-list-item-title class="list-item-disabled">
-                            Arbitrum (Soon)
-                        </v-list-item-title>
-                    </v-list-item>
-                    <v-list-item disabled>
-                        <v-list-item-avatar>
-                            <div class="list-item-icon">
-                                <v-img :src="require('@/assets/network/avax.png')"/>
-                            </div>
-                        </v-list-item-avatar>
-                        <v-list-item-title class="list-item-disabled">
-                            Avalanche (Soon)
-                        </v-list-item-title>
-                    </v-list-item>
-                    <v-list-item disabled>
-                        <v-list-item-avatar>
-                            <div class="list-item-icon">
-                                <v-img :src="require('@/assets/network/ftm.png')"/>
-                            </div>
-                        </v-list-item-avatar>
-                        <v-list-item-title class="list-item-disabled">
-                            Fantom (Soon)
-                        </v-list-item-title>
-                    </v-list-item>
-                    <v-list-item disabled>
-                        <v-list-item-avatar>
-                            <div class="list-item-icon">
-                                <v-img :src="require('@/assets/currencies/eth.svg')"/>
-                            </div>
-                        </v-list-item-avatar>
-                        <v-list-item-title class="list-item-disabled">
-                            Ethereum (Soon)
-                        </v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
-        </div>
-    </v-row>
+    <div class="pt-1 ml-5" style="width: 40px; height: 40px">
+        <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+                <div class="btn-icon"
+                     @click="openedList = !openedList"
+                     style="display: flex"
+                     v-bind="attrs"
+                     v-on="on">
+                    <v-img :src="require('@/assets/network/polygon.svg')"/>
+                    <v-icon color="white">
+                        {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                    </v-icon>
+                </div>
+            </template>
+            <v-list class="network-select-list">
+                <v-list-item style="cursor: pointer">
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/polygon.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="network-select-list-item">
+                        Polygon (Matic)
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item disabled>
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/arbitrum.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="list-item-disabled">
+                        Arbitrum (Soon)
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item disabled>
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/avax.png')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="list-item-disabled">
+                        Avalanche (Soon)
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item disabled>
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/ftm.png')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="list-item-disabled">
+                        Fantom (Soon)
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item disabled>
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/currencies/eth.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="list-item-disabled">
+                        Ethereum (Soon)
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-menu>
+    </div>
 </template>
 
 <script>
@@ -118,17 +116,4 @@ export default {
     width: 32px;
     height: 32px;
 }
-
-.network-select-btn {
-    border-radius: 8px;
-    background: linear-gradient(91.26deg, rgba(130, 71, 229, 0.0651) 0%, rgba(129, 71, 228, 0.8845) 0.01%, rgba(96, 39, 192, 0.8845) 100%) !important;
-}
-
-.btn-label {
-    font-size: 16px;
-    text-transform: none;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
 </style>

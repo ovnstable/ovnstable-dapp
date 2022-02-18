@@ -3,12 +3,8 @@
             class="app-bar pa-4 pt-4"
             dense
             app>
-        <v-col cols="3" class="ml-0 pl-0">
+        <v-col cols="4" class="pl-5">
             <Logo/>
-        </v-col>
-
-        <v-col cols="1" class="ml-0 pl-0">
-            <NetworkSelect/>
         </v-col>
 
         <v-col cols="4" class="ma-0 pa-0">
@@ -45,7 +41,6 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import SwitchToPolygon from "./common/SwitchToPolygon";
 import AccountBar from "./common/AccountBar";
 import Logo from "./common/Logo";
-import NetworkSelect from "./common/NetworkSelect";
 import Menu from "./common/Menu";
 
 export default {
@@ -54,7 +49,6 @@ export default {
     components: {
         Menu,
         Logo,
-        NetworkSelect,
         AccountBar,
         SwitchToPolygon
     },
@@ -84,5 +78,4 @@ export default {
     box-shadow: none !important;
     background-color: var(--main-background) !important;
 }
-
 </style>

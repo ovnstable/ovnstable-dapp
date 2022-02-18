@@ -1,19 +1,26 @@
 <template>
-    <v-row dense class="logo pr-10" @click="clickLogo" justify="end">
-        <div style="width: 40px; height: 40px">
+    <v-row dense class="logo" @click="clickLogo" justify="start">
+        <div class="mr-1" style="width: 40px; height: 40px">
             <v-img :src="require('../../assets/ovn.png')"></v-img>
         </div>
+
         <label class="logo-title" @click="clickLogo">
             Overnight<sup>&reg;{{ stand }}</sup>
         </label>
+
+        <NetworkSelect/>
     </v-row>
 </template>
 
 <script>
+import NetworkSelect from "@/components/common/NetworkSelect";
+
 export default {
     name: "Logo",
 
-    components: {},
+    components: {
+        NetworkSelect,
+    },
 
     data: () => ({
     }),

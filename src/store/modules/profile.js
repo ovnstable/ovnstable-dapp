@@ -161,7 +161,7 @@ const actions = {
     async refreshPayouts({commit, dispatch, getters, rootState}) {
         commit('setLoadingPayouts', true);
 
-        axios.get(`/payouts`)
+        axios.get(`/dapp/payouts`)
             .then(value => {
                 commit('setPayouts', value.data);
                 commit('setLoadingPayouts', false);
@@ -233,9 +233,11 @@ const actions = {
 
     async refreshTotalUsdPlus({commit, dispatch, getters}) {
         commit('setLoadingTotalUsdPlus', true)
-        axios.get('/total').then(value => {
+        axios.get('/dapp/total').then(value => {
             commit('setTotalUsdPlus', value.data);
             commit('setLoadingTotalUsdPlus', false)
+        }).catch(reason => {
+            console.log('API: /total => ' + reason);
         })
 
     },
@@ -244,7 +246,7 @@ const actions = {
     async refreshCurrentTotalData({commit, dispatch, getters, rootState}) {
         commit('setLoadingCurrentTotalData', true)
 
-        axios.get('/prices').then(resp => {
+        axios.get('/dapp/assets').then(resp => {
             let data = [];
 
             let value = resp.data;
@@ -260,6 +262,8 @@ const actions = {
 
         commit('setCurrentTotalData', data)
         commit('setLoadingCurrentTotalData', false)
+        }).catch(reason => {
+            console.log('API: Prices => '+ reason);
         })
 
     }

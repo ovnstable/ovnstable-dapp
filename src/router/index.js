@@ -11,6 +11,7 @@ import getOverview from "./midleware/getOverview"
 import getProposals from "./midleware/getProposals"
 import getDapp from "./midleware/getDapp"
 import middlewarePipeline from "./middlewarePipeline";
+import getFinance from "@/router/midleware/getFinance";
 
 const routes = [
 
@@ -78,7 +79,7 @@ const routes = [
                 component: () => import('../views/governance/Finance.vue'),
                 meta: {
                     middleware: [
-                        getOverview,
+                        getFinance,
                     ]
                 }
             },

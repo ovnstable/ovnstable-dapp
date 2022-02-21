@@ -269,7 +269,7 @@ const actions = {
         contracts.govToken = _load(OvnToken, web3);
         contracts.governor = _load(OvnGovernor, web3);
         contracts.mark2market = _load(Mark2Market, web3);
-        contracts.portfolioManager = _load(PortfolioManager, web3);
+        contracts.pm = _load(PortfolioManager, web3);
         contracts.timelockController = _load(TimelockController, web3);
         contracts.usdPlus = _load(UsdPlusToken, web3);
 

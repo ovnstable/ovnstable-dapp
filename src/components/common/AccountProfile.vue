@@ -35,7 +35,7 @@
                     <v-row align="center" class="account-info-row">
                         <a class="view-explorer-btn" @click="viewInExplorer">
                             <v-img class="icon-img" :src="require('@/assets/icon/out.svg')"/>
-                            <label class="ml-1">View on explorer</label>
+                            <label class="ml-1 view-explorer-label">View on explorer</label>
                         </a>
                         <a class="copy-address-btn ml-5" @click="copyAddressToClipboard">
                             <v-img class="icon-img" :src="require('@/assets/icon/link.svg')"/>
@@ -195,6 +195,10 @@ export default {
     font-size: 14px;
     line-height: 24px;
     display: flex;
+}
+
+.view-explorer-label:hover {
+    text-decoration: underline;
 }
 
 .copy-address-btn {

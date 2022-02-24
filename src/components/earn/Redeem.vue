@@ -155,7 +155,7 @@
                     <v-row dense class="pl-2 pr-2 pt-6 pb-6">
                         <label class="from-to-sub-label">
                             Output is estimated. You will receive at least <b
-                                class="from-to-sub-sum">{{ sumResult - 0.04 }} USDC</b> or the transaction will revert.
+                                class="from-to-sub-sum">{{ estimateResult }} USDC</b> or the transaction will revert.
                         </label>
                     </v-row>
 
@@ -172,34 +172,7 @@
 
                     <!-- TODO: add estimated gas row when estimatedGas calculation is ready -->
 
-                    <v-row dense class="pl-7 pr-7 pt-8">
-                        <label class="add-info-label mr-2">
-                            Price Impact
-                        </label>
-                        <v-tooltip
-                                color="#202832"
-                                right
-                        >
-                            <template v-slot:activator="{ on, attrs }">
-                                <div class="currency-icon"
-                                     v-bind="attrs"
-                                     v-on="on">
-                                    <v-img :src="require('@/assets/icon/question-help.svg')"/>
-                                </div>
-                            </template>
-                            <p class="my-0">The difference between</p>
-                            <p class="my-0">the market price and estimated price</p>
-                            <p class="my-0">due to trade size</p>
-                        </v-tooltip>
-
-                        <v-spacer></v-spacer>
-                        <!-- TODO: change when price impact calculation added -->
-                        <label class="add-info-label">
-                            0.00%
-                        </label>
-                    </v-row>
-
-                    <v-row dense class="pl-7 pr-7 pt-5">
+                    <v-row dense class="px-7 pt-5 pb-5">
                         <label class="add-info-label mr-2">
                             Overnight Fee
                         </label>
@@ -214,14 +187,14 @@
                                     <v-img :src="require('@/assets/icon/question-help.svg')"/>
                                 </div>
                             </template>
-                            <p class="my-0">A portion of each trade (0.04 USD+)</p>
+                            <p class="my-0">A portion of each trade (0.004%)</p>
                             <p class="my-0">goes to Overnight as a protocol incentive</p>
                         </v-tooltip>
 
                         <v-spacer></v-spacer>
                         <!-- TODO: change when price impact calculation added -->
                         <label class="add-info-label">
-                            0.04 USD+
+                            0.004%
                         </label>
                     </v-row>
 
@@ -302,6 +275,13 @@ export default {
             } else {
                 return this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
             }
+        },
+
+        estimateResult: function () {
+
+            let result = this.sumResult * 0.996;
+
+            return this.$utils.formatMoney(result, 2);
         },
 
         numberRule: function () {

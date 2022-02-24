@@ -22,12 +22,12 @@
                             Connected with {{ walletName }}
                         </label>
                         <v-spacer></v-spacer>
-                        <v-btn class="disconnect-wallet-btn" dark @click="disconnectWallet">Disconnect</v-btn>
+                        <v-btn class="disconnect-wallet-btn" dark @click="disconnectWalletAction">Disconnect</v-btn>
                     </v-row>
 
                     <v-row align="center" class="account-info-row">
                         <div class="avatar-img">
-                            <v-img :src="ens.avatar ? ens.avatar : require('@/assets/network/polygon.svg')"/>
+                            <v-img :src="(ens && ens.avatar) ? ens.avatar : require('@/assets/network/polygon.svg')"/>
                         </div>
                         <label class="account-label ml-5">{{ accountShort }}</label>
                     </v-row>
@@ -122,6 +122,11 @@ export default {
 
         openPolygonScan(hash) {
             window.open(`https://polygonscan.com/tx/${hash}`, '_blank').focus();
+        },
+
+        disconnectWalletAction() {
+            this.disconnectWallet();
+            this.close();
         },
 
         close() {

@@ -6,10 +6,12 @@
         <v-card class="container_body">
             <v-card-text class="px-5 pt-5">
                 <v-row justify="center" class="mt-10 mb-10">
-                    <div class="loading-img">
-                        <!-- TODO: add animation -->
-                        <v-img :src="require('@/assets/icon/loading.svg')"/>
-                    </div>
+                    <v-progress-circular
+                            width="1.5"
+                            :size="70"
+                            color="#FFD505 "
+                            indeterminate
+                    ></v-progress-circular>
                 </v-row>
                 <v-row justify="center">
                     <label class="loading-label">Waiting for confirmation</label>

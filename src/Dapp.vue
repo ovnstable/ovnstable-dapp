@@ -24,14 +24,19 @@ import GasSettings from "@/components/common/GasSettings";
 
 export default {
     name: "Dapp",
-    components: {GasSettings, AccountProfile, Footer, Header}
+    components: {
+        GasSettings,
+        AccountProfile,
+        Footer,
+        Header
+    }
 }
 </script>
 
 <style scoped>
 
 .main-container {
-    height: calc(100vh - 72px - 44px);
+    height: calc(100vh - 72px - 44px - 54px);
 }
 
 </style>

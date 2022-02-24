@@ -62,15 +62,6 @@ export default {
     background-color: var(--secondary);
 }
 
-.container_header {
-    background-color: var(--secondary) !important;
-}
-
-.loading-img {
-    width: 80px;
-    height: 80px;
-}
-
 .loading-label {
     color: #FFD505;
     font-style: normal;

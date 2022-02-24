@@ -38,6 +38,12 @@
                             Change
                         </v-btn>
                     </v-col>
+
+                  <v-col>
+                    <v-btn @click="rebalanceAction">
+                      Rebalance
+                    </v-btn>
+                  </v-col>
                 </v-row>
             </v-container>
         </v-card-actions>
@@ -67,12 +73,16 @@ export default {
     },
     methods: {
 
-        ...mapActions('governance', ['getStrategyWeights', 'setStrategyWeights']),
+        ...mapActions('governance', ['getStrategyWeights', 'setStrategyWeights', 'rebalancePortfolio']),
 
 
         changeWeightsAction(){
           this.setStrategyWeights(this.strategyWeights);
-        }
+        },
+
+      rebalanceAction(){
+          this.rebalancePortfolio();
+      }
     }
 }
 </script>

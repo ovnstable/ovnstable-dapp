@@ -309,6 +309,17 @@ const actions = {
         pm.methods.setStrategyWeights(items).send(params);
 
     },
+
+    async rebalancePortfolio ({commit, dispatch, getters, rootState} ) {
+
+        let pm = rootState.web3.contracts.pm;
+        let account = rootState.web3.account;
+        let params = {from: account};
+
+        pm.methods.balance().send(params);
+
+    },
+
     async getStrategyWeights({commit, dispatch, getters, rootState}) {
 
         let pm = rootState.web3.contracts.pm;

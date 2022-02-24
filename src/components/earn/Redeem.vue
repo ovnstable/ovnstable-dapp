@@ -17,7 +17,6 @@
                                               hide-details
                                               dark
                                               background-color="transparent"
-                                              :rules="[numberRule]"
                                               v-model="sum">
                                 </v-text-field>
                                 <v-spacer></v-spacer>
@@ -51,7 +50,7 @@
                     <v-row>
                         <v-col>
                             <v-row>
-                                <label class="title-row-label ml-5 mt-3">From</label>
+                                <label class="title-row-label ml-5 mt-3">To</label>
                             </v-row>
                             <v-row align="center">
                                 <v-text-field placeholder="0.00"
@@ -62,7 +61,6 @@
                                               hide-details
                                               dark
                                               background-color="transparent"
-                                              :rules="[numberRule]"
                                               v-model="sumResult">
                                 </v-text-field>
                                 <v-spacer></v-spacer>
@@ -81,25 +79,189 @@
             </v-card>
         </v-row>
 
-        <v-row class="mt-10">
-            <v-btn dark height="56" class="buy" :class="isBuy ? 'enabled-buy' : 'disabled-buy'" @click="redeem"
-                   :disabled="!isBuy">
-                {{ buttonLabel }}
-            </v-btn>
+        <v-row class="mt-10" justify="center">
+            <div style="width: 96%;" v-if="!this.account">
+                <v-btn dark
+                       height="56"
+                       class='buy enabled-buy'
+                       @click="connectWallet">
+                    {{ buttonLabel }}
+                </v-btn>
+            </div>
+
+            <div style="width: 96%;" v-else>
+                <v-btn dark
+                       v-if="approved"
+                       height="56"
+                       class="buy"
+                       :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                       :disabled="!isBuy"
+                       @click="confirmSwapAction">
+                    {{ buttonLabel }}
+                </v-btn>
+                <v-btn dark
+                       v-else
+                       height="56"
+                       class="buy"
+                       :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                       :disabled="!isBuy"
+                       @click="approveAction">
+                    {{ buttonLabel }}
+                </v-btn>
+            </div>
         </v-row>
+
+        <v-dialog
+                v-model="showConfirmSwapDialog"
+                width="550"
+                persistent>
+            <v-card class="container_body">
+                <v-toolbar class="container_header" flat>
+                    <v-toolbar-title class="title">
+                        Confirm Swap
+                    </v-toolbar-title>
+                    <v-btn icon class="ml-auto" @click="showConfirmSwapDialog = false" dark>
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-toolbar>
+
+                <v-card-text class="px-5 pt-5">
+                    <v-row dense class="pl-2 pr-2">
+                        <label class="from-to-label">
+                            From
+                        </label>
+                        <v-spacer></v-spacer>
+                        <label class="from-to-label mr-3">
+                            {{ sumResult }} USD+
+                        </label>
+                        <div class="currency-icon">
+                            <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
+                        </div>
+                    </v-row>
+
+                    <v-row dense class="pl-2 pr-2 pt-5 pb-5">
+                        <label class="from-to-label">
+                            To
+                        </label>
+                        <v-spacer></v-spacer>
+                        <label class="from-to-label mr-3">
+                            {{ sumResult }} USDC
+                        </label>
+                        <div class="currency-icon">
+                            <v-img :src="require('@/assets/currencies/usdc.png')"/>
+                        </div>
+                    </v-row>
+
+                    <v-row dense class="pl-2 pr-2 pt-6 pb-6">
+                        <label class="from-to-sub-label">
+                            Output is estimated. You will receive at least <b
+                                class="from-to-sub-sum">{{ sumResult - 0.04 }} USDC</b> or the transaction will revert.
+                        </label>
+                    </v-row>
+
+                    <v-row dense class="pl-7 pr-7 pt-5">
+                        <label class="add-info-label">
+                            Exchange rate
+                        </label>
+                        <v-spacer></v-spacer>
+                        <label class="add-info-label">
+                            1 USD+ = 1 USDC
+                        </label>
+                        <!-- TODO: add swap btn when exchanging rate added -->
+                    </v-row>
+
+                    <!-- TODO: add estimated gas row when estimatedGas calculation is ready -->
+
+                    <v-row dense class="pl-7 pr-7 pt-8">
+                        <label class="add-info-label mr-2">
+                            Price Impact
+                        </label>
+                        <v-tooltip
+                                color="#202832"
+                                right
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <div class="currency-icon"
+                                     v-bind="attrs"
+                                     v-on="on">
+                                    <v-img :src="require('@/assets/icon/question-help.svg')"/>
+                                </div>
+                            </template>
+                            <p class="my-0">The difference between</p>
+                            <p class="my-0">the market price and estimated price</p>
+                            <p class="my-0">due to trade size</p>
+                        </v-tooltip>
+
+                        <v-spacer></v-spacer>
+                        <!-- TODO: change when price impact calculation added -->
+                        <label class="add-info-label">
+                            0.00%
+                        </label>
+                    </v-row>
+
+                    <v-row dense class="pl-7 pr-7 pt-5">
+                        <label class="add-info-label mr-2">
+                            Overnight Fee
+                        </label>
+                        <v-tooltip
+                                color="#202832"
+                                right
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <div class="currency-icon"
+                                     v-bind="attrs"
+                                     v-on="on">
+                                    <v-img :src="require('@/assets/icon/question-help.svg')"/>
+                                </div>
+                            </template>
+                            <p class="my-0">A portion of each trade (0.04 USD+)</p>
+                            <p class="my-0">goes to Overnight as a protocol incentive</p>
+                        </v-tooltip>
+
+                        <v-spacer></v-spacer>
+                        <!-- TODO: change when price impact calculation added -->
+                        <label class="add-info-label">
+                            0.04 USD+
+                        </label>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <v-btn dark
+                                   height="56"
+                                   class="buy enabled-buy"
+                                   @click="redeem">
+                                Confirm
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+
+        <WaitingModal/>
+        <SuccessModal/>
+        <ErrorModal/>
     </v-col>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
 import ItemSelector from "../common/ItemSelector";
-import ToastTransaction from "../common/ToastTransaction";
+import ErrorModal from "@/components/common/ErrorModal";
+import WaitingModal from "@/components/common/WaitingModal";
+import SuccessModal from "@/components/common/SuccessModal";
 
 
 export default {
     name: "Redeem",
 
-    components: {ItemSelector},
+    components: {
+        ItemSelector,
+        ErrorModal,
+        WaitingModal,
+        SuccessModal,
+    },
 
     data: () => ({
         menu: false,
@@ -118,6 +280,12 @@ export default {
             title: 'USD+',
             image: require('../../assets/usdPlus.png')
         }],
+
+        approved: false,
+
+        showConfirmSwapDialog: false,
+
+        estimatedGas: null,
     }),
 
     computed: {
@@ -140,13 +308,17 @@ export default {
 
             let v = this.sum;
 
-            if (!v || !v.trim()) {
+            if (!v)
                 return false;
-            }
+
+            if (!v.trim()) return false;
 
             v = parseFloat(v);
 
-            return !isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlus);
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlus)) return true;
+
+
+            return false;
         },
 
         maxResult() {
@@ -158,7 +330,11 @@ export default {
             if (!this.account) {
                 return 'You need to connect to a wallet';
             } else if (this.isBuy) {
-                return 'Confirm Swap'
+                if (this.approved) {
+                    return 'Confirm Swap'
+                } else {
+                    return 'Approve USD+';
+                }
             } else if (this.sum > parseFloat(this.balance.usdPlus)) {
                 return 'Invalid amount'
             } else {
@@ -193,14 +369,23 @@ export default {
         this.currency = this.currencies[0];
 
         this.buyCurrency = this.buyCurrencies[0];
+
+        this.estimatedGas = null;
+
+        this.approved = false;
+        this.showConfirmSwapDialog = false;
     },
 
     methods: {
 
         ...mapActions("profile", ['refreshAfterMintRedeem']),
         ...mapActions("gasPrice", ['refreshGasPrice']),
-        ...mapActions("showTransactions", ['show', 'hide', 'addText', 'failed']),
         ...mapActions("mintRedeemView", ['showMintView']),
+        ...mapActions("web3", ['connectWallet']),
+        ...mapActions("errorModal", ['showErrorModal']),
+        ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
+        ...mapActions("successModal", ['showSuccessModal']),
+
 
         setSum(value) {
             this.sum = value;
@@ -212,8 +397,11 @@ export default {
         },
 
         async redeem() {
-            try {
 
+            this.showConfirmSwapDialog = false;
+            this.showWaitingModal('Swapping ' + this.sumResult + ' USD+ for ' + this.sumResult + ' USDC');
+
+            try {
                 let sum = this.sum * 10 ** 6;
                 sum = Math.floor(sum);
                 let self = this;
@@ -221,56 +409,72 @@ export default {
                 let contracts = this.contracts;
                 let from = this.account;
 
-
-                this.show('Processing...')
-                this.addText(`Locking ${this.sum} USD+ ......  done`)
-
-
-                let allowApprove = await this.checkAllowance(sum);
-                if (!allowApprove) {
-                    this.failed();
-                    return;
-                } else {
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                }
-
-                /* TODO: separate approve and swap */
-
-                self.addText(`Estimating gas for transaction ......  done`);
-
-                let estimatedGasValue = await this.estimateGas(sum);
-                if (estimatedGasValue === -1) {
-                    this.failed();
-                    return;
-                } else {
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                }
-
-                self.addText(`Burning ${self.sum} USD+ ......  done`);
-                self.addText(`Transferring ${self.sum} USDC to ${from.substring(1, 10)}  ......  done`);
-
                 try {
                     await this.refreshGasPrice();
-                    let buyParams = {gasPrice: estimatedGasValue, from: from};
-                    console.log(`Try redeem ${contracts.usdc.options.address} ${sum}`);
+                    let buyParams = {gasPrice: this.gasPriceGwei, from: from};
                     let redeemResult = await contracts.exchange.methods.redeem(contracts.usdc.options.address, sum).send(buyParams);
-                    this.showSuccessRedeemToast(self.sum, redeemResult.transactionHash)
+
+                    this.closeWaitingModal();
+                    this.showSuccessModal(redeemResult.transactionHash);
                 } catch (e) {
                     console.log(e)
-                    this.failed();
+                    this.closeWaitingModal();
+                    this.showErrorModal('buyUSDC');
                     return;
                 }
-
-
-                self.addText(`Completed, await blockchain, click to proceed`);
-                setTimeout(() => self.hide(), 1000);
 
                 self.refreshAfterMintRedeem();
                 self.setSum(null)
-
             } catch (e) {
                 console.log(e)
-                this.failed();
+                this.showErrorModal('buyUSDC');
+            }
+        },
+
+        async confirmSwapAction() {
+            try {
+                let sum = this.sum * 10 ** 6;
+                sum = Math.floor(sum);
+
+                this.showWaitingModal();
+
+                let estimatedGasValue = await this.estimateGas(sum);
+                if (estimatedGasValue === -1) {
+                    this.closeWaitingModal();
+                    this.showErrorModal('estimateGas');
+                    return;
+                } else {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    this.estimatedGas = estimatedGasValue;
+                    this.closeWaitingModal();
+                    this.showConfirmSwapDialog = true;
+                }
+            } catch (e) {
+                console.log(e)
+                this.showErrorModal('estimateGas');
+            }
+        },
+
+        async approveAction() {
+            try {
+                this.approved = false;
+                this.showWaitingModal('Approving in process');
+
+                let sum = this.sum * 10 ** 6;
+                sum = Math.floor(sum);
+
+                let allowApprove = await this.checkAllowance(sum);
+                if (!allowApprove) {
+                    this.closeWaitingModal();
+                    this.showErrorModal('approve');
+                    return;
+                } else {
+                    this.approved = true;
+                    this.closeWaitingModal();
+                }
+            } catch (e) {
+                console.log(e)
+                this.showErrorModal('approve');
             }
         },
 
@@ -280,7 +484,6 @@ export default {
             let from = this.account;
 
             let allowanceValue = await contracts.usdPlus.methods.allowance(from, contracts.exchange.options.address).call();
-            console.log('Allowance value ' + allowanceValue)
 
             if (allowanceValue < sum) {
                 try {
@@ -292,20 +495,19 @@ export default {
                     while (minted) {
                         await new Promise(resolve => setTimeout(resolve, 2000));
                         let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
-                        console.log('Check receipt: ' + receipt)
+
                         if (receipt) {
                             if (receipt.status)
                                 return true;
                             else {
-                                this.failed();
                                 return false;
                             }
                         }
                     }
 
+                    return true;
                 } catch (e) {
                     console.log(e)
-                    this.failed();
                     return false;
                 }
             }
@@ -321,35 +523,19 @@ export default {
             try {
                 let estimateOptions = {from: from, value: sum};
 
-                await contracts.usdc.methods.redeem(contracts.usdc.options.address, sum).estimateGas(estimateOptions)
+                await contracts.exchange.methods.redeem(contracts.usdc.options.address, sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         return gasAmount;
                     })
                     .catch(function (error) {
-                        this.failed();
+                        console.log(error)
                         return -1;
                     });
             } catch (e) {
                 console.log(e)
-                this.failed();
                 return -1;
             }
         },
-
-        showSuccessRedeemToast(sum, tx) {
-            const content = {
-                component: ToastTransaction,
-                props: {
-                    text: `Redeem ${sum} USDC`,
-                    tx: tx,
-                },
-            }
-            this.$toast(content, {position: "top-right", type: 'success', timeout: 10000});
-        },
-
-        selectItem(item) {
-            this.currency = item;
-        }
     }
 }
 </script>
@@ -369,16 +555,6 @@ export default {
     font-weight: 600;
     font-size: 14px;
     line-height: 24px;
-}
-
-.sum-row-label {
-    font-style: normal;
-    font-weight: 300;
-    font-size: 34px;
-    line-height: 42px;
-    background: var(--orange-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .field-sum {
@@ -430,5 +606,57 @@ export default {
     height: 56px;
     border-radius: 40px;
     color: white !important;
+}
+
+.title {
+    color: white;
+    font-weight: 300;
+    font-size: 20px;
+}
+
+.container_body {
+    border-radius: 24px;
+    background-color: var(--secondary);
+}
+
+.container_header {
+    background-color: var(--secondary) !important;
+}
+
+.from-to-label {
+    color: white;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.from-to-sub-label {
+    color: #6A84A0;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.from-to-sub-sum {
+    color: white;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.currency-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.add-info-label {
+    color: white;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
 }
 </style>

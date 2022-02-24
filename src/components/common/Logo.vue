@@ -57,14 +57,17 @@ export default {
 
 .logo-title {
     font-family: 'Raleway', sans-serif;
-    font-weight: 600;
+    letter-spacing: 1px;
+    font-weight: 700;
     font-size: 28px;
     color: var(--logo-color) !important;
 }
 
 .logo-title > sup {
-    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    letter-spacing: normal;
     font-weight: 400 !important;
+    font-size: 16px;
     vertical-align: super;
 }
 </style>

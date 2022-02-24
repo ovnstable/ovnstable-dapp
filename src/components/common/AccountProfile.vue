@@ -41,6 +41,7 @@
                             <v-img class="icon-img" :src="require('@/assets/icon/link.svg')"/>
                             <label class="ml-1">Copy Address</label>
                         </a>
+                        <!-- TODO: add animated action -->
                         <a class="ml-5" @click="addUsdPlusToken">
                             <label class="add-usd-btn">Add USD+</label>
                         </a>

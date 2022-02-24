@@ -1,0 +1,117 @@
+<template>
+    <v-dialog
+            v-model="show"
+            width="450"
+            persistent>
+        <v-card class="container_body">
+            <v-toolbar class="container_header" flat>
+                <v-btn icon class="ml-auto" @click="close" dark>
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+            </v-toolbar>
+            <v-card-text class="px-5 pt-5">
+                <v-row justify="center" class="mb-10">
+                    <div class="loading-img">
+                        <v-img :src="require('@/assets/icon/transation-send.svg')"/>
+                    </div>
+                </v-row>
+                <v-row justify="center">
+                    <label class="success-label">Transaction Submitted</label>
+                </v-row>
+                <v-row justify="center" class="mt-8 mb-5">
+                    <label class="success-link" @click="openPolygonScan(successTxHash)">View on PolygonScan</label>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <v-btn dark
+                               height="56"
+                               class="dismiss-btn mb-3"
+                               @click="close">
+                            Dismiss
+                        </v-btn>
+                    </v-col>
+                </v-row>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
+</template>
+
+<script>
+import {mapActions, mapGetters, mapMutations} from "vuex";
+
+export default {
+    name: "SuccessModal",
+
+    props: {
+    },
+
+    computed: {
+        ...mapGetters('successModal', ['show', 'successTxHash',]),
+    },
+
+    data: () => ({
+    }),
+
+    methods: {
+        ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
+
+        openPolygonScan(hash) {
+            if (hash) {
+                window.open(`https://polygonscan.com/tx/${hash}`, '_blank').focus();
+            }
+        },
+
+        close() {
+            this.closeSuccessModal();
+
+            this.$emit('input', false);
+            this.$emit('m-close');
+        },
+    },
+}
+</script>
+
+<style scoped>
+.container_body {
+    border-radius: 24px;
+    background-color: var(--secondary);
+}
+
+.container_header {
+    background-color: var(--secondary) !important;
+}
+
+.loading-img {
+    width: 80px;
+    height: 80px;
+}
+
+.success-label {
+    color: #76E268;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 36px;
+}
+
+.success-link {
+    cursor: pointer;
+    color: var(--link);
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.success-link:hover {
+    text-decoration: underline;
+}
+
+.dismiss-btn {
+    background: var(--orange-gradient) !important;
+    width: 100%;
+    height: 56px;
+    border-radius: 40px;
+    color: white !important;
+}
+</style>

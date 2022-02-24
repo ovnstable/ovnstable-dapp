@@ -28,22 +28,11 @@
           <v-container>
             <v-row dense>
               <v-col style="text-align: start">
-                Active
+                Strategy
               </v-col>
 
-              <v-col>
-                Position (# of tokens)
-              </v-col>
-
-              <v-col>
-                Market price (USDC/token)
-              </v-col>
               <v-col>
                 Net Asset Value (USDC)
-              </v-col>
-
-              <v-col>
-                Liquidation price (USDC/token)
               </v-col>
 
               <v-col>
@@ -54,24 +43,15 @@
             <v-row dense :key="item.symbol" v-for="item in currentTotalData" class="row">
 
               <v-col style="text-align: start">
-                {{ item.symbol }}
+                {{ item.name }}
               </v-col>
               <v-col>
-                {{ item.bookValue }}
+                {{ item.netAssetValue}}
               </v-col>
               <v-col>
-                {{ item.price }}
+                {{ item.liquidationValue}}
               </v-col>
 
-              <v-col>
-                {{ item.bookPrice }}
-              </v-col>
-              <v-col>
-                {{ item.liquidationPrice }}
-              </v-col>
-              <v-col>
-                {{ item.liquidationValue }}
-              </v-col>
             </v-row>
 
             <v-row dense class="row pt-10">
@@ -132,7 +112,7 @@ export default {
         for (let key in this.currentTotalData) {
           let item = this.currentTotalData[key];
           if (item.liquidationValue){
-            value = value.plus(new BigNumber(item.liquidationValue.replace(/[^\d.-]/g, '')))
+            value = value.plus(new BigNumber(item.liquidationValue))
           }
         }
 
@@ -149,8 +129,8 @@ export default {
 
         for (let key in this.currentTotalData) {
           let item = this.currentTotalData[key];
-          if (item.bookPrice){
-            value = value.plus(new BigNumber(item.bookPrice.replace(/[^\d.-]/g, '')))
+          if (item.netAssetValue){
+            value = value.plus(new BigNumber(item.netAssetValue))
           }
         }
 

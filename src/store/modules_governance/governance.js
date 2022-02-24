@@ -16,16 +16,7 @@ const state = {
     settings: {},
     settingsLoading: true,
 
-    assets: [
-        {id: "idleUsdc", address: "0x1ee6470cd75d5686d0b2b90c0305fa46fb0c89a1"},
-        {id: "usdc", address: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174"},
-        {id: "amUsdc", address: "0x1a13F4Ca1d028320A707D99520AbFefca3998b7F"},
-        {id: "am3CRV", address: "0xE7a24EF0C5e95Ffb0f6684b813A78F2a3AD7D171"},
-        {id: "am3CRVgauge", address: "0x19793B454D3AfC7b454F206Ffe95aDE26cA6912c"},
-        {id: "wMatic", address: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"},
-        {id: "crv", address: "0x172370d5Cd63279eFa6d502DAB29171933a610AF"}
-    ]
-
+    strategyWeights: null,
 };
 
 const getters = {
@@ -59,6 +50,9 @@ const getters = {
     },
 
 
+    strategyWeights(state) {
+        return state.strategyWeights;
+    },
 };
 
 const actions = {
@@ -74,11 +68,11 @@ const actions = {
         let params = {from: account};
 
         await governor.methods.proposeExec([contract.options.address], [0], [abi], name).send(params);
-   },
+    },
 
     async runPayoutAction({commit, dispatch, getters, rootState}) {
 
-        let contact= rootState.web3.contracts.exchange;
+        let contact = rootState.web3.contracts.exchange;
 
         let params = {from: rootState.web3.account};
         await contact.methods.payout().send(params);
@@ -208,17 +202,6 @@ const actions = {
         await governor.methods.proposeExec([contract.options.address], [0], [abi], name).send(params);
     },
 
-    async changeWeights({commit, dispatch, getters, rootState}, weights) {
-
-        let portfolio = rootState.web3.contracts.portfolio;
-        let governor = rootState.web3.contracts.governor;
-        let account = rootState.web3.account;
-        let params = {from: account};
-        let abi = await portfolio.methods.setWeights(weights).encodeABI();
-        let name = 'Proposal #' + getters.proposals.length + 1 + 'Change wights';
-        await governor.methods.proposeExec([portfolio.options.address], [0], [abi], name).send(params);
-
-    },
 
     async minting({commit, dispatch, getters, rootState}, request) {
 
@@ -297,6 +280,64 @@ const actions = {
         commit('setOverviewLoading', false);
 
         dispatch('getSettings')
+    },
+
+    async setStrategyWeights({commit, dispatch, getters, rootState}, weights) {
+
+
+        let pm = rootState.web3.contracts.pm;
+        let account = rootState.web3.account;
+        let params = {from: account};
+
+        let items = [];
+        for (let i = 0; i < weights.length; i++) {
+
+            let weight = weights[i];
+
+            let item = {};
+
+            item.strategy = weight.address;
+            item.minWeight = 0;
+            item.targetWeight = weight.weight * 1000;
+            item.maxWeight = 100000;
+            item.enabled = weight.enabled;
+            item.enabledReward = weight.enabledReward;
+
+            items.push(item);
+        }
+
+        pm.methods.setStrategyWeights(items).send(params);
+
+    },
+    async getStrategyWeights({commit, dispatch, getters, rootState}) {
+
+        let pm = rootState.web3.contracts.pm;
+        let weights = await pm.methods.getAllStrategyWeights().call();
+
+        let items = [];
+
+        let strategiesMapping = (await axios('/dapp/strategies')).data;
+
+        for (let i = 0; i < weights.length; i++) {
+            let weight = weights[i];
+
+            let item = {};
+
+            let strategy = strategiesMapping.find(value => value.address === weight.strategy);
+            let name = "not defined";
+            if (strategy)
+                name = strategy.name;
+
+            item.address = weight.strategy;
+            item.name = name;
+            item.weight = weight.targetWeight / 1000;
+            item.enabled = weight.enabled;
+            item.enabledReward = weight.enabledReward;
+
+            items.push(item);
+        }
+
+        commit('setStrategyWeights', items);
     }
 
 };
@@ -327,6 +368,9 @@ const mutations = {
         state.proposalsLoading = value;
     },
 
+    setStrategyWeights(state, value) {
+        state.strategyWeights = value;
+    },
 
 };
 

@@ -1,17 +1,35 @@
 <template>
 <v-container>
     <v-card>
+
+      <template v-if="strategyWeights == null">
+        Loading...
+      </template>
+      <template v-else>
+
         <v-card-title>Change Weight</v-card-title>
         <v-card-actions>
             <v-container>
                 <v-data-table
-                :items="assets"
+                :items="strategyWeights"
                 :headers="headers"
                 >
                     <template v-slot:item.weight="{ item }">
                             <v-text-field dense outlined v-model="item.weight">
                             </v-text-field>
                     </template>
+
+                  <template v-slot:item.enabled="{ item }">
+                    <v-switch
+                      v-model="item.enabled"
+                    ></v-switch>
+                  </template>
+
+                  <template v-slot:item.enabledReward="{ item }">
+                    <v-switch
+                      v-model="item.enabledReward"
+                    ></v-switch>
+                  </template>
                 </v-data-table>
 
                 <v-row>
@@ -23,6 +41,7 @@
                 </v-row>
             </v-container>
         </v-card-actions>
+      </template>
     </v-card>
 </v-container>
 </template>
@@ -35,34 +54,24 @@ export default {
 
     data: () => ({
         headers: [
-            {text: 'Address', value: 'address',},
-            {text: 'Name', value: 'id' },
+            {text: 'Address', value: 'address'},
+            {text: 'Name', value: 'name' },
             {text: 'Weight', value: 'weight' },
+            {text: 'Enabled', value: 'enabled' },
+            {text: 'Enabled Reward', value: 'enabledReward' },
         ]
     }),
 
     computed: {
-        ...mapGetters('governance', ['assets'])
+        ...mapGetters('governance', ['strategyWeights'])
     },
     methods: {
 
-        ...mapActions('governance', ['changeWeights']),
+        ...mapActions('governance', ['getStrategyWeights', 'setStrategyWeights']),
 
 
         changeWeightsAction(){
-
-            let weights = [];
-            for (let i = 0; i < this.assets.length; i++) {
-                let asset = this.assets[i];
-                weights.push({
-                    asset: asset.address,
-                    minWeight: 0,
-                    targetWeight: asset.weight * 1000,
-                    maxWeight: 100000
-                })
-            }
-
-            this.changeWeights(weights);
+          this.setStrategyWeights(this.strategyWeights);
         }
     }
 }

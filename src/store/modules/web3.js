@@ -15,7 +15,7 @@ console.log('Polygon: ' + polygon);
 const Exchange = require(`../../contracts/${polygon}/Exchange.json`)
 const OvnToken = require(`../../contracts/${polygon}/OvnToken.json`)
 const OvnGovernor = require(`../../contracts/${polygon}/OvnGovernor.json`)
-const Portfolio = require(`../../contracts/${polygon}/Portfolio.json`)
+const PortfolioManager = require(`../../contracts/${polygon}/PortfolioManager.json`)
 const Mark2Market = require(`../../contracts/${polygon}/Mark2Market.json`)
 const TimelockController = require(`../../contracts/${polygon}/TimelockController.json`)
 const UsdPlusToken = require(`../../contracts/${polygon}/UsdPlusToken.json`)
@@ -269,7 +269,7 @@ const actions = {
         contracts.govToken = _load(OvnToken, web3);
         contracts.governor = _load(OvnGovernor, web3);
         contracts.mark2market = _load(Mark2Market, web3);
-        contracts.portfolio = _load(Portfolio, web3);
+        contracts.pm = _load(PortfolioManager, web3);
         contracts.timelockController = _load(TimelockController, web3);
         contracts.usdPlus = _load(UsdPlusToken, web3);
 

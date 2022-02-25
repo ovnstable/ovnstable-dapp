@@ -71,7 +71,7 @@
                 Total USD+ in circulation
               </v-col>
               <v-col lg="4">
-                  {{ totalUsdPlus.totalSupply }}
+                  {{ totalSupply }}
               </v-col>
               <v-col lg="1"></v-col>
             </v-row>
@@ -102,6 +102,11 @@ export default {
   computed: {
     ...mapGetters("profile", ['currentTotalData', 'totalUsdPlus', 'loadingCurrentTotalData']),
     ...mapGetters("web3", ['web3']),
+
+
+    totalSupply: function (){
+      return new BigNumber(this.totalUsdPlus.totalSupply / 10 ** 6).toFixed(6);
+    },
 
     liquidationValueTotal: function () {
 

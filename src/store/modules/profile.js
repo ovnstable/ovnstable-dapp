@@ -246,25 +246,40 @@ const actions = {
     async refreshCurrentTotalData({commit, dispatch, getters, rootState}) {
         commit('setLoadingCurrentTotalData', true)
 
-        axios.get('/dapp/assets').then(resp => {
-            let data = [];
 
-            let value = resp.data;
-            for (let i = 0; i < value.length; i++) {
-            let element = value[i];
 
-            try {
-                data.push(element);
-            }catch (e) {
-                console.log(e)
-            }
+        let assets = await rootState.web3.contracts.mark2market.methods.strategyAssets().call();
+        let strategiesMapping = (await axios('/dapp/strategies')).data;
+
+        let data = [];
+
+        for (let i = 0; i < assets.length; i++) {
+            let asset = assets[i];
+
+            let element = {};
+
+            let strategy = strategiesMapping.find(value => value.address === asset.strategy);
+            let name = "not defined";
+            if (strategy)
+                name = strategy.name;
+
+
+            if (asset.netAssetValue==0)
+                continue;
+
+            element.name = name;
+            element.netAssetValue = asset.netAssetValue / 10 ** 6;
+            element.liquidationValue = asset.liquidationValue / 10 ** 6;
+            element.address = asset.strategy;
+
+
+
+            data.push(element);
+
         }
 
         commit('setCurrentTotalData', data)
         commit('setLoadingCurrentTotalData', false)
-        }).catch(reason => {
-            console.log('API: Prices => '+ reason);
-        })
 
     }
 

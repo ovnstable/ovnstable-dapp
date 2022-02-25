@@ -193,7 +193,7 @@
                         <v-spacer></v-spacer>
                         <!-- TODO: change when price impact calculation added -->
                         <label class="add-info-label">
-                            0.004%
+                            {{ estimateFee }}$
                         </label>
                     </v-row>
 
@@ -280,10 +280,11 @@ export default {
         },
 
         estimateResult: function () {
+            return this.sum * 0.996;
+        },
 
-            let result = this.sumResult * 0.996;
-
-            return this.$utils.formatMoney(result, 2);
+        estimateFee: function () {
+            return this.sum * 0.004;
         },
 
         buttonLabel: function () {
@@ -613,7 +614,7 @@ export default {
 
 .container_body {
     border-radius: 24px;
-    background-color: var(--secondary);
+    background-color: var(--secondary) !important;
 }
 
 .container_header {

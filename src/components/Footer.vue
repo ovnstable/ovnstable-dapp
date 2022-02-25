@@ -84,7 +84,7 @@ export default {
 
 .footer-beta-row {
     height: 54px;
-    background-color: var(--secondary);
+    background-color: var(--secondary) !important;
 }
 
 .footer-beta-label {

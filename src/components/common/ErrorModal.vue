@@ -63,7 +63,7 @@ export default {
 <style scoped>
 .container_body {
     border-radius: 24px;
-    background-color: var(--secondary);
+    background-color: var(--secondary) !important;
 }
 
 .container_header {

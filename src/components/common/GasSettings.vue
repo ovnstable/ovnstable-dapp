@@ -195,7 +195,7 @@ export default {
 }
 
 .gas-price-card {
-    background: none;
+    background: none !important;
     border-radius: 8px;
     border: 1px solid rgba(95, 151, 255, 0.15);
     cursor: pointer;

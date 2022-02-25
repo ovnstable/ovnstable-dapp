@@ -541,7 +541,7 @@ export default {
 <style scoped>
 
 .main-card {
-    background: none;
+    background: none !important;
     width: 100%;
     border: 1px solid #181E25;
     border-radius: 16px;

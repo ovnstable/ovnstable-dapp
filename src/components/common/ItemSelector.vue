@@ -110,7 +110,7 @@ export default {
 }
 
 .main-btn {
-    background: none;
+    background: none !important;
     border-radius: 16px;
     border: 1px solid #101419;
 }

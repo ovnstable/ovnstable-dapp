@@ -231,14 +231,14 @@ const actions = {
     },
 
 
-    async refreshTotalUsdPlus({commit, dispatch, getters}) {
-        commit('setLoadingTotalUsdPlus', true)
-        axios.get('/dapp/total').then(value => {
-            commit('setTotalUsdPlus', value.data);
-            commit('setLoadingTotalUsdPlus', false)
-        }).catch(reason => {
-            console.log('API: /total => ' + reason);
-        })
+    async refreshTotalUsdPlus({commit, dispatch, getters, rootState}) {
+        commit('setLoadingTotalUsdPlus', true);
+
+        let value = await rootState.web3.contracts.usdPlus.methods.totalSupply().call();
+        let data = {
+            totalSupply: value
+        }
+        commit('setTotalUsdPlus', data);
 
     },
 

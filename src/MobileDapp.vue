@@ -11,7 +11,7 @@
 <!--        <AccountProfile width="550"/>-->
 <!--        <GasSettings width="510"/>-->
 
-<!--        <Footer/>-->
+        <Footer/>
     </div>
 </template>
 
@@ -38,7 +38,7 @@ export default {
 /* mobile version */
 @media only screen and (max-width: 1400px) {
     .main-container {
-        height: calc(100vh - 72px - 44px - 54px);
+        height: calc(100vh - 72px - 44px - 74px);
     }
 }
 

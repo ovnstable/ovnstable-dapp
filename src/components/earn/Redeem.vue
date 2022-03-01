@@ -154,12 +154,13 @@
 
                     <v-row dense class="pl-2 pr-2 pt-6 pb-6">
                         <label class="from-to-sub-label">
-                            Output is estimated. You will receive at least <b
-                                class="from-to-sub-sum">{{ estimateResult }} USDC</b> or the transaction will revert.
+                            Output is estimated. You will receive at least&nbsp;&nbsp;<b
+                                class="from-to-sub-sum">{{ estimateResult }} USDC</b>&nbsp;&nbsp;or the transaction will
+                            revert.
                         </label>
                     </v-row>
 
-                    <v-row dense class="pl-7 pr-7 pt-5">
+                    <v-row dense class="pt-5 exchange-row">
                         <label class="add-info-label">
                             Exchange rate
                         </label>
@@ -172,7 +173,7 @@
 
                     <!-- TODO: add estimated gas row when estimatedGas calculation is ready -->
 
-                    <v-row dense class="px-7 pt-5 pb-5">
+                    <v-row dense class="pt-5 pb-5 exchange-row">
                         <label class="add-info-label mr-2">
                             Overnight Fee
                         </label>
@@ -528,9 +529,18 @@ export default {
     .max {
         display: none !important;
     }
+
+    .exchange-row {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
+    .exchange-row {
+        padding-left: 28px;
+        padding-right: 28px;
+    }
 }
 
 .main-card {

@@ -62,7 +62,7 @@ export default {
 
 <style scoped>
 .container_body {
-    border-radius: 24px;
+    border-radius: 24px !important;
     background-color: var(--secondary) !important;
 }
 

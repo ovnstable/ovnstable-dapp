@@ -47,7 +47,7 @@ html {
 
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
+    border-radius: 10px !important;
     background-color: #F5F5F5;
 }
 
@@ -57,7 +57,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
+    border-radius: 10px !important;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
     background-color: #555;
 }

@@ -51,8 +51,20 @@ export default {
 </script>
 
 <style scoped>
+
+/* mobile version */
+@media only screen and (max-width: 1400px) {
+    .logo-title {
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+}
+
 .logo {
     cursor: pointer;
+    width: 100vw !important;
 }
 
 .logo-title {

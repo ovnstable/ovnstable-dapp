@@ -16,13 +16,20 @@
             </v-toolbar>
 
             <v-card-text class="px-5 pt-5">
-                <v-col class="pl-10 pr-10">
-                    <v-row align="center" class="account-info-row">
+                <v-col class="main-content-col">
+                    <v-row align="center" class="account-info-row connected-row">
                         <label class="wallet-name-label">
                             Connected with {{ walletName }}
                         </label>
-                        <v-spacer></v-spacer>
+
+                        <v-spacer class="disconnect-wallet-spacer"></v-spacer>
+
                         <v-btn class="disconnect-wallet-btn" dark @click="disconnectWalletAction">Disconnect</v-btn>
+                        <v-btn class="disconnect-wallet-btn-mobile" icon color="red" dark @click="disconnectWalletAction">
+                            <v-icon>
+                                mdi-logout
+                            </v-icon>
+                        </v-btn>
                     </v-row>
 
                     <v-row align="center" class="account-info-row">
@@ -32,23 +39,25 @@
                         <label class="account-label ml-5">{{ accountShort }}</label>
                     </v-row>
 
-                    <v-row align="center" class="account-info-row">
+                    <v-row align="center" class="account-info-row actions-row">
                         <a class="view-explorer-btn" @click="viewInExplorer">
                             <v-img class="icon-img" :src="require('@/assets/icon/out.svg')"/>
                             <label class="ml-1 view-explorer-label">View on explorer</label>
                         </a>
-                        <a class="copy-address-btn ml-5" @click="copyAddressToClipboard">
+
+                        <!-- TODO: add animated action -->
+                        <a class="copy-address-btn" @click="copyAddressToClipboard">
                             <v-img class="icon-img" :src="require('@/assets/icon/link.svg')"/>
                             <label class="ml-1">Copy Address</label>
                         </a>
-                        <!-- TODO: add animated action -->
-                        <a class="ml-5" @click="addUsdPlusToken">
+
+                        <a class="add-usd-plus-btn" @click="addUsdPlusToken">
                             <label class="add-usd-btn">Add USD+</label>
                         </a>
                     </v-row>
 
-                    <v-row class="mt-10 mb-3" align="center">
-                        <label class="recent-label ml-2">
+                    <v-row class="recent-tr-row mb-3" align="center">
+                        <label class="recent-label">
                             Recent Transactions
                         </label>
                         <v-spacer></v-spacer>
@@ -58,14 +67,14 @@
                     </v-row>
 
                     <v-row v-if="!transactions || transactions.length === 0" align="center">
-                        <label class="recent-label ml-2">
+                        <label class="recent-label">
                             Your transactions will apper here...
                         </label>
                     </v-row>
 
                     <v-row class="row mt-2" v-bind:key="i" v-for="(item, i) in transactions">
                         <v-col cols="10">
-                            <div class="transaction-link ml-2" @click="openPolygonScan(item.hash)">{{ item.text }} ↗</div>
+                            <div class="transaction-link" @click="openPolygonScan(item.hash)">{{ item.text }} ↗</div>
                         </v-col>
                         <v-col cols="2">
                             <v-icon v-if="item.pending">mdi-progress-question</v-icon>
@@ -94,6 +103,7 @@ export default {
             type: Boolean,
             default: false,
         },
+
         width: {
             type: String,
             default: '500',
@@ -149,6 +159,65 @@ export default {
 </script>
 
 <style scoped>
+
+/* mobile version */
+@media only screen and (max-width: 1400px) {
+    .main-content-col {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .disconnect-wallet-btn, .disconnect-wallet-spacer {
+        display: none !important;
+    }
+
+    .copy-address-btn, .view-explorer-btn-btn, .add-usd-plus-btn {
+        margin-left: 30px;
+        margin-right: 30px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+
+    .actions-row {
+        margin-top: 24px;
+        margin-bottom: 24px;
+    }
+
+    .account-info-row {
+        justify-content: center !important;
+    }
+
+    .recent-tr-row {
+        margin-top: 48px;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    .main-content-col {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .disconnect-wallet-btn-mobile {
+        display: none !important;
+    }
+
+    .copy-address-btn, .account-action-btn {
+        margin-left: 20px;
+    }
+
+    .recent-tr-row {
+        margin-top: 40px;
+    }
+
+    .recent-label, .transaction-link, .recent-label {
+        margin-left: 8px;
+    }
+
+    .add-usd-plus-btn {
+        margin-left: 20px;
+    }
+}
 
 .row {
     font-size: 17px;

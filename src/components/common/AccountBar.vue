@@ -21,6 +21,16 @@
                         </template>
 
                         <v-list class="wallet-actions-list">
+                            <v-list-item @click="openBridgeLink" class="bridge-link-mobile">
+                                <label class="list-label-switch">
+                                    Bridge
+                                </label>
+                            </v-list-item>
+                            <v-list-item @click="showAccountProfile" class="account-profile-mobile">
+                                <label class="list-label-switch">
+                                    Account Profile
+                                </label>
+                            </v-list-item>
                             <v-list-item @click="addUsdPlusToken">
                                 <label class="list-label-switch">
                                     Add&nbsp;&nbsp;<strong>USD+</strong>&nbsp;&nbsp;to wallet
@@ -108,6 +118,19 @@ export default {
 </script>
 
 <style scoped>
+
+/* mobile version */
+@media only screen and (max-width: 1400px) {
+    .bridge-link, .balance-chip {
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    .bridge-link-mobile, .account-profile-mobile {
+        display: none !important;
+    }
+}
 
 .list-label-switch {
     cursor: pointer;

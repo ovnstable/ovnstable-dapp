@@ -1,31 +1,24 @@
 <template>
     <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
-
-            <v-col></v-col>
-
-            <v-col>
-                <!-- TODO: move StatsWidget -->
-                <!-- <StatsWidget/>-->
-
+            <v-col class="main-col">
                 <v-row align="center">
-                    <label class="swap-label">Swap</label>
+                    <label class="swap-title">Swap</label>
                     <v-spacer></v-spacer>
                     <v-btn icon>
-                        <img width="28px" height="28px" :src="require('@/assets/icon/cog.svg')"
+                        <img class="cog-img"
+                             :src="require('@/assets/icon/cog.svg')"
                              @click="showGasSettings">
                     </v-btn>
                 </v-row>
 
                 <v-row class="mt-15">
-                    <v-col class="pa-0 ma-0 fixed">
+                    <v-col class="pa-0 ma-0">
                         <Mint v-if="isMintView"/>
                         <Redeem v-else/>
                     </v-col>
                 </v-row>
             </v-col>
-
-            <v-col></v-col>
         </v-row>
 
         <ShowTransaction/>
@@ -68,66 +61,39 @@ export default {
 </script>
 
 <style scoped>
-.swap-title {
-    color: #788C9F;
-    font-weight: bold;
-    font-size: 30px;
+
+/* mobile version */
+@media only screen and (max-width: 1400px) {
+    .swap-title {
+        color: white;
+        font-weight: 300;
+        font-size: 34px;
+    }
+
+    .main-col {
+        max-width: 80vw !important;
+    }
+
+    .cog-img {
+        width: 22px;
+        height: 22px;
+    }
 }
 
-.desc {
-    font-size: 15px;
-    color: #171717;
+@media only screen and (min-width: 1400px) {
+    .swap-title {
+        color: white;
+        font-weight: 300;
+        font-size: 56px;
+    }
 
-}
+    .main-col {
+        max-width: 33vw !important;
+    }
 
-.tab-button-in-active {
-    color: #0A0952;
-    cursor: pointer; /* Mouse pointer on hover */
-    width: 50%;
-    height: 40px;
-    font-weight: 600;
-    font-size: 18px;
-    opacity: 0.8;
-
-}
-
-.tab-button-in-active:hover {
-    opacity: 1;
-    background-color: #FFFFFF;
-    border: 1px solid #ECECEC;
-    border-radius: 5px;
-}
-
-.tab-button {
-    color: #0A0952;
-    cursor: pointer; /* Mouse pointer on hover */
-    width: 50%;
-    height: 40px;
-    font-weight: 600;
-    font-size: 18px;
-    border-radius: 5px;
-    background-color: #FFFFFF;
-    border: 1px solid #ECECEC;
-    opacity: 0.8;
-}
-
-.card {
-    border-radius: 15px;
-    border: 1px solid #BBBBBB;
-}
-
-.tabs {
-    background-color: #F4F5F9;
-    border-radius: 8px;
-}
-
-.fixed {
-    flex: 0 0 600px;
-}
-
-.swap-label {
-    color: white;
-    font-weight: 300;
-    font-size: 56px;
+    .cog-img {
+        width: 28px;
+        height: 28px;
+    }
 }
 </style>

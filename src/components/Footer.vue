@@ -32,12 +32,18 @@
                     </v-btn>
                 </v-row>
 
-                <v-row justify="start" align="center" class="footer-beta-row">
+                <v-row justify="center" align="center" class="footer-beta-row">
                     <div class="info-img ml-3 mr-1">
                         <v-img :src="require('@/assets/icon/info.svg')"/>
                     </div>
                     <label class="footer-beta-label">
-                        Overnight is currently in <b>beta</b> mode. Please be mindful of the SmartContract risks. Learn more at&nbsp;&nbsp;
+                        Overnight is currently in <b>beta</b> mode.&nbsp;
+                    </label>
+                    <label class="footer-beta-label">
+                        Please be mindful of the SmartContract risks.&nbsp;
+                    </label>
+                    <label class="footer-beta-label">
+                        Learn more at&nbsp;&nbsp;
                     </label>
                     <label class="footer-beta-label docs-link" @click="openDocsLink">
                         docs.ovnstable.io
@@ -62,6 +68,19 @@ export default {
 
 <style scoped>
 
+/* mobile version */
+@media only screen and (max-width: 1400px) {
+    .footer-beta-row {
+        height: 74px;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    .footer-beta-row {
+        height: 54px;
+    }
+}
+
 .footer-row {
     background-color: var(--main-background) !important;
 }
@@ -83,7 +102,6 @@ export default {
 }
 
 .footer-beta-row {
-    height: 54px;
     background-color: var(--secondary) !important;
 }
 

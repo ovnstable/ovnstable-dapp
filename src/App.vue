@@ -16,6 +16,18 @@ export default {
     computed: {},
 
     created() {
+        this.resizeEventHandler();
+        window.addEventListener("resize", this.resizeEventHandler);
+    },
+
+    methods: {
+        resizeEventHandler(e) {
+            if (window.innerWidth < 1400) {
+                this.$router.push('/m');
+            } else {
+                this.$router.push('/');
+            }
+        }
     }
 };
 </script>

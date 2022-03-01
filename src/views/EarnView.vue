@@ -12,7 +12,7 @@
                     </v-btn>
                 </v-row>
 
-                <v-row class="mt-15">
+                <v-row class="mint-redeem-row">
                     <v-col class="pa-0 ma-0">
                         <Mint v-if="isMintView"/>
                         <Redeem v-else/>
@@ -78,6 +78,10 @@ export default {
         width: 22px;
         height: 22px;
     }
+
+    .mint-redeem-row {
+        margin-top: 40px;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
@@ -94,6 +98,10 @@ export default {
     .cog-img {
         width: 28px;
         height: 28px;
+    }
+
+    .mint-redeem-row {
+        margin-top: 60px;
     }
 }
 </style>

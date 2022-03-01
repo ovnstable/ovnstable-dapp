@@ -1,6 +1,6 @@
 <template>
     <div>
-<!--        <Header/>-->
+        <Header/>
 
         <v-main>
             <v-container fluid class="main-container">
@@ -35,8 +35,17 @@ export default {
 
 <style scoped>
 
-.main-container {
-    /*height: calc(100vh - 72px - 44px - 54px);*/
+/* mobile version */
+@media only screen and (max-width: 1400px) {
+    .main-container {
+        height: calc(100vh - 72px - 44px - 54px);
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    .main-container {
+        height: calc(100vh - 72px - 44px - 54px);
+    }
 }
 
 </style>

@@ -1,26 +1,26 @@
 <template>
     <v-app-bar
-            class="app-bar pa-4 pt-4"
+            class="app-bar pt-4"
             dense
             app>
-        <v-col cols="4" class="pl-5">
+        <v-col class="logo-col">
             <Logo/>
         </v-col>
 
-        <v-col cols="4" class="ma-0 pa-0">
-            <Menu/>
+        <v-col class="ma-0 pa-0 menu-col">
+            <Menu class="menu-col-content"/>
         </v-col>
 
         <template v-if="!loadingWeb3">
-            <v-col cols="4">
+            <v-col class="settings-col">
                 <AccountBar v-if="!switchToPolygon"/>
                 <SwitchToPolygon v-else/>
             </v-col>
         </template>
         <template v-else>
-            <v-col cols="4">
+            <v-col class="settings-col">
                 <v-container>
-                    <v-row justify="end">
+                    <v-row justify="end" align="center">
                         <v-progress-linear
                                 dark
                                 class="progress"
@@ -68,8 +68,44 @@ export default {
 
 <style>
 
+/* mobile version */
+@media only screen and (max-width: 1400px) {
+    .menu-col-content {
+        display: none !important;
+    }
+
+    .logo-col {
+        width: 33%;
+    }
+
+    .settings-col {
+        width: 67%;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    .app-bar {
+        padding: 16px;
+    }
+
+    .logo-col {
+        padding-left: 20px;
+    }
+
+    .logo-col, .settings-col {
+        width: 33%;
+    }
+
+    .menu-col {
+        width: 34%;
+    }
+
+    .progress {
+        width: 300px;
+    }
+}
+
 .progress {
-    width: 300px;
     background: var(--orange-gradient);
 }
 

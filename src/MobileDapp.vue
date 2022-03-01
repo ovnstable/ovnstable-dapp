@@ -8,7 +8,7 @@
             </v-container>
         </v-main>
 
-<!--        <AccountProfile width="550"/>-->
+        <AccountProfile width="550"/>
         <GasSettings width="510"/>
 
         <Footer/>

@@ -57,6 +57,20 @@ export default {
 </script>
 
 <style scoped>
+
+/* mobile version */
+@media only screen and (max-width: 1400px) {
+    .loading-sub2-label {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    .loading-sub2-label {
+        font-size: 12px;
+    }
+}
+
 .container_body {
     border-radius: 24px !important;
     background-color: var(--secondary) !important;
@@ -82,7 +96,6 @@ export default {
     color: white;
     font-style: normal;
     font-weight: normal;
-    font-size: 12px;
     line-height: 16px;
 }
 </style>

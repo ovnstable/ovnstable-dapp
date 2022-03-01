@@ -20,7 +20,7 @@
                                               v-model="sum">
                                 </v-text-field>
                                 <v-spacer></v-spacer>
-                                <div class="mr-5">
+                                <div class="mr-8">
                                     <label class="max mr-5" @click="max">Max</label>
                                     <ItemSelector :readonly="true" :selected-item="buyCurrency" :items="buyCurrencies"/>
                                 </div>
@@ -64,7 +64,7 @@
                                               v-model="sumResult">
                                 </v-text-field>
                                 <v-spacer></v-spacer>
-                                <div class="mr-5">
+                                <div>
                                     <ItemSelector :selected-item="currency" :items="currencies"/>
                                 </div>
                             </v-row>
@@ -523,6 +523,16 @@ export default {
 
 <style scoped>
 
+/* mobile version */
+@media only screen and (max-width: 1400px) {
+    .max {
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+}
+
 .main-card {
     background: none !important;
     width: 100%;
@@ -539,7 +549,7 @@ export default {
 }
 
 .field-sum {
-    width: 40%;
+    width: 45%;
     font-style: normal;
     font-weight: 300;
     font-size: 34px;

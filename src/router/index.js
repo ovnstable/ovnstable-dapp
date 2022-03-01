@@ -16,6 +16,26 @@ import getFinance from "@/router/midleware/getFinance";
 const routes = [
 
     {
+        path: '/m',
+        name: 'MobileDapp',
+        component: () => import('../MobileDapp.vue'),
+
+        children: [
+
+            {
+                path: '/',
+                name: 'EarnView',
+                component: () => import('../views/EarnView.vue'),
+                meta: {
+                    middleware: [
+                        getDapp,
+                    ]
+                }
+            },
+        ],
+    },
+
+    {
         path: '/',
         name: 'Dapp',
         component: () => import('../Dapp.vue'),
@@ -54,7 +74,6 @@ const routes = [
                 }
             },
         ],
-
     },
 
 
@@ -119,8 +138,6 @@ const routes = [
             }
         ]
     }
-
-
 ]
 
 const router = new VueRouter({

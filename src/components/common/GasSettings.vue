@@ -42,7 +42,7 @@
                                     <label class="gas-price-info">{{ gasPriceStation['low'] }} Gwei</label>
                                 </v-row>
                                 <v-row>
-                                    <label class="gas-price-info">> 1 minute</label>
+                                    <label class="gas-price-info gas-sub-info"><b>> 1 min</b></label>
                                 </v-row>
                             </v-card-text>
                         </v-card>
@@ -57,7 +57,7 @@
                                     <label class="gas-price-info">{{ gasPriceStation['standard'] }} Gwei</label>
                                 </v-row>
                                 <v-row>
-                                    <label class="gas-price-info" style="">~35 seconds</label>
+                                    <label class="gas-price-info gas-sub-info" style=""><b>~35 sec</b></label>
                                 </v-row>
                             </v-card-text>
                         </v-card>
@@ -72,7 +72,7 @@
                                     <label class="gas-price-info">{{ gasPriceStation['fast'] }} Gwei</label>
                                 </v-row>
                                 <v-row>
-                                    <label class="gas-price-info">5 - 20 seconds</label>
+                                    <label class="gas-price-info gas-sub-info"><b>5 - 20 sec</b></label>
                                 </v-row>
                             </v-card-text>
                         </v-card>
@@ -150,6 +150,19 @@ export default {
 
 <style scoped>
 
+/* mobile version */
+@media only screen and (max-width: 1400px) {
+    .note-label, .gas-price-title {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    .note-label, .gas-price-title {
+        font-size: 12px;
+    }
+}
+
 .btn-save:hover {
     filter: brightness(110%);
 }
@@ -190,7 +203,6 @@ export default {
     color: #6A84A0;
     font-style: normal;
     font-weight: normal;
-    font-size: 12px;
     line-height: 18px;
 }
 
@@ -199,6 +211,7 @@ export default {
     border-radius: 8px !important;
     border: 1px solid rgba(95, 151, 255, 0.15);
     cursor: pointer;
+    height: 100%;
 }
 
 .selected-type {
@@ -210,7 +223,6 @@ export default {
     color: #8FA2B7;
     font-style: normal;
     font-weight: normal;
-    font-size: 12px;
     line-height: 18px;
 }
 
@@ -221,6 +233,10 @@ export default {
     font-weight: 600;
     font-size: 14px;
     line-height: 24px;
+}
+
+.gas-sub-info {
+    opacity: 0.4;
 }
 
 .container_body {

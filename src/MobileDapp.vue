@@ -9,7 +9,7 @@
         </v-main>
 
 <!--        <AccountProfile width="550"/>-->
-<!--        <GasSettings width="510"/>-->
+        <GasSettings width="510"/>
 
         <Footer/>
     </div>

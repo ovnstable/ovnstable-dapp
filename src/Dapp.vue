@@ -41,7 +41,14 @@ export default {
         height: calc(100vh - 72px - 44px - 74px);
         padding-top: 16px !important;
         padding-bottom: 16px !important;
-        overflow-y: auto !important;
+
+        overflow-y: scroll;
+        -ms-overflow-style: none; /* for Internet Explorer, Edge */
+        scrollbar-width: none; /* for Firefox */
+    }
+
+    .main-container::-webkit-scrollbar {
+        display: none !important;
     }
 }
 

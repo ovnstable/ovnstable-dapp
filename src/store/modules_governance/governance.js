@@ -297,16 +297,23 @@ const actions = {
             let item = {};
 
             item.strategy = weight.address;
-            item.minWeight = 0;
-            item.targetWeight = weight.weight * 1000;
-            item.maxWeight = 100000;
+            item.minWeight = weight.minWeight * 1000;
+            item.targetWeight = weight.targetWeight * 1000;
+            item.maxWeight = weight.maxWeight * 1000;
             item.enabled = weight.enabled;
             item.enabledReward = weight.enabledReward;
 
             items.push(item);
         }
 
-        pm.methods.setStrategyWeights(items).send(params);
+        if (process.env.VUE_APP_POLYGON === "polygon_dev"){
+            pm.methods.setStrategyWeights(items).send(params);
+        }else {
+            let governor = rootState.web3.contracts.governor;
+            let abi = pm.methods.setStrategyWeights(items).encodeABI();
+            let name = 'Proposal #' + getters.proposals.length + 1 + ' Change weights';
+            await governor.methods.proposeExec([pm.options.address], [0], [abi], name).send(params);
+        }
 
     },
 
@@ -341,7 +348,9 @@ const actions = {
 
             item.address = weight.strategy;
             item.name = name;
-            item.weight = weight.targetWeight / 1000;
+            item.minWeight = weight.minWeight / 1000;
+            item.targetWeight = weight.targetWeight / 1000;
+            item.maxWeight = weight.maxWeight / 1000;
             item.enabled = weight.enabled;
             item.enabledReward = weight.enabledReward;
 

@@ -38,7 +38,7 @@ export default {
 /* mobile version */
 @media only screen and (max-width: 1400px) {
     .main-container {
-        height: calc(100vh - 72px - 44px - 74px);
+        height: calc(100vh - 72px - 34px - 34px);
         padding-top: 16px !important;
         padding-bottom: 16px !important;
 

@@ -79,7 +79,7 @@
             </v-card>
         </v-row>
 
-        <v-row class="mt-10" justify="center">
+        <v-row class="main-btn-row" justify="center">
             <div style="width: 96%;" v-if="!this.account">
                 <v-btn dark
                        height="56"
@@ -534,12 +534,28 @@ export default {
         padding-left: 8px;
         padding-right: 8px;
     }
+
+    .buy {
+        height: 46px !important;
+    }
+
+    .main-btn-row {
+        margin-top: 28px;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
     .exchange-row {
         padding-left: 28px;
         padding-right: 28px;
+    }
+
+    .buy {
+        height: 56px;
+    }
+
+    .main-btn-row {
+        margin-top: 40px;
     }
 }
 
@@ -565,13 +581,6 @@ export default {
     font-size: 34px;
     line-height: 42px;
 }
-
-.v-text-field > input {
-    background: var(--orange-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
 
 .balance-label {
     color: white;
@@ -604,7 +613,6 @@ export default {
 
 .buy {
     width: 100%;
-    height: 56px;
     border-radius: 40px;
     color: white !important;
 }

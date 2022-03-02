@@ -80,7 +80,7 @@ export default {
     }
 
     .mint-redeem-row {
-        margin-top: 40px;
+        margin-top: 28px;
     }
 }
 

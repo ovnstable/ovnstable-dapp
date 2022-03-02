@@ -124,11 +124,25 @@ export default {
     .bridge-link, .balance-chip {
         display: none !important;
     }
+
+    .btn-connect-wallet, .account-chip {
+        width: 165px !important;
+        height: 40px !important;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
     .bridge-link-mobile, .account-profile-mobile {
         display: none !important;
+    }
+
+    .btn-connect-wallet {
+        width: 185px !important;
+        height: 56px !important;
+    }
+
+    .account-chip {
+        height: 56px !important;
     }
 }
 
@@ -154,8 +168,6 @@ export default {
 
 .btn-connect-wallet {
     color: white;
-    width: 185px;
-    height: 56px;
     border-radius: 40px;
     background: var(--orange-gradient);
 }
@@ -184,7 +196,6 @@ export default {
     border-width: 0px !important;
     justify-content: center;
     color: white;
-    height: 56px !important;
     border-radius: 40px !important;
     font-size: 16px;
     min-width: 150px;

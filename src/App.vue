@@ -11,23 +11,16 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 export default {
     name: 'App',
 
-    data: () => ({}),
+    data: () => ({
+    }),
 
-    computed: {},
+    computed: {
+    },
 
     created() {
-        this.resizeEventHandler();
-        window.addEventListener("resize", this.resizeEventHandler);
     },
 
     methods: {
-        resizeEventHandler(e) {
-            if (window.innerWidth < 1400) {
-                this.$router.push('/m');
-            } else {
-                this.$router.push('/');
-            }
-        }
     }
 };
 </script>

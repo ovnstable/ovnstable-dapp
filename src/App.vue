@@ -80,6 +80,7 @@ html {
 
 .bn-onboard-modal-content {
     background-color: var(--secondary) !important;
+    width: 500px !important;
     border-radius: 24px !important;
 }
 
@@ -98,6 +99,10 @@ html {
 .bn-onboard-modal-select-wallets > div > .bn-onboard-prepare-button {
     background: none !important;
     border: none !important;
+}
+
+.bn-onboard-select-info-container > .bn-onboard-prepare-button {
+    display: none !important;
 }
 
 .bn-onboard-modal-select-wallets > li, .bn-onboard-icon-button {

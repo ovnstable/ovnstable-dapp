@@ -585,7 +585,6 @@ export default {
 
 .v-text-field > input {
     background: var(--orange-gradient);
-    height: 100% !important;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }

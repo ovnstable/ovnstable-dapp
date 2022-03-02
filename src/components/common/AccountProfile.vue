@@ -32,7 +32,13 @@
                         </v-btn>
                     </v-row>
 
-                    <v-row align="center" class="account-info-row">
+                    <v-row align="center" class="account-info-row balance-row">
+                        <label class="wallet-name-label">
+                            Balance: <strong>{{ balance.usdPlus }}</strong>&nbsp;USD+
+                        </label>
+                    </v-row>
+
+                    <v-row align="center" class="account-info-row account-num-row">
                         <div class="avatar-img">
                             <v-img :src="(ens && ens.avatar) ? ens.avatar : require('@/assets/network/polygon.svg')"/>
                         </div>
@@ -114,6 +120,7 @@ export default {
         ...mapGetters('web3', ['account', 'walletName', 'ens']),
         ...mapGetters('accountProfile', ['show']),
         ...mapGetters('transaction', ['transactions']),
+        ...mapGetters('profile', ['balance']),
 
         accountShort: function () {
             if (this.account) {
@@ -183,6 +190,15 @@ export default {
         margin-bottom: 24px;
     }
 
+    .balance-row {
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    .account-num-row {
+        margin-bottom: 8px;
+    }
+
     .account-info-row {
         justify-content: center !important;
     }
@@ -198,7 +214,7 @@ export default {
         padding-right: 40px;
     }
 
-    .disconnect-wallet-btn-mobile {
+    .disconnect-wallet-btn-mobile, .balance-row {
         display: none !important;
     }
 

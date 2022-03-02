@@ -80,7 +80,6 @@ html {
 
 .bn-onboard-modal-content {
     background-color: var(--secondary) !important;
-    width: 500px !important;
     border-radius: 24px !important;
 }
 

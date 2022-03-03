@@ -574,12 +574,25 @@ export default {
     line-height: 24px;
 }
 
+.v-text-field >>> input {
+    font-size: 34px !important;
+    font-style: normal !important;
+    font-weight: 300 !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    height: 48px !important;
+}
+
+.v-text-field >>> label {
+    font-size: 34px !important;
+}
+
+.v-text-field >>> button {
+    font-size: 34px !important;
+}
+
 .field-sum {
     width: 45%;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 34px;
-    line-height: 42px;
 }
 
 .balance-label {

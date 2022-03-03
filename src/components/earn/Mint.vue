@@ -9,8 +9,8 @@
                                 <label class="title-row-label ml-5 mt-3">From</label>
                             </v-row>
                             <v-row align="center">
-                                <!-- TODO: filtrate non-digits characters -->
                                 <v-text-field placeholder="0.00"
+                                              @keypress="isNumber($event)"
                                               flat
                                               solo
                                               class="ml-2 field-sum"
@@ -366,6 +366,22 @@ export default {
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
+
+
+        isNumber: function(evt) {
+            evt = (evt) ? evt : window.event;
+            let charCode = (evt.which) ? evt.which : evt.keyCode;
+
+            if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+                evt.preventDefault();
+            } else {
+                if (charCode === 46 && (!this.sum || this.sum.includes('.'))) {
+                    evt.preventDefault();
+                } else {
+                    return true;
+                }
+            }
+        },
 
         max() {
             let balanceElement = this.balance[this.currency.id];

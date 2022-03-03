@@ -11,23 +11,16 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 export default {
     name: 'App',
 
-    data: () => ({}),
+    data: () => ({
+    }),
 
-    computed: {},
+    computed: {
+    },
 
     created() {
-        this.resizeEventHandler();
-        window.addEventListener("resize", this.resizeEventHandler);
     },
 
     methods: {
-        resizeEventHandler(e) {
-            if (window.innerWidth < 1400) {
-                this.$router.push('/m');
-            } else {
-                this.$router.push('/');
-            }
-        }
     }
 };
 </script>
@@ -106,6 +99,10 @@ html {
 .bn-onboard-modal-select-wallets > div > .bn-onboard-prepare-button {
     background: none !important;
     border: none !important;
+}
+
+.bn-onboard-select-info-container > .bn-onboard-prepare-button {
+    display: none !important;
 }
 
 .bn-onboard-modal-select-wallets > li, .bn-onboard-icon-button {

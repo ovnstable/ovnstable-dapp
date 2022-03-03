@@ -14,10 +14,20 @@
                 :items="strategyWeights"
                 :headers="headers"
                 >
-                    <template v-slot:item.weight="{ item }">
-                            <v-text-field dense outlined v-model="item.weight">
-                            </v-text-field>
-                    </template>
+                  <template v-slot:item.minWeight="{ item }">
+                    <v-text-field dense outlined v-model="item.minWeight">
+                    </v-text-field>
+                  </template>
+
+                  <template v-slot:item.targetWeight="{ item }">
+                    <v-text-field dense outlined v-model="item.targetWeight">
+                    </v-text-field>
+                  </template>
+
+                  <template v-slot:item.maxWeight="{ item }">
+                    <v-text-field dense outlined v-model="item.maxWeight">
+                    </v-text-field>
+                  </template>
 
                   <template v-slot:item.enabled="{ item }">
                     <v-switch
@@ -62,7 +72,9 @@ export default {
         headers: [
             {text: 'Address', value: 'address'},
             {text: 'Name', value: 'name' },
-            {text: 'Weight', value: 'weight' },
+            {text: 'Min Weight', value: 'minWeight' },
+            {text: 'Target Weight', value: 'targetWeight' },
+            {text: 'Max Weight', value: 'maxWeight' },
             {text: 'Enabled', value: 'enabled' },
             {text: 'Enabled Reward', value: 'enabledReward' },
         ]

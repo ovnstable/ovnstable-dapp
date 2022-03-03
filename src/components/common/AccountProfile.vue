@@ -32,7 +32,13 @@
                         </v-btn>
                     </v-row>
 
-                    <v-row align="center" class="account-info-row">
+                    <v-row align="center" class="account-info-row balance-row">
+                        <label class="wallet-name-label">
+                            Balance: <strong>{{ balance.usdPlus }}</strong>&nbsp;USD+
+                        </label>
+                    </v-row>
+
+                    <v-row align="center" class="account-info-row account-num-row">
                         <div class="avatar-img">
                             <v-img :src="(ens && ens.avatar) ? ens.avatar : require('@/assets/network/polygon.svg')"/>
                         </div>
@@ -45,11 +51,19 @@
                             <label class="ml-1 view-explorer-label">View on explorer</label>
                         </a>
 
-                        <!-- TODO: add animated action -->
-                        <a class="copy-address-btn" @click="copyAddressToClipboard">
-                            <v-img class="icon-img" :src="require('@/assets/icon/link.svg')"/>
-                            <label class="ml-1">Copy Address</label>
-                        </a>
+                        <v-tooltip
+                                v-model="showCopyTooltip"
+                                color="#202832"
+                                bottom
+                        >
+                            <template v-slot:activator>
+                                <a class="copy-address-btn" @click="copyAddressToClipboard">
+                                    <v-img class="icon-img" :src="require('@/assets/icon/link.svg')"/>
+                                    <label class="ml-1">Copy Address</label>
+                                </a>
+                            </template>
+                            <p class="my-0">Copied!</p>
+                        </v-tooltip>
 
                         <a class="add-usd-plus-btn" @click="addUsdPlusToken">
                             <label class="add-usd-btn">Add USD+</label>
@@ -93,6 +107,10 @@ import {mapActions, mapGetters} from "vuex";
 export default {
     name: "AccountProfile",
 
+    data: () => ({
+        showCopyTooltip: false,
+    }),
+
     props: {
         persistent: {
             type: Boolean,
@@ -114,6 +132,7 @@ export default {
         ...mapGetters('web3', ['account', 'walletName', 'ens']),
         ...mapGetters('accountProfile', ['show']),
         ...mapGetters('transaction', ['transactions']),
+        ...mapGetters('profile', ['balance']),
 
         accountShort: function () {
             if (this.account) {
@@ -151,8 +170,13 @@ export default {
             window.open(url, '_blank');
         },
 
-        copyAddressToClipboard() {
-            navigator.clipboard.writeText(this.account);
+        async copyAddressToClipboard() {
+            this.showCopyTooltip = true;
+
+            await navigator.clipboard.writeText(this.account);
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            this.showCopyTooltip = false;
         },
     },
 }
@@ -183,6 +207,15 @@ export default {
         margin-bottom: 24px;
     }
 
+    .balance-row {
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    .account-num-row {
+        margin-bottom: 8px;
+    }
+
     .account-info-row {
         justify-content: center !important;
     }
@@ -198,7 +231,7 @@ export default {
         padding-right: 40px;
     }
 
-    .disconnect-wallet-btn-mobile {
+    .disconnect-wallet-btn-mobile, .balance-row {
         display: none !important;
     }
 

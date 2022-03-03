@@ -14,27 +14,6 @@ import middlewarePipeline from "./middlewarePipeline";
 import getFinance from "@/router/midleware/getFinance";
 
 const routes = [
-
-    {
-        path: '/m',
-        name: 'MobileDapp',
-        component: () => import('../MobileDapp.vue'),
-
-        children: [
-
-            {
-                path: '/',
-                name: 'EarnView',
-                component: () => import('../views/EarnView.vue'),
-                meta: {
-                    middleware: [
-                        getDapp,
-                    ]
-                }
-            },
-        ],
-    },
-
     {
         path: '/',
         name: 'Dapp',
@@ -75,7 +54,6 @@ const routes = [
             },
         ],
     },
-
 
     {
         path: '/governance',
@@ -168,6 +146,5 @@ router.beforeEach((to, from, next) => {
     });
 
 });
-
 
 export default router;

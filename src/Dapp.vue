@@ -35,8 +35,27 @@ export default {
 
 <style scoped>
 
-.main-container {
-    height: calc(100vh - 72px - 44px - 54px);
+/* mobile version */
+@media only screen and (max-width: 1400px) {
+    .main-container {
+        height: calc(100vh - 72px - 34px - 34px);
+        padding-top: 16px !important;
+        padding-bottom: 16px !important;
+
+        overflow-y: scroll;
+        -ms-overflow-style: none; /* for Internet Explorer, Edge */
+        scrollbar-width: none; /* for Firefox */
+    }
+
+    .main-container::-webkit-scrollbar {
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    .main-container {
+        height: calc(100vh - 72px - 44px - 54px);
+    }
 }
 
 </style>

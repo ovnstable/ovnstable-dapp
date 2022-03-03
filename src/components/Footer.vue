@@ -39,14 +39,20 @@
                     <label class="footer-beta-label">
                         Overnight is currently in <b>beta</b> mode.&nbsp;
                     </label>
-                    <label class="footer-beta-label">
+                    <label class="footer-beta-label footer-sub-label">
                         Please be mindful of the SmartContract risks.&nbsp;
                     </label>
-                    <label class="footer-beta-label">
+                    <label class="footer-beta-label footer-sub-label">
                         Learn more at&nbsp;&nbsp;
                     </label>
                     <label class="footer-beta-label docs-link" @click="openDocsLink">
                         docs.ovnstable.io
+                    </label>
+                    <label class="footer-beta-label docs-icon" @click="openDocsLink">
+                        &nbsp;Docs
+                        <v-icon small class="docs-icon share-icon">
+                            mdi-share
+                        </v-icon>
                     </label>
                 </v-row>
             </v-card-text>
@@ -70,8 +76,12 @@ export default {
 
 /* mobile version */
 @media only screen and (max-width: 1400px) {
-    .footer-beta-row {
-        height: 74px;
+    .footer-beta-row, .icons-row {
+        height: 34px;
+    }
+
+    .footer-sub-label, .docs-link {
+        display: none !important;
     }
 }
 
@@ -79,14 +89,18 @@ export default {
     .footer-beta-row {
         height: 54px;
     }
+
+    .docs-icon {
+        display: none !important;
+    }
+
+    .icons-row {
+        height: 44px;
+    }
 }
 
 .footer-row {
     background-color: var(--main-background) !important;
-}
-
-.icons-row {
-    height: 44px;
 }
 
 .footer-icon {
@@ -96,9 +110,9 @@ export default {
 }
 
 .colored {
-    background: var(--orange-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    width: 24px;
+    height: 24px;
+    color: #FE7F2D !important;
 }
 
 .footer-beta-row {
@@ -112,6 +126,16 @@ export default {
     font-style: normal !important;
     font-size: 14px;
     line-height: 24px;
+}
+
+.docs-icon {
+    color: var(--link) !important;
+    cursor: pointer;
+}
+
+.share-icon {
+    margin-bottom: 4px;
+    margin-left: -2px;
 }
 
 .docs-link {

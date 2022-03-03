@@ -9,8 +9,8 @@
                                 <label class="title-row-label ml-5 mt-3">From</label>
                             </v-row>
                             <v-row align="center">
-                                <!-- TODO: filtrate non-digits characters -->
                                 <v-text-field placeholder="0.00"
+                                              @keypress="isNumber($event)"
                                               flat
                                               solo
                                               class="ml-2 field-sum"
@@ -78,7 +78,7 @@
             </v-card>
         </v-row>
 
-        <v-row class="mt-10" justify="center">
+        <v-row class="main-btn-row" justify="center">
             <div style="width: 96%;" v-if="!this.account">
                 <v-btn dark
                        height="56"
@@ -367,6 +367,22 @@ export default {
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
 
+
+        isNumber: function(evt) {
+            evt = (evt) ? evt : window.event;
+            let charCode = (evt.which) ? evt.which : evt.keyCode;
+
+            if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+                evt.preventDefault();
+            } else {
+                if (charCode === 46 && (!this.sum || this.sum.includes('.'))) {
+                    evt.preventDefault();
+                } else {
+                    return true;
+                }
+            }
+        },
+
         max() {
             let balanceElement = this.balance[this.currency.id];
             this.sum = balanceElement + "";
@@ -551,12 +567,28 @@ export default {
         padding-left: 8px;
         padding-right: 8px;
     }
+
+    .buy {
+        height: 46px !important;
+    }
+
+    .main-btn-row {
+        margin-top: 28px;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
     .exchange-row {
         padding-left: 28px;
         padding-right: 28px;
+    }
+
+    .buy {
+        height: 56px;
+    }
+
+    .main-btn-row {
+        margin-top: 40px;
     }
 }
 
@@ -575,21 +607,26 @@ export default {
     line-height: 24px;
 }
 
+.v-text-field >>> input {
+    font-size: 34px !important;
+    font-style: normal !important;
+    font-weight: 300 !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    height: 48px !important;
+}
+
+.v-text-field >>> label {
+    font-size: 34px !important;
+}
+
+.v-text-field >>> button {
+    font-size: 34px !important;
+}
+
 .field-sum {
     width: 45%;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 34px;
-    line-height: 42px;
 }
-
-.v-text-field > input {
-    background: var(--orange-gradient);
-    height: 100% !important;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
 
 .balance-label {
     color: white;
@@ -622,7 +659,6 @@ export default {
 
 .buy {
     width: 100%;
-    height: 56px;
     border-radius: 40px;
     color: white !important;
 }

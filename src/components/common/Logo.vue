@@ -8,7 +8,7 @@
             Overnight<sup>&reg;{{ stand }}</sup>
         </label>
 
-        <NetworkSelect/>
+        <NetworkSelect class="network-btn"/>
     </v-row>
 </template>
 
@@ -54,7 +54,7 @@ export default {
 
 /* mobile version */
 @media only screen and (max-width: 1400px) {
-    .logo-title {
+    .logo-title, .network-btn {
         display: none !important;
     }
 }

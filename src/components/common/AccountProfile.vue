@@ -51,11 +51,19 @@
                             <label class="ml-1 view-explorer-label">View on explorer</label>
                         </a>
 
-                        <!-- TODO: add animated action -->
-                        <a class="copy-address-btn" @click="copyAddressToClipboard">
-                            <v-img class="icon-img" :src="require('@/assets/icon/link.svg')"/>
-                            <label class="ml-1">Copy Address</label>
-                        </a>
+                        <v-tooltip
+                                v-model="showCopyTooltip"
+                                color="#202832"
+                                bottom
+                        >
+                            <template v-slot:activator>
+                                <a class="copy-address-btn" @click="copyAddressToClipboard">
+                                    <v-img class="icon-img" :src="require('@/assets/icon/link.svg')"/>
+                                    <label class="ml-1">Copy Address</label>
+                                </a>
+                            </template>
+                            <p class="my-0">Copied!</p>
+                        </v-tooltip>
 
                         <a class="add-usd-plus-btn" @click="addUsdPlusToken">
                             <label class="add-usd-btn">Add USD+</label>
@@ -98,6 +106,10 @@ import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "AccountProfile",
+
+    data: () => ({
+        showCopyTooltip: false,
+    }),
 
     props: {
         persistent: {
@@ -158,8 +170,13 @@ export default {
             window.open(url, '_blank');
         },
 
-        copyAddressToClipboard() {
-            navigator.clipboard.writeText(this.account);
+        async copyAddressToClipboard() {
+            this.showCopyTooltip = true;
+
+            await navigator.clipboard.writeText(this.account);
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            this.showCopyTooltip = false;
         },
     },
 }

@@ -91,7 +91,7 @@
 
             <div style="width: 96%;" v-else>
                 <v-btn dark
-                       v-if="approved"
+                       v-if="usdPlusApproved"
                        height="56"
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
@@ -255,8 +255,6 @@ export default {
             image: require('../../assets/usdPlus.png')
         }],
 
-        approved: false,
-
         showConfirmSwapDialog: false,
 
         estimatedGas: null,
@@ -268,6 +266,7 @@ export default {
         ...mapGetters("web3", ["web3", 'account', 'contracts']),
         ...mapGetters("logTransactions", ["transactions"]),
         ...mapGetters("gasPrice", ["gasPriceGwei"]),
+        ...mapGetters("approve", ["usdPlusApproved"]),
 
 
         sumResult: function () {
@@ -312,7 +311,7 @@ export default {
             if (!this.account) {
                 return 'You need to connect to a wallet';
             } else if (this.isBuy) {
-                if (this.approved) {
+                if (this.usdPlusApproved) {
                     return 'Confirm Swap'
                 } else {
                     return 'Approve USD+';
@@ -354,7 +353,6 @@ export default {
 
         this.estimatedGas = null;
 
-        this.approved = false;
         this.showConfirmSwapDialog = false;
     },
 
@@ -367,6 +365,7 @@ export default {
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
+        ...mapActions("approve", ['approveUsdPlus']),
 
 
         isNumber: function(evt) {
@@ -454,10 +453,11 @@ export default {
 
         async approveAction() {
             try {
-                this.approved = false;
                 this.showWaitingModal('Approving in process');
 
-                let sum = this.sum * 10 ** 6;
+                let approveSum = 10000000;
+
+                let sum = approveSum * 10 ** 6;
                 sum = Math.floor(sum);
 
                 let allowApprove = await this.checkAllowance(sum);
@@ -466,7 +466,7 @@ export default {
                     this.showErrorModal('approve');
                     return;
                 } else {
-                    this.approved = true;
+                    this.approveUsdPlus();
                     this.closeWaitingModal();
                 }
             } catch (e) {

@@ -90,7 +90,7 @@
 
             <div style="width: 96%;" v-else>
                 <v-btn dark
-                       v-if="approved"
+                       v-if="usdcApproved"
                        height="56"
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
@@ -253,8 +253,6 @@ export default {
             image: require('../../assets/usdPlus.png')
         }],
 
-        approved: false,
-
         showConfirmSwapDialog: false,
 
         estimatedGas: null,
@@ -266,6 +264,7 @@ export default {
         ...mapGetters("transaction", ['transactions', 'transactionReceipts']),
         ...mapGetters("web3", ["web3", 'account', 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei"]),
+        ...mapGetters("approve", ["usdcApproved"]),
 
         maxResult: function () {
             return this.$utils.formatMoney(this.balance.usdc, 2);
@@ -293,7 +292,7 @@ export default {
             if (!this.account) {
                 return 'You need to connect to a wallet';
             } else if (this.isBuy) {
-                if (this.approved) {
+                if (this.usdcApproved) {
                     return 'Confirm Swap'
                 } else {
                     return 'Approve USDC';
@@ -352,7 +351,6 @@ export default {
 
         this.estimatedGas = null;
 
-        this.approved = false;
         this.showConfirmSwapDialog = false;
     },
 
@@ -366,6 +364,7 @@ export default {
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
+        ...mapActions("approve", ['approveUsdc']),
 
 
         isNumber: function(evt) {
@@ -432,8 +431,6 @@ export default {
                 console.log(e)
                 this.showErrorModal('buyUSD+');
             }
-
-            this.approved = false;
         },
 
         async confirmSwapAction() {
@@ -462,10 +459,11 @@ export default {
 
         async approveAction() {
             try {
-                this.approved = false;
                 this.showWaitingModal('Approving in process');
 
-                let sum = this.sum * 10 ** 6;
+                let approveSum = 10000000;
+
+                let sum = approveSum * 10 ** 6;
                 sum = Math.floor(sum);
 
                 let allowApprove = await this.checkAllowance(sum);
@@ -474,7 +472,7 @@ export default {
                     this.showErrorModal('approve');
                     return;
                 } else {
-                    this.approved = true;
+                    this.approveUsdc();
                     this.closeWaitingModal();
                 }
             } catch (e) {

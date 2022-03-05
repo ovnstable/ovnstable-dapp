@@ -12,6 +12,7 @@ import accountProfile from './modules/account-profile';
 import mintRedeemView from './modules/mint-redeem-view';
 import governance from './modules_governance/governance';
 import ethers from './modules_governance/ethers';
+import approve from "@/store/modules/approve";
 
 import createPersistedState from "vuex-persistedstate";
 
@@ -30,7 +31,8 @@ export default new Vuex.Store({
         accountProfile,
         mintRedeemView,
         governance,
-        ethers
+        ethers,
+        approve,
     },
     plugins: [createPersistedState({paths: ['transaction']})]
 });

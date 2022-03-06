@@ -7,7 +7,7 @@
                     <a class="bridge-link" @click="openBridgeLink">Bridge</a>
 
                     <v-chip outlined dark class="balance-chip" @click="showAccountProfile">
-                        <strong>{{ balance.usdPlus }}</strong>&nbsp;USD+
+                        <strong>{{ $utils.formatMoney(balance.usdPlus, 2) }}</strong>&nbsp;USD+
                     </v-chip>
 
                     <v-menu offset-y min-width="180px">

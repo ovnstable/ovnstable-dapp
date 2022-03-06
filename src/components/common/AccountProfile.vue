@@ -34,7 +34,7 @@
 
                     <v-row align="center" class="account-info-row balance-row">
                         <label class="wallet-name-label">
-                            Balance: <strong>{{ balance.usdPlus }}</strong>&nbsp;USD+
+                            Balance: <strong>{{ $utils.formatMoney(balance.usdPlus, 2) }}</strong>&nbsp;USD+
                         </label>
                     </v-row>
 

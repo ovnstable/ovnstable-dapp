@@ -1,0 +1,108 @@
+<template>
+    <v-simple-table class="activities-table" dark height="160px" dense>
+        <template v-slot:default>
+            <thead>
+                <tr>
+                    <th class="table-header" colspan="7">Recent activities</th>
+                </tr>
+                <tr>
+                    <th class="table-label table-header-col">Date</th>
+                    <th class="table-label table-header-col text-right">Opening balance</th>
+                    <th class="table-label table-header-col text-right">Deposit/Withdrawal</th>
+                    <th class="table-label table-header-col text-right">Fees</th>
+                    <th class="table-label table-header-col text-right">Daily profit</th>
+                    <th class="table-label table-header-col text-right">Closing balance</th>
+                    <th class="table-label table-header-col text-right">APY (% per year)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <template v-for="activity in activities">
+                    <tr>
+                        <td class="table-label table-col-value">
+                            {{ activity.date }}
+                        </td>
+                        <td class="table-label table-col-value text-right">
+                            ${{ $utils.formatMoney(activity.openingBalance, 6) }}
+                        </td>
+                        <td class="table-label table-col-value text-right">
+                            {{ activity.deposit < 0 ? '-' : '+' }}${{ $utils.formatMoney((activity.deposit < 0 ? -1 : 1) * activity.deposit, 2) }}
+                        </td>
+                        <td class="table-label table-col-value text-right">
+                            ${{ $utils.formatMoney(activity.fees, 2) }}
+                        </td>
+                        <td class="table-label table-col-value text-right">
+                            ${{ $utils.formatMoney(activity.dailyProfit, 6) }}
+                        </td>
+                        <td class="table-label table-col-value text-right">
+                            ${{ $utils.formatMoney(activity.closingBalance, 6) }}
+                        </td>
+                        <td class="table-label table-col-value text-right">
+                            {{ $utils.formatMoney(activity.apy, 2) }}%
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </template>
+    </v-simple-table>
+</template>
+
+<script>
+
+import {mapGetters} from "vuex";
+
+export default {
+    name: "RecentActivitiesTable",
+
+    components: {
+    },
+
+    data: () => ({
+    }),
+
+    computed: {
+        ...mapGetters('dashboardBalance', ['activities']),
+    },
+
+    methods: {
+    }
+}
+</script>
+
+<style>
+
+.activities-table {
+    width: 100% !important;
+    background: none !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(95, 151, 255, 0.15);
+}
+
+.table-header {
+    font-family: 'Lato', sans-serif !important;
+    color: white !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    line-height: 28px !important;
+    font-size: 18px !important;
+    padding-top: 14px !important;
+    padding-bottom: 2px !important;
+}
+
+.table-header-col {
+    color: #8FA2B7 !important;
+}
+
+.table-col-value {
+    color: white !important;
+}
+
+.table-label {
+    font-family: 'Lato', sans-serif !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 24px !important;
+    font-size: 14px !important;
+}
+
+</style>

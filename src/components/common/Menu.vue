@@ -12,10 +12,10 @@
                 Portfolio & Performance
             </span>
 
-            <span v-bind:class="activeTabStats"
-                  class="ml-10"
-                  @click="goToAction('/stats')">
-                Stats
+            <span v-bind:class="activeTabOvnStatement"
+                  class=" ml-10"
+                  @click="goToAction('/dashboard')">
+                Dashboard
             </span>
         </div>
         <div class="hidden-sm-and-up mt-10">
@@ -57,8 +57,8 @@ export default {
                 id: 2,
             },
             {
-                name: 'Stats',
-                to: '/stats',
+                name: 'Dashboard',
+                to: '/dashboard',
                 id: 3,
             },
         ]
@@ -84,8 +84,7 @@ export default {
             }
         },
 
-
-        activeTabStats: function () {
+        activeTabOvnStatement: function () {
             return {
                 'active-tab': this.tabId === 3,
                 'in-active-tab': this.tabId !== 3,

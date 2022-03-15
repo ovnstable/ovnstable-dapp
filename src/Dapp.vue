@@ -35,7 +35,7 @@ export default {
 
 <style scoped>
 
-/* mobile version */
+/* mobile */
 @media only screen and (max-width: 1400px) {
     .main-container {
         height: calc(100vh - 72px - 34px - 34px);

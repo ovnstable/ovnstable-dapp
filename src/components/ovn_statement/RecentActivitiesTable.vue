@@ -7,11 +7,11 @@
                 </tr>
                 <tr>
                     <th class="table-label table-header-col">Date</th>
-                    <th class="table-label table-header-col text-right">Opening balance</th>
-                    <th class="table-label table-header-col text-right">Deposit/Withdrawal</th>
-                    <th class="table-label table-header-col text-right">Fees</th>
-                    <th class="table-label table-header-col text-right">Daily profit</th>
-                    <th class="table-label table-header-col text-right">Closing balance</th>
+                    <th class="table-label table-header-col text-right" v-if="!minimized">Opening balance</th>
+                    <th class="table-label table-header-col text-right" v-if="!minimized">Deposit/Withdrawal</th>
+                    <th class="table-label table-header-col text-right" v-if="!minimized">Fees</th>
+                    <th class="table-label table-header-col text-right" v-if="!minimized">Daily profit</th>
+                    <th class="table-label table-header-col text-right" v-if="!minimized">Closing balance</th>
                     <th class="table-label table-header-col text-right">APY (% per year)</th>
                 </tr>
             </thead>
@@ -22,19 +22,19 @@
                         <td class="table-label table-col-value">
                             {{ activity.date }}
                         </td>
-                        <td class="table-label table-col-value text-right">
+                        <td class="table-label table-col-value text-right" v-if="!minimized">
                             ${{ $utils.formatMoney(activity.openingBalance, 6) }}
                         </td>
-                        <td class="table-label table-col-value text-right">
+                        <td class="table-label table-col-value text-right" v-if="!minimized">
                             {{ activity.deposit < 0 ? '-' : '+' }}${{ $utils.formatMoney((activity.deposit < 0 ? -1 : 1) * activity.deposit, 2) }}
                         </td>
-                        <td class="table-label table-col-value text-right">
+                        <td class="table-label table-col-value text-right" v-if="!minimized">
                             ${{ $utils.formatMoney(activity.fees, 2) }}
                         </td>
-                        <td class="table-label table-col-value text-right">
+                        <td class="table-label table-col-value text-right" v-if="!minimized">
                             ${{ $utils.formatMoney(activity.dailyProfit, 6) }}
                         </td>
-                        <td class="table-label table-col-value text-right">
+                        <td class="table-label table-col-value text-right" v-if="!minimized">
                             ${{ $utils.formatMoney(activity.closingBalance, 6) }}
                         </td>
                         <td class="table-label table-col-value text-right">
@@ -59,6 +59,13 @@ export default {
 
     data: () => ({
     }),
+
+    props: {
+        minimized: {
+            type: Boolean,
+            default: false,
+        },
+    },
 
     computed: {
         ...mapGetters('dashboardBalance', ['activities']),

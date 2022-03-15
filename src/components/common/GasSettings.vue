@@ -150,7 +150,7 @@ export default {
 
 <style scoped>
 
-/* mobile version */
+/* mobile */
 @media only screen and (max-width: 1400px) {
     .note-label, .gas-price-title {
         font-size: 14px;

@@ -29,23 +29,27 @@ const state = {
 
     portfolioValue: [
         {
-            date: '6:00',
+            date: '01.03',
             value: '5',
         },
         {
-            date: '9:00',
+            date: '02.03',
+            value: '5',
+        },
+        {
+            date: '03.03',
             value: '7',
         },
         {
-            date: '12:00',
+            date: '04.03',
             value: '30',
         },
         {
-            date: '15:00',
+            date: '05.03',
             value: '40',
         },
         {
-            date: '18:00',
+            date: '06.03',
             value: '50',
         },
         {
@@ -53,19 +57,19 @@ const state = {
             value: '45',
         },
         {
-            date: '14 feb',
+            date: '07.03',
             value: '51',
         },
         {
-            date: '3:00',
+            date: '08.03',
             value: '80',
         },
         {
-            date: '6:00',
+            date: '09.03',
             value: '70',
         },
         {
-            date: '9:00',
+            date: '10.03',
             value: '50',
         },
     ],

@@ -52,7 +52,7 @@ export default {
 
 <style scoped>
 
-/* mobile version */
+/* mobile */
 @media only screen and (max-width: 1400px) {
     .logo-title, .network-btn {
         display: none !important;

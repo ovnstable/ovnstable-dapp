@@ -14,6 +14,7 @@ import mintRedeemView from './modules/mint-redeem-view';
 import governance from './modules_governance/governance';
 import ethers from './modules_governance/ethers';
 import approve from "@/store/modules/approve";
+import farm from "@/store/modules/farm";
 
 import createPersistedState from "vuex-persistedstate";
 
@@ -35,6 +36,7 @@ export default new Vuex.Store({
         governance,
         ethers,
         approve,
+        farm,
     },
     plugins: [createPersistedState({paths: ['transaction']})]
 });

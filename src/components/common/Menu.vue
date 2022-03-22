@@ -6,10 +6,16 @@
                 Swap
             </span>
 
+            <span v-bind:class="activeTabFarm"
+                  class=" ml-10"
+                  @click="goToAction('/farm')">
+                Farm
+            </span>
+
             <span v-bind:class="activeTabDashboard"
                   class=" ml-10"
                   @click="goToAction('/fund')">
-                Portfolio & Performance
+                Performance
             </span>
 
             <span v-bind:class="activeTabOvnStatement"
@@ -52,14 +58,19 @@ export default {
                 id: 1
             },
             {
+                name: 'Farm',
+                to: '/farm',
+                id: 2,
+            },
+            {
                 name: 'Fund performance',
                 to: '/fund',
-                id: 2,
+                id: 3,
             },
             {
                 name: 'Dashboard',
                 to: '/dashboard',
-                id: 3,
+                id: 4,
             },
         ]
     }),
@@ -77,17 +88,24 @@ export default {
             }
         },
 
-        activeTabDashboard: function () {
+        activeTabFarm: function () {
             return {
                 'active-tab': this.tabId === 2,
                 'in-active-tab': this.tabId !== 2,
             }
         },
 
-        activeTabOvnStatement: function () {
+        activeTabDashboard: function () {
             return {
                 'active-tab': this.tabId === 3,
                 'in-active-tab': this.tabId !== 3,
+            }
+        },
+
+        activeTabOvnStatement: function () {
+            return {
+                'active-tab': this.tabId === 4,
+                'in-active-tab': this.tabId !== 4,
             }
         },
     },

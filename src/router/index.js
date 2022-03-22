@@ -51,6 +51,16 @@ const routes = [
                     ]
                 }
             },
+            {
+                path: '/farm',
+                name: 'FarmView',
+                component: () => import('../views/FarmView.vue'),
+                meta: {
+                    middleware: [
+                        getDapp,
+                    ]
+                }
+            },
         ],
     },
 

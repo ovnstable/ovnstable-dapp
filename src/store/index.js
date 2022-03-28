@@ -7,6 +7,7 @@ import waitingModal from './modules/waiting-modal';
 import successModal from './modules/success-modal';
 import transaction from './modules/transaction'
 import gasPrice from './modules/gas-price';
+import airDrop from './modules/airdrop-dialog'
 import web3 from "./modules/web3";
 import accountProfile from './modules/account-profile';
 import mintRedeemView from './modules/mint-redeem-view';
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     modules: {
         profile,
         gasPrice,
+        airDrop,
         showTransactions,
         errorModal,
         waitingModal,

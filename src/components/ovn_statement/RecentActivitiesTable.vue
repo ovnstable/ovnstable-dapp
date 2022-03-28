@@ -1,5 +1,5 @@
 <template>
-    <v-simple-table class="activities-table" dark height="160px" dense>
+    <v-simple-table class="activities-table" dark height="200px" dense>
         <template v-slot:default>
             <thead>
                 <tr>
@@ -8,11 +8,11 @@
                 <tr>
                     <th class="table-label table-header-col">Date</th>
                     <th class="table-label table-header-col text-right" v-if="!minimized">Opening balance</th>
-                    <th class="table-label table-header-col text-right" v-if="!minimized">Deposit/Withdrawal</th>
+                    <th class="table-label table-header-col text-right" v-if="!minimized">Balance change</th>
                     <th class="table-label table-header-col text-right" v-if="!minimized">Fees</th>
-                    <th class="table-label table-header-col text-right" v-if="!minimized">Daily profit</th>
+                    <th class="table-label table-header-col text-right">Daily profit</th>
                     <th class="table-label table-header-col text-right" v-if="!minimized">Closing balance</th>
-                    <th class="table-label table-header-col text-right">APY (% per year)</th>
+                    <th class="table-label table-header-col text-right">APY</th>
                 </tr>
             </thead>
 
@@ -20,25 +20,26 @@
                 <template v-for="activity in activities">
                     <tr>
                         <td class="table-label table-col-value">
-                            {{ activity.date }}
+                            {{ formatDate(activity.date) }}
                         </td>
                         <td class="table-label table-col-value text-right" v-if="!minimized">
                             ${{ $utils.formatMoney(activity.openingBalance, 6) }}
                         </td>
                         <td class="table-label table-col-value text-right" v-if="!minimized">
-                            {{ activity.deposit < 0 ? '-' : '+' }}${{ $utils.formatMoney((activity.deposit < 0 ? -1 : 1) * activity.deposit, 2) }}
+                            {{ activity.balanceChange ? (activity.balanceChange < 0 ? '-' : '+') : '' }}
+                            {{ activity.balanceChange ? '$' + ($utils.formatMoney((activity.balanceChange < 0 ? -1 : 1) * activity.balanceChange, 2)) : '—' }}
                         </td>
                         <td class="table-label table-col-value text-right" v-if="!minimized">
-                            ${{ $utils.formatMoney(activity.fees, 2) }}
+                            ${{ $utils.formatMoney(activity.fee, 2) }}
                         </td>
-                        <td class="table-label table-col-value text-right" v-if="!minimized">
-                            ${{ $utils.formatMoney(activity.dailyProfit, 6) }}
+                        <td class="table-label table-col-value text-right">
+                            {{ activity.dailyProfit ? '$' + $utils.formatMoney(activity.dailyProfit, 6) : '—' }}
                         </td>
                         <td class="table-label table-col-value text-right" v-if="!minimized">
                             ${{ $utils.formatMoney(activity.closingBalance, 6) }}
                         </td>
                         <td class="table-label table-col-value text-right">
-                            {{ $utils.formatMoney(activity.apy, 2) }}%
+                            {{ activity.apy ? $utils.formatMoney(activity.apy, 2) + '%' : '—' }}
                         </td>
                     </tr>
                 </template>
@@ -49,7 +50,7 @@
 
 <script>
 
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "RecentActivitiesTable",
@@ -72,6 +73,9 @@ export default {
     },
 
     methods: {
+        formatDate(date) {
+            return this.$moment(date).format('DD.MM.YYYY');
+        }
     }
 }
 </script>

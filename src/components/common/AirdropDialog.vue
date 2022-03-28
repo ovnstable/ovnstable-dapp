@@ -33,7 +33,7 @@
                         <p class="my-0"><a class="join-link" @click="openLink('https://t.me/overnight_fi_announcements')">Join on TG channel</a></p>
                         <p class="my-0"><a class="join-link" @click="openLink('https://discord.gg/7dEceNJqPq')">Join on Discord</a></p>
                         <p class="my-0 mt-1 mb-1"><a class="join-link" @click="openLink('https://twitter.com/overnight_fi')">Follow on Twitter</a>, retweet Airdrop promotional post and tag 3 persons</p>
-                        <p class="my-0"><a class="join-link" @click="openLink('overnight.fi')">Buy</a><b>&nbsp;100 USD+</b></p>
+                        <p class="my-0"><a class="join-link" @click="openLink('https://app.overnight.fi/')">Buy</a><b>&nbsp;100 USD+</b></p>
                     </v-tooltip>
                 </v-row>
                 <v-row dense>

@@ -13,7 +13,7 @@
 
                 <v-row>
                     <v-col>
-                        <v-row class="desc pr-5 pl-5 pt-10" justify="center">
+                        <v-row class="desc pr-5 pl-5 pt-8" justify="center">
                             <p>Automated Overnight DeFi total asset portfolio management dashboards. Your assets are there.</p>
                         </v-row>
                         <v-row class="desc pr-5 pl-5 pb-5" justify="center">

@@ -46,10 +46,10 @@
                 {{ item.name }}
               </v-col>
               <v-col>
-                {{ item.netAssetValue}}
+                {{ $utils.formatMoney(item.netAssetValue, 2)}}
               </v-col>
               <v-col>
-                {{ item.liquidationValue}}
+                  {{ $utils.formatMoney(item.liquidationValue, 2)}}
               </v-col>
 
             </v-row>
@@ -59,10 +59,10 @@
                 Total
               </v-col>
               <v-col lg="4">
-                {{ netAssetValueTotal }}
+                {{ $utils.formatMoney(netAssetValueTotal) }}
               </v-col>
               <v-col lg="4">
-                {{ liquidationValueTotal }}
+                {{ $utils.formatMoney(liquidationValueTotal) }}
               </v-col>
             </v-row>
 
@@ -71,7 +71,7 @@
                 Total USD+ in circulation
               </v-col>
               <v-col lg="4">
-                  {{ totalSupply }}
+                  {{ $utils.formatMoney(totalSupply) }}
               </v-col>
               <v-col lg="1"></v-col>
             </v-row>

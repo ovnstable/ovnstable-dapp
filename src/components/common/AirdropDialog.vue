@@ -43,13 +43,23 @@
                         So we are rewarding and will reward again the early adopters.
                     </label>
                 </v-row>
-                <v-row dense align="center" class="mt-6">
+
+                <v-row v-if="account" dense align="center" class="mt-6">
                     <v-btn dark
                            outlined
-                           disabled
                            height="40"
+                           @click="openLink('https://blog.overnight.fi/how-to-buy-usd-coin-if-you-already-own-crypto-currency-49da489a8652')"
                            class="move-btn">
-                        MOVE FIRST AND WIN IT ALL
+                        HOW TO BUY USD+
+                    </v-btn>
+                </v-row>
+                <v-row v-else dense align="center" class="mt-6">
+                    <v-btn dark
+                           outlined
+                           height="40"
+                           @click="connectWalletAction"
+                           class="move-btn">
+                        CONNECT TO A WALLET
                     </v-btn>
                 </v-row>
             </v-card-text>
@@ -67,15 +77,21 @@ export default {
 
     computed: {
         ...mapGetters('airDrop', ['show']),
+        ...mapGetters('web3', ['account']),
     },
 
     data: () => ({}),
 
     methods: {
         ...mapActions('airDrop', ['showAirdropDialog', 'hideAirdropDialog']),
+        ...mapActions('web3', ['connectWallet']),
 
         openLink(link) {
             window.open(link, '_blank').focus();
+        },
+
+        connectWalletAction() {
+            this.connectWallet();
         },
 
         close() {
@@ -158,10 +174,10 @@ export default {
 }
 
 .move-btn {
-    cursor: default;
+    cursor: pointer;
     background: none !important;
     border-radius: 40px;
     border: none !important;
-    color: white !important;
+    color: #8FA2B7 !important;
 }
 </style>

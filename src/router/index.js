@@ -41,11 +41,20 @@ const routes = [
                     ]
                 }
             },
-
             {
                 path: '/stats',
                 name: 'StatsView',
                 component: () => import('../views/StatsView.vue'),
+                meta: {
+                    middleware: [
+                        getDapp,
+                    ]
+                }
+            },
+            {
+                path: '/poolsFeeding',
+                name: 'PoolFeedingView',
+                component: () => import('../views/PoolFeedingView.vue'),
                 meta: {
                     middleware: [
                         getDapp,

@@ -1,10 +1,7 @@
-import detectEthereumProvider from "@metamask/detect-provider";
 import { ethers } from "ethers";
-import abiDecoder from "../../plugins/abiDecoder";
 
 const state = {
     provider: null,
-
 };
 
 const getters = {
@@ -12,8 +9,6 @@ const getters = {
     provider(state) {
         return state.provider;
     },
-
-
 };
 
 const actions = {
@@ -24,11 +19,9 @@ const actions = {
         commit('setProvider', provider)
     },
 
-
     async mineBlocks({commit, dispatch, getters, rootState}, count){
        await getters.provider.send('evm_mine' );
     }
-
 };
 
 const mutations = {
@@ -36,8 +29,6 @@ const mutations = {
     setProvider(state, value) {
         state.provider = value;
     },
-
-
 };
 
 export default {

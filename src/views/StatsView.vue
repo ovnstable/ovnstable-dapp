@@ -11,17 +11,9 @@
                     lg="12"
                     md="8"
                     sm="12"
-
             >
                 <v-row class="justify-center align-center pt-15">
-                    <template v-if="loadingBalance">
-                        <v-skeleton-loader
-                                type="button"
-                        />
-                    </template>
-                    <template v-else>
-                        <div class="swap-title ml-2">Your USD+ balance is: {{ balance.usdPlus }}</div>
-                    </template>
+                    <div class="swap-title ml-2">Your USD+ balance is: {{ $utils.formatMoney((balance && balance.usdPlus) ? balance.usdPlus : 0) }}</div>
                 </v-row>
 
                 <v-row>

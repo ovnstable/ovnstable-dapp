@@ -1,7 +1,7 @@
 <template>
-    <v-row dense class="logo" @click="clickLogo" justify="start">
-        <div class="mr-1" style="width: 40px; height: 40px">
-            <v-img :src="require('../../assets/ovn.png')"></v-img>
+    <v-row dense class="logo" justify="start">
+        <div class="mr-1 logo-img" style="width: 40px; height: 40px">
+            <v-img :src="require('../../assets/ovn.png')" @click="clickLogo"></v-img>
         </div>
 
         <label class="logo-title" @click="clickLogo">
@@ -63,8 +63,11 @@ export default {
 }
 
 .logo {
-    cursor: pointer;
     width: 100vw !important;
+}
+
+.logo-img, .logo-title {
+    cursor: pointer;
 }
 
 .logo-title {

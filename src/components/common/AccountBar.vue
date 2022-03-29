@@ -31,6 +31,11 @@
                                     Account Profile
                                 </label>
                             </v-list-item>
+                            <v-list-item @click="goToAction('/fund')" class="fund-mobile">
+                                <label class="list-label-switch">
+                                    Fund
+                                </label>
+                            </v-list-item>
                             <v-list-item @click="addUsdPlusToken">
                                 <label class="list-label-switch">
                                     Add&nbsp;&nbsp;<strong>USD+</strong>&nbsp;&nbsp;to wallet
@@ -112,7 +117,11 @@ export default {
 
         openBridgeLink() {
             window.open('https://wallet.polygon.technology', '_blank');
-        }
+        },
+
+        goToAction(id) {
+            this.$router.push(id);
+        },
     }
 }
 </script>
@@ -132,7 +141,7 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
-    .bridge-link-mobile, .account-profile-mobile {
+    .bridge-link-mobile, .account-profile-mobile, .fund-mobile {
         display: none !important;
     }
 

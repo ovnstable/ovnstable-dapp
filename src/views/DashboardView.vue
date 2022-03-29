@@ -1,52 +1,48 @@
 <template>
-    <v-container
-            class="fill-height"
-            fluid
-    >
-        <v-row
-                align="center"
-                justify="center"
-        >
-            <v-col
-                    lg="12"
-                    md="8"
-                    sm="8"
-
-            >
+    <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
+            <v-col lg="12" md="8" sm="8">
                 <v-row class="justify-center align-center pt-15">
-                    <div class="swap-title ml-2">USD+ Total Portfolio</div>
+                    <label class="swap-title">
+                        <v-icon class="return-btn" @click='goToAction("/")'>
+                            mdi-reply
+                        </v-icon>
+                        USD+ Total Portfolio
+                    </label>
                 </v-row>
 
                 <v-row>
-                    <v-col lg="3" class="pt-10  hidden-sm-and-down hidden-md-and-down">
-                        <!--            <StatsWidget/>-->
-                    </v-col>
-                    <v-col lg="1">
-                    </v-col>
-
-                    <v-col lg="4" sm="12" md="12" cols="12">
-                        <v-row class="desc pr-5 pl-5 pt-10">
+                    <v-col>
+                        <v-row class="desc pr-5 pl-5 pt-10" justify="center">
                             <p>Automated Overnight DeFi total asset portfolio management dashboards. Your assets are there.</p>
                         </v-row>
-                        <v-row class="desc pr-5 pl-5 pb-5">
+                        <v-row class="desc pr-5 pl-5 pb-5" justify="center">
                             <p class="text-left font-weight-bold">Redeem anytime</p>
                         </v-row>
                     </v-col>
                 </v-row>
 
-                <v-row justify="center" class="pr-5 pl-5">
-                    <v-col lg="4" class="tabs pa-1">
-                        <button v-bind:class="activeTabMint" @click="tab = 1">Payouts</button>
-                        <button v-bind:class="activeTabRedeem" @click="tab = 2 ">Portfolio</button>
-                    </v-col>
+                <v-row justify="center">
+                    <v-btn-toggle
+                            v-model="tabNumber"
+                            class="tab-btn-toggle"
+                            mandatory>
+                        <v-btn class="tab-btn" @click="tab = 1">
+                            <label v-bind:class="activeTabPayouts">Payouts</label>
+                        </v-btn>
+                        <v-btn class="tab-btn" @click="tab = 2">
+                            <label v-bind:class="activeTabPortfolio">Portfolio</label>
+                        </v-btn>
+                    </v-btn-toggle>
                 </v-row>
 
-                <v-row justify="center">
+                <v-row class="pt-4" justify="center">
                     <v-col lg="7" class="pa-0 ma-0" v-if="tab === 1">
-                        <HistoryTotalData/>
+                        <HistoryTotalDataTable class="history-full-table"/>
+                        <HistoryTotalDataTable class="history-minimized-table" minimized/>
                     </v-col>
                     <v-col lg="4" class="pa-0 ma-0" v-if="tab === 2">
-                        <CurrentTotalData/>
+                        <CurrentTotalDataTable/>
                     </v-col>
                 </v-row>
 
@@ -58,92 +54,118 @@
 <script>
 
 import StatsWidget from "../components/common/StatsWidget";
-import CurrentTotalData from "../components/dashboard/CurrentTotalData";
-import HistoryTotalData from "../components/dashboard/HistoryTotalData";
 import {mapGetters} from "vuex";
+import HistoryTotalDataTable from "@/components/dashboard/HistoryTotalDataTable";
+import CurrentTotalDataTable from "@/components/dashboard/CurrentTotalDataTable";
 
 export default {
     name: "DashboardView",
-    components: {HistoryTotalData, CurrentTotalData, StatsWidget},
+
+    components: {
+        CurrentTotalDataTable,
+        HistoryTotalDataTable,
+        StatsWidget
+    },
+
     data: () => ({
         tab: 1,
+        tabNumber: undefined,
     }),
 
-
     computed: {
-        activeTabMint: function () {
+        activeTabPayouts: function () {
             return {
                 'tab-button': this.tab === 1,
                 'tab-button-in-active': this.tab !== 1,
             }
         },
 
-        activeTabRedeem: function () {
+        activeTabPortfolio: function () {
             return {
                 'tab-button': this.tab === 2,
                 'tab-button-in-active': this.tab !== 2,
             }
         },
-
-
     },
 
-    methods: {}
-
+    methods: {
+        goToAction(id) {
+            this.$router.push(id);
+        },
+    },
 }
 </script>
 
 <style scoped>
+
+/* mobile */
+@media all and (min-width: 0px) and (max-width: 650px) {
+
+    .swap-title {
+        color: white;
+        font-weight: 300;
+        font-size: 34px;
+    }
+
+    .history-full-table {
+        display: none !important;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 650px) and (max-width: 1400px) {
+
+    .swap-title {
+        color: white;
+        font-weight: 300;
+        font-size: 34px;
+    }
+
+    .history-minimized-table {
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+
+    .swap-title {
+        color: white;
+        font-weight: 300;
+        font-size: 56px;
+    }
+
+    .history-minimized-table, .return-btn {
+        display: none !important;
+    }
+}
 
 .desc {
     font-size: 14px;
     color: white;
 }
 
-.tab-button-in-active {
-    color: #0A0952;
-    cursor: pointer; /* Mouse pointer on hover */
-    width: 50%;
-    height: 40px;
-    font-weight: 600;
-    font-size: 18px;
-    opacity: 0.8;
-
+.tab-btn-toggle {
+    background: none !important;
+    border-radius: 40px !important;
 }
 
-.tab-button-in-active:hover {
-    opacity: 1;
-    background-color: #FFFFFF;
-    border: 1px solid #ECECEC;
-    border-radius: 5px;
+.tab-btn {
+    background: var(--secondary) !important;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    min-width: 150px;
 }
 
 .tab-button {
-    color: #0A0952;
-    cursor: pointer; /* Mouse pointer on hover */
-    width: 50%;
-    height: 40px;
-    font-weight: 600;
-    font-size: 18px;
-    border-radius: 5px;
-    background-color: #FFFFFF;
-    border: 1px solid #ECECEC;
-    opacity: 0.8;
+    background: #FE7F2D;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.card {
-    border-radius: 15px;
-    border: 1px solid #BBBBBB;
-}
-
-.tabs {
-    background-color: #F4F5F9;
-    border-radius: 8px;
-}
-
-.swap-title {
-    color: white;
-    font-weight: 300;
-    font-size: 42px;
+.return-btn {
+    color: #FE7F2D !important;
+    cursor: pointer;
+    margin-top: -6px;
 }
 </style>

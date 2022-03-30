@@ -5,7 +5,7 @@
                 <label class="title-label pt-10 pl-3 pb-5">
                     Welcome to Overnight.fi
                     <br/>
-                    EXCLUSIVE AIRDROP for Savvy Investors
+                    EXCLUSIVE AIRDROP on&nbsp;<a class="bridge-link" @click="openBridgeLink">Polygon</a>&nbsp;for Savvy Investors
                 </label>
                 <v-btn icon class="ml-auto" @click="close" dark>
                     <v-icon>mdi-close</v-icon>
@@ -94,6 +94,10 @@ export default {
             this.connectWallet();
         },
 
+        openBridgeLink() {
+            window.open('https://wallet.polygon.technology', '_blank');
+        },
+
         close() {
             this.hideAirdropDialog();
         },
@@ -179,5 +183,10 @@ export default {
     border-radius: 40px;
     border: none !important;
     color: #8FA2B7 !important;
+}
+
+.bridge-link {
+    color: white;
+    text-decoration: underline;
 }
 </style>

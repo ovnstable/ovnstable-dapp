@@ -75,11 +75,11 @@ export default {
     },
 
     created() {
-        this.zoomChart("month");
+        this.zoomChart("all");
     },
 
     methods: {
-        ...mapActions([]),
+        ...mapActions('dashboardBalance', ['sliceClientDashboardData']),
 
         ...mapMutations([]),
 
@@ -99,6 +99,8 @@ export default {
                 default:
                     this.slice = null;
             }
+
+            this.sliceClientDashboardData(this.slice);
 
             if (this.chart) {
                 this.chart.destroy();

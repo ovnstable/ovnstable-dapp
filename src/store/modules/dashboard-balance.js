@@ -39,6 +39,7 @@ const actions = {
     async refreshClientDashboardData({commit, dispatch, getters, rootState}) {
 
         let account = rootState.web3.account.toLowerCase();
+
         let response = (await axios.get(`/dapp/clientBalanceChanges?address=${account}`)).data;
 
         let clientData = response.map(item => {
@@ -99,6 +100,31 @@ const actions = {
             commit('setAvgBalance', avg);
         } else {
             commit('setAvgBalance', 0);
+        }
+
+        let profitList = clientData.map(item => item.dailyProfit ? item.dailyProfit : 0).filter(item => item !== 0);
+        if (profitList && (profitList.length > 0)) {
+            const sum = profitList.reduce((a, b) => a + b, 0);
+
+            commit('setProfitUsdPlus', sum);
+        } else {
+            commit('setProfitUsdPlus', 0);
+        }
+    },
+
+    async sliceClientDashboardData({commit, dispatch, getters, rootState}, slice) {
+
+        let clientData = getters.activities;
+        clientData = slice ? clientData.slice(slice) : clientData;
+
+        let avgApyList = clientData.map(item => item.apy ? item.apy : 0).filter(item => item !== 0);
+        if (avgApyList && (avgApyList.length > 0)) {
+            const sum = avgApyList.reduce((a, b) => a + b, 0);
+            const avg = (sum / avgApyList.length) || 0;
+
+            commit('setApy', avg);
+        } else {
+            commit('setApy', 0);
         }
 
         let profitList = clientData.map(item => item.dailyProfit ? item.dailyProfit : 0).filter(item => item !== 0);

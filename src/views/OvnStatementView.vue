@@ -57,10 +57,10 @@
                                 </v-card-title>
                                 <v-card-text>
                                     <v-row class="ml-2 pt-2">
-                                        <label class="card-label label-light">Average balance</label>
+                                        <label class="card-label label-light">Current balance</label>
                                     </v-row>
                                     <v-row class="ml-2 pt-1 pb-3">
-                                        <label class="label-value">${{ $utils.formatMoney(avgBalance, 2) }}</label>
+                                        <label class="label-value">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
                                     </v-row>
                                 </v-card-text>
                             </v-card>
@@ -118,11 +118,11 @@
 
                                         <v-list-item-content>
                                             <v-list-item-title>
-                                                <label class="label-value">${{ $utils.formatMoney(avgBalance, 2) }}</label>
+                                                <label class="label-value">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
                                             </v-list-item-title>
 
                                             <v-list-item-subtitle>
-                                                <label class="card-label label-light">Average balance</label>
+                                                <label class="card-label label-light">Current balance</label>
                                             </v-list-item-subtitle>
                                         </v-list-item-content>
                                     </v-list-item>
@@ -208,6 +208,7 @@ export default {
 
 
     computed: {
+        ...mapGetters('profile', ['balance']),
         ...mapGetters('dashboardBalance', ['avgBalance', 'profitUsdPlus', 'apy', 'activities']),
 
         anyActivities() {

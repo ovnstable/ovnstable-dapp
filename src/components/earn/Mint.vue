@@ -187,7 +187,7 @@
                                     <v-img :src="require('@/assets/icon/question-help.svg')"/>
                                 </div>
                             </template>
-                            <p class="my-0">A portion of each trade (0.04%)</p>
+                            <p class="my-0">A portion of each trade (0.0004%)</p>
                             <p class="my-0">goes to Overnight as a protocol incentive</p>
                         </v-tooltip>
 
@@ -280,11 +280,11 @@ export default {
         },
 
         estimateResult: function () {
-            return this.sum * 0.996;
+            return this.sum * 0.9996;
         },
 
         estimateFee: function () {
-            return this.sum * 0.004;
+            return this.sum * 0.0004;
         },
 
         buttonLabel: function () {

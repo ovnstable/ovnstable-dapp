@@ -66,7 +66,7 @@ export default {
 
 <style scoped>
 
-/* mobile version */
+/* mobile */
 @media only screen and (max-width: 1400px) {
     .swap-title {
         color: white;

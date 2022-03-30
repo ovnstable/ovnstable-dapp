@@ -41,11 +41,10 @@ const routes = [
                     ]
                 }
             },
-
             {
-                path: '/stats',
-                name: 'StatsView',
-                component: () => import('../views/StatsView.vue'),
+                path: '/dashboard',
+                name: 'OvnStatementView',
+                component: () => import('../views/OvnStatementView.vue'),
                 meta: {
                     middleware: [
                         getDapp,

@@ -68,7 +68,7 @@ export default {
 
 <style>
 
-/* mobile version */
+/* mobile */
 @media only screen and (max-width: 1400px) {
     .menu-col-content {
         display: none !important;

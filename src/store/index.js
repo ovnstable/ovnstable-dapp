@@ -5,6 +5,7 @@ import showTransactions from './modules/show-transaction';
 import errorModal from './modules/error-modal';
 import waitingModal from './modules/waiting-modal';
 import successModal from './modules/success-modal';
+import dashboardBalance from './modules/dashboard-balance.js';
 import transaction from './modules/transaction'
 import gasPrice from './modules/gas-price';
 import airDrop from './modules/airdrop-dialog'
@@ -32,6 +33,7 @@ export default new Vuex.Store({
         errorModal,
         waitingModal,
         successModal,
+        dashboardBalance,
         transaction,
         web3,
         accountProfile,

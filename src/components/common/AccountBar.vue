@@ -21,14 +21,19 @@
                         </template>
 
                         <v-list class="wallet-actions-list">
-                            <v-list-item @click="openBridgeLink" class="bridge-link-mobile">
-                                <label class="list-label-switch">
-                                    Bridge
-                                </label>
-                            </v-list-item>
                             <v-list-item @click="showAccountProfile" class="account-profile-mobile">
                                 <label class="list-label-switch">
                                     Account Profile
+                                </label>
+                            </v-list-item>
+                            <v-list-item @click="goToAction('/dashboard')" class="dashboard-mobile">
+                                <label class="list-label-switch">
+                                    Dashboard
+                                </label>
+                            </v-list-item>
+                            <v-list-item @click="openBridgeLink" class="bridge-link-mobile">
+                                <label class="list-label-switch">
+                                    Bridge
                                 </label>
                             </v-list-item>
                             <v-list-item @click="goToAction('/fund')" class="fund-mobile">
@@ -128,7 +133,7 @@ export default {
 
 <style scoped>
 
-/* mobile version */
+/* mobile */
 @media only screen and (max-width: 1400px) {
     .bridge-link, .balance-chip {
         display: none !important;
@@ -141,7 +146,7 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
-    .bridge-link-mobile, .account-profile-mobile, .fund-mobile {
+    .bridge-link-mobile, .account-profile-mobile, .dashboard-mobile, .fund-mobile {
         display: none !important;
     }
 

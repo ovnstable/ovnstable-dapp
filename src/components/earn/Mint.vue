@@ -280,11 +280,11 @@ export default {
         },
 
         estimateResult: function () {
-            return this.sum * 0.996;
+            return this.sum * 0.9996;
         },
 
         estimateFee: function () {
-            return this.sum * 0.004;
+            return this.sum * 0.0004;
         },
 
         buttonLabel: function () {
@@ -555,7 +555,7 @@ export default {
 
 <style scoped>
 
-/* mobile version */
+/* mobile */
 @media only screen and (max-width: 1400px) {
     .max {
         display: none !important;

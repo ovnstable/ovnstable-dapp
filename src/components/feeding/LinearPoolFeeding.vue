@@ -3,10 +3,34 @@
         <v-row class="pt-5">
             <v-card flat class="main-card">
                 <v-card-text>
+
+                  <v-row  justify="start">
+                    <label class="recent-label">
+                      Balance USD+: <b>{{ balances.usdPlus }}</b>
+                    </label>
+                  </v-row>
+
+                  <v-row justify="start">
+                    <label class="recent-label">
+                      Balance USDC: <b>{{ balances.usdc }}</b>
+                    </label>
+                  </v-row>
+
+                  <v-row justify="start">
+                    <label class="recent-label">
+                      Balance StaticUSD+: <b>{{ balances.staticUsdPlus }}</b>
+                    </label>
+                  </v-row>
+
+                  <v-row justify="start">
+                    <label class="recent-label">
+                      Balance Pool LP: <b>{{ balances.lpToken }}</b>
+                    </label>
+                  </v-row>
                     <v-row>
                         <v-col>
                             <v-row>
-                                <label class="title-row-label ml-5 mt-3">Amount</label>
+                                <label class="title-row-label ml-5 mt-3">Amount USDC</label>
                             </v-row>
                             <v-row align="center">
                                 <v-text-field placeholder="0.00"
@@ -17,31 +41,46 @@
                                               hide-details
                                               dark
                                               background-color="transparent"
-                                              v-model="amount">
+                                              v-model="amountUsdc">
                                 </v-text-field>
                                 <v-spacer></v-spacer>
                             </v-row>
                         </v-col>
+
+
+                      <v-col>
+                        <v-row>
+                          <label class="title-row-label ml-5 mt-3">Amount USD+</label>
+                        </v-row>
+                        <v-row align="center">
+                          <v-text-field placeholder="0.00"
+                                        @keypress="isNumber($event)"
+                                        flat
+                                        solo
+                                        class="ml-2 field-sum"
+                                        hide-details
+                                        dark
+                                        background-color="transparent"
+                                        v-model="amountUsdPlus">
+                          </v-text-field>
+                          <v-spacer></v-spacer>
+                        </v-row>
+                      </v-col>
                     </v-row>
                 </v-card-text>
             </v-card>
         </v-row>
 
+
+
+
         <v-row class="main-btn-row pt-2" justify="center">
             <div style="width: 100%;">
                 <v-btn dark
                        height="56"
-                       v-if="amount && (amount > 0)"
                        class='buy enabled-buy'
                        @click="start">
                     Start
-                </v-btn>
-                <v-btn dark
-                       height="56"
-                       v-else
-                       disabled
-                       class='buy disabled-buy'>
-                    Invalid amount
                 </v-btn>
             </div>
         </v-row>
@@ -71,9 +110,27 @@
                     <v-col class="main-content-col">
                         <v-row align="center" justify="center">
                             <label class="recent-label">
-                                Amount: <b>{{ $utils.formatMoney(amount, 2) }}</b>
+                                Balance USD+: <b>{{ balances.usdPlus }}</b>
                             </label>
                         </v-row>
+
+                      <v-row align="center" justify="center">
+                        <label class="recent-label">
+                          Balance USDC: <b>{{ balances.usdc }}</b>
+                        </label>
+                      </v-row>
+
+                      <v-row align="center" justify="center">
+                        <label class="recent-label">
+                          Balance StaticUSD+: <b>{{ balances.staticUsdPlus }}</b>
+                        </label>
+                      </v-row>
+
+                      <v-row align="center" justify="center">
+                        <label class="recent-label">
+                          Balance Pool LP: <b>{{ balances.lpToken }}</b>
+                        </label>
+                      </v-row>
 
                         <v-row class="row mt-5">
                             <v-col cols="10">
@@ -117,7 +174,7 @@
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Swapping</div>
+                                <div class="step-label">Swapping USDC</div>
                             </v-col>
                             <v-col cols="2">
                                 <v-icon color="green" v-if="swappingFirstStep">mdi-check</v-icon>
@@ -137,7 +194,7 @@
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Swapping</div>
+                                <div class="step-label">Swapping Static USD+</div>
                             </v-col>
                             <v-col cols="2">
                                 <v-icon color="green" v-if="swappingSecondStep">mdi-check</v-icon>
@@ -175,7 +232,8 @@
 
 <script>
 
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
+import {ethers} from "ethers";
 
 export default {
     name: "LinearPoolFeeding",
@@ -183,12 +241,13 @@ export default {
     components: {},
 
     data: () => ({
-        amount: null,
+        amountUsdc: null,
+        amountUsdPlus: null,
         showProcessDialog: false,
     }),
 
     computed: {
-        ...mapGetters('linearPoolFeeding', [
+        ...mapGetters('linearPoolFeeding', [ 'balances',
                 'prepareStep', 'approveUsdPlusStep', 'depositStaticStep', 'approveUsdcStep',
                 'swappingFirstStep', 'approveStaticUsdPlusStep', 'swappingSecondStep', 'endStep'
             ]
@@ -196,8 +255,21 @@ export default {
 
     },
 
-    methods: {
-        ...mapActions('linearPoolFeeding', ['setAmountValue', 'startProcess']),
+  created() {
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    console.log('Provider: ' + provider.connection.url);
+    provider.send("eth_requestAccounts", []).then(value => {
+
+      let signer = provider.getSigner();
+      this.updateBalances(signer);
+    });
+
+  },
+
+  methods: {
+        ...mapActions('linearPoolFeeding', [ 'startProcess', 'updateBalances']),
+        ...mapMutations('linearPoolFeeding', ['setAmountValueUsdPlus', 'setAmountValueUsdc']),
 
         isNumber: function(evt) {
             evt = (evt) ? evt : window.event;
@@ -217,12 +289,13 @@ export default {
         start() {
             this.showProcessDialog = true;
 
-            this.setAmountValue(this.amount);
+            this.setAmountValueUsdc(this.amountUsdc);
+            this.setAmountValueUsdPlus(this.amountUsdPlus);
             this.startProcess();
         },
 
         close() {
-            this.amount = null;
+            this.amountUsdc = null;
             this.showProcessDialog = false;
 
             this.$emit('input', false);

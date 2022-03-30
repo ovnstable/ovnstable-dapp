@@ -10,7 +10,8 @@ import ERC20 from "../../contracts/abi/ERC20.json";
 
 const state = {
 
-    amountValue: null,
+    amountValueUsdc: null,
+    amountValueUsdPlus: null,
 
     prepareStep: false,
     approveUsdPlusStep: false,
@@ -20,12 +21,28 @@ const state = {
     approveStaticUsdPlusStep: false,
     swappingSecondStep: false,
     endStep: false,
+
+
+    balances: {
+        usdPlus: null,
+        usdc: null,
+        staticUsdPlus: null,
+        lpToken: null,
+    }
 };
 
 const getters = {
 
-    amountValue(state) {
-        return state.amountValue;
+    amountValueUsdc(state) {
+        return state.amountValueUsdc;
+    },
+
+    amountValueUsdPlus(state) {
+        return state.amountValueUsdPlus;
+    },
+
+    balances(state) {
+        return state.balances;
     },
 
     prepareStep(state) {
@@ -74,68 +91,95 @@ const actions = {
         commit('setEndStep', false);
     },
 
+
+    async updateBalances({commit, dispatch, getters, rootState}, signer){
+
+        let poolAddress = "0x6933ec1CA55C06a894107860c92aCdFd2Dd8512f";
+
+        let account = await signer.getAddress();
+
+        let usdPlus = await new ethers.Contract("0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f", USDPlus.abi, signer );
+        let staticUsdPlus = await new ethers.Contract("0x5d9D8509C522a47D9285b9e4e9ec686e6A580850", StaticUsdPlus.abi , signer );
+        let usdc = await new ethers.Contract("0x2791bca1f2de4661ed88a30c99a7a9449aa84174", ERC20, signer);
+        let pool = await new ethers.Contract(poolAddress, Pool , signer);
+        let vault = await new ethers.Contract("0xba12222222228d8ba445958a75a0704d566bf2c8" ,Vault , signer);
+
+        let usdPlusBalance = await usdPlus.balanceOf(account) / 1e6;
+        console.log('Balance USD+: ' + usdPlusBalance);
+        let usdcBalance = await usdc.balanceOf(account) / 1e6;
+        console.log('Balance USDC: ' + usdcBalance);
+        let staticUsdPlusBalance = await staticUsdPlus.balanceOf(account) / 1e6;
+        console.log('Balance StaticUSD+: ' + staticUsdPlusBalance);
+        let poolBalance = await pool.balanceOf(account) / 1e18;
+        console.log('Balance Pool LP: ' + poolBalance);
+
+
+        let targets = await pool.getTargets();
+        let balancesVault = await vault.getPoolTokens(await pool.getPoolId());
+
+        console.log(`Targets: lower: ${targets[0].toString()} upper: ${targets[1].toString()}`);
+        console.log(`Balances: ${balancesVault[0].toString()} : ${balancesVault[1].toString()}`);
+
+        let balances = {
+            usdPlus: usdPlusBalance,
+            usdc: usdcBalance,
+            staticUsdPlus: staticUsdPlusBalance,
+            lpToken: poolBalance,
+        };
+
+        commit('setBalances', balances);
+    },
+
     async startProcess({commit, dispatch, getters, rootState}) {
 
         await dispatch('discardSteps');
 
-        let poolAddress = "0x1aAFc31091d93C3Ff003Cff5D2d8f7bA2e728425";
+        let poolAddress = "0x6933ec1CA55C06a894107860c92aCdFd2Dd8512f";
 
-        let provider = ethers.provider;
+        const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
         console.log('Provider: ' + provider.connection.url);
-        let wallet = await new ethers.Wallet(process.env.PK_POLYGON, provider);
-        console.log('Wallet: ' + wallet.address);
-        const balance = await provider.getBalance(wallet.address);
-
-        let usdPlus = await ethers.getContractAt(USDPlus.abi, USDPlus.address, wallet);
-        let staticUsdPlus = await ethers.getContractAt(StaticUsdPlus.abi, StaticUsdPlus.address, wallet);
-        let usdc = await ethers.getContractAt(ERC20, "0x2791bca1f2de4661ed88a30c99a7a9449aa84174", wallet);
-        let vault = await ethers.getContractAt(Vault, "0xba12222222228d8ba445958a75a0704d566bf2c8", wallet);
-
-        console.log('1: Balance USD+: ' + await usdPlus.balanceOf(wallet.address) / 1e6);
-        console.log('1: Balance USDC: ' + await usdc.balanceOf(wallet.address) / 1e6);
-        console.log('1: Balance StaticUSD+: ' + await staticUsdPlus.balanceOf(wallet.address) / 1e6);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        let account = await signer.getAddress();
+        console.log("Account:", account);
 
 
-        let amountToUsdPlus = getters.amountValue;
+        let usdPlus = await new ethers.Contract("0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f", USDPlus.abi, signer );
+        let staticUsdPlus = await new ethers.Contract("0x5d9D8509C522a47D9285b9e4e9ec686e6A580850", StaticUsdPlus.abi , signer );
+        let usdc = await new ethers.Contract("0x2791bca1f2de4661ed88a30c99a7a9449aa84174", ERC20, signer);
+        let pool = await new ethers.Contract(poolAddress, Pool , signer);
+        let vault = await new ethers.Contract("0xba12222222228d8ba445958a75a0704d566bf2c8" ,Vault , signer);
+
+        await dispatch('updateBalances', signer);
+
+
+        let amountToUsdPlus = Number.parseInt(getters.amountValueUsdPlus);
+
+        console.log('Input: usdPlus ' + getters.amountValueUsdPlus);
+        console.log('Input: USDC ' + getters.amountValueUsdc);
+
         let amountToUsdPlusScaled = new BN(10).pow(new BN(6)).muln(amountToUsdPlus).toString();
-        let convertedAmount = staticUsdPlus.staticToDynamicAmount(amountToUsdPlusScaled);
+        let convertedAmount = await staticUsdPlus.staticToDynamicAmount(amountToUsdPlusScaled);
 
         commit('setPrepareStep', true);
 
-        await (await usdPlus.approve(staticUsdPlus.address, convertedAmount, {
-            maxFeePerGas: "250000000000",
-            maxPriorityFeePerGas: "250000000000"
-        })).wait();
+        await (await usdPlus.approve(staticUsdPlus.address, convertedAmount )).wait();
 
         commit('setApproveUsdPlusStep', true);
 
-        await (await staticUsdPlus.deposit(convertedAmount, wallet.address, {
-            maxFeePerGas: "250000000000",
-            maxPriorityFeePerGas: "250000000000"
-        })).wait();
+        await (await staticUsdPlus.deposit(convertedAmount, account)).wait();
+
+        await dispatch('updateBalances', signer);
 
         commit('setDepositStaticStep', true);
 
-        console.log('2: Balance USD+: ' + await usdPlus.balanceOf(wallet.address) / 1e6);
-        console.log('2: Balance USDC: ' + await usdc.balanceOf(wallet.address) / 1e6);
-        console.log('2: Balance StaticUSD+: ' + await staticUsdPlus.balanceOf(wallet.address) / 1e6);
+        let amountUsdcToLp = Number.parseInt(getters.amountValueUsdc);
+        let amountStUsdPlusToLp = Number.parseInt(getters.amountValueUsdPlus);
 
-        let amountUsdcToLp = 30000;
         let amountUsdcToLpScaled = new BN(10).pow(new BN(6)).muln(amountUsdcToLp).toString();
-        let amountStUsdPlusToLp = 400000;
         let amountStUsdPlusToLpScaled = new BN(10).pow(new BN(6)).muln(amountStUsdPlusToLp).toString();
 
-        let pool = await ethers.getContractAt(Pool, poolAddress, wallet);
-
-        let targets = await pool.getTargets();
-        let balances = await vault.getPoolTokens(await pool.getPoolId());
-
-        console.log(`2: Targets: lower: ${targets[0].toString()} upper: ${targets[1].toString()}`);
-        console.log(`2: Balances: ${balances[0].toString()} : ${balances[1].toString()}`);
-        await (await usdc.approve(vault.address, amountUsdcToLpScaled, {
-            maxFeePerGas: "250000000000",
-            maxPriorityFeePerGas: "250000000000"
-        })).wait();
+        await (await usdc.approve(vault.address, amountUsdcToLpScaled)).wait();
 
         commit('setApproveUsdcStep', true);
 
@@ -149,37 +193,27 @@ const actions = {
                 userData: "0x",
             },
             {
-                sender: wallet.address,
+                sender: account,
                 fromInternalBalance: false,
-                recipient: wallet.address,
+                recipient: account,
                 toInternalBalance: false,
             },
             0,
-            1000000000000,
-            {maxFeePerGas: "250000000000", maxPriorityFeePerGas: "250000000000"}
+            1000000000000
         )).wait();
 
         commit('setSwappingFirstStep', true);
 
-        console.log('3: Balance USD+: ' + await usdPlus.balanceOf(wallet.address) / 1e6);
-        console.log('3: Balance USDC: ' + await usdc.balanceOf(wallet.address) / 1e6);
-        console.log('3: Balance StaticUSD+: ' + await staticUsdPlus.balanceOf(wallet.address) / 1e6);
-        console.log('3: Balance Pool LP: ' + await pool.balanceOf(wallet.address) / 1e18);
 
-        targets = await pool.getTargets();
-        balances = await vault.getPoolTokens(await pool.getPoolId());
-
-        console.log(`3: Targets: lower: ${targets[0].toString()} upper: ${targets[1].toString()}`);
-        console.log(`3: Balances: ${balances[0].toString()} : ${balances[1].toString()}`);
+        await dispatch('updateBalances', signer);
 
 
-        await (await staticUsdPlus.approve(vault.address, amountStUsdPlusToLpScaled, {
-                maxFeePerGas: "250000000000",
-                maxPriorityFeePerGas: "250000000000"
-            })
-        ).wait();
+        await (await staticUsdPlus.approve(vault.address, amountStUsdPlusToLpScaled )).wait();
 
         commit('setApproveStaticUsdPlusStep', true);
+
+        await dispatch('updateBalances', signer);
+
 
         await (await vault.swap(
             {
@@ -191,29 +225,18 @@ const actions = {
                 userData: "0x",
             },
             {
-                sender: wallet.address,
+                sender: account,
                 fromInternalBalance: false,
-                recipient: wallet.address,
+                recipient: account,
                 toInternalBalance: false,
             },
             0,
             1000000000000,
-            {maxFeePerGas: "250000000000", maxPriorityFeePerGas: "250000000000"}
         )).wait();
 
         commit('setSwappingSecondStep', true);
 
-
-        console.log('4: Balance USD+: ' + await usdPlus.balanceOf(wallet.address) / 1e6);
-        console.log('4: Balance USDC: ' + await usdc.balanceOf(wallet.address) / 1e6);
-        console.log('4: Balance StaticUSD+: ' + await staticUsdPlus.balanceOf(wallet.address) / 1e6);
-        console.log('4: Balance Pool LP: ' + await pool.balanceOf(wallet.address) / 1e18);
-
-        targets = await pool.getTargets();
-        balances = await vault.getPoolTokens(await pool.getPoolId());
-
-        console.log(`4: Targets: lower: ${targets[0].toString()} upper: ${targets[1].toString()}`);
-        console.log(`4: Balances: ${balances[0].toString()} : ${balances[1].toString()}`);
+        await dispatch('updateBalances', signer);
 
         commit('setEndStep', true);
     }
@@ -221,8 +244,16 @@ const actions = {
 
 const mutations = {
 
-    setAmountValue(state, value) {
-        state.amountValue = value;
+    setAmountValueUsdPlus(state, value) {
+        state.amountValueUsdPlus = value;
+    },
+
+    setAmountValueUsdc(state, value) {
+        state.amountValueUsdc = value;
+    },
+
+    setBalances(state, value) {
+        state.balances = value;
     },
 
     setPrepareStep(state, value) {

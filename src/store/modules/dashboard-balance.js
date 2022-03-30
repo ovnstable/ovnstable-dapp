@@ -1,78 +1,14 @@
+import {axios} from "@/plugins/http-axios";
+import moment from "moment";
+
 const state = {
+    avgBalance: null,
+    profitUsdPlus: null,
+    apy: null,
 
-    /* TODO: replace mock data with real data */
+    activities: [],
 
-    avgBalance: 32.00,
-    profitUsdPlus: 2.54,
-    apy: 12.38,
-
-    activities: [
-        {
-            date: '12.02.2022',
-            openingBalance: '100',
-            deposit: '1',
-            fees: '0.04',
-            dailyProfit: '0.000504',
-            closingBalance: '101.000504',
-            apy: '8.19',
-        },
-        {
-            date: '11.02.2022',
-            openingBalance: '101',
-            deposit: '-1',
-            fees: '0',
-            dailyProfit: '0',
-            closingBalance: '100',
-            apy: '7.6',
-        },
-    ],
-
-    portfolioValue: [
-        {
-            date: '01.03',
-            value: '5',
-        },
-        {
-            date: '02.03',
-            value: '5',
-        },
-        {
-            date: '03.03',
-            value: '7',
-        },
-        {
-            date: '04.03',
-            value: '30',
-        },
-        {
-            date: '05.03',
-            value: '40',
-        },
-        {
-            date: '06.03',
-            value: '50',
-        },
-        {
-            date: '21:00',
-            value: '45',
-        },
-        {
-            date: '07.03',
-            value: '51',
-        },
-        {
-            date: '08.03',
-            value: '80',
-        },
-        {
-            date: '09.03',
-            value: '70',
-        },
-        {
-            date: '10.03',
-            value: '50',
-        },
-    ],
+    portfolioValue: {},
 };
 
 const getters = {
@@ -100,6 +36,106 @@ const getters = {
 
 const actions = {
 
+    async refreshClientDashboardData({commit, dispatch, getters, rootState}) {
+
+        let account = rootState.web3.account.toLowerCase();
+
+        let response = (await axios.get(`/dapp/clientBalanceChanges?address=${account}`)).data;
+
+        let clientData = response.map(item => {
+            return {
+                date: item[2],
+                type: item[3],
+                openingBalance: item[4],
+                balanceChange: item[3] !== 'PAYOUT' ? item[5] : null,
+                closingBalance: item[6],
+                dailyProfit: item[3] === 'PAYOUT' ? item[5] : null,
+                fee: item[7],
+                apy: item[8],
+            }
+        });
+
+        commit('setActivities', clientData);
+
+
+        let widgetDataDict = {};
+        let widgetData = {
+            labels: [],
+            datasets: [
+                {
+                    fill: false,
+                    borderColor: '#69a5fd',
+                    data: [],
+                }
+            ]
+        };
+
+        [...clientData].reverse().forEach(item => {
+            widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = item.closingBalance;
+        });
+
+        for(let key in widgetDataDict) {
+            widgetData.labels.push(key);
+            widgetData.datasets[0].data.push(widgetDataDict[key]);
+        }
+
+        commit('setPortfolioValue', widgetData);
+
+
+        let avgApyList = clientData.map(item => item.apy ? item.apy : 0).filter(item => item !== 0);
+        if (avgApyList && (avgApyList.length > 0)) {
+            const sum = avgApyList.reduce((a, b) => a + b, 0);
+            const avg = (sum / avgApyList.length) || 0;
+
+            commit('setApy', avg);
+        } else {
+            commit('setApy', 0);
+        }
+
+        let avgBalanceList = widgetData.datasets[0].data.map(item => item ? item : 0).filter(item => item !== 0);
+        if (avgBalanceList && (avgBalanceList.length > 0)) {
+            const sum = avgBalanceList.reduce((a, b) => a + b, 0);
+            const avg = (sum / avgBalanceList.length) || 0;
+
+            commit('setAvgBalance', avg);
+        } else {
+            commit('setAvgBalance', 0);
+        }
+
+        let profitList = clientData.map(item => item.dailyProfit ? item.dailyProfit : 0).filter(item => item !== 0);
+        if (profitList && (profitList.length > 0)) {
+            const sum = profitList.reduce((a, b) => a + b, 0);
+
+            commit('setProfitUsdPlus', sum);
+        } else {
+            commit('setProfitUsdPlus', 0);
+        }
+    },
+
+    async sliceClientDashboardData({commit, dispatch, getters, rootState}, slice) {
+
+        let clientData = getters.activities;
+        clientData = slice ? clientData.slice(slice) : clientData;
+
+        let avgApyList = clientData.map(item => item.apy ? item.apy : 0).filter(item => item !== 0);
+        if (avgApyList && (avgApyList.length > 0)) {
+            const sum = avgApyList.reduce((a, b) => a + b, 0);
+            const avg = (sum / avgApyList.length) || 0;
+
+            commit('setApy', avg);
+        } else {
+            commit('setApy', 0);
+        }
+
+        let profitList = clientData.map(item => item.dailyProfit ? item.dailyProfit : 0).filter(item => item !== 0);
+        if (profitList && (profitList.length > 0)) {
+            const sum = profitList.reduce((a, b) => a + b, 0);
+
+            commit('setProfitUsdPlus', sum);
+        } else {
+            commit('setProfitUsdPlus', 0);
+        }
+    },
 };
 
 const mutations = {

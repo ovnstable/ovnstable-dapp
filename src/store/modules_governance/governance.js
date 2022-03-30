@@ -309,10 +309,12 @@ const actions = {
         if (process.env.VUE_APP_POLYGON === "polygon_dev"){
             pm.methods.setStrategyWeights(items).send(params);
         }else {
-            let governor = rootState.web3.contracts.governor;
-            let abi = pm.methods.setStrategyWeights(items).encodeABI();
-            let name = 'Proposal #' + getters.proposals.length + 1 + ' Change weights';
-            await governor.methods.proposeExec([pm.options.address], [0], [abi], name).send(params);
+            pm.methods.setStrategyWeights(items).send(params);
+
+            // let governor = rootState.web3.contracts.governor;
+            // let abi = pm.methods.setStrategyWeights(items).encodeABI();
+            // let name = 'Proposal #' + getters.proposals.length + 1 + ' Change weights';
+            // await governor.methods.proposeExec([pm.options.address], [0], [abi], name).send(params);
         }
 
     },
@@ -336,23 +338,30 @@ const actions = {
 
         let strategiesMapping = (await axios('/dapp/strategies')).data;
 
-        for (let i = 0; i < weights.length; i++) {
-            let weight = weights[i];
+        for (let i = 0; i < strategiesMapping.length; i++) {
+
+            let strategy = strategiesMapping[i];
+
+            let weight = weights.find(value => strategy.address === value.strategy);
 
             let item = {};
+            item.address = strategy.address;
+            item.name = strategy.name;
 
-            let strategy = strategiesMapping.find(value => value.address === weight.strategy);
-            let name = "not defined";
-            if (strategy)
-                name = strategy.name;
+            if (weight){
+                item.minWeight = weight.minWeight / 1000;
+                item.targetWeight = weight.targetWeight / 1000;
+                item.maxWeight = weight.maxWeight / 1000;
+                item.enabled = weight.enabled;
+                item.enabledReward = weight.enabledReward;
+            }else {
+                item.minWeight = 0;
+                item.targetWeight = 0;
+                item.maxWeight = 0;
+                item.enabled = false;
+                item.enabledReward = false;
+            }
 
-            item.address = weight.strategy;
-            item.name = name;
-            item.minWeight = weight.minWeight / 1000;
-            item.targetWeight = weight.targetWeight / 1000;
-            item.maxWeight = weight.maxWeight / 1000;
-            item.enabled = weight.enabled;
-            item.enabledReward = weight.enabledReward;
 
             items.push(item);
         }

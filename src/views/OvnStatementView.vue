@@ -12,14 +12,41 @@
                     <v-spacer></v-spacer>
                 </v-row>
 
-                <v-row class="chart-row">
+                <v-row class="no-activities-row" v-if="!anyActivities">
+                    <v-col cols="3"></v-col>
+                    <v-col class="pa-0 ma-0" cols="6">
+                        <v-row align="center" justify="center">
+                            <div class="no-activities-img">
+                                <v-img :src="require('@/assets/icon/box-delete.svg')"/>
+                            </div>
+                        </v-row>
+                        <v-row class="pt-2" align="center" justify="center">
+                            <label class="no-activities-label">There’re no data for you to see yet. If you want to mint USD+, just click</label>
+                        </v-row>
+                        <v-row class="pt-3 pb-2" align="center" justify="center">
+                            <v-btn dark
+                                   height="56"
+                                   class='mint-usd-plus'
+                                   @click='goToAction("/")'>
+                                Mint USD+
+                            </v-btn>
+                        </v-row>
+                        <v-row align="center" justify="center">
+                            <label class="no-activities-label">and go ahead</label>
+                        </v-row>
+                    </v-col>
+                    <v-col cols="3"></v-col>
+                </v-row>
+
+                <v-row class="chart-row" v-if="anyActivities">
                     <v-col class="pa-0 ma-0">
-                        <!-- TODO: add widget -->
-                        <label class="label-light">Widget here</label>
+                        <v-row align="center" justify="center">
+                            <DashboardWidget/>
+                        </v-row>
                     </v-col>
                 </v-row>
 
-                <v-row class="cards-full">
+                <v-row class="cards-full" v-if="anyActivities">
                     <v-col class="pa-0 ma-0">
                         <v-row align="center" justify="start">
                             <v-card class="balance-card" flat>
@@ -30,10 +57,10 @@
                                 </v-card-title>
                                 <v-card-text>
                                     <v-row class="ml-2 pt-2">
-                                        <label class="card-label label-light">Average balance</label>
+                                        <label class="card-label label-light">Current balance</label>
                                     </v-row>
                                     <v-row class="ml-2 pt-1 pb-3">
-                                        <label class="label-value">${{ $utils.formatMoney(avgBalance, 2) }}</label>
+                                        <label class="label-value">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
                                     </v-row>
                                 </v-card-text>
                             </v-card>
@@ -52,7 +79,7 @@
                                         <label class="card-label label-dark">Profit USD+</label>
                                     </v-row>
                                     <v-row class="ml-2 pt-1 pb-3">
-                                        <label class="label-value">${{ $utils.formatMoney(profitUsdPlus, 2) }}</label>
+                                        <label class="label-value">${{ $utils.formatMoney(profitUsdPlus, 6) }}</label>
                                     </v-row>
                                 </v-card-text>
                             </v-card>
@@ -79,7 +106,7 @@
                     </v-col>
                 </v-row>
 
-                <v-row class="cards-minimized">
+                <v-row class="cards-minimized" v-if="anyActivities">
                     <v-col class="pa-0 ma-0">
                         <v-row align="center" justify="center">
                             <v-card class="balance-card" flat>
@@ -91,11 +118,11 @@
 
                                         <v-list-item-content>
                                             <v-list-item-title>
-                                                <label class="label-value">${{ $utils.formatMoney(avgBalance, 2) }}</label>
+                                                <label class="label-value">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
                                             </v-list-item-title>
 
                                             <v-list-item-subtitle>
-                                                <label class="card-label label-light">Average balance</label>
+                                                <label class="card-label label-light">Current balance</label>
                                             </v-list-item-subtitle>
                                         </v-list-item-content>
                                     </v-list-item>
@@ -112,7 +139,7 @@
 
                                         <v-list-item-content>
                                             <v-list-item-title>
-                                                <label class="label-value">${{ $utils.formatMoney(profitUsdPlus, 2) }}</label>
+                                                <label class="label-value">${{ $utils.formatMoney(profitUsdPlus, 6) }}</label>
                                             </v-list-item-title>
 
                                             <v-list-item-subtitle>
@@ -147,7 +174,7 @@
                     </v-col>
                 </v-row>
 
-                <v-row class="table-row">
+                <v-row class="table-row" v-if="anyActivities">
                     <v-col class="pa-0 ma-0" cols="12">
                         <v-row class="activities-full-table">
                             <RecentActivitiesTable/>
@@ -164,13 +191,15 @@
 
 <script>
 
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import RecentActivitiesTable from "@/components/ovn_statement/RecentActivitiesTable";
+import DashboardWidget from "@/components/ovn_statement/DashboardWidget";
 
 export default {
     name: "OvnStatementView",
 
     components: {
+        DashboardWidget,
         RecentActivitiesTable
     },
 
@@ -179,10 +208,25 @@ export default {
 
 
     computed: {
-        ...mapGetters('dashboardBalance', ['avgBalance', 'profitUsdPlus', 'apy']),
+        ...mapGetters('profile', ['balance']),
+        ...mapGetters('dashboardBalance', ['avgBalance', 'profitUsdPlus', 'apy', 'activities']),
+
+        anyActivities() {
+            return this.activities && this.activities.length > 0;
+        }
+    },
+
+    created() {
+        this.refreshClientDashboardData();
+    },
+
+    mounted() {
+        this.refreshClientDashboardData();
     },
 
     methods: {
+        ...mapActions('dashboardBalance', ['refreshClientDashboardData']),
+
         goToAction(id) {
             this.$router.push(id);
         },
@@ -212,12 +256,17 @@ export default {
         font-size: 34px;
     }
 
-    .chart-row, .cards-minimized, .table-row {
+    .table-row {
         margin-top: 28px !important;
     }
 
-    .chart-row {
-        margin-bottom: 28px !important;
+    .no-activities-img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    .mint-usd-plus {
+        height: 46px;
     }
 }
 
@@ -240,19 +289,24 @@ export default {
         font-size: 34px;
     }
 
-    .chart-row, .cards-minimized, .table-row {
+    .table-row {
         margin-top: 28px !important;
     }
 
-    .chart-row {
-        margin-bottom: 28px !important;
+    .no-activities-img {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    .mint-usd-plus {
+        height: 46px;
     }
 }
 
 @media only screen and (min-width: 1400px) {
 
     .main-col {
-        max-width: 45vw !important;
+        max-width: 55vw !important;
     }
 
     .balance-card, .profit-card, .apy-card {
@@ -267,12 +321,17 @@ export default {
         font-size: 56px;
     }
 
-    .chart-row, .cards-full, .table-row {
+    .table-row {
         margin-top: 60px !important;
     }
 
-    .chart-row {
-        margin-bottom: 60px !important;
+    .no-activities-img {
+        width: 80px !important;
+        height: 80px !important;
+    }
+
+    .mint-usd-plus {
+        height: 56px;
     }
 }
 
@@ -326,6 +385,27 @@ export default {
     color: #FE7F2D !important;
     cursor: pointer;
     margin-top: -6px;
+}
+
+.no-activities-row {
+    margin-top: 60px;
+}
+
+.no-activities-label {
+    display: block;
+    text-align: center;
+    color: #8FA2B7 !important;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    font-size: 14px;
+}
+
+.mint-usd-plus {
+    text-transform: none !important;
+    border-radius: 40px;
+    color: white !important;
+    background: var(--orange-gradient) !important;
 }
 
 </style>

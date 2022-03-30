@@ -1,5 +1,8 @@
 <template>
     <v-container class="fill-height" fluid>
+
+        <AirdropDialog/>
+
         <v-row align="center" justify="center">
             <v-col class="main-col">
                 <v-row align="center">
@@ -33,10 +36,11 @@ import Mint from "../components/earn/Mint";
 import StatsWidget from "../components/common/StatsWidget";
 import ShowTransaction from "../components/common/ShowTransaction";
 import {mapActions, mapGetters} from "vuex";
+import AirdropDialog from "@/components/common/AirdropDialog";
 
 export default {
     name: "EarnView",
-    components: {ShowTransaction, StatsWidget, Mint, Redeem},
+    components: {AirdropDialog, ShowTransaction, StatsWidget, Mint, Redeem},
     data: () => ({
         tab: 1,
 

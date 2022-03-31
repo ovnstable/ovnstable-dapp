@@ -12,6 +12,7 @@ import getProposals from "./midleware/getProposals"
 import getDapp from "./midleware/getDapp"
 import middlewarePipeline from "./middlewarePipeline";
 import getFinance from "@/router/midleware/getFinance";
+import getClientBalance from "@/router/midleware/getClientBalance";
 
 const routes = [
     {
@@ -47,7 +48,7 @@ const routes = [
                 component: () => import('../views/OvnStatementView.vue'),
                 meta: {
                     middleware: [
-                        getDapp,
+                        getClientBalance,
                     ]
                 }
             },

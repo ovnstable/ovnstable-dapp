@@ -82,7 +82,7 @@ export default {
 @media all and (min-width: 0px) and (max-width: 650px) {
 
     .swap-title {
-        color: white;
+        color: white !important;
         font-weight: 300;
         font-size: 34px;
     }
@@ -92,7 +92,7 @@ export default {
 @media only screen and (min-width: 650px) and (max-width: 1400px) {
 
     .swap-title {
-        color: white;
+        color: white !important;
         font-weight: 300;
         font-size: 34px;
     }
@@ -101,7 +101,7 @@ export default {
 @media only screen and (min-width: 1400px) {
 
     .swap-title {
-        color: white;
+        color: white !important;
         font-weight: 300;
         font-size: 56px;
     }
@@ -113,7 +113,7 @@ export default {
 
 .desc {
     font-size: 14px;
-    color: white;
+    color: white !important;
 }
 
 .tab-btn-toggle {

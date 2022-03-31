@@ -8,7 +8,16 @@ const state = {
 
     activities: [],
 
-    portfolioValue: {},
+    portfolioValue: {
+        labels: [],
+        datasets: [
+            {
+                fill: false,
+                borderColor: '#69a5fd',
+                data: [],
+            }
+        ]
+    },
 };
 
 const getters = {

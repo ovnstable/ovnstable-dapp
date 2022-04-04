@@ -17,7 +17,7 @@ const OvnToken = require(`../../contracts/${polygon}/OvnToken.json`)
 const OvnGovernor = require(`../../contracts/${polygon}/OvnGovernor.json`)
 const PortfolioManager = require(`../../contracts/${polygon}/PortfolioManager.json`)
 const Mark2Market = require(`../../contracts/${polygon}/Mark2Market.json`)
-const TimelockController = require(`../../contracts/${polygon}/TimelockController.json`)
+const TimelockController = require(`../../contracts/${polygon}/OvnTimelockController.json`)
 const UsdPlusToken = require(`../../contracts/${polygon}/UsdPlusToken.json`)
 
 export const wallets = [

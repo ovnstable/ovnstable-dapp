@@ -7,6 +7,12 @@ let accountingConfig = {
     thousand: " ",
 }
 
+let accountingFourConfig = {
+    symbol: "",
+    precision: 4,
+    thousand: " ",
+}
+
 let accountingSecondConfig = {
     symbol: "",
     precision: 2,
@@ -31,6 +37,8 @@ export default {
         switch (count){
             case 6:
                 return accounting.formatMoney(number, accountingConfig);
+            case 4:
+                return accounting.formatMoney(number, accountingFourConfig);
             case 2:
                 return accounting.formatMoney(number, accountingSecondConfig);
             case 0:

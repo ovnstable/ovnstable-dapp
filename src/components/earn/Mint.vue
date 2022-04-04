@@ -153,9 +153,9 @@
 
                     <v-row dense class="pl-2 pr-2 pt-6 pb-6">
                         <label class="from-to-sub-label">
-                            Output is estimated. You will receive at least&nbsp;&nbsp;<b
-                                class="from-to-sub-sum">{{ estimateResult }} USD+</b>&nbsp;&nbsp;or the transaction will
-                            revert.
+                            Output is estimated. You will receive at least&nbsp;&nbsp;
+                            <b class="from-to-sub-sum">{{ $utils.formatMoney(estimateResult, 4) }} USD+</b>&nbsp;&nbsp;
+                            or the transaction will revert.
                         </label>
                     </v-row>
 
@@ -194,7 +194,7 @@
                         <v-spacer></v-spacer>
                         <!-- TODO: change when price impact calculation added -->
                         <label class="add-info-label">
-                            {{ estimateFee }}$
+                            ${{ $utils.formatMoney(estimateFee, 4) }}
                         </label>
                     </v-row>
 

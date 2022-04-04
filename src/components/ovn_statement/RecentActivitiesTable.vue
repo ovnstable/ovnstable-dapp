@@ -8,11 +8,12 @@
                 <tr>
                     <th class="table-label table-header-col">Date</th>
                     <th class="table-label table-header-col text-right" v-if="!minimized">Opening balance</th>
-                    <th class="table-label table-header-col text-right" v-if="!minimized">Balance change</th>
+                    <th class="table-label table-header-col text-center" v-if="!minimized">Type</th>
+                    <th class="table-label table-header-col text-right">Balance change</th>
                     <th class="table-label table-header-col text-right" v-if="!minimized">Fees</th>
-                    <th class="table-label table-header-col text-right">Daily profit</th>
                     <th class="table-label table-header-col text-right" v-if="!minimized">Closing balance</th>
                     <th class="table-label table-header-col text-right">APY</th>
+                    <th class="table-label table-header-col text-right" v-if="!minimized"></th>
                 </tr>
             </thead>
 
@@ -25,21 +26,26 @@
                         <td class="table-label table-col-value text-right" v-if="!minimized">
                             ${{ $utils.formatMoney(activity.openingBalance, 6) }}
                         </td>
-                        <td class="table-label table-col-value text-right" v-if="!minimized">
-                            {{ activity.balanceChange ? (activity.balanceChange < 0 ? '-' : '+') : '' }}
-                            {{ activity.balanceChange ? '$' + ($utils.formatMoney((activity.balanceChange < 0 ? -1 : 1) * activity.balanceChange, 2)) : '—' }}
+                        <td class="table-label table-col-value text-center" v-if="!minimized">
+                            {{ activity.type }}
+                        </td>
+                        <td class="table-label table-col-value text-right">
+                            <a class="transaction-link" @click="openOnScan(activity.transactionHash)">
+                                {{ activity.balanceChange ? (activity.balanceChange < 0 ? '-' : '+') : '' }}
+                                {{ activity.balanceChange ? '$' + ($utils.formatMoney((activity.balanceChange < 0 ? -1 : 1) * activity.balanceChange, 6)) : '—' }}
+                            </a>
                         </td>
                         <td class="table-label table-col-value text-right" v-if="!minimized">
                             ${{ $utils.formatMoney(activity.fee, 2) }}
-                        </td>
-                        <td class="table-label table-col-value text-right">
-                            {{ activity.dailyProfit ? '$' + $utils.formatMoney(activity.dailyProfit, 6) : '—' }}
                         </td>
                         <td class="table-label table-col-value text-right" v-if="!minimized">
                             ${{ $utils.formatMoney(activity.closingBalance, 6) }}
                         </td>
                         <td class="table-label table-col-value text-right">
                             {{ activity.apy ? $utils.formatMoney(activity.apy, 2) + '%' : '—' }}
+                        </td>
+                        <td class="table-label table-col-value text-right" v-if="!minimized">
+                            <v-icon @click="openOnScan(activity.transactionHash)">mdi-eye</v-icon>
                         </td>
                     </tr>
                 </template>
@@ -75,12 +81,34 @@ export default {
     methods: {
         formatDate(date) {
             return this.$moment(date).format('DD.MM.YYYY');
-        }
+        },
+
+        openOnScan(transactionHash) {
+            let url = "https://polygonscan.com/tx/" + transactionHash;
+            window.open(url, '_blank').focus();
+        },
     }
 }
 </script>
 
 <style>
+
+/* mobile */
+@media all and (min-width:0px) and (max-width: 650px) {
+    .transaction-link {
+        text-decoration: underline !important;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width:650px) and (max-width: 1400px) {
+    .transaction-link {
+        text-decoration: underline !important;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+}
 
 .activities-table {
     width: 100% !important;
@@ -114,6 +142,10 @@ export default {
     font-weight: 400 !important;
     line-height: 24px !important;
     font-size: 14px !important;
+}
+
+.transaction-link {
+    color: white !important;
 }
 
 </style>

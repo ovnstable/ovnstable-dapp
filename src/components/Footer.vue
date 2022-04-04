@@ -28,7 +28,7 @@
                     </v-btn>
 
                     <v-btn icon @click="$router.push({name: 'Overview'})" class="footer-icon">
-                        <v-icon class="footer-icon colored">mdi-account-key</v-icon>
+                        <v-icon class="footer-icon">mdi-account-key</v-icon>
                     </v-btn>
                 </v-row>
 

@@ -3,7 +3,7 @@ const zlib = require("zlib");
 module.exports = {
     pluginOptions: {
         compression: {
-            modes: ['dev', 'production'],
+            modes: ['development', 'production'],
             brotli: {
                 filename: '[file].br[query]',
                 algorithm: 'brotliCompress',

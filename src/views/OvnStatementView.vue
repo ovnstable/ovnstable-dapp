@@ -12,7 +12,23 @@
                     <v-spacer></v-spacer>
                 </v-row>
 
-                <v-row class="no-activities-row" v-if="!anyActivities">
+                <v-row class="chart-row" v-if="isLoading">
+                    <v-col class="ma-0 pt-15">
+                        <v-row align="center" justify="center">
+                            <v-progress-circular
+                                    width="2"
+                                    size="32"
+                                    color="#8FA2B7"
+                                    indeterminate
+                            ></v-progress-circular>
+                        </v-row>
+                        <v-row class="pt-2" align="center" justify="center">
+                            <label class="no-activities-label">Getting account info</label>
+                        </v-row>
+                    </v-col>
+                </v-row>
+
+                <v-row class="no-activities-row" v-if="!isLoading && !anyActivities">
                     <v-col cols="3"></v-col>
                     <v-col class="pa-0 ma-0" cols="6">
                         <v-row align="center" justify="center">
@@ -38,7 +54,7 @@
                     <v-col cols="3"></v-col>
                 </v-row>
 
-                <v-row class="chart-row" v-if="anyActivities">
+                <v-row class="chart-row" v-if="!isLoading && anyActivities">
                     <v-col class="pa-0 ma-0">
                         <v-row align="center" justify="center">
                             <DashboardWidget/>
@@ -209,19 +225,19 @@ export default {
 
     computed: {
         ...mapGetters('profile', ['balance']),
+        ...mapGetters('web3', ['account']),
         ...mapGetters('dashboardBalance', ['avgBalance', 'profitUsdPlus', 'apy', 'activities']),
 
         anyActivities() {
             return this.activities && this.activities.length > 0;
+        },
+
+        isLoading() {
+            return !this.account;
         }
     },
 
     created() {
-        this.refreshClientDashboardData();
-    },
-
-    mounted() {
-        this.refreshClientDashboardData();
     },
 
     methods: {

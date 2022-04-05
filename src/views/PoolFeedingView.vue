@@ -7,43 +7,27 @@
                         <v-icon class="return-btn" @click='goToAction("/")'>
                             mdi-reply
                         </v-icon>
-                        USD+ Total Portfolio
+                        Pools feeding
                     </label>
                 </v-row>
 
-                <v-row>
-                    <v-col>
-                        <v-row class="desc pr-5 pl-5 pt-8" justify="center">
-                            <p>Automated Overnight DeFi total asset portfolio management dashboards. Your assets are there.</p>
-                        </v-row>
-                        <v-row class="desc pr-5 pl-5 pb-5" justify="center">
-                            <p class="text-left font-weight-bold">Redeem anytime</p>
-                        </v-row>
-                    </v-col>
-                </v-row>
-
-                <v-row justify="center">
+                <v-row class="mt-15" justify="center">
                     <v-btn-toggle
                             v-model="tabNumber"
                             class="tab-btn-toggle"
                             mandatory>
                         <v-btn class="tab-btn" @click="tab = 1">
-                            <label v-bind:class="activeTabPayouts">Payouts</label>
+                            <label v-bind:class="activeTabPayouts">Linear pool</label>
                         </v-btn>
                         <v-btn class="tab-btn" @click="tab = 2">
-                            <label v-bind:class="activeTabPortfolio">Portfolio</label>
+                            <label v-bind:class="activeTabPortfolio">Stable pool</label>
                         </v-btn>
                     </v-btn-toggle>
                 </v-row>
 
                 <v-row class="pt-4" justify="center">
-                    <v-col lg="7" class="pa-0 ma-0" v-if="tab === 1">
-                        <HistoryTotalDataTable class="history-full-table"/>
-                        <HistoryTotalDataTable class="history-minimized-table" minimized/>
-                    </v-col>
-                    <v-col lg="4" class="pa-0 ma-0" v-if="tab === 2">
-                        <CurrentTotalDataTable/>
-                    </v-col>
+                    <LinearPoolFeeding v-if="tab === 1"/>
+                    <StablePoolFeeding v-if="tab === 2"/>
                 </v-row>
             </v-col>
         </v-row>
@@ -52,18 +36,15 @@
 
 <script>
 
-import StatsWidget from "../components/common/StatsWidget";
 import {mapGetters} from "vuex";
-import HistoryTotalDataTable from "@/components/dashboard/HistoryTotalDataTable";
-import CurrentTotalDataTable from "@/components/dashboard/CurrentTotalDataTable";
-
+import LinearPoolFeeding from "@/components/feeding/LinearPoolFeeding";
+import StablePoolFeeding from "@/components/feeding/StablePoolFeeding";
 export default {
     name: "DashboardView",
 
     components: {
-        CurrentTotalDataTable,
-        HistoryTotalDataTable,
-        StatsWidget
+        StablePoolFeeding,
+        LinearPoolFeeding
     },
 
     data: () => ({
@@ -105,10 +86,6 @@ export default {
         font-weight: 300;
         font-size: 34px;
     }
-
-    .history-full-table {
-        display: none !important;
-    }
 }
 
 /* tablet */
@@ -118,10 +95,6 @@ export default {
         color: white !important;
         font-weight: 300;
         font-size: 34px;
-    }
-
-    .history-minimized-table {
-        display: none !important;
     }
 }
 
@@ -133,7 +106,7 @@ export default {
         font-size: 56px;
     }
 
-    .history-minimized-table, .return-btn {
+    .return-btn {
         display: none !important;
     }
 }

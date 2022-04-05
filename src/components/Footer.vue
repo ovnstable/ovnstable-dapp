@@ -11,7 +11,7 @@
                         <v-icon class="footer-icon">mdi-github</v-icon>
                     </v-btn>
 
-                    <v-btn icon href="https://ovnstable.medium.com/" target="_blank" class="footer-icon">
+                    <v-btn icon href="https://blog.overnight.fi/" target="_blank" class="footer-icon">
                         <img width="24" height="24" :src="require('../assets/resource/medium.png')">
                     </v-btn>
 
@@ -28,7 +28,7 @@
                     </v-btn>
 
                     <v-btn icon @click="$router.push({name: 'Overview'})" class="footer-icon">
-                        <v-icon class="footer-icon colored">mdi-account-key</v-icon>
+                        <v-icon class="footer-icon">mdi-account-key</v-icon>
                     </v-btn>
                 </v-row>
 

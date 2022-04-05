@@ -44,7 +44,7 @@
                     </label>
                 </v-row>
 
-                <v-row v-if="account" dense align="center" class="mt-6">
+                <v-row v-if="account" dense align="center" class="mt-6 pl-3">
                     <v-btn dark
                            outlined
                            height="40"
@@ -53,7 +53,7 @@
                         HOW TO BUY USD+
                     </v-btn>
                 </v-row>
-                <v-row v-else dense align="center" class="mt-6">
+                <v-row v-else dense align="center" class="mt-6 pl-3">
                     <v-btn dark
                            outlined
                            height="40"
@@ -182,7 +182,8 @@ export default {
     background: none !important;
     border-radius: 40px;
     border: none !important;
-    color: #8FA2B7 !important;
+    color: white !important;
+    background: var(--orange-gradient) !important;
 }
 
 .bridge-link {

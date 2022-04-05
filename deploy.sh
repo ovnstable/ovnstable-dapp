@@ -12,14 +12,14 @@ then
   nameDapp="dapp"
   deployments="polygon"
   build="build-production"
-  dockerComposePath="/root/ovn/docker-compose.yaml"
+  dockerComposePath="/root/common/docker-compose.yaml"
   tag="1"
 elif [ "$stand" = "dev" ]
 then
-  nameDapp="dapp"
+  nameDapp="dapp-dev"
   deployments="polygon_dev"
   build="build-dev"
-  dockerComposePath="/root/ovn-dev/docker-compose.yaml"
+  dockerComposePath="/root/common/docker-compose.yaml"
   tag="dev"
 else
   exit

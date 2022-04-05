@@ -41,12 +41,13 @@
                 </td>
             </tr>
             <tr>
-                <td class="table-label table-col-value" colspan="2">
+                <td class="table-label table-col-value">
                     <b>Total USD+ in circulation</b>
                 </td>
                 <td class="table-label table-col-value text-right">
                     <b>{{ $utils.formatMoney(totalSupply, 2) }}</b>
                 </td>
+                <td></td>
             </tr>
             </tbody>
         </template>

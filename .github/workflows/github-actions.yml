@@ -55,5 +55,5 @@ jobs:
                      --password ${{ secrets.DOCKER_TOKEN }} \
                     cr.yandex
             docker pull cr.yandex/crpg11k469bhc8lch9gm/overnight/dapp:dev
-            docker-compose -f /root/ovn-dev/docker-compose.yaml up -d --no-deps dapp
+            docker-compose -f /root/common/docker-compose.yaml up -d --no-deps dapp-dev
 

@@ -59,6 +59,7 @@ const actions = {
                 openingBalance: item[4],
                 balanceChange: item[5],
                 closingBalance: item[6],
+                dailyProfit: item[3] === 'PAYOUT' ? item[5] : null,
                 fee: item[7],
                 apy: item[8],
             }

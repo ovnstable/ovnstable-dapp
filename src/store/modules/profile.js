@@ -316,7 +316,12 @@ const actions = {
         commit('setLoadingCurrentTotalData', true)
 
         let assets = await rootState.web3.contracts.mark2market.methods.strategyAssets().call();
+
+        console.log("debug assets: " + JSON.stringify(assets))
+
         let strategiesMapping = (await axios('/dapp/strategies')).data;
+
+        console.log("debug strategiesMapping: " + JSON.stringify(strategiesMapping));
 
         let data = [];
 
@@ -330,7 +335,9 @@ const actions = {
             "#26A17B",
         ];
 
-        assets = assets.sort((a,b) => (a.netAssetValue > b.netAssetValue) ? -1 : ((b.netAssetValue > a.netAssetValue) ? 1 : 0))
+        assets = assets.sort((a,b) => (a.netAssetValue > b.netAssetValue) ? -1 : ((b.netAssetValue > a.netAssetValue) ? 1 : 0));
+
+        console.log("debug assets 2: " + JSON.stringify(assets))
 
         for (let i = 0; i < assets.length; i++) {
             let asset = assets[i];
@@ -355,6 +362,8 @@ const actions = {
 
             data.push(element);
         }
+
+        console.log("debug data: " + JSON.stringify(data))
 
         commit('setCurrentTotalData', data)
         commit('setLoadingCurrentTotalData', false)

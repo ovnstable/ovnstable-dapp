@@ -26,8 +26,8 @@
             <td class="table-label text-right">
                 <div class="color-rectangle" :style="{background: item.color}"></div>
             </td>
-            <td class="table-label text-left" @click="openInNewTab(item.link)">
-                <label @click="openTokenOnScan(item.link)" class="link-label">
+            <td class="table-label text-left">
+                <label @click="openInNewTab(item.link)" class="link-label">
                     {{ item.label }}
                     <v-img class="icon-img-link ml-2" :src="require('@/assets/icon/out-white.svg')"/>
                 </label>
@@ -138,9 +138,9 @@ export default {
             return sum;
         },
 
-        openTokenOnScan(hash) {
-            if (hash && hash !== '') {
-                window.open("https://polygonscan.com/token/" + hash, '_blank').focus();
+        openInNewTab(url) {
+            if (url && url !== '') {
+                window.open(url, '_blank').focus();
             }
         }
     }

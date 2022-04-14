@@ -26,7 +26,7 @@
             <td class="table-label text-right">
                 <v-img class="currency-icon" :src="item.logo"/>
             </td>
-            <td class="table-label text-left" @click="openInNewTab(item.link)">
+            <td class="table-label text-left">
                 <label @click="openTokenOnScan(item.link)" class="link-label">
                     {{ item.label }}
                     <v-img class="icon-img-link ml-2" :src="require('@/assets/icon/out-white.svg')"/>

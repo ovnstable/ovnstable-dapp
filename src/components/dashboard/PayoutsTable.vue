@@ -11,7 +11,7 @@
             <th class="table-header text-left">
                 Annualized yield<br/>(% per year)
             </th>
-            <th class="table-header text-right" width="160px">
+            <th class="table-header text-right" width="180px">
                 PolygonScan
             </th>
         </tr>
@@ -34,9 +34,10 @@
                 <label :class="item.annualizedYield > 0 ? 'ann-yield-green' : 'ann-yield-red'">{{ $utils.formatMoney(item.annualizedYield, 1) }}%</label>
             </td>
             <td class="table-label text-right">
-                <label @click="openInNewTab(item)"> {{ shortHash(item.transactionHash) }}</label>
-
-                <!-- TODO: add link icon -->
+                <label @click="openOnScan(item)" class="link-label">
+                    {{ shortHash(item.transactionHash) }}
+                    <v-img class="icon-img-link ml-2" :src="require('@/assets/icon/out-white.svg')"/>
+                </label>
             </td>
         </tr>
         </tbody>
@@ -178,6 +179,16 @@ export default {
 
 .ann-yield-red {
     color: #FE7F2D !important;
+}
+
+.icon-img-link {
+    width: 24px !important;
+    height: 24px !important;
+    margin-top: 2px;
+}
+
+.link-label {
+    display: inline-flex !important;
 }
 
 </style>

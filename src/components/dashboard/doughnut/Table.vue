@@ -27,8 +27,10 @@
                 <div class="color-rectangle" :style="{background: item.color}"></div>
             </td>
             <td class="table-label text-left" @click="openInNewTab(item.link)">
-                {{ item.label }}
-                <!-- TODO: add link -->
+                <label @click="openTokenOnScan(item.link)" class="link-label">
+                    {{ item.label }}
+                    <v-img class="icon-img-link ml-2" :src="require('@/assets/icon/out-white.svg')"/>
+                </label>
             </td>
             <td class="table-label text-left">
                 ${{ $utils.formatMoney(item.value, 2)}}
@@ -136,9 +138,9 @@ export default {
             return sum;
         },
 
-        openInNewTab(url) {
-            if (url && url !== '') {
-                window.open(url, '_blank').focus();
+        openTokenOnScan(hash) {
+            if (hash && hash !== '') {
+                window.open("https://polygonscan.com/token/" + hash, '_blank').focus();
             }
         }
     }
@@ -225,9 +227,13 @@ export default {
     line-height: 24px;
 }
 
-.icon-img {
+.icon-img-link {
     width: 24px !important;
     height: 24px !important;
+    margin-top: 2px;
 }
 
+.link-label {
+    display: inline-flex !important;
+}
 </style>

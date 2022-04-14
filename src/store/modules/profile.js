@@ -320,18 +320,6 @@ const actions = {
 
         let data = [];
 
-        let colors = [
-            "#FCCA46",
-            "#FE7F2D",
-            "#3D8DFF",
-            "#22ABAC",
-            "#B22174",
-            "#2775CA",
-            "#26A17B",
-        ];
-
-        assets = assets.sort((a,b) => (a[1] > b[1]) ? -1 : ((b[1] > [1]) ? 1 : 0));
-
         for (let i = 0; i < assets.length; i++) {
             let asset = assets[i];
 
@@ -353,9 +341,24 @@ const actions = {
             element.value = asset[1] / 10 ** 6;
             element.liquidationValue = asset[2] / 10 ** 6;
             element.link = asset[0] ? 'https://polygonscan.com/address/' + asset[0] : '';
-            element.color = colors[i];
 
             data.push(element);
+        }
+
+        let colors = [
+            "#FCCA46",
+            "#FE7F2D",
+            "#3D8DFF",
+            "#22ABAC",
+            "#B22174",
+            "#2775CA",
+            "#26A17B",
+        ];
+
+        data = data.sort((a,b) => (a.value > b.value) ? -1 : ((b.value > a.value) ? 1 : 0));
+
+        for (let i = 0; i < data.length; i++) {
+            data[i].color = colors[i];
         }
 
         console.log("debug data: " + JSON.stringify(data))

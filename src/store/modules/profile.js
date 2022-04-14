@@ -316,12 +316,7 @@ const actions = {
         commit('setLoadingCurrentTotalData', true)
 
         let assets = await rootState.web3.contracts.mark2market.methods.strategyAssets().call();
-
-        console.log("debug assets: " + JSON.stringify(assets))
-
         let strategiesMapping = (await axios('/dapp/strategies')).data;
-
-        console.log("debug strategiesMapping: " + JSON.stringify(strategiesMapping));
 
         let data = [];
 
@@ -335,29 +330,29 @@ const actions = {
             "#26A17B",
         ];
 
-        assets = assets.sort((a,b) => (a.netAssetValue > b.netAssetValue) ? -1 : ((b.netAssetValue > a.netAssetValue) ? 1 : 0));
-
-        console.log("debug assets 2: " + JSON.stringify(assets))
+        assets = assets.sort((a,b) => (a[1] > b[1]) ? -1 : ((b[1] > [1]) ? 1 : 0));
 
         for (let i = 0; i < assets.length; i++) {
             let asset = assets[i];
 
             let element = {};
 
-            let strategy = strategiesMapping.find(value => value.address === asset.strategy);
+            let strategy = strategiesMapping.find(value => value.address === asset[0]);
             let name = "not defined";
-            if (strategy)
+
+            if (strategy) {
                 name = strategy.name;
+            }
 
 
-            if (asset.netAssetValue === 0) {
+            if (asset[1] === 0) {
                 continue;
             }
 
             element.label = name;
-            element.value = asset.netAssetValue / 10 ** 6;
-            element.liquidationValue = asset.liquidationValue / 10 ** 6;
-            element.link = asset.strategy ? 'https://polygonscan.com/address/' + asset.strategy : '';
+            element.value = asset[1] / 10 ** 6;
+            element.liquidationValue = asset[2] / 10 ** 6;
+            element.link = asset[0] ? 'https://polygonscan.com/address/' + asset[0] : '';
             element.color = colors[i];
 
             data.push(element);

@@ -38,7 +38,7 @@ export default {
 /* mobile */
 @media only screen and (max-width: 1400px) {
     .main-container {
-        height: calc(100vh - 72px - 34px - 34px);
+        height: max(calc(100vh - 72px - 34px - 34px), 100%);
         padding-top: 16px !important;
         padding-bottom: 16px !important;
 
@@ -54,7 +54,7 @@ export default {
 
 @media only screen and (min-width: 1400px) {
     .main-container {
-        height: calc(100vh - 72px - 44px - 54px);
+        height: max(calc(100vh - 72px - 44px - 54px), 100%);
     }
 }
 

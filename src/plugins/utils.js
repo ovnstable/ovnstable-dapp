@@ -19,6 +19,11 @@ let accountingSecondConfig = {
     thousand: " ",
 }
 
+let accountingFirstConfig = {
+    symbol: "",
+    precision: 1,
+    thousand: " ",
+}
 
 let accountingZeroConfig = {
     symbol: "",
@@ -26,13 +31,19 @@ let accountingZeroConfig = {
     thousand: " ",
 }
 
-export default {
+let accountingSecondConfigComma = {
+    symbol: "",
+    precision: 2,
+    thousand: ",",
+}
 
+export default {
 
     formatMoney(number = 0, count = 6) {
 
-        if (!number)
+        if (!number) {
             return 0;
+        }
 
         switch (count){
             case 6:
@@ -41,16 +52,27 @@ export default {
                 return accounting.formatMoney(number, accountingFourConfig);
             case 2:
                 return accounting.formatMoney(number, accountingSecondConfig);
+            case 1:
+                return accounting.formatMoney(number, accountingFirstConfig);
             case 0:
                 return accounting.formatMoney(number, accountingZeroConfig);
+        }
+    },
 
+    formatMoneyComma(number = 0, count = 6) {
+
+        if (!number) {
+            return 0;
         }
 
+        switch (count){
+            case 2:
+                return accounting.formatMoney(number, accountingSecondConfigComma);
+
+        }
     },
 
     formatDate(date, pattern){
         return moment(date, pattern, true)
     },
-
-
 }

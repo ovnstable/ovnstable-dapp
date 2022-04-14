@@ -333,7 +333,7 @@ const actions = {
             }
 
 
-            if (asset[1] === 0) {
+            if (asset[1] == 0) {
                 continue;
             }
 
@@ -353,15 +353,15 @@ const actions = {
             "#B22174",
             "#2775CA",
             "#26A17B",
+            "#23DD00",
         ];
 
         data = data.sort((a,b) => (a.value > b.value) ? -1 : ((b.value > a.value) ? 1 : 0));
+        data = data.filter(item => item.value != 0);
 
         for (let i = 0; i < data.length; i++) {
             data[i].color = colors[i];
         }
-
-        console.log("debug data: " + JSON.stringify(data))
 
         commit('setCurrentTotalData', data)
         commit('setLoadingCurrentTotalData', false)

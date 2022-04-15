@@ -55,7 +55,7 @@ var configuration = {
   toChain: 'POLYGON',
   amount: 1,
   iframe: 'vertical',
-  hideSelectionFrom: true,
+  hideSelectionFrom: false,
   hideSelectionTo: true,
   theme: 'dark',
   background: '#1d2029',

@@ -1,5 +1,6 @@
 <template>
     <v-app id="app">
+        <div id="rubic-widget-root" class="rubic-not-show"></div>
         <router-view></router-view>
     </v-app>
 </template>
@@ -140,4 +141,17 @@ html {
     display: none !important;
 }
 
+.rubic-show {
+}
+
+.rubic-not-show {
+    display: none !important;
+}
+
+#rubic-widget-iframe {
+    position: absolute !important;
+    z-index: 100 !important;
+    right: 2% !important;
+    top: 100px !important;
+}
 </style>

@@ -14,6 +14,7 @@
                         <template v-slot:activator="{ attrs, on }">
                             <v-chip class="account-chip"
                                     dark
+                                    @click="hideRubic"
                                     v-bind="attrs"
                                     v-on="on">
                                 {{ accountShort }}
@@ -121,13 +122,19 @@ export default {
         },
 
         openBridge() {
-            // window.open('https://wallet.polygon.technology', '_blank');
             if (document.getElementById("rubic-widget-root").classList.contains("rubic-show")) {
                 document.getElementById("rubic-widget-root").classList.remove("rubic-show");
                 document.getElementById("rubic-widget-root").classList.add("rubic-not-show");
             } else {
                 document.getElementById("rubic-widget-root").classList.remove("rubic-not-show");
                 document.getElementById("rubic-widget-root").classList.add("rubic-show");
+            }
+        },
+
+        hideRubic() {
+            if (document.getElementById("rubic-widget-root").classList.contains("rubic-show")) {
+                document.getElementById("rubic-widget-root").classList.remove("rubic-show");
+                document.getElementById("rubic-widget-root").classList.add("rubic-not-show");
             }
         },
 

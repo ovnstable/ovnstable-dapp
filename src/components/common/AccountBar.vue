@@ -4,7 +4,7 @@
             <v-col>
                 <v-row justify="end" align="center">
 
-                    <a class="bridge-link" @click="openBridgeLink">Bridge</a>
+                    <a class="bridge-link" @click="openBridge">Bridge</a>
 
                     <v-chip outlined dark class="balance-chip" @click="showAccountProfile">
                         <strong>{{ $utils.formatMoney(balance.usdPlus, 2) }}</strong>&nbsp;USD+
@@ -31,7 +31,7 @@
                                     Dashboard
                                 </label>
                             </v-list-item>
-                            <v-list-item @click="openBridgeLink" class="bridge-link-mobile">
+                            <v-list-item @click="openBridge" class="bridge-link-mobile">
                                 <label class="list-label-switch">
                                     Bridge
                                 </label>
@@ -120,8 +120,15 @@ export default {
             this.connectWallet();
         },
 
-        openBridgeLink() {
-            window.open('https://wallet.polygon.technology', '_blank');
+        openBridge() {
+            // window.open('https://wallet.polygon.technology', '_blank');
+            if (document.getElementById("rubic-widget-root").classList.contains("rubic-show")) {
+                document.getElementById("rubic-widget-root").classList.remove("rubic-show");
+                document.getElementById("rubic-widget-root").classList.add("rubic-not-show");
+            } else {
+                document.getElementById("rubic-widget-root").classList.remove("rubic-not-show");
+                document.getElementById("rubic-widget-root").classList.add("rubic-show");
+            }
         },
 
         goToAction(id) {

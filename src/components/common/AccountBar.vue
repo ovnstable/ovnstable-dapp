@@ -214,5 +214,4 @@ export default {
     font-size: 16px;
     min-width: 150px;
 }
-
 </style>

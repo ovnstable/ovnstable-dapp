@@ -18,6 +18,8 @@ const state = {
             }
         ]
     },
+
+    slice: null,
 };
 
 const getters = {
@@ -41,11 +43,17 @@ const getters = {
     portfolioValue(state) {
         return state.portfolioValue;
     },
+
+    slice(state) {
+        return state.slice;
+    },
 };
 
 const actions = {
 
     async refreshClientDashboardData({commit, dispatch, getters, rootState}) {
+
+        console.log("Updating client dashboard data");
 
         let account = rootState.web3.account.toLowerCase();
 
@@ -122,10 +130,10 @@ const actions = {
         }
     },
 
-    async sliceClientDashboardData({commit, dispatch, getters, rootState}, slice) {
+    async sliceClientDashboardData({commit, dispatch, getters, rootState}) {
 
         let clientData = getters.activities;
-        clientData = slice ? clientData.slice(slice) : clientData;
+        clientData = getters.slice ? clientData.slice(getters.slice) : clientData;
 
         let avgApyList = clientData.map(item => item.apy ? item.apy : 0).filter(item => item !== 0);
         if (avgApyList && (avgApyList.length > 0)) {
@@ -168,6 +176,10 @@ const mutations = {
 
     setPortfolioValue(state, portfolioValue) {
         state.portfolioValue = portfolioValue;
+    },
+
+    setSlice(state, slice) {
+        state.slice = slice;
     },
 };
 

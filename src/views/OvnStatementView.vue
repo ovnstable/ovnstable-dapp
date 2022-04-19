@@ -114,7 +114,7 @@
                                         <label class="card-label label-dark">APY %</label>
                                     </v-row>
                                     <v-row class="ml-2 pt-1 pb-3">
-                                        <label class="label-value">{{ $utils.formatMoney(apy, 2) }}%</label>
+                                        <label class="label-value">{{ apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}</label>
                                     </v-row>
                                 </v-card-text>
                             </v-card>
@@ -176,7 +176,7 @@
 
                                         <v-list-item-content>
                                             <v-list-item-title>
-                                                <label class="label-value">{{ $utils.formatMoney(apy, 2) }}%</label>
+                                                <label class="label-value">{{ apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}</label>
                                             </v-list-item-title>
 
                                             <v-list-item-subtitle>

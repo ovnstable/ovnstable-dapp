@@ -58,12 +58,11 @@ export default {
 
     data: () => ({
         zoom: "all",
-        slice: null,
         chart: null,
     }),
 
     computed: {
-        ...mapGetters([]),
+        ...mapGetters('dashboardBalance', ['slice']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -81,26 +80,26 @@ export default {
     methods: {
         ...mapActions('dashboardBalance', ['sliceClientDashboardData']),
 
-        ...mapMutations([]),
+        ...mapMutations('dashboardBalance', ['setSlice']),
 
         zoomChart(zoom) {
             this.zoom = zoom;
 
             switch (zoom) {
                 case "week":
-                    this.slice = -7;
+                    this.setSlice(-7);
                     break;
                 case "month":
-                    this.slice = -30;
+                    this.setSlice(-30)
                     break;
                 case "all":
-                    this.slice = null;
+                    this.setSlice(null)
                     break;
                 default:
-                    this.slice = null;
+                    this.setSlice(null)
             }
 
-            this.sliceClientDashboardData(this.slice);
+            this.sliceClientDashboardData();
 
             if (this.chart) {
                 this.chart.destroy();

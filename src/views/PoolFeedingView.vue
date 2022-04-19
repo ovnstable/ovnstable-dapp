@@ -17,17 +17,40 @@
                             class="tab-btn-toggle"
                             mandatory>
                         <v-btn class="tab-btn" @click="tab = 1">
-                            <label v-bind:class="activeTabPayouts">Linear pool</label>
+                            <label v-bind:class="activeTabLinearPoolFeeding">LP USDC/USD+ [Stake]</label>
                         </v-btn>
-                        <v-btn class="tab-btn" @click="tab = 2">
-                            <label v-bind:class="activeTabPortfolio">Stable pool</label>
+
+                      <v-btn class="tab-btn" @click="tab = 2">
+                        <label v-bind:class="activeTabLinearPoolFeedingUnstake">LP USDC/USD+ [Unstake]</label>
+                      </v-btn>
+
+                      <v-btn class="tab-btn" @click="tab = 3">
+                        <label v-bind:class="activeTabPayouts">LP aDAI [Stake]</label>
+                      </v-btn>
+
+                      <v-btn class="tab-btn" @click="tab = 4">
+                        <label v-bind:class="activeTabPayouts">LP aDAI [Unstake]</label>
+                      </v-btn>
+
+                      <v-btn class="tab-btn" @click="tab = 5">
+                        <label v-bind:class="activeTabPayouts">LP aUSDT [Stake]</label>
+                      </v-btn>
+
+                      <v-btn class="tab-btn" @click="tab = 6">
+                        <label v-bind:class="activeTabPayouts">LP aUSDT [Unstake]</label>
+                      </v-btn>
+
+                        <v-btn class="tab-btn" @click="tab = 7">
+                            <label v-bind:class="activeTabPortfolio">Stable pool USD+</label>
                         </v-btn>
                     </v-btn-toggle>
                 </v-row>
 
                 <v-row class="pt-4" justify="center">
                     <LinearPoolFeeding v-if="tab === 1"/>
-                    <StablePoolFeeding v-if="tab === 2"/>
+                    <LinearPoolFeedingUnstake v-if="tab === 2"/>
+                    <LinearPoolFeeding v-if="tab === 3"/>
+                    <StablePoolFeeding v-if="tab === 4"/>
                 </v-row>
             </v-col>
         </v-row>
@@ -39,10 +62,12 @@
 import {mapGetters} from "vuex";
 import LinearPoolFeeding from "@/components/feeding/LinearPoolFeeding";
 import StablePoolFeeding from "@/components/feeding/StablePoolFeeding";
+import LinearPoolFeedingUnstake from "@/components/feeding/LinearPoolFeedingUnstake";
 export default {
     name: "DashboardView",
 
     components: {
+      LinearPoolFeedingUnstake,
         StablePoolFeeding,
         LinearPoolFeeding
     },
@@ -53,14 +78,14 @@ export default {
     }),
 
     computed: {
-        activeTabPayouts: function () {
+        activeTabLinearPoolFeeding: function () {
             return {
                 'tab-button': this.tab === 1,
                 'tab-button-in-active': this.tab !== 1,
             }
         },
 
-        activeTabPortfolio: function () {
+        activeTabLinearPoolFeedingUnstake: function () {
             return {
                 'tab-button': this.tab === 2,
                 'tab-button-in-active': this.tab !== 2,

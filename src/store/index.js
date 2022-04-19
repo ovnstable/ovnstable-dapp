@@ -10,6 +10,8 @@ import transaction from './modules/transaction'
 import gasPrice from './modules/gas-price';
 import airDrop from './modules/airdrop-dialog'
 import linearPoolFeeding from './modules/linear-pool-feeding'
+import linearPoolFeedingUnstake from './modules/linear-pool-feeding-unstake'
+import linearPoolDAI from './modules/linear-pool-dai'
 import stablePoolFeeding from './modules/stable-pool-feeding'
 import web3 from "./modules/web3";
 import accountProfile from './modules/account-profile';
@@ -28,6 +30,8 @@ export default new Vuex.Store({
         gasPrice,
         airDrop,
         linearPoolFeeding,
+        linearPoolFeedingUnstake,
+        linearPoolDAI,
         stablePoolFeeding,
         showTransactions,
         errorModal,

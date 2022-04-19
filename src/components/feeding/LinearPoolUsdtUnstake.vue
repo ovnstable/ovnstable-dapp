@@ -80,7 +80,7 @@
                        height="56"
                        class='buy enabled-buy'
                        @click="start">
-                    Stake
+                    Start
                 </v-btn>
             </div>
         </v-row>

@@ -6,19 +6,19 @@
 
                   <v-row  justify="start">
                     <label class="recent-label">
-                      Balance USD+: <b>{{ balances.usdPlus }}</b>
+                      Balance DAI: <b>{{ balances.dai }}</b>
                     </label>
                   </v-row>
 
                   <v-row justify="start">
                     <label class="recent-label">
-                      Balance USDC: <b>{{ balances.usdc }}</b>
+                      Balance aDAI: <b>{{ balances.aDai }}</b>
                     </label>
                   </v-row>
 
                   <v-row justify="start">
                     <label class="recent-label">
-                      Balance StaticUSD+: <b>{{ balances.staticUsdPlus }}</b>
+                      Balance Static DAI: <b>{{ balances.staticDai }}</b>
                     </label>
                   </v-row>
 
@@ -30,7 +30,7 @@
                     <v-row>
                         <v-col>
                             <v-row>
-                                <label class="title-row-label ml-5 mt-3">Amount USDC</label>
+                                <label class="title-row-label ml-5 mt-3">Amount DAI</label>
                             </v-row>
                             <v-row align="center">
                                 <v-text-field placeholder="0.00"
@@ -41,7 +41,7 @@
                                               hide-details
                                               dark
                                               background-color="transparent"
-                                              v-model="amountUsdc">
+                                              v-model="amountDai">
                                 </v-text-field>
                                 <v-spacer></v-spacer>
                             </v-row>
@@ -50,7 +50,7 @@
 
                       <v-col>
                         <v-row>
-                          <label class="title-row-label ml-5 mt-3">Amount USD+</label>
+                          <label class="title-row-label ml-5 mt-3">Amount aDAI</label>
                         </v-row>
                         <v-row align="center">
                           <v-text-field placeholder="0.00"
@@ -61,7 +61,7 @@
                                         hide-details
                                         dark
                                         background-color="transparent"
-                                        v-model="amountUsdPlus">
+                                        v-model="amountADai">
                           </v-text-field>
                           <v-spacer></v-spacer>
                         </v-row>
@@ -80,7 +80,7 @@
                        height="56"
                        class='buy enabled-buy'
                        @click="start">
-                    Stake
+                    Start
                 </v-btn>
             </div>
         </v-row>
@@ -241,8 +241,8 @@ export default {
     components: {},
 
     data: () => ({
-        amountUsdc: null,
-        amountUsdPlus: null,
+        amountDai: null,
+        amountADai: null,
         showProcessDialog: false,
     }),
 
@@ -289,13 +289,13 @@ export default {
         start() {
             this.showProcessDialog = true;
 
-            this.setAmountValueUsdc(this.amountUsdc);
-            this.setAmountValueUsdPlus(this.amountUsdPlus);
+            this.setAmountValueUsdc(this.amountDai);
+            this.setAmountValueUsdPlus(this.amountADai);
             this.startProcess();
         },
 
         close() {
-            this.amountUsdc = null;
+            this.amountDai = null;
             this.showProcessDialog = false;
 
             this.$emit('input', false);

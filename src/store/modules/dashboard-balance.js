@@ -99,13 +99,23 @@ const actions = {
 
         commit('setPortfolioValue', widgetData);
 
+        let apyDataList = [...clientData].filter(value => value.type === 'PAYOUT');
+        let days = apyDataList.length;
 
-        let avgApyList = clientData.map(item => item.apy ? item.apy : 0).filter(item => item !== 0);
-        if (avgApyList && (avgApyList.length > 0)) {
-            const sum = avgApyList.reduce((a, b) => a + b, 0);
-            const avg = (sum / avgApyList.length) || 0;
+        apyDataList.forEach(value => {
+            value.changePercent = value.balanceChange / value.openingBalance;
+        })
 
-            commit('setApy', avg);
+        let productResult = 1.0;
+
+        for (let i = 0; i < days; i++) {
+            productResult = productResult * (1.0 + apyDataList[i].changePercent);
+        }
+
+        let apy = Math.pow(productResult, 365.0 / days) - 1.0;
+
+        if (apy) {
+            commit('setApy', apy * 100.0);
         } else {
             commit('setApy', 0);
         }
@@ -135,12 +145,23 @@ const actions = {
         let clientData = getters.activities;
         clientData = getters.slice ? clientData.slice(getters.slice) : clientData;
 
-        let avgApyList = clientData.map(item => item.apy ? item.apy : 0).filter(item => item !== 0);
-        if (avgApyList && (avgApyList.length > 0)) {
-            const sum = avgApyList.reduce((a, b) => a + b, 0);
-            const avg = (sum / avgApyList.length) || 0;
+        let apyDataList = [...clientData].filter(value => value.type === 'PAYOUT');
+        let days = apyDataList.length;
 
-            commit('setApy', avg);
+        apyDataList.forEach(value => {
+            value.changePercent = value.balanceChange / value.openingBalance;
+        })
+
+        let productResult = 1.0;
+
+        for (let i = 0; i < days; i++) {
+            productResult = productResult * (1.0 + apyDataList[i].changePercent);
+        }
+
+        let apy = Math.pow(productResult, 365.0 / days) - 1.0;
+
+        if (apy) {
+            commit('setApy', apy * 100.0);
         } else {
             commit('setApy', 0);
         }

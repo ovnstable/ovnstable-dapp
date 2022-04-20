@@ -233,6 +233,9 @@ const actions = {
         let proposals = await governor.methods.getProposals().call();
 
         proposals = [...proposals].reverse();
+        if (proposals.length > 5){
+            proposals = proposals.slice(0, 5);
+        }
 
         let items = [];
         for (let i = 0; i < proposals.length; i++) {
@@ -309,12 +312,11 @@ const actions = {
         if (process.env.VUE_APP_POLYGON === "polygon_dev"){
             pm.methods.setStrategyWeights(items).send(params);
         }else {
-            pm.methods.setStrategyWeights(items).send(params);
 
-            // let governor = rootState.web3.contracts.governor;
-            // let abi = pm.methods.setStrategyWeights(items).encodeABI();
-            // let name = 'Proposal #' + getters.proposals.length + 1 + ' Change weights';
-            // await governor.methods.proposeExec([pm.options.address], [0], [abi], name).send(params);
+            let governor = rootState.web3.contracts.governor;
+            let abi = pm.methods.setStrategyWeights(items).encodeABI();
+            let name = 'Proposal #' + getters.proposals.length + 1 + ' Change weights';
+            await governor.methods.proposeExec([pm.options.address], [0], [abi], name).send(params);
         }
 
     },
@@ -325,7 +327,17 @@ const actions = {
         let account = rootState.web3.account;
         let params = {from: account};
 
-        pm.methods.balance().send(params);
+
+        if (process.env.VUE_APP_POLYGON === "polygon_dev"){
+            pm.methods.balance().send(params);
+        }else {
+
+            let governor = rootState.web3.contracts.governor;
+            let abi = pm.methods.balance().encodeABI();
+            let name = 'Proposal #' + getters.proposals.length + 1 + ' Balance';
+            await governor.methods.proposeExec([pm.options.address], [0], [abi], name).send(params);
+        }
+
 
     },
 

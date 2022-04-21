@@ -2,26 +2,27 @@ import fs from "fs";
 import {ethers} from "ethers";
 import BN from "bn.js";
 
-import Pool from "../../contracts/abi/ERC4626LinearPool.json";
-import USDPlus from "../../contracts/abi/UsdPlusToken.json";
-import Vault from "../../contracts/abi/VaultBalancer.json";
-import StaticUsdPlus from "../../contracts/abi/StaticUsdPlusToken.json";
-import ERC20 from "../../contracts/abi/ERC20.json";
+import Pool from "../../../contracts/abi/ERC4626LinearPool.json";
+import USDPlus from "../../../contracts/abi/UsdPlusToken.json";
+import Vault from "../../../contracts/abi/VaultBalancer.json";
+import StaticUsdPlus from "../../../contracts/abi/StaticUsdPlusToken.json";
+import StaticATokenLM from "../../../contracts/abi/StaticATokenLM.json";
+import ERC20 from "../../../contracts/abi/ERC20.json"
 
 const state = {
 
     amountValueUsdc: null,
     amountValueUsdPlus: null,
 
+    prepareStep: false,
+    approveUsdPlusStep: false,
+    depositStaticStep: false,
+    approveUsdcStep: false,
+    swappingFirstStep: false,
+    approveStaticUsdPlusStep: false,
+    swappingSecondStep: false,
+    endStep: false,
 
-    steps: {
-        prepareStep: false,
-        approveLp: false,
-        swapLpToUsdc: false,
-        swapLpToStaticUsdPlus: false,
-        convertStatioUsdPlusToUsdPlus: false,
-        endStep: false,
-    },
 
     balances: {
         usdPlus: null,
@@ -41,31 +42,54 @@ const getters = {
         return state.amountValueUsdPlus;
     },
 
-
     balances(state) {
         return state.balances;
     },
 
-    steps(state) {
-        return state.steps;
+    prepareStep(state) {
+        return state.prepareStep;
     },
 
+    approveUsdPlusStep(state) {
+        return state.approveUsdPlusStep;
+    },
+
+    depositStaticStep(state) {
+        return state.depositStaticStep;
+    },
+
+    approveUsdcStep(state) {
+        return state.approveUsdcStep;
+    },
+
+    swappingFirstStep(state) {
+        return state.swappingFirstStep;
+    },
+
+    approveStaticUsdPlusStep(state) {
+        return state.approveStaticUsdPlusStep;
+    },
+
+    swappingSecondStep(state) {
+        return state.swappingSecondStep;
+    },
+
+    endStep(state) {
+        return state.endStep;
+    },
 };
 
 const actions = {
 
     async discardSteps({commit, dispatch, getters, rootState}) {
-
-        let steps = {
-            prepareStep: false,
-                approveLp: false,
-                swapLpToUsdc: false,
-                swapLpToStaticUsdPlus: false,
-                convertStatioUsdPlusToUsdPlus: false,
-                endStep: false,
-        }
-
-        commit('setSteps', steps);
+        commit('setPrepareStep', false);
+        commit('setApproveUsdPlusStep', false);
+        commit('setDepositStaticStep', false);
+        commit('setApproveUsdcStep', false);
+        commit('setSwappingFirstStep', false);
+        commit('setApproveStaticUsdPlusStep', false);
+        commit('setSwappingSecondStep', false);
+        commit('setEndStep', false);
     },
 
 
@@ -129,26 +153,44 @@ const actions = {
 
         await dispatch('updateBalances', signer);
 
+
+        let amountToUsdPlus = Number.parseInt(getters.amountValueUsdPlus);
+
         console.log('Input: usdPlus ' + getters.amountValueUsdPlus);
         console.log('Input: USDC ' + getters.amountValueUsdc);
 
-        let amountUsdc = new BN(10).pow(new BN(6)).muln(Number.parseInt(getters.amountValueUsdc)).toString();
-        let amountUsdPlus = new BN(10).pow(new BN(6)).muln(Number.parseInt(getters.amountValueUsdPlus)).toString();
+        let amountToUsdPlusScaled = new BN(10).pow(new BN(6)).muln(amountToUsdPlus).toString();
+        let convertedAmount = await staticUsdPlus.staticToDynamicAmount(amountToUsdPlusScaled);
 
-        await (await pool.approve(vault.address, await pool.balanceOf(account))).wait();
+        commit('setPrepareStep', true);
 
+        await (await usdPlus.approve(staticUsdPlus.address, convertedAmount )).wait();
 
-        let steps = getters.steps;
-        steps.approveLp = true;
-        commit('setSteps', steps);
+        commit('setApproveUsdPlusStep', true);
+
+        await (await staticUsdPlus.deposit(convertedAmount, account)).wait();
+
+        await dispatch('updateBalances', signer);
+
+        commit('setDepositStaticStep', true);
+
+        let amountUsdcToLp = Number.parseInt(getters.amountValueUsdc);
+        let amountStUsdPlusToLp = Number.parseInt(getters.amountValueUsdPlus);
+
+        let amountUsdcToLpScaled = new BN(10).pow(new BN(6)).muln(amountUsdcToLp).toString();
+        let amountStUsdPlusToLpScaled = new BN(10).pow(new BN(6)).muln(amountStUsdPlusToLp).toString();
+
+        await (await usdc.approve(vault.address, amountUsdcToLpScaled)).wait();
+
+        commit('setApproveUsdcStep', true);
 
         await (await vault.swap(
             {
                 poolId: await pool.getPoolId(),
-                kind: 1,
-                assetIn: poolAddress,
-                assetOut: usdc.address,
-                amount: amountUsdc ,
+                kind: 0,
+                assetIn: usdc.address,
+                assetOut: poolAddress,
+                amount: amountUsdcToLpScaled,
                 userData: "0x",
             },
             {
@@ -157,23 +199,30 @@ const actions = {
                 recipient: account,
                 toInternalBalance: false,
             },
-            new BN(10).pow(new BN(27)).toString(),
-            new BN(10).pow(new BN(27)).toString()
+            0,
+            1000000000000
         )).wait();
 
+        commit('setSwappingFirstStep', true);
 
-        steps.swapLpToUsdc = true;
-        commit('setSteps', steps);
+
         await dispatch('updateBalances', signer);
 
 
-        await(await vault.swap(
+        await (await staticUsdPlus.approve(vault.address, amountStUsdPlusToLpScaled )).wait();
+
+        commit('setApproveStaticUsdPlusStep', true);
+
+        await dispatch('updateBalances', signer);
+
+
+        await (await vault.swap(
             {
                 poolId: await pool.getPoolId(),
-                kind: 1,
-                assetIn: poolAddress,
-                assetOut: staticUsdPlus.address,
-                amount: amountUsdPlus,
+                kind: 0,
+                assetIn: staticUsdPlus.address,
+                assetOut: poolAddress,
+                amount: amountStUsdPlusToLpScaled,
                 userData: "0x",
             },
             {
@@ -182,39 +231,19 @@ const actions = {
                 recipient: account,
                 toInternalBalance: false,
             },
-            new BN(10).pow(new BN(27)).toString(),
-            new BN(10).pow(new BN(27)).toString()
+            0,
+            1000000000000,
         )).wait();
 
-        steps.swapLpToStaticUsdPlus = true;
-        commit('setSteps', steps);
+        commit('setSwappingSecondStep', true);
 
         await dispatch('updateBalances', signer);
 
-        (await staticUsdPlus.redeem(await staticUsdPlus.balanceOf(account), account, account)).wait();
-
-
-        steps.convertStatioUsdPlusToUsdPlus = true;
-        commit('setSteps', steps);
-
-        await dispatch('updateBalances', signer);
-
-        steps.endStep = true;
-        commit('setSteps', steps);
+        commit('setEndStep', true);
     }
 };
 
 const mutations = {
-
-    setBalances(state, value) {
-        state.balances = value;
-    },
-
-
-    setSteps(state, value) {
-        state.steps = value;
-    },
-
 
     setAmountValueUsdPlus(state, value) {
         state.amountValueUsdPlus = value;
@@ -222,6 +251,42 @@ const mutations = {
 
     setAmountValueUsdc(state, value) {
         state.amountValueUsdc = value;
+    },
+
+    setBalances(state, value) {
+        state.balances = value;
+    },
+
+    setPrepareStep(state, value) {
+        state.prepareStep = value;
+    },
+
+    setApproveUsdPlusStep(state, value) {
+        state.approveUsdPlusStep = value;
+    },
+
+    setDepositStaticStep(state, value) {
+        state.depositStaticStep = value;
+    },
+
+    setApproveUsdcStep(state, value) {
+        state.approveUsdcStep = value;
+    },
+
+    setSwappingFirstStep(state, value) {
+        state.swappingFirstStep = value;
+    },
+
+    setApproveStaticUsdPlusStep(state, value) {
+        state.approveStaticUsdPlusStep = value;
+    },
+
+    setSwappingSecondStep(state, value) {
+        state.swappingSecondStep = value;
+    },
+
+    setEndStep(state, value) {
+        state.endStep = value;
     },
 };
 

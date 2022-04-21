@@ -3,9 +3,12 @@ import {ethers} from "ethers";
 import BN from "bn.js";
 const {web3} = require("@openzeppelin/test-helpers/src/setup");
 
-import Pool from "../../contracts/abi/StablePhantomPool.json";
-import Vault from "../../contracts/abi/VaultBalancer.json";
-import ERC20 from "../../contracts/abi/ERC20.json";
+import Pool from "../../../contracts/abi/ERC4626LinearPool.json";
+import USDPlus from "../../../contracts/abi/UsdPlusToken.json";
+import Vault from "../../../contracts/abi/VaultBalancer.json";
+import StaticUsdPlus from "../../../contracts/abi/StaticUsdPlusToken.json";
+import StaticATokenLM from "../../../contracts/abi/StaticATokenLM.json";
+import ERC20 from "../../../contracts/abi/ERC20.json"
 
 const state = {
 

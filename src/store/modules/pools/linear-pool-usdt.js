@@ -2,45 +2,45 @@ import fs from "fs";
 import {ethers} from "ethers";
 import BN from "bn.js";
 
-import Pool from "../../contracts/abi/ERC4626LinearPool.json";
-import USDPlus from "../../contracts/abi/UsdPlusToken.json";
-import Vault from "../../contracts/abi/VaultBalancer.json";
-import StaticUsdPlus from "../../contracts/abi/StaticUsdPlusToken.json";
-import StaticATokenLM from "../../contracts/abi/StaticATokenLM.json";
-import ERC20 from "../../contracts/abi/ERC20.json";
+import Pool from "../../../contracts/abi/ERC4626LinearPool.json";
+import USDPlus from "../../../contracts/abi/UsdPlusToken.json";
+import Vault from "../../../contracts/abi/VaultBalancer.json";
+import StaticUsdPlus from "../../../contracts/abi/StaticUsdPlusToken.json";
+import StaticATokenLM from "../../../contracts/abi/StaticATokenLM.json";
+import ERC20 from "../../../contracts/abi/ERC20.json"
 
 const state = {
 
-    amountValueDai: null,
-    amountValueADai: null,
+    amountValueUsdt: null,
+    amountValueAUsdt: null,
 
 
     steps: {
         prepareStep: false,
-        approveDai: false,
-        swapDaiToStatic: false,
+        approveUsdt: false,
+        swapUsdtToStatic: false,
         swapStaticToLp: false,
-        approveDaiLp: false,
-        swapDaiToLp: false,
+        approveUsdtLp: false,
+        swapUsdtToLp: false,
         endStep: false,
     },
 
     balances: {
-        usdPlus: null,
-        usdc: null,
-        staticUsdPlus: null,
+        usdt: null,
+        amUsdt: null,
+        staticAmUsdt: null,
         lpToken: null,
     }
 };
 
 const getters = {
 
-    amountValueDai(state) {
-        return state.amountValueDai;
+    amountValueUsdt(state) {
+        return state.amountValueUsdt;
     },
 
-    amountValueADai(state) {
-        return state.amountValueADai;
+    amountValueAUsdt(state) {
+        return state.amountValueAUsdt;
     },
 
 
@@ -60,11 +60,11 @@ const actions = {
 
         let steps = {
             prepareStep: false,
-            approveDai: false,
-            swapDaiToStatic: false,
+            approveUsdt: false,
+            swapUsdtToStatic: false,
             swapStaticToLp: false,
-            approveDaiLp: false,
-            swapDaiToLp: false,
+            approveUsdtLp: false,
+            swapUsdtToLp: false,
             endStep: false,
         }
 
@@ -74,21 +74,17 @@ const actions = {
 
     async updateBalances({commit, dispatch, getters, rootState}, signer){
 
-        let poolAddress = "0x0503Dd6b2D3Dd463c9BeF67fB5156870Af63393E";
+        let poolAddress = "0x8A819a4caBD6EfCb4E5504fE8679A1aBD831Dd8f";
 
         let account = await signer.getAddress();
 
-        let dai = await new ethers.Contract("0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", ERC20, signer);
-        let staticADai = await new ethers.Contract("0xa84B5B903f62ea61dfAac3f88123cC6B21Bb81ab", StaticATokenLM, signer);
-        let aDAI = await new ethers.Contract("0x27F8D03b3a2196956ED754baDc28D73be8830A6e", ERC20, signer);
+        let usdt = await new ethers.Contract("0xc2132d05d31c914a87c6611c10748aeb04b58e8f", ERC20, signer);
+        let staticAmUsdt = await new ethers.Contract("0x548571A302D354B190AE6E9107552aB4F7FD9DC5", StaticATokenLM, signer);
+        let amUsdt= await new ethers.Contract("0x60D55F02A771d515e077c9C2403a1ef324885CeC", ERC20, signer);
         let pool = await new ethers.Contract(poolAddress, Pool , signer);
 
         let vault = await new ethers.Contract("0xba12222222228d8ba445958a75a0704d566bf2c8" ,Vault , signer);
 
-        let daiBalance = await dai.balanceOf(account) / 1e18;
-        let staticIDaiBalance= await staticADai.balanceOf(account) / 1e18;
-        let aDaiBalance = await aDAI.balanceOf(account) / 1e18;
-        let poolBalance = await pool.balanceOf(account) / 1e18;
 
         let targets = await pool.getTargets();
         let balancesVault = await vault.getPoolTokens(await pool.getPoolId());
@@ -97,10 +93,10 @@ const actions = {
         console.log(`Balances: ${balancesVault[0].toString()} : ${balancesVault[1].toString()}`);
 
         let balances = {
-            dai: daiBalance,
-            aDai: aDaiBalance,
-            staticADai: staticIDaiBalance,
-            lpToken: poolBalance,
+            usdt: await usdt.balanceOf(account) / 1e6,
+            amUsdt: await amUsdt.balanceOf(account) / 1e6,
+            staticAmUsdt: await staticAmUsdt.balanceOf(account) / 1e6,
+            lpToken: await pool.balanceOf(account) / 1e18,
         };
 
         commit('setBalances', balances);
@@ -110,7 +106,7 @@ const actions = {
 
         await dispatch('discardSteps');
 
-        let poolAddress = "0x0503Dd6b2D3Dd463c9BeF67fB5156870Af63393E";
+        let poolAddress = "0x8A819a4caBD6EfCb4E5504fE8679A1aBD831Dd8f";
 
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
         console.log('Provider: ' + provider.connection.url);
@@ -120,52 +116,53 @@ const actions = {
         console.log("Account:", account);
 
 
-        let dai = await new ethers.Contract("0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", ERC20, signer);
-        let staticADai = await new ethers.Contract("0xa84B5B903f62ea61dfAac3f88123cC6B21Bb81ab", StaticATokenLM, signer);
-        let aDAI = await new ethers.Contract("0x27F8D03b3a2196956ED754baDc28D73be8830A6e", ERC20, signer);
+        let usdt = await new ethers.Contract("0xc2132d05d31c914a87c6611c10748aeb04b58e8f", ERC20, signer);
+        let staticAmUsdt = await new ethers.Contract("0x548571A302D354B190AE6E9107552aB4F7FD9DC5", StaticATokenLM, signer);
+        let amUsdt= await new ethers.Contract("0x60D55F02A771d515e077c9C2403a1ef324885CeC", ERC20, signer);
         let pool = await new ethers.Contract(poolAddress, Pool , signer);
+
         let vault = await new ethers.Contract("0xba12222222228d8ba445958a75a0704d566bf2c8" ,Vault , signer);
 
         await dispatch('updateBalances', signer);
 
-        console.log('Input: DAI ' + getters.amountValueDai);
-        console.log('Input: aDAI ' + getters.amountValueADai);
+        console.log('Input: USDT ' + getters.amountValueUsdt);
+        console.log('Input: amUsdt ' + getters.amountValueAUsdt);
 
-        let amountDai = new BN(10).pow(new BN(18)).muln(Number.parseInt(getters.amountValueDai)).toString();
-        let amountADai = new BN(10).pow(new BN(18)).muln(Number.parseInt(getters.amountValueADai)).toString();
+        let amountUsdt = new BN(10).pow(new BN(6)).muln(Number.parseInt(getters.amountValueUsdt)).toString();
+        let amountAmUsdt = new BN(10).pow(new BN(6)).muln(Number.parseInt(getters.amountValueAUsdt)).toString();
 
 
         let steps = getters.steps;
         steps.prepareStep = true;
         commit('setSteps', steps);
 
-        await (await dai.approve(staticADai.address, amountADai)).wait();
+        await (await usdt.approve(staticAmUsdt.address, amountAmUsdt)).wait();
 
-        steps.approveDai = true;
+        steps.approveUsdt = true;
         commit('setSteps', steps);
 
-        await (await staticADai.deposit(account, amountADai, 0, true)).wait();
+        await (await staticAmUsdt.deposit(account, amountAmUsdt, 0, true)).wait();
 
         await dispatch('updateBalances', signer);
 
-        steps.swapDaiToStatic = true;
+        steps.swapUsdtToStatic = true;
         commit('setSteps', steps);
 
-        await swap(staticADai, pool, await staticADai.balanceOf(account), await pool.getPoolId());
+        await swap(staticAmUsdt, pool, await staticAmUsdt.balanceOf(account), await pool.getPoolId());
 
         steps.swapStaticToLp = true;
         commit('setSteps', steps);
 
         await dispatch('updateBalances', signer);
 
-        await (await dai.approve(pool.address, amountDai)).wait();
+        await (await usdt.approve(pool.address, amountUsdt)).wait();
 
-        steps.approveDaiLp = true;
+        steps.approveUsdtLp = true;
         commit('setSteps', steps);
 
-        await swap(dai, pool, amountDai, await pool.getPoolId());
+        await swap(usdt, pool, amountUsdt, await pool.getPoolId());
 
-        steps.swapDaiToLp = true;
+        steps.swapUsdtToLp = true;
         commit('setSteps', steps);
 
         await dispatch('updateBalances', signer);
@@ -213,12 +210,12 @@ const mutations = {
     },
 
 
-    setAmountValueDai(state, value) {
-        state.amountValueDai = value;
+    setAmountValueUsdt(state, value) {
+        state.amountValueUsdt = value;
     },
 
-    setAmountValueADai(state, value) {
-        state.amountValueADai = value;
+    setAmountValueAUsdt(state, value) {
+        state.amountValueAUsdt = value;
     },
 };
 

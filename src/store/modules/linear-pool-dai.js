@@ -71,25 +71,21 @@ const actions = {
 
     async updateBalances({commit, dispatch, getters, rootState}, signer){
 
-        let poolAddress = "0x6933ec1CA55C06a894107860c92aCdFd2Dd8512f";
+        let poolAddress = "0x0503Dd6b2D3Dd463c9BeF67fB5156870Af63393E";
 
         let account = await signer.getAddress();
 
-        let usdPlus = await new ethers.Contract("0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f", USDPlus.abi, signer );
-        let staticUsdPlus = await new ethers.Contract("0x5d9D8509C522a47D9285b9e4e9ec686e6A580850", StaticUsdPlus.abi , signer );
-        let usdc = await new ethers.Contract("0x2791bca1f2de4661ed88a30c99a7a9449aa84174", ERC20, signer);
+        let dai = await new ethers.Contract("0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", ERC20, signer);
+        let staticADai = await new ethers.Contract("0xa84B5B903f62ea61dfAac3f88123cC6B21Bb81ab", ERC20, signer);
+        let aDAI = await new ethers.Contract("0x27F8D03b3a2196956ED754baDc28D73be8830A6e", ERC20, signer);
         let pool = await new ethers.Contract(poolAddress, Pool , signer);
+
         let vault = await new ethers.Contract("0xba12222222228d8ba445958a75a0704d566bf2c8" ,Vault , signer);
 
-        let usdPlusBalance = await usdPlus.balanceOf(account) / 1e6;
-        console.log('Balance USD+: ' + usdPlusBalance);
-        let usdcBalance = await usdc.balanceOf(account) / 1e6;
-        console.log('Balance USDC: ' + usdcBalance);
-        let staticUsdPlusBalance = await staticUsdPlus.balanceOf(account) / 1e6;
-        console.log('Balance StaticUSD+: ' + staticUsdPlusBalance);
+        let daiBalance = await dai.balanceOf(account) / 1e18;
+        let staticIDaiBalance= await staticADai.balanceOf(account) / 1e18;
+        let aDaiBalance = await aDAI.balanceOf(account) / 1e18;
         let poolBalance = await pool.balanceOf(account) / 1e18;
-        console.log('Balance Pool LP: ' + poolBalance);
-
 
         let targets = await pool.getTargets();
         let balancesVault = await vault.getPoolTokens(await pool.getPoolId());
@@ -98,9 +94,9 @@ const actions = {
         console.log(`Balances: ${balancesVault[0].toString()} : ${balancesVault[1].toString()}`);
 
         let balances = {
-            usdPlus: usdPlusBalance,
-            usdc: usdcBalance,
-            staticUsdPlus: staticUsdPlusBalance,
+            dai: daiBalance,
+            aDai: aDaiBalance,
+            staticADai: staticIDaiBalance,
             lpToken: poolBalance,
         };
 
@@ -111,7 +107,7 @@ const actions = {
 
         await dispatch('discardSteps');
 
-        let poolAddress = "0x6933ec1CA55C06a894107860c92aCdFd2Dd8512f";
+        let poolAddress = "0x0503Dd6b2D3Dd463c9BeF67fB5156870Af63393E";
 
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
         console.log('Provider: ' + provider.connection.url);
@@ -121,11 +117,10 @@ const actions = {
         console.log("Account:", account);
 
 
-        let usdPlus = await new ethers.Contract("0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f", USDPlus.abi, signer );
-        let staticUsdPlus = await new ethers.Contract("0x5d9D8509C522a47D9285b9e4e9ec686e6A580850", StaticUsdPlus.abi , signer );
-        let usdc = await new ethers.Contract("0x2791bca1f2de4661ed88a30c99a7a9449aa84174", ERC20, signer);
+        let dai = await new ethers.Contract("0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", ERC20, signer);
+        let staticADai = await new ethers.Contract("0xa84B5B903f62ea61dfAac3f88123cC6B21Bb81ab", ERC20, signer);
+        let aDAI = await new ethers.Contract("0x27F8D03b3a2196956ED754baDc28D73be8830A6e", ERC20, signer);
         let pool = await new ethers.Contract(poolAddress, Pool , signer);
-        let vault = await new ethers.Contract("0xba12222222228d8ba445958a75a0704d566bf2c8" ,Vault , signer);
 
         await dispatch('updateBalances', signer);
 

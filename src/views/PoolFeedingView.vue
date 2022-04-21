@@ -49,8 +49,8 @@
                 <v-row class="pt-4" justify="center">
                     <LinearPoolFeeding v-if="tab === 1"/>
                     <LinearPoolFeedingUnstake v-if="tab === 2"/>
-                    <LinearPoolFeeding v-if="tab === 3"/>
-                    <StablePoolFeeding v-if="tab === 4"/>
+                    <LinearPoolDai v-if="tab === 3"/>
+                    <LinearPoolDaiUnstake v-if="tab === 4"/>
                 </v-row>
             </v-col>
         </v-row>
@@ -63,10 +63,14 @@ import {mapGetters} from "vuex";
 import LinearPoolFeeding from "@/components/feeding/LinearPoolFeeding";
 import StablePoolFeeding from "@/components/feeding/StablePoolFeeding";
 import LinearPoolFeedingUnstake from "@/components/feeding/LinearPoolFeedingUnstake";
+import LinearPoolDai from "@/components/feeding/LinearPoolDai";
+import LinearPoolDaiUnstake from "@/components/feeding/LinearPoolDaiUnstake";
 export default {
     name: "DashboardView",
 
     components: {
+      LinearPoolDaiUnstake,
+      LinearPoolDai,
       LinearPoolFeedingUnstake,
         StablePoolFeeding,
         LinearPoolFeeding

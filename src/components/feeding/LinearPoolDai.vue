@@ -110,19 +110,19 @@
                     <v-col class="main-content-col">
                         <v-row align="center" justify="center">
                             <label class="recent-label">
-                                Balance USD+: <b>{{ balances.usdPlus }}</b>
+                                Balance DAI: <b>{{ balances.dai }}</b>
                             </label>
                         </v-row>
 
                       <v-row align="center" justify="center">
                         <label class="recent-label">
-                          Balance USDC: <b>{{ balances.usdc }}</b>
+                          Balance aDAI: <b>{{ balances.aDai }}</b>
                         </label>
                       </v-row>
 
                       <v-row align="center" justify="center">
                         <label class="recent-label">
-                          Balance StaticUSD+: <b>{{ balances.staticUsdPlus }}</b>
+                          Balance StaticADai: <b>{{ balances.staticADai }}</b>
                         </label>
                       </v-row>
 
@@ -236,7 +236,7 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import {ethers} from "ethers";
 
 export default {
-    name: "LinearPoolFeeding",
+    name: "LinearPoolDai",
 
     components: {},
 
@@ -247,7 +247,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('linearPoolFeeding', [ 'balances',
+        ...mapGetters('linearPoolDAI', [ 'balances',
                 'prepareStep', 'approveUsdPlusStep', 'depositStaticStep', 'approveUsdcStep',
                 'swappingFirstStep', 'approveStaticUsdPlusStep', 'swappingSecondStep', 'endStep'
             ]
@@ -268,8 +268,8 @@ export default {
   },
 
   methods: {
-        ...mapActions('linearPoolFeeding', [ 'startProcess', 'updateBalances']),
-        ...mapMutations('linearPoolFeeding', ['setAmountValueUsdPlus', 'setAmountValueUsdc']),
+        ...mapActions('linearPoolDAI', [ 'startProcess', 'updateBalances']),
+        ...mapMutations('linearPoolDAI', ['setAmountValueDai', 'setAmountValueADai']),
 
         isNumber: function(evt) {
             evt = (evt) ? evt : window.event;
@@ -289,8 +289,8 @@ export default {
         start() {
             this.showProcessDialog = true;
 
-            this.setAmountValueUsdc(this.amountDai);
-            this.setAmountValueUsdPlus(this.amountADai);
+            this.setAmountValueDai(this.amountDai);
+            this.setAmountValueADai(this.amountADai);
             this.startProcess();
         },
 

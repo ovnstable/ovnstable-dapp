@@ -236,7 +236,7 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import {ethers} from "ethers";
 
 export default {
-    name: "LinearPoolFeeding",
+    name: "LinearPoolDaiUnstake",
 
     components: {},
 

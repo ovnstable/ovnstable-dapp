@@ -4,69 +4,69 @@
             <v-card flat class="main-card">
                 <v-card-text>
 
-                  <v-row  justify="start">
-                    <label class="recent-label">
-                      Balance USD+: <b>{{ balances.usdPlus }}</b>
-                    </label>
-                  </v-row>
+                    <v-row justify="start">
+                        <label class="recent-label">
+                            Balance USD+: <b>{{ balances.usdPlus }}</b>
+                        </label>
+                    </v-row>
 
-                  <v-row justify="start">
-                    <label class="recent-label">
-                      Balance USDC: <b>{{ balances.usdc }}</b>
-                    </label>
-                  </v-row>
+                    <v-row justify="start">
+                        <label class="recent-label">
+                            Balance USDC: <b>{{ balances.usdc }}</b>
+                        </label>
+                    </v-row>
 
-                  <v-row justify="start">
-                    <label class="recent-label">
-                      Balance StaticUSD+: <b>{{ balances.staticUsdPlus }}</b>
-                    </label>
-                  </v-row>
+                    <v-row justify="start">
+                        <label class="recent-label">
+                            Balance StaticUSD+: <b>{{ balances.staticUsdPlus }}</b>
+                        </label>
+                    </v-row>
 
-                  <v-row justify="start">
-                    <label class="recent-label">
-                      Balance Pool LP: <b>{{ balances.lpToken }}</b>
-                    </label>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <v-row>
-                        <label class="title-row-label ml-5 mt-3">Amount USDC</label>
-                      </v-row>
-                      <v-row align="center">
-                        <v-text-field placeholder="0.00"
-                                      @keypress="isNumber($event)"
-                                      flat
-                                      solo
-                                      class="ml-2 field-sum"
-                                      hide-details
-                                      dark
-                                      background-color="transparent"
-                                      v-model="amountUsdc">
-                        </v-text-field>
-                        <v-spacer></v-spacer>
-                      </v-row>
-                    </v-col>
+                    <v-row justify="start">
+                        <label class="recent-label">
+                            Balance Pool LP: <b>{{ balances.lpToken }}</b>
+                        </label>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-row>
+                                <label class="title-row-label ml-5 mt-3">Amount USDC</label>
+                            </v-row>
+                            <v-row align="center">
+                                <v-text-field placeholder="0.00"
+                                              @keypress="isNumber($event)"
+                                              flat
+                                              solo
+                                              class="ml-2 field-sum"
+                                              hide-details
+                                              dark
+                                              background-color="transparent"
+                                              v-model="amountUsdc">
+                                </v-text-field>
+                                <v-spacer></v-spacer>
+                            </v-row>
+                        </v-col>
 
 
-                    <v-col>
-                      <v-row>
-                        <label class="title-row-label ml-5 mt-3">Amount USD+</label>
-                      </v-row>
-                      <v-row align="center">
-                        <v-text-field placeholder="0.00"
-                                      @keypress="isNumber($event)"
-                                      flat
-                                      solo
-                                      class="ml-2 field-sum"
-                                      hide-details
-                                      dark
-                                      background-color="transparent"
-                                      v-model="amountUsdPlus">
-                        </v-text-field>
-                        <v-spacer></v-spacer>
-                      </v-row>
-                    </v-col>
-                  </v-row>
+                        <v-col>
+                            <v-row>
+                                <label class="title-row-label ml-5 mt-3">Amount USD+</label>
+                            </v-row>
+                            <v-row align="center">
+                                <v-text-field placeholder="0.00"
+                                              @keypress="isNumber($event)"
+                                              flat
+                                              solo
+                                              class="ml-2 field-sum"
+                                              hide-details
+                                              dark
+                                              background-color="transparent"
+                                              v-model="amountUsdPlus">
+                                </v-text-field>
+                                <v-spacer></v-spacer>
+                            </v-row>
+                        </v-col>
+                    </v-row>
                 </v-card-text>
             </v-card>
         </v-row>
@@ -83,11 +83,11 @@
         </v-row>
 
         <v-dialog
-                :value="showProcessDialog"
-                :width="600"
-                @input="close"
-                persistent
-                scrollable>
+          :value="showProcessDialog"
+          :width="600"
+          @input="close"
+          persistent
+          scrollable>
             <v-card class="container_body">
                 <v-toolbar class="container_header" flat>
                     <v-spacer></v-spacer>
@@ -111,23 +111,23 @@
                             </label>
                         </v-row>
 
-                      <v-row align="center" justify="center">
-                        <label class="recent-label">
-                          Balance USDC: <b>{{ balances.usdc }}</b>
-                        </label>
-                      </v-row>
+                        <v-row align="center" justify="center">
+                            <label class="recent-label">
+                                Balance USDC: <b>{{ balances.usdc }}</b>
+                            </label>
+                        </v-row>
 
-                      <v-row align="center" justify="center">
-                        <label class="recent-label">
-                          Balance StaticUSD+: <b>{{ balances.staticUsdPlus }}</b>
-                        </label>
-                      </v-row>
+                        <v-row align="center" justify="center">
+                            <label class="recent-label">
+                                Balance StaticUSD+: <b>{{ balances.staticUsdPlus }}</b>
+                            </label>
+                        </v-row>
 
-                      <v-row align="center" justify="center">
-                        <label class="recent-label">
-                          Balance Pool LP: <b>{{ balances.lpToken }}</b>
-                        </label>
-                      </v-row>
+                        <v-row align="center" justify="center">
+                            <label class="recent-label">
+                                Balance Pool LP: <b>{{ balances.lpToken }}</b>
+                            </label>
+                        </v-row>
 
                         <v-row class="row mt-5">
                             <v-col cols="10">
@@ -218,34 +218,34 @@ export default {
     components: {},
 
     data: () => ({
-      amountUsdc: null,
-      amountUsdPlus: null,
-      showProcessDialog: false,
+        amountUsdc: null,
+        amountUsdPlus: null,
+        showProcessDialog: false,
     }),
 
     computed: {
-        ...mapGetters('linearPoolFeedingUnstake', [ 'balances', 'steps' ]
+        ...mapGetters('linearPoolFeedingUnstake', ['balances', 'steps']
         ),
 
     },
 
-  created() {
+    created() {
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    console.log('Provider: ' + provider.connection.url);
-    provider.send("eth_requestAccounts", []).then(value => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+        console.log('Provider: ' + provider.connection.url);
+        provider.send("eth_requestAccounts", []).then(value => {
 
-      let signer = provider.getSigner();
-      this.updateBalances(signer);
-    });
+            let signer = provider.getSigner();
+            this.updateBalances(signer);
+        });
 
-  },
+    },
 
-  methods: {
-        ...mapActions('linearPoolFeedingUnstake', [ 'startProcess', 'updateBalances']),
+    methods: {
+        ...mapActions('linearPoolFeedingUnstake', ['startProcess', 'updateBalances']),
         ...mapMutations('linearPoolFeedingUnstake', ['setAmountValueUsdPlus', 'setAmountValueUsdc']),
 
-        isNumber: function(evt) {
+        isNumber: function (evt) {
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;
 
@@ -259,7 +259,6 @@ export default {
                 }
             }
         },
-
 
 
         start() {

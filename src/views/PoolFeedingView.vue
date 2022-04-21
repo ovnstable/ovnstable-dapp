@@ -43,6 +43,7 @@
                     <LinearPoolFeedingUnstake v-if="tab === 2"/>
                     <LinearPoolDai v-if="tab === 3"/>
                     <LinearPoolUsdt v-if="tab === 4"/>
+                    <StablePoolFeeding v-if="tab === 5"/>
                 </v-row>
             </v-col>
         </v-row>

@@ -4,29 +4,29 @@
             <v-card flat class="main-card">
                 <v-card-text>
 
-                  <v-row  justify="start">
-                    <label class="recent-label">
-                      Balance DAI: <b>{{ balances.dai }}</b>
-                    </label>
-                  </v-row>
+                    <v-row justify="start">
+                        <label class="recent-label">
+                            Balance DAI: <b>{{ balances.dai }}</b>
+                        </label>
+                    </v-row>
 
-                  <v-row justify="start">
-                    <label class="recent-label">
-                      Balance aDAI: <b>{{ balances.aDai }}</b>
-                    </label>
-                  </v-row>
+                    <v-row justify="start">
+                        <label class="recent-label">
+                            Balance aDAI: <b>{{ balances.aDai }}</b>
+                        </label>
+                    </v-row>
 
-                  <v-row justify="start">
-                    <label class="recent-label">
-                      Balance Static DAI: <b>{{ balances.staticDai }}</b>
-                    </label>
-                  </v-row>
+                    <v-row justify="start">
+                        <label class="recent-label">
+                            Balance Static DAI: <b>{{ balances.staticDai }}</b>
+                        </label>
+                    </v-row>
 
-                  <v-row justify="start">
-                    <label class="recent-label">
-                      Balance Pool LP: <b>{{ balances.lpToken }}</b>
-                    </label>
-                  </v-row>
+                    <v-row justify="start">
+                        <label class="recent-label">
+                            Balance Pool LP: <b>{{ balances.lpToken }}</b>
+                        </label>
+                    </v-row>
                     <v-row>
                         <v-col>
                             <v-row>
@@ -48,30 +48,28 @@
                         </v-col>
 
 
-                      <v-col>
-                        <v-row>
-                          <label class="title-row-label ml-5 mt-3">Amount aDAI</label>
-                        </v-row>
-                        <v-row align="center">
-                          <v-text-field placeholder="0.00"
-                                        @keypress="isNumber($event)"
-                                        flat
-                                        solo
-                                        class="ml-2 field-sum"
-                                        hide-details
-                                        dark
-                                        background-color="transparent"
-                                        v-model="amountADai">
-                          </v-text-field>
-                          <v-spacer></v-spacer>
-                        </v-row>
-                      </v-col>
+                        <v-col>
+                            <v-row>
+                                <label class="title-row-label ml-5 mt-3">Amount aDAI</label>
+                            </v-row>
+                            <v-row align="center">
+                                <v-text-field placeholder="0.00"
+                                              @keypress="isNumber($event)"
+                                              flat
+                                              solo
+                                              class="ml-2 field-sum"
+                                              hide-details
+                                              dark
+                                              background-color="transparent"
+                                              v-model="amountADai">
+                                </v-text-field>
+                                <v-spacer></v-spacer>
+                            </v-row>
+                        </v-col>
                     </v-row>
                 </v-card-text>
             </v-card>
         </v-row>
-
-
 
 
         <v-row class="main-btn-row pt-2" justify="center">
@@ -86,11 +84,11 @@
         </v-row>
 
         <v-dialog
-                :value="showProcessDialog"
-                :width="600"
-                @input="close"
-                persistent
-                scrollable>
+          :value="showProcessDialog"
+          :width="600"
+          @input="close"
+          persistent
+          scrollable>
             <v-card class="container_body">
                 <v-toolbar class="container_header" flat>
                     <v-spacer></v-spacer>
@@ -114,23 +112,23 @@
                             </label>
                         </v-row>
 
-                      <v-row align="center" justify="center">
-                        <label class="recent-label">
-                          Balance aDAI: <b>{{ balances.aDai }}</b>
-                        </label>
-                      </v-row>
+                        <v-row align="center" justify="center">
+                            <label class="recent-label">
+                                Balance aDAI: <b>{{ balances.aDai }}</b>
+                            </label>
+                        </v-row>
 
-                      <v-row align="center" justify="center">
-                        <label class="recent-label">
-                          Balance StaticADai: <b>{{ balances.staticADai }}</b>
-                        </label>
-                      </v-row>
+                        <v-row align="center" justify="center">
+                            <label class="recent-label">
+                                Balance StaticADai: <b>{{ balances.staticADai }}</b>
+                            </label>
+                        </v-row>
 
-                      <v-row align="center" justify="center">
-                        <label class="recent-label">
-                          Balance Pool LP: <b>{{ balances.lpToken }}</b>
-                        </label>
-                      </v-row>
+                        <v-row align="center" justify="center">
+                            <label class="recent-label">
+                                Balance Pool LP: <b>{{ balances.lpToken }}</b>
+                            </label>
+                        </v-row>
 
                         <v-row class="row mt-5">
                             <v-col cols="10">
@@ -237,28 +235,28 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('linearPoolDAI', [ 'balances', "steps", ]
+        ...mapGetters('linearPoolDAI', ['balances', "steps",]
         ),
 
     },
 
-  created() {
+    created() {
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    console.log('Provider: ' + provider.connection.url);
-    provider.send("eth_requestAccounts", []).then(value => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+        console.log('Provider: ' + provider.connection.url);
+        provider.send("eth_requestAccounts", []).then(value => {
 
-      let signer = provider.getSigner();
-      this.updateBalances(signer);
-    });
+            let signer = provider.getSigner();
+            this.updateBalances(signer);
+        });
 
-  },
+    },
 
-  methods: {
-        ...mapActions('linearPoolDAI', [ 'startProcess', 'updateBalances']),
+    methods: {
+        ...mapActions('linearPoolDAI', ['startProcess', 'updateBalances']),
         ...mapMutations('linearPoolDAI', ['setAmountValueDai', 'setAmountValueADai']),
 
-        isNumber: function(evt) {
+        isNumber: function (evt) {
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;
 

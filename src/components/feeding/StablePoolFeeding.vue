@@ -3,10 +3,35 @@
         <v-row class="pt-5">
             <v-card flat class="main-card">
                 <v-card-text>
+                    <v-row align="center" justify="center">
+                        <label class="recent-label">
+                            Balance LP USDC/USD+: <b>{{ balances.lpUsdPlus }}</b>
+                        </label>
+                    </v-row>
+
+                    <v-row align="center" justify="center">
+                        <label class="recent-label">
+                            Balance LP DAI/amDAI: <b>{{ balances.lpDai }}</b>
+                        </label>
+                    </v-row>
+
+                    <v-row align="center" justify="center">
+                        <label class="recent-label">
+                            Balance LP USDT/amUSDT: <b>{{ balances.lpUsdt }}</b>
+                        </label>
+                    </v-row>
+
+                    <v-row align="center" justify="center">
+                        <label class="recent-label">
+                            Balance Stable pool LP: <b>{{ balances.lpToken }}</b>
+                        </label>
+                    </v-row>
+
                     <v-row>
                         <v-col>
+
                             <v-row>
-                                <label class="title-row-label ml-5 mt-3">LP Amount</label>
+                                <label class="title-row-label ml-5 mt-3">LP USDC/USD+</label>
                             </v-row>
                             <v-row align="center">
                                 <v-text-field placeholder="0.00"
@@ -17,7 +42,7 @@
                                               hide-details
                                               dark
                                               background-color="transparent"
-                                              v-model="amountLP">
+                                              v-model="amountUsdPlus">
                                 </v-text-field>
                                 <v-spacer></v-spacer>
                                 <div class="mr-8">
@@ -29,7 +54,7 @@
                     <v-row>
                         <v-col>
                             <v-row>
-                                <label class="title-row-label ml-5 mt-3">USDT Amount</label>
+                                <label class="title-row-label ml-5 mt-3">LP USDT/amUSDT</label>
                             </v-row>
                             <v-row align="center">
                                 <v-text-field placeholder="0.00"
@@ -52,7 +77,7 @@
                     <v-row>
                         <v-col>
                             <v-row>
-                                <label class="title-row-label ml-5 mt-3">DAI Amount</label>
+                                <label class="title-row-label ml-5 mt-3">LP DAI/amDAI</label>
                             </v-row>
                             <v-row align="center">
                                 <v-text-field placeholder="0.00"
@@ -80,7 +105,7 @@
             <div style="width: 100%;">
                 <v-btn dark
                        height="56"
-                       v-if="(amountLP && (amountLP > 0)) && (amountUsdt && (amountUsdt > 0)) && (amountDai && (amountDai > 0))"
+                       v-if="(amountUsdPlus && (amountUsdPlus > 0)) && (amountUsdt && (amountUsdt > 0)) && (amountDai && (amountDai > 0))"
                        class='buy enabled-buy'
                        @click="start">
                     Start
@@ -96,18 +121,18 @@
         </v-row>
 
         <v-dialog
-                :value="showProcessDialog"
-                :width="600"
-                @input="close"
-                persistent
-                scrollable>
+          :value="showProcessDialog"
+          :width="600"
+          @input="close"
+          persistent
+          scrollable>
             <v-card class="container_body">
                 <v-toolbar class="container_header" flat>
                     <v-spacer></v-spacer>
                     <v-toolbar-title class="title">
                         Feeding stable pool&nbsp;&nbsp;
                     </v-toolbar-title>
-                    <v-progress-circular v-if="!endStep"
+                    <v-progress-circular v-if="!steps.endStep"
                                          width="2"
                                          size="20"
                                          color="white"
@@ -120,9 +145,25 @@
                     <v-col class="main-content-col">
                         <v-row align="center" justify="center">
                             <label class="recent-label">
-                                Amount: LP: <b>{{ $utils.formatMoney(amountLP, 2) }}</b>,
-                                USDT: <b>{{ $utils.formatMoney(amountUsdt, 2) }}</b>,
-                                DAI: <b>{{ $utils.formatMoney(amountDai, 2) }}</b>
+                                Balance LP USDC/USD+: <b>{{ balances.lpUsdPlus }}</b>
+                            </label>
+                        </v-row>
+
+                        <v-row align="center" justify="center">
+                            <label class="recent-label">
+                                Balance LP DAI/amDAI: <b>{{ balances.lpDai }}</b>
+                            </label>
+                        </v-row>
+
+                        <v-row align="center" justify="center">
+                            <label class="recent-label">
+                                Balance LP USDT/amUSDT: <b>{{ balances.lpUsdt }}</b>
+                            </label>
+                        </v-row>
+
+                        <v-row align="center" justify="center">
+                            <label class="recent-label">
+                                Balance Stable pool LP: <b>{{ balances.lpToken }}</b>
                             </label>
                         </v-row>
 
@@ -131,17 +172,17 @@
                                 <div class="step-label">Preparing</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="prepareStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.prepareStep">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row mt-5">
                             <v-col cols="10">
-                                <div class="step-label">Approving LP</div>
+                                <div class="step-label">Approving UsdPlus</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="approveLpStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.approveUsdPlus">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
@@ -151,7 +192,7 @@
                                 <div class="step-label">Approving USDT</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="approveUsdtStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.approveUsdt">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
@@ -161,7 +202,7 @@
                                 <div class="step-label">Approving DAI</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="approveDaiStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.approveDai">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
@@ -171,7 +212,7 @@
                                 <div class="step-label">Joining pool</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="joinPoolStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.joinPool">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
@@ -181,7 +222,7 @@
                                 <div class="step-label">Ending process</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="endStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.endStep">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
@@ -190,7 +231,7 @@
                             <v-col>
                                 <v-btn dark
                                        height="40"
-                                       v-if="endStep"
+                                       v-if="steps.endStep"
                                        class='buy enabled-buy'
                                        @click="close">
                                     Close
@@ -206,8 +247,9 @@
 
 <script>
 
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import ItemSelector from "@/components/common/ItemSelector";
+import {ethers} from "ethers";
 
 export default {
     name: "StablePoolFeeding",
@@ -215,7 +257,7 @@ export default {
     components: {ItemSelector},
 
     data: () => ({
-        amountLP: null,
+        amountUsdPlus: null,
         amountUsdt: null,
         amountDai: null,
         showProcessDialog: false,
@@ -248,19 +290,27 @@ export default {
         this.lpCurrency = this.currencies[0];
         this.usdtCurrency = this.currencies[1];
         this.daiCurrency = this.currencies[2];
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+        console.log('Provider: ' + provider.connection.url);
+        provider.send("eth_requestAccounts", []).then(value => {
+
+            let signer = provider.getSigner();
+            this.updateBalances(signer);
+        });
     },
 
+
     computed: {
-        ...mapGetters('stablePoolFeeding', [
-                'prepareStep', 'approveLpStep', 'approveUsdtStep', 'approveDaiStep', 'joinPoolStep', 'endStep'
-            ]
+        ...mapGetters('stablePoolFeeding', ['balances', 'steps']
         ),
     },
 
     methods: {
-        ...mapActions('stablePoolFeeding', ['setUsdtAmountValue', 'setDaiAmountValue', 'setLpAmountValue', 'startProcess']),
+        ...mapActions('stablePoolFeeding', ['startProcess', 'updateBalances']),
+        ...mapMutations('stablePoolFeeding', ['setAmountValueLpDai', 'setAmountValueLpUsdt', 'setAmountValueLpUsdPlus']),
 
-        isNumber: function(evt) {
+        isNumber: function (evt) {
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;
 
@@ -278,16 +328,16 @@ export default {
         start() {
             this.showProcessDialog = true;
 
-            this.setUsdtAmountValue(this.amountUsdt);
-            this.setDaiAmountValue(this.amountDai);
-            this.setLpAmountValue(this.amountLP);
+            this.setAmountValueLpDai(this.amountUsdt);
+            this.setAmountValueLpUsdt(this.amountDai);
+            this.setAmountValueLpUsdPlus(this.amountUsdPlus);
             this.startProcess();
         },
 
         close() {
             this.amountUsdt = null;
             this.amountDai = null;
-            this.amountLP = null;
+            this.amountUsdPlus = null;
             this.showProcessDialog = false;
 
             this.$emit('input', false);

@@ -97,7 +97,7 @@
                     <v-toolbar-title class="title">
                         Feeding linear pool&nbsp;&nbsp;
                     </v-toolbar-title>
-                    <v-progress-circular v-if="!endStep"
+                    <v-progress-circular v-if="!steps.endStep"
                                          width="2"
                                          size="20"
                                          color="white"
@@ -137,67 +137,57 @@
                                 <div class="step-label">Preparing</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="prepareStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.prepareStep">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Approving USD+</div>
+                                <div class="step-label">Approving DAI</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="approveUsdPlusStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.approveDai">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Depositing static USD+</div>
+                                <div class="step-label">Swapping DAI to Static</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="depositStaticStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.swapDaiToStatic">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Approving USDC</div>
+                                <div class="step-label">Swap static to LP</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="approveUsdcStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.swapStaticToLp">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Swapping USDC</div>
+                                <div class="step-label">Approve DAi to LP</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="swappingFirstStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.approveDaiLp">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Approving static USD+</div>
+                                <div class="step-label">Swap DAI to LP</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="approveStaticUsdPlusStep">mdi-check</v-icon>
-                                <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
-                            </v-col>
-                        </v-row>
-
-                        <v-row class="row">
-                            <v-col cols="10">
-                                <div class="step-label">Swapping Static USD+</div>
-                            </v-col>
-                            <v-col cols="2">
-                                <v-icon color="green" v-if="swappingSecondStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.swapDaiToLp">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
@@ -207,7 +197,7 @@
                                 <div class="step-label">Ending process</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="endStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.endStep">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
@@ -216,7 +206,7 @@
                             <v-col>
                                 <v-btn dark
                                        height="40"
-                                       v-if="endStep"
+                                       v-if="steps.endStep"
                                        class='buy enabled-buy'
                                        @click="close">
                                     Close
@@ -247,10 +237,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('linearPoolDAI', [ 'balances',
-                'prepareStep', 'approveUsdPlusStep', 'depositStaticStep', 'approveUsdcStep',
-                'swappingFirstStep', 'approveStaticUsdPlusStep', 'swappingSecondStep', 'endStep'
-            ]
+        ...mapGetters('linearPoolDAI', [ 'balances', "steps", ]
         ),
 
     },

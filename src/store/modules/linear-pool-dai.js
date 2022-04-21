@@ -6,6 +6,7 @@ import Pool from "../../contracts/abi/ERC4626LinearPool.json";
 import USDPlus from "../../contracts/abi/UsdPlusToken.json";
 import Vault from "../../contracts/abi/VaultBalancer.json";
 import StaticUsdPlus from "../../contracts/abi/StaticUsdPlusToken.json";
+import StaticATokenLM from "../../contracts/abi/StaticATokenLM.json";
 import ERC20 from "../../contracts/abi/ERC20.json";
 
 const state = {
@@ -16,10 +17,11 @@ const state = {
 
     steps: {
         prepareStep: false,
-        approveLp: false,
-        swapLpToUsdc: false,
-        swapLpToStaticUsdPlus: false,
-        convertStatioUsdPlusToUsdPlus: false,
+        approveDai: false,
+        swapDaiToStatic: false,
+        swapStaticToLp: false,
+        approveDaiLp: false,
+        swapDaiToLp: false,
         endStep: false,
     },
 
@@ -58,10 +60,11 @@ const actions = {
 
         let steps = {
             prepareStep: false,
-            approveLp: false,
-            swapLpToUsdc: false,
-            swapLpToStaticUsdPlus: false,
-            convertStatioUsdPlusToUsdPlus: false,
+            approveDai: false,
+            swapDaiToStatic: false,
+            swapStaticToLp: false,
+            approveDaiLp: false,
+            swapDaiToLp: false,
             endStep: false,
         }
 
@@ -76,7 +79,7 @@ const actions = {
         let account = await signer.getAddress();
 
         let dai = await new ethers.Contract("0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", ERC20, signer);
-        let staticADai = await new ethers.Contract("0xa84B5B903f62ea61dfAac3f88123cC6B21Bb81ab", ERC20, signer);
+        let staticADai = await new ethers.Contract("0xa84B5B903f62ea61dfAac3f88123cC6B21Bb81ab", StaticATokenLM, signer);
         let aDAI = await new ethers.Contract("0x27F8D03b3a2196956ED754baDc28D73be8830A6e", ERC20, signer);
         let pool = await new ethers.Contract(poolAddress, Pool , signer);
 
@@ -118,84 +121,83 @@ const actions = {
 
 
         let dai = await new ethers.Contract("0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", ERC20, signer);
-        let staticADai = await new ethers.Contract("0xa84B5B903f62ea61dfAac3f88123cC6B21Bb81ab", ERC20, signer);
+        let staticADai = await new ethers.Contract("0xa84B5B903f62ea61dfAac3f88123cC6B21Bb81ab", StaticATokenLM, signer);
         let aDAI = await new ethers.Contract("0x27F8D03b3a2196956ED754baDc28D73be8830A6e", ERC20, signer);
         let pool = await new ethers.Contract(poolAddress, Pool , signer);
+        let vault = await new ethers.Contract("0xba12222222228d8ba445958a75a0704d566bf2c8" ,Vault , signer);
 
         await dispatch('updateBalances', signer);
 
-        console.log('Input: usdPlus ' + getters.amountValueUsdPlus);
-        console.log('Input: USDC ' + getters.amountValueUsdc);
+        console.log('Input: DAI ' + getters.amountValueDai);
+        console.log('Input: aDAI ' + getters.amountValueADai);
 
-        let amountUsdc = new BN(10).pow(new BN(6)).muln(Number.parseInt(getters.amountValueUsdc)).toString();
-        let amountUsdPlus = new BN(10).pow(new BN(6)).muln(Number.parseInt(getters.amountValueUsdPlus)).toString();
-
-        await (await pool.approve(vault.address, await pool.balanceOf(account))).wait();
+        let amountDai = new BN(10).pow(new BN(18)).muln(Number.parseInt(getters.amountValueDai)).toString();
+        let amountADai = new BN(10).pow(new BN(18)).muln(Number.parseInt(getters.amountValueADai)).toString();
 
 
         let steps = getters.steps;
-        steps.approveLp = true;
+        steps.prepareStep = true;
         commit('setSteps', steps);
 
-        await (await vault.swap(
-            {
-                poolId: await pool.getPoolId(),
-                kind: 1,
-                assetIn: poolAddress,
-                assetOut: usdc.address,
-                amount: amountUsdc ,
-                userData: "0x",
-            },
-            {
-                sender: account,
-                fromInternalBalance: false,
-                recipient: account,
-                toInternalBalance: false,
-            },
-            new BN(10).pow(new BN(27)).toString(),
-            new BN(10).pow(new BN(27)).toString()
-        )).wait();
+        await (await dai.approve(staticADai.address, amountADai)).wait();
 
-
-        steps.swapLpToUsdc = true;
+        steps.approveDai = true;
         commit('setSteps', steps);
+
+        await (await staticADai.deposit(account, amountADai, 0, true)).wait();
+
         await dispatch('updateBalances', signer);
 
+        steps.swapDaiToStatic = true;
+        commit('setSteps', steps);
 
-        await(await vault.swap(
-            {
-                poolId: await pool.getPoolId(),
-                kind: 1,
-                assetIn: poolAddress,
-                assetOut: staticUsdPlus.address,
-                amount: amountUsdPlus,
-                userData: "0x",
-            },
-            {
-                sender: account,
-                fromInternalBalance: false,
-                recipient: account,
-                toInternalBalance: false,
-            },
-            new BN(10).pow(new BN(27)).toString(),
-            new BN(10).pow(new BN(27)).toString()
-        )).wait();
+        await swap(staticADai, pool, await staticADai.balanceOf(account), await pool.getPoolId());
 
-        steps.swapLpToStaticUsdPlus = true;
+        steps.swapStaticToLp = true;
         commit('setSteps', steps);
 
         await dispatch('updateBalances', signer);
 
-        (await staticUsdPlus.redeem(await staticUsdPlus.balanceOf(account), account, account)).wait();
+        await (await dai.approve(pool.address, amountDai)).wait();
 
+        steps.approveDaiLp = true;
+        commit('setSteps', steps);
 
-        steps.convertStatioUsdPlusToUsdPlus = true;
+        await swap(dai, pool, amountDai, await pool.getPoolId());
+
+        steps.swapDaiToLp = true;
         commit('setSteps', steps);
 
         await dispatch('updateBalances', signer);
 
         steps.endStep = true;
         commit('setSteps', steps);
+
+        async function swap(tokenIn, tokenOut, amount, poolId) {
+
+            await (await tokenIn.approve(vault.address, amount)).wait();
+
+            await (await vault.swap(
+                {
+                    poolId: poolId,
+                    kind: 0,
+                    assetIn: tokenIn.address,
+                    assetOut: tokenOut.address,
+                    amount: amount,
+                    userData: "0x",
+                },
+                {
+                    sender: account,
+                    fromInternalBalance: false,
+                    recipient: account,
+                    toInternalBalance: false,
+                },
+                0,
+                1000000000000
+            )).wait();
+        }
+
+
     }
 };
 

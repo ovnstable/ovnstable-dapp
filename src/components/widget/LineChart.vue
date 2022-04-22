@@ -87,7 +87,7 @@ export default {
 
             switch (zoom) {
                 case "week":
-                    this.setSlice(-7);
+                    this.setSlice(-8);
                     break;
                 case "month":
                     this.setSlice(-30)

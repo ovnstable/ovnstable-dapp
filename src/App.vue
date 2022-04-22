@@ -1,6 +1,8 @@
 <template>
     <v-app id="app">
         <div id="rubic-widget-root" class="rubic-not-show"></div>
+        <v-btn id="rubic-widget-close" class="rubic-not-show" icon @click="closeRubicWidget"><v-icon>mdi-close</v-icon></v-btn>
+
         <router-view></router-view>
     </v-app>
 </template>
@@ -22,6 +24,28 @@ export default {
     },
 
     methods: {
+        closeRubicWidget() {
+            if (document.getElementById("rubic-widget-root").classList.contains("rubic-show")) {
+
+                document.getElementById("rubic-widget-root").classList.remove("rubic-show");
+                document.getElementById("rubic-widget-root").classList.add("rubic-not-show");
+
+                document.getElementById("rubic-widget-close").classList.remove("rubic-show");
+                document.getElementById("rubic-widget-close").classList.add("rubic-not-show");
+
+                document.getElementById("bridge-button").classList.remove("rubic-not-show");
+                document.getElementById("bridge-button").classList.add("rubic-show");
+            } else {
+                document.getElementById("rubic-widget-root").classList.remove("rubic-not-show");
+                document.getElementById("rubic-widget-root").classList.add("rubic-show");
+
+                document.getElementById("rubic-widget-close").classList.remove("rubic-not-show");
+                document.getElementById("rubic-widget-close").classList.add("rubic-show");
+
+                document.getElementById("bridge-button").classList.remove("rubic-show");
+                document.getElementById("bridge-button").classList.add("rubic-not-show");
+            }
+        },
     }
 };
 </script>
@@ -29,6 +53,29 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,400;0,500;0,600;0,700;0,800;0,900;1,300&display=swap');
+
+/* mobile */
+@media all and (min-width:0px) and (max-width: 650px) {
+
+    #rubic-widget-close {
+        right: 64px !important;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width:650px) and (max-width: 1400px) {
+
+    #rubic-widget-close {
+        right: 82px !important;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+
+    #rubic-widget-close {
+        right: 90px !important;
+    }
+}
 
 /* main variables */
 :root {
@@ -153,5 +200,12 @@ html {
     z-index: 100 !important;
     right: 2% !important;
     top: 100px !important;
+}
+
+#rubic-widget-close {
+    color: white;
+    position: absolute !important;
+    z-index: 110 !important;
+    top: 118px !important;
 }
 </style>

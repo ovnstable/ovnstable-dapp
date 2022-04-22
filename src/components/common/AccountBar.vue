@@ -4,7 +4,7 @@
             <v-col>
                 <v-row justify="end" align="center">
 
-                    <a class="bridge-link" @click="openBridge">Bridge</a>
+                    <a id="bridge-button" class="bridge-link rubic-show" @click="openBridge">Bridge</a>
 
                     <v-chip outlined dark class="balance-chip" @click="showAccountProfile">
                         <strong>{{ $utils.formatMoney(balance.usdPlus, 2) }}</strong>&nbsp;USD+
@@ -123,18 +123,35 @@ export default {
 
         openBridge() {
             if (document.getElementById("rubic-widget-root").classList.contains("rubic-show")) {
+
                 document.getElementById("rubic-widget-root").classList.remove("rubic-show");
                 document.getElementById("rubic-widget-root").classList.add("rubic-not-show");
+
+                document.getElementById("rubic-widget-close").classList.remove("rubic-show");
+                document.getElementById("rubic-widget-close").classList.add("rubic-not-show");
+
+                document.getElementById("bridge-button").classList.remove("rubic-not-show");
+                document.getElementById("bridge-button").classList.add("rubic-show");
             } else {
                 document.getElementById("rubic-widget-root").classList.remove("rubic-not-show");
                 document.getElementById("rubic-widget-root").classList.add("rubic-show");
+
+                document.getElementById("rubic-widget-close").classList.remove("rubic-not-show");
+                document.getElementById("rubic-widget-close").classList.add("rubic-show");
+
+                document.getElementById("bridge-button").classList.remove("rubic-show");
+                document.getElementById("bridge-button").classList.add("rubic-not-show");
             }
         },
 
         hideRubic() {
             if (document.getElementById("rubic-widget-root").classList.contains("rubic-show")) {
+
                 document.getElementById("rubic-widget-root").classList.remove("rubic-show");
                 document.getElementById("rubic-widget-root").classList.add("rubic-not-show");
+
+                document.getElementById("rubic-widget-close").classList.remove("rubic-show");
+                document.getElementById("rubic-widget-close").classList.add("rubic-not-show");
             }
         },
 

@@ -52,7 +52,6 @@
 
 <script>
 
-import StatsWidget from "../components/common/StatsWidget";
 import {mapGetters} from "vuex";
 import HistoryTotalDataTable from "@/components/dashboard/HistoryTotalDataTable";
 import CurrentTotalDataTable from "@/components/dashboard/CurrentTotalDataTable";
@@ -63,7 +62,6 @@ export default {
     components: {
         CurrentTotalDataTable,
         HistoryTotalDataTable,
-        StatsWidget
     },
 
     data: () => ({

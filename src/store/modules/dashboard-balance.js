@@ -70,6 +70,7 @@ const actions = {
                 dailyProfit: item[3] === 'PAYOUT' ? item[5] : null,
                 fee: item[7],
                 apy: item[8],
+                duration: item[9],
             }
         });
 
@@ -107,12 +108,14 @@ const actions = {
         })
 
         let productResult = 1.0;
+        let durationSum = 0.0;
 
         for (let i = 0; i < days; i++) {
             productResult = productResult * (1.0 + apyDataList[i].changePercent);
+            durationSum = durationSum + apyDataList[i].duration;
         }
 
-        let apy = Math.pow(productResult, 365.0 / days) - 1.0;
+        let apy = Math.pow(productResult, 365.0 / (durationSum / 24.0)) - 1.0;
 
         if (apy) {
             commit('setApy', apy * 100.0);
@@ -153,12 +156,14 @@ const actions = {
         })
 
         let productResult = 1.0;
+        let durationSum = 0.0;
 
         for (let i = 0; i < days; i++) {
             productResult = productResult * (1.0 + apyDataList[i].changePercent);
+            durationSum = durationSum + apyDataList[i].duration;
         }
 
-        let apy = Math.pow(productResult, 365.0 / days) - 1.0;
+        let apy = Math.pow(productResult, 365.0 / (durationSum / 24.0)) - 1.0;
 
         if (apy) {
             commit('setApy', apy * 100.0);

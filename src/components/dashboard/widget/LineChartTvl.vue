@@ -5,8 +5,14 @@
                 <v-row justify="start">
                     <label class="chart-title">USD+ TVL</label>
                 </v-row>
+
+                <v-row justify="start">
+                    <label class="mobile-info-title">
+                        ${{ $utils.formatMoneyComma(totalUsdPlusValue, 2) }}
+                    </label>
+                </v-row>
             </v-col>
-            <v-col>
+            <v-col class="add-chart-info-col">
                 <v-row justify="end">
                     <label class="chart-title-apy">
                         ${{ $utils.formatMoneyComma(totalUsdPlusValue, 2) }}
@@ -182,7 +188,7 @@ export default {
 
                 chart: {
                     type: 'area',
-                    height: 230,
+                    height: this.isMobile ? 100 : 230,
 
                     sparkline: {
                         enabled: false,
@@ -209,6 +215,7 @@ export default {
                         label: {
                             show: false,
                         },
+                        width: this.isMobile ? '0%' : '100%',
                     }]
                 },
 
@@ -222,8 +229,8 @@ export default {
 
                 stroke: {
                     curve: 'straight',
-                    width: 2,
-                    colors: ["#51FF00"],
+                    width: this.isMobile ? 1 : 2,
+                    colors: this.isMobile ? ["#23DD00"] : ["#51FF00"],
                 },
 
                 xaxis: {
@@ -261,7 +268,7 @@ export default {
                     horizontalAlign: 'left'
                 },
 
-                colors: ['#68D55A'],
+                colors: this.isMobile ? ['#181E25'] : ['#68D55A'],
 
                 theme: {
                     mode: 'dark',
@@ -291,22 +298,99 @@ export default {
 <style>
 
 /* mobile */
-@media only screen and (max-width: 650px) {
-    .yaxis-label {
-        font-size: 12px !important;
-        line-height: 12px !important;
-        font-weight: 400;
-        fill: rgba(255, 255, 255, 0.6) !important;
+@media only screen and (max-width: 1400px) {
+
+    .chart-title {
+        margin-left: 4%;
+        margin-top: 30px !important;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 16px;
+        line-height: 24px;
+        color: #FFFFFF;
+    }
+
+    .mobile-info-title {
+        margin-top: 5px !important;
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 28px;
+        color: #FFFFFF;
+        z-index: 2 !important;
+    }
+
+    .add-chart-info-col, .zoom-row {
+        display: none !important;
+    }
+
+    .chart-row {
+        margin-bottom: -10px !important;
     }
 }
 
-@media only screen and (min-width: 650px) {
-    .yaxis-label {
-        font-size: 12px !important;
-        line-height: 12px !important;
-        font-weight: 400;
-        fill: rgba(255, 255, 255, 0.6) !important;
+@media only screen and (min-width: 1400px) {
+
+    .chart-title {
+        margin-left: 4%;
+        margin-top: 30px !important;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 24px;
+        line-height: 36px;
+        color: #FFFFFF;
     }
+
+    .chart-title-apy {
+        margin-right: 4%;
+        margin-top: 30px !important;
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 34px;
+        line-height: 42px;
+        color: #FFFFFF;
+    }
+
+    .chart-sub-title-apy {
+        margin-right: 4%;
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+        color: #707A8B;
+    }
+
+    .mobile-info-title {
+        display: none !important;
+    }
+
+    .zoom-row {
+        height: 20px !important;
+    }
+
+    .chart-header-row {
+        height: 150px !important;
+    }
+
+    .chart-row {
+        height: 250px !important;
+    }
+
+    .apy-chart-container {
+        height: 420px !important;
+    }
+}
+
+.yaxis-label {
+    font-size: 12px !important;
+    line-height: 12px !important;
+    font-weight: 400;
+    fill: rgba(255, 255, 255, 0.6) !important;
 }
 
 #line-chart-tvl {
@@ -333,57 +417,9 @@ export default {
     display: none !important;
 }
 
-.apy-chart-container {
-    height: 420px !important;
-}
-
-.chart-header-row {
-    height: 150px !important;
-}
-
-.chart-row {
-    height: 250px !important;
-}
-
-.zoom-row {
-    height: 20px !important;
-}
-
 .chart-header-row, .chart-row, .zoom-row {
     margin-left: 4%;
     margin-right: 4%;
-}
-
-.chart-title {
-    margin-left: 4%;
-    margin-top: 30px !important;
-    font-family: 'Raleway', sans-serif;
-    font-style: normal;
-    font-weight: 800;
-    font-size: 24px;
-    line-height: 36px;
-    color: #FFFFFF;
-}
-
-.chart-title-apy {
-    margin-right: 4%;
-    margin-top: 30px !important;
-    font-family: 'Lato', sans-serif;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 34px;
-    line-height: 42px;
-    color: #FFFFFF;
-}
-
-.chart-sub-title-apy {
-    margin-right: 4%;
-    font-family: 'Lato', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 28px;
-    color: #707A8B;
 }
 
 </style>

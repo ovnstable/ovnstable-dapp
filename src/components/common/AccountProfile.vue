@@ -38,14 +38,14 @@
                         </label>
                     </v-row>
 
-                    <v-row align="center" class="account-info-row account-num-row">
+                    <v-row align="center" class="account-info-row account-num-row mt-6">
                         <div class="avatar-img">
                             <v-img :src="(ens && ens.avatar) ? ens.avatar : require('@/assets/network/polygon.svg')"/>
                         </div>
                         <label class="account-label ml-5">{{ accountShort }}</label>
                     </v-row>
 
-                    <v-row align="center" class="account-info-row actions-row">
+                    <v-row align="center" class="account-info-row actions-row mt-6">
                         <a class="view-explorer-btn" @click="viewInExplorer">
                             <v-img class="icon-img" :src="require('@/assets/icon/out.svg')"/>
                             <label class="ml-1 view-explorer-label">View on explorer</label>
@@ -70,7 +70,7 @@
                         </a>
                     </v-row>
 
-                    <v-row class="recent-tr-row mb-3" align="center">
+<!--                    <v-row class="recent-tr-row mb-3" align="center">
                         <label class="recent-label">
                             Recent Transactions
                         </label>
@@ -94,7 +94,7 @@
                             <v-icon v-if="item.pending">mdi-progress-question</v-icon>
                             <v-icon color="green" v-else>mdi-check</v-icon>
                         </v-col>
-                    </v-row>
+                    </v-row>-->
                 </v-col>
             </v-card-text>
         </v-card>

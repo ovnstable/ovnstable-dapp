@@ -7,12 +7,15 @@
             scrollable>
         <v-card class="container_body">
             <v-toolbar class="container_header" flat>
-                <v-toolbar-title class="title">
-                    Account
-                </v-toolbar-title>
-                <v-btn icon class="ml-auto" @click="close" dark>
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
+                <v-row>
+                    <label class="title-modal ml-6">
+                        Account
+                    </label>
+                    <v-spacer></v-spacer>
+                    <v-btn icon class="ml-auto" @click="close" dark>
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-row>
             </v-toolbar>
 
             <v-card-text class="px-5 pt-5">

@@ -12,7 +12,7 @@
                     </v-btn>
 
                     <v-btn icon href="https://blog.overnight.fi/" target="_blank" class="footer-icon">
-                        <img width="24" height="24" :src="require('../assets/resource/medium.png')">
+                        <img width="24" height="24" :src="require('../assets/resource/medium.svg')">
                     </v-btn>
 
                     <v-btn icon href="https://twitter.com/ovnstable" target="_blank" class="footer-icon">
@@ -32,7 +32,7 @@
                     </v-btn>
                 </v-row>
 
-                <v-row justify="center" align="center" class="footer-beta-row">
+                <v-row justify="start" align="center" class="footer-beta-row">
                     <div class="info-img ml-3 mr-1">
                         <v-img :src="require('@/assets/icon/info.svg')"/>
                     </div>
@@ -116,7 +116,7 @@ export default {
 }
 
 .footer-beta-row {
-    background-color: var(--secondary) !important;
+    background-color: #3D4657 !important;
 }
 
 .footer-beta-label {

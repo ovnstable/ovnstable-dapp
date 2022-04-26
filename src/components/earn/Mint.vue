@@ -6,7 +6,7 @@
                     <v-row>
                         <v-col>
                             <v-row>
-                                <label class="title-row-label ml-5 mt-3">From</label>
+                                <label class="title-row-label ml-5 mt-1">From</label>
                             </v-row>
                             <v-row align="center">
                                 <v-text-field placeholder="0.00"
@@ -26,7 +26,7 @@
                                 </div>
                             </v-row>
                             <v-row>
-                                <label class="balance-label ml-5 mb-3">Balance: {{ maxResult }}</label>
+                                <label class="balance-label ml-5 mb-1">Balance: {{ maxResult }}</label>
                             </v-row>
                         </v-col>
                     </v-row>
@@ -37,9 +37,9 @@
         <v-row class="mb-2">
             <v-col>
                 <v-row justify="center" align="center">
-                    <button @click="showRedeemView">
-                        <v-icon class="swap-btn">mdi-swap-vertical</v-icon>
-                    </button>
+                    <v-btn @click="showRedeemView" class="swap-btn" icon>
+                        <img width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')">
+                    </v-btn>
                 </v-row>
             </v-col>
         </v-row>
@@ -50,7 +50,7 @@
                     <v-row>
                         <v-col>
                             <v-row>
-                                <label class="title-row-label ml-5 mt-3">To</label>
+                                <label class="title-row-label ml-5 mt-1">To</label>
                             </v-row>
                             <v-row align="center">
                                 <v-text-field placeholder="0.00"
@@ -69,7 +69,7 @@
                                 </div>
                             </v-row>
                             <v-row>
-                                <label class="balance-label ml-5 mb-3">Balance:
+                                <label class="balance-label ml-5 mb-1">Balance:
                                     {{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
                             </v-row>
                         </v-col>
@@ -78,11 +78,17 @@
             </v-card>
         </v-row>
 
+        <v-row class="main-btn-row mb-2" v-if="sum" align="center">
+            <label class="exchange-label ml-5">Exchange Rate</label>
+            <v-spacer></v-spacer>
+            <label class="exchange-label mr-5">1 USDC = 1 USD+ <img @click="showRedeemView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
+        </v-row>
+
         <v-row class="main-btn-row" justify="center">
             <div style="width: 96%;" v-if="!this.account">
                 <v-btn dark
                        height="56"
-                       class='buy enabled-buy'
+                       class='buy disabled-buy'
                        @click="connectWallet">
                     {{ buttonLabel }}
                 </v-btn>
@@ -116,12 +122,19 @@
                 persistent>
             <v-card class="container_body">
                 <v-toolbar class="container_header" flat>
-                    <v-toolbar-title class="title">
-                        Confirm Swap
-                    </v-toolbar-title>
-                    <v-btn icon class="ml-auto" @click="showConfirmSwapDialog = false" dark>
-                        <v-icon>mdi-close</v-icon>
-                    </v-btn>
+                    <v-row>
+                        <v-btn icon class="ml-auto" @click="showConfirmSwapDialog = false" dark>
+                            <v-icon>mdi-chevron-left</v-icon>
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <label class="title-modal">
+                            Confirm Swap
+                        </label>
+                        <v-spacer></v-spacer>
+                        <v-btn icon class="ml-auto" @click="showConfirmSwapDialog = false" dark>
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                    </v-row>
                 </v-toolbar>
 
                 <v-card-text class="px-5 pt-5">
@@ -290,7 +303,7 @@ export default {
         buttonLabel: function () {
 
             if (!this.account) {
-                return 'You need to connect to a wallet';
+                return 'Connect to a wallet';
             } else if (this.isBuy) {
                 if (this.usdcApproved) {
                     return 'Confirm Swap'
@@ -592,9 +605,9 @@ export default {
 
 .main-card {
     background: none !important;
-    width: 100%;
-    border: 1px solid #181E25;
-    border-radius: 16px;
+    width: 100% !important;
+    border: 1px solid #1D2029 !important;
+    border-radius: 16px !important;
 }
 
 .title-row-label {
@@ -606,20 +619,19 @@ export default {
 }
 
 .v-text-field >>> input {
-    font-size: 34px !important;
+    min-height: 42px !important;
+    max-height: 42px !important;
+    height: 42px !important;
+}
+
+.v-text-field >>> input, .v-text-field >>> label, .v-text-field >>> button {
+    font-family: 'Lato', sans-serif;
     font-style: normal !important;
-    font-weight: 300 !important;
-    min-height: 48px !important;
-    max-height: 48px !important;
-    height: 48px !important;
-}
-
-.v-text-field >>> label {
+    font-weight: 800 !important;
     font-size: 34px !important;
-}
+    line-height: 42px !important;
 
-.v-text-field >>> button {
-    font-size: 34px !important;
+    color: #FE7F2D !important;
 }
 
 .field-sum {
@@ -628,8 +640,9 @@ export default {
 
 .balance-label {
     color: white;
+    font-family: 'Lato', sans-serif;
     font-style: normal;
-    font-weight: normal;
+    font-weight: 400;
     font-size: 14px;
     line-height: 24px;
 }
@@ -644,7 +657,6 @@ export default {
 }
 
 .swap-btn {
-    color: var(--link);
 }
 
 .enabled-buy {
@@ -652,19 +664,21 @@ export default {
 }
 
 .disabled-buy {
-    background: #202932 !important;
+    background: #181A21 !important;
+    box-shadow: none !important;
+    border: 1px solid #1D2029 !important;
 }
 
 .buy {
     width: 100%;
     border-radius: 40px;
     color: white !important;
-}
-
-.title {
-    color: white;
-    font-weight: 300;
-    font-size: 20px;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px !important;
+    line-height: 24px !important;
+    text-transform: none !important;
 }
 
 .container_body {
@@ -711,5 +725,19 @@ export default {
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
+}
+
+.exchange-label {
+    font-family: 'Lato', sans-serif;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 24px !important;
+    color: white !important;
+}
+
+.exchange-label-icon {
+    cursor: pointer !important;
+    vertical-align: bottom !important;
 }
 </style>

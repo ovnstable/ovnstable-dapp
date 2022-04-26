@@ -3,7 +3,7 @@
         <v-row align="center" justify="center">
             <v-col class="main-col">
                 <v-row align="center">
-                    <label class="title-label">
+                    <label class="title-header">
                         <v-icon class="return-btn" @click='goToAction("/")'>
                             mdi-reply
                         </v-icon>
@@ -12,7 +12,7 @@
                     <v-spacer></v-spacer>
                 </v-row>
 
-                <v-row class="chart-row" v-if="isLoading">
+                <v-row class="chart-row-db mb-10" v-if="isLoading">
                     <v-col class="ma-0 pt-15">
                         <v-row align="center" justify="center">
                             <v-progress-circular
@@ -39,7 +39,7 @@
                         <v-row class="pt-2" align="center" justify="center">
                             <label class="no-activities-label">There’re no data for you to see yet. If you want to mint USD+, just click</label>
                         </v-row>
-                        <v-row class="pt-3 pb-2" align="center" justify="center">
+                        <v-row class="pt-4 pb-2" align="center" justify="center">
                             <v-btn dark
                                    height="56"
                                    class='mint-usd-plus'
@@ -54,125 +54,127 @@
                     <v-col cols="3"></v-col>
                 </v-row>
 
-                <v-row class="chart-row" v-if="!isLoading && anyActivities">
-                    <v-col class="pa-0 ma-0">
-                        <v-row align="center" justify="center">
-                            <DashboardWidget/>
-                        </v-row>
-                    </v-col>
-                </v-row>
+                <v-col class="dashboard-main-container mt-8" v-if="!isLoading && anyActivities">
+                    <v-row class="chart-row-db" v-if="!isLoading && anyActivities">
+                        <v-col>
+                            <v-row align="center" justify="center">
+                                <DashboardWidget/>
+                            </v-row>
+                        </v-col>
+                    </v-row>
 
-                <v-row class="cards-full" v-if="anyActivities">
-                    <v-col class="pa-0 ma-0">
-                        <v-row align="center" justify="start">
-                            <v-card class="balance-card" flat>
-                                <v-card-text>
-                                    <v-row class="ml-2 pt-2">
-                                        <label class="card-label label-dark">Current balance</label>
-                                    </v-row>
-                                    <v-row class="ml-2 pt-1 pb-3">
-                                        <label class="label-value label-orange">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
-                                    </v-row>
-                                </v-card-text>
-                            </v-card>
-                        </v-row>
-                    </v-col>
-                    <v-col class="pa-0 ma-0">
-                        <v-row align="center" justify="center">
-                            <v-card class="profit-card" flat>
-                                <v-card-text>
-                                    <v-row class="ml-2 pt-2">
-                                        <label class="card-label label-dark">Profit USD+</label>
-                                    </v-row>
-                                    <v-row class="ml-2 pt-1 pb-3">
-                                        <label class="label-value label-light">${{ $utils.formatMoney(profitUsdPlus, 6) }}</label>
-                                    </v-row>
-                                </v-card-text>
-                            </v-card>
-                        </v-row>
-                    </v-col>
-                    <v-col class="pa-0 ma-0">
-                        <v-row align="center" justify="end">
-                            <v-card class="apy-card" flat>
-                                <v-card-text>
-                                    <v-row class="ml-2 pt-2">
-                                        <label class="card-label label-dark">APY %</label>
-                                    </v-row>
-                                    <v-row class="ml-2 pt-1 pb-3">
-                                        <label class="label-value label-light">{{ apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}</label>
-                                    </v-row>
-                                </v-card-text>
-                            </v-card>
-                        </v-row>
-                    </v-col>
-                </v-row>
+                    <v-row class="cards-full mb-4" v-if="anyActivities">
+                        <v-col cols="4">
+                            <v-row align="center" justify="start">
+                                <v-card class="balance-card" flat>
+                                    <v-card-text>
+                                        <v-row class="ml-2 pt-2" justify="center">
+                                            <label class="card-label label-dark">Current balance</label>
+                                        </v-row>
+                                        <v-row class="ml-2 pt-1 pb-3" justify="center">
+                                            <label class="label-value label-orange">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
+                                        </v-row>
+                                    </v-card-text>
+                                </v-card>
+                            </v-row>
+                        </v-col>
+                        <v-col cols="4" class="profit-col">
+                            <v-row align="center" justify="center">
+                                <v-card class="profit-card" flat>
+                                    <v-card-text>
+                                        <v-row class="ml-2 pt-2" justify="center">
+                                            <label class="card-label label-dark">Profit USD+</label>
+                                        </v-row>
+                                        <v-row class="ml-2 pt-1 pb-3" justify="center">
+                                            <label class="label-value label-light">${{ $utils.formatMoney(profitUsdPlus, 6) }}</label>
+                                        </v-row>
+                                    </v-card-text>
+                                </v-card>
+                            </v-row>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-row align="center" justify="end">
+                                <v-card class="apy-card" flat>
+                                    <v-card-text>
+                                        <v-row class="ml-2 pt-2" justify="center">
+                                            <label class="card-label label-dark">APY %</label>
+                                        </v-row>
+                                        <v-row class="ml-2 pt-1 pb-3" justify="center">
+                                            <label class="label-value label-light">{{ apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}</label>
+                                        </v-row>
+                                    </v-card-text>
+                                </v-card>
+                            </v-row>
+                        </v-col>
+                    </v-row>
 
-                <v-row class="cards-minimized" v-if="anyActivities">
-                    <v-col class="pa-0 ma-0">
-                        <v-row align="center" justify="center">
-                            <v-card class="balance-card" flat>
-                                <v-card-text>
-                                    <v-list-item dense>
-                                        <v-list-item-content>
-                                            <v-list-item-title>
-                                                <label class="card-label label-dark">Current balance</label>
-                                            </v-list-item-title>
+                    <v-row class="cards-minimized" dense v-if="anyActivities">
+                        <v-col>
+                            <v-row align="center" justify="center" dense>
+                                <v-card class="balance-card" flat>
+                                    <v-card-text>
+                                        <v-list-item dense>
+                                            <v-list-item-content>
+                                                <v-list-item-title>
+                                                    <label class="card-label label-dark">Current balance</label>
+                                                </v-list-item-title>
 
-                                            <v-list-item-subtitle>
-                                                <label class="label-value label-orange">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
-                                            </v-list-item-subtitle>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </v-card-text>
-                            </v-card>
-                        </v-row>
-                        <v-row class="pt-2" align="center" justify="center">
-                            <v-card class="profit-card" flat>
-                                <v-card-text>
-                                    <v-list-item dense>
-                                        <v-list-item-content>
-                                            <v-list-item-title>
-                                                <label class="card-label label-dark">Profit USD+</label>
-                                            </v-list-item-title>
+                                                <v-list-item-subtitle>
+                                                    <label class="label-value label-orange">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
+                                                </v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </v-card-text>
+                                </v-card>
 
-                                            <v-list-item-subtitle>
-                                                <label class="label-value label-light">${{ $utils.formatMoney(profitUsdPlus, 6) }}</label>
-                                            </v-list-item-subtitle>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </v-card-text>
-                            </v-card>
-                        </v-row>
-                        <v-row class="pt-2" align="center" justify="center">
-                            <v-card class="apy-card" flat>
-                                <v-card-text>
-                                    <v-list-item dense>
-                                        <v-list-item-content>
-                                            <v-list-item-title>
-                                                <label class="card-label label-dark">APY %</label>
-                                            </v-list-item-title>
+                                <v-card class="profit-card" flat>
+                                    <v-card-text>
+                                        <v-list-item dense>
+                                            <v-list-item-content>
+                                                <v-list-item-title>
+                                                    <label class="card-label label-dark">Profit USD+</label>
+                                                </v-list-item-title>
 
-                                            <v-list-item-subtitle>
-                                                <label class="label-value label-light">{{ apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}</label>
-                                            </v-list-item-subtitle>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </v-card-text>
-                            </v-card>
-                        </v-row>
-                    </v-col>
-                </v-row>
+                                                <v-list-item-subtitle>
+                                                    <label class="label-value label-light">${{ $utils.formatMoney(profitUsdPlus, 6) }}</label>
+                                                </v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </v-card-text>
+                                </v-card>
 
-                <v-row class="table-row" v-if="anyActivities">
-                    <v-col class="pa-0 ma-0" cols="12">
-                        <v-row class="activities-full-table">
-                            <RecentActivitiesTable/>
-                        </v-row>
-                        <v-row class="activities-minimized-table">
-                            <RecentActivitiesTable minimized/>
-                        </v-row>
-                    </v-col>
-                </v-row>
+                                <v-card class="apy-card" flat>
+                                    <v-card-text>
+                                        <v-list-item dense>
+                                            <v-list-item-content>
+                                                <v-list-item-title>
+                                                    <label class="card-label label-dark">APY %</label>
+                                                </v-list-item-title>
+
+                                                <v-list-item-subtitle>
+                                                    <label class="label-value label-light">{{ apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}</label>
+                                                </v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </v-card-text>
+                                </v-card>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+                </v-col>
+
+                <v-col>
+                    <v-row class="table-row" v-if="anyActivities">
+                        <v-col cols="12">
+                            <v-row class="activities-full-table">
+                                <RecentActivitiesTable/>
+                            </v-row>
+                            <v-row class="activities-minimized-table">
+                                <RecentActivitiesTable minimized/>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+                </v-col>
             </v-col>
         </v-row>
     </v-container>
@@ -230,23 +232,15 @@ export default {
 @media all and (min-width:0px) and (max-width: 650px) {
 
     .main-col {
-        max-width: 80vw !important;
+        max-width: 90vw !important;
     }
 
     .balance-card, .profit-card, .apy-card {
-        width: 80vw !important;
+        width: 90vw !important;
     }
 
     .activities-full-table, .cards-full {
         display: none !important;
-    }
-
-    .title-label {
-        font-size: 34px;
-    }
-
-    .table-row {
-        margin-top: 28px !important;
     }
 
     .no-activities-img {
@@ -262,16 +256,16 @@ export default {
         font-family: 'Lato', sans-serif;
         font-style: normal;
         font-weight: 400;
-        font-size: 14px;
-        line-height: 24px;
+        font-size: 12px;
+        line-height: 20px;
     }
 
     .label-value {
         font-family: 'Lato', sans-serif;
         font-style: normal;
-        font-weight: 700;
-        font-size: 26px;
-        line-height: 42px;
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        line-height: 32px !important;
     }
 }
 
@@ -288,14 +282,6 @@ export default {
 
     .activities-full-table, .cards-minimized {
         display: none !important;
-    }
-
-    .title-label {
-        font-size: 34px;
-    }
-
-    .table-row {
-        margin-top: 28px !important;
     }
 
     .no-activities-img {
@@ -318,9 +304,9 @@ export default {
     .label-value {
         font-family: 'Lato', sans-serif;
         font-style: normal;
-        font-weight: 700;
-        font-size: 26px;
-        line-height: 42px;
+        font-weight: 600 !important;
+        font-size: 24px !important;
+        line-height: 36px !important;
     }
 }
 
@@ -338,12 +324,8 @@ export default {
         display: none !important;
     }
 
-    .title-label {
-        font-size: 56px;
-    }
-
     .table-row {
-        margin-top: 60px !important;
+        margin-top: 4px !important;
     }
 
     .no-activities-img {
@@ -359,22 +341,22 @@ export default {
         font-family: 'Lato', sans-serif;
         font-style: normal;
         font-weight: 400;
-        font-size: 18px;
-        line-height: 28px;
+        font-size: 14px;
+        line-height: 24px;
     }
 
     .label-value {
         font-family: 'Lato', sans-serif;
         font-style: normal;
-        font-weight: 700;
-        font-size: 34px;
-        line-height: 42px;
+        font-weight: 600 !important;
+        font-size: 24px !important;
+        line-height: 36px !important;
     }
-}
 
-.title-label {
-    color: white;
-    font-weight: 300;
+    .profit-col {
+        border-left: 1px solid #4C586D !important;
+        border-right: 1px solid #4C586D !important;
+    }
 }
 
 .balance-card, .profit-card, .apy-card {
@@ -428,6 +410,17 @@ export default {
     border-radius: 40px;
     color: white !important;
     background: var(--orange-gradient) !important;
+
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.dashboard-main-container {
+    background: #1D2029 !important;
+    border-radius: 20px;
 }
 
 </style>

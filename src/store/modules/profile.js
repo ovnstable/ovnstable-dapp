@@ -1,3 +1,5 @@
+import moment from "moment";
+
 let accounting = require("accounting-js")
 import {axios} from "../../plugins/http-axios";
 
@@ -31,6 +33,10 @@ const state = {
     transactionLogsLoader: false,
     payouts: [],
     loadingPayouts: true,
+
+    payoutsApyData: [],
+    payoutsTvlData: [],
+    totalUsdPlusValue: null,
 };
 
 const getters = {
@@ -47,6 +53,7 @@ const getters = {
     currentTotalData(state) {
         return state.currentTotalData;
     },
+
     loadingCurrentTotalData(state) {
         return state.loadingCurrentTotalData;
     },
@@ -72,6 +79,18 @@ const getters = {
         return state.payouts;
     },
 
+    payoutsApyData(state) {
+        return state.payoutsApyData;
+    },
+
+    payoutsTvlData(state) {
+        return state.payoutsTvlData;
+    },
+
+    totalUsdPlusValue(state) {
+        return state.totalUsdPlusValue;
+    },
+
     loadingPayouts(state) {
         return state.loadingPayouts;
     },
@@ -83,7 +102,6 @@ const getters = {
 };
 
 const actions = {
-
 
     async refreshBalance({commit, dispatch, getters, rootState}) {
 
@@ -164,9 +182,61 @@ const actions = {
         axios.get(`/dapp/payouts`)
             .then(value => {
                 commit('setPayouts', value.data);
+
+                let clientData = value.data;
+
+                let widgetDataDict = {};
+                let widgetData = {
+                    labels: [],
+                    datasets: [
+                        {
+                            fill: false,
+                            borderColor: '#69a5fd',
+                            data: [],
+                        }
+                    ]
+                };
+
+                [...clientData].reverse().forEach(item => {
+                    widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = item.annualizedYield;
+                });
+
+                for(let key in widgetDataDict) {
+                    widgetData.labels.push(key);
+                    widgetData.datasets[0].data.push(widgetDataDict[key]);
+                }
+
+                commit('setPayoutsApyData', widgetData);
+
+                let widgetDataDictTvl = {};
+                let widgetDataTvl = {
+                    labels: [],
+                    datasets: [
+                        {
+                            fill: false,
+                            borderColor: '#69a5fd',
+                            data: [],
+                        }
+                    ]
+                };
+
+                [...clientData].reverse().forEach(item => {
+                    widgetDataDictTvl[moment(item.payableDate).format('DD.MM.YYYY')] = item.totalUsdPlus;
+                });
+
+                for(let key in widgetDataDictTvl) {
+                    widgetDataTvl.labels.push(key);
+                    widgetDataTvl.datasets[0].data.push(widgetDataDictTvl[key]);
+                }
+
+                commit('setPayoutsTvlData', widgetDataTvl);
+
+                if (clientData && clientData.length > 0) {
+                    commit('setTotalUsdPlusValue', clientData[0].totalUsdPlus);
+                }
+
                 commit('setLoadingPayouts', false);
             })
-
     },
 
 
@@ -227,7 +297,6 @@ const actions = {
 
         commit('setTransactionLogs', logs)
         commit('setTransactionLogsLoader', false)
-
     },
 
 
@@ -246,8 +315,6 @@ const actions = {
     async refreshCurrentTotalData({commit, dispatch, getters, rootState}) {
         commit('setLoadingCurrentTotalData', true)
 
-
-
         let assets = await rootState.web3.contracts.mark2market.methods.strategyAssets().call();
         let strategiesMapping = (await axios('/dapp/strategies')).data;
 
@@ -258,32 +325,48 @@ const actions = {
 
             let element = {};
 
-            let strategy = strategiesMapping.find(value => value.address === asset.strategy);
+            let strategy = strategiesMapping.find(value => value.address === asset[0]);
             let name = "not defined";
-            if (strategy)
+
+            if (strategy) {
                 name = strategy.name;
+            }
 
 
-            if (asset.netAssetValue==0)
+            if (asset[1] == 0) {
                 continue;
+            }
 
-            element.name = name;
-            element.netAssetValue = asset.netAssetValue / 10 ** 6;
-            element.liquidationValue = asset.liquidationValue / 10 ** 6;
-            element.address = asset.strategy;
-
-
+            element.label = name;
+            element.value = asset[1] / 10 ** 6;
+            element.liquidationValue = asset[2] / 10 ** 6;
+            element.link = asset[0] ? 'https://polygonscan.com/address/' + asset[0] : '';
 
             data.push(element);
+        }
 
+        let colors = [
+            "#FCCA46",
+            "#FE7F2D",
+            "#3D8DFF",
+            "#22ABAC",
+            "#B22174",
+            "#2775CA",
+            "#26A17B",
+            "#23DD00",
+        ];
+
+        data = data.sort((a,b) => (a.value > b.value) ? -1 : ((b.value > a.value) ? 1 : 0));
+        data = data.filter(item => item.value != 0);
+
+        for (let i = 0; i < data.length; i++) {
+            data[i].color = colors[i];
         }
 
         commit('setCurrentTotalData', data)
         commit('setLoadingCurrentTotalData', false)
 
     }
-
-
 };
 
 const mutations = {
@@ -319,6 +402,18 @@ const mutations = {
 
     setPayouts(state, payouts) {
         state.payouts = payouts;
+    },
+
+    setPayoutsApyData(state, payoutsApyData) {
+        state.payoutsApyData = payoutsApyData;
+    },
+
+    setPayoutsTvlData(state, payoutsTvlData) {
+        state.payoutsTvlData = payoutsTvlData;
+    },
+
+    setTotalUsdPlusValue(state, totalUsdPlusValue) {
+        state.totalUsdPlusValue = totalUsdPlusValue;
     },
 
     setTransactionLogsLoader(state, transactionLogsLoader) {

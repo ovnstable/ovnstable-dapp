@@ -51,14 +51,33 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,400;0,500;0,600;0,700;0,800;0,900;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
 
 /* mobile */
 @media all and (min-width:0px) and (max-width: 650px) {
 
     #rubic-widget-close {
         right: 64px !important;
+    }
+
+    .title-header {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 36px;
+        line-height: 48px;
+    }
+
+    .title-modal {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 20px;
+        line-height: 24px;
+        margin-top: 12px;
     }
 }
 
@@ -68,6 +87,25 @@ export default {
     #rubic-widget-close {
         right: 82px !important;
     }
+
+    .title-header {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 48px;
+        line-height: 56px;
+    }
+
+    .title-modal {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 20px;
+        line-height: 24px;
+        margin-top: 10px;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
@@ -75,12 +113,31 @@ export default {
     #rubic-widget-close {
         right: 90px !important;
     }
+
+    .title-header {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 48px;
+        line-height: 56px;
+    }
+
+    .title-modal {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 24px;
+        line-height: 36px;
+        margin-top: 4px;
+    }
 }
 
 /* main variables */
 :root {
-    --main-background: #080a0c;
-    --secondary: #181E25;
+    --main-background: #13151C;
+    --secondary: #1D2029;
     --logo-color: #ffffff;
     --orange-gradient: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
     --link: #3d8dff;

@@ -37,6 +37,12 @@ export default {
     height: 56px;
     border-radius: 40px;
     background: var(--orange-gradient);
+
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px !important;
+    line-height: 24px !important;
 }
 
 </style>

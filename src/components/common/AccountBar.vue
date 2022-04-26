@@ -7,13 +7,12 @@
                     <a id="bridge-button" class="bridge-link rubic-show" @click="openBridge">Bridge</a>
 
                     <v-chip outlined dark class="balance-chip" @click="showAccountProfile">
-                        <strong>{{ $utils.formatMoney(balance.usdPlus, 2) }}</strong>&nbsp;USD+
+                        {{ $utils.formatMoney(balance.usdPlus, 2) }}&nbsp;USD+
                     </v-chip>
 
                     <v-menu offset-y min-width="180px">
                         <template v-slot:activator="{ attrs, on }">
                             <v-chip class="account-chip"
-                                    dark
                                     @click="hideRubic"
                                     v-bind="attrs"
                                     v-on="on">
@@ -166,7 +165,7 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 1400px) {
-    .bridge-link, .balance-chip {
+    .bridge-link, .balance-chip, .fund-mobile {
         display: none !important;
     }
 
@@ -213,13 +212,22 @@ export default {
 
 .btn-connect-wallet {
     color: white;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px !important;
+    line-height: 24px !important;
     border-radius: 40px;
     background: var(--orange-gradient);
 }
 
 .bridge-link {
     color: var(--link);
-    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px !important;
+    line-height: 24px !important;
     text-decoration: none;
     margin-right: 20px;
 }
@@ -231,7 +239,11 @@ export default {
     color: white;
     height: 56px !important;
     border-radius: 40px !important;
-    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px !important;
+    line-height: 24px !important;
     min-width: 112px;
 }
 
@@ -240,9 +252,13 @@ export default {
     background: var(--secondary) !important;
     border-width: 0px !important;
     justify-content: center;
-    color: white;
+    color: var(--link) !important;
     border-radius: 40px !important;
-    font-size: 16px;
-    min-width: 150px;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px !important;
+    line-height: 24px !important;
+    min-width: 130px;
 }
 </style>

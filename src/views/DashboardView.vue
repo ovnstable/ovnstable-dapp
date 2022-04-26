@@ -3,7 +3,7 @@
         <v-row align="center" justify="center">
             <v-col lg="12" md="8" sm="8">
                 <v-row class="justify-center align-center pt-15">
-                    <label class="swap-title">
+                    <label class="title-header">
                         <v-icon class="return-btn" @click='goToAction("/")'>
                             mdi-reply
                         </v-icon>

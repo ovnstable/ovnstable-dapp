@@ -162,7 +162,7 @@ export default {
                         enabled: false
                     },
 
-                    background: '#080a0c',
+                    background: '#13151C',
 
                     toolbar: {
                         show: false

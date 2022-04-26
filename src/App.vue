@@ -60,6 +60,25 @@ export default {
     #rubic-widget-close {
         right: 64px !important;
     }
+
+    .title-header {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 36px;
+        line-height: 48px;
+    }
+
+    .title-modal {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 20px;
+        line-height: 24px;
+        margin-top: 12px;
+    }
 }
 
 /* tablet */
@@ -68,6 +87,25 @@ export default {
     #rubic-widget-close {
         right: 82px !important;
     }
+
+    .title-header {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 48px;
+        line-height: 56px;
+    }
+
+    .title-modal {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 20px;
+        line-height: 24px;
+        margin-top: 10px;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
@@ -75,12 +113,31 @@ export default {
     #rubic-widget-close {
         right: 90px !important;
     }
+
+    .title-header {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 48px;
+        line-height: 56px;
+    }
+
+    .title-modal {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 24px;
+        line-height: 36px;
+        margin-top: 4px;
+    }
 }
 
 /* main variables */
 :root {
-    --main-background: #080a0c;
-    --secondary: #181E25;
+    --main-background: #13151C;
+    --secondary: #1D2029;
     --logo-color: #ffffff;
     --orange-gradient: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
     --link: #3d8dff;

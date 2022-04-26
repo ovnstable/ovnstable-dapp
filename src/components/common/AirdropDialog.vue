@@ -5,7 +5,7 @@
                 <label class="title-label pt-10 pl-3 pb-5">
                     Welcome to Overnight.fi
                     <br/>
-                    EXCLUSIVE AIRDROP on&nbsp;<a class="bridge-link" @click="openBridgeLink">Polygon</a>&nbsp;for Savvy Investors
+                    EXCLUSIVE AIRDROP on&nbsp;<a class="bridge-link-air" @click="openBridgeLink">Polygon</a>&nbsp;for Savvy Investors
                 </label>
                 <v-btn icon class="ml-auto" @click="close" dark>
                     <v-icon>mdi-close</v-icon>
@@ -186,7 +186,7 @@ export default {
     background: var(--orange-gradient) !important;
 }
 
-.bridge-link {
+.bridge-link-air {
     color: white;
     text-decoration: underline;
 }

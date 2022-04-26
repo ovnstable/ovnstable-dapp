@@ -3,7 +3,7 @@
         <v-row align="center" justify="center">
             <v-col class="main-col">
                 <v-row align="center">
-                    <label class="title-label">
+                    <label class="title-header">
                         <v-icon class="return-btn" @click='goToAction("/")'>
                             mdi-reply
                         </v-icon>
@@ -39,7 +39,7 @@
                         <v-row class="pt-2" align="center" justify="center">
                             <label class="no-activities-label">There’re no data for you to see yet. If you want to mint USD+, just click</label>
                         </v-row>
-                        <v-row class="pt-3 pb-2" align="center" justify="center">
+                        <v-row class="pt-4 pb-2" align="center" justify="center">
                             <v-btn dark
                                    height="56"
                                    class='mint-usd-plus'
@@ -241,10 +241,6 @@ export default {
         display: none !important;
     }
 
-    .title-label {
-        font-size: 34px;
-    }
-
     .table-row {
         margin-top: 28px !important;
     }
@@ -288,10 +284,6 @@ export default {
 
     .activities-full-table, .cards-minimized {
         display: none !important;
-    }
-
-    .title-label {
-        font-size: 34px;
     }
 
     .table-row {
@@ -338,10 +330,6 @@ export default {
         display: none !important;
     }
 
-    .title-label {
-        font-size: 56px;
-    }
-
     .table-row {
         margin-top: 60px !important;
     }
@@ -370,11 +358,6 @@ export default {
         font-size: 34px;
         line-height: 42px;
     }
-}
-
-.title-label {
-    color: white;
-    font-weight: 300;
 }
 
 .balance-card, .profit-card, .apy-card {
@@ -428,6 +411,12 @@ export default {
     border-radius: 40px;
     color: white !important;
     background: var(--orange-gradient) !important;
+
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
 }
 
 </style>

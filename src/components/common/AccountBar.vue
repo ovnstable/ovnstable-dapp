@@ -4,16 +4,16 @@
             <v-col>
                 <v-row justify="end" align="center">
 
-                    <a class="bridge-link" @click="openBridgeLink">Bridge</a>
+                    <a id="bridge-button" class="bridge-link rubic-show" @click="openBridge">Bridge</a>
 
                     <v-chip outlined dark class="balance-chip" @click="showAccountProfile">
-                        <strong>{{ $utils.formatMoney(balance.usdPlus, 2) }}</strong>&nbsp;USD+
+                        {{ $utils.formatMoney(balance.usdPlus, 2) }}&nbsp;USD+
                     </v-chip>
 
                     <v-menu offset-y min-width="180px">
                         <template v-slot:activator="{ attrs, on }">
                             <v-chip class="account-chip"
-                                    dark
+                                    @click="hideRubic"
                                     v-bind="attrs"
                                     v-on="on">
                                 {{ accountShort }}
@@ -31,7 +31,7 @@
                                     Dashboard
                                 </label>
                             </v-list-item>
-                            <v-list-item @click="openBridgeLink" class="bridge-link-mobile">
+                            <v-list-item @click="openBridge" class="bridge-link-mobile">
                                 <label class="list-label-switch">
                                     Bridge
                                 </label>
@@ -120,8 +120,38 @@ export default {
             this.connectWallet();
         },
 
-        openBridgeLink() {
-            window.open('https://wallet.polygon.technology', '_blank');
+        openBridge() {
+            if (document.getElementById("rubic-widget-root").classList.contains("rubic-show")) {
+
+                document.getElementById("rubic-widget-root").classList.remove("rubic-show");
+                document.getElementById("rubic-widget-root").classList.add("rubic-not-show");
+
+                document.getElementById("rubic-widget-close").classList.remove("rubic-show");
+                document.getElementById("rubic-widget-close").classList.add("rubic-not-show");
+
+                document.getElementById("bridge-button").classList.remove("rubic-not-show");
+                document.getElementById("bridge-button").classList.add("rubic-show");
+            } else {
+                document.getElementById("rubic-widget-root").classList.remove("rubic-not-show");
+                document.getElementById("rubic-widget-root").classList.add("rubic-show");
+
+                document.getElementById("rubic-widget-close").classList.remove("rubic-not-show");
+                document.getElementById("rubic-widget-close").classList.add("rubic-show");
+
+                document.getElementById("bridge-button").classList.remove("rubic-show");
+                document.getElementById("bridge-button").classList.add("rubic-not-show");
+            }
+        },
+
+        hideRubic() {
+            if (document.getElementById("rubic-widget-root").classList.contains("rubic-show")) {
+
+                document.getElementById("rubic-widget-root").classList.remove("rubic-show");
+                document.getElementById("rubic-widget-root").classList.add("rubic-not-show");
+
+                document.getElementById("rubic-widget-close").classList.remove("rubic-show");
+                document.getElementById("rubic-widget-close").classList.add("rubic-not-show");
+            }
         },
 
         goToAction(id) {
@@ -182,13 +212,22 @@ export default {
 
 .btn-connect-wallet {
     color: white;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px !important;
+    line-height: 24px !important;
     border-radius: 40px;
     background: var(--orange-gradient);
 }
 
 .bridge-link {
     color: var(--link);
-    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px !important;
+    line-height: 24px !important;
     text-decoration: none;
     margin-right: 20px;
 }
@@ -200,7 +239,11 @@ export default {
     color: white;
     height: 56px !important;
     border-radius: 40px !important;
-    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px !important;
+    line-height: 24px !important;
     min-width: 112px;
 }
 
@@ -209,10 +252,13 @@ export default {
     background: var(--secondary) !important;
     border-width: 0px !important;
     justify-content: center;
-    color: white;
+    color: var(--link) !important;
     border-radius: 40px !important;
-    font-size: 16px;
-    min-width: 150px;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px !important;
+    line-height: 24px !important;
+    min-width: 130px;
 }
-
 </style>

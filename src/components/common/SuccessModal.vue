@@ -26,8 +26,8 @@
                         <v-btn dark
                                height="56"
                                class="dismiss-btn mb-3"
-                               @click="close">
-                            Dismiss
+                               @click="dismiss">
+                            Add USD+ to {{ walletName ? walletName : ' a wallet' }}
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -47,6 +47,7 @@ export default {
 
     computed: {
         ...mapGetters('successModal', ['show', 'successTxHash',]),
+        ...mapGetters('web3', ['walletName']),
     },
 
     data: () => ({
@@ -54,6 +55,7 @@ export default {
 
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
+        ...mapActions('web3', ['addUsdPlusToken']),
 
         openPolygonScan(hash) {
             if (hash) {
@@ -66,6 +68,11 @@ export default {
 
             this.$emit('input', false);
             this.$emit('m-close');
+        },
+
+        dismiss() {
+            this.addUsdPlusToken();
+            this.close();
         },
     },
 }
@@ -88,8 +95,9 @@ export default {
 
 .success-label {
     color: #76E268;
+    font-family: 'Raleway', sans-serif;
     font-style: normal;
-    font-weight: 300;
+    font-weight: 800;
     font-size: 24px;
     line-height: 36px;
 }
@@ -113,5 +121,11 @@ export default {
     height: 56px;
     border-radius: 40px;
     color: white !important;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    text-transform: none !important;
 }
 </style>

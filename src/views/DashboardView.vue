@@ -3,7 +3,7 @@
         <v-row align="center" justify="center">
             <v-col class="stats-col">
                 <v-row class="justify-start pt-15">
-                    <label class="swap-title">
+                    <label class="title-header">
                         <v-icon class="return-btn" @click='goToAction("/")'>
                             mdi-reply
                         </v-icon>
@@ -16,14 +16,14 @@
                 </v-row>
 
                 <v-row class="mt-8" justify="center">
-                    <v-col>
+                    <v-col cols="6">
                         <div class="line-apy-container">
                             <template v-if="payoutsApyData">
                                 <LineChartApy :data="payoutsApyData"/>
                             </template>
                         </div>
                     </v-col>
-                    <v-col>
+                    <v-col cols="6">
                         <div class="line-tvl-container">
                             <template v-if="payoutsTvlData">
                                 <LineChartTvl :data="payoutsTvlData"/>
@@ -38,9 +38,10 @@
                 </v-row>
 
                 <v-row class="pt-8 pb-5" justify="center">
-                    <v-col class="pa-0 ma-0 main-div" v-if="tab === 1" cols="8">
+                    <v-col class="pa-0 ma-0 main-div" v-if="tab === 1" :cols="isMobile ? 12 : 8">
                         <v-row style="padding-top: 30px;" no-gutters>
-                            <PayoutsTable class="payouts-table-part"/>
+                            <PayoutsTable class="payouts-table-part table-full"/>
+                            <PayoutsTable class="payouts-table-part table-minimized" minimized/>
                         </v-row>
                         <v-row style="padding-top: 30px; padding-bottom: 30px" no-gutters justify="center" align="center">
                             <label class="scroll-label">scroll to see more</label>
@@ -53,11 +54,12 @@
                                 <label class="total-portfolio-header">Total portfolio</label>
                             </v-row>
                             <v-row style="padding-top: 15px; padding-bottom: 15px" no-gutters>
-                                <v-col cols="8">
-                                    <Table class="table-part" :data="currentTotalData"/>
+                                <v-col :cols="isMobile ? 12 : 8">
+                                    <Table class="table-part table-full" :data="currentTotalData"/>
+                                    <Table class="table-part table-minimized" :data="currentTotalData" minimized/>
                                 </v-col>
 
-                                <v-col cols="4">
+                                <v-col class="doughnut-col-part" cols="4">
                                     <Doughnut class="doughnut-part" :data="currentTotalData" :size="320"/>
                                 </v-col>
                             </v-row>
@@ -67,7 +69,20 @@
                             <v-row style="padding-top: 30px; padding-bottom: 15px" no-gutters justify="start">
                                 <label class="total-portfolio-header">Stablecoin stats</label>
                             </v-row>
-                            <v-row style="padding-top: 15px; padding-bottom: 15px" no-gutters>
+
+                            <v-row style="padding-top: 15px; padding-bottom: 15px" no-gutters class="doughnut-part-minimized">
+                                <v-col cols="12">
+                                    <PieStablecoins class="doughnut-part-tvl-mobile" :data="stablecoinData" :size="200"/>
+                                </v-col>
+                            </v-row>
+
+                            <v-row style="padding-top: 15px; padding-bottom: 15px" no-gutters class="doughnut-part-minimized">
+                                <v-col cols="12">
+                                    <TableStablecoins class="table-part" :data="stablecoinData" minimized/>
+                                </v-col>
+                            </v-row>
+
+                            <v-row style="padding-top: 15px; padding-bottom: 15px" no-gutters class="doughnut-part-full">
                                 <v-col cols="8">
                                     <TableStablecoins class="table-part" :data="stablecoinData"/>
                                 </v-col>
@@ -136,6 +151,10 @@ export default {
                 'tab-button-in-active': this.tab !== 2,
             }
         },
+
+        isMobile() {
+            return window.innerWidth < 1400;
+        }
     },
 
     created() {
@@ -163,6 +182,24 @@ export default {
         font-weight: 300;
         font-size: 34px;
     }
+
+    .tab-btn {
+        background: none !important;
+        justify-content: center;
+        color: #707A8B !important;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 18px;
+        line-height: 28px;
+        text-transform: capitalize;
+        border: none;
+        cursor: pointer !important;
+    }
+
+    .table-full, .doughnut-col-part, .doughnut-part-full {
+        display: none !important;
+    }
 }
 
 /* tablet */
@@ -179,6 +216,24 @@ export default {
     }
 
     .history-minimized-table {
+        display: none !important;
+    }
+
+    .tab-btn {
+        background: none !important;
+        justify-content: center;
+        color: #707A8B !important;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 18px;
+        line-height: 28px;
+        text-transform: capitalize;
+        border: none;
+        cursor: pointer !important;
+    }
+
+    .table-full, .doughnut-col-part, .doughnut-part-full {
         display: none !important;
     }
 }
@@ -198,25 +253,37 @@ export default {
     .history-minimized-table, .return-btn {
         display: none !important;
     }
+
+    .line-apy-container {
+        margin-left: -2%;
+    }
+
+    .line-tvl-container {
+        margin-left: 2%;
+    }
+
+    .tab-btn {
+        background: none !important;
+        justify-content: center;
+        color: #707A8B !important;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 24px;
+        line-height: 57px;
+        text-transform: capitalize;
+        border: none;
+        cursor: pointer !important;
+    }
+
+    .table-minimized, .doughnut-part-minimized {
+        display: none !important;
+    }
 }
 
 .desc {
     font-size: 14px;
     color: white !important;
-}
-
-.tab-btn {
-    background: none !important;
-    justify-content: center;
-    color: #707A8B !important;
-    font-family: 'Raleway', sans-serif;
-    font-style: normal;
-    font-weight: 800;
-    font-size: 24px;
-    line-height: 57px;
-    text-transform: capitalize;
-    border: none;
-    cursor: pointer !important;
 }
 
 .tab-button {
@@ -253,6 +320,10 @@ export default {
     height: 380px !important;
 }
 
+.doughnut-part-tvl-mobile {
+    height: 200px !important;
+}
+
 .total-portfolio-header {
     font-family: 'Raleway', sans-serif;
     font-style: normal;
@@ -278,15 +349,7 @@ export default {
 
 .line-apy-container, .line-tvl-container {
     width: 100%;
-    background: #1D2029 !important;
+    background: var(--secondary) !important;
     border-radius: 20px;
-}
-
-.line-apy-container {
-    margin-left: -2%;
-}
-
-.line-tvl-container {
-    margin-left: 2%;
 }
 </style>

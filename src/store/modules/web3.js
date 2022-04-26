@@ -144,6 +144,12 @@ const actions = {
                         localStorage.setItem('walletName', wallet.name);
                         console.log(wallet.name + ' is now connected!');
                     });
+                },
+
+                address: async address => {
+                    await dispatch('dashboardBalance/refreshClientDashboardData', null, {root: true}).then(value => {
+                        dispatch('dashboardBalance/sliceClientDashboardData', null, {root: true});
+                    });
                 }
             }
         });
@@ -227,8 +233,8 @@ const actions = {
         abiDecoder.setUtils(web3.utils);
         abiDecoder.setAbiDecoder(web3.eth.abi);
 
-        console.log('Web3 init completed!')
         commit('setWeb3', web3);
+        console.log('Web3 init completed!')
 
         dispatch('initContracts');
         dispatch('profile/refreshNotUserData', null, {root: true})

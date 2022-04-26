@@ -3,7 +3,7 @@
         <v-row align="center" justify="center">
             <v-col class="main-col">
                 <v-row align="center">
-                    <label class="swap-title">Swap</label>
+                    <label class="title-header">Swap</label>
                     <v-spacer></v-spacer>
                     <v-btn icon>
                         <img class="cog-img"
@@ -63,11 +63,6 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 1400px) {
-    .swap-title {
-        color: white;
-        font-weight: 300;
-        font-size: 34px;
-    }
 
     .main-col {
         max-width: 80vw !important;
@@ -84,14 +79,9 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
-    .swap-title {
-        color: white;
-        font-weight: 300;
-        font-size: 56px;
-    }
 
     .main-col {
-        max-width: 33vw !important;
+        max-width: 30vw !important;
     }
 
     .cog-img {

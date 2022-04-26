@@ -2,40 +2,47 @@
     <v-simple-table class="current-table-payouts" dark height="600px">
         <thead>
         <tr class="current-table-row-header">
-            <th class="table-header text-left" width="450px">
+            <th class="table-header-payouts text-left" :width="minimized ? '' : '450px'">
                 Payable date, UTC
             </th>
-            <th class="table-header text-left">
-                Daily profit<br/>(USDC per USD+)
+            <th class="table-header-payouts text-left" v-if="!minimized">
+                Daily profit<br/>{{ minimized ? '' : '(USDC per USD+)'}}
             </th>
-            <th class="table-header text-left">
-                Annualized yield<br/>(% per year)
+            <th class="table-header-payouts text-left" :colspan="minimized ? 2 : 1">
+                Annualized yield<br/>{{ minimized ? '' : '(% per year)'}}
             </th>
-            <th class="table-header text-right" width="180px">
+            <th class="table-header-payouts text-right" width="180px" v-if="!minimized">
                 PolygonScan
             </th>
         </tr>
         </thead>
 
         <tbody>
-        <tr v-for="item in payouts" :key="item.payableDate" class="current-table-row">
-            <td class="table-label text-left">
+        <tr v-for="item in payouts" :key="item.payableDate" class="current-table-row" @click="minimized ? openOnScan(item) : rowClick()">
+            <td class="table-label-payouts text-left">
                 <label>
                     {{ formatDate(item.payableDate) }}
                 </label>
-                <label class="ml-6">
+                <label class="ml-6" v-if="!minimized">
                     {{ formatTime(item.payableDate) }}
                 </label>
             </td>
-            <td class="table-label text-left">
+            <td class="table-label-payouts text-left" v-if="!minimized">
                 $ {{ $utils.formatMoney(item.dailyProfit, 6) }}
             </td>
-            <td class="table-label text-left">
-                <label :class="item.annualizedYield > 0 ? 'ann-yield-green' : 'ann-yield-red'">{{ $utils.formatMoney(item.annualizedYield, 1) }}%</label>
+            <td class="table-label-payouts text-left">
+                <label :class="item.annualizedYield > 0 ? 'ann-yield-green' : 'ann-yield-red'">
+                    {{ $utils.formatMoney(item.annualizedYield, 1) }}%
+                </label>
             </td>
-            <td class="table-label text-right">
+            <td class="table-label-payouts text-right" v-if="!minimized">
                 <label @click="openOnScan(item)" class="link-label">
                     {{ shortHash(item.transactionHash) }}
+                    <v-img class="icon-img-link ml-2" :src="require('@/assets/icon/out-white.svg')"/>
+                </label>
+            </td>
+            <td v-if="minimized" class="table-label-payouts text-right">
+                <label class="text-right">
                     <v-img class="icon-img-link ml-2" :src="require('@/assets/icon/out-white.svg')"/>
                 </label>
             </td>
@@ -73,6 +80,9 @@ export default {
 
         },
 
+        rowClick() {
+        },
+
         formatDate(date) {
             return this.$moment.utc(date).format('DD.MM.YYYY');
         },
@@ -94,6 +104,56 @@ export default {
 
 <style>
 
+/* mobile */
+@media only screen and (max-width: 1400px) {
+
+    .table-header-payouts {
+        font-family: 'Lato', sans-serif !important;
+        font-style: normal !important;
+        font-weight: 700 !important;
+        line-height: 22px !important;
+        font-size: 14px !important;
+        color: #4C586D !important;
+    }
+
+    .table-label-payouts {
+        font-family: 'Lato', sans-serif !important;
+        color: white !important;
+        font-style: normal !important;
+        font-weight: 400 !important;
+        line-height: 24px !important;
+        font-size: 16px !important;
+    }
+
+    .current-table-row {
+        height: 48px !important;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+
+    .table-header-payouts {
+        font-family: 'Lato', sans-serif !important;
+        font-style: normal !important;
+        font-weight: 600 !important;
+        line-height: 24px !important;
+        font-size: 16px !important;
+        color: #4C586D !important;
+    }
+
+    .table-label-payouts {
+        font-family: 'Lato', sans-serif !important;
+        color: white !important;
+        font-style: normal !important;
+        font-weight: 400 !important;
+        line-height: 28px !important;
+        font-size: 18px !important;
+    }
+
+    .current-table-row {
+        height: 70px !important;
+    }
+}
 
 .current-table-payouts {
     width: 100% !important;
@@ -110,34 +170,7 @@ export default {
     display: none !important;
 }
 
-.table-header {
-    font-family: 'Lato', sans-serif !important;
-    font-style: normal !important;
-    font-weight: 600 !important;
-    line-height: 24px !important;
-    font-size: 16px !important;
-    color: #4C586D !important;
-}
-
-.table-label {
-    font-family: 'Lato', sans-serif !important;
-    color: white !important;
-    font-style: normal !important;
-    font-weight: 400 !important;
-    line-height: 28px !important;
-    font-size: 18px !important;
-}
-
-.table-label-total {
-    font-family: 'Lato', sans-serif !important;
-    color: white !important;
-    font-style: normal !important;
-    font-weight: 600 !important;
-    line-height: 28px !important;
-    font-size: 18px !important;
-}
-
-.table-header, .table-label, .table-empty {
+.table-header-payouts, .table-label-payouts {
     border-bottom: 2px solid #13151C !important;
 }
 
@@ -151,10 +184,6 @@ export default {
 
 .text-right {
     text-align: right !important;
-}
-
-.current-table-row {
-    height: 70px !important;
 }
 
 .current-table-row-header {

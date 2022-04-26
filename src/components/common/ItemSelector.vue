@@ -123,12 +123,6 @@ export default {
     line-height: 24px;
 }
 
-.text-btn {
-    font-size: 1.125rem;
-    color: rgb(37, 39, 45);
-    font-weight: 800;
-}
-
 .text-list {
     background-color: var(--secondary) !important;
     border-radius: 10px !important;
@@ -138,6 +132,11 @@ export default {
 .text-list-item {
     cursor: pointer;
     color: white;
+    font-family: 'Lato', sans-serif !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    line-height: 24px !important;
 }
 
 .item-disabled {

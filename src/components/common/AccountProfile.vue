@@ -7,12 +7,15 @@
             scrollable>
         <v-card class="container_body">
             <v-toolbar class="container_header" flat>
-                <v-toolbar-title class="title">
-                    Account
-                </v-toolbar-title>
-                <v-btn icon class="ml-auto" @click="close" dark>
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
+                <v-row>
+                    <label class="title-modal ml-6">
+                        Account
+                    </label>
+                    <v-spacer></v-spacer>
+                    <v-btn icon class="ml-auto" @click="close" dark>
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-row>
             </v-toolbar>
 
             <v-card-text class="px-5 pt-5">
@@ -38,14 +41,14 @@
                         </label>
                     </v-row>
 
-                    <v-row align="center" class="account-info-row account-num-row">
+                    <v-row align="center" class="account-info-row account-num-row mt-6">
                         <div class="avatar-img">
                             <v-img :src="(ens && ens.avatar) ? ens.avatar : require('@/assets/network/polygon.svg')"/>
                         </div>
                         <label class="account-label ml-5">{{ accountShort }}</label>
                     </v-row>
 
-                    <v-row align="center" class="account-info-row actions-row">
+                    <v-row align="center" class="account-info-row actions-row mt-6">
                         <a class="view-explorer-btn" @click="viewInExplorer">
                             <v-img class="icon-img" :src="require('@/assets/icon/out.svg')"/>
                             <label class="ml-1 view-explorer-label">View on explorer</label>
@@ -70,7 +73,7 @@
                         </a>
                     </v-row>
 
-                    <v-row class="recent-tr-row mb-3" align="center">
+                    <v-row class="recent-tr-row mb-3" align="center" v-if="transactions && transactions.length > 0">
                         <label class="recent-label">
                             Recent Transactions
                         </label>
@@ -80,13 +83,7 @@
                         </v-btn>
                     </v-row>
 
-                    <v-row v-if="!transactions || transactions.length === 0" align="center">
-                        <label class="recent-label">
-                            Your transactions will apper here...
-                        </label>
-                    </v-row>
-
-                    <v-row class="row mt-2" v-bind:key="i" v-for="(item, i) in transactions">
+                    <v-row class="row mt-2" v-bind:key="i" v-for="(item, i) in transactions" v-if="transactions && transactions.length > 0">
                         <v-col cols="10">
                             <div class="transaction-link" @click="openPolygonScan(item.hash)">{{ item.text }} ↗</div>
                         </v-col>

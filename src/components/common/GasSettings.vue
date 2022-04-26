@@ -7,12 +7,15 @@
             scrollable>
         <v-card class="container_body">
             <v-toolbar class="container_header" flat>
-                <v-toolbar-title class="title">
-                    Customize Gas
-                </v-toolbar-title>
-                <v-btn icon class="ml-auto" @click="close" dark>
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
+                <v-row>
+                    <label class="title-modal ml-4">
+                        Customize Gas
+                    </label>
+                    <v-spacer></v-spacer>
+                    <v-btn icon class="ml-auto" @click="close" dark>
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-row>
             </v-toolbar>
 
             <v-card-text class="px-5 pt-5">
@@ -170,7 +173,7 @@ export default {
 .btn-save {
     font-size: 16px;
     font-weight: normal;
-    background: #202932;
+    background: #181A21;
     color: var(--link);
     width: 100%;
     height: 56px;

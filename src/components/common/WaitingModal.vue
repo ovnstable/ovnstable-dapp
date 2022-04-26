@@ -78,8 +78,9 @@ export default {
 
 .loading-label {
     color: #FFD505;
+    font-family: 'Raleway', sans-serif;
     font-style: normal;
-    font-weight: 300;
+    font-weight: 800;
     font-size: 24px;
     line-height: 36px;
 }

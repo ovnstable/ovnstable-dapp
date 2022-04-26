@@ -22,7 +22,7 @@
             </v-col>
         </v-row>
 
-        <div class="chart-row" id="line-chart"></div>
+        <div class="chart-row" id="line-chart-apy"></div>
 
         <v-row class="zoom-row" style="margin-top: -40px !important;">
             <v-spacer></v-spacer>
@@ -287,7 +287,7 @@ export default {
                 }
             };
 
-            this.chart = new ApexCharts(document.querySelector("#line-chart"), options);
+            this.chart = new ApexCharts(document.querySelector("#line-chart-apy"), options);
             this.chart.render();
         },
     }
@@ -386,7 +386,7 @@ export default {
     }
 }
 
-#line-chart {
+#line-chart-apy {
     overflow-x: hidden !important;
     overflow-y: hidden !important;
 }

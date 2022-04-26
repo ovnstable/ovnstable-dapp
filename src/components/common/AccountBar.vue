@@ -165,7 +165,7 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 1400px) {
-    .bridge-link, .balance-chip {
+    .bridge-link, .balance-chip, .fund-mobile {
         display: none !important;
     }
 

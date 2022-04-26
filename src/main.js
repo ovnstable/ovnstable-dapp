@@ -40,6 +40,11 @@ Vue.use(VueYandexMetrika, {
   options: {clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true}
 })
 
+import Donut from 'vue-css-donut-chart';
+import 'vue-css-donut-chart/dist/vcdonut.css';
+
+Vue.use(Donut);
+
 new Vue({
   store,
   vuetify,

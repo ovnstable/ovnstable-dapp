@@ -9,7 +9,7 @@
             <span v-bind:class="activeTabDashboard"
                   class=" ml-10"
                   @click="goToAction('/fund')">
-                Performance
+                Stats
             </span>
 
             <span v-bind:class="activeTabOvnStatement"

@@ -3,23 +3,25 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">USD+ TVL</label>
+                    <label class="chart-title">{{ totalUsdPlusValue ? 'USD+ TVL' : '' }}</label>
                 </v-row>
 
                 <v-row justify="start">
                     <label class="mobile-info-title">
-                        ${{ $utils.formatMoneyComma(totalUsdPlusValue, 2) }}
+                        {{ totalUsdPlusValue ? ('$' + $utils.formatMoneyComma(totalUsdPlusValue, 2)) : '' }}
                     </label>
                 </v-row>
             </v-col>
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
                     <label class="chart-title-apy">
-                        ${{ $utils.formatMoneyComma(totalUsdPlusValue, 2) }}
+                        {{ totalUsdPlusValue ? ('$' + $utils.formatMoneyComma(totalUsdPlusValue, 2)) : '' }}
                     </label>
                 </v-row>
                 <v-row justify="end">
-                    <label class="chart-sub-title-apy">past 24 hours</label>
+                    <label class="chart-sub-title-apy">
+                        {{ totalUsdPlusValue ? 'past 24 hours' : '' }}
+                    </label>
                 </v-row>
             </v-col>
         </v-row>

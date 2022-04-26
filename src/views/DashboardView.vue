@@ -3,7 +3,7 @@
         <v-row align="center" justify="center">
             <v-col class="stats-col">
                 <v-row class="justify-start pt-15">
-                    <label class="swap-title">
+                    <label class="title-header">
                         <v-icon class="return-btn" @click='goToAction("/")'>
                             mdi-reply
                         </v-icon>
@@ -349,7 +349,7 @@ export default {
 
 .line-apy-container, .line-tvl-container {
     width: 100%;
-    background: #1D2029 !important;
+    background: var(--secondary) !important;
     border-radius: 20px;
 }
 </style>

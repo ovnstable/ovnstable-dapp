@@ -3,21 +3,21 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ isMobile ? '' : 'Average '}}USD+ APY</label>
+                    <label class="chart-title">{{ averageApy ? ((isMobile ? '' : 'Average ') + 'USD+ APY') : ''}}</label>
                 </v-row>
 
                 <v-row justify="start">
                     <label class="mobile-info-title">
-                        {{ averageApy }}%
+                        {{ averageApy ? (averageApy + '%') : '' }}
                     </label>
                 </v-row>
             </v-col>
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
-                    <label class="chart-title-apy">{{ averageApy }}%</label>
+                    <label class="chart-title-apy">{{ averageApy ? (averageApy + '%') : '' }}</label>
                 </v-row>
                 <v-row justify="end">
-                    <label class="chart-sub-title-apy">from {{ firstDateApy }}</label>
+                    <label class="chart-sub-title-apy">{{ firstDateApy ? ('from ' + firstDateApy) : '' }}</label>
                 </v-row>
             </v-col>
         </v-row>

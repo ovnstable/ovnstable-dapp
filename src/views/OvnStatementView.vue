@@ -54,7 +54,7 @@
                     <v-col cols="3"></v-col>
                 </v-row>
 
-                <v-col class="dashboard-main-container mt-8">
+                <v-col class="dashboard-main-container mt-8" v-if="!isLoading && anyActivities">
                     <v-row class="chart-row-db" v-if="!isLoading && anyActivities">
                         <v-col>
                             <v-row align="center" justify="center">

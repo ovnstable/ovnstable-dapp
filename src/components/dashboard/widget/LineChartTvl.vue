@@ -3,7 +3,7 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ totalUsdPlusValue ? 'USD+ TVL' : '' }}</label>
+                    <label class="chart-title">{{ totalUsdPlusValue ? 'USD+ CPV' : '' }}</label>
                 </v-row>
 
                 <v-row justify="start">

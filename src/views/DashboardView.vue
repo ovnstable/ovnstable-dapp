@@ -51,7 +51,7 @@
                     <v-col class="pa-0 ma-0" v-if="tab === 2">
                         <div class="main-div">
                             <v-row style="padding-top: 30px; padding-bottom: 15px" no-gutters justify="start">
-                                <label class="total-portfolio-header">Total portfolio</label>
+                                <label class="total-portfolio-header">Strategies</label>
                             </v-row>
                             <v-row style="padding-top: 15px; padding-bottom: 15px" no-gutters>
                                 <v-col :cols="isMobile ? 12 : 8">
@@ -67,7 +67,7 @@
 
                         <div class="main-div mt-8">
                             <v-row style="padding-top: 30px; padding-bottom: 15px" no-gutters justify="start">
-                                <label class="total-portfolio-header">Stablecoin stats</label>
+                                <label class="total-portfolio-header">Collateral</label>
                             </v-row>
 
                             <v-row style="padding-top: 15px; padding-bottom: 15px" no-gutters class="doughnut-part-minimized">

@@ -3,7 +3,7 @@
         <v-row align="center" justify="center">
             <v-col class="main-col">
                 <v-row align="center">
-                    <label class="title-header">Swap</label>
+                    <label class="title-header">{{ isMintView ? 'Mint' : 'Redeem' }}</label>
                     <v-spacer></v-spacer>
                     <v-btn icon>
                         <img class="cog-img"

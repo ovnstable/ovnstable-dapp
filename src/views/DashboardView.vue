@@ -33,22 +33,12 @@
                 </v-row>
 
                 <v-row justify="center" class="toggle-row mt-8">
-                    <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPayouts">Payouts</label>
-                    <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabPortfolio">Portfolio</label>
+                    <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPortfolio">Portfolio</label>
+                    <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabPayouts">Payouts</label>
                 </v-row>
 
                 <v-row class="pt-8 pb-5" justify="center">
-                    <v-col class="pa-0 ma-0 main-div" v-if="tab === 1" :cols="isMobile ? 12 : 8">
-                        <v-row style="padding-top: 30px;" no-gutters>
-                            <PayoutsTable class="payouts-table-part table-full"/>
-                            <PayoutsTable class="payouts-table-part table-minimized" minimized/>
-                        </v-row>
-                        <v-row style="padding-top: 30px; padding-bottom: 30px" no-gutters justify="center" align="center">
-                            <label class="scroll-label">scroll to see more</label>
-                        </v-row>
-                    </v-col>
-
-                    <v-col class="pa-0 ma-0" v-if="tab === 2">
+                    <v-col class="pa-0 ma-0" v-if="tab === 1">
                         <div class="main-div">
                             <v-row style="padding-top: 30px; padding-bottom: 15px" no-gutters justify="start">
                                 <label class="total-portfolio-header">Strategies</label>
@@ -93,6 +83,17 @@
                             </v-row>
                         </div>
                     </v-col>
+
+                    <v-col class="pa-0 ma-0 main-div" v-if="tab === 2" :cols="isMobile ? 12 : 8">
+                        <v-row style="padding-top: 30px;" no-gutters>
+                            <PayoutsTable class="payouts-table-part table-full"/>
+                            <PayoutsTable class="payouts-table-part table-minimized" minimized/>
+                        </v-row>
+                        <v-row style="padding-top: 30px; padding-bottom: 30px" no-gutters justify="center" align="center">
+                            <label class="scroll-label">scroll to see more</label>
+                        </v-row>
+                    </v-col>
+
                 </v-row>
             </v-col>
         </v-row>
@@ -138,14 +139,14 @@ export default {
     computed: {
         ...mapGetters("profile", ['totalUsdPlusValue', 'payoutsApyData', 'payoutsTvlData', 'currentTotalData', 'totalUsdPlus', 'loadingCurrentTotalData']),
 
-        activeTabPayouts: function () {
+        activeTabPortfolio: function () {
             return {
                 'tab-button': this.tab === 1,
                 'tab-button-in-active': this.tab !== 1,
             }
         },
 
-        activeTabPortfolio: function () {
+        activeTabPayouts: function () {
             return {
                 'tab-button': this.tab === 2,
                 'tab-button-in-active': this.tab !== 2,

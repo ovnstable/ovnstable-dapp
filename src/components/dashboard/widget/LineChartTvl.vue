@@ -3,7 +3,7 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ totalUsdPlusValue ? 'USD+ PCV' : '' }}</label>
+                    <label class="chart-title">{{ totalUsdPlusValue ? 'USD+ TVL' : '' }}</label>
                 </v-row>
 
                 <v-row justify="start">
@@ -182,7 +182,7 @@ export default {
 
             let options = {
                 series: [{
-                    name: "PCV",
+                    name: "TVL",
                     data: values
                 }],
 

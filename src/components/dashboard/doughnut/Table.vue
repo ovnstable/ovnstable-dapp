@@ -229,7 +229,7 @@ export default {
     background: none !important;
 }
 
-.table-header, .table-label, .table-empty {
+.table-header-pools, .table-label-pools, .table-empty {
     border-bottom: 2px solid #13151C !important;
 }
 

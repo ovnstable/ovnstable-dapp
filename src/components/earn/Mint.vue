@@ -78,7 +78,7 @@
             </v-card>
         </v-row>
 
-        <v-row class="main-btn-row mb-2" v-if="sum" align="center">
+        <v-row class="main-btn-row mb-2" align="center">
             <label class="exchange-label ml-5">Exchange Rate</label>
             <v-spacer></v-spacer>
             <label class="exchange-label mr-5">1 USDC = 1 USD+ <img @click="showRedeemView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>

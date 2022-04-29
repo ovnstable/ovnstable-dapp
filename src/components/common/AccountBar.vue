@@ -31,14 +31,14 @@
                                     Dashboard
                                 </label>
                             </v-list-item>
+                            <v-list-item @click="goToAction('/fund')" class="fund-mobile">
+                                <label class="list-label-switch">
+                                    Stats
+                                </label>
+                            </v-list-item>
                             <v-list-item @click="openBridge" class="bridge-link-mobile">
                                 <label class="list-label-switch">
                                     Bridge
-                                </label>
-                            </v-list-item>
-                            <v-list-item @click="goToAction('/fund')" class="fund-mobile">
-                                <label class="list-label-switch">
-                                    Fund
                                 </label>
                             </v-list-item>
                             <v-list-item @click="addUsdPlusToken">

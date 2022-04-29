@@ -2,7 +2,7 @@
     <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
             <v-col class="main-col">
-                <v-row align="center">
+                <v-row class="justify-start pt-15">
                     <label class="title-header">
                         <v-icon class="return-btn" @click='goToAction("/")'>
                             mdi-reply
@@ -12,7 +12,7 @@
                     <v-spacer></v-spacer>
                 </v-row>
 
-                <v-row class="chart-row-db mb-10" v-if="isLoading">
+                <v-row class="chart-row-db mb-10 mt-8" v-if="isLoading">
                     <v-col class="ma-0 pt-15">
                         <v-row align="center" justify="center">
                             <v-progress-circular
@@ -54,8 +54,8 @@
                     <v-col cols="3"></v-col>
                 </v-row>
 
-                <v-col class="dashboard-main-container mt-8" v-if="!isLoading && anyActivities">
-                    <v-row class="chart-row-db" v-if="!isLoading && anyActivities">
+                <v-col class="dashboard-main-container mt-10" v-if="!isLoading && anyActivities">
+                    <v-row class="chart-row-db justify-center" v-if="!isLoading && anyActivities">
                         <v-col>
                             <v-row align="center" justify="center">
                                 <DashboardWidget/>
@@ -65,7 +65,7 @@
 
                     <v-row class="cards-full mb-4" v-if="anyActivities">
                         <v-col cols="4">
-                            <v-row align="center" justify="start">
+                            <v-row align="center" justify="center">
                                 <v-card class="balance-card" flat>
                                     <v-card-text>
                                         <v-row class="ml-2 pt-2" justify="center">
@@ -93,7 +93,7 @@
                             </v-row>
                         </v-col>
                         <v-col cols="4">
-                            <v-row align="center" justify="end">
+                            <v-row align="center" justify="center">
                                 <v-card class="apy-card" flat>
                                     <v-card-text>
                                         <v-row class="ml-2 pt-2" justify="center">
@@ -163,14 +163,15 @@
                     </v-row>
                 </v-col>
 
-                <v-col>
+                <v-col class="mt-6">
                     <v-row class="table-row" v-if="anyActivities">
-                        <v-col cols="12">
-                            <v-row class="activities-full-table">
-                                <RecentActivitiesTable/>
+                        <v-col cols="12" class="pa-0 ma-0 main-div">
+                            <v-row style="padding-top: 30px;" no-gutters>
+                                <RecentActivitiesTable class="activities-table-part activities-full-table"/>
+                                <RecentActivitiesTable class="activities-table-part activities-minimized-table" minimized/>
                             </v-row>
-                            <v-row class="activities-minimized-table">
-                                <RecentActivitiesTable minimized/>
+                            <v-row style="padding-top: 30px; padding-bottom: 30px" no-gutters justify="center" align="center">
+                                <label class="scroll-label">scroll to see more</label>
                             </v-row>
                         </v-col>
                     </v-row>
@@ -232,7 +233,7 @@ export default {
 @media all and (min-width:0px) and (max-width: 650px) {
 
     .main-col {
-        max-width: 90vw !important;
+        max-width: 95vw !important;
     }
 
     .balance-card, .profit-card, .apy-card {
@@ -313,7 +314,7 @@ export default {
 @media only screen and (min-width: 1400px) {
 
     .main-col {
-        max-width: 55vw !important;
+        max-width: 70vw !important;
     }
 
     .balance-card, .profit-card, .apy-card {
@@ -421,6 +422,26 @@ export default {
 .dashboard-main-container {
     background: #1D2029 !important;
     border-radius: 20px;
+}
+
+.scroll-label {
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #4C586D !important;
+}
+
+.main-div {
+    width: 100% !important;
+    background: #1D2029 !important;
+    border-radius: 20px !important;
+}
+
+.activities-table-part {
+    padding-left: 4%;
+    padding-right: 4%;
 }
 
 </style>

@@ -22,12 +22,12 @@
         </thead>
 
         <tbody>
-        <tr v-for="item in data" :key="item.label" class="current-table-row">
+        <tr v-for="item in data" :key="item.label" class="current-table-row" @click="openTokenOnScan(item.link)">
             <td class="table-label-don text-right">
                 <v-img class="currency-icon" :src="item.logo"/>
             </td>
             <td class="table-label-don text-left">
-                <label @click="openTokenOnScan(item.link)" class="link-label">
+                <label class="link-label">
                     {{ item.label }}
                     <v-img v-if="!minimized" class="icon-img-link ml-2" :src="require('@/assets/icon/out-white.svg')"/>
                 </label>
@@ -248,6 +248,7 @@ export default {
     width: 24px !important;
     height: 24px !important;
     margin-top: 2px;
+    cursor: pointer;
 }
 
 .link-label {

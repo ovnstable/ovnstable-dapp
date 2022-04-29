@@ -624,10 +624,14 @@ export default {
     height: 42px !important;
 }
 
+.v-text-field >>> input::placeholder {
+    color: #353E4C !important;
+}
+
 .v-text-field >>> input, .v-text-field >>> label, .v-text-field >>> button {
     font-family: 'Lato', sans-serif;
     font-style: normal !important;
-    font-weight: 800 !important;
+    font-weight: 700 !important;
     font-size: 34px !important;
     line-height: 42px !important;
 

@@ -2,7 +2,7 @@
     <v-simple-table class="current-table-payouts" dark height="600px">
         <thead>
         <tr class="current-table-row-header">
-            <th class="table-header-payouts text-left" :width="minimized ? '' : '450px'">
+            <th class="table-header-payouts text-left" :width="minimized ? '' : '40%'">
                 Payable date, UTC
             </th>
             <th class="table-header-payouts text-left" v-if="!minimized">
@@ -18,7 +18,7 @@
         </thead>
 
         <tbody>
-        <tr v-for="item in payouts" :key="item.payableDate" class="current-table-row" @click="minimized ? openOnScan(item) : rowClick()">
+        <tr v-for="item in payouts" :key="item.payableDate" class="current-table-row" @click="openOnScan(item)">
             <td class="table-label-payouts text-left">
                 <label>
                     {{ formatDate(item.payableDate) }}
@@ -78,9 +78,6 @@ export default {
             let url = "https://polygonscan.com/tx/" + item.transactionHash;
             window.open(url, '_blank').focus();
 
-        },
-
-        rowClick() {
         },
 
         formatDate(date) {
@@ -214,6 +211,7 @@ export default {
     width: 24px !important;
     height: 24px !important;
     margin-top: 2px;
+    cursor: pointer;
 }
 
 .link-label {

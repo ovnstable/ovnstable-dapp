@@ -93,7 +93,6 @@
                             <label class="scroll-label">scroll to see more</label>
                         </v-row>
                     </v-col>
-
                 </v-row>
             </v-col>
         </v-row>
@@ -201,6 +200,14 @@ export default {
     .table-full, .doughnut-col-part, .doughnut-part-full {
         display: none !important;
     }
+
+    .line-apy-container {
+        margin-left: 4% !important;
+    }
+
+    .line-tvl-container {
+        margin-left: -4% !important;
+    }
 }
 
 /* tablet */
@@ -283,7 +290,11 @@ export default {
 }
 
 .desc {
-    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
     color: white !important;
 }
 
@@ -301,7 +312,7 @@ export default {
 .main-div {
     width: 100% !important;
     background: #1D2029 !important;
-    border-radius: 20px;
+    border-radius: 20px !important;
 }
 
 .table-part {
@@ -351,6 +362,6 @@ export default {
 .line-apy-container, .line-tvl-container {
     width: 100%;
     background: var(--secondary) !important;
-    border-radius: 20px;
+    border-radius: 20px !important;
 }
 </style>

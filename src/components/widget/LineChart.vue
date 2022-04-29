@@ -32,6 +32,7 @@
             >
                 All
             </v-btn>
+            <v-spacer v-if="isMobile"></v-spacer>
         </v-row>
 
         <div class="chart-db-row" id="line-chart-dashboard"></div>

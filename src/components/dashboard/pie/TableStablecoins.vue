@@ -2,8 +2,7 @@
     <v-simple-table class="current-table" dark>
         <thead>
         <tr class="current-table-row-header">
-            <th class="table-header-don" width="1%" v-if="!minimized"></th>
-            <th class="table-header-don text-left" :colspan="minimized ? 2 : 1">
+            <th class="table-header-don text-left" :colspan="2">
                 Stablecoin
             </th>
             <th class="table-header-don text-left" v-if="!minimized">
@@ -22,12 +21,12 @@
         </thead>
 
         <tbody>
-        <tr v-for="item in data" :key="item.label" class="current-table-row">
-            <td class="table-label-don text-right">
+        <tr v-for="item in data" :key="item.label" class="current-table-row" @click="openTokenOnScan(item.link)">
+            <td class="table-label-don text-right" width="1%">
                 <v-img class="currency-icon" :src="item.logo"/>
             </td>
             <td class="table-label-don text-left">
-                <label @click="openTokenOnScan(item.link)" class="link-label">
+                <label class="link-label" style="margin-left: -20px !important;">
                     {{ item.label }}
                     <v-img v-if="!minimized" class="icon-img-link ml-2" :src="require('@/assets/icon/out-white.svg')"/>
                 </label>
@@ -248,6 +247,7 @@ export default {
     width: 24px !important;
     height: 24px !important;
     margin-top: 2px;
+    cursor: pointer;
 }
 
 .link-label {

@@ -15,19 +15,19 @@
                 <!-- TODO: add info -->
             </th>
             <th class="table-header-pools text-left" :class="minimized ? 'text-right' : 'text-left'" :width="minimized ? '' : '180px'" :colspan="minimized ? 2 : 1">
-                Percent in portfolio
+                {{ minimized ? '' : 'Percent in portfolio' }}
             </th>
             <th class="table-header-pools" v-if="!minimized"></th>
         </tr>
         </thead>
 
         <tbody>
-        <tr v-for="item in data" :key="item.label" class="current-table-row">
+        <tr v-for="item in data" :key="item.label" class="current-table-row" @click="openInNewTab(item.link)">
             <td class="table-label-pools text-right" v-if="!minimized">
                 <div class="color-rectangle" :style="{background: item.color}"></div>
             </td>
             <td class="table-label-pools text-left">
-                <label @click="openInNewTab(item.link)" class="link-label">
+                <label class="link-label">
                     {{ item.label }}
                     <v-img class="icon-img-link ml-2" v-if="!minimized" :src="require('@/assets/icon/out-white.svg')"/>
                 </label>
@@ -275,6 +275,7 @@ export default {
     width: 24px !important;
     height: 24px !important;
     margin-top: 2px;
+    cursor: pointer;
 }
 
 .link-label {

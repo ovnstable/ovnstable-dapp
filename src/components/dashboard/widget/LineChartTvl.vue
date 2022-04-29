@@ -207,20 +207,6 @@ export default {
                     }
                 },
 
-                annotations: {
-                    position: 'front',
-                    yaxis: [{
-                        y: averageValue,
-                        strokeDashArray: 5,
-                        borderColor: '#23DD00',
-                        fillColor: '#23DD00',
-                        label: {
-                            show: false,
-                        },
-                        width: this.isMobile ? '0%' : '100%',
-                    }]
-                },
-
                 grid: {
                     show: false,
                 },
@@ -362,8 +348,8 @@ export default {
         font-family: 'Lato', sans-serif;
         font-style: normal;
         font-weight: 400;
-        font-size: 18px;
-        line-height: 28px;
+        font-size: 16px;
+        line-height: 24px;
         color: #707A8B;
     }
 

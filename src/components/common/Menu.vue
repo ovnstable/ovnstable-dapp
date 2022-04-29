@@ -52,7 +52,7 @@ export default {
                 id: 1
             },
             {
-                name: 'Fund performance',
+                name: 'Stats performance',
                 to: '/fund',
                 id: 2,
             },

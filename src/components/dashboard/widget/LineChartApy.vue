@@ -360,8 +360,8 @@ export default {
         font-family: 'Lato', sans-serif;
         font-style: normal;
         font-weight: 400;
-        font-size: 18px;
-        line-height: 28px;
+        font-size: 16px;
+        line-height: 24px;
         color: #707A8B;
     }
 

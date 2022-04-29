@@ -63,15 +63,15 @@
                         </v-col>
                     </v-row>
 
-                    <v-row class="cards-full mb-4" v-if="anyActivities">
+                    <v-row class="mb-4" v-if="anyActivities">
                         <v-col cols="4">
                             <v-row align="center" justify="center">
                                 <v-card class="balance-card" flat>
                                     <v-card-text>
-                                        <v-row class="ml-2 pt-2" justify="center">
-                                            <label class="card-label label-dark">Current balance</label>
+                                        <v-row class="pt-2" justify="center">
+                                            <label class="card-label label-dark">{{ isMobile ? 'Balance' : 'Current balance' }}</label>
                                         </v-row>
-                                        <v-row class="ml-2 pt-1 pb-3" justify="center">
+                                        <v-row class="pt-1 pb-3" justify="center">
                                             <label class="label-value label-orange">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
                                         </v-row>
                                     </v-card-text>
@@ -82,11 +82,11 @@
                             <v-row align="center" justify="center">
                                 <v-card class="profit-card" flat>
                                     <v-card-text>
-                                        <v-row class="ml-2 pt-2" justify="center">
+                                        <v-row class="pt-2" justify="center">
                                             <label class="card-label label-dark">Profit USD+</label>
                                         </v-row>
-                                        <v-row class="ml-2 pt-1 pb-3" justify="center">
-                                            <label class="label-value label-light">${{ $utils.formatMoney(profitUsdPlus, 6) }}</label>
+                                        <v-row class="pt-1 pb-3" justify="center">
+                                            <label class="label-value label-light">${{ $utils.formatMoney(profitUsdPlus, isMobile ? 2 : 6) }}</label>
                                         </v-row>
                                     </v-card-text>
                                 </v-card>
@@ -96,66 +96,12 @@
                             <v-row align="center" justify="center">
                                 <v-card class="apy-card" flat>
                                     <v-card-text>
-                                        <v-row class="ml-2 pt-2" justify="center">
+                                        <v-row class="pt-2" justify="center">
                                             <label class="card-label label-dark">APY %</label>
                                         </v-row>
-                                        <v-row class="ml-2 pt-1 pb-3" justify="center">
+                                        <v-row class="pt-1 pb-3" justify="center">
                                             <label class="label-value label-light">{{ apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}</label>
                                         </v-row>
-                                    </v-card-text>
-                                </v-card>
-                            </v-row>
-                        </v-col>
-                    </v-row>
-
-                    <v-row class="cards-minimized" dense v-if="anyActivities">
-                        <v-col>
-                            <v-row align="center" justify="center" dense>
-                                <v-card class="balance-card" flat>
-                                    <v-card-text>
-                                        <v-list-item dense>
-                                            <v-list-item-content>
-                                                <v-list-item-title>
-                                                    <label class="card-label label-dark">Current balance</label>
-                                                </v-list-item-title>
-
-                                                <v-list-item-subtitle>
-                                                    <label class="label-value label-orange">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
-                                                </v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </v-list-item>
-                                    </v-card-text>
-                                </v-card>
-
-                                <v-card class="profit-card" flat>
-                                    <v-card-text>
-                                        <v-list-item dense>
-                                            <v-list-item-content>
-                                                <v-list-item-title>
-                                                    <label class="card-label label-dark">Profit USD+</label>
-                                                </v-list-item-title>
-
-                                                <v-list-item-subtitle>
-                                                    <label class="label-value label-light">${{ $utils.formatMoney(profitUsdPlus, 6) }}</label>
-                                                </v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </v-list-item>
-                                    </v-card-text>
-                                </v-card>
-
-                                <v-card class="apy-card" flat>
-                                    <v-card-text>
-                                        <v-list-item dense>
-                                            <v-list-item-content>
-                                                <v-list-item-title>
-                                                    <label class="card-label label-dark">APY %</label>
-                                                </v-list-item-title>
-
-                                                <v-list-item-subtitle>
-                                                    <label class="label-value label-light">{{ apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}</label>
-                                                </v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </v-list-item>
                                     </v-card-text>
                                 </v-card>
                             </v-row>
@@ -210,6 +156,10 @@ export default {
 
         isLoading() {
             return !this.account;
+        },
+
+        isMobile() {
+            return window.innerWidth < 650;
         }
     },
 
@@ -258,7 +208,7 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 12px;
-        line-height: 20px;
+        line-height: 16px;
     }
 
     .label-value {
@@ -266,7 +216,7 @@ export default {
         font-style: normal;
         font-weight: 600 !important;
         font-size: 20px !important;
-        line-height: 32px !important;
+        line-height: 28px !important;
     }
 }
 
@@ -308,6 +258,11 @@ export default {
         font-weight: 600 !important;
         font-size: 24px !important;
         line-height: 36px !important;
+    }
+
+    .activities-table-part {
+        padding-left: 4%;
+        padding-right: 4%;
     }
 }
 
@@ -354,10 +309,15 @@ export default {
         line-height: 36px !important;
     }
 
-    .profit-col {
-        border-left: 1px solid #4C586D !important;
-        border-right: 1px solid #4C586D !important;
+    .activities-table-part {
+        padding-left: 4%;
+        padding-right: 4%;
     }
+}
+
+.profit-col {
+    border-left: 1px solid #4C586D !important;
+    border-right: 1px solid #4C586D !important;
 }
 
 .balance-card, .profit-card, .apy-card {
@@ -437,11 +397,6 @@ export default {
     width: 100% !important;
     background: #1D2029 !important;
     border-radius: 20px !important;
-}
-
-.activities-table-part {
-    padding-left: 4%;
-    padding-right: 4%;
 }
 
 </style>

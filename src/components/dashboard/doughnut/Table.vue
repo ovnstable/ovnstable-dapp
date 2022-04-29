@@ -15,7 +15,7 @@
                 <!-- TODO: add info -->
             </th>
             <th class="table-header-pools text-left" :class="minimized ? 'text-right' : 'text-left'" :width="minimized ? '' : '180px'" :colspan="minimized ? 2 : 1">
-                Percent in portfolio
+                {{ minimized ? '' : 'Percent in portfolio' }}
             </th>
             <th class="table-header-pools" v-if="!minimized"></th>
         </tr>

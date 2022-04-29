@@ -200,6 +200,14 @@ export default {
     .table-full, .doughnut-col-part, .doughnut-part-full {
         display: none !important;
     }
+
+    .line-apy-container {
+        margin-left: 4% !important;
+    }
+
+    .line-tvl-container {
+        margin-left: -4% !important;
+    }
 }
 
 /* tablet */

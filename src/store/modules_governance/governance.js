@@ -309,12 +309,10 @@ const actions = {
         if (process.env.VUE_APP_POLYGON === "polygon_dev"){
             pm.methods.setStrategyWeights(items).send(params);
         }else {
-            pm.methods.setStrategyWeights(items).send(params);
-
-            // let governor = rootState.web3.contracts.governor;
-            // let abi = pm.methods.setStrategyWeights(items).encodeABI();
-            // let name = 'Proposal #' + getters.proposals.length + 1 + ' Change weights';
-            // await governor.methods.proposeExec([pm.options.address], [0], [abi], name).send(params);
+            let governor = rootState.web3.contracts.governor;
+            let abi = pm.methods.setStrategyWeights(items).encodeABI();
+            let name = 'Proposal #' + getters.proposals.length + 1 + ' Change weights';
+            await governor.methods.proposeExec([pm.options.address], [0], [abi], name).send(params);
         }
 
     },

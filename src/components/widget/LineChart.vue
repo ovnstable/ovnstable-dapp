@@ -1,33 +1,41 @@
 <template>
     <div>
-        <v-row class="zoom-row">
+        <v-row class="zoom-db-row mb-5 mt-6 mr-2">
             <v-spacer></v-spacer>
             <v-btn
-                    id="week-zoom-btn"
+                    rounded
+                    text
+                    id="week-zoom-btn-db"
                     class="zoom-btn"
-                    dark x-small outlined
+                    dark
                     @click="zoomChart('week')"
             >
                 <label>Week</label>
             </v-btn>
             <v-btn
-                    id="month-zoom-btn"
+                    rounded
+                    text
+                    id="month-zoom-btn-db"
                     class="zoom-btn"
-                    dark x-small outlined
+                    dark
                     @click="zoomChart('month')"
             >
                 Month
             </v-btn>
             <v-btn
-                    id="all-zoom-btn"
+                    rounded
+                    text
+                    id="all-zoom-btn-db"
                     class="zoom-btn"
-                    dark x-small outlined
+                    dark
                     @click="zoomChart('all')"
             >
                 All
             </v-btn>
+            <v-spacer v-if="isMobile"></v-spacer>
         </v-row>
-        <div id="line-chart"></div>
+
+        <div class="chart-db-row" id="line-chart-dashboard"></div>
     </div>
 </template>
 
@@ -43,7 +51,7 @@ export default {
 
     props: {
         data: {
-            type: Array,
+            type: Object,
             default: null,
         },
     },
@@ -58,12 +66,11 @@ export default {
 
     data: () => ({
         zoom: "all",
-        slice: null,
         chart: null,
     }),
 
     computed: {
-        ...mapGetters([]),
+        ...mapGetters('dashboardBalance', ['slice']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -81,26 +88,26 @@ export default {
     methods: {
         ...mapActions('dashboardBalance', ['sliceClientDashboardData']),
 
-        ...mapMutations([]),
+        ...mapMutations('dashboardBalance', ['setSlice']),
 
         zoomChart(zoom) {
             this.zoom = zoom;
 
             switch (zoom) {
                 case "week":
-                    this.slice = -7;
+                    this.setSlice(-8);
                     break;
                 case "month":
-                    this.slice = -30;
+                    this.setSlice(-30)
                     break;
                 case "all":
-                    this.slice = null;
+                    this.setSlice(null)
                     break;
                 default:
-                    this.slice = null;
+                    this.setSlice(null)
             }
 
-            this.sliceClientDashboardData(this.slice);
+            this.sliceClientDashboardData();
 
             if (this.chart) {
                 this.chart.destroy();
@@ -110,11 +117,11 @@ export default {
         },
 
         changeZoomBtnStyle() {
-            document.getElementById("week-zoom-btn").classList.remove("selected");
-            document.getElementById("month-zoom-btn").classList.remove("selected");
-            document.getElementById("all-zoom-btn").classList.remove("selected");
+            document.getElementById("week-zoom-btn-db").classList.remove("selected");
+            document.getElementById("month-zoom-btn-db").classList.remove("selected");
+            document.getElementById("all-zoom-btn-db").classList.remove("selected");
 
-            document.getElementById(this.zoom + "-zoom-btn").classList.add("selected");
+            document.getElementById(this.zoom + "-zoom-btn-db").classList.add("selected");
         },
 
         redraw() {
@@ -163,7 +170,7 @@ export default {
                         enabled: false
                     },
 
-                    background: '#080a0c',
+                    background: '#1D2029',
 
                     toolbar: {
                         show: false
@@ -180,8 +187,8 @@ export default {
 
                 stroke: {
                     curve: 'straight',
-                    width: 1,
-                    colors: ["#51FF00"],
+                    width: this.isMobile ? 1 : 2,
+                    colors: this.isMobile ? ["#23DD00"] : ["#51FF00"],
                 },
 
                 xaxis: {
@@ -217,7 +224,7 @@ export default {
 
                     labels: {
                         style: {
-                            cssClass: 'yaxis-label',
+                            cssClass: 'yaxis-label-dashboard',
                         },
                         formatter: (value) => {
                             return value
@@ -270,7 +277,7 @@ export default {
                     horizontalAlign: 'left'
                 },
 
-                colors: ['#48e400'],
+                colors: this.isMobile ? ['#181E25'] : ['#68D55A'],
 
                 theme: {
                     mode: 'dark',
@@ -282,7 +289,7 @@ export default {
                     gradient: {
                         shade: 'dark',
                         type: "vertical",
-                        shadeIntensity: 0.8,
+                        shadeIntensity: 0.2,
                         opacityFrom: 1,
                         opacityTo: 0,
                         stops: [0, 100],
@@ -290,7 +297,7 @@ export default {
                 }
             };
 
-            this.chart = new ApexCharts(document.querySelector("#line-chart"), options);
+            this.chart = new ApexCharts(document.querySelector("#line-chart-dashboard"), options);
             this.chart.render();
         },
     }
@@ -308,9 +315,22 @@ export default {
         fill: rgba(255, 255, 255, 0.6) !important;
     }
 
-    .zoom-row {
-        margin-bottom: 0px !important;
-        margin-top: 15px !important;
+    .zoom-db-row {
+        height: 20px !important;
+    }
+
+    .chart-db-row {
+        margin-bottom: -10px !important;
+    }
+
+    .zoom-btn {
+        border: none !important;
+        font-family: 'Lato', sans-serif !important;
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
+        color: #707A8B !important;
     }
 }
 
@@ -322,24 +342,33 @@ export default {
         fill: rgba(255, 255, 255, 0.6) !important;
     }
 
-    .zoom-row {
-        margin-bottom: 0px !important;
-        margin-top: 5px !important;
+    .zoom-db-row {
+        height: 20px !important;
+    }
+
+    .chart-db-row {
+        height: 250px !important;
+    }
+
+    .zoom-btn {
+        border: none !important;
+        font-family: 'Lato', sans-serif !important;
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 24px !important;
+        color: #707A8B !important;
     }
 }
 
-#line-chart {
+#line-chart-dashboard {
     overflow-x: hidden !important;
     overflow-y: hidden !important;
 }
 
-.zoom-btn {
-    margin-right: 5px;
-    border-color: rgba(0, 0, 0, 0) !important;
-}
-
 .selected {
-    border-color: white !important;
+    color: #FCCA46 !important;
+    background-color: rgba(255, 213, 5, 0.15) !important;
 }
 
 </style>

@@ -12,6 +12,7 @@ import getProposals from "./midleware/getProposals"
 import getDapp from "./midleware/getDapp"
 import middlewarePipeline from "./middlewarePipeline";
 import getFinance from "@/router/midleware/getFinance";
+import getClientBalance from "@/router/midleware/getClientBalance";
 
 const routes = [
     {
@@ -45,6 +46,16 @@ const routes = [
                 path: '/dashboard',
                 name: 'OvnStatementView',
                 component: () => import('../views/OvnStatementView.vue'),
+                meta: {
+                    middleware: [
+                        getClientBalance,
+                    ]
+                }
+            },
+            {
+                path: '/poolsFeeding',
+                name: 'PoolFeedingView',
+                component: () => import('../views/PoolFeedingView.vue'),
                 meta: {
                     middleware: [
                         getDapp,

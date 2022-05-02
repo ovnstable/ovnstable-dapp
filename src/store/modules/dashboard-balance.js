@@ -8,7 +8,18 @@ const state = {
 
     activities: [],
 
-    portfolioValue: {},
+    portfolioValue: {
+        labels: [],
+        datasets: [
+            {
+                fill: false,
+                borderColor: '#69a5fd',
+                data: [],
+            }
+        ]
+    },
+
+    slice: null,
 };
 
 const getters = {
@@ -32,11 +43,17 @@ const getters = {
     portfolioValue(state) {
         return state.portfolioValue;
     },
+
+    slice(state) {
+        return state.slice;
+    },
 };
 
 const actions = {
 
     async refreshClientDashboardData({commit, dispatch, getters, rootState}) {
+
+        console.log("Updating client dashboard data");
 
         let account = rootState.web3.account.toLowerCase();
 
@@ -44,14 +61,16 @@ const actions = {
 
         let clientData = response.map(item => {
             return {
+                transactionHash: item[1],
                 date: item[2],
                 type: item[3],
                 openingBalance: item[4],
-                balanceChange: item[3] !== 'PAYOUT' ? item[5] : null,
+                balanceChange: item[5],
                 closingBalance: item[6],
                 dailyProfit: item[3] === 'PAYOUT' ? item[5] : null,
                 fee: item[7],
                 apy: item[8],
+                duration: item[9],
             }
         });
 
@@ -81,13 +100,25 @@ const actions = {
 
         commit('setPortfolioValue', widgetData);
 
+        let apyDataList = [...clientData].filter(value => value.type === 'PAYOUT');
+        let days = apyDataList.length;
 
-        let avgApyList = clientData.map(item => item.apy ? item.apy : 0).filter(item => item !== 0);
-        if (avgApyList && (avgApyList.length > 0)) {
-            const sum = avgApyList.reduce((a, b) => a + b, 0);
-            const avg = (sum / avgApyList.length) || 0;
+        apyDataList.forEach(value => {
+            value.changePercent = value.balanceChange / value.openingBalance;
+        })
 
-            commit('setApy', avg);
+        let productResult = 1.0;
+        let durationSum = 0.0;
+
+        for (let i = 0; i < days; i++) {
+            productResult = productResult * (1.0 + apyDataList[i].changePercent);
+            durationSum = durationSum + apyDataList[i].duration;
+        }
+
+        let apy = Math.pow(productResult, 365.0 / (durationSum / 24.0)) - 1.0;
+
+        if (apy) {
+            commit('setApy', apy * 100.0);
         } else {
             commit('setApy', 0);
         }
@@ -112,17 +143,30 @@ const actions = {
         }
     },
 
-    async sliceClientDashboardData({commit, dispatch, getters, rootState}, slice) {
+    async sliceClientDashboardData({commit, dispatch, getters, rootState}) {
 
         let clientData = getters.activities;
-        clientData = slice ? clientData.slice(slice) : clientData;
+        clientData = getters.slice ? clientData.slice(getters.slice) : clientData;
 
-        let avgApyList = clientData.map(item => item.apy ? item.apy : 0).filter(item => item !== 0);
-        if (avgApyList && (avgApyList.length > 0)) {
-            const sum = avgApyList.reduce((a, b) => a + b, 0);
-            const avg = (sum / avgApyList.length) || 0;
+        let apyDataList = [...clientData].filter(value => value.type === 'PAYOUT');
+        let days = apyDataList.length;
 
-            commit('setApy', avg);
+        apyDataList.forEach(value => {
+            value.changePercent = value.balanceChange / value.openingBalance;
+        })
+
+        let productResult = 1.0;
+        let durationSum = 0.0;
+
+        for (let i = 0; i < days; i++) {
+            productResult = productResult * (1.0 + apyDataList[i].changePercent);
+            durationSum = durationSum + apyDataList[i].duration;
+        }
+
+        let apy = Math.pow(productResult, 365.0 / (durationSum / 24.0)) - 1.0;
+
+        if (apy) {
+            commit('setApy', apy * 100.0);
         } else {
             commit('setApy', 0);
         }
@@ -158,6 +202,10 @@ const mutations = {
 
     setPortfolioValue(state, portfolioValue) {
         state.portfolioValue = portfolioValue;
+    },
+
+    setSlice(state, slice) {
+        state.slice = slice;
     },
 };
 

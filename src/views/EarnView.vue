@@ -1,12 +1,9 @@
 <template>
     <v-container class="fill-height" fluid>
-
-        <AirdropDialog/>
-
         <v-row align="center" justify="center">
             <v-col class="main-col">
                 <v-row align="center">
-                    <label class="swap-title">Swap</label>
+                    <label class="title-header">{{ isMintView ? 'Mint' : 'Redeem' }}</label>
                     <v-spacer></v-spacer>
                     <v-btn icon>
                         <img class="cog-img"
@@ -33,14 +30,12 @@
 
 import Redeem from "../components/earn/Redeem";
 import Mint from "../components/earn/Mint";
-import StatsWidget from "../components/common/StatsWidget";
 import ShowTransaction from "../components/common/ShowTransaction";
 import {mapActions, mapGetters} from "vuex";
-import AirdropDialog from "@/components/common/AirdropDialog";
 
 export default {
     name: "EarnView",
-    components: {AirdropDialog, ShowTransaction, StatsWidget, Mint, Redeem},
+    components: {ShowTransaction, Mint, Redeem},
     data: () => ({
         tab: 1,
 
@@ -68,11 +63,6 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 1400px) {
-    .swap-title {
-        color: white;
-        font-weight: 300;
-        font-size: 34px;
-    }
 
     .main-col {
         max-width: 80vw !important;
@@ -89,14 +79,9 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
-    .swap-title {
-        color: white;
-        font-weight: 300;
-        font-size: 56px;
-    }
 
     .main-col {
-        max-width: 33vw !important;
+        max-width: 30vw !important;
     }
 
     .cog-img {

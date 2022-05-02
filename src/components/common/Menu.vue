@@ -15,7 +15,7 @@
             <span v-bind:class="activeTabDashboard"
                   class=" ml-10"
                   @click="goToAction('/fund')">
-                Performance
+                Stats
             </span>
 
             <span v-bind:class="activeTabOvnStatement"
@@ -63,7 +63,7 @@ export default {
                 id: 2,
             },
             {
-                name: 'Fund performance',
+                name: 'Stats performance',
                 to: '/fund',
                 id: 3,
             },
@@ -148,23 +148,25 @@ export default {
 }
 
 .active-tab {
-    background: var(--orange-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 16px;
-    font-weight: 400;
+    color: #FE7F2D;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
     cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: .1rem;
+    text-transform: capitalize;
 }
 
 .in-active-tab {
-    color: #8FA2B7;
-    font-size: 16px;
-    font-weight: 300;
+    color: #ADB3BD;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px !important;
+    line-height: 28px !important;
     cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: .1rem;
+    text-transform: capitalize;
 }
 
 .menu-select {

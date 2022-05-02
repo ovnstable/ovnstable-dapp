@@ -3,7 +3,6 @@
         <template v-if="portfolioValue">
             <LineChart :data="portfolioValue"/>
         </template>
-
     </div>
 </template>
 

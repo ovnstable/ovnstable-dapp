@@ -2,8 +2,8 @@
     <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
             <v-col class="main-col">
-                <v-row align="center">
-                    <label class="title-label">
+                <v-row class="justify-start pt-15">
+                    <label class="title-header">
                         <v-icon class="return-btn" @click='goToAction("/")'>
                             mdi-reply
                         </v-icon>
@@ -12,7 +12,23 @@
                     <v-spacer></v-spacer>
                 </v-row>
 
-                <v-row class="no-activities-row" v-if="!anyActivities">
+                <v-row class="chart-row-db mb-10 mt-8" v-if="isLoading">
+                    <v-col class="ma-0 pt-15">
+                        <v-row align="center" justify="center">
+                            <v-progress-circular
+                                    width="2"
+                                    size="32"
+                                    color="#8FA2B7"
+                                    indeterminate
+                            ></v-progress-circular>
+                        </v-row>
+                        <v-row class="pt-2" align="center" justify="center">
+                            <label class="no-activities-label">Getting account info</label>
+                        </v-row>
+                    </v-col>
+                </v-row>
+
+                <v-row class="no-activities-row" v-if="!isLoading && !anyActivities">
                     <v-col cols="3"></v-col>
                     <v-col class="pa-0 ma-0" cols="6">
                         <v-row align="center" justify="center">
@@ -23,7 +39,7 @@
                         <v-row class="pt-2" align="center" justify="center">
                             <label class="no-activities-label">There’re no data for you to see yet. If you want to mint USD+, just click</label>
                         </v-row>
-                        <v-row class="pt-3 pb-2" align="center" justify="center">
+                        <v-row class="pt-4 pb-2" align="center" justify="center">
                             <v-btn dark
                                    height="56"
                                    class='mint-usd-plus'
@@ -38,152 +54,74 @@
                     <v-col cols="3"></v-col>
                 </v-row>
 
-                <v-row class="chart-row" v-if="anyActivities">
-                    <v-col class="pa-0 ma-0">
-                        <v-row align="center" justify="center">
-                            <DashboardWidget/>
-                        </v-row>
-                    </v-col>
-                </v-row>
+                <v-col class="dashboard-main-container mt-10" v-if="!isLoading && anyActivities">
+                    <v-row class="chart-row-db justify-center" v-if="!isLoading && anyActivities">
+                        <v-col>
+                            <v-row align="center" justify="center">
+                                <DashboardWidget/>
+                            </v-row>
+                        </v-col>
+                    </v-row>
 
-                <v-row class="cards-full" v-if="anyActivities">
-                    <v-col class="pa-0 ma-0">
-                        <v-row align="center" justify="start">
-                            <v-card class="balance-card" flat>
-                                <v-card-title>
-                                    <div class="money-icon">
-                                        <v-img :src="require('@/assets/icon/money.svg')"/>
-                                    </div>
-                                </v-card-title>
-                                <v-card-text>
-                                    <v-row class="ml-2 pt-2">
-                                        <label class="card-label label-light">Current balance</label>
-                                    </v-row>
-                                    <v-row class="ml-2 pt-1 pb-3">
-                                        <label class="label-value">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
-                                    </v-row>
-                                </v-card-text>
-                            </v-card>
-                        </v-row>
-                    </v-col>
-                    <v-col class="pa-0 ma-0">
-                        <v-row align="center" justify="center">
-                            <v-card class="profit-card" flat>
-                                <v-card-title>
-                                    <div class="money-icon">
-                                        <v-img :src="require('@/assets/icon/sent.svg')"/>
-                                    </div>
-                                </v-card-title>
-                                <v-card-text>
-                                    <v-row class="ml-2 pt-2">
-                                        <label class="card-label label-dark">Profit USD+</label>
-                                    </v-row>
-                                    <v-row class="ml-2 pt-1 pb-3">
-                                        <label class="label-value">${{ $utils.formatMoney(profitUsdPlus, 6) }}</label>
-                                    </v-row>
-                                </v-card-text>
-                            </v-card>
-                        </v-row>
-                    </v-col>
-                    <v-col class="pa-0 ma-0">
-                        <v-row align="center" justify="end">
-                            <v-card class="apy-card" flat>
-                                <v-card-title>
-                                    <div class="money-icon">
-                                        <v-img :src="require('@/assets/icon/info.svg')"/>
-                                    </div>
-                                </v-card-title>
-                                <v-card-text>
-                                    <v-row class="ml-2 pt-2">
-                                        <label class="card-label label-dark">APY %</label>
-                                    </v-row>
-                                    <v-row class="ml-2 pt-1 pb-3">
-                                        <label class="label-value">{{ $utils.formatMoney(apy, 2) }}%</label>
-                                    </v-row>
-                                </v-card-text>
-                            </v-card>
-                        </v-row>
-                    </v-col>
-                </v-row>
+                    <v-row class="mb-4" v-if="anyActivities">
+                        <v-col cols="4">
+                            <v-row align="center" justify="center">
+                                <v-card class="balance-card" flat>
+                                    <v-card-text>
+                                        <v-row class="pt-2" justify="center">
+                                            <label class="card-label label-dark">{{ isMobile ? 'Balance' : 'Current balance' }}</label>
+                                        </v-row>
+                                        <v-row class="pt-1 pb-3" justify="center">
+                                            <label class="label-value label-orange">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
+                                        </v-row>
+                                    </v-card-text>
+                                </v-card>
+                            </v-row>
+                        </v-col>
+                        <v-col cols="4" class="profit-col">
+                            <v-row align="center" justify="center">
+                                <v-card class="profit-card" flat>
+                                    <v-card-text>
+                                        <v-row class="pt-2" justify="center">
+                                            <label class="card-label label-dark">Profit USD+</label>
+                                        </v-row>
+                                        <v-row class="pt-1 pb-3" justify="center">
+                                            <label class="label-value label-light">${{ $utils.formatMoney(profitUsdPlus, isMobile ? 2 : 6) }}</label>
+                                        </v-row>
+                                    </v-card-text>
+                                </v-card>
+                            </v-row>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-row align="center" justify="center">
+                                <v-card class="apy-card" flat>
+                                    <v-card-text>
+                                        <v-row class="pt-2" justify="center">
+                                            <label class="card-label label-dark">APY %</label>
+                                        </v-row>
+                                        <v-row class="pt-1 pb-3" justify="center">
+                                            <label class="label-value label-light">{{ apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}</label>
+                                        </v-row>
+                                    </v-card-text>
+                                </v-card>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+                </v-col>
 
-                <v-row class="cards-minimized" v-if="anyActivities">
-                    <v-col class="pa-0 ma-0">
-                        <v-row align="center" justify="center">
-                            <v-card class="balance-card" flat>
-                                <v-card-text>
-                                    <v-list-item dense>
-                                        <v-list-item-avatar>
-                                            <v-img :src="require('@/assets/icon/money.svg')"/>
-                                        </v-list-item-avatar>
-
-                                        <v-list-item-content>
-                                            <v-list-item-title>
-                                                <label class="label-value">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
-                                            </v-list-item-title>
-
-                                            <v-list-item-subtitle>
-                                                <label class="card-label label-light">Current balance</label>
-                                            </v-list-item-subtitle>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </v-card-text>
-                            </v-card>
-                        </v-row>
-                        <v-row class="pt-2" align="center" justify="center">
-                            <v-card class="profit-card" flat>
-                                <v-card-text>
-                                    <v-list-item dense>
-                                        <v-list-item-avatar>
-                                            <v-img :src="require('@/assets/icon/sent.svg')"/>
-                                        </v-list-item-avatar>
-
-                                        <v-list-item-content>
-                                            <v-list-item-title>
-                                                <label class="label-value">${{ $utils.formatMoney(profitUsdPlus, 6) }}</label>
-                                            </v-list-item-title>
-
-                                            <v-list-item-subtitle>
-                                                <label class="card-label label-light">Profit USD+</label>
-                                            </v-list-item-subtitle>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </v-card-text>
-                            </v-card>
-                        </v-row>
-                        <v-row class="pt-2" align="center" justify="center">
-                            <v-card class="apy-card" flat>
-                                <v-card-text>
-                                    <v-list-item dense>
-                                        <v-list-item-avatar>
-                                            <v-img :src="require('@/assets/icon/info.svg')"/>
-                                        </v-list-item-avatar>
-
-                                        <v-list-item-content>
-                                            <v-list-item-title>
-                                                <label class="label-value">{{ $utils.formatMoney(apy, 2) }}%</label>
-                                            </v-list-item-title>
-
-                                            <v-list-item-subtitle>
-                                                <label class="card-label label-light">APY %</label>
-                                            </v-list-item-subtitle>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </v-card-text>
-                            </v-card>
-                        </v-row>
-                    </v-col>
-                </v-row>
-
-                <v-row class="table-row" v-if="anyActivities">
-                    <v-col class="pa-0 ma-0" cols="12">
-                        <v-row class="activities-full-table">
-                            <RecentActivitiesTable/>
-                        </v-row>
-                        <v-row class="activities-minimized-table">
-                            <RecentActivitiesTable minimized/>
-                        </v-row>
-                    </v-col>
-                </v-row>
+                <v-col class="mt-6">
+                    <v-row class="table-row" v-if="anyActivities">
+                        <v-col cols="12" class="pa-0 ma-0 main-div">
+                            <v-row style="padding-top: 30px;" no-gutters>
+                                <RecentActivitiesTable class="activities-table-part activities-full-table"/>
+                                <RecentActivitiesTable class="activities-table-part activities-minimized-table" minimized/>
+                            </v-row>
+                            <v-row style="padding-top: 30px; padding-bottom: 30px" no-gutters justify="center" align="center">
+                                <label class="scroll-label">scroll to see more</label>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+                </v-col>
             </v-col>
         </v-row>
     </v-container>
@@ -209,19 +147,23 @@ export default {
 
     computed: {
         ...mapGetters('profile', ['balance']),
+        ...mapGetters('web3', ['account']),
         ...mapGetters('dashboardBalance', ['avgBalance', 'profitUsdPlus', 'apy', 'activities']),
 
         anyActivities() {
             return this.activities && this.activities.length > 0;
+        },
+
+        isLoading() {
+            return !this.account;
+        },
+
+        isMobile() {
+            return window.innerWidth < 650;
         }
     },
 
     created() {
-        this.refreshClientDashboardData();
-    },
-
-    mounted() {
-        this.refreshClientDashboardData();
     },
 
     methods: {
@@ -241,23 +183,15 @@ export default {
 @media all and (min-width:0px) and (max-width: 650px) {
 
     .main-col {
-        max-width: 80vw !important;
+        max-width: 95vw !important;
     }
 
     .balance-card, .profit-card, .apy-card {
-        width: 80vw !important;
+        width: 90vw !important;
     }
 
     .activities-full-table, .cards-full {
         display: none !important;
-    }
-
-    .title-label {
-        font-size: 34px;
-    }
-
-    .table-row {
-        margin-top: 28px !important;
     }
 
     .no-activities-img {
@@ -267,6 +201,22 @@ export default {
 
     .mint-usd-plus {
         height: 46px;
+    }
+
+    .card-label {
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .label-value {
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        line-height: 28px !important;
     }
 }
 
@@ -285,14 +235,6 @@ export default {
         display: none !important;
     }
 
-    .title-label {
-        font-size: 34px;
-    }
-
-    .table-row {
-        margin-top: 28px !important;
-    }
-
     .no-activities-img {
         width: 60px !important;
         height: 60px !important;
@@ -301,28 +243,45 @@ export default {
     .mint-usd-plus {
         height: 46px;
     }
+
+    .card-label {
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    .label-value {
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 600 !important;
+        font-size: 24px !important;
+        line-height: 36px !important;
+    }
+
+    .activities-table-part {
+        padding-left: 4%;
+        padding-right: 4%;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
 
     .main-col {
-        max-width: 55vw !important;
+        max-width: 70vw !important;
     }
 
     .balance-card, .profit-card, .apy-card {
-        width: 13vw !important;
+        width: 17vw !important;
     }
 
     .activities-minimized-table, .cards-minimized, .return-btn {
         display: none !important;
     }
 
-    .title-label {
-        font-size: 56px;
-    }
-
     .table-row {
-        margin-top: 60px !important;
+        margin-top: 4px !important;
     }
 
     .no-activities-img {
@@ -333,11 +292,32 @@ export default {
     .mint-usd-plus {
         height: 56px;
     }
+
+    .card-label {
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    .label-value {
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 600 !important;
+        font-size: 24px !important;
+        line-height: 36px !important;
+    }
+
+    .activities-table-part {
+        padding-left: 4%;
+        padding-right: 4%;
+    }
 }
 
-.title-label {
-    color: white;
-    font-weight: 300;
+.profit-col {
+    border-left: 1px solid #4C586D !important;
+    border-right: 1px solid #4C586D !important;
 }
 
 .balance-card, .profit-card, .apy-card {
@@ -345,11 +325,7 @@ export default {
     border: none !important;
 }
 
-.balance-card {
-    background: var(--orange-gradient) !important;
-}
-
-.profit-card, .apy-card {
+.balance-card,.profit-card, .apy-card {
     background: var(--secondary) !important;
 }
 
@@ -358,27 +334,16 @@ export default {
     height: 40px;
 }
 
-.card-label {
-    font-style: normal;
-    font-weight: normal;
-    line-height: 18px;
-    font-size: 14px;
+.label-light {
+    color: white !important;
 }
 
-.label-light {
-    color: #E7EBEF !important;
+.label-orange {
+    color: #FE7F2D !important;
 }
 
 .label-dark {
-    color: #8FA2B7 !important;
-}
-
-.label-value {
-    color: white !important;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 28px;
-    font-size: 18px;
+    color: #707A8B !important;
 }
 
 .return-btn {
@@ -406,6 +371,32 @@ export default {
     border-radius: 40px;
     color: white !important;
     background: var(--orange-gradient) !important;
+
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.dashboard-main-container {
+    background: #1D2029 !important;
+    border-radius: 20px;
+}
+
+.scroll-label {
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #4C586D !important;
+}
+
+.main-div {
+    width: 100% !important;
+    background: #1D2029 !important;
+    border-radius: 20px !important;
 }
 
 </style>

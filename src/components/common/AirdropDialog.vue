@@ -5,7 +5,7 @@
                 <label class="title-label pt-10 pl-3 pb-5">
                     Welcome to Overnight.fi
                     <br/>
-                    EXCLUSIVE AIRDROP on&nbsp;<a class="bridge-link" @click="openBridgeLink">Polygon</a>&nbsp;for Savvy Investors
+                    EXCLUSIVE AIRDROP on&nbsp;<a class="bridge-link-air" @click="openBridgeLink">Polygon</a>&nbsp;for Savvy Investors
                 </label>
                 <v-btn icon class="ml-auto" @click="close" dark>
                     <v-icon>mdi-close</v-icon>
@@ -44,7 +44,7 @@
                     </label>
                 </v-row>
 
-                <v-row v-if="account" dense align="center" class="mt-6">
+                <v-row v-if="account" dense align="center" class="mt-6 pl-3">
                     <v-btn dark
                            outlined
                            height="40"
@@ -53,7 +53,7 @@
                         HOW TO BUY USD+
                     </v-btn>
                 </v-row>
-                <v-row v-else dense align="center" class="mt-6">
+                <v-row v-else dense align="center" class="mt-6 pl-3">
                     <v-btn dark
                            outlined
                            height="40"
@@ -182,10 +182,11 @@ export default {
     background: none !important;
     border-radius: 40px;
     border: none !important;
-    color: #8FA2B7 !important;
+    color: white !important;
+    background: var(--orange-gradient) !important;
 }
 
-.bridge-link {
+.bridge-link-air {
     color: white;
     text-decoration: underline;
 }

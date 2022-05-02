@@ -17,7 +17,7 @@ const OvnToken = require(`../../contracts/${polygon}/OvnToken.json`)
 const OvnGovernor = require(`../../contracts/${polygon}/OvnGovernor.json`)
 const PortfolioManager = require(`../../contracts/${polygon}/PortfolioManager.json`)
 const Mark2Market = require(`../../contracts/${polygon}/Mark2Market.json`)
-const TimelockController = require(`../../contracts/${polygon}/TimelockController.json`)
+const TimelockController = require(`../../contracts/${polygon}/OvnTimelockController.json`)
 const UsdPlusToken = require(`../../contracts/${polygon}/UsdPlusToken.json`)
 
 export const wallets = [
@@ -144,6 +144,12 @@ const actions = {
                         localStorage.setItem('walletName', wallet.name);
                         console.log(wallet.name + ' is now connected!');
                     });
+                },
+
+                address: async address => {
+                    await dispatch('dashboardBalance/refreshClientDashboardData', null, {root: true}).then(value => {
+                        dispatch('dashboardBalance/sliceClientDashboardData', null, {root: true});
+                    });
                 }
             }
         });
@@ -227,8 +233,8 @@ const actions = {
         abiDecoder.setUtils(web3.utils);
         abiDecoder.setAbiDecoder(web3.eth.abi);
 
-        console.log('Web3 init completed!')
         commit('setWeb3', web3);
+        console.log('Web3 init completed!')
 
         dispatch('initContracts');
         dispatch('profile/refreshNotUserData', null, {root: true})

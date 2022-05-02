@@ -9,8 +9,11 @@ import dashboardBalance from './modules/dashboard-balance.js';
 import transaction from './modules/transaction'
 import gasPrice from './modules/gas-price';
 import airDrop from './modules/airdrop-dialog'
-import linearPoolFeeding from './modules/linear-pool-feeding'
-import stablePoolFeeding from './modules/stable-pool-feeding'
+import linearPoolFeeding from './modules/pools/linear-pool-feeding'
+import linearPoolFeedingUnstake from './modules/pools/linear-pool-feeding-unstake'
+import linearPoolDAI from './modules/pools/linear-pool-dai'
+import linearPoolUsdt from './modules/pools/linear-pool-usdt'
+import stablePoolFeeding from './modules/pools/stable-pool-feeding'
 import web3 from "./modules/web3";
 import accountProfile from './modules/account-profile';
 import mintRedeemView from './modules/mint-redeem-view';
@@ -28,6 +31,9 @@ export default new Vuex.Store({
         gasPrice,
         airDrop,
         linearPoolFeeding,
+        linearPoolFeedingUnstake,
+        linearPoolDAI,
+        linearPoolUsdt,
         stablePoolFeeding,
         showTransactions,
         errorModal,

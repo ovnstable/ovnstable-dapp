@@ -6,19 +6,19 @@
 
                     <v-row justify="start">
                         <label class="recent-label">
-                            Balance USD+: <b>{{ balances.usdPlus }}</b>
+                            Balance DAI: <b>{{ balances.dai }}</b>
                         </label>
                     </v-row>
 
                     <v-row justify="start">
                         <label class="recent-label">
-                            Balance USDC: <b>{{ balances.usdc }}</b>
+                            Balance aDAI: <b>{{ balances.aDai }}</b>
                         </label>
                     </v-row>
 
                     <v-row justify="start">
                         <label class="recent-label">
-                            Balance StaticUSD+: <b>{{ balances.staticUsdPlus }}</b>
+                            Balance Static DAI: <b>{{ balances.staticDai }}</b>
                         </label>
                     </v-row>
 
@@ -30,7 +30,7 @@
                     <v-row>
                         <v-col>
                             <v-row>
-                                <label class="title-row-label ml-5 mt-3">Amount USDC</label>
+                                <label class="title-row-label ml-5 mt-3">Amount DAI</label>
                             </v-row>
                             <v-row align="center">
                                 <v-text-field placeholder="0.00"
@@ -41,7 +41,7 @@
                                               hide-details
                                               dark
                                               background-color="transparent"
-                                              v-model="amountUsdc">
+                                              v-model="amountDai">
                                 </v-text-field>
                                 <v-spacer></v-spacer>
                             </v-row>
@@ -50,7 +50,7 @@
 
                         <v-col>
                             <v-row>
-                                <label class="title-row-label ml-5 mt-3">Amount USD+</label>
+                                <label class="title-row-label ml-5 mt-3">Amount aDAI</label>
                             </v-row>
                             <v-row align="center">
                                 <v-text-field placeholder="0.00"
@@ -61,7 +61,7 @@
                                               hide-details
                                               dark
                                               background-color="transparent"
-                                              v-model="amountUsdPlus">
+                                              v-model="amountADai">
                                 </v-text-field>
                                 <v-spacer></v-spacer>
                             </v-row>
@@ -78,7 +78,7 @@
                        height="56"
                        class='buy enabled-buy'
                        @click="start">
-                    Stake
+                    Start
                 </v-btn>
             </div>
         </v-row>
@@ -95,7 +95,7 @@
                     <v-toolbar-title class="title">
                         Feeding linear pool&nbsp;&nbsp;
                     </v-toolbar-title>
-                    <v-progress-circular v-if="!endStep"
+                    <v-progress-circular v-if="!steps.endStep"
                                          width="2"
                                          size="20"
                                          color="white"
@@ -108,19 +108,19 @@
                     <v-col class="main-content-col">
                         <v-row align="center" justify="center">
                             <label class="recent-label">
-                                Balance USD+: <b>{{ balances.usdPlus }}</b>
+                                Balance DAI: <b>{{ balances.dai }}</b>
                             </label>
                         </v-row>
 
                         <v-row align="center" justify="center">
                             <label class="recent-label">
-                                Balance USDC: <b>{{ balances.usdc }}</b>
+                                Balance aDAI: <b>{{ balances.aDai }}</b>
                             </label>
                         </v-row>
 
                         <v-row align="center" justify="center">
                             <label class="recent-label">
-                                Balance StaticUSD+: <b>{{ balances.staticUsdPlus }}</b>
+                                Balance StaticADai: <b>{{ balances.staticADai }}</b>
                             </label>
                         </v-row>
 
@@ -135,67 +135,57 @@
                                 <div class="step-label">Preparing</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="prepareStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.prepareStep">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Approving USD+</div>
+                                <div class="step-label">Approving DAI</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="approveUsdPlusStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.approveDai">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Depositing static USD+</div>
+                                <div class="step-label">Swapping DAI to Static</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="depositStaticStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.swapDaiToStatic">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Approving USDC</div>
+                                <div class="step-label">Swap static to LP</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="approveUsdcStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.swapStaticToLp">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Swapping USDC</div>
+                                <div class="step-label">Approve DAi to LP</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="swappingFirstStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.approveDaiLp">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Approving static USD+</div>
+                                <div class="step-label">Swap DAI to LP</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="approveStaticUsdPlusStep">mdi-check</v-icon>
-                                <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
-                            </v-col>
-                        </v-row>
-
-                        <v-row class="row">
-                            <v-col cols="10">
-                                <div class="step-label">Swapping Static USD+</div>
-                            </v-col>
-                            <v-col cols="2">
-                                <v-icon color="green" v-if="swappingSecondStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.swapDaiToLp">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
@@ -205,7 +195,7 @@
                                 <div class="step-label">Ending process</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="endStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.endStep">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
@@ -214,7 +204,7 @@
                             <v-col>
                                 <v-btn dark
                                        height="40"
-                                       v-if="endStep"
+                                       v-if="steps.endStep"
                                        class='buy enabled-buy'
                                        @click="close">
                                     Close
@@ -234,21 +224,18 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import {ethers} from "ethers";
 
 export default {
-    name: "LinearPoolFeeding",
+    name: "LinearPoolDai",
 
     components: {},
 
     data: () => ({
-        amountUsdc: null,
-        amountUsdPlus: null,
+        amountDai: null,
+        amountADai: null,
         showProcessDialog: false,
     }),
 
     computed: {
-        ...mapGetters('linearPoolFeeding', ['balances',
-              'prepareStep', 'approveUsdPlusStep', 'depositStaticStep', 'approveUsdcStep',
-              'swappingFirstStep', 'approveStaticUsdPlusStep', 'swappingSecondStep', 'endStep'
-          ]
+        ...mapGetters('linearPoolDAI', ['balances', "steps",]
         ),
 
     },
@@ -266,8 +253,8 @@ export default {
     },
 
     methods: {
-        ...mapActions('linearPoolFeeding', ['startProcess', 'updateBalances']),
-        ...mapMutations('linearPoolFeeding', ['setAmountValueUsdPlus', 'setAmountValueUsdc']),
+        ...mapActions('linearPoolDAI', ['startProcess', 'updateBalances']),
+        ...mapMutations('linearPoolDAI', ['setAmountValueDai', 'setAmountValueADai']),
 
         isNumber: function (evt) {
             evt = (evt) ? evt : window.event;
@@ -287,13 +274,13 @@ export default {
         start() {
             this.showProcessDialog = true;
 
-            this.setAmountValueUsdc(this.amountUsdc);
-            this.setAmountValueUsdPlus(this.amountUsdPlus);
+            this.setAmountValueDai(this.amountDai);
+            this.setAmountValueADai(this.amountADai);
             this.startProcess();
         },
 
         close() {
-            this.amountUsdc = null;
+            this.amountDai = null;
             this.showProcessDialog = false;
 
             this.$emit('input', false);

@@ -71,14 +71,13 @@
             </v-card>
         </v-row>
 
-
         <v-row class="main-btn-row pt-2" justify="center">
             <div style="width: 100%;">
                 <v-btn dark
                        height="56"
                        class='buy enabled-buy'
                        @click="start">
-                    Stake
+                    UnStake
                 </v-btn>
             </div>
         </v-row>
@@ -95,7 +94,7 @@
                     <v-toolbar-title class="title">
                         Feeding linear pool&nbsp;&nbsp;
                     </v-toolbar-title>
-                    <v-progress-circular v-if="!endStep"
+                    <v-progress-circular v-if="!steps.endStep"
                                          width="2"
                                          size="20"
                                          color="white"
@@ -135,67 +134,47 @@
                                 <div class="step-label">Preparing</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="prepareStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.prepareStep">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Approving USD+</div>
+                                <div class="step-label">Approving LP</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="approveUsdPlusStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.approveLp">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Depositing static USD+</div>
+                                <div class="step-label">Swap LP to USDC</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="depositStaticStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.swapLpToUsdc">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Approving USDC</div>
+                                <div class="step-label">Swap LP to static USD+</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="approveUsdcStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.swapLpToStaticUsdPlus">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
 
                         <v-row class="row">
                             <v-col cols="10">
-                                <div class="step-label">Swapping USDC</div>
+                                <div class="step-label">Convert static USD+ to USD+</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="swappingFirstStep">mdi-check</v-icon>
-                                <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
-                            </v-col>
-                        </v-row>
-
-                        <v-row class="row">
-                            <v-col cols="10">
-                                <div class="step-label">Approving static USD+</div>
-                            </v-col>
-                            <v-col cols="2">
-                                <v-icon color="green" v-if="approveStaticUsdPlusStep">mdi-check</v-icon>
-                                <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
-                            </v-col>
-                        </v-row>
-
-                        <v-row class="row">
-                            <v-col cols="10">
-                                <div class="step-label">Swapping Static USD+</div>
-                            </v-col>
-                            <v-col cols="2">
-                                <v-icon color="green" v-if="swappingSecondStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.convertStatioUsdPlusToUsdPlus">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
@@ -205,7 +184,7 @@
                                 <div class="step-label">Ending process</div>
                             </v-col>
                             <v-col cols="2">
-                                <v-icon color="green" v-if="endStep">mdi-check</v-icon>
+                                <v-icon color="green" v-if="steps.endStep">mdi-check</v-icon>
                                 <v-icon color="#8FA2B7" v-else>mdi-dots-horizontal</v-icon>
                             </v-col>
                         </v-row>
@@ -214,7 +193,7 @@
                             <v-col>
                                 <v-btn dark
                                        height="40"
-                                       v-if="endStep"
+                                       v-if="steps.endStep"
                                        class='buy enabled-buy'
                                        @click="close">
                                     Close
@@ -234,7 +213,7 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import {ethers} from "ethers";
 
 export default {
-    name: "LinearPoolFeeding",
+    name: "LinearPoolFeedingUnstake",
 
     components: {},
 
@@ -245,10 +224,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('linearPoolFeeding', ['balances',
-              'prepareStep', 'approveUsdPlusStep', 'depositStaticStep', 'approveUsdcStep',
-              'swappingFirstStep', 'approveStaticUsdPlusStep', 'swappingSecondStep', 'endStep'
-          ]
+        ...mapGetters('linearPoolFeedingUnstake', ['balances', 'steps']
         ),
 
     },
@@ -266,8 +242,8 @@ export default {
     },
 
     methods: {
-        ...mapActions('linearPoolFeeding', ['startProcess', 'updateBalances']),
-        ...mapMutations('linearPoolFeeding', ['setAmountValueUsdPlus', 'setAmountValueUsdc']),
+        ...mapActions('linearPoolFeedingUnstake', ['startProcess', 'updateBalances']),
+        ...mapMutations('linearPoolFeedingUnstake', ['setAmountValueUsdPlus', 'setAmountValueUsdc']),
 
         isNumber: function (evt) {
             evt = (evt) ? evt : window.event;
@@ -283,6 +259,7 @@ export default {
                 }
             }
         },
+
 
         start() {
             this.showProcessDialog = true;

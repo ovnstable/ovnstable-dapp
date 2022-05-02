@@ -13,21 +13,37 @@
 
                 <v-row class="mt-15" justify="center">
                     <v-btn-toggle
-                            v-model="tabNumber"
-                            class="tab-btn-toggle"
-                            mandatory>
+                      v-model="tabNumber"
+                      class="tab-btn-toggle"
+                      mandatory>
                         <v-btn class="tab-btn" @click="tab = 1">
-                            <label v-bind:class="activeTabPayouts">Linear pool</label>
+                            <label v-bind:class="tab1">LP USDC/USD+ [Stake]</label>
                         </v-btn>
+
                         <v-btn class="tab-btn" @click="tab = 2">
-                            <label v-bind:class="activeTabPortfolio">Stable pool</label>
+                            <label v-bind:class="tab2">LP USDC/USD+ [Unstake]</label>
+                        </v-btn>
+
+                        <v-btn class="tab-btn" @click="tab = 3">
+                            <label v-bind:class="tab3">LP DAI/amDAI [Stake]</label>
+                        </v-btn>
+
+                        <v-btn class="tab-btn" @click="tab = 4">
+                            <label v-bind:class="tab4">LP USDT/amUSDT [Stake]</label>
+                        </v-btn>
+
+                        <v-btn class="tab-btn" @click="tab = 5">
+                            <label v-bind:class="tab5">Stable pool USD+</label>
                         </v-btn>
                     </v-btn-toggle>
                 </v-row>
 
                 <v-row class="pt-4" justify="center">
                     <LinearPoolFeeding v-if="tab === 1"/>
-                    <StablePoolFeeding v-if="tab === 2"/>
+                    <LinearPoolFeedingUnstake v-if="tab === 2"/>
+                    <LinearPoolDai v-if="tab === 3"/>
+                    <LinearPoolUsdt v-if="tab === 4"/>
+                    <StablePoolFeeding v-if="tab === 5"/>
                 </v-row>
             </v-col>
         </v-row>
@@ -39,10 +55,17 @@
 import {mapGetters} from "vuex";
 import LinearPoolFeeding from "@/components/feeding/LinearPoolFeeding";
 import StablePoolFeeding from "@/components/feeding/StablePoolFeeding";
+import LinearPoolFeedingUnstake from "@/components/feeding/LinearPoolFeedingUnstake";
+import LinearPoolDai from "@/components/feeding/LinearPoolDai";
+import LinearPoolUsdt from "@/components/feeding/LinearPoolUsdt";
+
 export default {
     name: "DashboardView",
 
     components: {
+        LinearPoolUsdt,
+        LinearPoolDai,
+        LinearPoolFeedingUnstake,
         StablePoolFeeding,
         LinearPoolFeeding
     },
@@ -53,17 +76,38 @@ export default {
     }),
 
     computed: {
-        activeTabPayouts: function () {
+        tab1: function () {
             return {
                 'tab-button': this.tab === 1,
                 'tab-button-in-active': this.tab !== 1,
             }
         },
 
-        activeTabPortfolio: function () {
+        tab2: function () {
             return {
                 'tab-button': this.tab === 2,
                 'tab-button-in-active': this.tab !== 2,
+            }
+        },
+
+        tab3: function () {
+            return {
+                'tab-button': this.tab === 3,
+                'tab-button-in-active': this.tab !== 3,
+            }
+        },
+
+        tab4: function () {
+            return {
+                'tab-button': this.tab === 4,
+                'tab-button-in-active': this.tab !== 4,
+            }
+        },
+
+        tab5: function () {
+            return {
+                'tab-button': this.tab === 5,
+                'tab-button-in-active': this.tab !== 5,
             }
         },
     },

@@ -110,7 +110,7 @@ export default {
         buyCurrency: null,
         buyCurrencies: [{
             id: 'undefined',
-            title: 'Pool',
+            title: '—',
             image: require('@/assets/currencies/undefined.svg')
         }],
     }),

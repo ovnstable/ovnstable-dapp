@@ -2,28 +2,10 @@
     <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
             <v-col class="main-col">
-                <v-row align="center">
-                    <label class="title-label">
+                <v-row class="justify-start">
+                    <label class="title-header">
                         Farm
                     </label>
-                    <v-spacer></v-spacer>
-                </v-row>
-
-                <v-row class="header-row">
-                    <v-col class="pa-0 ma-0" cols="2">
-                    </v-col>
-                    <v-col class="pa-0 ma-0" cols="4">
-                        <label class="header-row-label">Instrument</label>
-                    </v-col>
-                    <v-col class="pa-0 ma-0" cols="4">
-                        <v-col cols="8">
-                            <v-row justify="end">
-                                <label class="header-row-label">Pool Stats</label>
-                            </v-row>
-                        </v-col>
-                    </v-col>
-                    <v-col class="pa-0 ma-0" cols="2">
-                    </v-col>
                 </v-row>
 
                 <v-row class="main-row">
@@ -37,39 +19,96 @@
                                         @click="openPanel(i)">
 
                                     <v-expansion-panel-header class="pool-panel-header">
-                                        <v-col class="pa-0 ma-0" cols="2">
-                                            <div style="display: flex">
-                                                <div class="currency-icon">
-                                                    <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                        <v-col cols="1">
+                                            <v-row class="header-title-row">
+                                                <label class="header-title-label">Instrument</label>
+                                            </v-row>
+                                            <v-row>
+                                                <div style="display: flex">
+                                                    <div class="currency-icon">
+                                                        <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                                    </div>
+                                                    <div class="currency-icon">
+                                                        <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                                    </div>
                                                 </div>
-                                                <div class="currency-icon">
-                                                    <v-img :src="require('@/assets/currencies/undefined.svg')"/>
-                                                </div>
-                                            </div>
+                                            </v-row>
                                         </v-col>
-                                        <v-col class="pa-0 ma-0" cols="4">
-                                            <label class="panel-header-title-label">
-                                                {{ pool.title }}
-                                            </label>
+
+                                        <v-col cols="5">
+                                            <v-row class="header-title-row">
+                                                <label class="header-title-label" style="color: transparent !important;">Instrument</label>
+                                            </v-row>
+                                            <v-row>
+                                                <label class="panel-header-title-label">
+                                                    {{ pool.title }}
+                                                </label>
+                                            </v-row>
                                         </v-col>
-                                        <v-col class="pa-0 ma-0" cols="4">
-                                            <v-col cols="8">
-                                                <v-row justify="end">
-                                                    <label class="panel-header-stats-label">
-                                                        {{ pool.apy ? $utils.formatMoney(pool.apy, 2) + '%' : '—' }}
-                                                    </label>
-                                                </v-row>
-                                                <v-row justify="end">
-                                                    <label class="panel-header-stats-label">
-                                                        {{ pool.tvl ? pool.tvl + ' TVL' : '—' }}
-                                                    </label>
-                                                </v-row>
-                                            </v-col>
+
+                                        <v-col class="pa-0 ma-0" cols="1">
+                                        </v-col>
+
+                                        <v-col>
+                                            <v-row align="center" justify="end" class="header-title-row">
+                                                <label class="header-title-label mr-1">
+                                                    Pool stats
+                                                </label>
+                                                <v-tooltip
+                                                        color="#0C0D12"
+                                                        right
+                                                >
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <div class="help-icon"
+                                                             v-bind="attrs"
+                                                             v-on="on">
+                                                            <v-img :src="require('@/assets/icon/help-gray.svg')"/>
+                                                        </div>
+                                                    </template>
+                                                <!--<p class="tooltip-sub-label my-0">Total APR</p>
+                                                    <p class="tooltip-label mt-1 mb-2" style="font-size: 14px !important;">{{ pool.apy ? $utils.formatMoney(pool.apy, 2) + '%' : '—' }}</p>
+                                                    <p class="my-0">
+                                                        <label class="tooltip-label">0.05%</label>
+                                                        <label class="ml-1 tooltip-sub-label">Basic APR</label>
+                                                    </p>-->
+                                                    <!-- TODO: add other pool stats -->
+                                                </v-tooltip>
+                                            </v-row>
+                                            <v-row justify="end">
+                                                <label class="panel-header-stats-label">
+                                                    {{ pool.apy ? $utils.formatMoney(pool.apy, 2) + '% APR' : '—' }}
+                                                </label>
+                                            </v-row>
+                                            <v-row justify="end">
+                                                <label class="panel-header-stats-label">
+                                                    {{ pool.tvl ? pool.tvl + ' TVL' : '—' }}
+                                                </label>
+                                            </v-row>
+                                        </v-col>
+
+                                        <v-col>
+                                            <v-row justify="end" class="header-title-row">
+                                                <label class="header-title-label">
+                                                    Your stats
+                                                </label>
+                                            </v-row>
+                                            <v-row justify="end">
+                                                <label class="panel-header-stats-label">
+                                                    325 LP staked
+                                                </label>
+                                            </v-row>
+                                            <v-row justify="end">
+                                                <label class="panel-header-stats-label">
+                                                    12 preOVN earned
+                                                </label>
+                                            </v-row>
+                                        </v-col>
+
+                                        <v-col class="pa-0 ma-0" cols="1">
                                         </v-col>
 
                                         <template v-slot:actions>
                                             <label class="pool-panel-action-label">
-                                                Manage
                                                 <v-icon class="action-label-icon">
                                                     mdi-chevron-down
                                                 </v-icon>
@@ -77,85 +116,154 @@
                                         </template>
                                     </v-expansion-panel-header>
 
-                                    <v-expansion-panel-content>
+                                    <v-expansion-panel-content class="mb-4">
                                         <v-col>
                                             <v-row class="content-row">
-                                                <v-col>
-                                                    <v-row justify="start">
-                                                        <label class="content-label">Your total LP tokens</label>
-                                                    </v-row>
+                                                <v-col cols="4">
+                                                    <v-card class="content-card">
+                                                        <v-card-title>
+                                                            <v-row class="mb-3 mt-0">
+                                                                <v-col cols="4">
+                                                                    <v-row align="center" justify="end">
+                                                                        <label class="card-title-label">
+                                                                            LP tokens
+                                                                        </label>
+                                                                    </v-row>
+                                                                </v-col>
+                                                                <v-col cols="8">
+                                                                    <v-row align="center" justify="end" class="mr-1">
+                                                                        <a class="card-link-title-label" @click="openGetLpTokenLink">
+                                                                            <label class="mr-1">Get LP tokens</label>
+                                                                            <v-img class="help-icon out-icon" :src="require('@/assets/icon/out.svg')"/>
+                                                                        </a>
+                                                                    </v-row>
+                                                                </v-col>
+                                                            </v-row>
+                                                        </v-card-title>
+                                                        <v-card-text>
+                                                            <v-row>
+                                                                <v-col cols="4">
+                                                                    <v-row align="center" justify="end">
+                                                                        <label class="card-content-label-name">
+                                                                            Total
+                                                                        </label>
+                                                                    </v-row>
+                                                                    <v-row align="center" justify="end">
+                                                                        <label class="card-content-label-name">
+                                                                            Staked
+                                                                        </label>
+                                                                    </v-row>
+                                                                </v-col>
+                                                                <v-col cols="8">
+                                                                    <v-row align="center" justify="start">
+                                                                        <label class="ml-4 card-content-label-value">
+                                                                            0.0000000004302
+                                                                        </label>
+                                                                    </v-row>
+                                                                    <v-row align="center" justify="start">
+                                                                        <label class="ml-4 card-content-label-value">
+                                                                            <label class="mr-1">0.000000000000</label>
+                                                                            <v-img class="help-icon-medium" :src="require('@/assets/currencies/undefined.svg')"/>
+                                                                        </label>
+                                                                    </v-row>
+                                                                </v-col>
+                                                            </v-row>
+                                                        </v-card-text>
+                                                    </v-card>
                                                 </v-col>
-                                                <v-col>
-                                                    <v-row justify="end">
-                                                        <label class="content-label">0.0000000004302</label>
-                                                    </v-row>
+                                                <v-col cols="4">
+                                                    <v-card class="content-card">
+                                                        <v-card-title>
+                                                            <v-spacer></v-spacer>
+                                                            <label class="card-title-label mr-1">
+                                                                PreOVN available to claim
+                                                            </label>
+                                                            <v-tooltip
+                                                                    color="#0C0D12"
+                                                                    top
+                                                                    close-delay="2000"
+                                                            >
+                                                                <template v-slot:activator="{ on, attrs }">
+                                                                    <div class="help-icon-medium"
+                                                                         v-bind="attrs"
+                                                                         v-on="on">
+                                                                        <v-img :src="require('@/assets/icon/question-help.svg')"/>
+                                                                    </div>
+                                                                </template>
+                                                                <a class="learn-more-link my-0" @click="openPreOvnPage">Learn more about preOVN</a>
+                                                            </v-tooltip>
+                                                            <v-spacer></v-spacer>
+                                                        </v-card-title>
+                                                        <v-card-text style="height: 50%">
+                                                            <v-row justify="center" align="center" class="mt-0" style="height: 100%">
+                                                                <label class="ml-4 card-content-label-value">
+                                                                    <label class="mr-1">0.000000000000</label>
+                                                                    <v-img class="help-icon-medium" :src="require('@/assets/currencies/undefined.svg')"/>
+                                                                </label>
+                                                            </v-row>
+                                                        </v-card-text>
+                                                    </v-card>
+                                                </v-col>
+                                                <v-col cols="2">
+                                                    <v-card class="content-card">
+                                                        <v-card-title>
+                                                            <v-spacer></v-spacer>
+                                                            <label class="card-title-label">
+                                                                Your pool share
+                                                            </label>
+                                                            <v-spacer></v-spacer>
+                                                        </v-card-title>
+                                                        <v-card-text style="height: 50%">
+                                                            <v-row justify="center" align="center" class="mt-0" style="height: 100%">
+                                                                <label class="ml-4 card-content-label-value">
+                                                                    0.00%
+                                                                </label>
+                                                            </v-row>
+                                                        </v-card-text>
+                                                    </v-card>
+                                                </v-col>
+                                                <v-col cols="2">
+                                                    <v-card class="content-card">
+                                                        <v-card-title>
+                                                            <v-spacer></v-spacer>
+                                                            <label class="card-title-label mr-1">
+                                                                Fee
+                                                            </label>
+                                                            <v-tooltip
+                                                                    color="#0C0D12"
+                                                                    right
+                                                            >
+                                                                <template v-slot:activator="{ on, attrs }">
+                                                                    <div class="help-icon-medium"
+                                                                         v-bind="attrs"
+                                                                         v-on="on">
+                                                                        <v-img :src="require('@/assets/icon/question-help.svg')"/>
+                                                                    </div>
+                                                                </template>
+                                                                <!-- TODO: add fee tooltip -->
+                                                            </v-tooltip>
+                                                            <v-spacer></v-spacer>
+                                                        </v-card-title>
+                                                        <v-card-text style="height: 50%">
+                                                            <v-row justify="center" align="center" class="mt-0" style="height: 100%">
+                                                                <label class="ml-4 card-content-label-value">
+                                                                    0.00%
+                                                                </label>
+                                                            </v-row>
+                                                        </v-card-text>
+                                                    </v-card>
                                                 </v-col>
                                             </v-row>
 
-                                            <v-row class="content-row">
-                                                <v-col>
-                                                    <v-row justify="start">
-                                                        <label class="content-label">LP token staked</label>
-                                                    </v-row>
-                                                </v-col>
-                                                <v-col>
-                                                    <v-row justify="end">
-                                                        <span style="display: flex">
-                                                            <label class="mr-1 content-label">0.000000000000</label>
-                                                            <v-img height="24" width="24" :src="require('@/assets/currencies/undefined.svg')"/>
-                                                        </span>
-                                                    </v-row>
-                                                </v-col>
-                                            </v-row>
-
-                                            <v-row class="content-row">
-                                                <v-col>
-                                                    <v-row justify="start">
-                                                        <span style="display: flex">
-                                                            <label class="mr-1 content-label">preOVN available to claim</label>
-                                                            <v-img class="preovn-help-icon" height="24" width="24" :src="require('@/assets/icon/question-help.svg')"/>
-                                                        </span>
-                                                    </v-row>
-                                                </v-col>
-                                                <v-col>
-                                                    <v-row justify="end">
-                                                        <span style="display: flex">
-                                                            <label class="mr-1 content-label">0.00000000</label>
-                                                            <v-img height="24" width="24" :src="require('@/assets/currencies/undefined.svg')"/>
-                                                        </span>
-                                                    </v-row>
-                                                </v-col>
-                                            </v-row>
-
-                                            <v-row class="content-row">
-                                                <v-col>
-                                                    <v-row justify="start">
-                                                        <label class="content-label">Your pool share</label>
-                                                    </v-row>
-                                                </v-col>
-                                                <v-col>
-                                                    <v-row justify="end">
-                                                        <label class="content-label">0.00%</label>
-                                                    </v-row>
-                                                </v-col>
-                                            </v-row>
-
-                                            <v-row justify="center" align="center">
-                                                <a class="view-explorer-btn" @click="openGetLpTokenLink">
-                                                    <label class="mr-1 view-explorer-label">Get LP token</label>
-                                                    <v-img class="icon-img" :src="require('@/assets/icon/out.svg')"/>
-                                                </a>
-                                            </v-row>
-
-                                            <v-row>
+                                            <v-row class="mt-5">
                                                 <v-col cols="6">
-                                                    <button class="btn-deposit" v-on:click="depositAction">
-                                                        Deposit
+                                                    <button class="btn-deposit" v-on:click="depositAction(pool)">
+                                                        Deposit LP tokens
                                                     </button>
                                                 </v-col>
                                                 <v-col cols="6">
-                                                    <button class="btn-withdraw" v-on:click="withdrawAction">
-                                                        Withdraw & Claim Rewards
+                                                    <button class="btn-withdraw" v-on:click="withdrawAction(pool)">
+                                                        Withdraw LP tokens & Claim Rewards
                                                     </button>
                                                 </v-col>
                                             </v-row>
@@ -168,18 +276,22 @@
                 </v-row>
             </v-col>
         </v-row>
+
+        <DepositModal persistent/>
+        <WithdrawModal persistent/>
     </v-container>
 </template>
 
 <script>
 
-
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
+import DepositModal from "@/components/farm/DepositModal";
+import WithdrawModal from "@/components/farm/WithdrawModal";
 
 export default {
     name: "FarmView",
 
-    components: {},
+    components: {WithdrawModal, DepositModal},
 
     data: () => ({
         openedPanels: [0],
@@ -191,6 +303,9 @@ export default {
     },
 
     methods: {
+        ...mapActions('farm', ['showDepositModal', 'showWithdrawModal']),
+        ...mapMutations('farm', ['setSelectedPool']),
+
         openPanel(i) {
             if (this.openedPanels[0] !== i) {
                 this.openedPanels = [].push(i);
@@ -198,21 +313,27 @@ export default {
         },
 
         openGetLpTokenLink() {
-
             /* TODO: add link */
             let url = '';
             window.open(url, '_blank');
         },
 
-        depositAction() {
-
+        openPreOvnPage() {
+            /* TODO: add link */
+            let url = '';
+            window.open(url, '_blank');
         },
 
-        withdrawAction() {
+        depositAction(pool) {
+            this.setSelectedPool(pool);
+            this.showDepositModal();
+        },
 
+        withdrawAction(pool) {
+            this.setSelectedPool(pool);
+            this.showWithdrawModal();
         }
     }
-
 }
 </script>
 
@@ -221,112 +342,102 @@ export default {
 /* TODO: add mobile version */
 
 .main-col {
-    max-width: 45vw !important;
-}
-
-.header-row {
-    margin-top: 60px !important;
-    margin-bottom: 30px !important;
+    max-width: 60vw !important;
 }
 
 .pool-panel {
     margin-bottom: 10px !important;
-    border-radius: 8px !important;
-    border: 1px solid rgba(95, 151, 255, 0.15) !important;
-    background-color: #101419 !important;
+    border-radius: 20px !important;
+    background-color: var(--secondary) !important;
 }
 
 .v-expansion-panel--active {
     margin: 0 !important;
-    border: 1px solid var(--link) !important;
+    border: none !important;
 }
 
-.title-label {
-    color: white;
-    font-weight: 300;
-    font-size: 56px;
-}
-
-.header-row-label {
-    font-family: 'Lato', sans-serif !important;
-    color: white;
-    font-weight: 600;
-    font-style: normal;
-    font-size: 18px;
-    line-height: 28px;
+.main-row {
+    padding-top: 30px !important;
 }
 
 .pool-panel-header {
     cursor: default !important;
 }
 
-.pool-panel-action-label {
+
+.panel-header-title-label, .panel-header-stats-label, .card-title-label, .pool-panel-action-label {
     font-family: 'Lato', sans-serif !important;
-    cursor: pointer !important;
-    font-weight: 600;
     font-style: normal;
-    font-size: 16px;
-    line-height: 24px;
+    font-weight: 600;
+    font-size: 16px !important;
+    line-height: 24px !important;
+}
+
+.panel-header-title-label, .panel-header-stats-label, .card-title-label {
+    color: white;
 }
 
 .pool-panel-action-label, .action-label-icon {
     color: var(--link) !important;
 }
 
-.panel-header-title-label {
-    margin-left: -8px !important;
+
+.card-content-label-value, .header-title-label, .card-content-label-name, .card-link-title-label, .learn-more-link {
+    font-family: 'Lato', sans-serif !important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px !important;
+    line-height: 24px !important;
 }
 
-.panel-header-title-label, .panel-header-stats-label {
-    font-family: 'Lato', sans-serif !important;
-    cursor: pointer !important;
-    font-weight: 600;
-    font-style: normal;
-    font-size: 16px;
-    line-height: 24px;
+.card-content-label-value {
     color: white;
+    display: flex;
 }
+
+.header-title-label, .card-content-label-name {
+    color: #4C586D !important;
+}
+
+.card-link-title-label {
+    color: var(--link);
+    display: flex;
+    cursor: pointer !important;
+}
+
+
+.tooltip-sub-label, .tooltip-label {
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px !important;
+    line-height: 16px !important;
+}
+
+.tooltip-sub-label {
+    color: #4C586D !important;
+}
+
+.tooltip-label, .learn-more-link {
+    color: white !important;
+}
+
+.learn-more-link {
+    text-decoration: underline !important;
+}
+
 
 .currency-icon {
-    width: 32px;
-    height: 32px;
-    margin-left: 2px;
-    margin-right: 2px;
+    width: 40px;
+    height: 40px;
 }
 
-.view-explorer-btn > label, .preovn-help-icon {
+.view-explorer-btn > label {
     cursor: pointer !important;
-}
-
-.view-explorer-btn {
-    cursor: pointer;
-    background: none !important;
-    color: var(--link);
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 24px;
-    display: flex;
-    margin-top: 5px !important;
-    margin-bottom: 20px !important;
-}
-
-.view-explorer-label:hover {
-    text-decoration: underline;
 }
 
 .content-row {
-    margin-left: -6px !important;
-    margin-right: -6px !important;
-    margin-bottom: 5px !important;
-}
-
-.content-label {
-    font-family: 'Lato', sans-serif !important;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 14px;
-    line-height: 24px;
-    color: #8FA2B7 !important;
+    border-top: 1px solid #13151C !important;
 }
 
 .btn-deposit:hover {
@@ -340,13 +451,38 @@ export default {
 
 .btn-withdraw {
     color: var(--link);
-    background: var(--secondary);
+    background: #13151C !important;
 }
 
 .btn-deposit, .btn-withdraw {
     height: 40px !important;
     width: 100%;
     border-radius: 40px;
+}
+
+.content-card {
+    height: 100% !important;
+    margin-top: 10px !important;
+    background: #13151C !important;
+    border-radius: 12px !important;
+}
+
+.header-title-row {
+    margin-bottom: 4px !important;
+}
+
+.help-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.help-icon-medium {
+    width: 24px;
+    height: 24px;
+}
+
+.out-icon {
+    margin-top: 2px;
 }
 
 </style>

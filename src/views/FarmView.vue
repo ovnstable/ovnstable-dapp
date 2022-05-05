@@ -10,6 +10,36 @@
 
                 <v-row class="main-row">
                     <v-col class="pa-0 ma-0" cols="12">
+                        <v-row class="ml-4 mr-4">
+                            <v-col class="header-title-row" cols="3">
+                                <v-row>
+                                    <label class="header-title-label">Name</label>
+                                </v-row>
+                            </v-col>
+                            <v-col class="header-title-row" cols="2">
+                                <v-row justify="end" class="mr-2">
+                                    <label class="header-title-label">TVL</label>
+                                </v-row>
+                            </v-col>
+                            <v-col class="header-title-row" cols="2">
+                                <v-row justify="end" class="mr-2">
+                                    <label class="header-title-label">APY</label>
+                                </v-row>
+                            </v-col>
+                            <v-col class="header-title-row" cols="2">
+                                <v-row justify="end" class="mr-2">
+                                    <label class="header-title-label">Balance</label>
+                                </v-row>
+                            </v-col>
+                            <v-col class="header-title-row" cols="2">
+                                <v-row justify="end" class="mr-2">
+                                    <label class="header-title-label">Rewards</label>
+                                </v-row>
+                            </v-col>
+                            <v-col class="header-title-row" cols="1">
+                            </v-col>
+                        </v-row>
+
                         <v-row>
                             <v-expansion-panels multiple v-model="openedPanels">
                                 <v-expansion-panel
@@ -20,9 +50,6 @@
 
                                     <v-expansion-panel-header class="pool-panel-header">
                                         <v-col cols="1">
-                                            <v-row class="header-title-row">
-                                                <label class="header-title-label">Instrument</label>
-                                            </v-row>
                                             <v-row>
                                                 <div style="display: flex">
                                                     <div class="currency-icon">
@@ -35,10 +62,7 @@
                                             </v-row>
                                         </v-col>
 
-                                        <v-col cols="5">
-                                            <v-row class="header-title-row">
-                                                <label class="header-title-label" style="color: transparent !important;">Instrument</label>
-                                            </v-row>
+                                        <v-col cols="2">
                                             <v-row>
                                                 <label class="panel-header-title-label">
                                                     {{ pool.title }}
@@ -46,39 +70,7 @@
                                             </v-row>
                                         </v-col>
 
-                                        <v-col class="pa-0 ma-0" cols="1">
-                                        </v-col>
-
-                                        <v-col>
-                                            <v-row align="center" justify="end" class="header-title-row">
-                                                <label class="header-title-label mr-1">
-                                                    Pool stats
-                                                </label>
-                                                <v-tooltip
-                                                        color="#0C0D12"
-                                                        right
-                                                >
-                                                    <template v-slot:activator="{ on, attrs }">
-                                                        <div class="help-icon"
-                                                             v-bind="attrs"
-                                                             v-on="on">
-                                                            <v-img :src="require('@/assets/icon/help-gray.svg')"/>
-                                                        </div>
-                                                    </template>
-                                                <!--<p class="tooltip-sub-label my-0">Total APR</p>
-                                                    <p class="tooltip-label mt-1 mb-2" style="font-size: 14px !important;">{{ pool.apy ? $utils.formatMoney(pool.apy, 2) + '%' : '—' }}</p>
-                                                    <p class="my-0">
-                                                        <label class="tooltip-label">0.05%</label>
-                                                        <label class="ml-1 tooltip-sub-label">Basic APR</label>
-                                                    </p>-->
-                                                    <!-- TODO: add other pool stats -->
-                                                </v-tooltip>
-                                            </v-row>
-                                            <v-row justify="end">
-                                                <label class="panel-header-stats-label">
-                                                    {{ pool.apy ? $utils.formatMoney(pool.apy, 2) + '% APR' : '—' }}
-                                                </label>
-                                            </v-row>
+                                        <v-col cols="2">
                                             <v-row justify="end">
                                                 <label class="panel-header-stats-label">
                                                     {{ pool.tvl ? pool.tvl + ' TVL' : '—' }}
@@ -86,20 +78,39 @@
                                             </v-row>
                                         </v-col>
 
-                                        <v-col>
-                                            <v-row justify="end" class="header-title-row">
-                                                <label class="header-title-label">
-                                                    Your stats
+                                        <v-col cols="2">
+                                            <v-row justify="end">
+                                                <label class="panel-header-stats-label mr-1">
+                                                    {{ pool.apy ? $utils.formatMoney(pool.apy, 2) + '% APR' : '—' }}
                                                 </label>
+                                                <v-tooltip
+                                                        color="#0C0D12"
+                                                        right
+                                                >
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <div class="help-icon-medium"
+                                                             v-bind="attrs"
+                                                             v-on="on">
+                                                            <v-img :src="require('@/assets/icon/question-help.svg')"/>
+                                                        </div>
+                                                    </template>
+                                                    <!-- TODO: add APR tooltip -->
+                                                </v-tooltip>
                                             </v-row>
+                                        </v-col>
+
+                                        <v-col cols="2">
                                             <v-row justify="end">
                                                 <label class="panel-header-stats-label">
-                                                    325 LP staked
+                                                    325 LP
                                                 </label>
                                             </v-row>
+                                        </v-col>
+
+                                        <v-col cols="2">
                                             <v-row justify="end">
                                                 <label class="panel-header-stats-label">
-                                                    12 preOVN earned
+                                                    12 preOVN
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -124,7 +135,7 @@
                                                         <v-card-title>
                                                             <v-row class="mb-3 mt-0">
                                                                 <v-col cols="4">
-                                                                    <v-row align="center" justify="end">
+                                                                    <v-row align="center" justify="start" class="ml-1">
                                                                         <label class="card-title-label">
                                                                             LP tokens
                                                                         </label>
@@ -178,20 +189,6 @@
                                                             <label class="card-title-label mr-1">
                                                                 PreOVN available to claim
                                                             </label>
-                                                            <v-tooltip
-                                                                    color="#0C0D12"
-                                                                    top
-                                                                    close-delay="2000"
-                                                            >
-                                                                <template v-slot:activator="{ on, attrs }">
-                                                                    <div class="help-icon-medium"
-                                                                         v-bind="attrs"
-                                                                         v-on="on">
-                                                                        <v-img :src="require('@/assets/icon/question-help.svg')"/>
-                                                                    </div>
-                                                                </template>
-                                                                <a class="learn-more-link my-0" @click="openPreOvnPage">Learn more about preOVN</a>
-                                                            </v-tooltip>
                                                             <v-spacer></v-spacer>
                                                         </v-card-title>
                                                         <v-card-text style="height: 50%">
@@ -256,16 +253,18 @@
                                             </v-row>
 
                                             <v-row class="mt-5">
-                                                <v-col cols="6">
+                                                <v-col cols="2"></v-col>
+                                                <v-col cols="4">
                                                     <button class="btn-deposit" v-on:click="depositAction(pool)">
                                                         Deposit LP tokens
                                                     </button>
                                                 </v-col>
-                                                <v-col cols="6">
+                                                <v-col cols="4">
                                                     <button class="btn-withdraw" v-on:click="withdrawAction(pool)">
                                                         Withdraw LP tokens & Claim Rewards
                                                     </button>
                                                 </v-col>
+                                                <v-col cols="2"></v-col>
                                             </v-row>
                                         </v-col>
                                     </v-expansion-panel-content>
@@ -342,7 +341,7 @@ export default {
 /* TODO: add mobile version */
 
 .main-col {
-    max-width: 60vw !important;
+    max-width: 70vw !important;
 }
 
 .pool-panel {

@@ -8,6 +8,10 @@
                     </label>
                 </v-row>
 
+                <v-row class="mt-10 mb-2">
+                    <GetRewardsSection/>
+                </v-row>
+
                 <v-row class="main-row">
                     <v-col class="pa-0 ma-0" cols="12">
                         <v-row class="ml-4 mr-4">
@@ -81,7 +85,7 @@
                                         <v-col cols="2">
                                             <v-row justify="end">
                                                 <label class="panel-header-stats-label mr-1">
-                                                    {{ pool.apy ? $utils.formatMoney(pool.apy, 2) + '% APR' : '—' }}
+                                                    {{ pool.apy ? $utils.formatMoney(pool.apy, 2) + '%' : '—' }}
                                                 </label>
                                                 <v-tooltip
                                                         color="#0C0D12"
@@ -152,29 +156,29 @@
                                                             </v-row>
                                                         </v-card-title>
                                                         <v-card-text>
-                                                            <v-row>
+                                                            <v-row class="ml-1 mr-1">
                                                                 <v-col cols="4">
-                                                                    <v-row align="center" justify="end">
+                                                                    <v-row align="center" justify="start">
                                                                         <label class="card-content-label-name">
                                                                             Total
                                                                         </label>
                                                                     </v-row>
-                                                                    <v-row align="center" justify="end">
+                                                                    <v-row align="center" justify="start" class="mt-5">
                                                                         <label class="card-content-label-name">
                                                                             Staked
                                                                         </label>
                                                                     </v-row>
                                                                 </v-col>
                                                                 <v-col cols="8">
-                                                                    <v-row align="center" justify="start">
-                                                                        <label class="ml-4 card-content-label-value">
+                                                                    <v-row align="center" justify="end">
+                                                                        <label class="card-content-label-value">
                                                                             0.0000000004302
                                                                         </label>
                                                                     </v-row>
-                                                                    <v-row align="center" justify="start">
-                                                                        <label class="ml-4 card-content-label-value">
-                                                                            <label class="mr-1">0.000000000000</label>
+                                                                    <v-row align="center" justify="end" class="mt-5">
+                                                                        <label class="card-content-label-value">
                                                                             <v-img class="help-icon-medium" :src="require('@/assets/currencies/undefined.svg')"/>
+                                                                            <label class="ml-1">0.000000000000</label>
                                                                         </label>
                                                                     </v-row>
                                                                 </v-col>
@@ -185,18 +189,37 @@
                                                 <v-col cols="4">
                                                     <v-card class="content-card">
                                                         <v-card-title>
-                                                            <v-spacer></v-spacer>
-                                                            <label class="card-title-label mr-1">
-                                                                PreOVN available to claim
+                                                            <label class="card-title-label mr-1 mb-3 mt-0">
+                                                                You earned, preOVN
                                                             </label>
                                                             <v-spacer></v-spacer>
                                                         </v-card-title>
-                                                        <v-card-text style="height: 50%">
-                                                            <v-row justify="center" align="center" class="mt-0" style="height: 100%">
-                                                                <label class="ml-4 card-content-label-value">
-                                                                    <label class="mr-1">0.000000000000</label>
-                                                                    <v-img class="help-icon-medium" :src="require('@/assets/currencies/undefined.svg')"/>
-                                                                </label>
+                                                        <v-card-text>
+                                                            <v-row class="ml-1 mr-1">
+                                                                <v-col cols="4">
+                                                                    <v-row align="center" justify="start">
+                                                                        <label class="card-content-label-name">
+                                                                            Claimable
+                                                                        </label>
+                                                                    </v-row>
+                                                                    <v-row align="center" justify="start" class="mt-5">
+                                                                        <label class="card-content-label-name">
+                                                                            Accrued Rewards
+                                                                        </label>
+                                                                    </v-row>
+                                                                </v-col>
+                                                                <v-col cols="8">
+                                                                    <v-row align="center" justify="end">
+                                                                        <label class="card-content-label-value">
+                                                                            0.0000000004302 /~2,456$
+                                                                        </label>
+                                                                    </v-row>
+                                                                    <v-row align="center" justify="end" class="mt-5">
+                                                                        <label class="card-content-label-value">
+                                                                            <label>0.000000000000</label>
+                                                                        </label>
+                                                                    </v-row>
+                                                                </v-col>
                                                             </v-row>
                                                         </v-card-text>
                                                     </v-card>
@@ -254,14 +277,15 @@
 
                                             <v-row class="mt-5">
                                                 <v-col cols="2"></v-col>
-                                                <v-col cols="4">
+                                                <v-col style="display: flex">
                                                     <button class="btn-deposit" v-on:click="depositAction(pool)">
                                                         Deposit LP tokens
                                                     </button>
-                                                </v-col>
-                                                <v-col cols="4">
-                                                    <button class="btn-withdraw" v-on:click="withdrawAction(pool)">
-                                                        Withdraw LP tokens & Claim Rewards
+                                                    <button class="btn-withdraw ml-2 mr-2" v-on:click="withdrawAction(pool)">
+                                                        Withdraw LP tokens
+                                                    </button>
+                                                    <button class="btn-withdraw" v-on:click="claimAction(pool)">
+                                                        Claim Rewards
                                                     </button>
                                                 </v-col>
                                                 <v-col cols="2"></v-col>
@@ -278,19 +302,22 @@
 
         <DepositModal persistent/>
         <WithdrawModal persistent/>
+        <ClaimModal persistent/>
     </v-container>
 </template>
 
 <script>
 
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import DepositModal from "@/components/farm/DepositModal";
-import WithdrawModal from "@/components/farm/WithdrawModal";
+import DepositModal from "@/components/farm/modal/DepositModal";
+import WithdrawModal from "@/components/farm/modal/WithdrawModal";
+import ClaimModal from "@/components/farm/modal/ClaimModal";
+import GetRewardsSection from "@/components/farm/section/GetRewardsSection";
 
 export default {
     name: "FarmView",
 
-    components: {WithdrawModal, DepositModal},
+    components: {GetRewardsSection, ClaimModal, WithdrawModal, DepositModal},
 
     data: () => ({
         openedPanels: [0],
@@ -302,7 +329,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('farm', ['showDepositModal', 'showWithdrawModal']),
+        ...mapActions('farm', ['showDepositModal', 'showWithdrawModal', 'showClaimModal']),
         ...mapMutations('farm', ['setSelectedPool']),
 
         openPanel(i) {
@@ -317,12 +344,6 @@ export default {
             window.open(url, '_blank');
         },
 
-        openPreOvnPage() {
-            /* TODO: add link */
-            let url = '';
-            window.open(url, '_blank');
-        },
-
         depositAction(pool) {
             this.setSelectedPool(pool);
             this.showDepositModal();
@@ -331,6 +352,11 @@ export default {
         withdrawAction(pool) {
             this.setSelectedPool(pool);
             this.showWithdrawModal();
+        },
+
+        claimAction(pool) {
+            this.setSelectedPool(pool);
+            this.showClaimModal();
         }
     }
 }
@@ -404,28 +430,6 @@ export default {
     cursor: pointer !important;
 }
 
-
-.tooltip-sub-label, .tooltip-label {
-    font-family: 'Lato', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px !important;
-    line-height: 16px !important;
-}
-
-.tooltip-sub-label {
-    color: #4C586D !important;
-}
-
-.tooltip-label, .learn-more-link {
-    color: white !important;
-}
-
-.learn-more-link {
-    text-decoration: underline !important;
-}
-
-
 .currency-icon {
     width: 40px;
     height: 40px;
@@ -441,6 +445,15 @@ export default {
 
 .btn-deposit:hover {
     filter: brightness(110%);
+}
+
+.btn-deposit, .btn-withdraw {
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    font-feature-settings: 'pnum' on, 'lnum' on;
 }
 
 .btn-deposit {

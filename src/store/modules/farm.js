@@ -17,8 +17,16 @@ const state = {
 
     showDeposit: false,
     showWithdraw: false,
+    showClaim: false,
 
     selectedPool: null,
+
+    /* TODO: edit mock data */
+    farmTvl: 400000,
+    totalRewards: 200000,
+    totalRewardsLeft: 200000,
+    startDate: '05.11.2022',
+    estimatedDate: '06.11.2022',
 };
 
 const getters = {
@@ -37,6 +45,30 @@ const getters = {
 
     showWithdraw(state) {
         return state.showWithdraw;
+    },
+
+    showClaim(state) {
+        return state.showClaim;
+    },
+
+    farmTvl(state) {
+        return state.farmTvl;
+    },
+
+    totalRewards(state) {
+        return state.totalRewards;
+    },
+
+    totalRewardsLeft(state) {
+        return state.totalRewardsLeft;
+    },
+
+    startDate(state) {
+        return state.startDate;
+    },
+
+    estimatedDate(state) {
+        return state.estimatedDate;
     },
 };
 
@@ -57,6 +89,14 @@ const actions = {
     async hideWithdrawModal({commit, dispatch, getters, rootState}) {
         commit('setShowWithdraw', false);
     },
+
+    async showClaimModal({commit, dispatch, getters, rootState}) {
+        commit('setShowClaim', true);
+    },
+
+    async hideClaimModal({commit, dispatch, getters, rootState}) {
+        commit('setShowClaim', false);
+    },
 };
 
 const mutations = {
@@ -73,8 +113,32 @@ const mutations = {
         state.showWithdraw = showWithdraw;
     },
 
+    setShowClaim(state, showClaim) {
+        state.showClaim = showClaim;
+    },
+
     setSelectedPool(state, selectedPool) {
         state.selectedPool = selectedPool;
+    },
+
+    setFarmTvl(state, farmTvl) {
+        state.farmTvl = farmTvl;
+    },
+
+    setTotalRewards(state, totalRewards) {
+        state.totalRewards = totalRewards;
+    },
+
+    setTotalRewardsLeft(state, totalRewardsLeft) {
+        state.totalRewardsLeft = totalRewardsLeft;
+    },
+
+    setStartDate(state, startdDate) {
+        state.startdDate = startdDate;
+    },
+
+    setEstimatedDate(state, estimatedDate) {
+        state.estimatedDate = estimatedDate;
     },
 };
 

@@ -27,7 +27,7 @@ let accountingFirstConfig = {
 
 let accountingZeroConfig = {
     symbol: "",
-    precision: 2,
+    precision: 0,
     thousand: " ",
 }
 

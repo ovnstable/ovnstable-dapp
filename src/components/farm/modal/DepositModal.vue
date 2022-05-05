@@ -1,6 +1,6 @@
 <template>
     <v-dialog
-            :value="showWithdraw"
+            :value="showDeposit"
             :width="width"
             @input="close"
             :persistent="persistent"
@@ -10,7 +10,7 @@
                 <v-row>
                     <v-spacer></v-spacer>
                     <label class="title-modal ml-4">
-                        Withdraw
+                        Deposit
                     </label>
                     <v-spacer></v-spacer>
                     <v-btn icon class="ml-auto" @click="close" dark>
@@ -19,10 +19,29 @@
                 </v-row>
             </v-toolbar>
 
-            <v-card-text class="px-5 pt-5">
+            <v-card-text class="px-5 pt-2">
                 <v-row>
                     <v-col class="ml-4 mr-4">
-                        <v-row align="center">
+                        <v-row align="center" class="mt-1 mb-2">
+                            <div style="display: flex">
+                                <div class="currency-icon">
+                                    <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                </div>
+                                <div class="currency-icon">
+                                    <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                </div>
+                            </div>
+
+                            <label class="pool-title-label ml-2">
+                                {{ selectedPool.title }}
+                            </label>
+                        </v-row>
+                    </v-col>
+                </v-row>
+
+                <v-row class="input-row mx-1">
+                    <v-col cols="10" class="mt-2 mb-2">
+                        <v-row align="center" justify="start">
                             <v-text-field placeholder="0.00"
                                           @keypress="isNumber($event)"
                                           flat
@@ -33,26 +52,39 @@
                                           background-color="transparent"
                                           v-model="sum">
                             </v-text-field>
-                            <v-spacer></v-spacer>
-                            <div>
-                                <label class="max mr-5" @click="max">Max</label>
-                                <ItemSelector :readonly="true" :selected-item="buyCurrency" :items="buyCurrencies"/>
-                            </div>
                         </v-row>
 
                         <v-row class="balance-row">
-                            <label class="balance-label ml-5 mb-1">Balance LP token: 10.00</label>
+                            <label class="balance-label ml-5 mb-1 mt-2">Balance LP token: 10.00</label>
+                        </v-row>
+                    </v-col>
+
+                    <v-col cols="2" class="mt-2 mb-2">
+                        <v-row align="center" justify="end" style="height: 72px">
+                            <div>
+                                <label class="max mr-5" @click="max">Max</label>
+                            </div>
                         </v-row>
                     </v-col>
                 </v-row>
 
-                <v-row class="mt-6">
+                <v-row class="mt-12 mb-2">
                     <v-col class="ml-4 mr-4">
-                        <v-btn dark
-                               height="56"
-                               class="buy enabled-buy">
-                            Withdraw & Claim Rewards
-                        </v-btn>
+                        <v-row align="center">
+                            <PromoSection/>
+                        </v-row>
+                    </v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col class="ml-4 mr-4">
+                        <v-row align="center" class="mb-2">
+                            <v-btn dark
+                                   height="56"
+                                   class="buy enabled-buy">
+                                Approve LP
+                            </v-btn>
+                        </v-row>
                     </v-col>
                 </v-row>
             </v-card-text>
@@ -62,14 +94,14 @@
 
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import ItemSelector from "../common/ItemSelector";
+import ItemSelector from "../../common/ItemSelector";
 import ErrorModal from "@/components/common/ErrorModal";
 import WaitingModal from "@/components/common/WaitingModal";
 import SuccessModal from "@/components/common/SuccessModal";
-import PromoSection from "@/components/farm/PromoSection";
+import PromoSection from "@/components/farm/section/PromoSection";
 
 export default {
-    name: "WithdrawModal",
+    name: "DepositModal",
 
     components: {
         PromoSection,
@@ -92,27 +124,18 @@ export default {
     },
 
     computed: {
-        ...mapGetters('farm', ['showWithdraw', 'selectedPool']),
+        ...mapGetters('farm', ['showDeposit', 'selectedPool']),
     },
 
     data: () => ({
-
         sum: null,
-
-        buyCurrency: null,
-        buyCurrencies: [{
-            id: 'undefined',
-            title: 'Pool',
-            image: require('@/assets/currencies/undefined.svg')
-        }],
     }),
 
     created() {
-        this.buyCurrency = this.buyCurrencies[0];
     },
 
     methods: {
-        ...mapActions('farm', ['hideWithdrawModal']),
+        ...mapActions('farm', ['hideDepositModal']),
 
         max() {
         },
@@ -133,7 +156,7 @@ export default {
         },
 
         close() {
-            this.hideWithdrawModal();
+            this.hideDepositModal();
 
             this.$emit('input', false);
             this.$emit('m-close');
@@ -229,4 +252,23 @@ export default {
     text-transform: none !important;
 }
 
+.input-row {
+    border: 1px solid #13151C;
+    border-radius: 16px;
+}
+
+.currency-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.pool-title-label {
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #FFFFFF;
+}
 </style>

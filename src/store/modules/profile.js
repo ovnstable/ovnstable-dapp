@@ -45,7 +45,6 @@ const getters = {
         return state.balance;
     },
 
-
     loadingBalance(state) {
         return state.loadingBalance;
     },
@@ -57,7 +56,6 @@ const getters = {
     loadingCurrentTotalData(state) {
         return state.loadingCurrentTotalData;
     },
-
 
     gasPrice(state) {
         return state.gasPrice;
@@ -146,7 +144,6 @@ const actions = {
         })
 
         commit('setLoadingBalance', false)
-
     },
 
     async resetUserData({commit, dispatch, getters}) {
@@ -230,11 +227,6 @@ const actions = {
                 }
 
                 commit('setPayoutsTvlData', widgetDataTvl);
-
-                if (clientData && clientData.length > 0) {
-                    commit('setTotalUsdPlusValue', clientData[0].totalUsdPlus);
-                }
-
                 commit('setLoadingPayouts', false);
             })
     },
@@ -290,8 +282,6 @@ const actions = {
                 } catch (e) {
                     console.log(e)
                 }
-
-
             }
         }
 
@@ -309,6 +299,8 @@ const actions = {
         }
         commit('setTotalUsdPlus', data);
 
+        let usdPlusValue = (await axios('/dapp/getTotalUsdPlusValue')).data;
+        commit('setTotalUsdPlusValue', usdPlusValue);
     },
 
 
@@ -365,7 +357,6 @@ const actions = {
 
         commit('setCurrentTotalData', data)
         commit('setLoadingCurrentTotalData', false)
-
     }
 };
 

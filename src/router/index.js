@@ -72,6 +72,16 @@ const routes = [
                     ]
                 }
             },
+            {
+                path: '/preovn',
+                name: 'PreOvnView',
+                component: () => import('../views/PreOvnView.vue'),
+                meta: {
+                    middleware: [
+                        getDapp,
+                    ]
+                }
+            },
         ],
     },
 

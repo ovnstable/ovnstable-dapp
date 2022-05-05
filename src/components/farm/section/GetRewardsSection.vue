@@ -79,9 +79,12 @@ export default {
     methods: {
 
         openPreOvnPage() {
-            /* TODO: add preOvn page */
+            this.goToAction('/preovn');
         },
 
+        goToAction(id) {
+            this.$router.push(id);
+        },
     },
 }
 </script>
@@ -112,7 +115,7 @@ export default {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-fill-color: transparent;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 .get-rewards-sub-label {

@@ -9,7 +9,8 @@
                 </v-row>
 
                 <v-row class="mt-10 mb-2">
-                    <GetRewardsSection/>
+                    <GetRewardsSection class="rewards-section-full"/>
+                    <GetRewardsSectionMobile class="rewards-section-mobile"/>
                 </v-row>
 
                 <v-row class="main-row">
@@ -313,11 +314,12 @@ import DepositModal from "@/components/farm/modal/DepositModal";
 import WithdrawModal from "@/components/farm/modal/WithdrawModal";
 import ClaimModal from "@/components/farm/modal/ClaimModal";
 import GetRewardsSection from "@/components/farm/section/GetRewardsSection";
+import GetRewardsSectionMobile from "@/components/farm/section/GetRewardsSectionMobile";
 
 export default {
     name: "FarmView",
 
-    components: {GetRewardsSection, ClaimModal, WithdrawModal, DepositModal},
+    components: {GetRewardsSectionMobile, GetRewardsSection, ClaimModal, WithdrawModal, DepositModal},
 
     data: () => ({
         openedPanels: [0],
@@ -364,10 +366,31 @@ export default {
 
 <style scoped>
 
-/* TODO: add mobile version */
+/* mobile */
+@media only screen and (max-width: 1400px) {
+    .main-col {
+        max-width: 90vw !important;
+    }
 
-.main-col {
-    max-width: 70vw !important;
+    .main-row {
+        width: 1050px !important;
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+
+    .rewards-section-full {
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    .main-col {
+        max-width: 70vw !important;
+    }
+
+    .rewards-section-mobile {
+        display: none !important;
+    }
 }
 
 .pool-panel {

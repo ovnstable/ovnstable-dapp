@@ -26,6 +26,11 @@
                                     Account Profile
                                 </label>
                             </v-list-item>
+                            <v-list-item @click="goToAction('/farm')" class="farm-mobile">
+                                <label class="list-label-switch">
+                                    Farm
+                                </label>
+                            </v-list-item>
                             <v-list-item @click="goToAction('/dashboard')" class="dashboard-mobile">
                                 <label class="list-label-switch">
                                     Dashboard
@@ -176,7 +181,7 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
-    .bridge-link-mobile, .account-profile-mobile, .dashboard-mobile, .fund-mobile {
+    .bridge-link-mobile, .account-profile-mobile, .dashboard-mobile, .fund-mobile, .farm-mobile {
         display: none !important;
     }
 

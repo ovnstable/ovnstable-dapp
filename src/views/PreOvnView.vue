@@ -13,7 +13,7 @@
                 </v-row>
 
                 <v-row class="main-row">
-                    <v-col class="pa-0 ma-0" cols="6">
+                    <v-col class="pa-0 ma-0" :cols="isMobile ? 12 : 6">
                         <p class="preovn-info-text">
                             preOVN is a temporary token. Its purpose is to represent the protocol's obligation.
                             Each preOVN has a nominal value of 1 USDC, to be converted into OVN with a 25% bonus to the OVN IDO price. preOVN holders will be able to choose to (1) exchange their preOVNs for OVN or (2) receive an OVN value equivalent.
@@ -31,10 +31,10 @@
                         </p>
                     </v-col>
 
-                    <v-col class="pa-0 ma-0" cols="2">
+                    <v-col v-if="!isMobile" class="pa-0 ma-0" cols="2">
                     </v-col>
 
-                    <v-col class="pa-0 ma-0" cols="4">
+                    <v-col class="pa-0 ma-0" :cols="isMobile ? 12 : 4">
                         <v-container fluid class="preovn-swap-container">
                             <v-row align="center" justify="center" class="mt-16">
                                 <label class="preovn-card-label mr-3">preOVN</label>
@@ -63,7 +63,7 @@
 
                             <v-row align="center" justify="center" class="mt-10">
                                 <v-spacer></v-spacer>
-                                <label class="preovn-card-sub-text-label mr-3"> Here you can exchange preOVN for OVN soon</label>
+                                <label class="preovn-card-sub-text-label mr-3">Here you can exchange preOVN for OVN soon</label>
                                 <v-spacer></v-spacer>
                             </v-row>
 
@@ -118,6 +118,9 @@ export default {
 
 
     computed: {
+        isMobile() {
+            return window.innerWidth < 650;
+        }
     },
 
     methods: {
@@ -133,8 +136,6 @@ export default {
 </script>
 
 <style scoped>
-
-/* TODO: add mobile version */
 
 .main-col {
     max-width: 70vw !important;
@@ -196,6 +197,7 @@ export default {
     line-height: 24px;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #FFFFFF;
+    text-align: center;
 }
 
 .enabled-buy {

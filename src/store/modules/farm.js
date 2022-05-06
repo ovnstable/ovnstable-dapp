@@ -1,19 +1,6 @@
 const state = {
 
-    pools: [
-        {
-            title: 'USD+/wMatic',
-            apy: 29.96,
-            tvl: '10.000.000',
-            promoUntilDate: '2022-06-05T23:59:59.000Z',
-        },
-        {
-            title: 'USDC/USD+',
-            apy: 29.96,
-            tvl: '10.000.000',
-            promoUntilDate: '2022-06-05T23:59:59.000Z',
-        }
-    ],
+    pools: null,
 
     showDeposit: false,
     showWithdraw: false,
@@ -97,6 +84,37 @@ const actions = {
     async hideClaimModal({commit, dispatch, getters, rootState}) {
         commit('setShowClaim', false);
     },
+
+
+    async loadPools({commit, dispatch, getters, rootState}) {
+
+        let pools = [];
+
+        let account = rootState.web3.account;
+        let poolQsUsdPlusWeth = rootState.web3.contracts.poolQsUsdPlusWeth;
+
+        let pool = {};
+
+        pool.availableToClaim = await poolQsUsdPlusWeth.methods.earned(account);
+        pool.lpTokensStaked = await poolQsUsdPlusWeth.methods.balanceOf(account);
+        pool.lpTokensTotal = await poolQsUsdPlusWeth.methods.totalSupply();
+        pool.paid = await poolQsUsdPlusWeth.methods.paid(account);
+        pool.title = "USD+/WETH";
+        pool.tvl = 0;
+        pool.apy = 0;
+        pool.fee = 0;
+        pool.yourPoolShare = 0;
+        pool.link = "https://info.quickswap.exchange/#/pair/0x901Debb34469e89FeCA591f5E5336984151fEc39";
+        pool.balance = 0;
+        pool.rewards = 0;
+        pool.promoUntilDate = await poolQsUsdPlusWeth.methods.periodFinish();
+
+        pool.contract = poolQsUsdPlusWeth;
+        pool.token = rootState.web3.contracts.poolQsUsdPlusWethToken;
+
+        pools.push(pool);
+        commit('setPools', pools);
+    }
 };
 
 const mutations = {

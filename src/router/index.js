@@ -10,6 +10,7 @@ import store from "../store";
 import getOverview from "./midleware/getOverview"
 import getProposals from "./midleware/getProposals"
 import getDapp from "./midleware/getDapp"
+import getFarm from "./midleware/getFarm"
 import middlewarePipeline from "./middlewarePipeline";
 import getFinance from "@/router/midleware/getFinance";
 import getClientBalance from "@/router/midleware/getClientBalance";
@@ -68,7 +69,7 @@ const routes = [
                 component: () => import('../views/FarmView.vue'),
                 meta: {
                     middleware: [
-                        getDapp,
+                        getFarm,
                     ]
                 }
             },

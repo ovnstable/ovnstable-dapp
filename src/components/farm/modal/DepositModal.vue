@@ -81,9 +81,10 @@
                         <v-row align="center" class="mb-2">
                             <v-btn dark
                                    height="56"
+                                   @click="deposit"
                                    class="buy enabled-buy">
                                 Approve LP
-                            </v-btn>
+                            </v-btn >
                         </v-row>
                     </v-col>
                 </v-row>
@@ -125,6 +126,7 @@ export default {
 
     computed: {
         ...mapGetters('farm', ['showDeposit', 'selectedPool']),
+        ...mapGetters("web3", ["web3", 'account' ]),
     },
 
     data: () => ({
@@ -136,6 +138,7 @@ export default {
 
     methods: {
         ...mapActions('farm', ['hideDepositModal']),
+        ...mapActions("gasPrice", ['refreshGasPrice']),
 
         max() {
         },
@@ -153,6 +156,57 @@ export default {
                     return true;
                 }
             }
+        },
+
+
+        async deposit(){
+
+            console.log('Call deposit');
+
+            await this.approveAction();
+            await this.depositAction();
+        },
+
+        async approveAction(){
+
+            let from = this.account;
+            let self = this;
+
+            await this.refreshGasPrice();
+            let params = {gasPrice: this.gasPriceGwei, from: from};
+
+            let token = this.selectedPool.token;
+            let contract = this.selectedPool.contract;
+            await token.methods.approve(contract.options.address, this.sum).send(params).on('transactionHash', function (hash) {
+                let tx = {
+                    text: `Approve ${self.sum} LP tokens`,
+                    hash: hash,
+                    pending: true,
+                };
+                self.putTransaction(tx);
+            });
+
+        },
+
+        async depositAction(){
+
+            let from = this.account;
+            let self = this;
+
+            let pool = this.selectedPool.contract;
+
+            await this.refreshGasPrice();
+            let params = {gasPrice: this.gasPriceGwei, from: from};
+
+            await pool.methods.stake(this.sum).send(params).on('transactionHash', function (hash) {
+                let tx = {
+                    text: `Stake ${self.sum} LP tokens`,
+                    hash: hash,
+                    pending: true,
+                };
+                self.putTransaction(tx);
+            });
+
         },
 
         close() {

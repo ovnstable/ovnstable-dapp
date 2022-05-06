@@ -17,6 +17,8 @@ const state = {
     settingsLoading: true,
 
     strategyWeights: null,
+
+    rewardPools: [],
 };
 
 const getters = {
@@ -49,9 +51,12 @@ const getters = {
         return state.proposals;
     },
 
-
     strategyWeights(state) {
         return state.strategyWeights;
+    },
+
+    rewardPools(state) {
+        return state.rewardPools;
     },
 };
 
@@ -377,8 +382,31 @@ const actions = {
         }
 
         commit('setStrategyWeights', items);
-    }
+    },
 
+    async getRewardPools({commit, dispatch, getters, rootState}) {
+
+        let pools = [];
+
+        /* dateFormat by default YYYY-DD-MM */
+        pools.push({ name: 'Pool 1 mock', rewardRate: '10', periodFinish: '2022-05-11'});
+        pools.push({ name: 'Pool 2 mock', rewardRate: '5', periodFinish: '2022-07-30'});
+
+        commit('setRewardPools', pools);
+    },
+
+    async updateRewardPool({commit, dispatch, getters, rootState}, pool) {
+
+        let pools = getters.rewardPools;
+
+        pools = pools.filter(function( obj ) {
+            return obj.name !== pool.name;
+        });
+
+        pools.push(pool);
+
+        commit('setRewardPools', pools);
+    },
 };
 
 const mutations = {
@@ -411,7 +439,11 @@ const mutations = {
         state.strategyWeights = value;
     },
 
-};
+    setRewardPools(state, value) {
+        state.rewardPools = value;
+    },
+
+}
 
 export default {
     namespaced: true,

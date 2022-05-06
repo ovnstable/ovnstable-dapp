@@ -8,6 +8,7 @@ import store from "../store";
 
 
 import getOverview from "./midleware/getOverview"
+import getRewardPools from "./midleware/getRewardPools"
 import getProposals from "./midleware/getProposals"
 import getDapp from "./midleware/getDapp"
 import middlewarePipeline from "./middlewarePipeline";
@@ -130,7 +131,16 @@ const routes = [
                     ]
                 }
             },
-
+            {
+                path: '/governance/reward_program',
+                name: 'Reward program',
+                component: () => import('../views/governance/RewardProgram.vue'),
+                meta: {
+                    middleware: [
+                        getRewardPools
+                    ]
+                }
+            },
         ],
     },
 

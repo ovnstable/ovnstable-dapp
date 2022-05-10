@@ -4,3 +4,4 @@ node_modules
 node_modules/
 dist/
 src/contracts/local
+.env

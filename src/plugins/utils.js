@@ -1,3 +1,5 @@
+import BN from "bn.js";
+
 let accounting = require("accounting-js")
 let moment = require("moment");
 
@@ -75,4 +77,10 @@ export default {
     formatDate(date, pattern){
         return moment(date, pattern, true)
     },
+
+    fromE18: (value) => new BN(value.toString()).divRound(new BN(10).pow(new BN(18))).toString(),
+    toE18: (value) => new BN(value).mul(new BN(10).pow(new BN(18))).toString(),
+
+    toE6: (value) => value * 10 ** 6,
+    fromE6: (value) => value / 10 ** 6,
 }

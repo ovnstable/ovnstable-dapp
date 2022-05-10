@@ -60,35 +60,55 @@ const actions = {
         let pools = [];
 
         let account = rootState.accountData.account;
-        let poolQsUsdPlusWeth = rootState.web3.contracts.poolQsUsdPlusWeth;
+        let pool = rootState.web3.contracts.poolQsUsdPlusWeth;
+        let token = rootState.web3.contracts.poolQsUsdPlusWethToken;
 
-        let pool = {};
+        let item = {};
+
+        let userData = {};
+        let poolData = {};
+
+        let utils = rootState.web3.web3.utils;
+
+
+        poolData.lpTokensTotal = utils.fromWei(await pool.methods.totalSupply().call());
 
         if (account) {
-            pool.availableToClaim = await poolQsUsdPlusWeth.methods.earned(account).call();
-            pool.lpTokensStaked = await poolQsUsdPlusWeth.methods.balanceOf(account).call();
-            pool.paid = await poolQsUsdPlusWeth.methods.paid(account).call();
+            userData.availableToClaim = utils.fromWei(await pool.methods.earned(account).call());
+            userData.lpTokensStaked = utils.fromWei(await pool.methods.balanceOf(account).call());
+            userData.paid =  utils.fromWei(await pool.methods.paid(account).call());
+            userData.yourPoolShare = 0;
+            userData.lpTokensBalance =  utils.fromWei(await token.methods.balanceOf(account).call())
+
         } else {
-            pool.availableToClaim = 0;
-            pool.lpTokensTotal = 0;
-            pool.paid = 0;
+            userData.availableToClaim = 0;
+            userData.lpTokensStaked = 0;
+            userData.paid = 0;
+            userData.yourPoolShare = 0;
         }
 
-        pool.lpTokensTotal = await poolQsUsdPlusWeth.methods.totalSupply().call();
-        pool.title = "USD+/WETH";
-        pool.tvl = 0;
-        pool.apy = 0;
-        pool.fee = 0;
-        pool.yourPoolShare = 0;
-        pool.link = "https://info.quickswap.exchange/#/pair/0x901Debb34469e89FeCA591f5E5336984151fEc39";
-        pool.balance = 0;
-        pool.rewards = 0;
-        pool.promoUntilDate = await poolQsUsdPlusWeth.methods.periodFinish().call();
+        poolData.title = "USD+/WETH";
+        poolData.token0Icon = require('@/assets/currencies/usdPlus.svg');
+        poolData.token1Icon = require('@/assets/currencies/eth.svg');
+        poolData.tvl = 0;
+        poolData.apy = 0;
+        poolData.fee = 0;
+        poolData.yourPoolShare = 0;
+        poolData.link = "https://info.quickswap.exchange/#/pair/0x901Debb34469e89FeCA591f5E5336984151fEc39";
+        poolData.balance = 0;
+        poolData.rewards = 0;
+        poolData.promoUntilDate = await pool.methods.periodFinish().call();
 
-        pool.contract = poolQsUsdPlusWeth;
-        pool.token = rootState.web3.contracts.poolQsUsdPlusWethToken;
+        item.contract = pool;
+        item.token = token;
 
-        pools.push(pool);
+        item.userData = userData;
+        item.poolData = poolData;
+
+        console.log('userData: ' + JSON.stringify(item.userData));
+        console.log('poolData: ' + JSON.stringify(item.poolData));
+
+        pools.push(item);
         commit('setPools', pools);
     }
 };

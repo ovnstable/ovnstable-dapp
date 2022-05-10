@@ -55,7 +55,7 @@
                         </v-row>
 
                         <v-row class="balance-row">
-                            <label class="balance-label ml-5 mb-1 mt-2">Balance LP token: 10.00</label>
+                            <label class="balance-label ml-5 mb-1 mt-2">Balance LP token: {{selectedPool.userData.lpTokensStaked}}</label>
                         </v-row>
                     </v-col>
 
@@ -73,6 +73,7 @@
                         <v-row align="center" class="mt-1 mb-2">
                             <v-btn dark
                                    height="56"
+                                   @click="withdrawAction"
                                    class="buy enabled-buy">
                                 Withdraw
                             </v-btn>
@@ -116,6 +117,8 @@ export default {
     computed: {
         ...mapGetters('farmData', ['selectedPool']),
         ...mapGetters('farmUI', ['showWithdraw']),
+        ...mapGetters('accountData', ['account'])
+
     },
 
     data: () => ({
@@ -127,6 +130,7 @@ export default {
 
     methods: {
         ...mapActions('farmUI', ['hideWithdrawModal']),
+        ...mapActions("gasPrice", ['refreshGasPrice']),
 
         max() {
         },
@@ -144,6 +148,28 @@ export default {
                     return true;
                 }
             }
+        },
+
+
+        async withdrawAction(){
+
+            let from = this.account;
+            let self = this;
+
+            let pool = this.selectedPool.contract;
+
+            await this.refreshGasPrice();
+            let params = {gasPrice: this.gasPriceGwei, from: from};
+
+            await pool.methods.withdraw(this.sum).send(params).on('transactionHash', function (hash) {
+                let tx = {
+                    text: `Withdraw ${self.sum} LP tokens`,
+                    hash: hash,
+                    pending: true,
+                };
+                self.putTransaction(tx);
+            });
+
         },
 
         close() {

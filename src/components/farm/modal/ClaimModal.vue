@@ -44,6 +44,7 @@
                         <v-row align="center" class="mb-2">
                             <v-btn dark
                                    height="56"
+                                   @click="claimRewardAction"
                                    class="buy enabled-buy">
                                 Claim Rewards
                             </v-btn>
@@ -87,6 +88,8 @@ export default {
     computed: {
         ...mapGetters('farmData', [ 'selectedPool']),
         ...mapGetters('farmUI', ['showClaim' ]),
+        ...mapGetters('accountData', ['account'])
+
     },
 
     data: () => ({
@@ -97,6 +100,28 @@ export default {
 
     methods: {
         ...mapActions('farmUI', ['hideClaimModal']),
+        ...mapActions("gasPrice", ['refreshGasPrice']),
+
+        async claimRewardAction(){
+
+            let from = this.account;
+            let self = this;
+
+            let pool = this.selectedPool.contract;
+
+            await this.refreshGasPrice();
+            let params = {gasPrice: this.gasPriceGwei, from: from};
+
+            await pool.methods.getReward().send(params).on('transactionHash', function (hash) {
+                let tx = {
+                    text: `Claim reward`,
+                    hash: hash,
+                    pending: true,
+                };
+                self.putTransaction(tx);
+            });
+
+        },
 
         close() {
             this.hideClaimModal();

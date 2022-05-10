@@ -58,10 +58,10 @@
                                             <v-row>
                                                 <div style="display: flex">
                                                     <div class="currency-icon">
-                                                        <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                                        <v-img :src="pool.poolData.token0Icon"/>
                                                     </div>
                                                     <div class="currency-icon">
-                                                        <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                                        <v-img :src="pool.poolData.token1Icon"/>
                                                     </div>
                                                 </div>
                                             </v-row>
@@ -70,7 +70,7 @@
                                         <v-col cols="2">
                                             <v-row>
                                                 <label class="panel-header-title-label">
-                                                    {{ pool.title }}
+                                                    {{ pool.poolData.title }}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -78,7 +78,7 @@
                                         <v-col cols="2">
                                             <v-row justify="end">
                                                 <label class="panel-header-stats-label">
-                                                    {{ pool.tvl ? pool.tvl + ' TVL' : '—' }}
+                                                    {{ pool.poolData.tvl ? pool.poolData.tvl + ' TVL' : '—' }}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -86,7 +86,7 @@
                                         <v-col cols="2">
                                             <v-row justify="end">
                                                 <label class="panel-header-stats-label mr-1">
-                                                    {{ pool.apy ? $utils.formatMoney(pool.apy, 2) + '%' : '—' }}
+                                                    {{ pool.poolData.apy ? $utils.formatMoney(pool.poolData.apy, 2) + '%' : '—' }}
                                                 </label>
                                                 <v-tooltip
                                                         color="#0C0D12"
@@ -107,7 +107,7 @@
                                         <v-col cols="2">
                                             <v-row justify="end">
                                                 <label class="panel-header-stats-label">
-                                                    325 LP
+                                                   {{pool.userData.lpTokensStaked}}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -115,7 +115,7 @@
                                         <v-col cols="2">
                                             <v-row justify="end">
                                                 <label class="panel-header-stats-label">
-                                                    12 preOVN
+                                                    {{pool.userData.availableToClaim}}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -148,7 +148,7 @@
                                                                 </v-col>
                                                                 <v-col cols="8">
                                                                     <v-row align="center" justify="end" class="mr-1">
-                                                                        <a class="card-link-title-label" @click="openGetLpTokenLink">
+                                                                        <a class="card-link-title-label" @click="openGetLpTokenLink(pool.poolData.link)">
                                                                             <label class="mr-1">Get LP tokens</label>
                                                                             <v-img class="help-icon out-icon" :src="require('@/assets/icon/out.svg')"/>
                                                                         </a>
@@ -173,13 +173,13 @@
                                                                 <v-col cols="8">
                                                                     <v-row align="center" justify="end">
                                                                         <label class="card-content-label-value">
-                                                                            0.0000000004302
+                                                                            {{pool.poolData.lpTokensTotal}}
                                                                         </label>
                                                                     </v-row>
                                                                     <v-row align="center" justify="end" class="mt-5">
                                                                         <label class="card-content-label-value">
                                                                             <v-img class="help-icon-medium" :src="require('@/assets/currencies/undefined.svg')"/>
-                                                                            <label class="ml-1">0.000000000000</label>
+                                                                            <label class="ml-1">{{pool.userData.lpTokensStaked}}</label>
                                                                         </label>
                                                                     </v-row>
                                                                 </v-col>
@@ -212,12 +212,12 @@
                                                                 <v-col cols="8">
                                                                     <v-row align="center" justify="end">
                                                                         <label class="card-content-label-value">
-                                                                            0.0000000004302 /~2,456$
+                                                                           {{pool.userData.availableToClaim}}
                                                                         </label>
                                                                     </v-row>
                                                                     <v-row align="center" justify="end" class="mt-5">
                                                                         <label class="card-content-label-value">
-                                                                            <label>0.000000000000</label>
+                                                                            <label>{{pool.userData.paid}}</label>
                                                                         </label>
                                                                     </v-row>
                                                                 </v-col>
@@ -340,9 +340,7 @@ export default {
             }
         },
 
-        openGetLpTokenLink() {
-            /* TODO: add link */
-            let url = '';
+        openGetLpTokenLink(url) {
             window.open(url, '_blank');
         },
 

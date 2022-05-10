@@ -55,7 +55,7 @@
                         </v-row>
 
                         <v-row class="balance-row">
-                            <label class="balance-label ml-5 mb-1 mt-2">Balance LP token: 10.00</label>
+                            <label class="balance-label ml-5 mb-1 mt-2">Balance LP token: {{selectedPool.userData.lpTokensBalance}}</label>
                         </v-row>
                     </v-col>
 

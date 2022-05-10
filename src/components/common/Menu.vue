@@ -78,8 +78,8 @@ export default {
 
     computed: {
 
-        ...mapGetters('web3', ['account', 'web3', 'contractNames', 'networkId']),
-
+        ...mapGetters('web3', ['web3', 'networkId']),
+        ...mapGetters('accountData', ['account']),
 
         activeTabSave: function () {
             return {

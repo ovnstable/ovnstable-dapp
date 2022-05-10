@@ -32,7 +32,7 @@
                                 </div>
                             </div>
 
-                            <label class="pool-title-label ml-2">
+                            <label class="pool-title-label ml-2" v-if="selectedPool">
                                 {{ selectedPool.title }}
                             </label>
                         </v-row>
@@ -114,7 +114,8 @@ export default {
     },
 
     computed: {
-        ...mapGetters('farm', ['showWithdraw', 'selectedPool']),
+        ...mapGetters('farmData', ['selectedPool']),
+        ...mapGetters('farmUI', ['showWithdraw']),
     },
 
     data: () => ({
@@ -125,7 +126,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('farm', ['hideWithdrawModal']),
+        ...mapActions('farmUI', ['hideWithdrawModal']),
 
         max() {
         },

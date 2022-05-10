@@ -327,12 +327,12 @@ export default {
 
 
     computed: {
-        ...mapGetters('farm', ['pools']),
+        ...mapGetters('farmData', ['pools']),
     },
 
     methods: {
-        ...mapActions('farm', ['showDepositModal', 'showWithdrawModal', 'showClaimModal']),
-        ...mapMutations('farm', ['setSelectedPool']),
+        ...mapActions('farmUI', ['showDepositModal', 'showWithdrawModal', 'showClaimModal']),
+        ...mapMutations('farmData', ['setSelectedPool']),
 
         openPanel(i) {
             if (this.openedPanels[0] !== i) {

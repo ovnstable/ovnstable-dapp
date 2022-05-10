@@ -1,10 +1,6 @@
-import {axios} from "../../plugins/http-axios";
-import utils from "../../plugins/utils";
-import abiDecoder from "../../plugins/abiDecoder";
-import Web3Utils from 'web3-utils'
+const {axios} = require('@/plugins/http-axios');
 
 const proposalStates = ['Pending', 'Active', 'Canceled', 'Defeated', 'Succeeded', 'Queued', 'Expired', 'Executed'];
-import BigNumber from "bignumber.js";
 
 
 const state = {
@@ -66,7 +62,7 @@ const actions = {
 
         let contract = rootState.web3.contracts[request.contract];
         let governor = rootState.web3.contracts.governor;
-        let account = rootState.web3.account;
+        let account = rootState.accountData.account;
 
         let abi = contract.methods.upgradeTo(request.address).encodeABI();
         let name = 'Proposal #' + getters.proposals.length + 1 + ' UpgradeTo ' + request.contract;
@@ -79,14 +75,14 @@ const actions = {
 
         let contact = rootState.web3.contracts.exchange;
 
-        let params = {from: rootState.web3.account};
+        let params = {from: rootState.accountData.account};
         await contact.methods.payout().send(params);
     },
 
     async updateGovernanceSettings({commit, dispatch, getters, rootState}, value) {
 
         let governor = rootState.web3.contracts.governor;
-        let account = rootState.web3.account;
+        let account = rootState.accountData.account;
         let params = {from: account};
 
         let name = 'Proposal #' + getters.proposals.length + 1 + ' Update Governance Settings';
@@ -125,7 +121,7 @@ const actions = {
     async updateDelay({commit, dispatch, getters, rootState}, value) {
 
         let governor = rootState.web3.contracts.governor;
-        let account = rootState.web3.account;
+        let account = rootState.accountData.account;
         let contract = rootState.web3.contracts.timelockController;
         let params = {from: account};
 
@@ -138,7 +134,7 @@ const actions = {
 
         let governor = rootState.web3.contracts.governor;
 
-        let account = rootState.web3.account;
+        let account = rootState.accountData.account;
         let params = {from: account};
         await governor.methods.cancel(id).send(params);
     },
@@ -147,7 +143,7 @@ const actions = {
 
         let governor = rootState.web3.contracts.governor;
 
-        let account = rootState.web3.account;
+        let account = rootState.accountData.account;
         let params = {from: account};
         await governor.methods.executeExec(id).send(params);
     },
@@ -156,7 +152,7 @@ const actions = {
 
         let governor = rootState.web3.contracts.governor;
 
-        let account = rootState.web3.account;
+        let account = rootState.accountData.account;
         let params = {from: account};
         await governor.methods.queueExec(id).send(params);
     },
@@ -166,7 +162,7 @@ const actions = {
 
         let governor = rootState.web3.contracts.governor;
 
-        let account = rootState.web3.account;
+        let account = rootState.accountData.account;
         let params = {from: account};
         await governor.methods.castVote(request.id, request.status).send(params);
     },
@@ -198,7 +194,7 @@ const actions = {
 
         let contract = rootState.web3.contracts.exchange;
         let governor = rootState.web3.contracts.governor;
-        let account = rootState.web3.account;
+        let account = rootState.accountData.account;
 
         let params = {from: account};
 
@@ -211,7 +207,7 @@ const actions = {
     async minting({commit, dispatch, getters, rootState}, request) {
 
         let govToken = rootState.web3.contracts.govToken;
-        let account = rootState.web3.account;
+        let account = rootState.accountData.account;
         let governor = rootState.web3.contracts.governor;
         let params = {from: account};
 
@@ -225,7 +221,7 @@ const actions = {
     async delegate({commit, dispatch, getters, rootState}, address) {
 
         let govToken = rootState.web3.contracts.govToken;
-        let account = rootState.web3.account;
+        let account = rootState.accountData.account;
         let params = {from: account};
         let result = await govToken.methods.delegate(address).send(params);
     },
@@ -275,7 +271,7 @@ const actions = {
         let govToken = rootState.web3.contracts.govToken;
         let governor = rootState.web3.contracts.governor;
         let totalVotes = await govToken.methods.totalSupply().call();
-        let totalDelegated = await govToken.methods.getVotes(rootState.web3.account).call();
+        let totalDelegated = await govToken.methods.getVotes(rootState.accountData.account).call();
         let totalProposals = await governor.methods.getProposals().call();
 
         let overview = {
@@ -294,7 +290,7 @@ const actions = {
 
 
         let pm = rootState.web3.contracts.pm;
-        let account = rootState.web3.account;
+        let account = rootState.accountData.account;
         let params = {from: account};
 
         let items = [];
@@ -328,7 +324,7 @@ const actions = {
     async rebalancePortfolio ({commit, dispatch, getters, rootState} ) {
 
         let pm = rootState.web3.contracts.pm;
-        let account = rootState.web3.account;
+        let account = rootState.accountData.account;
         let params = {from: account};
 
         if (process.env.VUE_APP_POLYGON === "polygon_dev"){

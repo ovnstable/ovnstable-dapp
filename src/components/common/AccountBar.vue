@@ -85,8 +85,8 @@ export default {
     },
 
     computed: {
-        ...mapGetters('profile', ['balance']),
-        ...mapGetters('web3', ['account', 'web3', 'contractNames', 'networkId', 'walletConnected']),
+        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('web3', [ 'web3',  'networkId', 'walletConnected']),
 
         isWalletConnected: function () {
             return this.walletConnected;
@@ -110,8 +110,8 @@ export default {
     methods: {
 
         ...mapActions('web3', ['connectWallet', 'disconnectWallet', 'switchAccount', 'addUsdPlusToken']),
-        ...mapActions('accountProfile', ['showAccountProfile']),
-        ...mapActions('profile', ['refreshBalance']),
+        ...mapActions('accountUI', ['showAccountProfile']),
+        ...mapActions('accountData', ['refreshBalance']),
 
         disconnectWalletAction() {
             this.disconnectWallet();

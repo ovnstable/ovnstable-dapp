@@ -67,7 +67,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('farm', ['farmTvl', 'totalRewards', 'totalRewardsLeft', 'startDate', 'estimatedDate']),
+        ...mapGetters('farmData', ['farmTvl', 'totalRewards', 'totalRewardsLeft', 'startDate', 'estimatedDate']),
     },
 
     data: () => ({

@@ -32,7 +32,7 @@
                                 </div>
                             </div>
 
-                            <label class="pool-title-label ml-2">
+                            <label class="pool-title-label ml-2" v-if="selectedPool">
                                 {{ selectedPool.title }}
                             </label>
                         </v-row>
@@ -125,8 +125,11 @@ export default {
     },
 
     computed: {
-        ...mapGetters('farm', ['showDeposit', 'selectedPool']),
-        ...mapGetters("web3", ["web3", 'account' ]),
+        ...mapGetters('farmData', [ 'selectedPool']),
+        ...mapGetters('farmUI', ['showDeposit', ]),
+        ...mapGetters("web3", ["web3"]),
+        ...mapGetters('accountData', ['account'])
+
     },
 
     data: () => ({
@@ -137,7 +140,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('farm', ['hideDepositModal']),
+        ...mapActions('farmUI', ['hideDepositModal']),
         ...mapActions("gasPrice", ['refreshGasPrice']),
 
         max() {

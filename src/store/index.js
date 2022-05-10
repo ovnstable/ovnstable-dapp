@@ -1,26 +1,56 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import profile from "./modules/profile";
-import showTransactions from './modules/show-transaction';
-import errorModal from './modules/error-modal';
-import waitingModal from './modules/waiting-modal';
-import successModal from './modules/success-modal';
-import dashboardBalance from './modules/dashboard-balance.js';
-import transaction from './modules/transaction'
-import gasPrice from './modules/gas-price';
-import airDrop from './modules/airdrop-dialog'
-import linearPoolFeeding from './modules/pools/linear-pool-feeding'
-import linearPoolFeedingUnstake from './modules/pools/linear-pool-feeding-unstake'
-import linearPoolDAI from './modules/pools/linear-pool-dai'
-import linearPoolUsdt from './modules/pools/linear-pool-usdt'
-import stablePoolFeeding from './modules/pools/stable-pool-feeding'
-import web3 from "./modules/web3";
-import accountProfile from './modules/account-profile';
-import mintRedeemView from './modules/mint-redeem-view';
-import governance from './modules_governance/governance';
-import ethers from './modules_governance/ethers';
-import approve from "@/store/modules/approve";
-import farm from "@/store/modules/farm";
+
+
+
+// Modals
+import showTransactionsModal from '@/store/modules/modals/show-transaction-modal';
+import errorModal from '@/store/modules/modals/error-modal';
+import waitingModal from '@/store/modules/modals/waiting-modal';
+import successModal from '@/store/modules/modals/success-modal';
+
+
+// Views
+
+import dashboardData from '@/store/modules/views/dashboard/data';
+import dashboardUI from '@/store/modules/views/dashboard/ui';
+
+import farmData from "@/store/modules/views/farm/data";
+import farmUI from "@/store/modules/views/farm/ui";
+
+import statsData from "@/store/modules/views/stats/data";
+import statsUI from "@/store/modules/views/stats/ui";
+
+import swapData from "@/store/modules/views/swap/data";
+import swapUI from "@/store/modules/views/swap/ui";
+
+import accountUI from '@/store/modules/views/account/ui';
+import accountData  from '@/store/modules/views/account/data';
+import transaction from '@/store/modules/views/account/transaction';
+
+import airdropUI from '@/store/modules/views/airdrop/ui';
+
+
+// Pools
+
+import linearPoolFeeding from '@/store/modules/pools/linear-pool-feeding'
+import linearPoolFeedingUnstake from '@/store/modules/pools/linear-pool-feeding-unstake'
+import linearPoolDAI from '@/store/modules/pools/linear-pool-dai'
+import linearPoolUsdt from '@/store/modules/pools/linear-pool-usdt'
+import stablePoolFeeding from '@/store/modules/pools/stable-pool-feeding'
+
+
+// Governance
+
+import governance from '@/store/modules_governance/governance';
+import ethers from '@/store/modules_governance/ethers';
+
+
+// Common
+
+import gasPrice from '@/store/modules/common/gas-price';
+import web3 from "@/store/modules/common/web3";
+
 
 import createPersistedState from "vuex-persistedstate";
 
@@ -28,27 +58,38 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        profile,
-        gasPrice,
-        airDrop,
-        linearPoolFeeding,
-        linearPoolFeedingUnstake,
-        linearPoolDAI,
-        linearPoolUsdt,
-        stablePoolFeeding,
-        showTransactions,
+        showTransactionsModal,
         errorModal,
         waitingModal,
         successModal,
-        dashboardBalance,
+
+        dashboardData,
+        dashboardUI,
+        farmData,
+        farmUI,
+        statsData,
+        statsUI,
+        swapData,
+        swapUI,
+        accountUI,
+        accountData,
         transaction,
-        web3,
-        accountProfile,
-        mintRedeemView,
+
+        airdropUI,
+
+        linearPoolFeedingUnstake,
+        linearPoolFeeding,
+        linearPoolDAI,
+        linearPoolUsdt,
+        stablePoolFeeding,
+
+
         governance,
         ethers,
-        approve,
-        farm,
+
+        gasPrice,
+        web3
+
     },
     plugins: [createPersistedState({paths: ['transaction']})]
 });

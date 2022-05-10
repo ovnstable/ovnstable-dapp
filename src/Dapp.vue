@@ -21,6 +21,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AccountProfile from "./components/common/AccountProfile";
 import GasSettings from "@/components/common/GasSettings";
+import {mapActions} from "vuex";
 
 export default {
     name: "Dapp",
@@ -29,6 +30,20 @@ export default {
         AccountProfile,
         Footer,
         Header
+    },
+
+
+    created() {
+
+        console.log('Dapp.created()')
+        this.initWeb3();
+        this.connectWallet();
+    },
+
+
+    methods:{
+
+        ...mapActions('web3', ['initWeb3', 'connectWallet'])
     }
 }
 </script>

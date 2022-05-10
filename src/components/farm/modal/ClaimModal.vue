@@ -32,7 +32,7 @@
                                 </div>
                             </div>
 
-                            <label class="pool-title-label ml-2">
+                            <label class="pool-title-label ml-2" v-if="selectedPool">
                                 {{ selectedPool.title }}
                             </label>
                         </v-row>
@@ -85,7 +85,8 @@ export default {
     },
 
     computed: {
-        ...mapGetters('farm', ['showClaim', 'selectedPool']),
+        ...mapGetters('farmData', [ 'selectedPool']),
+        ...mapGetters('farmUI', ['showClaim' ]),
     },
 
     data: () => ({
@@ -95,7 +96,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('farm', ['hideClaimModal']),
+        ...mapActions('farmUI', ['hideClaimModal']),
 
         close() {
             this.hideClaimModal();

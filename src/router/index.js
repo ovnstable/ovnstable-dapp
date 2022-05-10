@@ -6,15 +6,24 @@ Vue.use(VueRouter)
 
 import store from "../store";
 
-
-import getOverview from "./midleware/getOverview"
-import getRewardPools from "./midleware/getRewardPools"
-import getProposals from "./midleware/getProposals"
 import getDapp from "./midleware/getDapp"
-import getFarm from "./midleware/getFarm"
+
+
+// Governance sections
+
+import getOverview from "./midleware/governance/getOverview"
+import getRewardPools from "./midleware/governance/getRewardPools"
+import getProposals from "./midleware/governance/getProposals"
 import middlewarePipeline from "./middlewarePipeline";
-import getFinance from "@/router/midleware/getFinance";
-import getClientBalance from "@/router/midleware/getClientBalance";
+import getFinance from "@/router/midleware/governance/getFinance";
+
+// Dapp Sections
+import Swap from "./midleware/dapp/Swap";
+import Farm from "./midleware/dapp/Farm";
+import Stats from "./midleware/dapp/Stats";
+import Dashboard from "./midleware/dapp/Dashboard";
+import PreOvn from "./midleware/dapp/PreOvn";
+
 
 const routes = [
     {
@@ -26,41 +35,31 @@ const routes = [
 
             {
                 path: '/',
-                name: 'EarnView',
-                component: () => import('../views/EarnView.vue'),
+                name: 'SwapView',
+                component: () => import('../views/SwapView.vue'),
                 meta: {
                     middleware: [
-                        getDapp,
+                        Swap,
                     ]
                 }
             },
             {
                 path: '/fund',
-                name: 'DashboardView',
-                component: () => import('../views/DashboardView.vue'),
+                name: 'StatsView',
+                component: () => import('../views/StatsView.vue'),
                 meta: {
                     middleware: [
-                        getDapp,
+                        Stats,
                     ]
                 }
             },
             {
                 path: '/dashboard',
-                name: 'OvnStatementView',
-                component: () => import('../views/OvnStatementView.vue'),
+                name: 'DashboardView',
+                component: () => import('../views/DashboardView.vue'),
                 meta: {
                     middleware: [
-                        getClientBalance,
-                    ]
-                }
-            },
-            {
-                path: '/poolsFeeding',
-                name: 'PoolFeedingView',
-                component: () => import('../views/PoolFeedingView.vue'),
-                meta: {
-                    middleware: [
-                        getDapp,
+                        Dashboard,
                     ]
                 }
             },
@@ -70,7 +69,7 @@ const routes = [
                 component: () => import('../views/FarmView.vue'),
                 meta: {
                     middleware: [
-                        getFarm,
+                        Farm,
                     ]
                 }
             },
@@ -78,6 +77,17 @@ const routes = [
                 path: '/preovn',
                 name: 'PreOvnView',
                 component: () => import('../views/PreOvnView.vue'),
+                meta: {
+                    middleware: [
+                        PreOvn,
+                    ]
+                }
+            },
+
+            {
+                path: '/poolsFeeding',
+                name: 'PoolFeedingView',
+                component: () => import('../views/PoolFeedingView.vue'),
                 meta: {
                     middleware: [
                         getDapp,

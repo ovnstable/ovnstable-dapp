@@ -170,11 +170,6 @@ const actions = {
                 }
 
                 commit('setPayoutsTvlData', widgetDataTvl);
-
-                if (clientData && clientData.length > 0) {
-                    commit('setTotalUsdPlusValue', clientData[0].totalUsdPlus);
-                }
-
                 commit('statsUI/setLoadingPayouts', false, { root: true });
 
             })
@@ -192,6 +187,10 @@ const actions = {
             totalSupply: value
         }
         commit('setTotalUsdPlus', data);
+
+        let usdPlusValue = (await axios('/dapp/getTotalUsdPlusValue')).data;
+        commit('setTotalUsdPlusValue', usdPlusValue);
+
         commit('statsUI/setLoadingTotalUsdPlus', false, { root: true });
 
     },

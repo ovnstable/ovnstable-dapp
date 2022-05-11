@@ -211,13 +211,17 @@
                                                                 </v-col>
                                                                 <v-col cols="8">
                                                                     <v-row align="center" justify="end">
-                                                                        <label class="card-content-label-value">
-                                                                           {{pool.userData.availableToClaim}}
+                                                                        <label class="card-content-label-value" v-if="pool.userData.availableToClaim && pool.userData.availableToClaim > 0">
+                                                                            <label>{{ getStringNonZero(pool.userData.availableToClaim) }}</label>
+                                                                            <label :id="'paid-label-' + i"></label>
+                                                                        </label>
+                                                                        <label class="card-content-label-value" v-else>
+                                                                            {{ pool.userData.availableToClaim }}
                                                                         </label>
                                                                     </v-row>
                                                                     <v-row align="center" justify="end" class="mt-5">
                                                                         <label class="card-content-label-value">
-                                                                            <label>{{pool.userData.paid}}</label>
+                                                                            <label>{{ pool.userData.paid }}</label>
                                                                         </label>
                                                                     </v-row>
                                                                 </v-col>
@@ -326,14 +330,49 @@ export default {
         openedPanels: [0],
     }),
 
-
     computed: {
         ...mapGetters('farmData', ['pools']),
     },
 
+    created() {
+        window.setInterval(async () => {
+            await this.loadPools();
+
+            for (let i = 0; i < this.pools.length; i++) {
+                if (this.pools[i].userData.availableToClaim && this.pools[i].userData.availableToClaim > 0) {
+                    this.animateValue("paid-label-" + i, 13, 2000, 20);
+                }
+            }
+        }, 2000)
+    },
+
     methods: {
         ...mapActions('farmUI', ['showDepositModal', 'showWithdrawModal', 'showClaimModal']),
+        ...mapActions('farmData', ['loadPools']),
         ...mapMutations('farmData', ['setSelectedPool']),
+
+
+        getStringNonZero(s) {
+            return s.toFixed(5);
+        },
+
+        animateValue(id, numLength, duration, periodMs) {
+
+            let obj = document.getElementById(id);
+
+            let ticksMax = Math.floor(duration / periodMs);
+            let ticks = 0;
+
+            let timer = setInterval(function() {
+                obj.innerHTML = Math.random().toString().slice(2, numLength + 2);
+
+                if (ticks === ticksMax ) {
+                    clearInterval(timer);
+                }
+
+                ticks++;
+            }, periodMs);
+        },
 
         openPanel(i) {
             if (this.openedPanels[0] !== i) {

@@ -110,8 +110,8 @@ const actions = {
         item.userData = userData;
         item.poolData = poolData;
 
-        console.log('userData: ' + JSON.stringify(item.userData));
-        console.log('poolData: ' + JSON.stringify(item.poolData));
+        // console.log('userData: ' + JSON.stringify(item.userData));
+        // console.log('poolData: ' + JSON.stringify(item.poolData));
 
         pools.push(item);
         commit('setPools', pools);

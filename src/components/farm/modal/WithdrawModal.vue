@@ -74,7 +74,9 @@
                             <v-btn dark
                                    height="56"
                                    @click="withdrawAction"
-                                   class="buy enabled-buy">
+                                   :disabled="!isBuy"
+                                   :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                                   class="buy">
                                 Withdraw LP
                             </v-btn>
                         </v-row>
@@ -121,7 +123,27 @@ export default {
     computed: {
         ...mapGetters('farmData', ['selectedPool']),
         ...mapGetters('farmUI', ['showWithdraw']),
-        ...mapGetters('accountData', ['account'])
+        ...mapGetters('accountData', ['account']),
+
+        isBuy: function () {
+            return this.account && this.sum > 0 && this.numberRule;
+        },
+
+        numberRule: function () {
+
+            let v = this.sum;
+
+            if (!v)
+                return false;
+
+            if (!v.trim()) return false;
+
+            v = parseFloat(v.trim().replace(/\s/g, ''));
+
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.selectedPool.userData.lpTokensStaked)) return true;
+
+            return false;
+        },
     },
 
     data: () => ({

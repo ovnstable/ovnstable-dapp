@@ -83,14 +83,18 @@
                                    v-if="!lpApproved"
                                    height="56"
                                    @click="approveAction"
-                                   class="buy enabled-buy">
+                                   :disabled="!isBuy"
+                                   :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                                   class="buy">
                                 Approve LP
                             </v-btn>
                             <v-btn dark
                                    v-else
                                    height="56"
                                    @click="depositAction"
-                                   class="buy enabled-buy">
+                                   :disabled="!isBuy"
+                                   :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                                   class="buy">
                                 Deposit LP
                             </v-btn>
                         </v-row>
@@ -140,7 +144,27 @@ export default {
         ...mapGetters('farmData', ['selectedPool']),
         ...mapGetters('farmUI', ['showDeposit', 'lpApproved']),
         ...mapGetters("web3", ["web3"]),
-        ...mapGetters('accountData', ['account'])
+        ...mapGetters('accountData', ['account']),
+
+        isBuy: function () {
+            return this.account && this.sum > 0 && this.numberRule;
+        },
+
+        numberRule: function () {
+
+            let v = this.sum;
+
+            if (!v)
+                return false;
+
+            if (!v.trim()) return false;
+
+            v = parseFloat(v.trim().replace(/\s/g, ''));
+
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.selectedPool.userData.lpTokensBalance)) return true;
+
+            return false;
+        },
     },
 
     data: () => ({

@@ -237,7 +237,7 @@
                                                         <v-card-text style="height: 50%">
                                                             <v-row justify="center" align="center" class="mt-0" style="height: 100%">
                                                                 <label class="ml-4 card-content-label-value">
-                                                                    0.00%
+                                                                    {{ poolShareValue(pool.userData.lpTokensStaked, pool.poolData.lpTokensTotal) }}
                                                                 </label>
                                                             </v-row>
                                                         </v-card-text>
@@ -338,6 +338,14 @@ export default {
         openPanel(i) {
             if (this.openedPanels[0] !== i) {
                 this.openedPanels = [].push(i);
+            }
+        },
+
+        poolShareValue(staked, total) {
+            if (staked && total && total > 0) {
+                return this.$utils.formatMoney((100 * staked / total), 6) + "%";
+            } else {
+                return "0.00%";
             }
         },
 

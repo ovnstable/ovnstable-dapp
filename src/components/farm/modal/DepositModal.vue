@@ -242,7 +242,7 @@ export default {
                     await this.refreshGasPrice();
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                    let tx = await token.methods.approve(contract.options.address, this.$utils.toE18(this.sum)).send(approveParams);
+                    let tx = await token.methods.approve(contract.options.address, this.sum * 10 ** 18).send(approveParams);
 
                     let done = true;
                     while (done) {
@@ -290,7 +290,7 @@ export default {
                 await this.refreshGasPrice();
                 let params = {gasPrice: this.gasPriceGwei, from: from};
 
-                let buyResult = await pool.methods.stake(this.$utils.toE18(this.sum)).send(params).on('transactionHash', function (hash) {
+                let buyResult = await pool.methods.stake(this.sum * 10 ** 18).send(params).on('transactionHash', function (hash) {
                     let tx = {
                         text: `Stake ${self.sum} LP tokens`,
                         hash: hash,

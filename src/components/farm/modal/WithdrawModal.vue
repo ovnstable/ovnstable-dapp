@@ -194,7 +194,7 @@ export default {
                 await this.refreshGasPrice();
                 let params = {gasPrice: this.gasPriceGwei, from: from};
 
-                let buyResult = await pool.methods.withdraw(this.$utils.toE18(this.sum)).send(params).on('transactionHash', function (hash) {
+                let buyResult = await pool.methods.withdraw(this.sum * 10 ** 18).send(params).on('transactionHash', function (hash) {
                     let tx = {
                         text: `Withdraw ${self.sum} LP tokens`,
                         hash: hash,

@@ -25,15 +25,15 @@
                         <v-row align="center" class="mt-1 mb-2">
                             <div style="display: flex">
                                 <div class="currency-icon">
-                                    <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                    <v-img :src="selectedPool.poolData.token0Icon"/>
                                 </div>
-                                <div class="currency-icon">
-                                    <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                <div class="currency-icon ml-1">
+                                    <v-img :src="selectedPool.poolData.token1Icon"/>
                                 </div>
                             </div>
 
-                            <label class="pool-title-label ml-2" v-if="selectedPool">
-                                {{ selectedPool.title }}
+                            <label class="pool-title-label ml-2" v-if="selectedPool && selectedPool.poolData">
+                                {{ selectedPool.poolData.title }}
                             </label>
                         </v-row>
                     </v-col>
@@ -53,6 +53,10 @@
                 </v-row>
             </v-card-text>
         </v-card>
+
+        <WaitingModal/>
+        <SuccessModal/>
+        <ErrorModal/>
     </v-dialog>
 </template>
 
@@ -86,14 +90,12 @@ export default {
     },
 
     computed: {
-        ...mapGetters('farmData', [ 'selectedPool']),
-        ...mapGetters('farmUI', ['showClaim' ]),
+        ...mapGetters('farmData', ['selectedPool']),
+        ...mapGetters('farmUI', ['showClaim']),
         ...mapGetters('accountData', ['account'])
-
     },
 
-    data: () => ({
-    }),
+    data: () => ({}),
 
     created() {
     },
@@ -102,25 +104,40 @@ export default {
         ...mapActions('farmUI', ['hideClaimModal']),
         ...mapActions("gasPrice", ['refreshGasPrice']),
 
-        async claimRewardAction(){
+        ...mapActions("errorModal", ['showErrorModal']),
+        ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
+        ...mapActions("successModal", ['showSuccessModal']),
 
-            let from = this.account;
-            let self = this;
+        async claimRewardAction() {
 
-            let pool = this.selectedPool.contract;
+            console.log('Call claim rewards');
+            this.showWaitingModal('Claiming rewards');
 
-            await this.refreshGasPrice();
-            let params = {gasPrice: this.gasPriceGwei, from: from};
+            try {
+                let from = this.account;
+                let self = this;
 
-            await pool.methods.getReward().send(params).on('transactionHash', function (hash) {
-                let tx = {
-                    text: `Claim reward`,
-                    hash: hash,
-                    pending: true,
-                };
-                self.putTransaction(tx);
-            });
+                let pool = this.selectedPool.contract;
 
+                await this.refreshGasPrice();
+                let params = {gasPrice: this.gasPriceGwei, from: from};
+
+                let buyResult = await pool.methods.getReward().send(params).on('transactionHash', function (hash) {
+                    let tx = {
+                        text: `Claim reward`,
+                        hash: hash,
+                        pending: true,
+                    };
+                    self.putTransaction(tx);
+                });
+
+                this.closeWaitingModal();
+                await this.close();
+                this.showSuccessModal(buyResult.transactionHash);
+            } catch (e) {
+                console.log(e)
+                this.showErrorModal('claimRewards');
+            }
         },
 
         close() {

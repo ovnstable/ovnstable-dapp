@@ -60,7 +60,7 @@
                                                     <div class="currency-icon">
                                                         <v-img :src="pool.poolData.token0Icon"/>
                                                     </div>
-                                                    <div class="currency-icon">
+                                                    <div class="currency-icon ml-1">
                                                         <v-img :src="pool.poolData.token1Icon"/>
                                                     </div>
                                                 </div>
@@ -261,7 +261,8 @@
                                                                         <v-img :src="require('@/assets/icon/question-help.svg')"/>
                                                                     </div>
                                                                 </template>
-                                                                <!-- TODO: add fee tooltip -->
+                                                                <p class="my-0">A portion of each trade</p>
+                                                                <p class="my-0">goes to Overnight as a protocol incentive</p>
                                                             </v-tooltip>
                                                             <v-spacer></v-spacer>
                                                         </v-card-title>

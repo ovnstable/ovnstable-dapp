@@ -25,15 +25,15 @@
                         <v-row align="center" class="mt-1 mb-2">
                             <div style="display: flex">
                                 <div class="currency-icon">
-                                    <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                    <v-img :src="selectedPool.poolData.token0Icon"/>
                                 </div>
-                                <div class="currency-icon">
-                                    <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                <div class="currency-icon ml-1">
+                                    <v-img :src="selectedPool.poolData.token1Icon"/>
                                 </div>
                             </div>
 
-                            <label class="pool-title-label ml-2" v-if="selectedPool">
-                                {{ selectedPool.title }}
+                            <label class="pool-title-label ml-2" v-if="selectedPool && selectedPool.poolData">
+                                {{ selectedPool.poolData.title }}
                             </label>
                         </v-row>
                     </v-col>
@@ -83,13 +83,17 @@
                                    height="56"
                                    @click="deposit"
                                    class="buy enabled-buy">
-                                Approve LP
-                            </v-btn >
+                                Deposit LP
+                            </v-btn>
                         </v-row>
                     </v-col>
                 </v-row>
             </v-card-text>
         </v-card>
+
+        <WaitingModal/>
+        <SuccessModal/>
+        <ErrorModal/>
     </v-dialog>
 </template>
 
@@ -125,11 +129,10 @@ export default {
     },
 
     computed: {
-        ...mapGetters('farmData', [ 'selectedPool']),
-        ...mapGetters('farmUI', ['showDeposit', ]),
+        ...mapGetters('farmData', ['selectedPool']),
+        ...mapGetters('farmUI', ['showDeposit',]),
         ...mapGetters("web3", ["web3"]),
         ...mapGetters('accountData', ['account'])
-
     },
 
     data: () => ({
@@ -143,10 +146,15 @@ export default {
         ...mapActions('farmUI', ['hideDepositModal']),
         ...mapActions("gasPrice", ['refreshGasPrice']),
 
+        ...mapActions("errorModal", ['showErrorModal']),
+        ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
+        ...mapActions("successModal", ['showSuccessModal']),
+
         max() {
+            this.sum = this.selectedPool.userData.lpTokensBalance + "";
         },
 
-        isNumber: function(evt) {
+        isNumber: function (evt) {
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;
 
@@ -161,55 +169,68 @@ export default {
             }
         },
 
-
-        async deposit(){
+        async deposit() {
 
             console.log('Call deposit');
+
+            this.showWaitingModal('Approving & Depositing ' + this.sum + ' LP tokens');
 
             await this.approveAction();
             await this.depositAction();
         },
 
-        async approveAction(){
+        async approveAction() {
 
-            let from = this.account;
-            let self = this;
+            try {
+                let from = this.account;
+                let self = this;
 
-            await this.refreshGasPrice();
-            let params = {gasPrice: this.gasPriceGwei, from: from};
+                await this.refreshGasPrice();
+                let params = {gasPrice: this.gasPriceGwei, from: from};
 
-            let token = this.selectedPool.token;
-            let contract = this.selectedPool.contract;
-            await token.methods.approve(contract.options.address, this.sum).send(params).on('transactionHash', function (hash) {
-                let tx = {
-                    text: `Approve ${self.sum} LP tokens`,
-                    hash: hash,
-                    pending: true,
-                };
-                self.putTransaction(tx);
-            });
-
+                let token = this.selectedPool.token;
+                let contract = this.selectedPool.contract;
+                await token.methods.approve(contract.options.address, this.sum).send(params).on('transactionHash', function (hash) {
+                    let tx = {
+                        text: `Approve ${self.sum} LP tokens`,
+                        hash: hash,
+                        pending: true,
+                    };
+                    self.putTransaction(tx);
+                });
+            } catch (e) {
+                console.log(e)
+                this.showErrorModal('depositLP');
+            }
         },
 
-        async depositAction(){
+        async depositAction() {
 
-            let from = this.account;
-            let self = this;
+            try {
+                let from = this.account;
+                let self = this;
 
-            let pool = this.selectedPool.contract;
+                let pool = this.selectedPool.contract;
 
-            await this.refreshGasPrice();
-            let params = {gasPrice: this.gasPriceGwei, from: from};
+                await this.refreshGasPrice();
+                let params = {gasPrice: this.gasPriceGwei, from: from};
 
-            await pool.methods.stake(this.sum).send(params).on('transactionHash', function (hash) {
-                let tx = {
-                    text: `Stake ${self.sum} LP tokens`,
-                    hash: hash,
-                    pending: true,
-                };
-                self.putTransaction(tx);
-            });
+                let buyResult = await pool.methods.stake(this.sum).send(params).on('transactionHash', function (hash) {
+                    let tx = {
+                        text: `Stake ${self.sum} LP tokens`,
+                        hash: hash,
+                        pending: true,
+                    };
+                    self.putTransaction(tx);
+                });
 
+                this.closeWaitingModal();
+                await this.close();
+                this.showSuccessModal(buyResult.transactionHash);
+            } catch (e) {
+                console.log(e)
+                this.showErrorModal('depositLP');
+            }
         },
 
         close() {

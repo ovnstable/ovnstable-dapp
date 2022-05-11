@@ -25,15 +25,15 @@
                         <v-row align="center" class="mt-1 mb-2">
                             <div style="display: flex">
                                 <div class="currency-icon">
-                                    <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                    <v-img :src="selectedPool.poolData.token0Icon"/>
                                 </div>
-                                <div class="currency-icon">
-                                    <v-img :src="require('@/assets/currencies/undefined.svg')"/>
+                                <div class="currency-icon ml-1">
+                                    <v-img :src="selectedPool.poolData.token1Icon"/>
                                 </div>
                             </div>
 
-                            <label class="pool-title-label ml-2" v-if="selectedPool">
-                                {{ selectedPool.title }}
+                            <label class="pool-title-label ml-2" v-if="selectedPool && selectedPool.poolData">
+                                {{ selectedPool.poolData.title }}
                             </label>
                         </v-row>
                     </v-col>
@@ -75,13 +75,17 @@
                                    height="56"
                                    @click="withdrawAction"
                                    class="buy enabled-buy">
-                                Withdraw
+                                Withdraw LP
                             </v-btn>
                         </v-row>
                     </v-col>
                 </v-row>
             </v-card-text>
         </v-card>
+
+        <WaitingModal/>
+        <SuccessModal/>
+        <ErrorModal/>
     </v-dialog>
 </template>
 
@@ -118,7 +122,6 @@ export default {
         ...mapGetters('farmData', ['selectedPool']),
         ...mapGetters('farmUI', ['showWithdraw']),
         ...mapGetters('accountData', ['account'])
-
     },
 
     data: () => ({
@@ -132,10 +135,15 @@ export default {
         ...mapActions('farmUI', ['hideWithdrawModal']),
         ...mapActions("gasPrice", ['refreshGasPrice']),
 
+        ...mapActions("errorModal", ['showErrorModal']),
+        ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
+        ...mapActions("successModal", ['showSuccessModal']),
+
         max() {
+            this.sum = this.selectedPool.userData.lpTokensStaked + "";
         },
 
-        isNumber: function(evt) {
+        isNumber: function (evt) {
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;
 
@@ -150,26 +158,36 @@ export default {
             }
         },
 
+        async withdrawAction() {
 
-        async withdrawAction(){
+            console.log('Call withdraw');
+            this.showWaitingModal('Withdrawing ' + this.sum + ' LP tokens');
 
-            let from = this.account;
-            let self = this;
+            try {
+                let from = this.account;
+                let self = this;
 
-            let pool = this.selectedPool.contract;
+                let pool = this.selectedPool.contract;
 
-            await this.refreshGasPrice();
-            let params = {gasPrice: this.gasPriceGwei, from: from};
+                await this.refreshGasPrice();
+                let params = {gasPrice: this.gasPriceGwei, from: from};
 
-            await pool.methods.withdraw(this.sum).send(params).on('transactionHash', function (hash) {
-                let tx = {
-                    text: `Withdraw ${self.sum} LP tokens`,
-                    hash: hash,
-                    pending: true,
-                };
-                self.putTransaction(tx);
-            });
+                let buyResult = await pool.methods.withdraw(this.sum).send(params).on('transactionHash', function (hash) {
+                    let tx = {
+                        text: `Withdraw ${self.sum} LP tokens`,
+                        hash: hash,
+                        pending: true,
+                    };
+                    self.putTransaction(tx);
+                });
 
+                this.closeWaitingModal();
+                await this.close();
+                this.showSuccessModal(buyResult.transactionHash);
+            } catch (e) {
+                console.log(e)
+                this.showErrorModal('withdrawLP');
+            }
         },
 
         close() {

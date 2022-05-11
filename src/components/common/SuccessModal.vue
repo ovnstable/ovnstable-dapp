@@ -27,7 +27,8 @@
                                height="56"
                                class="dismiss-btn mb-3"
                                @click="dismiss">
-                            Add USD+ to {{ walletName ? walletName : ' a wallet' }}
+<!--                            Add USD+ to {{ walletName ? walletName : ' a wallet' }}-->
+                            Dismiss
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -71,7 +72,7 @@ export default {
         },
 
         dismiss() {
-            this.addUsdPlusToken();
+            // this.addUsdPlusToken();
             this.close();
         },
     },

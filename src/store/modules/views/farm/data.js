@@ -4,12 +4,17 @@ const state = {
 
     selectedPool: null,
 
-    /* TODO: edit mock data */
+    /* TODO: calculate tvl sum of all pools in $ */
     farmTvl: 400000,
+
+    /* TODO: $100k for each pool */
     totalRewards: 200000,
+
+    /* TODO: decrease for each participant */
     totalRewardsLeft: 200000,
-    startDate: '05.11.2022',
-    estimatedDate: '06.11.2022',
+
+    startDate: '05.16.2022',
+    estimatedDate: '06.16.2022',
 };
 
 const getters = {

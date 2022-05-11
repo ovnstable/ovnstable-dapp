@@ -80,8 +80,16 @@
                     <v-col class="ml-4 mr-4">
                         <v-row align="center" class="mb-2">
                             <v-btn dark
+                                   v-if="!lpApproved"
                                    height="56"
-                                   @click="deposit"
+                                   @click="approveAction"
+                                   class="buy enabled-buy">
+                                Approve LP
+                            </v-btn>
+                            <v-btn dark
+                                   v-else
+                                   height="56"
+                                   @click="depositAction"
                                    class="buy enabled-buy">
                                 Deposit LP
                             </v-btn>
@@ -130,7 +138,7 @@ export default {
 
     computed: {
         ...mapGetters('farmData', ['selectedPool']),
-        ...mapGetters('farmUI', ['showDeposit',]),
+        ...mapGetters('farmUI', ['showDeposit', 'lpApproved']),
         ...mapGetters("web3", ["web3"]),
         ...mapGetters('accountData', ['account'])
     },
@@ -143,7 +151,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('farmUI', ['hideDepositModal']),
+        ...mapActions('farmUI', ['hideDepositModal', 'approveLP']),
         ...mapActions("gasPrice", ['refreshGasPrice']),
 
         ...mapActions("errorModal", ['showErrorModal']),
@@ -169,42 +177,85 @@ export default {
             }
         },
 
-        async deposit() {
-
-            console.log('Call deposit');
-
-            this.showWaitingModal('Approving & Depositing ' + this.sum + ' LP tokens');
-
-            await this.approveAction();
-            await this.depositAction();
-        },
-
         async approveAction() {
 
+            console.log('Call deposit approve');
+            this.showWaitingModal('Approving in process');
+
             try {
-                let from = this.account;
-                let self = this;
+                let approveSum = 10000000;
 
-                await this.refreshGasPrice();
-                let params = {gasPrice: this.gasPriceGwei, from: from};
+                let sum = approveSum * 10 ** 6;
+                sum = Math.floor(sum);
 
-                let token = this.selectedPool.token;
-                let contract = this.selectedPool.contract;
-                await token.methods.approve(contract.options.address, this.sum).send(params).on('transactionHash', function (hash) {
-                    let tx = {
-                        text: `Approve ${self.sum} LP tokens`,
-                        hash: hash,
-                        pending: true,
-                    };
-                    self.putTransaction(tx);
-                });
+                let allowApprove = await this.checkAllowance(sum);
+
+                if (!allowApprove) {
+                    this.closeWaitingModal();
+                    this.showErrorModal('approve');
+                    return;
+                } else {
+                    await this.approveLP();
+                    this.closeWaitingModal();
+                }
             } catch (e) {
                 console.log(e)
-                this.showErrorModal('depositLP');
+                this.showErrorModal('approve');
             }
         },
 
+        async checkAllowance(sum) {
+
+            let from = this.account;
+            let self = this;
+            let token = this.selectedPool.token;
+            let contract = this.selectedPool.contract;
+
+            let allowanceValue = await token.methods.allowance(from, contract.options.address).call();
+
+            if (allowanceValue < sum) {
+                try {
+                    await this.refreshGasPrice();
+                    let approveParams = {gasPrice: this.gasPriceGwei, from: from};
+
+                    let tx = await token.methods.approve(contract.options.address, this.sum).send(approveParams);
+
+                    let done = true;
+                    while (done) {
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
+
+                        if (receipt) {
+                            if (receipt.status) {
+                                let tx = {
+                                    text: 'Approve LP',
+                                    hash: receipt.transactionHash,
+                                    pending: true,
+                                };
+
+                                self.putTransaction(tx);
+
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+
+                    return true;
+                } catch (e) {
+                    console.log(e)
+                    return false;
+                }
+            }
+
+            return true;
+        },
+
         async depositAction() {
+
+            console.log('Call deposit');
+            this.showWaitingModal('Depositing ' + this.sum + ' LP tokens');
 
             try {
                 let from = this.account;
@@ -227,6 +278,7 @@ export default {
                 this.closeWaitingModal();
                 await this.close();
                 this.showSuccessModal(buyResult.transactionHash);
+                this.sum = null;
             } catch (e) {
                 console.log(e)
                 this.showErrorModal('depositLP');

@@ -4,6 +4,7 @@ const state = {
     showWithdraw: false,
     showClaim: false,
 
+    lpApproved: false,
 };
 
 const getters = {
@@ -20,7 +21,9 @@ const getters = {
         return state.showClaim;
     },
 
-
+    lpApproved(state) {
+        return state.lpApproved;
+    },
 };
 
 const actions = {
@@ -49,7 +52,9 @@ const actions = {
         commit('setShowClaim', false);
     },
 
-
+    async approveLP({commit, dispatch, getters, rootState}) {
+        commit('setLpApproved', true);
+    },
 
 };
 
@@ -68,7 +73,9 @@ const mutations = {
         state.showClaim = showClaim;
     },
 
-
+    setLpApproved(state, lpApproved) {
+        state.lpApproved = lpApproved;
+    },
 };
 
 export default {

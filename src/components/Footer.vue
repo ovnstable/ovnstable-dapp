@@ -46,7 +46,7 @@
                         Learn more at&nbsp;&nbsp;
                     </label>
                     <label class="footer-beta-label docs-link" @click="openDocsLink">
-                        docs.ovnstable.io
+                        docs.overnight.fi
                     </label>
                     <label class="footer-beta-label docs-icon" @click="openDocsLink">
                         &nbsp;Docs
@@ -66,7 +66,7 @@ export default {
 
     methods: {
         openDocsLink() {
-            window.open(`https://docs.ovnstable.io/`, '_blank').focus();
+            window.open(`https://docs.overnight.fi/`, '_blank').focus();
         },
     }
 }

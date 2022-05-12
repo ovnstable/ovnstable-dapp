@@ -410,8 +410,7 @@ export default {
             this.showWaitingModal('Swapping ' + this.sumResult + ' USDC for ' + this.sumResult + ' USD+');
 
             try {
-                let sum = this.sum * 10 ** 6;
-                sum = Math.floor(sum);
+                let sum = this.web3.utils.toWei(this.sum, 'mwei');
 
                 let contracts = this.contracts;
                 let from = this.account;
@@ -448,8 +447,7 @@ export default {
 
         async confirmSwapAction() {
             try {
-                let sum = this.sum * 10 ** 6;
-                sum = Math.floor(sum);
+                let sum = this.web3.utils.toWei(this.sum, 'mwei');
 
                 this.showWaitingModal();
 
@@ -474,10 +472,9 @@ export default {
             try {
                 this.showWaitingModal('Approving in process');
 
-                let approveSum = 10000000;
+                let approveSum = "10000000";
 
-                let sum = approveSum * 10 ** 6;
-                sum = Math.floor(sum);
+                let sum = this.web3.utils.toWei(approveSum, 'mwei');
 
                 let allowApprove = await this.checkAllowance(sum);
                 if (!allowApprove) {

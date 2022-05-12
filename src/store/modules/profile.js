@@ -136,8 +136,8 @@ const actions = {
             }
         }
 
-        usdPlus = usdPlus / 10 ** 6;
-        usdc = usdc / 10 ** 6;
+        usdPlus = web3.web3.utils.fromWei(usdPlus, 'mwei') ;
+        usdc = web3.web3.utils.fromWei(usdc, 'mwei') ;
         commit('setBalance', {
             usdPlus: usdPlus,
             usdc: usdc

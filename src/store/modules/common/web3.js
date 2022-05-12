@@ -20,6 +20,7 @@ const Mark2Market = require(`@/contracts/${polygon}/Mark2Market.json`)
 const TimelockController = require(`@/contracts/${polygon}/OvnTimelockController.json`)
 const UsdPlusToken = require(`@/contracts/${polygon}/UsdPlusToken.json`)
 const StakingRewards = require(`@/contracts/abi/StakingRewards.json`)
+const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`)
 
 const ALLOW_NETWORKS = [137, 31337];
 
@@ -298,6 +299,7 @@ const actions = {
         contracts.usdPlus = _load(UsdPlusToken, web3);
         contracts.poolQsUsdPlusWeth = _load(StakingRewards, web3, "0x398B66c4c69Bf19EA6A3c97e8d8b9c93f295D209");
         contracts.poolQsUsdPlusWethToken = _load(ERC20, web3, '0x901Debb34469e89FeCA591f5E5336984151fEc39');
+        contracts.poolQsUsdPlusWethPair = _load(UniswapV2Pair, web3, '0x901Debb34469e89FeCA591f5E5336984151fEc39');
 
         commit('setContracts', contracts)
     },

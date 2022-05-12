@@ -67,6 +67,7 @@ const actions = {
         let account = rootState.accountData.account;
         let pool = rootState.web3.contracts.poolQsUsdPlusWeth;
         let token = rootState.web3.contracts.poolQsUsdPlusWethToken;
+        let pair = rootState.web3.contracts.poolQsUsdPlusWethPair;
 
         let item = {};
 

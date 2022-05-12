@@ -103,6 +103,7 @@ export default {
     methods: {
         ...mapActions('farmUI', ['hideClaimModal']),
         ...mapActions("gasPrice", ['refreshGasPrice']),
+        ...mapActions('transaction', ['putTransaction']),
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),

@@ -78,7 +78,7 @@
                                         <v-col cols="2">
                                             <v-row justify="end">
                                                 <label class="panel-header-stats-label">
-                                                    {{ pool.poolData.tvl ? pool.poolData.tvl + ' TVL' : '—' }}
+                                                    {{ pool.poolData.tvl ? "$" + $utils.formatMoney(pool.poolData.tvl, 0) + ' TVL' : '—' }}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -212,7 +212,7 @@
                                                                 <v-col cols="8">
                                                                     <v-row align="center" justify="end">
                                                                         <label class="card-content-label-value" v-if="pool.userData.availableToClaim && pool.userData.availableToClaim > 0">
-                                                                            <label>{{ getStringNonZero(pool.userData.availableToClaim) }}</label>
+                                                                            <label>{{ pool.userData.availableToClaim }}</label>
                                                                             <label :id="'paid-label-' + i"></label>
                                                                         </label>
                                                                         <label class="card-content-label-value" v-else>
@@ -334,17 +334,7 @@ export default {
         ...mapGetters('farmData', ['pools']),
     },
 
-    created() {
-        window.setInterval(async () => {
-            await this.loadPools();
 
-            for (let i = 0; i < this.pools.length; i++) {
-                if (this.pools[i].userData.availableToClaim && this.pools[i].userData.availableToClaim > 0) {
-                    this.animateValue("paid-label-" + i, 13, 2000, 20);
-                }
-            }
-        }, 2000)
-    },
 
     methods: {
         ...mapActions('farmUI', ['showDepositModal', 'showWithdrawModal', 'showClaimModal']),
@@ -353,7 +343,7 @@ export default {
 
 
         getStringNonZero(s) {
-            return s.toFixed(5);
+            return Number.parseFloat(s).toFixed(5);
         },
 
         animateValue(id, numLength, duration, periodMs) {

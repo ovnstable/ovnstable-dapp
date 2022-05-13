@@ -297,9 +297,15 @@ const actions = {
         contracts.pm = _load(PortfolioManager, web3);
         contracts.timelockController = _load(TimelockController, web3);
         contracts.usdPlus = _load(UsdPlusToken, web3);
+        contracts.preOvn = _load(ERC20, web3, "0x18D4565Cbd03340996BED17e66D154b632f5d4B6");
+
         contracts.poolQsUsdPlusWeth = _load(StakingRewards, web3, "0x398B66c4c69Bf19EA6A3c97e8d8b9c93f295D209");
         contracts.poolQsUsdPlusWethToken = _load(ERC20, web3, '0x901Debb34469e89FeCA591f5E5336984151fEc39');
         contracts.poolQsUsdPlusWethPair = _load(UniswapV2Pair, web3, '0x901Debb34469e89FeCA591f5E5336984151fEc39');
+
+        contracts.poolQsUsdPlusWmatic = _load(StakingRewards, web3, "0x398B66c4c69Bf19EA6A3c97e8d8b9c93f295D209");
+        contracts.poolQsUsdPlusWmaticToken = _load(ERC20, web3, '0x91f670270b86c80ec92bb6b5914e6532ca967bfb');
+        contracts.poolQsUsdPlusWmaticPair = _load(UniswapV2Pair, web3, '0x91f670270b86c80ec92bb6b5914e6532ca967bfb');
 
         commit('setContracts', contracts)
     },

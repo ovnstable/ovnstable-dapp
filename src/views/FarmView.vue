@@ -265,8 +265,7 @@
                                                                         <v-img :src="require('@/assets/icon/question-help.svg')"/>
                                                                     </div>
                                                                 </template>
-                                                                <p class="my-0">A portion of each trade</p>
-                                                                <p class="my-0">goes to Overnight as a protocol incentive</p>
+                                                                <p class="my-0">Special offer 0% fee</p>
                                                             </v-tooltip>
                                                             <v-spacer></v-spacer>
                                                         </v-card-title>

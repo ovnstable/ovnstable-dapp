@@ -86,7 +86,7 @@
                                         <v-col cols="2">
                                             <v-row justify="end">
                                                 <label class="panel-header-stats-label mr-1">
-                                                    {{ pool.poolData.apy ? $utils.formatMoney(pool.poolData.apy, 2) + '%' : '—' }}
+                                                    {{ pool.poolData.apyTotal ? $utils.formatMoney(pool.poolData.apyTotal, 2) + '%' : '—' }}
                                                 </label>
                                                 <v-tooltip
                                                         color="#0C0D12"
@@ -99,7 +99,11 @@
                                                             <v-img :src="require('@/assets/icon/question-help.svg')"/>
                                                         </div>
                                                     </template>
-                                                    <!-- TODO: add APR tooltip -->
+
+                                                    <template v-for="item in pool.poolData.apyList">
+                                                        <label class="panel-header-stats-label">{{item.name}} : {{item.value}}</label>
+                                                        <br>
+                                                    </template>
                                                 </v-tooltip>
                                             </v-row>
                                         </v-col>
@@ -173,7 +177,7 @@
                                                                 <v-col cols="8">
                                                                     <v-row align="center" justify="end">
                                                                         <label class="card-content-label-value">
-                                                                            {{pool.poolData.lpTokensTotal}}
+                                                                            {{pool.userData.lpTokensBalance}}
                                                                         </label>
                                                                     </v-row>
                                                                     <v-row align="center" justify="end" class="mt-5">

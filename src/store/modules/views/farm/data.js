@@ -1,4 +1,5 @@
 import {axios} from "@/plugins/http-axios";
+import BN from "bn.js";
 
 const state = {
 
@@ -71,18 +72,18 @@ const actions = {
         pools.push(await loadUsdPlusWethPool(rootState));
         pools.push(await loadUsdPlusWmaticPool(rootState));
 
-        let totalRewardsLeft =0;
+        let totalRewardsLeft = 0;
         let totalRewards=0;
         let farmTvl = 0;
         pools.forEach(value => {
 
             totalRewards += 50000;
             farmTvl +=value.poolData.tvl;
-            totalRewardsLeft = value.poolData.rewardsLeft;
+            totalRewardsLeft += Number.parseFloat(value.poolData.rewardsLeft);
         })
 
         commit('setFarmTvl', farmTvl);
-        commit('setTotalRewardsLeft', totalRewardsLeft);
+        commit('setTotalRewardsLeft', totalRewardsLeft.toString());
         commit('setTotalRewards', totalRewards);
 
         commit('setPools', pools);
@@ -136,6 +137,7 @@ async function loadUsdPlusWethPool(rootState){
     let pool = rootState.web3.contracts.poolQsUsdPlusWeth;
     let token = rootState.web3.contracts.poolQsUsdPlusWethToken;
     let pair = rootState.web3.contracts.poolQsUsdPlusWethPair;
+    let preOvn = rootState.web3.contracts.preOvn;
 
     let item = {};
 
@@ -160,6 +162,7 @@ async function loadUsdPlusWethPool(rootState){
         userData.lpTokensStaked = 0;
         userData.paid = 0;
         userData.yourPoolShare = 0;
+        userData.lpTokensBalance = 0;
     }
 
 
@@ -172,12 +175,14 @@ async function loadUsdPlusWethPool(rootState){
     poolData.token0Icon = require('@/assets/currencies/usdPlus.svg');
     poolData.token1Icon = require('@/assets/currencies/eth.svg');
     poolData.tvl = info.tvl;
-    poolData.apy = apy;
+    poolData.apyTotal = apy;
+    poolData.apyList = info.apy;
     poolData.fee = 0;
     poolData.yourPoolShare = 0;
     poolData.link = "https://info.quickswap.exchange/#/pair/0x901Debb34469e89FeCA591f5E5336984151fEc39";
     poolData.balance = 0;
     poolData.rewards = 0;
+    poolData.rewardsLeft = utils.fromWei(await preOvn.methods.balanceOf(pool.options.address).call());
     poolData.promoUntilDate = await pool.methods.periodFinish().call();
 
     item.contract = pool;
@@ -211,7 +216,7 @@ async function loadUsdPlusWmaticPool(rootState){
 
     poolData.lpTokensTotal = utils.fromWei(await pool.methods.totalSupply().call());
 
-    if (false) {
+    if (account) {
         userData.availableToClaim = utils.fromWei(await pool.methods.earned(account).call());
         userData.lpTokensStaked = utils.fromWei(await pool.methods.balanceOf(account).call());
         userData.paid =  utils.fromWei(await pool.methods.paid(account).call());
@@ -229,11 +234,13 @@ async function loadUsdPlusWmaticPool(rootState){
         .map(value=> value.value)
         .reduce((val1, val2)=> { return val1 + val2 },0);
 
+
     poolData.title = "USD+/WMATIC";
     poolData.token0Icon = require('@/assets/currencies/usdPlus.svg');
     poolData.token1Icon = require('@/assets/currencies/pol.svg');
     poolData.tvl = info.tvl;
-    poolData.apy = apy;
+    poolData.apyTotal = apy;
+    poolData.apyList = info.apy;
     poolData.fee = 0;
     poolData.yourPoolShare = 0;
     poolData.link = "https://info.quickswap.exchange/#/pair/" + pair.options.address;

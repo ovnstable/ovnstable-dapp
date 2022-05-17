@@ -15,11 +15,11 @@
                         <img width="24" height="24" :src="require('../assets/resource/medium.svg')">
                     </v-btn>
 
-                    <v-btn icon href="https://twitter.com/ovnstable" target="_blank" class="footer-icon">
+                    <v-btn icon href="https://twitter.com/overnight_fi" target="_blank" class="footer-icon">
                         <v-icon class="footer-icon">mdi-twitter</v-icon>
                     </v-btn>
 
-                    <v-btn icon href="https://t.me/ovnstable" target="_blank" class="footer-icon">
+                    <v-btn icon href="https://t.me/overnight_fi" target="_blank" class="footer-icon">
                         <img width="24" height="24" :src="require('../assets/resource/telegram.png')">
                     </v-btn>
 

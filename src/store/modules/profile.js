@@ -307,35 +307,10 @@ const actions = {
     async refreshCurrentTotalData({commit, dispatch, getters, rootState}) {
         commit('setLoadingCurrentTotalData', true)
 
-        let assets = await rootState.web3.contracts.mark2market.methods.strategyAssets().call();
-        let strategiesMapping = (await axios('/dapp/strategies')).data;
+        let result = [];
 
-        let data = [];
-
-        for (let i = 0; i < assets.length; i++) {
-            let asset = assets[i];
-
-            let element = {};
-
-            let strategy = strategiesMapping.find(value => value.address === asset[0]);
-            let name = "not defined";
-
-            if (strategy) {
-                name = strategy.name;
-            }
-
-
-            if (asset[1] == 0) {
-                continue;
-            }
-
-            element.label = name;
-            element.value = asset[1] / 10 ** 6;
-            element.liquidationValue = asset[2] / 10 ** 6;
-            element.link = asset[0] ? 'https://polygonscan.com/address/' + asset[0] : '';
-
-            data.push(element);
-        }
+        let strategies = (await axios('/dapp/strategies')).data;
+        strategies.sort((a,b) => b[4] - a[4]);
 
         let colors = [
             "#FCCA46",
@@ -348,14 +323,22 @@ const actions = {
             "#23DD00",
         ];
 
-        data = data.sort((a,b) => (a.value > b.value) ? -1 : ((b.value > a.value) ? 1 : 0));
-        data = data.filter(item => item.value != 0);
+        for (let i = 0; i < strategies.length; i++) {
+            let element = strategies[i];
 
-        for (let i = 0; i < data.length; i++) {
-            data[i].color = colors[i];
+            result.push(
+                {
+                    label: element[0],
+                    fullName: element[1],
+                    value: element[4],
+                    liquidationValue: element[5],
+                    color: colors[i],
+                    link: element[3] ? 'https://polygonscan.com/address/' + element[3] : ''
+                }
+            );
         }
 
-        commit('setCurrentTotalData', data)
+        commit('setCurrentTotalData', result)
         commit('setLoadingCurrentTotalData', false)
     }
 };

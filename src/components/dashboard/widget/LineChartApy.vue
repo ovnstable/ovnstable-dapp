@@ -3,21 +3,25 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ averageApy ? ((isMobile ? '' : 'Average ') + 'USD+ APY') : ''}}</label>
+                    <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? '' : 'Average ') + 'USD+ APY') : ''}}</label>
                 </v-row>
 
                 <v-row justify="start">
                     <label class="mobile-info-title">
-                        {{ averageApy ? (averageApy + '%') : '' }}
+                        {{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '' }}
                     </label>
                 </v-row>
             </v-col>
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
-                    <label class="chart-title-apy">{{ averageApy ? (averageApy + '%') : '' }}</label>
+                    <label class="chart-title-apy">
+                        {{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '' }}
+                    </label>
                 </v-row>
                 <v-row justify="end">
-                    <label class="chart-sub-title-apy">{{ firstDateApy ? ('from ' + firstDateApy) : '' }}</label>
+                    <label class="chart-sub-title-apy">
+                        {{ (avgApy && avgApy.date) ? 'from ' + avgApy.date : '' }}
+                    </label>
                 </v-row>
             </v-col>
         </v-row>
@@ -65,6 +69,7 @@
 /* eslint-disable no-unused-vars,no-undef */
 
 import {mapActions, mapGetters, mapMutations} from "vuex";
+import moment from "moment";
 
 import ApexCharts from 'apexcharts'
 
@@ -91,8 +96,7 @@ export default {
         slice: null,
         chart: null,
 
-        averageApy: null,
-        firstDateApy: null,
+        avgApy: null,
     }),
 
     computed: {
@@ -114,7 +118,22 @@ export default {
     methods: {
         ...mapMutations([]),
 
-        zoomChart(zoom) {
+        async zoomChart(zoom) {
+            let fetchOptions = {
+                headers: {
+                    "Access-Control-Allow-Origin": process.env.VUE_APP_API
+                }
+            };
+
+            await fetch(process.env.VUE_APP_API + '/widget/avg-apy-info/' + zoom, fetchOptions)
+                .then(value => value.json())
+                .then(value => {
+                    this.avgApy = value;
+                    this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+                }).catch(reason => {
+                    console.log('Error get data: ' + reason);
+                })
+
             this.zoom = zoom;
 
             switch (zoom) {
@@ -161,13 +180,7 @@ export default {
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(this.slice) : labels;
 
-            this.firstDateApy = labels[0];
-
-            /* TODO: fix calculating avg apy */
-            let averageValue = values.reduce((a, b) => (a + b)) / values.length;
-            averageValue = averageValue.toFixed(1);
-
-            this.averageApy = averageValue;
+            let averageValue = this.avgApy.value;
 
             let maxValue;
             try {

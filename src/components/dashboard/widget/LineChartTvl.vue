@@ -3,24 +3,24 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ totalUsdPlusValue ? 'USD+ TVL' : '' }}</label>
+                    <label class="chart-title">{{ totalPcv ? 'USD+ PCV' : '' }}</label>
                 </v-row>
 
                 <v-row justify="start">
                     <label class="mobile-info-title">
-                        {{ totalUsdPlusValue ? ('$' + $utils.formatMoneyComma(totalUsdPlusValue, 2)) : '' }}
+                        {{ totalPcv ? ('$' + $utils.formatMoneyComma(totalPcv, 2)) : '' }}
                     </label>
                 </v-row>
             </v-col>
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
                     <label class="chart-title-apy">
-                        {{ totalUsdPlusValue ? ('$' + $utils.formatMoneyComma(totalUsdPlusValue, 2)) : '' }}
+                        {{ totalPcv ? ('$' + $utils.formatMoneyComma(totalPcv, 2)) : '' }}
                     </label>
                 </v-row>
                 <v-row justify="end">
                     <label class="chart-sub-title-apy">
-                        {{ totalUsdPlusValue ? 'past 24 hours' : '' }}
+                        {{ totalPcv ? 'past 2 hours' : '' }}
                     </label>
                 </v-row>
             </v-col>
@@ -95,12 +95,11 @@ export default {
         slice: null,
         chart: null,
 
-        averageApy: null,
-        firstDateApy: null,
+        totalPcv: null,
     }),
 
     computed: {
-        ...mapGetters("profile", ['totalUsdPlusValue']),
+        ...mapGetters("profile", ['totalUsdPlusValue', 'currentTotalData']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -150,6 +149,15 @@ export default {
             document.getElementById(this.zoom + "-zoom-btn-tvl").classList.add("selected");
         },
 
+        getTotalPcv() {
+            let sum = 0;
+            this.currentTotalData.forEach(dataItem => {
+                sum += dataItem.value
+            });
+
+            return sum;
+        },
+
         redraw() {
             if (this.chart) {
                 this.chart.destroy();
@@ -165,13 +173,6 @@ export default {
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(this.slice) : labels;
 
-            this.firstDateApy = labels[0];
-
-            let averageValue = values.reduce((a, b) => (a + b)) / values.length;
-            averageValue = averageValue.toFixed(1);
-
-            this.averageApy = averageValue;
-
             let maxValue;
             try {
                 maxValue = Math.max.apply(Math, values);
@@ -180,9 +181,11 @@ export default {
                 maxValue = 50;
             }
 
+            this.totalPcv = this.getTotalPcv();
+
             let options = {
                 series: [{
-                    name: "TVL",
+                    name: "PCV",
                     data: values
                 }],
 

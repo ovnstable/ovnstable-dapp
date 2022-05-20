@@ -218,7 +218,7 @@ const actions = {
                 };
 
                 [...clientData].reverse().forEach(item => {
-                    widgetDataDictTvl[moment(item.payableDate).format('DD.MM.YYYY')] = item.totalUsdPlus;
+                    widgetDataDictTvl[moment(item.payableDate).format('DD.MM.YYYY')] = item.totalUsdc;
                 });
 
                 for(let key in widgetDataDictTvl) {

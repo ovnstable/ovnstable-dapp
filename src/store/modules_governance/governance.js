@@ -347,17 +347,17 @@ const actions = {
 
         let items = [];
 
-        let strategiesMapping = (await axios('/dapp/strategies')).data;
+        let strategiesMapping = (await axios('/dict/strategies')).data;
 
         for (let i = 0; i < strategiesMapping.length; i++) {
 
             let strategy = strategiesMapping[i];
 
-            let weight = weights.find(value => strategy[3].toLowerCase() === value.strategy.toLowerCase());
+            let weight = weights.find(value => strategy.address === value.strategy.toLowerCase());
 
             let item = {};
-            item.address = strategy[3];
-            item.name = strategy[0];
+            item.address = strategy.address;
+            item.name = strategy.name;
 
             if (weight){
                 item.minWeight = weight.minWeight / 1000;

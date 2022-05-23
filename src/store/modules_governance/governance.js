@@ -353,11 +353,11 @@ const actions = {
 
             let strategy = strategiesMapping[i];
 
-            let weight = weights.find(value => strategy.address === value.strategy);
+            let weight = weights.find(value => strategy[3].toLowerCase() === value.strategy.toLowerCase());
 
             let item = {};
-            item.address = strategy.address;
-            item.name = strategy.name;
+            item.address = strategy[3];
+            item.name = strategy[0];
 
             if (weight){
                 item.minWeight = weight.minWeight / 1000;

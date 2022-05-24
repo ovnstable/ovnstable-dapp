@@ -151,6 +151,22 @@ html {
     background-color: var(--main-background);
 }
 
+.blur-content > * {
+    filter: blur(5px);
+}
+
+.blur-none {
+    filter: blur(0) !important;
+}
+
+.disable-content > * {
+    pointer-events: none;
+}
+
+.enable-content {
+    pointer-events: initial !important;
+}
+
 .v-application {
     font-family: 'Lato', sans-serif !important;
 }

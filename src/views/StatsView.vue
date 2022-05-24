@@ -125,7 +125,6 @@ export default {
 
     data: () => ({
         tab: 1,
-        tabNumber: undefined,
 
         /* TODO: it's hardcoded, need to change */
         stablecoinData: [

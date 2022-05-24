@@ -52,28 +52,28 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
-// // describe widget configuration and saving to a global variable for future use
-// var configuration = {
-//   from: 'USDC',
-//   to: 'USDC',
-//   fromChain: 'ETH',
-//   toChain: 'POLYGON',
-//   amount: 1,
-//   iframe: 'vertical',
-//   hideSelectionFrom: false,
-//   hideSelectionTo: true,
-//   theme: 'dark',
-//   background: '#1d2029',
-//   language: 'en',
-//   injectTokens: {},
-//   slippagePercent: {
-//     instantTrades: 2,
-//     crossChain: 5
-//   }
-// }
-//
-// // prevent accidental changes to the object, for example, when re-creating a widget for another theme
-// Object.freeze(configuration);
-//
-// // create widget
-// rubicWidget.init(configuration);
+// describe widget configuration and saving to a global variable for future use
+var configuration = {
+  from: 'USDC',
+  to: 'USDC',
+  fromChain: 'ETH',
+  toChain: 'POLYGON',
+  amount: 1,
+  iframe: 'vertical',
+  hideSelectionFrom: false,
+  hideSelectionTo: true,
+  theme: 'dark',
+  background: '#1d2029',
+  language: 'en',
+  injectTokens: {},
+  slippagePercent: {
+    instantTrades: 2,
+    crossChain: 5
+  }
+}
+
+// prevent accidental changes to the object, for example, when re-creating a widget for another theme
+Object.freeze(configuration);
+
+// create widget
+rubicWidget.init(configuration);

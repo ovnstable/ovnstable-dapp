@@ -4,6 +4,7 @@ import BN from "bn.js";
 const state = {
 
     pools: null,
+    poolList: null,
 
     selectedPool: null,
 
@@ -24,6 +25,10 @@ const getters = {
 
     pools(state) {
         return state.pools;
+    },
+
+    poolList(state) {
+        return state.poolList;
     },
 
     selectedPool(state) {
@@ -59,9 +64,52 @@ const actions = {
 
         console.log('FarmData: refreshFarm');
 
+        /* TODO: add loading poolList */
+
+        dispatch('loadPoolList');
         dispatch('loadPools');
     },
 
+
+    async loadPoolList({commit, dispatch, getters, rootState}) {
+        console.log('Farm: loadPoolList');
+
+        let poolList = [];
+        let info = null;
+
+        /* TODO: add dystoipa 0x5A272ad79cBd3C874879E3FEc5753C2127f77583 pool*/
+        /* TODO: add dystoipa 0xB2094C94E8DE8d614000eC6802635524A79C30DA pool*/
+        /* TODO: add dystoipa 0x421a018cC5839c4C0300AfB21C725776dc389B1a pool*/
+        /* TODO: add mesh 0x68b7cEd0dBA382a0eC705d6d97608B7bA3CD8C55 pool*/
+
+        info =  (await axios.get('/reward-programs/' + '0x901Debb34469e89FeCA591f5E5336984151fEc39')).data;
+        poolList.push(
+            {
+                chainIcon: require('@/assets/network/polygon.svg'),
+                platform: 'QuickSwap',
+                name: 'USD+/WETH',
+                token0Icon: require('@/assets/currencies/usdPlus.svg'),
+                token1Icon: require('@/assets/currencies/eth.svg'),
+                tvl: info.tvl,
+                link: "https://info.quickswap.exchange/#/pair/0x901Debb34469e89FeCA591f5E5336984151fEc39"
+            }
+        );
+
+        info =  (await axios.get('/reward-programs/' + '0x91F670270B86C80Ec92bB6B5914E6532cA967bFB')).data;
+        poolList.push(
+            {
+                chainIcon: require('@/assets/network/polygon.svg'),
+                platform: 'QuickSwap',
+                name: 'USD+/WMATIC',
+                token0Icon: require('@/assets/currencies/usdPlus.svg'),
+                token1Icon: require('@/assets/currencies/pol.svg'),
+                tvl: info.tvl,
+                link: "https://info.quickswap.exchange/#/pair/0x91F670270B86C80Ec92bB6B5914E6532cA967bFB"
+            }
+        );
+
+        commit('setPoolList', poolList);
+    },
 
 
     async loadPools({commit, dispatch, getters, rootState}) {
@@ -96,6 +144,9 @@ const mutations = {
         state.pools = pools;
     },
 
+    setPoolList(state, poolList) {
+        state.poolList = poolList;
+    },
 
     setSelectedPool(state, selectedPool) {
         state.selectedPool = selectedPool;
@@ -191,8 +242,8 @@ async function loadUsdPlusWethPool(rootState){
     item.userData = userData;
     item.poolData = poolData;
 
-    console.log('userData: ' + JSON.stringify(item.userData));
-    console.log('poolData: ' + JSON.stringify(item.poolData));
+    // console.log('userData: ' + JSON.stringify(item.userData));
+    // console.log('poolData: ' + JSON.stringify(item.poolData));
 
     return item;
 }
@@ -255,8 +306,8 @@ async function loadUsdPlusWmaticPool(rootState){
     item.userData = userData;
     item.poolData = poolData;
 
-    console.log('userData: ' + JSON.stringify(item.userData));
-    console.log('poolData: ' + JSON.stringify(item.poolData));
+    // console.log('userData: ' + JSON.stringify(item.userData));
+    // console.log('poolData: ' + JSON.stringify(item.poolData));
 
     return item;
 }

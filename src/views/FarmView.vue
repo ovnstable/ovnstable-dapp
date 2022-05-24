@@ -8,7 +8,7 @@
                     </label>
                 </v-row>
 
-                <v-row justify="center" class="toggle-row">
+                <v-row justify="center" class="toggle-row mt-8">
                     <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPools">Pools</label>
                     <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabRewardProgram">Reward Program</label>
                 </v-row>
@@ -73,7 +73,7 @@
                                             <div class="currency-icon ml-1">
                                                 <v-img :src="pool.token1Icon"/>
                                             </div>
-                                            <label class="panel-header-title-label ml-4 pool-name-label">
+                                            <label class="panel-header-title-label ml-2 pool-name-label">
                                                 {{ pool.name }}
                                             </label>
                                         </v-row>

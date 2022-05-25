@@ -75,14 +75,29 @@ const actions = {
         console.log('Farm: loadPoolList');
 
         let poolList = [];
-        let info = null;
 
-        /* TODO: add dystoipa 0x5A272ad79cBd3C874879E3FEc5753C2127f77583 pool*/
-        /* TODO: add dystoipa 0xB2094C94E8DE8d614000eC6802635524A79C30DA pool*/
-        /* TODO: add dystoipa 0x421a018cC5839c4C0300AfB21C725776dc389B1a pool*/
-        /* TODO: add mesh 0x68b7cEd0dBA382a0eC705d6d97608B7bA3CD8C55 pool*/
+        poolList.push(
+            {
+                chainIcon: require('@/assets/network/polygon.svg'),
+                platform: 'Dystopia',
+                name: 'USD+/USDC',
+                token0Icon: require('@/assets/currencies/usdPlus.svg'),
+                token1Icon: require('@/assets/currencies/usdc.png'),
+                link: "https://www.dystopia.exchange/liquidity/0x421a018cc5839c4c0300afb21c725776dc389b1a"
+            }
+        );
 
-        info =  (await axios.get('/reward-programs/' + '0x901Debb34469e89FeCA591f5E5336984151fEc39')).data;
+        poolList.push(
+            {
+                chainIcon: require('@/assets/network/polygon.svg'),
+                platform: 'Dystopia',
+                name: 'USD+/TETU',
+                token0Icon: require('@/assets/currencies/usdPlus.svg'),
+                token1Icon: require('@/assets/currencies/tetu.png'),
+                link: "https://www.dystopia.exchange/liquidity/0x5a272ad79cbd3c874879e3fec5753c2127f77583"
+            }
+        );
+
         poolList.push(
             {
                 chainIcon: require('@/assets/network/polygon.svg'),
@@ -90,12 +105,10 @@ const actions = {
                 name: 'USD+/WETH',
                 token0Icon: require('@/assets/currencies/usdPlus.svg'),
                 token1Icon: require('@/assets/currencies/eth.svg'),
-                tvl: info.tvl,
                 link: "https://info.quickswap.exchange/#/pair/0x901Debb34469e89FeCA591f5E5336984151fEc39"
             }
         );
 
-        info =  (await axios.get('/reward-programs/' + '0x91F670270B86C80Ec92bB6B5914E6532cA967bFB')).data;
         poolList.push(
             {
                 chainIcon: require('@/assets/network/polygon.svg'),
@@ -103,7 +116,6 @@ const actions = {
                 name: 'USD+/WMATIC',
                 token0Icon: require('@/assets/currencies/usdPlus.svg'),
                 token1Icon: require('@/assets/currencies/pol.svg'),
-                tvl: info.tvl,
                 link: "https://info.quickswap.exchange/#/pair/0x91F670270B86C80Ec92bB6B5914E6532cA967bFB"
             }
         );

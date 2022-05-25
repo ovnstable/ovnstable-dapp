@@ -35,7 +35,7 @@
                                     </v-col>
                                     <v-col class="header-title-row" :cols="isMobile ? '' : 2">
                                         <v-row justify="end">
-                                            <label class="header-title-label">TVL</label>
+<!--                                            <label class="header-title-label">TVL</label>-->
                                         </v-row>
                                     </v-col>
                                     <v-col class="header-title-row" :cols="isMobile ? '' : 4">
@@ -81,7 +81,7 @@
                                     <v-col class="header-title-row" :cols="isMobile ? '' : 2">
                                         <v-row justify="end">
                                             <label class="panel-header-title-label">
-                                                {{ pool.tvl ? "$" + $utils.formatMoney(pool.tvl, 0) : '—' }}
+<!--                                                {{ pool.tvl ? "$" + $utils.formatMoney(pool.tvl, 0) : '—' }}-->
                                             </label>
                                         </v-row>
                                     </v-col>

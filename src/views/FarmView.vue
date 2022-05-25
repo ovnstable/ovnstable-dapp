@@ -4,6 +4,9 @@
             <v-col class="main-col">
                 <v-row class="justify-start pt-15">
                     <label class="title-header">
+                        <v-icon class="return-btn" @click='goToAction("/")'>
+                            mdi-reply
+                        </v-icon>
                         Farm
                     </label>
                 </v-row>
@@ -514,7 +517,11 @@ export default {
         claimAction(pool) {
             this.setSelectedPool(pool);
             this.showClaimModal();
-        }
+        },
+
+        goToAction(id) {
+            this.$router.push(id);
+        },
     }
 }
 </script>
@@ -592,6 +599,10 @@ export default {
         width: 40px;
         height: 40px;
     }
+
+    .return-btn {
+        display: none !important;
+    }
 }
 
 .pool-panel {
@@ -613,6 +624,11 @@ export default {
     cursor: default !important;
 }
 
+.return-btn {
+    color: #FE7F2D !important;
+    cursor: pointer;
+    margin-top: -6px;
+}
 
 .panel-header-title-label, .panel-header-stats-label, .card-title-label, .pool-panel-action-label {
     font-family: 'Lato', sans-serif !important;

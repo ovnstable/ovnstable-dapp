@@ -1,99 +1,127 @@
 <template>
     <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
-            <v-col class="stats-col">
+            <v-col class="main-col">
                 <v-row class="justify-start pt-15">
                     <label class="title-header">
                         <v-icon class="return-btn" @click='goToAction("/")'>
                             mdi-reply
                         </v-icon>
-                        Stats
+                        Dashboard
                     </label>
+                    <v-spacer></v-spacer>
                 </v-row>
 
-                <v-row class="desc justify-start">
-                    <p>Automated Overnight DeFi total asset portfolio management dashboards. Your assets are there.</p>
-                </v-row>
-
-                <v-row class="mt-8" justify="center">
-                    <v-col cols="6">
-                        <div class="line-apy-container">
-                            <template v-if="payoutsApyData">
-                                <LineChartApy :data="payoutsApyData"/>
-                            </template>
-                        </div>
-                    </v-col>
-                    <v-col cols="6">
-                        <div class="line-tvl-container">
-                            <template v-if="payoutsTvlData">
-                                <LineChartTvl :data="payoutsTvlData"/>
-                            </template>
-                        </div>
-                    </v-col>
-                </v-row>
-
-                <v-row justify="center" class="toggle-row mt-8">
-                    <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPortfolio">Portfolio</label>
-                    <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabPayouts">Payouts</label>
-                </v-row>
-
-                <v-row class="pt-8 pb-5" justify="center">
-                    <v-col class="pa-0 ma-0" v-if="tab === 1">
-                        <div class="main-div">
-                            <v-row style="padding-top: 30px; padding-bottom: 15px" no-gutters justify="start">
-                                <label class="total-portfolio-header">Strategies</label>
-                            </v-row>
-                            <v-row style="padding-top: 15px; padding-bottom: 15px" no-gutters>
-                                <v-col :cols="isMobile ? 12 : 8">
-                                    <Table class="table-part table-full" :data="currentTotalData"/>
-                                    <Table class="table-part table-minimized" :data="currentTotalData" minimized/>
-                                </v-col>
-
-                                <v-col class="doughnut-col-part" cols="4">
-                                    <Doughnut class="doughnut-part" :data="currentTotalData" :size="320"/>
-                                </v-col>
-                            </v-row>
-                        </div>
-
-                        <div class="main-div mt-8">
-                            <v-row style="padding-top: 30px; padding-bottom: 15px" no-gutters justify="start">
-                                <label class="total-portfolio-header">Collateral</label>
-                            </v-row>
-
-                            <v-row style="padding-top: 15px; padding-bottom: 15px" no-gutters class="doughnut-part-minimized">
-                                <v-col cols="12">
-                                    <PieStablecoins class="doughnut-part-tvl-mobile" :data="stablecoinData" :size="200"/>
-                                </v-col>
-                            </v-row>
-
-                            <v-row style="padding-top: 15px; padding-bottom: 15px" no-gutters class="doughnut-part-minimized">
-                                <v-col cols="12">
-                                    <TableStablecoins class="table-part" :data="stablecoinData" minimized/>
-                                </v-col>
-                            </v-row>
-
-                            <v-row style="padding-top: 15px; padding-bottom: 15px" no-gutters class="doughnut-part-full">
-                                <v-col cols="8">
-                                    <TableStablecoins class="table-part" :data="stablecoinData"/>
-                                </v-col>
-
-                                <v-col cols="4">
-                                    <PieStablecoins class="doughnut-part-tvl" :data="stablecoinData" :size="320"/>
-                                </v-col>
-                            </v-row>
-                        </div>
-                    </v-col>
-
-                    <v-col class="pa-0 ma-0 main-div" v-if="tab === 2" :cols="isMobile ? 12 : 8">
-                        <v-row style="padding-top: 30px;" no-gutters>
-                            <PayoutsTable class="payouts-table-part table-full"/>
-                            <PayoutsTable class="payouts-table-part table-minimized" minimized/>
+                <v-row class="chart-row-db mb-10 mt-8" v-if="isLoading">
+                    <v-col class="ma-0 pt-15">
+                        <v-row align="center" justify="center">
+                            <v-progress-circular
+                                    width="2"
+                                    size="32"
+                                    color="#8FA2B7"
+                                    indeterminate
+                            ></v-progress-circular>
                         </v-row>
-                        <v-row style="padding-top: 30px; padding-bottom: 30px" no-gutters justify="center" align="center">
-                            <label class="scroll-label">scroll to see more</label>
+                        <v-row class="pt-2" align="center" justify="center">
+                            <label class="no-activities-label">Getting account info</label>
                         </v-row>
                     </v-col>
                 </v-row>
+
+                <v-row class="no-activities-row" v-if="!isLoading && !anyActivities">
+                    <v-col cols="3"></v-col>
+                    <v-col class="pa-0 ma-0" cols="6">
+                        <v-row align="center" justify="center">
+                            <div class="no-activities-img">
+                                <v-img :src="require('@/assets/icon/box-delete.svg')"/>
+                            </div>
+                        </v-row>
+                        <v-row class="pt-2" align="center" justify="center">
+                            <label class="no-activities-label">There’re no data for you to see yet. If you want to mint USD+, just click</label>
+                        </v-row>
+                        <v-row class="pt-4 pb-2" align="center" justify="center">
+                            <v-btn dark
+                                   height="56"
+                                   class='mint-usd-plus'
+                                   @click='goToAction("/")'>
+                                Mint USD+
+                            </v-btn>
+                        </v-row>
+                        <v-row align="center" justify="center">
+                            <label class="no-activities-label">and go ahead</label>
+                        </v-row>
+                    </v-col>
+                    <v-col cols="3"></v-col>
+                </v-row>
+
+                <v-col class="dashboard-main-container mt-10" v-if="!isLoading && anyActivities">
+                    <v-row class="chart-row-db justify-center" v-if="!isLoading && anyActivities">
+                        <v-col>
+                            <v-row align="center" justify="center">
+                                <DashboardWidget/>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+
+                    <v-row class="mb-4" v-if="anyActivities">
+                        <v-col cols="4">
+                            <v-row align="center" justify="center">
+                                <v-card class="balance-card" flat>
+                                    <v-card-text>
+                                        <v-row class="pt-2" justify="center">
+                                            <label class="card-label label-dark">{{ isMobile ? 'Balance' : 'Current balance' }}</label>
+                                        </v-row>
+                                        <v-row class="pt-1 pb-3" justify="center">
+                                            <label class="label-value label-orange">${{ $utils.formatMoney(balance.usdPlus, 2) }}</label>
+                                        </v-row>
+                                    </v-card-text>
+                                </v-card>
+                            </v-row>
+                        </v-col>
+                        <v-col cols="4" class="profit-col">
+                            <v-row align="center" justify="center">
+                                <v-card class="profit-card" flat>
+                                    <v-card-text>
+                                        <v-row class="pt-2" justify="center">
+                                            <label class="card-label label-dark">Profit USD+</label>
+                                        </v-row>
+                                        <v-row class="pt-1 pb-3" justify="center">
+                                            <label class="label-value label-light">${{ $utils.formatMoney(profitUsdPlus, isMobile ? 2 : 6) }}</label>
+                                        </v-row>
+                                    </v-card-text>
+                                </v-card>
+                            </v-row>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-row align="center" justify="center">
+                                <v-card class="apy-card" flat>
+                                    <v-card-text>
+                                        <v-row class="pt-2" justify="center">
+                                            <label class="card-label label-dark">APY %</label>
+                                        </v-row>
+                                        <v-row class="pt-1 pb-3" justify="center">
+                                            <label class="label-value label-light">{{ apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}</label>
+                                        </v-row>
+                                    </v-card-text>
+                                </v-card>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+                </v-col>
+
+                <v-col class="mt-6">
+                    <v-row class="table-row" v-if="anyActivities">
+                        <v-col cols="12" class="pa-0 ma-0 main-div">
+                            <v-row style="padding-top: 30px;" no-gutters>
+                                <RecentActivitiesTable class="activities-table-part activities-full-table"/>
+                                <RecentActivitiesTable class="activities-table-part activities-minimized-table" minimized/>
+                            </v-row>
+                            <v-row style="padding-top: 30px; padding-bottom: 30px" no-gutters justify="center" align="center">
+                                <label class="scroll-label">scroll to see more</label>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+                </v-col>
             </v-col>
         </v-row>
     </v-container>
@@ -101,59 +129,36 @@
 
 <script>
 
-import {mapGetters} from "vuex";
-import PayoutsTable from "@/components/dashboard/PayoutsTable";
-import Table from "@/components/dashboard/doughnut/Table"
-import Doughnut from "@/components/dashboard/doughnut/Doughnut"
-import LineChartApy from "@/components/dashboard/widget/LineChartApy";
-import LineChartTvl from "@/components/dashboard/widget/LineChartTvl";
-import TableStablecoins from "@/components/dashboard/pie/TableStablecoins";
-import PieStablecoins from "@/components/dashboard/pie/PieStablecoins";
+import {mapActions, mapGetters} from "vuex";
+import RecentActivitiesTable from "@/components/dashboard/RecentActivitiesTable";
+import DashboardWidget from "@/components/dashboard/DashboardWidget";
 
 export default {
     name: "DashboardView",
 
     components: {
-        PieStablecoins,
-        TableStablecoins,
-        LineChartTvl,
-        LineChartApy,
-        PayoutsTable,
-        Table,
-        Doughnut,
+        DashboardWidget,
+        RecentActivitiesTable
     },
 
     data: () => ({
-        tab: 1,
-        tabNumber: undefined,
-
-        /* TODO: it's hardcoded, need to change */
-        stablecoinData: [
-            {"label": "USDC", "value": 313222.68, "link": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", "color": "#2775CA", "logo": require('../assets/currencies/usdc.png')},
-            {"label": "USDT", "value": 177460.28, "link": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f", "color": "#26A17B", "logo": require('../assets/currencies/usdt.svg')},
-            // {"label": "DAI", "value": 0, "link": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", "color": "#FCCA46", "logo": require('@/assets/currencies/dai.svg')},
-        ],
     }),
 
-    computed: {
-        ...mapGetters("profile", ['totalUsdPlusValue', 'payoutsApyData', 'payoutsTvlData', 'currentTotalData', 'totalUsdPlus', 'loadingCurrentTotalData']),
 
-        activeTabPortfolio: function () {
-            return {
-                'tab-button': this.tab === 1,
-                'tab-button-in-active': this.tab !== 1,
-            }
+    computed: {
+        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('dashboardData', ['avgBalance', 'profitUsdPlus', 'apy', 'activities']),
+
+        anyActivities() {
+            return this.activities && this.activities.length > 0;
         },
 
-        activeTabPayouts: function () {
-            return {
-                'tab-button': this.tab === 2,
-                'tab-button-in-active': this.tab !== 2,
-            }
+        isLoading() {
+            return !this.account;
         },
 
         isMobile() {
-            return window.innerWidth < 1400;
+            return window.innerWidth < 650;
         }
     },
 
@@ -161,146 +166,182 @@ export default {
     },
 
     methods: {
+
         goToAction(id) {
             this.$router.push(id);
         },
-    },
+    }
+
 }
 </script>
 
 <style scoped>
 
 /* mobile */
-@media all and (min-width: 0px) and (max-width: 650px) {
+@media all and (min-width:0px) and (max-width: 650px) {
 
-    .stats-col {
-        max-width: 90vw !important;
+    .main-col {
+        max-width: 95vw !important;
     }
 
-    .swap-title {
-        color: white !important;
-        font-weight: 300;
-        font-size: 34px;
+    .balance-card, .profit-card, .apy-card {
+        width: 90vw !important;
     }
 
-    .tab-btn {
-        background: none !important;
-        justify-content: center;
-        color: #707A8B !important;
-        font-family: 'Raleway', sans-serif;
-        font-style: normal;
-        font-weight: 800;
-        font-size: 18px;
-        line-height: 28px;
-        text-transform: capitalize;
-        border: none;
-        cursor: pointer !important;
-    }
-
-    .table-full, .doughnut-col-part, .doughnut-part-full {
+    .activities-full-table, .cards-full {
         display: none !important;
     }
 
-    .line-apy-container {
-        margin-left: 4% !important;
+    .no-activities-img {
+        width: 50px !important;
+        height: 50px !important;
     }
 
-    .line-tvl-container {
-        margin-left: -4% !important;
+    .mint-usd-plus {
+        height: 46px;
+    }
+
+    .card-label {
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .label-value {
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        line-height: 28px !important;
     }
 }
 
 /* tablet */
-@media only screen and (min-width: 650px) and (max-width: 1400px) {
+@media only screen and (min-width:650px) and (max-width: 1400px) {
 
-    .stats-col {
-        max-width: 90vw !important;
+    .main-col {
+        max-width: 80vw !important;
     }
 
-    .swap-title {
-        color: white !important;
-        font-weight: 300;
-        font-size: 34px;
+    .balance-card, .profit-card, .apy-card {
+        width: 25vw !important;
     }
 
-    .history-minimized-table {
+    .activities-full-table, .cards-minimized {
         display: none !important;
     }
 
-    .tab-btn {
-        background: none !important;
-        justify-content: center;
-        color: #707A8B !important;
-        font-family: 'Raleway', sans-serif;
+    .no-activities-img {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    .mint-usd-plus {
+        height: 46px;
+    }
+
+    .card-label {
+        font-family: 'Lato', sans-serif;
         font-style: normal;
-        font-weight: 800;
-        font-size: 18px;
-        line-height: 28px;
-        text-transform: capitalize;
-        border: none;
-        cursor: pointer !important;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
     }
 
-    .table-full, .doughnut-col-part, .doughnut-part-full {
-        display: none !important;
+    .label-value {
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 600 !important;
+        font-size: 24px !important;
+        line-height: 36px !important;
+    }
+
+    .activities-table-part {
+        padding-left: 4%;
+        padding-right: 4%;
     }
 }
 
 @media only screen and (min-width: 1400px) {
 
-    .stats-col {
-        max-width: 90vw !important;
+    .main-col {
+        max-width: 70vw !important;
     }
 
-    .swap-title {
-        color: white !important;
-        font-weight: 300;
-        font-size: 56px;
+    .balance-card, .profit-card, .apy-card {
+        width: 17vw !important;
     }
 
-    .history-minimized-table, .return-btn {
+    .activities-minimized-table, .cards-minimized, .return-btn {
         display: none !important;
     }
 
-    .line-apy-container {
-        margin-left: -2%;
+    .table-row {
+        margin-top: 4px !important;
     }
 
-    .line-tvl-container {
-        margin-left: 2%;
+    .no-activities-img {
+        width: 80px !important;
+        height: 80px !important;
     }
 
-    .tab-btn {
-        background: none !important;
-        justify-content: center;
-        color: #707A8B !important;
-        font-family: 'Raleway', sans-serif;
+    .mint-usd-plus {
+        height: 56px;
+    }
+
+    .card-label {
+        font-family: 'Lato', sans-serif;
         font-style: normal;
-        font-weight: 800;
-        font-size: 24px;
-        line-height: 57px;
-        text-transform: capitalize;
-        border: none;
-        cursor: pointer !important;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
     }
 
-    .table-minimized, .doughnut-part-minimized {
-        display: none !important;
+    .label-value {
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-weight: 600 !important;
+        font-size: 24px !important;
+        line-height: 36px !important;
+    }
+
+    .activities-table-part {
+        padding-left: 4%;
+        padding-right: 4%;
     }
 }
 
-.desc {
-    font-family: 'Lato', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
+.profit-col {
+    border-left: 1px solid #4C586D !important;
+    border-right: 1px solid #4C586D !important;
+}
+
+.balance-card, .profit-card, .apy-card {
+    border-radius: 24px !important;
+    border: none !important;
+}
+
+.balance-card,.profit-card, .apy-card {
+    background: var(--secondary) !important;
+}
+
+.money-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.label-light {
     color: white !important;
 }
 
-.tab-button {
+.label-orange {
     color: #FE7F2D !important;
-    border-bottom: 2px solid #FE7F2D !important;
+}
+
+.label-dark {
+    color: #707A8B !important;
 }
 
 .return-btn {
@@ -309,41 +350,36 @@ export default {
     margin-top: -6px;
 }
 
-.main-div {
-    width: 100% !important;
-    background: #1D2029 !important;
-    border-radius: 20px !important;
+.no-activities-row {
+    margin-top: 60px;
 }
 
-.table-part {
-    padding-left: 4%;
-}
-
-.payouts-table-part {
-    padding-left: 4%;
-    padding-right: 4%;
-}
-
-.doughnut-part {
-    height: 500px !important;
-}
-
-.doughnut-part-tvl {
-    height: 380px !important;
-}
-
-.doughnut-part-tvl-mobile {
-    height: 200px !important;
-}
-
-.total-portfolio-header {
-    font-family: 'Raleway', sans-serif;
+.no-activities-label {
+    display: block;
+    text-align: center;
+    color: #8FA2B7 !important;
     font-style: normal;
-    font-weight: 800;
-    font-size: 24px;
-    line-height: 36px;
-    color: #FFFFFF !important;
-    padding-left: 3% !important;
+    font-weight: 400;
+    line-height: 24px;
+    font-size: 14px;
+}
+
+.mint-usd-plus {
+    text-transform: none !important;
+    border-radius: 40px;
+    color: white !important;
+    background: var(--orange-gradient) !important;
+
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.dashboard-main-container {
+    background: #1D2029 !important;
+    border-radius: 20px;
 }
 
 .scroll-label {
@@ -355,13 +391,10 @@ export default {
     color: #4C586D !important;
 }
 
-.toggle-row {
-    border-bottom: 1px solid #4C586D;
-}
-
-.line-apy-container, .line-tvl-container {
-    width: 100%;
-    background: var(--secondary) !important;
+.main-div {
+    width: 100% !important;
+    background: #1D2029 !important;
     border-radius: 20px !important;
 }
+
 </style>

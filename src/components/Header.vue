@@ -58,7 +58,8 @@ export default {
 
 
     computed: {
-        ...mapGetters('web3', ['account', 'web3', 'contractNames', 'networkId', 'switchToPolygon', 'loadingWeb3']),
+        ...mapGetters('web3', [ 'web3',  'networkId', 'switchToPolygon', 'loadingWeb3']),
+        ...mapGetters('accountData', ['account'])
     },
 
     methods: {

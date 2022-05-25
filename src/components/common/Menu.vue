@@ -6,6 +6,12 @@
                 Swap
             </span>
 
+            <span v-bind:class="activeTabFarm"
+                  class=" ml-10"
+                  @click="goToAction('/farm')">
+                Farm
+            </span>
+
             <span v-bind:class="activeTabDashboard"
                   class=" ml-10"
                   @click="goToAction('/fund')">
@@ -52,14 +58,19 @@ export default {
                 id: 1
             },
             {
+                name: 'Farm',
+                to: '/farm',
+                id: 2,
+            },
+            {
                 name: 'Stats performance',
                 to: '/fund',
-                id: 2,
+                id: 3,
             },
             {
                 name: 'Dashboard',
                 to: '/dashboard',
-                id: 3,
+                id: 4,
             },
         ]
     }),
@@ -67,8 +78,8 @@ export default {
 
     computed: {
 
-        ...mapGetters('web3', ['account', 'web3', 'contractNames', 'networkId']),
-
+        ...mapGetters('web3', ['web3', 'networkId']),
+        ...mapGetters('accountData', ['account']),
 
         activeTabSave: function () {
             return {
@@ -77,17 +88,24 @@ export default {
             }
         },
 
-        activeTabDashboard: function () {
+        activeTabFarm: function () {
             return {
                 'active-tab': this.tabId === 2,
                 'in-active-tab': this.tabId !== 2,
             }
         },
 
-        activeTabOvnStatement: function () {
+        activeTabDashboard: function () {
             return {
                 'active-tab': this.tabId === 3,
                 'in-active-tab': this.tabId !== 3,
+            }
+        },
+
+        activeTabOvnStatement: function () {
+            return {
+                'active-tab': this.tabId === 4,
+                'in-active-tab': this.tabId !== 4,
             }
         },
     },

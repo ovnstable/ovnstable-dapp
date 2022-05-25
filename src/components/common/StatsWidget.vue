@@ -83,7 +83,8 @@ export default {
 
 
   computed: {
-    ...mapGetters('profile', ['totalUsdPlus', 'loadingTotalUsdPlus'])
+    ...mapGetters('statsData', ['totalUsdPlus' ]),
+    ...mapGetters('statsUI', [ 'loadingTotalUsdPlus'])
   },
 
   methods: {

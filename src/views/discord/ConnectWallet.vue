@@ -47,13 +47,14 @@
 <script>
 import UsdPlusImage from "@/assets/usdPlus.json";
 
-const connectIcon = require('../../assets/discord/connect.png');
-const loadingIcon = require('../../assets/discord/loading.png');
-const successIcon = require('../../assets/discord/success.png');
-const failIcon = require('../../assets/discord/fail.png');
+const connectIcon = require('@/assets/discord/connect.png');
+const loadingIcon = require('@/assets/discord/loading.png');
+const successIcon = require('@/assets/discord/success.png');
+const failIcon = require('@/assets/discord/fail.png');
 
-import {axios} from "../../plugins/http-axios";
-import {wallets} from '../../store/modules/web3'
+const {axios} = require('@/plugins/http-axios');
+
+const {wallets} = require('@/store/modules/common/web3');
 
 import Onboard from 'bnc-onboard';
 import Web3 from "web3";

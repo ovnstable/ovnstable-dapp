@@ -26,6 +26,11 @@
                                     Account Profile
                                 </label>
                             </v-list-item>
+                            <v-list-item @click="goToAction('/farm')" class="farm-mobile">
+                                <label class="list-label-switch">
+                                    Farm
+                                </label>
+                            </v-list-item>
                             <v-list-item @click="goToAction('/dashboard')" class="dashboard-mobile">
                                 <label class="list-label-switch">
                                     Dashboard
@@ -63,9 +68,39 @@
         </v-row>
 
         <v-row justify="end" v-else>
-            <button class="btn-connect-wallet" v-on:click="connectWalletAction">
+            <button class="btn-connect-wallet" v-on:click="connectWalletAction" v-if="!isMobile">
                 Connect to a wallet
             </button>
+
+            <v-menu offset-y min-width="180px" v-else>
+                <template v-slot:activator="{ attrs, on }">
+                    <v-btn class="menu-btn-activator"
+                           icon
+                            @click="hideRubic"
+                            v-bind="attrs"
+                            v-on="on">
+                        <v-icon class="menu-icon">mdi-menu</v-icon>
+                    </v-btn>
+                </template>
+
+                <v-list class="wallet-actions-list">
+                    <v-list-item @click="goToAction('/farm')" class="farm-mobile">
+                        <label class="list-label-switch">
+                            Farm
+                        </label>
+                    </v-list-item>
+                    <v-list-item @click="goToAction('/fund')" class="fund-mobile">
+                        <label class="list-label-switch">
+                            Stats
+                        </label>
+                    </v-list-item>
+                    <v-list-item @click="connectWalletAction">
+                        <label class="list-label-switch">
+                            Connect wallet
+                        </label>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
         </v-row>
     </v-col>
 </template>
@@ -80,8 +115,8 @@ export default {
     },
 
     computed: {
-        ...mapGetters('profile', ['balance']),
-        ...mapGetters('web3', ['account', 'web3', 'contractNames', 'networkId', 'walletConnected']),
+        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('web3', [ 'web3',  'networkId', 'walletConnected']),
 
         isWalletConnected: function () {
             return this.walletConnected;
@@ -94,6 +129,10 @@ export default {
                 return null;
             }
         },
+
+        isMobile() {
+            return window.innerWidth <= 1400;
+        }
     },
 
     created() {
@@ -105,8 +144,8 @@ export default {
     methods: {
 
         ...mapActions('web3', ['connectWallet', 'disconnectWallet', 'switchAccount', 'addUsdPlusToken']),
-        ...mapActions('accountProfile', ['showAccountProfile']),
-        ...mapActions('profile', ['refreshBalance']),
+        ...mapActions('accountUI', ['showAccountProfile']),
+        ...mapActions('accountData', ['refreshBalance']),
 
         disconnectWalletAction() {
             this.disconnectWallet();
@@ -176,7 +215,7 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
-    .bridge-link-mobile, .account-profile-mobile, .dashboard-mobile, .fund-mobile {
+    .bridge-link-mobile, .account-profile-mobile, .dashboard-mobile, .fund-mobile, .farm-mobile {
         display: none !important;
     }
 
@@ -260,5 +299,22 @@ export default {
     font-size: 16px !important;
     line-height: 24px !important;
     min-width: 130px;
+}
+
+.menu-btn-activator {
+    margin-left: 10px;
+    background: var(--secondary) !important;
+    border-width: 0px !important;
+    border-radius: 40px !important;
+    justify-content: center;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px !important;
+    line-height: 24px !important;
+}
+
+.menu-icon {
+    color: white !important;
 }
 </style>

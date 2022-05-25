@@ -37,7 +37,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('showTransactions', ['text', 'textSecond', "show", 'failed', 'persistent']),
+    ...mapGetters('showTransactionsModal', ['text', 'textSecond', "show", 'failed', 'persistent']),
 
 
     modal: {
@@ -53,7 +53,7 @@ export default {
 
 
   methods: {
-    ...mapActions('showTransactions', ['hide']),
+    ...mapActions('showTransactionsModal', ['hide']),
 
   }
 

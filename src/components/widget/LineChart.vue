@@ -3,32 +3,32 @@
         <v-row class="zoom-db-row mb-5 mt-6 mr-2">
             <v-spacer></v-spacer>
             <v-btn
-                    rounded
-                    text
-                    id="week-zoom-btn-db"
-                    class="zoom-btn"
-                    dark
-                    @click="zoomChart('week')"
+              rounded
+              text
+              id="week-zoom-btn-db"
+              class="zoom-btn"
+              dark
+              @click="zoomChart('week')"
             >
                 <label>Week</label>
             </v-btn>
             <v-btn
-                    rounded
-                    text
-                    id="month-zoom-btn-db"
-                    class="zoom-btn"
-                    dark
-                    @click="zoomChart('month')"
+              rounded
+              text
+              id="month-zoom-btn-db"
+              class="zoom-btn"
+              dark
+              @click="zoomChart('month')"
             >
                 Month
             </v-btn>
             <v-btn
-                    rounded
-                    text
-                    id="all-zoom-btn-db"
-                    class="zoom-btn"
-                    dark
-                    @click="zoomChart('all')"
+              rounded
+              text
+              id="all-zoom-btn-db"
+              class="zoom-btn"
+              dark
+              @click="zoomChart('all')"
             >
                 All
             </v-btn>
@@ -70,7 +70,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('dashboardBalance', ['slice']),
+        ...mapGetters('dashboardData', ['slice']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -86,9 +86,9 @@ export default {
     },
 
     methods: {
-        ...mapActions('dashboardBalance', ['sliceClientDashboardData']),
+        ...mapActions('dashboardData', ['sliceDashboard']),
 
-        ...mapMutations('dashboardBalance', ['setSlice']),
+        ...mapMutations('dashboardData', ['setSlice']),
 
         zoomChart(zoom) {
             this.zoom = zoom;
@@ -107,7 +107,7 @@ export default {
                     this.setSlice(null)
             }
 
-            this.sliceClientDashboardData();
+            this.sliceDashboard();
 
             if (this.chart) {
                 this.chart.destroy();
@@ -129,7 +129,18 @@ export default {
                 this.chart.destroy();
             }
 
-            this.changeZoomBtnStyle();
+            if (!this.data) {
+                return;
+            }
+
+            try {
+                this.changeZoomBtnStyle();
+            } catch (e) {
+                if (e.message === "document.getElementById(...) is null")
+                    return;
+                else
+                    throw new Error(e);
+            }
 
             let values = [];
             this.data.datasets[0].data.forEach(v => values.push(v));
@@ -298,7 +309,11 @@ export default {
             };
 
             this.chart = new ApexCharts(document.querySelector("#line-chart-dashboard"), options);
-            this.chart.render();
+            try {
+                this.chart.render();
+            } catch (e) {
+                console.log('Error: ' + e.message);
+            }
         },
     }
 }

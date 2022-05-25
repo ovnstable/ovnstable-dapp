@@ -76,14 +76,14 @@ export default {
     props: {},
 
     computed: {
-        ...mapGetters('airDrop', ['show']),
-        ...mapGetters('web3', ['account']),
+        ...mapGetters('airdropUI', ['show']),
+        ...mapGetters('accountData', ['account']),
     },
 
     data: () => ({}),
 
     methods: {
-        ...mapActions('airDrop', ['showAirdropDialog', 'hideAirdropDialog']),
+        ...mapActions('airdropUI', ['showAirdropDialog', 'hideAirdropDialog']),
         ...mapActions('web3', ['connectWallet']),
 
         openLink(link) {

@@ -1,6 +1,6 @@
 <template>
     <v-dialog
-            :value="show"
+            :value="showAccountProfile"
             :width="width"
             @input="close"
             :persistent="persistent"
@@ -59,7 +59,7 @@
                                 color="#202832"
                                 bottom
                         >
-                            <template v-slot:activator>
+                            <template v-slot:activator="{on}">
                                 <a class="copy-address-btn" @click="copyAddressToClipboard">
                                     <v-img class="icon-img" :src="require('@/assets/icon/link.svg')"/>
                                     <label class="ml-1">Copy Address</label>
@@ -126,10 +126,10 @@ export default {
     },
 
     computed: {
-        ...mapGetters('web3', ['account', 'walletName', 'ens']),
-        ...mapGetters('accountProfile', ['show']),
+        ...mapGetters('web3', ['walletName', 'ens']),
+        ...mapGetters('accountUI', ['showAccountProfile']),
         ...mapGetters('transaction', ['transactions']),
-        ...mapGetters('profile', ['balance']),
+        ...mapGetters('accountData', ['balance', 'account']),
 
         accountShort: function () {
             if (this.account) {
@@ -141,10 +141,22 @@ export default {
     },
 
 
+    watch: {
+
+        showAccountProfile: function (newValue, oldValue){
+
+            console.log('Watch: show ' + newValue);
+            if (newValue){
+                this.loadTransaction();
+            }
+
+        },
+    },
+
     methods: {
-        ...mapActions('accountProfile', ['hideAccountProfile']),
+        ...mapActions('accountUI', ['hideAccountProfile']),
         ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken']),
-        ...mapActions('transaction', ['clearTransaction']),
+        ...mapActions('transaction', ['clearTransaction', 'loadTransaction']),
 
         openPolygonScan(hash) {
             window.open(`https://polygonscan.com/tx/${hash}`, '_blank').focus();

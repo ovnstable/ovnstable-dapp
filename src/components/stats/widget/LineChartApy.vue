@@ -3,22 +3,25 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label
-                      class="chart-title">{{ averageApy ? ((isMobile ? '' : 'Average ') + 'USD+ APY') : '' }}</label>
+                    <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? '' : 'Average ') + 'USD+ APY') : ''}}</label>
                 </v-row>
 
                 <v-row justify="start">
                     <label class="mobile-info-title">
-                        {{ averageApy ? (averageApy + '%') : '' }}
+                        {{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '' }}
                     </label>
                 </v-row>
             </v-col>
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
-                    <label class="chart-title-apy">{{ averageApy ? (averageApy + '%') : '' }}</label>
+                    <label class="chart-title-apy">
+                        {{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '' }}
+                    </label>
                 </v-row>
                 <v-row justify="end">
-                    <label class="chart-sub-title-apy">{{ firstDateApy ? ('from ' + firstDateApy) : '' }}</label>
+                    <label class="chart-sub-title-apy">
+                        {{ (avgApy && avgApy.date) ? 'from ' + avgApy.date : '' }}
+                    </label>
                 </v-row>
             </v-col>
         </v-row>
@@ -28,33 +31,33 @@
         <v-row class="zoom-row" style="margin-top: -40px !important;">
             <v-spacer></v-spacer>
             <v-btn
-              rounded
-              text
-              id="week-zoom-btn"
-              class="zoom-btn"
-              dark
-              @click="zoomChart('week')"
+                    rounded
+                    text
+                    id="week-zoom-btn"
+                    class="zoom-btn"
+                    dark
+                    @click="zoomChart('week')"
             >
                 <label>Week</label>
             </v-btn>
             <v-btn
-              rounded
-              text
-              id="month-zoom-btn"
-              class="zoom-btn"
-              dark
-              @click="zoomChart('month')"
+                    rounded
+                    text
+                    id="month-zoom-btn"
+                    class="zoom-btn"
+                    dark
+                    @click="zoomChart('month')"
             >
                 Month
             </v-btn>
             <v-btn
-              rounded
-              text
-              style="margin-right: 1%;"
-              id="all-zoom-btn"
-              class="zoom-btn"
-              dark
-              @click="zoomChart('all')"
+                    rounded
+                    text
+                    style="margin-right: 1%;"
+                    id="all-zoom-btn"
+                    class="zoom-btn"
+                    dark
+                    @click="zoomChart('all')"
             >
                 All
             </v-btn>
@@ -66,6 +69,7 @@
 /* eslint-disable no-unused-vars,no-undef */
 
 import {mapActions, mapGetters, mapMutations} from "vuex";
+import moment from "moment";
 
 import ApexCharts from 'apexcharts'
 
@@ -92,8 +96,7 @@ export default {
         slice: null,
         chart: null,
 
-        averageApy: null,
-        firstDateApy: null,
+        avgApy: null,
     }),
 
     computed: {
@@ -115,7 +118,22 @@ export default {
     methods: {
         ...mapMutations([]),
 
-        zoomChart(zoom) {
+        async zoomChart(zoom) {
+            let fetchOptions = {
+                headers: {
+                    "Access-Control-Allow-Origin": process.env.VUE_APP_API
+                }
+            };
+
+            await fetch(process.env.VUE_APP_API + '/widget/avg-apy-info/' + zoom, fetchOptions)
+                .then(value => value.json())
+                .then(value => {
+                    this.avgApy = value;
+                    this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+                }).catch(reason => {
+                    console.log('Error get data: ' + reason);
+                })
+
             this.zoom = zoom;
 
             switch (zoom) {
@@ -152,18 +170,7 @@ export default {
                 this.chart.destroy();
             }
 
-            if (!this.data.datasets) {
-                return;
-            }
-
-            try {
-                this.changeZoomBtnStyle();
-            } catch (e) {
-                if (e.message === "document.getElementById(...) is null")
-                    return;
-                else
-                    throw new Error(e);
-            }
+            this.changeZoomBtnStyle();
 
             let values = [];
             this.data.datasets[0].data.forEach(v => values.push(v));
@@ -173,13 +180,7 @@ export default {
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(this.slice) : labels;
 
-            this.firstDateApy = labels[0];
-
-            /* TODO: fix calculating avg apy */
-            let averageValue = values.reduce((a, b) => (a + b)) / values.length;
-            averageValue = averageValue.toFixed(1);
-
-            this.averageApy = averageValue;
+            let averageValue = this.avgApy.value;
 
             let maxValue;
             try {
@@ -300,11 +301,7 @@ export default {
             };
 
             this.chart = new ApexCharts(document.querySelector("#line-chart-apy"), options);
-            try {
-                this.chart.render();
-            } catch (e) {
-                console.log('Error: ' + e.message);
-            }
+            this.chart.render();
         },
     }
 }

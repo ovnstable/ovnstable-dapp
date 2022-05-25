@@ -3,24 +3,24 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ totalUsdPlusValue ? 'USD+ TVL' : '' }}</label>
+                    <label class="chart-title">{{ totalPcv ? 'USD+ PCV' : '' }}</label>
                 </v-row>
 
                 <v-row justify="start">
                     <label class="mobile-info-title">
-                        {{ totalUsdPlusValue ? ('$' + $utils.formatMoneyComma(totalUsdPlusValue, 2)) : '' }}
+                        {{ totalPcv ? ('$' + $utils.formatMoneyComma(totalPcv, 2)) : '' }}
                     </label>
                 </v-row>
             </v-col>
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
                     <label class="chart-title-apy">
-                        {{ totalUsdPlusValue ? ('$' + $utils.formatMoneyComma(totalUsdPlusValue, 2)) : '' }}
+                        {{ totalPcv ? ('$' + $utils.formatMoneyComma(totalPcv, 2)) : '' }}
                     </label>
                 </v-row>
                 <v-row justify="end">
                     <label class="chart-sub-title-apy">
-                        {{ totalUsdPlusValue ? 'past 24 hours' : '' }}
+                        {{ totalPcv ? 'past 2 hours' : '' }}
                     </label>
                 </v-row>
             </v-col>
@@ -31,33 +31,33 @@
         <v-row class="zoom-row" style="margin-top: -40px !important;">
             <v-spacer></v-spacer>
             <v-btn
-              rounded
-              text
-              id="week-zoom-btn-tvl"
-              class="zoom-btn"
-              dark
-              @click="zoomChart('week')"
+                    rounded
+                    text
+                    id="week-zoom-btn-tvl"
+                    class="zoom-btn"
+                    dark
+                    @click="zoomChart('week')"
             >
                 <label>Week</label>
             </v-btn>
             <v-btn
-              rounded
-              text
-              id="month-zoom-btn-tvl"
-              class="zoom-btn"
-              dark
-              @click="zoomChart('month')"
+                    rounded
+                    text
+                    id="month-zoom-btn-tvl"
+                    class="zoom-btn"
+                    dark
+                    @click="zoomChart('month')"
             >
                 Month
             </v-btn>
             <v-btn
-              rounded
-              text
-              style="margin-right: 1%;"
-              id="all-zoom-btn-tvl"
-              class="zoom-btn"
-              dark
-              @click="zoomChart('all')"
+                    rounded
+                    text
+                    style="margin-right: 1%;"
+                    id="all-zoom-btn-tvl"
+                    class="zoom-btn"
+                    dark
+                    @click="zoomChart('all')"
             >
                 All
             </v-btn>
@@ -95,12 +95,11 @@ export default {
         slice: null,
         chart: null,
 
-        averageApy: null,
-        firstDateApy: null,
+        totalPcv: null,
     }),
 
     computed: {
-        ...mapGetters("statsData", ['totalUsdPlusValue']),
+        ...mapGetters("statsData", ['totalUsdPlusValue', 'currentTotalData']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -143,13 +142,20 @@ export default {
         },
 
         changeZoomBtnStyle() {
-
             document.getElementById("week-zoom-btn-tvl").classList.remove("selected");
             document.getElementById("month-zoom-btn-tvl").classList.remove("selected");
             document.getElementById("all-zoom-btn-tvl").classList.remove("selected");
 
             document.getElementById(this.zoom + "-zoom-btn-tvl").classList.add("selected");
+        },
 
+        getTotalPcv() {
+            let sum = 0;
+            this.currentTotalData.forEach(dataItem => {
+                sum += dataItem.value
+            });
+
+            return sum;
         },
 
         redraw() {
@@ -157,18 +163,7 @@ export default {
                 this.chart.destroy();
             }
 
-            if (!this.data.datasets) {
-                return;
-            }
-
-            try {
-                this.changeZoomBtnStyle();
-            } catch (e) {
-                if (e.message === "document.getElementById(...) is null")
-                    return;
-                else
-                    throw new Error(e);
-            }
+            this.changeZoomBtnStyle();
 
             let values = [];
             this.data.datasets[0].data.forEach(v => values.push(v));
@@ -178,13 +173,6 @@ export default {
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(this.slice) : labels;
 
-            this.firstDateApy = labels[0];
-
-            let averageValue = values.reduce((a, b) => (a + b)) / values.length;
-            averageValue = averageValue.toFixed(1);
-
-            this.averageApy = averageValue;
-
             let maxValue;
             try {
                 maxValue = Math.max.apply(Math, values);
@@ -193,9 +181,11 @@ export default {
                 maxValue = 50;
             }
 
+            this.totalPcv = this.getTotalPcv();
+
             let options = {
                 series: [{
-                    name: "TVL",
+                    name: "PCV",
                     data: values
                 }],
 
@@ -290,11 +280,7 @@ export default {
             };
 
             this.chart = new ApexCharts(document.querySelector("#line-chart-tvl"), options);
-            try {
-                this.chart.render();
-            } catch (e) {
-                console.log('Error: ' + e.message);
-            }
+            this.chart.render();
         },
     }
 }

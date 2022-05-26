@@ -605,6 +605,10 @@ export default {
     }
 }
 
+.pool-row {
+    cursor: pointer !important;
+}
+
 .pool-panel {
     margin-bottom: 10px !important;
     border-radius: 20px !important;

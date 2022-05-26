@@ -45,7 +45,11 @@
                             {{ activity.apy ? $utils.formatMoney(activity.apy, 2) + '%' : '—' }}
                         </td>
                         <td class="table-col-value text-right" v-if="!minimized">
-                            <v-icon class="link-icon">mdi-eye</v-icon>
+                            <v-row justify="end">
+                                <div class="out-icon mr-4">
+                                    <v-img :src="require('@/assets/icon/out-white.svg')"/>
+                                </div>
+                            </v-row>
                         </td>
                     </tr>
                 </template>
@@ -181,12 +185,18 @@ export default {
     color: white !important;
 }
 
-.link-icon {
-    cursor: pointer;
+.current-table-row {
+    cursor: pointer !important;
 }
 
 .current-table-row-header {
     height: 24px !important;
+}
+
+.out-icon {
+    width: 24px !important;
+    height: 24px !important;
+    cursor: pointer;
 }
 
 </style>

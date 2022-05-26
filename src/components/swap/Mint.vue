@@ -419,7 +419,8 @@ export default {
             this.showWaitingModal('Swapping ' + this.sumResult + ' USDC for ' + this.sumResult + ' USD+');
 
             try {
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+                /* TODO: Fix me */
+                let sum = this.web3.utils.toWei(this.sum, 'mwei') - 10;
 
                 let contracts = this.contracts;
                 let from = this.account;
@@ -456,7 +457,8 @@ export default {
 
         async confirmSwapAction() {
             try {
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+                /* TODO: Fix me */
+                let sum = this.web3.utils.toWei(this.sum, 'mwei') - 10;
 
                 this.showWaitingModal();
 

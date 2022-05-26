@@ -404,13 +404,17 @@ export default {
             }
         },
 
-        max() {
-            let balanceElement = this.balance[this.currency.id];
-            this.sum = balanceElement + "";
-        },
-
         setSum(value) {
             this.sum = value;
+        },
+
+        truncateByDecimalPlace(value, numDecimalPlaces) {
+            return Math.trunc(value * Math.pow(10, numDecimalPlaces)) / Math.pow(10, numDecimalPlaces);
+        },
+
+        max() {
+            let balanceElement = this.balance[this.currency.id];
+            this.sum = this.truncateByDecimalPlace(balanceElement, 5) + "";
         },
 
         async buyAction() {
@@ -419,8 +423,7 @@ export default {
             this.showWaitingModal('Swapping ' + this.sumResult + ' USDC for ' + this.sumResult + ' USD+');
 
             try {
-                /* TODO: Fix me */
-                let sum = this.web3.utils.toWei(this.sum, 'mwei') - 10;
+                let sum = this.web3.utils.toWei(this.sum, 'mwei');
 
                 let contracts = this.contracts;
                 let from = this.account;
@@ -457,8 +460,7 @@ export default {
 
         async confirmSwapAction() {
             try {
-                /* TODO: Fix me */
-                let sum = this.web3.utils.toWei(this.sum, 'mwei') - 10;
+                let sum = this.web3.utils.toWei(this.sum, 'mwei');
 
                 this.showWaitingModal();
 

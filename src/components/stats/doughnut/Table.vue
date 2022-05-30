@@ -107,7 +107,7 @@ export default {
     data: () => ({}),
 
     computed: {
-        ...mapGetters("statsData", ['totalUsdPlusValue', 'currentTotalData', 'totalUsdPlus' ]),
+        ...mapGetters("statsData", ['totalUsdPlusValue', 'currentTotalData',]),
         ...mapGetters("statsUI", ['loadingCurrentTotalData'])
     },
 

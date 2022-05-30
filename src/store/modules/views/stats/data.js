@@ -2,13 +2,6 @@ import {axios} from "@/plugins/http-axios";
 import moment from "moment";
 
 const state = {
-
-    totalUsdPlus: {
-        totalMint: 0,
-        totalBurn: 0,
-        totalSupply: 0,
-    },
-
     currentTotalData: null,
 
     payouts: [],
@@ -23,11 +16,6 @@ const getters = {
     currentTotalData(state) {
         return state.currentTotalData;
     },
-
-    totalUsdPlus(state) {
-        return state.totalUsdPlus;
-    },
-
 
     payouts(state) {
         return state.payouts;
@@ -163,13 +151,6 @@ const actions = {
     async refreshTotalUsdPlus({commit, dispatch, getters, rootState}) {
         commit('statsUI/setLoadingTotalUsdPlus', true, { root: true });
 
-
-        let value = await rootState.web3.contracts.usdPlus.methods.totalSupply().call();
-        let data = {
-            totalSupply: value
-        }
-        commit('setTotalUsdPlus', data);
-
         let usdPlusValue = (await axios('/dapp/getTotalUsdPlusValue')).data;
         commit('setTotalUsdPlusValue', usdPlusValue);
 
@@ -189,11 +170,6 @@ const mutations = {
     setGasPrice(state, price) {
         state.gasPrice = price;
     },
-
-    setTotalUsdPlus(state, value) {
-        state.totalUsdPlus = value;
-    },
-
 
     setPayouts(state, payouts) {
         state.payouts = payouts;

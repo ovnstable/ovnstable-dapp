@@ -135,7 +135,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("statsData", ['totalUsdPlusValue', 'payoutsApyData', 'payoutsTvlData', 'currentTotalData', 'totalUsdPlus']),
+        ...mapGetters("statsData", ['totalUsdPlusValue', 'payoutsApyData', 'payoutsTvlData', 'currentTotalData',]),
         ...mapGetters("statsUI", ['loadingCurrentTotalData']),
 
         activeTabPortfolio: function () {

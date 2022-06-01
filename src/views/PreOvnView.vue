@@ -78,7 +78,7 @@
                                 <div class="avatar-img">
                                     <v-img
                                             class="stay-tune-img"
-                                            @click="openLink('https://discord.gg/7dEceNJqPq')"
+                                            @click="openLink('https://discord.gg/overnight-fi')"
                                             :src="require('@/assets/resource/discord-btn.svg')"
                                     />
                                 </div>

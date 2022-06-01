@@ -57,7 +57,7 @@ export default {
 
     methods: {
         openDiscord() {
-            window.open(`https://discord.com/invite/7dEceNJqPq`, '_blank').focus();
+            window.open(`https://discord.com/invite/overnight-fi`, '_blank').focus();
         },
 
         openTwitter() {

@@ -47,7 +47,7 @@ export default {
         ...mapActions('errorModal', ['showErrorModal', 'closeErrorModal']),
 
         openDiscord() {
-            window.open(`https://discord.com/channels/933003627444969552/933723252637978635`, '_blank').focus();
+            window.open(`https://discord.gg/overnight-fi`, '_blank').focus();
         },
 
         close() {

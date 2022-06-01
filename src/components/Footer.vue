@@ -23,7 +23,7 @@
                         <img width="24" height="24" :src="require('../assets/resource/telegram.png')">
                     </v-btn>
 
-                    <v-btn icon href="https://discord.gg/7dEceNJqPq" target="_blank" class="footer-icon">
+                    <v-btn icon href="https://discord.gg/overnight-fi" target="_blank" class="footer-icon">
                         <v-icon class="footer-icon">mdi-discord</v-icon>
                     </v-btn>
 

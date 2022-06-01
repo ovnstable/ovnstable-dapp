@@ -41,7 +41,7 @@
                         <td class="table-col-value text-right" v-if="!minimized">
                             ${{ $utils.formatMoney(activity.closingBalance, 6) }}
                         </td>
-                        <td class="table-col-value text-right">
+                        <td class="table-col-value text-right" :class="activity.apy ? (activity.apy > 0 ? 'apy-green' : 'apy-red') : ''">
                             {{ activity.apy ? $utils.formatMoney(activity.apy, 2) + '%' : '—' }}
                         </td>
                         <td class="table-col-value text-right" v-if="!minimized">
@@ -197,6 +197,14 @@ export default {
     width: 24px !important;
     height: 24px !important;
     cursor: pointer;
+}
+
+.apy-green {
+    color: #23DD00 !important;
+}
+
+.apy-red {
+    color: #FE7F2D !important;
 }
 
 </style>

@@ -97,7 +97,7 @@
                                 <v-card class="apy-card" flat>
                                     <v-card-text>
                                         <v-row class="pt-2" justify="center">
-                                            <label class="card-label label-dark">APY %</label>
+                                            <label class="card-label label-dark"><abbr title="Annual Percentage Yield">APY</abbr> %</label>
                                         </v-row>
                                         <v-row class="pt-1 pb-3" justify="center">
                                             <label class="label-value label-light">{{ apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}</label>

@@ -3,7 +3,8 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ totalPcv ? 'USD+ PCV' : '' }}</label>
+                    <label class="chart-title">{{ totalPcv ? 'USD+&nbsp;' : '' }}</label>
+                    <label class="chart-title" style="margin-left: 0 !important"><abbr title="Protocol Controlled Value">PCV</abbr></label>
                 </v-row>
 
                 <v-row justify="start">

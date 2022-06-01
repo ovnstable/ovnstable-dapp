@@ -12,7 +12,7 @@
                     <th class="table-header-col text-right">Balance change</th>
                     <th class="table-header-col text-right" v-if="!minimized">Fees</th>
                     <th class="table-header-col text-right" v-if="!minimized">Closing balance</th>
-                    <th class="table-header-col text-right">APY</th>
+                    <th class="table-header-col text-right"><abbr title="Annual Percentage Yield">APY</abbr></th>
                     <th class="table-header-col text-right" v-if="!minimized"></th>
                 </tr>
             </thead>

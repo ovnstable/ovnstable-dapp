@@ -65,7 +65,7 @@ export default {
     components: {},
 
     data: () => ({
-        zoom: "all",
+        zoom: "week",
         chart: null,
     }),
 
@@ -82,7 +82,7 @@ export default {
     },
 
     created() {
-        this.zoomChart("all");
+        this.zoomChart("week");
     },
 
     methods: {
@@ -149,9 +149,6 @@ export default {
             let labels = [];
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(this.slice) : labels;
-
-            let averageValue = values.reduce((a, b) => (a + b)) / values.length;
-            averageValue = averageValue.toFixed(1);
 
             let maxValue;
             try {

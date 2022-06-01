@@ -92,7 +92,7 @@ export default {
     components: {},
 
     data: () => ({
-        zoom: "all",
+        zoom: "week",
         slice: null,
         chart: null,
 
@@ -112,7 +112,7 @@ export default {
     },
 
     created() {
-        this.zoomChart("all");
+        this.zoomChart("week");
     },
 
     methods: {

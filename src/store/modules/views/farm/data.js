@@ -101,6 +101,28 @@ const actions = {
         poolList.push(
             {
                 chainIcon: require('@/assets/network/polygon.svg'),
+                platform: 'Dystopia',
+                name: 'USD+/WETH',
+                token0Icon: require('@/assets/currencies/usdPlus.svg'),
+                token1Icon: require('@/assets/currencies/eth.svg'),
+                link: "https://www.dystopia.exchange/liquidity/0xCF107443b87d9F9A6dB946D02CB5df5EF5299c95"
+            }
+        );
+
+        poolList.push(
+            {
+                chainIcon: require('@/assets/network/polygon.svg'),
+                platform: 'Dystopia',
+                name: 'USD+/WMATIC',
+                token0Icon: require('@/assets/currencies/usdPlus.svg'),
+                token1Icon: require('@/assets/currencies/pol.svg'),
+                link: "https://www.dystopia.exchange/liquidity/0x1A5FEBA5D5846B3b840312Bd04D76ddaa6220170"
+            }
+        );
+
+        poolList.push(
+            {
+                chainIcon: require('@/assets/network/polygon.svg'),
                 platform: 'QuickSwap',
                 name: 'USD+/WETH',
                 token0Icon: require('@/assets/currencies/usdPlus.svg'),

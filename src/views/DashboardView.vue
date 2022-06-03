@@ -147,7 +147,7 @@ export default {
 
     computed: {
         ...mapGetters('accountData', ['balance', 'account']),
-        ...mapGetters('dashboardData', ['avgBalance', 'profitUsdPlus', 'apy', 'activities']),
+        ...mapGetters('dashboardData', ['profitUsdPlus', 'apy', 'activities']),
 
         anyActivities() {
             return this.activities && this.activities.length > 0;

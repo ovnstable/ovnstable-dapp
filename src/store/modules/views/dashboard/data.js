@@ -2,7 +2,6 @@ import {axios} from "@/plugins/http-axios";
 import moment from "moment";
 
 const state = {
-    avgBalance: null,
     profitUsdPlus: null,
     apy: null,
 
@@ -19,14 +18,10 @@ const state = {
         ]
     },
 
-    slice: null,
+    slice: -8,
 };
 
 const getters = {
-
-    avgBalance(state) {
-        return state.avgBalance;
-    },
 
     profitUsdPlus(state) {
         return state.profitUsdPlus;
@@ -55,11 +50,11 @@ const actions = {
 
         console.log("Dashboard: resetDashboard");
 
-        commit('setAvgBalance', null);
         commit('setProfitUsdPlus', null);
         commit('setPortfolioValue', null);
         commit('setApy', null);
         commit('setActivities', null);
+        commit('setSlice', -8);
     },
 
     async refreshDashboard({commit, dispatch, getters, rootState}) {
@@ -115,47 +110,8 @@ const actions = {
 
         commit('setPortfolioValue', widgetData);
 
-        let apyDataList = [...clientData].filter(value => value.type === 'PAYOUT');
-        let days = apyDataList.length;
 
-        apyDataList.forEach(value => {
-            value.changePercent = value.balanceChange / value.openingBalance;
-        })
-
-        let productResult = 1.0;
-        let durationSum = 0.0;
-
-        for (let i = 0; i < days; i++) {
-            productResult = productResult * (1.0 + apyDataList[i].changePercent);
-            durationSum = durationSum + apyDataList[i].duration;
-        }
-
-        let apy = Math.pow(productResult, 365.0 / (durationSum / 24.0)) - 1.0;
-
-        if (apy) {
-            commit('setApy', apy * 100.0);
-        } else {
-            commit('setApy', 0);
-        }
-
-        let avgBalanceList = widgetData.datasets[0].data.map(item => item ? item : 0).filter(item => item !== 0);
-        if (avgBalanceList && (avgBalanceList.length > 0)) {
-            const sum = avgBalanceList.reduce((a, b) => a + b, 0);
-            const avg = (sum / avgBalanceList.length) || 0;
-
-            commit('setAvgBalance', avg);
-        } else {
-            commit('setAvgBalance', 0);
-        }
-
-        let profitList = clientData.map(item => item.dailyProfit ? item.dailyProfit : 0).filter(item => item !== 0);
-        if (profitList && (profitList.length > 0)) {
-            const sum = profitList.reduce((a, b) => a + b, 0);
-
-            commit('setProfitUsdPlus', sum);
-        } else {
-            commit('setProfitUsdPlus', 0);
-        }
+        await dispatch("sliceDashboard");
     },
 
     async sliceDashboard({commit, dispatch, getters, rootState}) {
@@ -198,10 +154,6 @@ const actions = {
 };
 
 const mutations = {
-
-    setAvgBalance(state, avgBalance) {
-        state.avgBalance = avgBalance;
-    },
 
     setProfitUsdPlus(state, profitUsdPlus) {
         state.profitUsdPlus = profitUsdPlus;

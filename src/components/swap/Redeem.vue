@@ -403,13 +403,9 @@ export default {
             this.sum = value;
         },
 
-        truncateByDecimalPlace(value, numDecimalPlaces) {
-            return Math.trunc(value * Math.pow(10, numDecimalPlaces)) / Math.pow(10, numDecimalPlaces);
-        },
-
         max() {
             let balanceElement = this.balance.usdPlus;
-            this.sum = this.truncateByDecimalPlace(balanceElement, 5) + "";
+            this.sum = balanceElement + "";
         },
 
         async redeem() {

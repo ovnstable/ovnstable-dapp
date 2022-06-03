@@ -44,7 +44,7 @@ const actions = {
         let result = [];
 
         let strategies = (await axios('/dapp/strategies')).data;
-        strategies.sort((a,b) => b[4] - a[4]);
+        strategies.sort((a,b) => b.netAssetValue - a.netAssetValue);
 
         let colors = [
             "#FCCA46",
@@ -62,12 +62,12 @@ const actions = {
 
             result.push(
                 {
-                    label: element[0],
-                    fullName: element[1],
-                    value: element[4],
-                    liquidationValue: element[5],
+                    label: element.name,
+                    fullName: element.fullName,
+                    value: element.netAssetValue,
+                    liquidationValue: element.liquidationValue,
                     color: colors[i],
-                    link: element[3] ? 'https://polygonscan.com/address/' + element[3] : ''
+                    link: element.address ? 'https://polygonscan.com/address/' + element.address : ''
                 }
             );
         }

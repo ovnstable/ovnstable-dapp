@@ -176,6 +176,8 @@ const actions = {
             await dispatch('initWeb3').then(value => {
                 commit('setWalletConnected', false);
                 console.log('Wallet was disconnected');
+
+                dispatch('checkAccount');
             });
         }
     },
@@ -191,6 +193,10 @@ const actions = {
 
         commit('setLoadingWeb3', true);
         commit('setWalletConnected', false);
+
+        if (localStorage.getItem('walletName')) {
+            await dispatch('connectWallet');
+        }
 
         let web3;
 
@@ -229,11 +235,10 @@ const actions = {
 
         }
 
-
-
         commit('setWeb3', web3);
 
         dispatch('initContracts');
+        dispatch('gasPrice/refreshGasPrice', null, {root: true})
 
         if (!ALLOW_NETWORKS.includes(networkId)) {
             commit('setSwitchToPolygon', true)
@@ -246,17 +251,27 @@ const actions = {
 
     async checkAccount({commit, dispatch, getters, rootState}, account){
 
-        if (!account){
-            let accounts = await getters.web3.eth.getAccounts();
-            account = accounts[0];
-        }
+        if (getters.walletConnected) {
 
-        commit('accountData/setAccount', account, {root:true});
+            console.log("CheckAccount: wallet is connected");
 
-        if (account){
-            dispatch('updateUserData');
-        }else {
+            if (!account){
+                let accounts = await getters.web3.eth.getAccounts();
+                account = accounts[0];
+            }
+
+            commit('accountData/setAccount', account, {root:true});
+
+            if (account){
+                dispatch('updateUserData');
+            } else {
+                dispatch('resetUserData');
+            }
+        } else {
+            console.log("CheckAccount: wallet is disconnected");
+
             dispatch('resetUserData');
+            commit('accountData/setAccount', null, {root:true});
         }
     },
 

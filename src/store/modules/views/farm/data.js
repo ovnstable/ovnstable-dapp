@@ -76,7 +76,7 @@ const actions = {
 
         let poolList = [];
 
-        let networkId = rootState["web3/networkId"];
+        let networkId = rootState.web3.networkId;
 
         if (networkId === 137){
             poolList.push(

@@ -11,7 +11,6 @@ const state = {
         fast: 30,
         ultra: 50,
 
-        suggestBaseFee: 0,
         usdPrice: 0
     },
 
@@ -62,7 +61,7 @@ const actions = {
         let url;
         if (networkId === 137)
             url = "https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
-        else if(networkId === 41337)
+        else if(networkId === 43114)
             url = "https://gavax.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
 
         console.log('GAS STATION: ' + url);
@@ -75,7 +74,6 @@ const actions = {
                 fast: result.FastGasPrice,
                 ultra: result.FastGasPrice * 3,
 
-                suggestBaseFee: result.suggestBaseFee,
                 usdPrice: result.UsdPrice
             }
             commit('setGasPriceStation', price);

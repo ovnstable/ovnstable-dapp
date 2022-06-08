@@ -345,7 +345,7 @@ const actions = {
                 let params;
                 if (polygon === "avalanche"){
                     params = {
-                        chainId: getters.web3.utils.toHex(41337),
+                        chainId: getters.web3.utils.toHex(43114),
                         rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
                         blockExplorerUrls: ['https://snowtrace.io/'],
                         chainName: 'Avalanche',

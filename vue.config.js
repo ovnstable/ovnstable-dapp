@@ -3,7 +3,7 @@ const zlib = require("zlib");
 module.exports = {
     pluginOptions: {
         compression: {
-            modes: ['dev', 'production'],
+            modes: ['dev', 'production', 'avax-prod'],
             brotli: {
                 filename: '[file].br[query]',
                 algorithm: 'brotliCompress',

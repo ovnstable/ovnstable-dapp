@@ -56,7 +56,17 @@ const actions = {
 
     async refreshGasPrice({commit, dispatch, getters, rootState}) {
 
-        axios.get('https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle').then(value => {
+
+        let networkId = rootState["web3/networkId"];
+
+        let url;
+        if (networkId === 137)
+            url = "https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
+        else if(networkId === 41337)
+            url = "https://gavax.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
+
+        console.log('GAS STATION: ' + url);
+        axios.get(url).then(value => {
 
             let result = value.data.result;
             let price = {

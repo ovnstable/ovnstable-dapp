@@ -1,7 +1,6 @@
 function middlewarePipeline (context, middleware, index) {
     let nextMiddleware = middleware[index];
     if(!nextMiddleware){
-        // debugger;
         return context.next;
     }
     return () => {

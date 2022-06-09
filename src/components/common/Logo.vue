@@ -1,11 +1,9 @@
 <template>
-    <v-row dense class="logo" justify="start">
-        <div class="mr-1 logo-img" style="width: 40px; height: 40px">
-            <v-img :src="require('../../assets/ovn.png')" @click="clickLogo"></v-img>
-        </div>
-
-        <label class="logo-title" @click="clickLogo">
-            Overnight<sup>&reg;{{ stand }}</sup>
+    <v-row dense class="logo" justify="start" align="center">
+        <img class="logo-img" :src="require('@/assets/logo.svg')" @click="clickLogo">
+        <img class="logo-img-text ml-2" :src="require('@/assets/logo-text.svg')" @click="clickLogo">
+        <label class="ml-2 logo-title" @click="clickLogo">
+            <sup>&reg;{{ stand }}</sup>
         </label>
 
         <NetworkSelect class="network-btn"/>
@@ -54,19 +52,31 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 1400px) {
-    .logo-title, .network-btn {
+    .logo-img-text, .network-btn, .logo-title {
         display: none !important;
+    }
+
+    .logo-img {
+        height: 40px !important ;
     }
 }
 
 @media only screen and (min-width: 1400px) {
+
+    .logo-img {
+        height: 40px !important ;
+    }
+
+    .logo-img-text {
+        height: 34px !important ;
+    }
 }
 
 .logo {
     width: 100vw !important;
 }
 
-.logo-img, .logo-title {
+.logo-img, .logo-title, .logo-img-text {
     cursor: pointer;
 }
 
@@ -83,6 +93,10 @@ export default {
     letter-spacing: normal;
     font-weight: 400 !important;
     font-size: 16px;
-    vertical-align: super;
+    vertical-align: super !important;
+}
+
+.logo-img {
+    vertical-align: center !important;
 }
 </style>

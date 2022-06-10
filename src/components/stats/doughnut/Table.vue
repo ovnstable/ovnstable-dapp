@@ -125,7 +125,7 @@ export default {
         getPercent(item) {
             let sum = this.data.map(dataItem => dataItem.value).reduce((prev, next) => prev + next);
 
-            return (item.value * 100 / sum).toFixed(0) - 0;
+            return (item.value * 100 / sum).toFixed(1) - 0;
         },
 
         getTotal() {

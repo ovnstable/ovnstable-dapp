@@ -43,7 +43,7 @@
 
                     <v-row align="center" class="account-info-row account-num-row mt-6">
                         <div class="avatar-img">
-                            <v-img :src="(ens && ens.avatar) ? ens.avatar : require('@/assets/network/polygon.svg')"/>
+                            <v-img :src="require('@/assets/network/' + networkName + '.svg')"/>
                         </div>
                         <label class="account-label ml-5">{{ accountShort }}</label>
                     </v-row>
@@ -85,7 +85,7 @@
 
                     <v-row class="row mt-2" v-bind:key="i" v-for="(item, i) in transactions" v-if="transactions && transactions.length > 0">
                         <v-col cols="10">
-                            <div class="transaction-link" @click="openPolygonScan(item.hash)">{{ item.text }} ↗</div>
+                            <div class="transaction-link" @click="openOnExplorer(item.hash)">{{ item.text }} ↗</div>
                         </v-col>
                         <v-col cols="2">
                             <v-icon v-if="item.pending">mdi-progress-question</v-icon>
@@ -126,7 +126,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('web3', ['walletName', 'ens']),
+        ...mapGetters('web3', ['walletName']),
         ...mapGetters('accountUI', ['showAccountProfile']),
         ...mapGetters('transaction', ['transactions']),
         ...mapGetters('accountData', ['balance', 'account']),
@@ -137,6 +137,10 @@ export default {
             } else {
                 return null;
             }
+        },
+
+        networkName() {
+            return process.env.VUE_APP_POLYGON;
         },
     },
 
@@ -158,8 +162,8 @@ export default {
         ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken']),
         ...mapActions('transaction', ['clearTransaction', 'loadTransaction']),
 
-        openPolygonScan(hash) {
-            window.open(`https://polygonscan.com/tx/${hash}`, '_blank').focus();
+        openOnExplorer(hash) {
+            window.open(process.env.VUE_APP_NETWORK_EXPLORER + `tx/${hash}`, '_blank').focus();
         },
 
         disconnectWalletAction() {
@@ -175,7 +179,7 @@ export default {
         },
 
         viewInExplorer() {
-            let url = 'https://polygonscan.com/address/' + this.account;
+            let url = process.env.VUE_APP_NETWORK_EXPLORER + 'address/' + this.account;
             window.open(url, '_blank');
         },
 

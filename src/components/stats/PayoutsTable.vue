@@ -12,7 +12,7 @@
                 Annualized yield<br/>{{ minimized ? '' : '(% per year)'}}
             </th>
             <th class="table-header-payouts text-right" width="180px" v-if="!minimized">
-                PolygonScan
+                Explorer
             </th>
         </tr>
         </thead>
@@ -76,7 +76,7 @@ export default {
 
     methods: {
         openOnScan(item) {
-            let url = "https://polygonscan.com/tx/" + item.transactionHash;
+            let url = process.env.VUE_APP_NETWORK_EXPLORER + "tx/" + item.transactionHash;
             window.open(url, '_blank').focus();
 
         },

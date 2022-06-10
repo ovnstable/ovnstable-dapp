@@ -19,7 +19,7 @@
 
             <tbody>
                 <template v-for="activity in activities">
-                    <tr @click="openOnScan(activity.transactionHash)" class="current-table-row">
+                    <tr @click="openOnExplorer(activity.transactionHash)" class="current-table-row">
                         <td class="table-col-value">
                             {{ formatDate(activity.date) }}
                         </td>
@@ -87,8 +87,8 @@ export default {
             return this.$moment(date).format('DD.MM.YYYY');
         },
 
-        openOnScan(transactionHash) {
-            let url = "https://polygonscan.com/tx/" + transactionHash;
+        openOnExplorer(transactionHash) {
+            let url = process.env.VUE_APP_NETWORK_EXPLORER + "tx/" + transactionHash;
             window.open(url, '_blank').focus();
         },
     }

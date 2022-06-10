@@ -68,7 +68,6 @@ const state = {
     onboard: null,
     walletConnected: false,
     walletName: null,
-    ens: null,
 };
 
 const getters = {
@@ -107,10 +106,6 @@ const getters = {
 
     walletName(state) {
         return state.walletName;
-    },
-
-    ens(state) {
-        return state.ens;
     },
 };
 
@@ -196,6 +191,10 @@ const actions = {
         commit('setLoadingWeb3', true);
         commit('setWalletConnected', false);
 
+        if (polygon === "avalanche") {
+            dispatch('farmUI/hidePage', null, {root: true});
+        }
+
         if (localStorage.getItem('walletName')) {
             await dispatch('connectWallet');
         }
@@ -229,9 +228,10 @@ const actions = {
                 commit('setNetworkId', networkId)
                 if (ALLOW_NETWORKS.includes(networkId)) {
                     dispatch('updateUserData');
+                    commit('setSwitchToPolygon', false);
                 } else {
                     dispatch('resetUserData');
-                    commit('setSwitchToPolygon', true)
+                    commit('setSwitchToPolygon', true);
                 }
             });
 
@@ -472,10 +472,6 @@ const mutations = {
 
     setWalletName(state, value) {
         state.walletName = value;
-    },
-
-    setEns(state, value) {
-        state.ens = value;
     },
 };
 

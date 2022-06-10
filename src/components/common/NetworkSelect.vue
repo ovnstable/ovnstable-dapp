@@ -3,6 +3,7 @@
         <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
                 <div class="btn-icon"
+                     v-click-outside="clickMenuOutside"
                      @click="openedList = !openedList"
                      style="display: flex"
                      v-bind="attrs"
@@ -21,7 +22,17 @@
                         </div>
                     </v-list-item-avatar>
                     <v-list-item-title class="network-select-list-item">
-                        Polygon (Matic)
+                        Polygon
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item style="cursor: pointer"  target="_blank" href="https://avax.overnight.fi">
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/avalanche.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="network-select-list-item">
+                        Avalanche
                     </v-list-item-title>
                 </v-list-item>
                 <v-list-item disabled>
@@ -32,16 +43,6 @@
                     </v-list-item-avatar>
                     <v-list-item-title class="list-item-disabled">
                         Arbitrum (Soon)
-                    </v-list-item-title>
-                </v-list-item>
-                <v-list-item style="cursor: pointer"  target="_blank" href="https://avax.overnight.fi">
-                    <v-list-item-avatar>
-                        <div class="list-item-icon">
-                            <v-img :src="require('@/assets/network/avax.png')"/>
-                        </div>
-                    </v-list-item-avatar>
-                    <v-list-item-title class="network-select-list-item">
-                        Avalanche
                     </v-list-item-title>
                 </v-list-item>
                 <v-list-item disabled>
@@ -73,7 +74,7 @@
 import {mapGetters} from "vuex";
 
 let polygonIcon = require('@/assets/network/polygon.svg');
-let avaxIcon = require('@/assets/network/avax.png');
+let avaxIcon = require('@/assets/network/avalanche.svg');
 
 export default {
     name: "NetworkSelect",
@@ -99,7 +100,11 @@ export default {
         }
     },
 
-    methods: {}
+    methods: {
+        clickMenuOutside() {
+            this.openedList = false;
+        }
+    }
 }
 </script>
 

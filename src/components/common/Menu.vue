@@ -7,6 +7,7 @@
             </span>
 
             <span v-bind:class="activeTabFarm"
+                  v-if="showFarm"
                   class=" ml-10"
                   @click="goToAction('/farm')">
                 Farm
@@ -80,6 +81,7 @@ export default {
 
         ...mapGetters('web3', ['web3', 'networkId']),
         ...mapGetters('accountData', ['account']),
+        ...mapGetters('farmUI', ['showFarm']),
 
         activeTabSave: function () {
             return {

@@ -119,7 +119,7 @@ export default {
 
         openTokenOnScan(hash) {
             if (hash && hash !== '') {
-                window.open("https://polygonscan.com/token/" + hash, '_blank').focus();
+                window.open(process.env.VUE_APP_NETWORK_EXPLORER + "token/" + hash, '_blank').focus();
             }
         }
     }

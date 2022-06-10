@@ -1,5 +1,5 @@
 <template>
-    <div class="pt-1 ml-5" style="width: 40px; height: 40px">
+    <div class="mt-2 ml-5" style="width: 40px; height: 40px">
         <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
                 <div class="btn-icon"

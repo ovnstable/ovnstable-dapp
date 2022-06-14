@@ -95,10 +95,10 @@ export default {
 
             switch (zoom) {
                 case "week":
-                    this.setSlice(-8);
+                    this.setSlice(7);
                     break;
                 case "month":
-                    this.setSlice(-30)
+                    this.setSlice(30)
                     break;
                 case "all":
                     this.setSlice(null)
@@ -144,11 +144,11 @@ export default {
 
             let values = [];
             this.data.datasets[0].data.forEach(v => values.push(v));
-            values = this.slice ? values.slice(this.slice) : values;
+            values = this.slice ? values.slice(-this.slice) : values;
 
             let labels = [];
             this.data.labels.forEach(v => labels.push(v));
-            labels = this.slice ? labels.slice(this.slice) : labels;
+            labels = this.slice ? labels.slice(-this.slice) : labels;
 
             let maxValue;
             try {

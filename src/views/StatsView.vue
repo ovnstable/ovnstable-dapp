@@ -128,9 +128,9 @@ export default {
 
         /* TODO: it's hardcoded, need to change */
         stablecoinData: [
-            {"label": "USDC", "value": 489514.22, "link": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", "color": "#2775CA", "logo": require('../assets/currencies/usdc.png')},
-            {"label": "USDT", "value": 254354.25, "link": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f", "color": "#26A17B", "logo": require('../assets/currencies/usdt.svg')},
-            // {"label": "DAI", "value": 46208.26, "link": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", "color": "#FCCA46", "logo": require('@/assets/currencies/dai.svg')},
+            {"label": "USDC", "value": 1434685.535, "link": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", "color": "#2775CA", "logo": require('../assets/currencies/usdc.png')},
+            {"label": "USDT", "value": 552677.2502, "link": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f", "color": "#26A17B", "logo": require('../assets/currencies/usdt.svg')},
+            {"label": "DAI", "value": 247020.4647, "link": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", "color": "#FCCA46", "logo": require('@/assets/currencies/dai.svg')},
         ],
     }),
 

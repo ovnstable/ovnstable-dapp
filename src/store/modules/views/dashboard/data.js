@@ -18,7 +18,7 @@ const state = {
         ]
     },
 
-    slice: -8,
+    slice: 7,
 };
 
 const getters = {
@@ -54,7 +54,7 @@ const actions = {
         commit('setPortfolioValue', null);
         commit('setApy', null);
         commit('setActivities', null);
-        commit('setSlice', -8);
+        commit('setSlice', 7);
     },
 
     async refreshDashboard({commit, dispatch, getters, rootState}) {
@@ -116,10 +116,11 @@ const actions = {
 
     async sliceDashboard({commit, dispatch, getters, rootState}) {
 
-        let clientData = getters.activities;
-        clientData = getters.slice ? clientData.slice(getters.slice) : clientData;
+        let clientData = getters.activities.filter(value => value.type === 'PAYOUT');
+        clientData = getters.slice ? clientData.slice(0, getters.slice) : clientData;
 
-        let apyDataList = [...clientData].filter(value => value.type === 'PAYOUT');
+        let apyDataList = [...clientData];
+
         let days = apyDataList.length;
 
         apyDataList.forEach(value => {

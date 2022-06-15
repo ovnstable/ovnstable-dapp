@@ -10,7 +10,8 @@
                 <!-- TODO: add info -->
             </th>
             <th class="table-header-don text-left" :colspan="minimized ? 2 : 1">
-
+                Net Asset Value
+                <!-- TODO: add info -->
             </th>
             <th class="table-header-don text-left" width="180px" v-if="!minimized">
                 Percent in portfolio
@@ -34,7 +35,7 @@
                 VERY HIGH
             </td>
             <td class="table-label-don text-left">
-
+                ${{ $utils.formatMoney(item.value, 2)}}
             </td>
             <td class="table-label-don text-left progress-col" v-if="!minimized">
                 <v-progress-linear :value="getPercent(item)"

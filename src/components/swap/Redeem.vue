@@ -165,7 +165,7 @@
                         </div>
                     </v-row>
 
-                    <v-row dense class="pl-2 pr-2 pt-6 pb-6">
+                    <v-row dense class="pl-2 pr-2 pt-5 pb-5">
                         <label class="from-to-sub-label">
                             Output is estimated. You will receive at least&nbsp;&nbsp;
                             <b class="from-to-sub-sum">{{ $utils.formatMoney(estimateResult, 4) }} USDC</b>&nbsp;&nbsp;
@@ -184,9 +184,24 @@
                         <!-- TODO: add swap btn when exchanging rate added -->
                     </v-row>
 
-                    <!-- TODO: add estimated gas row when estimatedGas calculation is ready -->
+                    <v-row dense class="pt-10 exchange-row">
+                        <label class="add-info-label">
+                            Gas fee
+                        </label>
+                        <v-spacer></v-spacer>
+                        <label class="add-info-label">
+                            {{ $utils.formatMoney(gasAmountInMatic, 6) }} MATIC
+                        </label>
+                    </v-row>
 
-                    <v-row dense class="pt-5 pb-5 exchange-row">
+                    <v-row dense class="exchange-row">
+                        <v-spacer></v-spacer>
+                        <label class="from-to-sub-label">
+                            ~${{ $utils.formatMoney(gasAmountInUsd, 4) }}
+                        </label>
+                    </v-row>
+
+                    <v-row dense class="pt-2 pb-5 exchange-row">
                         <label class="add-info-label mr-2">
                             Overnight Fee
                         </label>
@@ -238,6 +253,7 @@ import ItemSelector from "../common/ItemSelector";
 import ErrorModal from "@/components/common/ErrorModal";
 import WaitingModal from "@/components/common/WaitingModal";
 import SuccessModal from "@/components/common/SuccessModal";
+import BN from "bn.js";
 
 
 export default {
@@ -258,9 +274,6 @@ export default {
         currencies: [],
 
         sum: null,
-        gasPrice: null,
-
-        gas: null,
 
         buyCurrency: null,
         buyCurrencies: [{
@@ -272,16 +285,22 @@ export default {
         showConfirmSwapDialog: false,
 
         estimatedGas: null,
+
+        gas: null,
+        gasAmountInMatic: null,
+        gasAmountInUsd: null,
     }),
 
     computed: {
 
-        ...mapGetters("accountData", ['balance', 'account' ]),
+        ...mapGetters("accountData", ['balance', 'account']),
         ...mapGetters("accountUI", ['loadingBalance']),
+
+        ...mapGetters("swapUI", ["usdPlusApproved"]),
+
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("transaction", ["transactions"]),
-        ...mapGetters("gasPrice", ["gasPriceGwei"]),
-        ...mapGetters("swapUI", ["usdPlusApproved"]),
+        ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
 
         sumResult: function () {
@@ -368,6 +387,10 @@ export default {
 
         this.estimatedGas = null;
 
+        this.gas = null;
+        this.gasAmountInMatic = null;
+        this.gasAmountInUsd = null;
+
         this.showConfirmSwapDialog = false;
     },
 
@@ -422,7 +445,8 @@ export default {
 
                 try {
                     await this.refreshGasPrice();
-                    let buyParams = {gasPrice: this.gasPriceGwei, from: from};
+
+                    let buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     let redeemResult = await contracts.exchange.methods.redeem(contracts.usdc.options.address, sum).send(buyParams);
 
                     this.closeWaitingModal();
@@ -452,10 +476,14 @@ export default {
                 if (estimatedGasValue === -1) {
                     this.closeWaitingModal();
                     this.showErrorModal('estimateGas');
-                    return;
                 } else {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
                     this.estimatedGas = estimatedGasValue;
+
+                    /* adding 10% to estimated gas */
+                    this.gas = new BN(Number.parseFloat(this.estimatedGas) * 1.1);
+                    this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
+                    this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
+
                     this.closeWaitingModal();
                     this.showConfirmSwapDialog = true;
                 }
@@ -530,12 +558,14 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
+            let result;
+
             try {
-                let estimateOptions = {from: from, value: sum};
+                let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
 
                 await contracts.exchange.methods.redeem(contracts.usdc.options.address, sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
-                        return gasAmount;
+                        result = gasAmount;
                     })
                     .catch(function (error) {
                         console.log(error)
@@ -545,6 +575,8 @@ export default {
                 console.log(e)
                 return -1;
             }
+
+            return result;
         },
     }
 }

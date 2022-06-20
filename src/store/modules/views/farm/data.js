@@ -79,73 +79,44 @@ const actions = {
         let networkId = rootState.web3.networkId;
 
         if (networkId === 137){
-            poolList.push(
-                {
-                    chainIcon: require('@/assets/network/polygon.svg'),
-                    platform: 'Dystopia',
-                    name: 'USD+/USDC',
-                    token0Icon: require('@/assets/currencies/usdPlus.svg'),
-                    token1Icon: require('@/assets/currencies/usdc.png'),
-                    link: "https://www.dystopia.exchange/liquidity/0x421a018cc5839c4c0300afb21c725776dc389b1a"
-                }
-            );
 
-            poolList.push(
-                {
-                    chainIcon: require('@/assets/network/polygon.svg'),
-                    platform: 'Dystopia',
-                    name: 'USD+/TETU',
-                    token0Icon: require('@/assets/currencies/usdPlus.svg'),
-                    token1Icon: require('@/assets/currencies/tetu.png'),
-                    link: "https://www.dystopia.exchange/liquidity/0x5a272ad79cbd3c874879e3fec5753c2127f77583"
-                }
-            );
+            let pools = (await axios('/pools?tvl=2000')).data;
+            pools.sort((a,b) => b.tvl - a.tvl);
 
-            poolList.push(
-                {
-                    chainIcon: require('@/assets/network/polygon.svg'),
-                    platform: 'Dystopia',
-                    name: 'USD+/WETH',
-                    token0Icon: require('@/assets/currencies/usdPlus.svg'),
-                    token1Icon: require('@/assets/currencies/eth.svg'),
-                    link: "https://www.dystopia.exchange/liquidity/0xCF107443b87d9F9A6dB946D02CB5df5EF5299c95"
-                }
-            );
+            pools.forEach(item => {
 
-            poolList.push(
-                {
-                    chainIcon: require('@/assets/network/polygon.svg'),
-                    platform: 'Dystopia',
-                    name: 'USD+/WMATIC',
-                    token0Icon: require('@/assets/currencies/usdPlus.svg'),
-                    token1Icon: require('@/assets/currencies/pol.svg'),
-                    link: "https://www.dystopia.exchange/liquidity/0x1A5FEBA5D5846B3b840312Bd04D76ddaa6220170"
-                }
-            );
+                let token0Icon;
+                let token1Icon;
 
-            poolList.push(
-                {
-                    chainIcon: require('@/assets/network/polygon.svg'),
-                    platform: 'QuickSwap',
-                    name: 'USD+/WETH',
-                    token0Icon: require('@/assets/currencies/usdPlus.svg'),
-                    token1Icon: require('@/assets/currencies/eth.svg'),
-                    link: "https://info.quickswap.exchange/#/pair/0x901Debb34469e89FeCA591f5E5336984151fEc39"
-                }
-            );
+                let tokenNames = item.id.name.split('/');
 
-            poolList.push(
-                {
-                    chainIcon: require('@/assets/network/polygon.svg'),
-                    platform: 'QuickSwap',
-                    name: 'USD+/WMATIC',
-                    token0Icon: require('@/assets/currencies/usdPlus.svg'),
-                    token1Icon: require('@/assets/currencies/pol.svg'),
-                    link: "https://info.quickswap.exchange/#/pair/0x91F670270B86C80Ec92bB6B5914E6532cA967bFB"
+                try {
+                    token0Icon = require('@/assets/currencies/farm/' + tokenNames[0] + '.svg');
+                } catch (e) {
+                    console.error("Error while getting coin icon")
+                    token0Icon = require('@/assets/currencies/undefined.svg');
                 }
-            );
+
+                try {
+                    token1Icon = require('@/assets/currencies/farm/' + tokenNames[1] + '.svg');
+                } catch (e) {
+                    console.error("Error while getting coin icon")
+                    token1Icon = require('@/assets/currencies/undefined.svg');
+                }
+
+                poolList.push(
+                    {
+                        chainIcon: require('@/assets/network/polygon.svg'),
+                        platform: item.platform,
+                        name: item.id.name,
+                        link: item.id.address,
+                        tvl: item.tvl,
+                        token0Icon: token0Icon,
+                        token1Icon: token1Icon,
+                    }
+                )
+            });
         }
-
 
         commit('setPoolList', poolList);
     },

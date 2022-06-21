@@ -1,5 +1,8 @@
 import Web3 from "web3";
 import Onboard from 'bnc-onboard'
+import UAuth from '@uauth/js'
+import UAuthBncOnboard from '@uauth/bnc-onboard'
+
 
 const ERC20 = require('@/contracts/ERC20.json');
 
@@ -25,6 +28,15 @@ const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`)
 
 
 const ALLOW_NETWORKS = [networkId, 31337];
+
+// Unstoppable domains config for BNC Onboard
+const uauthOnboard = new UAuthBncOnboard({
+    uauth: new UAuth({
+        clientID: process.env.VUE_APP_UD_CLIENT_ID,
+        redirectUri: process.env.VUE_APP_UD_REDIRECT_URI,
+        scope: 'openid wallet'
+    })
+})
 
 export const wallets = [
     {
@@ -55,6 +67,11 @@ export const wallets = [
     {
         walletName: "ronin"
     },
+    uauthOnboard.module({
+        walletconnect: {
+            infuraId: process.env.VUE_APP_INFURA_ID
+        }
+    })
 ];
 
 

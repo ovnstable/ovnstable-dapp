@@ -1,5 +1,7 @@
 const state = {
 
+    showFarm: true,
+
     showDeposit: false,
     showWithdraw: false,
     showClaim: false,
@@ -8,6 +10,10 @@ const state = {
 };
 
 const getters = {
+
+    showFarm(state) {
+        return state.showFarm;
+    },
 
     showDeposit(state) {
         return state.showDeposit;
@@ -56,10 +62,16 @@ const actions = {
         commit('setLpApproved', true);
     },
 
+    async hidePage({commit, dispatch, getters, rootState}) {
+        commit('setShowFarm', false);
+    },
 };
 
 const mutations = {
 
+    setShowFarm(state, showFarm) {
+        state.showFarm = showFarm;
+    },
 
     setShowDeposit(state, showDeposit) {
         state.showDeposit = showDeposit;

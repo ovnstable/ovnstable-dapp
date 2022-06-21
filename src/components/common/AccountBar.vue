@@ -26,7 +26,7 @@
                                     Account Profile
                                 </label>
                             </v-list-item>
-                            <v-list-item @click="goToAction('/farm')" class="farm-mobile">
+                            <v-list-item @click="goToAction('/farm')" class="farm-mobile" v-if="showFarm">
                                 <label class="list-label-switch">
                                     Farm
                                 </label>
@@ -84,7 +84,7 @@
                 </template>
 
                 <v-list class="wallet-actions-list">
-                    <v-list-item @click="goToAction('/farm')" class="farm-mobile">
+                    <v-list-item @click="goToAction('/farm')" class="farm-mobile" v-if="showFarm">
                         <label class="list-label-switch">
                             Farm
                         </label>
@@ -116,7 +116,8 @@ export default {
 
     computed: {
         ...mapGetters('accountData', ['balance', 'account']),
-        ...mapGetters('web3', [ 'web3',  'networkId', 'walletConnected']),
+        ...mapGetters('web3', ['web3',  'networkId', 'walletConnected']),
+        ...mapGetters('farmUI', ['showFarm']),
 
         isWalletConnected: function () {
             return this.walletConnected;

@@ -3,6 +3,7 @@ import moment from "moment";
 
 const state = {
     currentTotalData: null,
+    stablecoinData: null,
 
     payouts: [],
 
@@ -15,6 +16,10 @@ const getters = {
 
     currentTotalData(state) {
         return state.currentTotalData;
+    },
+
+    stablecoinData(state) {
+        return state.stablecoinData;
     },
 
     payouts(state) {
@@ -67,13 +72,49 @@ const actions = {
                     value: element.netAssetValue,
                     liquidationValue: element.liquidationValue,
                     color: colors[i],
-                    link: element.address ? 'https://polygonscan.com/address/' + element.address : ''
+                    link: element.address ? (process.env.VUE_APP_NETWORK_EXPLORER + 'address/' + element.address) : ''
                 }
             );
         }
 
         commit('setCurrentTotalData', result);
         commit('statsUI/setLoadingCurrentTotalData', false, { root: true });
+    },
+
+    async refreshStablecoinData({commit, dispatch, getters, rootState}) {
+        let result = [];
+
+        let stablecoinList = (await axios('/dapp/collateral/total')).data;
+        stablecoinList.sort((a,b) => b.netAssetValue - a.netAssetValue);
+        stablecoinList = stablecoinList.filter(el => el.netAssetValue > 0);
+
+        let colors = [
+            "#2775CA",
+            "#26A17B",
+            "#FCCA46",
+            "#FE7F2D",
+            "#B22174",
+        ];
+
+        for (let i = 0; i < stablecoinList.length; i++) {
+            let element = stablecoinList[i];
+
+            try {
+                result.push(
+                    {
+                        label: element.id.tokenName,
+                        value: element.netAssetValue,
+                        link: element.tokenAddress ? element.tokenAddress : '',
+                        color: colors[i],
+                        logo: require('@/assets/currencies/stablecoins/' + element.id.tokenName + '.png')
+                    }
+                );
+            } catch (e) {
+                console.error("Error while adding stablecoin to list: " + e);
+            }
+        }
+
+        commit('setStablecoinData', result);
     },
 
 
@@ -84,6 +125,7 @@ const actions = {
         dispatch('refreshPayouts');
         dispatch('refreshCurrentTotalData');
         dispatch('refreshTotalUsdPlus');
+        dispatch('refreshStablecoinData');
     },
 
     async refreshPayouts({commit, dispatch, getters, rootState}) {
@@ -166,6 +208,9 @@ const mutations = {
         state.currentTotalData = currentTotalData;
     },
 
+    setStablecoinData(state, stablecoinData) {
+        state.stablecoinData = stablecoinData;
+    },
 
     setGasPrice(state, price) {
         state.gasPrice = price;

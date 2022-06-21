@@ -32,9 +32,9 @@ export default {
                 return 'Local';
             } else if (hostname === 'dev.overnight.fi') {
                 return 'Dev';
-            } else if (hostname === 'app.overnight.fi') {
+            } else if (hostname === 'app.overnight.fi' || hostname === "avax.overnight.fi") {
                 return 'Beta';
-            } else {
+            }else {
                 return 'UnKnown';
             }
         }

@@ -57,7 +57,7 @@ var configuration = {
   from: 'USDC',
   to: 'USDC',
   fromChain: 'ETH',
-  toChain: 'POLYGON',
+  toChain: process.env.VUE_APP_POLYGON.toUpperCase(),
   amount: 1,
   iframe: 'vertical',
   hideSelectionFrom: false,

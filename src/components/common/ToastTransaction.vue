@@ -4,7 +4,7 @@
       <span class="text-toast">{{text}}</span>
     </v-row>
     <v-row dense>
-      <v-btn text color="#FFFFFF" @click.stop="clicked">View on PolygonScan</v-btn>
+      <v-btn text color="#FFFFFF" @click.stop="clicked">View transaction</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -15,7 +15,7 @@ export default {
   props: ["text", 'tx'],
   methods: {
     clicked() {
-      window.open(`https://polygonscan.com/tx/${this.tx}`, '_blank').focus();
+      window.open(process.env.VUE_APP_NETWORK_EXPLORER + `tx/${this.tx}`, '_blank').focus();
     }
   }
 };

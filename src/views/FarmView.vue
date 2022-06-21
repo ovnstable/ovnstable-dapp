@@ -38,7 +38,7 @@
                                     </v-col>
                                     <v-col class="header-title-row" :cols="isMobile ? '' : 2">
                                         <v-row justify="end">
-<!--                                            <label class="header-title-label">TVL</label>-->
+                                            <label class="header-title-label">TVL</label>
                                         </v-row>
                                     </v-col>
                                     <v-col class="header-title-row" :cols="isMobile ? '' : 4">
@@ -52,7 +52,7 @@
                                        align="center"
                                        v-for="(pool, i) in poolList"
                                        :key="i"
-                                       @click="openGetLpTokenLink(pool.link)"
+                                       @click="openPoolLink(pool)"
                                 >
                                     <v-col class="header-title-row" cols="1" v-if="!isMobile">
                                         <v-row justify="center">
@@ -84,7 +84,7 @@
                                     <v-col class="header-title-row" :cols="isMobile ? '' : 2">
                                         <v-row justify="end">
                                             <label class="panel-header-title-label">
-<!--                                                {{ pool.tvl ? "$" + $utils.formatMoney(pool.tvl, 0) : '—' }}-->
+                                                {{ pool.tvl ? "$" + $utils.formatMoneyComma(pool.tvl, 0) : '—' }}
                                             </label>
                                         </v-row>
                                     </v-col>
@@ -422,6 +422,7 @@ import ClaimModal from "@/components/farm/modal/ClaimModal";
 import GetRewardsSection from "@/components/farm/section/GetRewardsSection";
 import GetRewardsSectionMobile from "@/components/farm/section/GetRewardsSectionMobile";
 import ComingSoonModal from "@/components/farm/modal/ComingSoonModal";
+import accounting from "accounting-js";
 
 export default {
     name: "FarmView",
@@ -502,6 +503,28 @@ export default {
 
         openGetLpTokenLink(url) {
             window.open(url, '_blank');
+        },
+
+        openPoolLink(item) {
+
+            let url;
+            let platform = item.platform.toLowerCase();
+
+            console.log(platform)
+
+            switch (platform){
+                case 'quickswap':
+                    url = 'https://info.quickswap.exchange/#/pair/'
+                    break;
+                case 'dystopia':
+                    url = 'https://www.dystopia.exchange/liquidity/'
+                    break;
+                case 'meshswap':
+                    url = 'https://meshswap.fi/exchange/pool/detail/'
+                    break;
+            }
+
+            window.open(url + item.link, '_blank');
         },
 
         depositAction(pool) {

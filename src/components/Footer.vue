@@ -32,28 +32,24 @@
                     </v-btn>
                 </v-row>
 
-                <v-row justify="start" align="center" class="footer-beta-row">
-                    <div class="info-img ml-3 mr-1">
-                        <v-img :src="require('@/assets/icon/info.svg')"/>
-                    </div>
+                <v-row justify="center" align="center" class="footer-beta-row">
                     <label class="footer-beta-label">
-                        Overnight is currently in <b>beta</b> mode.&nbsp;
+                        Overnight is currently in <b>beta</b> mode
                     </label>
-                    <label class="footer-beta-label footer-sub-label">
-                        Please be mindful of the SmartContract risks.&nbsp;
-                    </label>
-                    <label class="footer-beta-label footer-sub-label">
-                        Learn more at&nbsp;&nbsp;
-                    </label>
-                    <label class="footer-beta-label docs-link" @click="openDocsLink">
-                        docs.overnight.fi
-                    </label>
-                    <label class="footer-beta-label docs-icon" @click="openDocsLink">
-                        &nbsp;Docs
-                        <v-icon small class="docs-icon share-icon">
-                            mdi-share
-                        </v-icon>
-                    </label>
+                    <div>
+                        <v-btn
+                                text
+                                class="footer-btn ml-2"
+                                @click="openDocsLink">
+                            Docs
+                        </v-btn>
+                        <v-btn
+                                text
+                                class="footer-btn ml-2"
+                                @click="openLink('https://overnight.canny.io/')">
+                            Vote for new features
+                        </v-btn>
+                    </div>
                 </v-row>
             </v-card-text>
         </v-card>
@@ -68,6 +64,10 @@ export default {
         openDocsLink() {
             window.open(`https://docs.overnight.fi/`, '_blank').focus();
         },
+
+        openLink(url) {
+            window.open(url, '_blank').focus();
+        },
     }
 }
 </script>
@@ -76,12 +76,27 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 1400px) {
-    .footer-beta-row, .icons-row {
+    .icons-row {
         height: 34px;
     }
 
-    .footer-sub-label, .docs-link {
-        display: none !important;
+    .footer-beta-row {
+        height: 48px;
+    }
+
+    .footer-btn {
+        height: 24px !important;
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 24px !important;
+    }
+
+    .footer-beta-label {
+        font-weight: normal;
+        font-style: normal !important;
+        font-size: 14px;
+        line-height: 24px;
     }
 }
 
@@ -90,12 +105,23 @@ export default {
         height: 54px;
     }
 
-    .docs-icon {
-        display: none !important;
-    }
-
     .icons-row {
         height: 44px;
+    }
+
+    .footer-btn {
+        height: 30px !important;
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 24px !important;
+    }
+
+    .footer-beta-label {
+        font-weight: normal;
+        font-style: normal !important;
+        font-size: 16px;
+        line-height: 24px;
     }
 }
 
@@ -109,47 +135,22 @@ export default {
     margin-right: 5px;
 }
 
-.colored {
-    width: 24px;
-    height: 24px;
-    color: #FE7F2D !important;
-}
-
 .footer-beta-row {
-    background-color: #3D4657 !important;
+    background-color: var(--main-background) !important;
 }
 
 .footer-beta-label {
     font-family: 'Lato', sans-serif !important;
     color: white;
-    font-weight: normal;
-    font-style: normal !important;
-    font-size: 14px;
-    line-height: 24px;
 }
 
-.docs-icon {
-    color: var(--link) !important;
-    cursor: pointer;
-}
-
-.share-icon {
-    margin-bottom: 4px;
-    margin-left: -2px;
-}
-
-.docs-link {
-    cursor: pointer;
-    color: var(--link) !important;
-}
-
-.docs-link:hover {
-    text-decoration: underline;
-}
-
-.info-img {
-    width: 20px;
-    height: 20px;
+.footer-btn {
+    border: 1px solid #2C6DDB;
+    border-radius: 0;
+    font-family: 'Roboto', sans-serif !important;
+    font-feature-settings: 'liga' off !important;
+    color: #2C6DDB !important;
+    text-transform: none !important;
 }
 
 </style>

@@ -2,7 +2,7 @@
     <v-container>
         <v-row justify="end">
             <button v-on:click="goToPolygon" class="switcher-btn">
-                Switch to Polygon
+                Switch to {{ networkName }}
             </button>
         </v-row>
     </v-container>
@@ -14,12 +14,21 @@ import {mapActions} from "vuex";
 export default {
     name: "SwitchToPolygon",
 
-    methods: {
+    computed: {
+        networkName() {
+            return this.capitalize(process.env.VUE_APP_POLYGON)
+        },
+    },
 
+    methods: {
         ...mapActions('web3', ['setNetwork']),
 
+        capitalize(s) {
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        },
+
         goToPolygon() {
-            this.setNetwork(137)
+            this.setNetwork(process.env.VUE_APP_NETWORK_ID)
         }
     }
 }

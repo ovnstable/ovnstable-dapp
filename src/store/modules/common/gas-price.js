@@ -11,7 +11,6 @@ const state = {
         fast: 30,
         ultra: 50,
 
-        suggestBaseFee: 0,
         usdPrice: 0
     },
 
@@ -56,7 +55,19 @@ const actions = {
 
     async refreshGasPrice({commit, dispatch, getters, rootState}) {
 
-        axios.get('https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle').then(value => {
+
+        let networkId = rootState.web3.networkId;
+
+        console.log("Getting gas price for network_id=" + networkId);
+
+        let url;
+        if (networkId === 137)
+            url = "https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
+        else if(networkId === 43114)
+            url = "https://gavax.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
+
+        console.log('GAS STATION: ' + url);
+        axios.get(url).then(value => {
 
             let result = value.data.result;
             let price = {
@@ -65,7 +76,6 @@ const actions = {
                 fast: result.FastGasPrice,
                 ultra: result.FastGasPrice * 3,
 
-                suggestBaseFee: result.suggestBaseFee,
                 usdPrice: result.UsdPrice
             }
             commit('setGasPriceStation', price);

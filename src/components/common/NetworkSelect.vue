@@ -8,14 +8,14 @@
                      style="display: flex"
                      v-bind="attrs"
                      v-on="on">
-                    <v-img :src="require('@/assets/network/polygon.svg')"/>
+                    <v-img :src="icon"/>
                     <v-icon color="white">
                         {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
                     </v-icon>
                 </div>
             </template>
             <v-list class="network-select-list">
-                <v-list-item style="cursor: pointer">
+                <v-list-item style="cursor: pointer" target="_blank" href="https://app.overnight.fi">
                     <v-list-item-avatar>
                         <div class="list-item-icon">
                             <v-img :src="require('@/assets/network/polygon.svg')"/>
@@ -25,14 +25,14 @@
                         Polygon
                     </v-list-item-title>
                 </v-list-item>
-                <v-list-item disabled>
+                <v-list-item style="cursor: pointer"  target="_blank" href="https://avax.overnight.fi">
                     <v-list-item-avatar>
                         <div class="list-item-icon">
-                            <v-img :src="require('@/assets/network/avax.png')"/>
+                            <v-img :src="require('@/assets/network/avalanche.svg')"/>
                         </div>
                     </v-list-item-avatar>
-                    <v-list-item-title class="list-item-disabled">
-                        Avalanche (Soon)
+                    <v-list-item-title class="network-select-list-item">
+                        Avalanche
                     </v-list-item-title>
                 </v-list-item>
                 <v-list-item disabled>
@@ -71,6 +71,11 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
+let polygonIcon = require('@/assets/network/polygon.svg');
+let avaxIcon = require('@/assets/network/avalanche.svg');
+
 export default {
     name: "NetworkSelect",
 
@@ -80,7 +85,20 @@ export default {
         openedList: false,
     }),
 
-    computed: {},
+    computed: {
+        ...mapGetters('web3', ['networkId']),
+
+
+        icon: function (){
+
+            if (this.networkId === 137){
+                return polygonIcon;
+            }else if (this.networkId === 43114) {
+                return avaxIcon;
+            }
+
+        }
+    },
 
     methods: {
         clickMenuOutside() {

@@ -164,7 +164,7 @@
                         </div>
                     </v-row>
 
-                    <v-row dense class="pl-2 pr-2 pt-6 pb-6">
+                    <v-row dense class="pl-2 pr-2 pt-5 pb-5">
                         <label class="from-to-sub-label">
                             Output is estimated. You will receive at least&nbsp;&nbsp;
                             <b class="from-to-sub-sum">{{ $utils.formatMoney(estimateResult, 4) }} USD+</b>&nbsp;&nbsp;
@@ -183,9 +183,24 @@
                         <!-- TODO: add swap btn when exchanging rate added -->
                     </v-row>
 
-                    <!-- TODO: add estimated gas row when estimatedGas calculation is ready -->
+                    <v-row dense class="pt-10 exchange-row">
+                        <label class="add-info-label">
+                            Gas fee
+                        </label>
+                        <v-spacer></v-spacer>
+                        <label class="add-info-label">
+                            {{ $utils.formatMoney(gasAmountInMatic, 6) }} MATIC
+                        </label>
+                    </v-row>
 
-                    <v-row dense class="pt-5 pb-5 exchange-row">
+                    <v-row dense class="exchange-row">
+                        <v-spacer></v-spacer>
+                        <label class="from-to-sub-label">
+                            ~${{ $utils.formatMoney(gasAmountInUsd, 4) }}
+                        </label>
+                    </v-row>
+
+                    <v-row dense class="pt-2 pb-5 exchange-row">
                         <label class="add-info-label mr-2">
                             Overnight Fee
                         </label>
@@ -237,6 +252,7 @@ import ItemSelector from "../common/ItemSelector";
 import ErrorModal from "@/components/common/ErrorModal";
 import WaitingModal from "@/components/common/WaitingModal";
 import SuccessModal from "@/components/common/SuccessModal";
+import BN from "bn.js";
 
 export default {
     name: "Mint",
@@ -257,10 +273,6 @@ export default {
 
         sum: null,
 
-        gasPrice: null,
-
-        gas: 0.112,
-
         buyCurrency: null,
         buyCurrencies: [{
             id: 'usdPlus',
@@ -271,6 +283,10 @@ export default {
         showConfirmSwapDialog: false,
 
         estimatedGas: null,
+
+        gas: null,
+        gasAmountInMatic: null,
+        gasAmountInUsd: null,
     }),
 
     computed: {
@@ -279,12 +295,11 @@ export default {
         ...mapGetters('accountData', ['balance', 'account']),
         ...mapGetters('accountUI', ['loadingBalance']),
 
+        ...mapGetters('swapUI', ['usdcApproved']),
+
         ...mapGetters("transaction", ['transactions' ]),
         ...mapGetters("web3", ["web3", 'contracts']),
-        ...mapGetters("gasPrice", ["gasPriceGwei"]),
-
-
-        ...mapGetters('swapUI', ['usdcApproved']),
+        ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
         maxResult: function () {
             return this.$utils.formatMoney(this.balance.usdc, 2);
@@ -346,7 +361,6 @@ export default {
     },
 
     created() {
-
         this.currencies.push({
             id: 'usdc',
             title: 'USDC',
@@ -370,6 +384,10 @@ export default {
         this.buyCurrency = this.buyCurrencies[0];
 
         this.estimatedGas = null;
+
+        this.gas = null;
+        this.gasAmountInMatic = null;
+        this.gasAmountInUsd = null;
 
         this.showConfirmSwapDialog = false;
     },
@@ -427,15 +445,9 @@ export default {
 
                 try {
                     await this.refreshGasPrice();
-                    let buyParams = {gasPrice: this.gasPriceGwei, from: from};
-                    let buyResult = await contracts.exchange.methods.buy(contracts.usdc.options.address, sum).send(buyParams).on('transactionHash', function (hash) {
-                        let tx = {
-                            text: `Minting ${self.sum} USD+`,
-                            hash: hash,
-                            pending: true,
-                        };
-                        self.putTransaction(tx);
-                    });
+
+                    let buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+                    let buyResult = await contracts.exchange.methods.buy(contracts.usdc.options.address, sum).send(buyParams);
 
                     this.closeWaitingModal();
                     this.showSuccessModal(buyResult.transactionHash);
@@ -464,10 +476,14 @@ export default {
                 if (estimatedGasValue === -1) {
                     this.closeWaitingModal();
                     this.showErrorModal('estimateGas');
-                    return;
                 } else {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
                     this.estimatedGas = estimatedGasValue;
+
+                    /* adding 10% to estimated gas */
+                    this.gas = new BN(Number.parseFloat(this.estimatedGas) * 1.1);
+                    this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
+                    this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
+
                     this.closeWaitingModal();
                     this.showConfirmSwapDialog = true;
                 }
@@ -552,12 +568,14 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
+            let result;
+
             try {
-                let estimateOptions = {from: from, value: sum};
+                let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
 
                 await contracts.exchange.methods.buy(contracts.usdc.options.address, sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
-                        return gasAmount;
+                        result = gasAmount;
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -567,6 +585,8 @@ export default {
                 console.log(e);
                 return -1;
             }
+
+            return result;
         },
     }
 }

@@ -19,7 +19,7 @@
                     <label class="success-label">Transaction Submitted</label>
                 </v-row>
                 <v-row justify="center" class="mt-8 mb-5">
-                    <label class="success-link" @click="openPolygonScan(successTxHash)">View on PolygonScan</label>
+                    <label class="success-link" @click="openOnExplorer(successTxHash)">View transaction</label>
                 </v-row>
                 <v-row>
                     <v-col>
@@ -27,7 +27,6 @@
                                height="56"
                                class="dismiss-btn mb-3"
                                @click="dismiss">
-<!--                            Add USD+ to {{ walletName ? walletName : ' a wallet' }}-->
                             Dismiss
                         </v-btn>
                     </v-col>
@@ -58,9 +57,9 @@ export default {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
         ...mapActions('web3', ['addUsdPlusToken']),
 
-        openPolygonScan(hash) {
+        openOnExplorer(hash) {
             if (hash) {
-                window.open(`https://polygonscan.com/tx/${hash}`, '_blank').focus();
+                window.open(process.env.VUE_APP_NETWORK_EXPLORER + `tx/${hash}`, '_blank').focus();
             }
         },
 

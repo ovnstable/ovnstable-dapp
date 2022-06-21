@@ -12,6 +12,7 @@ const OvnImage = require('@/assets/ovn.json');
 const UsdPlusImage = require('@/assets/usdPlus.json');
 
 const polygon = process.env.VUE_APP_POLYGON;
+const networkId = Number.parseInt(process.env.VUE_APP_NETWORK_ID);
 
 console.log('Polygon: ' + polygon);
 
@@ -25,7 +26,8 @@ const UsdPlusToken = require(`@/contracts/${polygon}/UsdPlusToken.json`)
 const StakingRewards = require(`@/contracts/abi/StakingRewards.json`)
 const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`)
 
-const ALLOW_NETWORKS = [137, 31337];
+
+const ALLOW_NETWORKS = [networkId, 31337];
 
 // Unstoppable domains config for BNC Onboard
 const uauthOnboard = new UAuthBncOnboard({
@@ -44,7 +46,7 @@ export const wallets = [
     {
         walletName: "walletConnect",
         rpc: {
-            137: 'https://polygon-rpc.com/',
+            [networkId]: process.env.VUE_APP_RPC_URL,
         },
         preferred: true
     },
@@ -83,7 +85,6 @@ const state = {
     onboard: null,
     walletConnected: false,
     walletName: null,
-    ens: null,
 };
 
 const getters = {
@@ -122,10 +123,6 @@ const getters = {
 
     walletName(state) {
         return state.walletName;
-    },
-
-    ens(state) {
-        return state.ens;
     },
 };
 
@@ -211,6 +208,10 @@ const actions = {
         commit('setLoadingWeb3', true);
         commit('setWalletConnected', false);
 
+        if (polygon === "avalanche") {
+            dispatch('farmUI/hidePage', null, {root: true});
+        }
+
         if (localStorage.getItem('walletName')) {
             await dispatch('connectWallet');
         }
@@ -218,7 +219,7 @@ const actions = {
         let web3;
 
         if (!getters.provider) {
-            let provider = await new Web3.providers.HttpProvider("https://polygon-rpc.com");
+            let provider = await new Web3.providers.HttpProvider(process.env.VUE_APP_RPC_URL);
             web3 = await new Web3(provider);
 
             console.log('InitWeb3: Provider default');
@@ -244,9 +245,10 @@ const actions = {
                 commit('setNetworkId', networkId)
                 if (ALLOW_NETWORKS.includes(networkId)) {
                     dispatch('updateUserData');
+                    commit('setSwitchToPolygon', false);
                 } else {
                     dispatch('resetUserData');
-                    commit('setSwitchToPolygon', true)
+                    commit('setSwitchToPolygon', true);
                 }
             });
 
@@ -319,8 +321,12 @@ const actions = {
 
         let contracts = {};
 
-        contracts.usdc = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
-        contracts.dai = _load(ERC20, web3, '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063');
+
+        if (polygon === "avalanche"){
+            contracts.usdc = _load(ERC20, web3, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E');
+        }else {
+            contracts.usdc = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
+        }
 
         contracts.exchange = _load(Exchange, web3);
         contracts.govToken = _load(OvnToken, web3);
@@ -352,17 +358,33 @@ const actions = {
             });
         } catch (switchError) {
             try {
-                let params = {
-                    chainId: getters.web3.utils.toHex(137),
-                    rpcUrls: ['https://polygon-rpc.com/'],
-                    blockExplorerUrls: ['https://polygonscan.com/'],
-                    chainName: 'Polygon Mainnet',
-                    nativeCurrency: {
-                        symbol: 'MATIC',
-                        name: 'MATIC',
-                        decimals: 18,
-                    }
-                };
+
+                let params;
+                if (polygon === "avalanche"){
+                    params = {
+                        chainId: getters.web3.utils.toHex(43114),
+                        rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
+                        blockExplorerUrls: ['https://snowtrace.io/'],
+                        chainName: 'Avalanche',
+                        nativeCurrency: {
+                            symbol: 'AVAX',
+                            name: 'AVAX',
+                            decimals: 18,
+                        }
+                    };
+                }else{
+                    params = {
+                        chainId: getters.web3.utils.toHex(137),
+                        rpcUrls: ['https://polygon-rpc.com/'],
+                        blockExplorerUrls: ['https://polygonscan.com/'],
+                        chainName: 'Polygon Mainnet',
+                        nativeCurrency: {
+                            symbol: 'MATIC',
+                            name: 'MATIC',
+                            decimals: 18,
+                        }
+                    };
+                }
 
                 await getters.provider.request({
                     method: 'wallet_addEthereumChain',
@@ -467,10 +489,6 @@ const mutations = {
 
     setWalletName(state, value) {
         state.walletName = value;
-    },
-
-    setEns(state, value) {
-        state.ens = value;
     },
 };
 

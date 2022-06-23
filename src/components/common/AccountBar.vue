@@ -141,7 +141,7 @@ export default {
     created() {
         window.setInterval(() => {
             this.refreshBalance();
-        }, 500000)
+        }, 5000)
     },
 
     methods: {

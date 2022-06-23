@@ -1,9 +1,15 @@
 <template>
     <v-row justify="center">
         <div class="hidden-xs-only">
-            <span v-bind:class="activeTabSave"
+            <span v-bind:class="activeTabSwap"
                   @click="goToAction('/')">
                 Swap
+            </span>
+
+            <span v-bind:class="activeTabWrap"
+                  class=" ml-10"
+                  @click="goToAction('/wrap')">
+                Wrap
             </span>
 
             <span v-bind:class="activeTabFarm"
@@ -13,13 +19,13 @@
                 Farm
             </span>
 
-            <span v-bind:class="activeTabDashboard"
+            <span v-bind:class="activeTabStats"
                   class=" ml-10"
                   @click="goToAction('/fund')">
                 Stats
             </span>
 
-            <span v-bind:class="activeTabOvnStatement"
+            <span v-bind:class="activeTabDashboard"
                   class=" ml-10"
                   @click="goToAction('/dashboard')">
                 Dashboard
@@ -59,19 +65,24 @@ export default {
                 id: 1
             },
             {
+                name: 'Wrap',
+                to: '/wrap',
+                id: 2
+            },
+            {
                 name: 'Farm',
                 to: '/farm',
-                id: 2,
+                id: 3,
             },
             {
                 name: 'Stats performance',
                 to: '/fund',
-                id: 3,
+                id: 4,
             },
             {
                 name: 'Dashboard',
                 to: '/dashboard',
-                id: 4,
+                id: 5,
             },
         ]
     }),
@@ -83,31 +94,38 @@ export default {
         ...mapGetters('accountData', ['account']),
         ...mapGetters('farmUI', ['showFarm']),
 
-        activeTabSave: function () {
+        activeTabSwap: function () {
             return {
                 'active-tab': this.tabId === 1,
                 'in-active-tab': this.tabId !== 1,
             }
         },
 
-        activeTabFarm: function () {
+        activeTabWrap: function () {
             return {
                 'active-tab': this.tabId === 2,
                 'in-active-tab': this.tabId !== 2,
             }
         },
 
-        activeTabDashboard: function () {
+        activeTabFarm: function () {
             return {
                 'active-tab': this.tabId === 3,
                 'in-active-tab': this.tabId !== 3,
             }
         },
 
-        activeTabOvnStatement: function () {
+        activeTabStats: function () {
             return {
                 'active-tab': this.tabId === 4,
                 'in-active-tab': this.tabId !== 4,
+            }
+        },
+
+        activeTabDashboard: function () {
+            return {
+                'active-tab': this.tabId === 5,
+                'in-active-tab': this.tabId !== 5,
             }
         },
     },

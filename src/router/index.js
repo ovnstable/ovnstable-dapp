@@ -19,6 +19,7 @@ import getFinance from "@/router/midleware/governance/getFinance";
 
 // Dapp Sections
 import Swap from "./midleware/dapp/Swap";
+import Wrap from "./midleware/dapp/Wrap";
 import Farm from "./midleware/dapp/Farm";
 import Stats from "./midleware/dapp/Stats";
 import Dashboard from "./midleware/dapp/Dashboard";
@@ -40,6 +41,16 @@ const routes = [
                 meta: {
                     middleware: [
                         Swap,
+                    ]
+                }
+            },
+            {
+                path: '/wrap',
+                name: 'WrapView',
+                component: () => import('../views/WrapView.vue'),
+                meta: {
+                    middleware: [
+                        Wrap,
                     ]
                 }
             },

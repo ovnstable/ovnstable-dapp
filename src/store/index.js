@@ -24,6 +24,9 @@ import statsUI from "@/store/modules/views/stats/ui";
 import swapData from "@/store/modules/views/swap/data";
 import swapUI from "@/store/modules/views/swap/ui";
 
+import wrapData from "@/store/modules/views/wrap/data";
+import wrapUI from "@/store/modules/views/wrap/ui";
+
 import accountUI from '@/store/modules/views/account/ui';
 import accountData  from '@/store/modules/views/account/data';
 import transaction from '@/store/modules/views/account/transaction';
@@ -71,6 +74,8 @@ export default new Vuex.Store({
         statsUI,
         swapData,
         swapUI,
+        wrapData,
+        wrapUI,
         accountUI,
         accountData,
         transaction,

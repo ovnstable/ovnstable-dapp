@@ -304,7 +304,6 @@ const actions = {
         dispatch('accountData/resetBalance', null, {root:true});
         dispatch('accountData/resetUns', null, {root:true})
         dispatch('dashboardData/resetDashboard', null, {root:true});
-       
     },
 
     async updateUserData({commit, dispatch, getters, rootState}) {

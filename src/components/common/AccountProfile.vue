@@ -45,7 +45,7 @@
                         <div class="avatar-img">
                             <v-img :src="require('@/assets/network/' + networkName + '.svg')"/>
                         </div>
-                        <label class="account-label ml-5">{{ accountShort }}</label>
+                        <label class="account-label ml-5">{{ accountDisplay }}</label>
                     </v-row>
 
                     <v-row align="center" class="account-info-row actions-row mt-6">
@@ -129,10 +129,12 @@ export default {
         ...mapGetters('web3', ['walletName']),
         ...mapGetters('accountUI', ['showAccountProfile']),
         ...mapGetters('transaction', ['transactions']),
-        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('accountData', ['balance', 'account', 'uns']),
 
-        accountShort: function () {
-            if (this.account) {
+        accountDisplay: function () {
+            if (this.uns) {
+                return this.uns;
+            } else if (this.account) {
                 return this.account.substring(0, 5) + '...' + this.account.substring(this.account.length - 4);
             } else {
                 return null;

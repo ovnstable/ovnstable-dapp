@@ -7,6 +7,8 @@ const state = {
 
     account: null,
 
+    uns: null,
+
 };
 
 const getters = {
@@ -18,6 +20,10 @@ const getters = {
     account(state) {
         return state.account;
     },
+
+    uns(state) {
+        return state.uns;
+    }
 
 };
 
@@ -32,6 +38,14 @@ const actions = {
             usdc: 0
         });
 
+    },
+
+    async resetUns({commit, dispatch, getters}) {
+
+        console.log('AccountData: resetUns');
+
+        commit('setUns', null);
+        
     },
 
 
@@ -97,6 +111,10 @@ const mutations = {
     setAccount(state, account) {
         state.account = account;
     },
+
+    setUns(state, uns) {
+        state.uns = uns;
+    }
 };
 
 export default {

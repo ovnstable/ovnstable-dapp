@@ -16,7 +16,7 @@
                                     @click="hideRubic"
                                     v-bind="attrs"
                                     v-on="on">
-                                {{ accountShort }}
+                                {{ accountDisplay }}
                             </v-chip>
                         </template>
 
@@ -115,7 +115,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('accountData', ['balance', 'account', 'uns']),
         ...mapGetters('web3', ['web3',  'networkId', 'walletConnected']),
         ...mapGetters('farmUI', ['showFarm']),
 
@@ -123,8 +123,10 @@ export default {
             return this.walletConnected;
         },
 
-        accountShort: function () {
-            if (this.account) {
+        accountDisplay: function () {
+            if (this.uns) {
+                return this.uns;
+            } else if (this.account) {
                 return this.account.substring(0, 5) + '...' + this.account.substring(this.account.length - 4);
             } else {
                 return null;

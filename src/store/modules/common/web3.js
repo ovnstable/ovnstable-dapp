@@ -151,6 +151,9 @@ const actions = {
                         commit('setWalletName', wallet.name);
                         localStorage.setItem('walletName', wallet.name);
                         console.log(wallet.name + ' is now connected!');
+                        if (wallet.name === 'Unstoppable') {
+                            commit('accountData/setUns', wallet.instance.cacheOptions.getDefaultUsername(), {root:true})
+                        }
                         commit('accountData/setAccount', wallet.address, {root:true});
 
                         dispatch('checkAccount');
@@ -299,8 +302,9 @@ const actions = {
         console.log('Call: resetUserData');
 
         dispatch('accountData/resetBalance', null, {root:true});
+        dispatch('accountData/resetUns', null, {root:true})
         dispatch('dashboardData/resetDashboard', null, {root:true});
-
+       
     },
 
     async updateUserData({commit, dispatch, getters, rootState}) {

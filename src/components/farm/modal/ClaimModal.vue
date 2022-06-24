@@ -62,10 +62,10 @@
 
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import ItemSelector from "../../common/ItemSelector";
-import ErrorModal from "@/components/common/modal/ErrorModal";
-import WaitingModal from "@/components/common/modal/WaitingModal";
-import SuccessModal from "@/components/common/modal/SuccessModal";
+import ItemSelector from "../../common/element/ItemSelector";
+import ErrorModal from "@/components/common/modal/action/ErrorModal";
+import WaitingModal from "@/components/common/modal/action/WaitingModal";
+import SuccessModal from "@/components/common/modal/action/SuccessModal";
 
 export default {
     name: "ClaimModal",

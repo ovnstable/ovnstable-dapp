@@ -51,8 +51,8 @@ export default {
         currentDate: null,
         showLimitTooltip: false,
 
-        ethLogo: require('../../assets/currencies/eth.svg'),
-        polLogo: require('../../assets/currencies/pol.svg'),
+        ethLogo: require('../../../assets/currencies/eth.svg'),
+        polLogo: require('../../../assets/currencies/pol.svg'),
 
         tabId: 1,
 

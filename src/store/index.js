@@ -4,7 +4,6 @@ import Vuex from 'vuex';
 
 
 // Modals
-import showTransactionsModal from '@/store/modules/modals/show-transaction-modal';
 import errorModal from '@/store/modules/modals/error-modal';
 import waitingModal from '@/store/modules/modals/waiting-modal';
 import successModal from '@/store/modules/modals/success-modal';
@@ -61,7 +60,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        showTransactionsModal,
         errorModal,
         waitingModal,
         successModal,

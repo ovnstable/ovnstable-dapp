@@ -51,7 +51,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import InputDatePicker from "@/components/common/InputDatePicker";
+import InputDatePicker from "@/components/common/element/InputDatePicker";
 
 export default {
     name: "RewardProgram",

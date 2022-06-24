@@ -38,10 +38,10 @@
 <script>
 
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import SwitchToPolygon from "./common/SwitchToPolygon";
-import AccountBar from "./common/AccountBar";
-import Logo from "./common/Logo";
-import Menu from "./common/Menu";
+import SwitchToPolygon from "./common/header/SwitchToPolygon";
+import AccountBar from "./common/header/AccountBar";
+import Logo from "./common/header/Logo";
+import Menu from "./common/header/Menu";
 
 export default {
     name: 'Header',

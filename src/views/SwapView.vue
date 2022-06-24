@@ -20,8 +20,6 @@
                 </v-row>
             </v-col>
         </v-row>
-
-        <ShowTransaction/>
     </v-container>
 </template>
 
@@ -30,12 +28,11 @@
 
 import Redeem from "../components/swap/Redeem";
 import Mint from "../components/swap/Mint";
-import ShowTransaction from "../components/common/ShowTransaction";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "SwapView",
-    components: {ShowTransaction, Mint, Redeem},
+    components: {Mint, Redeem},
     data: () => ({
         tab: 1,
 

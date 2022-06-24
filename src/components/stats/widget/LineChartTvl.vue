@@ -3,25 +3,25 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ totalPcv ? 'USD+&nbsp;' : '' }}</label>
-                    <label class="chart-title" style="margin-left: 0 !important"><abbr title="Protocol Controlled Value">PCV</abbr></label>
+                    <label class="chart-title">{{ totalTvl ? 'USD+&nbsp;' : '' }}</label>
+                    <label class="chart-title" style="margin-left: 0 !important"><abbr title="Total Value Locked">TVL</abbr></label>
                 </v-row>
 
                 <v-row justify="start">
                     <label class="mobile-info-title">
-                        {{ totalPcv ? ('$' + $utils.formatMoneyComma(totalPcv, 2)) : '' }}
+                        {{ totalTvl ? ('$' + $utils.formatMoneyComma(totalTvl, 2)) : '' }}
                     </label>
                 </v-row>
             </v-col>
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
                     <label class="chart-title-apy">
-                        {{ totalPcv ? ('$' + $utils.formatMoneyComma(totalPcv, 2)) : '' }}
+                        {{ totalTvl ? ('$' + $utils.formatMoneyComma(totalTvl, 2)) : '' }}
                     </label>
                 </v-row>
                 <v-row justify="end">
                     <label class="chart-sub-title-apy">
-                        {{ totalPcv ? 'past 2 hours' : '' }}
+                        {{ totalTvl ? 'past 2 hours' : '' }}
                     </label>
                 </v-row>
             </v-col>
@@ -96,7 +96,7 @@ export default {
         slice: null,
         chart: null,
 
-        totalPcv: null,
+        totalTvl: null,
     }),
 
     computed: {
@@ -150,7 +150,7 @@ export default {
             document.getElementById(this.zoom + "-zoom-btn-tvl").classList.add("selected");
         },
 
-        getTotalPcv() {
+        getTotalTvl() {
             let sum = 0;
             this.currentTotalData.forEach(dataItem => {
                 sum += dataItem.value
@@ -182,11 +182,11 @@ export default {
                 maxValue = 50;
             }
 
-            this.totalPcv = this.getTotalPcv();
+            this.totalTvl = this.getTotalTvl();
 
             let options = {
                 series: [{
-                    name: "PCV",
+                    name: "TVL",
                     data: values
                 }],
 

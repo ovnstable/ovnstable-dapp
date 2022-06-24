@@ -26,10 +26,15 @@
                 <v-img class="currency-icon" :src="item.logo"/>
             </td>
             <td class="table-label-don text-left">
-                <label class="link-label" style="margin-left: -20px !important;">
-                    {{ item.label }}
-                    <v-img v-if="!minimized" class="icon-img-link ml-2" :src="require('@/assets/icon/out-white.svg')"/>
-                </label>
+                <v-row>
+                    <label class="link-label">
+                        {{ item.label }}
+                    </label>
+                    <v-spacer></v-spacer>
+                    <label class="link-label mr-6">
+                        <v-img class="icon-img-link" v-if="!minimized" :src="require('@/assets/icon/out-white.svg')"/>
+                    </label>
+                </v-row>
             </td>
             <td class="table-label-don text-left high-label" v-if="!minimized">
                 VERY HIGH

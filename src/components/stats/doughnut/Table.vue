@@ -28,10 +28,15 @@
                 <div class="color-rectangle" :style="{background: item.color}"></div>
             </td>
             <td class="table-label-pools text-left">
-                <label class="link-label">
-                    {{ item.label }}
-                    <v-img class="icon-img-link ml-2" v-if="!minimized" :src="require('@/assets/icon/out-white.svg')"/>
-                </label>
+                <v-row>
+                    <label class="link-label" :title="item.fullName">
+                        {{ item.label }}
+                    </label>
+                    <v-spacer></v-spacer>
+                    <label class="link-label mr-6">
+                        <v-img class="icon-img-link" v-if="!minimized" :src="require('@/assets/icon/out-white.svg')"/>
+                    </label>
+                </v-row>
             </td>
             <td class="table-label-pools text-left">
                 ${{ $utils.formatMoney(item.value, 2) }}

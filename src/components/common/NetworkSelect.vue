@@ -38,7 +38,7 @@
                 <v-list-item disabled>
                     <v-list-item-avatar>
                         <div class="list-item-icon">
-                            <v-img :src="require('@/assets/network/arbitrum.svg')"/>
+                            <v-img style="filter: grayscale(100%);" :src="require('@/assets/network/arbitrum.svg')"/>
                         </div>
                     </v-list-item-avatar>
                     <v-list-item-title class="list-item-disabled">
@@ -48,7 +48,7 @@
                 <v-list-item disabled>
                     <v-list-item-avatar>
                         <div class="list-item-icon">
-                            <v-img :src="require('@/assets/network/ftm.png')"/>
+                            <v-img style="filter: grayscale(100%);" :src="require('@/assets/network/ftm.png')"/>
                         </div>
                     </v-list-item-avatar>
                     <v-list-item-title class="list-item-disabled">
@@ -58,7 +58,7 @@
                 <v-list-item disabled>
                     <v-list-item-avatar>
                         <div class="list-item-icon">
-                            <v-img :src="require('@/assets/currencies/eth.svg')"/>
+                            <v-img style="filter: grayscale(100%);" :src="require('@/assets/currencies/eth.svg')"/>
                         </div>
                     </v-list-item-avatar>
                     <v-list-item-title class="list-item-disabled">

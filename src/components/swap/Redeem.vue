@@ -372,13 +372,13 @@ export default {
             id: 'usdt',
             title: 'USDT (Soon)',
             disabled: true,
-            image: require('../../assets/currencies/usdt.svg')
+            image: require('../../assets/currencies/usdtGray.svg')
         });
         this.currencies.push({
             id: 'dai',
             title: 'DAI (Soon)',
             disabled: true,
-            image: require('../../assets/currencies/dai.svg')
+            image: require('../../assets/currencies/daiGray.svg')
         });
 
         this.currency = this.currencies[0];

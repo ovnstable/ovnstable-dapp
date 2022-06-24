@@ -10,6 +10,7 @@ import contract from "@truffle/contract";
 
 const OvnImage = require('@/assets/ovn.json');
 const UsdPlusImage = require('@/assets/usdPlus.json');
+const WrappedUsdPlusImage = require('@/assets/WUsdPlus.json');
 
 const polygon = process.env.VUE_APP_POLYGON;
 const networkId = Number.parseInt(process.env.VUE_APP_NETWORK_ID);
@@ -25,6 +26,8 @@ const TimelockController = require(`@/contracts/${polygon}/OvnTimelockController
 const UsdPlusToken = require(`@/contracts/${polygon}/UsdPlusToken.json`)
 const StakingRewards = require(`@/contracts/abi/StakingRewards.json`)
 const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`)
+const Market = require(`@/contracts/${polygon}/Market.json`)
+const WrappedUsdPlusToken = require(`@/contracts/${polygon}/WrappedUsdPlusToken.json`)
 
 
 const ALLOW_NETWORKS = [networkId, 31337];
@@ -336,6 +339,8 @@ const actions = {
         contracts.timelockController = _load(TimelockController, web3);
         contracts.usdPlus = _load(UsdPlusToken, web3);
         contracts.preOvn = _load(ERC20, web3, "0x18D4565Cbd03340996BED17e66D154b632f5d4B6");
+        contracts.market = _load(Market, web3);
+        contracts.wrappedUsdPlusToken = _load(WrappedUsdPlusToken, web3);
 
         contracts.poolQsUsdPlusWeth = _load(StakingRewards, web3, "0x398B66c4c69Bf19EA6A3c97e8d8b9c93f295D209");
         contracts.poolQsUsdPlusWethToken = _load(ERC20, web3, '0x901Debb34469e89FeCA591f5E5336984151fEc39');
@@ -395,8 +400,6 @@ const actions = {
                 dispatch('switchAccount');
             }
         }
-
-
     },
 
     async addUsdPlusToken({commit, dispatch, getters, rootState}) {
@@ -422,7 +425,31 @@ const actions = {
                 }
             })
             .catch(console.error)
+    },
 
+    async addWUsdPlusToken({commit, dispatch, getters, rootState}) {
+
+        await getters.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: rootState.web3.contracts.wrappedUsdPlusToken.options.address,
+                        symbol: process.env.VUE_APP_WRAPPED_USD_TOKEN_NAME,
+                        decimals: 6,
+                        image: WrappedUsdPlusImage.image,
+                    },
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('WUSD+ successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
     },
 
     async addOvnToken({commit, dispatch, getters, rootState}) {
@@ -448,9 +475,7 @@ const actions = {
                 }
             })
             .catch(console.error)
-
     },
-
 };
 
 const mutations = {

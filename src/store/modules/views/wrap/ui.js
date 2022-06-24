@@ -4,7 +4,7 @@ const state = {
 
     usdcApproved: false,
     usdPlusApproved: false,
-    wUsdPlusApproved: false,
+    WUsdPlusApproved: false,
 };
 
 const getters = {
@@ -21,8 +21,8 @@ const getters = {
         return state.usdPlusApproved;
     },
 
-    wUsdPlusApproved(state) {
-        return state.wUsdPlusApproved;
+    WUsdPlusApproved(state) {
+        return state.WUsdPlusApproved;
     },
 };
 
@@ -64,8 +64,8 @@ const mutations = {
         state.usdPlusApproved = usdPlusApproved;
     },
 
-    setWUsdPlusApproved(state, wUsdPlusApproved) {
-        state.wUsdPlusApproved = wUsdPlusApproved;
+    setWUsdPlusApproved(state, WUsdPlusApproved) {
+        state.WUsdPlusApproved = WUsdPlusApproved;
     },
 };
 

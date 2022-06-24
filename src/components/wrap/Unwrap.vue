@@ -82,7 +82,7 @@
         <v-row class="main-btn-row mb-2" align="center">
             <label class="exchange-label ml-5">Current index = {{ $utils.formatMoney(index, 2) }}</label>
             <v-spacer></v-spacer>
-            <label class="exchange-label mr-5">1 wUSD+ = {{ $utils.formatMoney(10 / index, 3) }} USD+ <img @click="showWrapView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
+            <label class="exchange-label mr-5">1 WUSD+ = {{ $utils.formatMoney(10 / index, 3) }} USD+ <img @click="showWrapView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
         </v-row>
 
         <v-row class="main-btn-row" justify="center">
@@ -160,9 +160,9 @@ export default {
 
         buyCurrency: null,
         buyCurrencies: [{
-            id: 'wUsdPlus',
-            title: 'wUSD+',
-            image: require('../../assets/wUsdPlus.svg')
+            id: 'WUsdPlus',
+            title: 'WUSD+',
+            image: require('../../assets/WUsdPlus.svg')
         }],
 
         showConfirmSwapDialog: false,
@@ -180,14 +180,14 @@ export default {
         ...mapGetters("accountUI", ['loadingBalance']),
 
         ...mapGetters('wrapData', ['index']),
-        ...mapGetters("wrapUI", ["wUsdPlusApproved"]),
+        ...mapGetters("wrapUI", ["WUsdPlusApproved"]),
 
         ...mapGetters("transaction", ["transactions"]),
         ...mapGetters("web3", ["web3", 'contracts']),
 
 
         maxResult() {
-            return this.$utils.formatMoney(this.balance.wUsdPlus, 2);
+            return this.$utils.formatMoney(this.balance.WUsdPlus, 2);
         },
 
         sumResult: function () {
@@ -209,7 +209,7 @@ export default {
 
             v = parseFloat(v);
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.wUsdPlus)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.WUsdPlus)) return true;
 
 
             return false;
@@ -225,7 +225,7 @@ export default {
                 } else {
                     return '';
                 }
-            } else if (this.sum > parseFloat(this.balance.wUsdPlus)) {
+            } else if (this.sum > parseFloat(this.balance.WUsdPlus)) {
                 return 'Invalid amount'
             } else {
                 return 'Enter an amount';
@@ -233,7 +233,7 @@ export default {
         },
 
         approved: function () {
-            return this.wUsdPlusApproved;
+            return this.WUsdPlusApproved;
         },
 
         isBuy: function () {
@@ -292,7 +292,7 @@ export default {
         },
 
         max() {
-            let balanceElement = this.balance.wUsdPlus;
+            let balanceElement = this.balance.WUsdPlus;
             this.sum = balanceElement + "";
         },
     }

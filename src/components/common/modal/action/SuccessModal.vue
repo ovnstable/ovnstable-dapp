@@ -55,7 +55,6 @@ export default {
 
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
-        ...mapActions('web3', ['addUsdPlusToken']),
 
         openOnExplorer(hash) {
             if (hash) {
@@ -71,7 +70,6 @@ export default {
         },
 
         dismiss() {
-            // this.addUsdPlusToken();
             this.close();
         },
     },

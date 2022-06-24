@@ -5,7 +5,7 @@ const state = {
     balance: {
         usdPlus: 0,
         usdc: 0,
-        wUsdPlus: 0,
+        WUsdPlus: 0,
     },
 
     account: null,
@@ -33,7 +33,7 @@ const actions = {
         commit('setBalance', {
             usdPlus: 0,
             usdc: 0,
-            wUsdPlus: 0
+            WUsdPlus: 0
         });
 
     },
@@ -54,9 +54,9 @@ const actions = {
         let usdPlus;
         let usdc;
         /* TODO: remove value, it's for test */
-        let wUsdPlus = new BN(10000000);
+        let WUsdPlus = new BN(10000000);
 
-        /* TODO: add getting wUsdPlus balance */
+        /* TODO: add getting WUsdPlus balance */
         try {
             usdc = await web3.contracts.usdc.methods.balanceOf(getters.account).call();
         } catch (e) {
@@ -87,11 +87,11 @@ const actions = {
 
         usdPlus = web3.web3.utils.fromWei(usdPlus, 'mwei') ;
         usdc = web3.web3.utils.fromWei(usdc, 'mwei') ;
-        wUsdPlus = web3.web3.utils.fromWei(wUsdPlus, 'mwei') ;
+        WUsdPlus = web3.web3.utils.fromWei(WUsdPlus, 'mwei') ;
         commit('setBalance', {
             usdPlus: usdPlus,
             usdc: usdc,
-            wUsdPlus: wUsdPlus
+            WUsdPlus: WUsdPlus
         })
 
         commit('accountUI/setLoadingBalance', false, { root: true })

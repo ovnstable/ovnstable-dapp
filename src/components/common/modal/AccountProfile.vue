@@ -67,9 +67,15 @@
                             </template>
                             <p class="my-0">Copied!</p>
                         </v-tooltip>
+                    </v-row>
 
+                    <v-row align="center" class="account-info-row actions-row">
                         <a class="add-usd-plus-btn" @click="addUsdPlusToken">
                             <label class="add-usd-btn">Add USD+</label>
+                        </a>
+
+                        <a class="add-usd-plus-btn ml-5" @click="addWUsdPlusToken">
+                            <label class="add-usd-btn">Add WUSD+</label>
                         </a>
                     </v-row>
 
@@ -159,7 +165,7 @@ export default {
 
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
-        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken']),
+        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addWUsdPlusToken']),
         ...mapActions('transaction', ['clearTransaction', 'loadTransaction']),
 
         openOnExplorer(hash) {
@@ -258,10 +264,6 @@ export default {
 
     .recent-label, .transaction-link, .recent-label {
         margin-left: 8px;
-    }
-
-    .add-usd-plus-btn {
-        margin-left: 20px;
     }
 }
 

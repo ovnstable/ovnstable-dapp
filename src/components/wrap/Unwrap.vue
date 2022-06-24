@@ -133,9 +133,9 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import ItemSelector from "../common/ItemSelector";
-import ErrorModal from "@/components/common/ErrorModal";
-import WaitingModal from "@/components/common/WaitingModal";
-import SuccessModal from "@/components/common/SuccessModal";
+import ErrorModal from "@/components/common/modal/ErrorModal";
+import WaitingModal from "@/components/common/modal/WaitingModal";
+import SuccessModal from "@/components/common/modal/SuccessModal";
 import BN from "bn.js";
 
 

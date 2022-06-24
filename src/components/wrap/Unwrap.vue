@@ -85,6 +85,45 @@
             <label class="exchange-label mr-5">1 wUSD+ = {{ $utils.formatMoney(10 / index, 3) }} USD+ <img @click="showWrapView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
         </v-row>
 
+        <v-row class="main-btn-row" justify="center">
+            <div class="mb-4" style="width: 96%;">
+                <v-row justify="center">
+                    <label class="action-info-label">{{ textInfoLabel }}</label>
+                </v-row>
+            </div>
+
+            <div style="width: 96%;" v-if="!this.account">
+                <v-btn dark
+                       height="56"
+                       class='buy disabled-buy'
+                       @click="connectWallet">
+                    {{ buttonLabel }}
+                </v-btn>
+            </div>
+
+            <div style="width: 96%;" v-else>
+                <v-btn dark
+                       v-if="approved"
+                       height="56"
+                       class="buy"
+                       :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                       :disabled="!isBuy"
+                       @click="unwrapAction">
+                    Unwrap
+                </v-btn>
+
+                <v-btn dark
+                       v-else
+                       height="56"
+                       class="buy"
+                       :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                       :disabled="!isBuy"
+                       @click="approveAction">
+                    Approve {{ buyCurrency.title }}
+                </v-btn>
+            </div>
+        </v-row>
+
         <WaitingModal/>
         <SuccessModal/>
         <ErrorModal/>
@@ -147,6 +186,10 @@ export default {
         ...mapGetters("web3", ["web3", 'contracts']),
 
 
+        maxResult() {
+            return this.$utils.formatMoney(this.balance.wUsdPlus, 2);
+        },
+
         sumResult: function () {
             if (!this.sum || this.sum === 0) {
                 return '0.00';
@@ -172,8 +215,29 @@ export default {
             return false;
         },
 
-        maxResult() {
-            return this.$utils.formatMoney(this.balance.wUsdPlus, 2);
+        textInfoLabel: function () {
+
+            if (!this.account) {
+                return 'You need to connect to a wallet';
+            } else if (this.isBuy) {
+                if (this.approved) {
+                    return 'Press Unwrap button to complete the process'
+                } else {
+                    return '';
+                }
+            } else if (this.sum > parseFloat(this.balance.wUsdPlus)) {
+                return 'Invalid amount'
+            } else {
+                return 'Enter an amount';
+            }
+        },
+
+        approved: function () {
+            return this.wUsdPlusApproved;
+        },
+
+        isBuy: function () {
+            return this.account && this.sum > 0 && this.numberRule;
         },
     },
 
@@ -412,5 +476,14 @@ export default {
 .exchange-label-icon {
     cursor: pointer !important;
     vertical-align: bottom !important;
+}
+
+.action-info-label {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+    color: #FE7F2D;
 }
 </style>

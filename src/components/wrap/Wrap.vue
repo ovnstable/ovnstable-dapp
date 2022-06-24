@@ -84,6 +84,45 @@
             <label class="exchange-label mr-5">1 USD+ = {{ $utils.formatMoney(index / 10, 3) }} wUSD+ <img @click="showUnWrapView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
         </v-row>
 
+        <v-row class="main-btn-row" justify="center">
+            <div class="mb-4" style="width: 96%;">
+                <v-row justify="center">
+                    <label class="action-info-label">{{ textInfoLabel }}</label>
+                </v-row>
+            </div>
+
+            <div style="width: 96%;" v-if="!this.account">
+                <v-btn dark
+                       height="56"
+                       class='buy disabled-buy'
+                       @click="connectWallet">
+                    {{ buttonLabel }}
+                </v-btn>
+            </div>
+
+            <div style="width: 96%;" v-else>
+                <v-btn dark
+                       v-if="approved"
+                       height="56"
+                       class="buy"
+                       :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                       :disabled="!isBuy"
+                       @click="wrapAction">
+                    Wrap
+                </v-btn>
+
+                <v-btn dark
+                       v-else
+                       height="56"
+                       class="buy"
+                       :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                       :disabled="!isBuy"
+                       @click="approveAction">
+                    Approve {{ currency.title }}
+                </v-btn>
+            </div>
+        </v-row>
+
         <WaitingModal/>
         <SuccessModal/>
         <ErrorModal/>
@@ -164,6 +203,37 @@ export default {
             if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance[this.currency.id])) return true;
 
             return false;
+        },
+
+        textInfoLabel: function () {
+
+            if (!this.account) {
+                return 'You need to connect to a wallet';
+            } else if (this.isBuy) {
+                if (this.approved) {
+                    return 'Press Wrap button to complete the process'
+                } else {
+                    return '';
+                }
+            } else if (this.sum > parseFloat(this.balance[this.currency.id])) {
+                return 'Invalid amount'
+            } else {
+                return 'Enter an amount';
+            }
+        },
+
+        approved: function () {
+            if (this.currency.id === 'usdc') {
+                return this.usdcApproved;
+            } else if (this.currency.id === 'usdPlus') {
+                return this.usdPlusApproved;
+            } else {
+                return false;
+            }
+        },
+
+        isBuy: function () {
+            return this.account && this.sum > 0 && this.numberRule;
         },
     },
 
@@ -401,5 +471,14 @@ export default {
 .exchange-label-icon {
     cursor: pointer !important;
     vertical-align: bottom !important;
+}
+
+.action-info-label {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+    color: #FE7F2D;
 }
 </style>

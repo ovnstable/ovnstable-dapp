@@ -53,10 +53,8 @@ const actions = {
 
         let usdPlus;
         let usdc;
-        /* TODO: remove value, it's for test */
-        let WUsdPlus = new BN(10000000);
+        let WUsdPlus;
 
-        /* TODO: add getting WUsdPlus balance */
         try {
             usdc = await web3.contracts.usdc.methods.balanceOf(getters.account).call();
         } catch (e) {
@@ -82,6 +80,20 @@ const actions = {
                 console.log('ERROR: ' + e)
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 usdPlus = await web3.contracts.usdPlus.methods.balanceOf(getters.account).call();
+            }
+        }
+
+        try {
+            WUsdPlus = await web3.contracts.WUsdPlus.methods.balanceOf(getters.account).call();
+        } catch (e) {
+            console.log('ERROR: ' + e)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            try {
+                WUsdPlus = await web3.contracts.WUsdPlus.methods.balanceOf(getters.account).call();
+            } catch (e) {
+                console.log('ERROR: ' + e)
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                WUsdPlus = await web3.contracts.WUsdPlus.methods.balanceOf(getters.account).call();
             }
         }
 

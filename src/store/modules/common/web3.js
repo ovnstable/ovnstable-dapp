@@ -310,6 +310,8 @@ const actions = {
 
         console.log('Call: updateUserData');
 
+        /* TODO: add getting wrap rate */
+
         dispatch('accountData/refreshBalance', null, {root:true});
         dispatch('swapData/refreshSwap', null, {root:true});
         dispatch('statsData/refreshStats', null, {root:true});
@@ -340,7 +342,7 @@ const actions = {
         contracts.usdPlus = _load(UsdPlusToken, web3);
         contracts.preOvn = _load(ERC20, web3, "0x18D4565Cbd03340996BED17e66D154b632f5d4B6");
         contracts.market = _load(Market, web3);
-        contracts.wrappedUsdPlusToken = _load(WrappedUsdPlusToken, web3);
+        contracts.WUsdPlus = _load(WrappedUsdPlusToken, web3);
 
         contracts.poolQsUsdPlusWeth = _load(StakingRewards, web3, "0x398B66c4c69Bf19EA6A3c97e8d8b9c93f295D209");
         contracts.poolQsUsdPlusWethToken = _load(ERC20, web3, '0x901Debb34469e89FeCA591f5E5336984151fEc39');

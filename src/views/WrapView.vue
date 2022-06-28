@@ -12,7 +12,7 @@
                 </v-row>
 
                 <v-row class="desc justify-start mt-5">
-                    <p>WUSD+ is an index-adjusted wrapper for USD+. Some people may find this useful for cross-blockchain purposes. Unlike your USD+ balance, your wUSD+ balance will not increase over time. When wUSD+ is unwrapped, you receive USD+ based on the latest (ever-increasing) index, so the total yield is the same.</p>
+                    <p>wUSD+ is an index-adjusted wrapper for USD+. Some people may find this useful for cross-blockchain purposes. Unlike your USD+ balance, your wUSD+ balance will not increase over time. When wUSD+ is unwrapped, you receive USD+ based on the latest (ever-increasing) index, so the total yield is the same.</p>
                 </v-row>
 
                 <v-row class="mint-redeem-row">
@@ -46,7 +46,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('web3', ['addWUsdPlusToken']),
+        ...mapActions('web3', ['addwUsdPlusToken']),
 
         goToAction(id) {
             this.$router.push(id);

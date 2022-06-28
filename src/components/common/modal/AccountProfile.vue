@@ -74,8 +74,8 @@
                             <label class="add-usd-btn">Add USD+</label>
                         </a>
 
-                        <a class="add-usd-plus-btn ml-5" @click="addWUsdPlusToken">
-                            <label class="add-usd-btn">Add WUSD+</label>
+                        <a class="add-usd-plus-btn ml-5" @click="addwUsdPlusToken">
+                            <label class="add-usd-btn">Add wUSD+</label>
                         </a>
                     </v-row>
 
@@ -165,7 +165,7 @@ export default {
 
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
-        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addWUsdPlusToken']),
+        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addwUsdPlusToken']),
         ...mapActions('transaction', ['clearTransaction', 'loadTransaction']),
 
         openOnExplorer(hash) {

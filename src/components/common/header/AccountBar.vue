@@ -56,9 +56,9 @@
                                     Add&nbsp;&nbsp;<strong>USD+</strong>&nbsp;&nbsp;to wallet
                                 </label>
                             </v-list-item>
-                            <v-list-item @click="addWUsdPlusToken">
+                            <v-list-item @click="addwUsdPlusToken">
                                 <label class="list-label-switch">
-                                    Add&nbsp;&nbsp;<strong>WUSD+</strong>&nbsp;&nbsp;to wallet
+                                    Add&nbsp;&nbsp;<strong>wUSD+</strong>&nbsp;&nbsp;to wallet
                                 </label>
                             </v-list-item>
                             <v-list-item @click="switchAccountAction">
@@ -154,7 +154,7 @@ export default {
 
     methods: {
 
-        ...mapActions('web3', ['connectWallet', 'disconnectWallet', 'switchAccount', 'addUsdPlusToken', 'addWUsdPlusToken']),
+        ...mapActions('web3', ['connectWallet', 'disconnectWallet', 'switchAccount', 'addUsdPlusToken', 'addwUsdPlusToken']),
         ...mapActions('accountUI', ['showAccountProfile']),
         ...mapActions('accountData', ['refreshBalance']),
 

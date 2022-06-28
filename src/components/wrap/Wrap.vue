@@ -81,7 +81,7 @@
         <v-row class="main-btn-row mb-2" align="center">
             <label class="exchange-label ml-5">Current index = {{ $utils.formatMoney(index, 2) }}</label>
             <v-spacer></v-spacer>
-            <label class="exchange-label mr-5">1 USD+ = {{ $utils.formatMoney(index / 27, 3) }} wUSD+ <img @click="showUnWrapView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
+            <label class="exchange-label mr-5">1 USD+ = {{ $utils.formatMoney(Number.parseFloat(amountPerUsdPlus), 2) }} wUSD+ <img @click="showUnWrapView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
         </v-row>
 
         <v-row class="main-btn-row" justify="center">
@@ -183,7 +183,7 @@ export default {
         ...mapGetters('accountData', ['balance', 'account']),
         ...mapGetters('accountUI', ['loadingBalance']),
 
-        ...mapGetters('wrapData', ['index']),
+        ...mapGetters('wrapData', ['index', 'amountPerUsdPlus']),
         ...mapGetters('wrapUI', ['usdcApproved', 'usdPlusApproved']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 

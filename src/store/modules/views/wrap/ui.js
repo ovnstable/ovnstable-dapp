@@ -45,8 +45,8 @@ const actions = {
         commit('setUsdPlusApproved', true);
     },
 
-    approvewUsdPlus({commit, dispatch, getters}) {
-        commit('setwUsdPlusApproved', true);
+    approveWUsdPlus({commit, dispatch, getters}) {
+        commit('setWUsdPlusApproved', true);
     },
 };
 
@@ -64,7 +64,7 @@ const mutations = {
         state.usdPlusApproved = usdPlusApproved;
     },
 
-    setwUsdPlusApproved(state, wUsdPlusApproved) {
+    setWUsdPlusApproved(state, wUsdPlusApproved) {
         state.wUsdPlusApproved = wUsdPlusApproved;
     },
 };

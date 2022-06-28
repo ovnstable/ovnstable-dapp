@@ -81,7 +81,7 @@
         <v-row class="main-btn-row mb-2" align="center">
             <label class="exchange-label ml-5">Current index = {{ $utils.formatMoney(index, 2) }}</label>
             <v-spacer></v-spacer>
-            <label class="exchange-label mr-5">1 USD+ = {{ $utils.formatMoney(index / 10, 3) }} wUSD+ <img @click="showUnWrapView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
+            <label class="exchange-label mr-5">1 USD+ = {{ $utils.formatMoney(index / 27, 3) }} wUSD+ <img @click="showUnWrapView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
         </v-row>
 
         <v-row class="main-btn-row" justify="center">
@@ -155,6 +155,7 @@ export default {
         currencies: [],
 
         sum: null,
+        sumResult: null,
 
         buyCurrency: null,
         buyCurrencies: [{
@@ -163,6 +164,19 @@ export default {
             image: require('../../assets/wUsdPlus.svg')
         }],
     }),
+
+
+    watch: {
+
+        currency: function() {
+            this.previewWrap();
+        },
+
+        sum: function (){
+            this.previewWrap();
+        }
+    },
+
 
     computed: {
 
@@ -186,6 +200,14 @@ export default {
         },
 
 
+        tokenContract(){
+            if (this.currency.id === 'usdc')
+                return this.contracts.usdc;
+            else
+                return this.contracts.usdPlus;
+        },
+
+
         buttonLabel: function () {
 
             if (!this.account) {
@@ -194,12 +216,10 @@ export default {
                 if (this.usdcApproved || this.usdPlusApproved) {
                     return 'Wrap'
                 } else {
-
                     if (this.currency.id === 'usdc')
                         return 'Approve USDC';
                     else if (this.currency.id === 'usdPlus')
                         return 'Approve USD+';
-
                 }
             } else if (this.sum > parseFloat(this.balance.usdc)) {
                 return 'Invalid amount'
@@ -213,14 +233,6 @@ export default {
             return this.$utils.formatMoney(this.balance[this.currency.id], 2);
         },
 
-        sumResult: function () {
-
-            if (!this.sum || this.sum === 0)
-                return '0.00';
-            else {
-                return this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
-            }
-        },
 
         numberRule: function () {
 
@@ -270,6 +282,7 @@ export default {
         },
     },
 
+
     created() {
         this.currencies.push({
             id: 'usdc',
@@ -316,20 +329,29 @@ export default {
             }
         },
 
+
+        async previewWrap() {
+
+            if (!this.sum || this.sum === 0 || this.sum === '0') {
+                this.sumResult = '0.00';
+                return;
+            }
+
+            let sum = this.web3.utils.toWei(this.sum, 'mwei');
+            let address = this.tokenContract.options.address;
+
+            let value = await this.contracts.market.methods.previewWrap(address, sum).call();
+            value = this.web3.utils.fromWei(value, 'mwei');
+            this.sumResult = this.$utils.formatMoney(Number.parseFloat(value), 2);
+
+        },
+
         async wrapAction() {
             try {
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
 
                 this.showWaitingModal();
 
-                let contract;
-                if (this.currency.id === 'usdc'){
-                    contract = this.contracts.usdc;
-                }else if (this.currency.id === 'usdPlus'){
-                    contract = this.contracts.usdPlus;
-                }else {
-                    throw new Error('Unknown currency');
-                }
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1) {
@@ -348,7 +370,7 @@ export default {
 
 
                     let wrapParams = {from: this.account, gasPrice: this.gasPriceGwei, gas: this.gas};
-                    let wrapResult = await this.contracts.market.methods.wrap(contract.options.address, sum, this.account).send(wrapParams);
+                    let wrapResult = await this.contracts.market.methods.wrap(this.tokenContract.options.address, sum, this.account).send(wrapParams);
 
                     this.closeWaitingModal();
                     this.showSuccessModal(wrapResult.transactionHash)
@@ -367,25 +389,17 @@ export default {
 
             let result;
 
-            let contract;
-            if (this.currency.id === 'usdc'){
-                contract = contracts.usdc;
-            }else if (this.currency.id === 'usdPlus'){
-                contract = contracts.usdPlus;
-            }else {
-                throw new Error('Unknown currency');
-            }
 
             try {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
 
-                await contracts.market.methods.wrap(contract.options.address, sum, this.account).estimateGas(estimateOptions)
+                await contracts.market.methods.wrap(this.tokenContract.options.address, sum, this.account).estimateGas(estimateOptions)
                   .then(function (gasAmount) {
                       result = gasAmount;
                   })
                   .catch(function (error) {
                       console.log(error);
-                      return -1;
+                      result = -1;
                   });
             } catch (e) {
                 console.log(e);
@@ -434,30 +448,16 @@ export default {
             let from = this.account;
             let self = this;
 
-            let id = this.currency.id;
+            let text = 'Approve ' + await this.tokenContract.methods.symbol().call();
 
-            let contract;
-            let text;
-
-            if (id === 'usdc'){
-                contract = contracts.usdc;
-                text = 'Approve USDC';
-            }else if (id === 'usdPlus'){
-                contract = contracts.usdPlus;
-                text = 'Approve USD+';
-            }else {
-                throw new Error('Unknown currency');
-            }
-
-
-            let allowanceValue = await contract.methods.allowance(from, contracts.market.options.address).call();
+            let allowanceValue = await this.tokenContract.methods.allowance(from, contracts.market.options.address).call();
 
             if (allowanceValue < sum) {
                 try {
                     await this.refreshGasPrice();
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                    let tx = await contract.methods.approve(contracts.market.options.address, sum).send(approveParams);
+                    let tx = await this.tokenContract.methods.approve(contracts.market.options.address, sum).send(approveParams);
 
                     let minted = true;
                     while (minted) {

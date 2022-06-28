@@ -310,10 +310,9 @@ const actions = {
 
         console.log('Call: updateUserData');
 
-        /* TODO: add getting wrap rate */
-
         dispatch('accountData/refreshBalance', null, {root:true});
         dispatch('swapData/refreshSwap', null, {root:true});
+        dispatch('wrapData/refreshWrap', null, {root:true});
         dispatch('statsData/refreshStats', null, {root:true});
         dispatch('dashboardData/refreshDashboard', null, {root:true});
         dispatch('farmData/refreshFarm', null, {root:true});

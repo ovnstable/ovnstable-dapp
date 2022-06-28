@@ -82,7 +82,9 @@
         <v-row class="main-btn-row mb-2" align="center">
             <label class="exchange-label ml-5">Current index = {{ $utils.formatMoney(index, 2) }}</label>
             <v-spacer></v-spacer>
-            <label class="exchange-label mr-5">1 WUSD+ = {{ $utils.formatMoney(10 / index, 3) }} USD+ <img @click="showWrapView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
+            <label class="exchange-label mr-5">1 wUSD+ = {{ $utils.formatMoney(10 / index, 3) }} USD+ <img
+              @click="showWrapView" class="exchange-label-icon" width="24" height="24"
+              :src="require('@/assets/icon/filter-exchange.svg')"/></label>
         </v-row>
 
         <v-row class="main-btn-row" justify="center">
@@ -157,12 +159,13 @@ export default {
         currencies: [],
 
         sum: null,
+        sumResult: null,
 
         buyCurrency: null,
         buyCurrencies: [{
-            id: 'WUsdPlus',
-            title: 'WUSD+',
-            image: require('../../assets/WUsdPlus.svg')
+            id: 'wUsdPlus',
+            title: 'wUSD+',
+            image: require('../../assets/wUsdPlus.svg')
         }],
 
         showConfirmSwapDialog: false,
@@ -174,28 +177,67 @@ export default {
         gasAmountInUsd: null,
     }),
 
+
+    watch: {
+
+        currency: function() {
+            this.previewUnwrap();
+        },
+
+        sum: function (){
+            this.previewUnwrap();
+        }
+    },
+
+
     computed: {
 
         ...mapGetters("accountData", ['balance', 'account']),
         ...mapGetters("accountUI", ['loadingBalance']),
 
         ...mapGetters('wrapData', ['index']),
-        ...mapGetters("wrapUI", ["WUsdPlusApproved"]),
+        ...mapGetters("wrapUI", ["wUsdPlusApproved"]),
 
         ...mapGetters("transaction", ["transactions"]),
         ...mapGetters("web3", ["web3", 'contracts']),
+        ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
-
-        maxResult() {
-            return this.$utils.formatMoney(this.balance.WUsdPlus, 2);
+        estimateResult: function () {
+            return this.sum * 0.9996;
         },
 
-        sumResult: function () {
-            if (!this.sum || this.sum === 0) {
-                return '0.00';
+        estimateFee: function () {
+            return this.sum * 0.0004;
+        },
+
+
+        buttonLabel: function () {
+
+            if (!this.account) {
+                return 'Connect to a wallet';
+            } else if (this.isBuy) {
+                if (this.wUsdPlusApproved) {
+                    return 'Unwrap'
+                } else {
+                    return 'Approve wUSD+';
+                }
+            } else if (this.sum > parseFloat(this.balance.usdc)) {
+                return 'Invalid amount'
             } else {
-                return this.$utils.formatMoney(Number.parseFloat(this.sum.replace(/,/g, '.')) * 10 / this.index, 2);
+                return 'Enter an amount';
             }
+        },
+
+
+        tokenContract(){
+            if (this.currency.id === 'usdc')
+                return this.contracts.usdc;
+            else
+                return this.contracts.usdPlus;
+        },
+
+        maxResult() {
+            return this.$utils.formatMoney(this.balance.wUsdPlus, 2);
         },
 
         numberRule: function () {
@@ -209,7 +251,7 @@ export default {
 
             v = parseFloat(v);
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.WUsdPlus)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.wUsdPlus)) return true;
 
 
             return false;
@@ -225,7 +267,7 @@ export default {
                 } else {
                     return '';
                 }
-            } else if (this.sum > parseFloat(this.balance.WUsdPlus)) {
+            } else if (this.sum > parseFloat(this.balance.wUsdPlus)) {
                 return 'Invalid amount'
             } else {
                 return 'Enter an amount';
@@ -233,7 +275,7 @@ export default {
         },
 
         approved: function () {
-            return this.WUsdPlusApproved;
+            return this.wUsdPlusApproved;
         },
 
         isBuy: function () {
@@ -266,13 +308,14 @@ export default {
 
         ...mapActions("transaction", ['putTransaction']),
         ...mapActions("web3", ['connectWallet']),
+        ...mapActions("gasPrice", ['refreshGasPrice']),
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
 
 
-        isNumber: function(evt) {
+        isNumber: function (evt) {
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;
 
@@ -292,8 +335,158 @@ export default {
         },
 
         max() {
-            let balanceElement = this.balance.WUsdPlus;
+            let balanceElement = this.balance.wUsdPlus;
             this.sum = balanceElement + "";
+        },
+
+
+        async previewUnwrap() {
+
+            if (!this.sum || this.sum === 0 || this.sum === '0') {
+                this.sumResult = '0.00';
+                return;
+            }
+
+            let sum = this.web3.utils.toWei(this.sum, 'mwei');
+            let address = this.tokenContract.options.address;
+
+            let value = await this.contracts.market.methods.previewUnwrap(address, sum).call();
+            value = this.web3.utils.fromWei(value, 'mwei');
+            this.sumResult = this.$utils.formatMoney(Number.parseFloat(value), 2);
+
+        },
+
+        async unwrapAction() {
+            try {
+                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+
+                this.showWaitingModal();
+
+                let estimatedGasValue = await this.estimateGas(sum);
+
+                if (estimatedGasValue === -1) {
+                    this.closeWaitingModal();
+                    this.showErrorModal('estimateGas');
+                } else {
+
+                    await this.refreshGasPrice();
+
+                    this.estimatedGas = estimatedGasValue;
+
+                    /* adding 10% to estimated gas */
+                    this.gas = new BN(Number.parseFloat(this.estimatedGas) * 1.1);
+                    this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
+                    this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
+
+                    let wrapParams = {from: this.account, gasPrice: this.gasPriceGwei, gas: this.gas};
+                    let wrapResult = await this.contracts.market.methods.unwrap(this.tokenContract.options.address, sum, this.account).send(wrapParams);
+
+                    this.closeWaitingModal();
+                    this.showSuccessModal(wrapResult.transactionHash)
+                }
+            } catch (e) {
+                console.log(e)
+                this.closeWaitingModal();
+                this.showErrorModal('estimateGas');
+            }
+        },
+
+        async estimateGas(sum) {
+
+            let contracts = this.contracts;
+            let from = this.account;
+
+            let result;
+
+            try {
+                let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
+
+                await contracts.market.methods.unwrap(this.tokenContract.options.address, sum, this.account).estimateGas(estimateOptions)
+                  .then(function (gasAmount) {
+                      result = gasAmount;
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                      result = -1;
+                  });
+            } catch (e) {
+                console.log(e);
+                return -1;
+            }
+
+            return result;
+        },
+
+        approveAction: async function () {
+
+            try {
+                this.showWaitingModal('Approving in process');
+
+                let approveSum = "10000000";
+
+                let sum = this.web3.utils.toWei(approveSum, 'mwei');
+
+                let allowApprove = await this.checkAllowance(sum);
+                if (!allowApprove) {
+                    this.closeWaitingModal();
+                    this.showErrorModal('approve');
+                    return;
+                } else {
+                    this.approveWUsdPlus();
+                    this.closeWaitingModal();
+                }
+            } catch (e) {
+                console.log(e)
+                this.showErrorModal('approve');
+            }
+
+        },
+
+        async checkAllowance(sum) {
+
+            let contracts = this.contracts;
+            let from = this.account;
+            let self = this;
+
+            let allowanceValue = await contracts.wUsdPlus.methods.allowance(from, contracts.market.options.address).call();
+
+            if (allowanceValue < sum) {
+                try {
+                    await this.refreshGasPrice();
+                    let approveParams = {gasPrice: this.gasPriceGwei, from: from};
+
+                    let tx = await contracts.wUsdPlus.methods.approve(contracts.market.options.address, sum).send(approveParams);
+
+                    let minted = true;
+                    while (minted) {
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
+
+                        if (receipt) {
+                            if (receipt.status) {
+                                let tx = {
+                                    text: 'Approve wUSD+',
+                                    hash: receipt.transactionHash,
+                                    pending: true,
+                                };
+
+                                self.putTransaction(tx);
+
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+
+                    return true;
+                } catch (e) {
+                    console.log(e)
+                    return false;
+                }
+            }
+
+            return true;
         },
     }
 }

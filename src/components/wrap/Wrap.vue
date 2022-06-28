@@ -70,7 +70,7 @@
                             </v-row>
                             <v-row>
                                 <label class="balance-label ml-5 mb-1">Balance:
-                                    {{ $utils.formatMoney(balance.WUsdPlus, 2) }}</label>
+                                    {{ $utils.formatMoney(balance.wUsdPlus, 2) }}</label>
                             </v-row>
                         </v-col>
                     </v-row>
@@ -81,7 +81,7 @@
         <v-row class="main-btn-row mb-2" align="center">
             <label class="exchange-label ml-5">Current index = {{ $utils.formatMoney(index, 2) }}</label>
             <v-spacer></v-spacer>
-            <label class="exchange-label mr-5">1 USD+ = {{ $utils.formatMoney(index / 10, 3) }} WUSD+ <img @click="showUnWrapView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
+            <label class="exchange-label mr-5">1 USD+ = {{ $utils.formatMoney(index / 10, 3) }} wUSD+ <img @click="showUnWrapView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
         </v-row>
 
         <v-row class="main-btn-row" justify="center">
@@ -158,9 +158,9 @@ export default {
 
         buyCurrency: null,
         buyCurrencies: [{
-            id: 'WUsdPlus',
-            title: 'WUSD+',
-            image: require('../../assets/WUsdPlus.svg')
+            id: 'wUsdPlus',
+            title: 'wUSD+',
+            image: require('../../assets/wUsdPlus.svg')
         }],
     }),
 
@@ -171,9 +171,42 @@ export default {
 
         ...mapGetters('wrapData', ['index']),
         ...mapGetters('wrapUI', ['usdcApproved', 'usdPlusApproved']),
+        ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
         ...mapGetters("transaction", ['transactions' ]),
         ...mapGetters("web3", ["web3", 'contracts']),
+
+
+        estimateResult: function () {
+            return this.sum * 0.9996;
+        },
+
+        estimateFee: function () {
+            return this.sum * 0.0004;
+        },
+
+
+        buttonLabel: function () {
+
+            if (!this.account) {
+                return 'Connect to a wallet';
+            } else if (this.isBuy) {
+                if (this.usdcApproved || this.usdPlusApproved) {
+                    return 'Wrap'
+                } else {
+
+                    if (this.currency.id === 'usdc')
+                        return 'Approve USDC';
+                    else if (this.currency.id === 'usdPlus')
+                        return 'Approve USD+';
+
+                }
+            } else if (this.sum > parseFloat(this.balance.usdc)) {
+                return 'Invalid amount'
+            } else {
+                return 'Enter an amount';
+            }
+        },
 
 
         maxResult: function () {
@@ -185,7 +218,7 @@ export default {
             if (!this.sum || this.sum === 0)
                 return '0.00';
             else {
-                return this.$utils.formatMoney(Number.parseFloat(this.sum.replace(/,/g, '.')) * this.index / 10, 2);
+                return this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
             }
         },
 
@@ -261,6 +294,7 @@ export default {
 
         ...mapActions("transaction", ['putTransaction']),
         ...mapActions("web3", ['connectWallet']),
+        ...mapActions("gasPrice", ['refreshGasPrice']),
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
@@ -280,6 +314,181 @@ export default {
                     return true;
                 }
             }
+        },
+
+        async wrapAction() {
+            try {
+                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+
+                this.showWaitingModal();
+
+                let contract;
+                if (this.currency.id === 'usdc'){
+                    contract = this.contracts.usdc;
+                }else if (this.currency.id === 'usdPlus'){
+                    contract = this.contracts.usdPlus;
+                }else {
+                    throw new Error('Unknown currency');
+                }
+
+                let estimatedGasValue = await this.estimateGas(sum);
+                if (estimatedGasValue === -1) {
+                    this.closeWaitingModal();
+                    this.showErrorModal('estimateGas');
+                } else {
+
+                    await this.refreshGasPrice();
+
+                    this.estimatedGas = estimatedGasValue;
+
+                    /* adding 10% to estimated gas */
+                    this.gas = new BN(Number.parseFloat(this.estimatedGas) * 1.1);
+                    this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
+                    this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
+
+
+                    let wrapParams = {from: this.account, gasPrice: this.gasPriceGwei, gas: this.gas};
+                    let wrapResult = await this.contracts.market.methods.wrap(contract.options.address, sum, this.account).send(wrapParams);
+
+                    this.closeWaitingModal();
+                    this.showSuccessModal(wrapResult.transactionHash)
+                }
+            } catch (e) {
+                console.log(e)
+                this.closeWaitingModal();
+                this.showErrorModal('estimateGas');
+            }
+        },
+
+        async estimateGas(sum) {
+
+            let contracts = this.contracts;
+            let from = this.account;
+
+            let result;
+
+            let contract;
+            if (this.currency.id === 'usdc'){
+                contract = contracts.usdc;
+            }else if (this.currency.id === 'usdPlus'){
+                contract = contracts.usdPlus;
+            }else {
+                throw new Error('Unknown currency');
+            }
+
+            try {
+                let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
+
+                await contracts.market.methods.wrap(contract.options.address, sum, this.account).estimateGas(estimateOptions)
+                  .then(function (gasAmount) {
+                      result = gasAmount;
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                      return -1;
+                  });
+            } catch (e) {
+                console.log(e);
+                return -1;
+            }
+
+            return result;
+        },
+
+
+        approveAction: async function (){
+
+            try {
+                this.showWaitingModal('Approving in process');
+
+                let approveSum = "10000000";
+
+                let sum = this.web3.utils.toWei(approveSum, 'mwei');
+
+                let allowApprove = await this.checkAllowance(sum);
+                if (!allowApprove) {
+                    this.closeWaitingModal();
+                    this.showErrorModal('approve');
+                    return;
+                } else {
+
+                    if (this.currency.id === 'usdc')
+                        this.approveUsdc();
+                    else if (this.currency.id === 'usdPlus')
+                        this.approveUsdPlus();
+                    else
+                        throw new Error('Unknown currency');
+
+                    this.closeWaitingModal();
+                }
+            } catch (e) {
+                console.log(e)
+                this.showErrorModal('approve');
+            }
+
+        },
+
+        async checkAllowance(sum) {
+
+            let contracts = this.contracts;
+            let from = this.account;
+            let self = this;
+
+            let id = this.currency.id;
+
+            let contract;
+            let text;
+
+            if (id === 'usdc'){
+                contract = contracts.usdc;
+                text = 'Approve USDC';
+            }else if (id === 'usdPlus'){
+                contract = contracts.usdPlus;
+                text = 'Approve USD+';
+            }else {
+                throw new Error('Unknown currency');
+            }
+
+
+            let allowanceValue = await contract.methods.allowance(from, contracts.market.options.address).call();
+
+            if (allowanceValue < sum) {
+                try {
+                    await this.refreshGasPrice();
+                    let approveParams = {gasPrice: this.gasPriceGwei, from: from};
+
+                    let tx = await contract.methods.approve(contracts.market.options.address, sum).send(approveParams);
+
+                    let minted = true;
+                    while (minted) {
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
+
+                        if (receipt) {
+                            if (receipt.status) {
+                                let tx = {
+                                    text: text,
+                                    hash: receipt.transactionHash,
+                                    pending: true,
+                                };
+
+                                self.putTransaction(tx);
+
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+
+                    return true;
+                } catch (e) {
+                    console.log(e)
+                    return false;
+                }
+            }
+
+            return true;
         },
 
         setSum(value) {

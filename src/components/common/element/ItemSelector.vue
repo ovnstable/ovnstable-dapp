@@ -97,6 +97,7 @@ export default {
 
         setItem(item) {
             this.selectedItem = item;
+            this.$emit('update:selectedItem', item)
         }
     }
 }
@@ -121,6 +122,7 @@ export default {
     font-weight: 600;
     font-size: 16px;
     line-height: 24px;
+    text-transform: none !important;
 }
 
 .text-list {

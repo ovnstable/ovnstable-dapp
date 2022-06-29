@@ -4,7 +4,6 @@ import Vuex from 'vuex';
 
 
 // Modals
-import showTransactionsModal from '@/store/modules/modals/show-transaction-modal';
 import errorModal from '@/store/modules/modals/error-modal';
 import waitingModal from '@/store/modules/modals/waiting-modal';
 import successModal from '@/store/modules/modals/success-modal';
@@ -23,6 +22,9 @@ import statsUI from "@/store/modules/views/stats/ui";
 
 import swapData from "@/store/modules/views/swap/data";
 import swapUI from "@/store/modules/views/swap/ui";
+
+import wrapData from "@/store/modules/views/wrap/data";
+import wrapUI from "@/store/modules/views/wrap/ui";
 
 import accountUI from '@/store/modules/views/account/ui';
 import accountData  from '@/store/modules/views/account/data';
@@ -58,7 +60,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        showTransactionsModal,
         errorModal,
         waitingModal,
         successModal,
@@ -71,6 +72,8 @@ export default new Vuex.Store({
         statsUI,
         swapData,
         swapUI,
+        wrapData,
+        wrapUI,
         accountUI,
         accountData,
         transaction,

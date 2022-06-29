@@ -248,7 +248,7 @@
 <script>
 
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import ItemSelector from "@/components/common/ItemSelector";
+import ItemSelector from "@/components/common/element/ItemSelector";
 import {ethers} from "ethers";
 
 export default {

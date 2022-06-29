@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import NetworkSelect from "@/components/common/NetworkSelect";
+import NetworkSelect from "@/components/common/header/NetworkSelect";
 
 export default {
     name: "Logo",

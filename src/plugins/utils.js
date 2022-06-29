@@ -15,6 +15,12 @@ let accountingFourConfig = {
     thousand: " ",
 }
 
+let accountingThreeConfig = {
+    symbol: "",
+    precision: 3,
+    thousand: " ",
+}
+
 let accountingSecondConfig = {
     symbol: "",
     precision: 2,
@@ -64,6 +70,8 @@ export default {
                 return accounting.formatMoney(number, accountingConfig);
             case 4:
                 return accounting.formatMoney(number, accountingFourConfig);
+            case 3:
+                return accounting.formatMoney(number, accountingThreeConfig);
             case 2:
                 return accounting.formatMoney(number, accountingSecondConfig);
             case 1:

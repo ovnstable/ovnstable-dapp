@@ -19,8 +19,8 @@
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import AccountProfile from "./components/common/AccountProfile";
-import GasSettings from "@/components/common/GasSettings";
+import AccountProfile from "./components/common/modal/AccountProfile";
+import GasSettings from "@/components/common/modal/GasSettings";
 import {mapActions} from "vuex";
 
 export default {

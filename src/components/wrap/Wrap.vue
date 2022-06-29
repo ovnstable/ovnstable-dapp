@@ -20,9 +20,9 @@
                                               v-model="sum">
                                 </v-text-field>
                                 <v-spacer></v-spacer>
-                                <div class="mr-8">
+                                <div>
                                     <label class="max mr-5" @click="max">Max</label>
-                                    <ItemSelector :readonly="true" :selected-item="buyCurrency" :items="buyCurrencies"/>
+                                    <ItemSelector :selected-item.sync="currency" :items="currencies"/>
                                 </div>
                             </v-row>
                             <v-row>
@@ -37,7 +37,7 @@
         <v-row class="mb-2">
             <v-col>
                 <v-row justify="center" align="center">
-                    <v-btn @click="showMintView" class="swap-btn" icon>
+                    <v-btn @click="showUnWrapView" class="swap-btn" icon>
                         <img width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')">
                     </v-btn>
                 </v-row>
@@ -64,14 +64,13 @@
                                               v-model="sumResult">
                                 </v-text-field>
                                 <v-spacer></v-spacer>
-                                <div>
-                                    <ItemSelector :selected-item="currency" :items="currencies"/>
+                                <div class="mr-8">
+                                    <ItemSelector :readonly="true" :selected-item="buyCurrency" :items="buyCurrencies"/>
                                 </div>
                             </v-row>
                             <v-row>
-                                <label class="balance-label ml-5 mb-1">Balance: {{
-                                        $utils.formatMoney(balance.usdc, 2)
-                                    }}</label>
+                                <label class="balance-label ml-5 mb-1">Balance:
+                                    {{ $utils.formatMoney(balance.wUsdPlus, 2) }}</label>
                             </v-row>
                         </v-col>
                     </v-row>
@@ -80,12 +79,18 @@
         </v-row>
 
         <v-row class="main-btn-row mb-2" align="center">
-            <label class="exchange-label ml-5">Exchange Rate</label>
+            <label class="exchange-label ml-5">Current index = {{ $utils.formatMoney(index, 2) }}</label>
             <v-spacer></v-spacer>
-            <label class="exchange-label mr-5">1 USD+ = 1 USDC <img @click="showMintView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
+            <label class="exchange-label mr-5">1 USD+ = {{ $utils.formatMoney(Number.parseFloat(amountPerUsdPlus), 2) }} wUSD+ <img @click="showUnWrapView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
         </v-row>
 
         <v-row class="main-btn-row" justify="center">
+            <div class="mb-4" style="width: 96%;">
+                <v-row justify="center">
+                    <label class="action-info-label">{{ textInfoLabel }}</label>
+                </v-row>
+            </div>
+
             <div style="width: 96%;" v-if="!this.account">
                 <v-btn dark
                        height="56"
@@ -97,14 +102,15 @@
 
             <div style="width: 96%;" v-else>
                 <v-btn dark
-                       v-if="usdPlusApproved"
+                       v-if="approved"
                        height="56"
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
-                       @click="confirmSwapAction">
-                    {{ buttonLabel }}
+                       @click="wrapAction">
+                    Wrap
                 </v-btn>
+
                 <v-btn dark
                        v-else
                        height="56"
@@ -112,134 +118,10 @@
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
                        @click="approveAction">
-                    {{ buttonLabel }}
+                    Approve {{ currency.title }}
                 </v-btn>
             </div>
         </v-row>
-
-        <v-dialog
-                v-model="showConfirmSwapDialog"
-                width="550"
-                persistent>
-            <v-card class="container_body">
-                <v-toolbar class="container_header" flat>
-                    <v-row>
-                        <v-btn icon class="ml-auto" @click="showConfirmSwapDialog = false" dark>
-                            <v-icon>mdi-chevron-left</v-icon>
-                        </v-btn>
-                        <v-spacer></v-spacer>
-                        <label class="title-modal">
-                            Confirm Swap
-                        </label>
-                        <v-spacer></v-spacer>
-                        <v-btn icon class="ml-auto" @click="showConfirmSwapDialog = false" dark>
-                            <v-icon>mdi-close</v-icon>
-                        </v-btn>
-                    </v-row>
-                </v-toolbar>
-
-                <v-card-text class="px-5 pt-5">
-                    <v-row dense class="pl-2 pr-2">
-                        <label class="from-to-label">
-                            From
-                        </label>
-                        <v-spacer></v-spacer>
-                        <label class="from-to-label mr-3">
-                            {{ sumResult }} USD+
-                        </label>
-                        <div class="currency-icon">
-                            <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
-                        </div>
-                    </v-row>
-
-                    <v-row dense class="pl-2 pr-2 pt-5 pb-5">
-                        <label class="from-to-label">
-                            To
-                        </label>
-                        <v-spacer></v-spacer>
-                        <label class="from-to-label mr-3">
-                            {{ sumResult }} USDC
-                        </label>
-                        <div class="currency-icon">
-                            <v-img :src="require('@/assets/currencies/usdc.png')"/>
-                        </div>
-                    </v-row>
-
-                    <v-row dense class="pl-2 pr-2 pt-5 pb-5">
-                        <label class="from-to-sub-label">
-                            Output is estimated. You will receive at least&nbsp;&nbsp;
-                            <b class="from-to-sub-sum">{{ $utils.formatMoney(estimateResult, 4) }} USDC</b>&nbsp;&nbsp;
-                            or the transaction will revert.
-                        </label>
-                    </v-row>
-
-                    <v-row dense class="pt-5 exchange-row">
-                        <label class="add-info-label">
-                            Exchange rate
-                        </label>
-                        <v-spacer></v-spacer>
-                        <label class="add-info-label">
-                            1 USD+ = 1 USDC
-                        </label>
-                        <!-- TODO: add swap btn when exchanging rate added -->
-                    </v-row>
-
-                    <v-row dense class="pt-10 exchange-row">
-                        <label class="add-info-label">
-                            Gas fee
-                        </label>
-                        <v-spacer></v-spacer>
-                        <label class="add-info-label">
-                            {{ $utils.formatMoney(gasAmountInMatic, 6) }} MATIC
-                        </label>
-                    </v-row>
-
-                    <v-row dense class="exchange-row">
-                        <v-spacer></v-spacer>
-                        <label class="from-to-sub-label">
-                            ~${{ $utils.formatMoney(gasAmountInUsd, 4) }}
-                        </label>
-                    </v-row>
-
-                    <v-row dense class="pt-2 pb-5 exchange-row">
-                        <label class="add-info-label mr-2">
-                            Overnight Fee
-                        </label>
-                        <v-tooltip
-                                color="#202832"
-                                right
-                        >
-                            <template v-slot:activator="{ on, attrs }">
-                                <div class="currency-icon"
-                                     v-bind="attrs"
-                                     v-on="on">
-                                    <v-img :src="require('@/assets/icon/question-help.svg')"/>
-                                </div>
-                            </template>
-                            <p class="my-0">A portion of each trade (0.04%)</p>
-                            <p class="my-0">goes to Overnight as a protocol incentive</p>
-                        </v-tooltip>
-
-                        <v-spacer></v-spacer>
-                        <!-- TODO: change when price impact calculation added -->
-                        <label class="add-info-label">
-                            ${{ $utils.formatMoney(estimateFee, 4) }}
-                        </label>
-                    </v-row>
-
-                    <v-row>
-                        <v-col>
-                            <v-btn dark
-                                   height="56"
-                                   class="buy enabled-buy"
-                                   @click="redeem">
-                                Confirm
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-            </v-card>
-        </v-dialog>
 
         <WaitingModal/>
         <SuccessModal/>
@@ -255,9 +137,8 @@ import WaitingModal from "@/components/common/modal/action/WaitingModal";
 import SuccessModal from "@/components/common/modal/action/SuccessModal";
 import BN from "bn.js";
 
-
 export default {
-    name: "Redeem",
+    name: "Wrap",
 
     components: {
         ItemSelector,
@@ -274,42 +155,41 @@ export default {
         currencies: [],
 
         sum: null,
+        sumResult: null,
 
         buyCurrency: null,
         buyCurrencies: [{
-            id: 'usdPlus',
-            title: 'USD+',
-            image: require('../../assets/usdPlus.png')
+            id: 'wUsdPlus',
+            title: 'wUSD+',
+            image: require('../../assets/wUsdPlus.svg')
         }],
-
-        showConfirmSwapDialog: false,
-
-        estimatedGas: null,
-
-        gas: null,
-        gasAmountInMatic: null,
-        gasAmountInUsd: null,
     }),
+
+
+    watch: {
+
+        currency: function() {
+            this.previewWrap();
+        },
+
+        sum: function (){
+            this.previewWrap();
+        }
+    },
+
 
     computed: {
 
-        ...mapGetters("accountData", ['balance', 'account']),
-        ...mapGetters("accountUI", ['loadingBalance']),
+        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('accountUI', ['loadingBalance']),
 
-        ...mapGetters("swapUI", ["usdPlusApproved"]),
-
-        ...mapGetters("web3", ["web3", 'contracts']),
-        ...mapGetters("transaction", ["transactions"]),
+        ...mapGetters('wrapData', ['index', 'amountPerUsdPlus']),
+        ...mapGetters('wrapUI', ['usdcApproved', 'usdPlusApproved']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
+        ...mapGetters("transaction", ['transactions' ]),
+        ...mapGetters("web3", ["web3", 'contracts']),
 
-        sumResult: function () {
-            if (!this.sum || this.sum === 0) {
-                return '0.00';
-            } else {
-                return this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
-            }
-        },
 
         estimateResult: function () {
             return this.sum * 0.9996;
@@ -318,6 +198,41 @@ export default {
         estimateFee: function () {
             return this.sum * 0.0004;
         },
+
+
+        tokenContract(){
+            if (this.currency.id === 'usdc')
+                return this.contracts.usdc;
+            else
+                return this.contracts.usdPlus;
+        },
+
+
+        buttonLabel: function () {
+
+            if (!this.account) {
+                return 'Connect to a wallet';
+            } else if (this.isBuy) {
+                if (this.usdcApproved || this.usdPlusApproved) {
+                    return 'Wrap'
+                } else {
+                    if (this.currency.id === 'usdc')
+                        return 'Approve USDC';
+                    else if (this.currency.id === 'usdPlus')
+                        return 'Approve USD+';
+                }
+            } else if (this.sum > parseFloat(this.balance.usdc)) {
+                return 'Invalid amount'
+            } else {
+                return 'Enter an amount';
+            }
+        },
+
+
+        maxResult: function () {
+            return this.$utils.formatMoney(this.balance[this.currency.id], 2);
+        },
+
 
         numberRule: function () {
 
@@ -328,32 +243,37 @@ export default {
 
             if (!v.trim()) return false;
 
-            v = parseFloat(v);
+            v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlus)) return true;
-
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance[this.currency.id])) return true;
 
             return false;
         },
 
-        maxResult() {
-            return this.$utils.formatMoney(this.balance.usdPlus, 2);
-        },
-
-        buttonLabel: function () {
+        textInfoLabel: function () {
 
             if (!this.account) {
-                return 'Connect to a wallet';
+                return 'You need to connect to a wallet';
             } else if (this.isBuy) {
-                if (this.usdPlusApproved) {
-                    return 'Confirm Swap'
+                if (this.approved) {
+                    return 'Press Wrap button to complete the process'
                 } else {
-                    return 'Approve USD+';
+                    return '';
                 }
-            } else if (this.sum > parseFloat(this.balance.usdPlus)) {
+            } else if (this.sum > parseFloat(this.balance[this.currency.id])) {
                 return 'Invalid amount'
             } else {
                 return 'Enter an amount';
+            }
+        },
+
+        approved: function () {
+            if (this.currency.id === 'usdc') {
+                return this.usdcApproved;
+            } else if (this.currency.id === 'usdPlus') {
+                return this.usdPlusApproved;
+            } else {
+                return false;
             }
         },
 
@@ -362,6 +282,7 @@ export default {
         },
     },
 
+
     created() {
         this.currencies.push({
             id: 'usdc',
@@ -369,39 +290,25 @@ export default {
             image: require('../../assets/currencies/usdc.png')
         });
         this.currencies.push({
-            id: 'usdt',
-            title: 'USDT (Soon)',
-            disabled: true,
-            image: require('../../assets/currencies/usdtGray.svg')
-        });
-        this.currencies.push({
-            id: 'dai',
-            title: 'DAI (Soon)',
-            disabled: true,
-            image: require('../../assets/currencies/daiGray.svg')
+            id: 'usdPlus',
+            title: 'USD+',
+            image: require('../../assets/currencies/usdPlus.svg')
         });
 
         this.currency = this.currencies[0];
 
         this.buyCurrency = this.buyCurrencies[0];
-
-        this.estimatedGas = null;
-
-        this.gas = null;
-        this.gasAmountInMatic = null;
-        this.gasAmountInUsd = null;
-
-        this.showConfirmSwapDialog = false;
     },
 
     methods: {
 
-        ...mapActions("swapData", ['refreshSwap']),
-        ...mapActions("swapUI", ['showMintView']),
-        ...mapActions("swapUI", ['approveUsdPlus']),
+        ...mapActions("wrapData", ['refreshWrap']),
+        ...mapActions("wrapUI", ['showUnWrapView', 'approveUsdc', 'approveUsdPlus']),
 
-        ...mapActions("gasPrice", ['refreshGasPrice']),
+        ...mapActions("transaction", ['putTransaction']),
         ...mapActions("web3", ['connectWallet']),
+        ...mapActions("gasPrice", ['refreshGasPrice']),
+
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
@@ -422,61 +329,38 @@ export default {
             }
         },
 
-        setSum(value) {
-            this.sum = value;
-        },
 
-        max() {
-            let balanceElement = this.balance.usdPlus;
-            this.sum = balanceElement + "";
-        },
+        async previewWrap() {
 
-        async redeem() {
-
-            this.showConfirmSwapDialog = false;
-            this.showWaitingModal('Swapping ' + this.sumResult + ' USD+ for ' + this.sumResult + ' USDC');
-
-            try {
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
-                let self = this;
-
-                let contracts = this.contracts;
-                let from = this.account;
-
-                try {
-                    await this.refreshGasPrice();
-
-                    let buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
-                    let redeemResult = await contracts.exchange.methods.redeem(contracts.usdc.options.address, sum).send(buyParams);
-
-                    this.closeWaitingModal();
-                    this.showSuccessModal(redeemResult.transactionHash);
-                } catch (e) {
-                    console.log(e)
-                    this.closeWaitingModal();
-                    this.showErrorModal('buyUSDC');
-                    return;
-                }
-
-                self.refreshSwap();
-                self.setSum(null)
-            } catch (e) {
-                console.log(e)
-                this.showErrorModal('buyUSDC');
+            if (!this.sum || this.sum === 0 || this.sum === '0') {
+                this.sumResult = '0.00';
+                return;
             }
+
+            let sum = this.web3.utils.toWei(this.sum, 'mwei');
+            let address = this.tokenContract.options.address;
+
+            let value = await this.contracts.market.methods.previewWrap(address, sum).call();
+            value = this.web3.utils.fromWei(value, 'mwei');
+            this.sumResult = this.$utils.formatMoney(Number.parseFloat(value), 2);
+
         },
 
-        async confirmSwapAction() {
+        async wrapAction() {
             try {
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
 
                 this.showWaitingModal();
+
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1) {
                     this.closeWaitingModal();
                     this.showErrorModal('estimateGas');
                 } else {
+
+                    await this.refreshGasPrice();
+
                     this.estimatedGas = estimatedGasValue;
 
                     /* adding 10% to estimated gas */
@@ -484,16 +368,50 @@ export default {
                     this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
                     this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
 
+
+                    let wrapParams = {from: this.account, gasPrice: this.gasPriceGwei, gas: this.gas};
+                    let wrapResult = await this.contracts.market.methods.wrap(this.tokenContract.options.address, sum, this.account).send(wrapParams);
+
                     this.closeWaitingModal();
-                    this.showConfirmSwapDialog = true;
+                    this.showSuccessModal(wrapResult.transactionHash)
                 }
             } catch (e) {
                 console.log(e)
+                this.closeWaitingModal();
                 this.showErrorModal('estimateGas');
             }
         },
 
-        async approveAction() {
+        async estimateGas(sum) {
+
+            let contracts = this.contracts;
+            let from = this.account;
+
+            let result;
+
+
+            try {
+                let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
+
+                await contracts.market.methods.wrap(this.tokenContract.options.address, sum, this.account).estimateGas(estimateOptions)
+                  .then(function (gasAmount) {
+                      result = gasAmount;
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                      result = -1;
+                  });
+            } catch (e) {
+                console.log(e);
+                return -1;
+            }
+
+            return result;
+        },
+
+
+        approveAction: async function (){
+
             try {
                 this.showWaitingModal('Approving in process');
 
@@ -507,27 +425,39 @@ export default {
                     this.showErrorModal('approve');
                     return;
                 } else {
-                    this.approveUsdPlus();
+
+                    if (this.currency.id === 'usdc')
+                        this.approveUsdc();
+                    else if (this.currency.id === 'usdPlus')
+                        this.approveUsdPlus();
+                    else
+                        throw new Error('Unknown currency');
+
                     this.closeWaitingModal();
                 }
             } catch (e) {
                 console.log(e)
                 this.showErrorModal('approve');
             }
+
         },
 
         async checkAllowance(sum) {
 
             let contracts = this.contracts;
             let from = this.account;
+            let self = this;
 
-            let allowanceValue = await contracts.usdPlus.methods.allowance(from, contracts.exchange.options.address).call();
+            let text = 'Approve ' + await this.tokenContract.methods.symbol().call();
+
+            let allowanceValue = await this.tokenContract.methods.allowance(from, contracts.market.options.address).call();
 
             if (allowanceValue < sum) {
                 try {
                     await this.refreshGasPrice();
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
-                    let tx = await contracts.usdPlus.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
+
+                    let tx = await this.tokenContract.methods.approve(contracts.market.options.address, sum).send(approveParams);
 
                     let minted = true;
                     while (minted) {
@@ -535,9 +465,17 @@ export default {
                         let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
 
                         if (receipt) {
-                            if (receipt.status)
+                            if (receipt.status) {
+                                let tx = {
+                                    text: text,
+                                    hash: receipt.transactionHash,
+                                    pending: true,
+                                };
+
+                                self.putTransaction(tx);
+
                                 return true;
-                            else {
+                            } else {
                                 return false;
                             }
                         }
@@ -553,30 +491,13 @@ export default {
             return true;
         },
 
-        async estimateGas(sum) {
+        setSum(value) {
+            this.sum = value;
+        },
 
-            let contracts = this.contracts;
-            let from = this.account;
-
-            let result;
-
-            try {
-                let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
-
-                await contracts.exchange.methods.redeem(contracts.usdc.options.address, sum).estimateGas(estimateOptions)
-                    .then(function (gasAmount) {
-                        result = gasAmount;
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                        return -1;
-                    });
-            } catch (e) {
-                console.log(e)
-                return -1;
-            }
-
-            return result;
+        max() {
+            let balanceElement = this.balance[this.currency.id];
+            this.sum = balanceElement + "";
         },
     }
 }
@@ -759,5 +680,14 @@ export default {
 .exchange-label-icon {
     cursor: pointer !important;
     vertical-align: bottom !important;
+}
+
+.action-info-label {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+    color: #FE7F2D;
 }
 </style>

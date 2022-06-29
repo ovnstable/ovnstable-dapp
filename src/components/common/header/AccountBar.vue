@@ -41,6 +41,11 @@
                                     Stats
                                 </label>
                             </v-list-item>
+                            <v-list-item @click="goToAction('/wrap')" class="wrap-mobile">
+                                <label class="list-label-switch">
+                                    Wrap
+                                </label>
+                            </v-list-item>
                             <v-list-item @click="openBridge" class="bridge-link-mobile">
                                 <label class="list-label-switch">
                                     Bridge
@@ -49,6 +54,11 @@
                             <v-list-item @click="addUsdPlusToken">
                                 <label class="list-label-switch">
                                     Add&nbsp;&nbsp;<strong>USD+</strong>&nbsp;&nbsp;to wallet
+                                </label>
+                            </v-list-item>
+                            <v-list-item @click="addwUsdPlusToken">
+                                <label class="list-label-switch">
+                                    Add&nbsp;&nbsp;<strong>wUSD+</strong>&nbsp;&nbsp;to wallet
                                 </label>
                             </v-list-item>
                             <v-list-item @click="switchAccountAction">
@@ -146,7 +156,7 @@ export default {
 
     methods: {
 
-        ...mapActions('web3', ['connectWallet', 'disconnectWallet', 'switchAccount', 'addUsdPlusToken']),
+        ...mapActions('web3', ['connectWallet', 'disconnectWallet', 'switchAccount', 'addUsdPlusToken', 'addwUsdPlusToken']),
         ...mapActions('accountUI', ['showAccountProfile']),
         ...mapActions('accountData', ['refreshBalance']),
 
@@ -218,7 +228,7 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
-    .bridge-link-mobile, .account-profile-mobile, .dashboard-mobile, .fund-mobile, .farm-mobile {
+    .bridge-link-mobile, .account-profile-mobile, .dashboard-mobile, .fund-mobile, .farm-mobile, .wrap-mobile {
         display: none !important;
     }
 

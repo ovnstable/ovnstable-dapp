@@ -26,8 +26,15 @@ Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false
 
-import VueGtag from "vue-gtag";
+import VueGtm from '@gtm-support/vue2-gtm';
+Vue.use(VueGtm, {
+  id: 'GTM-TBCD9KR',
+  enabled: true,
+  vueRouter: router,
+  debug: false,
+});
 
+import VueGtag from "vue-gtag";
 Vue.use(VueGtag, {
   config: { id: "G-97YQSM714C" }
 }, router);

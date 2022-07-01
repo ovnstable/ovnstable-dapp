@@ -9,14 +9,6 @@ import router from './router/index'
 import {axios} from './plugins/http-axios';
 import moment from 'moment';
 
-import Toast from "vue-toastification";
-import "vue-toastification/dist/index.css";
-const options = {
-  toastClassName: "toast",
-};
-Vue.use(Toast, options);
-
-
 Vue.use(Vuex)
 
 Vue.prototype.$moment = moment;
@@ -34,11 +26,6 @@ Vue.use(VueGtm, {
   debug: false,
 });
 
-import VueGtag from "vue-gtag";
-Vue.use(VueGtag, {
-  config: { id: "G-97YQSM714C" }
-}, router);
-
 import VueYandexMetrika from 'vue-yandex-metrika'
 Vue.use(VueYandexMetrika, {
   id: 86928892,
@@ -49,8 +36,8 @@ Vue.use(VueYandexMetrika, {
 
 import Donut from 'vue-css-donut-chart';
 import 'vue-css-donut-chart/dist/vcdonut.css';
-
 Vue.use(Donut);
+
 
 new Vue({
   store,
@@ -59,7 +46,8 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
-// describe widget configuration and saving to a global variable for future use
+
+// Rubic widget configuration part
 var configuration = {
   from: 'USDC',
   to: 'USDC',
@@ -79,8 +67,5 @@ var configuration = {
   }
 }
 
-// prevent accidental changes to the object, for example, when re-creating a widget for another theme
 Object.freeze(configuration);
-
-// create widget
 rubicWidget.init(configuration);

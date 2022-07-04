@@ -1,38 +1,56 @@
 <template>
     <v-app-bar
-            class="app-bar pt-4"
-            dense
+            class="app-bar"
             app>
-        <v-col class="logo-col">
-            <Logo/>
-        </v-col>
-
-        <v-col class="ma-0 pa-0 menu-col">
-            <Menu class="menu-col-content"/>
-        </v-col>
-
-        <template v-if="!loadingWeb3">
-            <v-col class="settings-col">
-                <AccountBar v-if="!switchToPolygon"/>
-                <SwitchToPolygon v-else/>
+        <v-row class="header-container fill-height" align="center">
+            <v-col cols="5" class="fill-height">
+                <v-row justify="start" align="center" class="mt-0 fill-height">
+                    <WalletBar/>
+                </v-row>
             </v-col>
-        </template>
-        <template v-else>
-            <v-col class="settings-col">
-                <v-container>
-                    <v-row justify="end" align="center">
+
+            <v-col cols="6" class="fill-height">
+                <v-row justify="end" align="center" class="mt-0 fill-height">
+                    <template v-if="!loadingWeb3">
+                            <template v-if="walletConnected">
+                                <v-btn v-if="switchToPolygon" class="header-btn btn-filled" v-on:click="goToPolygon">
+                                    Switch to {{ networkName }}
+                                </v-btn>
+
+                                <template v-else>
+                                    <v-btn class="header-btn btn-outlined mr-5" outlined @click="openLink('https://app.overnight.fi/wrap')">
+                                        Wrap / unwrap
+                                    </v-btn>
+                                    <v-btn class="header-btn btn-filled" @click="openLink('https://app.overnight.fi/')">
+                                        Mint / redeem
+                                    </v-btn>
+                                </template>
+                            </template>
+
+                            <template v-else>
+                                <v-btn class="header-btn btn-filled" @click="connectWallet">
+                                    Connect wallet
+                                </v-btn>
+                            </template>
+                    </template>
+                    <template v-else>
                         <v-progress-linear
                                 dark
-                                class="progress"
+                                class="progress mt-1"
                                 background-opacity="0"
                                 color="var(--main-background)"
-                                rounded
                                 indeterminate
                         ></v-progress-linear>
-                    </v-row>
-                </v-container>
+                    </template>
+                </v-row>
             </v-col>
-        </template>
+
+            <v-col cols="1" class="fill-height">
+                <v-row justify="end" align="center" class="mt-0 fill-height">
+                    <NetworkSelect />
+                </v-row>
+            </v-col>
+        </v-row>
     </v-app-bar>
 </template>
 <script>
@@ -42,11 +60,15 @@ import SwitchToPolygon from "./common/header/SwitchToPolygon";
 import AccountBar from "./common/header/AccountBar";
 import Logo from "./common/header/Logo";
 import Menu from "./common/header/Menu";
+import WalletBar from "@/components/common/header/WalletBar";
+import NetworkSelect from "@/components/common/header/NetworkSelect";
 
 export default {
     name: 'Header',
 
     components: {
+        NetworkSelect,
+        WalletBar,
         Menu,
         Logo,
         AccountBar,
@@ -58,11 +80,28 @@ export default {
 
 
     computed: {
-        ...mapGetters('web3', [ 'web3',  'networkId', 'switchToPolygon', 'loadingWeb3']),
-        ...mapGetters('accountData', ['account'])
+        ...mapGetters('web3', [ 'web3',  'networkId', 'switchToPolygon', 'loadingWeb3', 'walletConnected']),
+        ...mapGetters('accountData', ['account']),
+
+        networkName() {
+            return this.capitalize(process.env.VUE_APP_POLYGON);
+        },
     },
 
     methods: {
+        ...mapActions('web3', ['connectWallet', 'disconnectWallet', 'setNetwork']),
+
+        capitalize(s) {
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        },
+
+        goToPolygon() {
+            this.setNetwork(process.env.VUE_APP_NETWORK_ID);
+        },
+
+        openLink(url) {
+            window.open(url, '_blank').focus();
+        },
     }
 }
 </script>
@@ -71,48 +110,53 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 1400px) {
-    .menu-col-content {
-        display: none !important;
-    }
-
-    .logo-col {
-        width: 33%;
-    }
-
-    .settings-col {
-        width: 67%;
-    }
 }
 
 @media only screen and (min-width: 1400px) {
-    .app-bar {
-        padding: 16px;
-    }
-
-    .logo-col {
-        padding-left: 20px;
-    }
-
-    .logo-col, .settings-col {
-        width: 33%;
-    }
-
-    .menu-col {
-        width: 34%;
-    }
-
     .progress {
         width: 300px;
     }
 }
 
 .progress {
-    background: var(--orange-gradient);
+    background: var(--blue-gradient);
 }
 
 .app-bar {
     height: 72px !important;
     box-shadow: none !important;
     background-color: var(--main-background) !important;
+    border-bottom: 1px solid #CED2D8 !important;
+}
+
+.header-container {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.header-btn {
+    width: 200px;
+    height: 36px;
+    border-radius: 2px;
+    box-shadow: none !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    text-align: center !important;
+    letter-spacing: 0.02em !important;
+    text-transform: uppercase !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+}
+
+.btn-filled {
+    background: var(--blue-gradient);
+    color: #FFFFFF !important;
+}
+
+.btn-outlined {
+    color: #1C95E7 !important;
 }
 </style>

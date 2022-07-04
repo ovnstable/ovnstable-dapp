@@ -19,6 +19,7 @@ import getFinance from "@/router/midleware/governance/getFinance";
 
 // Dapp Sections
 import Swap from "./midleware/dapp/Swap";
+import Market from "./midleware/dapp/Market";
 import Wrap from "./midleware/dapp/Wrap";
 import Farm from "./midleware/dapp/Farm";
 import Stats from "./midleware/dapp/Stats";
@@ -33,8 +34,17 @@ const routes = [
         component: () => import('../Dapp.vue'),
 
         children: [
-
             {
+                path: '/',
+                name: 'MarketView',
+                component: () => import('../views/MarketView.vue'),
+                meta: {
+                    middleware: [
+                        Market,
+                    ]
+                }
+            },
+            /*{
                 path: '/',
                 name: 'SwapView',
                 component: () => import('../views/SwapView.vue'),
@@ -104,7 +114,7 @@ const routes = [
                         getDapp,
                     ]
                 }
-            },
+            },*/
         ],
     },
 

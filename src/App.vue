@@ -71,13 +71,13 @@ export default {
     }
 
     .title-modal {
-        color: white;
-        font-family: 'Raleway', sans-serif;
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
-        font-weight: 800;
-        font-size: 20px;
-        line-height: 24px;
-        margin-top: 12px;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 28px;
+        font-feature-settings: 'liga' off;
+        color: #333333;
     }
 }
 
@@ -98,13 +98,13 @@ export default {
     }
 
     .title-modal {
-        color: white;
-        font-family: 'Raleway', sans-serif;
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
-        font-weight: 800;
-        font-size: 20px;
-        line-height: 24px;
-        margin-top: 10px;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 28px;
+        font-feature-settings: 'liga' off;
+        color: #333333;
     }
 }
 
@@ -124,23 +124,24 @@ export default {
     }
 
     .title-modal {
-        color: white;
-        font-family: 'Raleway', sans-serif;
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
-        font-weight: 800;
-        font-size: 24px;
+        font-weight: 400;
+        font-size: 30px;
         line-height: 36px;
-        margin-top: 4px;
+        font-feature-settings: 'pnum' on, 'lnum' on;
+        color: #333333;
     }
 }
 
 /* main variables */
 :root {
-    --main-background: #13151C;
-    --secondary: #1D2029;
+    --main-background: #F5F5F5;
+    --secondary: #FFFFFF;
     --logo-color: #ffffff;
     --orange-gradient: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
-    --link: #3d8dff;
+    --blue-gradient: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+    --link: #1C95E7;
 }
 
 html {
@@ -224,20 +225,25 @@ html {
 }
 
 .bn-onboard-custom .bn-onboard-modal-content-header-heading {
-    font-family: 'Lato', sans-serif !important;
-    color: white !important;
-    font-weight: 300 !important;
-    font-size: 20px !important;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #333333;
     margin-bottom: 15px !important;
 }
 
 .bn-onboard-icon-button > span {
-    font-family: 'Lato', sans-serif !important;
-    color: white !important;
-    font-weight: 600 !important;
-    font-size: 16px !important;
-    line-height: 24px !important;
+    font-family: 'Roboto', sans-serif;
     font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.02em;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #333333;
 }
 
 .bn-onboard-select-wallet-info {

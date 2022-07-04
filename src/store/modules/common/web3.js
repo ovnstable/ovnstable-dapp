@@ -136,13 +136,12 @@ const actions = {
         let onboard = Onboard({
             dappId: 'c81e3c96-54f6-4d82-b911-87dea6376ba4',
             networkId: parseInt(process.env.VUE_APP_NETWORK_ID),
-            darkMode: true,
+            darkMode: false,
             walletSelect: {
                 wallets: wallets,
             },
 
             subscriptions: {
-
                 wallet: async wallet => {
                     console.log('OnBoard: wallet');
 
@@ -161,13 +160,10 @@ const actions = {
 
                         dispatch('checkAccount');
                     });
-
-
                 },
 
                 address: async address => {
                     console.log('OnBoard: address');
-
                 }
             }
         });

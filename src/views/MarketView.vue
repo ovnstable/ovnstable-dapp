@@ -13,7 +13,7 @@
             </v-row>
         </div>
 
-        <div class="mt-7">
+        <div class="mt-7 cards-list-container">
             <WmaticUsdPlus/>
         </div>
     </div>
@@ -119,5 +119,9 @@ export default {
 
 .group-right-btn {
     border-radius: 0px 2px 2px 0px;
+}
+
+.cards-list-container {
+    margin-bottom: 30% !important;
 }
 </style>

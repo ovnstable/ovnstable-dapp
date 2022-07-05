@@ -2,6 +2,7 @@ export default async function getSwap({ context, nextMiddleware }){
     try {
         console.log('Get Dapp/Market');
 
+        context.store.dispatch('statsData/refreshStats');
         context.store.dispatch('marketData/refreshMarket');
     }
     catch(e){

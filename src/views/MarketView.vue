@@ -1,20 +1,70 @@
 <template>
-    <v-container fluid>
-        <!-- TODO: add banner -->
-        <!-- TODO: add market list -->
-    </v-container>
+    <div>
+        <div class="mt-10">
+            <Banner/>
+        </div>
+
+        <div class="mt-7">
+            <v-row justify="start" class="tab-row ma-0">
+                <v-btn flat class="group-left-btn" @click="tab=1" v-bind:class="activeTabFeatured">Featured&nbsp;<v-icon size="16">mdi-star-circle</v-icon></v-btn>
+                <v-btn style="background-color: transparent !important;" @click="tab=2" v-bind:class="activeTabHold" disabled>Hold USD+</v-btn>
+                <v-btn style="background-color: transparent !important;" @click="tab=3" v-bind:class="activeTabPools" disabled>Pools</v-btn>
+                <v-btn class="group-right-btn" @click="tab=4" v-bind:class="activeTabHedged">Hedged strategies</v-btn>
+            </v-row>
+        </div>
+
+        <div class="mt-7">
+            <WmaticUsdPlus/>
+        </div>
+    </div>
 </template>
 
 <script>
 
+import Banner from "@/components/market/section/Banner";
+import WmaticUsdPlus from "@/components/market/cards/hedged/WmaticUsdPlus";
+
 export default {
     name: "MarketView",
-    components: {},
+
+    components: {
+        WmaticUsdPlus,
+        Banner
+    },
+
     data: () => ({
+        tab: 1,
     }),
 
 
     computed: {
+        activeTabFeatured: function () {
+            return {
+                'tab-button': this.tab === 1,
+                'tab-button-in-active': this.tab !== 1,
+            }
+        },
+
+        activeTabHold: function () {
+            return {
+                'tab-button': this.tab === 2,
+                'tab-button-in-active': this.tab !== 2,
+            }
+        },
+
+        activeTabPools: function () {
+            return {
+                'tab-button': this.tab === 3,
+                'tab-button-in-active': this.tab !== 3,
+            }
+        },
+
+        activeTabHedged: function () {
+            return {
+                'tab-button': this.tab === 4,
+                'tab-button-in-active': this.tab !== 4,
+            }
+        },
     },
 
     methods: {
@@ -32,5 +82,42 @@ export default {
 
 @media only screen and (min-width: 1400px) {
 
+}
+
+.tab-button {
+    background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+    border-radius: 0;
+    box-shadow: none !important;
+    font-family: 'Roboto', sans-serif !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    text-transform: none !important;
+    font-feature-settings: 'liga' off !important;
+    color: #FFFFFF !important;
+}
+
+.tab-button-in-active {
+    background: none !important;
+    border: 1px solid #CED2D8;
+    border-radius: 0;
+    box-shadow: none !important;
+    font-family: 'Roboto', sans-serif !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    text-transform: none !important;
+    font-feature-settings: 'liga' off !important;
+    color: #333333 !important;
+}
+
+.group-left-btn {
+    border-radius: 2px 0px 0px 2px;
+}
+
+.group-right-btn {
+    border-radius: 0px 2px 2px 0px;
 }
 </style>

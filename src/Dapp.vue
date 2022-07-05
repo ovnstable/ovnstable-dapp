@@ -4,9 +4,9 @@
         <Header/>
 
         <v-main>
-            <v-container fluid class="main-container">
+            <div class="main-container mt-5">
                 <router-view></router-view>
-            </v-container>
+            </div>
         </v-main>
 
         <AccountProfile width="630"/>
@@ -54,6 +54,11 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
+}
+
+.main-container {
+    margin-left: 5% !important;
+    margin-right: 5% !important;
 }
 
 </style>

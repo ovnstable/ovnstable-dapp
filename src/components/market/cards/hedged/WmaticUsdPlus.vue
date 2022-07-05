@@ -29,27 +29,30 @@
                 <label class="card-info mt-1">APY</label>
                 <v-spacer></v-spacer>
                 <label class="card-info-value">{{ apy ? ($utils.formatMoneyComma(apy, 0)) + '%' : '—' }}</label>
+                <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
             </v-row>
 
-            <v-row class="card-row info-row mt-8" justify="start" align="center">
+            <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">Diff. to Hold USD+</label>
                 <v-spacer></v-spacer>
                 <label class="card-info-value">{{ diffApy ? ((diffApy > 0 ? '+' : '-') + $utils.formatMoneyComma(diffApy, 1)) + '%' : '—' }}</label>
+                <Tooltip text="APY difference compared to the base APY USD+"/>
             </v-row>
 
-            <v-row class="card-row info-row mt-8" justify="start" align="center">
+            <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">Risk factor</label>
                 <v-spacer></v-spacer>
                 <label class="card-info-risk">High</label>
+                <Tooltip text="Risk Factor is determined by a Pool's downside volatility. Pools that have a low Risk Factor translates to smaller downside volatility."/>
             </v-row>
 
-            <v-row class="card-row info-row mt-8" justify="start" align="center">
+            <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">TVL</label>
                 <v-spacer></v-spacer>
                 <label class="card-info">{{ tvl ? ('$' + $utils.formatMoneyComma(tvl, 2)) : '—' }}</label>
             </v-row>
 
-            <v-row class="card-row card-banner-container mt-15" justify="start" align="center">
+            <v-row class="card-row card-banner-container mt-12" justify="start" align="center">
                 <v-col class="card-banner-body">
                     <v-row align="center">
                         <div class="card-banner-icon">
@@ -82,11 +85,13 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import moment from "moment";
+import Tooltip from "@/components/common/element/Tooltip";
 
 export default {
     name: "WmaticUsdPlus",
 
     components: {
+        Tooltip
     },
 
     props: {

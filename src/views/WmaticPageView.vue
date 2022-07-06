@@ -348,7 +348,64 @@
                     </v-row>
                 </v-col>
                 <v-col cols="3">
-                    <!-- TODO: add should be investor section -->
+                    <v-row align="center" justify="start" class="ma-0 sticky" style="width: 20%;">
+                        <v-btn class="header-btn btn-filled-red" @click="openInvestModalAction">
+                            <div class="info-card-icon mr-2">
+                                <v-img :src="require('@/assets/icon/bellWhite.svg')"/>
+                            </div>
+                            Should you be an investor?
+                        </v-btn>
+                    </v-row>
+
+                    <v-row class="info-card-container-white ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
+                        <v-col class="my-10 mx-8">
+                            <v-row align="center">
+                                <label class="investor-card-title">Your share</label>
+                            </v-row>
+                            <v-row align="center" class="mt-10">
+                                <label class="investor-card-sub-title">Your balance in strategy</label>
+                            </v-row>
+                            <v-row align="center" class="mt-4">
+                                <label class="investor-card-sub-title-value">{{ balance ? ($utils.formatMoneyComma(balance, 2) + ' USD+') : '—' }}</label>
+                            </v-row>
+                            <v-row align="center" class="mt-10">
+                                <label class="investor-card-sub-title">Profit/loss</label>
+                            </v-row>
+                            <v-row align="center" class="mt-4">
+                                <label class="investor-card-sub-title-value">{{ profit ? ('$' + $utils.formatMoneyComma(profit, 2)) : '—' }}</label>
+                            </v-row>
+                            <v-row align="center" class="mt-15">
+                                <label class="investor-card-title">Fee structure</label>
+                            </v-row>
+                            <v-row class="info-row mt-8" justify="start" align="center">
+                                <label class="fee-structure-label mt-1">Entry</label>
+                                <v-spacer></v-spacer>
+                                <label class="fee-structure-value mt-1">{{ entryFee ? $utils.formatMoneyComma(entryFee, 1) + '%' : '—' }}</label>
+                            </v-row>
+                            <v-row class="info-row mt-8" justify="start" align="center">
+                                <label class="fee-structure-label mt-1">Exit</label>
+                                <v-spacer></v-spacer>
+                                <label class="fee-structure-value mt-1">{{ exitFee ? $utils.formatMoneyComma(exitFee, 1) + '%' : '—' }}</label>
+                            </v-row>
+                            <v-row class="info-row mt-8" justify="start" align="center">
+                                <label class="fee-structure-label mt-1">Performance</label>
+                                <v-spacer></v-spacer>
+                                <label class="fee-structure-value mt-1">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 0) + '%' : '—' }}</label>
+                            </v-row>
+                            <v-row class="info-row mt-8" justify="start" align="center">
+                                <label class="fee-structure-label mt-1">Management</label>
+                                <v-spacer></v-spacer>
+                                <label class="fee-structure-value mt-1">{{ managementFee ? $utils.formatMoneyComma(managementFee, 0) + '%' : '—' }}</label>
+                                <Tooltip text="An annual fee that will be charged per block, regardless of the pool's performance. "/>
+                            </v-row>
+
+                            <v-row align="center" justify="center" class="ma-0 mt-15">
+                                <v-btn class="header-btn btn-investor-invest" @click="openInvestModalAction">
+                                    Invest
+                                </v-btn>
+                            </v-row>
+                        </v-col>
+                    </v-row>
                 </v-col>
             </v-row>
         </div>
@@ -381,6 +438,14 @@ export default {
         investors: null,
         targetHealthFactor: null,
         healthFactorCheckInterval: null,
+
+        balance: null,
+        profit: null,
+
+        entryFee: null,
+        exitFee: null,
+        performanceFee: null,
+        managementFee: null,
     }),
 
 
@@ -504,6 +569,11 @@ export default {
     background: #FBF0F6;
     border: 1px solid rgba(207, 63, 146, 0.4);
     border-radius: 4px;
+}
+
+.info-card-container-white {
+    background: #FFFFFF;
+    border-radius: 8px;
 }
 
 .info-card-body {
@@ -709,9 +779,7 @@ export default {
 }
 
 .header-btn {
-    width: 40%;
-    height: 50px !important;
-    border-radius: 2px;
+    border-radius: 4px;
     box-shadow: none !important;
 
     font-family: 'Roboto', sans-serif !important;
@@ -726,7 +794,82 @@ export default {
 }
 
 .btn-filled {
+    width: 40%;
+    height: 50px !important;
     background: var(--blue-gradient);
     color: #FFFFFF !important;
+}
+
+.btn-investor-invest {
+    width: 100%;
+    height: 44px !important;
+    background: var(--blue-gradient);
+    color: #FFFFFF !important;
+}
+
+.btn-filled-red {
+    width: 100%;
+    height: 44px !important;
+    background: #CF3F92 !important;
+    color: #FFFFFF !important;
+}
+
+.sticky {
+    margin-right: 4% !important;
+    position: fixed !important;
+}
+
+.investor-card-title {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #333333;
+}
+
+.investor-card-sub-title {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #333333;
+}
+
+.investor-card-sub-title-value {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+    font-feature-settings: 'liga' off;
+    color: #333333;
+}
+
+.fee-structure-label {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #333333;
+}
+
+.fee-structure-value {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #3E5463;
 }
 </style>

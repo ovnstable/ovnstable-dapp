@@ -7,6 +7,7 @@
     "build-dev": "vue-cli-service build --mode dev",
     "build-production": "vue-cli-service build --mode production",
     "build-avax-prod": "vue-cli-service build --mode avax-prod",
+    "build-market": "vue-cli-service build --mode market",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

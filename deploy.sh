@@ -22,6 +22,11 @@ then
   nameDapp="dapp-avax"
   build="build-avax-prod"
   tag="avax"
+elif [ "$stand" = "market" ]
+then
+  nameDapp="dapp-market"
+  build="build-market"
+  tag="market"
 else
   exit
 fi

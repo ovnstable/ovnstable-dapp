@@ -349,7 +349,7 @@
                 </v-col>
                 <v-col cols="3">
                     <v-row align="center" justify="start" class="ma-0 sticky" style="width: 20%;">
-                        <v-btn class="header-btn btn-filled-red" @click="openInvestModalAction">
+                        <v-btn class="header-btn btn-filled-red" @click="showInvestorModal">
                             <div class="info-card-icon mr-2">
                                 <v-img :src="require('@/assets/icon/bellWhite.svg')"/>
                             </div>
@@ -411,6 +411,7 @@
         </div>
 
         <RiskDisclosureModal/>
+        <InvestorModal/>
     </div>
 </template>
 
@@ -420,10 +421,12 @@ import StrategyBanner from "@/components/market/strategy/section/StrategyBanner"
 import RiskDisclosureModal from "@/components/market/modal/RiskDisclosureModal";
 import {mapActions} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
+import InvestorModal from "@/components/market/modal/InvestorModal";
 export default {
     name: "WmaticPageView",
 
     components: {
+        InvestorModal,
         Tooltip,
         RiskDisclosureModal,
         StrategyBanner
@@ -474,6 +477,7 @@ export default {
 
     methods: {
         ...mapActions('riskModal', ['showRiskModal']),
+        ...mapActions('investorModal', ['showInvestorModal']),
 
         goToAction(id) {
             this.$router.push(id);

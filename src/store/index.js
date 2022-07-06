@@ -7,6 +7,7 @@ import errorModal from '@/store/modules/modals/error-modal';
 import waitingModal from '@/store/modules/modals/waiting-modal';
 import successModal from '@/store/modules/modals/success-modal';
 import riskModal from '@/store/modules/modals/market/risk-disclosure-modal';
+import investorModal from '@/store/modules/modals/market/investor-modal';
 
 
 // Views
@@ -67,6 +68,7 @@ export default new Vuex.Store({
         waitingModal,
         successModal,
         riskModal,
+        investorModal,
 
         dashboardData,
         dashboardUI,

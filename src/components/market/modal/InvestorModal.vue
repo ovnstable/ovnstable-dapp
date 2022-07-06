@@ -10,7 +10,7 @@
                     <v-img :src="require('@/assets/icon/bellRed.svg')"/>
                 </div>
                 <label class="title-modal ml-2">
-                    Risk disclosure
+                    Should you be an investor?
                 </label>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="close">
@@ -21,23 +21,26 @@
             <v-card-text class="pt-8 content-container">
                 <v-row class="modal-info-row" align="center">
                     <label class="modal-info-text">
-                        By depositing USD+ into this strategy, you are automatically borrowing an equal value of WMATIC from AAVE v2 at a rate roughly equal to the current price of WMATIC denoted above.
+                        Users should supply USD+ if they believe the volatility (price fluctuation) of WMATIC is less than the current average APY you would recieve by farming, which means that the Impermanent Losses are low relative to the profits from the Yield-Farm. It is important to note that impermanent losses increase based on higher price changes, which makes the hedged strategy.
                         <br/><br/>
-                        The strategy's smart contract is designed to automatically invest these equal values of WMATIC and USD+ into Dystopia's WMATIC-USD+ Liquidity Pool, after which these LP Tokens are staked into the Gauge Pool on Penrose.
-                        <br/><br/>
-                        While the Dystopia pools will accrue transaction fees that provide yield to the farmers, the pool may become imbalanced; when the user withdraws their investment, the strategy's smart contract may need to use the user's funds to buy additional WMATIC to repay the lent amount (plus interest), which can result in a net loss from the initial deposit.
-                        <br/><br/>
-                        <b>By depositing into this strategy, the user understands that they are fully responsible for any loss of value. Furthermore, all APY and yield numbers are speculative, and no profit is guaranteed by the protocol.</b>
-                        <br/><br/>
-                        Another risk for running this strategy is that the automated market maker (in this case, Dystopia, which the strategy's smart contracts automatically move your deposit into) may incur a smart contract risk or flash crash in which the prices of the tokens fluctuates in an unpredictable way causing extreme changes in price that lead automated systems like the strategy's smart contracts to misbehave.
-                        <br/><br/>
-                        By depositing into these smart contracts, the user understands and agrees to the strategies it will invest their underlying assets into.
+                        <label class="important-label">IMPORTANT:</label>&nbsp;Yield/APY is not guaranteed, and can be highly variable depending on the volume and rewards from the underlying AMM. Farmers may incur net losses if impermanent loss is greater than yield earned.
                     </label>
                 </v-row>
 
                 <v-row class="modal-info-row mt-10" align="center">
-                    <v-btn class="understand-btn" @click="close" outlined>
-                        I understand
+                    <v-checkbox
+                            color="#CF3F92"
+                            v-model="readConfirmed"
+                    >
+                        <template v-slot:label>
+                            <label class="checkbox-label">I have read and agree to this information</label>
+                        </template>
+                    </v-checkbox>
+                </v-row>
+
+                <v-row class="modal-info-row mt-6" align="center">
+                    <v-btn class="confirm-btn" @click="close" outlined :disabled="!readConfirmed">
+                        confirm
                     </v-btn>
                 </v-row>
             </v-card-text>
@@ -49,23 +52,24 @@
 import {mapActions, mapGetters, mapMutations} from "vuex";
 
 export default {
-    name: "RiskDisclosureModal",
+    name: "InvestorModal",
 
     props: {
     },
 
     computed: {
-        ...mapGetters('riskModal', ['show']),
+        ...mapGetters('investorModal', ['show']),
     },
 
     data: () => ({
+        readConfirmed: false,
     }),
 
     methods: {
-        ...mapActions('riskModal', ['showRiskModal', 'closeRiskModal']),
+        ...mapActions('investorModal', ['showInvestorModal', 'closeInvestorModal']),
 
         close() {
-            this.closeRiskModal();
+            this.closeInvestorModal();
 
             this.$emit('input', false);
             this.$emit('m-close');
@@ -121,7 +125,7 @@ export default {
     height: 32px;
 }
 
-.understand-btn {
+.confirm-btn {
     width: 50%;
     height: 40px !important;
     border-radius: 2px !important;
@@ -135,5 +139,19 @@ export default {
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     color: #CF3F92 !important;
+}
+
+.important-label {
+    color: #CF3F92 !important;
+}
+
+.checkbox-label {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    font-feature-settings: 'liga' off;
+    color: #707A8B;
 }
 </style>

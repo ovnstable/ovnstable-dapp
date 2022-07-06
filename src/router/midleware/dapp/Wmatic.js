@@ -1,8 +1,7 @@
-export default async function getMarket({ context, nextMiddleware }){
+export default async function getWmatic({ context, nextMiddleware }){
     try {
         console.log('Get Dapp/Market');
 
-        context.store.dispatch('statsData/refreshStats');
         context.store.dispatch('marketData/refreshMarket');
     }
     catch(e){

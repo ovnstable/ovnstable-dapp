@@ -2,9 +2,9 @@
     <v-row align="center" justify="start" class="banner-container ma-0">
         <v-col class="text-col">
             <label class="banner-label">Choose your</label>
-            <label class="banner-label-accent">&nbsp;BEST</label>
+            <label class="banner-label-accent">&nbsp;IDEAL</label>
             <br/>
-            <label class="banner-label">investing options</label>
+            <label class="banner-label">strategy</label>
         </v-col>
 
         <v-col class="info-col">

@@ -7,11 +7,8 @@
             </v-row>
 
             <v-row class="card-row mt-12" justify="start" align="center">
-                <div class="currency-icon icon-first">
-                    <v-img :src="require('@/assets/currencies/wMatic.svg')"/>
-                </div>
-                <div class="currency-icon icon-second ml-n3">
-                    <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
+                <div class="currency-icon">
+                    <v-img :src="require('@/assets/currencies/market/WmaticUsdPlus.svg')"/>
                 </div>
                 <label class="card-title ml-3">WMatic / USD+</label>
                 <v-spacer></v-spacer>
@@ -24,7 +21,6 @@
                 <label class="card-info">Get 5x-6x USD+ yield by pledging USD+ as collateral with a minimum risk of liquidation</label>
             </v-row>
 
-            <!-- TODO: add tooltips -->
             <v-row class="card-row info-row mt-15" justify="start" align="center">
                 <label class="card-info mt-1">APY</label>
                 <v-spacer></v-spacer>
@@ -83,8 +79,6 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
-import moment from "moment";
 import Tooltip from "@/components/common/element/Tooltip";
 
 export default {
@@ -98,7 +92,6 @@ export default {
     },
 
     computed: {
-        ...mapGetters('accountData', ['account']),
     },
 
     data: () => ({
@@ -114,18 +107,8 @@ export default {
     },
 
     methods: {
-        ...mapActions('web3', ['connectWallet']),
-
-        openLink(url) {
-            window.open(url, '_blank').focus();
-        },
-
         openStrategyAction() {
-            if (this.account) {
-                /* TODO: add opening strategy */
-            } else {
-                this.connectWallet();
-            }
+            this.$router.push('/hedged');
         }
     },
 }
@@ -175,14 +158,6 @@ export default {
 .currency-icon {
     width: 40px;
     height: 40px;
-}
-
-.icon-first {
-    z-index: 3;
-}
-
-.icon-second {
-    z-index: 2;
 }
 
 .card-title {

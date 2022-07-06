@@ -20,6 +20,7 @@ import getFinance from "@/router/midleware/governance/getFinance";
 // Dapp Sections
 import Swap from "./midleware/dapp/Swap";
 import Market from "./midleware/dapp/Market";
+import Wmatic from "./midleware/dapp/Wmatic";
 import Wrap from "./midleware/dapp/Wrap";
 import Farm from "./midleware/dapp/Farm";
 import Stats from "./midleware/dapp/Stats";
@@ -41,6 +42,16 @@ const routes = [
                 meta: {
                     middleware: [
                         Market,
+                    ]
+                }
+            },
+            {
+                path: '/hedged',
+                name: 'WmaticPageView',
+                component: () => import('../views/WmaticPageView.vue'),
+                meta: {
+                    middleware: [
+                        Wmatic,
                     ]
                 }
             },

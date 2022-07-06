@@ -18,7 +18,7 @@
                         <label class="info-title">APY</label>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-2">
-                        <label class="info-value">{{ apy ? ($utils.formatMoneyComma(apy, 1)) + '%' : '—' }}</label>
+                        <label class="info-value">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 0)) + '%' : '—' }}</label>
                     </v-row>
                 </v-col>
                 <v-col class="bordered-col">
@@ -26,7 +26,7 @@
                         <label class="info-title">TVL</label>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-2">
-                        <label class="info-value">{{ tvl ? ('$' + $utils.formatMoneyComma(tvl, 2)) : '—' }}</label>
+                        <label class="info-value">{{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}</label>
                     </v-row>
                 </v-col>
                 <v-col>
@@ -34,7 +34,7 @@
                         <label class="info-title">Investors</label>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-2">
-                        <label class="info-value">{{ investors ? investors : '—' }}</label>
+                        <label class="info-value">{{ (wmaticStrategyData && wmaticStrategyData.holders) ? $utils.formatMoneyComma(wmaticStrategyData.holders, 0) : '—' }}</label>
                     </v-row>
                 </v-col>
             </v-row>
@@ -56,12 +56,10 @@ export default {
     },
 
     computed: {
+        ...mapGetters('marketData', ['wmaticStrategyData']),
     },
 
     data: () => ({
-        apy: null,
-        tvl: null,
-        investors: null,
     }),
 
     watch: {

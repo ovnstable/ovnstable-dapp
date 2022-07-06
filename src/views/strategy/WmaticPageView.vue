@@ -259,13 +259,13 @@
                             <v-row class="info-row" justify="start" align="center">
                                 <label class="card-info mt-1">APY</label>
                                 <v-spacer></v-spacer>
-                                <label class="card-info-value">{{ apy ? ($utils.formatMoneyComma(apy, 0)) + '%' : '—' }}</label>
+                                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 0)) + '%' : '—' }}</label>
                                 <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                             </v-row>
                             <v-row class="info-row mt-6" justify="start" align="center">
                                 <label class="card-info mt-1">Diff. to Hold USD+</label>
                                 <v-spacer></v-spacer>
-                                <label class="card-info-value">{{ diffApy ? ((diffApy > 0 ? '+' : '-') + $utils.formatMoneyComma(diffApy, 1)) + '%' : '—' }}</label>
+                                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.diffApy) ? ((wmaticStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(wmaticStrategyData.diffApy, 1)) + '%' : '—' }}</label>
                                 <Tooltip text="APY difference compared to the base APY USD+"/>
                             </v-row>
                             <v-row class="info-row mt-6" justify="start" align="center">
@@ -277,12 +277,12 @@
                             <v-row class="info-row mt-6" justify="start" align="center">
                                 <label class="card-info mt-1">TVL</label>
                                 <v-spacer></v-spacer>
-                                <label class="card-info-value">{{ tvl ? ('$' + $utils.formatMoneyComma(tvl, 2)) : '—' }}</label>
+                                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}</label>
                             </v-row>
                             <v-row class="info-row mt-6" justify="start" align="center">
                                 <label class="card-info mt-1">Investors</label>
                                 <v-spacer></v-spacer>
-                                <label class="card-info-value">{{ investors ? investors : '—' }}</label>
+                                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.holders) ? $utils.formatMoneyComma(wmaticStrategyData.holders, 0) : '—' }}</label>
                             </v-row>
                         </v-col>
                         <v-col cols="2"></v-col>
@@ -290,13 +290,13 @@
                             <v-row class="info-row" justify="start" align="center">
                                 <label class="card-info mt-1">Target Health Factor</label>
                                 <v-spacer></v-spacer>
-                                <label class="card-info-value">{{ targetHealthFactor ? ($utils.formatMoneyComma(targetHealthFactor, 1)) + '%' : '—' }}</label>
+                                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 1)) : '—' }}</label>
                                 <!-- TODO: add tooltip what is health factor -->
                             </v-row>
                             <v-row class="info-row mt-6" justify="start" align="center">
                                 <label class="card-info mt-1">Health Factor check interval</label>
                                 <v-spacer></v-spacer>
-                                <label class="card-info-value">{{ healthFactorCheckInterval ? (healthFactorCheckInterval + ' hours') : '—' }}</label>
+                                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.healthFactorCheckInterval) ? wmaticStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
                                 <!-- TODO: add tooltip what is health factor -->
                             </v-row>
                         </v-col>
@@ -304,30 +304,27 @@
 
                     <v-row align="center" justify="start" class="ma-0 mt-7 info-container">
                         <v-col class="ml-5">
-                            <v-row justify="start" align="center">
+                            <v-row justify="start" align="center" @click="openTokenOnScan(wmaticStrategyData.rebaseAddress)">
                                 <label class="address-card-text">Token address</label>
-                                <label class="address-card-link ml-3">—</label>
-                                <!-- TODO: add address -->
+                                <label class="address-card-link ml-3">{{ (wmaticStrategyData && wmaticStrategyData.rebaseAddress) ? shortAddress(wmaticStrategyData.rebaseAddress) : '—' }}</label>
                                 <div class="icon-img ml-2">
                                     <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                                 </div>
                             </v-row>
                         </v-col>
                         <v-col>
-                            <v-row justify="center" align="center">
+                            <v-row justify="center" align="center" @click="openStrategyOnScan(wmaticStrategyData.exchangerAddress)">
                                 <label class="address-card-text">Pool address</label>
-                                <label class="address-card-link ml-3">—</label>
-                                <!-- TODO: add address -->
+                                <label class="address-card-link ml-3">{{ (wmaticStrategyData && wmaticStrategyData.exchangerAddress) ? shortAddress(wmaticStrategyData.exchangerAddress) : '—' }}</label>
                                 <div class="icon-img ml-2">
                                     <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                                 </div>
                             </v-row>
                         </v-col>
                         <v-col>
-                            <v-row justify="center" align="center">
+                            <v-row justify="center" align="center" @click="openStrategyOnScan(wmaticStrategyData.strategyAddress)">
                                 <label class="address-card-text">Vault address</label>
-                                <label class="address-card-link ml-3">—</label>
-                                <!-- TODO: add address -->
+                                <label class="address-card-link ml-3">{{ (wmaticStrategyData && wmaticStrategyData.strategyAddress) ? shortAddress(wmaticStrategyData.strategyAddress) : '—' }}</label>
                                 <div class="icon-img ml-2">
                                     <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                                 </div>
@@ -380,22 +377,22 @@
                             <v-row class="info-row mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Entry</label>
                                 <v-spacer></v-spacer>
-                                <label class="fee-structure-value mt-1">{{ entryFee ? $utils.formatMoneyComma(entryFee, 1) + '%' : '—' }}</label>
+                                <label class="fee-structure-value mt-1">{{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}</label>
                             </v-row>
                             <v-row class="info-row mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Exit</label>
                                 <v-spacer></v-spacer>
-                                <label class="fee-structure-value mt-1">{{ exitFee ? $utils.formatMoneyComma(exitFee, 1) + '%' : '—' }}</label>
+                                <label class="fee-structure-value mt-1">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
                             </v-row>
                             <v-row class="info-row mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Performance</label>
                                 <v-spacer></v-spacer>
-                                <label class="fee-structure-value mt-1">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 0) + '%' : '—' }}</label>
+                                <label class="fee-structure-value mt-1">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 2) + '%' : '—' }}</label>
                             </v-row>
                             <v-row class="info-row mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Management</label>
                                 <v-spacer></v-spacer>
-                                <label class="fee-structure-value mt-1">{{ managementFee ? $utils.formatMoneyComma(managementFee, 0) + '%' : '—' }}</label>
+                                <label class="fee-structure-value mt-1">{{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
                                 <Tooltip text="An annual fee that will be charged per block, regardless of the pool's performance. "/>
                             </v-row>
 
@@ -419,7 +416,7 @@
 
 import StrategyBanner from "@/components/market/strategy/section/StrategyBanner";
 import RiskDisclosureModal from "@/components/market/modal/RiskDisclosureModal";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import InvestorModal from "@/components/market/modal/InvestorModal";
 export default {
@@ -435,24 +432,14 @@ export default {
     data: () => ({
         tab: 1,
 
-        apy: null,
-        diffApy: null,
-        tvl: null,
-        investors: null,
-        targetHealthFactor: null,
-        healthFactorCheckInterval: null,
-
         balance: null,
         profit: null,
-
-        entryFee: null,
-        exitFee: null,
-        performanceFee: null,
-        managementFee: null,
     }),
 
 
     computed: {
+        ...mapGetters('marketData', ['wmaticStrategyData']),
+
         activeTabAbout: function () {
             return {
                 'tab-button': this.tab === 1,
@@ -473,11 +460,67 @@ export default {
                 'tab-button-in-active': this.tab !== 3,
             }
         },
+
+        entryFee: function () {
+            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
+                let result = this.wmaticStrategyData.fees.find(x => x.id === 'buy');
+                return result ? result.value : null;
+            } else {
+                return null;
+            }
+        },
+
+        exitFee: function () {
+            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
+                let result = this.wmaticStrategyData.fees.find(x => x.id === 'redeem');
+                return result ? result.value : null;
+            } else {
+                return null;
+            }
+        },
+
+        performanceFee: function () {
+            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
+                let result = this.wmaticStrategyData.fees.find(x => x.id === 'tvl');
+                return result ? result.value : null;
+            } else {
+                return null;
+            }
+        },
+
+        managementFee: function () {
+            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
+                let result = this.wmaticStrategyData.fees.find(x => x.id === 'profit');
+                return result ? result.value : null;
+            } else {
+                return null;
+            }
+        },
     },
 
     methods: {
         ...mapActions('riskModal', ['showRiskModal']),
         ...mapActions('investorModal', ['showInvestorModal']),
+
+        shortAddress(address) {
+            if (address) {
+                return address.substring(0, 5) + '...' + address.substring(address.length - 4);
+            } else {
+                return null;
+            }
+        },
+
+        openTokenOnScan(hash) {
+            if (hash && hash !== '') {
+                window.open(process.env.VUE_APP_NETWORK_EXPLORER + "token/" + hash, '_blank').focus();
+            }
+        },
+
+        openStrategyOnScan(hash) {
+            if (hash && hash !== '') {
+                window.open(process.env.VUE_APP_NETWORK_EXPLORER + "address/" + hash, '_blank').focus();
+            }
+        },
 
         goToAction(id) {
             this.$router.push(id);

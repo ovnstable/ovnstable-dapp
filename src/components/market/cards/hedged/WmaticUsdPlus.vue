@@ -24,14 +24,14 @@
             <v-row class="card-row info-row mt-15" justify="start" align="center">
                 <label class="card-info mt-1">APY</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value">{{ apy ? ($utils.formatMoneyComma(apy, 0)) + '%' : '—' }}</label>
+                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 0)) + '%' : '—' }}</label>
                 <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
             </v-row>
 
             <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">Diff. to Hold USD+</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value">{{ diffApy ? ((diffApy > 0 ? '+' : '-') + $utils.formatMoneyComma(diffApy, 1)) + '%' : '—' }}</label>
+                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.diffApy) ? ((wmaticStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(wmaticStrategyData.diffApy, 1)) + '%' : '—' }}</label>
                 <Tooltip text="APY difference compared to the base APY USD+"/>
             </v-row>
 
@@ -45,7 +45,7 @@
             <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">TVL</label>
                 <v-spacer></v-spacer>
-                <label class="card-info">{{ tvl ? ('$' + $utils.formatMoneyComma(tvl, 2)) : '—' }}</label>
+                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}</label>
             </v-row>
 
             <v-row class="card-row card-banner-container mt-12" justify="start" align="center">
@@ -80,6 +80,7 @@
 
 <script>
 import Tooltip from "@/components/common/element/Tooltip";
+import {mapGetters} from "vuex";
 
 export default {
     name: "WmaticUsdPlus",
@@ -92,12 +93,10 @@ export default {
     },
 
     computed: {
+        ...mapGetters('marketData', ['wmaticStrategyData']),
     },
 
     data: () => ({
-        apy: null,
-        diffApy: null,
-        tvl: null,
     }),
 
     watch: {

@@ -108,6 +108,7 @@ export default {
     methods: {
         openStrategyAction() {
             this.$router.push('/hedged');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     },
 }

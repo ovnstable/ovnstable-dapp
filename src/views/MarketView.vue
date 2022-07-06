@@ -36,7 +36,6 @@ export default {
         tab: 1,
     }),
 
-
     computed: {
         activeTabFeatured: function () {
             return {

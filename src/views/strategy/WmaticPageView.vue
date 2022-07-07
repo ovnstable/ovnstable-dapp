@@ -10,12 +10,12 @@
             </v-row>
         </div>
 
-        <InvestModal/>
-
         <div class="mt-1">
             <v-row align="start" justify="start" class="main-container ma-0">
                 <v-col cols="9" class="ml-n3">
                     <StrategyBanner/>
+
+                    <InvestModal/>
 
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
                         <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabAbout">About strategy</label>
@@ -201,7 +201,7 @@
                             </v-row>
                         </v-col>
 
-                        <v-col class="ml-5">
+                        <v-col class="ml-8">
                             <v-row justify="start" align="start">
                                 <v-progress-linear
                                         rounded
@@ -224,7 +224,7 @@
                             </v-row>
                         </v-col>
 
-                        <v-col class="ml-5">
+                        <v-col class="ml-8">
                             <v-row justify="start" align="start">
                                 <v-progress-linear
                                         rounded

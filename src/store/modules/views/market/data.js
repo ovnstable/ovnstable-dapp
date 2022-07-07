@@ -30,6 +30,7 @@ const actions = {
         };
 
         let avgApy;
+        let wmaticStrategyData;
 
         await fetch(process.env.VUE_APP_API + '/widget/avg-apy-info/week', fetchOptions)
             .then(value => value.json())
@@ -40,38 +41,16 @@ const actions = {
                 console.log('Error get data: ' + reason);
             })
 
-        let mockWmaticStrategyData = {
-            "name": "USD+/WMATIC",
-            "exchangerAddress": "0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf",
-            "rebaseAddress": "0xfec31BC5e213615b013Eb58f1B8185868Ee4BD12",
-            "strategyAddress": "0xEb7f1622980bfF682635E35076bd3115814254A7",
-            "apy": -22.83,
-            "diffApy": (avgApy && avgApy.value) ? (-22.8362398972 - avgApy.value) : null,
-            "tvl": 4.99,
-            "holders": 1,
-            "fees": [
-                {
-                    "id": "buy",
-                    "value": 0.04
-                },
-                {
-                    "id": "redeem",
-                    "value": 0.04
-                },
-                {
-                    "id": "tvl",
-                    "value": 1
-                },
-                {
-                    "id": "profit",
-                    "value": 10
-                }
-            ],
-            "targetHealthFactor": 1.5,
-            "healthFactorCheckInterval": 24
-        };
+        await fetch(process.env.VUE_APP_API + '/hedge-strategies/0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', fetchOptions)
+            .then(value => value.json())
+            .then(value => {
+                wmaticStrategyData = value;
+                wmaticStrategyData.diffApy = (avgApy && avgApy.value) ? (wmaticStrategyData.apy - avgApy.value) : null;
+            }).catch(reason => {
+                console.log('Error get data: ' + reason);
+            })
 
-        commit('setWmaticStrategyData', mockWmaticStrategyData);
+        commit('setWmaticStrategyData', wmaticStrategyData);
     },
 };
 

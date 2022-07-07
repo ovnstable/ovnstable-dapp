@@ -35,7 +35,7 @@
         <v-row class="mt-8">
             <v-spacer></v-spacer>
             <div class="swap-view-btn" @click="showRedeemView">
-                <v-img :src="require('@/assets/icon/arrowDown.svg')"/>
+                <v-img :src="require('@/assets/icon/arrowsSwap.svg')"/>
             </div>
             <v-spacer></v-spacer>
         </v-row>
@@ -63,7 +63,7 @@
             </v-row>
 
             <v-row align="center" class="ma-0 mt-1 mb-3">
-                <label class="balance-label ml-5">Balance: {{ $utils.formatMoney(balance.usdPlusWmatic, 2) }}</label>
+                <label class="balance-label ml-5">Balance: {{ $utils.formatMoney(balance.usdPlusWmatic, 3) }}</label>
             </v-row>
         </v-row>
 
@@ -179,7 +179,7 @@ export default {
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.balance.usdPlus, 2);
+            return this.$utils.formatMoney(this.balance.usdPlus, 3);
         },
 
         sumResult: function () {

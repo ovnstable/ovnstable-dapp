@@ -29,7 +29,7 @@
                         <br/><br/>
                         <b>By depositing into this strategy, the user understands that they are fully responsible for any loss of value. Furthermore, all APY and yield numbers are speculative, and no profit is guaranteed by the protocol.</b>
                         <br/><br/>
-                        Another risk for running this strategy is that the automated market maker (in this case, Dystopia, which the strategy's smart contracts automatically move your deposit into) may incur a smart contract risk or flash crash in which the prices of the tokens fluctuates in an unpredictable way causing extreme changes in price that lead automated systems like the strategy's smart contracts to misbehave.
+                        The strategy's smart contracts automatically move your deposit into the said Automated Market Maker (in this case, Dystopia) and in doing so, may incur a smart contract risk and/or flash crash during which the price of the token fluctuates rapidly causing extreme volatility - this may cause the strategy's smart contracts to misbehave.
                         <br/><br/>
                         By depositing into these smart contracts, the user understands and agrees to the strategies it will invest their underlying assets into.
                     </label>

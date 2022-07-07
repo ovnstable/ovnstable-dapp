@@ -159,7 +159,7 @@
                                         <label class="list-title-text">Withdraw From Strategy</label>
                                     </v-row>
                                     <v-row class="mt-8">
-                                        <label class="list-sub-title-text">Withdraw at anytime by choosing what percent of your position you would like to divest. </label>
+                                        <label class="list-sub-title-text">Withdraw at any time by choosing what percent of your position you want to withdraw.</label>
                                     </v-row>
                                 </v-col>
                             </v-row>
@@ -249,7 +249,7 @@
                     </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 mt-7">
-                        <label class="list-sub-title-text">The strategy fee structure consists of a 1% annualised management fee and a 10% performance fee. If the weekly strategy is profitable, the weekly performance fee is charged on the premiums earned and the weekly management fee is charged on the assets managed by the strategy. If the weekly strategy is unprofitable, there are no fees charged.</label>
+                        <label class="list-sub-title-text">If the daily strategy is profitable, the daily performance fee is charged on the premiums earned, and the day-to-day management fee is set on the assets managed by the strategy. If the daily strategy is unprofitable, there are no fees charged.</label>
                     </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 mt-15">

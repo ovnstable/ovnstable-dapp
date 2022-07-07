@@ -365,7 +365,7 @@
                                 <label class="investor-card-sub-title">Your balance in strategy</label>
                             </v-row>
                             <v-row align="center" class="mt-4">
-                                <label class="investor-card-sub-title-value">{{ balance ? ($utils.formatMoneyComma(balance, 2) + ' USD+') : '—' }}</label>
+                                <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWmatic ? ($utils.formatMoneyComma(this.balance.usdPlusWmatic, 2) + ' USD+') : '—' }}</label>
                             </v-row>
                             <v-row align="center" class="mt-10">
                                 <label class="investor-card-sub-title">Profit/loss</label>
@@ -436,13 +436,13 @@ export default {
     data: () => ({
         tab: 1,
 
-        balance: null,
         profit: null,
     }),
 
 
     computed: {
         ...mapGetters('marketData', ['wmaticStrategyData']),
+        ...mapGetters('accountData', ['balance', 'account']),
 
         activeTabAbout: function () {
             return {

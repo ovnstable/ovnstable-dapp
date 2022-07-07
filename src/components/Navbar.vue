@@ -18,7 +18,7 @@
                     <img class="navbar-page-link" :src="require('@/assets/icon/cart.svg')">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label selected-page-label">Market</label>
+                    <label class="navbar-page-label selected-page-label">Market</label><v-icon class="alpha mb-5" small>mdi-alpha</v-icon>
                 </v-list-item-title>
             </v-list-item>
 
@@ -153,7 +153,7 @@ export default {
     color: #333333;
 }
 
-.selected-page-label {
+.selected-page-label, .alpha {
     color: #1C95E7 !important;
 }
 </style>

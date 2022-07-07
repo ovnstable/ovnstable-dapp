@@ -11,6 +11,7 @@ import contract from "@truffle/contract";
 const OvnImage = require('@/assets/ovn.json');
 const UsdPlusImage = require('@/assets/usdPlus.json');
 const WrappedUsdPlusImage = require('@/assets/wUsdPlus.json');
+const UsdPlusWmaticImage = require('@/assets/usdPlusWmatic.json');
 
 const polygon = process.env.VUE_APP_POLYGON;
 const networkId = Number.parseInt(process.env.VUE_APP_NETWORK_ID);
@@ -28,6 +29,8 @@ const StakingRewards = require(`@/contracts/abi/StakingRewards.json`)
 const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`)
 const Market = require(`@/contracts/${polygon}/Market.json`)
 const WrappedUsdPlusToken = require(`@/contracts/${polygon}/WrappedUsdPlusToken.json`)
+const ExchangerUsdPlusWmatic = require(`@/contracts/${polygon}/HedgeExchangerUsdPlusWmatic.json`)
+const UsdPlusWmaticToken = require(`@/contracts/${polygon}/RebaseTokenUsdPlusWmatic.json`)
 
 
 const ALLOW_NETWORKS = [networkId, 31337];
@@ -339,8 +342,12 @@ const actions = {
         contracts.timelockController = _load(TimelockController, web3);
         contracts.usdPlus = _load(UsdPlusToken, web3);
         contracts.preOvn = _load(ERC20, web3, "0x18D4565Cbd03340996BED17e66D154b632f5d4B6");
+
         contracts.market = _load(Market, web3);
         contracts.wUsdPlus = _load(WrappedUsdPlusToken, web3);
+
+        contracts.exchangerUsdPlusWmatic = _load(ExchangerUsdPlusWmatic, web3);
+        contracts.usdPlusWmatic = _load(UsdPlusWmaticToken, web3);
 
         contracts.poolQsUsdPlusWeth = _load(StakingRewards, web3, "0x398B66c4c69Bf19EA6A3c97e8d8b9c93f295D209");
         contracts.poolQsUsdPlusWethToken = _load(ERC20, web3, '0x901Debb34469e89FeCA591f5E5336984151fEc39');
@@ -445,6 +452,31 @@ const actions = {
             .then((success) => {
                 if (success) {
                     console.log('wUSD+ successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
+    async addUsdPlusWmaticToken({commit, dispatch, getters, rootState}) {
+
+        await getters.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: rootState.web3.contracts.usdPlusWmatic.options.address,
+                        symbol: process.env.VUE_APP_USD_PLUS_WMATIC_TOKEN_NAME,
+                        decimals: 6,
+                        image: UsdPlusWmaticImage.image,
+                    },
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('USD+/WMATIC successfully added to wallet!')
                 } else {
                     throw new Error('Something went wrong.')
                 }

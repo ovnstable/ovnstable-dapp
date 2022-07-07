@@ -6,6 +6,7 @@ const state = {
         usdPlus: 0,
         usdc: 0,
         wUsdPlus: 0,
+        usdPlusWmatic: 0,
     },
 
     account: null,
@@ -39,7 +40,8 @@ const actions = {
         commit('setBalance', {
             usdPlus: 0,
             usdc: 0,
-            wUsdPlus: 0
+            wUsdPlus: 0,
+            usdPlusWmatic: 0,
         });
 
     },
@@ -68,6 +70,7 @@ const actions = {
         let usdPlus;
         let usdc;
         let wUsdPlus;
+        let usdPlusWmatic;
 
         try {
             usdc = await web3.contracts.usdc.methods.balanceOf(getters.account).call();
@@ -111,13 +114,29 @@ const actions = {
             }
         }
 
+        try {
+            usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.balanceOf(getters.account).call();
+        } catch (e) {
+            console.log('ERROR: ' + e)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            try {
+                wUsdPlus = await web3.contracts.usdPlusWmatic.methods.balanceOf(getters.account).call();
+            } catch (e) {
+                console.log('ERROR: ' + e)
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                wUsdPlus = await web3.contracts.usdPlusWmatic.methods.balanceOf(getters.account).call();
+            }
+        }
+
         usdPlus = web3.web3.utils.fromWei(usdPlus, 'mwei') ;
         usdc = web3.web3.utils.fromWei(usdc, 'mwei') ;
         wUsdPlus = web3.web3.utils.fromWei(wUsdPlus, 'mwei') ;
+        usdPlusWmatic = web3.web3.utils.fromWei(usdPlusWmatic, 'mwei') ;
         commit('setBalance', {
             usdPlus: usdPlus,
             usdc: usdc,
-            wUsdPlus: wUsdPlus
+            wUsdPlus: wUsdPlus,
+            usdPlusWmatic: usdPlusWmatic
         })
 
         commit('accountUI/setLoadingBalance', false, { root: true })

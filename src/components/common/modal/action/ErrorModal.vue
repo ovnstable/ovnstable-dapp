@@ -5,7 +5,7 @@
             persistent>
         <v-card class="container_body">
             <v-toolbar class="container_header" flat>
-                <v-btn icon class="ml-auto" @click="close" dark>
+                <v-btn icon class="ml-auto" @click="close">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
             </v-toolbar>
@@ -71,7 +71,7 @@ export default {
 }
 
 .error-label {
-    color: #DC3545;
+    color: #CF3F92;
     font-family: 'Raleway', sans-serif;
     font-style: normal;
     font-weight: 800;
@@ -80,7 +80,7 @@ export default {
 }
 
 .discord-label {
-    color: white;
+    color: #333333;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;

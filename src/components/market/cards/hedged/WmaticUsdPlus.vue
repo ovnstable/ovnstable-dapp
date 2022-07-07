@@ -18,7 +18,7 @@
             </v-row>
 
             <v-row class="card-row mt-12 mb-15" justify="start" align="center">
-                <label class="card-info">Get 5x-6x USD+ yield by pledging USD+ as collateral with a minimum risk of liquidation</label>
+                <label class="card-info">Earn Yields on your WMatic/USD+ while hedging against WMatic's volatility by borrowing it</label>
             </v-row>
 
             <v-row class="card-row info-row mt-15" justify="start" align="center">

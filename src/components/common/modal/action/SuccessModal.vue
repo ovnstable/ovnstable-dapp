@@ -5,7 +5,7 @@
             persistent>
         <v-card class="container_body">
             <v-toolbar class="container_header" flat>
-                <v-btn icon class="ml-auto" @click="close" dark>
+                <v-btn icon class="ml-auto" @click="close">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
             </v-toolbar>
@@ -92,7 +92,7 @@ export default {
 }
 
 .success-label {
-    color: #76E268;
+    color: #22ABAC;
     font-family: 'Raleway', sans-serif;
     font-style: normal;
     font-weight: 800;
@@ -114,16 +114,19 @@ export default {
 }
 
 .dismiss-btn {
-    background: var(--orange-gradient) !important;
+    background: var(--blue-gradient) !important;
     width: 100%;
-    height: 56px;
-    border-radius: 40px;
-    color: white !important;
-    font-family: 'Lato', sans-serif;
+    height: 48px;
+    border-radius: 2px;
+
+    font-family: 'Roboto', sans-serif;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 400;
     font-size: 16px;
-    line-height: 24px;
-    text-transform: none !important;
+    line-height: 20px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #FFFFFF;
 }
 </style>

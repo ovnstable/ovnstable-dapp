@@ -74,6 +74,12 @@
                         </div>
                         <label class="ml-2">wUSD+</label>
                     </v-btn>
+                    <v-btn class="coin-btn coin-btn-wide ml-5" @click="addUsdPlusWmaticToken">
+                        <div class="coin-img">
+                            <v-img :src="require('@/assets/currencies/market/WmaticUsdPlus.svg')"/>
+                        </div>
+                        <label class="ml-2">USD+/WMATIC</label>
+                    </v-btn>
                 </v-row>
             </v-card-text>
         </v-card>
@@ -143,7 +149,7 @@ export default {
 
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
-        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addwUsdPlusToken']),
+        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken']),
         ...mapActions('transaction', ['clearTransaction', 'loadTransaction']),
 
         openOnExplorer(hash) {
@@ -315,5 +321,9 @@ export default {
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     color: #333333 !important;
+}
+
+.coin-btn-wide {
+    width: 180px !important;
 }
 </style>

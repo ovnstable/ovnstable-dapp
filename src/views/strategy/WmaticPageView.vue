@@ -10,6 +10,8 @@
             </v-row>
         </div>
 
+        <InvestModal/>
+
         <div class="mt-1">
             <v-row align="start" justify="start" class="main-container ma-0">
                 <v-col cols="9" class="ml-n3">
@@ -339,7 +341,7 @@
                     </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 mt-15">
-                        <v-btn class="header-btn btn-filled" @click="openInvestModalAction">
+                        <v-btn class="header-btn btn-filled" @click="showInvestModal">
                             Invest
                         </v-btn>
                     </v-row>
@@ -397,7 +399,7 @@
                             </v-row>
 
                             <v-row align="center" justify="center" class="ma-0 mt-15">
-                                <v-btn class="header-btn btn-investor-invest" @click="openInvestModalAction">
+                                <v-btn class="header-btn btn-investor-invest" @click="showInvestModal">
                                     Invest
                                 </v-btn>
                             </v-row>
@@ -419,10 +421,12 @@ import RiskDisclosureModal from "@/components/market/modal/RiskDisclosureModal";
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import InvestorModal from "@/components/market/modal/InvestorModal";
+import InvestModal from "@/components/market/modal/invest/InvestModal";
 export default {
     name: "WmaticPageView",
 
     components: {
+        InvestModal,
         InvestorModal,
         Tooltip,
         RiskDisclosureModal,
@@ -501,6 +505,7 @@ export default {
     methods: {
         ...mapActions('riskModal', ['showRiskModal']),
         ...mapActions('investorModal', ['showInvestorModal']),
+        ...mapActions('investModal', ['showInvestModal']),
 
         shortAddress(address) {
             if (address) {
@@ -524,10 +529,6 @@ export default {
 
         goToAction(id) {
             this.$router.push(id);
-        },
-
-        openInvestModalAction() {
-            /* TODO: add invest modal */
         },
     }
 

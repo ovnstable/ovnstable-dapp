@@ -1,9 +1,9 @@
-
 const state = {
-
     isMintView: true,
 
-    usdcApproved: false,
+    show: false,
+
+    usdPlusWmaticApproved: false,
     usdPlusApproved: false,
 };
 
@@ -13,8 +13,12 @@ const getters = {
         return state.isMintView;
     },
 
-    usdcApproved(state) {
-        return state.usdcApproved;
+    show(state) {
+        return state.show;
+    },
+
+    usdPlusWmaticApproved(state) {
+        return state.usdPlusWmaticApproved;
     },
 
     usdPlusApproved(state) {
@@ -24,6 +28,10 @@ const getters = {
 
 const actions = {
 
+    showInvestModal({commit, dispatch, getters}, errorType) {
+        commit('setShow', true);
+    },
+
     async showRedeemView({commit, dispatch, getters, rootState}){
         commit('setIsMintView', false)
     },
@@ -32,9 +40,12 @@ const actions = {
         commit('setIsMintView', true)
     },
 
+    closeInvestModal({commit, dispatch, getters}) {
+        commit('setShow', false);
+    },
 
-    approveUsdc({commit, dispatch, getters}) {
-        commit('setUsdcApproved', true);
+    approveUsdPlusWmatic({commit, dispatch, getters}) {
+        commit('setUsdPlusWmaticApproved', true);
     },
 
     approveUsdPlus({commit, dispatch, getters}) {
@@ -48,8 +59,12 @@ const mutations = {
         state.isMintView = value;
     },
 
-    setUsdcApproved(state, usdcApproved) {
-        state.usdcApproved = usdcApproved;
+    setShow(state, show) {
+        state.show = show;
+    },
+
+    setUsdPlusWmaticApproved(state, usdPlusWmaticApproved) {
+        state.usdPlusWmaticApproved = usdPlusWmaticApproved;
     },
 
     setUsdPlusApproved(state, usdPlusApproved) {

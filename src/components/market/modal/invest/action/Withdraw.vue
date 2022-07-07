@@ -71,7 +71,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 USD+ = 1 WMatic/USD+</label>
+            <label class="exchange-label">1 USD+ = 1 USD+/WMatic</label>
         </v-row>
 
         <!-- TODO: add gas fee section -->

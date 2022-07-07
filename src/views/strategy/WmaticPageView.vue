@@ -5,7 +5,7 @@
                 <label class="parent-page-label" @click="goToAction('/')">Market</label>
                 <label class="current-page-label">
                     <v-icon size="18" class="mx-2">mdi-chevron-right</v-icon>
-                    WMatic / USD+
+                    USD+ / WMatic
                 </label>
             </v-row>
         </div>
@@ -25,7 +25,7 @@
 
                     <v-row align="center" justify="start" class="ma-0 mt-10">
                         <label class="strategy-info-label">
-                            The Hedged strategy WMATIC/USD+ ($WMATICUSD+), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position in a safe and efficient way by abstracting its management into a simple index. Its enables market participants to take on leverage while minimizing the transaction costs and risks associated while maintaining an appropriately collateralized debt. Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.
+                            The Hedged strategy USD+/WMATIC ($USD+WMATIC), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position in a safe and efficient way by abstracting its management into a simple index. Its enables market participants to take on leverage while minimizing the transaction costs and risks associated while maintaining an appropriately collateralized debt. Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.
                         </label>
                     </v-row>
 

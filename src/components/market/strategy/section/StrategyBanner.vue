@@ -5,7 +5,7 @@
                 <div class="currency-icon">
                     <v-img :src="require('@/assets/currencies/market/WmaticUsdPlus.svg')"/>
                 </div>
-                <label class="banner-title ml-4">WMatic / USD+</label>
+                <label class="banner-title ml-4">USD+ / WMatic</label>
                 <v-spacer></v-spacer>
                 <div class="network-icon">
                     <v-img :src="require('@/assets/network/polygon.svg')"/>

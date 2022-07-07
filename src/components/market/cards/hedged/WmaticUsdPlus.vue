@@ -10,7 +10,7 @@
                 <div class="currency-icon">
                     <v-img :src="require('@/assets/currencies/market/WmaticUsdPlus.svg')"/>
                 </div>
-                <label class="card-title ml-3">WMatic / USD+</label>
+                <label class="card-title ml-3">USD+ / WMatic</label>
                 <v-spacer></v-spacer>
                 <div class="currency-icon">
                     <v-img :src="require('@/assets/network/polygon.svg')"/>
@@ -18,7 +18,7 @@
             </v-row>
 
             <v-row class="card-row mt-12 mb-15" justify="start" align="center">
-                <label class="card-info">Earn Yields on your WMatic/USD+ while hedging against WMatic's volatility by borrowing it</label>
+                <label class="card-info">Earn Yields on your USD+/WMatic while hedging against WMatic's volatility by borrowing it</label>
             </v-row>
 
             <v-row class="card-row info-row mt-15" justify="start" align="center">

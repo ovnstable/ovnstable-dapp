@@ -85,7 +85,7 @@
             </v-col>
             <v-col>
                 <v-row>
-                    <label class="action-info-sub-label">{{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}</label>
+                    <label class="action-info-sub-label">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
                     <v-spacer></v-spacer>
                     <label class="action-info-label">You withdraw:</label>
                     <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma(estimateResult, 2) : '0') }}</label>
@@ -191,7 +191,7 @@ export default {
             }
         },
 
-        entryFee: function () {
+        exitFee: function () {
             if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
                 let result = this.wmaticStrategyData.fees.find(x => x.id === 'redeem');
                 return result ? result.value : null;
@@ -201,11 +201,7 @@ export default {
         },
 
         estimateResult: function () {
-            return this.sum * 0.9996;
-        },
-
-        estimateFee: function () {
-            return this.sum * 0.0004;
+            return this.sum * (1 - (this.exitFee ? (this.exitFee / 100.0) : 0.0004));
         },
 
         buttonLabel: function () {

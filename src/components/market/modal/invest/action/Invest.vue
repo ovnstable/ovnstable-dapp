@@ -201,11 +201,7 @@ export default {
         },
 
         estimateResult: function () {
-            return this.sum * 0.9996;
-        },
-
-        estimateFee: function () {
-            return this.sum * 0.0004;
+            return this.sum * (1 - (this.entryFee ? (this.entryFee / 100.0) : 0.0004));
         },
 
         buttonLabel: function () {

@@ -337,7 +337,7 @@
                         <v-col class="mr-5">
                             <v-row justify="end" align="center">
                                 <label class="address-card-text">Inception date</label>
-                                <label class="address-card-text ml-3"><b>1 June 2022</b></label>
+                                <label class="address-card-text ml-3"><b>1 July 2022</b></label>
                             </v-row>
                         </v-col>
                     </v-row>
@@ -391,12 +391,12 @@
                             <v-row class="info-row mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Performance</label>
                                 <v-spacer></v-spacer>
-                                <label class="fee-structure-value mt-1">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 2) + '%' : '—' }}</label>
+                                <label class="fee-structure-value mt-1">{{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
                             </v-row>
                             <v-row class="info-row mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Management</label>
                                 <v-spacer></v-spacer>
-                                <label class="fee-structure-value mt-1">{{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
+                                <label class="fee-structure-value mt-1">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 2) + '%' : '—' }}</label>
                                 <Tooltip text="An annual fee that will be charged per block, regardless of the pool's performance. "/>
                             </v-row>
 

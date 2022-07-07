@@ -23,13 +23,13 @@
                         <label class="tab-btn ml-4" v-bind:class="activeTabTransactions">Transactions</label>
                     </v-row>
 
-                    <v-row align="center" justify="start" class="ma-0 mt-7">
+                    <v-row align="center" justify="start" class="ma-0 mt-10">
                         <label class="strategy-info-label">
                             The Hedged strategy WMATIC/USD+ ($WMATICUSD+), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position in a safe and efficient way by abstracting its management into a simple index. Its enables market participants to take on leverage while minimizing the transaction costs and risks associated while maintaining an appropriately collateralized debt. Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.
                         </label>
                     </v-row>
 
-                    <v-row align="start" justify="start" class="ma-0 mt-7">
+                    <v-row align="start" justify="start" class="ma-0 mt-10">
                         <v-col>
                             <v-row class="info-card-container" justify="start" align="center">
                                 <v-col class="info-card-body">
@@ -61,7 +61,7 @@
                                 </v-col>
                             </v-row>
                         </v-col>
-                        <v-col class="ml-3">
+                        <v-col class="ml-5">
                             <v-row class="info-card-container-red" justify="start" align="center">
                                 <v-col class="info-card-body">
                                     <v-row align="center">
@@ -167,7 +167,9 @@
                         <v-col cols="1">
                         </v-col>
                         <v-col cols="6">
-                            <v-img class="scheme-img ma-0" :src="require('@/assets/market/scheme.svg')"/>
+                            <v-row justify="end">
+                                <v-img class="scheme-img" :src="require('@/assets/market/scheme.svg')"/>
+                            </v-row>
                         </v-col>
                     </v-row>
 
@@ -199,7 +201,7 @@
                             </v-row>
                         </v-col>
 
-                        <v-col class="progress-info-container">
+                        <v-col class="ml-5">
                             <v-row justify="start" align="start">
                                 <v-progress-linear
                                         rounded
@@ -222,7 +224,7 @@
                             </v-row>
                         </v-col>
 
-                        <v-col class="progress-info-container">
+                        <v-col class="ml-5">
                             <v-row justify="start" align="start">
                                 <v-progress-linear
                                         rounded
@@ -257,7 +259,7 @@
                     </v-row>
 
                     <v-row class="ma-0 mt-7" justify="start" align="start">
-                        <v-col cols="5">
+                        <v-col>
                             <v-row class="info-row" justify="start" align="center">
                                 <label class="card-info mt-1">APY</label>
                                 <v-spacer></v-spacer>
@@ -287,8 +289,8 @@
                                 <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.holders) ? $utils.formatMoneyComma(wmaticStrategyData.holders, 0) : '—' }}</label>
                             </v-row>
                         </v-col>
-                        <v-col cols="2"></v-col>
-                        <v-col cols="5">
+                        <v-col cols="1"></v-col>
+                        <v-col>
                             <v-row class="info-row" justify="start" align="center">
                                 <label class="card-info mt-1">Target Health Factor</label>
                                 <v-spacer></v-spacer>
@@ -721,10 +723,6 @@ export default {
 
 .progress-info {
     background: #D7DADF;
-}
-
-.progress-info-container {
-    margin-left: 20px !important;
 }
 
 .progress-text {

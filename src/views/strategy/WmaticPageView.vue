@@ -25,7 +25,7 @@
 
                     <v-row align="center" justify="start" class="ma-0 mt-10">
                         <label class="strategy-info-label">
-                            The hedged strategy USD+/WMATIC ($USD+WMATIC), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WMATIC), pair it with USD+ stablecoin, and provide USD+/WMATIC liquidity on Dystopia / Penrose all in one action. This allows earning high APY and hedging against WMATIC volatility.
+                            The exchange-traded strategy USD+/WMATIC ($USD+WMATIC), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WMATIC), pair it with USD+ stablecoin, and provide USD+/WMATIC liquidity on Dystopia / Penrose all in one action. This allows earning high APY and hedging against WMATIC volatility.
                             <br/><br/>
                             Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.
                         </label>

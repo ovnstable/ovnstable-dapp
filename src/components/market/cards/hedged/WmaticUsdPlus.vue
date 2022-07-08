@@ -2,7 +2,7 @@
     <v-row class="card-container ma-0">
         <v-col>
             <v-row class="card-row mt-7" justify="end" align="center">
-                <label class="tag-label">Hedged strategies / high risk</label>
+                <label class="tag-label">Exchange-traded strategy / high risk</label>
                 <v-icon class="tag-icon ml-2" size="16">mdi-star-circle</v-icon>
             </v-row>
 

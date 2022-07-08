@@ -108,7 +108,7 @@
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
-                       @click="redeemAction">
+                       @click="confirmSwapAction">
                     {{ buttonLabel }}
                 </v-btn>
                 <v-btn v-else
@@ -338,6 +338,8 @@ export default {
                     this.gas = new BN(Number.parseFloat(this.estimatedGas) * 1.1);
                     this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
                     this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
+
+                    await this.redeemAction();
 
                     this.closeWaitingModal();
                 }

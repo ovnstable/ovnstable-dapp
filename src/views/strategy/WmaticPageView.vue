@@ -119,7 +119,7 @@
                                         <label class="list-title-text">Deposit Into Strategy</label>
                                     </v-row>
                                     <v-row class="mt-8">
-                                        <label class="list-sub-title-text">Deposit USD+ into the vault. This triggers an automatic borrow of an equal value of WMATIC (from AAVE v2 markets), which is invested alongside your USD+ deposit into Dystopia’s WMATIC/USD+ pool.</label>
+                                        <label class="list-sub-title-text">Deposit USD+ into the vault. This triggers an automatic borrow of value of WMATIC (from AAVE v2 markets), which is invested alongside your USD+ deposit into Dystopia’s WMATIC/USD+ pool.</label>
                                     </v-row>
                                 </v-col>
                             </v-row>
@@ -203,12 +203,12 @@
                                 ></v-progress-linear>
                             </v-row>
                             <v-row justify="start" align="start" class="mt-5">
-                                <label class="progress-text">1/365</label>
+                                <label class="progress-text">1/365 of {{ managementFee ? $utils.formatMoneyComma(managementFee, 0) + '%' : '—' }}</label>
                                 <v-spacer></v-spacer>
                                 <label class="progress-sub-text">your balance</label>
                             </v-row>
                             <v-row justify="start" align="start">
-                                <label class="progress-text">{{ managementFee ? $utils.formatMoneyComma(managementFee, 0) + '%' : '—' }} management daily fee</label>
+                                <label class="progress-text">management daily fee</label>
                                 <v-spacer></v-spacer>
                                 <label class="progress-sub-text">in strategy</label>
                             </v-row>
@@ -239,7 +239,7 @@
                     </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 mt-7">
-                        <label class="list-sub-title-text">If the daily strategy is profitable, the daily performance fee is charged on the premiums earned, and the day-to-day management fee is set on the assets managed by the strategy. If the daily strategy is unprofitable, there are no fees charged.</label>
+                        <label class="list-sub-title-text">If the daily strategy is profitable, the daily performance fee is charged on the premiums earned, and the day-to-day management fee is set on the assets managed by the strategy. If the daily strategy is unprofitable, there are no performance fees charged.</label>
                     </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 mt-15">

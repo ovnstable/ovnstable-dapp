@@ -22,7 +22,7 @@
                         <label class="info-title">Profit USD+</label>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-2">
-                        <label class="info-value">{{ profitUsdPlus ? ('$' + $utils.formatMoneyComma(profitUsdPlus, 2)) : '—' }}</label>
+                        <label class="info-value value-disabled">Soon</label>
                     </v-row>
                 </v-col>
                 <v-col>
@@ -57,7 +57,6 @@ export default {
 
     data: () => ({
         totalTvl: null,
-        profitUsdPlus: null,
         avgApy: null,
     }),
 
@@ -186,6 +185,13 @@ export default {
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #1C95E7;
+}
+
+.value-disabled {
+    font-weight: 300 !important;
+    font-size: 24px !important;
+    text-transform: uppercase !important;
+    color: #C5C9D1 !important;
 }
 
 .bordered-col {

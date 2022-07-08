@@ -25,7 +25,9 @@
 
                     <v-row align="center" justify="start" class="ma-0 mt-10">
                         <label class="strategy-info-label">
-                            The Hedged strategy USD+/WMATIC ($USD+WMATIC), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position in a safe and efficient way by abstracting its management into a simple index. Its enables market participants to take on leverage while minimizing the transaction costs and risks associated while maintaining an appropriately collateralized debt. Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.
+                            The hedged strategy USD+/WMATIC ($USD+WMATIC), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WMATIC), pair it with USD+ stablecoin, and provide USD+/WMATIC liquidity on Dystopia / Penrose all in one action. This allows earning high APY and hedging against WMATIC volatility.
+                            <br/><br/>
+                            Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.
                         </label>
                     </v-row>
 
@@ -44,13 +46,20 @@
                                         <div class="info-card-icon mt-5">
                                             <v-img :src="require('@/assets/icon/checkbox.svg')"/>
                                         </div>
-                                        <label class="info-card-text mt-5 ml-2">Monitoring your leveraged loan 24/7</label>
+                                        <label class="info-card-text mt-5 ml-2">Hedging against MATIC price volatility</label>
                                     </v-row>
                                     <v-row align="center">
                                         <div class="info-card-icon mt-4">
                                             <v-img :src="require('@/assets/icon/checkbox.svg')"/>
                                         </div>
-                                        <label class="info-card-text mt-4 ml-2">Automatically managed liquidation ratio</label>
+                                        <label class="info-card-text mt-4 ml-2">Hassle-free all-in-one swap action</label>
+                                    </v-row>
+                                    <v-row align="center">
+                                        <div class="info-card-icon mt-4">
+                                            <v-img :src="require('@/assets/icon/checkbox.svg')"/>
+                                        </div>
+                                        <label class="info-card-text mt-4 ml-2">Automatically monitored and managed</label>
+                                        <label class="info-card-text ml-8">liquidation ratio of 1.5</label>
                                     </v-row>
                                     <v-row align="center">
                                         <div class="info-card-icon mt-4">
@@ -81,8 +90,7 @@
                                         <div class="info-card-icon mt-4">
                                             <v-img :src="require('@/assets/icon/remove.svg')"/>
                                         </div>
-                                        <label class="info-card-text mt-4 ml-2">Flash crash of automated market maker</label>
-                                        <label class="info-card-text ml-8">(in this case, Dystopia)</label>
+                                        <label class="info-card-text mt-4 ml-2">AMM contract hack risk</label>
                                     </v-row>
                                     <v-row align="center">
                                         <label class="info-card-link mt-4 ml-1" @click="showRiskModal">Learn more about risks</label>
@@ -127,24 +135,6 @@
                                     </v-row>
                                     <v-row class="mt-8">
                                         <label class="list-sub-title-text">Strategy automatically stakes the earned pool LP tokens into Penrose and auto-compounds the rewards by re-investing into the pool for more LP tokens to maximise Yields.</label>
-                                    </v-row>
-                                    <v-row class="info-card-container-red mt-8" justify="start" align="center">
-                                        <v-col class="info-card-body">
-                                            <v-row align="start">
-                                                <v-col cols="1">
-                                                    <v-row justify="start" align="start">
-                                                        <div class="title-card-icon">
-                                                            <v-img :src="require('@/assets/icon/bell.svg')"/>
-                                                        </div>
-                                                    </v-row>
-                                                </v-col>
-                                                <v-col class="ml-3">
-                                                    <v-row justify="start" align="start">
-                                                        <label class="list-sub-title-text">It's important to compare the price invested at and the current price as a greater volatility may result in a greater loss; the LP tokens may be be smaller in amount as to what was lent in which case the strategy will swap the corresponding amount to repay the lender.</label>
-                                                    </v-row>
-                                                </v-col>
-                                            </v-row>
-                                        </v-col>
                                     </v-row>
                                 </v-col>
                             </v-row>
@@ -192,7 +182,7 @@
                                 ></v-progress-linear>
                             </v-row>
                             <v-row justify="start" align="start" class="mt-5">
-                                <label class="progress-text">10%</label>
+                                <label class="progress-text">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 0) + '%' : '—' }}</label>
                             </v-row>
                             <v-row justify="start" align="start">
                                 <label class="progress-text">Performance weekly fee</label>
@@ -218,7 +208,7 @@
                                 <label class="progress-sub-text">your balance</label>
                             </v-row>
                             <v-row justify="start" align="start">
-                                <label class="progress-text">management daily fee</label>
+                                <label class="progress-text">{{ managementFee ? $utils.formatMoneyComma(managementFee, 0) + '%' : '—' }} management daily fee</label>
                                 <v-spacer></v-spacer>
                                 <label class="progress-sub-text">in strategy</label>
                             </v-row>
@@ -236,7 +226,7 @@
                                 ></v-progress-linear>
                             </v-row>
                             <v-row justify="start" align="start" class="mt-5">
-                                <label class="progress-text">0.04%</label>
+                                <label class="progress-text">{{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}</label>
                                 <v-spacer></v-spacer>
                                 <label class="progress-sub-text">your balance</label>
                             </v-row>
@@ -295,13 +285,13 @@
                                 <label class="card-info mt-1">Target Health Factor</label>
                                 <v-spacer></v-spacer>
                                 <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 1)) : '—' }}</label>
-                                <!-- TODO: add tooltip what is health factor -->
+                                <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                             </v-row>
                             <v-row class="info-row mt-6" justify="start" align="center">
                                 <label class="card-info mt-1">Health Factor check interval</label>
                                 <v-spacer></v-spacer>
                                 <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.healthFactorCheckInterval) ? wmaticStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
-                                <!-- TODO: add tooltip what is health factor -->
+                                <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                             </v-row>
                         </v-col>
                     </v-row>
@@ -350,11 +340,11 @@
                 </v-col>
                 <v-col cols="3">
                     <v-row align="center" justify="start" class="ma-0 sticky" style="width: 20%;">
-                        <v-btn class="header-btn btn-filled-red" @click="showInvestorModal">
+                        <v-btn class="header-btn btn-filled-red" @click="showRiskModal">
                             <div class="info-card-icon mr-2">
                                 <v-img :src="require('@/assets/icon/bellWhite.svg')"/>
                             </div>
-                            Should you be an investor?
+                            Investment risks
                         </v-btn>
                     </v-row>
 
@@ -373,7 +363,7 @@
                                 <label class="investor-card-sub-title">Profit/loss</label>
                             </v-row>
                             <v-row align="center" class="mt-4">
-                                <label class="investor-card-sub-title-value">{{ profit ? ('$' + $utils.formatMoneyComma(profit, 2)) : '—' }}</label>
+                                <label class="investor-card-sub-title-value value-disabled">Soon</label>
                             </v-row>
                             <v-row align="center" class="mt-15">
                                 <label class="investor-card-title">Fee structure</label>
@@ -391,13 +381,13 @@
                             <v-row class="info-row mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Performance</label>
                                 <v-spacer></v-spacer>
-                                <label class="fee-structure-value mt-1">{{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
+                                <label class="fee-structure-value mt-1">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 2) + '%' : '—' }}</label>
                             </v-row>
                             <v-row class="info-row mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Management</label>
                                 <v-spacer></v-spacer>
-                                <label class="fee-structure-value mt-1">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 2) + '%' : '—' }}</label>
-                                <Tooltip text="An annual fee that will be charged per block, regardless of the pool's performance. "/>
+                                <label class="fee-structure-value mt-1">{{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
+                                <Tooltip text="An annual fee that will be charged 1/365 per day, regardless of the strategy's performance."/>
                             </v-row>
 
                             <v-row align="center" justify="center" class="ma-0 mt-15">
@@ -437,8 +427,6 @@ export default {
 
     data: () => ({
         tab: 1,
-
-        profit: null,
     }),
 
 
@@ -487,7 +475,7 @@ export default {
 
         performanceFee: function () {
             if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
-                let result = this.wmaticStrategyData.fees.find(x => x.id === 'tvl');
+                let result = this.wmaticStrategyData.fees.find(x => x.id === 'profit');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -496,7 +484,7 @@ export default {
 
         managementFee: function () {
             if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
-                let result = this.wmaticStrategyData.fees.find(x => x.id === 'profit');
+                let result = this.wmaticStrategyData.fees.find(x => x.id === 'tvl');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -895,6 +883,12 @@ export default {
     line-height: 28px;
     font-feature-settings: 'liga' off;
     color: #333333;
+}
+
+.value-disabled {
+    font-weight: 300 !important;
+    text-transform: uppercase !important;
+    color: #C5C9D1 !important;
 }
 
 .fee-structure-label {

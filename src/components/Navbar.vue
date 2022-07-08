@@ -50,25 +50,27 @@
             </v-list-item>
         </v-list>
 
-        <v-list nav dense class="footer-list ml-4">
-            <v-list-item link class="mb-0">
-                <v-list-item-title @click="openLink('https://docs.overnight.fi/')">
-                    <label class="footer-item-label">Docs</label>
-                </v-list-item-title>
-            </v-list-item>
+        <template v-slot:append>
+            <v-list nav dense class="footer-list ml-4">
+                <v-list-item link class="mb-0">
+                    <v-list-item-title @click="openLink('https://docs.overnight.fi/')">
+                        <label class="footer-item-label">Docs</label>
+                    </v-list-item-title>
+                </v-list-item>
 
-            <v-list-item link class="mb-0">
-                <v-list-item-title @click="openLink('https://overnight.canny.io/')">
-                    <label class="footer-item-label">Vote for new features</label>
-                </v-list-item-title>
-            </v-list-item>
+                <v-list-item link class="mb-0">
+                    <v-list-item-title @click="openLink('https://overnight.canny.io/')">
+                        <label class="footer-item-label">Vote for new features</label>
+                    </v-list-item-title>
+                </v-list-item>
 
-            <v-list-item>
-                <img class="footer-social-link ml-n3" :src="require('@/assets/social/twitterSocial.svg')" @click="openLink('https://twitter.com/overnight_fi')">
-                <img class="footer-social-link" :src="require('@/assets/social/discordSocial.svg')" @click="openLink('https://discord.gg/overnight-fi')">
-                <img class="footer-social-link" :src="require('@/assets/social/telegramSocial.svg')" @click="openLink('https://t.me/overnight_fi')">
-            </v-list-item>
-        </v-list>
+                <v-list-item>
+                    <img class="footer-social-link ml-n3" :src="require('@/assets/social/twitterSocial.svg')" @click="openLink('https://twitter.com/overnight_fi')">
+                    <img class="footer-social-link" :src="require('@/assets/social/discordSocial.svg')" @click="openLink('https://discord.gg/overnight-fi')">
+                    <img class="footer-social-link" :src="require('@/assets/social/telegramSocial.svg')" @click="openLink('https://t.me/overnight_fi')">
+                </v-list-item>
+            </v-list>
+        </template>
     </v-navigation-drawer>
 </template>
 <script>

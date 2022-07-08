@@ -51,10 +51,10 @@
             <v-row class="card-row card-banner-container mt-12" justify="start" align="center">
                 <v-col class="card-banner-body">
                     <v-row align="center">
-                        <div class="card-banner-icon">
-                            <v-img :src="require('@/assets/icon/history.svg')"/>
+                        <div class="card-banner-icon gradient-icon-container">
+                            <v-icon>mdi-shield-outline</v-icon>
                         </div>
-                        <label class="card-info ml-2">Monitoring your leveraged loan 24/7</label>
+                        <label class="card-info ml-2">Hedging against MATIC price volatility</label>
                     </v-row>
                     <v-row align="center">
                         <div class="card-banner-icon mt-4">
@@ -233,5 +233,13 @@ export default {
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     background: var(--blue-gradient);
     color: #FFFFFF !important;
+}
+
+.gradient-icon-container {
+    background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
 }
 </style>

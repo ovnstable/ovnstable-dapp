@@ -21,21 +21,25 @@
             <v-card-text class="pt-8 content-container">
                 <v-row class="modal-info-row" align="center">
                     <label class="modal-info-text">
-                        By depositing USD+ into this strategy, you are automatically borrowing an equal value of WMATIC from AAVE v2 at a rate roughly equal to the current price of WMATIC denoted above.
+                        By depositing USD+ into this strategy, you automatically borrow WMATIC from AAVE v2 at a market rate.
                         <br/><br/>
-                        The strategy's smart contract is designed to automatically invest these equal values of WMATIC and USD+ into Dystopia's WMATIC-USD+ Liquidity Pool, after which these LP Tokens are staked into the Gauge Pool on Penrose.
+                        The strategy's smart contract is designed to automatically invest these equal values of WMATIC and USD+ into Dystopia's USD+/WMATIC Liquidity Pool, after which these LP Tokens are staked into the Gauge Pool on Penrose.
                         <br/><br/>
-                        While the Dystopia pools will accrue transaction fees that provide yield to the farmers, the pool may become imbalanced; when the user withdraws their investment, the strategy's smart contract may need to use the user's funds to buy additional WMATIC to repay the lent amount (plus interest), which can result in a net loss from the initial deposit.
+                        <b>Impermanent loss risk</b>
+                        <br/>
+                        Due to trading activities with the USD+/WMATIC pair on Dystopia and/or WMATIC price change, the pool may become imbalanced, which can cause rebalance of a user’s LP position, resulting in increased or decreased number of WMATIC vs. borrowed in a position. When a user withdraws their investment, the strategy's smart contract may need to use a user's funds to buy additional WMATIC to repay the lent amount (plus interest), which can result in a net loss from the initial deposit.
                         <br/><br/>
-                        <b>By depositing into this strategy, the user understands that they are fully responsible for any loss of value. Furthermore, all APY and yield numbers are speculative, and no profit is guaranteed by the protocol.</b>
+                        <b>AMM contract hack risk</b>
+                        <br/>
+                        The strategy's smart contract automatically moves your deposit into the said Automated Market Maker (i.e., Dystopia) and, in doing so, may incur an AMM’s smart contract risk.
                         <br/><br/>
-                        The strategy's smart contracts automatically move your deposit into the said Automated Market Maker (in this case, Dystopia) and in doing so, may incur a smart contract risk and/or flash crash during which the price of the token fluctuates rapidly causing extreme volatility - this may cause the strategy's smart contracts to misbehave.
+                        By depositing funds into this smart contract, a user understands and agrees to the strategies to which it will invest underlying assets.
                         <br/><br/>
-                        By depositing into these smart contracts, the user understands and agrees to the strategies it will invest their underlying assets into.
+                        <label class="important-label"><b>IMPORTANT:</b></label> Yield/APY is not guaranteed and can be highly variable depending on the volume and rewards from the underlying AMM as well as the price of a volatile asset (WMATIC). Farmers may incur net losses if the impermanent loss is more significant than the yield earned.
                     </label>
                 </v-row>
 
-                <v-row class="modal-info-row mt-10" align="center">
+                <v-row class="modal-info-row mt-12" align="center">
                     <v-btn class="understand-btn" @click="close" outlined>
                         I understand
                     </v-btn>
@@ -134,6 +138,10 @@ export default {
     letter-spacing: 0.04em !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
+    color: #CF3F92 !important;
+}
+
+.important-label {
     color: #CF3F92 !important;
 }
 </style>

@@ -78,12 +78,58 @@ export default {
 <style scoped>
 
 /* mobile */
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 960px) {
+    .tab-button {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
+    }
 
+    .tab-button-in-active {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
+    }
+
+    .tab-button, .tab-button-in-active {
+        width: 50% !important;
+    }
 }
 
-@media only screen and (min-width: 1400px) {
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .tab-button {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+    }
 
+    .tab-button-in-active {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .tab-button {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+    }
+
+    .tab-button-in-active {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+    }
 }
 
 .tab-button {
@@ -91,10 +137,6 @@ export default {
     border-radius: 0;
     box-shadow: none !important;
     font-family: 'Roboto', sans-serif !important;
-    font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 16px !important;
-    line-height: 20px !important;
     text-transform: none !important;
     font-feature-settings: 'liga' off !important;
     color: #FFFFFF !important;
@@ -106,10 +148,6 @@ export default {
     border-radius: 0;
     box-shadow: none !important;
     font-family: 'Roboto', sans-serif !important;
-    font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 16px !important;
-    line-height: 20px !important;
     text-transform: none !important;
     font-feature-settings: 'liga' off !important;
     color: #333333 !important;

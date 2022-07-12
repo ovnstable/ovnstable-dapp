@@ -1,14 +1,13 @@
 <template>
     <v-row align="center" justify="start" class="banner-container ma-0">
-        <v-col class="text-col">
-            <label class="banner-label">Choose your</label>
-            <label class="banner-label-accent">&nbsp;IDEAL</label>
-            <br/>
-            <label class="banner-label">strategy</label>
-        </v-col>
+        <v-col class="ma-0 main-col">
+            <v-row justify="center" align="center" class="ma-0">
+                <label class="banner-label">Choose your</label>
+                <label class="banner-label-accent">&nbsp;IDEAL&nbsp;</label>
+                <label class="banner-label">strategy</label>
+            </v-row>
 
-        <v-col class="info-col">
-            <v-row align="center" justify="end" class="info-container ma-0" @click="openLink('https://app.overnight.fi/fund')">
+            <v-row justify="center" align="center" class="ma-0 mt-2 info-container" @click="openLink('https://app.overnight.fi/fund')">
                 <v-col>
                     <v-row justify="center" align="center" class="ma-0">
                         <label class="info-title">Total value locked</label>
@@ -27,7 +26,7 @@
                 </v-col>
                 <v-col>
                     <v-row justify="center" align="center" class="ma-0">
-                        <label class="info-title">USD+ APY based on 7-day average</label>
+                        <label class="info-title">Average USD+ APY</label>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-2">
                         <label class="info-value">{{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '—' }}</label>
@@ -43,7 +42,7 @@ import {mapGetters} from "vuex";
 import moment from "moment";
 
 export default {
-    name: "Banner",
+    name: "BannerMobile",
 
     components: {
     },
@@ -114,38 +113,151 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
+    .banner-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 26px;
+    }
+
+    .banner-label-accent {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 22px;
+        line-height: 26px;
+    }
+
+    .banner-container {
+        height: 150px !important;
+    }
+
+    .info-container {
+        height: 80px !important;
+    }
+
+    .info-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 14px;
+    }
+
+    .info-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .value-disabled {
+        font-weight: 300 !important;
+        font-size: 16px !important;
+        letter-spacing: 0.02em;
+    }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .banner-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 36px;
+        line-height: 46px;
+    }
+
+    .banner-label-accent {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 42px;
+        line-height: 46px;
+    }
+
+    .banner-container {
+        height: 200px !important;
+    }
+
+    .info-container {
+        height: 110px !important;
+    }
+
+    .info-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    .info-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 30px;
+        line-height: 36px;
+    }
+
+    .value-disabled {
+        font-weight: 300 !important;
+        font-size: 24px !important;
+    }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
+    .banner-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 40px;
+        line-height: 50px;
+    }
+
+    .banner-label-accent {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 50px;
+        line-height: 50px;
+    }
+
+    .banner-container {
+        height: 200px !important;
+    }
+
+    .info-container {
+        height: 110px !important;
+    }
+
+    .info-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    .info-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 30px;
+        line-height: 36px;
+    }
+
+    .value-disabled {
+        font-weight: 300 !important;
+        font-size: 24px !important;
+    }
 }
 
 .banner-container {
     width: 100% !important;
-    height: 200px !important;
     background-image: url("~@/assets/bg/banner_bg.svg");
     background-color: #E5E7EA !important;
 }
 
 .banner-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 40px;
-    line-height: 50px;
     color: #333333;
 }
 
 .banner-label-accent {
     font-family: 'Cormorant', sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 50px;
-    line-height: 50px;
     background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -153,17 +265,13 @@ export default {
     text-fill-color: transparent;
 }
 
-.text-col {
-    margin-left: 3%;
-}
-
-.info-col {
-    margin-right: 3%;
+.main-col {
+    margin-left: 3% !important;
+    margin-right: 3% !important;
 }
 
 .info-container {
     width: 100% !important;
-    height: 110px !important;
     background-color: #E5E7EA !important;
     border: 1px solid #CED2D8;
     border-radius: 6px;
@@ -172,10 +280,6 @@ export default {
 
 .info-title {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
@@ -183,18 +287,12 @@ export default {
 
 .info-value {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 30px;
-    line-height: 36px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #1C95E7;
 }
 
 .value-disabled {
-    font-weight: 300 !important;
-    font-size: 24px !important;
     text-transform: uppercase !important;
     color: #C5C9D1 !important;
 }

@@ -100,15 +100,18 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 /* mobile */
-@media only screen and (max-width: 1400px) {
-
+@media only screen and (max-width: 960px) {
 }
 
-@media only screen and (min-width: 1400px) {
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+}
 
+/* full */
+@media only screen and (min-width: 1400px) {
 }
 
 .page-list {
@@ -117,7 +120,7 @@ export default {
 
 .logo-img {
     cursor: pointer;
-    height: 48px !important ;
+    height: 48px !important;
 }
 
 .footer-social-link {

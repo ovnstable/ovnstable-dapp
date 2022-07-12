@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Navbar/>
+        <Navbar v-if="$wu.isFull()"/>
         <Header/>
 
         <v-main>
@@ -50,15 +50,27 @@ export default {
 <style scoped>
 
 /* mobile */
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 960px) {
+    .main-container {
+        margin-left: 3% !important;
+        margin-right: 3% !important;
+    }
 }
 
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .main-container {
+        margin-left: 3% !important;
+        margin-right: 3% !important;
+    }
+}
+
+/* full */
 @media only screen and (min-width: 1400px) {
-}
-
-.main-container {
-    margin-left: 5% !important;
-    margin-right: 5% !important;
+    .main-container {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
 }
 
 </style>

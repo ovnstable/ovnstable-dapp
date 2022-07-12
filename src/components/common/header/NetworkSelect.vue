@@ -6,7 +6,7 @@
                  @click="openedList = !openedList"
                  v-bind="attrs"
                  v-on="on">
-                <v-row align="center" class="select-bar-container">
+                <v-row justify="end" align="center" class="select-bar-container">
                     <v-col cols="12" class="select-col">
                         <div class="btn-icon"
                              style="display: flex">
@@ -46,7 +46,7 @@
                         <v-img style="filter: grayscale(100%);" :src="require('@/assets/network/arbitrum.svg')"/>
                     </div>
                 </v-list-item-avatar>
-                <v-list-item-title class="list-item-disabled">
+                <v-list-item-title class="network-select-list-item list-item-disabled">
                     Arbitrum (Soon)
                 </v-list-item-title>
             </v-list-item>
@@ -56,7 +56,7 @@
                         <v-img style="filter: grayscale(100%);" :src="require('@/assets/network/ftm.png')"/>
                     </div>
                 </v-list-item-avatar>
-                <v-list-item-title class="list-item-disabled">
+                <v-list-item-title class="network-select-list-item list-item-disabled">
                     Fantom (Soon)
                 </v-list-item-title>
             </v-list-item>
@@ -66,7 +66,7 @@
                         <v-img style="filter: grayscale(100%);" :src="require('@/assets/currencies/eth.svg')"/>
                     </div>
                 </v-list-item-avatar>
-                <v-list-item-title class="list-item-disabled">
+                <v-list-item-title class="network-select-list-item list-item-disabled">
                     Ethereum (Soon)
                 </v-list-item-title>
             </v-list-item>
@@ -113,6 +113,83 @@ export default {
 </script>
 
 <style scoped>
+/* mobile */
+@media only screen and (max-width: 960px) {
+
+    .btn-icon, .list-item-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .network-select-list-item {
+        font-size: 14px;
+        margin-left: -12px;
+    }
+
+    .select-bar-container {
+        height: 28px !important;
+    }
+
+    .select-col {
+        margin-top: -8px;
+    }
+
+    .select-bar-main-container {
+        width: 42px !important;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+
+    .btn-icon, .list-item-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .network-select-list-item {
+        font-size: 16px;
+        margin-left: -5px;
+    }
+
+    .select-bar-container {
+        height: 48px !important;
+    }
+
+    .select-col {
+        margin-top: -2px;
+    }
+
+    .select-bar-main-container {
+        width: 56px !important;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+
+    .btn-icon, .list-item-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .network-select-list-item {
+        font-size: 17px;
+        margin-left: -5px;
+    }
+
+    .select-bar-container {
+        height: 48px !important;
+    }
+
+    .select-col {
+        margin-top: -2px;
+    }
+
+    .select-bar-main-container {
+        width: 56px !important;
+    }
+}
 
 .network-select-list {
     background-color: var(--secondary) !important;
@@ -120,40 +197,18 @@ export default {
 }
 
 .network-select-list-item {
+    font-family: 'Roboto', sans-serif !important;
     color: #333333;
-    font-size: 17px;
-    margin-left: -5px;
-}
-
-.list-item-icon {
-    width: 28px;
-    height: 28px;
 }
 
 .list-item-disabled {
-    color: #C5C9D1;
-    font-size: 17px;
-    margin-left: -5px;
-}
-
-.btn-icon {
-    width: 28px;
-    height: 28px;
-}
-
-.select-bar-main-container {
-    width: 56px !important;
+    color: #C5C9D1 !important;
 }
 
 .select-bar-container {
     background-color: white !important;
     border-radius: 2px;
-    height: 48px !important;
     cursor: pointer;
-}
-
-.select-col {
-    margin-top: -2px;
 }
 
 </style>

@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="mt-10">
-            <Banner/>
+            <Banner v-if="$wu.isFull()"/>
+            <BannerMobile v-else/>
         </div>
 
         <div class="mt-7">
@@ -23,11 +24,13 @@
 
 import Banner from "@/components/market/section/Banner";
 import WmaticUsdPlus from "@/components/market/cards/hedged/WmaticUsdPlus";
+import BannerMobile from "@/components/market/section/BannerMobile";
 
 export default {
     name: "MarketView",
 
     components: {
+        BannerMobile,
         WmaticUsdPlus,
         Banner
     },

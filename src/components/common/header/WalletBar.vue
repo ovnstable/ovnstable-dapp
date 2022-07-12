@@ -1,24 +1,24 @@
 <template>
     <div class="wallet-bar-main-container mt-1">
         <v-row align="center" class="wallet-bar-container" @click="walletClickAction">
-            <v-col cols="1" class="wallet-col">
+            <v-col cols="1" class="wallet-col mr-4">
                 <div class="wallet-icon">
                     <v-img :src="require('@/assets/icon/undefined.svg')"/>
                 </div>
             </v-col>
-            <v-col cols="5" class="wallet-col ml-4">
+            <v-col cols="5" class="wallet-col" v-if="!$wu.isMobile()">
                 <label class="balance-label">
                     {{ $utils.formatMoney(account ? balance.usdPlus : 0, 2) }}&nbsp;USD+
                 </label>
             </v-col>
-            <v-col cols="4" class="wallet-col">
+            <v-col :cols="$wu.isMobile() ? 0 : 4" class="wallet-col" :class="$wu.isMobile() ? 'mr-4' : ''">
                 <v-row class="account-display-container" align="center" justify="center">
                     <label class="account-label">
                         {{ account ? accountDisplay : 'XXXXX...XXXX' }}
                     </label>
                 </v-row>
             </v-col>
-            <v-col cols="1" class="wallet-col">
+            <v-col cols="1" class="wallet-col" v-if="!$wu.isMobile()">
                 <v-icon class="eye-icon">mdi-eye-outline</v-icon>
             </v-col>
         </v-row>
@@ -48,10 +48,6 @@ export default {
                 return null;
             }
         },
-
-        isMobile() {
-            return window.innerWidth <= 1400;
-        }
     },
 
     created() {
@@ -96,41 +92,109 @@ export default {
 <style scoped>
 
 /* mobile */
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 960px) {
+    .wallet-bar-main-container {
+        width: 150px !important;
+    }
 
+    .wallet-bar-container {
+        height: 28px !important;
+    }
+
+    .wallet-col {
+        margin-top: -8px;
+    }
+
+    .account-display-container {
+        height: 24px !important;
+    }
+
+    .wallet-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .balance-label, .account-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.02em;
+    }
 }
 
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .wallet-bar-main-container {
+        width: 365px !important;
+    }
+
+    .wallet-bar-container {
+        height: 48px !important;
+    }
+
+    .wallet-col {
+        margin-top: -2px;
+    }
+
+    .account-display-container {
+        height: 28px !important;
+    }
+
+    .wallet-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .balance-label, .account-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+}
+
+/* full */
 @media only screen and (min-width: 1400px) {
+    .wallet-bar-main-container {
+        width: 365px !important;
+    }
 
-}
+    .wallet-bar-container {
+        height: 48px !important;
+    }
 
-.wallet-bar-main-container {
-    width: 365px !important;
+    .wallet-col {
+        margin-top: -2px;
+    }
+
+    .account-display-container {
+        height: 28px !important;
+    }
+
+    .wallet-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .balance-label, .account-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
 }
 
 .wallet-bar-container {
     background-color: white !important;
     border-radius: 2px;
-    height: 48px !important;
     cursor: pointer;
-}
-
-.wallet-icon {
-    width: 28px;
-    height: 28px;
-}
-
-.wallet-col {
-    margin-top: -2px;
 }
 
 .balance-label, .account-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
-    letter-spacing: 0.02em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
@@ -143,6 +207,5 @@ export default {
 .account-display-container {
     background: #F5F5F5;
     border-radius: 4px;
-    height: 28px !important;
 }
 </style>

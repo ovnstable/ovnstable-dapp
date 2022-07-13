@@ -1,6 +1,35 @@
 <template>
     <div v-if="show">
-        <v-card class="container_body airdrop-body">
+        <v-dialog
+                v-if="!$wu.isFull()"
+                v-model="show"
+                width="630"
+                persistent>
+            <v-card class="container_body airdrop-body">
+                <v-toolbar class="container_header" flat>
+                    <label class="title-modal mt-4">
+                        {{ isMintView ? 'Invest' : 'Withdraw' }}
+                    </label>
+                    <v-spacer></v-spacer>
+                    <v-btn icon @click="close" class="mt-4">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-toolbar>
+
+                <v-card-text class="pt-8 content-container">
+                    <v-row class="invest-body-row mx-n2" align="center">
+                        <label class="modal-link-label" @click="openLink('https://app.overnight.fi/')">Mint USD+</label>
+                    </v-row>
+
+                    <v-row class="invest-body-row mt-5 mx-n2" align="center">
+                        <Invest v-if="isMintView"/>
+                        <Withdraw v-else/>
+                    </v-row>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+
+        <v-card class="container_body airdrop-body" v-else>
             <v-toolbar class="container_header" flat>
                 <label class="title-modal">
                     {{ isMintView ? 'Invest' : 'Withdraw' }}
@@ -60,25 +89,81 @@ export default {
 
 <style scoped>
 
-@media only screen and (max-width: 500px) {
-}
-
-/* mobile version */
-@media only screen and (max-width: 1400px) {
+/* mobile */
+@media only screen and (max-width: 960px) {
     .airdrop-body {
-        z-index: 100;
         width: 100% !important;
+    }
+
+    .modal-link-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
     }
 }
 
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .airdrop-body {
+        width: 100% !important;
+    }
+
+    .container_header {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
+
+    .invest-body-row {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
+
+    .modal-link-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+}
+
+/* full */
 @media only screen and (min-width: 1400px) {
     .airdrop-body {
-        z-index: 100;
         position: fixed !important;
         top: 10vh !important;
         right: 50px !important;
         width: 30vw !important;
     }
+
+    .container_header {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
+
+    .invest-body-row {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
+
+    .modal-link-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .container_header {
+        margin-top: 5% !important;
+    }
+
+    .content-container {
+        margin-bottom: 5% !important;
+    }
+}
+
+.airdrop-body {
+    z-index: 100;
 }
 
 .container_body {
@@ -89,26 +174,10 @@ export default {
 
 .container_header {
     background-color: var(--secondary) !important;
-    margin-left: 5% !important;
-    margin-right: 5% !important;
-    margin-top: 5% !important;
-}
-
-.content-container {
-    margin-bottom: 5% !important;
-}
-
-.invest-body-row {
-    margin-left: 5% !important;
-    margin-right: 5% !important;
 }
 
 .modal-link-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
     font-feature-settings: 'liga' off;
     color: #1C95E7;
     cursor: pointer;

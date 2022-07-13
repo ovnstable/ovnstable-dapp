@@ -27,7 +27,7 @@
                         <label class="account-label">
                             {{ account ? accountDisplay : 'XXXXX...XXXX' }}
                         </label>
-                        <div class="icon-img ml-2">
+                        <div class="icon-img ml-2" v-if="!$wu.isMobile()">
                             <v-img :src="require('@/assets/icon/open.svg')"/>
                         </div>
                     </v-row>
@@ -58,27 +58,27 @@
                 </v-row>
 
                 <v-row class="account-info-row mt-8" align="center">
-                    <label class="add-coins-label">Add tokens to your wallet</label>
+                    <label class="add-coins-label" :class="$wu.isMobile() ? 'ml-1' : ''">Add tokens to your wallet</label>
                 </v-row>
 
-                <v-row class="account-info-row" align="center">
-                    <v-btn class="coin-btn" @click="addUsdPlusToken">
+                <v-row class="account-info-row" justify="start" align="center">
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ml-1' : ''" @click="addUsdPlusToken">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
                         </div>
-                        <label class="ml-2">USD+</label>
+                        <label class="ml-2 coin-btn-label">USD+</label>
                     </v-btn>
-                    <v-btn class="coin-btn ml-5" @click="addwUsdPlusToken">
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ml-1' : 'ml-5'" @click="addwUsdPlusToken">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/wUsdPlus.svg')"/>
                         </div>
-                        <label class="ml-2">wUSD+</label>
+                        <label class="ml-2 coin-btn-label">wUSD+</label>
                     </v-btn>
-                    <v-btn class="coin-btn coin-btn-wide ml-5" @click="addUsdPlusWmaticToken">
+                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ml-1' : 'ml-5'" @click="addUsdPlusWmaticToken">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/currencies/market/WmaticUsdPlus.svg')"/>
                         </div>
-                        <label class="ml-2">USD+/WMATIC</label>
+                        <label class="ml-2 coin-btn-label">USD+/WMATIC</label>
                     </v-btn>
                 </v-row>
             </v-card-text>
@@ -188,29 +188,174 @@ export default {
 <style scoped>
 
 /* mobile */
-@media only screen and (max-width: 1400px) {
-
+@media only screen and (max-width: 960px) {
     .disconnect-wallet-btn {
         display: none !important;
     }
 
+    .wallet-img {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .coin-img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .account-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.02em;
+    }
+
+    .add-coins-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .coin-btn {
+        width: 75px !important;
+        height: 46px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        line-height: 14px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .coin-btn-wide {
+        width: 125px !important;
+    }
+
     .account-info-row {
-        justify-content: center !important;
+        margin-left: 3% !important;
+        margin-right: 3% !important;
+    }
+
+    .container_header {
+        margin-left: 3% !important;
+        margin-right: 3% !important;
     }
 }
 
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .disconnect-wallet-btn {
+        display: none !important;
+    }
+
+    .wallet-img {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .coin-img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .account-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .add-coins-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .coin-btn {
+        width: 120px !important;
+        height: 56px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .coin-btn-wide {
+        width: 180px !important;
+    }
+
+    .account-info-row {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
+
+    .container_header {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
+}
+
+/* full */
 @media only screen and (min-width: 1400px) {
     .disconnect-wallet-btn-mobile {
         display: none !important;
     }
-}
 
-.account-label {
-    color: #333333 !important;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 24px;
+    .wallet-img {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .coin-img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .account-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .add-coins-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .coin-btn {
+        width: 120px !important;
+        height: 56px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .coin-btn-wide {
+        width: 180px !important;
+    }
+
+    .account-info-row {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
+
+    .container_header {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
 }
 
 .view-explorer-btn > label, .copy-address-btn > label, .add-usd-btn > label {
@@ -243,20 +388,13 @@ export default {
     cursor: pointer;
 }
 
-.wallet-img {
-    width: 36px !important;
-    height: 36px !important;
-}
-
-.coin-img {
-    width: 32px;
-    height: 32px;
-}
-
 .account-info-row {
     height: 56px;
-    margin-left: 5% !important;
-    margin-right: 5% !important;
+}
+
+.container_header {
+    background-color: var(--secondary) !important;
+    margin-top: 5% !important;
 }
 
 .content-container {
@@ -269,20 +407,8 @@ export default {
     border-radius: 8px;
 }
 
-.container_header {
-    background-color: var(--secondary) !important;
-    margin-left: 5% !important;
-    margin-right: 5% !important;
-    margin-top: 5% !important;
-}
-
 .account-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
-    letter-spacing: 0.02em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
@@ -293,37 +419,23 @@ export default {
     background: #F5F5F5;
     border-radius: 4px;
     height: 36px !important;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 .add-coins-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 20px;
-    line-height: 32px;
     color: #333333;
 }
 
 .coin-btn {
-    width: 120px !important;
-    height: 56px !important;
     background: #F5F5F5 !important;
     border-radius: 4px !important;
     box-shadow: none !important;
 
     font-family: 'Roboto', sans-serif !important;
     font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 16px !important;
-    line-height: 20px !important;
-    letter-spacing: 0.02em !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     color: #333333 !important;
-}
-
-.coin-btn-wide {
-    width: 180px !important;
 }
 </style>

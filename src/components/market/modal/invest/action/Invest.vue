@@ -94,7 +94,7 @@
         </v-row>
 
 
-        <v-row class="mt-15" align="center" justify="center">
+        <v-row class="mt-15" :class="$wu.isFull() ? '' : 'mb-4'" align="center" justify="center">
             <div class="action-btn-container" v-if="!this.account">
                 <v-btn class='buy enabled-buy'
                        @click="connectWallet">
@@ -442,27 +442,255 @@ export default {
 <style scoped>
 
 /* mobile */
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 960px) {
     .max {
         display: none !important;
     }
 
     .buy {
-        height: 48px !important;
+        height: 36px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
     }
 
-    .main-btn-row {
-        margin-top: 28px;
+    .balance-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    .v-text-field >>> input {
+        min-height: 36px !important;
+        max-height: 36px !important;
+        height: 36px !important;
+    }
+
+    .v-text-field >>> input, .v-text-field >>> label, .v-text-field >>> button {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 30px;
+        line-height: 36px;
+    }
+
+    .coin-img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .coin-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .exchange-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .action-info-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .action-info-sub-label {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .modal-link-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .swap-view-btn {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+    }
+
+    .field-sum {
+        width: 30%;
     }
 }
 
-@media only screen and (min-width: 1400px) {
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
     .buy {
-        height: 48px;
+        height: 48px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 20px !important;
+        line-height: 24px !important;
+        letter-spacing: 0.04em !important;
     }
 
-    .main-btn-row {
-        margin-top: 40px;
+    .balance-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    .v-text-field >>> input {
+        min-height: 42px !important;
+        max-height: 42px !important;
+        height: 42px !important;
+    }
+
+    .v-text-field >>> input, .v-text-field >>> label, .v-text-field >>> button {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 40px;
+        line-height: 42px;
+    }
+
+    .coin-img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .coin-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .exchange-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .action-info-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .action-info-sub-label {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .modal-link-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .swap-view-btn {
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+    }
+
+    .field-sum {
+        width: 45%;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .buy {
+        height: 48px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 20px !important;
+        line-height: 24px !important;
+        letter-spacing: 0.04em !important;
+    }
+
+    .balance-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    .v-text-field >>> input {
+        min-height: 42px !important;
+        max-height: 42px !important;
+        height: 42px !important;
+    }
+
+    .v-text-field >>> input, .v-text-field >>> label, .v-text-field >>> button {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 40px;
+        line-height: 42px;
+    }
+
+    .coin-img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .coin-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .exchange-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .action-info-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .action-info-sub-label {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .modal-link-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .swap-view-btn {
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+    }
+
+    .field-sum {
+        width: 45%;
     }
 }
 
@@ -472,37 +700,19 @@ export default {
     border-radius: 8px;
 }
 
-.v-text-field >>> input {
-    min-height: 42px !important;
-    max-height: 42px !important;
-    height: 42px !important;
-}
-
 .v-text-field >>> input::placeholder {
     color: #C5C9D1 !important;
 }
 
 .v-text-field >>> input, .v-text-field >>> label, .v-text-field >>> button {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 40px;
-    line-height: 42px;
     font-feature-settings: 'pnum' on, 'lnum' on;
 
     color: #1C95E7 !important;
 }
 
-.field-sum {
-    width: 45%;
-}
-
 .balance-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
 }
@@ -526,11 +736,6 @@ export default {
     width: 100% !important;
     border-radius: 2px !important;
     font-family: 'Roboto', sans-serif !important;
-    font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 20px !important;
-    line-height: 24px !important;
-    letter-spacing: 0.04em !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     box-shadow: none !important;
@@ -538,10 +743,6 @@ export default {
 
 .exchange-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 24px;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #8D95A3;
 }
@@ -551,54 +752,27 @@ export default {
     border-radius: 4px;
 }
 
-.coin-img {
-    width: 28px;
-    height: 28px;
-}
-
 .coin-title {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
     font-feature-settings: 'liga' off;
     color: #333333;
 }
 
 .modal-link-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
     font-feature-settings: 'liga' off;
     color: #1C95E7;
     cursor: pointer;
 }
 
-.swap-view-btn {
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-}
-
 .action-info-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 24px;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
 }
 
 .action-info-sub-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
 }

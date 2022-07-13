@@ -1,7 +1,7 @@
 <template>
     <v-row align="center" justify="start" class="banner-container ma-0">
         <v-col class="main-col">
-            <v-row align="center" justify="start" class="ma-0 mb-12">
+            <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-1 mb-3' : 'mb-12'">
                 <div class="currency-icon">
                     <v-img :src="require('@/assets/currencies/market/WmaticUsdPlus.svg')"/>
                 </div>
@@ -79,15 +79,136 @@ export default {
 <style scoped>
 
 /* mobile */
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 960px) {
+    .banner-container {
+        height: 150px !important;
+    }
+
+    .currency-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .banner-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 28px;
+    }
+
+    .network-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .info-container {
+        width: 100% !important;
+        height: 70px !important;
+    }
+
+    .info-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 14px;
+    }
+
+    .info-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
 }
 
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .banner-container {
+        height: 300px !important;
+    }
+
+    .currency-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .banner-title {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 56px;
+        line-height: 65px;
+    }
+
+    .network-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .info-container {
+        width: 100% !important;
+        height: 110px !important;
+    }
+
+    .info-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    .info-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 30px;
+        line-height: 36px;
+    }
+}
+
+/* full */
 @media only screen and (min-width: 1400px) {
+    .banner-container {
+        height: 300px !important;
+    }
+
+    .currency-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .banner-title {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 56px;
+        line-height: 65px;
+    }
+
+    .network-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .info-container {
+        width: 60% !important;
+        height: 110px !important;
+    }
+
+    .info-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    .info-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 30px;
+        line-height: 36px;
+    }
 }
 
 .banner-container {
     width: 100% !important;
-    height: 300px !important;
     background-image: url("~@/assets/bg/banner_strategy_bg.svg");
     background-color: #E5E7EA !important;
 }
@@ -99,17 +220,11 @@ export default {
 
 .banner-title {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 56px;
-    line-height: 65px;
     text-transform: uppercase;
     color: #333333;
 }
 
 .info-container {
-    width: 60% !important;
-    height: 110px !important;
     background-color: #E5E7EA !important;
     border: 1px solid #CED2D8;
     border-radius: 6px;
@@ -118,9 +233,6 @@ export default {
 .info-title {
     font-family: 'Roboto', sans-serif;
     font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
@@ -128,10 +240,6 @@ export default {
 
 .info-value {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 30px;
-    line-height: 36px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #1C95E7;
@@ -140,15 +248,5 @@ export default {
 .bordered-col {
     border-left: 1px solid #CED2D8 !important;
     border-right: 1px solid #CED2D8 !important;
-}
-
-.currency-icon {
-    width: 60px;
-    height: 60px;
-}
-
-.network-icon {
-    width: 40px;
-    height: 40px;
 }
 </style>

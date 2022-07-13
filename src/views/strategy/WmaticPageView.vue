@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="mt-10">
-            <v-row align="center" justify="start" class="ma-0">
+            <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'ml-3' : ''">
                 <label class="parent-page-label" @click="goToAction('/')">Market</label>
                 <label class="current-page-label">
                     <v-icon size="18" class="mx-2">mdi-chevron-right</v-icon>
@@ -12,18 +12,85 @@
 
         <div class="mt-1">
             <v-row align="start" justify="start" class="main-container ma-0">
-                <v-col cols="9" class="ml-n3">
+                <v-col :cols="$wu.isFull() ? 9 : 12" :class="$wu.isFull() ? 'ml-n3' : ''">
                     <StrategyBanner/>
+
+                    <v-row align="center" justify="start" class="ma-0 mt-5" v-if="!$wu.isFull()">
+                        <v-btn class="header-btn btn-filled-red" @click="showRiskModal">
+                            <div class="info-card-icon mr-2">
+                                <v-img :src="require('@/assets/icon/bellWhite.svg')"/>
+                            </div>
+                            Investment risks
+                        </v-btn>
+                    </v-row>
+
+                    <v-row class="info-card-container-white ma-0 mt-5" justify="start" align="center" v-if="!$wu.isFull()">
+                        <v-col class="my-10 mx-8">
+                            <v-row align="center">
+                                <label class="investor-card-title">Your share</label>
+                            </v-row>
+
+                            <v-row align="center">
+                                <v-col cols="9">
+                                    <v-row align="center" :class="$wu.isMobile() ? 'mt-2' : 'mt-4'">
+                                        <label class="investor-card-sub-title">Your balance in strategy</label>
+                                    </v-row>
+                                    <v-row align="center" class="mt-4">
+                                        <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWmatic ? ($utils.formatMoneyComma(this.balance.usdPlusWmatic, 2) + ' USD+') : '—' }}</label>
+                                    </v-row>
+                                </v-col>
+
+                                <v-col cols="3">
+                                    <v-row align="center" :class="$wu.isMobile() ? 'mt-2' : 'mt-4'">
+                                        <label class="investor-card-sub-title">Profit/loss</label>
+                                    </v-row>
+                                    <v-row align="center" class="mt-4">
+                                        <label class="investor-card-sub-title-value value-disabled">Soon</label>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+
+                            <v-row align="center" :class="$wu.isMobile() ? 'mt-10' : 'mt-15'">
+                                <label class="investor-card-title">Fee structure</label>
+                            </v-row>
+                            <v-row class="info-row mt-8" justify="start" align="center">
+                                <label class="fee-structure-label mt-1">Entry</label>
+                                <v-spacer></v-spacer>
+                                <label class="fee-structure-value mt-1">{{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}</label>
+                            </v-row>
+                            <v-row class="info-row mt-8" justify="start" align="center">
+                                <label class="fee-structure-label mt-1">Exit</label>
+                                <v-spacer></v-spacer>
+                                <label class="fee-structure-value mt-1">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
+                            </v-row>
+                            <v-row class="info-row mt-8" justify="start" align="center">
+                                <label class="fee-structure-label mt-1">Performance</label>
+                                <v-spacer></v-spacer>
+                                <label class="fee-structure-value mt-1">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 2) + '%' : '—' }}</label>
+                            </v-row>
+                            <v-row class="info-row mt-8" justify="start" align="center">
+                                <label class="fee-structure-label mt-1">Management</label>
+                                <v-spacer></v-spacer>
+                                <label class="fee-structure-value mt-1">{{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
+                                <Tooltip text="An annual fee that will be charged 1/365 per day, regardless of the strategy's performance."/>
+                            </v-row>
+
+                            <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-15'">
+                                <v-btn class="header-btn btn-investor-invest" @click="showInvestModal">
+                                    Invest
+                                </v-btn>
+                            </v-row>
+                        </v-col>
+                    </v-row>
 
                     <InvestModal/>
 
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
                         <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabAbout">About strategy</label>
-                        <label class="tab-btn mx-4" v-bind:class="activeTabPerformance">Performance</label>
-                        <label class="tab-btn ml-4" v-bind:class="activeTabTransactions">Transactions</label>
+                        <label class="tab-btn ml-4" v-bind:class="activeTabPerformance">Performance</label>
                     </v-row>
 
-                    <v-row align="center" justify="start" class="ma-0 mt-10">
+                    <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'">
                         <label class="strategy-info-label">
                             The exchange-traded strategy USD+/WMATIC ($USD+WMATIC), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WMATIC), pair it with USD+ stablecoin, and provide USD+/WMATIC liquidity on Dystopia / Penrose all in one action. This allows earning high APY and hedging against WMATIC volatility.
                             <br/><br/>
@@ -32,7 +99,7 @@
                     </v-row>
 
                     <v-row align="start" justify="start" class="ma-0 mt-10">
-                        <v-col>
+                        <v-col :cols="$wu.isMobile() ? 12 : 6">
                             <v-row class="info-card-container" justify="start" align="center">
                                 <v-col class="info-card-body">
                                     <v-row align="center">
@@ -59,7 +126,7 @@
                                             <v-img :src="require('@/assets/icon/checkbox.svg')"/>
                                         </div>
                                         <label class="info-card-text mt-4 ml-2">Automatically monitored and managed</label>
-                                        <label class="info-card-text ml-8">liquidation ratio of 1.5</label>
+                                        <label class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">liquidation ratio of 1.5</label>
                                     </v-row>
                                     <v-row align="center">
                                         <div class="info-card-icon mt-4">
@@ -70,7 +137,7 @@
                                 </v-col>
                             </v-row>
                         </v-col>
-                        <v-col class="ml-5">
+                        <v-col :class="$wu.isMobile() ? 'mt-2' : 'ml-5'">
                             <v-row class="info-card-container-red" justify="start" align="center">
                                 <v-col class="info-card-body">
                                     <v-row align="center">
@@ -107,7 +174,7 @@
                     </v-row>
 
                     <v-row align="start" justify="start" class="ma-0 mt-7">
-                        <v-col cols="5">
+                        <v-col :cols="$wu.isMobile() ? 12 : 5">
                             <v-row justify="start" align="start">
                                 <v-col cols="1">
                                     <v-row justify="start" align="start">
@@ -154,13 +221,17 @@
                                 </v-col>
                             </v-row>
                         </v-col>
-                        <v-col cols="1">
+                        <v-col cols="1" v-if="!$wu.isMobile()">
                         </v-col>
-                        <v-col cols="6">
+                        <v-col cols="6" v-if="!$wu.isMobile()">
                             <v-row justify="end">
                                 <v-img class="scheme-img" :src="require('@/assets/market/scheme.svg')"/>
                             </v-row>
                         </v-col>
+                    </v-row>
+
+                    <v-row align="center" justify="start" class="ma-0 mt-15" v-if="$wu.isMobile()">
+                        <v-img class="scheme-img" :src="require('@/assets/market/scheme.svg')"/>
                     </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 mt-15">
@@ -170,7 +241,7 @@
                     </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 mt-7">
-                        <v-col>
+                        <v-col :cols="$wu.isMobile() ? 12 : 0">
                             <v-row justify="start" align="start">
                                 <v-progress-linear
                                         rounded
@@ -191,7 +262,7 @@
                             </v-row>
                         </v-col>
 
-                        <v-col class="ml-8">
+                        <v-col :class="$wu.isMobile() ? 'mt-4' : 'ml-8'" :cols="$wu.isMobile() ? 12 : 0">
                             <v-row justify="start" align="start">
                                 <v-progress-linear
                                         rounded
@@ -214,7 +285,7 @@
                             </v-row>
                         </v-col>
 
-                        <v-col class="ml-8">
+                        <v-col :class="$wu.isMobile() ? 'mt-4' : 'ml-8'" :cols="$wu.isMobile() ? 12 : 0">
                             <v-row justify="start" align="start">
                                 <v-progress-linear
                                         rounded
@@ -278,9 +349,22 @@
                                 <v-spacer></v-spacer>
                                 <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.holders) ? $utils.formatMoneyComma(wmaticStrategyData.holders, 0) : '—' }}</label>
                             </v-row>
+
+                            <v-row class="info-row" justify="start" align="center" v-if="$wu.isMobile()">
+                                <label class="card-info mt-1">Target Health Factor</label>
+                                <v-spacer></v-spacer>
+                                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 1)) : '—' }}</label>
+                                <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
+                            </v-row>
+                            <v-row class="info-row mt-6" justify="start" align="center" v-if="$wu.isMobile()">
+                                <label class="card-info mt-1">Health Factor check interval</label>
+                                <v-spacer></v-spacer>
+                                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.healthFactorCheckInterval) ? wmaticStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
+                                <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
+                            </v-row>
                         </v-col>
-                        <v-col cols="1"></v-col>
-                        <v-col>
+                        <v-col cols="1" v-if="!$wu.isMobile()"></v-col>
+                        <v-col v-if="!$wu.isMobile()">
                             <v-row class="info-row" justify="start" align="center">
                                 <label class="card-info mt-1">Target Health Factor</label>
                                 <v-spacer></v-spacer>
@@ -297,48 +381,53 @@
                     </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 mt-7 info-container">
-                        <v-col class="ml-5">
-                            <v-row justify="start" align="center" @click="openTokenOnScan(wmaticStrategyData.rebaseAddress)">
-                                <label class="address-card-text">Token address</label>
+                        <v-col :class="!$wu.isFull() ? '' : 'ml-5'" :cols="!$wu.isFull() ? 12 : 0">
+                            <v-row justify="center" align="center" @click="openTokenOnScan(wmaticStrategyData.rebaseAddress)">
+                                <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Token address</label>
+                                <v-spacer v-if="!$wu.isFull()"></v-spacer>
                                 <label class="address-card-link ml-3">{{ (wmaticStrategyData && wmaticStrategyData.rebaseAddress) ? shortAddress(wmaticStrategyData.rebaseAddress) : '—' }}</label>
-                                <div class="icon-img ml-2">
+                                <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
                                     <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                                 </div>
                             </v-row>
                         </v-col>
-                        <v-col>
+                        <v-col :cols="!$wu.isFull() ? 12 : 0">
                             <v-row justify="center" align="center" @click="openStrategyOnScan(wmaticStrategyData.exchangerAddress)">
-                                <label class="address-card-text">Pool address</label>
+                                <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Pool address</label>
+                                <v-spacer v-if="!$wu.isFull()"></v-spacer>
                                 <label class="address-card-link ml-3">{{ (wmaticStrategyData && wmaticStrategyData.exchangerAddress) ? shortAddress(wmaticStrategyData.exchangerAddress) : '—' }}</label>
-                                <div class="icon-img ml-2">
+                                <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
                                     <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                                 </div>
                             </v-row>
                         </v-col>
-                        <v-col>
+                        <v-col :cols="!$wu.isFull() ? 12 : 0">
                             <v-row justify="center" align="center" @click="openStrategyOnScan(wmaticStrategyData.strategyAddress)">
-                                <label class="address-card-text">Vault address</label>
+                                <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Vault address</label>
+                                <v-spacer v-if="!$wu.isFull()"></v-spacer>
                                 <label class="address-card-link ml-3">{{ (wmaticStrategyData && wmaticStrategyData.strategyAddress) ? shortAddress(wmaticStrategyData.strategyAddress) : '—' }}</label>
-                                <div class="icon-img ml-2">
+                                <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
                                     <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                                 </div>
                             </v-row>
                         </v-col>
-                        <v-col class="mr-5">
-                            <v-row justify="end" align="center">
-                                <label class="address-card-text">Inception date</label>
-                                <label class="address-card-text ml-3"><b>1 July 2022</b></label>
+                        <v-col :class="!$wu.isFull() ? '' : 'mr-5'" :cols="!$wu.isFull() ? 12 : 0">
+                            <v-row justify="center" align="center">
+                                <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Inception date</label>
+                                <v-spacer v-if="!$wu.isFull()"></v-spacer>
+                                <label class="address-card-text ml-3" :class="!$wu.isFull() ? 'mr-2' : ''"><b>1 July 2022</b></label>
                             </v-row>
                         </v-col>
                     </v-row>
 
-                    <v-row align="center" justify="start" class="ma-0 mt-15">
+                    <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
                         <v-btn class="header-btn btn-filled" @click="showInvestModal">
                             Invest
                         </v-btn>
                     </v-row>
                 </v-col>
-                <v-col cols="3">
+
+                <v-col cols="3" v-if="$wu.isFull()">
                     <v-row align="center" justify="start" class="ma-0 sticky" style="width: 20%;">
                         <v-btn class="header-btn btn-filled-red" @click="showRiskModal">
                             <div class="info-card-icon mr-2">
@@ -448,13 +537,6 @@ export default {
             }
         },
 
-        activeTabTransactions: function () {
-            return {
-                'tab-button': this.tab === 3,
-                'tab-button-in-active': this.tab !== 3,
-            }
-        },
-
         entryFee: function () {
             if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
                 let result = this.wmaticStrategyData.fees.find(x => x.id === 'buy');
@@ -528,12 +610,570 @@ export default {
 <style scoped>
 
 /* mobile */
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 960px) {
+    .info-card-icon {
+        width: 20px;
+        height: 20px;
+    }
 
+    .investor-card-sub-title {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .investor-card-sub-title-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .investor-card-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.03em;
+    }
+
+    .fee-structure-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .fee-structure-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-investor-invest {
+        width: 100% !important;
+        height: 40px !important;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .strategy-info-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .title-card-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .info-card-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .title-card-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .section-title-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .list-title-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .list-title-num {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 54px;
+        line-height: 54px;
+    }
+
+    .list-sub-title-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .progress-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.03em;
+    }
+
+    .progress-sub-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.03em;
+    }
+
+    .card-info {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .card-info-value, .card-info-risk {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .info-container {
+        height: 150px !important;
+    }
+
+    .btn-filled {
+        width: 100%;
+        height: 44px !important;
+    }
+
+    .address-card-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .address-card-link {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+    }
 }
 
-@media only screen and (min-width: 1400px) {
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .info-card-icon {
+        width: 24px;
+        height: 24px;
+    }
 
+    .investor-card-sub-title {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .investor-card-sub-title-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .investor-card-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .fee-structure-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .fee-structure-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.04em;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .parent-page-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .current-page-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .btn-investor-invest {
+        width: 100% !important;
+        height: 44px !important;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .strategy-info-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .title-card-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.04em;
+    }
+
+    .info-card-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .title-card-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .section-title-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.04em;
+    }
+
+    .list-title-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .list-title-num {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 54px;
+        line-height: 54px;
+    }
+
+    .list-sub-title-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .progress-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .progress-sub-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .parent-page-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .current-page-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .card-info {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .card-info-value, .card-info-risk {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.04em;
+    }
+
+    .info-container {
+        height: 150px !important;
+    }
+
+    .btn-filled {
+        width: 100%;
+        height: 50px !important;
+    }
+
+    .address-card-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .address-card-link {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .info-card-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .investor-card-sub-title {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .investor-card-sub-title-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .investor-card-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .fee-structure-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .fee-structure-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.04em;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-investor-invest {
+        width: 100% !important;
+        height: 44px !important;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .strategy-info-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .title-card-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.04em;
+    }
+
+    .info-card-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .title-card-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .section-title-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.04em;
+    }
+
+    .list-title-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .list-title-num {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 54px;
+        line-height: 54px;
+    }
+
+    .list-sub-title-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .progress-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .progress-sub-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .parent-page-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .current-page-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .card-info {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .card-info-value, .card-info-risk {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.04em;
+    }
+
+    .info-container {
+        height: 64px !important;
+    }
+
+    .btn-filled {
+        width: 40%;
+        height: 50px !important;
+    }
+
+    .address-card-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .address-card-link {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+    }
 }
 
 .main-container {
@@ -544,20 +1184,12 @@ export default {
     cursor: pointer;
 
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
     font-feature-settings: 'liga' off;
     color: #1C95E7;
 }
 
 .current-page-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
     font-feature-settings: 'liga' off;
     color: #333333;
 }
@@ -568,10 +1200,6 @@ export default {
 
 .tab-btn {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 32px;
     font-feature-settings: 'liga' off;
     color: #333333;
     cursor: pointer;
@@ -590,10 +1218,6 @@ export default {
 
 .strategy-info-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 20px;
-    line-height: 32px;
     color: #333333;
 }
 
@@ -618,32 +1242,13 @@ export default {
     margin: 5% 3%;
 }
 
-.info-card-icon {
-    width: 24px;
-    height: 24px;
-}
-
-.title-card-icon {
-    width: 32px;
-    height: 32px;
-}
-
 .info-card-text {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 20px;
-    line-height: 32px;
     color: #333333;
 }
 
 .title-card-text {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 24px;
-    letter-spacing: 0.04em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
@@ -662,11 +1267,6 @@ export default {
 
 .section-title-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 24px;
-    letter-spacing: 0.04em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
@@ -678,10 +1278,6 @@ export default {
 
 .list-title-num {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 54px;
-    line-height: 54px;
     font-feature-settings: 'pnum' on, 'lnum' on;
     background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
     -webkit-background-clip: text;
@@ -692,20 +1288,12 @@ export default {
 
 .list-title-text {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 28px;
     font-feature-settings: 'liga' off;
     color: #333333;
 }
 
 .list-sub-title-text {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 24px;
     color: #333333;
 }
 
@@ -715,11 +1303,6 @@ export default {
 
 .progress-text {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    letter-spacing: 0.02em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
@@ -731,11 +1314,6 @@ export default {
 
 .progress-sub-text {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    letter-spacing: 0.02em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #BABFC8;
@@ -747,20 +1325,11 @@ export default {
 
 .card-info {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 20px;
-    line-height: 32px;
     color: #333333;
 }
 
 .card-info-value {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 24px;
-    letter-spacing: 0.04em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #3E5463;
@@ -769,10 +1338,6 @@ export default {
 .card-info-risk {
     font-family: 'Roboto', sans-serif;
     font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 24px;
-    letter-spacing: 0.04em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #CF3F92;
@@ -780,20 +1345,12 @@ export default {
 
 .address-card-text {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 24px;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
 }
 
 .address-card-link {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
     font-feature-settings: 'liga' off;
     color: #1C95E7;
     cursor: pointer;
@@ -801,7 +1358,6 @@ export default {
 
 .info-container {
     width: 100% !important;
-    height: 64px !important;
     background: #E5E7EA;
     border-radius: 4px;
 }
@@ -817,26 +1373,17 @@ export default {
     box-shadow: none !important;
 
     font-family: 'Roboto', sans-serif !important;
-    font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 16px !important;
-    line-height: 20px !important;
     text-align: center !important;
-    letter-spacing: 0.02em !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
 }
 
 .btn-filled {
-    width: 40%;
-    height: 50px !important;
     background: var(--blue-gradient);
     color: #FFFFFF !important;
 }
 
 .btn-investor-invest {
-    width: 100%;
-    height: 44px !important;
     background: var(--blue-gradient);
     color: #FFFFFF !important;
 }
@@ -855,11 +1402,6 @@ export default {
 
 .investor-card-title {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
-    letter-spacing: 0.02em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
@@ -867,20 +1409,12 @@ export default {
 
 .investor-card-sub-title {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 24px;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
 }
 
 .investor-card-sub-title-value {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 28px;
     font-feature-settings: 'liga' off;
     color: #333333;
 }
@@ -893,21 +1427,12 @@ export default {
 
 .fee-structure-label {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 24px;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
 }
 
 .fee-structure-value {
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 24px;
-    letter-spacing: 0.04em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #3E5463;

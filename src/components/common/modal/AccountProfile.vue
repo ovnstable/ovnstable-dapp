@@ -74,7 +74,7 @@
                             <label class="add-usd-btn">Add USD+</label>
                         </a>
 
-                        <a class="add-usd-plus-btn ml-5" @click="addwUsdPlusToken">
+                        <a class="add-usd-plus-btn ml-5" @click="addwUsdPlusToken" v-if="showWrap">
                             <label class="add-usd-btn">Add wUSD+</label>
                         </a>
                     </v-row>
@@ -134,6 +134,7 @@ export default {
     computed: {
         ...mapGetters('web3', ['walletName']),
         ...mapGetters('accountUI', ['showAccountProfile']),
+        ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('transaction', ['transactions']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
 

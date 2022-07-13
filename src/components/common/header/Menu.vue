@@ -7,6 +7,7 @@
             </span>
 
             <span v-bind:class="activeTabWrap"
+                  v-if="showWrap"
                   class=" ml-10"
                   @click="goToAction('/wrap')">
                 Wrap
@@ -93,6 +94,7 @@ export default {
         ...mapGetters('web3', ['web3', 'networkId']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('farmUI', ['showFarm']),
+        ...mapGetters('wrapUI', ['showWrap']),
 
         activeTabSwap: function () {
             return {

@@ -65,6 +65,8 @@ const actions = {
         commit('accountUI/setLoadingBalance', true, { root: true })
         let web3 = rootState.web3;
 
+        const networkId = Number.parseInt(process.env.VUE_APP_NETWORK_ID);
+
         let usdPlus;
         let usdc;
         let wUsdPlus;
@@ -97,23 +99,29 @@ const actions = {
             }
         }
 
-        try {
-            wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
-        } catch (e) {
-            console.log('ERROR: ' + e)
-            await new Promise(resolve => setTimeout(resolve, 2000));
+        if (networkId === 137) {
             try {
                 wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
             } catch (e) {
                 console.log('ERROR: ' + e)
                 await new Promise(resolve => setTimeout(resolve, 2000));
-                wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
+                try {
+                    wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
+                } catch (e) {
+                    console.log('ERROR: ' + e)
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
+                }
             }
         }
 
         usdPlus = web3.web3.utils.fromWei(usdPlus, 'mwei') ;
         usdc = web3.web3.utils.fromWei(usdc, 'mwei') ;
-        wUsdPlus = web3.web3.utils.fromWei(wUsdPlus, 'mwei') ;
+
+        if (networkId === 137) {
+            wUsdPlus = web3.web3.utils.fromWei(wUsdPlus, 'mwei') ;
+        }
+
         commit('setBalance', {
             usdPlus: usdPlus,
             usdc: usdc,

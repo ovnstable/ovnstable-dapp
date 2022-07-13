@@ -26,8 +26,14 @@ const TimelockController = require(`@/contracts/${polygon}/OvnTimelockController
 const UsdPlusToken = require(`@/contracts/${polygon}/UsdPlusToken.json`)
 const StakingRewards = require(`@/contracts/abi/StakingRewards.json`)
 const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`)
-const Market = require(`@/contracts/${polygon}/Market.json`)
-const WrappedUsdPlusToken = require(`@/contracts/${polygon}/WrappedUsdPlusToken.json`)
+
+let Market;
+let WrappedUsdPlusToken;
+
+if (polygon !== "avalanche") {
+    Market = require(`@/contracts/${polygon}/Market.json`)
+    WrappedUsdPlusToken = require(`@/contracts/${polygon}/WrappedUsdPlusToken.json`)
+}
 
 
 const ALLOW_NETWORKS = [networkId, 31337];
@@ -216,6 +222,7 @@ const actions = {
 
         if (polygon === "avalanche") {
             dispatch('farmUI/hidePage', null, {root: true});
+            dispatch('wrapUI/hidePage', null, {root: true});
         }
 
         if (localStorage.getItem('walletName')) {
@@ -343,8 +350,11 @@ const actions = {
         contracts.timelockController = _load(TimelockController, web3);
         contracts.usdPlus = _load(UsdPlusToken, web3);
         contracts.preOvn = _load(ERC20, web3, "0x18D4565Cbd03340996BED17e66D154b632f5d4B6");
-        contracts.market = _load(Market, web3);
-        contracts.wUsdPlus = _load(WrappedUsdPlusToken, web3);
+
+        if (polygon !== "avalanche") {
+            contracts.market = _load(Market, web3);
+            contracts.wUsdPlus = _load(WrappedUsdPlusToken, web3);
+        }
 
         contracts.poolQsUsdPlusWeth = _load(StakingRewards, web3, "0x398B66c4c69Bf19EA6A3c97e8d8b9c93f295D209");
         contracts.poolQsUsdPlusWethToken = _load(ERC20, web3, '0x901Debb34469e89FeCA591f5E5336984151fEc39');

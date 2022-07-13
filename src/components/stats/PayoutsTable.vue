@@ -70,7 +70,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('statsData', ['payouts', ]),
+        ...mapGetters('statsData', ['payouts']),
         ...mapGetters('statsUI', [ 'loadingPayouts'])
     },
 

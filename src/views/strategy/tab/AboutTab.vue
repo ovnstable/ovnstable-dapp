@@ -355,7 +355,6 @@ export default {
 
     computed: {
         ...mapGetters('marketData', ['wmaticStrategyData']),
-        ...mapGetters('accountData', ['balance', 'account']),
 
         entryFee: function () {
             if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
@@ -396,7 +395,6 @@ export default {
 
     methods: {
         ...mapActions('riskModal', ['showRiskModal']),
-        ...mapActions('investorModal', ['showInvestorModal']),
         ...mapActions('investModal', ['showInvestModal']),
 
         shortAddress(address) {

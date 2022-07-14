@@ -104,6 +104,13 @@
                     </v-row>
 
                     <AboutTab v-if="tab === 1"/>
+                    <PerformanceTab v-if="tab === 2"/>
+
+                    <v-row align="center" justify="start" class="ma-0 mt-6" v-if="tab === 2">
+                        <label class="about-link-label" @click="tab=1">
+                            About ETS
+                        </label>
+                    </v-row>
                 </v-col>
 
                 <v-col cols="3" v-if="$wu.isFull()">
@@ -210,10 +217,12 @@ import Tooltip from "@/components/common/element/Tooltip";
 import InvestorModal from "@/components/market/modal/InvestorModal";
 import InvestModal from "@/components/market/modal/invest/InvestModal";
 import AboutTab from "@/views/strategy/tab/AboutTab";
+import PerformanceTab from "@/views/strategy/tab/PerformanceTab";
 export default {
     name: "WmaticPageView",
 
     components: {
+        PerformanceTab,
         AboutTab,
         InvestModal,
         InvestorModal,
@@ -229,7 +238,7 @@ export default {
 
     computed: {
         ...mapGetters('marketData', ['wmaticStrategyData', 'clientProfitDay']),
-        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('accountData', ['balance']),
 
         activeTabAbout: function () {
             return {
@@ -284,7 +293,6 @@ export default {
 
     methods: {
         ...mapActions('riskModal', ['showRiskModal']),
-        ...mapActions('investorModal', ['showInvestorModal']),
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
 
         goToAction(id) {
@@ -370,6 +378,13 @@ export default {
         font-weight: 400;
         font-size: 16px;
         line-height: 20px;
+    }
+
+    .about-link-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
     }
 }
 
@@ -465,6 +480,13 @@ export default {
         font-size: 16px;
         line-height: 20px;
     }
+
+    .about-link-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 18px !important;
+        line-height: 24px !important;
+    }
 }
 
 /* full */
@@ -544,6 +566,13 @@ export default {
         font-weight: 400;
         font-size: 16px;
         line-height: 20px;
+    }
+
+    .about-link-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 18px !important;
+        line-height: 24px !important;
     }
 }
 
@@ -668,5 +697,16 @@ export default {
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #3E5463;
+}
+
+.about-link-label {
+    font-family: 'Roboto', sans-serif !important;
+    font-feature-settings: 'liga' off !important;
+    color: #1C95E7 !important;
+    cursor: pointer !important;
+}
+
+.about-link-label:hover {
+    text-decoration: underline !important;
 }
 </style>

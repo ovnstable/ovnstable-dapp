@@ -10,23 +10,23 @@
             <v-row justify="center" align="center" class="ma-0 mt-2 info-container" @click="openLink('https://app.overnight.fi/fund')">
                 <v-col>
                     <v-row justify="center" align="center" class="ma-0">
-                        <label class="info-title">Total value locked</label>
+                        <label class="info-title">TVL</label>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-2">
                         <label class="info-value">{{ totalTvl ? ('$' + $utils.formatMoneyComma(totalTvl, 2)) : '—' }}</label>
                     </v-row>
                 </v-col>
-                <v-col class="bordered-col" cols="3">
+                <v-col class="bordered-col" cols="4">
                     <v-row justify="center" align="center" class="ma-0">
                         <label class="info-title">Profit USD+</label>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-2">
-                        <label class="info-value value-disabled">Soon</label>
+                        <label class="info-value">{{ totalUsdPlusProfit ? ('$' + $utils.formatMoneyComma(totalUsdPlusProfit, 2)) : '—' }}</label>
                     </v-row>
                 </v-col>
                 <v-col>
                     <v-row justify="center" align="center" class="ma-0">
-                        <label class="info-title">Average USD+ APY</label>
+                        <label class="info-title">APY</label>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-2">
                         <label class="info-value">{{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '—' }}</label>
@@ -51,7 +51,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters("statsData", ['totalUsdPlusValue', 'currentTotalData']),
+        ...mapGetters("statsData", ['totalUsdPlusValue', 'totalUsdPlusProfit', 'currentTotalData']),
     },
 
     data: () => ({

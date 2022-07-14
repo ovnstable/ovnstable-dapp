@@ -22,7 +22,7 @@
                         <label class="info-title">Profit USD+</label>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-2">
-                        <label class="info-value value-disabled">Soon</label>
+                        <label class="info-value">{{ totalUsdPlusProfit ? ('$' + $utils.formatMoneyComma(totalUsdPlusProfit, 2)) : '—' }}</label>
                     </v-row>
                 </v-col>
                 <v-col>
@@ -52,7 +52,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters("statsData", ['totalUsdPlusValue', 'currentTotalData']),
+        ...mapGetters("statsData", ['totalUsdPlusValue', 'totalUsdPlusProfit', 'currentTotalData']),
     },
 
     data: () => ({
@@ -190,13 +190,6 @@ export default {
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #1C95E7;
-}
-
-.value-disabled {
-    font-weight: 300 !important;
-    font-size: 24px !important;
-    text-transform: uppercase !important;
-    color: #C5C9D1 !important;
 }
 
 .bordered-col {

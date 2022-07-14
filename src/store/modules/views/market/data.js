@@ -4,12 +4,18 @@ import moment from "moment";
 const state = {
 
     wmaticStrategyData: null,
+
+    clientProfitDay: null,
 };
 
 const getters = {
 
     wmaticStrategyData(state) {
         return state.wmaticStrategyData;
+    },
+
+    clientProfitDay(state) {
+        return state.clientProfitDay;
     },
 };
 
@@ -19,6 +25,7 @@ const actions = {
         console.log('MarketData: refreshMarket');
 
         dispatch('refreshStrategyData');
+        dispatch('refreshClientData', {root:true});
         dispatch('accountData/refreshBalance', null, {root:true});
     },
 
@@ -52,12 +59,39 @@ const actions = {
 
         commit('setWmaticStrategyData', wmaticStrategyData);
     },
+
+    async refreshClientData({commit, dispatch, getters, rootState}) {
+        console.log('MarketData: refreshClientData');
+
+        let fetchOptions = {
+            headers: {
+                "Access-Control-Allow-Origin": process.env.VUE_APP_API
+            }
+        };
+
+        let account = rootState.accountData.account.toLowerCase();
+        let profitDay;
+
+        await fetch(process.env.VUE_APP_API + `/hedge-strategies/0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf/account/${account}`, fetchOptions)
+            .then(value => value.json())
+            .then(value => {
+                profitDay = value.profit;
+            }).catch(reason => {
+                console.log('Error get data: ' + reason);
+            })
+
+        commit('setClientProfitDay', profitDay);
+    },
 };
 
 const mutations = {
 
     setWmaticStrategyData(state, wmaticStrategyData) {
         state.wmaticStrategyData = wmaticStrategyData;
+    },
+
+    setClientProfitDay(state, clientProfitDay) {
+        state.clientProfitDay = clientProfitDay;
     },
 };
 

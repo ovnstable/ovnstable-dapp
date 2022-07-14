@@ -39,6 +39,12 @@ let accountingZeroConfig = {
     thousand: " ",
 }
 
+let accountingFourConfigComma = {
+    symbol: "",
+    precision: 4,
+    thousand: ",",
+}
+
 let accountingSecondConfigComma = {
     symbol: "",
     precision: 2,
@@ -88,6 +94,8 @@ export default {
         }
 
         switch (count){
+            case 4:
+                return accounting.formatMoney(number, accountingFourConfigComma);
             case 2:
                 return accounting.formatMoney(number, accountingSecondConfigComma);
             case 1:

@@ -37,13 +37,23 @@ const actions = {
         };
 
         let avgApy;
+        let avgApyStrategyWeek;
         let wmaticStrategyData;
 
         await fetch(process.env.VUE_APP_API + '/widget/avg-apy-info/week', fetchOptions)
             .then(value => value.json())
             .then(value => {
                 avgApy = value;
-                avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+                avgApy.date = moment(avgApy.date).format("DD MMM. ‘YY");
+            }).catch(reason => {
+                console.log('Error get data: ' + reason);
+            })
+
+        await fetch(process.env.VUE_APP_API + '/hedge-strategies/0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf/avg-apy-info/week', fetchOptions)
+            .then(value => value.json())
+            .then(value => {
+                avgApyStrategyWeek = value;
+                avgApyStrategyWeek.date = moment(avgApyStrategyWeek.date).format("DD MMM. ‘YY");
             }).catch(reason => {
                 console.log('Error get data: ' + reason);
             })
@@ -52,6 +62,7 @@ const actions = {
             .then(value => value.json())
             .then(value => {
                 wmaticStrategyData = value;
+                wmaticStrategyData.apy = (avgApyStrategyWeek && avgApyStrategyWeek.value) ? (avgApyStrategyWeek.value) : wmaticStrategyData.apy;
                 wmaticStrategyData.diffApy = (avgApy && avgApy.value) ? (wmaticStrategyData.apy - avgApy.value) : null;
             }).catch(reason => {
                 console.log('Error get data: ' + reason);

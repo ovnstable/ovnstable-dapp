@@ -8,7 +8,7 @@
             <v-card class="container_body airdrop-body">
                 <v-toolbar class="container_header" flat>
                     <label class="title-modal mt-4">
-                        {{ isMintView ? 'Invest' : 'Withdraw' }}
+                        {{ isMintView ? 'Mint' : 'Redeem' }}
                     </label>
                     <v-spacer></v-spacer>
                     <v-btn icon @click="close" class="mt-4">
@@ -32,7 +32,7 @@
         <v-card class="container_body airdrop-body" v-else>
             <v-toolbar class="container_header" flat>
                 <label class="title-modal">
-                    {{ isMintView ? 'Invest' : 'Withdraw' }}
+                    {{ isMintView ? 'Mint' : 'Redeem' }}
                 </label>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="close">

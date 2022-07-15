@@ -75,8 +75,8 @@ export default {
         ...mapMutations([]),
 
         getHours() {
-            let now = this.$moment(new Date());
-            let lastPayoutDateTime = this.$moment(this.wmaticStrategyData.payoutItems[this.wmaticStrategyData.payoutItems.length - 1].payableDate);
+            let now = this.$moment.utc(new Date());
+            let lastPayoutDateTime = this.$moment.utc(this.wmaticStrategyData.payoutItems[this.wmaticStrategyData.payoutItems.length - 1].payableDate);
             let duration = this.$moment.duration(now.diff(lastPayoutDateTime));
 
             return duration.asHours();

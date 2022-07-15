@@ -234,14 +234,14 @@
                 <v-row class="info-row" justify="start" align="center">
                     <label class="card-info mt-1">APY</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 0)) + '%' : '—' }}</label>
+                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 1)) + '%' : '—' }}</label>
                     <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
-                    <label class="card-info mt-1">Diff. to Hold USD+</label>
+                    <label class="card-info mt-1">Diff. to USD+</label>
                     <v-spacer></v-spacer>
                     <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.diffApy) ? ((wmaticStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(wmaticStrategyData.diffApy, 1)) + '%' : '—' }}</label>
-                    <Tooltip text="APY difference compared to the base APY USD+"/>
+                    <Tooltip text="APY difference compared to the base APY USD+ (based on 7-day average)"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Risk factor</label>
@@ -255,7 +255,7 @@
                     <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}</label>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
-                    <label class="card-info mt-1">Investors</label>
+                    <label class="card-info mt-1">Users</label>
                     <v-spacer></v-spacer>
                     <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.holders) ? $utils.formatMoneyComma(wmaticStrategyData.holders, 0) : '—' }}</label>
                 </v-row>

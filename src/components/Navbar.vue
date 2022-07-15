@@ -18,7 +18,7 @@
                     <img class="navbar-page-link" :src="require('@/assets/icon/cart.svg')">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label selected-page-label">Market</label><v-icon class="alpha mb-5" small>mdi-alpha</v-icon>
+                    <label class="navbar-page-label selected-page-label">Market</label><v-icon class="alpha mb-5" small>mdi-beta</v-icon>
                 </v-list-item-title>
             </v-list-item>
 

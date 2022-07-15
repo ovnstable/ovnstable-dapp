@@ -24,15 +24,15 @@
             <v-row class="card-row info-row mt-15" justify="start" align="center">
                 <label class="card-info mt-1">APY</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 0)) + '%' : '—' }}</label>
+                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 1)) + '%' : '—' }}</label>
                 <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
             </v-row>
 
             <v-row class="card-row info-row mt-6" justify="start" align="center">
-                <label class="card-info mt-1">Diff. to Hold USD+</label>
+                <label class="card-info mt-1">Diff. to USD+</label>
                 <v-spacer></v-spacer>
                 <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.diffApy) ? ((wmaticStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(wmaticStrategyData.diffApy, 1)) + '%' : '—' }}</label>
-                <Tooltip text="APY difference compared to the base APY USD+"/>
+                <Tooltip text="APY difference compared to the base APY USD+ (based on 7-day average)"/>
             </v-row>
 
             <v-row class="card-row info-row mt-6" justify="start" align="center">

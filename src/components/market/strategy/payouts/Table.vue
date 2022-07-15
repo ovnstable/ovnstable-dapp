@@ -6,7 +6,7 @@
                 Payout date, UTC
             </th>
             <th class="table-header-payouts-strategy text-right" v-if="!minimized">
-                Daily profit{{ minimized ? '' : ', USDC per USD+'}}
+                Daily profit{{ minimized ? '' : ', USDC per USD+/wMatic'}}
             </th>
             <th class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
                 Annualized yield{{ minimized ? '' : ', % per year'}}

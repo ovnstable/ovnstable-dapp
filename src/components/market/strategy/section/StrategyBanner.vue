@@ -18,7 +18,8 @@
                         <label class="info-title">APY</label>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-2">
-                        <label class="info-value">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 0)) + '%' : '—' }}</label>
+                        <label class="info-value mr-n1">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 0)) + '%' : '—' }}</label>
+                        <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                     </v-row>
                 </v-col>
                 <v-col class="bordered-col">
@@ -31,7 +32,7 @@
                 </v-col>
                 <v-col>
                     <v-row justify="center" align="center" class="ma-0">
-                        <label class="info-title">Investors</label>
+                        <label class="info-title">Users</label>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-2">
                         <label class="info-value">{{ (wmaticStrategyData && wmaticStrategyData.holders) ? $utils.formatMoneyComma(wmaticStrategyData.holders, 0) : '—' }}</label>
@@ -45,11 +46,13 @@
 <script>
 import {mapGetters} from "vuex";
 import moment from "moment";
+import Tooltip from "@/components/common/element/Tooltip";
 
 export default {
     name: "StrategyBanner",
 
     components: {
+        Tooltip
     },
 
     props: {
@@ -85,15 +88,15 @@ export default {
     }
 
     .currency-icon {
-        width: 40px;
-        height: 40px;
+        width: 28px;
+        height: 28px;
     }
 
     .banner-title {
         font-style: normal;
         font-weight: 400;
-        font-size: 24px;
-        line-height: 28px;
+        font-size: 20px;
+        line-height: 24px;
     }
 
     .network-icon {

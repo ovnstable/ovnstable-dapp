@@ -41,7 +41,7 @@
                             </v-row>
                             <v-row align="center" justify="center" class="promo-row mt-8">
                                 <label class="promo-label-text">
-                                    You have <b>three extra credentials to share</b> among your DeFi buddies that are just as enthusiastic about our hedged strategies as you are - use them wisely!
+                                    You have <b>three extra credentials to share</b> among your DeFi buddies that are just as enthusiastic about our exchange-traded strategy as you are - use them wisely!
                                 </label>
                             </v-row>
 

@@ -21,7 +21,7 @@
             <v-card-text class="pt-8 content-container">
                 <v-row class="modal-info-row" align="center">
                     <label class="modal-info-text">
-                        By depositing USD+ into this strategy, you automatically borrow WMATIC from AAVE v2 at a market rate.
+                        By depositing USD+ into this strategy, you automatically borrow WMATIC from AAVE v3 at a market rate.
                         <br/><br/>
                         The strategy's smart contract is designed to automatically invest these equal values of WMATIC and USD+ into Dystopia's USD+/WMATIC Liquidity Pool, after which these LP Tokens are staked into the Gauge Pool on Penrose.
                         <br/><br/>

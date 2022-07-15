@@ -46,7 +46,7 @@ const routes = [
                 }
             },
             {
-                path: '/hedged',
+                path: '/ets',
                 name: 'WmaticPageView',
                 component: () => import('../views/strategy/WmaticPageView.vue'),
                 meta: {

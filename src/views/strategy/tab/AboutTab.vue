@@ -96,7 +96,7 @@
                             <label class="list-title-text">Deposit Into Strategy</label>
                         </v-row>
                         <v-row class="mt-8">
-                            <label class="list-sub-title-text">Deposit USD+ into the vault. This triggers an automatic borrow of value of WMATIC (from AAVE v2 markets), which is invested alongside your USD+ deposit into Dystopia’s WMATIC/USD+ pool.</label>
+                            <label class="list-sub-title-text">Deposit USD+ into the vault. This triggers an automatic borrow of value of WMATIC (from AAVE v3 markets), which is invested alongside your USD+ deposit into Dystopia’s WMATIC/USD+ pool.</label>
                         </v-row>
                     </v-col>
                 </v-row>

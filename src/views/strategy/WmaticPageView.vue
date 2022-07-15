@@ -5,7 +5,7 @@
                 <label class="parent-page-label" @click="goToAction('/')">Market</label>
                 <label class="current-page-label">
                     <v-icon size="18" class="mx-2">mdi-chevron-right</v-icon>
-                    USD+ / WMatic
+                    ETS: USD+ / WMatic
                 </label>
             </v-row>
         </div>

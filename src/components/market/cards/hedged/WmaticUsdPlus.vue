@@ -10,7 +10,7 @@
                 <div class="currency-icon">
                     <v-img :src="require('@/assets/currencies/market/WmaticUsdPlus.svg')"/>
                 </div>
-                <label class="card-title ml-3">USD+ / WMatic</label>
+                <label class="card-title ml-3">ETS: USD+ / WMatic</label>
                 <v-spacer></v-spacer>
                 <div class="currency-icon">
                     <v-img :src="require('@/assets/network/polygon.svg')"/>
@@ -107,7 +107,7 @@ export default {
 
     methods: {
         openStrategyAction() {
-            this.$router.push('/hedged');
+            this.$router.push('/ets');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     },

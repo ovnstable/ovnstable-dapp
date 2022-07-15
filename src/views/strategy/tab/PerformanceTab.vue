@@ -138,7 +138,7 @@
                             <div class="info-card-icon">
                                 <v-img :src="require('@/assets/currencies/market/Aave.svg')"/>
                             </div>
-                            <label class="title-card-text-bottom ml-2">Aave V2</label>
+                            <label class="title-card-text-bottom ml-2">Aave V3</label>
                             <v-spacer></v-spacer>
                             <label class="card-info">Current health factor</label>
                             <label class="card-info-value ml-2">{{ (wmaticStrategyData && wmaticStrategyData.currentHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.currentHealthFactor, 2)) : '—' }}</label>
@@ -159,7 +159,7 @@
                             <div class="info-card-icon">
                                 <v-img :src="require('@/assets/currencies/market/Aave.svg')"/>
                             </div>
-                            <label class="title-card-text-bottom ml-2">Aave V2</label>
+                            <label class="title-card-text-bottom ml-2">Aave V3</label>
                         </v-row>
                         <v-row align="center" justify="center" class="mt-6">
                             <label class="card-info">Current health factor</label>

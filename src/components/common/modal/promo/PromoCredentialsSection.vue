@@ -82,7 +82,7 @@ export default {
                 "Your invite credentials to access the beta https://market.overnight.fi/\n\n" +
                 "Login: " + promoLogin.login + "\n" +
                 "Password: " + promoLogin.password + "\n\n" +
-                "Be one of the first to check out the new hedged strategy"
+                "Be one of the first to check out the new exchange-traded strategy"
             );
 
             await new Promise(resolve => setTimeout(resolve, 1000));

@@ -1,16 +1,11 @@
 <template>
     <div>
-<!--        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'" justify="start" align="center">
+        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'" justify="start" align="center">
             <v-col class="info-card-body-bottom">
                 <v-row align="center" justify="start" class="ma-0">
                     <v-col class="ml-n3 mt-n3">
                         <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
                             APY
-                        </v-btn>
-                    </v-col>
-                    <v-col class="mx-3 mt-n3">
-                        <v-btn outlined class="rate-tab-btn" @click="rateTab=2" v-bind:class="activeRateDist">
-                            APY distribution
                         </v-btn>
                     </v-col>
                     <v-col class="mr-n3 mt-n3">
@@ -20,11 +15,10 @@
                     </v-col>
                 </v-row>
 
-&lt;!&ndash;                <LineChartApy v-if="rateTab === 1" :data="wmaticStrategyData.payoutItems"/>&ndash;&gt;
-&lt;!&ndash;                <LineChartApy v-if="rateTab === 2" :data="wmaticStrategyData.payoutItems"/>&ndash;&gt;
-&lt;!&ndash;                <LineChartApy v-if="rateTab === 3" :data="wmaticStrategyData.payoutItems"/>&ndash;&gt;
+                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData"/>
+                <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData"/>
             </v-col>
-        </v-row>-->
+        </v-row>
 
         <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'">
             <label class="section-title-label">
@@ -212,10 +206,14 @@ import Tooltip from "@/components/common/element/Tooltip";
 import Table from "@/components/market/strategy/payouts/Table";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut";
 import LineChartApy from "@/components/stats/widget/LineChartApy";
+import ChartApy from "@/components/market/strategy/chart/ChartApy";
+import ChartTvl from "@/components/market/strategy/chart/ChartTvl";
 export default {
     name: "PerformanceTab",
 
     components: {
+        ChartTvl,
+        ChartApy,
         LineChartApy,
         Doughnut,
         Table,
@@ -227,7 +225,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData']),
+        ...mapGetters('marketData', ['wmaticStrategyData', 'payoutsApyData', 'payoutsTvlData']),
 
         activeRateApy: function () {
             return {

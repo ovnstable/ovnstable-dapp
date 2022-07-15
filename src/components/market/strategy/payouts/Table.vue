@@ -18,7 +18,7 @@
         </thead>
 
         <tbody>
-        <tr v-for="item in wmaticStrategyData.payoutItems" :key="item.payableDate" class="current-strategy-table-row" @click="openOnScan(item)">
+        <tr v-for="item in [...wmaticStrategyData.payoutItems].reverse()" :key="item.payableDate" class="current-strategy-table-row" @click="openOnScan(item)">
             <td class="table-label-payouts-strategy text-left">
                 <label>
                     {{ formatDate(item.payableDate) }}

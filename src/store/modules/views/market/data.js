@@ -2,10 +2,12 @@ import {axios} from "@/plugins/http-axios";
 import moment from "moment";
 
 const state = {
-
     wmaticStrategyData: null,
 
     clientProfitDay: null,
+
+    payoutsApyData: {},
+    payoutsTvlData: {},
 };
 
 const getters = {
@@ -16,6 +18,14 @@ const getters = {
 
     clientProfitDay(state) {
         return state.clientProfitDay;
+    },
+
+    payoutsApyData(state) {
+        return state.payoutsApyData;
+    },
+
+    payoutsTvlData(state) {
+        return state.payoutsTvlData;
     },
 };
 
@@ -64,6 +74,55 @@ const actions = {
                 wmaticStrategyData = value;
                 wmaticStrategyData.apy = (avgApyStrategyWeek && avgApyStrategyWeek.value) ? (avgApyStrategyWeek.value) : wmaticStrategyData.apy;
                 wmaticStrategyData.diffApy = (avgApy && avgApy.value) ? (wmaticStrategyData.apy - avgApy.value) : null;
+
+                let clientData = wmaticStrategyData.timeData;
+
+                let widgetDataDict = {};
+                let widgetData = {
+                    labels: [],
+                    datasets: [
+                        {
+                            fill: false,
+                            borderColor: '#1C95E7',
+                            data: [],
+                        }
+                    ]
+                };
+
+                [...clientData].forEach(item => {
+                    widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
+                });
+
+                for(let key in widgetDataDict) {
+                    widgetData.labels.push(key);
+                    widgetData.datasets[0].data.push(widgetDataDict[key]);
+                }
+
+                commit('setPayoutsApyData', widgetData);
+
+
+                let widgetTvlDataDict = {};
+                let widgetTvlData = {
+                    labels: [],
+                    datasets: [
+                        {
+                            fill: false,
+                            borderColor: '#1C95E7',
+                            data: [],
+                        }
+                    ]
+                };
+
+                [...clientData].forEach(item => {
+                    widgetTvlDataDict[moment(item.date).format('DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
+                });
+
+                for(let key in widgetTvlDataDict) {
+                    widgetTvlData.labels.push(key);
+                    widgetTvlData.datasets[0].data.push(widgetTvlDataDict[key]);
+                }
+
+                commit('setPayoutsTvlData', widgetTvlData);
             }).catch(reason => {
                 console.log('Error get data: ' + reason);
             })
@@ -103,6 +162,14 @@ const mutations = {
 
     setClientProfitDay(state, clientProfitDay) {
         state.clientProfitDay = clientProfitDay;
+    },
+
+    setPayoutsApyData(state, payoutsApyData) {
+        state.payoutsApyData = payoutsApyData;
+    },
+
+    setPayoutsTvlData(state, payoutsTvlData) {
+        state.payoutsTvlData = payoutsTvlData;
     },
 };
 

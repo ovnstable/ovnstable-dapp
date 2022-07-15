@@ -6,8 +6,8 @@ const state = {
 
     clientProfitDay: null,
 
-    payoutsApyData: {},
-    payoutsTvlData: {},
+    apyData: {},
+    tvlData: {},
 };
 
 const getters = {
@@ -20,12 +20,12 @@ const getters = {
         return state.clientProfitDay;
     },
 
-    payoutsApyData(state) {
-        return state.payoutsApyData;
+    apyData(state) {
+        return state.apyData;
     },
 
-    payoutsTvlData(state) {
-        return state.payoutsTvlData;
+    tvlData(state) {
+        return state.tvlData;
     },
 };
 
@@ -98,7 +98,7 @@ const actions = {
                     widgetData.datasets[0].data.push(widgetDataDict[key]);
                 }
 
-                commit('setPayoutsApyData', widgetData);
+                commit('setApyData', widgetData);
 
 
                 let widgetTvlDataDict = {};
@@ -122,7 +122,7 @@ const actions = {
                     widgetTvlData.datasets[0].data.push(widgetTvlDataDict[key]);
                 }
 
-                commit('setPayoutsTvlData', widgetTvlData);
+                commit('setTvlData', widgetTvlData);
             }).catch(reason => {
                 console.log('Error get data: ' + reason);
             })
@@ -164,12 +164,12 @@ const mutations = {
         state.clientProfitDay = clientProfitDay;
     },
 
-    setPayoutsApyData(state, payoutsApyData) {
-        state.payoutsApyData = payoutsApyData;
+    setApyData(state, apyData) {
+        state.apyData = apyData;
     },
 
-    setPayoutsTvlData(state, payoutsTvlData) {
-        state.payoutsTvlData = payoutsTvlData;
+    setTvlData(state, tvlData) {
+        state.tvlData = tvlData;
     },
 };
 

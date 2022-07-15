@@ -8,6 +8,7 @@ const state = {
     payouts: [],
 
     payoutsApyData: {},
+    payoutsApyDataDict: [],
     payoutsTvlData: {},
     totalUsdPlusValue: null,
     totalUsdPlusProfit: null,
@@ -29,6 +30,10 @@ const getters = {
 
     payoutsApyData(state) {
         return state.payoutsApyData;
+    },
+
+    payoutsApyDataDict(state) {
+        return state.payoutsApyDataDict;
     },
 
     payoutsTvlData(state) {
@@ -155,8 +160,10 @@ const actions = {
                 };
 
                 [...clientData].reverse().forEach(item => {
-                    widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = item.annualizedYield;
+                    widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
                 });
+
+                commit('setPayoutsApyDataDict', widgetDataDict);
 
                 for(let key in widgetDataDict) {
                     widgetData.labels.push(key);
@@ -234,6 +241,10 @@ const mutations = {
 
     setPayoutsApyData(state, payoutsApyData) {
         state.payoutsApyData = payoutsApyData;
+    },
+
+    setPayoutsApyDataDict(state, payoutsApyDataDict) {
+        state.payoutsApyDataDict = payoutsApyDataDict;
     },
 
     setPayoutsTvlData(state, payoutsTvlData) {

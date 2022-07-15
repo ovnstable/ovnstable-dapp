@@ -12,6 +12,19 @@
                         {{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '' }}
                     </label>
                 </v-row>
+
+                <v-row justify="start" v-if="!isMobile">
+                    <v-checkbox
+                            class="hold-checkbox"
+                            color="#22ABAC"
+                            @click="redraw"
+                            v-model="usdPlusDataEnabled"
+                    >
+                        <template v-slot:label>
+                            <label class="hold-checkbox-label">Hold USD+</label>
+                        </template>
+                    </v-checkbox>
+                </v-row>
             </v-col>
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
@@ -78,10 +91,19 @@ export default {
             type: Object,
             default: null,
         },
+
+        usdPlusData: {
+            type: Object,
+            default: null,
+        },
     },
 
     watch: {
         data: function (newVal, oldVal) {
+            this.redraw();
+        },
+
+        usdPlusData: function (newVal, oldVal) {
             this.redraw();
         },
     },
@@ -94,6 +116,7 @@ export default {
         chart: null,
 
         avgApy: null,
+        usdPlusDataEnabled: false,
     }),
 
     computed: {
@@ -177,6 +200,9 @@ export default {
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(this.slice) : labels;
 
+            let valuesUsdPlus = [];
+            labels.forEach(v => valuesUsdPlus.push(this.usdPlusData[v]));
+
             let averageValue = this.avgApy.value;
 
             let maxValue;
@@ -187,11 +213,26 @@ export default {
                 maxValue = 50;
             }
 
-            let options = {
-                series: [{
-                    name: "APY",
+            let seriesList = [];
+
+            seriesList.push(
+                {
+                    name: "USD+/WMATIC ETS APY",
                     data: values
-                }],
+                }
+            );
+
+            if (this.usdPlusDataEnabled) {
+                seriesList.push(
+                    {
+                        name: "USD+ APY",
+                        data: valuesUsdPlus
+                    }
+                );
+            }
+
+            let options = {
+                series: seriesList,
 
                 labels: labels,
 
@@ -239,7 +280,7 @@ export default {
                 stroke: {
                     curve: 'straight',
                     width: this.isMobile ? 1 : 2,
-                    colors: ["#1C95E7"],
+                    colors: ["#1C95E7", "#22ABAC"],
                 },
 
                 xaxis: {
@@ -284,17 +325,17 @@ export default {
                 },
 
                 legend: {
-                    horizontalAlign: 'left'
+                    show: false,
                 },
 
-                colors: ['#E6F1FF'],
+                colors: ['#E6F1FF', 'rgba(34, 171, 172, 0.05)'],
 
                 theme: {
                     mode: 'light',
                 },
 
                 fill: {
-                    type: ['gradient'],
+                    type: ['gradient', 'gradient'],
 
                     gradient: {
                         shade: 'light',
@@ -343,6 +384,13 @@ export default {
     .chart-row {
         margin-bottom: -10px !important;
     }
+
+    .hold-checkbox-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
@@ -388,6 +436,13 @@ export default {
 
     .apy-chart-container {
         height: 420px !important;
+    }
+
+    .hold-checkbox-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
     }
 }
 
@@ -452,6 +507,20 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333 !important;
+}
+
+.hold-checkbox, .hold-checkbox-label {
+    z-index: 2 !important;
+}
+
+.hold-checkbox {
+    margin-left: 4% !important;
+}
+
+.hold-checkbox-label {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #707A8B !important;
 }
 
 </style>

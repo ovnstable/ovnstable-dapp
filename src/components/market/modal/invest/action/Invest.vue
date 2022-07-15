@@ -260,7 +260,7 @@ export default {
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
-        ...mapActions("successModal", ['showSuccessModal']),
+        ...mapActions("successModal", ['showSuccessModal', 'showSuccessModalWithPromo']),
 
 
         isNumber: function(evt) {
@@ -305,9 +305,34 @@ export default {
                     let buyResult = await contracts.exchangerUsdPlusWmatic.methods.buy(sum).send(buyParams);
 
                     this.closeWaitingModal();
-                    this.showSuccessModal(buyResult.transactionHash);
+
+                    let loginsList = localStorage.getItem('promoLogins');
+
+                    if (loginsList) {
+                        this.showSuccessModal(buyResult.transactionHash);
+                    } else {
+                        try {
+                            const response = await this.$axios.post(
+                                '/hedge-strategies/0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf/next-insiders',
+                                { hash: buyResult.transactionHash, address: from }
+                            );
+
+                            if (response && response.data) {
+                                localStorage.setItem('promoLogins', JSON.stringify(response.data));
+                                localStorage.setItem('promoChecked', "0");
+
+                                this.showSuccessModalWithPromo(buyResult.transactionHash);
+                            } else {
+                                console.log("Error while getting promo: " + e);
+                                this.showSuccessModal(buyResult.transactionHash);
+                            }
+                        } catch (e) {
+                            console.log("Error while getting promo: " + e);
+                            this.showSuccessModal(buyResult.transactionHash);
+                        }
+                    }
                 } catch (e) {
-                    console.log(e)
+                    console.log(e);
                     this.closeWaitingModal();
                     this.showErrorModal('buyUSD+Wmatic');
                     return;

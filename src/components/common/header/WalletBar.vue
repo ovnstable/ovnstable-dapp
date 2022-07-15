@@ -1,28 +1,33 @@
 <template>
-    <div class="wallet-bar-main-container mt-1">
-        <v-row align="center" class="wallet-bar-container" @click="walletClickAction">
-            <v-col cols="1" class="wallet-col mr-4">
-                <div class="wallet-icon">
-                    <v-img :src="require('@/assets/icon/undefined.svg')"/>
-                </div>
-            </v-col>
-            <v-col cols="5" class="wallet-col" v-if="!$wu.isMobile()">
-                <label class="balance-label">
-                    {{ $utils.formatMoney(account ? balance.usdPlus : 0, 2) }}&nbsp;USD+
-                </label>
-            </v-col>
-            <v-col :cols="$wu.isMobile() ? 0 : 4" class="wallet-col" :class="$wu.isMobile() ? 'mr-4' : ''">
-                <v-row class="account-display-container" align="center" justify="center">
-                    <label class="account-label">
-                        {{ account ? accountDisplay : 'XXXXX...XXXX' }}
+    <v-badge dot
+             :color="(promoLogins && promoChecked && (promoChecked === '0')) ? '#CF3F92' : '#FFFFFF'"
+             offset-x="-1"
+             offset-y="2">
+        <div class="wallet-bar-main-container mt-1">
+            <v-row align="center" class="wallet-bar-container" @click="walletClickAction">
+                <v-col cols="1" class="wallet-col mr-4">
+                    <div class="wallet-icon">
+                        <v-img :src="require('@/assets/icon/undefined.svg')"/>
+                    </div>
+                </v-col>
+                <v-col cols="5" class="wallet-col" v-if="!$wu.isMobile()">
+                    <label class="balance-label">
+                        {{ $utils.formatMoney(account ? balance.usdPlus : 0, 2) }}&nbsp;USD+
                     </label>
-                </v-row>
-            </v-col>
-            <v-col cols="1" class="wallet-col" v-if="!$wu.isMobile()">
-                <v-icon class="eye-icon">mdi-eye-outline</v-icon>
-            </v-col>
-        </v-row>
-    </div>
+                </v-col>
+                <v-col :cols="$wu.isMobile() ? 0 : 4" class="wallet-col" :class="$wu.isMobile() ? 'mr-4' : ''">
+                    <v-row class="account-display-container" align="center" justify="center">
+                        <label class="account-label">
+                            {{ account ? accountDisplay : 'XXXXX...XXXX' }}
+                        </label>
+                    </v-row>
+                </v-col>
+                <v-col cols="1" class="wallet-col" v-if="!$wu.isMobile()">
+                    <v-icon class="eye-icon">mdi-eye-outline</v-icon>
+                </v-col>
+            </v-row>
+        </div>
+    </v-badge>
 </template>
 
 <script>
@@ -34,10 +39,27 @@ export default {
     components: {
     },
 
+    data: () => ({
+        get promoLogins() {
+            return localStorage.getItem('promoLogins');
+        },
+
+        set promoLogins(value) {
+            localStorage.setItem('promoLogins', value);
+        },
+
+        get promoChecked() {
+            return localStorage.getItem('promoChecked');
+        },
+
+        set promoChecked(value) {
+            localStorage.setItem('promoChecked', value);
+        }
+    }),
+
     computed: {
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
         ...mapGetters('web3', ['web3',  'networkId', 'walletConnected']),
-        ...mapGetters('farmUI', ['showFarm']),
 
         accountDisplay: function () {
             if (this.uns) {
@@ -80,6 +102,9 @@ export default {
 
         walletClickAction() {
             if (this.account) {
+                if (localStorage.getItem('promoLogins')) {
+                    localStorage.setItem('promoChecked', "1");
+                }
                 this.showAccountProfile();
             } else {
                 this.connectWallet();

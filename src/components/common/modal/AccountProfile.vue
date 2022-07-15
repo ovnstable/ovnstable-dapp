@@ -81,6 +81,13 @@
                         <label class="ml-2 coin-btn-label">USD+/WMATIC</label>
                     </v-btn>
                 </v-row>
+
+                <v-row class="account-info-row" :class="$wu.isMobile() ? 'mt-15' : 'mt-8'" align="center" v-if="promoLogins">
+                    <label class="add-coins-label" :class="$wu.isMobile() ? 'ml-1' : ''">Extra credentials</label>
+                    <Tooltip text="Share these credentials among whom you think should use it"/>
+                </v-row>
+
+                <PromoCredentialsSection/>
             </v-card-text>
         </v-card>
     </v-dialog>
@@ -88,12 +95,24 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import Tooltip from "@/components/common/element/Tooltip";
+import PromoCredentialsSection from "@/components/common/modal/promo/PromoCredentialsSection";
 
 export default {
     name: "AccountProfile",
 
+    components: {PromoCredentialsSection, Tooltip},
+
     data: () => ({
         showCopyTooltip: false,
+
+        get promoLogins() {
+            return localStorage.getItem('promoLogins');
+        },
+
+        set promoLogins(value) {
+            localStorage.setItem('promoLogins', value);
+        },
     }),
 
     props: {
@@ -136,14 +155,11 @@ export default {
 
 
     watch: {
-
         showAccountProfile: function (newValue, oldValue){
-
             console.log('Watch: show ' + newValue);
             if (newValue){
                 this.loadTransaction();
             }
-
         },
     },
 

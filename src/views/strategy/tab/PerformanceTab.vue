@@ -1,6 +1,30 @@
 <template>
     <div>
-        <!-- TODO: add rates container -->
+<!--        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'" justify="start" align="center">
+            <v-col class="info-card-body-bottom">
+                <v-row align="center" justify="start" class="ma-0">
+                    <v-col class="ml-n3 mt-n3">
+                        <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
+                            APY
+                        </v-btn>
+                    </v-col>
+                    <v-col class="mx-3 mt-n3">
+                        <v-btn outlined class="rate-tab-btn" @click="rateTab=2" v-bind:class="activeRateDist">
+                            APY distribution
+                        </v-btn>
+                    </v-col>
+                    <v-col class="mr-n3 mt-n3">
+                        <v-btn outlined class="rate-tab-btn" @click="rateTab=3" v-bind:class="activeRateTvl">
+                            TVL
+                        </v-btn>
+                    </v-col>
+                </v-row>
+
+&lt;!&ndash;                <LineChartApy v-if="rateTab === 1" :data="wmaticStrategyData.payoutItems"/>&ndash;&gt;
+&lt;!&ndash;                <LineChartApy v-if="rateTab === 2" :data="wmaticStrategyData.payoutItems"/>&ndash;&gt;
+&lt;!&ndash;                <LineChartApy v-if="rateTab === 3" :data="wmaticStrategyData.payoutItems"/>&ndash;&gt;
+            </v-col>
+        </v-row>-->
 
         <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'">
             <label class="section-title-label">
@@ -16,7 +40,7 @@
                             <label class="title-card-text">OWNED</label>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
-                            <label class="card-info mt-1">Token</label>
+                            <label class="card-info mt-2">Token</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">{{ wmaticStrategyData ? wmaticStrategyData.ownedAsset.token : '—' }}</label>
                             <div class="info-card-icon ml-2">
@@ -24,7 +48,7 @@
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
-                            <label class="card-info mt-1">Balance</label>
+                            <label class="card-info mt-2">Balance</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
                                 {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.ownedAsset.amount, 0) : '—' }}
@@ -32,7 +56,7 @@
                             </label>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
-                            <label class="card-info mt-1">Value</label>
+                            <label class="card-info mt-2">Value</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
                                 {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.ownedAsset.amountUsdc, 0) : '—' }}
@@ -50,7 +74,7 @@
                             <label class="title-card-text">lent</label>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
-                            <label class="card-info mt-1">Token</label>
+                            <label class="card-info mt-2">Token</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">{{ wmaticStrategyData ? wmaticStrategyData.depositAsset.token : '—' }}</label>
                             <div class="info-card-icon ml-2">
@@ -58,7 +82,7 @@
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
-                            <label class="card-info mt-1">Balance</label>
+                            <label class="card-info mt-2">Balance</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
                                 {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.depositAsset.amount, 0) : '—' }}
@@ -66,7 +90,7 @@
                             </label>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
-                            <label class="card-info mt-1">Value</label>
+                            <label class="card-info mt-2">Value</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
                                 {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.depositAsset.amountUsdc, 0) : '—' }}
@@ -84,7 +108,7 @@
                             <label class="title-card-text">borrowed</label>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
-                            <label class="card-info mt-1">Token</label>
+                            <label class="card-info mt-2">Token</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">{{ wmaticStrategyData ? wmaticStrategyData.borrowedAsset.token : '—' }}</label>
                             <div class="info-card-icon ml-2">
@@ -92,7 +116,7 @@
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
-                            <label class="card-info mt-1">Balance</label>
+                            <label class="card-info mt-2">Balance</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
                                 {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.borrowedAsset.amount, 0) : '—' }}
@@ -100,7 +124,7 @@
                             </label>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
-                            <label class="card-info mt-1">Value</label>
+                            <label class="card-info mt-2">Value</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
                                 {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.borrowedAsset.amountUsdc, 0) : '—' }}
@@ -187,20 +211,44 @@ import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import Table from "@/components/market/strategy/payouts/Table";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut";
+import LineChartApy from "@/components/stats/widget/LineChartApy";
 export default {
     name: "PerformanceTab",
 
     components: {
+        LineChartApy,
         Doughnut,
         Table,
         Tooltip,
     },
 
     data: () => ({
+        rateTab: 1,
     }),
 
     computed: {
         ...mapGetters('marketData', ['wmaticStrategyData']),
+
+        activeRateApy: function () {
+            return {
+                'rate-tab-button': this.rateTab === 1,
+                'rate-tab-button-in-active': this.rateTab !== 1,
+            }
+        },
+
+        activeRateDist: function () {
+            return {
+                'rate-tab-button': this.rateTab === 2,
+                'rate-tab-button-in-active': this.rateTab !== 2,
+            }
+        },
+
+        activeRateTvl: function () {
+            return {
+                'rate-tab-button': this.rateTab === 3,
+                'rate-tab-button-in-active': this.rateTab !== 3,
+            }
+        },
     },
 
     methods: {
@@ -255,6 +303,15 @@ export default {
         line-height: 20px;
         letter-spacing: 0.02em;
     }
+
+    .rate-tab-btn {
+        height: 32px !important;
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.03em !important;
+    }
 }
 
 /* tablet */
@@ -302,6 +359,15 @@ export default {
         line-height: 24px;
         letter-spacing: 0.04em;
     }
+
+    .rate-tab-btn {
+        height: 40px !important;
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
 }
 
 /* full */
@@ -348,6 +414,15 @@ export default {
         font-size: 20px;
         line-height: 24px;
         letter-spacing: 0.04em;
+    }
+
+    .rate-tab-btn {
+        height: 40px !important;
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
     }
 }
 
@@ -419,5 +494,27 @@ export default {
 .scroll-container {
     height: 24px !important;
     background: #F5F5F5;
+}
+
+.rate-tab-btn {
+    width: 100% !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+}
+
+.rate-tab-button {
+    background: rgba(28, 149, 231, 0.1);
+    border-radius: 4px;
+    border: none !important;
+    color: #1C95E7 !important;
+}
+
+.rate-tab-button-in-active {
+    border-radius: 4px;
+    color: #707A8B !important;
+    border: 1px solid #DEE1E5 !important;
 }
 </style>

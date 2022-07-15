@@ -49,7 +49,7 @@
 
                             <v-row align="center" justify="center" class="promo-row mt-8 mb-2">
                                 <label class="promo-label-text">
-                                    Your invite credentials will be available <b>on your account screen</b>; click on your wallet address to access it and share among those whom you think should use it.
+                                    Your invite credentials will be available <b>on your account screen</b>; click on your wallet address to access it and share among those who you think should use it.
                                 </label>
                             </v-row>
                         </v-col>

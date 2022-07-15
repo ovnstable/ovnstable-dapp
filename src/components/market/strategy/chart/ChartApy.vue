@@ -21,7 +21,7 @@
                             v-model="usdPlusDataEnabled"
                     >
                         <template v-slot:label>
-                            <label class="hold-checkbox-label">Hold USD+</label>
+                            <label class="hold-checkbox-label">USD+ APY</label>
                         </template>
                     </v-checkbox>
                 </v-row>

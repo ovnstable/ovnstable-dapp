@@ -3,7 +3,7 @@
         <thead>
         <tr class="current-strategy-table-row-header">
             <th class="table-header-payouts-strategy text-left" :width="minimized ? '' : '30%'">
-                Payable date, UTC
+                Payout date, UTC
             </th>
             <th class="table-header-payouts-strategy text-right" v-if="!minimized">
                 Daily profit{{ minimized ? '' : ', USDC per USD+'}}

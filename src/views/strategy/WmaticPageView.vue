@@ -49,7 +49,7 @@
                                         </label>
                                     </v-row>
                                     <v-row class="info-row mt-6" justify="start" align="center">
-                                        <label class="fee-structure-label mt-1">All</label>
+                                        <label class="fee-structure-label mt-1">All time</label>
                                         <v-spacer></v-spacer>
                                         <label class="investor-card-sub-title-value value-disabled">Soon</label>
                                     </v-row>
@@ -142,7 +142,7 @@
                                 </label>
                             </v-row>
                             <v-row class="info-row mt-6" justify="start" align="center">
-                                <label class="fee-structure-label mt-1">All</label>
+                                <label class="fee-structure-label mt-1">All time</label>
                                 <v-spacer></v-spacer>
                                 <label class="investor-card-sub-title-value value-disabled">Soon</label>
                             </v-row>

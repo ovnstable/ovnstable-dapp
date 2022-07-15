@@ -83,8 +83,8 @@
                 </v-row>
 
                 <v-row class="account-info-row" :class="$wu.isMobile() ? 'mt-15' : 'mt-8'" align="center" v-if="promoLogins">
-                    <label class="add-coins-label" :class="$wu.isMobile() ? 'ml-1' : ''">Extra credentials</label>
-                    <Tooltip text="Share these credentials among whom you think should use it"/>
+                    <label class="add-coins-label" :class="$wu.isMobile() ? 'ml-1' : ''">Invite a friend</label>
+                    <Tooltip text="Share these credentials among who you think should use it"/>
                 </v-row>
 
                 <PromoCredentialsSection/>

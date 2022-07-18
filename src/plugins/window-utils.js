@@ -4,6 +4,10 @@ export default {
         return window.innerWidth;
     },
 
+    isHuge(){
+        return window.innerWidth > 1920;
+    },
+
     isFull(){
         return window.innerWidth > 1400;
     },

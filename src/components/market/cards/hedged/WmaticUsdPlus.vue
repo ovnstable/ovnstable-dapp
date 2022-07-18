@@ -2,8 +2,8 @@
     <v-row class="card-container ma-0">
         <v-col>
             <v-row class="card-row mt-7" justify="end" align="center">
-                <label class="tag-label">Exchange-traded strategy / high risk</label>
-                <v-icon class="tag-icon ml-2" size="16">mdi-star-circle</v-icon>
+                <label class="tag-label">Exchange-traded strategy / moderate risk</label>
+                <v-icon class="tag-icon" :class="$wu.isMobile() ? 'ml-1' : 'ml-2'" :size="$wu.isMobile() ? 12 : 16">mdi-star-circle</v-icon>
             </v-row>
 
             <v-row class="card-row mt-12" justify="start" align="center">
@@ -38,7 +38,7 @@
             <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">Risk factor</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value card-info-risk">High</label>
+                <label class="card-info-value card-info-risk">Moderate</label>
                 <Tooltip text="Risk Factor is determined by a Pool's downside volatility. Pools that have a low Risk Factor translates to smaller downside volatility."/>
             </v-row>
 

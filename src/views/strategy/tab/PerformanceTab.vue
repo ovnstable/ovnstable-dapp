@@ -24,9 +24,31 @@
             <label class="section-title-label">
                 Owned/Lent/Borrowed Assets
             </label>
+
+            <v-spacer></v-spacer>
+
+            <div v-if="!$wu.isMobile()" class="info-card-container-debank" @click="openLink('https://debank.com/profile/0xeb7f1622980bff682635e35076bd3115814254a7')">
+                <v-row class="ma-0" justify="start" align="center">
+                    <div class="info-card-icon ml-2 my-2">
+                        <v-img class="debank-icon" :src="require('@/assets/currencies/market/debank.svg')"/>
+                    </div>
+                    <label class="title-card-debank ma-2">View on DeBank</label>
+                </v-row>
+            </div>
         </v-row>
 
-        <v-row align="start" justify="start" class="ma-0 mt-6">
+        <v-row v-if="$wu.isMobile()" align="center" justify="start" class="ma-0 mt-5">
+            <div class="info-card-container-debank" style="width: 100% !important;" @click="openLink('https://debank.com/profile/0xeb7f1622980bff682635e35076bd3115814254a7')">
+                <v-row class="ma-0" justify="center" align="center">
+                    <div class="info-card-icon ml-2 my-2">
+                        <v-img class="debank-icon" :src="require('@/assets/currencies/market/debank.svg')"/>
+                    </div>
+                    <label class="title-card-debank ma-2">View on DeBank</label>
+                </v-row>
+            </div>
+        </v-row>
+
+        <v-row align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-4' : 'mt-4'">
             <v-col :cols="$wu.isMobile() ? 12 : 0">
                 <v-row class="info-card-container" justify="start" align="center">
                     <v-col class="info-card-body">
@@ -251,6 +273,9 @@ export default {
     },
 
     methods: {
+        openLink(url) {
+            window.open(url, '_blank').focus();
+        },
     }
 }
 </script>
@@ -299,6 +324,14 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .title-card-debank {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
         line-height: 20px;
         letter-spacing: 0.02em;
     }
@@ -359,6 +392,14 @@ export default {
         letter-spacing: 0.04em;
     }
 
+    .title-card-debank {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.04em;
+    }
+
     .rate-tab-btn {
         height: 40px !important;
         font-style: normal !important;
@@ -415,6 +456,14 @@ export default {
         letter-spacing: 0.04em;
     }
 
+    .title-card-debank {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.04em;
+    }
+
     .rate-tab-btn {
         height: 40px !important;
         font-style: normal !important;
@@ -442,12 +491,18 @@ export default {
     border-radius: 4px;
 }
 
+.info-card-container-debank {
+    background: #FFFFFF;
+    border-radius: 4px;
+    cursor: pointer !important;
+}
+
 .info-card-body {
     margin: 5% 3%;
 }
 
 .info-card-body-bottom {
-    margin: 2% 2%;
+    margin: 2% 2% !important;
 }
 
 .info-row {
@@ -477,6 +532,13 @@ export default {
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333;
+}
+
+.title-card-debank {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #fe815f;
+    cursor: pointer !important;
 }
 
 .table-scroll-label {
@@ -515,5 +577,9 @@ export default {
     border-radius: 4px;
     color: #707A8B !important;
     border: 1px solid #DEE1E5 !important;
+}
+
+.debank-icon {
+    margin-top: -2px !important;
 }
 </style>

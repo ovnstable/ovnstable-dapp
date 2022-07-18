@@ -318,6 +318,7 @@ const actions = {
         dispatch('statsData/refreshStats', null, {root:true});
         dispatch('dashboardData/refreshDashboard', null, {root:true});
         dispatch('farmData/refreshFarm', null, {root:true});
+        dispatch('marketData/refreshClientData', null, {root:true});
     },
 
 

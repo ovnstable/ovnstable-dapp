@@ -35,7 +35,7 @@ const actions = {
         console.log('MarketData: refreshMarket');
 
         dispatch('refreshStrategyData');
-        dispatch('refreshClientData', {root:true});
+        dispatch('refreshClientData');
         dispatch('accountData/refreshBalance', null, {root:true});
     },
 
@@ -133,14 +133,18 @@ const actions = {
     async refreshClientData({commit, dispatch, getters, rootState}) {
         console.log('MarketData: refreshClientData');
 
+        if (!rootState.accountData.account){
+            return;
+        }
+
+        let account = rootState.accountData.account.toLowerCase();
+        let profitDay;
+
         let fetchOptions = {
             headers: {
                 "Access-Control-Allow-Origin": process.env.VUE_APP_API
             }
         };
-
-        let account = rootState.accountData.account.toLowerCase();
-        let profitDay;
 
         await fetch(process.env.VUE_APP_API + `/hedge-strategies/0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf/account/${account}`, fetchOptions)
             .then(value => value.json())

@@ -37,8 +37,10 @@
                             <div class="info-card-icon mt-4">
                                 <v-img :src="require('@/assets/icon/checkbox.svg')"/>
                             </div>
-                            <label class="info-card-text mt-4 ml-2">Automatically monitored and managed</label>
-                            <label class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">liquidation ratio of 1.5</label>
+                            <label v-if="!$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed</label>
+                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">liquidation ratio of 1.5</label>
+
+                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed liquidation ratio of 1.5</label>
                         </v-row>
                         <v-row align="center">
                             <div class="info-card-icon mt-4">
@@ -137,7 +139,7 @@
             </v-col>
             <v-col cols="6" v-if="!$wu.isMobile()">
                 <v-row justify="end">
-                    <v-img class="scheme-img" :src="require('@/assets/market/scheme.svg')"/>
+                    <v-img class="scheme-img" max-width="700px" :src="require('@/assets/market/scheme.svg')"/>
                 </v-row>
             </v-col>
         </v-row>
@@ -248,7 +250,7 @@
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Risk factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-risk">High</label>
+                    <label class="card-info-risk">Moderate</label>
                     <Tooltip text="Risk Factor is determined by a Pool's downside volatility. Pools that have a low Risk Factor translates to smaller downside volatility."/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">

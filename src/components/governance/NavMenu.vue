@@ -22,7 +22,7 @@
                     v-for="item in items"
                     :key="item.title"
                     link
-                    :to="{name: item.title}"
+                    :to="{name: item.to}"
                 >
                     <v-list-item-icon>
                         <v-icon>{{ item.icon }}</v-icon>
@@ -42,11 +42,11 @@ export default {
 
     data:()=>({
         items: [
-            { title: 'Overview', icon: 'mdi-view-dashboard' },
-            { title: 'Proposals', icon: 'mdi-folder-table-outline' },
-            { title: 'Finance', icon: 'mdi-chart-bar' },
-            { title: 'Control', icon: 'mdi-clipboard-edit' },
-            { title: 'Reward program', icon: 'mdi-order-bool-descending' },
+            { title: 'Overview', icon: 'mdi-view-dashboard' , to: 'Overview' },
+            { title: 'Proposals', icon: 'mdi-folder-table-outline', to: 'Proposals'},
+            { title: 'Portfolio Agent', icon: 'mdi-chart-bar', to:  'Finance' },
+            { title: 'Control', icon: 'mdi-clipboard-edit', to: 'Control' },
+            { title: 'Reward program', icon: 'mdi-order-bool-descending', to: 'Reward program' },
         ],
     }),
 }

@@ -75,6 +75,8 @@
                 <v-btn class="open-strategy-btn" @click="openStrategyAction">open strategy</v-btn>
             </v-row>
         </v-col>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </v-row>
 </template>
 

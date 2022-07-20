@@ -27,6 +27,8 @@
                 </v-col>
             </v-row>
         </div>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </v-badge>
 </template>
 

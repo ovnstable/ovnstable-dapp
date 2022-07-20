@@ -90,6 +90,8 @@
                 <PromoCredentialsSection/>
             </v-card-text>
         </v-card>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </v-dialog>
 </template>
 

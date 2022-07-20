@@ -40,6 +40,10 @@ import Donut from 'vue-css-donut-chart';
 import 'vue-css-donut-chart/dist/vcdonut.css';
 Vue.use(Donut);
 
+import 'vue-resize/dist/vue-resize.css'
+import { ResizeObserver } from 'vue-resize'
+Vue.component('resize-observer', ResizeObserver)
+
 
 new Vue({
   store,

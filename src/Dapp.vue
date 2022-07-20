@@ -11,6 +11,8 @@
 
         <AccountProfile width="630"/>
         <GasSettings width="510"/>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 
@@ -31,18 +33,14 @@ export default {
         Header
     },
 
-
     created() {
-
         console.log('Dapp.created()')
         this.initWeb3();
         this.connectWallet();
     },
 
-
     methods:{
-
-        ...mapActions('web3', ['initWeb3', 'connectWallet'])
+        ...mapActions('web3', ['initWeb3', 'connectWallet']),
     }
 }
 </script>

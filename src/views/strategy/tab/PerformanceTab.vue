@@ -218,6 +218,8 @@
                 </v-row>
             </v-col>
         </v-row>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 

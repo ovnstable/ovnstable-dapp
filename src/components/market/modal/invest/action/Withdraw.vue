@@ -125,6 +125,8 @@
         <WaitingModal/>
         <SuccessModal/>
         <ErrorModal/>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </v-col>
 </template>
 

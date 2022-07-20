@@ -38,9 +38,9 @@
                                 <v-img :src="require('@/assets/icon/checkbox.svg')"/>
                             </div>
                             <label v-if="!$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed</label>
-                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">liquidation ratio of 1.5</label>
+                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">Health Factor of 1.5</label>
 
-                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed liquidation ratio of 1.5</label>
+                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed Health Factor of 1.5</label>
                         </v-row>
                         <v-row align="center">
                             <div class="info-card-icon mt-4">
@@ -339,6 +339,8 @@
                 Invest
             </v-btn>
         </v-row>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 

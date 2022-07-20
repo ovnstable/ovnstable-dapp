@@ -34,6 +34,8 @@
                 <p class="my-0">Copied!</p>
             </v-tooltip>
         </v-row>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 

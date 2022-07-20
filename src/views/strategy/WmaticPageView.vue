@@ -205,6 +205,8 @@
 
         <RiskDisclosureModal/>
         <InvestorModal/>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 

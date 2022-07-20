@@ -52,6 +52,8 @@
                 </v-row>
             </v-card-text>
         </v-card>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 

@@ -17,6 +17,8 @@
         <div class="mt-7 cards-list-container">
             <WmaticUsdPlus/>
         </div>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 

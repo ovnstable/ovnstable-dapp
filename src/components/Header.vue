@@ -63,6 +63,8 @@
                 </v-row>
             </v-col>
         </v-row>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </v-app-bar>
 </template>
 <script>

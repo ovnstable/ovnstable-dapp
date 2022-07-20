@@ -40,6 +40,8 @@
                 </v-col>
             </v-row>
         </v-col>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </v-row>
 </template>
 

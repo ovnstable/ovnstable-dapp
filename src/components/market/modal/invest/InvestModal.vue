@@ -1,9 +1,8 @@
 <template>
     <div v-if="show">
         <v-dialog
-                v-if="!$wu.isFull()"
                 v-model="show"
-                width="630"
+                width="600"
                 persistent>
             <v-card class="container_body airdrop-body">
                 <v-toolbar class="container_header" flat>
@@ -29,30 +28,6 @@
             </v-card>
         </v-dialog>
 
-        <v-card class="container_body airdrop-body" v-else>
-            <v-toolbar class="container_header" flat>
-                <label class="title-modal">
-                    {{ isMintView ? 'Mint' : 'Redeem' }}
-                </label>
-                <v-spacer></v-spacer>
-                <v-btn icon @click="close">
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
-            </v-toolbar>
-
-            <v-card-text class="pt-4 content-container">
-                <v-row class="invest-body-row" align="center">
-                    <v-spacer></v-spacer>
-                    <label class="modal-link-label" @click="openLink('https://app.overnight.fi/')">Mint USD+</label>
-                </v-row>
-
-                <v-row class="invest-body-row mt-5" align="center">
-                    <Invest v-if="isMintView"/>
-                    <Withdraw v-else/>
-                </v-row>
-            </v-card-text>
-        </v-card>
-
         <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
@@ -64,7 +39,12 @@ import Withdraw from "@/components/market/modal/invest/action/Withdraw";
 
 export default {
     name: "InvestModal",
-    components: {Withdraw, Invest},
+
+    components: {
+        Withdraw,
+        Invest
+    },
+
     props: {},
 
     computed: {
@@ -132,10 +112,7 @@ export default {
 /* full */
 @media only screen and (min-width: 1400px) {
     .airdrop-body {
-        position: fixed !important;
-        top: 10vh !important;
-        right: 50px !important;
-        width: 30vw !important;
+        width: 100% !important;
     }
 
     .container_header {
@@ -155,11 +132,7 @@ export default {
         line-height: 20px;
     }
 
-    .container_header {
-        margin-top: 5% !important;
-    }
-
-    .content-container {
+    .invest-body-row {
         margin-bottom: 5% !important;
     }
 }

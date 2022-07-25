@@ -303,7 +303,14 @@ export default {
                 try {
                     await this.refreshGasPrice();
 
-                    let buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+                    let buyParams;
+
+                    if (this.gas == null) {
+                        buyParams = {from: from, gasPrice: this.gasPriceGwei};
+                    } else {
+                        buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+                    }
+
                     let buyResult = await contracts.exchangerUsdPlusWmatic.methods.redeem(sum).send(buyParams);
 
                     this.closeWaitingModal();
@@ -330,9 +337,17 @@ export default {
                 this.showWaitingModal();
 
                 let estimatedGasValue = await this.estimateGas(sum);
-                if (estimatedGasValue === -1) {
+                if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
+                    // this.closeWaitingModal();
+                    // this.showErrorModal('estimateGas');
+
+                    this.gas = null;
+                    this.gasAmountInMatic = null;
+                    this.gasAmountInUsd = null;
+
+                    await this.redeemAction();
+
                     this.closeWaitingModal();
-                    this.showErrorModal('estimateGas');
                 } else {
                     this.estimatedGas = estimatedGasValue;
 

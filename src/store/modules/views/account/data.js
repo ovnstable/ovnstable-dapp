@@ -116,6 +116,8 @@ const actions = {
         }
 
         usdPlus = web3.web3.utils.fromWei(usdPlus, 'mwei') ;
+
+        // ether for 18 decimals
         usdc = web3.web3.utils.fromWei(usdc, 'mwei') ;
 
         if (networkId === 137) {

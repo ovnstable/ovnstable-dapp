@@ -30,7 +30,7 @@ const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`)
 let Market;
 let WrappedUsdPlusToken;
 
-if (polygon !== "avalanche") {
+if (polygon !== "avalanche" && polygon !== "bsc") {
     Market = require(`@/contracts/${polygon}/Market.json`)
     WrappedUsdPlusToken = require(`@/contracts/${polygon}/WrappedUsdPlusToken.json`)
 }
@@ -220,9 +220,14 @@ const actions = {
         commit('setLoadingWeb3', true);
         commit('setWalletConnected', false);
 
-        if (polygon === "avalanche") {
+        if (polygon === "avalanche" || polygon === "bsc") {
             dispatch('farmUI/hidePage', null, {root: true});
             dispatch('wrapUI/hidePage', null, {root: true});
+        }
+
+        if (polygon === "bsc") {
+            dispatch('dashboardUI/hidePage', null, {root: true});
+            dispatch('statsUI/hidePage', null, {root: true});
         }
 
         if (localStorage.getItem('walletName')) {
@@ -336,10 +341,12 @@ const actions = {
         let contracts = {};
 
 
-        if (polygon === "avalanche"){
+        if (polygon === "avalanche") {
             contracts.usdc = _load(ERC20, web3, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E');
-        }else {
+        } else if (polygon === "polygon") {
             contracts.usdc = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
+        } else if (polygon === "bsc") {
+            contracts.usdc = _load(ERC20, web3, '0xe9e7cea3dedca5984780bafc599bd69add087d56');
         }
 
         contracts.exchange = _load(Exchange, web3);
@@ -351,7 +358,7 @@ const actions = {
         contracts.usdPlus = _load(UsdPlusToken, web3);
         contracts.preOvn = _load(ERC20, web3, "0x18D4565Cbd03340996BED17e66D154b632f5d4B6");
 
-        if (polygon !== "avalanche") {
+        if (polygon !== "avalanche" && polygon !== "bsc") {
             contracts.market = _load(Market, web3);
             contracts.wUsdPlus = _load(WrappedUsdPlusToken, web3);
         }
@@ -377,9 +384,8 @@ const actions = {
             });
         } catch (switchError) {
             try {
-
                 let params;
-                if (polygon === "avalanche"){
+                if (polygon === "avalanche") {
                     params = {
                         chainId: getters.web3.utils.toHex(43114),
                         rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
@@ -391,7 +397,7 @@ const actions = {
                             decimals: 18,
                         }
                     };
-                }else{
+                } else if (polygon === "polygon") {
                     params = {
                         chainId: getters.web3.utils.toHex(137),
                         rpcUrls: ['https://polygon-rpc.com/'],
@@ -400,6 +406,18 @@ const actions = {
                         nativeCurrency: {
                             symbol: 'MATIC',
                             name: 'MATIC',
+                            decimals: 18,
+                        }
+                    };
+                } else if (polygon === "bsc") {
+                    params = {
+                        chainId: getters.web3.utils.toHex(56),
+                        rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                        blockExplorerUrls: ['https://bscscan.com/'],
+                        chainName: 'Smart Chain',
+                        nativeCurrency: {
+                            symbol: 'BNB',
+                            name: 'BNB',
                             decimals: 18,
                         }
                     };

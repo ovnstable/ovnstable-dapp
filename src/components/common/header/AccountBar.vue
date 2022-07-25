@@ -31,12 +31,12 @@
                                     Farm
                                 </label>
                             </v-list-item>
-                            <v-list-item @click="goToAction('/dashboard')" class="dashboard-mobile">
+                            <v-list-item @click="goToAction('/dashboard')" class="dashboard-mobile" v-if="showDashboard">
                                 <label class="list-label-switch">
                                     Dashboard
                                 </label>
                             </v-list-item>
-                            <v-list-item @click="goToAction('/fund')" class="fund-mobile">
+                            <v-list-item @click="goToAction('/fund')" class="fund-mobile" v-if="showStats">
                                 <label class="list-label-switch">
                                     Stats
                                 </label>
@@ -129,6 +129,8 @@ export default {
         ...mapGetters('web3', ['web3',  'networkId', 'walletConnected']),
         ...mapGetters('farmUI', ['showFarm']),
         ...mapGetters('wrapUI', ['showWrap']),
+        ...mapGetters('dashboardUI', ['showDashboard']),
+        ...mapGetters('statsUI', ['showStats']),
 
         isWalletConnected: function () {
             return this.walletConnected;

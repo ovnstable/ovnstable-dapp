@@ -25,7 +25,7 @@
                         Polygon
                     </v-list-item-title>
                 </v-list-item>
-                <v-list-item style="cursor: pointer"  target="_blank" href="https://avax.overnight.fi">
+                <v-list-item style="cursor: pointer" target="_blank" href="https://avax.overnight.fi">
                     <v-list-item-avatar>
                         <div class="list-item-icon">
                             <v-img :src="require('@/assets/network/avalanche.svg')"/>
@@ -33,6 +33,16 @@
                     </v-list-item-avatar>
                     <v-list-item-title class="network-select-list-item">
                         Avalanche
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item style="cursor: pointer" target="_blank" href="https://bsc.overnight.fi">
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/bsc.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="network-select-list-item">
+                        BSC
                     </v-list-item-title>
                 </v-list-item>
                 <v-list-item disabled>
@@ -75,6 +85,7 @@ import {mapGetters} from "vuex";
 
 let polygonIcon = require('@/assets/network/polygon.svg');
 let avaxIcon = require('@/assets/network/avalanche.svg');
+let bscIcon = require('@/assets/network/bsc.svg');
 
 export default {
     name: "NetworkSelect",
@@ -88,13 +99,14 @@ export default {
     computed: {
         ...mapGetters('web3', ['networkId']),
 
-
         icon: function (){
 
             if (this.networkId === 137){
                 return polygonIcon;
-            }else if (this.networkId === 43114) {
+            } else if (this.networkId === 43114) {
                 return avaxIcon;
+            } else if (this.networkId === 56) {
+                return bscIcon;
             }
 
         }
@@ -124,8 +136,8 @@ export default {
 }
 
 .list-item-icon {
-    width: 32px;
-    height: 32px;
+    width: 32px !important;
+    height: 32px !important;
 }
 
 .list-item-disabled {
@@ -136,7 +148,7 @@ export default {
 }
 
 .btn-icon {
-    width: 32px;
-    height: 32px;
+    width: 32px !important;
+    height: 32px !important;
 }
 </style>

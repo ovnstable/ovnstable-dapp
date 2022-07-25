@@ -98,8 +98,8 @@ const actions = {
         stablecoinList = stablecoinList.filter(el => el.netAssetValue > 0);
 
         let colors = [
-            "#2775CA",
-            "#26A17B",
+            "#1C95E7",
+            "#22ABAC",
             "#FCCA46",
             "#FE7F2D",
             "#B22174",
@@ -185,7 +185,7 @@ const actions = {
                 };
 
                 [...clientData].reverse().forEach(item => {
-                    widgetDataDictTvl[moment(item.payableDate).format('DD.MM.YYYY')] = item.totalUsdc;
+                    widgetDataDictTvl[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.totalUsdc ? item.totalUsdc : 0.0).toFixed(2);
                 });
 
                 for(let key in widgetDataDictTvl) {

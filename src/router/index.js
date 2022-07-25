@@ -55,6 +55,26 @@ const routes = [
                     ]
                 }
             },
+            {
+                path: '/collateral',
+                name: 'CollateralView',
+                component: () => import('../views/performance/view/CollateralView.vue'),
+                meta: {
+                    middleware: [
+                        Stats,
+                    ]
+                }
+            },
+            {
+                path: '/stats',
+                name: 'StatsPerformanceView',
+                component: () => import('../views/performance/view/StatsPerformanceView.vue'),
+                meta: {
+                    middleware: [
+                        Stats,
+                    ]
+                }
+            },
             /*{
                 path: '/',
                 name: 'SwapView',

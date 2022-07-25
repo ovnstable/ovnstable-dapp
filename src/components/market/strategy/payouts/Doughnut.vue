@@ -24,6 +24,16 @@ export default {
             type: Number,
             default: 280,
         },
+
+        color: {
+            type: String,
+            default: '#3D8DFF',
+        },
+
+        lastDate: {
+            type: String,
+            default: null,
+        },
     },
 
     watch: {
@@ -31,7 +41,7 @@ export default {
             this.updateSectionsData();
         },
 
-        wmaticStrategyData: function (newVal, oldVal) {
+        lastDate: function (newVal, oldVal) {
             this.updateSectionsData();
         },
     },
@@ -43,8 +53,6 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData']),
-
         timeDisplay: function () {
             let hours = Math.trunc(this.getHours());
             let minutes = Math.trunc((this.getHours() - Math.trunc(this.getHours())) * 60.0);
@@ -75,11 +83,15 @@ export default {
         ...mapMutations([]),
 
         getHours() {
-            let now = this.$moment.utc(new Date());
-            let lastPayoutDateTime = this.$moment.utc(this.wmaticStrategyData.payoutItems[this.wmaticStrategyData.payoutItems.length - 1].payableDate);
-            let duration = this.$moment.duration(now.diff(lastPayoutDateTime));
+            if (this.lastDate) {
+                let now = this.$moment.utc(new Date());
+                let lastPayoutDateTime = this.$moment.utc(this.lastDate);
+                let duration = this.$moment.duration(now.diff(lastPayoutDateTime));
 
-            return duration.asHours();
+                return duration.asHours();
+            } else {
+                return 0;
+            }
         },
 
         getPercent(item, data) {
@@ -91,7 +103,7 @@ export default {
 
             this.sections.push(
                 {
-                    color: "#3D8DFF",
+                    color: this.color,
                     label: "Time",
                     value: this.getPercent(),
                 }

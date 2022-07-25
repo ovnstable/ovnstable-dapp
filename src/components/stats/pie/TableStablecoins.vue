@@ -1,5 +1,5 @@
 <template>
-    <v-simple-table class="current-table" dark>
+    <v-simple-table class="current-table">
         <thead>
         <tr class="current-table-row-header">
             <th class="table-header-don text-left" :colspan="2">
@@ -32,7 +32,7 @@
                     </label>
                     <v-spacer></v-spacer>
                     <label class="link-label mr-6">
-                        <v-img class="icon-img-link" v-if="!minimized" :src="require('@/assets/icon/out-white.svg')"/>
+                        <v-img class="icon-img-link" v-if="!minimized" :src="require('@/assets/icon/open-in-new.svg')"/>
                     </label>
                 </v-row>
             </td>
@@ -59,8 +59,6 @@
 
 <script>
 
-import {mapActions, mapGetters, mapMutations} from "vuex";
-
 /* eslint-disable no-unused-vars,no-undef */
 
 export default {
@@ -80,11 +78,10 @@ export default {
 
     components: {},
 
-    data: () => ({}),
+    data: () => ({
+    }),
 
     computed: {
-        ...mapGetters('statsData', ['totalUsdPlusValue', 'currentTotalData',]),
-        ...mapGetters('statsUI', ['loadingCurrentTotalData'])
     },
 
     mounted() {
@@ -94,10 +91,6 @@ export default {
     },
 
     methods: {
-        ...mapActions([]),
-
-        ...mapMutations([]),
-
         getPercent(item) {
             let sum = this.data.map(dataItem => dataItem.value).reduce((prev, next) => prev + next);
 
@@ -131,65 +124,68 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 /* mobile */
-@media only screen and (max-width: 1400px) {
-
+@media only screen and (max-width: 960px) {
     .table-header-don {
-        font-family: 'Lato', sans-serif !important;
         font-style: normal !important;
-        font-weight: 700 !important;
-        line-height: 22px !important;
-        font-size: 14px !important;
-        color: #4C586D !important;
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        line-height: 16px !important;
     }
 
     .table-label-don {
-        font-family: 'Lato', sans-serif !important;
-        color: white !important;
         font-style: normal !important;
-        font-weight: 400 !important;
-        line-height: 24px !important;
+        font-weight: 300 !important;
         font-size: 14px !important;
+        line-height: 22px !important;
     }
+
     .current-table-row {
         height: 48px !important;
     }
-
-    .currency-icon {
-        width: 24px;
-        height: 24px;
-    }
 }
 
-@media only screen and (min-width: 1400px) {
-
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
     .table-header-don {
-        font-family: 'Lato', sans-serif !important;
         font-style: normal !important;
-        font-weight: 600 !important;
-        line-height: 24px !important;
-        font-size: 16px !important;
-        color: #4C586D !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
     }
 
     .table-label-don {
-        font-family: 'Lato', sans-serif !important;
-        color: white !important;
         font-style: normal !important;
-        font-weight: 400 !important;
-        line-height: 28px !important;
-        font-size: 18px !important;
+        font-weight: 300 !important;
+        font-size: 16px !important;
+        line-height: 24px !important;
     }
 
     .current-table-row {
-        height: 70px !important;
+        height: 64px !important;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .table-header-don {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
     }
 
-    .currency-icon {
-        width: 40px;
-        height: 40px;
+    .table-label-don {
+        font-style: normal !important;
+        font-weight: 300 !important;
+        font-size: 16px !important;
+        line-height: 24px !important;
+    }
+
+    .current-table-row {
+        height: 64px !important;
     }
 }
 
@@ -198,12 +194,34 @@ export default {
     background: none !important;
 }
 
-.table-header-don, .table-label-don {
-    border-bottom: 2px solid #13151C !important;
+.current-table > .v-data-table__wrapper {
+    overflow-y: scroll !important;
+    -ms-overflow-style: none !important; /* for Internet Explorer, Edge */
+    scrollbar-width: none !important; /* for Firefox */
 }
 
-.current-table-row-total > td, .current-table-row-total-usd-plus > td {
-    border-bottom: none !important;
+.v-data-table__wrapper::-webkit-scrollbar {
+    display: none !important;
+}
+
+.table-header-don {
+     font-family: 'Roboto', sans-serif !important;
+     font-feature-settings: 'pnum' on, 'lnum' on !important;
+     color: #ADB3BD !important;
+ }
+
+.table-label-don {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+    color: #333333 !important;
+}
+
+.table-label-don {
+    border-top: 1px solid #DEE1E5 !important;
+}
+
+.current-strategy-table-row-total > td, .current-strategy-table-row-total-usd-plus > td {
+    border-top: none !important;
 }
 
 .text-left {
@@ -214,45 +232,17 @@ export default {
     text-align: right !important;
 }
 
-.color-rectangle {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-}
-
-.current-table-row-total-usd-plus, .current-table-row-header {
-    height: 24px !important;
-}
-
-.progress-col > .v-progress-linear > .v-progress-linear__buffer {
-    background-color: #29323E !important;
-}
-
-.progress-col > .v-progress-linear > .v-progress-linear__determinate {
-    left: 0 !important;
-    right: auto !important;
-}
-
-.open-link-btn {
-    cursor: pointer !important;
-    background: none !important;
-    display: flex !important;
-    line-height: 24px;
-}
-
-.icon-img {
-    width: 24px !important;
-    height: 24px !important;
+.current-table-row-header {
+    height: 50px !important;
 }
 
 .high-label {
-    color: #23DD00 !important;
+    color: #22ABAC !important;
 }
 
 .icon-img-link {
-    width: 24px !important;
-    height: 24px !important;
-    margin-top: 2px;
+    width: 20px !important;
+    height: 20px !important;
     cursor: pointer;
 }
 

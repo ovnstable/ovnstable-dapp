@@ -6,7 +6,7 @@
                 Payout date, UTC
             </th>
             <th class="table-header-payouts-strategy text-right" v-if="!minimized">
-                Daily profit{{ minimized ? '' : ', USDC per USD+/wMatic'}}
+                Daily profit{{ minimized ? '' : (profitLabel ? ', ' + profitLabel : '')}}
             </th>
             <th class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
                 Annualized yield{{ minimized ? '' : ', % per year'}}
@@ -18,7 +18,7 @@
         </thead>
 
         <tbody>
-        <tr v-for="item in [...wmaticStrategyData.payoutItems].reverse()" :key="item.payableDate" class="current-strategy-table-row" @click="openOnScan(item)">
+        <tr v-for="item in payoutData" :key="item.payableDate" class="current-strategy-table-row" @click="openOnScan(item)">
             <td class="table-label-payouts-strategy text-left">
                 <label>
                     {{ formatDate(item.payableDate) }}
@@ -69,10 +69,19 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        profitLabel: {
+            type: String,
+            default: '',
+        },
+
+        payoutData: {
+            type: Array,
+            default: [],
+        },
     },
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData']),
     },
 
     methods: {
@@ -213,13 +222,6 @@ export default {
     height: 50px !important;
 }
 
-.open-link-btn {
-    cursor: pointer !important;
-    background: none !important;
-    display: flex !important;
-    line-height: 24px;
-}
-
 .yield-green {
     color: #22ABAC !important;
 }
@@ -231,7 +233,6 @@ export default {
 .icon-img {
     width: 24px !important;
     height: 24px !important;
-    margin-top: 2px;
     cursor: pointer;
 }
 

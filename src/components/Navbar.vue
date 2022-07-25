@@ -13,42 +13,46 @@
         </v-list>
 
         <v-list nav class="page-list ml-4">
-            <v-list-item link @click="goToAction('/')">
+            <v-list-item link @click="collateralClick">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/cart.svg')">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'collateral' ? 'addchartSelected.svg' : 'addchart.svg'))">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label selected-page-label">Market</label><v-icon class="alpha mb-5" small>mdi-beta</v-icon>
+                    <label class="navbar-page-label" :class="selectedTab === 'collateral' ? 'selected-page' : ''">Collateral</label>
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-item link @click="openLink('https://app.overnight.fi/fund')">
+            <v-list-item link @click="statsClick">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/addchart.svg')">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'stats' ? 'chartSelected.svg' : 'chart.svg'))">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label">Collateral</label>
+                    <label class="navbar-page-label" :class="selectedTab === 'stats' ? 'selected-page' : ''">Stats</label>
+                    <!-- TODO: add last payout time -->
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-item link @click="openLink('https://app.overnight.fi/fund')">
+            <v-list-item link @click="marketClick">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/chart.svg')">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'market' ? 'cartSelected.svg' : 'cart.svg'))">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label">Performance</label>
+                    <label class="navbar-page-label" :class="selectedTab === 'market' ? 'selected-page' : ''">Market</label>
+                    <v-icon class="mb-5" small :class="selectedTab === 'market' ? 'selected-page' : ''">mdi-beta</v-icon>
                 </v-list-item-title>
             </v-list-item>
 
             <v-list-item link @click="openLink('https://app.overnight.fi/dashboard')">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/avatar.svg')">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/avatar.svg')">
                 </v-list-item-icon>
                 <v-list-item-title>
                     <label class="navbar-page-label">Overview</label>
                 </v-list-item-title>
             </v-list-item>
         </v-list>
+
+        <!-- TODO: add Welcome to open beta section -->
 
         <template v-slot:append>
             <v-list nav dense class="footer-list ml-4">
@@ -75,6 +79,8 @@
 </template>
 <script>
 
+import {mapActions, mapGetters} from "vuex";
+
 export default {
     name: 'Navbar',
 
@@ -86,15 +92,33 @@ export default {
 
 
     computed: {
+        ...mapGetters('menuUI', ['selectedTab']),
     },
 
     methods: {
+        ...mapActions('menuUI', ['selectTab']),
+
         openLink(url) {
             window.open(url, '_blank').focus();
         },
 
         goToAction(id) {
             this.$router.push(id);
+        },
+
+        collateralClick() {
+            this.selectTab('collateral');
+            this.goToAction('/collateral');
+        },
+
+        statsClick() {
+            this.selectTab('stats');
+            this.goToAction('/stats');
+        },
+
+        marketClick() {
+            this.selectTab('market');
+            this.goToAction('/')
         },
     }
 }
@@ -158,7 +182,7 @@ export default {
     color: #333333;
 }
 
-.selected-page-label, .alpha {
+.selected-page {
     color: #1C95E7 !important;
 }
 </style>

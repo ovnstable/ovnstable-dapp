@@ -3,13 +3,12 @@
             background="none"
             :size="size" unit="px"
             :sections="sections"
-            :start-angle="0" :auto-adjust-text-size="false">
+            :start-angle="0"
+            :auto-adjust-text-size="false">
     </vc-donut>
 </template>
 
 <script>
-
-import {mapActions, mapGetters, mapMutations} from "vuex";
 
 /* eslint-disable no-unused-vars,no-undef */
 
@@ -56,10 +55,6 @@ export default {
     },
 
     methods: {
-        ...mapActions([]),
-
-        ...mapMutations([]),
-
         getPercent(item, data) {
             let sum = data.map(dataItem => dataItem.value).reduce((prev, next) => prev + next);
 
@@ -92,22 +87,5 @@ export default {
 }
 </script>
 
-<style>
-
-.total-label {
-    font-family: 'Lato', sans-serif !important;
-    font-weight: 300;
-    font-size: 24px;
-    line-height: 36px;
-    color: white !important;
-}
-
-.total-sum-label {
-    font-family: 'Lato', sans-serif !important;
-    font-weight: 700;
-    font-size: 34px;
-    line-height: 42px;
-    color: white !important;
-}
-
+<style scoped>
 </style>

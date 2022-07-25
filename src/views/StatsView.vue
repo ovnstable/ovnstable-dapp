@@ -103,8 +103,8 @@
 
 import {mapGetters} from "vuex";
 import PayoutsTable from "@/components/stats/PayoutsTable";
-import Table from "@/components/stats/doughnut/Table"
-import Doughnut from "@/components/stats/doughnut/Doughnut"
+import Table from "@/components/stats/doughnut/TableStrategies"
+import Doughnut from "@/components/stats/doughnut/DoughnutStrategies"
 import LineChartApy from "@/components/stats/widget/LineChartApy";
 import LineChartTvl from "@/components/stats/widget/LineChartTvl";
 import TableStablecoins from "@/components/stats/pie/TableStablecoins";

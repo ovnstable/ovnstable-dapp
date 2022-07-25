@@ -1,50 +1,50 @@
 <template>
-    <v-simple-table class="current-table" dark>
+    <v-simple-table class="current-table">
         <thead>
         <tr class="current-table-row-header">
-            <th class="table-header-pools" width="1%" v-if="!minimized"></th>
-            <th class="table-header-pools text-left">
+            <th class="table-header-don" width="1%" v-if="!minimized"></th>
+            <th class="table-header-don text-left">
                 Strategy
             </th>
-            <th class="table-header-pools text-left">
+            <th class="table-header-don text-left">
                 Net Asset Value (USDC)
                 <!-- TODO: add info -->
             </th>
-            <th class="table-header-pools text-left" v-if="!minimized">
+            <th class="table-header-don text-left" v-if="!minimized">
                 Liquidation value (USDC)
                 <!-- TODO: add info -->
             </th>
-            <th class="table-header-pools text-left" :class="minimized ? 'text-right' : 'text-left'"
+            <th class="table-header-don text-left" :class="minimized ? 'text-right' : 'text-left'"
                 :width="minimized ? '' : '180px'" :colspan="minimized ? 2 : 1">
                 {{ minimized ? '' : 'Percent in portfolio' }}
             </th>
-            <th class="table-header-pools" v-if="!minimized"></th>
+            <th class="table-header-don" v-if="!minimized"></th>
         </tr>
         </thead>
 
         <tbody>
         <tr v-for="item in data" :key="item.label" class="current-table-row" @click="openInNewTab(item.link)">
-            <td class="table-label-pools text-right" v-if="!minimized">
+            <td class="table-label-don text-right" v-if="!minimized">
                 <div class="color-rectangle" :style="{background: item.color}"></div>
             </td>
-            <td class="table-label-pools text-left">
+            <td class="table-label-don text-left">
                 <v-row>
                     <label class="link-label" :title="item.fullName">
                         {{ item.label }}
                     </label>
                     <v-spacer></v-spacer>
                     <label class="link-label mr-6">
-                        <v-img class="icon-img-link" v-if="!minimized" :src="require('@/assets/icon/out-white.svg')"/>
+                        <v-img class="icon-img-link" v-if="!minimized" :src="require('@/assets/icon/open-in-new.svg')"/>
                     </label>
                 </v-row>
             </td>
-            <td class="table-label-pools text-left">
+            <td class="table-label-don text-left">
                 ${{ $utils.formatMoney(item.value, 2) }}
             </td>
-            <td class="table-label-pools text-left" v-if="!minimized">
+            <td class="table-label-don text-left" v-if="!minimized">
                 ${{ $utils.formatMoney(item.liquidationValue, 2) }}
             </td>
-            <td class="table-label-pools text-left progress-col">
+            <td class="table-label-don text-left progress-col">
                 <v-progress-linear :value="getPercent(item)"
                                    :color="item.color"
                                    rounded
@@ -52,31 +52,39 @@
                                    height="16">
                 </v-progress-linear>
             </td>
-            <td class="table-label-pools text-left">
+            <td class="table-label-don text-left">
                 {{ getPercent(item) }}%
             </td>
         </tr>
+
         <tr class="current-table-row-total">
-            <td class="table-empty" v-if="!minimized"></td>
-            <td class="table-label-total-pools text-left">
-                Total
+            <td class="table-label-don text-right" v-if="!minimized">
+                <div class="color-rectangle" style="background: transparent"></div>
             </td>
-            <td class="table-label-total-pools text-left" :colspan="minimized ? 3 : 1">
-                ${{ $utils.formatMoney(getTotal(), 2) }}
+            <td class="table-label-don text-left">
+                <v-row>
+                    <b>Total</b>
+                </v-row>
             </td>
-            <td class="table-label-total-pools text-left" v-if="!minimized">
-                ${{ $utils.formatMoney(getLiquidationTotal(), 2) }}
+            <td class="table-label-don text-left" :colspan="minimized ? 3 : 1">
+                <b>${{ $utils.formatMoney(getTotal(), 2) }}</b>
             </td>
-            <td class="table-empty" v-if="!minimized"></td>
-            <td class="table-empty" v-if="!minimized"></td>
+            <td class="table-label-don text-left" v-if="!minimized">
+                <b>${{ $utils.formatMoney(getLiquidationTotal(), 2) }}</b>
+            </td>
+            <td class="table-label-don" v-if="!minimized"></td>
+            <td class="table-label-don" v-if="!minimized"></td>
         </tr>
+
         <tr class="current-table-row-total-usd-plus">
-            <td class="table-empty" v-if="!minimized"></td>
-            <td class="table-label-total-pools text-left">
-                Total USD+ in circulation
+            <td class="table-label-don" v-if="!minimized"></td>
+            <td class="table-label-don text-left">
+                <v-row>
+                    <b>Total USD+ in circulation</b>
+                </v-row>
             </td>
-            <td class="table-label-total-pools text-left" :colspan="minimized ? 3 : 1">
-                ${{ $utils.formatMoney(totalUsdPlusValue, 2) }}
+            <td class="table-label-don text-left" :colspan="minimized ? 3 : 1">
+                <b>${{ $utils.formatMoney(totalUsdPlusValue, 2) }}</b>
             </td>
             <td class="table-empty" v-if="!minimized"></td>
             <td class="table-empty" v-if="!minimized"></td>
@@ -93,7 +101,7 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 /* eslint-disable no-unused-vars,no-undef */
 
 export default {
-    name: "Table",
+    name: "TableStrategies",
 
     props: {
         data: {
@@ -164,74 +172,68 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 /* mobile */
-@media only screen and (max-width: 1400px) {
-
-    .table-header-pools {
-        font-family: 'Lato', sans-serif !important;
-        font-style: normal !important;
-        font-weight: 700 !important;
-        line-height: 22px !important;
-        font-size: 14px !important;
-        color: #4C586D !important;
-    }
-
-    .table-label-pools {
-        font-family: 'Lato', sans-serif !important;
-        color: white !important;
+@media only screen and (max-width: 960px) {
+    .table-header-don {
         font-style: normal !important;
         font-weight: 400 !important;
-        line-height: 24px !important;
-        font-size: 14px !important;
+        font-size: 12px !important;
+        line-height: 16px !important;
     }
 
-    .table-label-total-pools {
-        font-family: 'Lato', sans-serif !important;
-        color: white !important;
+    .table-label-don {
         font-style: normal !important;
-        font-weight: 600 !important;
-        line-height: 24px !important;
-        font-size: 16px !important;
+        font-weight: 300 !important;
+        font-size: 14px !important;
+        line-height: 22px !important;
     }
 
-    .current-table-row, .current-table-row-total {
+    .current-table-row {
         height: 48px !important;
     }
 }
 
-@media only screen and (min-width: 1400px) {
-
-    .table-header-pools {
-        font-family: 'Lato', sans-serif !important;
-        font-style: normal !important;
-        font-weight: 600 !important;
-        line-height: 24px !important;
-        font-size: 16px !important;
-        color: #4C586D !important;
-    }
-
-    .table-label-pools {
-        font-family: 'Lato', sans-serif !important;
-        color: white !important;
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .table-header-don {
         font-style: normal !important;
         font-weight: 400 !important;
-        line-height: 28px !important;
-        font-size: 18px !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
     }
 
-    .table-label-total-pools {
-        font-family: 'Lato', sans-serif !important;
-        color: white !important;
+    .table-label-don {
         font-style: normal !important;
-        font-weight: 600 !important;
-        line-height: 28px !important;
-        font-size: 18px !important;
+        font-weight: 300 !important;
+        font-size: 16px !important;
+        line-height: 24px !important;
     }
 
-    .current-table-row, .current-table-row-total {
-        height: 70px !important;
+    .current-table-row {
+        height: 64px !important;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .table-header-don {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
+    }
+
+    .table-label-don {
+        font-style: normal !important;
+        font-weight: 300 !important;
+        font-size: 16px !important;
+        line-height: 24px !important;
+    }
+
+    .current-table-row {
+        height: 64px !important;
     }
 }
 
@@ -240,12 +242,37 @@ export default {
     background: none !important;
 }
 
-.table-header-pools, .table-label-pools, .table-empty {
-    border-bottom: 2px solid #13151C !important;
+.current-table > .v-data-table__wrapper {
+    overflow-y: scroll !important;
+    -ms-overflow-style: none !important; /* for Internet Explorer, Edge */
+    scrollbar-width: none !important; /* for Firefox */
 }
 
-.current-table-row-total > td, .current-table-row-total-usd-plus > td {
+.v-data-table__wrapper::-webkit-scrollbar {
+    display: none !important;
+}
+
+.table-header-don {
+    font-family: 'Roboto', sans-serif !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+    color: #ADB3BD !important;
+}
+
+.table-label-don {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+    color: #333333 !important;
+}
+
+.table-label-don {
+    border-top: 1px solid #DEE1E5 !important;
+}
+
+.current-table-row-total > td {
     border-bottom: none !important;
+}
+.current-table-row-total-usd-plus > td {
+    border-top: none !important;
 }
 
 .text-left {
@@ -256,40 +283,23 @@ export default {
     text-align: right !important;
 }
 
-.color-rectangle {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-}
-
-.current-table-row-total-usd-plus, .current-table-row-header {
-    height: 24px !important;
-}
-
-.progress-col > .v-progress-linear > .v-progress-linear__buffer {
-    background-color: #29323E !important;
-}
-
-.progress-col > .v-progress-linear > .v-progress-linear__determinate {
-    left: 0 !important;
-    right: auto !important;
-}
-
-.open-link-btn {
-    cursor: pointer !important;
-    background: none !important;
-    display: flex !important;
-    line-height: 24px;
+.current-table-row-header {
+    height: 50px !important;
 }
 
 .icon-img-link {
-    width: 24px !important;
-    height: 24px !important;
-    margin-top: 2px;
+    width: 20px !important;
+    height: 20px !important;
     cursor: pointer;
 }
 
 .link-label {
     display: inline-flex !important;
+}
+
+.color-rectangle {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
 }
 </style>

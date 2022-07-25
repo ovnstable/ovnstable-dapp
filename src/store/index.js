@@ -37,6 +37,8 @@ import transaction from '@/store/modules/views/account/transaction';
 
 import airdropUI from '@/store/modules/views/airdrop/ui';
 
+import menuUI from '@/store/modules/views/menu/ui';
+
 
 // Pools
 
@@ -89,6 +91,8 @@ export default new Vuex.Store({
         transaction,
 
         airdropUI,
+
+        menuUI,
 
         linearPoolFeedingUnstake,
         linearPoolFeeding,

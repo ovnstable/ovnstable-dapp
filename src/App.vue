@@ -280,4 +280,13 @@ html {
     z-index: 110 !important;
     top: 118px !important;
 }
+
+.progress-col > .v-progress-linear > .v-progress-linear__buffer {
+    background-color: #E5E7EA !important;
+}
+
+.progress-col > .v-progress-linear > .v-progress-linear__determinate {
+    left: 0 !important;
+    right: auto !important;
+}
 </style>

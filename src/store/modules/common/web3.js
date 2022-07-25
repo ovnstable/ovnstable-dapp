@@ -331,7 +331,7 @@ const actions = {
 
         if (polygon === "avalanche"){
             contracts.usdc = _load(ERC20, web3, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E');
-        }else {
+        } else {
             contracts.usdc = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
         }
 

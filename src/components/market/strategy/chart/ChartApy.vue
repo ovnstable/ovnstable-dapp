@@ -26,6 +26,7 @@
                     </v-checkbox>
                 </v-row>
             </v-col>
+
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
                     <label class="chart-title-apy">
@@ -72,6 +73,8 @@
                 All
             </v-btn>
         </v-row>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 
@@ -486,24 +489,28 @@ export default {
 }
 
 .chart-title {
+    margin-left: 4%;
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: #333333 !important;
 }
 
 .chart-title-apy {
+    margin-right: 4%;
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333 !important;
 }
 
 .chart-sub-title-apy {
+    margin-right: 4%;
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: #707A8B !important;
 }
 
 .mobile-info-title {
+    margin-left: 4%;
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #333333 !important;

@@ -205,15 +205,24 @@
 
                 <v-row align="center" justify="center">
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
-                        <Table v-if="!$wu.isMobile()"/>
-                        <Table minimized v-else/>
+                        <Table
+                                v-if="!$wu.isMobile()"
+                                profit-label="USDC per USD+/wMatic"
+                                :payout-data="[...wmaticStrategyData.payoutItems].reverse()"/>
+
+                        <Table
+                                v-else
+                                minimized
+                                profit-label="USDC per USD+/wMatic"
+                                :payout-data="[...wmaticStrategyData.payoutItems].reverse()"/>
+
                         <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
                             <label class="table-scroll-label">scroll to see more</label>
                         </v-row>
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <Doughnut :size="280"/>
+                        <Doughnut :size="280" color="#7944DA" :last-date="lastPayoutDate"/>
                     </v-col>
                 </v-row>
             </v-col>
@@ -271,6 +280,10 @@ export default {
                 'rate-tab-button': this.rateTab === 3,
                 'rate-tab-button-in-active': this.rateTab !== 3,
             }
+        },
+
+        lastPayoutDate: function () {
+            return this.wmaticStrategyData.payoutItems[this.wmaticStrategyData.payoutItems.length - 1].payableDate;
         },
     },
 

@@ -1,12 +1,12 @@
 <template>
     <vc-donut
-      :background="'#0F1A26'"
-      :size="size" unit="px" :thickness="30"
+      :background="'#FFFFFF'"
+      :size="size" unit="px" :thickness="20"
       :sections="sections"
-      :start-angle="0" :auto-adjust-text-size="false">
+      :start-angle="0"
+      :auto-adjust-text-size="false">
 
-        <p class="total-label">TOTAL USD+</p>
-
+        <p class="total-label">Total USD+</p>
         <p class="total-sum-label">{{ $utils.formatMoneyComma(totalUsdPlusValue, 2) }}</p>
     </vc-donut>
 </template>
@@ -18,7 +18,7 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 /* eslint-disable no-unused-vars,no-undef */
 
 export default {
-    name: "Doughnut",
+    name: "DoughnutStrategies",
 
     props: {
         data: {
@@ -99,22 +99,71 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+/* mobile */
+@media only screen and (max-width: 960px) {
+    .total-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .total-sum-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .total-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .total-sum-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .total-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .total-sum-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 40px;
+        line-height: 48px;
+    }
+}
 
 .total-label {
-    font-family: 'Lato', sans-serif !important;
-    font-weight: 300;
-    font-size: 24px;
-    line-height: 36px;
-    color: white !important;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    font-feature-settings: 'liga' off;
+    color: #29323E;
 }
 
 .total-sum-label {
-    font-family: 'Lato', sans-serif !important;
-    font-weight: 700;
-    font-size: 34px;
-    line-height: 42px;
-    color: white !important;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #29323E;
 }
 
 </style>

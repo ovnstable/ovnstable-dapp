@@ -70,7 +70,7 @@
                             </v-row>
                             <v-row>
                                 <label class="balance-label ml-5 mb-1">Balance: {{
-                                        $utils.formatMoney(balance.usdc, 2)
+                                        $utils.formatMoney(balance.asset, 2)
                                     }}</label>
                             </v-row>
                         </v-col>
@@ -82,7 +82,7 @@
         <v-row class="main-btn-row mb-2" align="center">
             <label class="exchange-label ml-5">Exchange Rate</label>
             <v-spacer></v-spacer>
-            <label class="exchange-label mr-5">1 USD+ = 1 USDC <img @click="showMintView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
+            <label class="exchange-label mr-5">1 USD+ = 1 {{ assetName }} <img @click="showMintView" class="exchange-label-icon" width="24" height="24" :src="require('@/assets/icon/filter-exchange.svg')"/></label>
         </v-row>
 
         <v-row class="main-btn-row" justify="center">
@@ -158,17 +158,17 @@
                         </label>
                         <v-spacer></v-spacer>
                         <label class="from-to-label mr-3">
-                            {{ sumResult }} USDC
+                            {{ sumResult }} {{ assetName }}
                         </label>
                         <div class="currency-icon">
-                            <v-img :src="require('@/assets/currencies/usdc.png')"/>
+                            <v-img :src="require('@/assets/currencies/stablecoins/' + assetName + '.png')"/>
                         </div>
                     </v-row>
 
                     <v-row dense class="pl-2 pr-2 pt-5 pb-5">
                         <label class="from-to-sub-label">
                             Output is estimated. You will receive at least&nbsp;&nbsp;
-                            <b class="from-to-sub-sum">{{ $utils.formatMoney(estimateResult, 4) }} USDC</b>&nbsp;&nbsp;
+                            <b class="from-to-sub-sum">{{ $utils.formatMoney(estimateResult, 4) }} {{ assetName }}</b>&nbsp;&nbsp;
                             or the transaction will revert.
                         </label>
                     </v-row>
@@ -179,7 +179,7 @@
                         </label>
                         <v-spacer></v-spacer>
                         <label class="add-info-label">
-                            1 USD+ = 1 USDC
+                            1 USD+ = 1 {{ assetName }}
                         </label>
                         <!-- TODO: add swap btn when exchanging rate added -->
                     </v-row>
@@ -190,7 +190,7 @@
                         </label>
                         <v-spacer></v-spacer>
                         <label class="add-info-label">
-                            {{ $utils.formatMoney(gasAmountInMatic, 6) }} MATIC
+                            {{ $utils.formatMoney(gasAmountInNativeAsset, 6) }} {{ nativeAssetName }}
                         </label>
                     </v-row>
 
@@ -269,7 +269,7 @@ export default {
     data: () => ({
         menu: false,
         tab: null,
-        currency: {id: 'usdc'},
+        currency: {id: 'asset'},
 
         currencies: [],
 
@@ -287,12 +287,11 @@ export default {
         estimatedGas: null,
 
         gas: null,
-        gasAmountInMatic: null,
+        gasAmountInNativeAsset: null,
         gasAmountInUsd: null,
     }),
 
     computed: {
-
         ...mapGetters("accountData", ['balance', 'account']),
         ...mapGetters("accountUI", ['loadingBalance']),
 
@@ -302,6 +301,13 @@ export default {
         ...mapGetters("transaction", ["transactions"]),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
+        assetName() {
+            return process.env.VUE_APP_ASSET_NAME;
+        },
+
+        nativeAssetName() {
+            return process.env.VUE_APP_NATIVE_ASSET;
+        },
 
         sumResult: function () {
             if (!this.sum || this.sum === 0) {
@@ -312,11 +318,11 @@ export default {
         },
 
         estimateResult: function () {
-            return this.sum * 0.9996;
+            return this.$utils.toFixedDown(this.sum * 0.9996, 6);
         },
 
         estimateFee: function () {
-            return this.sum * 0.0004;
+            return this.$utils.toFixedDown(this.sum * 0.0004, 6);
         },
 
         numberRule: function () {
@@ -364,9 +370,9 @@ export default {
 
     created() {
         this.currencies.push({
-            id: 'usdc',
-            title: 'USDC',
-            image: require('../../assets/currencies/usdc.png')
+            id: 'asset',
+            title: process.env.VUE_APP_ASSET_NAME,
+            image: require('@/assets/currencies/stablecoins/' + process.env.VUE_APP_ASSET_NAME + '.png')
         });
         this.currencies.push({
             id: 'usdt',
@@ -388,7 +394,7 @@ export default {
         this.estimatedGas = null;
 
         this.gas = null;
-        this.gasAmountInMatic = null;
+        this.gasAmountInNativeAsset = null;
         this.gasAmountInUsd = null;
 
         this.showConfirmSwapDialog = false;
@@ -427,14 +433,14 @@ export default {
         },
 
         max() {
-            let balanceElement = this.balance.usdPlus;
+            let balanceElement = this.$utils.toFixedDown(this.balance.usdPlus, 6);
             this.sum = balanceElement + "";
         },
 
         async redeem() {
 
             this.showConfirmSwapDialog = false;
-            this.showWaitingModal('Swapping ' + this.sumResult + ' USD+ for ' + this.sumResult + ' USDC');
+            this.showWaitingModal('Swapping ' + this.sumResult + ' USD+ for ' + this.sumResult + ' ' + process.env.VUE_APP_ASSET_NAME);
 
             try {
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
@@ -447,14 +453,14 @@ export default {
                     await this.refreshGasPrice();
 
                     let buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
-                    let redeemResult = await contracts.exchange.methods.redeem(contracts.usdc.options.address, sum).send(buyParams);
+                    let redeemResult = await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).send(buyParams);
 
                     this.closeWaitingModal();
                     this.showSuccessModal(redeemResult.transactionHash);
                 } catch (e) {
                     console.log(e)
                     this.closeWaitingModal();
-                    this.showErrorModal('buyUSDC');
+                    this.showErrorModal('buyAsset');
                     return;
                 }
 
@@ -462,7 +468,7 @@ export default {
                 self.setSum(null)
             } catch (e) {
                 console.log(e)
-                this.showErrorModal('buyUSDC');
+                this.showErrorModal('buyAsset');
             }
         },
 
@@ -481,7 +487,7 @@ export default {
 
                     /* adding 10% to estimated gas */
                     this.gas = new BN(Number.parseFloat(this.estimatedGas) * 1.1);
-                    this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
+                    this.gasAmountInNativeAsset = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
                     this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
 
                     this.closeWaitingModal();
@@ -563,7 +569,7 @@ export default {
             try {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
 
-                await contracts.exchange.methods.redeem(contracts.usdc.options.address, sum).estimateGas(estimateOptions)
+                await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })

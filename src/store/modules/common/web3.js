@@ -94,6 +94,7 @@ const state = {
     onboard: null,
     walletConnected: false,
     walletName: null,
+    assetInfo: {},
 };
 
 const getters = {
@@ -132,6 +133,10 @@ const getters = {
 
     walletName(state) {
         return state.walletName;
+    },
+
+    assetInfo(state) {
+        return state.assetInfo;
     },
 };
 
@@ -342,12 +347,17 @@ const actions = {
 
 
         if (polygon === "avalanche") {
-            contracts.usdc = _load(ERC20, web3, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E');
+            contracts.asset = _load(ERC20, web3, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E');
         } else if (polygon === "polygon") {
-            contracts.usdc = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
+            contracts.asset = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
         } else if (polygon === "bsc") {
-            contracts.usdc = _load(ERC20, web3, '0xe9e7cea3dedca5984780bafc599bd69add087d56');
+            contracts.asset = _load(ERC20, web3, '0xe9e7cea3dedca5984780bafc599bd69add087d56');
         }
+
+        /*let assetInfo = {};
+        assetInfo.symbol = await contracts.asset.methods.symbol().call();
+        assetInfo.decimals = await contracts.asset.methods.decimals().call();
+        commit('setAssetInfo', assetInfo);*/
 
         contracts.exchange = _load(Exchange, web3);
         contracts.govToken = _load(OvnToken, web3);
@@ -546,6 +556,10 @@ const mutations = {
 
     setWalletName(state, value) {
         state.walletName = value;
+    },
+
+    setAssetInfo(state, value) {
+        state.assetInfo = value;
     },
 };
 

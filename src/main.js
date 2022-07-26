@@ -56,7 +56,7 @@ var configuration = {
   amount: 1,
   iframe: 'vertical',
   hideSelectionFrom: false,
-  hideSelectionTo: true,
+  hideSelectionTo: false,
   theme: 'dark',
   background: '#1d2029',
   language: 'en',

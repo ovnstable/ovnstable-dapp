@@ -221,7 +221,7 @@ export default {
                 } else {
                     return 'Approve wUSD+';
                 }
-            } else if (this.sum > parseFloat(this.balance.usdc)) {
+            } else if (this.sum > parseFloat(this.balance.asset)) {
                 return 'Invalid amount'
             } else {
                 return 'Enter an amount';
@@ -231,7 +231,7 @@ export default {
 
         tokenContract(){
             if (this.currency.id === 'usdc')
-                return this.contracts.usdc;
+                return this.contracts.asset;
             else
                 return this.contracts.usdPlus;
         },

@@ -230,11 +230,6 @@ const actions = {
             dispatch('wrapUI/hidePage', null, {root: true});
         }
 
-        if (polygon === "bsc") {
-            dispatch('dashboardUI/hidePage', null, {root: true});
-            dispatch('statsUI/hidePage', null, {root: true});
-        }
-
         if (localStorage.getItem('walletName')) {
             await dispatch('connectWallet');
         }

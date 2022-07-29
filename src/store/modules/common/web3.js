@@ -53,6 +53,11 @@ export const wallets = [
         preferred: true
     },
     {
+        walletName: "binance",
+        rpcUrl: process.env.VUE_APP_RPC_URL,
+        preferred: (process.env.VUE_APP_POLYGON === "bsc")
+    },
+    {
         walletName: "walletConnect",
         rpc: {
             [networkId]: process.env.VUE_APP_RPC_URL,
@@ -65,22 +70,19 @@ export const wallets = [
         appName: process.env.VUE_APP_TITLE,
         preferred: true
     },
-    {
-        walletName: "binance",
-        rpcUrl: process.env.VUE_APP_RPC_URL,
-    },
+    uauthOnboard.module({
+        preferred: false,
+        walletconnect: {
+            infuraId: process.env.VUE_APP_INFURA_ID
+        }
+    }),
     {
         walletName: 'ledger',
         rpcUrl: process.env.VUE_APP_RPC_URL,
     },
     {
         walletName: "ronin"
-    },
-    uauthOnboard.module({
-        walletconnect: {
-            infuraId: process.env.VUE_APP_INFURA_ID
-        }
-    })
+    }
 ];
 
 

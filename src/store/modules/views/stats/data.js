@@ -98,11 +98,13 @@ const actions = {
         stablecoinList = stablecoinList.filter(el => el.netAssetValue > 0);
 
         let colors = [
-            "#1C95E7",
-            "#22ABAC",
+            "#2775CA",
+            "#26A17B",
             "#FCCA46",
-            "#FE7F2D",
-            "#B22174",
+            "#6E56C4",
+            "#002868",
+            "#26A17B",
+            "#23DD00",
         ];
 
         for (let i = 0; i < stablecoinList.length; i++) {

@@ -4,7 +4,7 @@
             permanent
             width="228"
     >
-        <v-list class="ml-4 mb-8">
+        <v-list class="mt-1 mb-8">
             <v-list-item>
                 <v-list-item-title>
                     <img class="logo-img" :src="require('@/assets/logo.svg')" @click="openLink('https://market.overnight.fi/')">
@@ -12,23 +12,13 @@
             </v-list-item>
         </v-list>
 
-        <v-list nav class="page-list ml-4">
-            <v-list-item link @click="collateralClick">
+        <v-list nav class="page-list">
+            <v-list-item link @click="openLink('https://app.overnight.fi/dashboard')">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'collateral' ? 'addchartSelected.svg' : 'addchart.svg'))">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/avatar.svg')">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label" :class="selectedTab === 'collateral' ? 'selected-page' : ''">Collateral</label>
-                </v-list-item-title>
-            </v-list-item>
-
-            <v-list-item link @click="statsClick">
-                <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'stats' ? 'chartSelected.svg' : 'chart.svg'))">
-                </v-list-item-icon>
-                <v-list-item-title>
-                    <label class="navbar-page-label" :class="selectedTab === 'stats' ? 'selected-page' : ''">Stats</label>
-                    <!-- TODO: add last payout time -->
+                    <label class="navbar-page-label">My Performance</label>
                 </v-list-item-title>
             </v-list-item>
 
@@ -42,12 +32,22 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-item link @click="openLink('https://app.overnight.fi/dashboard')">
+            <v-list-item link @click="statsClick">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/avatar.svg')">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'stats' ? 'chartSelected.svg' : 'chart.svg'))">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label">Overview</label>
+                    <label class="navbar-page-label" :class="selectedTab === 'stats' ? 'selected-page' : ''">Stats</label>
+                    <!-- TODO: add last payout time -->
+                </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item link @click="collateralClick">
+                <v-list-item-icon>
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'collateral' ? 'addchartSelected.svg' : 'addchart.svg'))">
+                </v-list-item-icon>
+                <v-list-item-title>
+                    <label class="navbar-page-label" :class="selectedTab === 'collateral' ? 'selected-page' : ''">Collateral</label>
                 </v-list-item-title>
             </v-list-item>
         </v-list>
@@ -55,7 +55,7 @@
         <!-- TODO: add Welcome to open beta section -->
 
         <template v-slot:append>
-            <v-list nav dense class="footer-list ml-4">
+            <v-list nav dense class="footer-list">
                 <v-list-item link class="mb-0">
                     <v-list-item-title @click="openLink('https://docs.overnight.fi/')">
                         <label class="footer-item-label">Docs</label>

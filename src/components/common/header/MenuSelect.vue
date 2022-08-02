@@ -10,14 +10,9 @@
             </div>
         </template>
         <v-list class="network-select-list">
-            <v-list-item class="menu-item" @click="goToAction('/collateral')">
+            <v-list-item class="menu-item" @click="openLink('https://app.overnight.fi/dashboard')">
                 <v-list-item-title class="network-select-list-item">
-                    Collateral
-                </v-list-item-title>
-            </v-list-item>
-            <v-list-item class="menu-item" @click="goToAction('/stats')">
-                <v-list-item-title class="network-select-list-item">
-                    Stats
+                    My Performance
                 </v-list-item-title>
             </v-list-item>
             <v-list-item class="menu-item" @click="goToAction('/')">
@@ -25,9 +20,14 @@
                     Market
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item class="menu-item" @click="openLink('https://app.overnight.fi/dashboard')">
+            <v-list-item class="menu-item" @click="goToAction('/stats')">
                 <v-list-item-title class="network-select-list-item">
-                    Overview
+                    Stats
+                </v-list-item-title>
+            </v-list-item>
+            <v-list-item class="menu-item" @click="goToAction('/collateral')">
+                <v-list-item-title class="network-select-list-item">
+                    Collateral
                 </v-list-item-title>
             </v-list-item>
             <v-list-item class="menu-item" @click="openLink('https://app.overnight.fi/')">

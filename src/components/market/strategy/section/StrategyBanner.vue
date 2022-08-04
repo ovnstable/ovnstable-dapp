@@ -13,7 +13,7 @@
             </v-row>
 
             <v-row class="d-flex">
-                <v-col :cols="$wu.isFull() ? 7 : 12">
+                <v-col :cols="$wu.isFull() ? 8 : 12">
                     <v-row align="center" justify="start" class="info-container ma-0">
                         <v-col>
                             <v-row justify="center" align="center" class="ma-0">
@@ -24,7 +24,7 @@
                                 <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                             </v-row>
                         </v-col>
-                        <v-col class="bordered-col">
+                        <v-col class="bordered-col" cols="5">
                             <v-row justify="center" align="center" class="ma-0">
                                 <label class="info-title">TVL</label>
                             </v-row>
@@ -32,6 +32,7 @@
                                 <label class="info-value" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'label-error' : ''">
                                     {{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}
                                 </label>
+                                <Tooltip text="Past 2 hours"/>
                             </v-row>
                         </v-col>
                         <v-col>

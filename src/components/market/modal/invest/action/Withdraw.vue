@@ -179,6 +179,7 @@ export default {
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
+        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
 
         maxResult: function () {
             return this.$utils.formatMoney(this.balance.usdPlusWmatic, 3);
@@ -217,9 +218,9 @@ export default {
                     return 'Approve USD+/WMatic';
                 }
             } else if (this.sum > parseFloat(this.balance.usdPlusWmatic)) {
-                return 'Invest'
+                return 'Withdraw'
             } else {
-                return 'Invest';
+                return 'Withdraw';
             }
         },
 

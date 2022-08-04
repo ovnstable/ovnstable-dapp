@@ -265,7 +265,10 @@
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">TVL</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}</label>
+                    <label class="card-info-value" :class="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply ? 'label-error' : ''">
+                        {{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}
+                    </label>
+                    <Tooltip text="Past 2 hours"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Users</label>
@@ -1043,5 +1046,9 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #CF3F92;
+}
+
+.label-error {
+    color: #CF3F92 !important;
 }
 </style>

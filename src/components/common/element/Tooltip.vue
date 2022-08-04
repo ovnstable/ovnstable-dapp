@@ -7,7 +7,7 @@
             :close-delay="link ? 4000 : 100"
     >
         <template v-slot:activator="{ on, attrs }">
-            <div class="info-icon ml-2"
+            <div class="info-icon ml-1"
                  v-bind="attrs"
                  v-on="on">
                 <v-img :src="require('@/assets/icon/tooltip.svg')"/>

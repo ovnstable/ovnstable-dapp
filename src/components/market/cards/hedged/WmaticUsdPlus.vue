@@ -45,7 +45,10 @@
             <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">TVL</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}</label>
+                <label class="card-info-value" :class="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply ? 'label-error' : ''">
+                    {{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}
+                </label>
+                <Tooltip text="Past 2 hours"/>
             </v-row>
 
             <v-row class="card-row card-banner-status-container mt-12" justify="start" align="center">

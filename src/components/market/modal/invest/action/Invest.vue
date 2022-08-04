@@ -179,6 +179,7 @@ export default {
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
+        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
 
         maxResult: function () {
             return this.$utils.formatMoney(this.balance.usdPlus, 3);
@@ -216,6 +217,8 @@ export default {
                 } else {
                     return 'Approve USD+';
                 }
+            } else if ((this.totalSupply.usdPlusWmatic) >= this.maxUsdPlusWmaticSupply || (parseFloat(this.totalSupply.usdPlusWmatic) + parseFloat(this.sum)) >= parseFloat(this.maxUsdPlusWmaticSupply)) {
+                return 'Over ETS capacity'
             } else if (this.sum > parseFloat(this.balance.usdPlus)) {
                 return 'Invest'
             } else {
@@ -224,7 +227,7 @@ export default {
         },
 
         isBuy: function () {
-            return this.account && this.sum > 0 && this.numberRule;
+            return this.account && this.sum > 0 && this.numberRule && (this.totalSupply.usdPlusWmatic < this.maxUsdPlusWmaticSupply) && ((parseFloat(this.sum) + parseFloat(this.totalSupply.usdPlusWmatic)) < parseFloat(this.maxUsdPlusWmaticSupply));
         },
 
         numberRule: function () {

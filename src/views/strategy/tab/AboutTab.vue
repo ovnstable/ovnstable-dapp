@@ -10,6 +10,15 @@
             </label>
         </v-row>
 
+        <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'">
+            <div class="alert-icon mr-2" v-if="!$wu.isMobile()">
+                <v-img :src="require('@/assets/icon/alert.svg')"/>
+            </div>
+            <label class="strategy-info-label">
+                Strategy max capacity depends on votes on Dystopia and is reviewed every Thursday. Add your votes <label class="open-link-label" @click="openLink('https://www.dystopia.exchange/vote')">here</label>.
+            </label>
+        </v-row>
+
         <v-row align="start" justify="start" class="ma-0 mt-10">
             <v-col :cols="$wu.isMobile() ? 12 : 6">
                 <v-row class="info-card-container" justify="start" align="center">
@@ -335,9 +344,18 @@
         </v-row>
 
         <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-            <v-btn class="header-btn btn-filled" @click="showInvestModal">
-                Invest
+            <v-btn class="header-btn btn-filled" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" @click="showInvestModal" :disabled="totalSupply.usdPlusWmatic > maxUsdPlusWmaticSupply">
+                MINT ETS: USD+/wMatic
             </v-btn>
+            <template v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
+                <label v-if="$wu.isFull()" class="full-status-error-label ml-4">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 0) }}. Please check status later.</label>
+            </template>
+        </v-row>
+
+        <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-n8' : 'mt-2'" v-if="!$wu.isFull()">
+            <template v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
+                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 0) }}. Please check status later.</label>
+            </template>
         </v-row>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -361,6 +379,7 @@ export default {
 
     computed: {
         ...mapGetters('marketData', ['wmaticStrategyData']),
+        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
 
         entryFee: function () {
             if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
@@ -421,6 +440,10 @@ export default {
             if (hash && hash !== '') {
                 window.open(process.env.VUE_APP_NETWORK_EXPLORER + "address/" + hash, '_blank').focus();
             }
+        },
+
+        openLink(url) {
+            window.open(url, '_blank').focus();
         },
     }
 
@@ -553,6 +576,18 @@ export default {
         font-size: 16px;
         line-height: 24px;
     }
+
+    .alert-icon {
+        width: 24px !important;
+        height: 24px !important;
+    }
+
+    .full-status-error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
 }
 
 /* tablet */
@@ -679,6 +714,18 @@ export default {
         font-size: 16px;
         line-height: 24px;
     }
+
+    .alert-icon {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .full-status-error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+    }
 }
 
 /* full */
@@ -804,6 +851,18 @@ export default {
         font-weight: 400;
         font-size: 16px;
         line-height: 24px;
+    }
+
+    .alert-icon {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .full-status-error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
     }
 }
 
@@ -967,5 +1026,22 @@ export default {
 .btn-filled {
     background: var(--blue-gradient);
     color: #FFFFFF !important;
+}
+
+.open-link-label {
+    color: #1C95E7 !important;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.disabled-btn {
+    background: #E5E7EA !important;
+    color: #9DA4B0 !important;
+}
+
+.full-status-error-label {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #CF3F92;
 }
 </style>

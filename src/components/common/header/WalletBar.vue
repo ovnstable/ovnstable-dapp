@@ -77,6 +77,7 @@ export default {
     created() {
         window.setInterval(() => {
             this.refreshBalance();
+            this.refreshSupply();
         }, 5000)
     },
 
@@ -85,6 +86,7 @@ export default {
         ...mapActions('web3', ['connectWallet', 'disconnectWallet', 'switchAccount', 'addUsdPlusToken', 'addwUsdPlusToken']),
         ...mapActions('accountUI', ['showAccountProfile']),
         ...mapActions('accountData', ['refreshBalance']),
+        ...mapActions('supplyData', ['refreshSupply']),
 
         disconnectWalletAction() {
             this.disconnectWallet();

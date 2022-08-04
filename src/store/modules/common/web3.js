@@ -313,6 +313,7 @@ const actions = {
         console.log('Call: updateUserData');
 
         dispatch('accountData/refreshBalance', null, {root:true});
+        dispatch('supplyData/refreshSupply', null, {root:true});
         dispatch('swapData/refreshSwap', null, {root:true});
         dispatch('wrapData/refreshWrap', null, {root:true});
         dispatch('statsData/refreshStats', null, {root:true});

@@ -48,7 +48,39 @@
                 <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}</label>
             </v-row>
 
-            <v-row class="card-row card-banner-container mt-12" justify="start" align="center">
+            <v-row class="card-row card-banner-status-container mt-12" justify="start" align="center">
+                <v-col class="card-banner-body">
+                    <v-row justify="start" align="center">
+                        <label class="capacity-status-text">ETS capacity status</label>
+                        <v-spacer></v-spacer>
+                        <label class="capacity-status-value" :class="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply ? 'label-error' : ''">
+                            {{ totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply ? 'FULL' : 'AVAILABLE' }}
+                        </label>
+                    </v-row>
+                    <v-row justify="start" align="center" class="mt-5">
+                        <v-progress-linear
+                                rounded
+                                height="7"
+                                class="progress-info"
+                                background-opacity="0"
+                                :value="(totalSupply.usdPlusWmatic / maxUsdPlusWmaticSupply) * 100"
+                                :color="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply ? '#CF3F92' : '#1C95E7'"
+                        ></v-progress-linear>
+                    </v-row>
+                    <v-row justify="start" align="center" class="mt-5">
+                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(totalSupply.usdPlusWmatic, 2) }}</label>
+                        <v-spacer></v-spacer>
+                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 2) }}</label>
+                    </v-row>
+                    <v-row justify="start" align="center">
+                        <label class="capacity-status-sub-text">CURRENT TVL</label>
+                        <v-spacer></v-spacer>
+                        <label class="capacity-status-sub-text">MAX TVL</label>
+                    </v-row>
+                </v-col>
+            </v-row>
+
+            <v-row class="card-row card-banner-container mt-7" justify="start" align="center">
                 <v-col class="card-banner-body">
                     <v-row align="center">
                         <div class="card-banner-icon">
@@ -96,6 +128,7 @@ export default {
 
     computed: {
         ...mapGetters('marketData', ['wmaticStrategyData']),
+        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
     },
 
     data: () => ({
@@ -181,6 +214,29 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .capacity-status-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+    }
+
+    .capacity-status-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .capacity-status-sub-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
 }
 
 /* tablet */
@@ -245,6 +301,29 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .capacity-status-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .capacity-status-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
+    }
+
+    .capacity-status-sub-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
     }
 }
 
@@ -311,12 +390,40 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .capacity-status-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .capacity-status-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
+    }
+
+    .capacity-status-sub-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
+    }
 }
 
 .card-container {
     background: #FFFFFF !important;
     border-radius: 4px !important;
     max-width: 480px !important;
+}
+
+.card-banner-status-container {
+    background: #F5F5F5;
+    border-radius: 4px;
 }
 
 .card-banner-container {
@@ -381,5 +488,33 @@ export default {
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     background: var(--blue-gradient);
     color: #FFFFFF !important;
+}
+
+.label-error {
+    color: #CF3F92 !important;
+}
+
+.progress-info {
+    background: #D7DADF;
+}
+
+.capacity-status-text {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #29323E;
+}
+
+.capacity-status-value {
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #1C95E7;
+}
+
+.capacity-status-sub-text {
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #ADB3BD;
 }
 </style>

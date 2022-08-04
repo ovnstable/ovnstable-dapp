@@ -56,9 +56,12 @@
                                 </v-col>
                             </v-row>
 
+                            <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
+                                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 0) }}. Please check status later.</label>
+                            </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'">
-                                <v-btn class="header-btn btn-investor-invest" @click="mintAction">
+                            <v-row align="center" justify="center" class="ma-0" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'mt-2' : 'mt-12'">
+                                <v-btn class="header-btn btn-investor-invest" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" :disabled="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply"  @click="mintAction">
                                     MINT ETS: USD+/wMATIC
                                 </v-btn>
                             </v-row>
@@ -147,8 +150,12 @@
                                 <label class="investor-card-sub-title-value value-disabled">Soon</label>
                             </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0 mt-12">
-                                <v-btn class="header-btn btn-investor-invest" @click="mintAction">
+                            <v-row align="center" justify="center" class="ma-0 mt-12" v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
+                                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 0) }}. Please check status later.</label>
+                            </v-row>
+
+                            <v-row align="center" justify="center" class="ma-0" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'mt-2' : 'mt-12'">
+                                <v-btn class="header-btn btn-investor-invest" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" :disabled="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply" @click="mintAction">
                                     MINT ETS: USD+/wMATIC
                                 </v-btn>
                             </v-row>
@@ -241,6 +248,7 @@ export default {
     computed: {
         ...mapGetters('marketData', ['wmaticStrategyData', 'clientProfitDay']),
         ...mapGetters('accountData', ['balance']),
+        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
 
         activeTabAbout: function () {
             return {
@@ -388,6 +396,13 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
     }
+
+    .full-status-error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+    }
 }
 
 /* tablet */
@@ -489,6 +504,13 @@ export default {
         font-size: 18px !important;
         line-height: 24px !important;
     }
+
+    .full-status-error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+    }
 }
 
 /* full */
@@ -575,6 +597,13 @@ export default {
         font-weight: 400 !important;
         font-size: 18px !important;
         line-height: 24px !important;
+    }
+
+    .full-status-error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
     }
 }
 
@@ -710,5 +739,16 @@ export default {
 
 .about-link-label:hover {
     text-decoration: underline !important;
+}
+
+.disabled-btn {
+    background: #E5E7EA !important;
+    color: #9DA4B0 !important;
+}
+
+.full-status-error-label {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #CF3F92;
 }
 </style>

@@ -37,6 +37,7 @@ const actions = {
         dispatch('refreshStrategyData');
         dispatch('refreshClientData');
         dispatch('accountData/refreshBalance', null, {root:true});
+        dispatch('supplyData/refreshSupply', null, {root:true});
     },
 
     async refreshStrategyData({commit, dispatch, getters, rootState}) {

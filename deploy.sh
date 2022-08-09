@@ -27,6 +27,11 @@ then
   nameDapp="dapp-bsc"
   build="build-bsc-prod"
   tag="bsc"
+elif [ "$stand" = "optimism" ]
+then
+  nameDapp="dapp-optimism"
+  build="build-optimism-prod"
+  tag="optimism"
 else
   exit
 fi

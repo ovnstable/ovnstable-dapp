@@ -6,7 +6,7 @@ const state = {
         usdPlusWmatic: 0,
     },
 
-    maxUsdPlusWmaticSupply: 250000.00,
+    maxUsdPlusWmaticSupply: 275000.00,
 };
 
 const getters = {

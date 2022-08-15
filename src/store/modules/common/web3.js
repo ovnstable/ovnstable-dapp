@@ -227,6 +227,10 @@ const actions = {
             dispatch('wrapUI/hidePage', null, {root: true});
         }
 
+        if (polygon === "optimism") {
+            dispatch('farmUI/hidePage', null, {root: true});
+        }
+
         if (localStorage.getItem('walletName')) {
             await dispatch('connectWallet');
         }

@@ -25,16 +25,6 @@
                         Polygon
                     </v-list-item-title>
                 </v-list-item>
-                <v-list-item style="cursor: pointer" target="_blank" href="https://avax.overnight.fi">
-                    <v-list-item-avatar>
-                        <div class="list-item-icon">
-                            <v-img :src="require('@/assets/network/avalanche.svg')"/>
-                        </div>
-                    </v-list-item-avatar>
-                    <v-list-item-title class="network-select-list-item">
-                        Avalanche
-                    </v-list-item-title>
-                </v-list-item>
                 <v-list-item style="cursor: pointer" target="_blank" href="https://bsc.overnight.fi">
                     <v-list-item-avatar>
                         <div class="list-item-icon">
@@ -43,6 +33,16 @@
                     </v-list-item-avatar>
                     <v-list-item-title class="network-select-list-item">
                         BSC
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item style="cursor: pointer" target="_blank" href="https://avax.overnight.fi">
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/avalanche.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="network-select-list-item">
+                        Avalanche
                     </v-list-item-title>
                 </v-list-item>
                 <v-list-item style="cursor: pointer"  target="_blank" href="https://op.overnight.fi">

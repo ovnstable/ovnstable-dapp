@@ -25,6 +25,16 @@
                         Polygon
                     </v-list-item-title>
                 </v-list-item>
+                <v-list-item style="cursor: pointer" target="_blank" href="https://bsc.overnight.fi">
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/bsc.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="network-select-list-item">
+                        BSC
+                    </v-list-item-title>
+                </v-list-item>
                 <v-list-item style="cursor: pointer"  target="_blank" href="https://avax.overnight.fi">
                     <v-list-item-avatar>
                         <div class="list-item-icon">
@@ -48,26 +58,6 @@
                 <v-list-item disabled>
                     <v-list-item-avatar>
                         <div class="list-item-icon">
-                            <v-img style="filter: grayscale(100%);" :src="require('@/assets/network/arbitrum.svg')"/>
-                        </div>
-                    </v-list-item-avatar>
-                    <v-list-item-title class="list-item-disabled">
-                        Arbitrum (Soon)
-                    </v-list-item-title>
-                </v-list-item>
-                <v-list-item disabled>
-                    <v-list-item-avatar>
-                        <div class="list-item-icon">
-                            <v-img style="filter: grayscale(100%);" :src="require('@/assets/network/ftm.png')"/>
-                        </div>
-                    </v-list-item-avatar>
-                    <v-list-item-title class="list-item-disabled">
-                        Fantom (Soon)
-                    </v-list-item-title>
-                </v-list-item>
-                <v-list-item disabled>
-                    <v-list-item-avatar>
-                        <div class="list-item-icon">
                             <v-img style="filter: grayscale(100%);" :src="require('@/assets/currencies/eth.svg')"/>
                         </div>
                     </v-list-item-avatar>
@@ -85,6 +75,7 @@ import {mapGetters} from "vuex";
 
 let polygonIcon = require('@/assets/network/polygon.svg');
 let avaxIcon = require('@/assets/network/avalanche.svg');
+let bscIcon = require('@/assets/network/bsc.svg');
 let optimismIcon = require('@/assets/network/optimism.svg');
 
 export default {
@@ -109,6 +100,8 @@ export default {
                     return avaxIcon;
                 case 10:
                     return optimismIcon;
+                case 56:
+                    return bscIcon;
             }
 
         }

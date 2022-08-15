@@ -45,6 +45,16 @@
                         BSC
                     </v-list-item-title>
                 </v-list-item>
+                <v-list-item style="cursor: pointer"  target="_blank" href="https://op.overnight.fi">
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/optimism.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="network-select-list-item">
+                        Optimism
+                    </v-list-item-title>
+                </v-list-item>
                 <v-list-item disabled>
                     <v-list-item-avatar>
                         <div class="list-item-icon">
@@ -86,6 +96,7 @@ import {mapGetters} from "vuex";
 let polygonIcon = require('@/assets/network/polygon.svg');
 let avaxIcon = require('@/assets/network/avalanche.svg');
 let bscIcon = require('@/assets/network/bsc.svg');
+let optimismIcon = require('@/assets/network/optimism.svg');
 
 export default {
     name: "NetworkSelect",
@@ -101,12 +112,15 @@ export default {
 
         icon: function (){
 
-            if (this.networkId === 137){
-                return polygonIcon;
-            } else if (this.networkId === 43114) {
-                return avaxIcon;
-            } else if (this.networkId === 56) {
-                return bscIcon;
+            switch (this.networkId){
+                case 137:
+                    return polygonIcon;
+                case 43114:
+                    return avaxIcon;
+                case 10:
+                    return optimismIcon;
+                case 56:
+                    return bscIcon;
             }
 
         }

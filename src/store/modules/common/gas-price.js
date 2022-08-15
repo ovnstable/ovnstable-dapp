@@ -1,3 +1,5 @@
+import BN from "bn.js";
+
 const {axios} = require('@/plugins/http-axios');
 
 
@@ -67,6 +69,13 @@ const actions = {
             url = "https://gavax.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
         else if(networkId === 56)
             url = "https://gbsc.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
+        else if (networkId === 10){
+
+            // Fixed price for Optimism
+            commit('setGasPrice', "0.001");
+            commit('setGasPriceGwei', rootState.web3.web3.utils.toWei("0.001" + "", 'gwei'));
+            return;
+        }
 
         console.log('GAS STATION: ' + url);
         axios.get(url).then(value => {

@@ -458,7 +458,14 @@ export default {
                 try {
                     await this.refreshGasPrice();
 
-                    let buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+                    let buyParams;
+
+                    if (this.gas == null) {
+                        buyParams = {from: from, gasPrice: this.gasPriceGwei};
+                    } else {
+                        buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+                    }
+
                     let buyResult = await contracts.exchange.methods.buy(contracts.asset.options.address, sum).send(buyParams);
 
                     this.closeWaitingModal();
@@ -491,9 +498,13 @@ export default {
                 this.showWaitingModal();
 
                 let estimatedGasValue = await this.estimateGas(sum);
-                if (estimatedGasValue === -1) {
+                if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
+                    this.gas = null;
+                    this.gasAmountInMatic = null;
+                    this.gasAmountInUsd = null;
+
                     this.closeWaitingModal();
-                    this.showErrorModal('estimateGas');
+                    this.showConfirmSwapDialog = true;
                 } else {
                     this.estimatedGas = estimatedGasValue;
 

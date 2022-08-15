@@ -1,82 +1,83 @@
 <template>
-    <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-            <div class="select-bar-main-container mt-1"
-                 v-click-outside="clickMenuOutside"
-                 @click="openedList = !openedList"
-                 v-bind="attrs"
-                 v-on="on">
-                <v-row justify="end" align="center" class="select-bar-container">
-                    <v-col cols="12" class="select-col">
-                        <div class="btn-icon"
-                             style="display: flex">
-                            <v-img :src="icon"/>
-                            <v-icon color="#333333" class="ml-2">
-                                {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                            </v-icon>
+    <div class="mt-2 ml-5" style="width: 40px; height: 40px">
+        <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+                <div class="btn-icon"
+                     v-click-outside="clickMenuOutside"
+                     @click="openedList = !openedList"
+                     style="display: flex"
+                     v-bind="attrs"
+                     v-on="on">
+                    <v-img :src="icon"/>
+                    <v-icon color="white">
+                        {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                    </v-icon>
+                </div>
+            </template>
+            <v-list class="network-select-list">
+                <v-list-item style="cursor: pointer" target="_blank" href="https://app.overnight.fi">
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/polygon.svg')"/>
                         </div>
-                    </v-col>
-                </v-row>
-            </div>
-        </template>
-        <v-list class="network-select-list">
-            <v-list-item style="cursor: pointer" target="_blank" href="https://market.overnight.fi">
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img :src="require('@/assets/network/polygon.svg')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item">
-                    Polygon
-                    <v-icon class="mb-5" small color="#333333"></v-icon>
-                </v-list-item-title>
-            </v-list-item>
-            <v-list-item style="cursor: pointer" target="_blank" href="https://bsc.overnight.fi">
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img :src="require('@/assets/network/bsc.svg')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item">
-                    BSC
-                    <v-icon class="mb-5" small color="#333333"></v-icon>
-                </v-list-item-title>
-            </v-list-item>
-            <v-list-item style="cursor: pointer" target="_blank" href="https://avax.overnight.fi">
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img :src="require('@/assets/network/avalanche.svg')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item">
-                    Avalanche
-                    <v-icon class="ml-n1 mb-5" small color="#333333">mdi-alpha</v-icon>
-                </v-list-item-title>
-            </v-list-item>
-            <v-list-item style="cursor: pointer" target="_blank" href="https://op.overnight.fi">
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img :src="require('@/assets/network/op.svg')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item">
-                    Optimism
-                    <v-icon class="ml-n1 mb-5" small color="#333333">mdi-alpha</v-icon>
-                </v-list-item-title>
-            </v-list-item>
-            <v-list-item disabled>
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img style="filter: grayscale(100%);" :src="require('@/assets/currencies/eth.svg')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item list-item-disabled">
-                    Ethereum (Soon)
-                    <v-icon class="mb-5" small></v-icon>
-                </v-list-item-title>
-            </v-list-item>
-        </v-list>
-    </v-menu>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="network-select-list-item">
+                        Polygon
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item style="cursor: pointer"  target="_blank" href="https://avax.overnight.fi">
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/avalanche.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="network-select-list-item">
+                        Avalanche
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item style="cursor: pointer"  target="_blank" href="https://op.overnight.fi">
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/optimism.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="network-select-list-item">
+                        Optimism
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item disabled>
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img style="filter: grayscale(100%);" :src="require('@/assets/network/arbitrum.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="list-item-disabled">
+                        Arbitrum (Soon)
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item disabled>
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img style="filter: grayscale(100%);" :src="require('@/assets/network/ftm.png')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="list-item-disabled">
+                        Fantom (Soon)
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item disabled>
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img style="filter: grayscale(100%);" :src="require('@/assets/currencies/eth.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="list-item-disabled">
+                        Ethereum (Soon)
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-menu>
+    </div>
 </template>
 
 <script>
@@ -84,8 +85,7 @@ import {mapGetters} from "vuex";
 
 let polygonIcon = require('@/assets/network/polygon.svg');
 let avaxIcon = require('@/assets/network/avalanche.svg');
-let bscIcon = require('@/assets/network/bsc.svg');
-let optimismIcon = require('@/assets/network/op.svg');
+let optimismIcon = require('@/assets/network/optimism.svg');
 
 export default {
     name: "NetworkSelect",
@@ -99,7 +99,9 @@ export default {
     computed: {
         ...mapGetters('web3', ['networkId']),
 
+
         icon: function (){
+
             switch (this.networkId){
                 case 137:
                     return polygonIcon;
@@ -107,9 +109,8 @@ export default {
                     return avaxIcon;
                 case 10:
                     return optimismIcon;
-                case 56:
-                    return bscIcon;
             }
+
         }
     },
 
@@ -122,102 +123,34 @@ export default {
 </script>
 
 <style scoped>
-/* mobile */
-@media only screen and (max-width: 960px) {
-
-    .btn-icon, .list-item-icon {
-        width: 20px;
-        height: 20px;
-    }
-
-    .network-select-list-item {
-        font-size: 14px;
-        margin-left: -12px;
-    }
-
-    .select-bar-container {
-        height: 28px !important;
-    }
-
-    .select-col {
-        margin-top: -8px;
-    }
-
-    .select-bar-main-container {
-        width: 42px !important;
-    }
-}
-
-/* tablet */
-@media only screen and (min-width: 960px) and (max-width: 1400px) {
-
-    .btn-icon, .list-item-icon {
-        width: 28px;
-        height: 28px;
-    }
-
-    .network-select-list-item {
-        font-size: 16px;
-        margin-left: -5px;
-    }
-
-    .select-bar-container {
-        height: 48px !important;
-    }
-
-    .select-col {
-        margin-top: -2px;
-    }
-
-    .select-bar-main-container {
-        width: 56px !important;
-    }
-}
-
-/* full */
-@media only screen and (min-width: 1400px) {
-
-    .btn-icon, .list-item-icon {
-        width: 28px;
-        height: 28px;
-    }
-
-    .network-select-list-item {
-        font-size: 17px;
-        margin-left: -5px;
-    }
-
-    .select-bar-container {
-        height: 48px !important;
-    }
-
-    .select-col {
-        margin-top: -2px;
-    }
-
-    .select-bar-main-container {
-        width: 56px !important;
-    }
-}
 
 .network-select-list {
     background-color: var(--secondary) !important;
     border-radius: 10px;
+    margin-top: 10px;
 }
 
 .network-select-list-item {
-    font-family: 'Roboto', sans-serif !important;
-    color: var(--secondary-gray-text);
+    color: white;
+    font-weight: 600;
+    font-size: 17px;
+    margin-left: -5px;
+}
+
+.list-item-icon {
+    width: 32px;
+    height: 32px;
 }
 
 .list-item-disabled {
-    color: var(--fourth-lightgray-text) !important;
+    color: rgba(255, 255, 255, 0.15);
+    font-weight: 600;
+    font-size: 17px;
+    margin-left: -5px;
 }
 
-.select-bar-container {
-    background-color: white !important;
-    border-radius: 2px;
-    cursor: pointer;
+.btn-icon {
+    width: 32px;
+    height: 32px;
 }
-
 </style>

@@ -488,7 +488,7 @@ export default {
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
                     this.gas = null;
-                    this.gasAmountInMatic = null;
+                    this.gasAmountInNativeAsset = null;
                     this.gasAmountInUsd = null;
 
                     this.closeWaitingModal();

@@ -314,7 +314,8 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    let buyResult = await contracts.exchangerUsdPlusWmatic.methods.buy(sum).send(buyParams);
+                    let referral = ""; //TODO set referral from link
+                    let buyResult = await contracts.exchangerUsdPlusWmatic.methods.buy(sum, referral).send(buyParams);
 
                     this.closeWaitingModal();
 
@@ -465,7 +466,8 @@ export default {
             try {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
 
-                await contracts.exchangerUsdPlusWmatic.methods.buy(sum).estimateGas(estimateOptions)
+                let referral = ""; //TODO set referral from link
+                await contracts.exchangerUsdPlusWmatic.methods.buy(sum, referral).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })

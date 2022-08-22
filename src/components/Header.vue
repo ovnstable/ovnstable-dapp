@@ -24,10 +24,10 @@
                             </v-btn>
 
                             <template v-else>
-                                <v-btn class="header-btn btn-outlined mr-5" outlined @click="openLink('https://app.overnight.fi/wrap')">
+                                <v-btn class="header-btn btn-outlined mr-5" outlined @click="wrapAction">
                                     Wrap / unwrap
                                 </v-btn>
-                                <v-btn class="header-btn btn-filled mr-2" @click="openLink('https://app.overnight.fi/')">
+                                <v-btn class="header-btn btn-filled mr-2" @click="mintAction">
                                     Mint / redeem
                                 </v-btn>
                             </template>
@@ -64,6 +64,10 @@
             </v-col>
         </v-row>
 
+        <InvestModal/>
+        <SwapModal/>
+        <WrapModal/>
+
         <resize-observer @notify="$forceUpdate()"/>
     </v-app-bar>
 </template>
@@ -77,11 +81,17 @@ import Menu from "./common/header/Menu";
 import WalletBar from "@/components/common/header/WalletBar";
 import NetworkSelect from "@/components/common/header/NetworkSelect";
 import MenuSelect from "@/components/common/header/MenuSelect";
+import SwapModal from "@/components/swap/SwapModal";
+import InvestModal from "@/components/market/modal/invest/InvestModal";
+import WrapModal from "@/components/wrap/WrapModal";
 
 export default {
     name: 'Header',
 
     components: {
+        WrapModal,
+        InvestModal,
+        SwapModal,
         MenuSelect,
         NetworkSelect,
         WalletBar,
@@ -106,6 +116,8 @@ export default {
 
     methods: {
         ...mapActions('web3', ['connectWallet', 'disconnectWallet', 'setNetwork']),
+        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
 
         capitalize(s) {
             return s.charAt(0).toUpperCase() + s.slice(1);
@@ -117,6 +129,16 @@ export default {
 
         openLink(url) {
             window.open(url, '_blank').focus();
+        },
+
+        mintAction() {
+            this.showMintView();
+            this.showSwapModal();
+        },
+
+        wrapAction() {
+            this.showWrapView();
+            this.showWrapModal();
         },
     }
 }

@@ -77,7 +77,7 @@
         </div>
 
         <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-7 mb-10' : 'mt-7'">
-            <v-btn class="header-btn btn-filled" @click="openLink('https://app.overnight.fi/')">
+            <v-btn class="header-btn btn-filled" @click="mintAction">
                 Mint USD+
             </v-btn>
         </v-row>
@@ -88,7 +88,7 @@
 
 <script>
 
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import TableStablecoins from "@/components/stats/pie/TableStablecoins";
 import PieStablecoins from "@/components/stats/pie/PieStablecoins";
 import TableStrategies from "@/components/stats/doughnut/TableStrategies";
@@ -127,8 +127,15 @@ export default {
     },
 
     methods: {
+        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+
         openLink(url) {
             window.open(url, '_blank').focus();
+        },
+
+        mintAction() {
+            this.showMintView();
+            this.showSwapModal();
         },
     }
 }

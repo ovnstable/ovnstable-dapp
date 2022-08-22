@@ -1,38 +1,60 @@
 <template>
     <v-col>
         <v-row class="mx-n3 main-card">
-            <v-row class="ma-0 mt-3" align="center">
-                <v-text-field placeholder="0.00"
-                              @keypress="isNumber($event)"
-                              flat
-                              solo
-                              class="ml-2 field-sum"
-                              hide-details
-                              background-color="transparent"
-                              v-model="sum">
-                </v-text-field>
-                <v-spacer></v-spacer>
-                <div class="mr-5">
-                    <label class="max modal-link-label" @click="max">Max</label>
-                </div>
-                <div class="coin-card mr-5">
-                    <v-row class="ma-2" align="center">
-                        <div class="coin-img mr-2">
-                            <v-img :src="currency.image"/>
-                        </div>
-                        <label class="coin-title">{{ currency.title }}</label>
-                    </v-row>
-                </div>
-            </v-row>
+            <v-col cols="7">
+                <v-row align="center" class="ma-0">
+                    <label class="balance-label ml-3">Balance: {{ maxResult }}</label>
+                    <div class="balance-network-icon ml-2">
+                        <v-img :src="require('@/assets/network/polygon.svg')"/>
+                    </div>
+                </v-row>
 
-            <v-row align="center" class="ma-0 mt-1 mb-3">
-                <label class="balance-label ml-5">Balance: {{ maxResult }}</label>
-            </v-row>
+                <v-row class="ma-0 mt-1" align="center">
+                    <v-text-field placeholder="0.00"
+                                  @keypress="isNumber($event)"
+                                  flat
+                                  solo
+                                  class="field-sum"
+                                  hide-details
+                                  background-color="transparent"
+                                  v-model="sum">
+                    </v-text-field>
+                </v-row>
+            </v-col>
+
+            <v-col>
+                <v-row align="center" class="ma-0 fill-height">
+                    <v-spacer></v-spacer>
+                    <div class="coin-card mr-3">
+                        <v-row class="ma-2" align="center">
+                            <div class="coin-img mr-2">
+                                <v-img :src="currency.image"/>
+                            </div>
+                            <label class="coin-title">{{ currency.title }}</label>
+                        </v-row>
+                    </div>
+                </v-row>
+            </v-col>
         </v-row>
 
-        <!-- TODO: add sum slider -->
+        <v-row class="mt-5">
+            <v-slider
+                    class="percent-slider"
+                    color="#1C95E7"
+                    track-color="#DEE1E5"
+                    track-fill-color="#1C95E7"
+                    tick-size="10"
+                    min="0"
+                    max="100"
+                    v-model="sliderPercent"
+                    step="5"
+                    ticks
+                    :tick-labels="percentLabels"
+                    v-on:end="changeSliderPercent"
+            ></v-slider>
+        </v-row>
 
-        <v-row class="mt-8">
+        <v-row class="mt-5">
             <v-spacer></v-spacer>
             <div class="swap-view-btn" @click="showRedeemView">
                 <v-img :src="require('@/assets/icon/arrowsSwap.svg')"/>
@@ -41,30 +63,40 @@
         </v-row>
 
         <v-row class="mt-8 mx-n3 main-card">
-            <v-row class="ma-0 mt-3" align="center">
-                <v-text-field placeholder="0.00"
-                              flat
-                              readonly
-                              solo
-                              class="ml-2 field-sum"
-                              hide-details
-                              background-color="transparent"
-                              v-model="sumResult">
-                </v-text-field>
-                <v-spacer></v-spacer>
-                <div class="coin-card mr-5">
-                    <v-row class="ma-2" align="center">
-                        <div class="coin-img mr-2">
-                            <v-img :src="buyCurrency.image"/>
-                        </div>
-                        <label class="coin-title">{{ buyCurrency.title }}</label>
-                    </v-row>
-                </div>
-            </v-row>
+            <v-col>
+                <v-row align="center" class="ma-0">
+                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.usdPlusWmatic, 3) }}</label>
+                    <div class="balance-network-icon ml-2">
+                        <v-img :src="require('@/assets/network/polygon.svg')"/>
+                    </div>
+                </v-row>
 
-            <v-row align="center" class="ma-0 mt-1 mb-3">
-                <label class="balance-label ml-5">Balance: {{ $utils.formatMoney(balance.usdPlusWmatic, 3) }}</label>
-            </v-row>
+                <v-row class="ma-0 mt-1" align="center">
+                    <v-text-field placeholder="0.00"
+                                  flat
+                                  readonly
+                                  solo
+                                  class="field-sum"
+                                  hide-details
+                                  background-color="transparent"
+                                  v-model="sumResult">
+                    </v-text-field>
+                </v-row>
+            </v-col>
+
+            <v-col>
+                <v-row align="center" class="ma-0 fill-height">
+                    <v-spacer></v-spacer>
+                    <div class="coin-card mr-3">
+                        <v-row class="ma-2" align="center">
+                            <div class="coin-img mr-2">
+                                <v-img :src="buyCurrency.image"/>
+                            </div>
+                            <label class="coin-title">{{ buyCurrency.title }}</label>
+                        </v-row>
+                    </div>
+                </v-row>
+            </v-col>
         </v-row>
 
         <!-- TODO: add wrap checkbox -->
@@ -87,14 +119,13 @@
                 <v-row>
                     <label class="action-info-sub-label">{{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}</label>
                     <v-spacer></v-spacer>
-                    <label class="action-info-label">You invest:</label>
+                    <label class="action-info-label">You mint:</label>
                     <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma(estimateResult, 2) : '0') }}</label>
                 </v-row>
             </v-col>
         </v-row>
 
-
-        <v-row class="mt-15" :class="$wu.isFull() ? '' : 'mb-4'" align="center" justify="center">
+        <v-row class="mt-15" align="center" justify="center">
             <div class="action-btn-container" v-if="!this.account">
                 <v-btn class='buy enabled-buy'
                        @click="connectWallet">
@@ -120,6 +151,22 @@
                     {{ buttonLabel }}
                 </v-btn>
             </div>
+        </v-row>
+
+        <v-row class="mt-5" :class="$wu.isFull() ? '' : 'mb-4'">
+            <v-slider
+                    class="step-slider"
+                    color="#1C95E7"
+                    track-color="#DEE1E5"
+                    track-fill-color="#1C95E7"
+                    tick-size="10"
+                    min="0"
+                    max="2"
+                    v-model="step"
+                    step="1"
+                    ticks
+                    :tick-labels="stepLabels"
+            ></v-slider>
         </v-row>
 
         <WaitingModal/>
@@ -167,6 +214,10 @@ export default {
         gas: null,
         gasAmountInMatic: null,
         gasAmountInUsd: null,
+
+        sliderPercent: 0,
+        stepLabels: ['', 'Approve USD+', 'Confirmation'],
+        step: 0
     }),
 
     computed: {
@@ -186,6 +237,7 @@ export default {
         },
 
         sumResult: function () {
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.usdPlus) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -208,13 +260,16 @@ export default {
         },
 
         buttonLabel: function () {
+            this.step = 0;
 
             if (!this.account) {
                 return 'Connect to a wallet';
             } else if (this.isBuy) {
                 if (this.usdPlusApproved) {
+                    this.step = 2;
                     return 'Confirm transaction'
                 } else {
+                    this.step = 1;
                     return 'Approve USD+';
                 }
             } else if ((this.totalSupply.usdPlusWmatic) >= this.maxUsdPlusWmaticSupply || (parseFloat(this.totalSupply.usdPlusWmatic) + parseFloat(this.sum)) >= parseFloat(this.maxUsdPlusWmaticSupply)) {
@@ -245,6 +300,20 @@ export default {
 
             return false;
         },
+
+        percentLabels: function () {
+            let labelList = [];
+
+            for (let i = 0; i <= 100; i += 5) {
+                if (i % 25 === 0) {
+                    labelList.push(i + '%');
+                } else {
+                    labelList.push('');
+                }
+            }
+
+            return labelList;
+        }
     },
 
     created() {
@@ -267,6 +336,9 @@ export default {
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal', 'showSuccessModalWithPromo']),
 
+        changeSliderPercent() {
+            this.sum = (this.balance.usdPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+        },
 
         isNumber: function(evt) {
             evt = (evt) ? evt : window.event;
@@ -826,5 +898,10 @@ export default {
 
 .action-btn-container {
     width: 100% !important;
+}
+
+.balance-network-icon {
+    width: 16px !important;
+    height: 16px !important;
 }
 </style>

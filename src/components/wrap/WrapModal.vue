@@ -7,7 +7,7 @@
             <v-card class="container_body airdrop-body">
                 <v-toolbar class="container_header" flat>
                     <label class="title-modal mt-4">
-                        {{ isMintView ? 'Mint' : 'Redeem' }}
+                        {{ isWrapView ? 'Wrap' : 'Unwrap' }}
                     </label>
                     <v-spacer></v-spacer>
                     <v-btn icon @click="close" class="mt-4">
@@ -17,12 +17,8 @@
 
                 <v-card-text class="pt-8 content-container">
                     <v-row class="invest-body-row mx-n2" align="center">
-                        <label class="modal-link-label" @click="mintAction">Mint USD+</label>
-                    </v-row>
-
-                    <v-row class="invest-body-row mt-5 mx-n2" align="center">
-                        <Invest v-if="isMintView"/>
-                        <Withdraw v-else/>
+                        <Wrap v-if="isWrapView"/>
+                        <Unwrap v-else/>
                     </v-row>
                 </v-card-text>
             </v-card>
@@ -34,42 +30,36 @@
 
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import Invest from "@/components/market/modal/invest/action/Invest";
-import Withdraw from "@/components/market/modal/invest/action/Withdraw";
+import Wrap from "@/components/wrap/action/Wrap";
+import Unwrap from "@/components/wrap/action/Unwrap";
 
 export default {
-    name: "InvestModal",
+    name: "WrapModal",
 
     components: {
-        Withdraw,
-        Invest
+        Wrap,
+        Unwrap,
     },
 
     props: {},
 
     computed: {
-        ...mapGetters('investModal', ['show']),
-        ...mapGetters('investModal', ['usdPlusApproved', 'usdPlusWmaticApproved', 'isMintView']),
+        ...mapGetters('wrapModal', ['show']),
+        ...mapGetters('wrapModal', ['isWrapView']),
     },
 
     data: () => ({}),
 
     methods: {
-        ...mapActions('investModal', ['showInvestModal', 'closeInvestModal']),
+        ...mapActions('wrapModal', ['showWrapModal', 'closeWrapModal']),
         ...mapActions('web3', ['connectWallet']),
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
 
         openLink(link) {
             window.open(link, '_blank').focus();
         },
 
         close() {
-            this.closeInvestModal();
-        },
-
-        mintAction() {
-            this.showMintView();
-            this.showSwapModal();
+            this.closeWrapModal();
         },
     },
 }

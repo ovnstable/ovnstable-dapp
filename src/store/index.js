@@ -9,6 +9,8 @@ import successModal from '@/store/modules/modals/success-modal';
 import riskModal from '@/store/modules/modals/market/risk-disclosure-modal';
 import investorModal from '@/store/modules/modals/market/investor-modal';
 import investModal from '@/store/modules/modals/market/invest-modal';
+import swapModal from '@/store/modules/modals/swap/swap-modal';
+import wrapModal from '@/store/modules/modals/wrap/wrap-modal';
 
 
 // Views
@@ -73,6 +75,8 @@ export default new Vuex.Store({
         riskModal,
         investorModal,
         investModal,
+        swapModal,
+        wrapModal,
 
         dashboardData,
         dashboardUI,

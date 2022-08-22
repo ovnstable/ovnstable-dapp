@@ -79,6 +79,13 @@ export default {
         font-feature-settings: 'liga' off;
         color: #333333;
     }
+
+    .v-slider__tick-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        line-height: 20px !important;
+    }
 }
 
 /* tablet */
@@ -106,6 +113,13 @@ export default {
         font-feature-settings: 'liga' off;
         color: #333333;
     }
+
+    .v-slider__tick-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        line-height: 20px !important;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
@@ -131,6 +145,13 @@ export default {
         line-height: 36px;
         font-feature-settings: 'pnum' on, 'lnum' on;
         color: #333333;
+    }
+
+    .v-slider__tick-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 22px !important;
     }
 }
 
@@ -288,5 +309,31 @@ html {
 .progress-col > .v-progress-linear > .v-progress-linear__determinate {
     left: 0 !important;
     right: auto !important;
+}
+
+.v-slider__tick-label {
+    font-family: 'Roboto', sans-serif !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+    color: #29323E !important;
+}
+
+.percent-slider .v-slider__tick:not(:nth-child(5n + 1)) {
+    display: none !important;
+}
+
+.percent-slider .v-slider__tick:nth-child(5n + 1) {
+    background-color: #FFFFFF !important;
+    border-radius: 5px !important;
+    border: 1px solid #DEE1E5;
+}
+
+.step-slider .v-slider__tick:nth-child(n) {
+    background-color: #FFFFFF !important;
+    border-radius: 5px !important;
+    border: 1px solid #DEE1E5;
+}
+
+.v-slider__tick--filled {
+    border: 2px solid #1C95E7 !important;
 }
 </style>

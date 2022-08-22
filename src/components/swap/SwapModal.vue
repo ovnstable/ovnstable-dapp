@@ -17,12 +17,8 @@
 
                 <v-card-text class="pt-8 content-container">
                     <v-row class="invest-body-row mx-n2" align="center">
-                        <label class="modal-link-label" @click="mintAction">Mint USD+</label>
-                    </v-row>
-
-                    <v-row class="invest-body-row mt-5 mx-n2" align="center">
-                        <Invest v-if="isMintView"/>
-                        <Withdraw v-else/>
+                        <Mint v-if="isMintView"/>
+                        <Redeem v-else/>
                     </v-row>
                 </v-card-text>
             </v-card>
@@ -34,42 +30,36 @@
 
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import Invest from "@/components/market/modal/invest/action/Invest";
-import Withdraw from "@/components/market/modal/invest/action/Withdraw";
+import Mint from "@/components/swap/action/Mint";
+import Redeem from "@/components/swap/action/Redeem";
 
 export default {
-    name: "InvestModal",
+    name: "SwapModal",
 
     components: {
-        Withdraw,
-        Invest
+        Mint,
+        Redeem
     },
 
     props: {},
 
     computed: {
-        ...mapGetters('investModal', ['show']),
-        ...mapGetters('investModal', ['usdPlusApproved', 'usdPlusWmaticApproved', 'isMintView']),
+        ...mapGetters('swapModal', ['show']),
+        ...mapGetters('swapModal', ['isMintView']),
     },
 
     data: () => ({}),
 
     methods: {
-        ...mapActions('investModal', ['showInvestModal', 'closeInvestModal']),
+        ...mapActions('swapModal', ['showSwapModal', 'closeSwapModal']),
         ...mapActions('web3', ['connectWallet']),
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
 
         openLink(link) {
             window.open(link, '_blank').focus();
         },
 
         close() {
-            this.closeInvestModal();
-        },
-
-        mintAction() {
-            this.showMintView();
-            this.showSwapModal();
+            this.closeSwapModal();
         },
     },
 }

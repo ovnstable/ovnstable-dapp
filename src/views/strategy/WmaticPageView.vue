@@ -99,8 +99,6 @@
                         </v-col>
                     </v-row>
 
-                    <InvestModal/>
-
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
                         <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabAbout">About ETS</label>
                         <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabPerformance">Performance</label>
@@ -224,7 +222,6 @@ import RiskDisclosureModal from "@/components/market/modal/RiskDisclosureModal";
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import InvestorModal from "@/components/market/modal/InvestorModal";
-import InvestModal from "@/components/market/modal/invest/InvestModal";
 import AboutTab from "@/views/strategy/tab/AboutTab";
 import PerformanceTab from "@/views/strategy/tab/PerformanceTab";
 export default {
@@ -233,7 +230,6 @@ export default {
     components: {
         PerformanceTab,
         AboutTab,
-        InvestModal,
         InvestorModal,
         Tooltip,
         RiskDisclosureModal,

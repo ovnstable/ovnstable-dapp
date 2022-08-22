@@ -30,9 +30,14 @@
                     Collateral
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item class="menu-item" @click="openLink('https://app.overnight.fi/')">
+            <v-list-item class="menu-item" @click="mintAction">
                 <v-list-item-title class="network-select-list-item text-blue">
                     Mint USD+
+                </v-list-item-title>
+            </v-list-item>
+            <v-list-item class="menu-item" @click="wrapAction">
+                <v-list-item-title class="network-select-list-item text-blue">
+                    Wrap USD+
                 </v-list-item-title>
             </v-list-item>
             <v-divider></v-divider>
@@ -68,6 +73,8 @@
 
 <script>
 
+import {mapActions} from "vuex";
+
 export default {
     name: "MenuSelect",
 
@@ -81,12 +88,25 @@ export default {
     },
 
     methods: {
+        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
+
         openLink(url) {
             window.open(url, '_blank').focus();
         },
 
         goToAction(id) {
             this.$router.push(id);
+        },
+
+        mintAction() {
+            this.showMintView();
+            this.showSwapModal();
+        },
+
+        wrapAction() {
+            this.showWrapView();
+            this.showWrapModal();
         },
     }
 }

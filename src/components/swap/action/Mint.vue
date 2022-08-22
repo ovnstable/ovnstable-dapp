@@ -1,7 +1,7 @@
 <template>
     <v-col>
         <v-row class="mx-n3 main-card">
-            <v-col>
+            <v-col cols="7">
                 <v-row align="center" class="ma-0">
                     <label class="balance-label ml-3">Balance: {{ maxResult }}</label>
                     <div class="balance-network-icon ml-2">
@@ -56,7 +56,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <div class="swap-view-btn" @click="showMintView">
+            <div class="swap-view-btn" @click="showRedeemView">
                 <v-img :src="require('@/assets/icon/arrowsSwap.svg')"/>
             </div>
             <v-spacer></v-spacer>
@@ -103,7 +103,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 USD+ = 1 USD+/WMatic</label>
+            <label class="exchange-label">1 USDC = 1 USD+</label>
         </v-row>
 
         <!-- TODO: add gas fee section -->
@@ -112,19 +112,18 @@
         <v-row class="mt-10">
             <v-col cols="3">
                 <v-row>
-                    <label class="action-info-label">Exit fee:</label>
+                    <label class="action-info-label">Overnight fee:</label>
                 </v-row>
             </v-col>
             <v-col>
                 <v-row>
-                    <label class="action-info-sub-label">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
+                    <label class="action-info-sub-label">{{ overnightFee ? $utils.formatMoneyComma(overnightFee, 2) + '%' : '—' }}</label>
                     <v-spacer></v-spacer>
-                    <label class="action-info-label">You redeem:</label>
+                    <label class="action-info-label">You mint:</label>
                     <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma(estimateResult, 2) : '0') }}</label>
                 </v-row>
             </v-col>
         </v-row>
-
 
         <v-row class="mt-15" align="center" justify="center">
             <div class="action-btn-container" v-if="!this.account">
@@ -135,7 +134,7 @@
             </div>
 
             <div class="action-btn-container" v-else>
-                <v-btn v-if="usdPlusWmaticApproved"
+                <v-btn v-if="usdcApproved"
                        height="56"
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
@@ -187,7 +186,7 @@ import SuccessModal from "@/components/common/modal/action/SuccessModal";
 import BN from "bn.js";
 
 export default {
-    name: "Withdraw",
+    name: "Mint",
 
     components: {
         ItemSelector,
@@ -198,9 +197,9 @@ export default {
 
     data: () => ({
         currency: {
-            id: 'usdPlusWmatic',
-            title: 'USD+/WMATIC',
-            image: require('@/assets/currencies/market/WmaticUsdPlus.svg')
+            id: 'usdc',
+            title: 'USDC',
+            image: require('@/assets/currencies/usdc.png')
         },
 
         buyCurrency: {
@@ -217,7 +216,7 @@ export default {
         gasAmountInUsd: null,
 
         sliderPercent: 0,
-        stepLabels: ['', 'Approve USD+/WMatic', 'Confirmation'],
+        stepLabels: ['', 'Approve USDC', 'Confirmation'],
         step: 0
     }),
 
@@ -225,20 +224,17 @@ export default {
         ...mapGetters('accountData', ['balance', 'account']),
         ...mapGetters('accountUI', ['loadingBalance']),
 
-        ...mapGetters('investModal', ['usdPlusWmaticApproved']),
-
-        ...mapGetters('marketData', ['wmaticStrategyData']),
+        ...mapGetters('swapModal', ['usdcApproved']),
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
-        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.balance.usdPlusWmatic, 3);
+            return this.$utils.formatMoney(this.balance.usdc, 3);
         },
 
         sumResult: function () {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.usdPlusWmatic) * 100;
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.usdc) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -247,17 +243,12 @@ export default {
             }
         },
 
-        exitFee: function () {
-            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
-                let result = this.wmaticStrategyData.fees.find(x => x.id === 'redeem');
-                return result ? result.value : null;
-            } else {
-                return null;
-            }
+        overnightFee: function () {
+            return 0.04;
         },
 
         estimateResult: function () {
-            return this.sum * (1 - (this.exitFee ? (this.exitFee / 100.0) : 0.0004));
+            return this.sum * (1 - (this.overnightFee ? (this.overnightFee / 100.0) : 0.0004));
         },
 
         buttonLabel: function () {
@@ -266,17 +257,17 @@ export default {
             if (!this.account) {
                 return 'Connect to a wallet';
             } else if (this.isBuy) {
-                if (this.usdPlusWmaticApproved) {
+                if (this.usdcApproved) {
                     this.step = 2;
                     return 'Confirm transaction'
                 } else {
                     this.step = 1;
-                    return 'Approve USD+/WMatic';
+                    return 'Approve USDC';
                 }
-            } else if (this.sum > parseFloat(this.balance.usdPlusWmatic)) {
-                return 'Withdraw'
+            } else if (this.sum > parseFloat(this.balance.usdc)) {
+                return 'Mint'
             } else {
-                return 'Withdraw';
+                return 'Mint';
             }
         },
 
@@ -295,7 +286,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlusWmatic)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdc)) return true;
 
             return false;
         },
@@ -325,18 +316,18 @@ export default {
 
     methods: {
 
-        ...mapActions("marketData", ['refreshMarket']),
-        ...mapActions("investModal", ['showMintView', 'approveUsdPlusWmatic']),
+        ...mapActions("swapData", ['refreshSwap']),
+        ...mapActions("swapModal", ['showRedeemView', 'approveUsdc']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("web3", ['connectWallet']),
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
-        ...mapActions("successModal", ['showSuccessModal']),
+        ...mapActions("successModal", ['showSuccessModal', 'showSuccessModalWithPromo']),
 
         changeSliderPercent() {
-            this.sum = (this.balance.usdPlusWmatic * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.balance.usdc * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
 
         isNumber: function(evt) {
@@ -363,9 +354,9 @@ export default {
             this.sum = balanceElement + "";
         },
 
-        async redeemAction() {
+        async buyAction() {
 
-            this.showWaitingModal('Withdrawing ' + this.sumResult + ' USD+/WMatic for ' + this.sumResult + ' USD+');
+            this.showWaitingModal('Minting ' + this.sumResult + ' USDC for ' + this.sumResult + ' USD+');
 
             try {
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
@@ -385,22 +376,22 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    let buyResult = await contracts.exchangerUsdPlusWmatic.methods.redeem(sum).send(buyParams);
+                    let buyResult = await contracts.exchange.methods.buy(contracts.usdc.options.address, sum).send(buyParams);
 
                     this.closeWaitingModal();
                     this.showSuccessModal(buyResult.transactionHash);
                 } catch (e) {
-                    console.log(e)
+                    console.log(e);
                     this.closeWaitingModal();
-                    this.showErrorModal('withdrawUSD+Wmatic');
+                    this.showErrorModal('buyUSD+');
                     return;
                 }
 
-                self.refreshMarket();
+                self.refreshSwap();
                 self.setSum(null);
             } catch (e) {
                 console.log(e)
-                this.showErrorModal('withdrawUSD+Wmatic');
+                this.showErrorModal('buyUSD+');
             }
         },
 
@@ -412,15 +403,11 @@ export default {
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
-                    // this.closeWaitingModal();
-                    // this.showErrorModal('estimateGas');
-
                     this.gas = null;
                     this.gasAmountInMatic = null;
                     this.gasAmountInUsd = null;
 
-                    await this.redeemAction();
-
+                    await this.buyAction();
                     this.closeWaitingModal();
                 } else {
                     this.estimatedGas = estimatedGasValue;
@@ -430,8 +417,7 @@ export default {
                     this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
                     this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
 
-                    await this.redeemAction();
-
+                    await this.buyAction();
                     this.closeWaitingModal();
                 }
             } catch (e) {
@@ -454,7 +440,7 @@ export default {
                     this.showErrorModal('approve');
                     return;
                 } else {
-                    this.approveUsdPlusWmatic();
+                    this.approveUsdc();
                     this.closeWaitingModal();
                 }
             } catch (e) {
@@ -468,14 +454,14 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts.usdPlusWmatic.methods.allowance(from, contracts.exchangerUsdPlusWmatic.options.address).call();
+            let allowanceValue = await contracts.usdc.methods.allowance(from, contracts.exchange.options.address).call();
 
             if (allowanceValue < sum) {
                 try {
                     await this.refreshGasPrice();
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                    let tx = await contracts.usdPlusWmatic.methods.approve(contracts.exchangerUsdPlusWmatic.options.address, sum).send(approveParams);
+                    let tx = await contracts.usdc.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
 
                     let minted = true;
                     while (minted) {
@@ -511,7 +497,7 @@ export default {
             try {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
 
-                await contracts.exchangerUsdPlusWmatic.methods.redeem(sum).estimateGas(estimateOptions)
+                await contracts.exchange.methods.buy(contracts.usdc.options.address, sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })

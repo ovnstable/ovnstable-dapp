@@ -23,6 +23,7 @@
                     </v-list-item-avatar>
                     <v-list-item-title class="network-select-list-item">
                         Polygon
+                        <v-icon class="mb-5" small color="white"></v-icon>
                     </v-list-item-title>
                 </v-list-item>
                 <v-list-item style="cursor: pointer" target="_blank" href="https://bsc.overnight.fi">
@@ -33,6 +34,7 @@
                     </v-list-item-avatar>
                     <v-list-item-title class="network-select-list-item">
                         BSC
+                        <v-icon class="mb-5" small color="white"></v-icon>
                     </v-list-item-title>
                 </v-list-item>
                 <v-list-item style="cursor: pointer"  target="_blank" href="https://avax.overnight.fi">
@@ -43,6 +45,7 @@
                     </v-list-item-avatar>
                     <v-list-item-title class="network-select-list-item">
                         Avalanche
+                        <v-icon class="mb-5" small color="white">mdi-alpha</v-icon>
                     </v-list-item-title>
                 </v-list-item>
                 <v-list-item style="cursor: pointer"  target="_blank" href="https://op.overnight.fi">
@@ -53,6 +56,7 @@
                     </v-list-item-avatar>
                     <v-list-item-title class="network-select-list-item">
                         Optimism
+                        <v-icon class="mb-5" small color="white">mdi-alpha</v-icon>
                     </v-list-item-title>
                 </v-list-item>
                 <v-list-item disabled>
@@ -63,6 +67,7 @@
                     </v-list-item-avatar>
                     <v-list-item-title class="list-item-disabled">
                         Ethereum (Soon)
+                        <v-icon class="mb-5" small color="white"></v-icon>
                     </v-list-item-title>
                 </v-list-item>
             </v-list>

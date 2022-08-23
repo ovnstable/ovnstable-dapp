@@ -75,6 +75,16 @@ const routes = [
                     ]
                 }
             },
+            {
+                path: '/dashboard',
+                name: 'MyPerformanceView',
+                component: () => import('../views/dashboard/MyPerformanceView'),
+                meta: {
+                    middleware: [
+                        Dashboard
+                    ]
+                }
+            },
             /*{
                 path: '/',
                 name: 'SwapView',

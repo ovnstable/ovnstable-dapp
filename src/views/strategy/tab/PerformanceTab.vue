@@ -48,7 +48,7 @@
             </div>
         </v-row>
 
-        <v-row align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-4' : 'mt-4'">
+        <v-row v-if="wmaticStrategyData.ownedAsset" align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-4' : 'mt-4'">
             <v-col :cols="$wu.isMobile() ? 12 : 0">
                 <v-row class="info-card-container" justify="start" align="center">
                     <v-col class="info-card-body">

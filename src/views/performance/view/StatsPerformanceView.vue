@@ -7,7 +7,9 @@
         <div class="mt-7">
             <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
                 <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPolygon">Polygon</label>
-                <label style="color: #C5C9D1 !important" class="tab-btn ml-4" v-bind:class="activeTabAvalanche" disabled>Avalanche</label>
+                <label style="color: #C5C9D1 !important" class="tab-btn mx-4" v-bind:class="activeTabBsc" disabled>BSC</label>
+                <label style="color: #C5C9D1 !important" class="tab-btn mx-4" v-bind:class="activeTabAvalanche" disabled>Avalanche</label>
+                <label style="color: #C5C9D1 !important" class="tab-btn ml-4" v-bind:class="activeTabOptimism" disabled>Optimism</label>
             </v-row>
         </div>
 
@@ -108,10 +110,24 @@ export default {
             }
         },
 
-        activeTabAvalanche: function () {
+        activeTabBsc: function () {
             return {
                 'tab-button': this.tab === 2,
                 'tab-button-in-active': this.tab !== 2,
+            }
+        },
+
+        activeTabAvalanche: function () {
+            return {
+                'tab-button': this.tab === 3,
+                'tab-button-in-active': this.tab !== 3,
+            }
+        },
+
+        activeTabOptimism: function () {
+            return {
+                'tab-button': this.tab === 4,
+                'tab-button-in-active': this.tab !== 4,
             }
         },
 

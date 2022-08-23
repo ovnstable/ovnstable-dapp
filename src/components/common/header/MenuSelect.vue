@@ -10,7 +10,7 @@
             </div>
         </template>
         <v-list class="network-select-list">
-            <v-list-item class="menu-item" @click="openLink('https://app.overnight.fi/dashboard')">
+            <v-list-item class="menu-item" @click="goToAction('/dashboard')">
                 <v-list-item-title class="network-select-list-item">
                     My Performance
                 </v-list-item-title>

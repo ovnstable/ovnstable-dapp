@@ -13,12 +13,12 @@
         </v-list>
 
         <v-list nav class="page-list">
-            <v-list-item link @click="openLink('https://app.overnight.fi/dashboard')">
+            <v-list-item link @click="dashBoardClick">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/avatar.svg')">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'dashboard' ? 'avatarSelected.svg' : 'avatar.svg'))">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label">My Performance</label>
+                    <label class="navbar-page-label" :class="selectedTab === 'dashboard' ? 'selected-page' : ''">My Performance</label>
                 </v-list-item-title>
             </v-list-item>
 
@@ -104,6 +104,11 @@ export default {
 
         goToAction(id) {
             this.$router.push(id);
+        },
+
+        dashBoardClick() {
+            this.selectTab('dashboard');
+            this.goToAction('/dashboard');
         },
 
         collateralClick() {

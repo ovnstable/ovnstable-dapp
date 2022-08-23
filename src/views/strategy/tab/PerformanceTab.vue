@@ -76,7 +76,7 @@
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
                                 {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.ownedAsset.amountUsdc, 0) : '—' }}
-                                USDC
+                                USD
                             </label>
                         </v-row>
                     </v-col>
@@ -110,7 +110,7 @@
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
                                 {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.depositAsset.amountUsdc, 0) : '—' }}
-                                USDC
+                                USD
                             </label>
                         </v-row>
                     </v-col>
@@ -144,7 +144,7 @@
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
                                 {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.borrowedAsset.amountUsdc, 0) : '—' }}
-                                USDC
+                                USD
                             </label>
                         </v-row>
                     </v-col>

@@ -52,7 +52,33 @@
             </v-list-item>
         </v-list>
 
-        <!-- TODO: add Welcome to open beta section -->
+        <div>
+            <v-row class="ma-2 nav-card-container">
+                <v-col class="nav-card-body-bottom">
+                    <v-row align="start" justify="start" class="ma-0 mr-n3">
+                        <v-col cols="10">
+                            <v-row align="start" justify="start">
+                                <label class="nav-card-title">Welcome to our open beta dapp</label>
+                            </v-row>
+                        </v-col>
+
+                        <v-col>
+                            <v-row align="start" justify="start">
+                                <img class="navbar-card-icon" :src="require('@/assets/icon/emoticon.svg')">
+                            </v-row>
+                        </v-col>
+                    </v-row>
+
+                    <v-row align="start" justify="start" class="ma-0 mt-4">
+                        <label class="nav-card-text">Many things are still in the making. Please be patient. The house is yours and please let us know how we can do better, fix any bugs and improve the app over time.</label>
+                    </v-row>
+
+                    <v-row align="start" justify="start" class="ma-0 mt-4">
+                        <label class="nav-card-text-link" @click="openLink('https://overnight.canny.io')">Leave feedback</label>
+                    </v-row>
+                </v-col>
+            </v-row>
+        </div>
 
         <template v-slot:append>
             <v-list nav dense class="footer-list">
@@ -144,7 +170,7 @@ export default {
 }
 
 .page-list {
-    height: 60%;
+    height: 45%;
 }
 
 .logo-img {
@@ -189,5 +215,56 @@ export default {
 
 .selected-page {
     color: #1C95E7 !important;
+}
+
+.nav-card-container {
+    background: linear-gradient(0deg, rgba(28, 149, 231, 0.12), rgba(28, 149, 231, 0.12)), #FFFFFF !important;
+    border-radius: 4px !important;
+}
+
+.nav-card-body-bottom {
+    margin: 2% 2% !important;
+}
+
+.nav-card-title {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #29323E;
+}
+
+.navbar-card-icon {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.nav-card-text {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #707A8B;
+}
+
+.nav-card-text-link {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #1C95E7;
+    cursor: pointer;
+}
+
+.nav-card-text-link:hover {
+    text-decoration: underline !important;
 }
 </style>

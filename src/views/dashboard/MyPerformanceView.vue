@@ -263,8 +263,54 @@
                     </v-row>
                 </v-col>
 
-                <v-col cols="3" v-if="$wu.isFull()">
-                    <!-- TODO: add useful articles & video section -->
+                <v-col :cols="$wu.isFull() ? 3 : 12">
+                    <div :class="$wu.isFull() ? 'sticky' : ''">
+                        <v-row align="center" justify="start" class="ma-0 mt-3 info-card-container" :class="$wu.isFull() ? '' : 'mr-3 ml-n3'">
+                            <v-col class="info-card-body-bottom">
+                                <v-row align="start" justify="start" class="ma-0">
+                                    <label class="useful-title">Useful articles</label>
+                                </v-row>
+
+                                <v-row align="start" justify="start" class="ma-0 mt-7">
+                                    <label class="useful-link" @click="openLink('https://blog.overnight.fi/how-to-partake-in-liquidity-provisions-for-usd-5c8117e983b2')">
+                                        How to Partake in Liquidity Provisions for USD+
+                                    </label>
+                                </v-row>
+
+                                <v-row align="start" justify="start" class="ma-0 mt-5">
+                                    <label class="useful-link" @click="openLink('https://blog.overnight.fi/tic-how-to-buy-usd-if-you-already-own-cryptocurrency-48c4455f7efd')">
+                                        How to buy USD+ if you already own cryptocurrency
+                                    </label>
+                                </v-row>
+
+                                <v-row align="start" justify="start" class="ma-0 mt-5">
+                                    <label class="useful-link" @click="openLink('https://blog.overnight.fi/how-to-buy-usd-via-fiat-e3ff7818b8cc')">
+                                        How to buy USD+ via Fiat
+                                    </label>
+                                </v-row>
+
+                                <v-row align="start" justify="start" class="ma-0 mt-5">
+                                    <label class="useful-link" @click="openLink('https://blog.overnight.fi/what-is-yield-farming-fc28736a7f2f')">
+                                        What is Yield Farming?
+                                    </label>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+
+                        <v-row align="center" justify="start" class="ma-0 mt-3 info-card-container" :class="$wu.isFull() ? '' : 'mr-3 ml-n3'">
+                            <v-col class="info-card-body-bottom">
+                                <v-row align="start" justify="start" class="ma-0">
+                                    <label class="useful-title">Video tutorials</label>
+                                </v-row>
+
+                                <v-row align="start" justify="start" class="ma-0 mt-7">
+                                    <label class="useful-link" @click="openLink('https://www.youtube.com/watch?v=URHirNqiMiw')">
+                                        Dystopia & Penrose: High-Yield Stablecoin LP Staking
+                                    </label>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </div>
                 </v-col>
             </v-row>
         </div>
@@ -485,6 +531,21 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.04em !important;
     }
+
+    .useful-link {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .useful-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
+    }
 }
 
 /* tablet */
@@ -575,6 +636,21 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.04em !important;
     }
+
+    .useful-link {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .useful-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
+    }
 }
 
 /* full */
@@ -660,6 +736,21 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .useful-link {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .useful-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
     }
 }
 
@@ -794,5 +885,28 @@ export default {
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #ADB3BD;
+}
+
+.useful-title {
+    font-family: 'Roboto';
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #29323E;
+}
+
+.useful-link {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #1C95E7;
+    cursor: pointer;
+}
+
+.useful-link:hover {
+    text-decoration: underline !important;
+}
+
+.sticky {
+    margin-right: 4% !important;
+    position: fixed !important;
 }
 </style>

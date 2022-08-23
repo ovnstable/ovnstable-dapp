@@ -1,11 +1,14 @@
 <template>
     <div>
-        <div class="mt-10">
+<!--        <div class="mt-10">
             <Banner v-if="$wu.isFull()"/>
             <BannerMobile v-else/>
+        </div>-->
+        <div class="mt-10">
+            <label class="title-label">Market</label>
         </div>
 
-        <div class="mt-7">
+        <div class="mt-10">
             <v-row justify="start" class="tab-row ma-0">
                 <v-btn flat class="group-left-btn" @click="tab=1" v-bind:class="activeTabFeatured">Featured&nbsp;<v-icon size="16">mdi-star-circle</v-icon></v-btn>
                 <v-btn style="background-color: transparent !important;" @click="tab=2" v-bind:class="activeTabHold" disabled>Hold USD+</v-btn>
@@ -97,6 +100,13 @@ export default {
     .tab-button, .tab-button-in-active {
         width: 50% !important;
     }
+
+    .title-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 32px;
+        line-height: 40px;
+    }
 }
 
 /* tablet */
@@ -114,6 +124,13 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
     }
+
+    .title-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 54px;
+        line-height: 60px;
+    }
 }
 
 /* full */
@@ -130,6 +147,13 @@ export default {
         font-weight: 400 !important;
         font-size: 16px !important;
         line-height: 20px !important;
+    }
+
+    .title-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 54px;
+        line-height: 60px;
     }
 }
 
@@ -164,5 +188,12 @@ export default {
 
 .cards-list-container {
     margin-bottom: 30% !important;
+}
+
+.title-label {
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #29323E;
 }
 </style>

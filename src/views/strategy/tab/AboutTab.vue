@@ -4,7 +4,7 @@
             <label class="strategy-info-label">
                 The exchange-traded strategy USD+/WMATIC ($USD+WMATIC), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WMATIC), pair it with USD+ stablecoin, and provide USD+/WMATIC liquidity on Dystopia / Penrose all in one action. This allows earning high APY and hedging against WMATIC volatility.
                 <br/><br/>
-                The unique feature of USD+/WMATIC ETS is that it automatically administers a health factor of 1.5x on AAVE and rebalances your Lent/Borrowed amounts to maintain a stringent 1.5x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
+                The unique feature of USD+/WMATIC ETS is that it automatically administers a health factor of {{ wmaticStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2) : 1.35}}x on AAVE and rebalances your Lent/Borrowed amounts to maintain a stringent {{ wmaticStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2) : 1.35}}x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
                 <br/><br/>
                 Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.
             </label>
@@ -47,9 +47,9 @@
                                 <v-img :src="require('@/assets/icon/checkbox.svg')"/>
                             </div>
                             <label v-if="!$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed</label>
-                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">Health Factor of 1.5</label>
+                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">Health Factor of {{ wmaticStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2) : 1.35}}</label>
 
-                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed Health Factor of 1.5</label>
+                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed Health Factor of {{ wmaticStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2) : 1.35}}</label>
                         </v-row>
                         <v-row align="center">
                             <div class="info-card-icon mt-4">
@@ -279,7 +279,7 @@
                 <v-row class="info-row" justify="start" align="center" v-if="$wu.isMobile()">
                     <label class="card-info mt-1">Target Health Factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 1)) : '—' }}</label>
+                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2)) : '—' }}</label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center" v-if="$wu.isMobile()">
@@ -294,7 +294,7 @@
                 <v-row class="info-row" justify="start" align="center">
                     <label class="card-info mt-1">Target Health Factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 1)) : '—' }}</label>
+                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2)) : '—' }}</label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">

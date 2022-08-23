@@ -2,7 +2,7 @@
     <div>
         <div class="mt-10">
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'ml-3' : ''">
-                <label class="parent-page-label" @click="goToAction('/market')">Market</label>
+                <label class="parent-page-label" @click="goToAction('/market')">Earn</label>
                 <label class="current-page-label">
                     <v-icon size="18" class="mx-2">mdi-chevron-right</v-icon>
                     ETS: USD+ / WMatic
@@ -100,15 +100,15 @@
                     </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-                        <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabAbout">About ETS</label>
-                        <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabPerformance">Performance</label>
+                        <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPerformance">Performance</label>
+                        <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabAbout">About ETS</label>
                     </v-row>
 
-                    <AboutTab v-if="tab === 1"/>
-                    <PerformanceTab v-if="tab === 2"/>
+                    <PerformanceTab v-if="tab === 1"/>
+                    <AboutTab v-if="tab === 2"/>
 
-                    <v-row align="center" justify="start" class="ma-0 mt-6" v-if="tab === 2">
-                        <label class="about-link-label" @click="tab=1">
+                    <v-row align="center" justify="start" class="ma-0 mt-6" v-if="tab === 1">
+                        <label class="about-link-label" @click="tab=2">
                             About ETS
                         </label>
                     </v-row>
@@ -246,14 +246,14 @@ export default {
         ...mapGetters('accountData', ['balance']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
 
-        activeTabAbout: function () {
+        activeTabPerformance: function () {
             return {
                 'tab-button': this.tab === 1,
                 'tab-button-in-active': this.tab !== 1,
             }
         },
 
-        activeTabPerformance: function () {
+        activeTabAbout: function () {
             return {
                 'tab-button': this.tab === 2,
                 'tab-button-in-active': this.tab !== 2,

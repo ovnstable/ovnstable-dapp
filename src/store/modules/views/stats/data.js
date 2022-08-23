@@ -81,7 +81,7 @@ const actions = {
                     value: element.netAssetValue,
                     liquidationValue: element.liquidationValue,
                     color: colors[i],
-                    link: element.address ? (process.env.VUE_APP_NETWORK_EXPLORER + 'address/' + element.address) : ''
+                    link: element.address ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + element.address) : ''
                 }
             );
         }

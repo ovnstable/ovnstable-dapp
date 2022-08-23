@@ -24,11 +24,11 @@
                             </v-btn>
 
                             <template v-else>
-                                <v-btn class="header-btn btn-outlined mr-5" outlined @click="wrapAction">
-                                    Wrap / unwrap
-                                </v-btn>
-                                <v-btn class="header-btn btn-filled mr-2" @click="mintAction">
+                                <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
                                     Mint / redeem
+                                </v-btn>
+                                <v-btn class="header-btn btn-outlined mr-2" outlined @click="wrapAction">
+                                    Wrap / unwrap
                                 </v-btn>
                             </template>
                         </template>

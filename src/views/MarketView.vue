@@ -5,7 +5,7 @@
             <BannerMobile v-else/>
         </div>-->
         <div class="mt-10">
-            <label class="title-label">Market</label>
+            <label class="title-label">Earn</label>
         </div>
 
         <div class="mt-10">

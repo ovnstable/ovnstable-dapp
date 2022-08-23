@@ -18,16 +18,16 @@
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'dashboard' ? 'avatarSelected.svg' : 'avatar.svg'))">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label" :class="selectedTab === 'dashboard' ? 'selected-page' : ''">My Performance</label>
+                    <label class="navbar-page-label" :class="selectedTab === 'dashboard' ? 'selected-page' : ''">My Dashboard</label>
                 </v-list-item-title>
             </v-list-item>
 
             <v-list-item link @click="marketClick">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'market' ? 'cartSelected.svg' : 'cart.svg'))">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'market' ? 'earnSelected.svg' : 'earn.svg'))">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label" :class="selectedTab === 'market' ? 'selected-page' : ''">Market</label>
+                    <label class="navbar-page-label" :class="selectedTab === 'market' ? 'selected-page' : ''">Earn</label>
                     <v-icon class="mb-5" small :class="selectedTab === 'market' ? 'selected-page' : ''">mdi-beta</v-icon>
                 </v-list-item-title>
             </v-list-item>
@@ -37,7 +37,7 @@
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'stats' ? 'chartSelected.svg' : 'chart.svg'))">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label" :class="selectedTab === 'stats' ? 'selected-page' : ''">Stats</label>
+                    <label class="navbar-page-label" :class="selectedTab === 'stats' ? 'selected-page' : ''">Performance</label>
                     <!-- TODO: add last payout time -->
                 </v-list-item-title>
             </v-list-item>

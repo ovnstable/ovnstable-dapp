@@ -119,7 +119,7 @@ export default {
         chart: null,
 
         avgApy: null,
-        usdPlusDataEnabled: false,
+        usdPlusDataEnabled: true,
     }),
 
     computed: {

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="mt-10">
-            <label class="title-label">My perfomance</label>
+            <label class="title-label">My dashboard</label>
 
             <v-row align="start" justify="start" class="ma-0">
                 <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">

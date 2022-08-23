@@ -50,7 +50,7 @@
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item">
                     Avalanche
-                    <v-icon class="mb-5" small color="#333333">mdi-alpha</v-icon>
+                    <v-icon class="ml-n1 mb-5" small color="#333333">mdi-alpha</v-icon>
                 </v-list-item-title>
             </v-list-item>
             <v-list-item style="cursor: pointer" target="_blank" href="https://op.overnight.fi">
@@ -61,7 +61,7 @@
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item">
                     Optimism
-                    <v-icon class="mb-5" small color="#333333">mdi-alpha</v-icon>
+                    <v-icon class="ml-n1 mb-5" small color="#333333">mdi-alpha</v-icon>
                 </v-list-item-title>
             </v-list-item>
             <v-list-item disabled>

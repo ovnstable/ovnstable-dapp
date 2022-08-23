@@ -11,10 +11,20 @@
 
         <div class="mt-7">
             <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-                <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPolygon">Polygon</label>
-                <label style="color: #C5C9D1 !important" class="tab-btn mx-4" v-bind:class="activeTabBsc" disabled>BSC</label>
-                <label style="color: #C5C9D1 !important" class="tab-btn mx-4" v-bind:class="activeTabAvalanche" disabled>Avalanche</label>
-                <label style="color: #C5C9D1 !important" class="tab-btn ml-4" v-bind:class="activeTabOptimism" disabled>Optimism</label>
+                <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPolygon">
+                    Polygon
+                </label>
+                <label style="color: #C5C9D1 !important" class="tab-btn mx-4" v-bind:class="activeTabBsc" disabled>
+                    BSC
+                </label>
+                <label style="color: #C5C9D1 !important" class="tab-btn mx-4" v-bind:class="activeTabAvalanche" disabled>
+                    Avalanche
+                    <v-icon class="ml-n1 mb-5" small color="#C5C9D1">mdi-alpha</v-icon>
+                </label>
+                <label style="color: #C5C9D1 !important" class="tab-btn ml-4" v-bind:class="activeTabOptimism" disabled>
+                    Optimism
+                    <v-icon class="ml-n1 mb-5" small color="#C5C9D1">mdi-alpha</v-icon>
+                </label>
             </v-row>
         </div>
 

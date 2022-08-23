@@ -76,6 +76,9 @@ const actions = {
                 wmaticStrategyData.apy = (avgApyStrategyWeek && avgApyStrategyWeek.value) ? (avgApyStrategyWeek.value) : wmaticStrategyData.apy;
                 wmaticStrategyData.diffApy = (avgApy && avgApy.value) ? (wmaticStrategyData.apy - avgApy.value) : null;
 
+                /* TODO: get onChain */
+                wmaticStrategyData.targetHealthFactor = 1.35;
+
                 let clientData = wmaticStrategyData.timeData;
 
                 let widgetDataDict = {};

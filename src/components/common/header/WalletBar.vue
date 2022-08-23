@@ -1,6 +1,6 @@
 <template>
     <v-badge dot
-             :color="(promoLogins && promoChecked && (promoChecked === '0')) ? '#CF3F92' : '#FFFFFF'"
+             :color="badge ? '#CF3F92' : '#FFFFFF'"
              offset-x="-1"
              offset-y="2">
         <div class="wallet-bar-main-container mt-1">
@@ -42,25 +42,11 @@ export default {
     },
 
     data: () => ({
-        get promoLogins() {
-            return localStorage.getItem('promoLogins');
-        },
-
-        set promoLogins(value) {
-            localStorage.setItem('promoLogins', value);
-        },
-
-        get promoChecked() {
-            return localStorage.getItem('promoChecked');
-        },
-
-        set promoChecked(value) {
-            localStorage.setItem('promoChecked', value);
-        }
     }),
 
     computed: {
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
+        ...mapGetters('accountUI', ['badge']),
         ...mapGetters('web3', ['web3',  'networkId', 'walletConnected']),
 
         accountDisplay: function () {
@@ -106,9 +92,6 @@ export default {
 
         walletClickAction() {
             if (this.account) {
-                if (localStorage.getItem('promoLogins')) {
-                    localStorage.setItem('promoChecked', "1");
-                }
                 this.showAccountProfile();
             } else {
                 this.connectWallet();

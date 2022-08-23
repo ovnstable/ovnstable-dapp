@@ -28,9 +28,21 @@
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item">
                     Polygon
+                    <v-icon class="mb-5" small color="#333333"></v-icon>
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item style="cursor: pointer"  target="_blank" href="https://avax.overnight.fi">
+            <v-list-item style="cursor: pointer" target="_blank" href="https://bsc.overnight.fi">
+                <v-list-item-avatar>
+                    <div class="list-item-icon">
+                        <v-img :src="require('@/assets/network/bsc.svg')"/>
+                    </div>
+                </v-list-item-avatar>
+                <v-list-item-title class="network-select-list-item">
+                    BSC
+                    <v-icon class="mb-5" small color="#333333"></v-icon>
+                </v-list-item-title>
+            </v-list-item>
+            <v-list-item style="cursor: pointer" target="_blank" href="https://avax.overnight.fi">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
                         <v-img :src="require('@/assets/network/avalanche.svg')"/>
@@ -38,26 +50,18 @@
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item">
                     Avalanche
+                    <v-icon class="mb-5" small color="#333333">mdi-alpha</v-icon>
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item disabled>
+            <v-list-item style="cursor: pointer" target="_blank" href="https://op.overnight.fi">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
-                        <v-img style="filter: grayscale(100%);" :src="require('@/assets/network/arbitrum.svg')"/>
+                        <v-img :src="require('@/assets/network/op.svg')"/>
                     </div>
                 </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item list-item-disabled">
-                    Arbitrum (Soon)
-                </v-list-item-title>
-            </v-list-item>
-            <v-list-item disabled>
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img style="filter: grayscale(100%);" :src="require('@/assets/network/ftm.png')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item list-item-disabled">
-                    Fantom (Soon)
+                <v-list-item-title class="network-select-list-item">
+                    Optimism
+                    <v-icon class="mb-5" small color="#333333">mdi-alpha</v-icon>
                 </v-list-item-title>
             </v-list-item>
             <v-list-item disabled>
@@ -68,6 +72,7 @@
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item list-item-disabled">
                     Ethereum (Soon)
+                    <v-icon class="mb-5" small></v-icon>
                 </v-list-item-title>
             </v-list-item>
         </v-list>

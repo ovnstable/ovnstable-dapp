@@ -134,7 +134,7 @@ export default {
 
         dashBoardClick() {
             this.selectTab('dashboard');
-            this.goToAction('/dashboard');
+            this.goToAction('/');
         },
 
         collateralClick() {
@@ -149,7 +149,7 @@ export default {
 
         marketClick() {
             this.selectTab('market');
-            this.goToAction('/')
+            this.goToAction('/market')
         },
     }
 }

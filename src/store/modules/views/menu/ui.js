@@ -1,5 +1,5 @@
 const state = {
-    selectedTab: 'market',
+    selectedTab: 'dashboard',
 };
 
 const getters = {

@@ -36,7 +36,7 @@ const routes = [
 
         children: [
             {
-                path: '/',
+                path: '/market',
                 name: 'MarketView',
                 component: () => import('../views/MarketView.vue'),
                 meta: {
@@ -76,7 +76,7 @@ const routes = [
                 }
             },
             {
-                path: '/dashboard',
+                path: '/',
                 name: 'MyPerformanceView',
                 component: () => import('../views/dashboard/MyPerformanceView'),
                 meta: {

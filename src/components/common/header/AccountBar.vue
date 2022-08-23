@@ -31,7 +31,7 @@
                                     Farm
                                 </label>
                             </v-list-item>
-                            <v-list-item @click="goToAction('/dashboard')" class="dashboard-mobile">
+                            <v-list-item @click="goToAction('/')" class="dashboard-mobile">
                                 <label class="list-label-switch">
                                     Dashboard
                                 </label>

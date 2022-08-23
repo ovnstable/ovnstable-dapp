@@ -2,7 +2,7 @@
     <v-row justify="center">
         <div class="hidden-xs-only">
             <span v-bind:class="activeTabSwap"
-                  @click="goToAction('/')">
+                  @click="goToAction('/market')">
                 Swap
             </span>
 
@@ -27,7 +27,7 @@
 
             <span v-bind:class="activeTabDashboard"
                   class=" ml-10"
-                  @click="goToAction('/dashboard')">
+                  @click="goToAction('/')">
                 Dashboard
             </span>
         </div>

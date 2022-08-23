@@ -10,12 +10,12 @@
             </div>
         </template>
         <v-list class="network-select-list">
-            <v-list-item class="menu-item" @click="goToAction('/dashboard')">
+            <v-list-item class="menu-item" @click="goToAction('/')">
                 <v-list-item-title class="network-select-list-item">
                     My Performance
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item class="menu-item" @click="goToAction('/')">
+            <v-list-item class="menu-item" @click="goToAction('/market')">
                 <v-list-item-title class="network-select-list-item">
                     Market
                 </v-list-item-title>

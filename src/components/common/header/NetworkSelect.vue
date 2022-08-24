@@ -84,6 +84,8 @@ import {mapGetters} from "vuex";
 
 let polygonIcon = require('@/assets/network/polygon.svg');
 let avaxIcon = require('@/assets/network/avalanche.svg');
+let bscIcon = require('@/assets/network/bsc.svg');
+let optimismIcon = require('@/assets/network/optimism.svg');
 
 export default {
     name: "NetworkSelect",
@@ -97,13 +99,17 @@ export default {
     computed: {
         ...mapGetters('web3', ['networkId']),
 
-
         icon: function (){
 
-            if (this.networkId === 137){
-                return polygonIcon;
-            }else if (this.networkId === 43114) {
-                return avaxIcon;
+            switch (this.networkId){
+                case 137:
+                    return polygonIcon;
+                case 43114:
+                    return avaxIcon;
+                case 10:
+                    return optimismIcon;
+                case 56:
+                    return bscIcon;
             }
 
         }

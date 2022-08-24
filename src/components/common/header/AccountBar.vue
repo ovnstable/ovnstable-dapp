@@ -31,17 +31,17 @@
                                     Farm
                                 </label>
                             </v-list-item>
-                            <v-list-item @click="goToAction('/')" class="dashboard-mobile">
+                            <v-list-item @click="goToAction('/')" class="dashboard-mobile" v-if="showDashboard">
                                 <label class="list-label-switch">
                                     Dashboard
                                 </label>
                             </v-list-item>
-                            <v-list-item @click="goToAction('/fund')" class="fund-mobile">
+                            <v-list-item @click="goToAction('/fund')" class="fund-mobile" v-if="showStats">
                                 <label class="list-label-switch">
                                     Stats
                                 </label>
                             </v-list-item>
-                            <v-list-item @click="goToAction('/wrap')" class="wrap-mobile">
+                            <v-list-item @click="goToAction('/wrap')" class="wrap-mobile" v-if="showWrap">
                                 <label class="list-label-switch">
                                     Wrap
                                 </label>
@@ -56,7 +56,7 @@
                                     Add&nbsp;&nbsp;<strong>USD+</strong>&nbsp;&nbsp;to wallet
                                 </label>
                             </v-list-item>
-                            <v-list-item @click="addwUsdPlusToken">
+                            <v-list-item @click="addwUsdPlusToken" v-if="showWrap">
                                 <label class="list-label-switch">
                                     Add&nbsp;&nbsp;<strong>wUSD+</strong>&nbsp;&nbsp;to wallet
                                 </label>
@@ -128,6 +128,9 @@ export default {
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
         ...mapGetters('web3', ['web3',  'networkId', 'walletConnected']),
         ...mapGetters('farmUI', ['showFarm']),
+        ...mapGetters('wrapUI', ['showWrap']),
+        ...mapGetters('dashboardUI', ['showDashboard']),
+        ...mapGetters('statsUI', ['showStats']),
 
         isWalletConnected: function () {
             return this.walletConnected;

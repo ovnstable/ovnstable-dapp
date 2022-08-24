@@ -6,7 +6,7 @@
                 Payable date, UTC
             </th>
             <th class="table-header-payouts text-left" v-if="!minimized">
-                Daily profit<br/>{{ minimized ? '' : '(USDC per USD+)'}}
+                Daily profit<br/>{{ minimized ? '' : ('(' + assetName + ' per USD+)')}}
             </th>
             <th class="table-header-payouts text-left" :colspan="minimized ? 2 : 1">
                 Annualized yield<br/>{{ minimized ? '' : '(% per year)'}}
@@ -70,8 +70,12 @@ export default {
     },
 
     computed: {
-        ...mapGetters('statsData', ['payouts', ]),
-        ...mapGetters('statsUI', [ 'loadingPayouts'])
+        ...mapGetters('statsData', ['payouts']),
+        ...mapGetters('statsUI', [ 'loadingPayouts']),
+
+        assetName() {
+            return process.env.VUE_APP_ASSET_NAME;
+        },
     },
 
     methods: {

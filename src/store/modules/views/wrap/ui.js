@@ -1,5 +1,7 @@
 const state = {
 
+    showWrap: true,
+
     isWrapView: true,
 
     usdcApproved: false,
@@ -8,6 +10,10 @@ const state = {
 };
 
 const getters = {
+
+    showWrap(state) {
+        return state.showWrap;
+    },
 
     isWrapView(state) {
         return state.isWrapView;
@@ -48,9 +54,17 @@ const actions = {
     approveWUsdPlus({commit, dispatch, getters}) {
         commit('setWUsdPlusApproved', true);
     },
+
+    async hidePage({commit, dispatch, getters, rootState}) {
+        commit('setShowWrap', false);
+    },
 };
 
 const mutations = {
+
+    setShowWrap(state, showWrap) {
+        state.showWrap = showWrap;
+    },
 
     setIsWrapView(state, value) {
         state.isWrapView = value;

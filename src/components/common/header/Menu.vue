@@ -7,6 +7,7 @@
             </span>
 
             <span v-bind:class="activeTabWrap"
+                  v-if="showWrap"
                   class=" ml-10"
                   @click="goToAction('/wrap')">
                 Wrap
@@ -20,12 +21,14 @@
             </span>
 
             <span v-bind:class="activeTabStats"
+                  v-if="showStats"
                   class=" ml-10"
                   @click="goToAction('/fund')">
                 Stats
             </span>
 
             <span v-bind:class="activeTabDashboard"
+                  v-if="showDashboard"
                   class=" ml-10"
                   @click="goToAction('/')">
                 Dashboard
@@ -93,6 +96,9 @@ export default {
         ...mapGetters('web3', ['web3', 'networkId']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('farmUI', ['showFarm']),
+        ...mapGetters('wrapUI', ['showWrap']),
+        ...mapGetters('dashboardUI', ['showDashboard']),
+        ...mapGetters('statsUI', ['showStats']),
 
         activeTabSwap: function () {
             return {

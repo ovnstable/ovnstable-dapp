@@ -78,7 +78,7 @@ const actions = {
 
         let networkId = rootState.web3.networkId;
 
-        if (networkId === 137){
+        if (networkId === 137) {
 
             let pools = (await axios('/pools?tvl=2000')).data;
             pools.sort((a,b) => b.tvl - a.tvl);

@@ -3,7 +3,7 @@ const state = {
 
     show: false,
 
-    /* buyUSD+, buyUSDC, estimateGas, approve */
+    /* buyUSD+, buyAsset, estimateGas, approve */
     errorType: null,
 };
 

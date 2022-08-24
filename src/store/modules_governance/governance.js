@@ -15,12 +15,20 @@ const state = {
     strategyWeights: null,
 
     rewardPools: [],
+
+
+    abroad: {},
 };
 
 const getters = {
 
     overview(state) {
         return state.overview;
+    },
+
+
+    abroad(state) {
+        return state.abroad;
     },
 
     assets(state) {
@@ -403,6 +411,32 @@ const actions = {
 
         commit('setRewardPools', pools);
     },
+
+
+    async getAbroad({commit, dispatch, getters, rootState}) {
+
+        let abroad = {};
+
+        abroad.min = await rootState.web3.contracts.exchange.methods.abroadMin().call();
+        abroad.max = await rootState.web3.contracts.exchange.methods.abroadMax().call();
+
+        commit('setAbroad', abroad);
+    },
+
+    async updateAbroad({commit, dispatch, getters, rootState}, abroad) {
+
+        let account = rootState.accountData.account;
+        let params = {from: account};
+
+        await rootState.web3.contracts.exchange.methods.setAbroad(abroad.min, abroad.max).send(params);
+    },
+
+
+    async getFinance({commit, dispatch, getters, rootState}) {
+
+        dispatch('getAbroad');
+        dispatch('getStrategyWeights');
+    }
 };
 
 const mutations = {
@@ -410,6 +444,11 @@ const mutations = {
     setOverview(state, value) {
         state.overview = value;
     },
+
+    setAbroad(state, value) {
+        state.abroad = value;
+    },
+
 
     setSettings(state, value) {
         state.settings = value;

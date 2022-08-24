@@ -27,10 +27,16 @@ const TimelockController = require(`@/contracts/${polygon}/OvnTimelockController
 const UsdPlusToken = require(`@/contracts/${polygon}/UsdPlusToken.json`)
 const StakingRewards = require(`@/contracts/abi/StakingRewards.json`)
 const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`)
-const Market = require(`@/contracts/${polygon}/Market.json`)
-const WrappedUsdPlusToken = require(`@/contracts/${polygon}/WrappedUsdPlusToken.json`)
 const ExchangerUsdPlusWmatic = require(`@/contracts/${polygon}/HedgeExchangerUsdPlusWmatic.json`)
 const UsdPlusWmaticToken = require(`@/contracts/${polygon}/RebaseTokenUsdPlusWmatic.json`)
+
+let Market;
+let WrappedUsdPlusToken;
+
+if (polygon !== "avalanche" && polygon !== "bsc") {
+    Market = require(`@/contracts/${polygon}/Market.json`)
+    WrappedUsdPlusToken = require(`@/contracts/${polygon}/WrappedUsdPlusToken.json`)
+}
 
 
 const ALLOW_NETWORKS = [networkId, 31337];
@@ -50,6 +56,11 @@ export const wallets = [
         preferred: true
     },
     {
+        walletName: "binance",
+        rpcUrl: process.env.VUE_APP_RPC_URL,
+        preferred: (process.env.VUE_APP_POLYGON === "bsc")
+    },
+    {
         walletName: "walletConnect",
         rpc: {
             [networkId]: process.env.VUE_APP_RPC_URL,
@@ -62,22 +73,19 @@ export const wallets = [
         appName: process.env.VUE_APP_TITLE,
         preferred: true
     },
-    {
-        walletName: "binance",
-        rpcUrl: process.env.VUE_APP_RPC_URL,
-    },
+    uauthOnboard.module({
+        preferred: false,
+        walletconnect: {
+            infuraId: process.env.VUE_APP_INFURA_ID
+        }
+    }),
     {
         walletName: 'ledger',
         rpcUrl: process.env.VUE_APP_RPC_URL,
     },
     {
         walletName: "ronin"
-    },
-    uauthOnboard.module({
-        walletconnect: {
-            infuraId: process.env.VUE_APP_INFURA_ID
-        }
-    })
+    }
 ];
 
 
@@ -91,6 +99,7 @@ const state = {
     onboard: null,
     walletConnected: false,
     walletName: null,
+    assetInfo: {},
 };
 
 const getters = {
@@ -129,6 +138,10 @@ const getters = {
 
     walletName(state) {
         return state.walletName;
+    },
+
+    assetInfo(state) {
+        return state.assetInfo;
     },
 };
 
@@ -213,7 +226,12 @@ const actions = {
         commit('setLoadingWeb3', true);
         commit('setWalletConnected', false);
 
-        if (polygon === "avalanche") {
+        if (polygon === "avalanche" || polygon === "bsc") {
+            dispatch('farmUI/hidePage', null, {root: true});
+            dispatch('wrapUI/hidePage', null, {root: true});
+        }
+
+        if (polygon === "optimism") {
             dispatch('farmUI/hidePage', null, {root: true});
         }
 
@@ -330,11 +348,26 @@ const actions = {
         let contracts = {};
 
 
-        if (polygon === "avalanche"){
-            contracts.usdc = _load(ERC20, web3, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E');
-        } else {
-            contracts.usdc = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
+        switch (polygon){
+            case "avalanche":
+                contracts.asset = _load(ERC20, web3, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E');
+                break;
+            case "polygon":
+            case "polygon_dev":
+                contracts.asset = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
+                break;
+            case "optimism":
+                contracts.asset = _load(ERC20, web3, '0x7F5c764cBc14f9669B88837ca1490cCa17c31607');
+                break;
+            case "bsc":
+                contracts.asset = _load(ERC20, web3, '0xe9e7cea3dedca5984780bafc599bd69add087d56');
+                break;
         }
+
+        /*let assetInfo = {};
+        assetInfo.symbol = await contracts.asset.methods.symbol().call();
+        assetInfo.decimals = await contracts.asset.methods.decimals().call();
+        commit('setAssetInfo', assetInfo);*/
 
         contracts.exchange = _load(Exchange, web3);
         contracts.govToken = _load(OvnToken, web3);
@@ -345,8 +378,10 @@ const actions = {
         contracts.usdPlus = _load(UsdPlusToken, web3);
         contracts.preOvn = _load(ERC20, web3, "0x18D4565Cbd03340996BED17e66D154b632f5d4B6");
 
-        contracts.market = _load(Market, web3);
-        contracts.wUsdPlus = _load(WrappedUsdPlusToken, web3);
+        if (polygon !== "avalanche" && polygon !== "bsc") {
+            contracts.market = _load(Market, web3);
+            contracts.wUsdPlus = _load(WrappedUsdPlusToken, web3);
+        }
 
         contracts.exchangerUsdPlusWmatic = _load(ExchangerUsdPlusWmatic, web3);
         contracts.usdPlusWmatic = _load(UsdPlusWmaticToken, web3);
@@ -372,32 +407,62 @@ const actions = {
             });
         } catch (switchError) {
             try {
-
                 let params;
-                if (polygon === "avalanche"){
-                    params = {
-                        chainId: getters.web3.utils.toHex(43114),
-                        rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
-                        blockExplorerUrls: ['https://snowtrace.io/'],
-                        chainName: 'Avalanche',
-                        nativeCurrency: {
-                            symbol: 'AVAX',
-                            name: 'AVAX',
-                            decimals: 18,
-                        }
-                    };
-                }else{
-                    params = {
-                        chainId: getters.web3.utils.toHex(137),
-                        rpcUrls: ['https://polygon-rpc.com/'],
-                        blockExplorerUrls: ['https://polygonscan.com/'],
-                        chainName: 'Polygon Mainnet',
-                        nativeCurrency: {
-                            symbol: 'MATIC',
-                            name: 'MATIC',
-                            decimals: 18,
-                        }
-                    };
+
+                switch (polygon){
+                    case "avalanche":
+                        params = {
+                            chainId: getters.web3.utils.toHex(43114),
+                            rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
+                            blockExplorerUrls: ['https://snowtrace.io/'],
+                            chainName: 'Avalanche',
+                            nativeCurrency: {
+                                symbol: 'AVAX',
+                                name: 'AVAX',
+                                decimals: 18,
+                            }
+                        };
+                        break;
+                    case "polygon":
+                    case "polygon_dev":
+                        params = {
+                            chainId: getters.web3.utils.toHex(137),
+                            rpcUrls: ['https://polygon-rpc.com/'],
+                            blockExplorerUrls: ['https://polygonscan.com/'],
+                            chainName: 'Polygon Mainnet',
+                            nativeCurrency: {
+                                symbol: 'MATIC',
+                                name: 'MATIC',
+                                decimals: 18,
+                            }
+                        };
+                        break;
+                    case "optimism":
+                        params = {
+                            chainId: getters.web3.utils.toHex(10),
+                            rpcUrls: ['https://mainnet.optimism.io'],
+                            blockExplorerUrls: ['https://optimistic.etherscan.io/'],
+                            chainName: 'Optimism',
+                            nativeCurrency: {
+                                symbol: 'ETH',
+                                name: 'ETH',
+                                decimals: 18,
+                            }
+                        };
+                        break;
+                    case "bsc":
+                        params = {
+                            chainId: getters.web3.utils.toHex(56),
+                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                            blockExplorerUrls: ['https://bscscan.com/'],
+                            chainName: 'Smart Chain',
+                            nativeCurrency: {
+                                symbol: 'BNB',
+                                name: 'BNB',
+                                decimals: 18,
+                            }
+                        };
+                        break;
                 }
 
                 await getters.provider.request({
@@ -548,6 +613,10 @@ const mutations = {
 
     setWalletName(state, value) {
         state.walletName = value;
+    },
+
+    setAssetInfo(state, value) {
+        state.assetInfo = value;
     },
 };
 

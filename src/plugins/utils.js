@@ -115,4 +115,6 @@ export default {
 
     toE6: (value) => value * 10 ** 6,
     fromE6: (value) => value / 10 ** 6,
+
+    toFixedDown: (fixed, n) => `${fixed}`.match(new RegExp(`^-?\\d+(?:\.\\d{0,${n}})?`))[0],
 }

@@ -68,7 +68,7 @@
                         </div>
                         <label class="ml-2 coin-btn-label">USD+</label>
                     </v-btn>
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ml-1' : 'ml-5'" @click="addwUsdPlusToken">
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ml-1' : 'ml-5'" @click="addwUsdPlusToken" v-if="showWrap">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/wUsdPlus.svg')"/>
                         </div>
@@ -120,6 +120,7 @@ export default {
     computed: {
         ...mapGetters('web3', ['walletName']),
         ...mapGetters('accountUI', ['showAccountProfile']),
+        ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('transaction', ['transactions']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
 

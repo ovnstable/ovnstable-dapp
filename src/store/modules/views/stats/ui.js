@@ -4,6 +4,7 @@ const state = {
     loadingTotalUsdPlus: true,
     loadingPayouts: true,
 
+    showStats: true,
 };
 
 const getters = {
@@ -19,10 +20,16 @@ const getters = {
         return state.loadingTotalUsdPlus;
     },
 
+    showStats(state) {
+        return state.showStats;
+    },
 };
 
 const actions = {
 
+    async hidePage({commit, dispatch, getters, rootState}) {
+        commit('setShowStats', false);
+    },
 
 };
 
@@ -38,6 +45,10 @@ const mutations = {
 
     setLoadingPayouts(state, value) {
         state.loadingPayouts = value;
+    },
+
+    setShowStats(state, showStats) {
+        state.showStats = showStats;
     },
 };
 

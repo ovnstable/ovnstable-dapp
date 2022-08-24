@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="showUsdPlusWmatic">
         <div class="mt-10">
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'ml-3' : ''">
                 <label class="parent-page-label" @click="goToAction('/market')">Earn</label>
@@ -243,6 +243,7 @@ export default {
 
     computed: {
         ...mapGetters('marketData', ['wmaticStrategyData', 'clientProfitDay']),
+        ...mapGetters('marketUI', ['showUsdPlusWmatic']),
         ...mapGetters('accountData', ['balance']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
 

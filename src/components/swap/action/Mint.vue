@@ -5,7 +5,7 @@
                 <v-row align="center" class="ma-0">
                     <label class="balance-label ml-3">Balance: {{ maxResult }}</label>
                     <div class="balance-network-icon ml-2">
-                        <v-img :src="require('@/assets/network/polygon.svg')"/>
+                        <v-img :src="icon"/>
                     </div>
                 </v-row>
 
@@ -67,7 +67,7 @@
                 <v-row align="center" class="ma-0">
                     <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.usdPlus, 3) }}</label>
                     <div class="balance-network-icon ml-2">
-                        <v-img :src="require('@/assets/network/polygon.svg')"/>
+                        <v-img :src="icon"/>
                     </div>
                 </v-row>
 
@@ -103,7 +103,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 USDC = 1 USD+</label>
+            <label class="exchange-label">1 {{ assetName }} = 1 USD+</label>
         </v-row>
 
         <!-- TODO: add gas fee section -->
@@ -134,7 +134,7 @@
             </div>
 
             <div class="action-btn-container" v-else>
-                <v-btn v-if="usdcApproved"
+                <v-btn v-if="assetApproved"
                        height="56"
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
@@ -185,6 +185,10 @@ import ErrorModal from "@/components/common/modal/action/ErrorModal";
 import WaitingModal from "@/components/common/modal/action/WaitingModal";
 import SuccessModal from "@/components/common/modal/action/SuccessModal";
 import BN from "bn.js";
+import polygonIcon from "@/assets/network/polygon.svg";
+import avaxIcon from "@/assets/network/avalanche.svg";
+import optimismIcon from "@/assets/network/op.svg";
+import bscIcon from "@/assets/network/bsc.svg";
 
 export default {
     name: "Mint",
@@ -197,17 +201,15 @@ export default {
     },
 
     data: () => ({
-        currency: {
-            id: 'usdc',
-            title: 'USDC',
-            image: require('@/assets/currencies/usdc.png')
-        },
+        currency: {id: 'asset'},
+        currencies: [],
 
-        buyCurrency: {
+        buyCurrency: null,
+        buyCurrencies: [{
             id: 'usdPlus',
             title: 'USD+',
-            image: require('@/assets/currencies/usdPlus.svg')
-        },
+            image: require('@/assets/usdPlus.png')
+        }],
 
         sum: null,
 
@@ -217,7 +219,7 @@ export default {
         gasAmountInUsd: null,
 
         sliderPercent: 0,
-        stepLabels: ['', 'Approve USDC', 'Confirmation'],
+        stepLabels: ['', 'Approve', 'Confirmation'],
         step: 0
     }),
 
@@ -225,17 +227,38 @@ export default {
         ...mapGetters('accountData', ['balance', 'account']),
         ...mapGetters('accountUI', ['loadingBalance']),
 
-        ...mapGetters('swapModal', ['usdcApproved']),
+        ...mapGetters('swapModal', ['assetApproved']),
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
+        icon: function (){
+            switch (process.env.VUE_APP_NETWORK_ID){
+                case '137':
+                    return polygonIcon;
+                case '43114':
+                    return avaxIcon;
+                case '10':
+                    return optimismIcon;
+                case '56':
+                    return bscIcon;
+            }
+        },
+
+        assetName() {
+            return process.env.VUE_APP_ASSET_NAME;
+        },
+
+        nativeAssetName() {
+            return process.env.VUE_APP_NATIVE_ASSET;
+        },
+
         maxResult: function () {
-            return this.$utils.formatMoney(this.balance.usdc, 3);
+            return this.$utils.formatMoney(this.balance.asset, 3);
         },
 
         sumResult: function () {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.usdc) * 100;
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.asset) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -258,14 +281,14 @@ export default {
             if (!this.account) {
                 return 'Connect to a wallet';
             } else if (this.isBuy) {
-                if (this.usdcApproved) {
+                if (this.assetApproved) {
                     this.step = 2;
                     return 'Confirm transaction'
                 } else {
                     this.step = 1;
-                    return 'Approve USDC';
+                    return 'Approve ' + this.assetName;
                 }
-            } else if (this.sum > parseFloat(this.balance.usdc)) {
+            } else if (this.sum > parseFloat(this.balance.asset)) {
                 return 'Mint'
             } else {
                 return 'Mint';
@@ -287,7 +310,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdc)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.asset)) return true;
 
             return false;
         },
@@ -308,6 +331,15 @@ export default {
     },
 
     created() {
+        this.currencies.push({
+            id: 'asset',
+            title: process.env.VUE_APP_ASSET_NAME,
+            image: require('@/assets/currencies/stablecoins/' + process.env.VUE_APP_ASSET_NAME + '.png')
+        });
+
+        this.currency = this.currencies[0];
+        this.buyCurrency = this.buyCurrencies[0];
+
         this.estimatedGas = null;
 
         this.gas = null;
@@ -318,7 +350,7 @@ export default {
     methods: {
 
         ...mapActions("swapData", ['refreshSwap']),
-        ...mapActions("swapModal", ['showRedeemView', 'approveUsdc']),
+        ...mapActions("swapModal", ['showRedeemView', 'approveAsset']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("web3", ['connectWallet']),
@@ -328,7 +360,7 @@ export default {
         ...mapActions("successModal", ['showSuccessModal', 'showSuccessModalWithPromo']),
 
         changeSliderPercent() {
-            this.sum = (this.balance.usdc * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.balance.asset * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
 
         isNumber: function(evt) {
@@ -357,10 +389,16 @@ export default {
 
         async buyAction() {
 
-            this.showWaitingModal('Minting ' + this.sumResult + ' USDC for ' + this.sumResult + ' USD+');
+            this.showWaitingModal('Minting ' + this.sumResult + ' ' + this.assetName + ' for ' + this.sumResult + ' USD+');
 
             try {
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+                let sum;
+
+                if (process.env.VUE_APP_ASSET_DECIMALS == 18) {
+                    sum = this.web3.utils.toWei(this.sum, 'ether');
+                } else {
+                    sum = this.web3.utils.toWei(this.sum, 'mwei');
+                }
 
                 let contracts = this.contracts;
                 let from = this.account;
@@ -377,7 +415,7 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    let buyResult = await contracts.exchange.methods.buy(contracts.usdc.options.address, sum).send(buyParams);
+                    let buyResult = await contracts.exchange.methods.buy(contracts.asset.options.address, sum).send(buyParams);
 
                     this.closeWaitingModal();
                     this.showSuccessModal(buyResult.transactionHash);
@@ -398,7 +436,13 @@ export default {
 
         async confirmSwapAction() {
             try {
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+                let sum;
+
+                if (process.env.VUE_APP_ASSET_DECIMALS == 18) {
+                    sum = this.web3.utils.toWei(this.sum, 'ether');
+                } else {
+                    sum = this.web3.utils.toWei(this.sum, 'mwei');
+                }
 
                 this.showWaitingModal();
 
@@ -433,7 +477,13 @@ export default {
 
                 let approveSum = "10000000";
 
-                let sum = this.web3.utils.toWei(approveSum, 'mwei');
+                let sum;
+
+                if (process.env.VUE_APP_ASSET_DECIMALS == 18) {
+                    sum = this.web3.utils.toWei(this.sum, 'ether');
+                } else {
+                    sum = this.web3.utils.toWei(this.sum, 'mwei');
+                }
 
                 let allowApprove = await this.checkAllowance(sum);
                 if (!allowApprove) {
@@ -441,7 +491,7 @@ export default {
                     this.showErrorModal('approve');
                     return;
                 } else {
-                    this.approveUsdc();
+                    this.approveAsset();
                     this.closeWaitingModal();
                 }
             } catch (e) {
@@ -455,14 +505,14 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts.usdc.methods.allowance(from, contracts.exchange.options.address).call();
+            let allowanceValue = await contracts.asset.methods.allowance(from, contracts.exchange.options.address).call();
 
             if (allowanceValue < sum) {
                 try {
                     await this.refreshGasPrice();
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                    let tx = await contracts.usdc.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
+                    let tx = await contracts.asset.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
 
                     let minted = true;
                     while (minted) {
@@ -498,7 +548,7 @@ export default {
             try {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
 
-                await contracts.exchange.methods.buy(contracts.usdc.options.address, sum).estimateGas(estimateOptions)
+                await contracts.exchange.methods.buy(contracts.asset.options.address, sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })

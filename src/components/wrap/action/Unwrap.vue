@@ -5,7 +5,7 @@
                 <v-row align="center" class="ma-0">
                     <label class="balance-label ml-3">Balance: {{ maxResult }}</label>
                     <div class="balance-network-icon ml-2">
-                        <v-img :src="require('@/assets/network/polygon.svg')"/>
+                        <v-img :src="icon"/>
                     </div>
                 </v-row>
 
@@ -67,7 +67,7 @@
                 <v-row align="center" class="ma-0">
                     <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance[currency.id], 3) }}</label>
                     <div class="balance-network-icon ml-2">
-                        <v-img :src="require('@/assets/network/polygon.svg')"/>
+                        <v-img :src="icon"/>
                     </div>
                 </v-row>
 
@@ -187,6 +187,10 @@ import ErrorModal from "@/components/common/modal/action/ErrorModal";
 import WaitingModal from "@/components/common/modal/action/WaitingModal";
 import SuccessModal from "@/components/common/modal/action/SuccessModal";
 import BN from "bn.js";
+import polygonIcon from "@/assets/network/polygon.svg";
+import avaxIcon from "@/assets/network/avalanche.svg";
+import optimismIcon from "@/assets/network/op.svg";
+import bscIcon from "@/assets/network/bsc.svg";
 
 export default {
     name: "Unwrap",
@@ -232,6 +236,19 @@ export default {
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
+
+        icon: function (){
+            switch (process.env.VUE_APP_NETWORK_ID){
+                case '137':
+                    return polygonIcon;
+                case '43114':
+                    return avaxIcon;
+                case '10':
+                    return optimismIcon;
+                case '56':
+                    return bscIcon;
+            }
+        },
 
         maxResult: function () {
             return this.$utils.formatMoney(this.balance.wUsdPlus, 3);

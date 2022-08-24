@@ -6,17 +6,17 @@
 
         <div class="mt-7">
             <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-                <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPolygon">
+                <label class="tab-btn mr-4" v-bind:class="activeTabPolygon" @click="clickPolygon">
                     Polygon
                 </label>
-                <label style="color: #C5C9D1 !important" class="tab-btn mx-4" v-bind:class="activeTabBsc" disabled @click="openLink('https://bsc.overnight.fi')">
+                <label class="tab-btn mx-4" v-bind:class="activeTabBsc" @click="clickBsc">
                     BSC
                 </label>
-                <label style="color: #C5C9D1 !important" class="tab-btn mx-4" v-bind:class="activeTabAvalanche" disabled @click="openLink('https://avax.overnight.fi')">
+                <label class="tab-btn mx-4" v-bind:class="activeTabAvalanche" @click="openLink('https://avax.overnight.fi/fund')">
                     Avalanche
                     <v-icon class="ml-n1 mb-5" small color="#C5C9D1">mdi-alpha</v-icon>
                 </label>
-                <label style="color: #C5C9D1 !important" class="tab-btn ml-4" v-bind:class="activeTabOptimism" disabled @click="openLink('https://op.overnight.fi')">
+                <label class="tab-btn ml-4" v-bind:class="activeTabOptimism" @click="openLink('https://op.overnight.fi/fund')">
                     Optimism
                     <v-icon class="ml-n1 mb-5" small color="#C5C9D1">mdi-alpha</v-icon>
                 </label>
@@ -62,13 +62,13 @@
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
                         <Table
                                 v-if="!$wu.isMobile()"
-                                profit-label="USDC per USD+"
+                                :profit-label="assetName + ' per USD+'"
                                 :payout-data="payouts"/>
 
                         <Table
                                 v-else
                                 minimized
-                                profit-label="USDC per USD+"
+                                :profit-label="assetName + ' per USD+'"
                                 :payout-data="payouts"/>
 
                         <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
@@ -83,6 +83,18 @@
             </v-col>
         </v-row>
 
+        <div class="mt-12">
+            <v-row align="center" justify="center" class="ma-0 mt-10">
+                <label class="ready-label">Ready to use?</label>
+            </v-row>
+        </div>
+
+        <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-7 mb-10' : 'mt-7'">
+            <v-btn class="header-btn btn-filled" @click="mintAction">
+                Mint USD+
+            </v-btn>
+        </v-row>
+
         <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
@@ -91,7 +103,7 @@
 
 import Table from "@/components/market/strategy/payouts/Table";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import LineChartApy from "@/components/stats/widget/LineChartApy";
 import LineChartTvl from "@/components/stats/widget/LineChartTvl";
 
@@ -106,17 +118,26 @@ export default {
     },
 
     data: () => ({
-        tab: 1,
+        tab: null,
         rateTab: 1,
     }),
 
     computed: {
         ...mapGetters('statsData', ['payouts', 'payoutsApyData', 'payoutsTvlData']),
 
+        assetName() {
+            return process.env.VUE_APP_ASSET_NAME;
+        },
+
+        nativeAssetName() {
+            return process.env.VUE_APP_NATIVE_ASSET;
+        },
+
         activeTabPolygon: function () {
             return {
                 'tab-button': this.tab === 1,
                 'tab-button-in-active': this.tab !== 1,
+                'tab-btn-disabled': this.tab !== 1,
             }
         },
 
@@ -124,6 +145,7 @@ export default {
             return {
                 'tab-button': this.tab === 2,
                 'tab-button-in-active': this.tab !== 2,
+                'tab-btn-disabled': this.tab !== 2,
             }
         },
 
@@ -131,6 +153,7 @@ export default {
             return {
                 'tab-button': this.tab === 3,
                 'tab-button-in-active': this.tab !== 3,
+                'tab-btn-disabled': this.tab !== 3,
             }
         },
 
@@ -138,6 +161,7 @@ export default {
             return {
                 'tab-button': this.tab === 4,
                 'tab-button-in-active': this.tab !== 4,
+                'tab-btn-disabled': this.tab !== 4,
             }
         },
 
@@ -167,10 +191,43 @@ export default {
         },
     },
 
+    created() {
+        if (process.env.VUE_APP_NETWORK_ID === '137') {
+            this.tab = 1;
+        }
+
+        if (process.env.VUE_APP_NETWORK_ID === '56') {
+            this.tab = 2;
+        }
+    },
+
     methods: {
+        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+
         openLink(url) {
             window.open(url, '_blank').focus();
         },
+
+        mintAction() {
+            this.showMintView();
+            this.showSwapModal();
+        },
+
+        clickPolygon() {
+            if (process.env.VUE_APP_NETWORK_ID === '137') {
+                this.tab = 1;
+            } else {
+                this.openLink('https://market.overnight.fi/stats');
+            }
+        },
+
+        clickBsc() {
+            if (process.env.VUE_APP_NETWORK_ID === '56') {
+                this.tab = 2;
+            } else {
+                this.openLink('https://bsc.overnight.fi/stats');
+            }
+        }
     }
 }
 </script>
@@ -209,6 +266,26 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.03em !important;
     }
+
+    .ready-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 32px;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-filled {
+        width: 100%;
+        height: 36px !important;
+    }
 }
 
 /* tablet */
@@ -243,6 +320,26 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .ready-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 32px;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-filled {
+        width: 20%;
+        height: 40px !important;
+    }
 }
 
 /* full */
@@ -276,6 +373,26 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .ready-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 32px;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-filled {
+        width: 20%;
+        height: 40px !important;
     }
 }
 
@@ -364,5 +481,30 @@ export default {
     border-radius: 4px;
     color: #707A8B !important;
     border: 1px solid #DEE1E5 !important;
+}
+
+.tab-btn-disabled {
+    color: #C5C9D1 !important;
+}
+
+.ready-label {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: #29323E;
+}
+
+.header-btn {
+    border-radius: 4px !important;
+    box-shadow: none !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+}
+
+.btn-filled {
+    background: var(--blue-gradient);
+    color: #FFFFFF !important;
 }
 </style>

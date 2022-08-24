@@ -24,10 +24,10 @@
                             </v-btn>
 
                             <template v-else>
-                                <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
+                                <v-btn class="header-btn btn-filled" :class="showWrap ? 'mr-5' : 'mr-2'" @click="mintAction">
                                     Mint / redeem
                                 </v-btn>
-                                <v-btn class="header-btn btn-outlined mr-2" outlined @click="wrapAction">
+                                <v-btn class="header-btn btn-outlined mr-2" outlined @click="wrapAction" v-if="showWrap">
                                     Wrap / unwrap
                                 </v-btn>
                             </template>
@@ -108,6 +108,7 @@ export default {
     computed: {
         ...mapGetters('web3', [ 'web3',  'networkId', 'switchToPolygon', 'loadingWeb3', 'walletConnected']),
         ...mapGetters('accountData', ['account']),
+        ...mapGetters('wrapUI', ['showWrap']),
 
         networkName() {
             return this.capitalize(process.env.VUE_APP_POLYGON);

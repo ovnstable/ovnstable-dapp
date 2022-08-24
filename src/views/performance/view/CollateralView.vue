@@ -5,23 +5,23 @@
         </div>
 
         <div class="mt-7">
-            <label class="title-info-label">USD+ stablecoin can be instantly minted and redeemed to USDC 1:1. Simply replace USDC with USD+ stablecoin and start getting passive yield where it didn’t exist before. Here you can see automated Overnight DeFi total asset portfolio management dashboards. Your assets are there.&nbsp;</label>
+            <label class="title-info-label">USD+ stablecoin can be instantly minted and redeemed to {{ assetName }} 1:1. Simply replace {{ assetName }} with USD+ stablecoin and start getting passive yield where it didn’t exist before. Here you can see automated Overnight DeFi total asset portfolio management dashboards. Your assets are there.&nbsp;</label>
             <label class="title-info-label info-link" @click="openLink('https://docs.overnight.fi/core-concept/usd+-token')">How USD+ works</label>
         </div>
 
         <div class="mt-7">
             <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-                <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPolygon">
+                <label class="tab-btn mr-4" v-bind:class="activeTabPolygon" @click="clickPolygon">
                     Polygon
                 </label>
-                <label style="color: #C5C9D1 !important" class="tab-btn mx-4" v-bind:class="activeTabBsc" disabled @click="openLink('https://bsc.overnight.fi')">
+                <label class="tab-btn mx-4" v-bind:class="activeTabBsc" @click="clickBsc">
                     BSC
                 </label>
-                <label style="color: #C5C9D1 !important" class="tab-btn mx-4" v-bind:class="activeTabAvalanche" disabled @click="openLink('https://avax.overnight.fi')">
+                <label class="tab-btn mx-4" v-bind:class="activeTabAvalanche" @click="openLink('https://avax.overnight.fi/fund')">
                     Avalanche
                     <v-icon class="ml-n1 mb-5" small color="#C5C9D1">mdi-alpha</v-icon>
                 </label>
-                <label style="color: #C5C9D1 !important" class="tab-btn ml-4" v-bind:class="activeTabOptimism" disabled @click="openLink('https://op.overnight.fi')">
+                <label class="tab-btn ml-4" v-bind:class="activeTabOptimism" @click="openLink('https://op.overnight.fi/fund')">
                     Optimism
                     <v-icon class="ml-n1 mb-5" small color="#C5C9D1">mdi-alpha</v-icon>
                 </label>
@@ -117,16 +117,25 @@ export default {
     },
 
     data: () => ({
-        tab: 1,
+        tab: null,
     }),
 
     computed: {
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
 
+        assetName() {
+            return process.env.VUE_APP_ASSET_NAME;
+        },
+
+        nativeAssetName() {
+            return process.env.VUE_APP_NATIVE_ASSET;
+        },
+
         activeTabPolygon: function () {
             return {
                 'tab-button': this.tab === 1,
                 'tab-button-in-active': this.tab !== 1,
+                'tab-btn-disabled': this.tab !== 1,
             }
         },
 
@@ -134,6 +143,7 @@ export default {
             return {
                 'tab-button': this.tab === 2,
                 'tab-button-in-active': this.tab !== 2,
+                'tab-btn-disabled': this.tab !== 2,
             }
         },
 
@@ -141,6 +151,7 @@ export default {
             return {
                 'tab-button': this.tab === 3,
                 'tab-button-in-active': this.tab !== 3,
+                'tab-btn-disabled': this.tab !== 3,
             }
         },
 
@@ -148,8 +159,19 @@ export default {
             return {
                 'tab-button': this.tab === 4,
                 'tab-button-in-active': this.tab !== 4,
+                'tab-btn-disabled': this.tab !== 4,
             }
         },
+    },
+
+    created() {
+        if (process.env.VUE_APP_NETWORK_ID === '137') {
+            this.tab = 1;
+        }
+
+        if (process.env.VUE_APP_NETWORK_ID === '56') {
+            this.tab = 2;
+        }
     },
 
     methods: {
@@ -163,6 +185,22 @@ export default {
             this.showMintView();
             this.showSwapModal();
         },
+
+        clickPolygon() {
+            if (process.env.VUE_APP_NETWORK_ID === '137') {
+                this.tab = 1;
+            } else {
+                this.openLink('https://market.overnight.fi/stats');
+            }
+        },
+
+        clickBsc() {
+            if (process.env.VUE_APP_NETWORK_ID === '56') {
+                this.tab = 2;
+            } else {
+                this.openLink('https://bsc.overnight.fi/stats');
+            }
+        }
     }
 }
 </script>
@@ -405,5 +443,9 @@ export default {
     font-feature-settings: 'pnum' on, 'lnum' on;
     text-transform: uppercase;
     color: #333333;
+}
+
+.tab-btn-disabled {
+    color: #C5C9D1 !important;
 }
 </style>

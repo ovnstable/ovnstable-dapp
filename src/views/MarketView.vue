@@ -18,7 +18,7 @@
         </div>
 
         <div class="mt-7 cards-list-container">
-            <WmaticUsdPlus/>
+            <WmaticUsdPlus v-if="showUsdPlusWmatic"/>
         </div>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -30,6 +30,7 @@
 import Banner from "@/components/market/section/Banner";
 import WmaticUsdPlus from "@/components/market/cards/hedged/WmaticUsdPlus";
 import BannerMobile from "@/components/market/section/BannerMobile";
+import {mapGetters} from "vuex";
 
 export default {
     name: "MarketView",
@@ -45,6 +46,8 @@ export default {
     }),
 
     computed: {
+        ...mapGetters('marketUI', ['showUsdPlusWmatic']),
+
         activeTabFeatured: function () {
             return {
                 'tab-button': this.tab === 1,

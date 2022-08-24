@@ -27,8 +27,6 @@ const TimelockController = require(`@/contracts/${polygon}/OvnTimelockController
 const UsdPlusToken = require(`@/contracts/${polygon}/UsdPlusToken.json`)
 const StakingRewards = require(`@/contracts/abi/StakingRewards.json`)
 const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`)
-const ExchangerUsdPlusWmatic = require(`@/contracts/${polygon}/HedgeExchangerUsdPlusWmatic.json`)
-const UsdPlusWmaticToken = require(`@/contracts/${polygon}/RebaseTokenUsdPlusWmatic.json`)
 
 let Market;
 let WrappedUsdPlusToken;
@@ -36,6 +34,14 @@ let WrappedUsdPlusToken;
 if (polygon !== "avalanche" && polygon !== "bsc") {
     Market = require(`@/contracts/${polygon}/Market.json`)
     WrappedUsdPlusToken = require(`@/contracts/${polygon}/WrappedUsdPlusToken.json`)
+}
+
+let ExchangerUsdPlusWmatic;
+let UsdPlusWmaticToken;
+
+if (polygon === "polygon") {
+    ExchangerUsdPlusWmatic = require(`@/contracts/${polygon}/HedgeExchangerUsdPlusWmatic.json`)
+    UsdPlusWmaticToken = require(`@/contracts/${polygon}/RebaseTokenUsdPlusWmatic.json`)
 }
 
 
@@ -235,6 +241,14 @@ const actions = {
             dispatch('farmUI/hidePage', null, {root: true});
         }
 
+        if (polygon !== "polygon") {
+            dispatch('marketUI/hideUsdPlusWmatic', null, {root: true});
+        }
+
+        if (polygon !== "binance") {
+            dispatch('marketUI/hideUsdPlusBnb', null, {root: true});
+        }
+
         if (localStorage.getItem('walletName')) {
             await dispatch('connectWallet');
         }
@@ -383,8 +397,10 @@ const actions = {
             contracts.wUsdPlus = _load(WrappedUsdPlusToken, web3);
         }
 
-        contracts.exchangerUsdPlusWmatic = _load(ExchangerUsdPlusWmatic, web3);
-        contracts.usdPlusWmatic = _load(UsdPlusWmaticToken, web3);
+        if (polygon === "polygon") {
+            contracts.exchangerUsdPlusWmatic = _load(ExchangerUsdPlusWmatic, web3);
+            contracts.usdPlusWmatic = _load(UsdPlusWmaticToken, web3);
+        }
 
         contracts.poolQsUsdPlusWeth = _load(StakingRewards, web3, "0x398B66c4c69Bf19EA6A3c97e8d8b9c93f295D209");
         contracts.poolQsUsdPlusWethToken = _load(ERC20, web3, '0x901Debb34469e89FeCA591f5E5336984151fEc39');

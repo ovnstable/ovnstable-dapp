@@ -3,7 +3,7 @@ const state = {
 
     show: false,
 
-    usdcApproved: false,
+    assetApproved: false,
     usdPlusApproved: false,
 };
 
@@ -17,8 +17,8 @@ const getters = {
         return state.show;
     },
 
-    usdcApproved(state) {
-        return state.usdcApproved;
+    assetApproved(state) {
+        return state.assetApproved;
     },
 
     usdPlusApproved(state) {
@@ -44,8 +44,8 @@ const actions = {
         commit('setShow', false);
     },
 
-    approveUsdc({commit, dispatch, getters}) {
-        commit('setUsdcApproved', true);
+    approveAsset({commit, dispatch, getters}) {
+        commit('setAssetApproved', true);
     },
 
     approveUsdPlus({commit, dispatch, getters}) {
@@ -63,8 +63,8 @@ const mutations = {
         state.show = show;
     },
 
-    setUsdcApproved(state, usdcApproved) {
-        state.usdcApproved = usdcApproved;
+    setAssetApproved(state, assetApproved) {
+        state.assetApproved = assetApproved;
     },
 
     setUsdPlusApproved(state, usdPlusApproved) {

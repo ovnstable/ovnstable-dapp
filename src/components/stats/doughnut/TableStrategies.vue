@@ -7,11 +7,11 @@
                 Strategy
             </th>
             <th class="table-header-don text-left">
-                Net Asset Value (USDC)
+                Net Asset Value ({{ assetName }})
                 <!-- TODO: add info -->
             </th>
             <th class="table-header-don text-left" v-if="!minimized">
-                Liquidation value (USDC)
+                Liquidation value ({{ assetName }})
                 <!-- TODO: add info -->
             </th>
             <th class="table-header-don text-left" :class="minimized ? 'text-right' : 'text-left'"
@@ -121,7 +121,15 @@ export default {
 
     computed: {
         ...mapGetters("statsData", ['totalUsdPlusValue', 'currentTotalData',]),
-        ...mapGetters("statsUI", ['loadingCurrentTotalData'])
+        ...mapGetters("statsUI", ['loadingCurrentTotalData']),
+
+        assetName() {
+            return process.env.VUE_APP_ASSET_NAME;
+        },
+
+        nativeAssetName() {
+            return process.env.VUE_APP_NATIVE_ASSET;
+        },
     },
 
     mounted() {

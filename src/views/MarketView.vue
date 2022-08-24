@@ -1,9 +1,5 @@
 <template>
     <div>
-<!--        <div class="mt-10">
-            <Banner v-if="$wu.isFull()"/>
-            <BannerMobile v-else/>
-        </div>-->
         <div class="mt-10">
             <label class="title-label">Earn</label>
         </div>
@@ -18,7 +14,10 @@
         </div>
 
         <div class="mt-7 cards-list-container">
-            <WmaticUsdPlus v-if="showUsdPlusWmatic"/>
+            <v-row class="d-flex" justify="start">
+                <WmaticUsdPlus class="ma-3" v-if="showUsdPlusWmatic"/>
+                <WbnbUsdPlus class="ma-3" v-if="showUsdPlusWbnb"/>
+            </v-row>
         </div>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -28,14 +27,16 @@
 <script>
 
 import Banner from "@/components/market/section/Banner";
-import WmaticUsdPlus from "@/components/market/cards/hedged/WmaticUsdPlus";
+import WmaticUsdPlus from "@/components/market/cards/wmatic/WmaticUsdPlus";
 import BannerMobile from "@/components/market/section/BannerMobile";
 import {mapGetters} from "vuex";
+import WbnbUsdPlus from "@/components/market/cards/wbnb/WbnbUsdPlus";
 
 export default {
     name: "MarketView",
 
     components: {
+        WbnbUsdPlus,
         BannerMobile,
         WmaticUsdPlus,
         Banner
@@ -46,7 +47,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketUI', ['showUsdPlusWmatic']),
+        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb']),
 
         activeTabFeatured: function () {
             return {

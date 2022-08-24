@@ -4,9 +4,11 @@ const state = {
 
     totalSupply: {
         usdPlusWmatic: 0,
+        usdPlusWbnb: 0,
     },
 
-    maxUsdPlusWmaticSupply: 275000.00,
+    maxUsdPlusWmaticSupply: 125000.00,
+    maxUsdPlusWbnbSupply: 500000.00,
 };
 
 const getters = {
@@ -18,6 +20,10 @@ const getters = {
     maxUsdPlusWmaticSupply(state) {
         return state.maxUsdPlusWmaticSupply;
     },
+
+    maxUsdPlusWbnbSupply(state) {
+        return state.maxUsdPlusWbnbSupply;
+    },
 };
 
 const actions = {
@@ -28,6 +34,7 @@ const actions = {
 
         commit('setTotalSupply', {
             usdPlusWmatic: 0,
+            usdPlusWbnb: 0,
         });
 
     },
@@ -38,6 +45,7 @@ const actions = {
 
         let web3 = rootState.web3;
         let usdPlusWmatic;
+        let usdPlusWbnb;
 
         try {
             usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.totalSupply().call();
@@ -48,18 +56,38 @@ const actions = {
                 usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.totalSupply().call();
             } catch (e) {
                 console.log('ERROR: ' + e)
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.totalSupply().call();
             }
         }
 
-        usdPlusWmatic = web3.web3.utils.fromWei(usdPlusWmatic, 'mwei') ;
+        try {
+            usdPlusWmatic = web3.web3.utils.fromWei(usdPlusWmatic, 'mwei') ;
+        } catch (e) {
+            console.log('ERROR: ' + e)
+        }
+
+
+        try {
+            usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.totalSupply().call();
+        } catch (e) {
+            console.log('ERROR: ' + e)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            try {
+                usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.totalSupply().call();
+            } catch (e) {
+                console.log('ERROR: ' + e)
+            }
+        }
+
+        try {
+            usdPlusWbnb = web3.web3.utils.fromWei(usdPlusWbnb, 'mwei') ;
+        } catch (e) {
+            console.log('ERROR: ' + e)
+        }
 
         commit('setTotalSupply', {
             usdPlusWmatic: usdPlusWmatic,
+            usdPlusWbnb: usdPlusWbnb,
         })
-
-        console.log("Supply: " + usdPlusWmatic)
     },
 };
 

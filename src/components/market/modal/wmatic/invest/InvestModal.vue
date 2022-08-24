@@ -34,8 +34,8 @@
 
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import Invest from "@/components/market/modal/invest/action/Invest";
-import Withdraw from "@/components/market/modal/invest/action/Withdraw";
+import Invest from "@/components/market/modal/wmatic/invest/action/Invest";
+import Withdraw from "@/components/market/modal/wmatic/invest/action/Withdraw";
 
 export default {
     name: "InvestModal",
@@ -49,13 +49,13 @@ export default {
 
     computed: {
         ...mapGetters('investModal', ['show']),
-        ...mapGetters('investModal', ['usdPlusApproved', 'usdPlusWmaticApproved', 'isMintView']),
+        ...mapGetters('investModal', ['isMintView']),
     },
 
     data: () => ({}),
 
     methods: {
-        ...mapActions('investModal', ['showInvestModal', 'closeInvestModal']),
+        ...mapActions('investModal', ['closeInvestModal']),
         ...mapActions('web3', ['connectWallet']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
 

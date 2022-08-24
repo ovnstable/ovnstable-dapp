@@ -60,7 +60,7 @@ const actions = {
                 console.log('Error get data: ' + reason);
             })
 
-        await fetch(process.env.VUE_APP_API + '/hedge-strategies/0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf/avg-apy-info/week', fetchOptions)
+        await fetch(process.env.VUE_APP_API + '/hedge-strategies/0/avg-apy-info/week', fetchOptions)
             .then(value => value.json())
             .then(value => {
                 avgApyStrategyWeek = value;
@@ -69,12 +69,12 @@ const actions = {
                 console.log('Error get data: ' + reason);
             })
 
-        await fetch(process.env.VUE_APP_API + '/hedge-strategies/0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', fetchOptions)
+        await fetch(process.env.VUE_APP_API + '/hedge-strategies/0', fetchOptions)
             .then(value => value.json())
             .then(value => {
                 wmaticStrategyData = value;
                 wmaticStrategyData.apy = (avgApyStrategyWeek && avgApyStrategyWeek.value) ? (avgApyStrategyWeek.value) : wmaticStrategyData.apy;
-                wmaticStrategyData.diffApy = (avgApy && avgApy.value) ? (wmaticStrategyData.apy - avgApy.value) : null;
+                wmaticStrategyData.diffApy = (avgApy && avgApy.value && wmaticStrategyData.apy) ? (wmaticStrategyData.apy - avgApy.value) : null;
 
                 /* TODO: get onChain */
                 wmaticStrategyData.targetHealthFactor = 1.35;
@@ -150,7 +150,7 @@ const actions = {
             }
         };
 
-        await fetch(process.env.VUE_APP_API + `/hedge-strategies/0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf/account/${account}`, fetchOptions)
+        await fetch(process.env.VUE_APP_API + `/hedge-strategies/0/account/${account}`, fetchOptions)
             .then(value => value.json())
             .then(value => {
                 profitDay = value.profit;

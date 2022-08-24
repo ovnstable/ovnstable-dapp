@@ -3,7 +3,7 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? 'USD+/WMATIC' : 'ETS: USD+/WMATIC daily net') + '&nbsp;') : ''}}</label>
+                    <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? etsName : 'ETS: ' + etsName + ' daily net') + '&nbsp;') : ''}}</label>
                     <label class="chart-title" style="margin-left: 0 !important"><abbr title="Annual Percentage Yield">APY</abbr></label>
                 </v-row>
 
@@ -99,6 +99,11 @@ export default {
             type: Object,
             default: null,
         },
+
+        etsName: {
+            type: String,
+            default: 'USD+/WMATIC',
+        },
     },
 
     watch: {
@@ -148,11 +153,14 @@ export default {
                 }
             };
 
-            await fetch(process.env.VUE_APP_API + '/hedge-strategies/0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf/avg-apy-info/' + zoom, fetchOptions)
+            await fetch(process.env.VUE_APP_API + '/hedge-strategies/0/avg-apy-info/' + zoom, fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;
-                    this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+
+                    if (this.avgApy.date) {
+                        this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+                    }
                 }).catch(reason => {
                     console.log('Error get data: ' + reason);
                 })
@@ -220,7 +228,7 @@ export default {
 
             seriesList.push(
                 {
-                    name: "USD+/WMATIC ETS APY",
+                    name: this.etsName + " ETS APY",
                     data: values
                 }
             );
@@ -268,7 +276,7 @@ export default {
                         label: {
                             show: false,
                         },
-                        width: this.isMobile ? '0%' : '100%',
+                        width: this.isMobile ? '0%' : (averageValue ? '100%' : '0%'),
                     }]
                 },
 

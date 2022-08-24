@@ -64,7 +64,8 @@
             </v-col>
         </v-row>
 
-        <InvestModal/>
+        <InvestModalWmatic v-if="showUsdPlusWmatic"/>
+        <InvestModalWbnb v-if="showUsdPlusWbnb"/>
         <SwapModal/>
         <WrapModal/>
 
@@ -82,7 +83,8 @@ import WalletBar from "@/components/common/header/WalletBar";
 import NetworkSelect from "@/components/common/header/NetworkSelect";
 import MenuSelect from "@/components/common/header/MenuSelect";
 import SwapModal from "@/components/swap/SwapModal";
-import InvestModal from "@/components/market/modal/invest/InvestModal";
+import InvestModalWmatic from "@/components/market/modal/wmatic/invest/InvestModal";
+import InvestModalWbnb from "@/components/market/modal/wbnb/invest/InvestModal";
 import WrapModal from "@/components/wrap/WrapModal";
 
 export default {
@@ -90,7 +92,8 @@ export default {
 
     components: {
         WrapModal,
-        InvestModal,
+        InvestModalWmatic,
+        InvestModalWbnb,
         SwapModal,
         MenuSelect,
         NetworkSelect,
@@ -109,6 +112,7 @@ export default {
         ...mapGetters('web3', [ 'web3',  'networkId', 'switchToPolygon', 'loadingWeb3', 'walletConnected']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('wrapUI', ['showWrap']),
+        ...mapGetters('marketUI', ['showUsdPlusWbnb', 'showUsdPlusWmatic']),
 
         networkName() {
             return this.capitalize(process.env.VUE_APP_POLYGON);

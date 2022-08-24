@@ -1,5 +1,5 @@
 <template>
-    <div v-if="showUsdPlusWmatic">
+    <div>
         <div class="mt-10">
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'ml-3' : ''">
                 <label class="parent-page-label" @click="goToAction('/market')">Earn</label>
@@ -217,13 +217,13 @@
 
 <script>
 
-import StrategyBanner from "@/components/market/strategy/section/StrategyBanner";
-import RiskDisclosureModal from "@/components/market/modal/RiskDisclosureModal";
+import StrategyBanner from "@/components/market/strategy/section/wmatic/StrategyBanner";
+import RiskDisclosureModal from "@/components/market/modal/wmatic/RiskDisclosureModal";
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import InvestorModal from "@/components/market/modal/InvestorModal";
-import AboutTab from "@/views/strategy/tab/AboutTab";
-import PerformanceTab from "@/views/strategy/tab/PerformanceTab";
+import AboutTab from "@/views/strategy/wmatic/tab/AboutTab";
+import PerformanceTab from "@/views/strategy/wmatic/tab/PerformanceTab";
 export default {
     name: "WmaticPageView",
 

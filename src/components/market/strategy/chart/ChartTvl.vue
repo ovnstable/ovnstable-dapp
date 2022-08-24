@@ -3,7 +3,7 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ totalTvl ? 'USD+/WMATIC&nbsp;' : ''}}</label>
+                    <label class="chart-title">{{ totalTvl ? (etsName + '&nbsp;') : ''}}</label>
                     <label class="chart-title" style="margin-left: 0 !important"><abbr title="Total Value Locked">TVL</abbr></label>
                 </v-row>
 
@@ -80,6 +80,11 @@ export default {
         data: {
             type: Object,
             default: null,
+        },
+
+        etsName: {
+            type: String,
+            default: 'USD+/WMATIC',
         },
     },
 

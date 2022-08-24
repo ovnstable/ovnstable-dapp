@@ -12,6 +12,7 @@ const OvnImage = require('@/assets/ovn.json');
 const UsdPlusImage = require('@/assets/usdPlus.json');
 const WrappedUsdPlusImage = require('@/assets/wUsdPlus.json');
 const UsdPlusWmaticImage = require('@/assets/usdPlusWmatic.json');
+const UsdPlusWbnbImage = require('@/assets/usdPlusWbnb.json');
 
 const polygon = process.env.VUE_APP_POLYGON;
 const networkId = Number.parseInt(process.env.VUE_APP_NETWORK_ID);
@@ -42,6 +43,14 @@ let UsdPlusWmaticToken;
 if (polygon === "polygon") {
     ExchangerUsdPlusWmatic = require(`@/contracts/${polygon}/HedgeExchangerUsdPlusWmatic.json`)
     UsdPlusWmaticToken = require(`@/contracts/${polygon}/RebaseTokenUsdPlusWmatic.json`)
+}
+
+let ExchangerUsdPlusWbnb;
+let UsdPlusWbnbToken;
+
+if (polygon === "bsc") {
+    ExchangerUsdPlusWbnb = require(`@/contracts/${polygon}/HedgeExchangerUsdPlusWbnb.json`)
+    UsdPlusWbnbToken = require(`@/contracts/${polygon}/RebaseTokenUsdPlusWbnb.json`)
 }
 
 
@@ -245,8 +254,8 @@ const actions = {
             dispatch('marketUI/hideUsdPlusWmatic', null, {root: true});
         }
 
-        if (polygon !== "binance") {
-            dispatch('marketUI/hideUsdPlusBnb', null, {root: true});
+        if (polygon !== "bsc") {
+            dispatch('marketUI/hideUsdPlusWbnb', null, {root: true});
         }
 
         if (localStorage.getItem('walletName')) {
@@ -400,6 +409,11 @@ const actions = {
         if (polygon === "polygon") {
             contracts.exchangerUsdPlusWmatic = _load(ExchangerUsdPlusWmatic, web3);
             contracts.usdPlusWmatic = _load(UsdPlusWmaticToken, web3);
+        }
+
+        if (polygon === "bsc") {
+            contracts.exchangerUsdPlusWbnb = _load(ExchangerUsdPlusWbnb, web3);
+            contracts.usdPlusWbnb = _load(UsdPlusWbnbToken, web3);
         }
 
         contracts.poolQsUsdPlusWeth = _load(StakingRewards, web3, "0x398B66c4c69Bf19EA6A3c97e8d8b9c93f295D209");
@@ -560,6 +574,31 @@ const actions = {
             .then((success) => {
                 if (success) {
                     console.log('USD+/WMATIC successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
+    async addUsdPlusWbnbToken({commit, dispatch, getters, rootState}) {
+
+        await getters.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: rootState.web3.contracts.usdPlusWbnb.options.address,
+                        symbol: process.env.VUE_APP_USD_PLUS_WBNB_TOKEN_NAME,
+                        decimals: 6,
+                        image: UsdPlusWbnbImage.image,
+                    },
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('USD+/WBNB successfully added to wallet!')
                 } else {
                     throw new Error('Something went wrong.')
                 }

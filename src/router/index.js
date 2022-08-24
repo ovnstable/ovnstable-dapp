@@ -17,9 +17,11 @@ import getFinance from "@/router/midleware/governance/getFinance";
 // Dapp Sections
 import Market from "./midleware/dapp/Market";
 import Wmatic from "./midleware/dapp/Wmatic";
+import Wbnb from "./midleware/dapp/Wbnb";
 import Stats from "./midleware/dapp/Stats";
 import Collateral from "./midleware/dapp/Collateral";
 import Dashboard from "./midleware/dapp/Dashboard";
+import getDapp from "@/router/midleware/getDapp";
 
 
 const routes = [
@@ -42,10 +44,20 @@ const routes = [
             {
                 path: '/ets',
                 name: 'WmaticPageView',
-                component: () => import('../views/strategy/WmaticPageView.vue'),
+                component: () => import(
+                    process.env.VUE_APP_NETWORK_ID === '137'
+                        ? '../views/strategy/wmatic/WmaticPageView.vue'
+                        : (process.env.VUE_APP_NETWORK_ID === '56'
+                                ? '../views/strategy/wbnb/WbnbPageView.vue'
+                                : '')
+                    ),
                 meta: {
                     middleware: [
-                        Wmatic,
+                        process.env.VUE_APP_NETWORK_ID === '137'
+                            ? Wmatic
+                            : (process.env.VUE_APP_NETWORK_ID === '56'
+                                ? Wbnb
+                                : getDapp)
                     ]
                 }
             },

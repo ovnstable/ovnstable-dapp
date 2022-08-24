@@ -5,6 +5,7 @@ const state = {
         asset: 0,
         wUsdPlus: 0,
         usdPlusWmatic: 0,
+        usdPlusWbnb: 0,
     },
 
     account: null,
@@ -40,6 +41,7 @@ const actions = {
             asset: 0,
             wUsdPlus: 0,
             usdPlusWmatic: 0,
+            usdPlusWbnb: 0,
         });
 
     },
@@ -71,6 +73,7 @@ const actions = {
         let asset;
         let wUsdPlus;
         let usdPlusWmatic;
+        let usdPlusWbnb;
 
         try {
             asset = await web3.contracts.asset.methods.balanceOf(getters.account).call();
@@ -100,7 +103,7 @@ const actions = {
             }
         }
 
-        if (networkId === 137) {
+        if (networkId === 137 || networkId === 10) {
             try {
                 wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
             } catch (e) {
@@ -116,26 +119,46 @@ const actions = {
             }
         }
 
-        if (networkId === 137) {
+        if (web3.contracts.usdPlusWmatic && networkId === 137) {
             try {
                 usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.balanceOf(getters.account).call();
             } catch (e) {
                 console.log('ERROR: ' + e)
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 try {
-                    wUsdPlus = await web3.contracts.usdPlusWmatic.methods.balanceOf(getters.account).call();
+                    usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.balanceOf(getters.account).call();
                 } catch (e) {
                     console.log('ERROR: ' + e)
                     await new Promise(resolve => setTimeout(resolve, 2000));
-                    wUsdPlus = await web3.contracts.usdPlusWmatic.methods.balanceOf(getters.account).call();
+                    usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.balanceOf(getters.account).call();
+                }
+            }
+        }
+
+        if (web3.contracts.usdPlusWbnb && networkId === 56) {
+            try {
+                usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.balanceOf(getters.account).call();
+            } catch (e) {
+                console.log('ERROR: ' + e)
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                try {
+                    usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.balanceOf(getters.account).call();
+                } catch (e) {
+                    console.log('ERROR: ' + e)
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.balanceOf(getters.account).call();
                 }
             }
         }
 
         usdPlus = web3.web3.utils.fromWei(usdPlus, 'mwei') ;
 
-        if (networkId === 137) {
+        if (usdPlusWmatic && networkId === 137) {
             usdPlusWmatic = web3.web3.utils.fromWei(usdPlusWmatic, 'mwei') ;
+        }
+
+        if (usdPlusWbnb && networkId === 56) {
+            usdPlusWbnb = web3.web3.utils.fromWei(usdPlusWbnb, 'mwei') ;
         }
 
         if (process.env.VUE_APP_ASSET_DECIMALS == 18) {
@@ -144,7 +167,7 @@ const actions = {
             asset = web3.web3.utils.fromWei(asset, 'mwei') ;
         }
 
-        if (networkId === 137 || networkId === 10) {
+        if (wUsdPlus && (networkId === 137 || networkId === 10)) {
             wUsdPlus = web3.web3.utils.fromWei(wUsdPlus, 'mwei') ;
         }
 
@@ -152,7 +175,8 @@ const actions = {
             usdPlus: usdPlus,
             asset: asset,
             wUsdPlus: wUsdPlus,
-            usdPlusWmatic: usdPlusWmatic
+            usdPlusWmatic: usdPlusWmatic,
+            usdPlusWbnb: usdPlusWbnb
         })
 
         commit('accountUI/setLoadingBalance', false, { root: true })

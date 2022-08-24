@@ -5,7 +5,7 @@
       :sections="sections"
       :start-angle="0" :auto-adjust-text-size="false">
         <p class="total-label mt-5">Last payout was</p>
-        <p class="total-label-time mt-n3 mb-0">{{ timeDisplay }}</p>
+        <p class="total-label-time mt-n3 mb-0">{{ timeDisplay === "00 : 00" ? '—' : timeDisplay }}</p>
         <p class="total-label">hours ago</p>
     </vc-donut>
 </template>

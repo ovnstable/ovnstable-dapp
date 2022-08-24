@@ -2,7 +2,7 @@
 const state = {
 
     showUsdPlusWmatic: true,
-    showUsdPlusBnb: true,
+    showUsdPlusWbnb: true,
 
 };
 
@@ -12,8 +12,8 @@ const getters = {
         return state.showUsdPlusWmatic;
     },
 
-    showUsdPlusBnb(state) {
-        return state.showUsdPlusBnb;
+    showUsdPlusWbnb(state) {
+        return state.showUsdPlusWbnb;
     },
 
 };
@@ -24,8 +24,8 @@ const actions = {
         commit('setShowUsdPlusWmatic', false);
     },
 
-    async hideUsdPlusBnb({commit, dispatch, getters, rootState}) {
-        commit('setShowUsdPlusBnb', false);
+    async hideUsdPlusWbnb({commit, dispatch, getters, rootState}) {
+        commit('setShowUsdPlusWbnb', false);
     },
 
 };
@@ -37,8 +37,8 @@ const mutations = {
     },
 
 
-    setShowUsdPlusBnb(state, showUsdPlusBnb) {
-        state.showUsdPlusBnb = showUsdPlusBnb;
+    setShowUsdPlusWbnb(state, showUsdPlusWbnb) {
+        state.showUsdPlusWbnb = showUsdPlusWbnb;
     },
 
 };

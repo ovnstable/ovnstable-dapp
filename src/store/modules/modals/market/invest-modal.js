@@ -4,6 +4,7 @@ const state = {
     show: false,
 
     usdPlusWmaticApproved: false,
+    usdPlusWbnbApproved: false,
     usdPlusApproved: false,
 };
 
@@ -18,6 +19,10 @@ const getters = {
     },
 
     usdPlusWmaticApproved(state) {
+        return state.usdPlusWmaticApproved;
+    },
+
+    usdPlusWbnbApproved(state) {
         return state.usdPlusWmaticApproved;
     },
 
@@ -48,6 +53,10 @@ const actions = {
         commit('setUsdPlusWmaticApproved', true);
     },
 
+    approveUsdPlusWbnb({commit, dispatch, getters}) {
+        commit('setUsdPlusWmaticApproved', true);
+    },
+
     approveUsdPlus({commit, dispatch, getters}) {
         commit('setUsdPlusApproved', true);
     },
@@ -64,6 +73,10 @@ const mutations = {
     },
 
     setUsdPlusWmaticApproved(state, usdPlusWmaticApproved) {
+        state.usdPlusWmaticApproved = usdPlusWmaticApproved;
+    },
+
+    setUsdPlusWbnbApproved(state, usdPlusWmaticApproved) {
         state.usdPlusWmaticApproved = usdPlusWmaticApproved;
     },
 

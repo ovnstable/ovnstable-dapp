@@ -148,13 +148,13 @@
             </v-col>
             <v-col cols="6" v-if="!$wu.isMobile()">
                 <v-row justify="end">
-                    <v-img class="scheme-img" max-width="700px" :src="require('@/assets/market/scheme.svg')"/>
+                    <v-img class="scheme-img" max-width="700px" :src="require('@/assets/market/schemeWmatic.svg')"/>
                 </v-row>
             </v-col>
         </v-row>
 
         <v-row align="center" justify="start" class="ma-0 mt-15" v-if="$wu.isMobile()">
-            <v-img class="scheme-img" :src="require('@/assets/market/scheme.svg')"/>
+            <v-img class="scheme-img" :src="require('@/assets/market/schemeWmatic.svg')"/>
         </v-row>
 
         <v-row align="center" justify="start" class="ma-0 mt-15">
@@ -225,7 +225,7 @@
                     <label class="progress-sub-text">your balance</label>
                 </v-row>
                 <v-row justify="start" align="start">
-                    <label class="progress-text">Enter/exit</label>
+                    <label class="progress-text">Enter</label>
                     <v-spacer></v-spacer>
                     <label class="progress-sub-text">in strategy</label>
                 </v-row>

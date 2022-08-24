@@ -80,6 +80,12 @@
                         </div>
                         <label class="ml-2 coin-btn-label">USD+/WMATIC</label>
                     </v-btn>
+                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ml-1' : 'ml-5'" @click="addUsdPlusWbnbToken" v-if="showUsdPlusWbnb">
+                        <div class="coin-img">
+                            <v-img :src="require('@/assets/currencies/market/UsdPlusWbnb.svg')"/>
+                        </div>
+                        <label class="ml-2 coin-btn-label">USD+/WBNB</label>
+                    </v-btn>
                 </v-row>
             </v-card-text>
         </v-card>
@@ -121,7 +127,7 @@ export default {
         ...mapGetters('web3', ['walletName']),
         ...mapGetters('accountUI', ['showAccountProfile']),
         ...mapGetters('wrapUI', ['showWrap']),
-        ...mapGetters('marketUI', ['showUsdPlusWmatic']),
+        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb']),
         ...mapGetters('transaction', ['transactions']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
 
@@ -152,7 +158,7 @@ export default {
 
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
-        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken']),
+        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addUsdPlusWbnbToken']),
         ...mapActions('transaction', ['clearTransaction', 'loadTransaction']),
 
         openOnExplorer(hash) {

@@ -2,7 +2,7 @@
     <div>
         <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'">
             <label class="strategy-info-label">
-                The exchange-traded strategy USD+/WBNB ($USD+WBNB), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position (BUSD lent on Venus) to borrow a volatile asset (WBNB), pair it with USD+ stablecoin, and provide USD+/WBNB liquidity on Cone all in one action. This allows earning high APY and hedging against WBNB volatility.
+                The exchange-traded strategy USD+/WBNB ($USD+WBNB), is an ERC-20 structured product built on Binance Smart chain that lets you leverage a collateralized debt position (BUSD lent on Venus) to borrow a volatile asset (WBNB), pair it with USD+ stablecoin, and provide USD+/WBNB liquidity on Cone all in one action. This allows earning high APY and hedging against WBNB volatility.
                 <br/><br/>
                 The unique feature of USD+/WBNB ETS is that it automatically administers a health factor of {{ wmaticStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2) : 1.35}}x on Venus and rebalances your Lent/Borrowed amounts to maintain a stringent {{ wmaticStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2) : 1.35}}x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
                 <br/><br/>
@@ -124,7 +124,7 @@
                             <label class="list-title-text">Strategy Generates Yield</label>
                         </v-row>
                         <v-row class="mt-8">
-                            <label class="list-sub-title-text">Strategy automatically stakes the earned pool LP tokens into Penrose and auto-compounds the rewards by re-investing into the pool for more LP tokens to maximise Yields.</label>
+                            <label class="list-sub-title-text">Strategy automatically stakes the earned pool LP tokens into Cone's gauge and auto-compounds the rewards by re-investing into the pool for more LP tokens to maximise Yields.</label>
                         </v-row>
                     </v-col>
                 </v-row>

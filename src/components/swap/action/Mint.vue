@@ -155,6 +155,7 @@
 
         <v-row class="mt-5" :class="$wu.isFull() ? '' : 'mb-4'">
             <v-slider
+                    readonly
                     class="step-slider"
                     color="#1C95E7"
                     track-color="#DEE1E5"

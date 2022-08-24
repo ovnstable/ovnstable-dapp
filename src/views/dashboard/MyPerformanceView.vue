@@ -15,7 +15,7 @@
 
                         <v-menu offset-y v-if="$wu.isFull()">
                             <template v-slot:activator="{ on, attrs }">
-                                <div class="slice-select-main-container mb-1"
+                                <div class="slice-select-main-container mb-1 mr-3"
                                      v-click-outside="clickMenuOutside"
                                      @click="openedSliceList = !openedSliceList"
                                      v-bind="attrs"
@@ -51,8 +51,6 @@
                                 </v-list-item>
                             </v-list>
                         </v-menu>
-
-                        <v-icon class="ml-5 mb-1" color="#DADADA">mdi-eye-outline</v-icon>
                     </v-row>
                 </v-col>
 

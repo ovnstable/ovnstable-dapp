@@ -1,8 +1,8 @@
-export default async function getStats({ context, nextMiddleware }){
+export default async function getCollateral({ context, nextMiddleware }){
     try {
-        console.log('Get Dapp/Stats');
+        console.log('Get Dapp/Collateral');
 
-        context.store.dispatch('menuUI/selectTab', 'stats');
+        context.store.dispatch('menuUI/selectTab', 'collateral');
         context.store.dispatch('statsData/refreshStats');
     }
     catch(e){

@@ -6,9 +6,6 @@ Vue.use(VueRouter)
 
 import store from "../store";
 
-import getDapp from "./midleware/getDapp"
-
-
 // Governance sections
 
 import getOverview from "./midleware/governance/getOverview"
@@ -18,14 +15,11 @@ import middlewarePipeline from "./middlewarePipeline";
 import getFinance from "@/router/midleware/governance/getFinance";
 
 // Dapp Sections
-import Swap from "./midleware/dapp/Swap";
 import Market from "./midleware/dapp/Market";
 import Wmatic from "./midleware/dapp/Wmatic";
-import Wrap from "./midleware/dapp/Wrap";
-import Farm from "./midleware/dapp/Farm";
 import Stats from "./midleware/dapp/Stats";
+import Collateral from "./midleware/dapp/Collateral";
 import Dashboard from "./midleware/dapp/Dashboard";
-import PreOvn from "./midleware/dapp/PreOvn";
 
 
 const routes = [
@@ -61,7 +55,7 @@ const routes = [
                 component: () => import('../views/performance/view/CollateralView.vue'),
                 meta: {
                     middleware: [
-                        Stats,
+                        Collateral,
                     ]
                 }
             },
@@ -85,77 +79,6 @@ const routes = [
                     ]
                 }
             },
-            /*{
-                path: '/',
-                name: 'SwapView',
-                component: () => import('../views/SwapView.vue'),
-                meta: {
-                    middleware: [
-                        Swap,
-                    ]
-                }
-            },
-            {
-                path: '/wrap',
-                name: 'WrapView',
-                component: () => import('../views/WrapView.vue'),
-                meta: {
-                    middleware: [
-                        Wrap,
-                    ]
-                }
-            },
-            {
-                path: '/fund',
-                name: 'StatsView',
-                component: () => import('../views/StatsView.vue'),
-                meta: {
-                    middleware: [
-                        Stats,
-                    ]
-                }
-            },
-            {
-                path: '/dashboard',
-                name: 'DashboardView',
-                component: () => import('../views/DashboardView.vue'),
-                meta: {
-                    middleware: [
-                        Dashboard,
-                    ]
-                }
-            },
-            {
-                path: '/farm',
-                name: 'FarmView',
-                component: () => import('../views/FarmView.vue'),
-                meta: {
-                    middleware: [
-                        Farm,
-                    ]
-                }
-            },
-            {
-                path: '/preovn',
-                name: 'PreOvnView',
-                component: () => import('../views/PreOvnView.vue'),
-                meta: {
-                    middleware: [
-                        PreOvn,
-                    ]
-                }
-            },
-
-            {
-                path: '/poolsFeeding',
-                name: 'PoolFeedingView',
-                component: () => import('../views/PoolFeedingView.vue'),
-                meta: {
-                    middleware: [
-                        getDapp,
-                    ]
-                }
-            },*/
         ],
     },
 

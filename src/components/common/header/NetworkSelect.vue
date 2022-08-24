@@ -20,7 +20,7 @@
             </div>
         </template>
         <v-list class="network-select-list">
-            <v-list-item style="cursor: pointer" target="_blank" href="https://app.overnight.fi">
+            <v-list-item style="cursor: pointer" target="_blank" href="https://market.overnight.fi">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
                         <v-img :src="require('@/assets/network/polygon.svg')"/>

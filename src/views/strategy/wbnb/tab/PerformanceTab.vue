@@ -101,7 +101,7 @@
                             <label class="card-info mt-2">Balance</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.depositAsset.amount * 100, 0) : '—' }}
+                                {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.depositAsset.amount, 0) : '—' }}
                                 {{ wmaticStrategyData ? wmaticStrategyData.depositAsset.token : '—' }}
                             </label>
                         </v-row>

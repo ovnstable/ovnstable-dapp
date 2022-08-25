@@ -6,7 +6,7 @@
                 <br/><br/>
                 The unique feature of USD+/WBNB ETS is that it automatically administers a health factor of {{ wmaticStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2) : 1.35}}x on Venus and rebalances your Lent/Borrowed amounts to maintain a stringent {{ wmaticStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2) : 1.35}}x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
                 <br/><br/>
-                Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Binace Smart Chain - a highly scalable L2 chain.
+                Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Binace Smart Chain - a highly scalable chain.
             </label>
         </v-row>
 

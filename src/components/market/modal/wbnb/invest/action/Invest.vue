@@ -189,6 +189,7 @@ import polygonIcon from "@/assets/network/polygon.svg";
 import avaxIcon from "@/assets/network/avalanche.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import bscIcon from "@/assets/network/bsc.svg";
+import {axios} from "@/plugins/http-axios";
 
 export default {
     name: "Invest",
@@ -527,6 +528,7 @@ export default {
 
             try {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
+                let blockNum = await this.web3.eth.getBlockNumber();
 
                 let referral = ""; //TODO set referral from link
                 await contracts.exchangerUsdPlusWbnb.methods.buy(sum, referral).estimateGas(estimateOptions)
@@ -534,7 +536,28 @@ export default {
                         result = gasAmount;
                     })
                     .catch(function (error) {
-                        console.log(error);
+                        if (error && error.message) {
+                            let msg = error.message.replace(/(?:\r\n|\r|\n)/g, '');
+
+                            let errorMsg = {
+                                product: 'ETS',
+                                data: {
+                                    from: from,
+                                    gas: null,
+                                    gasPrice: parseInt(estimateOptions.gasPrice, 16),
+                                    method: contracts.exchangerUsdPlusWbnb.methods.buy(sum, referral).encodeABI(),
+                                    message: msg,
+                                    block: blockNum
+                                }
+                            };
+
+                            axios.post('/error/log', errorMsg);
+
+                            console.log(errorMsg);
+                        } else {
+                            console.log(error);
+                        }
+
                         return -1;
                     });
             } catch (e) {

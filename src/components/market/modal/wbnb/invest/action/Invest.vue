@@ -543,6 +543,7 @@ export default {
                                 product: 'ETS',
                                 data: {
                                     from: from,
+                                    to: contracts.exchangerUsdPlusWbnb.options.address,
                                     gas: null,
                                     gasPrice: parseInt(estimateOptions.gasPrice, 16),
                                     method: contracts.exchangerUsdPlusWbnb.methods.buy(sum, referral).encodeABI(),

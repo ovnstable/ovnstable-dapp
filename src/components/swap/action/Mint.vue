@@ -562,6 +562,7 @@ export default {
                                 product: 'USD+',
                                 data: {
                                     from: from,
+                                    to: contracts.exchange.options.address,
                                     gas: null,
                                     gasPrice: parseInt(estimateOptions.gasPrice, 16),
                                     method: contracts.exchange.methods.buy(contracts.asset.options.address, sum).encodeABI(),

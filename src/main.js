@@ -51,27 +51,3 @@ new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')
-
-
-// Rubic widget configuration part
-var configuration = {
-  from: 'USDC',
-  to: 'USDC',
-  fromChain: 'ETH',
-  toChain: process.env.VUE_APP_POLYGON.toUpperCase(),
-  amount: 1,
-  iframe: 'vertical',
-  hideSelectionFrom: false,
-  hideSelectionTo: false,
-  theme: 'dark',
-  background: '#1d2029',
-  language: 'en',
-  injectTokens: {},
-  slippagePercent: {
-    instantTrades: 2,
-    crossChain: 5
-  }
-}
-
-Object.freeze(configuration);
-rubicWidget.init(configuration);

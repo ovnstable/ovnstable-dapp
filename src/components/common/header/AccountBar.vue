@@ -3,9 +3,6 @@
         <v-row justify="end" align="center" v-if="account">
             <v-col>
                 <v-row justify="end" align="center">
-
-                    <a id="bridge-button" class="bridge-link rubic-show" @click="openBridge">Bridge</a>
-
                     <v-chip outlined dark class="balance-chip" @click="showAccountProfile">
                         {{ $utils.formatMoney(balance.usdPlus, 2) }}&nbsp;USD+
                     </v-chip>
@@ -13,7 +10,6 @@
                     <v-menu offset-y min-width="180px">
                         <template v-slot:activator="{ attrs, on }">
                             <v-chip class="account-chip"
-                                    @click="hideRubic"
                                     v-bind="attrs"
                                     v-on="on">
                                 {{ accountDisplay }}
@@ -44,11 +40,6 @@
                             <v-list-item @click="goToAction('/wrap')" class="wrap-mobile" v-if="showWrap">
                                 <label class="list-label-switch">
                                     Wrap
-                                </label>
-                            </v-list-item>
-                            <v-list-item @click="openBridge" class="bridge-link-mobile">
-                                <label class="list-label-switch">
-                                    Bridge
                                 </label>
                             </v-list-item>
                             <v-list-item @click="addUsdPlusToken">
@@ -86,7 +77,6 @@
                 <template v-slot:activator="{ attrs, on }">
                     <v-btn class="menu-btn-activator"
                            icon
-                            @click="hideRubic"
                             v-bind="attrs"
                             v-on="on">
                         <v-icon class="menu-icon">mdi-menu</v-icon>
@@ -175,40 +165,6 @@ export default {
             this.connectWallet();
         },
 
-        openBridge() {
-            if (document.getElementById("rubic-widget-root").classList.contains("rubic-show")) {
-
-                document.getElementById("rubic-widget-root").classList.remove("rubic-show");
-                document.getElementById("rubic-widget-root").classList.add("rubic-not-show");
-
-                document.getElementById("rubic-widget-close").classList.remove("rubic-show");
-                document.getElementById("rubic-widget-close").classList.add("rubic-not-show");
-
-                document.getElementById("bridge-button").classList.remove("rubic-not-show");
-                document.getElementById("bridge-button").classList.add("rubic-show");
-            } else {
-                document.getElementById("rubic-widget-root").classList.remove("rubic-not-show");
-                document.getElementById("rubic-widget-root").classList.add("rubic-show");
-
-                document.getElementById("rubic-widget-close").classList.remove("rubic-not-show");
-                document.getElementById("rubic-widget-close").classList.add("rubic-show");
-
-                document.getElementById("bridge-button").classList.remove("rubic-show");
-                document.getElementById("bridge-button").classList.add("rubic-not-show");
-            }
-        },
-
-        hideRubic() {
-            if (document.getElementById("rubic-widget-root").classList.contains("rubic-show")) {
-
-                document.getElementById("rubic-widget-root").classList.remove("rubic-show");
-                document.getElementById("rubic-widget-root").classList.add("rubic-not-show");
-
-                document.getElementById("rubic-widget-close").classList.remove("rubic-show");
-                document.getElementById("rubic-widget-close").classList.add("rubic-not-show");
-            }
-        },
-
         goToAction(id) {
             this.$router.push(id);
         },
@@ -220,7 +176,7 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 1400px) {
-    .bridge-link, .balance-chip {
+    .balance-chip {
         display: none !important;
     }
 
@@ -231,7 +187,7 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
-    .bridge-link-mobile, .account-profile-mobile, .dashboard-mobile, .fund-mobile, .farm-mobile, .wrap-mobile {
+    .account-profile-mobile, .dashboard-mobile, .fund-mobile, .farm-mobile, .wrap-mobile {
         display: none !important;
     }
 
@@ -274,17 +230,6 @@ export default {
     line-height: 24px !important;
     border-radius: 40px;
     background: var(--orange-gradient);
-}
-
-.bridge-link {
-    color: var(--link);
-    font-family: 'Lato', sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px !important;
-    line-height: 24px !important;
-    text-decoration: none;
-    margin-right: 20px;
 }
 
 .balance-chip {

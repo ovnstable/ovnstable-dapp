@@ -1,8 +1,5 @@
 <template>
     <v-app id="app">
-        <div id="rubic-widget-root" class="rubic-not-show"></div>
-        <v-btn id="rubic-widget-close" class="rubic-not-show" icon @click="closeRubicWidget"><v-icon>mdi-close</v-icon></v-btn>
-
         <router-view></router-view>
     </v-app>
 </template>
@@ -24,28 +21,6 @@ export default {
     },
 
     methods: {
-        closeRubicWidget() {
-            if (document.getElementById("rubic-widget-root").classList.contains("rubic-show")) {
-
-                document.getElementById("rubic-widget-root").classList.remove("rubic-show");
-                document.getElementById("rubic-widget-root").classList.add("rubic-not-show");
-
-                document.getElementById("rubic-widget-close").classList.remove("rubic-show");
-                document.getElementById("rubic-widget-close").classList.add("rubic-not-show");
-
-                document.getElementById("bridge-button").classList.remove("rubic-not-show");
-                document.getElementById("bridge-button").classList.add("rubic-show");
-            } else {
-                document.getElementById("rubic-widget-root").classList.remove("rubic-not-show");
-                document.getElementById("rubic-widget-root").classList.add("rubic-show");
-
-                document.getElementById("rubic-widget-close").classList.remove("rubic-not-show");
-                document.getElementById("rubic-widget-close").classList.add("rubic-show");
-
-                document.getElementById("bridge-button").classList.remove("rubic-show");
-                document.getElementById("bridge-button").classList.add("rubic-not-show");
-            }
-        },
     }
 };
 </script>
@@ -56,10 +31,6 @@ export default {
 
 /* mobile */
 @media all and (min-width:0px) and (max-width: 650px) {
-
-    #rubic-widget-close {
-        right: 64px !important;
-    }
 
     .title-header {
         color: white;
@@ -91,10 +62,6 @@ export default {
 /* tablet */
 @media only screen and (min-width:650px) and (max-width: 1400px) {
 
-    #rubic-widget-close {
-        right: 82px !important;
-    }
-
     .title-header {
         color: white;
         font-family: 'Raleway', sans-serif;
@@ -123,10 +90,6 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
-
-    #rubic-widget-close {
-        right: 90px !important;
-    }
 
     .title-header {
         color: white;
@@ -279,27 +242,6 @@ html {
 
 .bn-onboard-modal-content-close, .bn-onboard-prepare-button-left {
     display: none !important;
-}
-
-.rubic-show {
-}
-
-.rubic-not-show {
-    display: none !important;
-}
-
-#rubic-widget-iframe {
-    position: absolute !important;
-    z-index: 100 !important;
-    right: 2% !important;
-    top: 100px !important;
-}
-
-#rubic-widget-close {
-    color: white;
-    position: absolute !important;
-    z-index: 110 !important;
-    top: 118px !important;
 }
 
 .progress-col > .v-progress-linear > .v-progress-linear__buffer {

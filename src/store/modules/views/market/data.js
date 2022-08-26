@@ -51,6 +51,8 @@ const actions = {
         let avgApyStrategyWeek;
         let wmaticStrategyData;
 
+        let contractAddress = process.env.VUE_APP_POLYGON === 'polygon' ? '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf' : (process.env.VUE_APP_POLYGON === 'bsc' ? '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1' : '0');
+
         await fetch(process.env.VUE_APP_API + '/widget/avg-apy-info/week', fetchOptions)
             .then(value => value.json())
             .then(value => {
@@ -60,7 +62,7 @@ const actions = {
                 console.log('Error get data: ' + reason);
             })
 
-        await fetch(process.env.VUE_APP_API + '/hedge-strategies/0/avg-apy-info/week', fetchOptions)
+        await fetch(process.env.VUE_APP_API + '/hedge-strategies/' + contractAddress + '/avg-apy-info/week', fetchOptions)
             .then(value => value.json())
             .then(value => {
                 avgApyStrategyWeek = value;
@@ -70,7 +72,7 @@ const actions = {
                 console.log('Error get data: ' + reason);
             })
 
-        await fetch(process.env.VUE_APP_API + '/hedge-strategies/0', fetchOptions)
+        await fetch(process.env.VUE_APP_API + '/hedge-strategies/' + contractAddress, fetchOptions)
             .then(value => value.json())
             .then(value => {
                 wmaticStrategyData = value;
@@ -138,6 +140,8 @@ const actions = {
     async refreshClientData({commit, dispatch, getters, rootState}) {
         console.log('MarketData: refreshClientData');
 
+        let contractAddress = process.env.VUE_APP_POLYGON === 'polygon' ? '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf' : (process.env.VUE_APP_POLYGON === 'bsc' ? '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1' : '0');
+
         if (!rootState.accountData.account){
             return;
         }
@@ -151,7 +155,7 @@ const actions = {
             }
         };
 
-        await fetch(process.env.VUE_APP_API + `/hedge-strategies/0/account/${account}`, fetchOptions)
+        await fetch(process.env.VUE_APP_API + `/hedge-strategies/` + contractAddress `/account/${account}`, fetchOptions)
             .then(value => value.json())
             .then(value => {
                 profitDay = value.profit;

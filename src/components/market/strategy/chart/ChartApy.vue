@@ -153,7 +153,9 @@ export default {
                 }
             };
 
-            await fetch(process.env.VUE_APP_API + '/hedge-strategies/0/avg-apy-info/' + zoom, fetchOptions)
+            let contractAddress = process.env.VUE_APP_POLYGON === 'polygon' ? '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf' : (process.env.VUE_APP_POLYGON === 'bsc' ? '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1' : '0');
+
+            await fetch(process.env.VUE_APP_API + '/hedge-strategies/' + contractAddress + '/avg-apy-info/' + zoom, fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;

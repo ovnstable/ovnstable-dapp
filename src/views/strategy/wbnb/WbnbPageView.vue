@@ -96,6 +96,34 @@
                                 <label class="fee-structure-value mt-1">{{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
                                 <Tooltip text="An annual fee that will be charged 1/365 per day, regardless of the strategy's performance."/>
                             </v-row>
+                            <v-row class="mt-8" justify="start" align="start" v-if="$wu.isMobile()">
+                                <v-col cols="1">
+                                    <v-row justify="start" align="start">
+                                        <div class="alert-icon mt-1">
+                                            <v-img :src="require('@/assets/icon/alert.svg')"/>
+                                        </div>
+                                    </v-row>
+                                </v-col>
+                                <v-col>
+                                    <v-row justify="start" align="start">
+                                        <label class="fee-structure-label">
+                                            All ETS commissions are routed to vote for the underlying gauge pool on Cone to keep the high APRs.
+                                        </label>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+                            <v-row class="mt-8" justify="start" align="start" v-if="$wu.isTablet()">
+                                <v-col>
+                                    <v-row justify="start" align="start">
+                                        <div class="alert-icon mr-1">
+                                            <v-img :src="require('@/assets/icon/alert.svg')"/>
+                                        </div>
+                                        <label class="fee-structure-label">
+                                            All ETS commissions are routed to vote for the underlying gauge pool on Cone to keep the high APRs.
+                                        </label>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
                         </v-col>
                     </v-row>
 
@@ -199,6 +227,23 @@
                                         <Tooltip text="An annual fee that will be charged 1/365 per day, regardless of the strategy's performance."/>
                                         <v-spacer></v-spacer>
                                         <label class="fee-structure-value">{{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+
+                            <v-row class="mt-8" justify="start" align="start">
+                                <v-col cols="1">
+                                    <v-row justify="start" align="start">
+                                        <div class="alert-icon mt-1">
+                                            <v-img :src="require('@/assets/icon/alert.svg')"/>
+                                        </div>
+                                    </v-row>
+                                </v-col>
+                                <v-col>
+                                    <v-row justify="start" align="start">
+                                        <label class="fee-structure-label">
+                                            All ETS commissions are routed to vote for the underlying gauge pool on Cone to keep the high APRs.
+                                        </label>
                                     </v-row>
                                 </v-col>
                             </v-row>
@@ -747,5 +792,10 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #CF3F92;
+}
+
+.alert-icon {
+    width: 20px !important;
+    height: 20px !important;
 }
 </style>

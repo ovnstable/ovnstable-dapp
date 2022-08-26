@@ -158,12 +158,6 @@ export default {
                 .then(value => {
                     this.avgApy = value;
 
-                    try {
-                        this.avgApy.value = parseFloat(value);
-                    } catch (e) {
-                        this.avgApy.value = null;
-                    }
-
                     if (this.avgApy.date) {
                         this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
                     }

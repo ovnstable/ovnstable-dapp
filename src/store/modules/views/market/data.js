@@ -65,12 +65,6 @@ const actions = {
             .then(value => {
                 avgApyStrategyWeek = value;
 
-                try {
-                    avgApyStrategyWeek.value = parseFloat(value);
-                } catch (e) {
-                    avgApyStrategyWeek.value = null;
-                }
-
                 avgApyStrategyWeek.date = moment(avgApyStrategyWeek.date).format("DD MMM. ‘YY");
             }).catch(reason => {
                 console.log('Error get data: ' + reason);

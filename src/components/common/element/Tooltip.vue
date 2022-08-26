@@ -70,9 +70,9 @@ export default {
     color: #333333;
 }
 
-.icon-img {
-    width: 20px;
-    height: 20px;
+.icon-img, .info-icon {
+    width: 20px !important;
+    height: 20px !important;
 }
 
 .link-container {

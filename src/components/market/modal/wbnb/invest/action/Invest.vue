@@ -223,7 +223,23 @@ export default {
 
         sliderPercent: 0,
         stepLabels: ['', 'Approve', 'Confirmation'],
-        step: 0
+        step: 0,
+
+        get overcapRemaining() {
+
+            let overcapValue = localStorage.getItem('overcapRemaining');
+
+            if (overcapValue == null) {
+                localStorage.setItem('overcapRemaining', "5000.0");
+                overcapValue = localStorage.getItem('overcapRemaining');
+            }
+
+            try {
+                return parseFloat(overcapValue);
+            } catch (e) {
+                return null;
+            }
+        },
     }),
 
     computed: {
@@ -233,6 +249,7 @@ export default {
         ...mapGetters('investModal', ['usdPlusApproved']),
 
         ...mapGetters('marketData', ['wmaticStrategyData']),
+        ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit']),
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
@@ -283,7 +300,9 @@ export default {
 
             if (!this.account) {
                 return 'Connect to a wallet';
-            } else if (this.isBuy) {
+            }
+
+            if (this.isBuy) {
                 if (this.usdPlusApproved) {
                     this.step = 2;
                     return 'Confirm transaction'
@@ -291,9 +310,17 @@ export default {
                     this.step = 1;
                     return 'Approve USD+';
                 }
-            } else if ((this.totalSupply.usdPlusWbnb) >= this.maxUsdPlusWbnbSupply || (parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) >= parseFloat(this.maxUsdPlusWbnbSupply)) {
+            }
+
+            if (this.isOvercapAvailable && ((parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) <= (parseFloat(this.maxUsdPlusWbnbSupply) + parseFloat(this.overcapRemaining)))) {
+                return 'Invest';
+            }
+
+            if ((this.totalSupply.usdPlusWbnb) >= this.maxUsdPlusWbnbSupply || (parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) >= parseFloat(this.maxUsdPlusWbnbSupply)) {
                 return 'Over ETS capacity'
-            } else if (this.sum > parseFloat(this.balance.usdPlus)) {
+            }
+
+            if (this.sum > parseFloat(this.balance.usdPlus)) {
                 return 'Invest'
             } else {
                 return 'Invest';
@@ -301,7 +328,11 @@ export default {
         },
 
         isBuy: function () {
-            return this.account && this.sum > 0 && this.numberRule && (this.totalSupply.usdPlusWbnb < this.maxUsdPlusWbnbSupply) && ((parseFloat(this.sum) + parseFloat(this.totalSupply.usdPlusWbnb)) < parseFloat(this.maxUsdPlusWbnbSupply));
+            if (this.isOvercapAvailable) {
+                return this.account && this.sum > 0 && this.numberRule && ((parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) <= (parseFloat(this.maxUsdPlusWbnbSupply) + parseFloat(this.overcapRemaining)));
+            } else {
+                return this.account && this.sum > 0 && this.numberRule && (this.totalSupply.usdPlusWbnb < this.maxUsdPlusWbnbSupply) && ((parseFloat(this.sum) + parseFloat(this.totalSupply.usdPlusWbnb)) < parseFloat(this.maxUsdPlusWbnbSupply));
+            }
         },
 
         numberRule: function () {
@@ -346,6 +377,7 @@ export default {
     methods: {
 
         ...mapActions("marketData", ['refreshMarket']),
+        ...mapActions("overcapData", ['useOvercap', 'returnOvercap']),
         ...mapActions("investModal", ['showRedeemView', 'approveUsdPlus']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
@@ -407,6 +439,22 @@ export default {
 
                     let referral = ""; //TODO set referral from link
                     let buyResult = await contracts.exchangerUsdPlusWbnb.methods.buy(sum, referral).send(buyParams);
+
+                    if (this.isOvercapAvailable) {
+                        let noOvercapSum = parseFloat(this.maxUsdPlusWbnbSupply) - parseFloat(this.totalSupply.usdPlusWbnb);
+                        let useOvercapSum;
+
+                        if (noOvercapSum <= 0) {
+                            useOvercapSum = this.sum;
+                        } else {
+                            useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
+                        }
+
+                        this.useOvercap({
+                            overcapLeft: this.overcapRemaining,
+                            overcapVolume: useOvercapSum
+                        });
+                    }
 
                     this.closeWaitingModal();
                     this.showSuccessModal(buyResult.transactionHash);

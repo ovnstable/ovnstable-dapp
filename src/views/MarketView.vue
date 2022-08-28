@@ -7,8 +7,8 @@
         <div class="mt-10">
             <v-row justify="start" class="tab-row ma-0">
                 <v-btn flat class="group-left-btn" @click="tab=1" v-bind:class="activeTabFeatured">Featured&nbsp;<v-icon size="16">mdi-star-circle</v-icon></v-btn>
-                <v-btn style="background-color: transparent !important;" @click="tab=2" v-bind:class="activeTabHold" disabled>Hold USD+</v-btn>
-                <v-btn style="background-color: transparent !important;" @click="tab=3" v-bind:class="activeTabPools" disabled>Pools</v-btn>
+                <v-btn style="background-color: transparent !important;" @click="tab=2" v-bind:class="activeTabHold" disabled>USD+</v-btn>
+                <v-btn style="background-color: transparent !important;" @click="tab=3" v-bind:class="activeTabPools" disabled>USD+ Pools</v-btn>
                 <v-btn class="group-right-btn" @click="tab=4" v-bind:class="activeTabHedged">ETS</v-btn>
             </v-row>
         </div>
@@ -31,11 +31,13 @@ import WmaticUsdPlus from "@/components/market/cards/wmatic/WmaticUsdPlus";
 import BannerMobile from "@/components/market/section/BannerMobile";
 import {mapGetters} from "vuex";
 import WbnbUsdPlus from "@/components/market/cards/wbnb/WbnbUsdPlus";
+import OvercapBanner from "@/components/market/cards/wbnb/banner/OvercapBanner";
 
 export default {
     name: "MarketView",
 
     components: {
+        OvercapBanner,
         WbnbUsdPlus,
         BannerMobile,
         WmaticUsdPlus,
@@ -191,7 +193,7 @@ export default {
 }
 
 .cards-list-container {
-    margin-bottom: 30% !important;
+    margin-bottom: 15% !important;
 }
 
 .title-label {

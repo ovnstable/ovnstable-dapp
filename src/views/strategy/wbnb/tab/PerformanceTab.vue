@@ -222,7 +222,7 @@
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <Doughnut :size="280" color="#7944DA" :last-date="lastPayoutDate"/>
+                        <Doughnut :size="280" color="#F3BA2F" :last-date="lastPayoutDate"/>
                     </v-col>
                 </v-row>
             </v-col>

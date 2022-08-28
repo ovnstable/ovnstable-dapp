@@ -265,7 +265,7 @@
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">TVL</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value" :class="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply ? 'label-error' : ''">
+                    <label class="card-info-value">
                         {{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}
                     </label>
                     <Tooltip text="Past 2 hours"/>
@@ -347,16 +347,16 @@
         </v-row>
 
         <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-            <v-btn class="header-btn btn-filled" :class="(totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply) ? 'disabled-btn' : ''" @click="showInvestModal" :disabled="totalSupply.usdPlusWbnb > maxUsdPlusWbnbSupply">
+            <v-btn class="header-btn btn-filled" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'disabled-btn' : ''" @click="showInvestModal" :disabled="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
                 MINT ETS: USD+/WBNB
             </v-btn>
-            <template v-if="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply">
+            <template v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
                 <label v-if="$wu.isFull()" class="full-status-error-label ml-4">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 0) }}. Please check status later.</label>
             </template>
         </v-row>
 
         <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-n8' : 'mt-2'" v-if="!$wu.isFull()">
-            <template v-if="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply">
+            <template v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
                 <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 0) }}. Please check status later.</label>
             </template>
         </v-row>
@@ -383,6 +383,7 @@ export default {
     computed: {
         ...mapGetters('marketData', ['wmaticStrategyData']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
+        ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit']),
 
         entryFee: function () {
             if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {

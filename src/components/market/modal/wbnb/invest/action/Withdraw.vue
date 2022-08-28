@@ -103,11 +103,10 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 USD+ = 1 USD+/WBNB</label>
+            <label class="exchange-label">1 USD+/WBNB = 1 USD+</label>
         </v-row>
 
         <!-- TODO: add gas fee section -->
-
 
         <v-row class="mt-10">
             <v-col cols="3">
@@ -224,7 +223,23 @@ export default {
 
         sliderPercent: 0,
         stepLabels: ['', 'Approve', 'Confirmation'],
-        step: 0
+        step: 0,
+
+        get overcapRemaining() {
+
+            let overcapValue = localStorage.getItem('overcapRemaining');
+
+            if (overcapValue == null) {
+                localStorage.setItem('overcapRemaining', "5000.0");
+                overcapValue = localStorage.getItem('overcapRemaining');
+            }
+
+            try {
+                return parseFloat(overcapValue);
+            } catch (e) {
+                return null;
+            }
+        },
     }),
 
     computed: {
@@ -234,6 +249,7 @@ export default {
         ...mapGetters('investModal', ['usdPlusWbnbApproved']),
 
         ...mapGetters('marketData', ['wmaticStrategyData']),
+        ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit']),
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
@@ -345,6 +361,7 @@ export default {
     methods: {
 
         ...mapActions("marketData", ['refreshMarket']),
+        ...mapActions("overcapData", ['useOvercap', 'returnOvercap']),
         ...mapActions("investModal", ['showMintView', 'approveUsdPlusWbnb']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
@@ -405,6 +422,13 @@ export default {
                     }
 
                     let buyResult = await contracts.exchangerUsdPlusWbnb.methods.redeem(sum).send(buyParams);
+
+                    if (this.isOvercapAvailable) {
+                        this.returnOvercap({
+                            overcapLeft: this.overcapRemaining,
+                            overcapVolume: this.sum
+                        });
+                    }
 
                     this.closeWaitingModal();
                     this.showSuccessModal(buyResult.transactionHash);

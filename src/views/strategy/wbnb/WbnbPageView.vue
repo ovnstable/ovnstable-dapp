@@ -56,12 +56,39 @@
                                 </v-col>
                             </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply">
+                            <v-row align="center" v-if="isOvercapAvailable" class="card-banner-status-container"  :class="$wu.isMobile() ? 'mt-10' : 'mt-10'">
+                                <v-col class="card-banner-body">
+                                    <v-row justify="start" align="center">
+                                        <label class="investor-card-sub-title">You minted overcap, USD+</label>
+                                    </v-row>
+                                    <v-row justify="start" align="center" class="mt-5">
+                                        <v-progress-linear
+                                                rounded
+                                                height="7"
+                                                class="progress-info"
+                                                background-opacity="0"
+                                                :value="((walletOvercapLimit - overcapRemaining) / walletOvercapLimit) * 100"
+                                                color="#F3BA2F"
+                                        ></v-progress-linear>
+                                    </v-row>
+                                    <v-row justify="start" align="center" class="mt-5">
+                                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit - overcapRemaining, 2) }}</label>
+                                        <v-spacer></v-spacer>
+                                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit, 2) }}</label>
+                                    </v-row>
+                                    <v-row justify="start" align="center">
+                                        <v-spacer></v-spacer>
+                                        <label class="capacity-status-sub-text">OVERCAP LIMIT</label>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+
+                            <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
                                 <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 0) }}. Please check status later.</label>
                             </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0" :class="(totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply) ? 'mt-2' : 'mt-12'">
-                                <v-btn class="header-btn btn-investor-invest" :class="(totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply) ? 'disabled-btn' : ''" :disabled="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply"  @click="mintAction">
+                            <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'mt-2' : 'mt-12'">
+                                <v-btn class="header-btn btn-investor-invest" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'disabled-btn' : ''" :disabled="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)"  @click="mintAction">
                                     MINT ETS: USD+/WBNB
                                 </v-btn>
                             </v-row>
@@ -106,7 +133,7 @@
                                 </v-col>
                                 <v-col>
                                     <v-row justify="start" align="start">
-                                        <label class="fee-structure-label">
+                                        <label class="fee-structure-label-ets">
                                             All ETS commissions are routed to vote for the underlying gauge pool on Cone to keep the high APRs.
                                         </label>
                                     </v-row>
@@ -118,7 +145,7 @@
                                         <div class="alert-icon mr-1">
                                             <v-img :src="require('@/assets/icon/alert.svg')"/>
                                         </div>
-                                        <label class="fee-structure-label">
+                                        <label class="fee-structure-label-ets">
                                             All ETS commissions are routed to vote for the underlying gauge pool on Cone to keep the high APRs.
                                         </label>
                                     </v-row>
@@ -176,12 +203,39 @@
                                 <label class="investor-card-sub-title-value value-disabled">Soon</label>
                             </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0 mt-12" v-if="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply">
+                            <v-row align="center" v-if="isOvercapAvailable" class="card-banner-status-container mt-7">
+                                <v-col class="card-banner-body">
+                                    <v-row justify="start" align="center">
+                                        <label class="investor-card-sub-title">You minted overcap, USD+</label>
+                                    </v-row>
+                                    <v-row justify="start" align="center" class="mt-5">
+                                        <v-progress-linear
+                                                rounded
+                                                height="7"
+                                                class="progress-info"
+                                                background-opacity="0"
+                                                :value="((walletOvercapLimit - overcapRemaining) / walletOvercapLimit) * 100"
+                                                color="#F3BA2F"
+                                        ></v-progress-linear>
+                                    </v-row>
+                                    <v-row justify="start" align="center" class="mt-5">
+                                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit - overcapRemaining, 2) }}</label>
+                                        <v-spacer></v-spacer>
+                                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit, 2) }}</label>
+                                    </v-row>
+                                    <v-row justify="start" align="center">
+                                        <v-spacer></v-spacer>
+                                        <label class="capacity-status-sub-text">OVERCAP LIMIT</label>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+
+                            <v-row align="center" justify="center" class="ma-0 mt-12" v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
                                 <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 0) }}. Please check status later.</label>
                             </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0" :class="(totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply) ? 'mt-2' : 'mt-12'">
-                                <v-btn class="header-btn btn-investor-invest" :class="(totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply) ? 'disabled-btn' : ''" :disabled="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply" @click="mintAction">
+                            <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'mt-2' : (isOvercapAvailable ? 'mt-7' : 'mt-12')">
+                                <v-btn class="header-btn btn-investor-invest" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'disabled-btn' : ''" :disabled="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)" @click="mintAction">
                                     MINT ETS: USD+/WBNB
                                 </v-btn>
                             </v-row>
@@ -192,7 +246,7 @@
                                 </v-btn>
                             </v-row>
 
-                            <v-row align="center" class="mt-12">
+                            <v-row align="center" :class="isOvercapAvailable ? 'mt-7' : 'mt-12'">
                                 <label class="investor-card-title">Fee structure</label>
                             </v-row>
 
@@ -241,7 +295,7 @@
                                 </v-col>
                                 <v-col>
                                     <v-row justify="start" align="start">
-                                        <label class="fee-structure-label">
+                                        <label class="fee-structure-label-ets">
                                             All ETS commissions are routed to vote for the underlying gauge pool on Cone to keep the high APRs.
                                         </label>
                                     </v-row>
@@ -283,6 +337,22 @@ export default {
 
     data: () => ({
         tab: 1,
+
+        get overcapRemaining() {
+
+            let overcapValue = localStorage.getItem('overcapRemaining');
+
+            if (overcapValue == null) {
+                localStorage.setItem('overcapRemaining', "5000.0");
+                overcapValue = localStorage.getItem('overcapRemaining');
+            }
+
+            try {
+                return parseFloat(overcapValue);
+            } catch (e) {
+                return null;
+            }
+        },
     }),
 
 
@@ -291,6 +361,7 @@ export default {
         ...mapGetters('marketUI', ['showUsdPlusWbnb']),
         ...mapGetters('accountData', ['balance']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
+        ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit']),
 
         activeTabPerformance: function () {
             return {
@@ -445,6 +516,25 @@ export default {
         font-size: 12px;
         line-height: 20px;
     }
+
+    .capacity-status-sub-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .fee-structure-label-ets {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+    }
+
+    .card-banner-body {
+        margin: 1% 3% !important;
+    }
 }
 
 /* tablet */
@@ -553,6 +643,25 @@ export default {
         font-size: 12px;
         line-height: 20px;
     }
+
+    .capacity-status-sub-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
+    }
+
+    .fee-structure-label-ets {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .card-banner-body {
+        margin: 1% 3% !important;
+    }
 }
 
 /* full */
@@ -646,6 +755,25 @@ export default {
         font-weight: 400;
         font-size: 14px;
         line-height: 22px;
+    }
+
+    .capacity-status-sub-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
+    }
+
+    .fee-structure-label-ets {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .card-banner-body {
+        margin: 5% 3% !important;
     }
 }
 
@@ -797,5 +925,32 @@ export default {
 .alert-icon {
     width: 20px !important;
     height: 20px !important;
+}
+
+.progress-info {
+    background: #D7DADF;
+}
+
+.capacity-status-sub-text {
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #ADB3BD;
+}
+
+.minor-card-label {
+    font-size: 16px !important;
+    line-height: 24px !important;
+}
+
+.fee-structure-label-ets {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #707A8B;
+}
+
+.card-banner-status-container {
+    background: #F5F5F5;
+    border-radius: 4px;
 }
 </style>

@@ -8,7 +8,7 @@ const state = {
     },
 
     maxUsdPlusWmaticSupply: 125000.00,
-    maxUsdPlusWbnbSupply: 485000.00,
+    maxUsdPlusWbnbSupply: 500000.00,
 };
 
 const getters = {

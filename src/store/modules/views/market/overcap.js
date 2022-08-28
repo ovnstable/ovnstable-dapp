@@ -59,6 +59,7 @@ const actions = {
 
     async closeOvercapBanner({commit, dispatch, getters, rootState}) {
         commit('setShowOvercapBanner', false);
+        localStorage.setItem('showOvercapModal', "false");
     },
 };
 

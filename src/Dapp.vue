@@ -12,7 +12,7 @@
         <AccountProfile width="630"/>
         <GasSettings width="510"/>
 
-        <OvercapBanner class="overcap-banner" v-if="isOvercapAvailable && showOvercapBanner"/>
+        <OvercapBanner v-if="isOvercapAvailable && showOvercapBanner && showOvercapModal"/>
 
         <resize-observer @notify="$forceUpdate()"/>
     </div>
@@ -36,6 +36,20 @@ export default {
         AccountProfile,
         Header
     },
+
+    data: () => ({
+        get showOvercapModal() {
+
+            let showOvercapModal = localStorage.getItem('showOvercapModal');
+
+            if (showOvercapModal == null) {
+                localStorage.setItem('showOvercapModal', "true");
+                showOvercapModal = localStorage.getItem('showOvercapModal');
+            }
+
+            return showOvercapModal === "true";
+        },
+    }),
 
     created() {
         console.log('Dapp.created()')
@@ -61,11 +75,6 @@ export default {
         margin-left: 3% !important;
         margin-right: 3% !important;
     }
-
-    .overcap-banner {
-        right: 0;
-        bottom: 0;
-    }
 }
 
 /* tablet */
@@ -73,11 +82,6 @@ export default {
     .main-container {
         margin-left: 3% !important;
         margin-right: 3% !important;
-    }
-
-    .overcap-banner {
-        right: 8px;
-        bottom: 8px;
     }
 }
 
@@ -87,16 +91,5 @@ export default {
         margin-left: 5% !important;
         margin-right: 5% !important;
     }
-
-    .overcap-banner {
-        right: 12px;
-        bottom: 12px;
-    }
 }
-
-.overcap-banner {
-    z-index: 999999 !important;
-    position: fixed !important;
-}
-
 </style>

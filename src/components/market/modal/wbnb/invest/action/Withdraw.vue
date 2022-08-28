@@ -309,9 +309,9 @@ export default {
                     return 'Approve USD+/WBNB';
                 }
             } else if (this.sum > parseFloat(this.balance.usdPlusWbnb)) {
-                return 'Withdraw'
+                return 'Redeem'
             } else {
-                return 'Withdraw';
+                return 'Redeem';
             }
         },
 

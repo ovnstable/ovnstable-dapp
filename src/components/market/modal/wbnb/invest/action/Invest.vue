@@ -312,8 +312,8 @@ export default {
                 }
             }
 
-            if (this.isOvercapAvailable && ((parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) <= (parseFloat(this.maxUsdPlusWbnbSupply) + parseFloat(this.overcapRemaining)))) {
-                return 'Invest';
+            if (this.isOvercapAvailable && ((parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) <= (parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.overcapRemaining)))) {
+                return 'Mint';
             }
 
             if ((this.totalSupply.usdPlusWbnb) >= this.maxUsdPlusWbnbSupply || (parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) >= parseFloat(this.maxUsdPlusWbnbSupply)) {
@@ -321,15 +321,15 @@ export default {
             }
 
             if (this.sum > parseFloat(this.balance.usdPlus)) {
-                return 'Invest'
+                return 'Mint'
             } else {
-                return 'Invest';
+                return 'Mint';
             }
         },
 
         isBuy: function () {
             if (this.isOvercapAvailable) {
-                return this.account && this.sum > 0 && this.numberRule && ((parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) <= (parseFloat(this.maxUsdPlusWbnbSupply) + parseFloat(this.overcapRemaining)));
+                return this.account && this.sum > 0 && this.numberRule && ((parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) <= (parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.overcapRemaining)));
             } else {
                 return this.account && this.sum > 0 && this.numberRule && (this.totalSupply.usdPlusWbnb < this.maxUsdPlusWbnbSupply) && ((parseFloat(this.sum) + parseFloat(this.totalSupply.usdPlusWbnb)) < parseFloat(this.maxUsdPlusWbnbSupply));
             }

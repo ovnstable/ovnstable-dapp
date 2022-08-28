@@ -233,27 +233,10 @@ export default {
     },
 
     methods: {
-        ...mapActions('overcapData', ['useOvercap', 'returnOvercap', 'closeOvercapBanner']),
-
         openStrategyAction() {
             this.$router.push('/ets');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            this.closeOvercapBanner();
         },
-
-        useOvercapAction() {
-            this.useOvercap({
-                overcapLeft: this.overcapRemaining,
-                overcapVolume: 2300.0
-            });
-        },
-
-        returnOvercapAction() {
-            this.returnOvercap({
-                overcapLeft: this.overcapRemaining,
-                overcapVolume: 1300.0
-            });
-        }
     },
 }
 </script>

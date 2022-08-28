@@ -1,31 +1,37 @@
 <template>
-    <v-card class="card-container ma-0">
-        <v-col>
-            <v-row class="toolbar-row mb-n8">
-                <v-spacer></v-spacer>
-                <v-btn class="close-btn" icon @click="closeOvercapBanner">
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
-            </v-row>
-            <v-row class="banner-image-row">
-                <v-img :src="require('@/assets/bg/overcap_banner_bg.png')"/>
-            </v-row>
+    <v-dialog
+            :value="isOvercapAvailable && showOvercapBanner && showOvercapModal"
+            :width="430"
+            @input="close"
+            :persistent="true"
+            scrollable>
+        <v-card class="card-container ma-0">
+            <v-col>
+                <v-row class="toolbar-row mb-n8">
+                    <v-spacer></v-spacer>
+                    <v-btn class="close-btn" icon @click="closeOvercapBanner">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-row>
+                <v-row class="banner-image-row">
+                    <v-img :src="require('@/assets/bg/overcap_banner_bg.png')"/>
+                </v-row>
 
-            <v-row class="card-row mt-5" justify="center" align="center">
-                <label class="card-info">You're eligible to mint ETS: USD+/WBNB over cap for</label>
-            </v-row>
+                <v-row class="card-row mt-5" justify="center" align="center">
+                    <label class="card-info">You're eligible to mint ETS: USD+/WBNB over cap for</label>
+                </v-row>
 
-            <v-row class="card-row mt-5" justify="center" align="center">
-                <label class="card-info card-info-sum">$5,000.00</label>
-            </v-row>
+                <v-row class="card-row mt-5" justify="center" align="center">
+                    <label class="card-info card-info-sum">$5,000.00</label>
+                </v-row>
 
-            <v-row class="card-row mt-5 mb-5" justify="center" align="center">
-                <label class="card-info link-label" @click="openStrategyAction">Enjoy opportunity</label>
-            </v-row>
-        </v-col>
-
+                <v-row class="card-row mt-5 mb-5" justify="center" align="center">
+                    <label class="card-info link-label" @click="openStrategyAction">Enjoy opportunity</label>
+                </v-row>
+            </v-col>
+        </v-card>
         <resize-observer @notify="$forceUpdate()"/>
-    </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -64,6 +70,18 @@ export default {
             } catch (e) {
                 return null;
             }
+        },
+
+        get showOvercapModal() {
+
+            let showOvercapModal = localStorage.getItem('showOvercapModal');
+
+            if (showOvercapModal == null) {
+                localStorage.setItem('showOvercapModal', "true");
+                showOvercapModal = localStorage.getItem('showOvercapModal');
+            }
+
+            return showOvercapModal === "true";
         },
     }),
 

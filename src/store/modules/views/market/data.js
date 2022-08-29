@@ -155,7 +155,7 @@ const actions = {
             }
         };
 
-        await fetch(process.env.VUE_APP_API + `/hedge-strategies/` + contractAddress `/account/${account}`, fetchOptions)
+        await fetch(process.env.VUE_APP_API + '/hedge-strategies/' + contractAddress + '/account/' + account, fetchOptions)
             .then(value => value.json())
             .then(value => {
                 profitDay = value.profit;

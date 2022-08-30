@@ -7,7 +7,7 @@
         <v-list class="mt-1 mb-8">
             <v-list-item>
                 <v-list-item-title>
-                    <img class="logo-img" :src="require('@/assets/logo.svg')" @click="openLink('https://market.overnight.fi/')">
+                    <img class="logo-img" :src="require('@/assets/logo.svg')" @click="openLink('https://overnight.fi/')">
                 </v-list-item-title>
             </v-list-item>
         </v-list>

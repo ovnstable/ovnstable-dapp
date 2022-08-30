@@ -448,14 +448,14 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 30px;
-        line-height: 36px;
+        line-height: 40px;
     }
 
     .card-info {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 16px;
+        line-height: 24px;
     }
 
     .card-info-banner {
@@ -468,8 +468,8 @@ export default {
     .card-info-value {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 16px;
+        line-height: 20px;
         letter-spacing: 0.04em;
     }
 

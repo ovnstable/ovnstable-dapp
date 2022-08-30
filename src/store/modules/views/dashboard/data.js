@@ -18,7 +18,7 @@ const state = {
         ]
     },
 
-    slice: 7,
+    slice: null,
 };
 
 const getters = {

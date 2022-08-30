@@ -95,14 +95,34 @@ export const wallets = [
         }
     }),
     {
-        walletName: 'ledger',
-        rpcUrl: process.env.VUE_APP_RPC_URL,
+        walletName: "coinbase",
+        preferred: true
     },
     {
-        walletName: "ronin"
-    }
+        walletName: 'ledger',
+        rpcUrl: process.env.VUE_APP_RPC_URL,
+        preferred: false
+    },
+    {
+        walletName: 'trezor',
+        appUrl: process.env.VUE_APP_API.replaceAll('/api', ''),
+        email: 'ovnstable@gmail.com',
+        rpcUrl: process.env.VUE_APP_RPC_URL,
+        preferred: false
+    },
+    {
+        walletName: "1inch",
+        preferred: false
+    },
+    {
+        walletName: "xdefi",
+        preferred: false
+    },
+    {
+        walletName: "ronin",
+        preferred: false
+    },
 ];
-
 
 const state = {
     contracts: null,

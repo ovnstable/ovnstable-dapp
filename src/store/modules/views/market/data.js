@@ -51,7 +51,8 @@ const actions = {
         let avgApyStrategyWeek;
         let wmaticStrategyData;
 
-        let contractAddress = process.env.VUE_APP_POLYGON === 'polygon' ? '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf' : (process.env.VUE_APP_POLYGON === 'bsc' ? '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1' : '0');
+        let network = rootState.network.networkName;
+        let contractAddress = network === 'polygon' ? '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf' : (network === 'bsc' ? '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1' : '0');
 
         await fetch(process.env.VUE_APP_API + '/widget/avg-apy-info/week', fetchOptions)
             .then(value => value.json())
@@ -140,7 +141,8 @@ const actions = {
     async refreshClientData({commit, dispatch, getters, rootState}) {
         console.log('MarketData: refreshClientData');
 
-        let contractAddress = process.env.VUE_APP_POLYGON === 'polygon' ? '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf' : (process.env.VUE_APP_POLYGON === 'bsc' ? '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1' : '0');
+        let network = rootState.network.networkName;
+        let contractAddress = network === 'polygon' ? '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf' : (network === 'bsc' ? '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1' : '0');
 
         if (!rootState.accountData.account){
             return;

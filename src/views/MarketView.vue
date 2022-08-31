@@ -15,8 +15,8 @@
 
         <div class="mt-7 cards-list-container">
             <v-row class="d-flex" justify="start">
-                <WmaticUsdPlus class="ma-3" v-if="showUsdPlusWmatic"/>
-                <WbnbUsdPlus class="ma-3" v-if="showUsdPlusWbnb"/>
+                <WmaticUsdPlus class="ma-3"/>
+                <WbnbUsdPlus class="ma-3"/>
             </v-row>
         </div>
 

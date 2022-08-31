@@ -145,7 +145,7 @@ export default {
 
     methods: {
         openStrategyAction() {
-            this.$router.push('/ets');
+            this.$router.push('/ets/wmatic');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     },

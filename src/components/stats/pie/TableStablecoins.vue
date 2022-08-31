@@ -61,6 +61,8 @@
 
 /* eslint-disable no-unused-vars,no-undef */
 
+import {mapGetters} from "vuex";
+
 export default {
     name: "TableStablecoins",
 
@@ -82,6 +84,7 @@ export default {
     }),
 
     computed: {
+        ...mapGetters('network', ['explorerUrl']),
     },
 
     mounted() {
@@ -117,7 +120,7 @@ export default {
 
         openTokenOnScan(hash) {
             if (hash && hash !== '') {
-                window.open(process.env.VUE_APP_NETWORK_EXPLORER + "token/" + hash, '_blank').focus();
+                window.open(this.explorerUrl + "token/" + hash, '_blank').focus();
             }
         }
     }

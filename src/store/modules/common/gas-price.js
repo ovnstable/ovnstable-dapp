@@ -57,7 +57,7 @@ const actions = {
 
     async refreshGasPrice({commit, dispatch, getters, rootState}) {
 
-        let networkId = rootState.web3.networkId;
+        let networkId = rootState.network.networkId;
 
         console.log("Getting gas price for network_id=" + networkId);
 

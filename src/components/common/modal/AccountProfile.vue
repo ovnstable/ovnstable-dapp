@@ -124,6 +124,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters('network', ['explorerUrl']),
         ...mapGetters('web3', ['walletName']),
         ...mapGetters('accountUI', ['showAccountProfile']),
         ...mapGetters('wrapUI', ['showWrap']),
@@ -139,10 +140,6 @@ export default {
             } else {
                 return null;
             }
-        },
-
-        networkName() {
-            return process.env.VUE_APP_POLYGON;
         },
     },
 
@@ -162,7 +159,7 @@ export default {
         ...mapActions('transaction', ['clearTransaction', 'loadTransaction']),
 
         openOnExplorer(hash) {
-            window.open(process.env.VUE_APP_NETWORK_EXPLORER + `tx/${hash}`, '_blank').focus();
+            window.open(this.explorerUrl + `tx/${hash}`, '_blank').focus();
         },
 
         disconnectWalletAction() {
@@ -178,7 +175,7 @@ export default {
         },
 
         viewInExplorer() {
-            let url = process.env.VUE_APP_NETWORK_EXPLORER + 'address/' + this.account;
+            let url = this.explorerUrl + 'address/' + this.account;
             window.open(url, '_blank');
         },
 

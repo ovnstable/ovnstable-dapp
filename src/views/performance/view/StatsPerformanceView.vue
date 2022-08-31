@@ -123,6 +123,7 @@ export default {
     }),
 
     computed: {
+        ...mapGetters("network", ['networkId']),
         ...mapGetters('statsData', ['payouts', 'payoutsApyData', 'payoutsTvlData']),
 
         assetName() {
@@ -192,11 +193,11 @@ export default {
     },
 
     created() {
-        if (process.env.VUE_APP_NETWORK_ID === '137') {
+        if (this.networkId === 137) {
             this.tab = 1;
         }
 
-        if (process.env.VUE_APP_NETWORK_ID === '56') {
+        if (this.networkId === 56) {
             this.tab = 2;
         }
     },
@@ -214,7 +215,7 @@ export default {
         },
 
         clickPolygon() {
-            if (process.env.VUE_APP_NETWORK_ID === '137') {
+            if (this.networkId === 137) {
                 this.tab = 1;
             } else {
                 this.openLink('https://market.overnight.fi/stats');
@@ -222,7 +223,7 @@ export default {
         },
 
         clickBsc() {
-            if (process.env.VUE_APP_NETWORK_ID === '56') {
+            if (this.networkId === 56) {
                 this.tab = 2;
             } else {
                 this.openLink('https://bsc.overnight.fi/stats');

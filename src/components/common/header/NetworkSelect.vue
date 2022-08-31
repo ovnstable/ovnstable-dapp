@@ -97,7 +97,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('web3', ['networkId']),
+        ...mapGetters('network', ['networkId']),
 
         icon: function (){
             switch (this.networkId){

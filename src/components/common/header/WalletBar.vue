@@ -47,7 +47,7 @@ export default {
     computed: {
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
         ...mapGetters('accountUI', ['badge']),
-        ...mapGetters('web3', ['web3',  'networkId', 'walletConnected']),
+        ...mapGetters('web3', ['web3', 'walletConnected']),
 
         accountDisplay: function () {
             if (this.uns) {

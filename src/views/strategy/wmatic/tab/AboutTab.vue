@@ -381,6 +381,7 @@ export default {
 
 
     computed: {
+        ...mapGetters('network', ['explorerUrl']),
         ...mapGetters('marketData', ['wmaticStrategyData']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
 
@@ -435,13 +436,13 @@ export default {
 
         openTokenOnScan(hash) {
             if (hash && hash !== '') {
-                window.open(process.env.VUE_APP_NETWORK_EXPLORER + "token/" + hash, '_blank').focus();
+                window.open(this.explorerUrl + "token/" + hash, '_blank').focus();
             }
         },
 
         openStrategyOnScan(hash) {
             if (hash && hash !== '') {
-                window.open(process.env.VUE_APP_NETWORK_EXPLORER + "address/" + hash, '_blank').focus();
+                window.open(this.explorerUrl + "address/" + hash, '_blank').focus();
             }
         },
 

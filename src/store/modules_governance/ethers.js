@@ -14,7 +14,8 @@ const getters = {
 const actions = {
 
     async initProvider({commit, dispatch, getters, rootState}) {
-        const provider = new ethers.providers.JsonRpcProvider(process.env.VUE_APP_RPC_URL)
+        let rpcUrl = rootState.network.rpcUrl;
+        const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
 
         commit('setProvider', provider)
     },

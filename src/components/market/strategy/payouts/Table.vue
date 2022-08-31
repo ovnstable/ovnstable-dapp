@@ -82,11 +82,12 @@ export default {
     },
 
     computed: {
+        ...mapGetters('network', ['explorerUrl']),
     },
 
     methods: {
         openOnScan(item) {
-            let url = process.env.VUE_APP_NETWORK_EXPLORER + "tx/" + item.transactionHash;
+            let url = this.explorerUrl + "tx/" + item.transactionHash;
             window.open(url, '_blank').focus();
 
         },

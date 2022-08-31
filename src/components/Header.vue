@@ -19,7 +19,7 @@
                 <v-row justify="end" align="center" class="mt-0 fill-height">
                     <template v-if="!loadingWeb3">
                         <template v-if="walletConnected">
-                            <v-btn v-if="switchToPolygon" class="header-btn btn-filled" v-on:click="goToPolygon">
+                            <v-btn v-if="switchToPolygon" class="header-btn btn-filled" v-on:click="switchToNetwork">
                                 Switch to {{ networkName }}
                             </v-btn>
 
@@ -75,7 +75,6 @@
 <script>
 
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import SwitchToPolygon from "./common/header/SwitchToPolygon";
 import AccountBar from "./common/header/AccountBar";
 import Logo from "./common/header/Logo";
 import Menu from "./common/header/Menu";
@@ -101,7 +100,6 @@ export default {
         Menu,
         Logo,
         AccountBar,
-        SwitchToPolygon
     },
 
     data: () => ({
@@ -109,14 +107,11 @@ export default {
 
 
     computed: {
-        ...mapGetters('web3', [ 'web3',  'networkId', 'switchToPolygon', 'loadingWeb3', 'walletConnected']),
+        ...mapGetters('network', ['networkName', 'networkId']),
+        ...mapGetters('web3', [ 'web3', 'switchToPolygon', 'loadingWeb3', 'walletConnected']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('marketUI', ['showUsdPlusWbnb', 'showUsdPlusWmatic']),
-
-        networkName() {
-            return this.capitalize(process.env.VUE_APP_POLYGON);
-        },
     },
 
     methods: {
@@ -124,12 +119,8 @@ export default {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
 
-        capitalize(s) {
-            return s.charAt(0).toUpperCase() + s.slice(1);
-        },
-
-        goToPolygon() {
-            this.setNetwork(process.env.VUE_APP_NETWORK_ID);
+        switchToNetwork() {
+            this.setNetwork(this.networkId.toString());
         },
 
         openLink(url) {

@@ -57,8 +57,17 @@ export default {
         this.connectWallet();
     },
 
+    watch: {
+        account: function (newVal, oldVal) {
+            if (newVal && localStorage.getItem('overcapRemaining') === '-1') {
+                localStorage.setItem('overcapRemaining', this.walletOvercapLimit.toString());
+            }
+        },
+    },
+
     computed: {
-        ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit', 'showOvercapBanner']),
+        ...mapGetters('overcapData', ['isOvercapAvailable', 'showOvercapBanner', 'walletOvercapLimit']),
+        ...mapGetters('accountData', ['account']),
     },
 
     methods:{

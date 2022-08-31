@@ -137,7 +137,7 @@ export default {
     computed: {
         ...mapGetters('marketData', ['wmaticStrategyData']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
-        ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit']),
+        ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap']),
         ...mapGetters('accountData', ['balance']),
     },
 
@@ -147,7 +147,7 @@ export default {
             let overcapValue = localStorage.getItem('overcapRemaining');
 
             if (overcapValue == null) {
-                localStorage.setItem('overcapRemaining', "5000.0");
+                localStorage.setItem('overcapRemaining', '-1');
                 overcapValue = localStorage.getItem('overcapRemaining');
             }
 

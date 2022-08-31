@@ -214,7 +214,7 @@ export default {
             let overcapValue = localStorage.getItem('overcapRemaining');
 
             if (overcapValue == null) {
-                localStorage.setItem('overcapRemaining', "5000.0");
+                localStorage.setItem('overcapRemaining', '-1');
                 overcapValue = localStorage.getItem('overcapRemaining');
             }
 

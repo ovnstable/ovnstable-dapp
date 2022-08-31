@@ -230,7 +230,7 @@ export default {
             let overcapValue = localStorage.getItem('overcapRemaining');
 
             if (overcapValue == null) {
-                localStorage.setItem('overcapRemaining', "5000.0");
+                localStorage.setItem('overcapRemaining', '-1');
                 overcapValue = localStorage.getItem('overcapRemaining');
             }
 
@@ -249,7 +249,7 @@ export default {
         ...mapGetters('investModal', ['usdPlusWbnbApproved']),
 
         ...mapGetters('marketData', ['wmaticStrategyData']),
-        ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit']),
+        ...mapGetters('overcapData', ['isOvercapAvailable']),
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
@@ -292,7 +292,7 @@ export default {
         },
 
         estimateResult: function () {
-            return this.sum * (1 - (this.exitFee ? (this.exitFee / 100.0) : 0.0004));
+            return this.sum * (1 - (this.exitFee ? (this.exitFee / 100.0) : 0));
         },
 
         buttonLabel: function () {
@@ -424,7 +424,7 @@ export default {
                     let buyResult = await contracts.exchangerUsdPlusWbnb.methods.redeem(sum).send(buyParams);
 
                     if (this.isOvercapAvailable) {
-                        this.returnOvercap({
+                        await this.returnOvercap({
                             overcapLeft: this.overcapRemaining,
                             overcapVolume: this.sum
                         });

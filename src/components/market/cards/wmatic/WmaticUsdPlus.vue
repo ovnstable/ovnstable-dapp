@@ -1,5 +1,5 @@
 <template>
-    <v-row class="card-container ma-0">
+    <v-row class="card-container ma-0" @click="openStrategyCard">
         <v-col>
             <v-row class="card-row mt-7" justify="end" align="center">
                 <label class="tag-label">Exchange-traded strategy / moderate risk</label>
@@ -107,7 +107,7 @@
             </v-row>
 
             <v-row class="card-row mt-15 mb-7" justify="center" align="center">
-                <v-btn class="open-strategy-btn" @click="openStrategyAction">open strategy</v-btn>
+                <v-btn class="open-strategy-btn" v.on:click.prevent>open strategy</v-btn>
             </v-row>
         </v-col>
 
@@ -147,6 +147,11 @@ export default {
         openStrategyAction() {
             this.$router.push('/ets');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+
+        openStrategyCard() {
+          this.$router.push('/ets');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     },
 }
@@ -519,5 +524,9 @@ export default {
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #ADB3BD;
+}
+
+* {
+  cursor: pointer;
 }
 </style>

@@ -88,6 +88,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters('network', ['explorerUrl']),
         ...mapGetters('successModal', ['show', 'successTxHash', 'promo']),
         ...mapGetters('web3', ['walletName']),
     },
@@ -100,7 +101,7 @@ export default {
 
         openOnExplorer(hash) {
             if (hash) {
-                window.open(process.env.VUE_APP_NETWORK_EXPLORER + `tx/${hash}`, '_blank').focus();
+                window.open(this.explorerUrl + `tx/${hash}`, '_blank').focus();
             }
         },
 

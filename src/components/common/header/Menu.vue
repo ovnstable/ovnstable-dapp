@@ -93,7 +93,7 @@ export default {
 
     computed: {
 
-        ...mapGetters('web3', ['web3', 'networkId']),
+        ...mapGetters('web3', ['web3']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('farmUI', ['showFarm']),
         ...mapGetters('wrapUI', ['showWrap']),

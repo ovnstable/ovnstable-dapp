@@ -43,21 +43,25 @@ const routes = [
             },
             {
                 path: '/ets',
-                name: 'WmaticPageView',
-                component: () => import(
-                    process.env.VUE_APP_NETWORK_ID === '137'
-                        ? '../views/strategy/wmatic/WmaticPageView.vue'
-                        : (process.env.VUE_APP_NETWORK_ID === '56'
-                                ? '../views/strategy/wbnb/WbnbPageView.vue'
-                                : '')
-                    ),
+                redirect: '/market',
+            },
+            {
+                path: '/ets/wbnb',
+                name: 'WbnbPageView',
+                component: () => import('../views/strategy/wbnb/WbnbPageView.vue'),
                 meta: {
                     middleware: [
-                        process.env.VUE_APP_NETWORK_ID === '137'
-                            ? Wmatic
-                            : (process.env.VUE_APP_NETWORK_ID === '56'
-                                ? Wbnb
-                                : getDapp)
+                        Wbnb
+                    ]
+                }
+            },
+            {
+                path: '/ets/wmatic',
+                name: 'WmaticPageView',
+                component: () => import('../views/strategy/wmatic/WmaticPageView.vue'),
+                meta: {
+                    middleware: [
+                        Wmatic
                     ]
                 }
             },

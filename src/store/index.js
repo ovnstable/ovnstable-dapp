@@ -60,6 +60,7 @@ import ethers from '@/store/modules_governance/ethers';
 
 // Common
 
+import network from "@/store/modules/common/network";
 import gasPrice from '@/store/modules/common/gas-price';
 import web3 from "@/store/modules/common/web3";
 import supplyData  from '@/store/modules/common/supply';
@@ -110,6 +111,7 @@ export default new Vuex.Store({
         governance,
         ethers,
 
+        network,
         gasPrice,
         web3,
         supplyData

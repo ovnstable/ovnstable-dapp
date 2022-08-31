@@ -116,7 +116,7 @@ export default {
 
     computed: {
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
-        ...mapGetters('web3', ['web3',  'networkId', 'walletConnected']),
+        ...mapGetters('web3', ['web3', 'walletConnected']),
         ...mapGetters('farmUI', ['showFarm']),
         ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('dashboardUI', ['showDashboard']),

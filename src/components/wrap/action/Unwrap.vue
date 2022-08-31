@@ -234,18 +234,19 @@ export default {
         ...mapGetters('wrapData', ['index', 'amountPerUsdPlus']),
         ...mapGetters('wrapModal', ['wUsdPlusApproved']),
 
+        ...mapGetters("network", ['networkId']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
-        icon: function (){
-            switch (process.env.VUE_APP_NETWORK_ID){
-                case '137':
+        icon: function () {
+            switch (this.networkId){
+                case 137:
                     return polygonIcon;
-                case '43114':
+                case 43114:
                     return avaxIcon;
-                case '10':
+                case 10:
                     return optimismIcon;
-                case '56':
+                case 56:
                     return bscIcon;
             }
         },

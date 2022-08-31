@@ -1,5 +1,5 @@
 <template>
-    <div class="chart-container">
+    <div>
         <v-row class="chart-header-row" justify="start" align="center">
             <label class="chart-title">USD+ Balance</label>
             <label class="chart-title chart-title-slice" v-if="$wu.isFull()">&nbsp;&nbsp;|&nbsp;</label>
@@ -303,10 +303,6 @@ export default {
 
     .chart-row {
         height: 250px !important;
-    }
-
-    chart-container {
-        height: 420px !important;
     }
 
     .chart-title-slice {

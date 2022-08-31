@@ -318,7 +318,9 @@ const actions = {
             items.push(item);
         }
 
-        if (process.env.VUE_APP_POLYGON === "polygon_dev"){
+        let network = rootState.network.networkName;
+
+        if (network === "polygon_dev"){
             pm.methods.setStrategyWeights(items).send(params);
         }else {
             let governor = rootState.web3.contracts.governor;
@@ -335,7 +337,9 @@ const actions = {
         let account = rootState.accountData.account;
         let params = {from: account};
 
-        if (process.env.VUE_APP_POLYGON === "polygon_dev"){
+        let network = rootState.network.networkName;
+
+        if (network === "polygon_dev"){
             pm.methods.balance().send(params);
         }else {
 

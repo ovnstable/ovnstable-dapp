@@ -67,7 +67,7 @@ const actions = {
         commit('accountUI/setLoadingBalance', true, { root: true })
         let web3 = rootState.web3;
 
-        const networkId = Number.parseInt(process.env.VUE_APP_NETWORK_ID);
+        let networkId = rootState.network.networkId;
 
         let usdPlus;
         let asset;

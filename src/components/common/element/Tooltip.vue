@@ -3,6 +3,7 @@
             max-width="220px"
             color="#FFFFFF"
             class="tooltip-container"
+            transition="none"
             right
             :close-delay="link ? 4000 : 100"
     >

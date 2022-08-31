@@ -633,6 +633,11 @@ export default {
 }
 
 * {
-  cursor: pointer;
+    cursor: pointer;
 }
+
+.card-container:hover {
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.05), 0 4px 4px 0 rgba(0, 0, 0, 0.05);
+}
+
 </style>

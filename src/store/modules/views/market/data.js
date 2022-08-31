@@ -84,6 +84,12 @@ const actions = {
                 /* TODO: get onChain */
                 wmaticStrategyData.targetHealthFactor = 1.35;
 
+                wmaticStrategyData.payoutItems.sort(
+                    function(o1,o2){
+                        return moment(o1.payableDate).isBefore(moment(o2.payableDate)) ? -1 : moment(o1.payableDate).isAfter(moment(o2.payableDate)) ? 1 : 0;
+                    }
+                );
+
                 let clientData = wmaticStrategyData.timeData;
 
                 let widgetDataDict = {};

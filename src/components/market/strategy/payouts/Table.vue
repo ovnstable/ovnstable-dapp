@@ -123,7 +123,7 @@ export default {
 
     .table-label-payouts-strategy {
         font-style: normal !important;
-        font-weight: 300 !important;
+        font-weight: 400 !important;
         font-size: 16px !important;
         line-height: 24px !important;
     }
@@ -144,7 +144,7 @@ export default {
 
     .table-label-payouts-strategy {
         font-style: normal !important;
-        font-weight: 300 !important;
+        font-weight: 400 !important;
         font-size: 16px !important;
         line-height: 24px !important;
     }
@@ -165,7 +165,7 @@ export default {
 
     .table-label-payouts-strategy {
         font-style: normal !important;
-        font-weight: 300 !important;
+        font-weight: 400 !important;
         font-size: 16px !important;
         line-height: 24px !important;
     }

@@ -302,8 +302,8 @@ export default {
     .section-title-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
+        font-size: 20px;
+        line-height: 32px;
         letter-spacing: 0.02em;
     }
 
@@ -317,7 +317,7 @@ export default {
 
     .card-info {
         font-style: normal;
-        font-weight: 300;
+        font-weight: 400;
         font-size: 16px;
         line-height: 24px;
     }
@@ -366,22 +366,22 @@ export default {
     .section-title-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 24px;
+        line-height: 36px;
         letter-spacing: 0.04em;
     }
 
     .title-card-text {
         font-style: normal;
         font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
+        font-size: 18px;
+        line-height: 22px;
         letter-spacing: 0.02em;
     }
 
     .card-info {
         font-style: normal;
-        font-weight: 300;
+        font-weight: 400;
         font-size: 16px;
         line-height: 24px;
     }
@@ -430,22 +430,22 @@ export default {
     .section-title-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 24px;
+        line-height: 36px;
         letter-spacing: 0.04em;
     }
 
     .title-card-text {
         font-style: normal;
         font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
+        font-size: 18px;
+        line-height: 22px;
         letter-spacing: 0.02em;
     }
 
     .card-info {
         font-style: normal;
-        font-weight: 300;
+        font-weight: 400;
         font-size: 16px;
         line-height: 24px;
     }
@@ -492,7 +492,7 @@ export default {
 .section-title-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    text-transform: uppercase;
+    text-transform: capitalize;
     color: #333333;
 }
 

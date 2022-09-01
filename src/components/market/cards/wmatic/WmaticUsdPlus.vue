@@ -1,6 +1,6 @@
 <template>
     <v-row class="card-container ma-0" @click="openStrategyCard">
-        <v-col>
+        <v-col cols="12" align-self="start">
             <v-row class="card-row mt-7" justify="end" align="center">
                 <label class="tag-label">Exchange-traded strategy / moderate risk</label>
                 <v-icon class="tag-icon" :class="$wu.isMobile() ? 'ml-1' : 'ml-2'" :size="$wu.isMobile() ? 12 : 16">mdi-star-circle</v-icon>
@@ -105,8 +105,10 @@
                     </v-row>
                 </v-col>
             </v-row>
+        </v-col>
 
-            <v-row class="card-row mt-15 mb-7" justify="center" align="center">
+        <v-col cols="12" align-self="end">
+            <v-row class="card-row mt-2 mb-7" justify="center" align="center">
                 <v-btn class="open-strategy-btn" v.on:click.prevent>open strategy</v-btn>
             </v-row>
         </v-col>

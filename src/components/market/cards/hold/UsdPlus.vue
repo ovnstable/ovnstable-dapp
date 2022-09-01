@@ -51,16 +51,59 @@
             <v-row class="card-row card-banner-status-container mt-12" justify="start" align="center">
                 <v-col class="card-banner-body">
                     <v-row align="center">
-                        <label class="mt-2 mb-4 card-info minor-card-label overview-link" @click.stop="openDashboardAction">
+                        <label class="mb-4 card-info minor-card-label overview-link" @click.stop="openDashboardAction">
                             OVERVIEW
                             <v-img class="icon-img ml-2" :src="require('@/assets/icon/openLight.svg')"/>
                         </label>
+
+                        <v-spacer></v-spacer>
+
+                        <v-menu offset-y>
+                            <template v-slot:activator="{ on, attrs }">
+                                <div class="mb-5 mr-3"
+                                     v-click-outside="clickMenuOutside"
+                                     @click="openedSliceList = !openedSliceList"
+                                     v-bind="attrs"
+                                     v-on="on">
+                                    <v-row justify="center" align="start" class="slice-select-container">
+                                        <v-col cols="12" class="select-col">
+                                            <label class="selected-slice-label">
+                                                {{ sliceLabel }}
+                                                <v-icon color="#1C95E7" class="mb-1">
+                                                    {{ openedSliceList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                                                </v-icon>
+                                            </label>
+                                        </v-col>
+                                    </v-row>
+                                </div>
+                            </template>
+
+                            <v-list class="slice-select-list">
+                                <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('week')">
+                                    <v-list-item-title class="slice-select-list-item">
+                                        Week
+                                    </v-list-item-title>
+                                </v-list-item>
+                                <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('month')">
+                                    <v-list-item-title class="slice-select-list-item">
+                                        Month
+                                    </v-list-item-title>
+                                </v-list-item>
+                                <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('all')">
+                                    <v-list-item-title class="slice-select-list-item">
+                                        All
+                                    </v-list-item-title>
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
                     </v-row>
+
                     <v-row align="center" class="info-row">
                         <label class="my-2 card-info minor-card-label">Current balance</label>
                         <v-spacer></v-spacer>
                         <label class="card-info-value minor-card-label">{{ this.balance.usdPlus ? ($utils.formatMoneyComma(this.balance.usdPlus, 2) + ' USD+') : '—' }}</label>
                     </v-row>
+
                     <v-row align="center" class="mt-4 info-row">
                         <label class="my-2 card-info minor-card-label">Profit</label>
                         <label class="my-2 card-info minor-card-label title-slice ml-1">&nbsp;|&nbsp; {{ sliceLabel }}</label>
@@ -69,6 +112,7 @@
                             {{ profitUsdPlus ? ((profitUsdPlus > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(profitUsdPlus, 4)) : '—' }}
                         </label>
                     </v-row>
+
                     <v-row align="center" class="mt-4 info-row">
                         <label class="my-2 card-info minor-card-label">Your APY</label>
                         <label class="my-2 card-info minor-card-label title-slice ml-1">&nbsp;|&nbsp; {{ sliceLabel }}</label>
@@ -148,6 +192,8 @@ export default {
     data: () => ({
         avgApy: null,
         totalTvl: null,
+
+        openedSliceList: false,
     }),
 
     watch: {
@@ -167,7 +213,8 @@ export default {
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
-        ...mapActions('dashboardData', ['sliceDashboard', 'setSlice']),
+        ...mapActions('dashboardData', ['sliceDashboard']),
+        ...mapMutations('dashboardData', ['setSlice']),
 
         openStrategyAction() {
             this.$router.push('/ets');
@@ -217,6 +264,28 @@ export default {
             });
 
             return sum;
+        },
+
+        clickMenuOutside() {
+            this.openedSliceList = false;
+        },
+
+        sliceDashboardByPeriod(slice) {
+            switch (slice) {
+                case "week":
+                    this.setSlice(7);
+                    break;
+                case "month":
+                    this.setSlice(30)
+                    break;
+                case "all":
+                    this.setSlice(null)
+                    break;
+                default:
+                    this.setSlice(null)
+            }
+
+            this.sliceDashboard();
         },
     },
 }
@@ -275,6 +344,18 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .selected-slice-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
+    }
+
+    .slice-select-list-item {
+        font-size: 14px;
+    }
 }
 
 /* tablet */
@@ -328,6 +409,18 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .selected-slice-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
+    }
+
+    .slice-select-list-item {
+        font-size: 16px;
+    }
 }
 
 /* full */
@@ -380,6 +473,18 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .selected-slice-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
+    }
+
+    .slice-select-list-item {
+        font-size: 17px;
     }
 }
 
@@ -491,5 +596,33 @@ export default {
 .icon-img {
     width: 24px !important;
     height: 24px !important;
+}
+
+.slice-select-container {
+    background-color: rgba(28, 149, 231, 0.1) !important;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 28px !important;
+}
+
+.select-col {
+    margin-top: -10px;
+}
+
+.selected-slice-label {
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #1C95E7;
+}
+
+.slice-select-list {
+    background-color: var(--secondary) !important;
+    border-radius: 10px;
+}
+
+.slice-select-list-item {
+    font-family: 'Roboto', sans-serif !important;
+    color: #333333;
 }
 </style>

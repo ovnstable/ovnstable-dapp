@@ -29,7 +29,7 @@
                             <v-row align="center">
                                 <v-col cols="12">
                                     <v-row align="center">
-                                        <label class="investor-card-sub-title">Your balance in strategy</label>
+                                        <label class="investor-card-sub-title">Your balance in ETS</label>
                                     </v-row>
                                     <v-row align="center" class="mt-5">
                                         <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
@@ -449,7 +449,7 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
-        line-height: 24px;
+        line-height: 20px;
         letter-spacing: 0.03em;
     }
 
@@ -521,7 +521,7 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 12px;
-        line-height: 20px;
+        line-height: 18px;
         letter-spacing: 0.02em;
     }
 
@@ -548,15 +548,15 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
-        line-height: 24px;
+        line-height: 20px;
         letter-spacing: 0.02em;
     }
 
     .investor-card-sub-title-value {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 28px;
+        font-size: 24px;
+        line-height: 36px;
     }
 
     .investor-card-title {
@@ -675,15 +675,15 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
-        line-height: 24px;
+        line-height: 20px;
         letter-spacing: 0.02em;
     }
 
     .investor-card-sub-title-value {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 28px;
+        font-size: 24px;
+        line-height: 36px;
     }
 
     .investor-card-title {
@@ -882,9 +882,11 @@ export default {
 }
 
 .value-disabled {
-    font-weight: 300 !important;
+    font-weight: 400 !important;
     text-transform: uppercase !important;
     color: #C5C9D1 !important;
+    font-size: 16px;
+    line-height: 20px;
 }
 
 .fee-structure-label {

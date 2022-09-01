@@ -126,10 +126,10 @@
         </v-col>
 
         <v-col cols="12" align-self="end">
-            <v-row class="card-row mt-2" justify="center" align="center">
+            <v-row class="card-row mt-2" :class="showWrap ? '' : 'mb-7'" justify="center" align="center">
                 <v-btn class="open-strategy-btn btn-filled" @click.stop="mintAction">Mint USD+</v-btn>
             </v-row>
-            <v-row class="card-row mt-6 mb-7" justify="center" align="center">
+            <v-row v-if="showWrap" class="card-row mt-6 mb-7" justify="center" align="center">
                 <v-btn class="open-strategy-btn btn-outlined" @click.stop="wrapAction" outlined>Wrap USD+</v-btn>
             </v-row>
         </v-col>
@@ -163,6 +163,7 @@ export default {
         ...mapGetters('dashboardData', ['profitUsdPlus', 'apy', 'activities', 'slice', 'portfolioValue']),
         ...mapGetters("statsData", ['totalUsdPlusValue', 'currentTotalData']),
         ...mapGetters("accountData", ['balance']),
+        ...mapGetters('wrapUI', ['showWrap']),
 
         icon: function (){
             switch (process.env.VUE_APP_NETWORK_ID){

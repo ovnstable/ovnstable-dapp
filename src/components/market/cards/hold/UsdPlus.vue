@@ -43,10 +43,12 @@
                 </label>
                 <Tooltip text="Past 2 hours"/>
             </v-row>
-        </v-col>
 
-        <v-col cols="12" align-self="center">
-            <v-row class="card-row card-banner-status-container" justify="start" align="center">
+            <v-row class="card-row mt-6" justify="start" align="center">
+                <label class="card-info mt-1">&nbsp;</label>
+            </v-row>
+
+            <v-row class="card-row card-banner-status-container mt-12" justify="start" align="center">
                 <v-col class="card-banner-body">
                     <v-row align="center">
                         <label class="mt-2 mb-4 card-info minor-card-label overview-link" @click.stop="openDashboardAction">
@@ -80,7 +82,7 @@
         </v-col>
 
         <v-col cols="12" align-self="end">
-            <v-row class="card-row" justify="center" align="center">
+            <v-row class="card-row mt-2" justify="center" align="center">
                 <v-btn class="open-strategy-btn btn-filled" @click.stop="mintAction">Mint USD+</v-btn>
             </v-row>
             <v-row class="card-row mt-6 mb-7" justify="center" align="center">

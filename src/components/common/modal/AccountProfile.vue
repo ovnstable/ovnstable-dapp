@@ -64,7 +64,7 @@
                 <v-row class="account-info-row" justify="start" align="center">
                     <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ml-1' : ''" @click="addUsdPlusToken">
                         <div class="coin-img">
-                            <v-img :src="require('@/assets/currencies/usdPlus_new.svg')"/>
+                            <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
                         </div>
                         <label class="ml-2 coin-btn-label">USD+</label>
                     </v-btn>

@@ -29,7 +29,7 @@
                             <v-row align="center">
                                 <v-col cols="12">
                                     <v-row align="center">
-                                        <label class="investor-card-sub-title">Your balance in strategy</label>
+                                        <label class="investor-card-sub-title">Your balance in ETS</label>
                                     </v-row>
                                     <v-row align="center" class="mt-5">
                                         <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWmatic ? ($utils.formatMoneyComma(this.balance.usdPlusWmatic, 2) + ' USD+') : '—' }}</label>
@@ -127,7 +127,7 @@
                     <v-row class="info-card-container-white ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
                         <v-col class="my-10 mx-8">
                             <v-row align="center">
-                                <label class="investor-card-sub-title">Your balance in strategy</label>
+                                <label class="investor-card-sub-title">Your balance in ETS</label>
                             </v-row>
                             <v-row align="center" class="mt-5">
                                 <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWmatic ? ($utils.formatMoneyComma(this.balance.usdPlusWmatic, 2) + ' USD+') : '—' }}</label>

@@ -193,7 +193,7 @@ export default {
 
     .table-label-don {
         font-style: normal !important;
-        font-weight: 300 !important;
+        font-weight: 400 !important;
         font-size: 14px !important;
         line-height: 22px !important;
     }
@@ -214,7 +214,7 @@ export default {
 
     .table-label-don {
         font-style: normal !important;
-        font-weight: 300 !important;
+        font-weight: 400 !important;
         font-size: 16px !important;
         line-height: 24px !important;
     }
@@ -235,7 +235,7 @@ export default {
 
     .table-label-don {
         font-style: normal !important;
-        font-weight: 300 !important;
+        font-weight: 400 !important;
         font-size: 16px !important;
         line-height: 24px !important;
     }

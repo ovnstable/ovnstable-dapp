@@ -25,10 +25,10 @@
 
                             <template v-else>
                                 <v-btn class="header-btn btn-filled" :class="showWrap ? 'mr-5' : 'mr-2'" @click="mintAction">
-                                    Mint / redeem
+                                    Mint USD+
                                 </v-btn>
                                 <v-btn class="header-btn btn-outlined mr-2" outlined @click="wrapAction" v-if="showWrap">
-                                    Wrap / unwrap
+                                    Wrap USD+
                                 </v-btn>
                             </template>
                         </template>

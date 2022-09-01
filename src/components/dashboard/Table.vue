@@ -2,7 +2,7 @@
     <v-simple-table class="current-table-payouts-strategy" height="400px">
         <thead>
         <tr class="current-strategy-table-row-header">
-            <th class="table-header-payouts-strategy text-left">
+            <th class="table-header-payouts-strategy text-left" :width="$wu.isMobile() ? '100px' : '180px'">
                 Payable date, UTC
             </th>
             <th class="table-header-payouts-strategy text-right" v-if="!minimized">
@@ -140,7 +140,7 @@ export default {
 
     .table-label-payouts-strategy {
         font-style: normal !important;
-        font-weight: 300 !important;
+        font-weight: 400 !important;
         font-size: 16px !important;
         line-height: 24px !important;
     }
@@ -161,7 +161,7 @@ export default {
 
     .table-label-payouts-strategy {
         font-style: normal !important;
-        font-weight: 300 !important;
+        font-weight: 400 !important;
         font-size: 16px !important;
         line-height: 24px !important;
     }
@@ -182,7 +182,7 @@ export default {
 
     .table-label-payouts-strategy {
         font-style: normal !important;
-        font-weight: 300 !important;
+        font-weight: 400 !important;
         font-size: 16px !important;
         line-height: 24px !important;
     }

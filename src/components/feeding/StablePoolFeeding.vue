@@ -272,7 +272,7 @@ export default {
         this.currencies.push({
             id: 'usdPlus',
             title: 'LP USD+',
-            image: require('../../assets/currencies/usdPlus_new.svg')
+            image: require('../../assets/currencies/usdPlus.svg')
         });
         this.currencies.push({
             id: 'usdt',

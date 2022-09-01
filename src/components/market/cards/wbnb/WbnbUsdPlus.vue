@@ -142,7 +142,7 @@
             <v-row v-if="isOvercapAvailable" class="card-row card-banner-status-container mt-7" justify="start" align="center">
                 <v-col class="card-banner-body">
                     <v-row align="center" class="info-row">
-                        <label class="my-2 card-info minor-card-label">Your balance in strategy</label>
+                        <label class="my-2 card-info minor-card-label">Your balance in ETS</label>
                         <v-spacer></v-spacer>
                         <label class="card-info-value minor-card-label">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
                     </v-row>

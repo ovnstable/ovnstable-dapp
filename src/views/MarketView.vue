@@ -7,7 +7,7 @@
         <v-row align="start" justify="start" class="ma-0">
           <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
             <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-              <label  @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabFeatured" disabled>Featured<v-icon size="16">mdi-star-circle</v-icon></label>
+              <label  @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabFeatured" disabled>Featured&nbsp;<v-icon size="16" class="mb-1">mdi-star-circle</v-icon></label>
               <label style="color: #C5C9D1 !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabHold">USD+</label>
               <label style="color: #C5C9D1 !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
               <label  @click="tab=4"   class="tab-btn ml-4" v-bind:class="activeTabHedged" disabled>ETS</label>

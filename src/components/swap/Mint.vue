@@ -160,7 +160,7 @@
                             {{ sumResult }} USD+
                         </label>
                         <div class="currency-icon">
-                            <v-img :src="require('@/assets/currencies/usdPlus_new.svg')"/>
+                            <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
                         </div>
                     </v-row>
 
@@ -277,7 +277,7 @@ export default {
         buyCurrencies: [{
             id: 'usdPlus',
             title: 'USD+',
-            image: require('../../assets/currencies/usdPlus_new.svg')
+            image: require('../../assets/currencies/usdPlus.svg')
         }],
 
         showConfirmSwapDialog: false,

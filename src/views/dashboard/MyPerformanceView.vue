@@ -111,7 +111,7 @@
                                 <v-col :cols="$wu.isFull() ? 3 : 12">
                                     <v-row class="container-body-title-row" justify="start" align="center" :class="$wu.isFull() ? '' : 'mb-0'">
                                         <div class="coin-img mr-2" :class="$wu.isFull() ? '' : 'mb-1'" v-if="!$wu.isFull() && (!walletConnected || !isLoading)">
-                                            <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
+                                            <v-img :src="require('@/assets/currencies/usdPlus_new.svg')"/>
                                         </div>
                                         <v-progress-circular
                                                 v-if="!$wu.isFull() && isLoading && walletConnected"
@@ -174,7 +174,7 @@
                                 <v-col v-if="$wu.isFull()">
                                     <v-row justify="end" align="center">
                                         <div class="coin-img" v-if="!walletConnected || !isLoading">
-                                            <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
+                                            <v-img :src="require('@/assets/currencies/usdPlus_new.svg')"/>
                                         </div>
                                         <v-progress-circular
                                                 v-if="walletConnected && isLoading"

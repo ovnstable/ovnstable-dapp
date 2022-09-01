@@ -233,7 +233,7 @@ async function loadUsdPlusWethPool(rootState){
         .reduce((val1, val2)=> { return val1 + val2 },0);
 
     poolData.title = "USD+/WETH";
-    poolData.token0Icon = require('@/assets/currencies/usdPlus.svg');
+    poolData.token0Icon = require('@/assets/currencies/usdPlus_new.svg');
     poolData.token1Icon = require('@/assets/currencies/eth.svg');
     poolData.tvl = info.tvl;
     poolData.apyTotal = apy;
@@ -297,7 +297,7 @@ async function loadUsdPlusWmaticPool(rootState){
 
 
     poolData.title = "USD+/WMATIC";
-    poolData.token0Icon = require('@/assets/currencies/usdPlus.svg');
+    poolData.token0Icon = require('@/assets/currencies/usdPlus_new.svg');
     poolData.token1Icon = require('@/assets/currencies/pol.svg');
     poolData.tvl = info.tvl;
     poolData.apyTotal = apy;

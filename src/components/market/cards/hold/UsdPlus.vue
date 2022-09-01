@@ -160,6 +160,10 @@ export default {
         this.getAvgWeekApy();
     },
 
+    mounted() {
+        this.totalTvl = this.getTotalTvl();
+    },
+
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),

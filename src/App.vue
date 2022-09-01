@@ -57,6 +57,13 @@ export default {
         font-size: 12px !important;
         line-height: 20px !important;
     }
+
+    .bn-onboard-icon-button > div {
+        width: 24px !important;
+        height: 24px !important;
+        min-width: 24px !important;
+        min-height: 24px !important;
+    }
 }
 
 /* tablet */
@@ -87,6 +94,13 @@ export default {
         font-size: 12px !important;
         line-height: 20px !important;
     }
+
+    .bn-onboard-icon-button > div {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
@@ -115,6 +129,13 @@ export default {
         font-weight: 400 !important;
         font-size: 14px !important;
         line-height: 22px !important;
+    }
+
+    .bn-onboard-icon-button > div {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
     }
 }
 
@@ -209,7 +230,7 @@ html {
 
 .bn-onboard-modal-content {
     background-color: var(--secondary) !important;
-    width: 500px !important;
+    width: 460px !important;
     border-radius: 24px !important;
 }
 

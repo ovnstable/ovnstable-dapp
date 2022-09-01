@@ -395,6 +395,10 @@ export default {
                 default:
                     return 'ALL';
             }
+        },
+
+        isMobile() {
+            return window.innerWidth <= 1400;
         }
     },
 

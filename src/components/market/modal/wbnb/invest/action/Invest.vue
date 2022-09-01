@@ -230,7 +230,7 @@ export default {
             let overcapValue = localStorage.getItem('overcapRemaining');
 
             if (overcapValue == null) {
-                localStorage.setItem('overcapRemaining', "5000.0");
+                localStorage.setItem('overcapRemaining', '-1');
                 overcapValue = localStorage.getItem('overcapRemaining');
             }
 
@@ -249,7 +249,7 @@ export default {
         ...mapGetters('investModal', ['usdPlusApproved']),
 
         ...mapGetters('marketData', ['wmaticStrategyData']),
-        ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit']),
+        ...mapGetters('overcapData', ['isOvercapAvailable']),
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
@@ -292,7 +292,7 @@ export default {
         },
 
         estimateResult: function () {
-            return this.sum * (1 - (this.entryFee ? (this.entryFee / 100.0) : 0.0004));
+            return this.sum * (1 - (this.entryFee ? (this.entryFee / 100.0) : 0));
         },
 
         buttonLabel: function () {
@@ -312,8 +312,21 @@ export default {
                 }
             }
 
-            if (this.isOvercapAvailable && ((parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) <= (parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.overcapRemaining)))) {
-                return 'Mint';
+            if (this.isOvercapAvailable) {
+                if (this.account && this.sum > 0 && this.numberRule) {
+                    let noOvercapSum = parseFloat(this.maxUsdPlusWbnbSupply) - parseFloat(this.totalSupply.usdPlusWbnb);
+                    let useOvercapSum;
+
+                    if (noOvercapSum <= 0) {
+                        useOvercapSum = this.sum;
+                    } else {
+                        useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
+                    }
+
+                    if (useOvercapSum <= this.overcapRemaining) {
+                        return 'Mint';
+                    }
+                }
             }
 
             if ((this.totalSupply.usdPlusWbnb) >= this.maxUsdPlusWbnbSupply || (parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) >= parseFloat(this.maxUsdPlusWbnbSupply)) {
@@ -329,7 +342,20 @@ export default {
 
         isBuy: function () {
             if (this.isOvercapAvailable) {
-                return this.account && this.sum > 0 && this.numberRule && ((parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) <= (parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.overcapRemaining)));
+                if (this.account && this.sum > 0 && this.numberRule) {
+                    let noOvercapSum = parseFloat(this.maxUsdPlusWbnbSupply) - parseFloat(this.totalSupply.usdPlusWbnb);
+                    let useOvercapSum;
+
+                    if (noOvercapSum <= 0) {
+                        useOvercapSum = this.sum;
+                    } else {
+                        useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
+                    }
+
+                    return useOvercapSum <= this.overcapRemaining;
+                } else {
+                    return false;
+                }
             } else {
                 return this.account && this.sum > 0 && this.numberRule && (this.totalSupply.usdPlusWbnb < this.maxUsdPlusWbnbSupply) && ((parseFloat(this.sum) + parseFloat(this.totalSupply.usdPlusWbnb)) < parseFloat(this.maxUsdPlusWbnbSupply));
             }
@@ -450,7 +476,7 @@ export default {
                             useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
                         }
 
-                        this.useOvercap({
+                        await this.useOvercap({
                             overcapLeft: this.overcapRemaining,
                             overcapVolume: useOvercapSum
                         });

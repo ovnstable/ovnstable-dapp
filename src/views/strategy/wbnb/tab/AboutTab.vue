@@ -383,7 +383,7 @@ export default {
     computed: {
         ...mapGetters('marketData', ['wmaticStrategyData']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
-        ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit']),
+        ...mapGetters('overcapData', ['isOvercapAvailable']),
 
         entryFee: function () {
             if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {

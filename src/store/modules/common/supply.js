@@ -7,7 +7,7 @@ const state = {
         usdPlusWbnb: 0,
     },
 
-    maxUsdPlusWmaticSupply: 125000.00,
+    maxUsdPlusWmaticSupply: 275000.00,
     maxUsdPlusWbnbSupply: 500000.00,
 };
 

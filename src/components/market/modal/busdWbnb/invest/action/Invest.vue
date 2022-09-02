@@ -65,7 +65,7 @@
         <v-row class="mt-8 mx-n3 main-card">
             <v-col>
                 <v-row align="center" class="ma-0">
-                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.usdPlusWbnb, 3) }}</label>
+                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.busdWbnb, 3) }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>
@@ -103,7 +103,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 USD+ = 1 USD+/WBNB</label>
+            <label class="exchange-label">1 USD+ = 1 BUSD/WBNB</label>
         </v-row>
 
         <!-- TODO: add gas fee section -->
@@ -209,9 +209,9 @@ export default {
         },
 
         buyCurrency: {
-            id: 'usdPlusWbnb',
-            title: 'USD+/WBNB',
-            image: require('@/assets/currencies/market/UsdPlusWbnb.svg')
+            id: 'busdWbnb',
+            title: 'BUSD/WBNB',
+            image: require('@/assets/currencies/market/BusdWbnb.svg')
         },
 
         sum: null,
@@ -224,22 +224,6 @@ export default {
         sliderPercent: 0,
         stepLabels: ['', 'Approve', 'Confirmation'],
         step: 0,
-
-        get overcapRemaining() {
-
-            let overcapValue = localStorage.getItem('overcapRemaining');
-
-            if (overcapValue == null) {
-                localStorage.setItem('overcapRemaining', '-1');
-                overcapValue = localStorage.getItem('overcapRemaining');
-            }
-
-            try {
-                return parseFloat(overcapValue);
-            } catch (e) {
-                return null;
-            }
-        },
     }),
 
     computed: {
@@ -248,12 +232,11 @@ export default {
 
         ...mapGetters('investModal', ['usdPlusApproved']),
 
-        ...mapGetters('marketData', ['usdPlusWbnbStrategyData']),
-        ...mapGetters('overcapData', ['isOvercapAvailable']),
+        ...mapGetters('marketData', ['busdWbnbStrategyData']),
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
-        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
+        ...mapGetters('supplyData', ['totalSupply', 'maxBusdWbnbSupply']),
 
         icon: function (){
             switch (process.env.VUE_APP_NETWORK_ID){
@@ -283,8 +266,8 @@ export default {
         },
 
         entryFee: function () {
-            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
-                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'buy');
+            if (this.busdWbnbStrategyData && this.busdWbnbStrategyData.fees) {
+                let result = this.busdWbnbStrategyData.fees.find(x => x.id === 'buy');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -312,24 +295,7 @@ export default {
                 }
             }
 
-            if (this.isOvercapAvailable) {
-                if (this.account && this.sum > 0 && this.numberRule) {
-                    let noOvercapSum = parseFloat(this.maxUsdPlusWbnbSupply) - parseFloat(this.totalSupply.usdPlusWbnb);
-                    let useOvercapSum;
-
-                    if (noOvercapSum <= 0) {
-                        useOvercapSum = this.sum;
-                    } else {
-                        useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
-                    }
-
-                    if (useOvercapSum <= this.overcapRemaining) {
-                        return 'Mint';
-                    }
-                }
-            }
-
-            if ((this.totalSupply.usdPlusWbnb) >= this.maxUsdPlusWbnbSupply || (parseFloat(this.totalSupply.usdPlusWbnb) + parseFloat(this.sum)) >= parseFloat(this.maxUsdPlusWbnbSupply)) {
+            if ((this.totalSupply.busdWbnb) >= this.maxBusdWbnbSupply || (parseFloat(this.totalSupply.busdWbnb) + parseFloat(this.sum)) >= parseFloat(this.maxBusdWbnbSupply)) {
                 return 'Over ETS capacity'
             }
 
@@ -341,24 +307,7 @@ export default {
         },
 
         isBuy: function () {
-            if (this.isOvercapAvailable) {
-                if (this.account && this.sum > 0 && this.numberRule) {
-                    let noOvercapSum = parseFloat(this.maxUsdPlusWbnbSupply) - parseFloat(this.totalSupply.usdPlusWbnb);
-                    let useOvercapSum;
-
-                    if (noOvercapSum <= 0) {
-                        useOvercapSum = this.sum;
-                    } else {
-                        useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
-                    }
-
-                    return useOvercapSum <= this.overcapRemaining;
-                } else {
-                    return false;
-                }
-            } else {
-                return this.account && this.sum > 0 && this.numberRule && (this.totalSupply.usdPlusWbnb < this.maxUsdPlusWbnbSupply) && ((parseFloat(this.sum) + parseFloat(this.totalSupply.usdPlusWbnb)) < parseFloat(this.maxUsdPlusWbnbSupply));
-            }
+            return this.account && this.sum > 0 && this.numberRule && (this.totalSupply.busdWbnb < this.maxBusdWbnbSupply) && ((parseFloat(this.sum) + parseFloat(this.totalSupply.busdWbnb)) < parseFloat(this.maxBusdWbnbSupply));
         },
 
         numberRule: function () {
@@ -403,7 +352,6 @@ export default {
     methods: {
 
         ...mapActions("marketData", ['refreshMarket']),
-        ...mapActions("overcapData", ['useOvercap', 'returnOvercap']),
         ...mapActions("investModal", ['showRedeemView', 'approveUsdPlus']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
@@ -443,7 +391,7 @@ export default {
 
         async buyAction() {
 
-            this.showWaitingModal('Swapping ' + this.sumResult + ' USD+ for ' + this.sumResult + ' USD+/WBNB');
+            this.showWaitingModal('Swapping ' + this.sumResult + ' USD+ for ' + this.sumResult + ' BUSD/WBNB');
 
             try {
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
@@ -464,30 +412,14 @@ export default {
                     }
 
                     let referral = ""; //TODO set referral from link
-                    let buyResult = await contracts.exchangerUsdPlusWbnb.methods.buy(sum, referral).send(buyParams);
-
-                    if (this.isOvercapAvailable) {
-                        let noOvercapSum = parseFloat(this.maxUsdPlusWbnbSupply) - parseFloat(this.totalSupply.usdPlusWbnb);
-                        let useOvercapSum;
-
-                        if (noOvercapSum <= 0) {
-                            useOvercapSum = this.sum;
-                        } else {
-                            useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
-                        }
-
-                        await this.useOvercap({
-                            overcapLeft: this.overcapRemaining,
-                            overcapVolume: useOvercapSum
-                        });
-                    }
+                    let buyResult = await contracts.exchangerBusdWbnb.methods.buy(sum, referral).send(buyParams);
 
                     this.closeWaitingModal();
                     this.showSuccessModal(buyResult.transactionHash);
                 } catch (e) {
                     console.log(e);
                     this.closeWaitingModal();
-                    this.showErrorModal('buyUSD+Wbnb');
+                    this.showErrorModal('buyBusdWbnb');
                     return;
                 }
 
@@ -495,7 +427,7 @@ export default {
                 self.setSum(null);
             } catch (e) {
                 console.log(e)
-                this.showErrorModal('buyUSD+Wbnb');
+                this.showErrorModal('buyBusdWbnb');
             }
         },
 
@@ -560,14 +492,14 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts.usdPlus.methods.allowance(from, contracts.exchangerUsdPlusWbnb.options.address).call();
+            let allowanceValue = await contracts.usdPlus.methods.allowance(from, contracts.exchangerBusdWbnb.options.address).call();
 
             if (allowanceValue < sum) {
                 try {
                     await this.refreshGasPrice();
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                    let tx = await contracts.usdPlus.methods.approve(contracts.exchangerUsdPlusWbnb.options.address, sum).send(approveParams);
+                    let tx = await contracts.usdPlus.methods.approve(contracts.exchangerBusdWbnb.options.address, sum).send(approveParams);
 
                     let minted = true;
                     while (minted) {
@@ -605,7 +537,7 @@ export default {
                 let blockNum = await this.web3.eth.getBlockNumber();
 
                 let referral = ""; //TODO set referral from link
-                await contracts.exchangerUsdPlusWbnb.methods.buy(sum, referral).estimateGas(estimateOptions)
+                await contracts.exchangerBusdWbnb.methods.buy(sum, referral).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })
@@ -617,10 +549,10 @@ export default {
                                 product: 'ETS',
                                 data: {
                                     from: from,
-                                    to: contracts.exchangerUsdPlusWbnb.options.address,
+                                    to: contracts.exchangerBusdWbnb.options.address,
                                     gas: null,
                                     gasPrice: parseInt(estimateOptions.gasPrice, 16),
-                                    method: contracts.exchangerUsdPlusWbnb.methods.buy(sum, referral).encodeABI(),
+                                    method: contracts.exchangerBusdWbnb.methods.buy(sum, referral).encodeABI(),
                                     message: msg,
                                     block: blockNum
                                 }

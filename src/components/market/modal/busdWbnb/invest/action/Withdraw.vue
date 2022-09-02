@@ -103,7 +103,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 USD+/WBNB = 1 USD+</label>
+            <label class="exchange-label">1 BUSD/WBNB = 1 USD+</label>
         </v-row>
 
         <!-- TODO: add gas fee section -->
@@ -134,7 +134,7 @@
             </div>
 
             <div class="action-btn-container" v-else>
-                <v-btn v-if="usdPlusWbnbApproved"
+                <v-btn v-if="busdWbnbApproved"
                        height="56"
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
@@ -203,9 +203,9 @@ export default {
 
     data: () => ({
         currency: {
-            id: 'usdPlusWbnb',
-            title: 'USD+/WBNB',
-            image: require('@/assets/currencies/market/UsdPlusWbnb.svg')
+            id: 'busdWbnb',
+            title: 'BUSD/WBNB',
+            image: require('@/assets/currencies/market/BusdWbnb.svg')
         },
 
         buyCurrency: {
@@ -224,36 +224,18 @@ export default {
         sliderPercent: 0,
         stepLabels: ['', 'Approve', 'Confirmation'],
         step: 0,
-
-        get overcapRemaining() {
-
-            let overcapValue = localStorage.getItem('overcapRemaining');
-
-            if (overcapValue == null) {
-                localStorage.setItem('overcapRemaining', '-1');
-                overcapValue = localStorage.getItem('overcapRemaining');
-            }
-
-            try {
-                return parseFloat(overcapValue);
-            } catch (e) {
-                return null;
-            }
-        },
     }),
 
     computed: {
         ...mapGetters('accountData', ['balance', 'account']),
         ...mapGetters('accountUI', ['loadingBalance']),
 
-        ...mapGetters('investModal', ['usdPlusWbnbApproved']),
+        ...mapGetters('investModal', ['busdWbnbApproved']),
 
-        ...mapGetters('marketData', ['usdPlusWbnbStrategyData']),
-        ...mapGetters('overcapData', ['isOvercapAvailable']),
+        ...mapGetters('marketData', ['busdWbnbStrategyData']),
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
-        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
 
         icon: function (){
             switch (process.env.VUE_APP_NETWORK_ID){
@@ -269,11 +251,11 @@ export default {
         },
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.balance.usdPlusWbnb, 3);
+            return this.$utils.formatMoney(this.balance.busdWbnb, 3);
         },
 
         sumResult: function () {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.usdPlusWbnb) * 100;
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.busdWbnb) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -283,8 +265,8 @@ export default {
         },
 
         exitFee: function () {
-            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
-                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'redeem');
+            if (this.busdWbnbStrategyData && this.busdWbnbStrategyData.fees) {
+                let result = this.busdWbnbStrategyData.fees.find(x => x.id === 'redeem');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -301,14 +283,14 @@ export default {
             if (!this.account) {
                 return 'Connect to a wallet';
             } else if (this.isBuy) {
-                if (this.usdPlusWbnbApproved) {
+                if (this.busdWbnbApproved) {
                     this.step = 2;
                     return 'Confirm transaction'
                 } else {
                     this.step = 1;
-                    return 'Approve USD+/WBNB';
+                    return 'Approve BUSD/WBNB';
                 }
-            } else if (this.sum > parseFloat(this.balance.usdPlusWbnb)) {
+            } else if (this.sum > parseFloat(this.balance.busdWbnb)) {
                 return 'Redeem'
             } else {
                 return 'Redeem';
@@ -330,7 +312,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlusWbnb)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.busdWbnb)) return true;
 
             return false;
         },
@@ -361,8 +343,7 @@ export default {
     methods: {
 
         ...mapActions("marketData", ['refreshMarket']),
-        ...mapActions("overcapData", ['useOvercap', 'returnOvercap']),
-        ...mapActions("investModal", ['showMintView', 'approveUsdPlusWbnb']),
+        ...mapActions("investModal", ['showMintView', 'approveBusdWbnb']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("web3", ['connectWallet']),
@@ -372,7 +353,7 @@ export default {
         ...mapActions("successModal", ['showSuccessModal']),
 
         changeSliderPercent() {
-            this.sum = (this.balance.usdPlusWbnb * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.balance.busdWbnb * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
 
         isNumber: function(evt) {
@@ -401,7 +382,7 @@ export default {
 
         async redeemAction() {
 
-            this.showWaitingModal('Withdrawing ' + this.sumResult + ' USD+/WBNB for ' + this.sumResult + ' USD+');
+            this.showWaitingModal('Withdrawing ' + this.sumResult + ' BUSD/WBNB for ' + this.sumResult + ' USD+');
 
             try {
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
@@ -421,21 +402,14 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    let buyResult = await contracts.exchangerUsdPlusWbnb.methods.redeem(sum).send(buyParams);
-
-                    if (this.isOvercapAvailable) {
-                        await this.returnOvercap({
-                            overcapLeft: this.overcapRemaining,
-                            overcapVolume: this.sum
-                        });
-                    }
+                    let buyResult = await contracts.exchangerBusdWbnb.methods.redeem(sum).send(buyParams);
 
                     this.closeWaitingModal();
                     this.showSuccessModal(buyResult.transactionHash);
                 } catch (e) {
                     console.log(e)
                     this.closeWaitingModal();
-                    this.showErrorModal('withdrawUSD+Wbnb');
+                    this.showErrorModal('withdrawBusdWbnb');
                     return;
                 }
 
@@ -443,7 +417,7 @@ export default {
                 self.setSum(null);
             } catch (e) {
                 console.log(e)
-                this.showErrorModal('withdrawUSD+Wbnb');
+                this.showErrorModal('withdrawBusdWbnb');
             }
         },
 
@@ -494,7 +468,7 @@ export default {
                     this.showErrorModal('approve');
                     return;
                 } else {
-                    this.approveUsdPlusWbnb();
+                    this.approveBusdWbnb();
                     this.closeWaitingModal();
                 }
             } catch (e) {
@@ -508,14 +482,14 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts.usdPlusWbnb.methods.allowance(from, contracts.exchangerUsdPlusWbnb.options.address).call();
+            let allowanceValue = await contracts.busdWbnb.methods.allowance(from, contracts.exchangerBusdWbnb.options.address).call();
 
             if (allowanceValue < sum) {
                 try {
                     await this.refreshGasPrice();
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                    let tx = await contracts.usdPlusWbnb.methods.approve(contracts.exchangerUsdPlusWbnb.options.address, sum).send(approveParams);
+                    let tx = await contracts.busdWbnb.methods.approve(contracts.exchangerBusdWbnb.options.address, sum).send(approveParams);
 
                     let minted = true;
                     while (minted) {
@@ -552,7 +526,7 @@ export default {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
                 let blockNum = await this.web3.eth.getBlockNumber();
 
-                await contracts.exchangerUsdPlusWbnb.methods.redeem(sum).estimateGas(estimateOptions)
+                await contracts.exchangerBusdWbnb.methods.redeem(sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })
@@ -564,10 +538,10 @@ export default {
                                 product: 'ETS',
                                 data: {
                                     from: from,
-                                    to: contracts.exchangerUsdPlusWbnb.options.address,
+                                    to: contracts.exchangerBusdWbnb.options.address,
                                     gas: null,
                                     gasPrice: parseInt(estimateOptions.gasPrice, 16),
-                                    method: contracts.exchangerUsdPlusWbnb.methods.redeem(sum).encodeABI(),
+                                    method: contracts.exchangerBusdWbnb.methods.redeem(sum).encodeABI(),
                                     message: msg,
                                     block: blockNum
                                 }

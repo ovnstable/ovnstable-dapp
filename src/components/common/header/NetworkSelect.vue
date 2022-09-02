@@ -20,7 +20,7 @@
             </div>
         </template>
         <v-list class="network-select-list">
-            <v-list-item style="cursor: pointer" target="_blank" href="https://market.overnight.fi">
+            <v-list-item style="cursor: pointer" @click="changeNetwork('polygon')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
                         <v-img :src="require('@/assets/network/polygon.svg')"/>
@@ -31,7 +31,7 @@
                     <v-icon class="mb-5" small color="#333333"></v-icon>
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item style="cursor: pointer" target="_blank" href="https://bsc.overnight.fi">
+            <v-list-item style="cursor: pointer" @click="changeNetwork('bsc')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
                         <v-img :src="require('@/assets/network/bsc.svg')"/>
@@ -42,7 +42,7 @@
                     <v-icon class="mb-5" small color="#333333"></v-icon>
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item style="cursor: pointer" target="_blank" href="https://avax.overnight.fi">
+            <v-list-item style="cursor: pointer" @click="changeNetwork('avax')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
                         <v-img :src="require('@/assets/network/avalanche.svg')"/>
@@ -53,7 +53,7 @@
                     <v-icon class="ml-n1 mb-5" small color="#333333">mdi-alpha</v-icon>
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item style="cursor: pointer" target="_blank" href="https://op.overnight.fi">
+            <v-list-item style="cursor: pointer" @click="changeNetwork('op')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
                         <v-img :src="require('@/assets/network/op.svg')"/>
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 let polygonIcon = require('@/assets/network/polygon.svg');
 let avaxIcon = require('@/assets/network/avalanche.svg');
@@ -114,6 +114,8 @@ export default {
     },
 
     methods: {
+        ...mapActions('network', ['changeNetwork']),
+
         clickMenuOutside() {
             this.openedList = false;
         }

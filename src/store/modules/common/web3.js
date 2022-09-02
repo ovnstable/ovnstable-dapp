@@ -269,13 +269,13 @@ const actions = {
                 dispatch('checkAccount', accounts[0])
             });
 
-            getters.provider.on('networkChanged', function (networkId) {
+            getters.provider.on('networkChanged', function (newNetworkId) {
 
                 console.log('Provider: networkChanged');
 
-                networkId = parseInt(networkId)
+                newNetworkId = parseInt(newNetworkId)
 
-                if (ALLOW_NETWORKS.includes(networkId)) {
+                if (ALLOW_NETWORKS.includes(newNetworkId)) {
                     dispatch('updateUserData');
                     commit('setSwitchToPolygon', false);
                 } else {
@@ -416,15 +416,11 @@ const actions = {
             contracts.wUsdPlus = _load(WrappedUsdPlusToken, web3);
         }
 
-        if (network === "polygon") {
-            contracts.exchangerUsdPlusWmatic = _load(ExchangerUsdPlusWmatic, web3);
-            contracts.usdPlusWmatic = _load(UsdPlusWmaticToken, web3);
-        }
+        contracts.exchangerUsdPlusWmatic = _load(ExchangerUsdPlusWmatic, web3);
+        contracts.usdPlusWmatic = _load(UsdPlusWmaticToken, web3);
 
-        if (network === "bsc") {
-            contracts.exchangerUsdPlusWbnb = _load(ExchangerUsdPlusWbnb, web3);
-            contracts.usdPlusWbnb = _load(UsdPlusWbnbToken, web3);
-        }
+        contracts.exchangerUsdPlusWbnb = _load(ExchangerUsdPlusWbnb, web3);
+        contracts.usdPlusWbnb = _load(UsdPlusWbnbToken, web3);
 
         contracts.poolQsUsdPlusWeth = _load(StakingRewards, web3, "0x398B66c4c69Bf19EA6A3c97e8d8b9c93f295D209");
         contracts.poolQsUsdPlusWethToken = _load(ERC20, web3, '0x901Debb34469e89FeCA591f5E5336984151fEc39');
@@ -447,6 +443,8 @@ const actions = {
                 method: 'wallet_switchEthereumChain',
                 params: [{chainId: getters.web3.utils.toHex(networkId)}],
             });
+
+            commit('setWalletConnected', 'true');
         } catch (switchError) {
             try {
                 let params;
@@ -511,6 +509,8 @@ const actions = {
                     method: 'wallet_addEthereumChain',
                     params: [params],
                 });
+
+                commit('setWalletConnected', 'true');
             } catch (addError) {
                 console.error(addError);
                 dispatch('switchAccount');

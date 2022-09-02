@@ -62,29 +62,35 @@
                 </v-row>
 
                 <v-row class="account-info-row" justify="start" align="center">
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ml-1' : ''" @click="addUsdPlusToken">
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : ''" @click="addUsdPlusToken">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
                         </div>
                         <label class="ml-2 coin-btn-label">USD+</label>
                     </v-btn>
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ml-1' : 'ml-5'" @click="addwUsdPlusToken" v-if="showWrap">
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addwUsdPlusToken" v-if="showWrap">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/wUsdPlus.svg')"/>
                         </div>
                         <label class="ml-2 coin-btn-label">wUSD+</label>
                     </v-btn>
-                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ml-1' : 'ml-5'" @click="addUsdPlusWmaticToken" v-if="showUsdPlusWmatic">
+                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addUsdPlusWmaticToken" v-if="showUsdPlusWmatic">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/currencies/market/WmaticUsdPlus.svg')"/>
                         </div>
                         <label class="ml-2 coin-btn-label">USD+/WMATIC</label>
                     </v-btn>
-                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ml-1' : 'ml-5'" @click="addUsdPlusWbnbToken" v-if="showUsdPlusWbnb">
+                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addUsdPlusWbnbToken" v-if="showUsdPlusWbnb">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/currencies/market/UsdPlusWbnb.svg')"/>
                         </div>
                         <label class="ml-2 coin-btn-label">USD+/WBNB</label>
+                    </v-btn>
+                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addBusdWbnbToken" v-if="showUsdPlusWbnb">
+                        <div class="coin-img">
+                            <v-img :src="require('@/assets/currencies/market/BusdWbnb.svg')"/>
+                        </div>
+                        <label class="ml-2 coin-btn-label">BUSD/WBNB</label>
                     </v-btn>
                 </v-row>
             </v-card-text>
@@ -155,7 +161,7 @@ export default {
 
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
-        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addUsdPlusWbnbToken']),
+        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addUsdPlusWbnbToken', 'addBusdWbnbToken']),
         ...mapActions('transaction', ['clearTransaction', 'loadTransaction']),
 
         openOnExplorer(hash) {

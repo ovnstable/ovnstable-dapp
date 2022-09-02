@@ -13,6 +13,7 @@ const UsdPlusImage = require('@/assets/usdPlus.json');
 const WrappedUsdPlusImage = require('@/assets/wUsdPlus.json');
 const UsdPlusWmaticImage = require('@/assets/usdPlusWmatic.json');
 const UsdPlusWbnbImage = require('@/assets/usdPlusWbnb.json');
+const BusdWbnbImage = require('@/assets/busdWbnb.json');
 
 const StakingRewards = require(`@/contracts/abi/StakingRewards.json`)
 const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`)
@@ -611,6 +612,31 @@ const actions = {
             .then((success) => {
                 if (success) {
                     console.log('USD+/WBNB successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
+    async addBusdWbnbToken({commit, dispatch, getters, rootState}) {
+
+        await getters.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: rootState.web3.contracts.busdWbnb.options.address,
+                        symbol: process.env.VUE_APP_BUSD_WBNB_TOKEN_NAME,
+                        decimals: 6,
+                        image: BusdWbnbImage.image,
+                    },
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('BUSD/WBNB successfully added to wallet!')
                 } else {
                     throw new Error('Something went wrong.')
                 }

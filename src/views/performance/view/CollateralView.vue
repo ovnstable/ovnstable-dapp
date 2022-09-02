@@ -121,16 +121,8 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("network", ['networkId']),
+        ...mapGetters("network", ['networkId', 'assetName']),
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
-
-        assetName() {
-            return process.env.VUE_APP_ASSET_NAME;
-        },
-
-        nativeAssetName() {
-            return process.env.VUE_APP_NATIVE_ASSET;
-        },
 
         activeTabPolygon: function () {
             return {

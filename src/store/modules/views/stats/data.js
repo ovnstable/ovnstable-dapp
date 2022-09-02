@@ -57,7 +57,9 @@ const actions = {
 
         let result = [];
 
-        let strategies = (await axios('/dapp/strategies')).data;
+        let appApiUrl = rootState.network.appApiUrl;
+
+        let strategies = (await axios.get(appApiUrl + '/dapp/strategies')).data;
         strategies.sort((a,b) => b.netAssetValue - a.netAssetValue);
 
         let colors = [
@@ -93,7 +95,9 @@ const actions = {
     async refreshStablecoinData({commit, dispatch, getters, rootState}) {
         let result = [];
 
-        let stablecoinList = (await axios('/dapp/collateral/total')).data;
+        let appApiUrl = rootState.network.appApiUrl;
+
+        let stablecoinList = (await axios.get(appApiUrl + '/dapp/collateral/total')).data;
         stablecoinList.sort((a,b) => b.netAssetValue - a.netAssetValue);
         stablecoinList = stablecoinList.filter(el => el.netAssetValue > 0);
 
@@ -143,7 +147,8 @@ const actions = {
     async refreshPayouts({commit, dispatch, getters, rootState}) {
         commit('statsUI/setLoadingPayouts', true, { root: true });
 
-        axios.get(`/dapp/payouts`)
+        let appApiUrl = rootState.network.appApiUrl;
+        axios.get(appApiUrl + `/dapp/payouts`)
             .then(value => {
                 commit('setPayouts', value.data);
 
@@ -204,7 +209,9 @@ const actions = {
     async refreshTotalUsdPlus({commit, dispatch, getters, rootState}) {
         commit('statsUI/setLoadingTotalUsdPlus', true, { root: true });
 
-        let usdPlusValue = (await axios('/dapp/getTotalUsdPlusValue')).data;
+        let appApiUrl = rootState.network.appApiUrl;
+
+        let usdPlusValue = (await axios.get(appApiUrl + '/dapp/getTotalUsdPlusValue')).data;
         commit('setTotalUsdPlusValue', usdPlusValue);
 
         commit('statsUI/setLoadingTotalUsdPlus', false, { root: true });
@@ -214,7 +221,9 @@ const actions = {
     async refreshTotalUsdPlusProfit({commit, dispatch, getters, rootState}) {
         commit('statsUI/setLoadingTotalUsdPlus', true, { root: true });
 
-        let usdPlusProfit = (await axios('/dapp/getTotalUsdPlusProfit')).data;
+        let appApiUrl = rootState.network.appApiUrl;
+
+        let usdPlusProfit = (await axios.get(appApiUrl + '/dapp/getTotalUsdPlusProfit')).data;
         commit('setTotalUsdPlusProfit', usdPlusProfit);
 
         commit('statsUI/setLoadingTotalUsdPlus', false, { root: true });

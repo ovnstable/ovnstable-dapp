@@ -67,7 +67,8 @@ const actions = {
 
         let account = rootState.accountData.account.toLowerCase();
 
-        let response = (await axios.get(`/dapp/clientBalanceChanges?address=${account}`)).data;
+        let appApiUrl = rootState.network.appApiUrl;
+        let response = (await axios.get(appApiUrl + `/dapp/clientBalanceChanges?address=${account}`)).data;
 
         let clientData = response.map(item => {
             return {

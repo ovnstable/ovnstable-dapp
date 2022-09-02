@@ -78,6 +78,7 @@ export default {
             isMounted: false
         }
     },
+
     async mounted() {
         const parsedParams = {};
         this.$route.hash.split('&')
@@ -87,10 +88,10 @@ export default {
                 parsedParams[parts[0]] = parts[1];
             });
         console.log(parsedParams);
-        const resp = await axios.post('/discord/get_user', parsedParams);
+
+        const resp = await axios.post(this.appApiUrl + '/discord/get_user', parsedParams);
         localStorage.setItem('discord_backend_token', resp.data.token);
         localStorage.setItem('discord_user', JSON.stringify(resp.data.user));
-
 
         this.onboard = Onboard({
             dappId: 'e7473c8b-6d55-418d-8fd7-e26e75446065',
@@ -111,8 +112,9 @@ export default {
 
         this.isMounted = true;
     },
+
     computed: {
-        ...mapGetters('network', ['networkId']),
+        ...mapGetters('network', ['networkId', 'appApiUrl']),
 
         centerIcon() {
             if (this.fail) return failIcon;
@@ -149,7 +151,7 @@ export default {
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
                 await this.addUsdPlus();
-                await axios.post('/discord/connect_wallet', {sig: sig, address: selectedWallet}, axiosConfig);
+                await axios.post(this.appApiUrl + '/discord/connect_wallet', {sig: sig, address: selectedWallet}, axiosConfig);
                 this.success = true;
             } catch (e) {
                 this.fail = true

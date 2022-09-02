@@ -68,6 +68,7 @@ const actions = {
         let web3 = rootState.web3;
 
         let networkId = rootState.network.networkId;
+        let assetDecimals = rootState.network.assetDecimals;
 
         let usdPlus;
         let asset;
@@ -161,7 +162,7 @@ const actions = {
             usdPlusWbnb = web3.web3.utils.fromWei(usdPlusWbnb, 'mwei') ;
         }
 
-        if (process.env.VUE_APP_ASSET_DECIMALS == 18) {
+        if (assetDecimals === 18) {
             asset = web3.web3.utils.fromWei(asset, 'ether') ;
         } else {
             asset = web3.web3.utils.fromWei(asset, 'mwei') ;

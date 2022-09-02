@@ -26,9 +26,7 @@
 
 <script>
 
-import Banner from "@/components/market/section/Banner";
 import WmaticUsdPlus from "@/components/market/cards/wmatic/WmaticUsdPlus";
-import BannerMobile from "@/components/market/section/BannerMobile";
 import {mapGetters} from "vuex";
 import WbnbUsdPlus from "@/components/market/cards/wbnb/WbnbUsdPlus";
 import OvercapBanner from "@/components/market/cards/wbnb/banner/OvercapBanner";
@@ -39,9 +37,7 @@ export default {
     components: {
         OvercapBanner,
         WbnbUsdPlus,
-        BannerMobile,
         WmaticUsdPlus,
-        Banner
     },
 
     data: () => ({

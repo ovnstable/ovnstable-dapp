@@ -1,4 +1,3 @@
-import {axios} from "@/plugins/http-axios";
 import moment from "moment";
 
 const state = {
@@ -41,9 +40,11 @@ const actions = {
     },
 
     async refreshStrategyData({commit, dispatch, getters, rootState}) {
+        let appApiUrl = rootState.network.appApiUrl;
+
         let fetchOptions = {
             headers: {
-                "Access-Control-Allow-Origin": process.env.VUE_APP_API
+                "Access-Control-Allow-Origin": appApiUrl
             }
         };
 
@@ -54,7 +55,7 @@ const actions = {
         let network = rootState.network.networkName;
         let contractAddress = network === 'polygon' ? '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf' : (network === 'bsc' ? '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1' : '0');
 
-        await fetch(process.env.VUE_APP_API + '/widget/avg-apy-info/week', fetchOptions)
+        await fetch(appApiUrl + '/widget/avg-apy-info/week', fetchOptions)
             .then(value => value.json())
             .then(value => {
                 avgApy = value;
@@ -63,7 +64,7 @@ const actions = {
                 console.log('Error get data: ' + reason);
             })
 
-        await fetch(process.env.VUE_APP_API + '/hedge-strategies/' + contractAddress + '/avg-apy-info/week', fetchOptions)
+        await fetch(appApiUrl + '/hedge-strategies/' + contractAddress + '/avg-apy-info/week', fetchOptions)
             .then(value => value.json())
             .then(value => {
                 avgApyStrategyWeek = value;
@@ -73,7 +74,7 @@ const actions = {
                 console.log('Error get data: ' + reason);
             })
 
-        await fetch(process.env.VUE_APP_API + '/hedge-strategies/' + contractAddress, fetchOptions)
+        await fetch(appApiUrl + '/hedge-strategies/' + contractAddress, fetchOptions)
             .then(value => value.json())
             .then(value => {
                 wmaticStrategyData = value;
@@ -141,7 +142,9 @@ const actions = {
     async refreshClientData({commit, dispatch, getters, rootState}) {
         console.log('MarketData: refreshClientData');
 
+        let appApiUrl = rootState.network.appApiUrl;
         let network = rootState.network.networkName;
+
         let contractAddress = network === 'polygon' ? '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf' : (network === 'bsc' ? '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1' : '0');
 
         if (!rootState.accountData.account){
@@ -153,11 +156,11 @@ const actions = {
 
         let fetchOptions = {
             headers: {
-                "Access-Control-Allow-Origin": process.env.VUE_APP_API
+                "Access-Control-Allow-Origin": appApiUrl
             }
         };
 
-        await fetch(process.env.VUE_APP_API + '/hedge-strategies/' + contractAddress + '/account/' + account, fetchOptions)
+        await fetch(appApiUrl + '/hedge-strategies/' + contractAddress + '/account/' + account, fetchOptions)
             .then(value => value.json())
             .then(value => {
                 profitDay = value.profit;

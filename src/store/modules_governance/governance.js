@@ -359,7 +359,9 @@ const actions = {
 
         let items = [];
 
-        let strategiesMapping = (await axios('/dict/strategies')).data;
+        let appApiUrl = rootState.network.appApiUrl;
+
+        let strategiesMapping = (await axios.get(appApiUrl + '/dict/strategies')).data;
 
         for (let i = 0; i < strategiesMapping.length; i++) {
 

@@ -251,7 +251,7 @@ export default {
         ...mapGetters('marketData', ['wmaticStrategyData']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
 
-        ...mapGetters("network", ['networkId']),
+        ...mapGetters("network", ['networkId', 'appApiUrl']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
@@ -574,7 +574,7 @@ export default {
                                 }
                             };
 
-                            axios.post('/error/log', errorMsg);
+                            axios.post(this.appApiUrl + '/error/log', errorMsg);
 
                             console.log(errorMsg);
                         } else {

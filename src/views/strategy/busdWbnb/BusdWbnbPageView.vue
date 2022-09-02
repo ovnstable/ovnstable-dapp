@@ -364,7 +364,7 @@ export default {
 
     methods: {
         ...mapActions('riskModal', ['showRiskModal']),
-        ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
+        ...mapActions('investModal', ['showBusdWbnbModal', 'showMintView', 'showRedeemView']),
 
         goToAction(id) {
             this.$router.push(id);
@@ -372,12 +372,12 @@ export default {
 
         mintAction() {
             this.showMintView();
-            this.showInvestModal();
+            this.showBusdWbnbModal();
         },
 
         redeemAction() {
             this.showRedeemView();
-            this.showInvestModal();
+            this.showBusdWbnbModal();
         }
     }
 

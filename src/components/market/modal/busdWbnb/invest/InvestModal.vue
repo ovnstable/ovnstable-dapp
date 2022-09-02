@@ -1,7 +1,7 @@
 <template>
-    <div v-if="show">
+    <div v-if="showBusdWbnbModal">
         <v-dialog
-                v-model="show"
+                v-model="showBusdWbnbModal"
                 width="600"
                 persistent>
             <v-card class="container_body airdrop-body">
@@ -48,14 +48,14 @@ export default {
     props: {},
 
     computed: {
-        ...mapGetters('investModal', ['show']),
+        ...mapGetters('investModal', ['showBusdWbnbModal']),
         ...mapGetters('investModal', ['isMintView']),
     },
 
     data: () => ({}),
 
     methods: {
-        ...mapActions('investModal', ['closeInvestModal']),
+        ...mapActions('investModal', ['closeBusdWbnbModal']),
         ...mapActions('web3', ['connectWallet']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
 
@@ -64,7 +64,7 @@ export default {
         },
 
         close() {
-            this.closeInvestModal();
+            this.closeBusdWbnbModal();
         },
 
         mintAction() {

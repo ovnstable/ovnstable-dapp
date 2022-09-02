@@ -21,7 +21,7 @@
                                 <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                             </v-row>
                             <v-row justify="center" align="center" class="mt-2">
-                                <label class="info-value mr-n1">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 0)) + '%' : '—' }}</label>
+                                <label class="info-value mr-n1">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.apy) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.apy, 0)) + '%' : '—' }}</label>
                             </v-row>
                         </v-col>
                         <v-col class="bordered-col" cols="5">
@@ -31,7 +31,7 @@
                             </v-row>
                             <v-row justify="center" align="center" class="mt-2">
                                 <label class="info-value">
-                                    {{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}
+                                    {{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(usdPlusWbnbStrategyData.tvl, 2)) : '—' }}
                                 </label>
                             </v-row>
                         </v-col>
@@ -40,7 +40,7 @@
                                 <label class="info-title mt-1">Users</label>
                             </v-row>
                             <v-row justify="center" align="center" class="mt-2">
-                                <label class="info-value">{{ (wmaticStrategyData && wmaticStrategyData.holders) ? $utils.formatMoneyComma(wmaticStrategyData.holders, 0) : '—' }}</label>
+                                <label class="info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.holders) ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.holders, 0) : '—' }}</label>
                             </v-row>
                         </v-col>
                     </v-row>
@@ -135,7 +135,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData']),
+        ...mapGetters('marketData', ['usdPlusWbnbStrategyData']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
         ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap']),
         ...mapGetters('accountData', ['balance']),

@@ -158,10 +158,8 @@ export default {
     },
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData']),
-        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
-        ...mapGetters('dashboardData', ['profitUsdPlus', 'apy', 'activities', 'slice', 'portfolioValue']),
-        ...mapGetters("statsData", ['totalUsdPlusValue', 'currentTotalData']),
+        ...mapGetters('dashboardData', ['profitUsdPlus', 'apy', 'slice']),
+        ...mapGetters("statsData", ['currentTotalData']),
         ...mapGetters("accountData", ['balance']),
         ...mapGetters('wrapUI', ['showWrap']),
 

@@ -15,8 +15,8 @@
                     </v-col>
                 </v-row>
 
-                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="apyData" :usdPlusData="payoutsApyDataDict"/>
-                <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="tvlData"/>
+                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="apyDataUsdPlusWmatic" :usdPlusData="payoutsApyDataDict"/>
+                <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="tvlDataUsdPlusWmatic"/>
             </v-col>
         </v-row>
 
@@ -258,7 +258,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData', 'apyData', 'tvlData']),
+        ...mapGetters('marketData', ['wmaticStrategyData', 'apyDataUsdPlusWmatic', 'tvlDataUsdPlusWmatic']),
         ...mapGetters("statsData", ['payoutsApyDataDict']),
 
         activeRateApy: function () {

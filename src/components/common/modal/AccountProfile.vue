@@ -86,7 +86,7 @@
                         </div>
                         <label class="ml-2 coin-btn-label">USD+/WBNB</label>
                     </v-btn>
-                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addBusdWbnbToken" v-if="showUsdPlusWbnb">
+                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addBusdWbnbToken" v-if="showBusdWbnb">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/currencies/market/BusdWbnb.svg')"/>
                         </div>
@@ -133,7 +133,7 @@ export default {
         ...mapGetters('web3', ['walletName']),
         ...mapGetters('accountUI', ['showAccountProfile']),
         ...mapGetters('wrapUI', ['showWrap']),
-        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb']),
+        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb', 'showBusdWbnb']),
         ...mapGetters('transaction', ['transactions']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
 

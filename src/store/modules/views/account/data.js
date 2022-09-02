@@ -6,6 +6,7 @@ const state = {
         wUsdPlus: 0,
         usdPlusWmatic: 0,
         usdPlusWbnb: 0,
+        busdWbnb: 0,
     },
 
     account: null,
@@ -42,6 +43,7 @@ const actions = {
             wUsdPlus: 0,
             usdPlusWmatic: 0,
             usdPlusWbnb: 0,
+            busdWbnb: 0,
         });
 
     },
@@ -74,6 +76,7 @@ const actions = {
         let wUsdPlus;
         let usdPlusWmatic;
         let usdPlusWbnb;
+        let busdWbnb;
 
         try {
             asset = await web3.contracts.asset.methods.balanceOf(getters.account).call();
@@ -151,6 +154,22 @@ const actions = {
             }
         }
 
+        if (web3.contracts.busdWbnb && networkId === 56) {
+            try {
+                busdWbnb = await web3.contracts.busdWbnb.methods.balanceOf(getters.account).call();
+            } catch (e) {
+                console.log('ERROR: ' + e)
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                try {
+                    busdWbnb = await web3.contracts.busdWbnb.methods.balanceOf(getters.account).call();
+                } catch (e) {
+                    console.log('ERROR: ' + e)
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    busdWbnb = await web3.contracts.busdWbnb.methods.balanceOf(getters.account).call();
+                }
+            }
+        }
+
         usdPlus = web3.web3.utils.fromWei(usdPlus, 'mwei') ;
 
         if (usdPlusWmatic && networkId === 137) {
@@ -159,6 +178,10 @@ const actions = {
 
         if (usdPlusWbnb && networkId === 56) {
             usdPlusWbnb = web3.web3.utils.fromWei(usdPlusWbnb, 'mwei') ;
+        }
+
+        if (busdWbnb && networkId === 56) {
+            busdWbnb = web3.web3.utils.fromWei(busdWbnb, 'mwei') ;
         }
 
         if (process.env.VUE_APP_ASSET_DECIMALS == 18) {
@@ -176,7 +199,8 @@ const actions = {
             asset: asset,
             wUsdPlus: wUsdPlus,
             usdPlusWmatic: usdPlusWmatic,
-            usdPlusWbnb: usdPlusWbnb
+            usdPlusWbnb: usdPlusWbnb,
+            busdWbnb: busdWbnb
         })
 
         commit('accountUI/setLoadingBalance', false, { root: true })

@@ -147,7 +147,7 @@ export default {
 
     methods: {
         openStrategyCard() {
-          this.$router.push('/ets');
+          this.$router.push('/ets/usd-plus-wmatic');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     },

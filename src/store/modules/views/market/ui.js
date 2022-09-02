@@ -3,6 +3,7 @@ const state = {
 
     showUsdPlusWmatic: true,
     showUsdPlusWbnb: true,
+    showBusdWbnb: true,
 
 };
 
@@ -14,6 +15,10 @@ const getters = {
 
     showUsdPlusWbnb(state) {
         return state.showUsdPlusWbnb;
+    },
+
+    showBusdWbnb(state) {
+        return state.showBusdWbnb;
     },
 
 };
@@ -28,6 +33,10 @@ const actions = {
         commit('setShowUsdPlusWbnb', false);
     },
 
+    async hideBusdWbnb({commit, dispatch, getters, rootState}) {
+        commit('setShowBusdWbnb', false);
+    },
+
 };
 
 const mutations = {
@@ -39,6 +48,11 @@ const mutations = {
 
     setShowUsdPlusWbnb(state, showUsdPlusWbnb) {
         state.showUsdPlusWbnb = showUsdPlusWbnb;
+    },
+
+
+    setShowBusdWbnb(state, showBusdWbnb) {
+        state.showBusdWbnb = showBusdWbnb;
     },
 
 };

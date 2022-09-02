@@ -43,21 +43,35 @@ const routes = [
             },
             {
                 path: '/ets',
-                name: 'WmaticPageView',
-                component: () => import(
-                    process.env.VUE_APP_NETWORK_ID === '137'
-                        ? '../views/strategy/wmatic/WmaticPageView.vue'
-                        : (process.env.VUE_APP_NETWORK_ID === '56'
-                                ? '../views/strategy/wbnb/WbnbPageView.vue'
-                                : '')
-                    ),
+                redirect: '/market',
+            },
+            {
+                path: '/ets/usd-plus-wbnb',
+                name: 'WbnbPageView',
+                component: () => import('../views/strategy/wbnb/WbnbPageView.vue'),
                 meta: {
                     middleware: [
-                        process.env.VUE_APP_NETWORK_ID === '137'
-                            ? Wmatic
-                            : (process.env.VUE_APP_NETWORK_ID === '56'
-                                ? Wbnb
-                                : getDapp)
+                        Wbnb
+                    ]
+                }
+            },
+            {
+                path: '/ets/busd-wbnb',
+                name: 'BusdWbnbPageView',
+                component: () => import('../views/strategy/busdWbnb/BusdWbnbPageView.vue'),
+                meta: {
+                    middleware: [
+                        Wbnb
+                    ]
+                }
+            },
+            {
+                path: '/ets/usd-plus-wmatic',
+                name: 'WmaticPageView',
+                component: () => import('../views/strategy/wmatic/WmaticPageView.vue'),
+                meta: {
+                    middleware: [
+                        Wmatic
                     ]
                 }
             },

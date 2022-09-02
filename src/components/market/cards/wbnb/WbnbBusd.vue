@@ -8,30 +8,31 @@
 
             <v-row class="card-row mt-12" justify="start" align="center">
                 <div class="currency-icon">
-                    <v-img :src="require('@/assets/currencies/market/WmaticUsdPlus.svg')"/>
+                    <v-img :src="require('@/assets/currencies/market/BusdWbnb.svg')"/>
                 </div>
-                <label class="card-title ml-3">ETS: USD+ / WMatic</label>
+                <label class="card-title ml-3">ETS: BUSD/WBNB</label>
+                <v-icon class="mb-6" color="#333333" small>mdi-beta</v-icon>
                 <v-spacer></v-spacer>
                 <div class="currency-icon">
-                    <v-img :src="require('@/assets/network/polygon.svg')"/>
+                    <v-img :src="require('@/assets/network/bsc.svg')"/>
                 </div>
             </v-row>
 
             <v-row class="card-row mt-12" :class="$wu.isMobile ? '' : 'mb-15'" justify="start" align="center">
-                <label class="card-info">Generate yield on wMatic-USD+ pool by hedging your risks and simplify process</label>
+                <label class="card-info">Generate yield on BUSD-WBNB pool by hedging your risks and simplify process</label>
             </v-row>
 
             <v-row class="card-row info-row mt-15" justify="start" align="center">
                 <label class="card-info mt-1">APY</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 1)) + '%' : '—' }}</label>
+                <label class="card-info-value">{{ (busdWbnbStrategyData && busdWbnbStrategyData.apy) ? ($utils.formatMoneyComma(busdWbnbStrategyData.apy, 1)) + '%' : '—' }}</label>
                 <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
             </v-row>
 
             <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">Diff. to USD+</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.diffApy) ? ((wmaticStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(wmaticStrategyData.diffApy, 1)) + '%' : '—' }}</label>
+                <label class="card-info-value">{{ (busdWbnbStrategyData && busdWbnbStrategyData.diffApy) ? ((busdWbnbStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(busdWbnbStrategyData.diffApy, 1)) + '%' : '—' }}</label>
                 <Tooltip text="APY difference compared to the base APY USD+ (based on 7-day average)"/>
             </v-row>
 
@@ -45,8 +46,8 @@
             <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">TVL</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value" :class="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply ? 'label-error' : ''">
-                    {{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}
+                <label class="card-info-value" :class="totalSupply.busdWbnb >= maxBusdWbnbSupply ? 'label-error' : ''">
+                    {{ (busdWbnbStrategyData && busdWbnbStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(busdWbnbStrategyData.tvl, 2)) : '—' }}
                 </label>
                 <Tooltip text="Past 2 hours"/>
             </v-row>
@@ -56,8 +57,8 @@
                     <v-row justify="start" align="center">
                         <label class="capacity-status-text">ETS capacity status</label>
                         <v-spacer></v-spacer>
-                        <label class="capacity-status-value" :class="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply ? 'label-error' : ''">
-                            {{ totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply ? 'FULL' : 'AVAILABLE' }}
+                        <label class="capacity-status-value" :class="totalSupply.busdWbnb >= maxBusdWbnbSupply ? 'label-error' : ''">
+                            {{ totalSupply.busdWbnb >= maxBusdWbnbSupply ? 'FULL' : 'AVAILABLE' }}
                         </label>
                     </v-row>
                     <v-row justify="start" align="center" class="mt-5">
@@ -66,14 +67,14 @@
                                 height="7"
                                 class="progress-info"
                                 background-opacity="0"
-                                :value="(totalSupply.usdPlusWmatic / maxUsdPlusWmaticSupply) * 100"
-                                :color="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply ? '#CF3F92' : '#1C95E7'"
+                                :value="(totalSupply.busdWbnb / maxBusdWbnbSupply) * 100"
+                                :color="totalSupply.busdWbnb >= maxBusdWbnbSupply ? '#CF3F92' : '#1C95E7'"
                         ></v-progress-linear>
                     </v-row>
                     <v-row justify="start" align="center" class="mt-5">
-                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(totalSupply.usdPlusWmatic, 2) }}</label>
+                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(totalSupply.busdWbnb, 2) }}</label>
                         <v-spacer></v-spacer>
-                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 2) }}</label>
+                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(maxBusdWbnbSupply, 2) }}</label>
                     </v-row>
                     <v-row justify="start" align="center">
                         <label class="capacity-status-sub-text">CURRENT TVL</label>
@@ -89,7 +90,7 @@
                         <div class="card-banner-icon">
                             <v-img :src="require('@/assets/icon/history.svg')"/>
                         </div>
-                        <label :class="$wu.isMobile() ? 'card-info-banner' : 'card-info'" class="ml-2">Hedging against MATIC price volatility</label>
+                        <label :class="$wu.isMobile() ? 'card-info-banner' : 'card-info'" class="ml-2">Hedging against BNB price volatility</label>
                     </v-row>
                     <v-row align="center">
                         <div class="card-banner-icon mt-4">
@@ -122,7 +123,7 @@ import Tooltip from "@/components/common/element/Tooltip";
 import {mapGetters} from "vuex";
 
 export default {
-    name: "WmaticUsdPlus",
+    name: "WbnbBusd",
 
     components: {
         Tooltip
@@ -132,8 +133,8 @@ export default {
     },
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData']),
-        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
+        ...mapGetters('marketData', ['busdWbnbStrategyData']),
+        ...mapGetters('supplyData', ['totalSupply', 'maxBusdWbnbSupply']),
     },
 
     data: () => ({

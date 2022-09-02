@@ -5,10 +5,12 @@ const state = {
     totalSupply: {
         usdPlusWmatic: 0,
         usdPlusWbnb: 0,
+        busdWbnb: 0,
     },
 
     maxUsdPlusWmaticSupply: 275000.00,
     maxUsdPlusWbnbSupply: 500000.00,
+    maxBusdWbnbSupply: 10000.00,
 };
 
 const getters = {
@@ -24,6 +26,10 @@ const getters = {
     maxUsdPlusWbnbSupply(state) {
         return state.maxUsdPlusWbnbSupply;
     },
+
+    maxBusdWbnbSupply(state) {
+        return state.maxBusdWbnbSupply;
+    },
 };
 
 const actions = {
@@ -35,6 +41,7 @@ const actions = {
         commit('setTotalSupply', {
             usdPlusWmatic: 0,
             usdPlusWbnb: 0,
+            busdWbnb: 0,
         });
 
     },
@@ -46,6 +53,7 @@ const actions = {
         let web3 = rootState.web3;
         let usdPlusWmatic;
         let usdPlusWbnb;
+        let busdWbnb;
 
         try {
             usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.totalSupply().call();
@@ -78,8 +86,22 @@ const actions = {
             }
         }
 
+
+        try {
+            busdWbnb = await web3.contracts.busdWbnb.methods.totalSupply().call();
+        } catch (e) {
+            console.log('ERROR: ' + e)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            try {
+                busdWbnb = await web3.contracts.busdWbnb.methods.totalSupply().call();
+            } catch (e) {
+                console.log('ERROR: ' + e)
+            }
+        }
+
         try {
             usdPlusWbnb = web3.web3.utils.fromWei(usdPlusWbnb, 'mwei') ;
+            busdWbnb = web3.web3.utils.fromWei(busdWbnb, 'mwei') ;
         } catch (e) {
             console.log('ERROR: ' + e)
         }
@@ -87,6 +109,7 @@ const actions = {
         commit('setTotalSupply', {
             usdPlusWmatic: usdPlusWmatic,
             usdPlusWbnb: usdPlusWbnb,
+            busdWbnb: busdWbnb,
         })
     },
 };

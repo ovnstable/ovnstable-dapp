@@ -25,6 +25,7 @@
                     <UsdPlus class="ma-3"/>
                     <WmaticUsdPlus class="ma-3" v-if="showUsdPlusWmatic"/>
                     <WbnbUsdPlus class="ma-3" v-if="showUsdPlusWbnb"/>
+                    <WbnbBusd class="ma-3" v-if="showUsdPlusWbnb"/>
                 </template>
 
                 <template v-if="tab === 2">
@@ -37,6 +38,7 @@
                 <template v-if="tab === 4">
                     <WmaticUsdPlus class="ma-3" v-if="showUsdPlusWmatic"/>
                     <WbnbUsdPlus class="ma-3" v-if="showUsdPlusWbnb"/>
+                    <WbnbBusd class="ma-3" v-if="showUsdPlusWbnb"/>
                 </template>
             </v-row>
         </div>
@@ -54,11 +56,13 @@ import {mapGetters} from "vuex";
 import WbnbUsdPlus from "@/components/market/cards/wbnb/WbnbUsdPlus";
 import OvercapBanner from "@/components/market/cards/wbnb/banner/OvercapBanner";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
+import WbnbBusd from "@/components/market/cards/wbnb/WbnbBusd";
 
 export default {
     name: "MarketView",
 
     components: {
+        WbnbBusd,
         UsdPlus,
         OvercapBanner,
         WbnbUsdPlus,

@@ -49,7 +49,6 @@ export default {
     },
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData', 'clientProfitDay']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
         ...mapGetters('overcapData', ['isOvercapAvailable', 'showOvercapBanner']),
         ...mapGetters('accountData', ['balance']),

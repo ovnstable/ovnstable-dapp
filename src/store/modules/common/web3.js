@@ -47,10 +47,15 @@ if (polygon === "polygon") {
 
 let ExchangerUsdPlusWbnb;
 let UsdPlusWbnbToken;
+let ExchangerBusdWbnb;
+let BusdWbnbToken;
 
 if (polygon === "bsc") {
     ExchangerUsdPlusWbnb = require(`@/contracts/${polygon}/HedgeExchangerUsdPlusWbnb.json`)
     UsdPlusWbnbToken = require(`@/contracts/${polygon}/RebaseTokenUsdPlusWbnb.json`)
+
+    ExchangerBusdWbnb = require(`@/contracts/${polygon}/HedgeExchangerBusdWbnb.json`)
+    BusdWbnbToken = require(`@/contracts/${polygon}/RebaseTokenBusdWbnb.json`)
 }
 
 
@@ -380,7 +385,15 @@ const actions = {
         dispatch('statsData/refreshStats', null, {root:true});
         dispatch('dashboardData/refreshDashboard', null, {root:true});
         dispatch('farmData/refreshFarm', null, {root:true});
-        dispatch('marketData/refreshClientData', null, {root:true});
+
+        if (process.env.VUE_APP_POLYGON === 'polygon') {
+            dispatch('marketData/refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'}, {root:true});
+        }
+
+        if (process.env.VUE_APP_POLYGON === 'bsc') {
+            dispatch('marketData/refreshClientData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'}, {root:true});
+            dispatch('marketData/refreshClientData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'}, {root:true});
+        }
     },
 
 
@@ -434,6 +447,9 @@ const actions = {
         if (polygon === "bsc") {
             contracts.exchangerUsdPlusWbnb = _load(ExchangerUsdPlusWbnb, web3);
             contracts.usdPlusWbnb = _load(UsdPlusWbnbToken, web3);
+
+            contracts.exchangerBusdWbnb = _load(ExchangerBusdWbnb, web3);
+            contracts.busdWbnb = _load(BusdWbnbToken, web3);
         }
 
         contracts.poolQsUsdPlusWeth = _load(StakingRewards, web3, "0x398B66c4c69Bf19EA6A3c97e8d8b9c93f295D209");

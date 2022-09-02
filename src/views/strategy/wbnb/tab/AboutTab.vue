@@ -4,7 +4,7 @@
             <label class="strategy-info-label">
                 The exchange-traded strategy USD+/WBNB ($USD+WBNB), is an ERC-20 structured product built on Binance Smart chain that lets you leverage a collateralized debt position (BUSD lent on Venus) to borrow a volatile asset (WBNB), pair it with USD+ stablecoin, and provide USD+/WBNB liquidity on Cone all in one action. This allows earning high APY and hedging against WBNB volatility.
                 <br/><br/>
-                The unique feature of USD+/WBNB ETS is that it automatically administers a health factor of {{ wmaticStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2) : 1.35}}x on Venus and rebalances your Lent/Borrowed amounts to maintain a stringent {{ wmaticStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2) : 1.35}}x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
+                The unique feature of USD+/WBNB ETS is that it automatically administers a health factor of {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.35}}x on Venus and rebalances your Lent/Borrowed amounts to maintain a stringent {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.35}}x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
                 <br/><br/>
                 Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Binace Smart Chain - a highly scalable chain.
             </label>
@@ -47,9 +47,9 @@
                                 <v-img :src="require('@/assets/icon/checkbox.svg')"/>
                             </div>
                             <label v-if="!$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed</label>
-                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">Health Factor of {{ wmaticStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2) : 1.35}}</label>
+                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">Health Factor of {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.35}}</label>
 
-                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed Health Factor of {{ wmaticStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2) : 1.35}}</label>
+                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed Health Factor of {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.35}}</label>
                         </v-row>
                         <v-row align="center">
                             <div class="info-card-icon mt-4">
@@ -247,13 +247,13 @@
                 <v-row class="info-row" justify="start" align="center">
                     <label class="card-info mt-1">APY</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 1)) + '%' : '—' }}</label>
+                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.apy) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.apy, 1)) + '%' : '—' }}</label>
                     <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Diff. to USD+</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.diffApy) ? ((wmaticStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(wmaticStrategyData.diffApy, 1)) + '%' : '—' }}</label>
+                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.diffApy) ? ((usdPlusWbnbStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(usdPlusWbnbStrategyData.diffApy, 1)) + '%' : '—' }}</label>
                     <Tooltip text="APY difference compared to the base APY USD+ (based on 7-day average)"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
@@ -266,26 +266,26 @@
                     <label class="card-info mt-1">TVL</label>
                     <v-spacer></v-spacer>
                     <label class="card-info-value">
-                        {{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}
+                        {{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(usdPlusWbnbStrategyData.tvl, 2)) : '—' }}
                     </label>
                     <Tooltip text="Past 2 hours"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Users</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.holders) ? $utils.formatMoneyComma(wmaticStrategyData.holders, 0) : '—' }}</label>
+                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.holders) ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.holders, 0) : '—' }}</label>
                 </v-row>
 
                 <v-row class="info-row" justify="start" align="center" v-if="$wu.isMobile()">
                     <label class="card-info mt-1">Target Health Factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2)) : '—' }}</label>
+                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2)) : '—' }}</label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center" v-if="$wu.isMobile()">
                     <label class="card-info mt-1">Health Factor check interval</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.healthFactorCheckInterval) ? wmaticStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
+                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.healthFactorCheckInterval) ? usdPlusWbnbStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
             </v-col>
@@ -294,13 +294,13 @@
                 <v-row class="info-row" justify="start" align="center">
                     <label class="card-info mt-1">Target Health Factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2)) : '—' }}</label>
+                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2)) : '—' }}</label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Health Factor check interval</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.healthFactorCheckInterval) ? wmaticStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
+                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.healthFactorCheckInterval) ? usdPlusWbnbStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
             </v-col>
@@ -308,30 +308,30 @@
 
         <v-row align="center" justify="start" class="ma-0 mt-7 info-container">
             <v-col :class="!$wu.isFull() ? '' : 'ml-5'" :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center" @click="openTokenOnScan(wmaticStrategyData.rebaseAddress)">
+                <v-row justify="center" align="center" @click="openTokenOnScan(usdPlusWbnbStrategyData.rebaseAddress)">
                     <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Token address</label>
                     <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-link ml-3">{{ (wmaticStrategyData && wmaticStrategyData.rebaseAddress) ? shortAddress(wmaticStrategyData.rebaseAddress) : '—' }}</label>
+                    <label class="address-card-link ml-3">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.rebaseAddress) ? shortAddress(usdPlusWbnbStrategyData.rebaseAddress) : '—' }}</label>
                     <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
                         <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                     </div>
                 </v-row>
             </v-col>
             <v-col :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center" @click="openStrategyOnScan(wmaticStrategyData.exchangerAddress)">
+                <v-row justify="center" align="center" @click="openStrategyOnScan(usdPlusWbnbStrategyData.exchangerAddress)">
                     <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Pool address</label>
                     <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-link ml-3">{{ (wmaticStrategyData && wmaticStrategyData.exchangerAddress) ? shortAddress(wmaticStrategyData.exchangerAddress) : '—' }}</label>
+                    <label class="address-card-link ml-3">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.exchangerAddress) ? shortAddress(usdPlusWbnbStrategyData.exchangerAddress) : '—' }}</label>
                     <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
                         <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                     </div>
                 </v-row>
             </v-col>
             <v-col :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center" @click="openStrategyOnScan(wmaticStrategyData.strategyAddress)">
+                <v-row justify="center" align="center" @click="openStrategyOnScan(usdPlusWbnbStrategyData.strategyAddress)">
                     <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Vault address</label>
                     <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-link ml-3">{{ (wmaticStrategyData && wmaticStrategyData.strategyAddress) ? shortAddress(wmaticStrategyData.strategyAddress) : '—' }}</label>
+                    <label class="address-card-link ml-3">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.strategyAddress) ? shortAddress(usdPlusWbnbStrategyData.strategyAddress) : '—' }}</label>
                     <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
                         <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                     </div>
@@ -381,13 +381,13 @@ export default {
 
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData']),
+        ...mapGetters('marketData', ['usdPlusWbnbStrategyData']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
 
         entryFee: function () {
-            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
-                let result = this.wmaticStrategyData.fees.find(x => x.id === 'buy');
+            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
+                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'buy');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -395,8 +395,8 @@ export default {
         },
 
         exitFee: function () {
-            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
-                let result = this.wmaticStrategyData.fees.find(x => x.id === 'redeem');
+            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
+                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'redeem');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -404,8 +404,8 @@ export default {
         },
 
         performanceFee: function () {
-            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
-                let result = this.wmaticStrategyData.fees.find(x => x.id === 'profit');
+            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
+                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'profit');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -413,8 +413,8 @@ export default {
         },
 
         managementFee: function () {
-            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
-                let result = this.wmaticStrategyData.fees.find(x => x.id === 'tvl');
+            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
+                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'tvl');
                 return result ? result.value : null;
             } else {
                 return null;

@@ -24,14 +24,14 @@
             <v-row class="card-row info-row mt-15" justify="start" align="center">
                 <label class="card-info mt-1">APY</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 1)) + '%' : '—' }}</label>
+                <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.apy) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.apy, 1)) + '%' : '—' }}</label>
                 <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
             </v-row>
 
             <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">Diff. to USD+</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.diffApy) ? ((wmaticStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(wmaticStrategyData.diffApy, 1)) + '%' : '—' }}</label>
+                <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.diffApy) ? ((usdPlusWbnbStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(usdPlusWbnbStrategyData.diffApy, 1)) + '%' : '—' }}</label>
                 <Tooltip text="APY difference compared to the base APY USD+ (based on 7-day average)"/>
             </v-row>
 
@@ -46,7 +46,7 @@
                 <label class="card-info mt-1">TVL</label>
                 <v-spacer></v-spacer>
                 <label class="card-info-value">
-                    {{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}
+                    {{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(usdPlusWbnbStrategyData.tvl, 2)) : '—' }}
                 </label>
                 <Tooltip text="Past 2 hours"/>
             </v-row>
@@ -148,9 +148,10 @@
                     </v-row>
                     <v-row align="center" class="mt-4 info-row">
                         <label class="my-2 card-info minor-card-label">Your profit/loss last day</label>
+
                         <v-spacer></v-spacer>
-                        <label class="card-info-value minor-card-label" :class="clientProfitDay > 0 ? 'label-success' : ''">
-                            {{ clientProfitDay ? ((clientProfitDay > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDay, 4)) : '—' }}
+                        <label class="card-info-value minor-card-label" :class="clientProfitDayUsdPlusWbnb > 0 ? 'label-success' : ''">
+                            {{ clientProfitDayUsdPlusWbnb ? ((clientProfitDayUsdPlusWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWbnb, 4)) : '—' }}
                         </label>
                     </v-row>
                     <v-row class="mt-4 info-row" justify="start" align="center">
@@ -204,7 +205,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData', 'clientProfitDay']),
+        ...mapGetters('marketData', ['usdPlusWbnbStrategyData', 'clientProfitDayUsdPlusWbnb']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
         ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit']),
         ...mapGetters('accountData', ['balance']),

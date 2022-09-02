@@ -248,7 +248,7 @@ export default {
 
         ...mapGetters('investModal', ['usdPlusApproved']),
 
-        ...mapGetters('marketData', ['wmaticStrategyData']),
+        ...mapGetters('marketData', ['usdPlusWbnbStrategyData']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
 
         ...mapGetters("web3", ["web3", 'contracts']),
@@ -283,8 +283,8 @@ export default {
         },
 
         entryFee: function () {
-            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
-                let result = this.wmaticStrategyData.fees.find(x => x.id === 'buy');
+            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
+                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'buy');
                 return result ? result.value : null;
             } else {
                 return null;

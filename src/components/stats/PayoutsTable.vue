@@ -70,13 +70,9 @@ export default {
     },
 
     computed: {
-        ...mapGetters('network', ['explorerUrl']),
+        ...mapGetters('network', ['explorerUrl', 'assetName']),
         ...mapGetters('statsData', ['payouts']),
         ...mapGetters('statsUI', [ 'loadingPayouts']),
-
-        assetName() {
-            return process.env.VUE_APP_ASSET_NAME;
-        },
     },
 
     methods: {

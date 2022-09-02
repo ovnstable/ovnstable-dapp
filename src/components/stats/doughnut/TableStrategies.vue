@@ -122,14 +122,7 @@ export default {
     computed: {
         ...mapGetters("statsData", ['totalUsdPlusValue', 'currentTotalData',]),
         ...mapGetters("statsUI", ['loadingCurrentTotalData']),
-
-        assetName() {
-            return process.env.VUE_APP_ASSET_NAME;
-        },
-
-        nativeAssetName() {
-            return process.env.VUE_APP_NATIVE_ASSET;
-        },
+        ...mapGetters("network", ['assetName']),
     },
 
     mounted() {

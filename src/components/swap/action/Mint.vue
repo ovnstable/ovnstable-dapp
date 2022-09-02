@@ -230,7 +230,7 @@ export default {
 
         ...mapGetters('swapModal', ['assetApproved']),
 
-        ...mapGetters("network", ['networkId']),
+        ...mapGetters("network", ['networkId', 'assetName', 'assetDecimals', 'appApiUrl']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
@@ -245,14 +245,6 @@ export default {
                 case 56:
                     return bscIcon;
             }
-        },
-
-        assetName() {
-            return process.env.VUE_APP_ASSET_NAME;
-        },
-
-        nativeAssetName() {
-            return process.env.VUE_APP_NATIVE_ASSET;
         },
 
         maxResult: function () {
@@ -335,8 +327,8 @@ export default {
     created() {
         this.currencies.push({
             id: 'asset',
-            title: process.env.VUE_APP_ASSET_NAME,
-            image: require('@/assets/currencies/stablecoins/' + process.env.VUE_APP_ASSET_NAME + '.png')
+            title: this.assetName,
+            image: require('@/assets/currencies/stablecoins/' + this.assetName + '.png')
         });
 
         this.currency = this.currencies[0];
@@ -396,7 +388,7 @@ export default {
             try {
                 let sum;
 
-                if (process.env.VUE_APP_ASSET_DECIMALS == 18) {
+                if (this.assetDecimals === 18) {
                     sum = this.web3.utils.toWei(this.sum, 'ether');
                 } else {
                     sum = this.web3.utils.toWei(this.sum, 'mwei');
@@ -440,7 +432,7 @@ export default {
             try {
                 let sum;
 
-                if (process.env.VUE_APP_ASSET_DECIMALS == 18) {
+                if (this.assetDecimals === 18) {
                     sum = this.web3.utils.toWei(this.sum, 'ether');
                 } else {
                     sum = this.web3.utils.toWei(this.sum, 'mwei');
@@ -478,20 +470,18 @@ export default {
                 this.showWaitingModal('Approving in process');
 
                 let approveSum = "10000000";
-
                 let sum;
 
-                if (process.env.VUE_APP_ASSET_DECIMALS == 18) {
-                    sum = this.web3.utils.toWei(this.sum, 'ether');
+                if (this.assetDecimals === 18) {
+                    sum = this.web3.utils.toWei(approveSum, 'ether');
                 } else {
-                    sum = this.web3.utils.toWei(this.sum, 'mwei');
+                    sum = this.web3.utils.toWei(approveSum, 'mwei');
                 }
 
                 let allowApprove = await this.checkAllowance(sum);
                 if (!allowApprove) {
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
-                    return;
                 } else {
                     this.approveAsset();
                     this.closeWaitingModal();
@@ -572,7 +562,7 @@ export default {
                                 }
                             };
 
-                            axios.post('/error/log', errorMsg);
+                            axios.post(this.appApiUrl + '/error/log', errorMsg);
 
                             console.log(errorMsg);
                         } else {

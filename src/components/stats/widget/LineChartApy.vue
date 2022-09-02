@@ -100,7 +100,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters([]),
+        ...mapGetters('network', ['appApiUrl']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -121,11 +121,11 @@ export default {
         async zoomChart(zoom) {
             let fetchOptions = {
                 headers: {
-                    "Access-Control-Allow-Origin": process.env.VUE_APP_API
+                    "Access-Control-Allow-Origin": this.appApiUrl
                 }
             };
 
-            await fetch(process.env.VUE_APP_API + '/widget/avg-apy-info/' + zoom, fetchOptions)
+            await fetch(this.appApiUrl + '/widget/avg-apy-info/' + zoom, fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;

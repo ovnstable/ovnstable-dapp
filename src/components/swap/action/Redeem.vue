@@ -233,7 +233,7 @@ export default {
 
         ...mapGetters('swapModal', ['usdPlusApproved']),
 
-        ...mapGetters("network", ['networkId']),
+        ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
@@ -248,14 +248,6 @@ export default {
                 case 56:
                     return bscIcon;
             }
-        },
-
-        assetName() {
-            return process.env.VUE_APP_ASSET_NAME;
-        },
-
-        nativeAssetName() {
-            return process.env.VUE_APP_NATIVE_ASSET;
         },
 
         maxResult: function () {
@@ -338,8 +330,8 @@ export default {
     created() {
         this.buyCurrencies.push({
             id: 'asset',
-            title: process.env.VUE_APP_ASSET_NAME,
-            image: require('@/assets/currencies/stablecoins/' + process.env.VUE_APP_ASSET_NAME + '.png')
+            title: this.assetName,
+            image: require('@/assets/currencies/stablecoins/' + this.assetName + '.png')
         });
 
         this.buyCurrency = this.buyCurrencies[0];
@@ -469,14 +461,12 @@ export default {
                 this.showWaitingModal('Approving in process');
 
                 let approveSum = "10000000";
-
                 let sum = this.web3.utils.toWei(approveSum, 'mwei');
 
                 let allowApprove = await this.checkAllowance(sum);
                 if (!allowApprove) {
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
-                    return;
                 } else {
                     this.approveUsdPlus();
                     this.closeWaitingModal();
@@ -557,7 +547,7 @@ export default {
                                 }
                             };
 
-                            axios.post('/error/log', errorMsg);
+                            axios.post(this.appApiUrl + '/error/log', errorMsg);
 
                             console.log(errorMsg);
                         } else {

@@ -83,6 +83,7 @@ const actions = {
 
         let networkId = rootState.network.networkId;
         let rpcUrl = rootState.network.rpcUrl;
+        let appApiUrl = rootState.network.appApiUrl;
 
         let wallets = [
             {
@@ -124,7 +125,7 @@ const actions = {
             },
             {
                 walletName: 'trezor',
-                appUrl: process.env.VUE_APP_API.replaceAll('/api', ''),
+                appUrl: appApiUrl.replaceAll('/api', ''),
                 email: 'ovnstable@gmail.com',
                 rpcUrl: rpcUrl,
                 preferred: false

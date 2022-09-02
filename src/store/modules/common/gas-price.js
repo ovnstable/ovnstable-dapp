@@ -1,5 +1,3 @@
-import BN from "bn.js";
-
 const {axios} = require('@/plugins/http-axios');
 
 

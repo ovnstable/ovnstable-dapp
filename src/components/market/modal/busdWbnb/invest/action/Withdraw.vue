@@ -236,16 +236,17 @@ export default {
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
+        ...mapGetters('network', ['networkId']),
 
         icon: function (){
-            switch (process.env.VUE_APP_NETWORK_ID){
-                case '137':
+            switch (this.networkId){
+                case 137:
                     return polygonIcon;
-                case '43114':
+                case 43114:
                     return avaxIcon;
-                case '10':
+                case 10:
                     return optimismIcon;
-                case '56':
+                case 56:
                     return bscIcon;
             }
         },

@@ -30,7 +30,7 @@ const uauthOnboard = new UAuthBncOnboard({
 const state = {
     contracts: null,
     web3: null,
-    switchToPolygon: false,
+    switchToOtherNetwork: false,
     loadingWeb3: true,
     provider: null,
     onboard: null,
@@ -61,8 +61,8 @@ const getters = {
         return state.contracts;
     },
 
-    switchToPolygon(state) {
-        return state.switchToPolygon;
+    switchToOtherNetwork(state) {
+        return state.switchToOtherNetwork;
     },
 
     loadingWeb3(state) {
@@ -278,10 +278,10 @@ const actions = {
 
                 if (ALLOW_NETWORKS.includes(newNetworkId)) {
                     dispatch('updateUserData');
-                    commit('setSwitchToPolygon', false);
+                    commit('setSwitchToOtherNetwork', false);
                 } else {
                     dispatch('resetUserData');
-                    commit('setSwitchToPolygon', true);
+                    commit('setSwitchToOtherNetwork', true);
                 }
             });
 
@@ -293,7 +293,7 @@ const actions = {
         dispatch('gasPrice/refreshGasPrice', null, {root: true})
 
         if (!ALLOW_NETWORKS.includes(networkId)) {
-            commit('setSwitchToPolygon', true)
+            commit('setSwitchToOtherNetwork', true)
         }
 
         /* Account connected */
@@ -348,11 +348,13 @@ const actions = {
         dispatch('dashboardData/refreshDashboard', null, {root:true});
         dispatch('farmData/refreshFarm', null, {root:true});
 
-        if (process.env.VUE_APP_POLYGON === 'polygon') {
+        let network = rootState.network.networkName;
+
+        if (network === 'polygon') {
             dispatch('marketData/refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'}, {root:true});
         }
 
-        if (process.env.VUE_APP_POLYGON === 'bsc') {
+        if (network === 'bsc') {
             dispatch('marketData/refreshClientData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'}, {root:true});
             dispatch('marketData/refreshClientData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'}, {root:true});
         }
@@ -707,8 +709,8 @@ const mutations = {
         state.contracts = contracts;
     },
 
-    setSwitchToPolygon(state, value) {
-        state.switchToPolygon = value;
+    setSwitchToOtherNetwork(state, value) {
+        state.switchToOtherNetwork = value;
     },
 
     setLoadingWeb3(state, value) {

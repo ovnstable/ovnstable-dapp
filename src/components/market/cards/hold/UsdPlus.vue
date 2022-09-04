@@ -162,16 +162,17 @@ export default {
         ...mapGetters("statsData", ['currentTotalData']),
         ...mapGetters("accountData", ['balance']),
         ...mapGetters('wrapUI', ['showWrap']),
+        ...mapGetters('network', ['appApiUrl', 'networkId']),
 
         icon: function (){
-            switch (process.env.VUE_APP_NETWORK_ID){
-                case '137':
+            switch (this.networkId){
+                case 137:
                     return polygonIcon;
-                case '43114':
+                case 43114:
                     return avaxIcon;
-                case '10':
+                case 10:
                     return optimismIcon;
-                case '56':
+                case 56:
                     return bscIcon;
             }
         },
@@ -237,11 +238,11 @@ export default {
         async getAvgWeekApy() {
             let fetchOptions = {
                 headers: {
-                    "Access-Control-Allow-Origin": process.env.VUE_APP_API
+                    "Access-Control-Allow-Origin": this.appApiUrl
                 }
             };
 
-            await fetch(process.env.VUE_APP_API + '/widget/avg-apy-info/week', fetchOptions)
+            await fetch(this.appApiUrl + '/widget/avg-apy-info/week', fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;

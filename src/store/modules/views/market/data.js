@@ -75,12 +75,14 @@ const actions = {
     async refreshMarket({commit, dispatch, getters, rootState}) {
         console.log('MarketData: refreshMarket');
 
-        if (process.env.VUE_APP_POLYGON === 'polygon') {
+        let network = rootState.network.networkName;
+
+        if (network === 'polygon') {
             dispatch('refreshStrategyData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
             dispatch('refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
         }
 
-        if (process.env.VUE_APP_POLYGON === 'bsc') {
+        if (network === 'bsc') {
             dispatch('refreshStrategyData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
             dispatch('refreshClientData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
 

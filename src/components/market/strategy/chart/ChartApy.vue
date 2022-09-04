@@ -122,13 +122,14 @@ export default {
         zoom: "all",
         slice: null,
         chart: null,
+        contractAddress: null,
 
         avgApy: null,
         usdPlusDataEnabled: true,
     }),
 
     computed: {
-        ...mapGetters('network', ['networkName', 'appApiUrl']),
+        ...mapGetters('network', ['appApiUrl']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -153,9 +154,19 @@ export default {
                 }
             };
 
-            let contractAddress = this.networkName === 'polygon' ? '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf' : (this.networkName === 'bsc' ? '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1' : '0');
+            switch (this.etsName) {
+                case "USD+/WMATIC":
+                    this.contractAddress = '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf';
+                    break;
+                case "USD+/WBNB":
+                    this.contractAddress = '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1';
+                    break;
+                case "BUSD/WBNB":
+                    this.contractAddress = '0xc6eca7a3b863d720393DFc62494B6eaB22567D37';
+                    break;
+            }
 
-            await fetch(this.appApiUrl + '/hedge-strategies/' + contractAddress + '/avg-apy-info/' + zoom, fetchOptions)
+            await fetch(this.appApiUrl + '/hedge-strategies/' + this.contractAddress + '/avg-apy-info/' + zoom, fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;
@@ -311,7 +322,7 @@ export default {
                     },
 
                     axisTicks: {
-                        show: true,
+                        show: false,
                     },
                 },
 

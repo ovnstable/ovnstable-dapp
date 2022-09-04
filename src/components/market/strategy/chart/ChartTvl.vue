@@ -105,7 +105,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData']),
+        ...mapGetters('marketData', ['wmaticStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -178,7 +178,17 @@ export default {
                 maxValue = 50;
             }
 
-            this.totalTvl = this.wmaticStrategyData.tvl;
+            switch (this.etsName) {
+                case "USD+/WMATIC":
+                    this.totalTvl = this.wmaticStrategyData.tvl;
+                    break;
+                case "USD+/WBNB":
+                    this.totalTvl = this.usdPlusWbnbStrategyData.tvl;
+                    break;
+                case "BUSD/WBNB":
+                    this.totalTvl = this.busdWbnbStrategyData.tvl;
+                    break;
+            }
 
             let options = {
                 series: [{
@@ -236,7 +246,7 @@ export default {
                     },
 
                     axisTicks: {
-                        show: true,
+                        show: false,
                     },
                 },
 

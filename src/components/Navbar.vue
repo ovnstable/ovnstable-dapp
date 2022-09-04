@@ -7,13 +7,13 @@
         <v-list class="mt-1 mb-8">
             <v-list-item>
                 <v-list-item-title>
-                    <img class="logo-img" :src="require('@/assets/logo.svg')" @click="openLink('https://market.overnight.fi/')">
+                    <img class="logo-img" :src="require('@/assets/logo.svg')" @click="openLink('https://overnight.fi/')">
                 </v-list-item-title>
             </v-list-item>
         </v-list>
 
         <v-list nav class="page-list">
-            <v-list-item link @click="dashBoardClick">
+            <v-list-item class="list-item-hover" link @click="dashBoardClick">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'dashboard' ? 'avatarSelected.svg' : 'avatar.svg'))">
                 </v-list-item-icon>
@@ -22,7 +22,7 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-item link @click="marketClick">
+            <v-list-item class="list-item-hover" link @click="marketClick">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'market' ? 'earnSelected.svg' : 'earn.svg'))">
                 </v-list-item-icon>
@@ -32,7 +32,7 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-item link @click="statsClick">
+            <v-list-item class="list-item-hover" link @click="statsClick">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'stats' ? 'chartSelected.svg' : 'chart.svg'))">
                 </v-list-item-icon>
@@ -42,7 +42,7 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-item link @click="collateralClick">
+            <v-list-item class="list-item-hover" link @click="collateralClick">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'collateral' ? 'addchartSelected.svg' : 'addchart.svg'))">
                 </v-list-item-icon>
@@ -213,6 +213,7 @@ export default {
     color: #333333;
 }
 
+
 .selected-page {
     color: #1C95E7 !important;
 }
@@ -267,4 +268,13 @@ export default {
 .nav-card-text-link:hover {
     text-decoration: underline !important;
 }
+
+.list-item-hover:hover {
+    background: rgba(28, 149, 231, 0.1) !important;
+}
+
+.list-item-hover:active {
+    background: linear-gradient(rgba(40, 160, 240, 1), rgba(6, 120, 196, 0.99)) !important;
+}
+
 </style>

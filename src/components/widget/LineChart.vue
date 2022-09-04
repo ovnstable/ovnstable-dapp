@@ -158,7 +158,7 @@ export default {
                     },
 
                     axisTicks: {
-                        show: true,
+                        show: false,
                     },
                 },
 
@@ -251,7 +251,7 @@ export default {
                     type: ['gradient'],
 
                     gradient: {
-                        shade: 'dark',
+                        shade: 'rgba(230, 241, 255, 1)',
                         type: "vertical",
                         shadeIntensity: 0.2,
                         opacityFrom: 1,

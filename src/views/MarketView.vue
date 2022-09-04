@@ -4,19 +4,40 @@
             <label class="title-label">Earn</label>
         </div>
 
-        <div class="mt-10">
-            <v-row justify="start" class="tab-row ma-0">
-                <v-btn flat class="group-left-btn" @click="tab=1" v-bind:class="activeTabFeatured">Featured&nbsp;<v-icon size="16">mdi-star-circle</v-icon></v-btn>
-                <v-btn style="background-color: transparent !important;" @click="tab=2" v-bind:class="activeTabHold" disabled>USD+</v-btn>
-                <v-btn style="background-color: transparent !important;" @click="tab=3" v-bind:class="activeTabPools" disabled>USD+ Pools</v-btn>
-                <v-btn class="group-right-btn" @click="tab=4" v-bind:class="activeTabHedged">ETS</v-btn>
-            </v-row>
-        </div>
+        <v-row align="start" justify="start" class="ma-0">
+              <v-col class="ma-n3">
+                    <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
+                          <label  @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabFeatured">Featured&nbsp;<v-icon size="16" class="mb-1">mdi-star-circle</v-icon></label>
+                          <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabHold">USD+</label>
+                          <label style="color: #C5C9D1 !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
+                          <label  @click="tab=4" class="tab-btn ml-4" v-bind:class="activeTabHedged">ETS</label>
+
+                          <v-spacer></v-spacer>
+
+                          <v-menu offset-y v-if="$wu.isFull()"> </v-menu>
+                    </v-row>
+              </v-col>
+        </v-row>
 
         <div class="mt-7 cards-list-container">
             <v-row class="d-flex" justify="start">
-                <WmaticUsdPlus class="ma-3"/>
-                <WbnbUsdPlus class="ma-3"/>
+                <template v-if="tab === 1">
+                    <UsdPlus class="ma-3"/>
+                    <WmaticUsdPlus class="ma-3"/>
+                    <WbnbUsdPlus class="ma-3"/>
+                </template>
+
+                <template v-if="tab === 2">
+                    <UsdPlus class="ma-3"/>
+                </template>
+
+                <template v-if="tab === 3">
+                </template>
+
+                <template v-if="tab === 4">
+                    <WmaticUsdPlus class="ma-3"/>
+                    <WbnbUsdPlus class="ma-3"/>
+                </template>
             </v-row>
         </div>
 
@@ -30,11 +51,13 @@ import WmaticUsdPlus from "@/components/market/cards/wmatic/WmaticUsdPlus";
 import {mapGetters} from "vuex";
 import WbnbUsdPlus from "@/components/market/cards/wbnb/WbnbUsdPlus";
 import OvercapBanner from "@/components/market/cards/wbnb/banner/OvercapBanner";
+import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 
 export default {
     name: "MarketView",
 
     components: {
+        UsdPlus,
         OvercapBanner,
         WbnbUsdPlus,
         WmaticUsdPlus,
@@ -85,22 +108,11 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
-    .tab-button {
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 14px !important;
-        line-height: 20px !important;
-    }
-
-    .tab-button-in-active {
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 14px !important;
-        line-height: 20px !important;
-    }
-
-    .tab-button, .tab-button-in-active {
-        width: 50% !important;
+    .tab-btn {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
     }
 
     .title-label {
@@ -113,18 +125,11 @@ export default {
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .tab-button {
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-    }
-
-    .tab-button-in-active {
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
+    .tab-btn {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 32px;
     }
 
     .title-label {
@@ -137,19 +142,13 @@ export default {
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .tab-button {
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
+    .tab-btn {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 32px;
     }
 
-    .tab-button-in-active {
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-    }
 
     .title-label {
         font-style: normal;
@@ -160,33 +159,37 @@ export default {
 }
 
 .tab-button {
-    background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
-    border-radius: 0;
-    box-shadow: none !important;
-    font-family: 'Roboto', sans-serif !important;
-    text-transform: none !important;
-    font-feature-settings: 'liga' off !important;
-    color: #FFFFFF !important;
+  border-bottom: 2px solid #1C95E7 !important;
+  color: #1C95E7 !important;
+  cursor: pointer;
 }
 
 .tab-button-in-active {
-    background: none !important;
-    border: 1px solid #CED2D8;
-    border-radius: 0;
-    box-shadow: none !important;
-    font-family: 'Roboto', sans-serif !important;
-    text-transform: none !important;
-    font-feature-settings: 'liga' off !important;
-    color: #333333 !important;
+  color: #C5C9D1 !important;
+  cursor: pointer;
 }
 
-.group-left-btn {
-    border-radius: 2px 0px 0px 2px;
+.mdi-star-circle {
+  color: #1C95E7 !important;
+  cursor: pointer !important;
 }
 
-.group-right-btn {
-    border-radius: 0px 2px 2px 0px;
+.tab-btn {
+  font-family: 'Roboto', sans-serif;
+  font-feature-settings: 'liga' off;
+  color: #333333;
+  margin-bottom: -2px;
+  cursor: pointer;
 }
+
+.tab-btn-disabled {
+  cursor: default;
+}
+
+.toggle-row {
+  border-bottom: 2px solid #DCE3E8;
+}
+
 
 .cards-list-container {
     margin-bottom: 15% !important;

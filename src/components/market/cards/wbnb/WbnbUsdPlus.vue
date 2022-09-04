@@ -1,6 +1,6 @@
 <template>
-    <v-row class="card-container ma-0">
-        <v-col>
+    <v-row class="card-container ma-0" @click="openStrategyCard">
+        <v-col cols="12" align-self="start">
             <v-row class="card-row mt-7" justify="end" align="center">
                 <label class="tag-label">Exchange-traded strategy / moderate risk</label>
                 <v-icon class="tag-icon" :class="$wu.isMobile() ? 'ml-1' : 'ml-2'" :size="$wu.isMobile() ? 12 : 16">mdi-star-circle</v-icon>
@@ -24,14 +24,14 @@
             <v-row class="card-row info-row mt-15" justify="start" align="center">
                 <label class="card-info mt-1">APY</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.apy) ? ($utils.formatMoneyComma(wmaticStrategyData.apy, 1)) + '%' : '—' }}</label>
+                <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.apy) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.apy, 1)) + '%' : '—' }}</label>
                 <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
             </v-row>
 
             <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">Diff. to USD+</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value">{{ (wmaticStrategyData && wmaticStrategyData.diffApy) ? ((wmaticStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(wmaticStrategyData.diffApy, 1)) + '%' : '—' }}</label>
+                <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.diffApy) ? ((usdPlusWbnbStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(usdPlusWbnbStrategyData.diffApy, 1)) + '%' : '—' }}</label>
                 <Tooltip text="APY difference compared to the base APY USD+ (based on 7-day average)"/>
             </v-row>
 
@@ -46,7 +46,7 @@
                 <label class="card-info mt-1">TVL</label>
                 <v-spacer></v-spacer>
                 <label class="card-info-value">
-                    {{ (wmaticStrategyData && wmaticStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticStrategyData.tvl, 2)) : '—' }}
+                    {{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(usdPlusWbnbStrategyData.tvl, 2)) : '—' }}
                 </label>
                 <Tooltip text="Past 2 hours"/>
             </v-row>
@@ -142,15 +142,16 @@
             <v-row v-if="isOvercapAvailable" class="card-row card-banner-status-container mt-7" justify="start" align="center">
                 <v-col class="card-banner-body">
                     <v-row align="center" class="info-row">
-                        <label class="my-2 card-info minor-card-label">Your balance in strategy</label>
+                        <label class="my-2 card-info minor-card-label">Your balance in ETS</label>
                         <v-spacer></v-spacer>
                         <label class="card-info-value minor-card-label">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
                     </v-row>
                     <v-row align="center" class="mt-4 info-row">
                         <label class="my-2 card-info minor-card-label">Your profit/loss last day</label>
+
                         <v-spacer></v-spacer>
-                        <label class="card-info-value minor-card-label" :class="clientProfitDay > 0 ? 'label-success' : ''">
-                            {{ clientProfitDay ? ((clientProfitDay > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDay, 4)) : '—' }}
+                        <label class="card-info-value minor-card-label" :class="clientProfitDayUsdPlusWbnb > 0 ? 'label-success' : ''">
+                            {{ clientProfitDayUsdPlusWbnb ? ((clientProfitDayUsdPlusWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWbnb, 4)) : '—' }}
                         </label>
                     </v-row>
                     <v-row class="mt-4 info-row" justify="start" align="center">
@@ -177,9 +178,11 @@
                     </v-row>
                 </v-col>
             </v-row>
+        </v-col>
 
-            <v-row class="card-row mt-15 mb-7" justify="center" align="center">
-                <v-btn class="open-strategy-btn" @click="openStrategyAction">open strategy</v-btn>
+        <v-col cols="12" align-self="end">
+            <v-row class="card-row mt-2 mb-7" justify="center" align="center">
+                <v-btn class="open-strategy-btn" v.on:click.prevent>open strategy</v-btn>
             </v-row>
         </v-col>
 
@@ -202,7 +205,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData', 'clientProfitDay']),
+        ...mapGetters('marketData', ['usdPlusWbnbStrategyData', 'clientProfitDayUsdPlusWbnb']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
         ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit']),
         ...mapGetters('accountData', ['balance']),
@@ -237,6 +240,11 @@ export default {
             this.$router.push('/ets/wbnb');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         },
+
+        openStrategyCard() {
+          this.$router.push('/ets');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     },
 }
 </script>
@@ -360,14 +368,14 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 30px;
-        line-height: 36px;
+        line-height: 40px;
     }
 
     .card-info {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 16px;
+        line-height: 24px;
     }
 
     .card-info-banner {
@@ -380,8 +388,8 @@ export default {
     .card-info-value {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 16px;
+        line-height: 20px;
         letter-spacing: 0.04em;
     }
 
@@ -448,14 +456,14 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 30px;
-        line-height: 36px;
+        line-height: 40px;
     }
 
     .card-info {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 16px;
+        line-height: 24px;
     }
 
     .card-info-banner {
@@ -468,8 +476,8 @@ export default {
     .card-info-value {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 16px;
+        line-height: 20px;
         letter-spacing: 0.04em;
     }
 
@@ -510,7 +518,7 @@ export default {
 .card-container {
     background: #FFFFFF !important;
     border-radius: 4px !important;
-    max-width: 480px !important;
+    max-width: 460px !important;
 }
 
 .card-banner-status-container {
@@ -626,4 +634,13 @@ export default {
     font-size: 16px !important;
     line-height: 24px !important;
 }
+
+* {
+    cursor: pointer;
+}
+
+.card-container:hover {
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.05), 0 4px 4px 0 rgba(0, 0, 0, 0.05);
+}
+
 </style>

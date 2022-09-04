@@ -29,7 +29,7 @@
                             <v-row align="center">
                                 <v-col cols="12">
                                     <v-row align="center">
-                                        <label class="investor-card-sub-title">Your balance in strategy</label>
+                                        <label class="investor-card-sub-title">Your balance in ETS</label>
                                     </v-row>
                                     <v-row align="center" class="mt-5">
                                         <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
@@ -44,8 +44,8 @@
                                     <v-row class="info-row mt-6" justify="start" align="center">
                                         <label class="fee-structure-label mt-1">Last day</label>
                                         <v-spacer></v-spacer>
-                                        <label class="investor-card-sub-title-value" :class="clientProfitDay > 0 ? 'success-color' : ''">
-                                            {{ clientProfitDay ? ((clientProfitDay > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDay, 4)) : '—' }}
+                                        <label class="investor-card-sub-title-value" :class="clientProfitDayUsdPlusWbnb > 0 ? 'success-color' : ''">
+                                            {{ clientProfitDayUsdPlusWbnb ? ((clientProfitDayUsdPlusWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWbnb, 4)) : '—' }}
                                         </label>
                                     </v-row>
                                     <v-row class="info-row mt-6" justify="start" align="center">
@@ -182,7 +182,7 @@
                     <v-row class="info-card-container-white ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
                         <v-col class="my-10 mx-8">
                             <v-row align="center">
-                                <label class="investor-card-sub-title">Your balance in strategy</label>
+                                <label class="investor-card-sub-title">Your balance in ETS</label>
                             </v-row>
                             <v-row align="center" class="mt-5">
                                 <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
@@ -193,8 +193,8 @@
                             <v-row class="info-row mt-6" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Last day</label>
                                 <v-spacer></v-spacer>
-                                <label class="investor-card-sub-title-value" :class="clientProfitDay > 0 ? 'success-color' : ''">
-                                    {{ clientProfitDay ? ((clientProfitDay > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDay, 4)) : '—' }}
+                                <label class="investor-card-sub-title-value" :class="clientProfitDayUsdPlusWbnb > 0 ? 'success-color' : ''">
+                                    {{ clientProfitDayUsdPlusWbnb ? ((clientProfitDayUsdPlusWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWbnb, 4)) : '—' }}
                                 </label>
                             </v-row>
                             <v-row class="info-row mt-6" justify="start" align="center">
@@ -357,7 +357,7 @@ export default {
 
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData', 'clientProfitDay']),
+        ...mapGetters('marketData', ['usdPlusWbnbStrategyData', 'clientProfitDayUsdPlusWbnb']),
         ...mapGetters('marketUI', ['showUsdPlusWbnb']),
         ...mapGetters('accountData', ['balance']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
@@ -378,8 +378,8 @@ export default {
         },
 
         entryFee: function () {
-            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
-                let result = this.wmaticStrategyData.fees.find(x => x.id === 'buy');
+            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
+                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'buy');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -387,8 +387,8 @@ export default {
         },
 
         exitFee: function () {
-            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
-                let result = this.wmaticStrategyData.fees.find(x => x.id === 'redeem');
+            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
+                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'redeem');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -396,8 +396,8 @@ export default {
         },
 
         performanceFee: function () {
-            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
-                let result = this.wmaticStrategyData.fees.find(x => x.id === 'profit');
+            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
+                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'profit');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -405,8 +405,8 @@ export default {
         },
 
         managementFee: function () {
-            if (this.wmaticStrategyData && this.wmaticStrategyData.fees) {
-                let result = this.wmaticStrategyData.fees.find(x => x.id === 'tvl');
+            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
+                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'tvl');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -452,7 +452,7 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
-        line-height: 24px;
+        line-height: 20px;
         letter-spacing: 0.03em;
     }
 
@@ -524,7 +524,7 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 12px;
-        line-height: 20px;
+        line-height: 18px;
         letter-spacing: 0.02em;
     }
 
@@ -551,15 +551,15 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
-        line-height: 24px;
+        line-height: 20px;
         letter-spacing: 0.02em;
     }
 
     .investor-card-sub-title-value {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 28px;
+        font-size: 24px;
+        line-height: 36px;
     }
 
     .investor-card-title {
@@ -678,15 +678,15 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
-        line-height: 24px;
+        line-height: 20px;
         letter-spacing: 0.02em;
     }
 
     .investor-card-sub-title-value {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 28px;
+        font-size: 24px;
+        line-height: 36px;
     }
 
     .investor-card-title {
@@ -885,9 +885,11 @@ export default {
 }
 
 .value-disabled {
-    font-weight: 300 !important;
+    font-weight: 400 !important;
     text-transform: uppercase !important;
     color: #C5C9D1 !important;
+    font-size: 16px;
+    line-height: 20px;
 }
 
 .fee-structure-label {

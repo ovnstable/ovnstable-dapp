@@ -29,7 +29,7 @@
                             <v-row align="center">
                                 <v-col cols="12">
                                     <v-row align="center">
-                                        <label class="investor-card-sub-title">Your balance in strategy</label>
+                                        <label class="investor-card-sub-title">Your balance in ETS</label>
                                     </v-row>
                                     <v-row align="center" class="mt-5">
                                         <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWmatic ? ($utils.formatMoneyComma(this.balance.usdPlusWmatic, 2) + ' USD+') : '—' }}</label>
@@ -44,8 +44,8 @@
                                     <v-row class="info-row mt-6" justify="start" align="center">
                                         <label class="fee-structure-label mt-1">Last day</label>
                                         <v-spacer></v-spacer>
-                                        <label class="investor-card-sub-title-value" :class="clientProfitDay > 0 ? 'success-color' : ''">
-                                            {{ clientProfitDay ? ((clientProfitDay > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDay, 4)) : '—' }}
+                                        <label class="investor-card-sub-title-value" :class="clientProfitDayUsdPlusWmatic > 0 ? 'success-color' : ''">
+                                            {{ clientProfitDayUsdPlusWmatic ? ((clientProfitDayUsdPlusWmatic > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWmatic, 4)) : '—' }}
                                         </label>
                                     </v-row>
                                     <v-row class="info-row mt-6" justify="start" align="center">
@@ -127,7 +127,7 @@
                     <v-row class="info-card-container-white ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
                         <v-col class="my-10 mx-8">
                             <v-row align="center">
-                                <label class="investor-card-sub-title">Your balance in strategy</label>
+                                <label class="investor-card-sub-title">Your balance in ETS</label>
                             </v-row>
                             <v-row align="center" class="mt-5">
                                 <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWmatic ? ($utils.formatMoneyComma(this.balance.usdPlusWmatic, 2) + ' USD+') : '—' }}</label>
@@ -138,8 +138,8 @@
                             <v-row class="info-row mt-6" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Last day</label>
                                 <v-spacer></v-spacer>
-                                <label class="investor-card-sub-title-value" :class="clientProfitDay > 0 ? 'success-color' : ''">
-                                    {{ clientProfitDay ? ((clientProfitDay > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDay, 4)) : '—' }}
+                                <label class="investor-card-sub-title-value" :class="clientProfitDayUsdPlusWmatic > 0 ? 'success-color' : ''">
+                                    {{ clientProfitDayUsdPlusWmatic ? ((clientProfitDayUsdPlusWmatic > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWmatic, 4)) : '—' }}
                                 </label>
                             </v-row>
                             <v-row class="info-row mt-6" justify="start" align="center">
@@ -242,7 +242,7 @@ export default {
 
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData', 'clientProfitDay']),
+        ...mapGetters('marketData', ['wmaticStrategyData', 'clientProfitDayUsdPlusWmatic']),
         ...mapGetters('marketUI', ['showUsdPlusWmatic']),
         ...mapGetters('accountData', ['balance']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),

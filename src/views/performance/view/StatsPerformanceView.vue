@@ -434,7 +434,7 @@ export default {
 .section-title-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    text-transform: uppercase;
+    text-transform: capitalize;
     color: #333333;
 }
 

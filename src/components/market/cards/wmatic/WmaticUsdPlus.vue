@@ -1,6 +1,6 @@
 <template>
-    <v-row class="card-container ma-0">
-        <v-col>
+    <v-row class="card-container ma-0" @click="openStrategyCard">
+        <v-col cols="12" align-self="start">
             <v-row class="card-row mt-7" justify="end" align="center">
                 <label class="tag-label">Exchange-traded strategy / moderate risk</label>
                 <v-icon class="tag-icon" :class="$wu.isMobile() ? 'ml-1' : 'ml-2'" :size="$wu.isMobile() ? 12 : 16">mdi-star-circle</v-icon>
@@ -105,9 +105,11 @@
                     </v-row>
                 </v-col>
             </v-row>
+        </v-col>
 
-            <v-row class="card-row mt-15 mb-7" justify="center" align="center">
-                <v-btn class="open-strategy-btn" @click="openStrategyAction">open strategy</v-btn>
+        <v-col cols="12" align-self="end">
+            <v-row class="card-row mt-2 mb-7" justify="center" align="center">
+                <v-btn class="open-strategy-btn" v.on:click.prevent>open strategy</v-btn>
             </v-row>
         </v-col>
 
@@ -147,6 +149,11 @@ export default {
         openStrategyAction() {
             this.$router.push('/ets/wmatic');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+
+        openStrategyCard() {
+          this.$router.push('/ets');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     },
 }
@@ -271,14 +278,14 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 30px;
-        line-height: 36px;
+        line-height: 40px;
     }
 
     .card-info {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 16px;
+        line-height: 24px;
     }
 
     .card-info-banner {
@@ -291,8 +298,8 @@ export default {
     .card-info-value {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 16px;
+        line-height: 20px;
         letter-spacing: 0.04em;
     }
 
@@ -359,14 +366,14 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 30px;
-        line-height: 36px;
+        line-height: 40px;
     }
 
     .card-info {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 16px;
+        line-height: 24px;
     }
 
     .card-info-banner {
@@ -379,8 +386,8 @@ export default {
     .card-info-value {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 16px;
+        line-height: 20px;
         letter-spacing: 0.04em;
     }
 
@@ -421,7 +428,7 @@ export default {
 .card-container {
     background: #FFFFFF !important;
     border-radius: 4px !important;
-    max-width: 480px !important;
+    max-width: 460px !important;
 }
 
 .card-banner-status-container {
@@ -520,4 +527,13 @@ export default {
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #ADB3BD;
 }
+
+* {
+  cursor: pointer;
+}
+
+.card-container:hover {
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.05), 0 4px 4px 0 rgba(0, 0, 0, 0.05);
+}
+
 </style>

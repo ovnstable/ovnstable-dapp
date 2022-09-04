@@ -6,10 +6,10 @@
             <v-row align="start" justify="start" class="ma-0">
                 <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-                        <label style="color: #C5C9D1 !important" class="tab-btn mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
+                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
                         <label class="tab-btn mx-4" @click="tab=2" v-bind:class="activeTabUsdPlus">USD+</label>
-                        <label style="color: #C5C9D1 !important" class="tab-btn mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
-                        <label style="color: #C5C9D1 !important" class="tab-btn ml-4" v-bind:class="activeTabETS" disabled>ETS</label>
+                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
+                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4" v-bind:class="activeTabETS" disabled>ETS</label>
 
                         <v-spacer></v-spacer>
 
@@ -781,12 +781,16 @@ export default {
 .tab-button {
     border-bottom: 2px solid #1C95E7 !important;
     color: #1C95E7 !important;
-    cursor: pointer !important;
+    cursor: pointer;
+}
+
+.tab-btn-disabled {
+  cursor: default;
 }
 
 .tab-button-in-active {
     color: #333333 !important;
-    cursor: pointer !important;
+    cursor: default;
 }
 
 .slice-select-container {

@@ -222,8 +222,8 @@ export default {
                     yaxis: [{
                         y: averageValue,
                         strokeDashArray: 5,
-                        borderColor: '#1C95E7',
-                        fillColor: '#1C95E7',
+                        borderColor: 'rgba(28, 149, 231, 1)',
+                        fillColor: 'rgba(28, 149, 231, 1)',
                         label: {
                             show: false,
                         },
@@ -242,7 +242,7 @@ export default {
                 stroke: {
                     curve: 'straight',
                     width: this.isMobile ? 1 : 2,
-                    colors: ["#1C95E7"],
+                    colors: ["rgba(28, 149, 231, 1)"],
                 },
 
                 xaxis: {
@@ -260,7 +260,7 @@ export default {
                     },
 
                     axisTicks: {
-                        show: true,
+                        show: false,
                     },
                 },
 
@@ -300,7 +300,7 @@ export default {
                     type: ['gradient'],
 
                     gradient: {
-                        shade: 'dark',
+                        shade: 'rgba(230, 241, 255, 1)',
                         type: "vertical",
                         shadeIntensity: 0.2,
                         opacityFrom: 1,
@@ -416,6 +416,17 @@ export default {
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     color: #707A8B !important;
+}
+
+.zoom-btn:hover {
+    background: rgba(28, 149, 231, 0.1);
+    color: rgba(28, 149, 231, 1) !important;
+}
+
+.zoom-btn:active {
+    background: linear-gradient(rgba(40, 160, 240, 1),
+    rgba(6, 120, 196, 0.99),
+    rgba(28, 149, 231, 0.24));
 }
 
 .selected {

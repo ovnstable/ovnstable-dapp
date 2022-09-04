@@ -23,7 +23,7 @@
         <tbody>
         <tr v-for="item in data" :key="item.label" class="current-table-row" @click="openTokenOnScan(item.link)">
             <td class="table-label-don text-right" width="1%">
-                <v-img class="currency-icon" :src="item.logo"/>
+                <v-img class="currency-icon" :src="item.logo" />
             </td>
             <td class="table-label-don text-left">
                 <v-row>
@@ -32,7 +32,8 @@
                     </label>
                     <v-spacer></v-spacer>
                     <label class="link-label mr-6">
-                        <v-img class="icon-img-link" v-if="!minimized" :src="require('@/assets/icon/open-in-new.svg')"/>
+                        <v-img class="icon-img-link" v-if="!minimized"
+                               :src="require('@/assets/icon/open-in-new.svg')" />
                     </label>
                 </v-row>
             </td>
@@ -40,7 +41,7 @@
                 VERY HIGH
             </td>
             <td class="table-label-don text-left">
-                ${{ $utils.formatMoney(item.value, 2)}}
+                ${{ $utils.formatMoney(item.value, 2) }}
             </td>
             <td class="table-label-don text-left progress-col" v-if="!minimized">
                 <v-progress-linear :value="getPercent(item)"
@@ -69,19 +70,18 @@ export default {
     props: {
         data: {
             type: Array,
-            default: null,
+            default: null
         },
 
         minimized: {
             type: Boolean,
-            default: false,
-        },
+            default: false
+        }
     },
 
     components: {},
 
-    data: () => ({
-    }),
+    data: () => ({}),
 
     computed: {
         ...mapGetters('network', ['explorerUrl']),
@@ -103,7 +103,7 @@ export default {
         getTotal() {
             let sum = 0;
             this.data.forEach(dataItem => {
-                sum += dataItem.value
+                sum += dataItem.value;
             });
 
             return sum;
@@ -112,7 +112,7 @@ export default {
         getLiquidationTotal() {
             let sum = 0;
             this.data.forEach(dataItem => {
-                sum += dataItem.liquidationValue
+                sum += dataItem.liquidationValue;
             });
 
             return sum;
@@ -124,7 +124,7 @@ export default {
             }
         }
     }
-}
+};
 </script>
 
 <style scoped>
@@ -140,13 +140,18 @@ export default {
 
     .table-label-don {
         font-style: normal !important;
-        font-weight: 300 !important;
+        font-weight: 400 !important;
         font-size: 14px !important;
         line-height: 22px !important;
     }
 
     .current-table-row {
         height: 48px !important;
+    }
+
+    .currency-icon {
+        width: 24px !important;
+        height: 24px !important;
     }
 }
 
@@ -161,13 +166,18 @@ export default {
 
     .table-label-don {
         font-style: normal !important;
-        font-weight: 300 !important;
+        font-weight: 400 !important;
         font-size: 16px !important;
         line-height: 24px !important;
     }
 
     .current-table-row {
         height: 64px !important;
+    }
+
+    .currency-icon {
+        width: 32px !important;
+        height: 32px !important;
     }
 }
 
@@ -182,13 +192,18 @@ export default {
 
     .table-label-don {
         font-style: normal !important;
-        font-weight: 300 !important;
+        font-weight: 400 !important;
         font-size: 16px !important;
         line-height: 24px !important;
     }
 
     .current-table-row {
         height: 64px !important;
+    }
+
+    .currency-icon {
+        width: 40px !important;
+        height: 40px !important;
     }
 }
 
@@ -208,10 +223,10 @@ export default {
 }
 
 .table-header-don {
-     font-family: 'Roboto', sans-serif !important;
-     font-feature-settings: 'pnum' on, 'lnum' on !important;
-     color: #ADB3BD !important;
- }
+    font-family: 'Roboto', sans-serif !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+    color: #ADB3BD !important;
+}
 
 .table-label-don {
     font-family: 'Roboto', sans-serif;

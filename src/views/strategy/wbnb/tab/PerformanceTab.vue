@@ -15,8 +15,8 @@
                     </v-col>
                 </v-row>
 
-                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="apyData" :usdPlusData="payoutsApyDataDict" ets-name="USD+/WBNB"/>
-                <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="tvlData" ets-name="USD+/WBNB"/>
+                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="apyDataUsdPlusWbnb" :usdPlusData="payoutsApyDataDict" ets-name="USD+/WBNB"/>
+                <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="tvlDataUsdPlusWbnb" ets-name="USD+/WBNB"/>
             </v-col>
         </v-row>
 
@@ -48,7 +48,7 @@
             </div>
         </v-row>
 
-        <v-row v-if="wmaticStrategyData.ownedAsset" align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-4' : 'mt-4'">
+        <v-row v-if="usdPlusWbnbStrategyData.ownedAsset" align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-4' : 'mt-4'">
             <v-col :cols="$wu.isMobile() ? 12 : 0">
                 <v-row class="info-card-container" justify="start" align="center">
                     <v-col class="info-card-body">
@@ -58,7 +58,7 @@
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Token</label>
                             <v-spacer></v-spacer>
-                            <label class="card-info-value">{{ wmaticStrategyData ? wmaticStrategyData.ownedAsset.token : '—' }}</label>
+                            <label class="card-info-value">{{ usdPlusWbnbStrategyData ? usdPlusWbnbStrategyData.ownedAsset.token : '—' }}</label>
                             <div class="info-card-icon ml-2">
                                 <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
                             </div>
@@ -67,15 +67,15 @@
                             <label class="card-info mt-2">Balance</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.ownedAsset.amount, 0) : '—' }}
-                                {{ wmaticStrategyData ? wmaticStrategyData.ownedAsset.token : '—' }}
+                                {{ usdPlusWbnbStrategyData ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.ownedAsset.amount, 0) : '—' }}
+                                {{ usdPlusWbnbStrategyData ? usdPlusWbnbStrategyData.ownedAsset.token : '—' }}
                             </label>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Value</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.ownedAsset.amountUsdc, 0) : '—' }}
+                                {{ usdPlusWbnbStrategyData ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.ownedAsset.amountUsdc, 0) : '—' }}
                                 USD
                             </label>
                         </v-row>
@@ -92,7 +92,7 @@
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Token</label>
                             <v-spacer></v-spacer>
-                            <label class="card-info-value">{{ wmaticStrategyData ? wmaticStrategyData.depositAsset.token : '—' }}</label>
+                            <label class="card-info-value">{{ usdPlusWbnbStrategyData ? usdPlusWbnbStrategyData.depositAsset.token : '—' }}</label>
                             <div class="info-card-icon ml-2">
                                 <v-img :src="require('@/assets/currencies/busd.svg')"/>
                             </div>
@@ -101,15 +101,15 @@
                             <label class="card-info mt-2">Balance</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.depositAsset.amount, 0) : '—' }}
-                                {{ wmaticStrategyData ? wmaticStrategyData.depositAsset.token : '—' }}
+                                {{ usdPlusWbnbStrategyData ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.depositAsset.amount, 0) : '—' }}
+                                {{ usdPlusWbnbStrategyData ? usdPlusWbnbStrategyData.depositAsset.token : '—' }}
                             </label>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Value</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.depositAsset.amountUsdc, 0) : '—' }}
+                                {{ usdPlusWbnbStrategyData ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.depositAsset.amountUsdc, 0) : '—' }}
                                 USD
                             </label>
                         </v-row>
@@ -126,7 +126,7 @@
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Token</label>
                             <v-spacer></v-spacer>
-                            <label class="card-info-value">{{ wmaticStrategyData ? wmaticStrategyData.borrowedAsset.token : '—' }}</label>
+                            <label class="card-info-value">{{ usdPlusWbnbStrategyData ? usdPlusWbnbStrategyData.borrowedAsset.token : '—' }}</label>
                             <div class="info-card-icon ml-2">
                                 <v-img :src="require('@/assets/currencies/wBnb.svg')"/>
                             </div>
@@ -135,15 +135,15 @@
                             <label class="card-info mt-2">Balance</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.borrowedAsset.amount, 0) : '—' }}
-                                {{ wmaticStrategyData ? wmaticStrategyData.borrowedAsset.token : '—' }}
+                                {{ usdPlusWbnbStrategyData ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.borrowedAsset.amount, 0) : '—' }}
+                                {{ usdPlusWbnbStrategyData ? usdPlusWbnbStrategyData.borrowedAsset.token : '—' }}
                             </label>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Value</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticStrategyData ? $utils.formatMoneyComma(wmaticStrategyData.borrowedAsset.amountUsdc, 0) : '—' }}
+                                {{ usdPlusWbnbStrategyData ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.borrowedAsset.amountUsdc, 0) : '—' }}
                                 USD
                             </label>
                         </v-row>
@@ -163,11 +163,11 @@
                             <label class="title-card-text-bottom ml-2">VENUS</label>
                             <v-spacer></v-spacer>
                             <label class="card-info">Current health factor</label>
-                            <label class="card-info-value ml-2">{{ (wmaticStrategyData && wmaticStrategyData.currentHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.currentHealthFactor, 2)) : '—' }}</label>
+                            <label class="card-info-value ml-2">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.currentHealthFactor) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.currentHealthFactor, 2)) : '—' }}</label>
                             <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                             <v-spacer></v-spacer>
                             <label class="card-info">Target Health factor</label>
-                            <label class="card-info-value ml-2">{{ (wmaticStrategyData && wmaticStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2)) : '—' }}</label>
+                            <label class="card-info-value ml-2">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2)) : '—' }}</label>
                             <v-spacer></v-spacer>
                         </v-row>
                     </v-col>
@@ -185,12 +185,12 @@
                         </v-row>
                         <v-row align="center" justify="center" class="mt-6">
                             <label class="card-info">Current health factor</label>
-                            <label class="card-info-value ml-2">{{ (wmaticStrategyData && wmaticStrategyData.currentHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.currentHealthFactor, 2)) : '—' }}</label>
+                            <label class="card-info-value ml-2">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.currentHealthFactor) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.currentHealthFactor, 2)) : '—' }}</label>
                             <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                         </v-row>
                         <v-row align="center" justify="center" class="mt-4">
                             <label class="card-info">Target Health factor</label>
-                            <label class="card-info-value ml-2">{{ (wmaticStrategyData && wmaticStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticStrategyData.targetHealthFactor, 2)) : '—' }}</label>
+                            <label class="card-info-value ml-2">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2)) : '—' }}</label>
                         </v-row>
                     </v-col>
                 </v-row>
@@ -208,13 +208,13 @@
                         <Table
                                 v-if="!$wu.isMobile()"
                                 profit-label="BUSD per USD+/WBNB"
-                                :payout-data="[...wmaticStrategyData.payoutItems].reverse()"/>
+                                :payout-data="[...usdPlusWbnbStrategyData.payoutItems].reverse()"/>
 
                         <Table
                                 v-else
                                 minimized
                                 profit-label="BUSD per USD+/WBNB"
-                                :payout-data="[...wmaticStrategyData.payoutItems].reverse()"/>
+                                :payout-data="[...usdPlusWbnbStrategyData.payoutItems].reverse()"/>
 
                         <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
                             <label class="table-scroll-label">scroll to see more</label>
@@ -258,7 +258,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData', 'apyData', 'tvlData']),
+        ...mapGetters('marketData', ['usdPlusWbnbStrategyData', 'apyDataUsdPlusWbnb', 'tvlDataUsdPlusWbnb']),
         ...mapGetters("statsData", ['payoutsApyDataDict']),
 
         activeRateApy: function () {
@@ -283,7 +283,7 @@ export default {
         },
 
         lastPayoutDate: function () {
-            return (this.wmaticStrategyData.payoutItems.length > 0) ? this.wmaticStrategyData.payoutItems[this.wmaticStrategyData.payoutItems.length - 1].payableDate : [];
+            return (this.usdPlusWbnbStrategyData.payoutItems.length > 0) ? this.usdPlusWbnbStrategyData.payoutItems[this.usdPlusWbnbStrategyData.payoutItems.length - 1].payableDate : [];
         },
     },
 
@@ -302,8 +302,8 @@ export default {
     .section-title-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
+        font-size: 20px;
+        line-height: 32px;
         letter-spacing: 0.02em;
     }
 
@@ -317,7 +317,7 @@ export default {
 
     .card-info {
         font-style: normal;
-        font-weight: 300;
+        font-weight: 400;
         font-size: 16px;
         line-height: 24px;
     }
@@ -366,22 +366,22 @@ export default {
     .section-title-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 24px;
+        line-height: 36px;
         letter-spacing: 0.04em;
     }
 
     .title-card-text {
         font-style: normal;
         font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
+        font-size: 18px;
+        line-height: 22px;
         letter-spacing: 0.02em;
     }
 
     .card-info {
         font-style: normal;
-        font-weight: 300;
+        font-weight: 400;
         font-size: 16px;
         line-height: 24px;
     }
@@ -430,22 +430,22 @@ export default {
     .section-title-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 24px;
+        line-height: 36px;
         letter-spacing: 0.04em;
     }
 
     .title-card-text {
         font-style: normal;
         font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
+        font-size: 18px;
+        line-height: 22px;
         letter-spacing: 0.02em;
     }
 
     .card-info {
         font-style: normal;
-        font-weight: 300;
+        font-weight: 400;
         font-size: 16px;
         line-height: 24px;
     }
@@ -492,7 +492,7 @@ export default {
 .section-title-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    text-transform: uppercase;
+    text-transform: capitalize;
     color: #333333;
 }
 

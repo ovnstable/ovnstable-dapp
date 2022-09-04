@@ -236,13 +236,8 @@ export default {
     },
 
     methods: {
-        openStrategyAction() {
-            this.$router.push('/ets/wbnb');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        },
-
         openStrategyCard() {
-          this.$router.push('/ets');
+          this.$router.push('/ets/usd-plus-wbnb');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     },

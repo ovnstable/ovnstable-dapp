@@ -5,7 +5,7 @@
                 <label class="parent-page-label" @click="goToAction('/market')">Earn</label>
                 <label class="current-page-label">
                     <v-icon size="18" class="mx-2">mdi-chevron-right</v-icon>
-                    ETS: USD+ / WBNB
+                    ETS: BUSD / WBNB
                 </label>
             </v-row>
         </div>
@@ -32,7 +32,7 @@
                                         <label class="investor-card-sub-title">Your balance in ETS</label>
                                     </v-row>
                                     <v-row align="center" class="mt-5">
-                                        <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
+                                        <label class="investor-card-sub-title-value">{{ this.balance.busdWbnb ? ($utils.formatMoneyComma(this.balance.busdWbnb, 2) + ' USD+') : '—' }}</label>
                                     </v-row>
                                 </v-col>
                             </v-row>
@@ -44,8 +44,8 @@
                                     <v-row class="info-row mt-6" justify="start" align="center">
                                         <label class="fee-structure-label mt-1">Last day</label>
                                         <v-spacer></v-spacer>
-                                        <label class="investor-card-sub-title-value" :class="clientProfitDayUsdPlusWbnb > 0 ? 'success-color' : ''">
-                                            {{ clientProfitDayUsdPlusWbnb ? ((clientProfitDayUsdPlusWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWbnb, 4)) : '—' }}
+                                        <label class="investor-card-sub-title-value" :class="clientProfitDayBusdWbnb > 0 ? 'success-color' : ''">
+                                            {{ clientProfitDayBusdWbnb ? ((clientProfitDayBusdWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayBusdWbnb, 4)) : '—' }}
                                         </label>
                                     </v-row>
                                     <v-row class="info-row mt-6" justify="start" align="center">
@@ -56,46 +56,19 @@
                                 </v-col>
                             </v-row>
 
-                            <v-row align="center" v-if="isOvercapAvailable" class="card-banner-status-container"  :class="$wu.isMobile() ? 'mt-10' : 'mt-10'">
-                                <v-col class="card-banner-body">
-                                    <v-row justify="start" align="center">
-                                        <label class="investor-card-sub-title">You minted overcap, USD+</label>
-                                    </v-row>
-                                    <v-row justify="start" align="center" class="mt-5">
-                                        <v-progress-linear
-                                                rounded
-                                                height="7"
-                                                class="progress-info"
-                                                background-opacity="0"
-                                                :value="((walletOvercapLimit - overcapRemaining) / walletOvercapLimit) * 100"
-                                                color="#F3BA2F"
-                                        ></v-progress-linear>
-                                    </v-row>
-                                    <v-row justify="start" align="center" class="mt-5">
-                                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit - overcapRemaining, 2) }}</label>
-                                        <v-spacer></v-spacer>
-                                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit, 2) }}</label>
-                                    </v-row>
-                                    <v-row justify="start" align="center">
-                                        <v-spacer></v-spacer>
-                                        <label class="capacity-status-sub-text">OVERCAP LIMIT</label>
-                                    </v-row>
-                                </v-col>
+                            <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="totalSupply.busdWbnb >= maxBusdWbnbSupply">
+                                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxBusdWbnbSupply, 0) }}. Please check status later.</label>
                             </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
-                                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 0) }}. Please check status later.</label>
-                            </v-row>
-
-                            <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'mt-2' : 'mt-12'">
-                                <v-btn class="header-btn btn-investor-invest" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'disabled-btn' : ''" :disabled="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)"  @click="mintAction">
-                                    MINT ETS: USD+/WBNB
+                            <v-row align="center" justify="center" class="ma-0" :class="(totalSupply.busdWbnb >= maxBusdWbnbSupply) ? 'mt-2' : 'mt-12'">
+                                <v-btn class="header-btn btn-investor-invest" :class="(totalSupply.busdWbnb >= maxBusdWbnbSupply) ? 'disabled-btn' : ''" :disabled="totalSupply.busdWbnb >= maxBusdWbnbSupply"  @click="mintAction">
+                                    MINT ETS: BUSD/WBNB
                                 </v-btn>
                             </v-row>
 
                             <v-row align="center" justify="center" class="ma-0 mt-4">
                                 <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                    REDEEM ETS: USD+/WBNB
+                                    REDEEM ETS: BUSD/WBNB
                                 </v-btn>
                             </v-row>
 
@@ -134,7 +107,7 @@
                                 <v-col>
                                     <v-row justify="start" align="start">
                                         <label class="fee-structure-label-ets">
-                                            All ETS commissions are routed to vote for the underlying gauge pool on Cone to keep the high APRs.
+                                            All ETS commissions are routed to vote for the underlying gauge pool on Unknown to keep the high APRs.
                                         </label>
                                     </v-row>
                                 </v-col>
@@ -146,7 +119,7 @@
                                             <v-img :src="require('@/assets/icon/alert.svg')"/>
                                         </div>
                                         <label class="fee-structure-label-ets">
-                                            All ETS commissions are routed to vote for the underlying gauge pool on Cone to keep the high APRs.
+                                            All ETS commissions are routed to vote for the underlying gauge pool on Unknown to keep the high APRs.
                                         </label>
                                     </v-row>
                                 </v-col>
@@ -185,7 +158,7 @@
                                 <label class="investor-card-sub-title">Your balance in ETS</label>
                             </v-row>
                             <v-row align="center" class="mt-5">
-                                <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
+                                <label class="investor-card-sub-title-value">{{ this.balance.busdWbnb ? ($utils.formatMoneyComma(this.balance.busdWbnb, 2) + ' USD+') : '—' }}</label>
                             </v-row>
                             <v-row align="center" class="mt-10">
                                 <label class="investor-card-sub-title">Profit/loss</label>
@@ -193,8 +166,8 @@
                             <v-row class="info-row mt-6" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Last day</label>
                                 <v-spacer></v-spacer>
-                                <label class="investor-card-sub-title-value" :class="clientProfitDayUsdPlusWbnb > 0 ? 'success-color' : ''">
-                                    {{ clientProfitDayUsdPlusWbnb ? ((clientProfitDayUsdPlusWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWbnb, 4)) : '—' }}
+                                <label class="investor-card-sub-title-value" :class="clientProfitDayBusdWbnb > 0 ? 'success-color' : ''">
+                                    {{ clientProfitDayBusdWbnb ? ((clientProfitDayBusdWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayBusdWbnb, 4)) : '—' }}
                                 </label>
                             </v-row>
                             <v-row class="info-row mt-6" justify="start" align="center">
@@ -203,50 +176,23 @@
                                 <label class="investor-card-sub-title-value value-disabled">Soon</label>
                             </v-row>
 
-                            <v-row align="center" v-if="isOvercapAvailable" class="card-banner-status-container mt-7">
-                                <v-col class="card-banner-body">
-                                    <v-row justify="start" align="center">
-                                        <label class="investor-card-sub-title">You minted overcap, USD+</label>
-                                    </v-row>
-                                    <v-row justify="start" align="center" class="mt-5">
-                                        <v-progress-linear
-                                                rounded
-                                                height="7"
-                                                class="progress-info"
-                                                background-opacity="0"
-                                                :value="((walletOvercapLimit - overcapRemaining) / walletOvercapLimit) * 100"
-                                                color="#F3BA2F"
-                                        ></v-progress-linear>
-                                    </v-row>
-                                    <v-row justify="start" align="center" class="mt-5">
-                                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit - overcapRemaining, 2) }}</label>
-                                        <v-spacer></v-spacer>
-                                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit, 2) }}</label>
-                                    </v-row>
-                                    <v-row justify="start" align="center">
-                                        <v-spacer></v-spacer>
-                                        <label class="capacity-status-sub-text">OVERCAP LIMIT</label>
-                                    </v-row>
-                                </v-col>
+                            <v-row align="center" justify="center" class="ma-0 mt-12" v-if="totalSupply.busdWbnb >= maxBusdWbnbSupply">
+                                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxBusdWbnbSupply, 0) }}. Please check status later.</label>
                             </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0 mt-12" v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
-                                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 0) }}. Please check status later.</label>
-                            </v-row>
-
-                            <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'mt-2' : (isOvercapAvailable ? 'mt-7' : 'mt-12')">
-                                <v-btn class="header-btn btn-investor-invest" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'disabled-btn' : ''" :disabled="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)" @click="mintAction">
-                                    MINT ETS: USD+/WBNB
+                            <v-row align="center" justify="center" class="ma-0" :class="totalSupply.busdWbnb >= maxBusdWbnbSupply ? 'mt-2' : 'mt-12'">
+                                <v-btn class="header-btn btn-investor-invest" :class="totalSupply.busdWbnb >= maxBusdWbnbSupply ? 'disabled-btn' : ''" :disabled="totalSupply.busdWbnb >= maxBusdWbnbSupply" @click="mintAction">
+                                    MINT ETS: BUSD/WBNB
                                 </v-btn>
                             </v-row>
 
                             <v-row align="center" justify="center" class="ma-0 mt-4">
                                 <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                    REDEEM ETS: USD+/WBNB
+                                    REDEEM ETS: BUSD/WBNB
                                 </v-btn>
                             </v-row>
 
-                            <v-row align="center" :class="isOvercapAvailable ? 'mt-7' : 'mt-12'">
+                            <v-row align="center" class='mt-12'>
                                 <label class="investor-card-title">Fee structure</label>
                             </v-row>
 
@@ -296,7 +242,7 @@
                                 <v-col>
                                     <v-row justify="start" align="start">
                                         <label class="fee-structure-label-ets">
-                                            All ETS commissions are routed to vote for the underlying gauge pool on Cone to keep the high APRs.
+                                            All ETS commissions are routed to vote for the underlying gauge pool on Unknown to keep the high APRs.
                                         </label>
                                     </v-row>
                                 </v-col>
@@ -316,13 +262,13 @@
 
 <script>
 
-import StrategyBanner from "@/components/market/strategy/section/wbnb/StrategyBanner";
-import RiskDisclosureModal from "@/components/market/modal/wbnb/RiskDisclosureModal";
+import StrategyBanner from "@/components/market/strategy/section/busdWbnb/StrategyBanner";
+import RiskDisclosureModal from "@/components/market/modal/busdWbnb/RiskDisclosureModal";
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import InvestorModal from "@/components/market/modal/InvestorModal";
-import AboutTab from "@/views/strategy/wbnb/tab/AboutTab";
-import PerformanceTab from "@/views/strategy/wbnb/tab/PerformanceTab";
+import AboutTab from "@/views/strategy/busdWbnb/tab/AboutTab";
+import PerformanceTab from "@/views/strategy/busdWbnb/tab/PerformanceTab";
 export default {
     name: "WbnbPageView",
 
@@ -357,9 +303,9 @@ export default {
 
 
     computed: {
-        ...mapGetters('marketData', ['usdPlusWbnbStrategyData', 'clientProfitDayUsdPlusWbnb']),
+        ...mapGetters('marketData', ['busdWbnbStrategyData', 'clientProfitDayBusdWbnb']),
         ...mapGetters('accountData', ['balance']),
-        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
+        ...mapGetters('supplyData', ['totalSupply', 'maxBusdWbnbSupply']),
         ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit']),
 
         activeTabPerformance: function () {
@@ -377,8 +323,8 @@ export default {
         },
 
         entryFee: function () {
-            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
-                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'buy');
+            if (this.busdWbnbStrategyData && this.busdWbnbStrategyData.fees) {
+                let result = this.busdWbnbStrategyData.fees.find(x => x.id === 'buy');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -386,8 +332,8 @@ export default {
         },
 
         exitFee: function () {
-            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
-                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'redeem');
+            if (this.busdWbnbStrategyData && this.busdWbnbStrategyData.fees) {
+                let result = this.busdWbnbStrategyData.fees.find(x => x.id === 'redeem');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -395,8 +341,8 @@ export default {
         },
 
         performanceFee: function () {
-            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
-                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'profit');
+            if (this.busdWbnbStrategyData && this.busdWbnbStrategyData.fees) {
+                let result = this.busdWbnbStrategyData.fees.find(x => x.id === 'profit');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -404,8 +350,8 @@ export default {
         },
 
         managementFee: function () {
-            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
-                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'tvl');
+            if (this.busdWbnbStrategyData && this.busdWbnbStrategyData.fees) {
+                let result = this.busdWbnbStrategyData.fees.find(x => x.id === 'tvl');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -418,7 +364,7 @@ export default {
 
     methods: {
         ...mapActions('riskModal', ['showRiskModal']),
-        ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
+        ...mapActions('investModal', ['showBusdWbnbModal', 'showMintView', 'showRedeemView']),
 
         goToAction(id) {
             this.$router.push(id);
@@ -426,12 +372,12 @@ export default {
 
         mintAction() {
             this.showMintView();
-            this.showInvestModal();
+            this.showBusdWbnbModal();
         },
 
         redeemAction() {
             this.showRedeemView();
-            this.showInvestModal();
+            this.showBusdWbnbModal();
         }
     }
 

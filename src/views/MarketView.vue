@@ -25,6 +25,7 @@
                     <UsdPlus class="ma-3"/>
                     <WmaticUsdPlus class="ma-3"/>
                     <WbnbUsdPlus class="ma-3"/>
+                    <WbnbBusd class="ma-3"/>
                 </template>
 
                 <template v-if="tab === 2">
@@ -37,6 +38,7 @@
                 <template v-if="tab === 4">
                     <WmaticUsdPlus class="ma-3"/>
                     <WbnbUsdPlus class="ma-3"/>
+                    <WbnbBusd class="ma-3"/>
                 </template>
             </v-row>
         </div>
@@ -52,11 +54,13 @@ import {mapGetters} from "vuex";
 import WbnbUsdPlus from "@/components/market/cards/wbnb/WbnbUsdPlus";
 import OvercapBanner from "@/components/market/cards/wbnb/banner/OvercapBanner";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
+import WbnbBusd from "@/components/market/cards/busdWbnb/WbnbBusd";
 
 export default {
     name: "MarketView",
 
     components: {
+        WbnbBusd,
         UsdPlus,
         OvercapBanner,
         WbnbUsdPlus,
@@ -68,7 +72,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb']),
+        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb', 'showBusdWbnb']),
 
         activeTabFeatured: function () {
             return {

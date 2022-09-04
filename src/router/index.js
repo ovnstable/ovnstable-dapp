@@ -46,7 +46,7 @@ const routes = [
                 redirect: '/market',
             },
             {
-                path: '/ets/wbnb',
+                path: '/ets/usd-plus-wbnb',
                 name: 'WbnbPageView',
                 component: () => import('../views/strategy/wbnb/WbnbPageView.vue'),
                 meta: {
@@ -56,7 +56,17 @@ const routes = [
                 }
             },
             {
-                path: '/ets/wmatic',
+                path: '/ets/busd-wbnb',
+                name: 'BusdWbnbPageView',
+                component: () => import('../views/strategy/busdWbnb/BusdWbnbPageView.vue'),
+                meta: {
+                    middleware: [
+                        Wbnb
+                    ]
+                }
+            },
+            {
+                path: '/ets/usd-plus-wmatic',
                 name: 'WmaticPageView',
                 component: () => import('../views/strategy/wmatic/WmaticPageView.vue'),
                 meta: {

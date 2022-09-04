@@ -215,11 +215,6 @@ export default {
         ...mapActions('dashboardData', ['sliceDashboard']),
         ...mapMutations('dashboardData', ['setSlice']),
 
-        openStrategyAction() {
-            this.$router.push('/ets');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        },
-
         openDashboardAction() {
             this.$router.push('/');
             window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -9,7 +9,7 @@
             <label class="title-info-label info-link" @click="openLink('https://docs.overnight.fi/core-concept/usd+-token')">How USD+ works</label>
         </div>
 
-        <div class="mt-7">
+<!--        <div class="mt-7">
             <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
                 <label class="tab-btn mr-4" v-bind:class="activeTabPolygon" @click="clickPolygon">
                     Polygon
@@ -26,9 +26,9 @@
                     <v-icon class="ml-n1 mb-5" small color="#C5C9D1">mdi-alpha</v-icon>
                 </label>
             </v-row>
-        </div>
+        </div>-->
 
-        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
+        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-7'" justify="start" align="center">
             <v-col class="info-card-body-bottom">
                 <v-row align="center" justify="start" class="ma-0">
                     <label class="section-title-label">Collateral assets</label>

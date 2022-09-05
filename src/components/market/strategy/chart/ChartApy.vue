@@ -129,7 +129,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['appApiUrl']),
+        ...mapGetters('network', ['polygonApi', 'bscApi']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -148,25 +148,31 @@ export default {
         ...mapMutations([]),
 
         async zoomChart(zoom) {
-            let fetchOptions = {
-                headers: {
-                    "Access-Control-Allow-Origin": this.appApiUrl
-                }
-            };
+
+            let apiUrl;
 
             switch (this.etsName) {
                 case "USD+/WMATIC":
+                    apiUrl = this.polygonApi;
                     this.contractAddress = '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf';
                     break;
                 case "USD+/WBNB":
+                    apiUrl = this.bscApi;
                     this.contractAddress = '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1';
                     break;
                 case "BUSD/WBNB":
+                    apiUrl = this.bscApi;
                     this.contractAddress = '0xc6eca7a3b863d720393DFc62494B6eaB22567D37';
                     break;
             }
 
-            await fetch(this.appApiUrl + '/hedge-strategies/' + this.contractAddress + '/avg-apy-info/' + zoom, fetchOptions)
+            let fetchOptions = {
+                headers: {
+                    "Access-Control-Allow-Origin": apiUrl
+                }
+            };
+
+            await fetch(apiUrl + '/hedge-strategies/' + this.contractAddress + '/avg-apy-info/' + zoom, fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;

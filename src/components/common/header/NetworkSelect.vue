@@ -11,7 +11,8 @@
                         <div class="btn-icon"
                              style="display: flex">
                             <v-img :src="icon"/>
-                            <v-icon color="#333333" class="ml-2">
+                            <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="#333333" v-if="alphaNetwork">mdi-alpha</v-icon>
+                            <v-icon color="#333333" :class="alphaNetwork ? 'ml-n1' : 'ml-2'">
                                 {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
                             </v-icon>
                         </div>
@@ -71,7 +72,7 @@
                     </div>
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item list-item-disabled">
-                    Ethereum (Soon)
+                    Ethereum
                     <v-icon class="mb-5" small></v-icon>
                 </v-list-item-title>
             </v-list-item>
@@ -94,12 +95,13 @@ export default {
 
     data: () => ({
         openedList: false,
+        alphaNetworks: [43114, 10],
     }),
 
     computed: {
         ...mapGetters('network', ['networkId']),
 
-        icon: function (){
+        icon: function () {
             switch (this.networkId){
                 case 137:
                     return polygonIcon;
@@ -110,6 +112,10 @@ export default {
                 case 56:
                     return bscIcon;
             }
+        },
+
+        alphaNetwork: function () {
+            return this.alphaNetworks.includes(this.networkId);
         }
     },
 
@@ -205,6 +211,7 @@ export default {
 .network-select-list {
     background-color: var(--secondary) !important;
     border-radius: 10px;
+    width: 200px !important;
 }
 
 .network-select-list-item {

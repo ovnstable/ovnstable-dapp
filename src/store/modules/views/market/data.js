@@ -75,27 +75,32 @@ const actions = {
     async refreshMarket({commit, dispatch, getters, rootState}) {
         console.log('MarketData: refreshMarket');
 
-        let network = rootState.network.networkName;
+        dispatch('refreshStrategyData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
+        dispatch('refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
 
-        if (network === 'polygon') {
-            dispatch('refreshStrategyData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
-            dispatch('refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
-        }
+        dispatch('refreshStrategyData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
+        dispatch('refreshClientData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
 
-        if (network === 'bsc') {
-            dispatch('refreshStrategyData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
-            dispatch('refreshClientData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
-
-            dispatch('refreshStrategyData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'});
-            dispatch('refreshClientData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'});
-        }
+        dispatch('refreshStrategyData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'});
+        dispatch('refreshClientData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'});
 
         dispatch('accountData/refreshBalance', null, {root:true});
         dispatch('supplyData/refreshSupply', null, {root:true});
     },
 
     async refreshStrategyData({commit, dispatch, getters, rootState}, refreshParams) {
-        let appApiUrl = rootState.network.appApiUrl;
+        let appApiUrl;
+
+        switch (refreshParams.strategyName) {
+            case "usdPlusWmatic":
+                appApiUrl = rootState.network.polygonApi;
+                break;
+            case "usdPlusWbnb":
+            case "busdWbnb":
+                appApiUrl = rootState.network.bscApi;
+                break;
+        }
+
         let fetchOptions = {
             headers: {
                 "Access-Control-Allow-Origin": appApiUrl
@@ -228,8 +233,17 @@ const actions = {
     async refreshClientData({commit, dispatch, getters, rootState}, refreshParams) {
         console.log('MarketData: refreshClientData');
 
-        let appApiUrl = rootState.network.appApiUrl;
-        let network = rootState.network.networkName;
+        let appApiUrl;
+
+        switch (refreshParams.strategyName) {
+            case "usdPlusWmatic":
+                appApiUrl = rootState.network.polygonApi;
+                break;
+            case "usdPlusWbnb":
+            case "busdWbnb":
+                appApiUrl = rootState.network.bscApi;
+                break;
+        }
 
         if (!rootState.accountData.account){
             return;

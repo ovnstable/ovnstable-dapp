@@ -11,7 +11,7 @@
 
             <v-col cols="5" class="fill-height">
                 <v-row justify="start" align="center" class="mt-0 fill-height">
-                    <WalletBar v-if="($wu.isMobile() && walletConnected) || !$wu.isMobile()"/>
+                    <WalletBar v-if="($wu.isMobile() && walletConnected && !switchToOtherNetwork) || !$wu.isMobile()"/>
                 </v-row>
             </v-col>
 
@@ -19,15 +19,15 @@
                 <v-row justify="end" align="center" class="mt-0 fill-height">
                     <template v-if="!loadingWeb3">
                         <template v-if="walletConnected">
-                            <v-btn v-if="switchToOtherNetwork" class="header-btn btn-filled" v-on:click="switchToNetwork">
+                            <v-btn v-if="switchToOtherNetwork" :class="$wu.isMobile() ? 'mr-2' : ''" class="header-btn btn-filled" v-on:click="switchToNetwork">
                                 Switch to {{ networkName }}
                             </v-btn>
 
                             <template v-else>
-                                <v-btn class="header-btn btn-filled" :class="showWrap ? 'mr-5' : 'mr-2'" @click="mintAction">
+                                <v-btn class="header-btn btn-filled" :class="showWrap ? 'mr-5' : 'mr-2'" @click="mintAction" v-if="$wu.isFull()">
                                     Mint USD+
                                 </v-btn>
-                                <v-btn class="header-btn btn-outlined mr-2" outlined @click="wrapAction" v-if="showWrap">
+                                <v-btn class="header-btn btn-outlined mr-2" outlined @click="wrapAction" v-if="showWrap && $wu.isFull()">
                                     Wrap USD+
                                 </v-btn>
                             </template>
@@ -152,11 +152,7 @@ export default {
         margin-right: 3% !important;
     }
 
-    .header-btn {
-        display: none !important;
-    }
-
-    .header-btn-connect {
+    .header-btn, .header-btn-connect {
         width: 148px !important;
         height: 28px !important;
 
@@ -188,11 +184,7 @@ export default {
         margin-right: 3% !important;
     }
 
-    .header-btn {
-        display: none !important;
-    }
-
-    .header-btn-connect {
+    .header-btn, .header-btn-connect {
         width: 200px !important;
         height: 36px !important;
 

@@ -83,21 +83,31 @@
                                 </v-col>
                             </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
-                                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 0) }}. Please check status later.</label>
-                            </v-row>
+                            <template v-if="networkSupport">
+                                <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
+                                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 0) }}. Please check status later.</label>
+                                </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'mt-2' : 'mt-12'">
-                                <v-btn class="header-btn btn-investor-invest" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'disabled-btn' : ''" :disabled="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)"  @click="mintAction">
-                                    MINT ETS: USD+/WBNB
-                                </v-btn>
-                            </v-row>
+                                <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'mt-2' : 'mt-12'">
+                                    <v-btn class="header-btn btn-investor-invest" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'disabled-btn' : ''" :disabled="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)"  @click="mintAction">
+                                        MINT ETS: USD+/WBNB
+                                    </v-btn>
+                                </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0 mt-4">
-                                <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                    REDEEM ETS: USD+/WBNB
-                                </v-btn>
-                            </v-row>
+                                <v-row align="center" justify="center" class="ma-0 mt-4">
+                                    <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
+                                        REDEEM ETS: USD+/WBNB
+                                    </v-btn>
+                                </v-row>
+                            </template>
+
+                            <template v-else>
+                                <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'">
+                                    <v-btn class="header-btn btn-investor-invest" @click="setNetwork('56')">
+                                        SWITCH TO BSC TO MINT
+                                    </v-btn>
+                                </v-row>
+                            </template>
 
                             <v-row align="center" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'">
                                 <label class="investor-card-title">Fee structure</label>
@@ -230,21 +240,31 @@
                                 </v-col>
                             </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0 mt-12" v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
-                                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 0) }}. Please check status later.</label>
-                            </v-row>
+                            <template v-if="networkSupport">
+                                <v-row align="center" justify="center" class="ma-0 mt-12" v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
+                                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 0) }}. Please check status later.</label>
+                                </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'mt-2' : (isOvercapAvailable ? 'mt-7' : 'mt-12')">
-                                <v-btn class="header-btn btn-investor-invest" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'disabled-btn' : ''" :disabled="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)" @click="mintAction">
-                                    MINT ETS: USD+/WBNB
-                                </v-btn>
-                            </v-row>
+                                <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'mt-2' : (isOvercapAvailable ? 'mt-7' : 'mt-12')">
+                                    <v-btn class="header-btn btn-investor-invest" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'disabled-btn' : ''" :disabled="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)" @click="mintAction">
+                                        MINT ETS: USD+/WBNB
+                                    </v-btn>
+                                </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0 mt-4">
-                                <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                    REDEEM ETS: USD+/WBNB
-                                </v-btn>
-                            </v-row>
+                                <v-row align="center" justify="center" class="ma-0 mt-4">
+                                    <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
+                                        REDEEM ETS: USD+/WBNB
+                                    </v-btn>
+                                </v-row>
+                            </template>
+
+                            <template v-else>
+                                <v-row align="center" justify="center" class="ma-0 mt-12">
+                                    <v-btn class="header-btn btn-investor-invest" @click="setNetwork('56')">
+                                        SWITCH TO BSC TO MINT
+                                    </v-btn>
+                                </v-row>
+                            </template>
 
                             <v-row align="center" :class="isOvercapAvailable ? 'mt-7' : 'mt-12'">
                                 <label class="investor-card-title">Fee structure</label>
@@ -357,6 +377,7 @@ export default {
 
 
     computed: {
+        ...mapGetters('network', ['networkId']),
         ...mapGetters('marketData', ['usdPlusWbnbStrategyData', 'clientProfitDayUsdPlusWbnb']),
         ...mapGetters('accountData', ['balance']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
@@ -411,12 +432,14 @@ export default {
                 return null;
             }
         },
-    },
 
-    created() {
+        networkSupport: function () {
+            return this.networkId === 56;
+        },
     },
 
     methods: {
+        ...mapActions('web3', ['setNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
 

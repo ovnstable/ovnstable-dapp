@@ -1,5 +1,3 @@
-import BN from "bn.js";
-
 const state = {
 
     totalSupply: {
@@ -58,50 +56,51 @@ const actions = {
         try {
             usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.totalSupply().call();
         } catch (e) {
-            console.log('ERROR: ' + e)
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            try {
-                usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.totalSupply().call();
-            } catch (e) {
-                console.log('ERROR: ' + e)
-            }
-        }
-
-        try {
-            usdPlusWmatic = web3.web3.utils.fromWei(usdPlusWmatic, 'mwei') ;
-        } catch (e) {
+            usdPlusWmatic = null;
             console.log('ERROR: ' + e)
         }
-
 
         try {
             usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.totalSupply().call();
         } catch (e) {
+            usdPlusWbnb = null;
             console.log('ERROR: ' + e)
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            try {
-                usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.totalSupply().call();
-            } catch (e) {
-                console.log('ERROR: ' + e)
-            }
         }
-
 
         try {
             busdWbnb = await web3.contracts.busdWbnb.methods.totalSupply().call();
         } catch (e) {
+            busdWbnb = null;
             console.log('ERROR: ' + e)
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            try {
-                busdWbnb = await web3.contracts.busdWbnb.methods.totalSupply().call();
-            } catch (e) {
-                console.log('ERROR: ' + e)
+        }
+
+
+        try {
+            if (usdPlusWmatic) {
+                usdPlusWmatic = web3.web3.utils.fromWei(usdPlusWmatic, 'mwei');
+            } else {
+                usdPlusWmatic = rootState.marketData.wmaticStrategyData.tvl;
             }
+        } catch (e) {
+            console.log('ERROR: ' + e)
         }
 
         try {
-            usdPlusWbnb = web3.web3.utils.fromWei(usdPlusWbnb, 'mwei') ;
-            busdWbnb = web3.web3.utils.fromWei(busdWbnb, 'mwei') ;
+            if (usdPlusWbnb) {
+                usdPlusWbnb = web3.web3.utils.fromWei(usdPlusWbnb, 'mwei');
+            } else {
+                usdPlusWbnb = rootState.marketData.usdPlusWbnbStrategyData.tvl;
+            }
+        } catch (e) {
+            console.log('ERROR: ' + e)
+        }
+
+        try {
+            if (busdWbnb) {
+                busdWbnb = web3.web3.utils.fromWei(busdWbnb, 'mwei');
+            } else {
+                busdWbnb = rootState.marketData.busdWbnbStrategyData.tvl;
+            }
         } catch (e) {
             console.log('ERROR: ' + e)
         }

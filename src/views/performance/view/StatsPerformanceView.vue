@@ -4,7 +4,7 @@
             <label class="title-label">Performance</label>
         </div>
 
-        <div class="mt-7">
+<!--        <div class="mt-7">
             <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
                 <label class="tab-btn mr-4" v-bind:class="activeTabPolygon" @click="clickPolygon">
                     Polygon
@@ -21,9 +21,9 @@
                     <v-icon class="ml-n1 mb-5" small color="#C5C9D1">mdi-alpha</v-icon>
                 </label>
             </v-row>
-        </div>
+        </div>-->
 
-        <v-row v-if="!$wu.isMobile()" class="ma-0 mt-6" justify="start" align="center">
+        <v-row v-if="!$wu.isMobile()" class="ma-0 mt-7" justify="start" align="center">
             <v-col class="info-card-container mr-2">
                 <LineChartApy :data="payoutsApyData"/>
             </v-col>

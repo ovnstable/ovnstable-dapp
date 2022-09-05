@@ -56,21 +56,31 @@
                                 </v-col>
                             </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
-                                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 0) }}. Please check status later.</label>
-                            </v-row>
+                            <template v-if="networkSupport">
+                                <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
+                                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 0) }}. Please check status later.</label>
+                                </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'mt-2' : 'mt-12'">
-                                <v-btn class="header-btn btn-investor-invest" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" :disabled="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply"  @click="mintAction">
-                                    MINT ETS: USD+/wMATIC
-                                </v-btn>
-                            </v-row>
+                                <v-row align="center" justify="center" class="ma-0" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'mt-2' : 'mt-12'">
+                                    <v-btn class="header-btn btn-investor-invest" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" :disabled="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply"  @click="mintAction">
+                                        MINT ETS: USD+/wMATIC
+                                    </v-btn>
+                                </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0 mt-4">
-                                <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                    REDEEM ETS: USD+/WMATIC
-                                </v-btn>
-                            </v-row>
+                                <v-row align="center" justify="center" class="ma-0 mt-4">
+                                    <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
+                                        REDEEM ETS: USD+/WMATIC
+                                    </v-btn>
+                                </v-row>
+                            </template>
+
+                            <template v-else>
+                                <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'">
+                                    <v-btn class="header-btn btn-investor-invest" @click="setNetwork('137')">
+                                        SWITCH TO POLYGON TO MINT
+                                    </v-btn>
+                                </v-row>
+                            </template>
 
                             <v-row align="center" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'">
                                 <label class="investor-card-title">Fee structure</label>
@@ -148,21 +158,31 @@
                                 <label class="investor-card-sub-title-value value-disabled">Soon</label>
                             </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0 mt-12" v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
-                                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 0) }}. Please check status later.</label>
-                            </v-row>
+                            <template v-if="networkSupport">
+                                <v-row align="center" justify="center" class="ma-0 mt-12" v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
+                                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 0) }}. Please check status later.</label>
+                                </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'mt-2' : 'mt-12'">
-                                <v-btn class="header-btn btn-investor-invest" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" :disabled="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply" @click="mintAction">
-                                    MINT ETS: USD+/wMATIC
-                                </v-btn>
-                            </v-row>
+                                <v-row align="center" justify="center" class="ma-0" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'mt-2' : 'mt-12'">
+                                    <v-btn class="header-btn btn-investor-invest" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" :disabled="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply" @click="mintAction">
+                                        MINT ETS: USD+/wMATIC
+                                    </v-btn>
+                                </v-row>
 
-                            <v-row align="center" justify="center" class="ma-0 mt-4">
-                                <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                    REDEEM ETS: USD+/WMATIC
-                                </v-btn>
-                            </v-row>
+                                <v-row align="center" justify="center" class="ma-0 mt-4">
+                                    <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
+                                        REDEEM ETS: USD+/WMATIC
+                                    </v-btn>
+                                </v-row>
+                            </template>
+
+                            <template v-else>
+                                <v-row align="center" justify="center" class="ma-0 mt-12">
+                                    <v-btn class="header-btn btn-investor-invest" @click="setNetwork('137')">
+                                        SWITCH TO POLYGON TO MINT
+                                    </v-btn>
+                                </v-row>
+                            </template>
 
                             <v-row align="center" class="mt-12">
                                 <label class="investor-card-title">Fee structure</label>
@@ -242,6 +262,7 @@ export default {
 
 
     computed: {
+        ...mapGetters('network', ['networkId']),
         ...mapGetters('marketData', ['wmaticStrategyData', 'clientProfitDayUsdPlusWmatic']),
         ...mapGetters('marketUI', ['showUsdPlusWmatic']),
         ...mapGetters('accountData', ['balance']),
@@ -296,9 +317,14 @@ export default {
                 return null;
             }
         },
+
+        networkSupport: function () {
+            return this.networkId === 137;
+        },
     },
 
     methods: {
+        ...mapActions('web3', ['setNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
 

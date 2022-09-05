@@ -4,11 +4,6 @@
             <label class="title-label">Collateral</label>
         </div>
 
-        <div class="mt-7">
-            <label class="title-info-label">USD+ stablecoin can be instantly minted and redeemed to {{ assetName }} 1:1. Simply replace {{ assetName }} with USD+ stablecoin and start getting passive yield where it didn’t exist before. Here you can see automated Overnight DeFi total asset portfolio management dashboards. Your assets are there.&nbsp;</label>
-            <label class="title-info-label info-link" @click="openLink('https://docs.overnight.fi/core-concept/usd+-token')">How USD+ works</label>
-        </div>
-
 <!--        <div class="mt-7">
             <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
                 <label class="tab-btn mr-4" v-bind:class="activeTabPolygon" @click="clickPolygon">
@@ -121,7 +116,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("network", ['networkId', 'assetName']),
+        ...mapGetters("network", ['networkId']),
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
 
         activeTabPolygon: function () {

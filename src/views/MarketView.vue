@@ -24,8 +24,8 @@
                 <template v-if="tab === 1">
                     <UsdPlus class="ma-3"/>
                     <WmaticUsdPlus class="ma-3"/>
-                    <WbnbUsdPlus class="ma-3"/>
                     <WbnbBusd class="ma-3"/>
+                    <WbnbUsdPlus class="ma-3"/>
                 </template>
 
                 <template v-if="tab === 2">

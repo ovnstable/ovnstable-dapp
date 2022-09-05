@@ -79,6 +79,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters('network', ['explorerUrl']),
         ...mapGetters('dashboardData', ['activities']),
     },
 
@@ -88,7 +89,7 @@ export default {
         },
 
         openOnExplorer(transactionHash) {
-            let url = process.env.VUE_APP_NETWORK_EXPLORER + "tx/" + transactionHash;
+            let url = this.explorerUrl + "tx/" + transactionHash;
             window.open(url, '_blank').focus();
         },
     }

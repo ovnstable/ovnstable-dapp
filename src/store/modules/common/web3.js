@@ -11,91 +11,28 @@ import contract from "@truffle/contract";
 const OvnImage = require('@/assets/ovn.json');
 const UsdPlusImage = require('@/assets/usdPlus.json');
 const WrappedUsdPlusImage = require('@/assets/wUsdPlus.json');
+const UsdPlusWmaticImage = require('@/assets/usdPlusWmatic.json');
+const UsdPlusWbnbImage = require('@/assets/usdPlusWbnb.json');
+const BusdWbnbImage = require('@/assets/busdWbnb.json');
 
-const polygon = process.env.VUE_APP_POLYGON;
-const networkId = Number.parseInt(process.env.VUE_APP_NETWORK_ID);
+const StakingRewards = require(`@/contracts/abi/StakingRewards.json`);
+const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`);
 
-console.log('Polygon: ' + polygon);
-
-const Exchange = require(`@/contracts/${polygon}/Exchange.json`)
-const OvnToken = require(`@/contracts/${polygon}/OvnToken.json`)
-const OvnGovernor = require(`@/contracts/${polygon}/OvnGovernor.json`)
-const PortfolioManager = require(`@/contracts/${polygon}/PortfolioManager.json`)
-const Mark2Market = require(`@/contracts/${polygon}/Mark2Market.json`)
-const TimelockController = require(`@/contracts/${polygon}/OvnTimelockController.json`)
-const UsdPlusToken = require(`@/contracts/${polygon}/UsdPlusToken.json`)
-const StakingRewards = require(`@/contracts/abi/StakingRewards.json`)
-const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`)
-
-let Market;
-let WrappedUsdPlusToken;
-
-if (polygon !== "avalanche") {
-    Market = require(`@/contracts/${polygon}/Market.json`)
-    WrappedUsdPlusToken = require(`@/contracts/${polygon}/WrappedUsdPlusToken.json`)
-}
-
-
-const ALLOW_NETWORKS = [networkId, 31337];
-
-// Unstoppable domains config for BNC Onboard
-const uauthOnboard = new UAuthBncOnboard({
-    uauth: new UAuth({
-        clientID: process.env.VUE_APP_UD_CLIENT_ID,
-        redirectUri: process.env.VUE_APP_UD_REDIRECT_URI,
-        scope: 'openid wallet'
-    })
-})
-
-export const wallets = [
-    {
-        walletName: "metamask",
-        preferred: true
-    },
-    {
-        walletName: "binance",
-        rpcUrl: process.env.VUE_APP_RPC_URL,
-        preferred: (process.env.VUE_APP_POLYGON === "bsc")
-    },
-    {
-        walletName: "walletConnect",
-        rpc: {
-            [networkId]: process.env.VUE_APP_RPC_URL,
-        },
-        preferred: true
-    },
-    {
-        walletName: "walletLink",
-        rpcUrl: process.env.VUE_APP_RPC_URL,
-        appName: process.env.VUE_APP_TITLE,
-        preferred: true
-    },
-    uauthOnboard.module({
-        preferred: false,
-        walletconnect: {
-            infuraId: process.env.VUE_APP_INFURA_ID
-        }
-    }),
-    {
-        walletName: 'ledger',
-        rpcUrl: process.env.VUE_APP_RPC_URL,
-    },
-    {
-        walletName: "ronin"
-    }
-];
+const SUPPORTED_NETWORKS = [137, 31337, 56, 43114, 10];
 
 
 const state = {
     contracts: null,
     web3: null,
-    networkId: null,
-    switchToPolygon: false,
+    switchToOtherNetwork: false,
     loadingWeb3: true,
     provider: null,
     onboard: null,
     walletConnected: false,
     walletName: null,
+    assetInfo: {},
+
+    networkChanged: false,
 };
 
 const getters = {
@@ -120,12 +57,8 @@ const getters = {
         return state.contracts;
     },
 
-    networkId(state) {
-        return state.networkId;
-    },
-
-    switchToPolygon(state) {
-        return state.switchToPolygon;
+    switchToOtherNetwork(state) {
+        return state.switchToOtherNetwork;
     },
 
     loadingWeb3(state) {
@@ -135,26 +68,137 @@ const getters = {
     walletName(state) {
         return state.walletName;
     },
+
+    assetInfo(state) {
+        return state.assetInfo;
+    },
+
+    networkChanged(state) {
+        return state.networkChanged;
+    },
 };
 
 const actions = {
 
-    async initOnboard({commit, dispatch, getters}) {
+    async initOnboard({commit, dispatch, getters, rootState}) {
+
+        let rpcUrl = rootState.network.rpcUrl;
+        let appApiUrl = rootState.network.appApiUrl;
+
+        // Unstoppable domains config for BNC Onboard
+        const uauthOnboard = new UAuthBncOnboard({
+            uauth: new UAuth({
+                clientID: process.env.VUE_APP_UD_CLIENT_ID,
+                redirectUri: appApiUrl,
+                scope: 'openid wallet'
+            })
+        })
+
+        let wallets = [
+            {
+                walletName: "metamask",
+                preferred: true
+            },
+            {
+                walletName: "binance",
+                rpcUrl: rpcUrl,
+                preferred: true
+            },
+            {
+                walletName: "walletConnect",
+                rpc: {
+                    137: 'https://polygon-rpc.com/',
+                    56: 'https://bsc-dataseed.binance.org',
+                    43114: 'https://api.avax.network/ext/bc/C/rpc',
+                    10: 'https://mainnet.optimism.io',
+                },
+                preferred: true
+            },
+            {
+                walletName: "walletLink",
+                rpcUrl: rpcUrl,
+                appName: process.env.VUE_APP_TITLE,
+                preferred: true
+            },
+            uauthOnboard.module({
+                preferred: false,
+                walletconnect: {
+                    infuraId: process.env.VUE_APP_INFURA_ID
+                }
+            }),
+            {
+                walletName: "coinbase",
+                preferred: true
+            },
+            {
+                walletName: 'ledger',
+                rpcUrl: rpcUrl,
+                preferred: false
+            },
+            {
+                walletName: 'trezor',
+                appUrl: appApiUrl.replaceAll('/api', ''),
+                email: 'ovnstable@gmail.com',
+                rpcUrl: rpcUrl,
+                preferred: false
+            },
+            {
+                walletName: "1inch",
+                preferred: false
+            },
+            {
+                walletName: "xdefi",
+                preferred: false
+            },
+            {
+                walletName: "ronin",
+                preferred: false
+            },
+        ]
 
         let onboard = Onboard({
             dappId: 'c81e3c96-54f6-4d82-b911-87dea6376ba4',
-            networkId: parseInt(process.env.VUE_APP_NETWORK_ID),
-            darkMode: true,
+            networkId: rootState.network.networkId,
+            darkMode: false,
             walletSelect: {
                 wallets: wallets,
             },
 
             subscriptions: {
-
                 wallet: async wallet => {
                     console.log('OnBoard: wallet');
 
                     commit('setProvider', wallet.provider);
+
+                    if (getters.provider) {
+
+                        getters.provider.on('accountsChanged', function (accounts) {
+                            console.log('Provider: accountsChanged');
+                            dispatch('checkAccount', accounts[0])
+                        });
+
+                        getters.provider.on('networkChanged', function (newNetworkId) {
+                            newNetworkId = parseInt(newNetworkId)
+
+                            console.log('Provider: networkChanged to ' + newNetworkId);
+
+                            if (SUPPORTED_NETWORKS.includes(newNetworkId)) {
+
+                                console.log("Current, new: " + rootState.network.networkId + " " + newNetworkId)
+
+                                if (rootState.network.networkId !== newNetworkId) {
+                                    dispatch('network/changeNetwork', newNetworkId.toString(), {root: true})
+                                } else {
+                                    commit('setSwitchToOtherNetwork', false);
+                                }
+
+                                dispatch('updateUserData');
+                            } else {
+                                dispatch('resetUserData');
+                                commit('setSwitchToOtherNetwork', true);
+                            }
+                        });
+                    }
 
                     await dispatch('initWeb3').then(value => {
 
@@ -169,13 +213,10 @@ const actions = {
 
                         dispatch('checkAccount');
                     });
-
-
                 },
 
                 address: async address => {
                     console.log('OnBoard: address');
-
                 }
             }
         });
@@ -187,12 +228,17 @@ const actions = {
 
         if (!getters.onboard) {
             await dispatch('initOnboard');
+        } else {
+            commit('setNetworkChanged', 'true');
         }
 
         let walletName = localStorage.getItem('walletName');
 
         await getters.onboard.walletSelect(walletName ? walletName : '');
-        await getters.onboard.walletCheck();
+
+        if (!getters.networkChanged) {
+            await getters.onboard.walletCheck();
+        }
     },
 
     async disconnectWallet({commit, dispatch, getters}) {
@@ -220,15 +266,38 @@ const actions = {
     async initWeb3({commit, dispatch, getters, rootState}) {
 
         commit('setLoadingWeb3', true);
-        commit('setWalletConnected', false);
 
-        if (polygon === "avalanche") {
+        let network = rootState.network.networkName;
+        let rpcUrl = rootState.network.rpcUrl;
+
+        console.log('Network: ' + network);
+
+        if (network === "avalanche" || network === "bsc") {
             dispatch('farmUI/hidePage', null, {root: true});
             dispatch('wrapUI/hidePage', null, {root: true});
+        } else {
+            dispatch('farmUI/showPage', null, {root: true});
+            dispatch('wrapUI/showPage', null, {root: true});
         }
 
-        if (polygon === "optimism") {
+        if (network === "optimism") {
             dispatch('farmUI/hidePage', null, {root: true});
+        } else {
+            dispatch('farmUI/showPage', null, {root: true});
+        }
+
+        if (network !== "polygon") {
+            dispatch('marketUI/hideUsdPlusWmatic', null, {root: true});
+        } else {
+            dispatch('marketUI/showUsdPlusWmatic', null, {root: true});
+        }
+
+        if (network !== "bsc") {
+            dispatch('marketUI/hideUsdPlusWbnb', null, {root: true});
+            dispatch('marketUI/hideBusdWbnb', null, {root: true});
+        } else {
+            dispatch('marketUI/showUsdPlusWbnb', null, {root: true});
+            dispatch('marketUI/showBusdWbnb', null, {root: true});
         }
 
         if (localStorage.getItem('walletName')) {
@@ -238,7 +307,7 @@ const actions = {
         let web3;
 
         if (!getters.provider) {
-            let provider = await new Web3.providers.HttpProvider(process.env.VUE_APP_RPC_URL);
+            let provider = await new Web3.providers.HttpProvider(rpcUrl);
             web3 = await new Web3(provider);
 
             console.log('InitWeb3: Provider default');
@@ -247,42 +316,20 @@ const actions = {
             console.log('InitWeb3: Provider Custom');
         }
 
-        let networkId = await web3.eth.net.getId();
-        console.log('Network ID ' + networkId)
-        commit('setNetworkId', networkId)
-
-        if (getters.provider) {
-            getters.provider.on('accountsChanged', function (accounts) {
-                console.log('Provider: accountsChanged');
-                dispatch('checkAccount', accounts[0])
-            });
-
-            getters.provider.on('networkChanged', function (networkId) {
-
-                console.log('Provider: networkChanged');
-                networkId = parseInt(networkId)
-                commit('setNetworkId', networkId)
-                if (ALLOW_NETWORKS.includes(networkId)) {
-                    dispatch('updateUserData');
-                    commit('setSwitchToPolygon', false);
-                } else {
-                    dispatch('resetUserData');
-                    commit('setSwitchToPolygon', true);
-                }
-            });
-
-        }
+        console.log('Network ID: ' + rootState.network.networkId)
 
         commit('setWeb3', web3);
 
         dispatch('initContracts');
         dispatch('gasPrice/refreshGasPrice', null, {root: true})
 
-        if (!ALLOW_NETWORKS.includes(networkId)) {
-            commit('setSwitchToPolygon', true)
-        }
+        let currentWalletNetworkId = await web3.eth.net.getId();
 
-        /* Account connected */
+        if (parseInt(currentWalletNetworkId) === rootState.network.networkId) {
+            commit('setSwitchToOtherNetwork', false);
+        } else {
+            commit('setSwitchToOtherNetwork', true);
+        }
 
         commit('setLoadingWeb3', false);
     },
@@ -327,34 +374,76 @@ const actions = {
         console.log('Call: updateUserData');
 
         dispatch('accountData/refreshBalance', null, {root:true});
+        dispatch('supplyData/refreshSupply', null, {root:true});
         dispatch('swapData/refreshSwap', null, {root:true});
         dispatch('wrapData/refreshWrap', null, {root:true});
         dispatch('statsData/refreshStats', null, {root:true});
         dispatch('dashboardData/refreshDashboard', null, {root:true});
         dispatch('farmData/refreshFarm', null, {root:true});
+
+        let network = rootState.network.networkName;
+
+        if (network === 'polygon') {
+            dispatch('marketData/refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'}, {root:true});
+        }
+
+        if (network === 'bsc') {
+            dispatch('marketData/refreshClientData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'}, {root:true});
+            dispatch('marketData/refreshClientData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'}, {root:true});
+        }
     },
 
 
-    async initContracts({commit, dispatch, getters}) {
+    async initContracts({commit, dispatch, getters, rootState}) {
+
+        let network = rootState.network.networkName;
+
+        const Exchange = require(`@/contracts/${network}/Exchange.json`)
+        const OvnToken = require(`@/contracts/${network}/OvnToken.json`)
+        const OvnGovernor = require(`@/contracts/${network}/OvnGovernor.json`)
+        const PortfolioManager = require(`@/contracts/${network}/PortfolioManager.json`)
+        const Mark2Market = require(`@/contracts/${network}/Mark2Market.json`)
+        const TimelockController = require(`@/contracts/${network}/OvnTimelockController.json`)
+        const UsdPlusToken = require(`@/contracts/${network}/UsdPlusToken.json`)
+
+        let Market;
+        let WrappedUsdPlusToken;
+
+        if (network !== "avalanche" && network !== "bsc") {
+            Market = require(`@/contracts/${network}/Market.json`)
+            WrappedUsdPlusToken = require(`@/contracts/${network}/WrappedUsdPlusToken.json`)
+        }
+
+        let ExchangerUsdPlusWmatic = require(`@/contracts/polygon/HedgeExchangerUsdPlusWmatic.json`);
+        let UsdPlusWmaticToken = require(`@/contracts/polygon/RebaseTokenUsdPlusWmatic.json`);
+
+        let ExchangerUsdPlusWbnb = require(`@/contracts/bsc/HedgeExchangerUsdPlusWbnb.json`);
+        let UsdPlusWbnbToken = require(`@/contracts/bsc/RebaseTokenUsdPlusWbnb.json`);
+
+        let ExchangerBusdWbnb = require(`@/contracts/bsc/HedgeExchangerBusdWbnb.json`)
+        let BusdWbnbToken = require(`@/contracts/bsc/RebaseTokenBusdWbnb.json`)
+
 
         let web3 = getters.web3;
 
         let contracts = {};
 
 
-
-        switch (polygon){
+        switch (network){
             case "avalanche":
-                contracts.usdc = _load(ERC20, web3, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E');
+                contracts.asset = _load(ERC20, web3, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E');
                 break;
             case "polygon":
             case "polygon_dev":
-                contracts.usdc = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
+                contracts.asset = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
                 break;
             case "optimism":
-                contracts.usdc = _load(ERC20, web3, '0x7F5c764cBc14f9669B88837ca1490cCa17c31607');
+                contracts.asset = _load(ERC20, web3, '0x7F5c764cBc14f9669B88837ca1490cCa17c31607');
+                break;
+            case "bsc":
+                contracts.asset = _load(ERC20, web3, '0xe9e7cea3dedca5984780bafc599bd69add087d56');
+                break;
         }
-
 
         contracts.exchange = _load(Exchange, web3);
         contracts.govToken = _load(OvnToken, web3);
@@ -365,10 +454,19 @@ const actions = {
         contracts.usdPlus = _load(UsdPlusToken, web3);
         contracts.preOvn = _load(ERC20, web3, "0x18D4565Cbd03340996BED17e66D154b632f5d4B6");
 
-        if (polygon !== "avalanche") {
+        if (network !== "avalanche" && network !== "bsc") {
             contracts.market = _load(Market, web3);
             contracts.wUsdPlus = _load(WrappedUsdPlusToken, web3);
         }
+
+        contracts.exchangerUsdPlusWmatic = _load(ExchangerUsdPlusWmatic, web3);
+        contracts.usdPlusWmatic = _load(UsdPlusWmaticToken, web3);
+
+        contracts.exchangerUsdPlusWbnb = _load(ExchangerUsdPlusWbnb, web3);
+        contracts.usdPlusWbnb = _load(UsdPlusWbnbToken, web3);
+
+        contracts.exchangerBusdWbnb = _load(ExchangerBusdWbnb, web3);
+        contracts.busdWbnb = _load(BusdWbnbToken, web3);
 
         contracts.poolQsUsdPlusWeth = _load(StakingRewards, web3, "0x398B66c4c69Bf19EA6A3c97e8d8b9c93f295D209");
         contracts.poolQsUsdPlusWethToken = _load(ERC20, web3, '0x901Debb34469e89FeCA591f5E5336984151fEc39');
@@ -382,34 +480,51 @@ const actions = {
     },
 
 
-    async setNetwork({commit, dispatch, getters, rootState}, networkId) {
+    async setNetwork({commit, dispatch, getters, rootState}, network) {
+
+        switch (network){
+            case "polygon":
+            case "polygon_dev":
+            case "137":
+            case "31337":
+                localStorage.setItem('selectedNetwork', 'polygon');
+                break;
+            case "bsc":
+            case "56":
+                localStorage.setItem('selectedNetwork', 'bsc');
+                break;
+            case "avax":
+            case "avalanche":
+            case "43114":
+                localStorage.setItem('selectedNetwork', 'avax');
+                break;
+            case "op":
+            case "optimism":
+            case "10":
+                localStorage.setItem('selectedNetwork', 'op');
+                break;
+            default:
+                localStorage.setItem('selectedNetwork', 'polygon');
+                break;
+        }
 
         try {
             await getters.provider.request({
                 method: 'wallet_switchEthereumChain',
-                params: [{chainId: getters.web3.utils.toHex(networkId)}],
+                params: [{chainId: getters.web3.utils.toHex(parseInt(network))}],
             });
+
+            commit('setNetworkChanged', 'true');
+            commit('setWalletConnected', 'true');
         } catch (switchError) {
             try {
-
                 let params;
 
-                switch (polygon){
-                    case "avalanche":
-                        params = {
-                            chainId: getters.web3.utils.toHex(43114),
-                            rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
-                            blockExplorerUrls: ['https://snowtrace.io/'],
-                            chainName: 'Avalanche',
-                            nativeCurrency: {
-                                symbol: 'AVAX',
-                                name: 'AVAX',
-                                decimals: 18,
-                            }
-                        };
-                        break;
+                switch (network){
                     case "polygon":
                     case "polygon_dev":
+                    case "137":
+                    case "31337":
                         params = {
                             chainId: getters.web3.utils.toHex(137),
                             rpcUrls: ['https://polygon-rpc.com/'],
@@ -422,7 +537,38 @@ const actions = {
                             }
                         };
                         break;
+                    case "bsc":
+                    case "56":
+                        params = {
+                            chainId: getters.web3.utils.toHex(56),
+                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                            blockExplorerUrls: ['https://bscscan.com/'],
+                            chainName: 'Smart Chain',
+                            nativeCurrency: {
+                                symbol: 'BNB',
+                                name: 'BNB',
+                                decimals: 18,
+                            }
+                        };
+                        break;
+                    case "avax":
+                    case "avalanche":
+                    case "43114":
+                        params = {
+                            chainId: getters.web3.utils.toHex(43114),
+                            rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
+                            blockExplorerUrls: ['https://snowtrace.io/'],
+                            chainName: 'Avalanche',
+                            nativeCurrency: {
+                                symbol: 'AVAX',
+                                name: 'AVAX',
+                                decimals: 18,
+                            }
+                        };
+                        break;
+                    case "op":
                     case "optimism":
+                    case "10":
                         params = {
                             chainId: getters.web3.utils.toHex(10),
                             rpcUrls: ['https://mainnet.optimism.io'],
@@ -435,13 +581,17 @@ const actions = {
                             }
                         };
                         break;
-
+                    default:
+                        break;
                 }
 
                 await getters.provider.request({
                     method: 'wallet_addEthereumChain',
                     params: [params],
                 });
+
+                commit('setNetworkChanged', 'true');
+                commit('setWalletConnected', 'true');
             } catch (addError) {
                 console.error(addError);
                 dispatch('switchAccount');
@@ -499,6 +649,81 @@ const actions = {
             .catch(console.error)
     },
 
+    async addUsdPlusWmaticToken({commit, dispatch, getters, rootState}) {
+
+        await getters.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: rootState.web3.contracts.usdPlusWmatic.options.address,
+                        symbol: process.env.VUE_APP_USD_PLUS_WMATIC_TOKEN_NAME,
+                        decimals: 6,
+                        image: UsdPlusWmaticImage.image,
+                    },
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('USD+/WMATIC successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
+    async addUsdPlusWbnbToken({commit, dispatch, getters, rootState}) {
+
+        await getters.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: rootState.web3.contracts.usdPlusWbnb.options.address,
+                        symbol: process.env.VUE_APP_USD_PLUS_WBNB_TOKEN_NAME,
+                        decimals: 6,
+                        image: UsdPlusWbnbImage.image,
+                    },
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('USD+/WBNB successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
+    async addBusdWbnbToken({commit, dispatch, getters, rootState}) {
+
+        await getters.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: rootState.web3.contracts.busdWbnb.options.address,
+                        symbol: process.env.VUE_APP_BUSD_WBNB_TOKEN_NAME,
+                        decimals: 6,
+                        image: BusdWbnbImage.image,
+                    },
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('BUSD/WBNB successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
     async addOvnToken({commit, dispatch, getters, rootState}) {
 
         await getters.provider
@@ -547,12 +772,8 @@ const mutations = {
         state.contracts = contracts;
     },
 
-    setNetworkId(state, value) {
-        state.networkId = value;
-    },
-
-    setSwitchToPolygon(state, value) {
-        state.switchToPolygon = value;
+    setSwitchToOtherNetwork(state, value) {
+        state.switchToOtherNetwork = value;
     },
 
     setLoadingWeb3(state, value) {
@@ -561,6 +782,14 @@ const mutations = {
 
     setWalletName(state, value) {
         state.walletName = value;
+    },
+
+    setAssetInfo(state, value) {
+        state.assetInfo = value;
+    },
+
+    setNetworkChanged(state, value) {
+        state.networkChanged = value;
     },
 };
 

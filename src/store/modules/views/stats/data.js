@@ -8,8 +8,10 @@ const state = {
     payouts: [],
 
     payoutsApyData: {},
+    payoutsApyDataDict: [],
     payoutsTvlData: {},
     totalUsdPlusValue: null,
+    totalUsdPlusProfit: null,
 };
 
 const getters = {
@@ -30,6 +32,10 @@ const getters = {
         return state.payoutsApyData;
     },
 
+    payoutsApyDataDict(state) {
+        return state.payoutsApyDataDict;
+    },
+
     payoutsTvlData(state) {
         return state.payoutsTvlData;
     },
@@ -38,6 +44,9 @@ const getters = {
         return state.totalUsdPlusValue;
     },
 
+    totalUsdPlusProfit(state) {
+        return state.totalUsdPlusProfit;
+    },
 };
 
 const actions = {
@@ -48,7 +57,9 @@ const actions = {
 
         let result = [];
 
-        let strategies = (await axios('/dapp/strategies')).data;
+        let appApiUrl = rootState.network.appApiUrl;
+
+        let strategies = (await axios.get(appApiUrl + '/dapp/strategies')).data;
         strategies.sort((a,b) => b.netAssetValue - a.netAssetValue);
 
         let colors = [
@@ -72,7 +83,7 @@ const actions = {
                     value: element.netAssetValue,
                     liquidationValue: element.liquidationValue,
                     color: colors[i],
-                    link: element.address ? (process.env.VUE_APP_NETWORK_EXPLORER + 'address/' + element.address) : ''
+                    link: element.address ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + element.address) : ''
                 }
             );
         }
@@ -84,7 +95,9 @@ const actions = {
     async refreshStablecoinData({commit, dispatch, getters, rootState}) {
         let result = [];
 
-        let stablecoinList = (await axios('/dapp/collateral/total')).data;
+        let appApiUrl = rootState.network.appApiUrl;
+
+        let stablecoinList = (await axios.get(appApiUrl + '/dapp/collateral/total')).data;
         stablecoinList.sort((a,b) => b.netAssetValue - a.netAssetValue);
         stablecoinList = stablecoinList.filter(el => el.netAssetValue > 0);
 
@@ -127,13 +140,15 @@ const actions = {
         dispatch('refreshPayouts');
         dispatch('refreshCurrentTotalData');
         dispatch('refreshTotalUsdPlus');
+        dispatch('refreshTotalUsdPlusProfit');
         dispatch('refreshStablecoinData');
     },
 
     async refreshPayouts({commit, dispatch, getters, rootState}) {
         commit('statsUI/setLoadingPayouts', true, { root: true });
 
-        axios.get(`/dapp/payouts`)
+        let appApiUrl = rootState.network.appApiUrl;
+        axios.get(appApiUrl + `/dapp/payouts`)
             .then(value => {
                 commit('setPayouts', value.data);
 
@@ -152,8 +167,10 @@ const actions = {
                 };
 
                 [...clientData].reverse().forEach(item => {
-                    widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = item.annualizedYield;
+                    widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
                 });
+
+                commit('setPayoutsApyDataDict', widgetDataDict);
 
                 for(let key in widgetDataDict) {
                     widgetData.labels.push(key);
@@ -175,7 +192,7 @@ const actions = {
                 };
 
                 [...clientData].reverse().forEach(item => {
-                    widgetDataDictTvl[moment(item.payableDate).format('DD.MM.YYYY')] = item.totalUsdc;
+                    widgetDataDictTvl[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.totalUsdc ? item.totalUsdc : 0.0).toFixed(2);
                 });
 
                 for(let key in widgetDataDictTvl) {
@@ -189,14 +206,25 @@ const actions = {
             })
     },
 
-
-
-
     async refreshTotalUsdPlus({commit, dispatch, getters, rootState}) {
         commit('statsUI/setLoadingTotalUsdPlus', true, { root: true });
 
-        let usdPlusValue = (await axios('/dapp/getTotalUsdPlusValue')).data;
+        let appApiUrl = rootState.network.appApiUrl;
+
+        let usdPlusValue = (await axios.get(appApiUrl + '/dapp/getTotalUsdPlusValue')).data;
         commit('setTotalUsdPlusValue', usdPlusValue);
+
+        commit('statsUI/setLoadingTotalUsdPlus', false, { root: true });
+
+    },
+
+    async refreshTotalUsdPlusProfit({commit, dispatch, getters, rootState}) {
+        commit('statsUI/setLoadingTotalUsdPlus', true, { root: true });
+
+        let appApiUrl = rootState.network.appApiUrl;
+
+        let usdPlusProfit = (await axios.get(appApiUrl + '/dapp/getTotalUsdPlusProfit')).data;
+        commit('setTotalUsdPlusProfit', usdPlusProfit);
 
         commit('statsUI/setLoadingTotalUsdPlus', false, { root: true });
 
@@ -226,12 +254,20 @@ const mutations = {
         state.payoutsApyData = payoutsApyData;
     },
 
+    setPayoutsApyDataDict(state, payoutsApyDataDict) {
+        state.payoutsApyDataDict = payoutsApyDataDict;
+    },
+
     setPayoutsTvlData(state, payoutsTvlData) {
         state.payoutsTvlData = payoutsTvlData;
     },
 
     setTotalUsdPlusValue(state, totalUsdPlusValue) {
         state.totalUsdPlusValue = totalUsdPlusValue;
+    },
+
+    setTotalUsdPlusProfit(state, totalUsdPlusProfit) {
+        state.totalUsdPlusProfit = totalUsdPlusProfit;
     },
 };
 

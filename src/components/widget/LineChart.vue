@@ -1,41 +1,15 @@
 <template>
     <div>
-        <v-row class="zoom-db-row mb-5 mt-6 mr-2">
-            <v-spacer></v-spacer>
-            <v-btn
-              rounded
-              text
-              id="week-zoom-btn-db"
-              class="zoom-btn"
-              dark
-              @click="zoomChart('week')"
-            >
-                <label>Week</label>
-            </v-btn>
-            <v-btn
-              rounded
-              text
-              id="month-zoom-btn-db"
-              class="zoom-btn"
-              dark
-              @click="zoomChart('month')"
-            >
-                Month
-            </v-btn>
-            <v-btn
-              rounded
-              text
-              id="all-zoom-btn-db"
-              class="zoom-btn"
-              dark
-              @click="zoomChart('all')"
-            >
-                All
-            </v-btn>
-            <v-spacer v-if="isMobile"></v-spacer>
+        <v-row class="chart-header-row" justify="start" align="center">
+            <label class="chart-title">USD+ Balance</label>
+            <label class="chart-title chart-title-slice" v-if="$wu.isFull()">&nbsp;&nbsp;|&nbsp;</label>
+            <v-spacer v-if="!$wu.isFull()"></v-spacer>
+            <label class="chart-title chart-title-slice">{{ sliceLabel }}</label>
         </v-row>
 
-        <div class="chart-db-row" id="line-chart-dashboard"></div>
+        <div class="chart-row mt-4" id="line-chart-dashboard"></div>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 
@@ -57,6 +31,10 @@ export default {
     },
 
     watch: {
+        slice: function (newVal, oldVal) {
+            this.redraw();
+        },
+
         data: function (newVal, oldVal) {
             this.redraw();
         },
@@ -65,7 +43,6 @@ export default {
     components: {},
 
     data: () => ({
-        zoom: "week",
         chart: null,
     }),
 
@@ -74,6 +51,17 @@ export default {
 
         isMobile() {
             return window.innerWidth < 650;
+        },
+
+        sliceLabel() {
+            switch (this.slice){
+                case 7:
+                    return 'WEEK'
+                case 30:
+                    return 'MONTH'
+                default:
+                    return 'ALL';
+            }
         }
     },
 
@@ -82,47 +70,10 @@ export default {
     },
 
     created() {
-        this.zoomChart("week");
     },
 
     methods: {
         ...mapActions('dashboardData', ['sliceDashboard']),
-
-        ...mapMutations('dashboardData', ['setSlice']),
-
-        zoomChart(zoom) {
-            this.zoom = zoom;
-
-            switch (zoom) {
-                case "week":
-                    this.setSlice(7);
-                    break;
-                case "month":
-                    this.setSlice(30)
-                    break;
-                case "all":
-                    this.setSlice(null)
-                    break;
-                default:
-                    this.setSlice(null)
-            }
-
-            this.sliceDashboard();
-
-            if (this.chart) {
-                this.chart.destroy();
-            }
-
-            this.redraw();
-        },
-
-        changeZoomBtnStyle() {
-            document.getElementById("week-zoom-btn-db").classList.remove("selected");
-            document.getElementById("month-zoom-btn-db").classList.remove("selected");
-            document.getElementById("all-zoom-btn-db").classList.remove("selected");
-
-            document.getElementById(this.zoom + "-zoom-btn-db").classList.add("selected");
-        },
 
         redraw() {
             if (this.chart) {
@@ -131,15 +82,6 @@ export default {
 
             if (!this.data) {
                 return;
-            }
-
-            try {
-                this.changeZoomBtnStyle();
-            } catch (e) {
-                if (e.message === "document.getElementById(...) is null")
-                    return;
-                else
-                    throw new Error(e);
             }
 
             let values = [];
@@ -168,7 +110,7 @@ export default {
 
                 chart: {
                     type: 'area',
-                    height: 250,
+                    height: this.isMobile ? 230 : 300,
 
                     sparkline: {
                         enabled: false,
@@ -178,7 +120,7 @@ export default {
                         enabled: false
                     },
 
-                    background: '#1D2029',
+                    background: '#FFFFFF',
 
                     toolbar: {
                         show: false
@@ -196,7 +138,7 @@ export default {
                 stroke: {
                     curve: 'straight',
                     width: this.isMobile ? 1 : 2,
-                    colors: this.isMobile ? ["#23DD00"] : ["#51FF00"],
+                    colors: ["#1C95E7"],
                 },
 
                 xaxis: {
@@ -210,16 +152,11 @@ export default {
                     },
 
                     axisBorder: {
-                        show: true,
-                        color: '#B1B1B1',
-                        height: 0.4,
-                        width: '100%',
-                        offsetX: 5,
-                        offsetY: -5,
+                        show: false,
                     },
 
                     axisTicks: {
-                        show: true,
+                        show: false,
                     },
                 },
 
@@ -231,11 +168,28 @@ export default {
                     max: maxValue,
 
                     labels: {
+                        show: true,
+
                         style: {
-                            cssClass: 'yaxis-label-dashboard',
+                            colors: ['#707A8B'],
+                            fontSize: '14px',
+                            fontFamily: 'Roboto, sans-serif',
+                            fontWeight: 400,
+                            cssClass: 'apexcharts-yaxis-label',
                         },
-                        formatter: (value) => {
-                            return value
+
+                        formatter: function (val, opts) {
+                            return '$' + Math.round(parseFloat(val));
+                        },
+                    },
+                },
+
+                tooltip: {
+                    enabled: true,
+
+                    y: {
+                        formatter: function (val, opts) {
+                            return '$' + val
                         },
                     },
                 },
@@ -246,35 +200,35 @@ export default {
                         {
                             y: maxValue / 5,
                             strokeDashArray: 2,
-                            borderColor: 'rgba(255, 255, 255, 0.2)',
+                            borderColor: '#C5C9D1',
                             offsetY: -3,
                             width: '100%',
                         },
                         {
                             y: 2 * maxValue / 5,
                             strokeDashArray: 2,
-                            borderColor: 'rgba(255, 255, 255, 0.2)',
+                            borderColor: '#C5C9D1',
                             offsetY: -3,
                             width: '100%',
                         },
                         {
                             y: 3 * maxValue / 5,
                             strokeDashArray: 2,
-                            borderColor: 'rgba(255, 255, 255, 0.2)',
+                            borderColor: '#C5C9D1',
                             offsetY: -3,
                             width: '100%',
                         },
                         {
                             y: 4 * maxValue / 5,
                             strokeDashArray: 2,
-                            borderColor: 'rgba(255, 255, 255, 0.2)',
+                            borderColor: '#C5C9D1',
                             offsetY: -3,
                             width: '100%',
                         },
                         {
                             y: maxValue,
                             strokeDashArray: 2,
-                            borderColor: 'rgba(255, 255, 255, 0.2)',
+                            borderColor: '#C5C9D1',
                             offsetY: -3,
                             width: '100%',
                         },
@@ -285,17 +239,17 @@ export default {
                     horizontalAlign: 'left'
                 },
 
-                colors: this.isMobile ? ['#181E25'] : ['#68D55A'],
+                colors: ['#E6F1FF'],
 
                 theme: {
-                    mode: 'dark',
+                    mode: 'light',
                 },
 
                 fill: {
                     type: ['gradient'],
 
                     gradient: {
-                        shade: 'dark',
+                        shade: 'rgba(230, 241, 255, 1)',
                         type: "vertical",
                         shadeIntensity: 0.2,
                         opacityFrom: 1,
@@ -316,60 +270,42 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 /* mobile */
-@media only screen and (max-width: 650px) {
-    .yaxis-label {
-        font-size: 12px !important;
-        line-height: 12px !important;
+@media only screen and (max-width: 1400px) {
+
+    .chart-title {
+        margin-top: 30px !important;
+        font-style: normal;
         font-weight: 400;
-        fill: rgba(255, 255, 255, 0.6) !important;
+        font-size: 20px;
+        line-height: 28px;
     }
 
-    .zoom-db-row {
-        height: 20px !important;
-    }
-
-    .chart-db-row {
-        margin-bottom: -10px !important;
-    }
-
-    .zoom-btn {
-        border: none !important;
-        font-family: 'Lato', sans-serif !important;
-        font-style: normal !important;
-        font-weight: 400 !important;
+    .chart-title-slice {
         font-size: 14px !important;
-        line-height: 20px !important;
-        color: #707A8B !important;
+        line-height: 18px !important;
     }
 }
 
-@media only screen and (min-width: 650px) {
-    .yaxis-label {
-        font-size: 12px !important;
-        line-height: 12px !important;
+@media only screen and (min-width: 1400px) {
+
+    .chart-title {
+        margin-top: 30px !important;
+        font-style: normal;
         font-weight: 400;
-        fill: rgba(255, 255, 255, 0.6) !important;
+        font-size: 24px;
+        line-height: 32px;
     }
 
-    .zoom-db-row {
-        height: 20px !important;
-    }
-
-    .chart-db-row {
+    .chart-row {
         height: 250px !important;
     }
 
-    .zoom-btn {
-        border: none !important;
-        font-family: 'Lato', sans-serif !important;
-        font-style: normal !important;
-        font-weight: 400 !important;
+    .chart-title-slice {
         font-size: 16px !important;
-        line-height: 24px !important;
-        color: #707A8B !important;
+        line-height: 20px !important;
     }
 }
 
@@ -378,9 +314,19 @@ export default {
     overflow-y: hidden !important;
 }
 
-.selected {
-    color: #FCCA46 !important;
-    background-color: rgba(255, 213, 5, 0.15) !important;
+.chart-header-row, .chart-row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.chart-title {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: #333333 !important;
+}
+
+.chart-title-slice {
+    color: #ADB3BD !important;
 }
 
 </style>

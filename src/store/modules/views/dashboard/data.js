@@ -18,7 +18,7 @@ const state = {
         ]
     },
 
-    slice: 7,
+    slice: null,
 };
 
 const getters = {
@@ -54,7 +54,7 @@ const actions = {
         commit('setPortfolioValue', null);
         commit('setApy', null);
         commit('setActivities', null);
-        commit('setSlice', 7);
+        commit('setSlice', null);
     },
 
     async refreshDashboard({commit, dispatch, getters, rootState}) {
@@ -67,7 +67,8 @@ const actions = {
 
         let account = rootState.accountData.account.toLowerCase();
 
-        let response = (await axios.get(`/dapp/clientBalanceChanges?address=${account}`)).data;
+        let appApiUrl = rootState.network.appApiUrl;
+        let response = (await axios.get(appApiUrl + `/dapp/clientBalanceChanges?address=${account}`)).data;
 
         let clientData = response.map(item => {
             return {

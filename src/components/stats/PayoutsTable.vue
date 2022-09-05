@@ -6,7 +6,7 @@
                 Payable date, UTC
             </th>
             <th class="table-header-payouts text-left" v-if="!minimized">
-                Daily profit<br/>{{ minimized ? '' : '(USDC per USD+)'}}
+                Daily profit<br/>{{ minimized ? '' : ('(' + assetName + ' per USD+)')}}
             </th>
             <th class="table-header-payouts text-left" :colspan="minimized ? 2 : 1">
                 Annualized yield<br/>{{ minimized ? '' : '(% per year)'}}
@@ -70,13 +70,14 @@ export default {
     },
 
     computed: {
+        ...mapGetters('network', ['explorerUrl', 'assetName']),
         ...mapGetters('statsData', ['payouts']),
-        ...mapGetters('statsUI', [ 'loadingPayouts'])
+        ...mapGetters('statsUI', [ 'loadingPayouts']),
     },
 
     methods: {
         openOnScan(item) {
-            let url = process.env.VUE_APP_NETWORK_EXPLORER + "tx/" + item.transactionHash;
+            let url = this.explorerUrl + "tx/" + item.transactionHash;
             window.open(url, '_blank').focus();
 
         },

@@ -1,49 +1,77 @@
 <template>
     <div>
+        <Navbar v-if="$wu.isFull()"/>
         <Header/>
 
         <v-main>
-            <v-container fluid class="main-container">
+            <div class="main-container mt-5">
                 <router-view></router-view>
-            </v-container>
+            </div>
         </v-main>
 
-        <AccountProfile width="550"/>
+        <AccountProfile width="630"/>
         <GasSettings width="510"/>
 
-        <Footer/>
+        <OvercapBanner v-if="isOvercapAvailable && showOvercapBanner && showOvercapModal"/>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 
 <script>
 
 import Header from "./components/Header";
-import Footer from "./components/Footer";
 import AccountProfile from "./components/common/modal/AccountProfile";
 import GasSettings from "@/components/common/modal/GasSettings";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
+import Navbar from "@/components/Navbar";
+import OvercapBanner from "@/components/market/cards/wbnb/banner/OvercapBanner";
 
 export default {
     name: "Dapp",
     components: {
+        OvercapBanner,
+        Navbar,
         GasSettings,
         AccountProfile,
-        Footer,
         Header
     },
 
+    data: () => ({
+        get showOvercapModal() {
+
+            let showOvercapModal = localStorage.getItem('showOvercapModal');
+
+            if (showOvercapModal == null) {
+                localStorage.setItem('showOvercapModal', "true");
+                showOvercapModal = localStorage.getItem('showOvercapModal');
+            }
+
+            return showOvercapModal === "true";
+        },
+    }),
 
     created() {
-
         console.log('Dapp.created()')
         this.initWeb3();
         this.connectWallet();
     },
 
+    watch: {
+        account: function (newVal, oldVal) {
+            if (newVal && localStorage.getItem('overcapRemaining') === '-1') {
+                localStorage.setItem('overcapRemaining', this.walletOvercapLimit.toString());
+            }
+        },
+    },
+
+    computed: {
+        ...mapGetters('overcapData', ['isOvercapAvailable', 'showOvercapBanner', 'walletOvercapLimit']),
+        ...mapGetters('accountData', ['account']),
+    },
 
     methods:{
-
-        ...mapActions('web3', ['initWeb3', 'connectWallet'])
+        ...mapActions('web3', ['initWeb3', 'connectWallet']),
     }
 }
 </script>
@@ -51,26 +79,26 @@ export default {
 <style scoped>
 
 /* mobile */
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 960px) {
     .main-container {
-        height: max(calc(100vh - 72px - 34px - 34px), 100%);
-        padding-top: 16px !important;
-        padding-bottom: 16px !important;
-
-        overflow-y: scroll;
-        -ms-overflow-style: none; /* for Internet Explorer, Edge */
-        scrollbar-width: none; /* for Firefox */
-    }
-
-    .main-container::-webkit-scrollbar {
-        display: none !important;
+        margin-left: 3% !important;
+        margin-right: 3% !important;
     }
 }
 
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .main-container {
+        margin-left: 3% !important;
+        margin-right: 3% !important;
+    }
+}
+
+/* full */
 @media only screen and (min-width: 1400px) {
     .main-container {
-        height: max(calc(100vh - 72px - 44px - 54px), 100%);
+        margin-left: 5% !important;
+        margin-right: 5% !important;
     }
 }
-
 </style>

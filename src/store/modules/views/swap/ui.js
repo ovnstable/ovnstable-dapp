@@ -1,9 +1,9 @@
 
 const state = {
 
-   isMintView: true,
+    isMintView: true,
 
-    usdcApproved: false,
+    assetApproved: false,
     usdPlusApproved: false,
 };
 
@@ -13,8 +13,8 @@ const getters = {
         return state.isMintView;
     },
 
-    usdcApproved(state) {
-        return state.usdcApproved;
+    assetApproved(state) {
+        return state.assetApproved;
     },
 
     usdPlusApproved(state) {
@@ -33,8 +33,8 @@ const actions = {
     },
 
 
-    approveUsdc({commit, dispatch, getters}) {
-        commit('setUsdcApproved', true);
+    approveAsset({commit, dispatch, getters}) {
+        commit('setAssetApproved', true);
     },
 
     approveUsdPlus({commit, dispatch, getters}) {
@@ -48,8 +48,8 @@ const mutations = {
         state.isMintView = value;
     },
 
-    setUsdcApproved(state, usdcApproved) {
-        state.usdcApproved = usdcApproved;
+    setAssetApproved(state, assetApproved) {
+        state.assetApproved = assetApproved;
     },
 
     setUsdPlusApproved(state, usdPlusApproved) {

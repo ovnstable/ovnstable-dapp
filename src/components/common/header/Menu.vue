@@ -2,7 +2,7 @@
     <v-row justify="center">
         <div class="hidden-xs-only">
             <span v-bind:class="activeTabSwap"
-                  @click="goToAction('/')">
+                  @click="goToAction('/market')">
                 Swap
             </span>
 
@@ -21,14 +21,16 @@
             </span>
 
             <span v-bind:class="activeTabStats"
+                  v-if="showStats"
                   class=" ml-10"
                   @click="goToAction('/fund')">
                 Stats
             </span>
 
             <span v-bind:class="activeTabDashboard"
+                  v-if="showDashboard"
                   class=" ml-10"
-                  @click="goToAction('/dashboard')">
+                  @click="goToAction('/')">
                 Dashboard
             </span>
         </div>
@@ -91,10 +93,12 @@ export default {
 
     computed: {
 
-        ...mapGetters('web3', ['web3', 'networkId']),
+        ...mapGetters('web3', ['web3']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('farmUI', ['showFarm']),
         ...mapGetters('wrapUI', ['showWrap']),
+        ...mapGetters('dashboardUI', ['showDashboard']),
+        ...mapGetters('statsUI', ['showStats']),
 
         activeTabSwap: function () {
             return {

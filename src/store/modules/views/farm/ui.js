@@ -65,6 +65,10 @@ const actions = {
     async hidePage({commit, dispatch, getters, rootState}) {
         commit('setShowFarm', false);
     },
+
+    async showPage({commit, dispatch, getters, rootState}) {
+        commit('setShowFarm', true);
+    },
 };
 
 const mutations = {

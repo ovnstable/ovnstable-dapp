@@ -1,5 +1,4 @@
 import {axios} from "@/plugins/http-axios";
-import BN from "bn.js";
 
 const state = {
 
@@ -76,11 +75,12 @@ const actions = {
 
         let poolList = [];
 
-        let networkId = rootState.web3.networkId;
+        let networkId = rootState.network.networkId;
+        let appApiUrl = rootState.network.appApiUrl;
 
-        if (networkId === 137){
+        if (networkId === 137) {
 
-            let pools = (await axios('/pools?tvl=2000')).data;
+            let pools = (await axios.get(appApiUrl + '/pools?tvl=2000')).data;
             pools.sort((a,b) => b.tvl - a.tvl);
 
             pools.forEach(item => {
@@ -207,7 +207,8 @@ async function loadUsdPlusWethPool(rootState){
 
     let utils = rootState.web3.web3.utils;
 
-    let info =  (await axios.get('/reward-programs/' + pair.options.address)).data;
+    let appApiUrl = rootState.network.appApiUrl;
+    let info =  (await axios.get(appApiUrl + '/reward-programs/' + pair.options.address)).data;
 
     poolData.lpTokensTotal = utils.fromWei(await pool.methods.totalSupply().call());
 
@@ -273,7 +274,8 @@ async function loadUsdPlusWmaticPool(rootState){
 
     let utils = rootState.web3.web3.utils;
 
-    let info =  (await axios.get('/reward-programs/' + pair.options.address)).data;
+    let appApiUrl = rootState.network.appApiUrl;
+    let info =  (await axios.get(appApiUrl + '/reward-programs/' + pair.options.address)).data;
 
     poolData.lpTokensTotal = utils.fromWei(await pool.methods.totalSupply().call());
 

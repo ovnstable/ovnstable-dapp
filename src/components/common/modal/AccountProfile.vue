@@ -7,100 +7,96 @@
             scrollable>
         <v-card class="container_body">
             <v-toolbar class="container_header" flat>
-                <v-row>
-                    <label class="title-modal ml-6">
-                        Account
-                    </label>
-                    <v-spacer></v-spacer>
-                    <v-btn icon class="ml-auto" @click="close" dark>
-                        <v-icon>mdi-close</v-icon>
-                    </v-btn>
-                </v-row>
+                <label class="title-modal">
+                    Account
+                </label>
+                <v-spacer></v-spacer>
+                <v-btn icon @click="close">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
             </v-toolbar>
 
-            <v-card-text class="px-5 pt-5">
-                <v-col class="main-content-col">
-                    <v-row align="center" class="account-info-row connected-row">
-                        <label class="wallet-name-label">
-                            Connected with {{ walletName }}
+            <v-card-text class="pt-8 content-container">
+                <v-row class="account-info-row" align="center">
+
+                    <div class="wallet-img">
+                        <v-img :src="require('@/assets/icon/undefined.svg')"/>
+                    </div>
+
+                    <v-row class="account-display-container ml-4" align="center" justify="center" @click="viewInExplorer">
+                        <label class="account-label">
+                            {{ account ? accountDisplay : 'XXXXX...XXXX' }}
                         </label>
-
-                        <v-spacer class="disconnect-wallet-spacer"></v-spacer>
-
-                        <v-btn class="disconnect-wallet-btn" dark @click="disconnectWalletAction">Disconnect</v-btn>
-                        <v-btn class="disconnect-wallet-btn-mobile" icon color="red" dark @click="disconnectWalletAction">
-                            <v-icon>
-                                mdi-logout
-                            </v-icon>
-                        </v-btn>
-                    </v-row>
-
-                    <v-row align="center" class="account-info-row balance-row">
-                        <label class="wallet-name-label">
-                            Balance: <strong>{{ $utils.formatMoney(balance.usdPlus, 2) }}</strong>&nbsp;USD+
-                        </label>
-                    </v-row>
-
-                    <v-row align="center" class="account-info-row account-num-row mt-6">
-                        <div class="avatar-img">
-                            <v-img :src="require('@/assets/network/' + networkName + '.svg')"/>
+                        <div class="icon-img ml-2" v-if="!$wu.isMobile()">
+                            <v-img :src="require('@/assets/icon/open.svg')"/>
                         </div>
-                        <label class="account-label ml-5">{{ accountDisplay }}</label>
                     </v-row>
 
-                    <v-row align="center" class="account-info-row actions-row mt-6">
-                        <a class="view-explorer-btn" @click="viewInExplorer">
-                            <v-img class="icon-img" :src="require('@/assets/icon/out.svg')"/>
-                            <label class="ml-1 view-explorer-label">View on explorer</label>
-                        </a>
+                    <v-tooltip
+                            v-model="showCopyTooltip"
+                            color="#202832"
+                            bottom
+                    >
+                        <template v-slot:activator="{on}">
+                            <div class="icon-img ml-8" @click="copyAddressToClipboard">
+                                <v-img :src="require('@/assets/icon/copy.svg')"/>
+                            </div>
+                        </template>
+                        <p class="my-0">Copied!</p>
+                    </v-tooltip>
 
-                        <v-tooltip
-                                v-model="showCopyTooltip"
-                                color="#202832"
-                                bottom
-                        >
-                            <template v-slot:activator="{on}">
-                                <a class="copy-address-btn" @click="copyAddressToClipboard">
-                                    <v-img class="icon-img" :src="require('@/assets/icon/link.svg')"/>
-                                    <label class="ml-1">Copy Address</label>
-                                </a>
-                            </template>
-                            <p class="my-0">Copied!</p>
-                        </v-tooltip>
-                    </v-row>
+                    <v-spacer></v-spacer>
 
-                    <v-row align="center" class="account-info-row actions-row">
-                        <a class="add-usd-plus-btn" @click="addUsdPlusToken">
-                            <label class="add-usd-btn">Add USD+</label>
-                        </a>
+                    <v-btn class="disconnect-wallet-btn btn-outlined" outlined @click="disconnectWalletAction">
+                        Disconnect
+                    </v-btn>
+                    <v-btn class="disconnect-wallet-btn-mobile" icon color="red" dark @click="disconnectWalletAction">
+                        <v-icon>
+                            mdi-logout
+                        </v-icon>
+                    </v-btn>
+                </v-row>
 
-                        <a class="add-usd-plus-btn ml-5" @click="addwUsdPlusToken" v-if="showWrap">
-                            <label class="add-usd-btn">Add wUSD+</label>
-                        </a>
-                    </v-row>
+                <v-row class="account-info-row mt-8" align="center">
+                    <label class="add-coins-label" :class="$wu.isMobile() ? 'ml-1' : ''">Add tokens to your wallet</label>
+                </v-row>
 
-                    <v-row class="recent-tr-row mb-3" align="center" v-if="transactions && transactions.length > 0">
-                        <label class="recent-label">
-                            Recent Transactions
-                        </label>
-                        <v-spacer></v-spacer>
-                        <v-btn class="disconnect-wallet-btn" dark @click="clearTransaction">
-                            Clear all
-                        </v-btn>
-                    </v-row>
-
-                    <v-row class="row mt-2" v-bind:key="i" v-for="(item, i) in transactions" v-if="transactions && transactions.length > 0">
-                        <v-col cols="10">
-                            <div class="transaction-link" @click="openOnExplorer(item.hash)">{{ item.text }} ↗</div>
-                        </v-col>
-                        <v-col cols="2">
-                            <v-icon v-if="item.pending">mdi-progress-question</v-icon>
-                            <v-icon color="green" v-else>mdi-check</v-icon>
-                        </v-col>
-                    </v-row>
-                </v-col>
+                <v-row class="account-info-row" justify="start" align="center">
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : ''" @click="addUsdPlusToken">
+                        <div class="coin-img">
+                            <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
+                        </div>
+                        <label class="ml-2 coin-btn-label">USD+</label>
+                    </v-btn>
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addwUsdPlusToken" v-if="showWrap">
+                        <div class="coin-img">
+                            <v-img :src="require('@/assets/wUsdPlus.svg')"/>
+                        </div>
+                        <label class="ml-2 coin-btn-label">wUSD+</label>
+                    </v-btn>
+                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addUsdPlusWmaticToken" v-if="showUsdPlusWmatic">
+                        <div class="coin-img">
+                            <v-img :src="require('@/assets/currencies/market/WmaticUsdPlus.svg')"/>
+                        </div>
+                        <label class="ml-2 coin-btn-label">USD+/WMATIC</label>
+                    </v-btn>
+                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addUsdPlusWbnbToken" v-if="showUsdPlusWbnb">
+                        <div class="coin-img">
+                            <v-img :src="require('@/assets/currencies/market/UsdPlusWbnb.svg')"/>
+                        </div>
+                        <label class="ml-2 coin-btn-label">USD+/WBNB</label>
+                    </v-btn>
+                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addBusdWbnbToken" v-if="showBusdWbnb">
+                        <div class="coin-img">
+                            <v-img :src="require('@/assets/currencies/market/BusdWbnb.svg')"/>
+                        </div>
+                        <label class="ml-2 coin-btn-label">BUSD/WBNB</label>
+                    </v-btn>
+                </v-row>
             </v-card-text>
         </v-card>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </v-dialog>
 </template>
 
@@ -109,6 +105,8 @@ import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "AccountProfile",
+
+    components: {},
 
     data: () => ({
         showCopyTooltip: false,
@@ -132,9 +130,11 @@ export default {
     },
 
     computed: {
+        ...mapGetters('network', ['explorerUrl']),
         ...mapGetters('web3', ['walletName']),
         ...mapGetters('accountUI', ['showAccountProfile']),
         ...mapGetters('wrapUI', ['showWrap']),
+        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb', 'showBusdWbnb']),
         ...mapGetters('transaction', ['transactions']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
 
@@ -147,32 +147,25 @@ export default {
                 return null;
             }
         },
-
-        networkName() {
-            return process.env.VUE_APP_POLYGON;
-        },
     },
 
 
     watch: {
-
         showAccountProfile: function (newValue, oldValue){
-
             console.log('Watch: show ' + newValue);
             if (newValue){
                 this.loadTransaction();
             }
-
         },
     },
 
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
-        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addwUsdPlusToken']),
+        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addUsdPlusWbnbToken', 'addBusdWbnbToken']),
         ...mapActions('transaction', ['clearTransaction', 'loadTransaction']),
 
         openOnExplorer(hash) {
-            window.open(process.env.VUE_APP_NETWORK_EXPLORER + `tx/${hash}`, '_blank').focus();
+            window.open(this.explorerUrl + `tx/${hash}`, '_blank').focus();
         },
 
         disconnectWalletAction() {
@@ -188,7 +181,7 @@ export default {
         },
 
         viewInExplorer() {
-            let url = process.env.VUE_APP_NETWORK_EXPLORER + 'address/' + this.account;
+            let url = this.explorerUrl + 'address/' + this.account;
             window.open(url, '_blank');
         },
 
@@ -207,186 +200,254 @@ export default {
 <style scoped>
 
 /* mobile */
-@media only screen and (max-width: 1400px) {
-    .main-content-col {
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-
-    .disconnect-wallet-btn, .disconnect-wallet-spacer {
+@media only screen and (max-width: 960px) {
+    .disconnect-wallet-btn {
         display: none !important;
     }
 
-    .copy-address-btn, .view-explorer-btn-btn, .add-usd-plus-btn {
-        margin-left: 30px;
-        margin-right: 30px;
-        margin-top: 4px;
-        margin-bottom: 4px;
+    .wallet-img {
+        width: 28px !important;
+        height: 28px !important;
     }
 
-    .actions-row {
-        margin-top: 24px;
-        margin-bottom: 24px;
+    .coin-img {
+        width: 20px;
+        height: 20px;
     }
 
-    .balance-row {
-        margin-top: 8px;
-        margin-bottom: 8px;
+    .account-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.02em;
     }
 
-    .account-num-row {
-        margin-bottom: 8px;
+    .add-coins-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .coin-btn {
+        width: 75px !important;
+        height: 46px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        line-height: 14px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .coin-btn-wide {
+        width: 125px !important;
     }
 
     .account-info-row {
-        justify-content: center !important;
+        margin-left: 3% !important;
+        margin-right: 3% !important;
     }
 
-    .recent-tr-row {
-        margin-top: 48px;
+    .container_header {
+        margin-left: 3% !important;
+        margin-right: 3% !important;
     }
 }
 
-@media only screen and (min-width: 1400px) {
-    .main-content-col {
-        padding-left: 40px;
-        padding-right: 40px;
-    }
-
-    .disconnect-wallet-btn-mobile, .balance-row {
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .disconnect-wallet-btn {
         display: none !important;
     }
 
-    .copy-address-btn, .account-action-btn {
-        margin-left: 20px;
+    .wallet-img {
+        width: 36px !important;
+        height: 36px !important;
     }
 
-    .recent-tr-row {
-        margin-top: 40px;
+    .coin-img {
+        width: 32px;
+        height: 32px;
     }
 
-    .recent-label, .transaction-link, .recent-label {
-        margin-left: 8px;
+    .account-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .add-coins-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .coin-btn {
+        width: 120px !important;
+        height: 56px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .coin-btn-wide {
+        width: 180px !important;
+    }
+
+    .account-info-row {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
+
+    .container_header {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
     }
 }
 
-.row {
-    font-size: 17px;
-}
+/* full */
+@media only screen and (min-width: 1400px) {
+    .disconnect-wallet-btn-mobile {
+        display: none !important;
+    }
 
-.title {
-    color: white;
-    font-weight: 300;
-}
+    .wallet-img {
+        width: 36px !important;
+        height: 36px !important;
+    }
 
-.recent-label {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 18px;
-    color: #8FA2B7 !important;
-}
+    .coin-img {
+        width: 32px;
+        height: 32px;
+    }
 
-.wallet-name-label {
-    color: white !important;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-}
+    .account-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
 
-.account-label {
-    color: white !important;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 24px;
+    .add-coins-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .coin-btn {
+        width: 120px !important;
+        height: 56px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .coin-btn-wide {
+        width: 180px !important;
+    }
+
+    .account-info-row {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
+
+    .container_header {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
 }
 
 .view-explorer-btn > label, .copy-address-btn > label, .add-usd-btn > label {
     cursor: pointer !important;
 }
 
-.view-explorer-btn {
-    cursor: pointer;
-    background: none !important;
-    color: var(--link);
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 24px;
-    display: flex;
-}
-
-.view-explorer-label:hover {
-    text-decoration: underline;
-}
-
-.copy-address-btn {
-    cursor: pointer;
-    background: none !important;
-    color: white;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 24px;
-    display: flex;
-}
-
-.add-usd-btn {
-    cursor: pointer;
-    color: white;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 24px;
-    background: var(--orange-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
 .disconnect-wallet-btn {
-    height: 40px !important;
-    background: none !important;
-    border: 1px solid var(--link);
-    border-radius: 40px;
-    text-transform: none !important;
-    color: var(--link);
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 24px;
+    height: 36px;
+    border-radius: 2px;
+    box-shadow: none !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    text-align: center !important;
+    letter-spacing: 0.02em !important;
+    text-transform: uppercase !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
 }
 
-.avatar-img {
-    width: 40px;
-    height: 40px;
+.btn-outlined {
+    color: #1C95E7 !important;
 }
 
 .icon-img {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
 }
 
 .account-info-row {
     height: 56px;
 }
 
-.container_body {
-    border-radius: 24px !important;
-    background-color: var(--secondary) !important;
-}
-
 .container_header {
     background-color: var(--secondary) !important;
+    margin-top: 5% !important;
 }
 
-.transaction-link {
-    cursor: pointer;
-    color: var(--link);
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 18px;
+.content-container {
+    margin-bottom: 5% !important;
 }
 
-.transaction-link:hover {
-    text-decoration: underline;
+.container_body {
+    background-color: var(--secondary) !important;
+    box-shadow: 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12), 0px 7px 8px -4px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.account-label {
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #333333;
+}
+
+.account-display-container {
+    max-width: 160px !important;
+    background: #F5F5F5;
+    border-radius: 4px;
+    height: 36px !important;
+    cursor: pointer !important;
+}
+
+.add-coins-label {
+    font-family: 'Roboto', sans-serif;
+    color: #333333;
+}
+
+.coin-btn {
+    background: #F5F5F5 !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-style: normal !important;
+    text-transform: uppercase !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+    color: #333333 !important;
 }
 </style>

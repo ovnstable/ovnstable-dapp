@@ -1,8 +1,5 @@
 <template>
     <v-app id="app">
-        <div id="rubic-widget-root" class="rubic-not-show"></div>
-        <v-btn id="rubic-widget-close" class="rubic-not-show" icon @click="closeRubicWidget"><v-icon>mdi-close</v-icon></v-btn>
-
         <router-view></router-view>
     </v-app>
 </template>
@@ -24,28 +21,6 @@ export default {
     },
 
     methods: {
-        closeRubicWidget() {
-            if (document.getElementById("rubic-widget-root").classList.contains("rubic-show")) {
-
-                document.getElementById("rubic-widget-root").classList.remove("rubic-show");
-                document.getElementById("rubic-widget-root").classList.add("rubic-not-show");
-
-                document.getElementById("rubic-widget-close").classList.remove("rubic-show");
-                document.getElementById("rubic-widget-close").classList.add("rubic-not-show");
-
-                document.getElementById("bridge-button").classList.remove("rubic-not-show");
-                document.getElementById("bridge-button").classList.add("rubic-show");
-            } else {
-                document.getElementById("rubic-widget-root").classList.remove("rubic-not-show");
-                document.getElementById("rubic-widget-root").classList.add("rubic-show");
-
-                document.getElementById("rubic-widget-close").classList.remove("rubic-not-show");
-                document.getElementById("rubic-widget-close").classList.add("rubic-show");
-
-                document.getElementById("bridge-button").classList.remove("rubic-show");
-                document.getElementById("bridge-button").classList.add("rubic-not-show");
-            }
-        },
     }
 };
 </script>
@@ -57,10 +32,6 @@ export default {
 /* mobile */
 @media all and (min-width:0px) and (max-width: 650px) {
 
-    #rubic-widget-close {
-        right: 64px !important;
-    }
-
     .title-header {
         color: white;
         font-family: 'Raleway', sans-serif;
@@ -71,23 +42,33 @@ export default {
     }
 
     .title-modal {
-        color: white;
-        font-family: 'Raleway', sans-serif;
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
-        font-weight: 800;
-        font-size: 20px;
-        line-height: 24px;
-        margin-top: 12px;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 28px;
+        font-feature-settings: 'liga' off;
+        color: #333333;
+    }
+
+    .v-slider__tick-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        line-height: 20px !important;
+    }
+
+    .bn-onboard-icon-button > div {
+        width: 24px !important;
+        height: 24px !important;
+        min-width: 24px !important;
+        min-height: 24px !important;
     }
 }
 
 /* tablet */
 @media only screen and (min-width:650px) and (max-width: 1400px) {
 
-    #rubic-widget-close {
-        right: 82px !important;
-    }
-
     .title-header {
         color: white;
         font-family: 'Raleway', sans-serif;
@@ -98,22 +79,32 @@ export default {
     }
 
     .title-modal {
-        color: white;
-        font-family: 'Raleway', sans-serif;
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
-        font-weight: 800;
-        font-size: 20px;
-        line-height: 24px;
-        margin-top: 10px;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 28px;
+        font-feature-settings: 'liga' off;
+        color: #333333;
+    }
+
+    .v-slider__tick-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        line-height: 20px !important;
+    }
+
+    .bn-onboard-icon-button > div {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
     }
 }
 
 @media only screen and (min-width: 1400px) {
 
-    #rubic-widget-close {
-        right: 90px !important;
-    }
-
     .title-header {
         color: white;
         font-family: 'Raleway', sans-serif;
@@ -124,23 +115,38 @@ export default {
     }
 
     .title-modal {
-        color: white;
-        font-family: 'Raleway', sans-serif;
+        font-family: 'Roboto', sans-serif;
         font-style: normal;
-        font-weight: 800;
-        font-size: 24px;
+        font-weight: 400;
+        font-size: 30px;
         line-height: 36px;
-        margin-top: 4px;
+        font-feature-settings: 'pnum' on, 'lnum' on;
+        color: #333333;
+    }
+
+    .v-slider__tick-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 22px !important;
+    }
+
+    .bn-onboard-icon-button > div {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
     }
 }
 
 /* main variables */
 :root {
-    --main-background: #13151C;
-    --secondary: #1D2029;
+    --main-background: #F5F5F5;
+    --secondary: #FFFFFF;
     --logo-color: #ffffff;
     --orange-gradient: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
-    --link: #3d8dff;
+    --blue-gradient: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+    --link: #1C95E7;
 }
 
 html {
@@ -194,7 +200,7 @@ html {
 
 .bn-onboard-modal-content {
     background-color: var(--secondary) !important;
-    width: 500px !important;
+    width: 460px !important;
     border-radius: 24px !important;
 }
 
@@ -224,20 +230,25 @@ html {
 }
 
 .bn-onboard-custom .bn-onboard-modal-content-header-heading {
-    font-family: 'Lato', sans-serif !important;
-    color: white !important;
-    font-weight: 300 !important;
-    font-size: 20px !important;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #333333;
     margin-bottom: 15px !important;
 }
 
 .bn-onboard-icon-button > span {
-    font-family: 'Lato', sans-serif !important;
-    color: white !important;
-    font-weight: 600 !important;
-    font-size: 16px !important;
-    line-height: 24px !important;
+    font-family: 'Roboto', sans-serif;
     font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.02em;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #333333;
 }
 
 .bn-onboard-select-wallet-info {
@@ -254,24 +265,38 @@ html {
     display: none !important;
 }
 
-.rubic-show {
+.progress-col > .v-progress-linear > .v-progress-linear__buffer {
+    background-color: #E5E7EA !important;
 }
 
-.rubic-not-show {
+.progress-col > .v-progress-linear > .v-progress-linear__determinate {
+    left: 0 !important;
+    right: auto !important;
+}
+
+.v-slider__tick-label {
+    font-family: 'Roboto', sans-serif !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+    color: #29323E !important;
+}
+
+.percent-slider .v-slider__tick:not(:nth-child(5n + 1)) {
     display: none !important;
 }
 
-#rubic-widget-iframe {
-    position: absolute !important;
-    z-index: 100 !important;
-    right: 2% !important;
-    top: 100px !important;
+.percent-slider .v-slider__tick:nth-child(5n + 1) {
+    background-color: #FFFFFF !important;
+    border-radius: 5px !important;
+    border: 1px solid #DEE1E5;
 }
 
-#rubic-widget-close {
-    color: white;
-    position: absolute !important;
-    z-index: 110 !important;
-    top: 118px !important;
+.step-slider .v-slider__tick:nth-child(n) {
+    background-color: #FFFFFF !important;
+    border-radius: 5px !important;
+    border: 1px solid #DEE1E5;
+}
+
+.v-slider__tick--filled {
+    border: 2px solid #1C95E7 !important;
 }
 </style>

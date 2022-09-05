@@ -33,6 +33,7 @@ const actions = {
         dispatch('loadAmountWPerUsdPlus');
 
         dispatch('accountData/refreshBalance', null, {root: true});
+        dispatch('supplyData/refreshSupply', null, {root:true});
     },
 
     async loadIndex({commit, dispatch, getters, rootState}) {

@@ -6,9 +6,6 @@ Vue.use(VueRouter)
 
 import store from "../store";
 
-import getDapp from "./midleware/getDapp"
-
-
 // Governance sections
 
 import getOverview from "./midleware/governance/getOverview"
@@ -18,12 +15,13 @@ import middlewarePipeline from "./middlewarePipeline";
 import getFinance from "@/router/midleware/governance/getFinance";
 
 // Dapp Sections
-import Swap from "./midleware/dapp/Swap";
-import Wrap from "./midleware/dapp/Wrap";
-import Farm from "./midleware/dapp/Farm";
+import Market from "./midleware/dapp/Market";
+import Wmatic from "./midleware/dapp/Wmatic";
+import Wbnb from "./midleware/dapp/Wbnb";
 import Stats from "./midleware/dapp/Stats";
+import Collateral from "./midleware/dapp/Collateral";
 import Dashboard from "./midleware/dapp/Dashboard";
-import PreOvn from "./midleware/dapp/PreOvn";
+import getDapp from "@/router/midleware/getDapp";
 
 
 const routes = [
@@ -33,31 +31,64 @@ const routes = [
         component: () => import('../Dapp.vue'),
 
         children: [
-
             {
-                path: '/',
-                name: 'SwapView',
-                component: () => import('../views/SwapView.vue'),
+                path: '/market',
+                name: 'MarketView',
+                component: () => import('../views/MarketView.vue'),
                 meta: {
                     middleware: [
-                        Swap,
+                        Market,
                     ]
                 }
             },
             {
-                path: '/wrap',
-                name: 'WrapView',
-                component: () => import('../views/WrapView.vue'),
+                path: '/ets',
+                redirect: '/market',
+            },
+            {
+                path: '/ets/usd-plus-wbnb',
+                name: 'WbnbPageView',
+                component: () => import('../views/strategy/wbnb/WbnbPageView.vue'),
                 meta: {
                     middleware: [
-                        Wrap,
+                        Wbnb
                     ]
                 }
             },
             {
-                path: '/fund',
-                name: 'StatsView',
-                component: () => import('../views/StatsView.vue'),
+                path: '/ets/busd-wbnb',
+                name: 'BusdWbnbPageView',
+                component: () => import('../views/strategy/busdWbnb/BusdWbnbPageView.vue'),
+                meta: {
+                    middleware: [
+                        Wbnb
+                    ]
+                }
+            },
+            {
+                path: '/ets/usd-plus-wmatic',
+                name: 'WmaticPageView',
+                component: () => import('../views/strategy/wmatic/WmaticPageView.vue'),
+                meta: {
+                    middleware: [
+                        Wmatic
+                    ]
+                }
+            },
+            {
+                path: '/collateral',
+                name: 'CollateralView',
+                component: () => import('../views/performance/view/CollateralView.vue'),
+                meta: {
+                    middleware: [
+                        Collateral,
+                    ]
+                }
+            },
+            {
+                path: '/stats',
+                name: 'StatsPerformanceView',
+                component: () => import('../views/performance/view/StatsPerformanceView.vue'),
                 meta: {
                     middleware: [
                         Stats,
@@ -65,43 +96,12 @@ const routes = [
                 }
             },
             {
-                path: '/dashboard',
-                name: 'DashboardView',
-                component: () => import('../views/DashboardView.vue'),
+                path: '/',
+                name: 'MyPerformanceView',
+                component: () => import('../views/dashboard/MyPerformanceView'),
                 meta: {
                     middleware: [
-                        Dashboard,
-                    ]
-                }
-            },
-            {
-                path: '/farm',
-                name: 'FarmView',
-                component: () => import('../views/FarmView.vue'),
-                meta: {
-                    middleware: [
-                        Farm,
-                    ]
-                }
-            },
-            {
-                path: '/preovn',
-                name: 'PreOvnView',
-                component: () => import('../views/PreOvnView.vue'),
-                meta: {
-                    middleware: [
-                        PreOvn,
-                    ]
-                }
-            },
-
-            {
-                path: '/poolsFeeding',
-                name: 'PoolFeedingView',
-                component: () => import('../views/PoolFeedingView.vue'),
-                meta: {
-                    middleware: [
-                        getDapp,
+                        Dashboard
                     ]
                 }
             },

@@ -9,7 +9,7 @@
                     <v-progress-circular
                             width="1.5"
                             :size="70"
-                            color="#FFD505 "
+                            color="#FCCA46"
                             indeterminate
                     ></v-progress-circular>
                 </v-row>
@@ -77,7 +77,7 @@ export default {
 }
 
 .loading-label {
-    color: #FFD505;
+    color: #FCCA46;
     font-family: 'Raleway', sans-serif;
     font-style: normal;
     font-weight: 800;
@@ -86,7 +86,7 @@ export default {
 }
 
 .loading-sub-label {
-    color: white;
+    color: #333333;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -94,7 +94,7 @@ export default {
 }
 
 .loading-sub2-label {
-    color: white;
+    color: #333333;
     font-style: normal;
     font-weight: normal;
     line-height: 16px;

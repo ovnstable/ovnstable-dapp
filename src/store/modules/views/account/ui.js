@@ -4,6 +4,8 @@ const state = {
     showAccountProfile: false,
 
     loadingBalance: true,
+
+    badge: false,
 };
 
 const getters = {
@@ -15,6 +17,10 @@ const getters = {
 
     loadingBalance(state) {
         return state.loadingBalance;
+    },
+
+    badge(state) {
+        return state.badge;
     },
 
 };
@@ -30,6 +36,14 @@ const actions = {
         commit('setShowAccountProfile', false)
     },
 
+    async showBadge({commit, dispatch, getters, rootState}){
+        commit('setBadge', true)
+    },
+
+    async hideBadge({commit, dispatch, getters, rootState}){
+        commit('setBadge', false)
+    },
+
 
 };
 
@@ -41,6 +55,10 @@ const mutations = {
 
     setLoadingBalance(state, value) {
         state.loadingBalance = value;
+    },
+
+    setBadge(state, value) {
+        state.loadingBalance = badge;
     },
 
 };

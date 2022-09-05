@@ -1,5 +1,3 @@
-import BN from "bn.js";
-
 const {axios} = require('@/plugins/http-axios');
 
 
@@ -57,8 +55,7 @@ const actions = {
 
     async refreshGasPrice({commit, dispatch, getters, rootState}) {
 
-
-        let networkId = rootState.web3.networkId;
+        let networkId = rootState.network.networkId;
 
         console.log("Getting gas price for network_id=" + networkId);
 
@@ -67,6 +64,8 @@ const actions = {
             url = "https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
         else if(networkId === 43114)
             url = "https://gavax.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
+        else if(networkId === 56)
+            url = "https://gbsc.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
         else if (networkId === 10){
 
             // Fixed price for Optimism

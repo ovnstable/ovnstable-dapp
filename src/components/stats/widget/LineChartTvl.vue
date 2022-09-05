@@ -13,6 +13,7 @@
                     </label>
                 </v-row>
             </v-col>
+
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
                     <label class="chart-title-apy">
@@ -32,7 +33,6 @@
         <v-row class="zoom-row" style="margin-top: -40px !important;">
             <v-spacer></v-spacer>
             <v-btn
-                    rounded
                     text
                     id="week-zoom-btn-tvl"
                     class="zoom-btn"
@@ -42,7 +42,6 @@
                 <label>Week</label>
             </v-btn>
             <v-btn
-                    rounded
                     text
                     id="month-zoom-btn-tvl"
                     class="zoom-btn"
@@ -52,17 +51,17 @@
                 Month
             </v-btn>
             <v-btn
-                    rounded
                     text
-                    style="margin-right: 1%;"
                     id="all-zoom-btn-tvl"
-                    class="zoom-btn"
+                    class="zoom-btn mr-3"
                     dark
                     @click="zoomChart('all')"
             >
                 All
             </v-btn>
         </v-row>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 
@@ -204,7 +203,7 @@ export default {
                         enabled: false
                     },
 
-                    background: '#1D2029',
+                    background: '#FFFFFF',
 
                     toolbar: {
                         show: false
@@ -222,7 +221,7 @@ export default {
                 stroke: {
                     curve: 'straight',
                     width: this.isMobile ? 1 : 2,
-                    colors: this.isMobile ? ["#23DD00"] : ["#51FF00"],
+                    colors: ["rgba(28, 149, 231, 1)"],
                 },
 
                 xaxis: {
@@ -240,7 +239,7 @@ export default {
                     },
 
                     axisTicks: {
-                        show: true,
+                        show: false,
                     },
                 },
 
@@ -256,21 +255,31 @@ export default {
                     },
                 },
 
+                tooltip: {
+                    enabled: true,
+
+                    y: {
+                        formatter: function (val, opts) {
+                            return '$' + val
+                        },
+                    },
+                },
+
                 legend: {
                     horizontalAlign: 'left'
                 },
 
-                colors: this.isMobile ? ['#181E25'] : ['#68D55A'],
+                colors: ['#E6F1FF'],
 
                 theme: {
-                    mode: 'dark',
+                    mode: 'light',
                 },
 
                 fill: {
                     type: ['gradient'],
 
                     gradient: {
-                        shade: 'dark',
+                        shade: 'rgba(230, 241, 255, 1)',
                         type: "vertical",
                         shadeIntensity: 0.2,
                         opacityFrom: 1,
@@ -287,31 +296,26 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 /* mobile */
 @media only screen and (max-width: 1400px) {
 
     .chart-title {
-        margin-left: 4%;
         margin-top: 30px !important;
-        font-family: 'Raleway', sans-serif;
         font-style: normal;
-        font-weight: 800;
+        font-weight: 400;
         font-size: 16px;
         line-height: 24px;
-        color: #FFFFFF;
     }
 
     .mobile-info-title {
         margin-top: 5px !important;
-        font-family: 'Lato', sans-serif;
-        font-style: normal;
-        font-weight: 700;
-        font-size: 20px;
-        line-height: 28px;
-        color: #FFFFFF;
         z-index: 2 !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 28px;
     }
 
     .add-chart-info-col, .zoom-row {
@@ -326,35 +330,26 @@ export default {
 @media only screen and (min-width: 1400px) {
 
     .chart-title {
-        margin-left: 4%;
         margin-top: 30px !important;
-        font-family: 'Raleway', sans-serif;
         font-style: normal;
-        font-weight: 800;
+        font-weight: 400;
         font-size: 24px;
-        line-height: 36px;
-        color: #FFFFFF;
+        line-height: 28px;
     }
 
     .chart-title-apy {
-        margin-right: 4%;
         margin-top: 30px !important;
-        font-family: 'Lato', sans-serif;
         font-style: normal;
-        font-weight: 700;
-        font-size: 34px;
+        font-weight: 400;
+        font-size: 40px;
         line-height: 42px;
-        color: #FFFFFF;
     }
 
     .chart-sub-title-apy {
-        margin-right: 4%;
-        font-family: 'Lato', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
-        line-height: 24px;
-        color: #707A8B;
+        line-height: 20px;
     }
 
     .mobile-info-title {
@@ -378,6 +373,11 @@ export default {
     }
 }
 
+#line-chart-tvl {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+}
+
 .yaxis-label {
     font-size: 12px !important;
     line-height: 12px !important;
@@ -385,24 +385,33 @@ export default {
     fill: rgba(255, 255, 255, 0.6) !important;
 }
 
-#line-chart-tvl {
-    overflow-x: hidden !important;
-    overflow-y: hidden !important;
-}
-
 .zoom-btn {
     border: none !important;
-    font-family: 'Lato', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
+    font-family: 'Roboto', sans-serif !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    letter-spacing: 0.02em !important;
+    text-transform: uppercase !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
     color: #707A8B !important;
 }
 
+.zoom-btn:hover {
+    background: rgba(28, 149, 231, 0.1);
+    color: rgba(28, 149, 231, 1) !important;
+}
+
+.zoom-btn:active {
+    background: linear-gradient(rgba(40, 160, 240, 1),
+    rgba(6, 120, 196, 0.99),
+    rgba(28, 149, 231, 0.24));
+}
+
 .selected {
-    color: #FCCA46 !important;
-    background-color: rgba(255, 213, 5, 0.15);
+    color: #1C95E7 !important;
+    background-color: #E8F4FD;
 }
 
 .yaxis-label {
@@ -410,8 +419,36 @@ export default {
 }
 
 .chart-header-row, .chart-row, .zoom-row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.chart-title {
     margin-left: 4%;
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: #333333 !important;
+}
+
+.chart-title-apy {
     margin-right: 4%;
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #333333 !important;
+}
+
+.chart-sub-title-apy {
+    margin-right: 4%;
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: #707A8B !important;
+}
+
+.mobile-info-title {
+    margin-left: 4%;
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #333333 !important;
 }
 
 </style>

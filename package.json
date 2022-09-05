@@ -9,6 +9,7 @@
     "build-avax-prod": "vue-cli-service build --mode avax-prod",
     "build-optimism-prod": "vue-cli-service build --mode optimism-prod",
     "build-bsc-prod": "vue-cli-service build --mode bsc-prod",
+    "build-market": "vue-cli-service build --mode market",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -24,13 +25,15 @@
     "axios": "^0.21.4",
     "bluebird": "^3.7.2",
     "bn.js": "^5.2.0",
-    "bnc-onboard": "^1.37.1",
+    "bnc-onboard": "^1.39.0",
+    "cheerio": "^1.0.0-rc.3",
     "discord-oauth2": "^2.9.0",
-    "ethers": "^5.5.2",
+    "ethers": "^5.7.0",
     "moment": "^2.29.1",
     "prettier": "^1.18.2",
     "vue": "^2.6.10",
     "vue-css-donut-chart": "^1.3.2",
+    "vue-resize": "^1.0.1",
     "vue-router": "^3.0.3",
     "vue-yandex-metrika": "^1.8.3",
     "vuetify": "^2.4.0",
@@ -41,7 +44,7 @@
     "web3modal": "^1.9.4"
   },
   "devDependencies": {
-    "@uauth/bnc-onboard": "^1.1.0",
+    "@uauth/bnc-onboard": "^2.2.0",
     "@uauth/js": "^1.1.0",
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-plugin-eslint": "^3.8.0",

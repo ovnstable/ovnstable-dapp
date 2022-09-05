@@ -114,7 +114,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('web3', ['connectWallet', 'disconnectWallet', 'setNetwork']),
+        ...mapActions('web3', ['connectWallet', 'setNetwork']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
 

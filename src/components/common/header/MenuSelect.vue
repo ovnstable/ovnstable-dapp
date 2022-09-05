@@ -35,7 +35,7 @@
                     Mint USD+
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item class="menu-item" @click="wrapAction">
+            <v-list-item class="menu-item" @click="wrapAction" v-if="showWrap">
                 <v-list-item-title class="network-select-list-item text-blue">
                     Wrap USD+
                 </v-list-item-title>
@@ -73,7 +73,7 @@
 
 <script>
 
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "MenuSelect",
@@ -84,7 +84,7 @@ export default {
     }),
 
     computed: {
-
+        ...mapGetters('wrapUI', ['showWrap']),
     },
 
     methods: {

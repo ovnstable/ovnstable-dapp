@@ -20,7 +20,7 @@
             </div>
         </template>
         <v-list class="network-select-list">
-            <v-list-item style="cursor: pointer" @click="changeNetwork('polygon')">
+            <v-list-item style="cursor: pointer" @click="setNetwork('137')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
                         <v-img :src="require('@/assets/network/polygon.svg')"/>
@@ -31,7 +31,7 @@
                     <v-icon class="mb-5" small color="#333333"></v-icon>
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item style="cursor: pointer" @click="changeNetwork('bsc')">
+            <v-list-item style="cursor: pointer" @click="setNetwork('56')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
                         <v-img :src="require('@/assets/network/bsc.svg')"/>
@@ -42,7 +42,7 @@
                     <v-icon class="mb-5" small color="#333333"></v-icon>
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item style="cursor: pointer" @click="changeNetwork('avax')">
+            <v-list-item style="cursor: pointer" @click="setNetwork('43114')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
                         <v-img :src="require('@/assets/network/avalanche.svg')"/>
@@ -53,7 +53,7 @@
                     <v-icon class="ml-n1 mb-5" small color="#333333">mdi-alpha</v-icon>
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item style="cursor: pointer" @click="changeNetwork('op')">
+            <v-list-item style="cursor: pointer" @click="setNetwork('10')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
                         <v-img :src="require('@/assets/network/op.svg')"/>
@@ -114,7 +114,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('network', ['changeNetwork']),
+        ...mapActions('web3', ['setNetwork']),
 
         clickMenuOutside() {
             this.openedList = false;

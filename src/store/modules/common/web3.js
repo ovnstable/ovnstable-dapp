@@ -15,17 +15,11 @@ const UsdPlusWmaticImage = require('@/assets/usdPlusWmatic.json');
 const UsdPlusWbnbImage = require('@/assets/usdPlusWbnb.json');
 const BusdWbnbImage = require('@/assets/busdWbnb.json');
 
-const StakingRewards = require(`@/contracts/abi/StakingRewards.json`)
-const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`)
+const StakingRewards = require(`@/contracts/abi/StakingRewards.json`);
+const UniswapV2Pair = require(`@/contracts/abi/IUniswapV2Pair.json`);
 
-// Unstoppable domains config for BNC Onboard
-const uauthOnboard = new UAuthBncOnboard({
-    uauth: new UAuth({
-        clientID: process.env.VUE_APP_UD_CLIENT_ID,
-        redirectUri: process.env.VUE_APP_UD_REDIRECT_URI,
-        scope: 'openid wallet'
-    })
-})
+const SUPPORTED_NETWORKS = [137, 31337, 56, 43114, 10];
+
 
 const state = {
     contracts: null,
@@ -37,6 +31,8 @@ const state = {
     walletConnected: false,
     walletName: null,
     assetInfo: {},
+
+    networkChanged: false,
 };
 
 const getters = {
@@ -76,15 +72,27 @@ const getters = {
     assetInfo(state) {
         return state.assetInfo;
     },
+
+    networkChanged(state) {
+        return state.networkChanged;
+    },
 };
 
 const actions = {
 
     async initOnboard({commit, dispatch, getters, rootState}) {
 
-        let networkId = rootState.network.networkId;
         let rpcUrl = rootState.network.rpcUrl;
         let appApiUrl = rootState.network.appApiUrl;
+
+        // Unstoppable domains config for BNC Onboard
+        const uauthOnboard = new UAuthBncOnboard({
+            uauth: new UAuth({
+                clientID: process.env.VUE_APP_UD_CLIENT_ID,
+                redirectUri: appApiUrl,
+                scope: 'openid wallet'
+            })
+        })
 
         let wallets = [
             {
@@ -99,7 +107,10 @@ const actions = {
             {
                 walletName: "walletConnect",
                 rpc: {
-                    [networkId]: rpcUrl,
+                    137: 'https://polygon-rpc.com/',
+                    56: 'https://bsc-dataseed.binance.org',
+                    43114: 'https://api.avax.network/ext/bc/C/rpc',
+                    10: 'https://mainnet.optimism.io',
                 },
                 preferred: true
             },
@@ -147,7 +158,7 @@ const actions = {
 
         let onboard = Onboard({
             dappId: 'c81e3c96-54f6-4d82-b911-87dea6376ba4',
-            networkId: networkId,
+            networkId: rootState.network.networkId,
             darkMode: false,
             walletSelect: {
                 wallets: wallets,
@@ -158,6 +169,36 @@ const actions = {
                     console.log('OnBoard: wallet');
 
                     commit('setProvider', wallet.provider);
+
+                    if (getters.provider) {
+
+                        getters.provider.on('accountsChanged', function (accounts) {
+                            console.log('Provider: accountsChanged');
+                            dispatch('checkAccount', accounts[0])
+                        });
+
+                        getters.provider.on('networkChanged', function (newNetworkId) {
+                            newNetworkId = parseInt(newNetworkId)
+
+                            console.log('Provider: networkChanged to ' + newNetworkId);
+
+                            if (SUPPORTED_NETWORKS.includes(newNetworkId)) {
+
+                                console.log("Current, new: " + rootState.network.networkId + " " + newNetworkId)
+
+                                if (rootState.network.networkId !== newNetworkId) {
+                                    dispatch('network/changeNetwork', newNetworkId.toString(), {root: true})
+                                } else {
+                                    commit('setSwitchToOtherNetwork', false);
+                                }
+
+                                dispatch('updateUserData');
+                            } else {
+                                dispatch('resetUserData');
+                                commit('setSwitchToOtherNetwork', true);
+                            }
+                        });
+                    }
 
                     await dispatch('initWeb3').then(value => {
 
@@ -187,12 +228,17 @@ const actions = {
 
         if (!getters.onboard) {
             await dispatch('initOnboard');
+        } else {
+            commit('setNetworkChanged', 'true');
         }
 
         let walletName = localStorage.getItem('walletName');
 
         await getters.onboard.walletSelect(walletName ? walletName : '');
-        await getters.onboard.walletCheck();
+
+        if (!getters.networkChanged) {
+            await getters.onboard.walletCheck();
+        }
     },
 
     async disconnectWallet({commit, dispatch, getters}) {
@@ -220,30 +266,38 @@ const actions = {
     async initWeb3({commit, dispatch, getters, rootState}) {
 
         commit('setLoadingWeb3', true);
-        commit('setWalletConnected', false);
 
         let network = rootState.network.networkName;
-        let networkId = rootState.network.networkId;
         let rpcUrl = rootState.network.rpcUrl;
-        let ALLOW_NETWORKS = [networkId, 31337];
 
         console.log('Network: ' + network);
 
         if (network === "avalanche" || network === "bsc") {
             dispatch('farmUI/hidePage', null, {root: true});
             dispatch('wrapUI/hidePage', null, {root: true});
+        } else {
+            dispatch('farmUI/showPage', null, {root: true});
+            dispatch('wrapUI/showPage', null, {root: true});
         }
 
         if (network === "optimism") {
             dispatch('farmUI/hidePage', null, {root: true});
+        } else {
+            dispatch('farmUI/showPage', null, {root: true});
         }
 
         if (network !== "polygon") {
             dispatch('marketUI/hideUsdPlusWmatic', null, {root: true});
+        } else {
+            dispatch('marketUI/showUsdPlusWmatic', null, {root: true});
         }
 
         if (network !== "bsc") {
             dispatch('marketUI/hideUsdPlusWbnb', null, {root: true});
+            dispatch('marketUI/hideBusdWbnb', null, {root: true});
+        } else {
+            dispatch('marketUI/showUsdPlusWbnb', null, {root: true});
+            dispatch('marketUI/showBusdWbnb', null, {root: true});
         }
 
         if (localStorage.getItem('walletName')) {
@@ -262,41 +316,20 @@ const actions = {
             console.log('InitWeb3: Provider Custom');
         }
 
-        console.log('Network ID: ' + networkId)
-
-        if (getters.provider) {
-            getters.provider.on('accountsChanged', function (accounts) {
-                console.log('Provider: accountsChanged');
-                dispatch('checkAccount', accounts[0])
-            });
-
-            getters.provider.on('networkChanged', function (newNetworkId) {
-
-                console.log('Provider: networkChanged');
-
-                newNetworkId = parseInt(newNetworkId)
-
-                if (ALLOW_NETWORKS.includes(newNetworkId)) {
-                    dispatch('updateUserData');
-                    commit('setSwitchToOtherNetwork', false);
-                } else {
-                    dispatch('resetUserData');
-                    commit('setSwitchToOtherNetwork', true);
-                }
-            });
-
-        }
+        console.log('Network ID: ' + rootState.network.networkId)
 
         commit('setWeb3', web3);
 
         dispatch('initContracts');
         dispatch('gasPrice/refreshGasPrice', null, {root: true})
 
-        if (!ALLOW_NETWORKS.includes(networkId)) {
-            commit('setSwitchToOtherNetwork', true)
-        }
+        let currentWalletNetworkId = await web3.eth.net.getId();
 
-        /* Account connected */
+        if (parseInt(currentWalletNetworkId) === rootState.network.networkId) {
+            commit('setSwitchToOtherNetwork', false);
+        } else {
+            commit('setSwitchToOtherNetwork', true);
+        }
 
         commit('setLoadingWeb3', false);
     },
@@ -412,11 +445,6 @@ const actions = {
                 break;
         }
 
-        /*let assetInfo = {};
-        assetInfo.symbol = await contracts.asset.methods.symbol().call();
-        assetInfo.decimals = await contracts.asset.methods.decimals().call();
-        commit('setAssetInfo', assetInfo);*/
-
         contracts.exchange = _load(Exchange, web3);
         contracts.govToken = _load(OvnToken, web3);
         contracts.governor = _load(OvnGovernor, web3);
@@ -452,37 +480,51 @@ const actions = {
     },
 
 
-    async setNetwork({commit, dispatch, getters, rootState}, networkId) {
+    async setNetwork({commit, dispatch, getters, rootState}, network) {
 
-        let network = rootState.network.networkName;
+        switch (network){
+            case "polygon":
+            case "polygon_dev":
+            case "137":
+            case "31337":
+                localStorage.setItem('selectedNetwork', 'polygon');
+                break;
+            case "bsc":
+            case "56":
+                localStorage.setItem('selectedNetwork', 'bsc');
+                break;
+            case "avax":
+            case "avalanche":
+            case "43114":
+                localStorage.setItem('selectedNetwork', 'avax');
+                break;
+            case "op":
+            case "optimism":
+            case "10":
+                localStorage.setItem('selectedNetwork', 'op');
+                break;
+            default:
+                localStorage.setItem('selectedNetwork', 'polygon');
+                break;
+        }
 
         try {
             await getters.provider.request({
                 method: 'wallet_switchEthereumChain',
-                params: [{chainId: getters.web3.utils.toHex(networkId)}],
+                params: [{chainId: getters.web3.utils.toHex(parseInt(network))}],
             });
 
+            commit('setNetworkChanged', 'true');
             commit('setWalletConnected', 'true');
         } catch (switchError) {
             try {
                 let params;
 
                 switch (network){
-                    case "avalanche":
-                        params = {
-                            chainId: getters.web3.utils.toHex(43114),
-                            rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
-                            blockExplorerUrls: ['https://snowtrace.io/'],
-                            chainName: 'Avalanche',
-                            nativeCurrency: {
-                                symbol: 'AVAX',
-                                name: 'AVAX',
-                                decimals: 18,
-                            }
-                        };
-                        break;
                     case "polygon":
                     case "polygon_dev":
+                    case "137":
+                    case "31337":
                         params = {
                             chainId: getters.web3.utils.toHex(137),
                             rpcUrls: ['https://polygon-rpc.com/'],
@@ -495,20 +537,8 @@ const actions = {
                             }
                         };
                         break;
-                    case "optimism":
-                        params = {
-                            chainId: getters.web3.utils.toHex(10),
-                            rpcUrls: ['https://mainnet.optimism.io'],
-                            blockExplorerUrls: ['https://optimistic.etherscan.io/'],
-                            chainName: 'Optimism',
-                            nativeCurrency: {
-                                symbol: 'ETH',
-                                name: 'ETH',
-                                decimals: 18,
-                            }
-                        };
-                        break;
                     case "bsc":
+                    case "56":
                         params = {
                             chainId: getters.web3.utils.toHex(56),
                             rpcUrls: ['https://bsc-dataseed.binance.org/'],
@@ -521,6 +551,38 @@ const actions = {
                             }
                         };
                         break;
+                    case "avax":
+                    case "avalanche":
+                    case "43114":
+                        params = {
+                            chainId: getters.web3.utils.toHex(43114),
+                            rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
+                            blockExplorerUrls: ['https://snowtrace.io/'],
+                            chainName: 'Avalanche',
+                            nativeCurrency: {
+                                symbol: 'AVAX',
+                                name: 'AVAX',
+                                decimals: 18,
+                            }
+                        };
+                        break;
+                    case "op":
+                    case "optimism":
+                    case "10":
+                        params = {
+                            chainId: getters.web3.utils.toHex(10),
+                            rpcUrls: ['https://mainnet.optimism.io'],
+                            blockExplorerUrls: ['https://optimistic.etherscan.io/'],
+                            chainName: 'Optimism',
+                            nativeCurrency: {
+                                symbol: 'ETH',
+                                name: 'ETH',
+                                decimals: 18,
+                            }
+                        };
+                        break;
+                    default:
+                        break;
                 }
 
                 await getters.provider.request({
@@ -528,6 +590,7 @@ const actions = {
                     params: [params],
                 });
 
+                commit('setNetworkChanged', 'true');
                 commit('setWalletConnected', 'true');
             } catch (addError) {
                 console.error(addError);
@@ -723,6 +786,10 @@ const mutations = {
 
     setAssetInfo(state, value) {
         state.assetInfo = value;
+    },
+
+    setNetworkChanged(state, value) {
+        state.networkChanged = value;
     },
 };
 

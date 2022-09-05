@@ -148,8 +148,8 @@ export default {
 
     methods: {
         openStrategyCard() {
-          this.$router.push('/ets/busd-wbnb');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+            this.$router.push('/ets/busd-wbnb');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     },
 }

@@ -1,13 +1,95 @@
+const POLYGON_PARAMS = {
+    appApiUrl: 'https://app.overnight.fi/api',
+    networkName: 'polygon',
+    networkId: 137,
+    rpcUrl: 'https://polygon-rpc.com/',
+    explorerUrl: 'https://polygonscan.com/',
+    assetName: 'USDC',
+    assetDecimals: 6,
+    nativeAssetName: 'MATIC',
+}
+
+const BSC_PARAMS = {
+    appApiUrl: 'https://bsc.overnight.fi/api',
+    networkName: 'bsc',
+    networkId: 56,
+    rpcUrl: 'https://bsc-dataseed.binance.org',
+    explorerUrl: 'https://bscscan.com/',
+    assetName: 'BUSD',
+    assetDecimals: 18,
+    nativeAssetName: 'BNB',
+}
+
+const AVALANCHE_PARAMS = {
+    appApiUrl: 'https://avax.overnight.fi/api',
+    networkName: 'avalanche',
+    networkId: 43114,
+    rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
+    explorerUrl: 'https://snowtrace.io/',
+    assetName: 'USDC',
+    assetDecimals: 6,
+    nativeAssetName: 'AVAX',
+}
+
+const OPTIMISM_PARAMS = {
+    appApiUrl: 'https://op.overnight.fi/api',
+    networkName: 'optimism',
+    networkId: 10,
+    rpcUrl: 'https://mainnet.optimism.io',
+    explorerUrl: 'https://optimistic.etherscan.io/',
+    assetName: 'USDC',
+    assetDecimals: 6,
+    nativeAssetName: 'ETH',
+}
+
 const state = {
-    appApiUrl: process.env.VUE_APP_API,
-    networkName: process.env.VUE_APP_POLYGON,
-    networkId: parseInt(process.env.VUE_APP_NETWORK_ID),
-    rpcUrl: process.env.VUE_APP_RPC_URL,
-    explorerUrl: process.env.VUE_APP_NETWORK_EXPLORER,
-    assetName: process.env.VUE_APP_ASSET_NAME,
-    assetDecimals: parseInt(process.env.VUE_APP_ASSET_DECIMALS),
-    nativeAssetName: process.env.VUE_APP_NATIVE_ASSET,
+    appApiUrl: _getParams(null).appApiUrl,
+    networkName: _getParams(null).networkName,
+    networkId: _getParams(null).networkId,
+    rpcUrl: _getParams(null).rpcUrl,
+    explorerUrl: _getParams(null).explorerUrl,
+    assetName: _getParams(null).assetName,
+    assetDecimals: _getParams(null).assetDecimals,
+    nativeAssetName: _getParams(null).nativeAssetName,
+
+    polygonApi: POLYGON_PARAMS.appApiUrl,
+    bscApi: BSC_PARAMS.appApiUrl,
+    avaxApi: AVALANCHE_PARAMS.appApiUrl,
+    opApi: OPTIMISM_PARAMS.appApiUrl,
 };
+
+
+function _getParams(networkName) {
+
+    if (!networkName) {
+        networkName = localStorage.getItem('selectedNetwork');
+
+        if (!networkName) {
+            networkName = 'polygon';
+        }
+    }
+
+    switch (networkName){
+        case "polygon":
+        case "polygon_dev":
+        case "137":
+        case "31337":
+            return POLYGON_PARAMS;
+        case "bsc":
+        case "56":
+            return BSC_PARAMS;
+        case "avax":
+        case "avalanche":
+        case "43114":
+            return AVALANCHE_PARAMS;
+        case "op":
+        case "optimism":
+        case "10":
+            return OPTIMISM_PARAMS;
+        default:
+            return POLYGON_PARAMS;
+    }
+}
 
 const getters = {
 
@@ -42,64 +124,38 @@ const getters = {
     assetDecimals(state) {
         return state.assetDecimals;
     },
+
+    polygonApi(state) {
+        return state.polygonApi;
+    },
+
+    bscApi(state) {
+        return state.bscApi;
+    },
+
+    avaxApi(state) {
+        return state.avaxApi;
+    },
+
+    opApi(state) {
+        return state.opApi;
+    },
 };
 
 const actions = {
 
     changeNetwork({commit, dispatch, getters, rootState}, networkName) {
-        switch (networkName){
-            case "polygon":
-            case "polygon_dev":
-            case "137":
-            case "31337":
-                commit('setAppApiUrl', 'https://app.overnight.fi/api');
-                commit('setNetworkName', 'polygon');
-                commit('setNetworkId', 137);
-                commit('setRpcUrl', 'https://polygon-rpc.com/');
-                commit('setExplorerUrl', 'https://polygonscan.com/');
-                commit('setAssetName', 'USDC');
-                commit('setAssetDecimals', 6);
-                commit('setNativeAssetName', 'MATIC');
-                break;
-            case "bsc":
-            case "56":
-                commit('setAppApiUrl', 'https://bsc.overnight.fi/api');
-                commit('setNetworkName', 'bsc');
-                commit('setNetworkId', 56);
-                commit('setRpcUrl', 'https://bsc-dataseed.binance.org');
-                commit('setExplorerUrl', 'https://bscscan.com/');
-                commit('setAssetName', 'BUSD');
-                commit('setAssetDecimals', 18);
-                commit('setNativeAssetName', 'BNB');
-                break;
-            case "avax":
-            case "avalanche":
-            case "43114":
-                commit('setAppApiUrl', 'https://avax.overnight.fi/api');
-                commit('setNetworkName', 'avalanche');
-                commit('setNetworkId', 43114);
-                commit('setRpcUrl', 'https://api.avax.network/ext/bc/C/rpc');
-                commit('setExplorerUrl', 'https://snowtrace.io/');
-                commit('setAssetName', 'USDC');
-                commit('setAssetDecimals', 6);
-                commit('setNativeAssetName', 'AVAX');
-                break;
-            case "op":
-            case "optimism":
-            case "10":
-                commit('setAppApiUrl', 'https://op.overnight.fi/api');
-                commit('setNetworkName', 'optimism');
-                commit('setNetworkId', 10);
-                commit('setRpcUrl', 'https://mainnet.optimism.io');
-                commit('setExplorerUrl', 'https://optimistic.etherscan.io/');
-                commit('setAssetName', 'USDC');
-                commit('setAssetDecimals', 6);
-                commit('setNativeAssetName', 'ETH');
-                break;
-        }
+
+        commit('setAppApiUrl', _getParams(networkName).appApiUrl);
+        commit('setNetworkName', _getParams(networkName).networkName);
+        commit('setNetworkId', _getParams(networkName).networkId);
+        commit('setRpcUrl', _getParams(networkName).rpcUrl);
+        commit('setExplorerUrl', _getParams(networkName).explorerUrl);
+        commit('setAssetName', _getParams(networkName).assetName);
+        commit('setAssetDecimals', _getParams(networkName).assetDecimals);
+        commit('setNativeAssetName', _getParams(networkName).nativeAssetName);
 
         dispatch('web3/initWeb3', null, {root: true});
-        dispatch('web3/setNetwork', getters.networkId, {root: true});
     },
 
 };

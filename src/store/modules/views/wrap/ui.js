@@ -58,6 +58,10 @@ const actions = {
     async hidePage({commit, dispatch, getters, rootState}) {
         commit('setShowWrap', false);
     },
+
+    async showPage({commit, dispatch, getters, rootState}) {
+        commit('setShowWrap', true);
+    },
 };
 
 const mutations = {

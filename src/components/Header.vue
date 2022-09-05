@@ -19,7 +19,7 @@
                 <v-row justify="end" align="center" class="mt-0 fill-height">
                     <template v-if="!loadingWeb3">
                         <template v-if="walletConnected">
-                            <v-btn v-if="switchToPolygon" class="header-btn btn-filled" v-on:click="switchToNetwork">
+                            <v-btn v-if="switchToOtherNetwork" class="header-btn btn-filled" v-on:click="switchToNetwork">
                                 Switch to {{ networkName }}
                             </v-btn>
 
@@ -107,7 +107,7 @@ export default {
 
     computed: {
         ...mapGetters('network', ['networkName', 'networkId']),
-        ...mapGetters('web3', [ 'web3', 'switchToPolygon', 'loadingWeb3', 'walletConnected']),
+        ...mapGetters('web3', [ 'web3', 'switchToOtherNetwork', 'loadingWeb3', 'walletConnected']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('marketUI', ['showUsdPlusWbnb', 'showUsdPlusWmatic']),

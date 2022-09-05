@@ -346,20 +346,30 @@
             </v-col>
         </v-row>
 
-        <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-            <v-btn class="header-btn btn-filled" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" @click="showInvestModal" :disabled="totalSupply.usdPlusWmatic > maxUsdPlusWmaticSupply">
-                MINT ETS: USD+/wMatic
-            </v-btn>
-            <template v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
-                <label v-if="$wu.isFull()" class="full-status-error-label ml-4">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 0) }}. Please check status later.</label>
-            </template>
-        </v-row>
+        <template v-if="networkSupport">
+            <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
+                <v-btn class="header-btn btn-filled" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" @click="showInvestModal" :disabled="totalSupply.usdPlusWmatic > maxUsdPlusWmaticSupply">
+                    MINT ETS: USD+/wMatic
+                </v-btn>
+                <template v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
+                    <label v-if="$wu.isFull()" class="full-status-error-label ml-4">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 0) }}. Please check status later.</label>
+                </template>
+            </v-row>
 
-        <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-n8' : 'mt-2'" v-if="!$wu.isFull()">
-            <template v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
-                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 0) }}. Please check status later.</label>
-            </template>
-        </v-row>
+            <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-n8' : 'mt-2'" v-if="!$wu.isFull()">
+                <template v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
+                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWmaticSupply, 0) }}. Please check status later.</label>
+                </template>
+            </v-row>
+        </template>
+
+        <template v-else>
+            <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
+                <v-btn class="header-btn btn-filled" @click="setNetwork('137')">
+                    SWITCH TO POLYGON TO MINT
+                </v-btn>
+            </v-row>
+        </template>
 
         <resize-observer @notify="$forceUpdate()"/>
     </div>
@@ -381,7 +391,7 @@ export default {
 
 
     computed: {
-        ...mapGetters('network', ['explorerUrl']),
+        ...mapGetters('network', ['explorerUrl', 'networkId']),
         ...mapGetters('marketData', ['wmaticStrategyData']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
 
@@ -420,9 +430,14 @@ export default {
                 return null;
             }
         },
+
+        networkSupport: function () {
+            return this.networkId === 137;
+        },
     },
 
     methods: {
+        ...mapActions('web3', ['setNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
         ...mapActions('investModal', ['showInvestModal']),
 

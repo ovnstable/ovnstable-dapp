@@ -200,6 +200,10 @@ export default {
         currentTotalData: function (newVal, oldVal) {
             this.totalTvl = this.getTotalTvl();
         },
+
+        appApiUrl: function (newVal, oldVal) {
+            this.getAvgWeekApy();
+        },
     },
 
     created() {

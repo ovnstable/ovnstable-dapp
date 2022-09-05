@@ -75,8 +75,6 @@ export default {
     methods: {
         ...mapActions('dashboardData', ['sliceDashboard']),
 
-        ...mapMutations('dashboardData', ['setSlice']),
-
         redraw() {
             if (this.chart) {
                 this.chart.destroy();

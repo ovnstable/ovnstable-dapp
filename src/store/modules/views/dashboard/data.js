@@ -54,7 +54,7 @@ const actions = {
         commit('setPortfolioValue', null);
         commit('setApy', null);
         commit('setActivities', null);
-        commit('setSlice', 7);
+        commit('setSlice', null);
     },
 
     async refreshDashboard({commit, dispatch, getters, rootState}) {

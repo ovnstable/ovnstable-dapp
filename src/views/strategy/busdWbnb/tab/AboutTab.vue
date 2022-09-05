@@ -5,8 +5,6 @@
                 The exchange-traded strategy BUSD/WBNB ($BUSDWBNB), is an ERC-20 structured product built on Binance Smart chain that lets you leverage a collateralized debt position (BUSD lent on Venus) to borrow a volatile asset (WBNB), pair it with BUSD stablecoin, and provide BUSD/WBNB liquidity on Cone all in one action. This allows earning high APY and hedging against WBNB volatility.
                 <br/><br/>
                 The unique feature of BUSD/WBNB ETS is that it automatically administers a health factor of {{ busdWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(busdWbnbStrategyData.targetHealthFactor, 2) : 1.35}}x on Venus and rebalances your Lent/Borrowed amounts to maintain a stringent {{ busdWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(busdWbnbStrategyData.targetHealthFactor, 2) : 1.35}}x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
-                <br/><br/>
-                Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Binace Smart Chain - a highly scalable chain.
             </label>
         </v-row>
 
@@ -346,20 +344,30 @@
             </v-col>
         </v-row>
 
-        <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-            <v-btn class="header-btn btn-filled" :class="totalSupply.busdWbnb >= maxBusdWbnbSupply ? 'disabled-btn' : ''" @click="mintAction" :disabled="totalSupply.busdWbnb >= maxBusdWbnbSupply">
-                MINT ETS: BUSD/WBNB
-            </v-btn>
-            <template v-if="totalSupply.busdWbnb >= maxBusdWbnbSupply">
-                <label v-if="$wu.isFull()" class="full-status-error-label ml-4">TVL > ${{ $utils.formatMoneyComma(maxBusdWbnbSupply, 0) }}. Please check status later.</label>
-            </template>
-        </v-row>
+        <template v-if="networkSupport">
+            <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
+                <v-btn class="header-btn btn-filled" :class="totalSupply.busdWbnb >= maxBusdWbnbSupply ? 'disabled-btn' : ''" @click="mintAction" :disabled="totalSupply.busdWbnb >= maxBusdWbnbSupply">
+                    MINT ETS: BUSD/WBNB
+                </v-btn>
+                <template v-if="totalSupply.busdWbnb >= maxBusdWbnbSupply">
+                    <label v-if="$wu.isFull()" class="full-status-error-label ml-4">TVL > ${{ $utils.formatMoneyComma(maxBusdWbnbSupply, 0) }}. Please check status later.</label>
+                </template>
+            </v-row>
 
-        <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-n8' : 'mt-2'" v-if="!$wu.isFull()">
-            <template v-if="totalSupply.busdWbnb >= maxBusdWbnbSupply">
-                <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxBusdWbnbSupply, 0) }}. Please check status later.</label>
-            </template>
-        </v-row>
+            <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-n8' : 'mt-2'" v-if="!$wu.isFull()">
+                <template v-if="totalSupply.busdWbnb >= maxBusdWbnbSupply">
+                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxBusdWbnbSupply, 0) }}. Please check status later.</label>
+                </template>
+            </v-row>
+        </template>
+
+        <template v-else>
+            <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
+                <v-btn class="header-btn btn-filled" @click="setNetwork('56')">
+                    SWITCH TO BSC TO MINT
+                </v-btn>
+            </v-row>
+        </template>
 
         <resize-observer @notify="$forceUpdate()"/>
     </div>
@@ -381,7 +389,7 @@ export default {
 
 
     computed: {
-        ...mapGetters('network', ['explorerUrl']),
+        ...mapGetters('network', ['explorerUrl', 'networkId']),
         ...mapGetters('marketData', ['busdWbnbStrategyData']),
         ...mapGetters('supplyData', ['totalSupply', 'maxBusdWbnbSupply']),
 
@@ -420,9 +428,14 @@ export default {
                 return null;
             }
         },
+
+        networkSupport: function () {
+            return this.networkId === 56;
+        },
     },
 
     methods: {
+        ...mapActions('web3', ['setNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
         ...mapActions('investModal', ['showBusdWbnbModal', 'showMintView']),
 

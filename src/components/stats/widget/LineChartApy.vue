@@ -87,6 +87,10 @@ export default {
         data: function (newVal, oldVal) {
             this.redraw();
         },
+
+        appApiUrl: function (newVal, oldVal) {
+            this.zoomChart(this.zoom);
+        },
     },
 
     components: {},

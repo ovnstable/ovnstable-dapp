@@ -104,16 +104,16 @@ const actions = {
                 rpcUrl: rpcUrl,
                 preferred: true
             },
-            {
+            /*{
                 walletName: "walletConnect",
                 rpc: {
-                    137: 'https://polygon-rpc.com/',
-                    56: 'https://bsc-dataseed.binance.org',
-                    43114: 'https://api.avax.network/ext/bc/C/rpc',
-                    10: 'https://mainnet.optimism.io',
+                    [137]: "https://polygon-rpc.com/",
+                    [56]: "https://bsc-dataseed.binance.org/",
+                    [43114]: 'https://api.avax.network/ext/bc/C/rpc/',
+                    [10]: 'https://mainnet.optimism.io/',
                 },
                 preferred: true
-            },
+            },*/
             {
                 walletName: "walletLink",
                 rpcUrl: rpcUrl,

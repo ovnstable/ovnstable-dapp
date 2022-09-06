@@ -18,7 +18,7 @@ Vue.prototype.$wu = wu;
 Vue.prototype.$abiDecoder = abiDecoder;
 Vue.prototype.$axios = axios;
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 import VueGtm from '@gtm-support/vue2-gtm';
 Vue.use(VueGtm, {

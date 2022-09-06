@@ -135,7 +135,6 @@ export default {
         ...mapGetters('accountUI', ['showAccountProfile']),
         ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb', 'showBusdWbnb']),
-        ...mapGetters('transaction', ['transactions']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
 
         accountDisplay: function () {
@@ -162,7 +161,7 @@ export default {
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
         ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addUsdPlusWbnbToken', 'addBusdWbnbToken']),
-        ...mapActions('transaction', ['clearTransaction', 'loadTransaction']),
+        ...mapActions('transaction', ['loadTransaction']),
 
         openOnExplorer(hash) {
             window.open(this.explorerUrl + `tx/${hash}`, '_blank').focus();

@@ -107,11 +107,9 @@ const actions = {
             /*{
                 walletName: "walletConnect",
                 rpc: {
-                    [137]: "https://polygon-rpc.com/",
-                    [56]: "https://bsc-dataseed.binance.org/",
-                    [43114]: 'https://api.avax.network/ext/bc/C/rpc/',
-                    [10]: 'https://mainnet.optimism.io/',
+                    [137]: "https://polygon-rpc.com/"
                 },
+                networkId: 137,
                 preferred: true
             },*/
             {
@@ -167,6 +165,12 @@ const actions = {
             subscriptions: {
                 wallet: async wallet => {
                     console.log('OnBoard: wallet');
+
+                    /*console.log("new Provider: " + JSON.stringify(wallet.name))
+
+                    if (wallet.name === 'WalletConnect') {
+                        await dispatch('network/changeNetwork', '137', {root: true})
+                    }*/
 
                     commit('setProvider', wallet.provider);
 
@@ -235,6 +239,7 @@ const actions = {
         let walletName = localStorage.getItem('walletName');
 
         await getters.onboard.walletSelect(walletName ? walletName : '');
+        // await getters.onboard.walletSelect((walletName !== undefined && walletName && walletName !== 'undefined') ? walletName : '');
 
         if (!getters.networkChanged) {
             await getters.onboard.walletCheck();
@@ -303,6 +308,12 @@ const actions = {
         if (localStorage.getItem('walletName')) {
             await dispatch('connectWallet');
         }
+
+        /*let walletName = localStorage.getItem('walletName');
+
+        if (walletName !== undefined && walletName && walletName !== 'undefined' && walletName !== 'WalletConnect') {
+            await dispatch('connectWallet');
+        }*/
 
         let web3;
 

@@ -181,7 +181,6 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import ItemSelector from "@/components/common/element/ItemSelector";
 import ErrorModal from "@/components/common/modal/action/ErrorModal";
 import WaitingModal from "@/components/common/modal/action/WaitingModal";
 import SuccessModal from "@/components/common/modal/action/SuccessModal";
@@ -196,7 +195,6 @@ export default {
     name: "Redeem",
 
     components: {
-        ItemSelector,
         ErrorModal,
         WaitingModal,
         SuccessModal,

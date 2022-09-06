@@ -7,7 +7,6 @@ import errorModal from '@/store/modules/modals/error-modal';
 import waitingModal from '@/store/modules/modals/waiting-modal';
 import successModal from '@/store/modules/modals/success-modal';
 import riskModal from '@/store/modules/modals/market/risk-disclosure-modal';
-import investorModal from '@/store/modules/modals/market/investor-modal';
 import investModal from '@/store/modules/modals/market/invest-modal';
 import swapModal from '@/store/modules/modals/swap/swap-modal';
 import wrapModal from '@/store/modules/modals/wrap/wrap-modal';
@@ -38,18 +37,7 @@ import accountUI from '@/store/modules/views/account/ui';
 import accountData  from '@/store/modules/views/account/data';
 import transaction from '@/store/modules/views/account/transaction';
 
-import airdropUI from '@/store/modules/views/airdrop/ui';
-
 import menuUI from '@/store/modules/views/menu/ui';
-
-
-// Pools
-
-import linearPoolFeeding from '@/store/modules/pools/linear-pool-feeding'
-import linearPoolFeedingUnstake from '@/store/modules/pools/linear-pool-feeding-unstake'
-import linearPoolDAI from '@/store/modules/pools/linear-pool-dai'
-import linearPoolUsdt from '@/store/modules/pools/linear-pool-usdt'
-import stablePoolFeeding from '@/store/modules/pools/stable-pool-feeding'
 
 
 // Governance
@@ -74,39 +62,37 @@ export default new Vuex.Store({
         errorModal,
         waitingModal,
         successModal,
-        riskModal,
-        investorModal,
         investModal,
         swapModal,
         wrapModal,
+        riskModal,
 
         dashboardData,
         dashboardUI,
+
         farmData,
         farmUI,
+
         statsData,
         statsUI,
+
         swapData,
         swapUI,
-        overcapData,
-        marketData,
-        marketUI,
+
         wrapData,
         wrapUI,
+
+        overcapData,
+
+        marketData,
+        marketUI,
+
         accountUI,
         accountData,
+
         transaction,
 
-        airdropUI,
-
         menuUI,
-
-        linearPoolFeedingUnstake,
-        linearPoolFeeding,
-        linearPoolDAI,
-        linearPoolUsdt,
-        stablePoolFeeding,
-
 
         governance,
         ethers,
@@ -116,5 +102,8 @@ export default new Vuex.Store({
         web3,
         supplyData
     },
-    plugins: [createPersistedState({paths: ['transaction']})]
+
+    plugins: [
+        createPersistedState({paths: ['transaction']})
+    ]
 });

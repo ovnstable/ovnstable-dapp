@@ -77,9 +77,7 @@
 <script>
 
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import AccountBar from "./common/header/AccountBar";
 import Logo from "./common/header/Logo";
-import Menu from "./common/header/Menu";
 import WalletBar from "@/components/common/header/WalletBar";
 import NetworkSelect from "@/components/common/header/NetworkSelect";
 import MenuSelect from "@/components/common/header/MenuSelect";
@@ -101,9 +99,7 @@ export default {
         MenuSelect,
         NetworkSelect,
         WalletBar,
-        Menu,
         Logo,
-        AccountBar,
     },
 
     data: () => ({

@@ -242,6 +242,7 @@ import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import AboutTab from "@/views/strategy/wmatic/tab/AboutTab";
 import PerformanceTab from "@/views/strategy/wmatic/tab/PerformanceTab";
+
 export default {
     name: "WmaticPageView",
 

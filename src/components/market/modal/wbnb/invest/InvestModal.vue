@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import Invest from "@/components/market/modal/wbnb/invest/action/Invest";
 import Withdraw from "@/components/market/modal/wbnb/invest/action/Withdraw";
 

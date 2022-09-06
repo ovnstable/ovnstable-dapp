@@ -1,13 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
-Vue.use(VueRouter)
-
-
 import store from "../store";
 
 // Governance sections
-
 import getOverview from "./midleware/governance/getOverview"
 import getRewardPools from "./midleware/governance/getRewardPools"
 import getProposals from "./midleware/governance/getProposals"
@@ -21,7 +16,8 @@ import Wbnb from "./midleware/dapp/Wbnb";
 import Stats from "./midleware/dapp/Stats";
 import Collateral from "./midleware/dapp/Collateral";
 import Dashboard from "./midleware/dapp/Dashboard";
-import getDapp from "@/router/midleware/getDapp";
+
+Vue.use(VueRouter)
 
 
 const routes = [

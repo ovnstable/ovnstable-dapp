@@ -9,6 +9,12 @@ import vuetify from './plugins/vuetify'
 import router from './router/index'
 import {axios} from './plugins/http-axios';
 import moment from 'moment';
+import VueGtm from '@gtm-support/vue2-gtm';
+import VueYandexMetrika from 'vue-yandex-metrika'
+import Donut from 'vue-css-donut-chart';
+import 'vue-css-donut-chart/dist/vcdonut.css';
+import 'vue-resize/dist/vue-resize.css'
+import {ResizeObserver} from 'vue-resize'
 
 Vue.use(Vuex)
 
@@ -20,7 +26,6 @@ Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;
 
-import VueGtm from '@gtm-support/vue2-gtm';
 Vue.use(VueGtm, {
   id: 'GTM-TBCD9KR',
   enabled: true,
@@ -28,7 +33,6 @@ Vue.use(VueGtm, {
   debug: false,
 });
 
-import VueYandexMetrika from 'vue-yandex-metrika'
 Vue.use(VueYandexMetrika, {
   id: 86928892,
   router: router,
@@ -36,12 +40,8 @@ Vue.use(VueYandexMetrika, {
   options: {clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true}
 })
 
-import Donut from 'vue-css-donut-chart';
-import 'vue-css-donut-chart/dist/vcdonut.css';
 Vue.use(Donut);
 
-import 'vue-resize/dist/vue-resize.css'
-import { ResizeObserver } from 'vue-resize'
 Vue.component('resize-observer', ResizeObserver)
 
 

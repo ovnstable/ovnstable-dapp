@@ -96,7 +96,7 @@
 
 <script>
 
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapGetters} from "vuex";
 
 /* eslint-disable no-unused-vars,no-undef */
 
@@ -132,10 +132,6 @@ export default {
     },
 
     methods: {
-        ...mapActions([]),
-
-        ...mapMutations([]),
-
         getPercent(item) {
             let sum = this.data.map(dataItem => dataItem.value).reduce((prev, next) => prev + next);
 

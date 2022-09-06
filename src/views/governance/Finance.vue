@@ -14,6 +14,7 @@
 <script>
 import ChangeWeightPanel from "../../components/governance/ChangeWeightPanel";
 import AbroadControl from "@/components/governance/control/AbroadControl";
+
 export default {
     name: "Finance",
     components: {AbroadControl, ChangeWeightPanel},

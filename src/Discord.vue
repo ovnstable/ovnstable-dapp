@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import Header from "@/components/Header";
 import Logo from "@/components/common/header/Logo";
+
 export default {
   name: "Discord",
   components: {Logo}

@@ -377,6 +377,7 @@
 
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
+
 export default {
     name: "AboutTab",
 

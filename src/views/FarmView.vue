@@ -422,7 +422,6 @@ import ClaimModal from "@/components/farm/modal/ClaimModal";
 import GetRewardsSection from "@/components/farm/section/GetRewardsSection";
 import GetRewardsSectionMobile from "@/components/farm/section/GetRewardsSectionMobile";
 import ComingSoonModal from "@/components/farm/modal/ComingSoonModal";
-import accounting from "accounting-js";
 
 export default {
     name: "FarmView",

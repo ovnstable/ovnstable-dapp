@@ -341,6 +341,7 @@ import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import AboutTab from "@/views/strategy/wbnb/tab/AboutTab";
 import PerformanceTab from "@/views/strategy/wbnb/tab/PerformanceTab";
+
 export default {
     name: "WbnbPageView",
 

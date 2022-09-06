@@ -12,8 +12,6 @@
 
 <script>
 
-import {mapActions, mapGetters, mapMutations} from "vuex";
-
 /* eslint-disable no-unused-vars,no-undef */
 
 export default {
@@ -78,10 +76,6 @@ export default {
     },
 
     methods: {
-        ...mapActions([]),
-
-        ...mapMutations([]),
-
         getHours() {
             if (this.lastDate) {
                 let now = this.$moment.utc(new Date());

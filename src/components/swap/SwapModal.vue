@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import Mint from "@/components/swap/action/Mint";
 import Redeem from "@/components/swap/action/Redeem";
 

@@ -192,7 +192,7 @@
 
 <script>
 import Tooltip from "@/components/common/element/Tooltip";
-import {mapActions, mapGetters} from "vuex";
+import {mapGetters} from "vuex";
 
 export default {
     name: "WbnbUsdPlus",

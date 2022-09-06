@@ -68,7 +68,7 @@
 <script>
 /* eslint-disable no-unused-vars,no-undef */
 
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapGetters} from "vuex";
 
 import ApexCharts from 'apexcharts'
 
@@ -115,8 +115,6 @@ export default {
     },
 
     methods: {
-        ...mapMutations([]),
-
         zoomChart(zoom) {
             this.zoom = zoom;
 

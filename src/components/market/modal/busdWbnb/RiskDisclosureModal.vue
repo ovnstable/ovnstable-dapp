@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "RiskDisclosureModal",

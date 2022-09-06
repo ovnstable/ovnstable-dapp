@@ -20,6 +20,7 @@
 <script>
 import ProposalList from "../../components/governance/ProposalList";
 import {mapGetters} from "vuex";
+
 export default {
     name: "Proposals",
     components: {ProposalList},

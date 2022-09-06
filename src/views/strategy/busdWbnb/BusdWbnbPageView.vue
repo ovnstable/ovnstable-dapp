@@ -303,6 +303,7 @@ import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import AboutTab from "@/views/strategy/busdWbnb/tab/AboutTab";
 import PerformanceTab from "@/views/strategy/busdWbnb/tab/PerformanceTab";
+
 export default {
     name: "WbnbPageView",
 

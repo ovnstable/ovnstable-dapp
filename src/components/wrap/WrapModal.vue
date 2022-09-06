@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import Wrap from "@/components/wrap/action/Wrap";
 import Unwrap from "@/components/wrap/action/Unwrap";
 

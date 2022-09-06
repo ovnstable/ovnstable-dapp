@@ -121,7 +121,6 @@
 
 <script>
 import {mapGetters} from "vuex";
-import moment from "moment";
 import Tooltip from "@/components/common/element/Tooltip";
 
 export default {

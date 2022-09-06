@@ -50,6 +50,9 @@
 
 <script>
 import UsdPlusImage from "@/assets/usdPlus.json";
+import Onboard from 'bnc-onboard';
+import Web3 from "web3";
+import {mapGetters} from 'vuex'
 
 const connectIcon = require('@/assets/discord/connect.png');
 const loadingIcon = require('@/assets/discord/loading.png');
@@ -59,10 +62,6 @@ const failIcon = require('@/assets/discord/fail.png');
 const {axios} = require('@/plugins/http-axios');
 
 const {wallets} = require('@/store/modules/common/web3');
-
-import Onboard from 'bnc-onboard';
-import Web3 from "web3";
-import {mapGetters} from 'vuex'
 
 
 export default {

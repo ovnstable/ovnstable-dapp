@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import ItemSelector from "../../common/element/ItemSelector";
 import ErrorModal from "@/components/common/modal/action/ErrorModal";
 import WaitingModal from "@/components/common/modal/action/WaitingModal";

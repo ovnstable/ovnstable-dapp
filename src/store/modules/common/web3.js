@@ -2,11 +2,10 @@ import Web3 from "web3";
 import Onboard from 'bnc-onboard'
 import UAuth from '@uauth/js'
 import UAuthBncOnboard from '@uauth/bnc-onboard'
+import contract from "@truffle/contract";
 
 
 const ERC20 = require('@/contracts/ERC20.json');
-
-import contract from "@truffle/contract";
 
 const OvnImage = require('@/assets/ovn.json');
 const UsdPlusImage = require('@/assets/usdPlus.json');

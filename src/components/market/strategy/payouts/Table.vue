@@ -53,7 +53,7 @@
 
 <script>
 
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapGetters} from "vuex";
 
 /* eslint-disable no-unused-vars,no-undef */
 

@@ -229,7 +229,6 @@
         </div>
 
         <RiskDisclosureModal/>
-        <InvestorModal/>
 
         <resize-observer @notify="$forceUpdate()"/>
     </div>
@@ -241,7 +240,6 @@ import StrategyBanner from "@/components/market/strategy/section/wmatic/Strategy
 import RiskDisclosureModal from "@/components/market/modal/wmatic/RiskDisclosureModal";
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
-import InvestorModal from "@/components/market/modal/InvestorModal";
 import AboutTab from "@/views/strategy/wmatic/tab/AboutTab";
 import PerformanceTab from "@/views/strategy/wmatic/tab/PerformanceTab";
 export default {
@@ -250,7 +248,6 @@ export default {
     components: {
         PerformanceTab,
         AboutTab,
-        InvestorModal,
         Tooltip,
         RiskDisclosureModal,
         StrategyBanner

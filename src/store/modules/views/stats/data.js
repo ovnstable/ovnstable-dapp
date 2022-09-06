@@ -8,7 +8,9 @@ const state = {
     payouts: [],
 
     payoutsApyData: {},
+
     payoutsApyDataDict: [],
+
     payoutsTvlData: {},
     totalUsdPlusValue: null,
     totalUsdPlusProfit: null,

@@ -180,7 +180,6 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import ItemSelector from "@/components/common/element/ItemSelector";
 import ErrorModal from "@/components/common/modal/action/ErrorModal";
 import WaitingModal from "@/components/common/modal/action/WaitingModal";
 import SuccessModal from "@/components/common/modal/action/SuccessModal";
@@ -195,7 +194,6 @@ export default {
     name: "Mint",
 
     components: {
-        ItemSelector,
         ErrorModal,
         WaitingModal,
         SuccessModal,
@@ -351,7 +349,7 @@ export default {
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
-        ...mapActions("successModal", ['showSuccessModal', 'showSuccessModalWithPromo']),
+        ...mapActions("successModal", ['showSuccessModal']),
 
         changeSliderPercent() {
             this.sum = (this.balance.asset * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';

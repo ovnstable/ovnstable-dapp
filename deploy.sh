@@ -17,27 +17,6 @@ then
   nameDapp="dapp-dev"
   build="build-dev"
   tag="dev"
-elif [ "$stand" = "avax-prod" ]
-then
-  nameDapp="dapp-avax"
-  build="build-avax-prod"
-  tag="avax"
-elif [ "$stand" = "market" ]
-then
-  nameDapp="dapp-market"
-  build="build-market"
-  tag="market"
-elif [ "$stand" = "bsc-prod" ]
-then
-  nameDapp="dapp-bsc"
-  build="build-bsc-prod"
-  tag="bsc"
-elif [ "$stand" = "optimism" ]
-then
-  nameDapp="dapp-optimism"
-  build="build-optimism-prod"
-  tag="optimism"
-
 else
   exit
 fi

@@ -15,7 +15,7 @@
                     </v-col>
                 </v-row>
 
-                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="apyDataBusdWbnb" :usdPlusData="payoutsApyDataDict" ets-name="BUSD/WBNB"/>
+                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="apyDataBusdWbnb" :usdPlusData="apyDataUsdPlusBinance" ets-name="BUSD/WBNB"/>
                 <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="tvlDataBusdWbnb" ets-name="BUSD/WBNB"/>
             </v-col>
         </v-row>
@@ -258,8 +258,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketData', ['busdWbnbStrategyData', 'apyDataBusdWbnb', 'tvlDataBusdWbnb']),
-        ...mapGetters("statsData", ['payoutsApyDataDict']),
+        ...mapGetters('marketData', ['busdWbnbStrategyData', 'apyDataBusdWbnb', 'tvlDataBusdWbnb', 'apyDataUsdPlusBinance']),
 
         activeRateApy: function () {
             return {

@@ -4,7 +4,7 @@
             <label class="strategy-info-label">
                 The exchange-traded strategy USD+/WBNB ($USD+WBNB), is an ERC-20 structured product built on Binance Smart chain that lets you leverage a collateralized debt position (BUSD lent on Venus) to borrow a volatile asset (WBNB), pair it with USD+ stablecoin, and provide USD+/WBNB liquidity on Cone all in one action. This allows earning high APY and hedging against WBNB volatility.
                 <br/><br/>
-                The unique feature of USD+/WBNB ETS is that it automatically administers a health factor of {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.35}}x on Venus and rebalances your Lent/Borrowed amounts to maintain a stringent {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.35}}x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
+                The unique feature of USD+/WBNB ETS is that it automatically administers a health factor of {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.2}}x on Venus and rebalances your Lent/Borrowed amounts to maintain a stringent {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.2}}x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
             </label>
         </v-row>
 
@@ -45,9 +45,9 @@
                                 <v-img :src="require('@/assets/icon/checkbox.svg')"/>
                             </div>
                             <label v-if="!$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed</label>
-                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">Health Factor of {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.35}}</label>
+                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">Health Factor of {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.2}}</label>
 
-                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed Health Factor of {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.35}}</label>
+                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed Health Factor of {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.2}}</label>
                         </v-row>
                         <v-row align="center">
                             <div class="info-card-icon mt-4">

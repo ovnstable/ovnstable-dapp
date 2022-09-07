@@ -1,4 +1,5 @@
 import moment from "moment";
+import {axios} from "@/plugins/http-axios";
 
 const state = {
     wmaticStrategyData: null,
@@ -17,6 +18,9 @@ const state = {
 
     apyDataBusdWbnb: {},
     tvlDataBusdWbnb: {},
+
+    apyDataUsdPlusPolygon: {},
+    apyDataUsdPlusBinance: {},
 };
 
 const getters = {
@@ -68,6 +72,14 @@ const getters = {
     tvlDataBusdWbnb(state) {
         return state.tvlDataBusdWbnb;
     },
+
+    apyDataUsdPlusPolygon(state) {
+        return state.apyDataUsdPlusPolygon;
+    },
+
+    apyDataUsdPlusBinance(state) {
+        return state.apyDataUsdPlusBinance;
+    },
 };
 
 const actions = {
@@ -83,6 +95,9 @@ const actions = {
 
         dispatch('refreshStrategyData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'});
         dispatch('refreshClientData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'});
+
+        dispatch('refreshUsdPlusPayoutsData', "polygon");
+        dispatch('refreshUsdPlusPayoutsData', "bsc");
 
         dispatch('accountData/refreshBalance', null, {root:true});
         dispatch('supplyData/refreshSupply', null, {root:true});
@@ -138,11 +153,17 @@ const actions = {
                 strategyData.diffApy = (avgApy && avgApy.value && strategyData.apy) ? (strategyData.apy - avgApy.value) : null;
 
                 /* TODO: get onChain */
-                strategyData.targetHealthFactor = 1.35;
+                strategyData.targetHealthFactor = 1.2;
 
                 strategyData.payoutItems.sort(
                     function(o1,o2){
                         return moment(o1.payableDate).isBefore(moment(o2.payableDate)) ? -1 : moment(o1.payableDate).isAfter(moment(o2.payableDate)) ? 1 : 0;
+                    }
+                );
+
+                strategyData.timeData.sort(
+                    function(o1,o2){
+                        return moment(o1.date).isBefore(moment(o2.date)) ? -1 : moment(o1.date).isAfter(moment(o2.date)) ? 1 : 0;
                     }
                 );
 
@@ -278,6 +299,50 @@ const actions = {
                 break;
         }
     },
+
+    async refreshUsdPlusPayoutsData({commit, dispatch, getters, rootState}, network) {
+        console.log('MarketData: refreshUsdPlusPayoutsData');
+
+        let appApiUrl;
+
+        switch (network) {
+            case "polygon":
+                appApiUrl = rootState.network.polygonApi;
+                break;
+            case "bsc":
+                appApiUrl = rootState.network.bscApi;
+                break;
+        }
+
+        let fetchOptions = {
+            headers: {
+                "Access-Control-Allow-Origin": appApiUrl
+            }
+        };
+
+        let resultDataList;
+
+        axios.get(appApiUrl + `/dapp/payouts`, fetchOptions)
+            .then(value => {
+                let clientData = value.data;
+                let widgetDataDict = {};
+
+                [...clientData].reverse().forEach(item => {
+                    widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
+                });
+
+                resultDataList = widgetDataDict;
+
+                switch (network) {
+                    case "polygon":
+                        commit('setApyDataUsdPlusPolygon', resultDataList);
+                        break;
+                    case "bsc":
+                        commit('setApyDataUsdPlusBinance', resultDataList);
+                        break;
+                }
+            })
+    },
 };
 
 const mutations = {
@@ -328,6 +393,14 @@ const mutations = {
 
     setTvlDataBusdWbnb(state, value) {
         state.tvlDataBusdWbnb = value;
+    },
+
+    setApyDataUsdPlusPolygon(state, value) {
+        state.apyDataUsdPlusPolygon = value;
+    },
+
+    setApyDataUsdPlusBinance(state, value) {
+        state.apyDataUsdPlusBinance = value;
     },
 };
 

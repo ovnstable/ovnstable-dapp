@@ -119,6 +119,10 @@ const actions = {
                 preferred: true
             },
             {
+                walletName: "gnosis",
+                preferred: false
+            },
+            {
                 walletName: 'ledger',
                 rpcUrl: rpcUrl,
                 preferred: false

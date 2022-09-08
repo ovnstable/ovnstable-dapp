@@ -231,7 +231,7 @@ export default {
 
         ...mapGetters('swapModal', ['usdPlusApproved']),
 
-        ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl']),
+        ...mapGetters("network", ['networkId', 'assetName', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
@@ -523,6 +523,7 @@ export default {
             try {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
                 let blockNum = await this.web3.eth.getBlockNumber();
+                let errorApi = this.polygonApi;
 
                 await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
@@ -545,7 +546,7 @@ export default {
                                 }
                             };
 
-                            axios.post(this.appApiUrl + '/error/log', errorMsg);
+                            axios.post(errorApi + '/error/log', errorMsg);
 
                             console.log(errorMsg);
                         } else {

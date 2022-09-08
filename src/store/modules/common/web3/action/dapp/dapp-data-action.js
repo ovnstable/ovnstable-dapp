@@ -14,7 +14,6 @@ const actions = {
         dispatch('accountData/refreshBalance', null, {root:true});
         dispatch('supplyData/refreshSupply', null, {root:true});
         dispatch('swapData/refreshSwap', null, {root:true});
-        dispatch('wrapData/refreshWrap', null, {root:true});
         dispatch('statsData/refreshStats', null, {root:true});
         dispatch('dashboardData/refreshDashboard', null, {root:true});
         dispatch('farmData/refreshFarm', null, {root:true});
@@ -28,6 +27,10 @@ const actions = {
         if (network === 'bsc') {
             dispatch('marketData/refreshClientData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'}, {root:true});
             dispatch('marketData/refreshClientData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'}, {root:true});
+        }
+
+        if (network === 'polygon' || network === 'op') {
+            dispatch('wrapData/refreshWrap', null, {root:true});
         }
     },
 

@@ -34,12 +34,6 @@ const actions = {
 
         commit('setLoadingWeb3', true);
 
-        await dispatch('dappUIAction/updateDappPages', null, {root: true});
-
-        if (localStorage.getItem('walletName')) {
-            await dispatch('walletAction/connectWallet', null, {root: true});
-        }
-
         let rpcUrl = rootState.network.rpcUrl;
         let web3;
 
@@ -54,7 +48,9 @@ const actions = {
 
         commit('setWeb3', web3);
 
-        dispatch('contractAction/initContracts', null, {root: true});
+        await dispatch('contractAction/initContracts', null, {root: true});
+
+        dispatch('dappUIAction/updateDappPages', null, {root: true});
         dispatch('gasPrice/refreshGasPrice', null, {root: true})
 
         let currentWalletNetworkId = await web3.eth.net.getId();

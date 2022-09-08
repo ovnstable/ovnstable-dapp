@@ -249,7 +249,7 @@ export default {
         ...mapGetters('marketData', ['usdPlusWbnbStrategyData']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
 
-        ...mapGetters("network", ['networkId', 'appApiUrl']),
+        ...mapGetters("network", ['networkId', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
@@ -602,6 +602,7 @@ export default {
             try {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
                 let blockNum = await this.web3.eth.getBlockNumber();
+                let errorApi = this.polygonApi;
 
                 let referral = ""; //TODO set referral from link
                 await contracts.exchangerUsdPlusWbnb.methods.buy(sum, referral).estimateGas(estimateOptions)
@@ -625,7 +626,7 @@ export default {
                                 }
                             };
 
-                            axios.post(this.appApiUrl + '/error/log', errorMsg);
+                            axios.post(errorApi + '/error/log', errorMsg);
 
                             console.log(errorMsg);
                         } else {

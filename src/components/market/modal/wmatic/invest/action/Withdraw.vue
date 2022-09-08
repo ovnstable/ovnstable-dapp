@@ -189,6 +189,7 @@ import polygonIcon from "@/assets/network/polygon.svg";
 import avaxIcon from "@/assets/network/avalanche.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import bscIcon from "@/assets/network/bsc.svg";
+import {axios} from "@/plugins/http-axios";
 
 export default {
     name: "Withdraw",
@@ -232,7 +233,7 @@ export default {
 
         ...mapGetters('marketData', ['wmaticStrategyData']),
 
-        ...mapGetters("network", ['networkId']),
+        ...mapGetters("network", ['networkId', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
@@ -429,9 +430,6 @@ export default {
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
-                    // this.closeWaitingModal();
-                    // this.showErrorModal('estimateGas');
-
                     this.gas = null;
                     this.gasAmountInMatic = null;
                     this.gasAmountInUsd = null;
@@ -527,13 +525,37 @@ export default {
 
             try {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
+                let blockNum = await this.web3.eth.getBlockNumber();
+                let errorApi = this.polygonApi;
 
                 await contracts.exchangerUsdPlusWmatic.methods.redeem(sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })
                     .catch(function (error) {
-                        console.log(error);
+                        if (error && error.message) {
+                            let msg = error.message.replace(/(?:\r\n|\r|\n)/g, '');
+
+                            let errorMsg = {
+                                product: 'ETS',
+                                data: {
+                                    from: from,
+                                    to: contracts.exchangerUsdPlusWmatic.options.address,
+                                    gas: null,
+                                    gasPrice: parseInt(estimateOptions.gasPrice, 16),
+                                    method: contracts.exchangerUsdPlusWmatic.methods.redeem(sum).encodeABI(),
+                                    message: msg,
+                                    block: blockNum
+                                }
+                            };
+
+                            axios.post(errorApi + '/error/log', errorMsg);
+
+                            console.log(errorMsg);
+                        } else {
+                            console.log(error);
+                        }
+
                         return -1;
                     });
             } catch (e) {

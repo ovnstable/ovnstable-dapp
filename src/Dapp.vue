@@ -51,10 +51,10 @@ export default {
         },
     }),
 
-    created() {
+    async created() {
         console.log('Dapp.created()')
-        this.initWeb3();
-        this.connectWallet();
+        await this.initWeb3();
+        await this.connectWallet();
     },
 
     watch: {

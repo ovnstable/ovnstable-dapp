@@ -234,7 +234,7 @@ export default {
 
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
-        ...mapGetters('network', ['networkId']),
+        ...mapGetters("network", ['networkId', 'polygonApi']),
 
         icon: function (){
             switch (this.networkId){
@@ -524,6 +524,7 @@ export default {
             try {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
                 let blockNum = await this.web3.eth.getBlockNumber();
+                let errorApi = this.polygonApi;
 
                 await contracts.exchangerBusdWbnb.methods.redeem(sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
@@ -546,7 +547,7 @@ export default {
                                 }
                             };
 
-                            axios.post('/error/log', errorMsg);
+                            axios.post(errorApi + '/error/log', errorMsg);
 
                             console.log(errorMsg);
                         } else {

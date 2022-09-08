@@ -58,7 +58,6 @@ const state = {
     opApi: OPTIMISM_PARAMS.appApiUrl,
 
     switchToOtherNetwork: false,
-    networkChanged: false,
 };
 
 function _getParams(networkName) {
@@ -146,10 +145,6 @@ const getters = {
     switchToOtherNetwork(state) {
         return state.switchToOtherNetwork;
     },
-
-    networkChanged(state) {
-        return state.networkChanged;
-    },
 };
 
 const actions = {
@@ -202,7 +197,6 @@ const actions = {
                 params: [{chainId: rootState.web3.web3.utils.toHex(parseInt(network))}],
             });
 
-            commit('setNetworkChanged', 'true');
             commit('walletAction/setWalletConnected', 'true', {root: true});
         } catch (switchError) {
             try {
@@ -278,7 +272,6 @@ const actions = {
                     params: [params],
                 });
 
-                commit('setNetworkChanged', 'true');
                 commit('walletAction/setWalletConnected', 'true', {root: true});
             } catch (addError) {
                 console.error(addError);

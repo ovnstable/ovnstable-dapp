@@ -47,14 +47,16 @@ const actions = {
                 rpcUrl: rpcUrl,
                 preferred: true
             },
-            /*{
+            {
                 walletName: "walletConnect",
                 rpc: {
-                    [137]: "https://polygon-rpc.com/"
+                    ['137']: "https://polygon-rpc.com/",
+                    ['56']: "https://bsc-dataseed.binance.org",
+                    ['43114']: "https://api.avax.network/ext/bc/C/rpc",
+                    ['10']: "https://mainnet.optimism.io"
                 },
-                networkId: 137,
                 preferred: true
-            },*/
+            },
             {
                 walletName: "walletLink",
                 rpcUrl: rpcUrl,
@@ -121,8 +123,14 @@ const actions = {
                             dispatch('checkAccount', accounts[0])
                         });
 
-                        rootState.web3.provider.on('networkChanged', function (newNetworkId) {
-                            newNetworkId = parseInt(newNetworkId)
+                        rootState.web3.provider.on('networkChanged', async function (newNetworkId) {
+
+                            if (newNetworkId !== undefined && newNetworkId && newNetworkId !== '') {
+                                newNetworkId = parseInt(newNetworkId)
+                            } else {
+                                let netId = await rootState.web3.web3.eth.net.getId();
+                                newNetworkId = parseInt(netId);
+                            }
 
                             if (SUPPORTED_NETWORKS.includes(newNetworkId)) {
                                 if (rootState.network.networkId !== newNetworkId) {
@@ -163,17 +171,12 @@ const actions = {
 
         if (!getters.onboard) {
             await dispatch('initOnboard');
-        } else {
-            commit('network/setNetworkChanged', 'true', {root: true});
         }
 
         let walletName = localStorage.getItem('walletName');
-
         await getters.onboard.walletSelect(walletName ? walletName : '');
 
-        if (!rootState.network.networkChanged) {
-            await getters.onboard.walletCheck();
-        }
+        await getters.onboard.walletCheck();
     },
 
     async disconnectWallet({commit, dispatch, getters, rootState}) {
@@ -181,7 +184,7 @@ const actions = {
         if (getters.onboard) {
 
             await getters.onboard.walletReset();
-            localStorage.removeItem('walletName');
+            localStorage.setItem('walletName', null);
 
             await dispatch('web3/initWeb3', null, {root: true}).then(value => {
                 commit('setWalletConnected', false);

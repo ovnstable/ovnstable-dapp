@@ -160,122 +160,128 @@ const actions = {
         commit('setAssetDecimals', _getParams(networkName).assetDecimals);
         commit('setNativeAssetName', _getParams(networkName).nativeAssetName);
 
+        dispatch('walletAction/updateOnboardNetwork', null, {root: true});
         dispatch('web3/initWeb3', null, {root: true});
     },
 
     async setWalletNetwork({commit, dispatch, getters, rootState}, network) {
 
-        switch (network) {
-            case "polygon":
-            case "polygon_dev":
-            case "137":
-            case "31337":
-                localStorage.setItem('selectedNetwork', 'polygon');
-                break;
-            case "bsc":
-            case "56":
-                localStorage.setItem('selectedNetwork', 'bsc');
-                break;
-            case "avax":
-            case "avalanche":
-            case "43114":
-                localStorage.setItem('selectedNetwork', 'avax');
-                break;
-            case "op":
-            case "optimism":
-            case "10":
-                localStorage.setItem('selectedNetwork', 'op');
-                break;
-            default:
-                localStorage.setItem('selectedNetwork', 'polygon');
-                break;
-        }
+        if (rootState.web3.provider) {
+            switch (network) {
+                case "polygon":
+                case "polygon_dev":
+                case "137":
+                case "31337":
+                    localStorage.setItem('selectedNetwork', 'polygon');
+                    break;
+                case "bsc":
+                case "56":
+                    localStorage.setItem('selectedNetwork', 'bsc');
+                    break;
+                case "avax":
+                case "avalanche":
+                case "43114":
+                    localStorage.setItem('selectedNetwork', 'avax');
+                    break;
+                case "op":
+                case "optimism":
+                case "10":
+                    localStorage.setItem('selectedNetwork', 'op');
+                    break;
+                default:
+                    localStorage.setItem('selectedNetwork', 'polygon');
+                    break;
+            }
 
-        try {
-            await rootState.web3.provider.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{chainId: rootState.web3.web3.utils.toHex(parseInt(network))}],
-            });
-
-            commit('walletAction/setWalletConnected', 'true', {root: true});
-        } catch (switchError) {
             try {
-                let params;
-
-                switch (network) {
-                    case "polygon":
-                    case "polygon_dev":
-                    case "137":
-                    case "31337":
-                        params = {
-                            chainId: rootState.web3.web3.utils.toHex(137),
-                            rpcUrls: ['https://polygon-rpc.com/'],
-                            blockExplorerUrls: ['https://polygonscan.com/'],
-                            chainName: 'Polygon Mainnet',
-                            nativeCurrency: {
-                                symbol: 'MATIC',
-                                name: 'MATIC',
-                                decimals: 18,
-                            }
-                        };
-                        break;
-                    case "bsc":
-                    case "56":
-                        params = {
-                            chainId: rootState.web3.web3.utils.toHex(56),
-                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
-                            blockExplorerUrls: ['https://bscscan.com/'],
-                            chainName: 'Smart Chain',
-                            nativeCurrency: {
-                                symbol: 'BNB',
-                                name: 'BNB',
-                                decimals: 18,
-                            }
-                        };
-                        break;
-                    case "avax":
-                    case "avalanche":
-                    case "43114":
-                        params = {
-                            chainId: rootState.web3.web3.utils.toHex(43114),
-                            rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
-                            blockExplorerUrls: ['https://snowtrace.io/'],
-                            chainName: 'Avalanche',
-                            nativeCurrency: {
-                                symbol: 'AVAX',
-                                name: 'AVAX',
-                                decimals: 18,
-                            }
-                        };
-                        break;
-                    case "op":
-                    case "optimism":
-                    case "10":
-                        params = {
-                            chainId: rootState.web3.web3.utils.toHex(10),
-                            rpcUrls: ['https://mainnet.optimism.io'],
-                            blockExplorerUrls: ['https://optimistic.etherscan.io/'],
-                            chainName: 'Optimism',
-                            nativeCurrency: {
-                                symbol: 'ETH',
-                                name: 'ETH',
-                                decimals: 18,
-                            }
-                        };
-                        break;
-                    default:
-                        break;
-                }
-
-                await getters.provider.request({
-                    method: 'wallet_addEthereumChain',
-                    params: [params],
+                await rootState.web3.provider.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{chainId: rootState.web3.web3.utils.toHex(parseInt(network))}],
                 });
 
                 commit('walletAction/setWalletConnected', 'true', {root: true});
-            } catch (addError) {
-                console.error(addError);
+            } catch (switchError) {
+                try {
+                    let params;
+
+                    switch (network) {
+                        case "polygon":
+                        case "polygon_dev":
+                        case "137":
+                        case "31337":
+                            params = {
+                                chainId: rootState.web3.web3.utils.toHex(137),
+                                rpcUrls: ['https://polygon-rpc.com/'],
+                                blockExplorerUrls: ['https://polygonscan.com/'],
+                                chainName: 'Polygon Mainnet',
+                                nativeCurrency: {
+                                    symbol: 'MATIC',
+                                    name: 'MATIC',
+                                    decimals: 18,
+                                }
+                            };
+                            break;
+                        case "bsc":
+                        case "56":
+                            params = {
+                                chainId: rootState.web3.web3.utils.toHex(56),
+                                rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                                blockExplorerUrls: ['https://bscscan.com/'],
+                                chainName: 'Smart Chain',
+                                nativeCurrency: {
+                                    symbol: 'BNB',
+                                    name: 'BNB',
+                                    decimals: 18,
+                                }
+                            };
+                            break;
+                        case "avax":
+                        case "avalanche":
+                        case "43114":
+                            params = {
+                                chainId: rootState.web3.web3.utils.toHex(43114),
+                                rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
+                                blockExplorerUrls: ['https://snowtrace.io/'],
+                                chainName: 'Avalanche',
+                                nativeCurrency: {
+                                    symbol: 'AVAX',
+                                    name: 'AVAX',
+                                    decimals: 18,
+                                }
+                            };
+                            break;
+                        case "op":
+                        case "optimism":
+                        case "10":
+                            params = {
+                                chainId: rootState.web3.web3.utils.toHex(10),
+                                rpcUrls: ['https://mainnet.optimism.io'],
+                                blockExplorerUrls: ['https://optimistic.etherscan.io/'],
+                                chainName: 'Optimism',
+                                nativeCurrency: {
+                                    symbol: 'ETH',
+                                    name: 'ETH',
+                                    decimals: 18,
+                                }
+                            };
+                            break;
+                        default:
+                            break;
+                    }
+
+                    await getters.provider.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [params],
+                    });
+
+                    commit('walletAction/setWalletConnected', 'true', {root: true});
+                } catch (addError) {
+                    console.error(addError);
+                }
             }
+        } else {
+            await dispatch('changeDappNetwork', network);
+            await dispatch('walletAction/checkAccount', null, {root: true});
         }
     },
 };

@@ -25,79 +25,7 @@ const actions = {
 
     async initOnboard({commit, dispatch, getters, rootState}) {
 
-        let rpcUrl = rootState.network.rpcUrl;
-        let appApiUrl = rootState.network.appApiUrl;
-
-        // Unstoppable domains config for BNC Onboard
-        const uauthOnboard = new UAuthBncOnboard({
-            uauth: new UAuth({
-                clientID: process.env.VUE_APP_UD_CLIENT_ID,
-                redirectUri: appApiUrl,
-                scope: 'openid wallet'
-            })
-        })
-
-        let wallets = [
-            {
-                walletName: "metamask",
-                preferred: true
-            },
-            {
-                walletName: "binance",
-                rpcUrl: rpcUrl,
-                preferred: true
-            },
-            {
-                walletName: "walletConnect",
-                rpc: {
-                    ['137']: "https://polygon-rpc.com/",
-                    ['56']: "https://bsc-dataseed.binance.org",
-                    ['43114']: "https://api.avax.network/ext/bc/C/rpc",
-                    ['10']: "https://mainnet.optimism.io"
-                },
-                preferred: true
-            },
-            {
-                walletName: "walletLink",
-                rpcUrl: rpcUrl,
-                appName: process.env.VUE_APP_TITLE,
-                preferred: true
-            },
-            uauthOnboard.module({
-                preferred: false,
-                walletconnect: {
-                    infuraId: process.env.VUE_APP_INFURA_ID
-                }
-            }),
-            {
-                walletName: "coinbase",
-                preferred: true
-            },
-            {
-                walletName: 'ledger',
-                rpcUrl: rpcUrl,
-                preferred: false
-            },
-            {
-                walletName: 'trezor',
-                appUrl: appApiUrl.replaceAll('/api', ''),
-                email: 'ovnstable@gmail.com',
-                rpcUrl: rpcUrl,
-                preferred: false
-            },
-            {
-                walletName: "1inch",
-                preferred: false
-            },
-            {
-                walletName: "xdefi",
-                preferred: false
-            },
-            {
-                walletName: "ronin",
-                preferred: false
-            },
-        ]
+        let wallets = await dispatch('getMainWalletsConfig');
 
         let onboard = Onboard({
             dappId: 'c81e3c96-54f6-4d82-b911-87dea6376ba4',
@@ -163,6 +91,16 @@ const actions = {
         commit('setOnboard', onboard);
     },
 
+    async updateOnboardNetwork({commit, dispatch, getters, rootState}) {
+
+        if (getters.onboard) {
+            let wallets = await dispatch('getMainWalletsConfig');
+
+            getters.onboard.networkId = rootState.network.networkId;
+            getters.onboard.walletSelect.wallets = wallets;
+        }
+    },
+
     async connectWallet({commit, dispatch, getters, rootState}) {
 
         if (!getters.onboard) {
@@ -191,6 +129,88 @@ const actions = {
         }
     },
 
+    async getMainWalletsConfig({commit, dispatch, getters, rootState}) {
+        let rpcUrl = rootState.network.rpcUrl;
+        let appApiUrl = rootState.network.appApiUrl;
+
+        const uauthOnboard = await dispatch('getUnstoppableConfig');
+
+        return [
+            {
+                walletName: "metamask",
+                preferred: true
+            },
+            {
+                walletName: "binance",
+                rpcUrl: rpcUrl,
+                preferred: true
+            },
+            {
+                walletName: "walletConnect",
+                rpc: {
+                    ['137']: "https://polygon-rpc.com/",
+                    ['56']: "https://bsc-dataseed.binance.org",
+                    ['43114']: "https://api.avax.network/ext/bc/C/rpc",
+                    ['10']: "https://mainnet.optimism.io"
+                },
+                preferred: true
+            },
+            {
+                walletName: "walletLink",
+                rpcUrl: rpcUrl,
+                appName: process.env.VUE_APP_TITLE,
+                preferred: true
+            },
+            uauthOnboard.module({
+                preferred: false,
+                walletconnect: {
+                    infuraId: process.env.VUE_APP_INFURA_ID
+                }
+            }),
+            {
+                walletName: "coinbase",
+                preferred: true
+            },
+            {
+                walletName: 'ledger',
+                rpcUrl: rpcUrl,
+                preferred: false
+            },
+            {
+                walletName: 'trezor',
+                appUrl: appApiUrl.replaceAll('/api', ''),
+                email: 'ovnstable@gmail.com',
+                rpcUrl: rpcUrl,
+                preferred: false
+            },
+            {
+                walletName: "1inch",
+                preferred: false
+            },
+            {
+                walletName: "xdefi",
+                preferred: false
+            },
+            {
+                walletName: "ronin",
+                preferred: false
+            },
+        ];
+    },
+
+    async getUnstoppableConfig({commit, dispatch, getters, rootState}) {
+        let appApiUrl = rootState.network.appApiUrl;
+
+        // Unstoppable domains config for BNC Onboard
+        return new UAuthBncOnboard({
+            uauth: new UAuth({
+                clientID: process.env.VUE_APP_UD_CLIENT_ID,
+                redirectUri: appApiUrl,
+                scope: 'openid wallet'
+            })
+        });
+    },
+
     async checkAccount({commit, dispatch, getters, rootState}, account) {
 
         if (getters.walletConnected) {
@@ -209,6 +229,7 @@ const actions = {
         } else {
             dispatch('dappDataAction/resetUserData', null, {root: true});
             commit('accountData/setAccount', null, {root: true});
+            dispatch('statsData/refreshStats', null, {root:true});
         }
     },
 };

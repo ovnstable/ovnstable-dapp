@@ -86,6 +86,10 @@ export default {
         data: function (newVal, oldVal) {
             this.redraw();
         },
+
+        currentTotalData: function (newVal, oldVal) {
+            this.totalTvl = this.getTotalTvl();
+        },
     },
 
     components: {},
@@ -99,7 +103,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("statsData", ['totalUsdPlusValue', 'currentTotalData']),
+        ...mapGetters("statsData", ['currentTotalData']),
 
         isMobile() {
             return window.innerWidth < 650;

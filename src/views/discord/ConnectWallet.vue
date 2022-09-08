@@ -61,7 +61,7 @@ const failIcon = require('@/assets/discord/fail.png');
 
 const {axios} = require('@/plugins/http-axios');
 
-const {wallets} = require('@/store/modules/common/web3');
+const {wallets} = require('@/store/modules/common/web3/web3');
 
 
 export default {

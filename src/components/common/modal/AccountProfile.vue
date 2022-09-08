@@ -160,7 +160,8 @@ export default {
 
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
-        ...mapActions('web3', ['disconnectWallet', 'addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addUsdPlusWbnbToken', 'addBusdWbnbToken']),
+        ...mapActions('walletAction', ['disconnectWallet']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addUsdPlusWbnbToken', 'addBusdWbnbToken']),
         ...mapActions('transaction', ['loadTransaction']),
 
         openOnExplorer(hash) {

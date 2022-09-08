@@ -71,7 +71,8 @@ export default {
     },
 
     methods:{
-        ...mapActions('web3', ['initWeb3', 'connectWallet']),
+        ...mapActions('web3', ['initWeb3']),
+        ...mapActions('walletAction', ['connectWallet']),
     }
 }
 </script>

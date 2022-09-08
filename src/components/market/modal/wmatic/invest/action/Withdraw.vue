@@ -346,7 +346,7 @@ export default {
         ...mapActions("investModal", ['showMintView', 'approveUsdPlusWmatic']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
-        ...mapActions("web3", ['connectWallet']),
+        ...mapActions("walletAction", ['connectWallet']),
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),

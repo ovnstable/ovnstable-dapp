@@ -348,7 +348,7 @@ export default {
     computed: {
         ...mapGetters('accountData', ['balance', 'account']),
         ...mapGetters('dashboardData', ['profitUsdPlus', 'apy', 'activities', 'slice', 'portfolioValue']),
-        ...mapGetters('web3', ['walletConnected']),
+        ...mapGetters('walletAction', ['walletConnected']),
 
         activeTabOverall: function () {
             return {
@@ -404,7 +404,7 @@ export default {
 
     methods: {
         ...mapActions('dashboardData', ['sliceDashboard']),
-        ...mapActions('web3', ['connectWallet']),
+        ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
 
         ...mapMutations('dashboardData', ['setSlice']),

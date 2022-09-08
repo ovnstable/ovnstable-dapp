@@ -76,7 +76,7 @@
 
                             <template v-else>
                                 <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'">
-                                    <v-btn class="header-btn btn-investor-invest" @click="setNetwork('56')">
+                                    <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('56')">
                                         SWITCH TO BSC TO MINT
                                     </v-btn>
                                 </v-row>
@@ -147,14 +147,14 @@
                                :class="totalSupply.busdWbnb >= maxBusdWbnbSupply ? 'banner-img-disabled' : 'banner-img'"
                                max-width="1200px"
                                :src="require('@/assets/bg/busd_wbnb_beta_banner.svg')"
-                               @click="networkSupport ? (totalSupply.busdWbnb >= maxBusdWbnbSupply ? noAction() : mintAction()) : setNetwork('56')"
+                               @click="networkSupport ? (totalSupply.busdWbnb >= maxBusdWbnbSupply ? noAction() : mintAction()) : setWalletNetwork('56')"
                         />
 
                         <v-img v-else
                                :class="totalSupply.busdWbnb >= maxBusdWbnbSupply ? 'banner-img-disabled' : 'banner-img'"
                                max-width="700"
                                :src="require('@/assets/bg/busd_wbnb_beta_banner_mobile.svg')"
-                               @click="networkSupport ? (totalSupply.busdWbnb >= maxBusdWbnbSupply ? noAction() : mintAction()) : setNetwork('56')"
+                               @click="networkSupport ? (totalSupply.busdWbnb >= maxBusdWbnbSupply ? noAction() : mintAction()) : setWalletNetwork('56')"
                         />
                     </v-row>
 
@@ -222,7 +222,7 @@
 
                             <template v-else>
                                 <v-row align="center" justify="center" class="ma-0 mt-12">
-                                    <v-btn class="header-btn btn-investor-invest" @click="setNetwork('56')">
+                                    <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('56')">
                                         SWITCH TO BSC TO MINT
                                     </v-btn>
                                 </v-row>
@@ -399,7 +399,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('web3', ['setNetwork']),
+        ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
         ...mapActions('investModal', ['showBusdWbnbModal', 'showMintView', 'showRedeemView']),
 

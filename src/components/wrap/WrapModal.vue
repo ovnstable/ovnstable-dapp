@@ -52,7 +52,6 @@ export default {
 
     methods: {
         ...mapActions('wrapModal', ['showWrapModal', 'closeWrapModal']),
-        ...mapActions('web3', ['connectWallet']),
 
         openLink(link) {
             window.open(link, '_blank').focus();

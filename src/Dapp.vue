@@ -55,6 +55,7 @@ export default {
         console.log('Dapp.created()')
         this.initWeb3();
         this.connectWallet();
+        this.initReferralCode();
     },
 
     watch: {
@@ -72,6 +73,7 @@ export default {
 
     methods:{
         ...mapActions('web3', ['initWeb3', 'connectWallet']),
+        ...mapActions('referral', ['initReferralCode']),
     }
 }
 </script>

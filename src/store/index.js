@@ -63,6 +63,7 @@ import ethers from '@/store/modules_governance/ethers';
 import network from "@/store/modules/common/network";
 import gasPrice from '@/store/modules/common/gas-price';
 import web3 from "@/store/modules/common/web3";
+import referral from "@/store/modules/common/referral";
 import supplyData  from '@/store/modules/common/supply';
 
 import createPersistedState from "vuex-persistedstate";
@@ -114,7 +115,8 @@ export default new Vuex.Store({
         network,
         gasPrice,
         web3,
-        supplyData
+        supplyData,
+        referral
     },
     plugins: [createPersistedState({paths: ['transaction']})]
 });

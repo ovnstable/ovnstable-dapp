@@ -409,6 +409,7 @@ export default {
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("web3", ['connectWallet']),
+        ...mapActions("referral", ['getReferralCode']),
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
@@ -464,7 +465,7 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    let referral = ""; //TODO set referral from link
+                    let referral = await this.getReferralCode();
                     let buyResult = await contracts.exchangerUsdPlusWbnb.methods.buy(sum, referral).send(buyParams);
 
                     if (this.isOvercapAvailable) {
@@ -605,7 +606,7 @@ export default {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
                 let blockNum = await this.web3.eth.getBlockNumber();
 
-                let referral = ""; //TODO set referral from link
+                let referral = await this.getReferralCode();
                 await contracts.exchangerUsdPlusWbnb.methods.buy(sum, referral).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;

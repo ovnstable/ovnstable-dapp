@@ -363,7 +363,7 @@
 
         <template v-else>
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-                <v-btn class="header-btn btn-filled" @click="setNetwork('56')">
+                <v-btn class="header-btn btn-filled" @click="setWalletNetwork('56')">
                     SWITCH TO BSC TO MINT
                 </v-btn>
             </v-row>
@@ -437,7 +437,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('web3', ['setNetwork']),
+        ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
         ...mapActions('investModal', ['showInvestModal']),
 

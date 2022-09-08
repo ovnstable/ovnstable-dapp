@@ -107,20 +107,22 @@ export default {
 
 
     computed: {
-        ...mapGetters('network', ['networkName', 'networkId']),
-        ...mapGetters('web3', [ 'web3', 'switchToOtherNetwork', 'loadingWeb3', 'walletConnected']),
+        ...mapGetters('network', ['networkName', 'networkId', 'switchToOtherNetwork']),
+        ...mapGetters('web3', ['loadingWeb3']),
+        ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('marketUI', ['showUsdPlusWbnb', 'showUsdPlusWmatic', 'showBusdWbnb']),
     },
 
     methods: {
-        ...mapActions('web3', ['connectWallet', 'setNetwork']),
+        ...mapActions('walletAction', ['connectWallet']),
+        ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
 
         switchToNetwork() {
-            this.setNetwork(this.networkId.toString());
+            this.setWalletNetwork(this.networkId.toString());
         },
 
         openLink(url) {

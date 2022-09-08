@@ -362,7 +362,7 @@ export default {
         ...mapActions("wrapModal", ['showWrapView', 'approveWUsdPlus']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
-        ...mapActions("web3", ['connectWallet']),
+        ...mapActions("walletAction", ['connectWallet']),
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),

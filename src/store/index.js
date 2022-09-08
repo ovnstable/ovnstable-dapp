@@ -44,10 +44,17 @@ import governance from '@/store/modules_governance/governance';
 import ethers from '@/store/modules_governance/ethers';
 
 
+// Web3
+import network from "@/store/modules/common/web3/network";
+import walletAction from "@/store/modules/common/web3/action/wallet-action";
+import contractAction from "@/store/modules/common/web3/action/contract-action";
+import web3 from "@/store/modules/common/web3/web3";
+import tokenAction from "@/store/modules/common/web3/action/token-action";
+import dappDataAction from "@/store/modules/common/web3/action/dapp/dapp-data-action";
+import dappUIAction from "@/store/modules/common/web3/action/dapp/dapp-ui-action";
+
 // Common
-import network from "@/store/modules/common/network";
 import gasPrice from '@/store/modules/common/gas-price';
-import web3 from "@/store/modules/common/web3";
 import supplyData from '@/store/modules/common/supply';
 
 import createPersistedState from "vuex-persistedstate";
@@ -95,8 +102,14 @@ export default new Vuex.Store({
         ethers,
 
         network,
-        gasPrice,
+        walletAction,
+        contractAction,
         web3,
+        tokenAction,
+        dappDataAction,
+        dappUIAction,
+
+        gasPrice,
         supplyData
     },
 

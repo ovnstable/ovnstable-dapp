@@ -56,7 +56,6 @@ export default {
 
     methods: {
         ...mapActions('investModal', ['closeBusdWbnbModal']),
-        ...mapActions('web3', ['connectWallet']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
 
         openLink(link) {

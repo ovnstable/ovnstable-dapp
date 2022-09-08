@@ -48,7 +48,7 @@ export default {
     methods:{
 
         ...mapActions('ethers', ['mineBlocks']),
-        ...mapActions('web3', ['addOvnToken']),
+        ...mapActions('tokenAction', ['addOvnToken']),
 
         async addOvnTokenAction(){
             this.addOvnToken();

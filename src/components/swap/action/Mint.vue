@@ -345,7 +345,7 @@ export default {
         ...mapActions("swapModal", ['showRedeemView', 'approveAsset']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
-        ...mapActions("web3", ['connectWallet']),
+        ...mapActions("walletAction", ['connectWallet']),
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),

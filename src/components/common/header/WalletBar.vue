@@ -47,7 +47,7 @@ export default {
     computed: {
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
         ...mapGetters('accountUI', ['badge']),
-        ...mapGetters('web3', ['web3', 'walletConnected']),
+        ...mapGetters('walletAction', ['walletConnected']),
 
         accountDisplay: function () {
             if (this.uns) {
@@ -69,22 +69,10 @@ export default {
 
     methods: {
 
-        ...mapActions('web3', ['connectWallet', 'disconnectWallet', 'switchAccount', 'addUsdPlusToken', 'addwUsdPlusToken']),
+        ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('accountUI', ['showAccountProfile']),
         ...mapActions('accountData', ['refreshBalance']),
         ...mapActions('supplyData', ['refreshSupply']),
-
-        disconnectWalletAction() {
-            this.disconnectWallet();
-        },
-
-        switchAccountAction() {
-            this.switchAccount();
-        },
-
-        connectWalletAction() {
-            this.connectWallet();
-        },
 
         goToAction(id) {
             this.$router.push(id);

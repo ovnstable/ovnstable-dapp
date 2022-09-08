@@ -270,11 +270,11 @@ export default {
 }
 
 .list-item-hover:hover {
-    background: rgba(28, 149, 231, 0.1) !important;
+    background: #E9F5FD !important;
 }
 
 .list-item-hover:active {
-    background: linear-gradient(rgba(40, 160, 240, 1), rgba(6, 120, 196, 0.99)) !important;
+    background: #C9E6F9 !important;
 }
 
 </style>

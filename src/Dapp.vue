@@ -56,6 +56,7 @@ export default {
 
         await this.initWeb3();
         await this.connectWallet();
+        this.initReferralCode();
     },
 
     watch: {
@@ -74,6 +75,7 @@ export default {
     methods:{
         ...mapActions('web3', ['initWeb3']),
         ...mapActions('walletAction', ['connectWallet']),
+        ...mapActions('referral', ['initReferralCode']),
     }
 }
 </script>

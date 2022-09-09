@@ -345,6 +345,7 @@ export default {
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
+        ...mapActions("referral", ['getReferralCode']),
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
@@ -406,7 +407,13 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    let buyResult = await contracts.exchange.methods.buy(contracts.asset.options.address, sum).send(buyParams);
+                    let mintParams = {
+                        asset: contracts.asset.options.address,
+                        amount: sum,
+                        referral: await this.getReferralCode(),
+                    }
+
+                    let buyResult = await contracts.exchange.methods.mint(mintParams).send(buyParams);
 
                     this.closeWaitingModal();
                     this.showSuccessModal(buyResult.transactionHash);
@@ -539,7 +546,13 @@ export default {
                 let blockNum = await this.web3.eth.getBlockNumber();
                 let errorApi = this.polygonApi;
 
-                await contracts.exchange.methods.buy(contracts.asset.options.address, sum).estimateGas(estimateOptions)
+                let mintParams = {
+                    asset: contracts.asset.options.address,
+                    amount: sum,
+                    referral: await this.getReferralCode(),
+                }
+
+                await contracts.exchange.methods.mint(mintParams).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })

@@ -348,6 +348,7 @@ export default {
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
+        ...mapActions("referral", ['getReferralCode']),
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
@@ -403,7 +404,7 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    let referral = ""; //TODO set referral from link
+                    let referral = await this.getReferralCode();
                     let buyResult = await contracts.exchangerUsdPlusWmatic.methods.buy(sum, referral).send(buyParams);
 
                     this.closeWaitingModal();
@@ -529,7 +530,8 @@ export default {
                 let blockNum = await this.web3.eth.getBlockNumber();
                 let errorApi = this.polygonApi;
 
-                let referral = ""; //TODO set referral from link
+                let referral = await this.getReferralCode();
+                debugger
                 await contracts.exchangerUsdPlusWmatic.methods.buy(sum, referral).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;

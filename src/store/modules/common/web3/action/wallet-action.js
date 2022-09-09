@@ -133,7 +133,14 @@ const actions = {
         let rpcUrl = rootState.network.rpcUrl;
         let appApiUrl = rootState.network.appApiUrl;
 
-        const uauthOnboard = await dispatch('getUnstoppableConfig');
+        // Unstoppable domains config for BNC Onboard
+        const uauthOnboard = new UAuthBncOnboard({
+                uauth: new UAuth({
+                    clientID: process.env.VUE_APP_UD_CLIENT_ID,
+                    redirectUri: process.env.VUE_APP_UD_REDIRECT_URI,
+                    scope: 'openid wallet'
+                })
+            });
 
         return [
             {
@@ -196,19 +203,6 @@ const actions = {
                 preferred: false
             },
         ];
-    },
-
-    async getUnstoppableConfig({commit, dispatch, getters, rootState}) {
-        let appApiUrl = rootState.network.appApiUrl;
-
-        // Unstoppable domains config for BNC Onboard
-        return new UAuthBncOnboard({
-            uauth: new UAuth({
-                clientID: process.env.VUE_APP_UD_CLIENT_ID,
-                redirectUri: appApiUrl,
-                scope: 'openid wallet'
-            })
-        });
     },
 
     async checkAccount({commit, dispatch, getters, rootState}, account) {

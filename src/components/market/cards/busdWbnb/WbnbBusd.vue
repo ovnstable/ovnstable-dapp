@@ -11,7 +11,6 @@
                     <v-img :src="require('@/assets/currencies/market/BusdWbnb.svg')"/>
                 </div>
                 <label class="card-title ml-3">ETS: BUSD/WBNB</label>
-                <v-icon class="mb-6" color="#333333" small>mdi-beta</v-icon>
                 <v-spacer></v-spacer>
                 <div class="currency-icon">
                     <v-img :src="require('@/assets/network/bsc.svg')"/>

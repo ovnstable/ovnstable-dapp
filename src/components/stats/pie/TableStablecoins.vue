@@ -221,13 +221,13 @@ export default {
 .table-header-don {
     font-family: 'Roboto', sans-serif !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #ADB3BD !important;
+    color: var(--third-lightgray-text) !important;
 }
 
 .table-label-don {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .table-label-don {

@@ -257,11 +257,11 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .promo-label-text {
     font-family: 'Roboto', sans-serif;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 </style>

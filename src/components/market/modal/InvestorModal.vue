@@ -99,7 +99,7 @@ export default {
     font-size: 30px;
     line-height: 36px;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .content-container {
@@ -117,7 +117,7 @@ export default {
     font-weight: 300;
     font-size: 20px;
     line-height: 32px;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .title-modal-icon {

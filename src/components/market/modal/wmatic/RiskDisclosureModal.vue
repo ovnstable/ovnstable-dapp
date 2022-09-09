@@ -208,7 +208,7 @@ export default {
 
 .modal-info-text {
     font-family: 'Roboto', sans-serif;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .understand-btn {

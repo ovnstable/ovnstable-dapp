@@ -792,7 +792,7 @@ export default {
 .current-page-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .toggle-row {
@@ -802,7 +802,7 @@ export default {
 .tab-btn {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
     margin-bottom: -2px;
 }
 
@@ -813,7 +813,7 @@ export default {
 }
 
 .tab-button-in-active {
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
     cursor: pointer !important;
 }
 
@@ -866,14 +866,14 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-lightgray-text);
 }
 
 .investor-card-sub-title {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-lightgray-text);
 }
 
 .investor-card-sub-title-value {
@@ -884,7 +884,7 @@ export default {
 .value-disabled {
     font-weight: 400 !important;
     text-transform: uppercase !important;
-    color: #C5C9D1 !important;
+    color: var(--fourth-lightgray-text) !important;
     font-size: 16px;
     line-height: 20px;
 }
@@ -892,7 +892,7 @@ export default {
 .fee-structure-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .fee-structure-value {
@@ -937,7 +937,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-lightgray-text);
 }
 
 .minor-card-label {
@@ -952,7 +952,7 @@ export default {
 }
 
 .card-banner-status-container {
-    background: #F5F5F5;
+    background: var(--main-background);
     border-radius: 4px;
 }
 </style>

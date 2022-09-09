@@ -402,7 +402,7 @@ export default {
 .banner-title {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .info-container, .info-container-capacity {
@@ -416,14 +416,14 @@ export default {
     font-style: normal;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .info-value {
     font-family: 'Roboto', sans-serif;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .bordered-col {
@@ -450,7 +450,7 @@ export default {
 .capacity-status-text {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .capacity-status-value {
@@ -464,6 +464,6 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-lightgray-text);
 }
 </style>

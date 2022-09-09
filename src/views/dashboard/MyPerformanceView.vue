@@ -6,10 +6,10 @@
             <v-row align="start" justify="start" class="ma-0">
                 <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
+                        <label style="color: var(--fourth-lightgray-text) !important" class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
                         <label class="tab-btn mx-4" @click="tab=2" v-bind:class="activeTabUsdPlus">USD+</label>
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4" v-bind:class="activeTabETS" disabled>ETS</label>
+                        <label style="color: var(--fourth-lightgray-text) !important" class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
+                        <label style="color: var(--fourth-lightgray-text) !important" class="tab-btn tab-btn-disabled ml-4" v-bind:class="activeTabETS" disabled>ETS</label>
 
                         <v-spacer></v-spacer>
 
@@ -759,7 +759,7 @@ export default {
 .tab-btn {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
     margin-bottom: -2px;
 }
 
@@ -771,7 +771,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .tab-button {
@@ -785,7 +785,7 @@ export default {
 }
 
 .tab-button-in-active {
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
     cursor: default;
 }
 
@@ -809,7 +809,7 @@ export default {
 
 .slice-select-list-item {
     font-family: 'Roboto', sans-serif !important;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .info-card-container {
@@ -824,13 +824,13 @@ export default {
 .container-body-title {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .container-body-text {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .text-wide {
@@ -841,17 +841,17 @@ export default {
 .container-info-sub-title {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-lightgray-text);
 }
 
 .container-info-text {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .container-body-title-slice {
-    color: #ADB3BD !important;
+    color: var(--third-lightgray-text) !important;
 }
 
 .dashboard-action-btn {
@@ -875,7 +875,7 @@ export default {
 
 .scroll-container {
     height: 24px !important;
-    background: #F5F5F5;
+    background: var(--main-background);
 }
 
 .table-scroll-label {
@@ -886,14 +886,14 @@ export default {
     line-height: 20px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-lightgray-text);
 }
 
 .useful-title {
     font-family: 'Roboto';
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .useful-link {

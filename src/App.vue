@@ -48,7 +48,7 @@ export default {
         font-size: 24px;
         line-height: 28px;
         font-feature-settings: 'liga' off;
-        color: #333333;
+        color: var(--secondary-gray-text);
     }
 
     .v-slider__tick-label {
@@ -78,7 +78,7 @@ export default {
         font-size: 24px;
         line-height: 28px;
         font-feature-settings: 'liga' off;
-        color: #333333;
+        color: var(--secondary-gray-text);
     }
 
     .v-slider__tick-label {
@@ -107,7 +107,7 @@ export default {
         font-size: 30px;
         line-height: 36px;
         font-feature-settings: 'pnum' on, 'lnum' on;
-        color: #333333;
+        color: var(--secondary-gray-text);
     }
 
     .v-slider__tick-label {
@@ -121,11 +121,41 @@ export default {
 /* main variables */
 :root {
     --main-background: #F5F5F5;
+    --dark-background: #13151C;
+
     --secondary: #FFFFFF;
+    --dark-secondary: #1D2029;
+
+    --main-gray-text: #29323E;
+    --secondary-gray-text: #333333;
+    --third-lightgray-text: #ADB3BD;
+    --fourth-lightgray-text: #C5C9D1;
+    --dark-white-text: #FFFFFF;
+
+    --dark-blue-values: #1C95E7;
+
+    --main-card-background: #FFFFFF;
+    --dark-card-background: #1D2029;
+
+    --main-card-status-background: #F5F5F5;
+    --dark-card-status-background: #29323E;
+
+    --main-banner-background: #E5E7EA;
+    --dark-banner-background: #1D2029;
+
+
+    --main-chart-subtitle: #707A8B;
+    --dark-chart-subtitle: #4C586D;
+
+    --main-banner-status-text: #29323E;
+
     --logo-color: #ffffff;
+
     --orange-gradient: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
     --blue-gradient: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+
     --link: #1C95E7;
+    --main-blue: #1C95E7;
 }
 
 html {
@@ -215,7 +245,7 @@ html {
     font-size: 30px;
     line-height: 36px;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
     margin-bottom: 15px !important;
 }
 
@@ -227,7 +257,7 @@ html {
     line-height: 20px;
     letter-spacing: 0.02em;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .bn-onboard-select-wallet-info {
@@ -256,7 +286,7 @@ html {
 .v-slider__tick-label {
     font-family: 'Roboto', sans-serif !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #29323E !important;
+    color: var(--main-gray-text) !important;
 }
 
 .percent-slider .v-slider__tick:not(:nth-child(5n + 1)) {

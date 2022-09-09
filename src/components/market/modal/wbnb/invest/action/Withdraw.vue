@@ -855,7 +855,7 @@ export default {
 }
 
 .v-text-field >>> input::placeholder {
-    color: #C5C9D1 !important;
+    color: var(--fourth-lightgray-text) !important;
 }
 
 .v-text-field >>> input, .v-text-field >>> label, .v-text-field >>> button {
@@ -868,7 +868,7 @@ export default {
 .balance-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .max {
@@ -902,14 +902,14 @@ export default {
 }
 
 .coin-card {
-    background: #F5F5F5;
+    background: var(--main-background);
     border-radius: 4px;
 }
 
 .coin-title {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .modal-link-label {
@@ -922,13 +922,13 @@ export default {
 .action-info-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .action-info-sub-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .action-btn-container {

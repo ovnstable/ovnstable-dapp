@@ -253,7 +253,7 @@ export default {
 
 .banner-label {
     font-family: 'Roboto', sans-serif;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .banner-label-accent {
@@ -282,7 +282,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .info-value {
@@ -294,7 +294,7 @@ export default {
 
 .value-disabled {
     text-transform: uppercase !important;
-    color: #C5C9D1 !important;
+    color: var(--fourth-lightgray-text) !important;
 }
 
 .bordered-col {

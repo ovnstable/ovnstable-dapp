@@ -328,11 +328,11 @@ export default {
 .chart-title {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .chart-title-slice {
-    color: #ADB3BD !important;
+    color: var(--third-lightgray-text) !important;
 }
 
 </style>

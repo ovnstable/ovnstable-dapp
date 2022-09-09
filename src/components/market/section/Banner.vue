@@ -137,7 +137,7 @@ export default {
     font-weight: 300;
     font-size: 40px;
     line-height: 50px;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .banner-label-accent {
@@ -178,7 +178,7 @@ export default {
     line-height: 16px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .info-value {

@@ -493,7 +493,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     text-transform: capitalize;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .info-card-container {
@@ -528,12 +528,12 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .card-info {
     font-family: 'Roboto', sans-serif;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .card-info-value {
@@ -546,7 +546,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .title-card-debank {
@@ -564,12 +564,12 @@ export default {
     line-height: 20px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-lightgray-text);
 }
 
 .scroll-container {
     height: 24px !important;
-    background: #F5F5F5;
+    background: var(--main-background);
 }
 
 .rate-tab-btn {

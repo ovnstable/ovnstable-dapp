@@ -209,7 +209,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .wallet-bar-container:hover > .wallet-col > .eye-icon {
@@ -217,7 +217,7 @@ export default {
 }
 
 .account-display-container {
-    background: #F5F5F5;
+    background: var(--main-background);
     border-radius: 4px;
 }
 </style>

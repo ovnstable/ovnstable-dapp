@@ -195,13 +195,13 @@ export default {
 .table-header-payouts-strategy {
     font-family: 'Roboto', sans-serif !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #ADB3BD !important;
+    color: var(--third-lightgray-text) !important;
 }
 
 .table-label-payouts-strategy {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .current-table-payouts-strategy {
@@ -248,7 +248,7 @@ export default {
 }
 
 .yield-default {
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .icon-img {

@@ -8,8 +8,8 @@
           <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
             <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
               <label  @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabFeatured" disabled>Featured<v-icon size="16">mdi-star-circle</v-icon></label>
-              <label style="color: #C5C9D1 !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabHold">USD+</label>
-              <label style="color: #C5C9D1 !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
+              <label style="color: var(--fourth-lightgray-text) !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabHold">USD+</label>
+              <label style="color: var(--fourth-lightgray-text) !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
               <label  @click="tab=4"   class="tab-btn ml-4" v-bind:class="activeTabHedged" disabled>ETS</label>
 
               <v-spacer></v-spacer>
@@ -153,7 +153,7 @@ export default {
 
 
 .tab-button-in-active {
-  color: #C5C9D1 !important;
+  color: var(--fourth-lightgray-text) !important;
   cursor: pointer;
 }
 
@@ -165,7 +165,7 @@ export default {
 .tab-btn {
   font-family: 'Roboto', sans-serif;
   font-feature-settings: 'liga' off;
-  color: #333333;
+  color: var(--secondary-gray-text);
   margin-bottom: -2px;
   cursor: pointer;
 }
@@ -187,6 +187,6 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 </style>

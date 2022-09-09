@@ -403,7 +403,7 @@ export default {
 .tab-btn {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
     margin-bottom: -2px;
 }
 
@@ -414,7 +414,7 @@ export default {
 }
 
 .tab-button-in-active {
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
     cursor: pointer !important;
 }
 
@@ -426,7 +426,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .info-card-container {
@@ -442,12 +442,12 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     text-transform: capitalize;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .scroll-container {
     height: 24px !important;
-    background: #F5F5F5;
+    background: var(--main-background);
 }
 
 .table-scroll-label {
@@ -458,7 +458,7 @@ export default {
     line-height: 20px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-lightgray-text);
 }
 
 .rate-tab-btn {
@@ -484,13 +484,13 @@ export default {
 }
 
 .tab-btn-disabled {
-    color: #C5C9D1 !important;
+    color: var(--fourth-lightgray-text) !important;
 }
 
 .ready-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .header-btn {

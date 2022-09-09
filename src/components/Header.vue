@@ -56,7 +56,6 @@
                     <NetworkSelect/>
                 </v-row>
             </v-col>
-
             <v-col v-if="!$wu.isFull()" cols="1" class="fill-height">
                 <v-row justify="end" align="center" class="mt-0 fill-height">
                     <MenuSelect/>

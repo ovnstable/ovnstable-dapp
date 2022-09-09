@@ -86,7 +86,7 @@ export default {
 }
 
 .loading-sub-label {
-    color: #333333;
+    color: var(--secondary-gray-text);
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -94,7 +94,7 @@ export default {
 }
 
 .loading-sub2-label {
-    color: #333333;
+    color: var(--secondary-gray-text);
     font-style: normal;
     font-weight: normal;
     line-height: 16px;

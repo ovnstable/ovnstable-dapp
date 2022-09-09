@@ -207,11 +207,11 @@ export default {
 
 .network-select-list-item {
     font-family: 'Roboto', sans-serif !important;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .list-item-disabled {
-    color: #C5C9D1 !important;
+    color: var(--fourth-lightgray-text) !important;
 }
 
 .select-bar-container {

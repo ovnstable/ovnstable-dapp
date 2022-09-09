@@ -169,7 +169,7 @@ export default {
     font-family: 'Roboto', sans-serif !important;
     font-style: normal !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .icon-img {

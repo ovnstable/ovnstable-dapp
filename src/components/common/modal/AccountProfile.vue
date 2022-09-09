@@ -420,12 +420,12 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .account-display-container {
     max-width: 160px !important;
-    background: #F5F5F5;
+    background: var(--main-background);
     border-radius: 4px;
     height: 36px !important;
     cursor: pointer !important;
@@ -433,11 +433,11 @@ export default {
 
 .add-coins-label {
     font-family: 'Roboto', sans-serif;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .coin-btn {
-    background: #F5F5F5 !important;
+    background: var(--main-background) !important;
     border-radius: 4px !important;
     box-shadow: none !important;
 
@@ -445,6 +445,6 @@ export default {
     font-style: normal !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 </style>

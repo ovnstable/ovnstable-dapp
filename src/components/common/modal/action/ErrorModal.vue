@@ -80,7 +80,7 @@ export default {
 }
 
 .discord-label {
-    color: #333333;
+    color: var(--secondary-gray-text);
     font-style: normal;
     font-weight: normal;
     font-size: 14px;

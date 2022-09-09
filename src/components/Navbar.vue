@@ -11,6 +11,19 @@
                 </v-list-item-title>
             </v-list-item>
         </v-list>
+        <template>
+            <v-container>
+                <v-switch
+                    :label="`dark theme `"
+                    class="switcher"
+                    color="primary"
+                    value="#13151C"
+                    inset
+                    hide-details
+                    :model-value="true"
+                ></v-switch>
+            </v-container>
+        </template>
 
         <v-list nav class="page-list">
             <v-list-item class="list-item-hover" link @click="dashBoardClick">
@@ -198,7 +211,7 @@ export default {
     font-size: 16px;
     line-height: 20px;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .navbar-page-label {
@@ -210,7 +223,7 @@ export default {
     letter-spacing: 0.02em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 
@@ -236,7 +249,7 @@ export default {
     letter-spacing: 0.03em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .navbar-card-icon {
@@ -275,6 +288,22 @@ export default {
 
 .list-item-hover:active {
     background: #C9E6F9 !important;
+}
+
+.switcher {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    padding: 10px;
+}
+
+.switcher:hover {
+    background: #E9F5FD;
 }
 
 </style>

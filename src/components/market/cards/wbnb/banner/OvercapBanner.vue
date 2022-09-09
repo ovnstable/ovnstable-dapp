@@ -177,7 +177,7 @@ export default {
 
 .card-info {
     font-family: 'Roboto', sans-serif;
-    color: #333333;
+    color: var(--secondary-gray-text);
     text-align: center !important;
 }
 

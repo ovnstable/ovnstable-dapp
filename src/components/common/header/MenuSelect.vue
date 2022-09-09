@@ -174,7 +174,7 @@ export default {
 
 .network-select-list-item {
     font-family: 'Roboto', sans-serif !important;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .text-blue {

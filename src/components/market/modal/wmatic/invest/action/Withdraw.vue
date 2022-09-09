@@ -227,7 +227,6 @@ export default {
 
     computed: {
         ...mapGetters('accountData', ['balance', 'account']),
-        ...mapGetters('accountUI', ['loadingBalance']),
 
         ...mapGetters('investModal', ['usdPlusWmaticApproved']),
 

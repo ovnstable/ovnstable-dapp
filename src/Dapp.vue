@@ -52,7 +52,8 @@ export default {
     }),
 
     async created() {
-        console.log('Dapp.created()')
+        console.debug('Dapp created')
+
         await this.initWeb3();
         await this.connectWallet();
     },

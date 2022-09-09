@@ -29,7 +29,7 @@ const actions = {
 
     loadTransaction({commit, dispatch, getters, rootState}) {
 
-        console.log('Transaction: loadTransaction');
+        console.debug('Transaction: loadTransaction');
 
         for (let i = 0; i < getters.transactions.length; i++) {
             let transaction = getters.transactions[i];

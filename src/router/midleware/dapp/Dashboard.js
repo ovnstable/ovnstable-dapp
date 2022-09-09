@@ -1,6 +1,6 @@
 export default async function getDashboard({ context, nextMiddleware }){
     try {
-        console.log('Get Dapp/Dashboard');
+        console.debug('Get Dapp/Dashboard');
 
         context.store.dispatch('menuUI/selectTab', 'dashboard');
         context.store.dispatch('dashboardData/refreshDashboard');

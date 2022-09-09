@@ -37,7 +37,7 @@ const actions = {
 
             subscriptions: {
                 wallet: async wallet => {
-                    console.log('OnBoard: wallet');
+                    console.debug('OnBoard: wallet');
 
                     commit('web3/setProvider', wallet.provider, {root: true});
 

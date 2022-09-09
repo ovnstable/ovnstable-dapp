@@ -12,7 +12,6 @@ const state = {
     account: null,
 
     uns: null,
-
 };
 
 const getters = {
@@ -35,7 +34,7 @@ const actions = {
 
     async resetBalance({commit, dispatch, getters}) {
 
-        console.log('AccountData: resetBalance');
+        console.debug('AccountData: resetBalance');
 
         commit('setBalance', {
             usdPlus: 0,
@@ -50,17 +49,15 @@ const actions = {
 
     async resetUns({commit, dispatch, getters}) {
 
-        console.log('AccountData: resetUns');
+        console.debug('AccountData: resetUns');
 
         commit('setUns', null);
-        
     },
 
 
     async refreshBalance({commit, dispatch, getters, rootState}) {
 
-        console.log('AccountData: refreshBalance');
-
+        console.debug('AccountData: refreshBalance');
 
         if (getters.account === null || getters.account === undefined){
             return;
@@ -82,44 +79,17 @@ const actions = {
         try {
             asset = await web3.contracts.asset.methods.balanceOf(getters.account).call();
         } catch (e) {
-            console.log('ERROR: ' + e)
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            try {
-                asset = await web3.contracts.asset.methods.balanceOf(getters.account).call();
-            } catch (e) {
-                console.log('ERROR: ' + e)
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                asset = await web3.contracts.asset.methods.balanceOf(getters.account).call();
-            }
         }
 
         try {
             usdPlus = await web3.contracts.usdPlus.methods.balanceOf(getters.account).call();
         } catch (e) {
-            console.log('ERROR: ' + e)
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            try {
-                usdPlus = await web3.contracts.usdPlus.methods.balanceOf(getters.account).call();
-            } catch (e) {
-                console.log('ERROR: ' + e)
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                usdPlus = await web3.contracts.usdPlus.methods.balanceOf(getters.account).call();
-            }
         }
 
         if (networkId === 137 || networkId === 10) {
             try {
                 wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
             } catch (e) {
-                console.log('ERROR: ' + e)
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                try {
-                    wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
-                } catch (e) {
-                    console.log('ERROR: ' + e)
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
-                }
             }
         }
 
@@ -127,15 +97,6 @@ const actions = {
             try {
                 usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.balanceOf(getters.account).call();
             } catch (e) {
-                console.log('ERROR: ' + e)
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                try {
-                    usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.balanceOf(getters.account).call();
-                } catch (e) {
-                    console.log('ERROR: ' + e)
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.balanceOf(getters.account).call();
-                }
             }
         }
 
@@ -143,15 +104,6 @@ const actions = {
             try {
                 usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.balanceOf(getters.account).call();
             } catch (e) {
-                console.log('ERROR: ' + e)
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                try {
-                    usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.balanceOf(getters.account).call();
-                } catch (e) {
-                    console.log('ERROR: ' + e)
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.balanceOf(getters.account).call();
-                }
             }
         }
 
@@ -159,15 +111,6 @@ const actions = {
             try {
                 busdWbnb = await web3.contracts.busdWbnb.methods.balanceOf(getters.account).call();
             } catch (e) {
-                console.log('ERROR: ' + e)
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                try {
-                    busdWbnb = await web3.contracts.busdWbnb.methods.balanceOf(getters.account).call();
-                } catch (e) {
-                    console.log('ERROR: ' + e)
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    busdWbnb = await web3.contracts.busdWbnb.methods.balanceOf(getters.account).call();
-                }
             }
         }
 

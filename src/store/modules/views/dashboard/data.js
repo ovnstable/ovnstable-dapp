@@ -48,7 +48,7 @@ const actions = {
 
     async resetDashboard({commit, dispatch, getters, rootState}) {
 
-        console.log("Dashboard: resetDashboard");
+        console.debug("Dashboard: resetDashboard");
 
         commit('setProfitUsdPlus', null);
         commit('setPortfolioValue', null);
@@ -59,7 +59,7 @@ const actions = {
 
     async refreshDashboard({commit, dispatch, getters, rootState}) {
 
-        console.log("Dashboard: refreshDashboard");
+        console.debug("Dashboard: refreshDashboard");
 
         if (!rootState.accountData.account){
             return;

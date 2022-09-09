@@ -1,6 +1,6 @@
 export default async function getPreOvn({ context, nextMiddleware }){
     try {
-        console.log('Get Dapp/PreOvn');
+        console.debug('Get Dapp/PreOvn');
 
 
     }

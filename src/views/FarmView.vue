@@ -130,8 +130,6 @@ export default {
             let url;
             let platform = item.platform.toLowerCase();
 
-            console.log(platform)
-
             switch (platform){
                 case 'quickswap':
                     url = 'https://info.quickswap.exchange/#/pair/'

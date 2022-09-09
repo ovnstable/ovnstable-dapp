@@ -151,7 +151,7 @@ export default {
 
     watch: {
         showAccountProfile: function (newValue, oldValue){
-            console.log('Watch: show ' + newValue);
+            console.debug('Watch: show ' + newValue);
             if (newValue){
                 this.loadTransaction();
             }

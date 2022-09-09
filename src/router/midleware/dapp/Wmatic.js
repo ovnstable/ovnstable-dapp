@@ -1,6 +1,6 @@
 export default async function getWmatic({ context, nextMiddleware }){
     try {
-        console.log('Get Dapp/Hedged/WMATIC');
+        console.debug('Get Dapp/Hedged/WMATIC');
 
         context.store.dispatch('menuUI/selectTab', 'market');
         context.store.dispatch('statsData/refreshStats');

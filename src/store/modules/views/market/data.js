@@ -85,7 +85,7 @@ const getters = {
 const actions = {
 
     async refreshMarket({commit, dispatch, getters, rootState}) {
-        console.log('MarketData: refreshMarket');
+        console.debug('MarketData: refreshMarket');
 
         dispatch('refreshStrategyData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
         dispatch('refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
@@ -252,7 +252,7 @@ const actions = {
     },
 
     async refreshClientData({commit, dispatch, getters, rootState}, refreshParams) {
-        console.log('MarketData: refreshClientData');
+        console.debug('MarketData: refreshClientData');
 
         let appApiUrl;
 
@@ -301,7 +301,7 @@ const actions = {
     },
 
     async refreshUsdPlusPayoutsData({commit, dispatch, getters, rootState}, network) {
-        console.log('MarketData: refreshUsdPlusPayoutsData');
+        console.debug('MarketData: refreshUsdPlusPayoutsData');
 
         let appApiUrl;
 

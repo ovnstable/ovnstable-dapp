@@ -185,11 +185,11 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
 
     if (!to.meta.middleware || !to.meta.middleware.length) {
-        console.log(`root from:${from.path} to:${to.path} to.middleware:`, null);
+        console.debug(`root from:${from.path} to:${to.path} to.middleware:`, null);
         return next();
     }
     const middleware = to.meta.middleware;
-    console.log(`root from:${from.path} to:${to.path} to.middleware:`, middleware);
+    console.debug(`root from:${from.path} to:${to.path} to.middleware:`, middleware);
 
     const context = {
         to,

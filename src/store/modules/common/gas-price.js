@@ -57,7 +57,7 @@ const actions = {
 
         let networkId = rootState.network.networkId;
 
-        console.log("Getting gas price for network_id=" + networkId);
+        console.debug("Getting gas price for network_id=" + networkId);
 
         let url;
         if (networkId === 137)
@@ -93,7 +93,7 @@ const actions = {
             commit('setGasPrice', element)
             commit('setGasPriceGwei', rootState.web3.web3.utils.toWei(element + "", 'gwei'))
         }).catch(reason => {
-            console.log('Error get gas price: ' + reason)
+            console.debug('Error get gas price: ' + reason)
         })
     },
 };

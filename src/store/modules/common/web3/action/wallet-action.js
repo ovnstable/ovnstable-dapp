@@ -57,8 +57,10 @@ const actions = {
                             }
 
                             if (SUPPORTED_NETWORKS.includes(newNetworkId)) {
+                                dispatch('network/saveNetworkToLocalStore', newNetworkId.toString(), {root: true});
+
                                 if (rootState.network.networkId !== newNetworkId) {
-                                    dispatch('network/changeDappNetwork', newNetworkId.toString(), {root: true})
+                                    dispatch('network/changeDappNetwork', newNetworkId.toString(), {root: true});
                                 } else {
                                     commit('network/setSwitchToOtherNetwork', false, {root: true});
                                 }

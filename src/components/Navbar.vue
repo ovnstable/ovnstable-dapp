@@ -13,7 +13,7 @@
         </v-list>
         <template>
             <v-container>
-                <v-switch
+                <v-switch @click="toggleTheme"
                     :label="`dark theme `"
                     class="switcher"
                     color="primary"
@@ -124,6 +124,13 @@ export default {
     name: 'Navbar',
 
     components: {
+    },
+
+    setup() {
+        const theme = useTheme()
+        return {
+            theme, toggleTheme: () => theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+        }
     },
 
     data: () => ({

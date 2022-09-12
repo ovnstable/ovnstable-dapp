@@ -38,7 +38,7 @@
                 <v-list-item style="cursor: pointer"  target="_blank" href="https://op.overnight.fi">
                     <v-list-item-avatar>
                         <div class="list-item-icon">
-                            <v-img :src="require('@/assets/network/optimism.svg')"/>
+                            <v-img :src="require('@/assets/network/op.svg')"/>
                         </div>
                     </v-list-item-avatar>
                     <v-list-item-title class="network-select-list-item">

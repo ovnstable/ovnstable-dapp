@@ -26,35 +26,37 @@
 
                     <v-row class="info-card-container-white ma-0 mt-5" justify="start" align="center" v-if="!$wu.isFull()">
                         <v-col class="my-10 mx-8">
-                            <v-row align="center">
-                                <v-col cols="12">
-                                    <v-row align="center">
-                                        <label class="investor-card-sub-title">Your balance in ETS</label>
-                                    </v-row>
-                                    <v-row align="center" class="mt-5">
-                                        <label class="investor-card-sub-title-value">{{ this.balance.busdWbnb ? ($utils.formatMoneyComma(this.balance.busdWbnb, 2) + ' USD+') : '—' }}</label>
-                                    </v-row>
-                                </v-col>
-                            </v-row>
-                            <v-row align="center">
-                                <v-col cols="12">
-                                    <v-row align="center" :class="$wu.isMobile() ? 'mt-2' : 'mt-4'">
-                                        <label class="investor-card-sub-title">Profit/loss</label>
-                                    </v-row>
-                                    <v-row class="info-row mt-6" justify="start" align="center">
-                                        <label class="fee-structure-label mt-1">Last day</label>
-                                        <v-spacer></v-spacer>
-                                        <label class="investor-card-sub-title-value" :class="clientProfitDayBusdWbnb > 0 ? 'success-color' : ''">
-                                            {{ clientProfitDayBusdWbnb ? ((clientProfitDayBusdWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayBusdWbnb, 4)) : '—' }}
-                                        </label>
-                                    </v-row>
-                                    <v-row class="info-row mt-6" justify="start" align="center">
-                                        <label class="fee-structure-label mt-1">All time</label>
-                                        <v-spacer></v-spacer>
-                                        <label class="investor-card-sub-title-value value-disabled">Soon</label>
-                                    </v-row>
-                                </v-col>
-                            </v-row>
+                            <template v-if="networkSupport">
+                                <v-row align="center">
+                                    <v-col cols="12">
+                                        <v-row align="center">
+                                            <label class="investor-card-sub-title">Your balance in ETS</label>
+                                        </v-row>
+                                        <v-row align="center" class="mt-5">
+                                            <label class="investor-card-sub-title-value">{{ this.balance.busdWbnb ? ($utils.formatMoneyComma(this.balance.busdWbnb, 2) + ' USD+') : '—' }}</label>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                                <v-row align="center">
+                                    <v-col cols="12">
+                                        <v-row align="center" :class="$wu.isMobile() ? 'mt-2' : 'mt-4'">
+                                            <label class="investor-card-sub-title">Profit/loss</label>
+                                        </v-row>
+                                        <v-row class="info-row mt-6" justify="start" align="center">
+                                            <label class="fee-structure-label mt-1">Last day</label>
+                                            <v-spacer></v-spacer>
+                                            <label class="investor-card-sub-title-value" :class="clientProfitDayBusdWbnb > 0 ? 'success-color' : ''">
+                                                {{ clientProfitDayBusdWbnb ? ((clientProfitDayBusdWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayBusdWbnb, 4)) : '—' }}
+                                            </label>
+                                        </v-row>
+                                        <v-row class="info-row mt-6" justify="start" align="center">
+                                            <label class="fee-structure-label mt-1">All time</label>
+                                            <v-spacer></v-spacer>
+                                            <label class="investor-card-sub-title-value value-disabled">Soon</label>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                            </template>
 
                             <template v-if="networkSupport">
                                 <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="totalSupply.busdWbnb >= maxBusdWbnbSupply">
@@ -75,7 +77,7 @@
                             </template>
 
                             <template v-else>
-                                <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'">
+                                <v-row align="center" justify="center" class="ma-0">
                                     <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('56')">
                                         SWITCH TO BSC TO MINT
                                     </v-btn>
@@ -164,27 +166,29 @@
 
                     <v-row class="info-card-container-white ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
                         <v-col class="my-10 mx-8">
-                            <v-row align="center">
-                                <label class="investor-card-sub-title">Your balance in ETS</label>
-                            </v-row>
-                            <v-row align="center" class="mt-5">
-                                <label class="investor-card-sub-title-value">{{ this.balance.busdWbnb ? ($utils.formatMoneyComma(this.balance.busdWbnb, 2) + ' USD+') : '—' }}</label>
-                            </v-row>
-                            <v-row align="center" class="mt-10">
-                                <label class="investor-card-sub-title">Profit/loss</label>
-                            </v-row>
-                            <v-row class="info-row mt-6" justify="start" align="center">
-                                <label class="fee-structure-label mt-1">Last day</label>
-                                <v-spacer></v-spacer>
-                                <label class="investor-card-sub-title-value" :class="clientProfitDayBusdWbnb > 0 ? 'success-color' : ''">
-                                    {{ clientProfitDayBusdWbnb ? ((clientProfitDayBusdWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayBusdWbnb, 4)) : '—' }}
-                                </label>
-                            </v-row>
-                            <v-row class="info-row mt-6" justify="start" align="center">
-                                <label class="fee-structure-label mt-1">All time</label>
-                                <v-spacer></v-spacer>
-                                <label class="investor-card-sub-title-value value-disabled">Soon</label>
-                            </v-row>
+                            <template v-if="networkSupport">
+                                <v-row align="center">
+                                    <label class="investor-card-sub-title">Your balance in ETS</label>
+                                </v-row>
+                                <v-row align="center" class="mt-5">
+                                    <label class="investor-card-sub-title-value">{{ this.balance.busdWbnb ? ($utils.formatMoneyComma(this.balance.busdWbnb, 2) + ' USD+') : '—' }}</label>
+                                </v-row>
+                                <v-row align="center" class="mt-10">
+                                    <label class="investor-card-sub-title">Profit/loss</label>
+                                </v-row>
+                                <v-row class="info-row mt-6" justify="start" align="center">
+                                    <label class="fee-structure-label mt-1">Last day</label>
+                                    <v-spacer></v-spacer>
+                                    <label class="investor-card-sub-title-value" :class="clientProfitDayBusdWbnb > 0 ? 'success-color' : ''">
+                                        {{ clientProfitDayBusdWbnb ? ((clientProfitDayBusdWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayBusdWbnb, 4)) : '—' }}
+                                    </label>
+                                </v-row>
+                                <v-row class="info-row mt-6" justify="start" align="center">
+                                    <label class="fee-structure-label mt-1">All time</label>
+                                    <v-spacer></v-spacer>
+                                    <label class="investor-card-sub-title-value value-disabled">Soon</label>
+                                </v-row>
+                            </template>
 
                             <template v-if="networkSupport">
                                 <v-row align="center" justify="center" class="ma-0 mt-12" v-if="totalSupply.busdWbnb >= maxBusdWbnbSupply">
@@ -205,7 +209,7 @@
                             </template>
 
                             <template v-else>
-                                <v-row align="center" justify="center" class="ma-0 mt-12">
+                                <v-row align="center" justify="center" class="ma-0">
                                     <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('56')">
                                         SWITCH TO BSC TO MINT
                                     </v-btn>

@@ -26,62 +26,64 @@
 
                     <v-row class="info-card-container-white ma-0 mt-5" justify="start" align="center" v-if="!$wu.isFull()">
                         <v-col class="my-10 mx-8">
-                            <v-row align="center">
-                                <v-col cols="12">
-                                    <v-row align="center">
-                                        <label class="investor-card-sub-title">Your balance in ETS</label>
-                                    </v-row>
-                                    <v-row align="center" class="mt-5">
-                                        <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
-                                    </v-row>
-                                </v-col>
-                            </v-row>
-                            <v-row align="center">
-                                <v-col cols="12">
-                                    <v-row align="center" :class="$wu.isMobile() ? 'mt-2' : 'mt-4'">
-                                        <label class="investor-card-sub-title">Profit/loss</label>
-                                    </v-row>
-                                    <v-row class="info-row mt-6" justify="start" align="center">
-                                        <label class="fee-structure-label mt-1">Last day</label>
-                                        <v-spacer></v-spacer>
-                                        <label class="investor-card-sub-title-value" :class="clientProfitDayUsdPlusWbnb > 0 ? 'success-color' : ''">
-                                            {{ clientProfitDayUsdPlusWbnb ? ((clientProfitDayUsdPlusWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWbnb, 4)) : '—' }}
-                                        </label>
-                                    </v-row>
-                                    <v-row class="info-row mt-6" justify="start" align="center">
-                                        <label class="fee-structure-label mt-1">All time</label>
-                                        <v-spacer></v-spacer>
-                                        <label class="investor-card-sub-title-value value-disabled">Soon</label>
-                                    </v-row>
-                                </v-col>
-                            </v-row>
+                            <template v-if="networkSupport">
+                                <v-row align="center">
+                                    <v-col cols="12">
+                                        <v-row align="center">
+                                            <label class="investor-card-sub-title">Your balance in ETS</label>
+                                        </v-row>
+                                        <v-row align="center" class="mt-5">
+                                            <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                                <v-row align="center">
+                                    <v-col cols="12">
+                                        <v-row align="center" :class="$wu.isMobile() ? 'mt-2' : 'mt-4'">
+                                            <label class="investor-card-sub-title">Profit/loss</label>
+                                        </v-row>
+                                        <v-row class="info-row mt-6" justify="start" align="center">
+                                            <label class="fee-structure-label mt-1">Last day</label>
+                                            <v-spacer></v-spacer>
+                                            <label class="investor-card-sub-title-value" :class="clientProfitDayUsdPlusWbnb > 0 ? 'success-color' : ''">
+                                                {{ clientProfitDayUsdPlusWbnb ? ((clientProfitDayUsdPlusWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWbnb, 4)) : '—' }}
+                                            </label>
+                                        </v-row>
+                                        <v-row class="info-row mt-6" justify="start" align="center">
+                                            <label class="fee-structure-label mt-1">All time</label>
+                                            <v-spacer></v-spacer>
+                                            <label class="investor-card-sub-title-value value-disabled">Soon</label>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
 
-                            <v-row align="center" v-if="isOvercapAvailable" class="card-banner-status-container"  :class="$wu.isMobile() ? 'mt-10' : 'mt-10'">
-                                <v-col class="card-banner-body">
-                                    <v-row justify="start" align="center">
-                                        <label class="investor-card-sub-title">You minted overcap, USD+</label>
-                                    </v-row>
-                                    <v-row justify="start" align="center" class="mt-5">
-                                        <v-progress-linear
+                                <v-row align="center" v-if="isOvercapAvailable" class="card-banner-status-container"  :class="$wu.isMobile() ? 'mt-10' : 'mt-10'">
+                                    <v-col class="card-banner-body">
+                                        <v-row justify="start" align="center">
+                                            <label class="investor-card-sub-title">You minted overcap, USD+</label>
+                                        </v-row>
+                                        <v-row justify="start" align="center" class="mt-5">
+                                            <v-progress-linear
                                                 rounded
                                                 height="7"
                                                 class="progress-info"
                                                 background-opacity="0"
                                                 :value="((walletOvercapLimit - overcapRemaining) / walletOvercapLimit) * 100"
                                                 color="#F3BA2F"
-                                        ></v-progress-linear>
-                                    </v-row>
-                                    <v-row justify="start" align="center" class="mt-5">
-                                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit - overcapRemaining, 2) }}</label>
-                                        <v-spacer></v-spacer>
-                                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit, 2) }}</label>
-                                    </v-row>
-                                    <v-row justify="start" align="center">
-                                        <v-spacer></v-spacer>
-                                        <label class="capacity-status-sub-text">OVERCAP LIMIT</label>
-                                    </v-row>
-                                </v-col>
-                            </v-row>
+                                            ></v-progress-linear>
+                                        </v-row>
+                                        <v-row justify="start" align="center" class="mt-5">
+                                            <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit - overcapRemaining, 2) }}</label>
+                                            <v-spacer></v-spacer>
+                                            <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit, 2) }}</label>
+                                        </v-row>
+                                        <v-row justify="start" align="center">
+                                            <v-spacer></v-spacer>
+                                            <label class="capacity-status-sub-text">OVERCAP LIMIT</label>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                            </template>
 
                             <template v-if="networkSupport">
                                 <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
@@ -102,7 +104,7 @@
                             </template>
 
                             <template v-else>
-                                <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'">
+                                <v-row align="center" justify="center" class="ma-0">
                                     <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('56')">
                                         SWITCH TO BSC TO MINT
                                     </v-btn>
@@ -191,54 +193,56 @@
 
                     <v-row class="info-card-container-white ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
                         <v-col class="my-10 mx-8">
-                            <v-row align="center">
-                                <label class="investor-card-sub-title">Your balance in ETS</label>
-                            </v-row>
-                            <v-row align="center" class="mt-5">
-                                <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
-                            </v-row>
-                            <v-row align="center" class="mt-10">
-                                <label class="investor-card-sub-title">Profit/loss</label>
-                            </v-row>
-                            <v-row class="info-row mt-6" justify="start" align="center">
-                                <label class="fee-structure-label mt-1">Last day</label>
-                                <v-spacer></v-spacer>
-                                <label class="investor-card-sub-title-value" :class="clientProfitDayUsdPlusWbnb > 0 ? 'success-color' : ''">
-                                    {{ clientProfitDayUsdPlusWbnb ? ((clientProfitDayUsdPlusWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWbnb, 4)) : '—' }}
-                                </label>
-                            </v-row>
-                            <v-row class="info-row mt-6" justify="start" align="center">
-                                <label class="fee-structure-label mt-1">All time</label>
-                                <v-spacer></v-spacer>
-                                <label class="investor-card-sub-title-value value-disabled">Soon</label>
-                            </v-row>
+                            <template v-if="networkSupport">
+                                <v-row align="center">
+                                    <label class="investor-card-sub-title">Your balance in ETS</label>
+                                </v-row>
+                                <v-row align="center" class="mt-5">
+                                    <label class="investor-card-sub-title-value">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
+                                </v-row>
+                                <v-row align="center" class="mt-10">
+                                    <label class="investor-card-sub-title">Profit/loss</label>
+                                </v-row>
+                                <v-row class="info-row mt-6" justify="start" align="center">
+                                    <label class="fee-structure-label mt-1">Last day</label>
+                                    <v-spacer></v-spacer>
+                                    <label class="investor-card-sub-title-value" :class="clientProfitDayUsdPlusWbnb > 0 ? 'success-color' : ''">
+                                        {{ clientProfitDayUsdPlusWbnb ? ((clientProfitDayUsdPlusWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWbnb, 4)) : '—' }}
+                                    </label>
+                                </v-row>
+                                <v-row class="info-row mt-6" justify="start" align="center">
+                                    <label class="fee-structure-label mt-1">All time</label>
+                                    <v-spacer></v-spacer>
+                                    <label class="investor-card-sub-title-value value-disabled">Soon</label>
+                                </v-row>
 
-                            <v-row align="center" v-if="isOvercapAvailable" class="card-banner-status-container mt-7">
-                                <v-col class="card-banner-body">
-                                    <v-row justify="start" align="center">
-                                        <label class="investor-card-sub-title">You minted overcap, USD+</label>
-                                    </v-row>
-                                    <v-row justify="start" align="center" class="mt-5">
-                                        <v-progress-linear
-                                                rounded
-                                                height="7"
-                                                class="progress-info"
-                                                background-opacity="0"
-                                                :value="((walletOvercapLimit - overcapRemaining) / walletOvercapLimit) * 100"
-                                                color="#F3BA2F"
-                                        ></v-progress-linear>
-                                    </v-row>
-                                    <v-row justify="start" align="center" class="mt-5">
-                                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit - overcapRemaining, 2) }}</label>
-                                        <v-spacer></v-spacer>
-                                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit, 2) }}</label>
-                                    </v-row>
-                                    <v-row justify="start" align="center">
-                                        <v-spacer></v-spacer>
-                                        <label class="capacity-status-sub-text">OVERCAP LIMIT</label>
-                                    </v-row>
-                                </v-col>
-                            </v-row>
+                                <v-row align="center" v-if="isOvercapAvailable" class="card-banner-status-container mt-7">
+                                    <v-col class="card-banner-body">
+                                        <v-row justify="start" align="center">
+                                            <label class="investor-card-sub-title">You minted overcap, USD+</label>
+                                        </v-row>
+                                        <v-row justify="start" align="center" class="mt-5">
+                                            <v-progress-linear
+                                                    rounded
+                                                    height="7"
+                                                    class="progress-info"
+                                                    background-opacity="0"
+                                                    :value="((walletOvercapLimit - overcapRemaining) / walletOvercapLimit) * 100"
+                                                    color="#F3BA2F"
+                                            ></v-progress-linear>
+                                        </v-row>
+                                        <v-row justify="start" align="center" class="mt-5">
+                                            <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit - overcapRemaining, 2) }}</label>
+                                            <v-spacer></v-spacer>
+                                            <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit, 2) }}</label>
+                                        </v-row>
+                                        <v-row justify="start" align="center">
+                                            <v-spacer></v-spacer>
+                                            <label class="capacity-status-sub-text">OVERCAP LIMIT</label>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                            </template>
 
                             <template v-if="networkSupport">
                                 <v-row align="center" justify="center" class="ma-0 mt-12" v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
@@ -259,7 +263,7 @@
                             </template>
 
                             <template v-else>
-                                <v-row align="center" justify="center" class="ma-0 mt-12">
+                                <v-row align="center" justify="center" class="ma-0">
                                     <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('56')">
                                         SWITCH TO BSC TO MINT
                                     </v-btn>

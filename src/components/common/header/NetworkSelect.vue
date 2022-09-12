@@ -85,7 +85,7 @@ import {mapGetters} from "vuex";
 
 let polygonIcon = require('@/assets/network/polygon.svg');
 let avaxIcon = require('@/assets/network/avalanche.svg');
-let optimismIcon = require('@/assets/network/optimism.svg');
+let optimismIcon = require('@/assets/network/op.svg');
 
 export default {
     name: "NetworkSelect",

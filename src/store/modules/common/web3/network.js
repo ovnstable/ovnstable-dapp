@@ -275,7 +275,7 @@ const actions = {
                             break;
                     }
 
-                    await getters.provider.request({
+                    await rootState.web3.provider.request({
                         method: 'wallet_addEthereumChain',
                         params: [params],
                     });

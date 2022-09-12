@@ -12,7 +12,8 @@
                              style="display: flex">
                             <v-img :src="icon"/>
                             <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="#333333" v-if="alphaNetwork">mdi-alpha</v-icon>
-                            <v-icon color="#333333" :class="alphaNetwork ? 'ml-n1' : 'ml-2'">
+                            <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="#333333" v-if="betaNetwork">mdi-beta</v-icon>
+                            <v-icon color="#333333" :class="(alphaNetwork || betaNetwork) ? 'ml-n1' : 'ml-2'">
                                 {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
                             </v-icon>
                         </div>
@@ -43,17 +44,6 @@
                     <v-icon class="mb-5" small color="#333333"></v-icon>
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item style="cursor: pointer" @click="setWalletNetwork('43114')">
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img :src="require('@/assets/network/avalanche.svg')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item">
-                    Avalanche
-                    <v-icon class="ml-n1 mb-5" small color="#333333">mdi-alpha</v-icon>
-                </v-list-item-title>
-            </v-list-item>
             <v-list-item style="cursor: pointer" @click="setWalletNetwork('10')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
@@ -62,6 +52,17 @@
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item">
                     Optimism
+                    <v-icon class="ml-n1 mb-5" small color="#333333">mdi-beta</v-icon>
+                </v-list-item-title>
+            </v-list-item>
+            <v-list-item style="cursor: pointer" @click="setWalletNetwork('43114')">
+                <v-list-item-avatar>
+                    <div class="list-item-icon">
+                        <v-img :src="require('@/assets/network/avalanche.svg')"/>
+                    </div>
+                </v-list-item-avatar>
+                <v-list-item-title class="network-select-list-item">
+                    Avalanche
                     <v-icon class="ml-n1 mb-5" small color="#333333">mdi-alpha</v-icon>
                 </v-list-item-title>
             </v-list-item>
@@ -95,7 +96,8 @@ export default {
 
     data: () => ({
         openedList: false,
-        alphaNetworks: [43114, 10],
+        alphaNetworks: [43114],
+        betaNetworks: [10],
     }),
 
     computed: {
@@ -116,6 +118,10 @@ export default {
 
         alphaNetwork: function () {
             return this.alphaNetworks.includes(this.networkId);
+        },
+
+        betaNetwork: function () {
+            return this.betaNetworks.includes(this.networkId);
         }
     },
 

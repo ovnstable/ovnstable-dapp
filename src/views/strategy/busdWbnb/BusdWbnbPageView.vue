@@ -142,22 +142,6 @@
                         <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabAbout">About ETS</label>
                     </v-row>
 
-                    <v-row justify="start" align="center" class="ma-0 mt-6">
-                        <v-img v-if="$wu.screenWidthIn(700, null)"
-                               :class="totalSupply.busdWbnb >= maxBusdWbnbSupply ? 'banner-img-disabled' : 'banner-img'"
-                               max-width="1200px"
-                               :src="require('@/assets/bg/busd_wbnb_beta_banner.svg')"
-                               @click="networkSupport ? (totalSupply.busdWbnb >= maxBusdWbnbSupply ? noAction() : mintAction()) : setWalletNetwork('56')"
-                        />
-
-                        <v-img v-else
-                               :class="totalSupply.busdWbnb >= maxBusdWbnbSupply ? 'banner-img-disabled' : 'banner-img'"
-                               max-width="700"
-                               :src="require('@/assets/bg/busd_wbnb_beta_banner_mobile.svg')"
-                               @click="networkSupport ? (totalSupply.busdWbnb >= maxBusdWbnbSupply ? noAction() : mintAction()) : setWalletNetwork('56')"
-                        />
-                    </v-row>
-
                     <PerformanceTab v-if="tab === 1"/>
                     <AboutTab v-if="tab === 2"/>
 

@@ -127,10 +127,10 @@
 
         <v-col cols="12" align-self="end">
             <v-row class="card-row mt-2" :class="showWrap ? '' : 'mb-7'" justify="center" align="center">
-                <v-btn class="open-strategy-btn btn-filled" @click.stop="mintAction">Mint USD+</v-btn>
+                <v-btn class="open-strategy-btn btn-filled" @click.stop="mintAction">Mint / Redeem USD+</v-btn>
             </v-row>
             <v-row v-if="showWrap" class="card-row mt-6 mb-7" justify="center" align="center">
-                <v-btn class="open-strategy-btn btn-outlined" @click.stop="wrapAction" outlined>Wrap USD+</v-btn>
+                <v-btn class="open-strategy-btn btn-outlined" @click.stop="wrapAction" outlined>Wrap / Unwrap USD+</v-btn>
             </v-row>
         </v-col>
 

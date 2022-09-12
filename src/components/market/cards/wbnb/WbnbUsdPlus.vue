@@ -539,11 +539,11 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #CF3F92;
+    color: #F3BA2F;
 }
 
 .tag-icon {
-    color: #CF3F92;
+    color: #F3BA2F;
 }
 
 .card-title {
@@ -570,7 +570,7 @@ export default {
 }
 
 .card-info-risk {
-    color: #CF3F92 !important;
+    color: #F3BA2F !important;
 }
 
 .info-row {

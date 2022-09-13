@@ -63,6 +63,23 @@ const state = {
 function _getParams(networkName) {
 
     if (!networkName) {
+        try {
+            let urlParams = new URLSearchParams(window.location.search);
+
+            if (urlParams.has('network')) {
+                let urlNetworkParameter = urlParams.get('network');
+                console.debug("URL network set to: " + urlNetworkParameter);
+
+                if (urlNetworkParameter) {
+                    networkName = urlNetworkParameter;
+                }
+            }
+        } catch (e) {
+            console.debug("Error occurred when trying to get url network parameter", e);
+        }
+    }
+
+    if (!networkName) {
         networkName = localStorage.getItem('selectedNetwork');
 
         if (!networkName) {

@@ -14,11 +14,25 @@
 <script>
 import ChangeWeightPanel from "../../components/governance/ChangeWeightPanel";
 import AbroadControl from "@/components/governance/control/AbroadControl";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "Finance",
     components: {AbroadControl, ChangeWeightPanel},
 
+    computed: {
+        ...mapGetters('web3', ['contracts']),
+    },
+
+    watch: {
+        contracts: async function (newVal, oldVal) {
+            await this.getFinance();
+        },
+    },
+
+    methods: {
+        ...mapActions('governance', ['getFinance']),
+    },
 }
 </script>
 

@@ -72,6 +72,16 @@ const routes = [
                 }
             },
             {
+                path: '/ets/wmatic-usdc',
+                name: 'WmaticUsdcPageView',
+                component: () => import('../views/strategy/wmaticUsdc/WmaticUsdcPageView.vue'),
+                meta: {
+                    middleware: [
+                        Wmatic
+                    ]
+                }
+            },
+            {
                 path: '/collateral',
                 name: 'CollateralView',
                 component: () => import('../views/performance/view/CollateralView.vue'),

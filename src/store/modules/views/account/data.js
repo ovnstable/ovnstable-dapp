@@ -5,6 +5,7 @@ const state = {
         asset: 0,
         wUsdPlus: 0,
         usdPlusWmatic: 0,
+        wmaticUsdc: 0,
         usdPlusWbnb: 0,
         busdWbnb: 0,
     },
@@ -41,6 +42,7 @@ const actions = {
             asset: 0,
             wUsdPlus: 0,
             usdPlusWmatic: 0,
+            wmaticUsdc: 0,
             usdPlusWbnb: 0,
             busdWbnb: 0,
         });
@@ -73,6 +75,7 @@ const actions = {
         let asset;
         let wUsdPlus;
         let usdPlusWmatic;
+        let wmaticUsdc;
         let usdPlusWbnb;
         let busdWbnb;
 
@@ -100,6 +103,13 @@ const actions = {
             }
         }
 
+        if (web3.contracts.wmaticUsdc && networkId === 137) {
+            try {
+                wmaticUsdc = await web3.contracts.wmaticUsdc.methods.balanceOf(getters.account).call();
+            } catch (e) {
+            }
+        }
+
         if (web3.contracts.usdPlusWbnb && networkId === 56) {
             try {
                 usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.balanceOf(getters.account).call();
@@ -118,6 +128,10 @@ const actions = {
 
         if (usdPlusWmatic && networkId === 137) {
             usdPlusWmatic = web3.web3.utils.fromWei(usdPlusWmatic, 'mwei') ;
+        }
+
+        if (wmaticUsdc && networkId === 137) {
+            wmaticUsdc = web3.web3.utils.fromWei(wmaticUsdc, 'mwei') ;
         }
 
         if (usdPlusWbnb && networkId === 56) {
@@ -143,6 +157,7 @@ const actions = {
             asset: asset,
             wUsdPlus: wUsdPlus,
             usdPlusWmatic: usdPlusWmatic,
+            wmaticUsdc: wmaticUsdc,
             usdPlusWbnb: usdPlusWbnb,
             busdWbnb: busdWbnb
         })

@@ -3,15 +3,20 @@ import {axios} from "@/plugins/http-axios";
 
 const state = {
     wmaticStrategyData: null,
+    wmaticUsdcStrategyData: null,
     usdPlusWbnbStrategyData: null,
     busdWbnbStrategyData: null,
 
     clientProfitDayUsdPlusWmatic: null,
+    clientProfitDayWmaticUsdc: null,
     clientProfitDayUsdPlusWbnb: null,
     clientProfitDayBusdWbnb: null,
 
     apyDataUsdPlusWmatic: {},
     tvlDataUsdPlusWmatic: {},
+
+    apyDataWmaticUsdc: {},
+    tvlDataWmaticUsdc: {},
 
     apyDataUsdPlusWbnb: {},
     tvlDataUsdPlusWbnb: {},
@@ -29,6 +34,10 @@ const getters = {
         return state.wmaticStrategyData;
     },
 
+    wmaticUsdcStrategyData(state) {
+        return state.wmaticUsdcStrategyData;
+    },
+
     usdPlusWbnbStrategyData(state) {
         return state.usdPlusWbnbStrategyData;
     },
@@ -39,6 +48,10 @@ const getters = {
 
     clientProfitDayUsdPlusWmatic(state) {
         return state.clientProfitDayUsdPlusWmatic;
+    },
+
+    clientProfitDayWmaticUsdc(state) {
+        return state.clientProfitDayWmaticUsdc;
     },
 
     clientProfitDayUsdPlusWbnb(state) {
@@ -55,6 +68,14 @@ const getters = {
 
     tvlDataUsdPlusWmatic(state) {
         return state.tvlDataUsdPlusWmatic;
+    },
+
+    apyDataWmaticUsdc(state) {
+        return state.apyDataWmaticUsdc;
+    },
+
+    tvlDataWmaticUsdc(state) {
+        return state.tvlDataWmaticUsdc;
     },
 
     apyDataUsdPlusWbnb(state) {
@@ -90,6 +111,9 @@ const actions = {
         dispatch('refreshStrategyData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
         dispatch('refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
 
+        dispatch('refreshStrategyData', {contractAddress: '0xd52caB8AfC8ECd08b7CFa6D07e224a56F943e4c4', strategyName: 'wmaticUsdc'});
+        dispatch('refreshClientData', {contractAddress: '0xd52caB8AfC8ECd08b7CFa6D07e224a56F943e4c4', strategyName: 'wmaticUsdc'});
+
         dispatch('refreshStrategyData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
         dispatch('refreshClientData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
 
@@ -108,6 +132,7 @@ const actions = {
 
         switch (refreshParams.strategyName) {
             case "usdPlusWmatic":
+            case "wmaticUsdc":
                 appApiUrl = rootState.network.polygonApi;
                 break;
             case "usdPlusWbnb":
@@ -194,6 +219,9 @@ const actions = {
                     case "usdPlusWmatic":
                         commit('setApyDataUsdPlusWmatic', widgetData);
                         break;
+                    case "wmaticUsdc":
+                        commit('setApyDataWmaticUsdc', widgetData);
+                        break;
                     case "usdPlusWbnb":
                         commit('setApyDataUsdPlusWbnb', widgetData);
                         break;
@@ -227,6 +255,9 @@ const actions = {
                     case "usdPlusWmatic":
                         commit('setTvlDataUsdPlusWmatic', widgetTvlData);
                         break;
+                    case "wmaticUsdc":
+                        commit('setTvlDataWmaticUsdc', widgetTvlData);
+                        break;
                     case "usdPlusWbnb":
                         commit('setTvlDataUsdPlusWbnb', widgetTvlData);
                         break;
@@ -241,6 +272,9 @@ const actions = {
         switch (refreshParams.strategyName) {
             case "usdPlusWmatic":
                 commit('setWmaticStrategyData', strategyData);
+                break;
+            case "wmaticUsdc":
+                commit('setWmaticUsdcStrategyData', strategyData);
                 break;
             case "usdPlusWbnb":
                 commit('setUsdPlusWbnbStrategyData', strategyData);
@@ -258,6 +292,7 @@ const actions = {
 
         switch (refreshParams.strategyName) {
             case "usdPlusWmatic":
+            case "wmaticUsdc":
                 appApiUrl = rootState.network.polygonApi;
                 break;
             case "usdPlusWbnb":
@@ -290,6 +325,9 @@ const actions = {
         switch (refreshParams.strategyName) {
             case "usdPlusWmatic":
                 commit('setClientProfitDayUsdPlusWmatic', profitDay);
+                break;
+            case "wmaticUsdc":
+                commit('setClientProfitDayWmaticUsdc', profitDay);
                 break;
             case "usdPlusWbnb":
                 commit('setClientProfitDayUsdPlusWbnb', profitDay);
@@ -351,6 +389,10 @@ const mutations = {
         state.wmaticStrategyData = wmaticStrategyData;
     },
 
+    setWmaticUsdcStrategyData(state, wmaticUsdcStrategyData) {
+        state.wmaticUsdcStrategyData = wmaticUsdcStrategyData;
+    },
+
     setUsdPlusWbnbStrategyData(state, usdPlusWbnbStrategyData) {
         state.usdPlusWbnbStrategyData = usdPlusWbnbStrategyData;
     },
@@ -361,6 +403,10 @@ const mutations = {
 
     setClientProfitDayUsdPlusWmatic(state, value) {
         state.clientProfitDayUsdPlusWmatic = value;
+    },
+
+    setClientProfitDayWmaticUsdc(state, value) {
+        state.clientProfitDayWmaticUsdc = value;
     },
 
     setClientProfitDayUsdPlusWbnb(state, value) {
@@ -377,6 +423,14 @@ const mutations = {
 
     setTvlDataUsdPlusWmatic(state, value) {
         state.tvlDataUsdPlusWmatic = value;
+    },
+
+    setApyDataWmaticUsdc(state, value) {
+        state.apyDataWmaticUsdc = value;
+    },
+
+    setTvlDataWmaticUsdc(state, value) {
+        state.tvlDataWmaticUsdc = value;
     },
 
     setApyDataUsdPlusWbnb(state, value) {

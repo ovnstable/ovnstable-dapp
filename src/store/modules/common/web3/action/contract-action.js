@@ -28,6 +28,9 @@ const actions = {
         let ExchangerUsdPlusWmatic = require(`@/contracts/polygon/HedgeExchangerUsdPlusWmatic.json`);
         let UsdPlusWmaticToken = require(`@/contracts/polygon/RebaseTokenUsdPlusWmatic.json`);
 
+        let ExchangerWmaticUsdc = require(`@/contracts/polygon/HedgeExchangerWmaticUsdc.json`);
+        let WmaticUsdcToken = require(`@/contracts/polygon/EtsWmaticUsdc.json`);
+
         let ExchangerUsdPlusWbnb = require(`@/contracts/bsc/HedgeExchangerUsdPlusWbnb.json`);
         let UsdPlusWbnbToken = require(`@/contracts/bsc/RebaseTokenUsdPlusWbnb.json`);
 
@@ -70,6 +73,9 @@ const actions = {
 
         contracts.exchangerUsdPlusWmatic = _load(ExchangerUsdPlusWmatic, web3);
         contracts.usdPlusWmatic = _load(UsdPlusWmaticToken, web3);
+
+        contracts.exchangerWmaticUsdc = _load(ExchangerWmaticUsdc, web3);
+        contracts.wmaticUsdc = _load(WmaticUsdcToken, web3);
 
         contracts.exchangerUsdPlusWbnb = _load(ExchangerUsdPlusWbnb, web3);
         contracts.usdPlusWbnb = _load(UsdPlusWbnbToken, web3);

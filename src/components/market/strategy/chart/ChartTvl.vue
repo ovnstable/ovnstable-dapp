@@ -104,7 +104,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData']),
+        ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -178,6 +178,9 @@ export default {
             switch (this.etsName) {
                 case "USD+/WMATIC":
                     this.totalTvl = this.wmaticStrategyData.tvl;
+                    break;
+                case "WMATIC/USDC":
+                    this.totalTvl = this.wmaticUsdcStrategyData.tvl;
                     break;
                 case "USD+/WBNB":
                     this.totalTvl = this.usdPlusWbnbStrategyData.tvl;

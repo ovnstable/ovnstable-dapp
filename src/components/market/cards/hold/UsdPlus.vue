@@ -3,7 +3,6 @@
         <v-col cols="12" align-self="start">
             <v-row class="card-row mt-7" justify="end" align="center">
                 <label class="tag-label">cash management / low risk</label>
-                <v-icon class="tag-icon" :class="$wu.isMobile() ? 'ml-1' : 'ml-2'" :size="$wu.isMobile() ? 12 : 16">mdi-star-circle</v-icon>
             </v-row>
 
             <v-row class="card-row mt-12" justify="start" align="center">

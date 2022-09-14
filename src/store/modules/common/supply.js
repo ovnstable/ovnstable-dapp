@@ -2,11 +2,13 @@ const state = {
 
     totalSupply: {
         usdPlusWmatic: 0,
+        wmaticUsdc: 0,
         usdPlusWbnb: 0,
         busdWbnb: 0,
     },
 
     maxUsdPlusWmaticSupply: 275000.00,
+    maxWmaticUsdcSupply: 500000.00,
     maxUsdPlusWbnbSupply: 500000.00,
     maxBusdWbnbSupply: 500000.00,
 };
@@ -19,6 +21,10 @@ const getters = {
 
     maxUsdPlusWmaticSupply(state) {
         return state.maxUsdPlusWmaticSupply;
+    },
+
+    maxWmaticUsdcSupply(state) {
+        return state.maxWmaticUsdcSupply;
     },
 
     maxUsdPlusWbnbSupply(state) {
@@ -50,6 +56,7 @@ const actions = {
 
         let web3 = rootState.web3;
         let usdPlusWmatic;
+        let wmaticUsdc;
         let usdPlusWbnb;
         let busdWbnb;
 
@@ -57,6 +64,12 @@ const actions = {
             usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.totalSupply().call();
         } catch (e) {
             usdPlusWmatic = null;
+        }
+
+        try {
+            wmaticUsdc = await web3.contracts.wmaticUsdc.methods.totalSupply().call();
+        } catch (e) {
+            wmaticUsdc = null;
         }
 
         try {
@@ -82,6 +95,15 @@ const actions = {
         }
 
         try {
+            if (wmaticUsdc) {
+                wmaticUsdc = web3.web3.utils.fromWei(wmaticUsdc, 'mwei');
+            } else {
+                wmaticUsdc = rootState.marketData.wmaticUsdcStrategyData.tvl;
+            }
+        } catch (e) {
+        }
+
+        try {
             if (usdPlusWbnb) {
                 usdPlusWbnb = web3.web3.utils.fromWei(usdPlusWbnb, 'mwei');
             } else {
@@ -101,6 +123,7 @@ const actions = {
 
         commit('setTotalSupply', {
             usdPlusWmatic: usdPlusWmatic,
+            wmaticUsdc: wmaticUsdc,
             usdPlusWbnb: usdPlusWbnb,
             busdWbnb: busdWbnb,
         })

@@ -154,6 +154,10 @@ export default {
                     apiUrl = this.polygonApi;
                     this.contractAddress = '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf';
                     break;
+                case "WMATIC/USDC":
+                    apiUrl = this.polygonApi;
+                    this.contractAddress = '0xd52caB8AfC8ECd08b7CFa6D07e224a56F943e4c4';
+                    break;
                 case "USD+/WBNB":
                     apiUrl = this.bscApi;
                     this.contractAddress = '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1';

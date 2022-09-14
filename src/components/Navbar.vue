@@ -3,6 +3,7 @@
             app
             permanent
             width="228"
+            color="var(--secondary)"
     >
         <v-list class="mt-1 mb-8">
             <v-list-item>
@@ -13,15 +14,9 @@
         </v-list>
         <template>
             <v-container>
-                <v-switch @click="toggleTheme"
-                    :label="`dark theme `"
-                    class="switcher"
-                    color="primary"
-                    value="#13151C"
-                    inset
-                    hide-details
-                    :model-value="true"
-                ></v-switch>
+                <v-btn @click="switchTheme">
+                    Switch theme
+                </v-btn>
             </v-container>
         </template>
 
@@ -126,23 +121,18 @@ export default {
     components: {
     },
 
-    setup() {
-        const theme = useTheme()
-        return {
-            theme, toggleTheme: () => theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
-        }
-    },
-
     data: () => ({
     }),
 
 
     computed: {
         ...mapGetters('menuUI', ['selectedTab']),
+        ...mapGetters('theme', ['light']),
     },
 
     methods: {
         ...mapActions('menuUI', ['selectTab']),
+        ...mapActions('theme', ['switchTheme']),
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -201,6 +191,7 @@ export default {
 .footer-social-link {
     cursor: pointer;
     height: 48px !important ;
+    color: var(--third-gray-text);
 }
 
 .navbar-page-link {
@@ -218,7 +209,7 @@ export default {
     font-size: 16px;
     line-height: 20px;
     font-feature-settings: 'liga' off;
-    color: var(--secondary-gray-text);
+    color: var(--third-gray-text);
 }
 
 .navbar-page-label {
@@ -235,11 +226,11 @@ export default {
 
 
 .selected-page {
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .nav-card-container {
-    background: linear-gradient(0deg, rgba(28, 149, 231, 0.12), rgba(28, 149, 231, 0.12)), #FFFFFF !important;
+    background: linear-gradient(0deg, rgba(28, 149, 231, 0.12), rgba(28, 149, 231, 0.12)), var(--secondary) !important;
     border-radius: 4px !important;
 }
 
@@ -281,7 +272,7 @@ export default {
     font-size: 14px;
     line-height: 22px;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #1C95E7;
+    color: var(--links-blue);
     cursor: pointer;
 }
 
@@ -295,22 +286,6 @@ export default {
 
 .list-item-hover:active {
     background: #C9E6F9 !important;
-}
-
-.switcher {
-    font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 18px;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    padding: 10px;
-}
-
-.switcher:hover {
-    background: #E9F5FD;
 }
 
 </style>

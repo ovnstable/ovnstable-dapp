@@ -221,7 +221,7 @@ export default {
 
 .success-link {
     cursor: pointer;
-    color: var(--link);
+    color: var(--links-blue);
     font-style: normal;
     font-weight: normal;
     font-size: 14px;

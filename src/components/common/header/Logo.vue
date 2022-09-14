@@ -87,7 +87,7 @@ export default {
     letter-spacing: 1px;
     font-weight: 700;
     font-size: 28px;
-    color: var(--logo-color) !important;
+    color: #FFFFFF !important;
 }
 
 .logo-title > sup {

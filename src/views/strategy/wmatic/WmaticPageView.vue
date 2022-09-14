@@ -637,7 +637,7 @@ export default {
 
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #1C95E7;
+    color: var(--links-blue);
 }
 
 .current-page-label {
@@ -658,8 +658,8 @@ export default {
 }
 
 .tab-button {
-    border-bottom: 2px solid #1C95E7 !important;
-    color: #1C95E7 !important;
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
     cursor: pointer !important;
 }
 
@@ -669,12 +669,12 @@ export default {
 }
 
 .info-card-container-white {
-    background: #FFFFFF;
+    background: var(--secondary);
     border-radius: 8px;
 }
 
 .info-row {
-    border-top: 1px solid #CED2D8;
+    border-top: 1px solid var(--secondary-border);
 }
 
 .header-btn {
@@ -694,7 +694,7 @@ export default {
 
 .btn-investor-outline {
     background: none !important;
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .btn-filled-red {
@@ -717,14 +717,14 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--third-lightgray-text);
+    color: var(--third-gray-text);
 }
 
 .investor-card-sub-title {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--third-lightgray-text);
+    color: var(--third-gray-text);
 }
 
 .investor-card-sub-title-value {
@@ -735,7 +735,7 @@ export default {
 .value-disabled {
     font-weight: 300 !important;
     text-transform: uppercase !important;
-    color: var(--fourth-lightgray-text) !important;
+    color: #C5C9D1 !important;
 }
 
 .fee-structure-label {
@@ -754,7 +754,7 @@ export default {
 .about-link-label {
     font-family: 'Roboto', sans-serif !important;
     font-feature-settings: 'liga' off !important;
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
     cursor: pointer !important;
 }
 
@@ -763,7 +763,7 @@ export default {
 }
 
 .disabled-btn {
-    background: #E5E7EA !important;
+    background: var(--main-banner-background) !important;
     color: #9DA4B0 !important;
 }
 

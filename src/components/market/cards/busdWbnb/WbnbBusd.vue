@@ -422,13 +422,13 @@ export default {
 }
 
 .card-container {
-    background: #FFFFFF !important;
+    background: var(--secondary) !important;
     border-radius: 4px !important;
     max-width: 460px !important;
 }
 
 .card-banner-status-container {
-    background: #F5F5F5;
+    background: var(--card-banner-status-container);
     border-radius: 4px;
 }
 
@@ -451,24 +451,24 @@ export default {
 .card-title {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .card-info {
     font-family: 'Roboto', sans-serif;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .card-info-banner {
     font-family: 'Roboto', sans-serif;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .card-info-value {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #3E5463;
+    color: var(--main-gray-text);
 }
 
 .card-info-risk {
@@ -476,7 +476,7 @@ export default {
 }
 
 .info-row {
-    border-top: 1px solid #CED2D8;
+    border-top: 1px solid var(--secondary-border);
 }
 
 .card-banner-body {
@@ -507,21 +507,21 @@ export default {
 .capacity-status-text {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .capacity-status-value {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #1C95E7;
+    color: var(--links-blue);
 }
 
 .capacity-status-sub-text {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-gray-text);
 }
 
 * {

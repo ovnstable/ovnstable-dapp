@@ -401,8 +401,8 @@ export default {
 }
 
 .tab-button {
-    border-bottom: 2px solid #1C95E7 !important;
-    color: #1C95E7 !important;
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
     cursor: pointer !important;
 }
 
@@ -423,7 +423,7 @@ export default {
 }
 
 .info-card-container {
-    background: #FFFFFF;
+    background: var(--secondary);
     border-radius: 4px;
 }
 
@@ -451,7 +451,7 @@ export default {
     line-height: 20px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--third-lightgray-text);
+    color: var(--third-gray-text);
 }
 
 .rate-tab-btn {
@@ -467,7 +467,7 @@ export default {
     background: rgba(28, 149, 231, 0.1);
     border-radius: 4px;
     border: none !important;
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .rate-tab-button-in-active {
@@ -477,7 +477,7 @@ export default {
 }
 
 .tab-btn-disabled {
-    color: var(--fourth-lightgray-text) !important;
+    color: #C5C9D1 !important;
 }
 
 .ready-label {

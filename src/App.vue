@@ -139,42 +139,8 @@ export default {
 
 /* main variables */
 :root {
-    --main-background: #F5F5F5;
-    --dark-background: #13151C;
-
-    --secondary: #FFFFFF;
-    --dark-secondary: #1D2029;
-
-    --main-gray-text: #29323E;
-    --secondary-gray-text: #333333;
-    --third-lightgray-text: #ADB3BD;
-    --fourth-lightgray-text: #C5C9D1;
-    --dark-white-text: #FFFFFF;
-
-    --dark-blue-values: #1C95E7;
-
-    --main-card-background: #FFFFFF;
-    --dark-card-background: #1D2029;
-
-    --main-card-status-background: #F5F5F5;
-    --dark-card-status-background: #29323E;
-
-    --main-banner-background: #E5E7EA;
-    --dark-banner-background: #1D2029;
-
-
-    --main-chart-subtitle: #707A8B;
-    --dark-chart-subtitle: #4C586D;
-
-    --main-banner-status-text: #29323E;
-
-    --logo-color: #ffffff;
-
     --orange-gradient: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
     --blue-gradient: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
-
-    --link: #1C95E7;
-    --main-blue: #1C95E7;
 }
 
 html {
@@ -208,12 +174,12 @@ html {
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px !important;
-    background-color: #F5F5F5;
+    background-color: var(--main-background);
 }
 
 ::-webkit-scrollbar {
     width: 12px;
-    background-color: #F5F5F5;
+    background-color: var(--main-background);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -240,7 +206,7 @@ html {
 
 .bn-onboard-selected-wallet {
     background: none !important;
-    border: 1px solid var(--link) !important;
+    border: 1px solid var(--links-blue) !important;
     border-radius: 16px !important;
 }
 
@@ -282,7 +248,7 @@ html {
 .bn-onboard-select-wallet-info {
     margin-left: 10px;
     font-family: 'Lato', sans-serif !important;
-    color: var(--link) !important;
+    color: var(--links-blue) !important;
     font-style: normal !important;
     font-weight: normal !important;
     font-size: 14px !important;
@@ -294,7 +260,7 @@ html {
 }
 
 .progress-col > .v-progress-linear > .v-progress-linear__buffer {
-    background-color: #E5E7EA !important;
+    background-color: var(--main-banner-background) !important;
 }
 
 .progress-col > .v-progress-linear > .v-progress-linear__determinate {
@@ -313,18 +279,18 @@ html {
 }
 
 .percent-slider .v-slider__tick:nth-child(5n + 1) {
-    background-color: #FFFFFF !important;
+    background-color: var(--secondary) !important;
     border-radius: 5px !important;
     border: 1px solid #DEE1E5;
 }
 
 .step-slider .v-slider__tick:nth-child(n) {
-    background-color: #FFFFFF !important;
+    background-color: var(--secondary) !important;
     border-radius: 5px !important;
     border: 1px solid #DEE1E5;
 }
 
 .v-slider__tick--filled {
-    border: 2px solid #1C95E7 !important;
+    border: 2px solid var(--links-blue) !important;
 }
 </style>

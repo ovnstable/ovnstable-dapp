@@ -116,7 +116,7 @@ export default {
     font-size: 18px;
     line-height: 32px;
     text-align: center;
-    color: var(--secondary-gray-text);
+    color: #333333;
 }
 
 .total-label-time {
@@ -127,6 +127,6 @@ export default {
     line-height: 60px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--secondary-gray-text);
+    color: #333333;
 }
 </style>

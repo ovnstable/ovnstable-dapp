@@ -198,7 +198,7 @@ export default {
 .table-header-payouts-strategy {
     font-family: 'Roboto', sans-serif !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: var(--third-lightgray-text) !important;
+    color: var(--third-gray-text) !important;
 }
 
 .table-label-payouts-strategy {

@@ -6,10 +6,10 @@
             <v-row align="start" justify="start" class="ma-0">
                 <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-                        <label style="color: var(--fourth-lightgray-text) !important" class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
+                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
                         <label class="tab-btn mx-4" @click="tab=2" v-bind:class="activeTabUsdPlus">USD+</label>
-                        <label style="color: var(--fourth-lightgray-text) !important" class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
-                        <label style="color: var(--fourth-lightgray-text) !important" class="tab-btn tab-btn-disabled ml-4" v-bind:class="activeTabETS" disabled>ETS</label>
+                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
+                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4" v-bind:class="activeTabETS" disabled>ETS</label>
 
                         <v-spacer></v-spacer>
 
@@ -779,8 +779,8 @@ export default {
 }
 
 .tab-button {
-    border-bottom: 2px solid #1C95E7 !important;
-    color: #1C95E7 !important;
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
     cursor: pointer;
 }
 
@@ -803,7 +803,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #1C95E7;
+    color: var(--links-blue);
 }
 
 .slice-select-list {
@@ -817,7 +817,7 @@ export default {
 }
 
 .info-card-container {
-    background: #FFFFFF;
+    background: var(--secondary);
     border-radius: 4px;
 }
 
@@ -845,7 +845,7 @@ export default {
 .container-info-sub-title {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--third-lightgray-text);
+    color: var(--third-gray-text);
 }
 
 .container-info-text {
@@ -855,7 +855,7 @@ export default {
 }
 
 .container-body-title-slice {
-    color: var(--third-lightgray-text) !important;
+    color: var(--third-gray-text) !important;
 }
 
 .dashboard-action-btn {
@@ -874,7 +874,7 @@ export default {
 }
 
 .btn-outlined {
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .scroll-container {
@@ -890,7 +890,7 @@ export default {
     line-height: 20px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--third-lightgray-text);
+    color: var(--third-gray-text);
 }
 
 .useful-title {
@@ -903,7 +903,7 @@ export default {
 .useful-link {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #1C95E7;
+    color: var(--links-blue);
     cursor: pointer;
 }
 

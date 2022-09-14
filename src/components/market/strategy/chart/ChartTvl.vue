@@ -403,7 +403,7 @@ export default {
 }
 
 .selected {
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
     background-color: #E8F4FD;
 }
 

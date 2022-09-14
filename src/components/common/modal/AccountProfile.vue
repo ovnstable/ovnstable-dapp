@@ -391,7 +391,7 @@ export default {
 }
 
 .btn-outlined {
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .icon-img {
@@ -428,7 +428,7 @@ export default {
 
 .account-display-container {
     max-width: 160px !important;
-    background: var(--main-background);
+    background: var(--card-coin-background);
     border-radius: 4px;
     height: 36px !important;
     cursor: pointer !important;
@@ -440,7 +440,7 @@ export default {
 }
 
 .coin-btn {
-    background: var(--main-background) !important;
+    background: var(--card-coin-background) !important;
     border-radius: 4px !important;
     box-shadow: none !important;
 

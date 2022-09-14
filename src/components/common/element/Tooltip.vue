@@ -68,7 +68,7 @@ export default {
     font-size: 14px;
     line-height: 16px;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--secondary-gray-text);
+    color: #333333;
 }
 
 .icon-img, .info-icon {

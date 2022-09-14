@@ -8,8 +8,8 @@
           <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
             <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
               <label  @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabFeatured" disabled>Featured<v-icon size="16">mdi-star-circle</v-icon></label>
-              <label style="color: var(--fourth-lightgray-text) !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabHold">USD+</label>
-              <label style="color: var(--fourth-lightgray-text) !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
+              <label style="color: #C5C9D1 !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabHold">USD+</label>
+              <label style="color: #C5C9D1 !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
               <label  @click="tab=4"   class="tab-btn ml-4" v-bind:class="activeTabHedged" disabled>ETS</label>
 
               <v-spacer></v-spacer>
@@ -142,19 +142,19 @@ export default {
 }
 
 .tab-button {
-  border-bottom: 2px solid #1C95E7 !important;
-  color: #1C95E7 !important;
+  border-bottom: 2px solid var(--links-blue) !important;
+  color: var(--links-blue) !important;
   cursor: pointer;
 }
 
 
 .tab-button-in-active {
-  color: var(--fourth-lightgray-text) !important;
+  color: #C5C9D1 !important;
   cursor: pointer;
 }
 
 .mdi-star-circle {
-  color: #1C95E7 !important;
+  color: var(--links-blue) !important;
   cursor: pointer !important;
 }
 

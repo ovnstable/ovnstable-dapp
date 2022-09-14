@@ -44,7 +44,7 @@
                                 dark
                                 class="progress mt-1 mr-2"
                                 background-opacity="0"
-                                color="var(--main-background)"
+                                color="#F5F5F5"
                                 indeterminate
                         ></v-progress-linear>
                     </template>
@@ -234,7 +234,7 @@ export default {
 .app-bar {
     box-shadow: none !important;
     background-color: var(--main-background) !important;
-    border-bottom: 1px solid #CED2D8 !important;
+    border-bottom: 1px solid var(--secondary-border) !important;
 }
 
 .header-btn, .header-btn-connect {
@@ -249,11 +249,11 @@ export default {
 
 .btn-filled {
     background: var(--blue-gradient);
-    color: #FFFFFF !important;
+    color: var(--secondary) !important;
 }
 
 .btn-outlined {
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .logo-img {

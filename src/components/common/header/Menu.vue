@@ -185,7 +185,7 @@ export default {
 }
 
 .in-active-tab {
-    color: var(--third-lightgray-text);
+    color: var(--third-gray-text);
     font-family: 'Lato', sans-serif;
     font-style: normal;
     font-weight: 600;

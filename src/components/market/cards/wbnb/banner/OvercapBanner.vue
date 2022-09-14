@@ -153,7 +153,7 @@ export default {
 }
 
 .card-container {
-    background: #FFFFFF !important;
+    background: var(--secondary) !important;
     border-radius: 4px !important;
     max-width: 430px !important;
 }
@@ -167,7 +167,7 @@ export default {
 .link-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
     cursor: pointer !important;
 }
 

@@ -57,6 +57,9 @@ import dappUIAction from "@/store/modules/common/web3/action/dapp/dapp-ui-action
 import gasPrice from '@/store/modules/common/gas-price';
 import supplyData from '@/store/modules/common/supply';
 
+// Theme
+import theme from '@/store/modules/theme/theme';
+
 import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
@@ -110,7 +113,9 @@ export default new Vuex.Store({
         dappUIAction,
 
         gasPrice,
-        supplyData
+        supplyData,
+
+        theme
     },
 
     plugins: [

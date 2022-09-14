@@ -128,7 +128,7 @@ export default {
     width: 100% !important;
     height: 200px !important;
     background-image: url("~@/assets/bg/banner_bg.svg");
-    background-color: #E5E7EA !important;
+    background-color: var(--main-banner-background) !important;
 }
 
 .banner-label {
@@ -164,8 +164,8 @@ export default {
 .info-container {
     width: 100% !important;
     height: 110px !important;
-    background-color: #E5E7EA !important;
-    border: 1px solid #CED2D8;
+    background-color: var(--main-banner-background) !important;
+    border: 1px solid var(--secondary-border);
     border-radius: 6px;
     cursor: pointer;
 }
@@ -189,11 +189,11 @@ export default {
     line-height: 36px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #1C95E7;
+    color: var(--links-blue);
 }
 
 .bordered-col {
-    border-left: 1px solid #CED2D8 !important;
-    border-right: 1px solid #CED2D8 !important;
+    border-left: 1px solid var(--secondary-border) !important;
+    border-right: 1px solid var(--secondary-border) !important;
 }
 </style>

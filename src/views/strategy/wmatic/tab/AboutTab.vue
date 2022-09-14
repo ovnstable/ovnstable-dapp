@@ -892,7 +892,7 @@ export default {
 }
 
 .info-card-container {
-    background: linear-gradient(91.26deg, rgba(40, 160, 240, 0.1) 0%, rgba(6, 120, 196, 0.09917) 100%), #FFFFFF;
+    background: linear-gradient(91.26deg, rgba(40, 160, 240, 0.1) 0%, rgba(6, 120, 196, 0.09917) 100%), var(--secondary);
     border: 1px solid rgba(28, 149, 231, 0.4);
     border-radius: 4px;
 }
@@ -926,7 +926,7 @@ export default {
     font-size: 16px;
     line-height: 20px;
     font-feature-settings: 'liga' off;
-    color: #1C95E7;
+    color: var(--links-blue);
     cursor: pointer;
 }
 
@@ -985,7 +985,7 @@ export default {
 }
 
 .info-row {
-    border-top: 1px solid #CED2D8;
+    border-top: 1px solid var(--secondary-border);
 }
 
 .card-info {
@@ -997,7 +997,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #3E5463;
+    color: var(--main-gray-text);
 }
 
 .card-info-risk {
@@ -1017,13 +1017,13 @@ export default {
 .address-card-link {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #1C95E7;
+    color: var(--links-blue);
     cursor: pointer;
 }
 
 .info-container {
     width: 100% !important;
-    background: #E5E7EA;
+    background: var(--main-banner-background);
     border-radius: 4px;
 }
 
@@ -1049,13 +1049,13 @@ export default {
 }
 
 .open-link-label {
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
     text-decoration: underline;
     cursor: pointer;
 }
 
 .disabled-btn {
-    background: #E5E7EA !important;
+    background: var(--main-banner-background) !important;
     color: #9DA4B0 !important;
 }
 

@@ -774,13 +774,13 @@ export default {
 
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #1C95E7;
+    color: var(--links-blue);
 }
 
 .current-page-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .toggle-row {
@@ -790,28 +790,28 @@ export default {
 .tab-btn {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
     margin-bottom: -2px;
 }
 
 .tab-button {
-    border-bottom: 2px solid #1C95E7 !important;
-    color: #1C95E7 !important;
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
     cursor: pointer !important;
 }
 
 .tab-button-in-active {
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
     cursor: pointer !important;
 }
 
 .info-card-container-white {
-    background: #FFFFFF;
+    background: var(--secondary);
     border-radius: 8px;
 }
 
 .info-row {
-    border-top: 1px solid #CED2D8;
+    border-top: 1px solid var(--secondary-border);
 }
 
 .header-btn {
@@ -831,7 +831,7 @@ export default {
 
 .btn-investor-outline {
     background: none !important;
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .btn-filled-red {
@@ -854,14 +854,14 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-gray-text);
 }
 
 .investor-card-sub-title {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-gray-text);
 }
 
 .investor-card-sub-title-value {
@@ -880,7 +880,7 @@ export default {
 .fee-structure-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .fee-structure-value {
@@ -893,7 +893,7 @@ export default {
 .about-link-label {
     font-family: 'Roboto', sans-serif !important;
     font-feature-settings: 'liga' off !important;
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
     cursor: pointer !important;
 }
 
@@ -902,7 +902,7 @@ export default {
 }
 
 .disabled-btn {
-    background: #E5E7EA !important;
+    background: var(--main-banner-background) !important;
     color: #9DA4B0 !important;
 }
 
@@ -925,7 +925,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-gray-text);
 }
 
 .minor-card-label {
@@ -940,7 +940,7 @@ export default {
 }
 
 .card-banner-status-container {
-    background: #F5F5F5;
+    background: var(--card-banner-status-container);
     border-radius: 4px;
 }
 

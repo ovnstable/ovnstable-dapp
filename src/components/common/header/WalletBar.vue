@@ -188,7 +188,7 @@ export default {
 }
 
 .wallet-bar-container {
-    background-color: white !important;
+    background-color: var(--secondary) !important;
     border-radius: 2px;
     cursor: pointer;
 }
@@ -201,11 +201,11 @@ export default {
 }
 
 .wallet-bar-container:hover > .wallet-col > .eye-icon {
-    color: #1C95E7;
+    color: var(--links-blue);
 }
 
 .account-display-container {
-    background: var(--main-background);
+    background: var(--card-coin-background);
     border-radius: 4px;
 }
 </style>

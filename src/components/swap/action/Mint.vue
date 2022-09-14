@@ -838,19 +838,19 @@ export default {
 
 .main-card {
     background: none !important;
-    border: 1px solid #DEE1E5;
+    border: 1px solid var(--main-border);
     border-radius: 8px;
 }
 
 .v-text-field >>> input::placeholder {
-    color: var(--fourth-lightgray-text) !important;
+    color: #C5C9D1 !important;
 }
 
 .v-text-field >>> input, .v-text-field >>> label, .v-text-field >>> button {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
 
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .balance-label {
@@ -860,7 +860,7 @@ export default {
 }
 
 .max {
-    color: var(--link);
+    color: var(--links-blue);
     cursor: pointer;
 }
 
@@ -870,7 +870,7 @@ export default {
 }
 
 .disabled-buy {
-    background: #E5E7EA !important;
+    background: var(--main-banner-background) !important;
     color: #9DA4B0 !important;
 }
 
@@ -890,7 +890,7 @@ export default {
 }
 
 .coin-card {
-    background: var(--main-background);
+    background: var(--card-coin-background);
     border-radius: 4px;
 }
 
@@ -903,7 +903,7 @@ export default {
 .modal-link-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #1C95E7;
+    color: var(--links-blue);
     cursor: pointer;
 }
 

@@ -178,7 +178,7 @@ export default {
 }
 
 .text-blue {
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 

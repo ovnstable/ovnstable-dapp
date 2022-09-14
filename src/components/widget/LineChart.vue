@@ -326,7 +326,7 @@ export default {
 }
 
 .chart-title-slice {
-    color: var(--third-lightgray-text) !important;
+    color: var(--third-gray-text) !important;
 }
 
 </style>

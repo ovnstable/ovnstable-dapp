@@ -8,6 +8,7 @@ import getRewardPools from "./midleware/governance/getRewardPools"
 import getProposals from "./midleware/governance/getProposals"
 import middlewarePipeline from "./middlewarePipeline";
 import getFinance from "@/router/midleware/governance/getFinance";
+import getAbroad from "@/router/midleware/governance/getAbroad";
 
 // Dapp Sections
 import Market from "./midleware/dapp/Market";
@@ -126,6 +127,16 @@ const routes = [
                 meta: {
                     middleware: [
                         getFinance,
+                    ]
+                }
+            },
+            {
+                path: '/governance/abroad',
+                name: 'Abroad',
+                component: () => import('../views/governance/Abroad.vue'),
+                meta: {
+                    middleware: [
+                        getAbroad,
                     ]
                 }
             },

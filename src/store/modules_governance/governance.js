@@ -1,4 +1,7 @@
+import BN from "bn.js";
+
 const {axios} = require('@/plugins/http-axios');
+const {utils} = require('@/plugins/utils');
 
 const proposalStates = ['Pending', 'Active', 'Canceled', 'Defeated', 'Succeeded', 'Queued', 'Expired', 'Executed'];
 
@@ -14,8 +17,12 @@ const state = {
 
     strategyWeights: null,
 
-    rewardPools: [],
+    m2mItems: [],
+    m2mTotal: null,
+    usdPlusTotal: null,
+    usdPlusLiquidityIndex: null,
 
+    rewardPools: [],
 
     abroad: {},
 };
@@ -57,6 +64,22 @@ const getters = {
 
     strategyWeights(state) {
         return state.strategyWeights;
+    },
+
+    m2mItems(state) {
+        return state.m2mItems;
+    },
+
+    m2mTotal(state) {
+        return state.m2mTotal;
+    },
+
+    usdPlusTotal(state) {
+        return state.usdPlusTotal;
+    },
+
+    usdPlusLiquidityIndex(state) {
+        return state.usdPlusLiquidityIndex;
     },
 
     rewardPools(state) {
@@ -242,7 +265,7 @@ const actions = {
         let proposals = await governor.methods.getProposals().call();
 
         proposals = [...proposals].reverse();
-        if (proposals.length > 5){
+        if (proposals.length > 5) {
             proposals = proposals.slice(0, 5);
         }
 
@@ -296,7 +319,6 @@ const actions = {
 
     async setStrategyWeights({commit, dispatch, getters, rootState}, weights) {
 
-
         let pm = rootState.web3.contracts.pm;
         let account = rootState.accountData.account;
         let params = {from: account};
@@ -320,18 +342,17 @@ const actions = {
 
         let network = rootState.network.networkName;
 
-        if (network === "polygon_dev"){
+        if (network === "polygon_dev") {
             pm.methods.setStrategyWeights(items).send(params);
-        }else {
+        } else {
             let governor = rootState.web3.contracts.governor;
             let abi = pm.methods.setStrategyWeights(items).encodeABI();
             let name = 'Proposal #' + getters.proposals.length + 1 + ' Change weights';
             await governor.methods.proposeExec([pm.options.address], [0], [abi], name).send(params);
         }
-
     },
 
-    async rebalancePortfolio ({commit, dispatch, getters, rootState} ) {
+    async rebalancePortfolio({commit, dispatch, getters, rootState}) {
 
         let pm = rootState.web3.contracts.pm;
         let account = rootState.accountData.account;
@@ -339,10 +360,9 @@ const actions = {
 
         let network = rootState.network.networkName;
 
-        if (network === "polygon_dev"){
+        if (network === "polygon_dev") {
             pm.methods.balance().send(params);
-        }else {
-
+        } else {
             let governor = rootState.web3.contracts.governor;
             let abi = pm.methods.balance().encodeABI();
             let name = 'Proposal #' + getters.proposals.length + 1 + ' Balance';
@@ -360,7 +380,6 @@ const actions = {
         let items = [];
 
         let appApiUrl = rootState.network.appApiUrl;
-
         let strategiesMapping = (await axios.get(appApiUrl + '/dict/strategies')).data;
 
         for (let i = 0; i < strategiesMapping.length; i++) {
@@ -373,13 +392,13 @@ const actions = {
             item.address = strategy.address;
             item.name = strategy.name;
 
-            if (weight){
+            if (weight) {
                 item.minWeight = weight.minWeight / 1000;
                 item.targetWeight = weight.targetWeight / 1000;
                 item.maxWeight = weight.maxWeight / 1000;
                 item.enabled = weight.enabled;
                 item.enabledReward = weight.enabledReward;
-            }else {
+            } else {
                 item.minWeight = 0;
                 item.targetWeight = 0;
                 item.maxWeight = 0;
@@ -394,13 +413,93 @@ const actions = {
         commit('setStrategyWeights', items);
     },
 
+    async getM2M({commit, dispatch, getters, rootState}) {
+
+        let m2m = rootState.web3.contracts.m2m;
+        let usdPlus = rootState.web3.contracts.usdPlus;
+        let pm = rootState.web3.contracts.pm;
+
+        let strategyAssets = await m2m.methods.strategyAssets().call();
+        let totalNetAssets = await m2m.methods.totalNetAssets().call();
+        let strategyWeights = await pm.methods.getAllStrategyWeights().call();
+
+        let strategiesMapping = [];
+        try {
+            let appApiUrl = rootState.network.appApiUrl;
+            strategiesMapping = (await axios.get(appApiUrl + '/dict/strategies')).data;
+        } catch (e) {
+            console.log('Error: ' + e.message);
+        }
+
+        let fromAsset6 = rootState.network.assetDecimals === 6;
+        let sum = 0;
+        let items = [];
+
+        for (let i = 0; i < strategyAssets.length; i++) {
+            let asset = strategyAssets[i];
+            let weight = strategyWeights[i];
+
+            let mapping = strategiesMapping.find(value => value.address === asset.strategy);
+
+            items.push(
+                {
+                    name: mapping ? mapping.name : asset.strategy,
+                    address: asset.strategy,
+                    netAssetValue: (fromAsset6 ? _fromE6(asset.netAssetValue.toString()) : _fromE18(asset.netAssetValue.toString())),
+                    liquidationValue: (fromAsset6 ? _fromE6(asset.liquidationValue.toString()) : _fromE18(asset.liquidationValue.toString())),
+                    minWeight: (weight.minWeight ? parseInt(weight.minWeight) / 1000 : 0),
+                    maxWeight: (weight.maxWeight ? parseInt(weight.maxWeight) / 1000 : 0),
+                    targetWeight: (weight.targetWeight ? parseInt(weight.targetWeight) / 1000 : 0),
+                    enabled: weight.enabled,
+                    enabledReward: weight.enabledReward
+                });
+
+            sum += parseFloat((fromAsset6 ? _fromE6(asset.netAssetValue.toString()) : _fromE18(asset.netAssetValue.toString())));
+        }
+
+        for (let i = 0; i < strategiesMapping.length; i++) {
+            let mappingAsset = strategiesMapping[i];
+            let added = items.find(value => value.address === mappingAsset.address);
+
+            if (!added) {
+                items.push(
+                    {
+                        name: mappingAsset.name,
+                        address: mappingAsset.address,
+                        netAssetValue: 0,
+                        liquidationValue: 0,
+                        minWeight: 0,
+                        maxWeight: 0,
+                        targetWeight: 0,
+                        enabled: false,
+                        enabledReward: false
+                    });
+            }
+        }
+
+        for (let i = 0; i < items.length; i++) {
+            items[i].currentWeight = Number((100 * parseFloat(items[i].netAssetValue) / sum).toFixed(3));
+        }
+
+        commit('setM2mItems', items);
+        commit('setM2mTotal', (fromAsset6 ? _fromE6(totalNetAssets.toString()) : _fromE18(totalNetAssets.toString())));
+
+        if (usdPlus) {
+            let totalUsdPlus = _fromE6(await usdPlus.methods.totalSupply().call());
+            let liquidityIndex = (await usdPlus.methods.liquidityIndex().call()).toString();
+
+            commit('setUsdPlusTotal', totalUsdPlus);
+            commit('setUsdPlusLiquidityIndex', liquidityIndex);
+        }
+    },
+
     async getRewardPools({commit, dispatch, getters, rootState}) {
 
         let pools = [];
 
         /* dateFormat by default YYYY-DD-MM */
-        pools.push({ name: 'Pool 1 mock', rewardRate: '10', periodFinish: '2022-05-11'});
-        pools.push({ name: 'Pool 2 mock', rewardRate: '5', periodFinish: '2022-07-30'});
+        pools.push({name: 'Pool 1 mock', rewardRate: '10', periodFinish: '2022-05-11'});
+        pools.push({name: 'Pool 2 mock', rewardRate: '5', periodFinish: '2022-07-30'});
 
         commit('setRewardPools', pools);
     },
@@ -409,7 +508,7 @@ const actions = {
 
         let pools = getters.rewardPools;
 
-        pools = pools.filter(function( obj ) {
+        pools = pools.filter(function (obj) {
             return obj.name !== pool.name;
         });
 
@@ -442,6 +541,7 @@ const actions = {
 
         dispatch('getAbroad');
         dispatch('getStrategyWeights');
+        dispatch('getM2M');
     }
 };
 
@@ -480,6 +580,22 @@ const mutations = {
         state.strategyWeights = value;
     },
 
+    setM2mItems(state, value) {
+        state.m2mItems = value;
+    },
+
+    setM2mTotal(state, value) {
+        state.m2mTotal = value;
+    },
+
+    setUsdPlusTotal(state, value) {
+        state.usdPlusTotal = value;
+    },
+
+    setUsdPlusLiquidityIndex(state, value) {
+        state.usdPlusLiquidityIndex = value;
+    },
+
     setRewardPools(state, value) {
         state.rewardPools = value;
     },
@@ -493,3 +609,13 @@ export default {
     actions,
     mutations
 };
+
+
+
+function _fromE6(value) {
+    return value / 10 ** 6;
+}
+
+function _fromE18(value) {
+    return new BN(value.toString()).divRound(new BN(10).pow(new BN(18))).toString();
+}

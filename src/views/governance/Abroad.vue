@@ -1,22 +1,22 @@
 <template>
     <v-container>
         <v-row justify="center">
-            <h1>Finance</h1>
+            <h1>Abroad</h1>
         </v-row>
 
-        <v-row>
-            <ChangeWeightPanel/>
-        </v-row>
+        <v-col>
+            <AbroadControl/>
+        </v-col>
     </v-container>
 </template>
 
 <script>
-import ChangeWeightPanel from "../../components/governance/ChangeWeightPanel";
+import AbroadControl from "@/components/governance/control/AbroadControl";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-    name: "Finance",
-    components: {ChangeWeightPanel},
+    name: "Abroad",
+    components: {AbroadControl},
 
     computed: {
         ...mapGetters('web3', ['contracts']),
@@ -24,12 +24,12 @@ export default {
 
     watch: {
         contracts: async function (newVal, oldVal) {
-            await this.getFinance();
+            await this.getAbroad();
         },
     },
 
     methods: {
-        ...mapActions('governance', ['getFinance']),
+        ...mapActions('governance', ['getAbroad']),
     },
 }
 </script>

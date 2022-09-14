@@ -65,6 +65,7 @@
         </v-row>
 
         <InvestModalWmatic v-if="showUsdPlusWmatic"/>
+        <InvestModalWmaticUsdc v-if="showWmaticUsdc"/>
         <InvestModalWbnb v-if="showUsdPlusWbnb"/>
         <InvestModalBusdWbnb v-if="showBusdWbnb"/>
 
@@ -83,6 +84,7 @@ import NetworkSelect from "@/components/common/header/NetworkSelect";
 import MenuSelect from "@/components/common/header/MenuSelect";
 import SwapModal from "@/components/swap/SwapModal";
 import InvestModalWmatic from "@/components/market/modal/wmatic/invest/InvestModal";
+import InvestModalWmaticUsdc from "@/components/market/modal/wmaticUsdc/invest/InvestModal";
 import InvestModalWbnb from "@/components/market/modal/wbnb/invest/InvestModal";
 import InvestModalBusdWbnb from "@/components/market/modal/busdWbnb/invest/InvestModal";
 import WrapModal from "@/components/wrap/WrapModal";
@@ -93,6 +95,7 @@ export default {
     components: {
         WrapModal,
         InvestModalWmatic,
+        InvestModalWmaticUsdc,
         InvestModalWbnb,
         InvestModalBusdWbnb,
         SwapModal,
@@ -112,7 +115,7 @@ export default {
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('wrapUI', ['showWrap']),
-        ...mapGetters('marketUI', ['showUsdPlusWbnb', 'showUsdPlusWmatic', 'showBusdWbnb']),
+        ...mapGetters('marketUI', ['showUsdPlusWbnb', 'showUsdPlusWmatic', 'showWmaticUsdc', 'showBusdWbnb']),
     },
 
     methods: {

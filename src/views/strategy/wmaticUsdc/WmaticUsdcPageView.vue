@@ -328,7 +328,7 @@ export default {
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
-        ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
+        ...mapActions('investModal', ['showWmaticUsdcModal', 'showMintView', 'showRedeemView']),
 
         goToAction(id) {
             this.$router.push(id);
@@ -336,12 +336,12 @@ export default {
 
         mintAction() {
             this.showMintView();
-            this.showInvestModal();
+            this.showWmaticUsdcModal();
         },
 
         redeemAction() {
             this.showRedeemView();
-            this.showInvestModal();
+            this.showWmaticUsdcModal();
         }
     }
 

@@ -60,7 +60,7 @@
                             <v-spacer></v-spacer>
                             <label class="card-info-value">{{ wmaticUsdcStrategyData ? wmaticUsdcStrategyData.ownedAsset.token : '—' }}</label>
                             <div class="info-card-icon ml-2">
-                                <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
+                                <v-img :src="require('@/assets/currencies/usdc.png')"/>
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">

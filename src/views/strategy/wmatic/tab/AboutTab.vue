@@ -348,7 +348,7 @@
 
         <template v-if="networkSupport">
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-                <v-btn class="header-btn btn-filled" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" @click="showInvestModal" :disabled="totalSupply.usdPlusWmatic > maxUsdPlusWmaticSupply">
+                <v-btn class="header-btn btn-filled" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" @click="mintAction" :disabled="totalSupply.usdPlusWmatic > maxUsdPlusWmaticSupply">
                     MINT ETS: USD+/wMatic
                 </v-btn>
                 <template v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
@@ -440,7 +440,7 @@ export default {
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
-        ...mapActions('investModal', ['showInvestModal']),
+        ...mapActions('investModal', ['showInvestModal', 'showMintView']),
 
         shortAddress(address) {
             if (address) {
@@ -464,6 +464,11 @@ export default {
 
         openLink(url) {
             window.open(url, '_blank').focus();
+        },
+
+        mintAction() {
+            this.showMintView();
+            this.showInvestModal();
         },
     }
 

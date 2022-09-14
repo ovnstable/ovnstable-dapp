@@ -32,12 +32,12 @@
             </v-list-item>
             <v-list-item class="menu-item" @click="mintAction">
                 <v-list-item-title class="network-select-list-item text-blue">
-                    Mint USD+
+                    Mint / Redeem USD+
                 </v-list-item-title>
             </v-list-item>
             <v-list-item class="menu-item" @click="wrapAction" v-if="showWrap">
                 <v-list-item-title class="network-select-list-item text-blue">
-                    Wrap USD+
+                    Wrap / Unwrap USD+
                 </v-list-item-title>
             </v-list-item>
             <v-divider></v-divider>

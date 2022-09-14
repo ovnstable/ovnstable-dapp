@@ -6,7 +6,6 @@
                     <v-img :src="require('@/assets/currencies/market/BusdWbnb.svg')"/>
                 </div>
                 <label class="banner-title ml-4">ETS: BUSD / WBNB</label>
-                <v-icon class="mb-9" color="#333333">mdi-beta</v-icon>
                 <v-spacer></v-spacer>
                 <div class="network-icon">
                     <v-img :src="require('@/assets/network/bsc.svg')"/>

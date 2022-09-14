@@ -3,7 +3,6 @@
         <v-col cols="12" align-self="start">
             <v-row class="card-row mt-7" justify="end" align="center">
                 <label class="tag-label">cash management / low risk</label>
-                <v-icon class="tag-icon" :class="$wu.isMobile() ? 'ml-1' : 'ml-2'" :size="$wu.isMobile() ? 12 : 16">mdi-star-circle</v-icon>
             </v-row>
 
             <v-row class="card-row mt-12" justify="start" align="center">
@@ -127,10 +126,10 @@
 
         <v-col cols="12" align-self="end">
             <v-row class="card-row mt-2" :class="showWrap ? '' : 'mb-7'" justify="center" align="center">
-                <v-btn class="open-strategy-btn btn-filled" @click.stop="mintAction">Mint USD+</v-btn>
+                <v-btn class="open-strategy-btn btn-filled" @click.stop="mintAction">Mint / Redeem USD+</v-btn>
             </v-row>
             <v-row v-if="showWrap" class="card-row mt-6 mb-7" justify="center" align="center">
-                <v-btn class="open-strategy-btn btn-outlined" @click.stop="wrapAction" outlined>Wrap USD+</v-btn>
+                <v-btn class="open-strategy-btn btn-outlined" @click.stop="wrapAction" outlined>Wrap / Unwrap USD+</v-btn>
             </v-row>
         </v-col>
 

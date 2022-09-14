@@ -1,6 +1,7 @@
 import UsdPlusImage from "@/assets/usdPlus.json";
 import WrappedUsdPlusImage from "@/assets/wUsdPlus.json";
 import UsdPlusWmaticImage from "@/assets/usdPlusWmatic.json";
+import WmaticImageUsdc from "@/assets/wmaticUsdc.json";
 import UsdPlusWbnbImage from "@/assets/usdPlusWbnb.json";
 import BusdWbnbImage from "@/assets/busdWbnb.json";
 import OvnImage from "@/assets/ovn.json";
@@ -78,6 +79,31 @@ const actions = {
             .then((success) => {
                 if (success) {
                     console.log('USD+/WMATIC successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
+    async addWmaticUsdcToken({commit, dispatch, getters, rootState}) {
+
+        await rootState.web3.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: rootState.web3.contracts.wmaticUsdc.options.address,
+                        symbol: process.env.VUE_APP_WMATIC_USDC_TOKEN_NAME,
+                        decimals: 6,
+                        image: WmaticImageUsdc.image,
+                    },
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('ETS WMATIC/USDC successfully added to wallet!')
                 } else {
                     throw new Error('Something went wrong.')
                 }

@@ -81,12 +81,11 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('governance', ['strategyWeights'])
+        ...mapGetters('governance', ['strategyWeights']),
     },
+
     methods: {
-
-        ...mapActions('governance', ['getStrategyWeights', 'setStrategyWeights', 'rebalancePortfolio']),
-
+        ...mapActions('governance', ['setStrategyWeights', 'rebalancePortfolio']),
 
         changeWeightsAction(){
           this.setStrategyWeights(this.strategyWeights);

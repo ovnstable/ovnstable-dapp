@@ -56,13 +56,23 @@ import GovSettings from "../../components/governance/GovSettings";
 
 export default {
     name: "Overview",
+
     components: {GovSettings, ChangeWeightPanel, DelegatePanel},
+
     computed: {
+        ...mapGetters('web3', ['contracts']),
         ...mapGetters('governance', ['overview', 'overviewLoading'])
     },
 
+    watch: {
+        contracts: async function (newVal, oldVal) {
+            await this.getOverview();
+        },
+    },
 
-    methods: {}
+    methods: {
+        ...mapActions('governance', ['getOverview']),
+    },
 }
 </script>
 

@@ -58,35 +58,41 @@
                 </v-row>
 
                 <v-row class="account-info-row mt-8" align="center">
-                    <label class="add-coins-label" :class="$wu.isMobile() ? 'ml-1' : ''">Add tokens to your wallet</label>
+                    <label class="add-coins-label" :class="$wu.isMobile() ? 'ml-1' : 'ml-2'">Add tokens to your wallet</label>
                 </v-row>
 
                 <v-row class="account-info-row" justify="start" align="center">
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : ''" @click="addUsdPlusToken">
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addUsdPlusToken">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
                         </div>
                         <label class="ml-2 coin-btn-label">USD+</label>
                     </v-btn>
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addwUsdPlusToken" v-if="showWrap">
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addwUsdPlusToken" v-if="showWrap">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/wUsdPlus.svg')"/>
                         </div>
                         <label class="ml-2 coin-btn-label">wUSD+</label>
                     </v-btn>
-                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addUsdPlusWmaticToken" v-if="showUsdPlusWmatic">
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addUsdPlusWmaticToken" v-if="showUsdPlusWmatic">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/currencies/market/WmaticUsdPlus.svg')"/>
                         </div>
                         <label class="ml-2 coin-btn-label">USD+/WMATIC</label>
                     </v-btn>
-                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addUsdPlusWbnbToken" v-if="showUsdPlusWbnb">
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addWmaticUsdcToken" v-if="showWmaticUsdc">
+                        <div class="coin-img">
+                            <v-img :src="require('@/assets/currencies/market/WmaticUsdc.svg')"/>
+                        </div>
+                        <label class="ml-2 coin-btn-label">WMATIC/USDC</label>
+                    </v-btn>
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addUsdPlusWbnbToken" v-if="showUsdPlusWbnb">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/currencies/market/UsdPlusWbnb.svg')"/>
                         </div>
                         <label class="ml-2 coin-btn-label">USD+/WBNB</label>
                     </v-btn>
-                    <v-btn class="coin-btn coin-btn-wide" :class="$wu.isMobile() ? 'ma-1' : 'ml-5'" @click="addBusdWbnbToken" v-if="showBusdWbnb">
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addBusdWbnbToken" v-if="showBusdWbnb">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/currencies/market/BusdWbnb.svg')"/>
                         </div>
@@ -134,7 +140,7 @@ export default {
         ...mapGetters('web3', ['walletName']),
         ...mapGetters('accountUI', ['showAccountProfile']),
         ...mapGetters('wrapUI', ['showWrap']),
-        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb', 'showBusdWbnb']),
+        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showWmaticUsdc', 'showUsdPlusWbnb', 'showBusdWbnb']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
 
         accountDisplay: function () {
@@ -151,7 +157,7 @@ export default {
 
     watch: {
         showAccountProfile: function (newValue, oldValue){
-            console.log('Watch: show ' + newValue);
+            console.debug('Watch: show ' + newValue);
             if (newValue){
                 this.loadTransaction();
             }
@@ -161,7 +167,7 @@ export default {
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
         ...mapActions('walletAction', ['disconnectWallet']),
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addUsdPlusWbnbToken', 'addBusdWbnbToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addWmaticUsdcToken', 'addUsdPlusWbnbToken', 'addBusdWbnbToken']),
         ...mapActions('transaction', ['loadTransaction']),
 
         openOnExplorer(hash) {
@@ -231,7 +237,6 @@ export default {
     }
 
     .coin-btn {
-        width: 75px !important;
         height: 46px !important;
 
         font-style: normal !important;
@@ -239,10 +244,6 @@ export default {
         font-size: 12px !important;
         line-height: 14px !important;
         letter-spacing: 0.02em !important;
-    }
-
-    .coin-btn-wide {
-        width: 125px !important;
     }
 
     .account-info-row {
@@ -288,7 +289,6 @@ export default {
     }
 
     .coin-btn {
-        width: 120px !important;
         height: 56px !important;
 
         font-style: normal !important;
@@ -296,10 +296,6 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
-    }
-
-    .coin-btn-wide {
-        width: 180px !important;
     }
 
     .account-info-row {
@@ -345,7 +341,6 @@ export default {
     }
 
     .coin-btn {
-        width: 120px !important;
         height: 56px !important;
 
         font-style: normal !important;
@@ -353,10 +348,6 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
-    }
-
-    .coin-btn-wide {
-        width: 180px !important;
     }
 
     .account-info-row {

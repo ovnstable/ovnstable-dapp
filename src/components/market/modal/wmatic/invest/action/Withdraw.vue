@@ -227,7 +227,6 @@ export default {
 
     computed: {
         ...mapGetters('accountData', ['balance', 'account']),
-        ...mapGetters('accountUI', ['loadingBalance']),
 
         ...mapGetters('investModal', ['usdPlusWmaticApproved']),
 
@@ -236,7 +235,6 @@ export default {
         ...mapGetters("network", ['networkId', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
-        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply']),
 
         icon: function () {
             switch (this.networkId){

@@ -51,133 +51,137 @@
                 <Tooltip text="Past 2 hours"/>
             </v-row>
 
-            <v-row v-if="!isOvercapAvailable" class="card-row card-banner-status-container mt-12" justify="start" align="center">
-                <v-col class="card-banner-body">
-                    <v-row justify="start" align="center">
-                        <label class="capacity-status-text">ETS capacity status</label>
-                        <v-spacer></v-spacer>
-                        <label class="capacity-status-value" :class="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply ? 'label-error' : ''">
-                            {{ totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply ? 'FULL' : 'AVAILABLE' }}
-                        </label>
-                    </v-row>
-                    <v-row justify="start" align="center" class="mt-5">
-                        <v-progress-linear
+            <template v-if="!isOvercapAvailable || !networkSupport">
+                <v-row class="card-row card-banner-status-container mt-12" justify="start" align="center">
+                    <v-col class="card-banner-body">
+                        <v-row justify="start" align="center">
+                            <label class="capacity-status-text">ETS capacity status</label>
+                            <v-spacer></v-spacer>
+                            <label class="capacity-status-value" :class="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply ? 'label-error' : ''">
+                                {{ totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply ? 'FULL' : 'AVAILABLE' }}
+                            </label>
+                        </v-row>
+                        <v-row justify="start" align="center" class="mt-5">
+                            <v-progress-linear
                                 rounded
                                 height="7"
                                 class="progress-info"
                                 background-opacity="0"
                                 :value="(totalSupply.usdPlusWbnb / maxUsdPlusWbnbSupply) * 100"
                                 :color="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply ? '#CF3F92' : '#1C95E7'"
-                        ></v-progress-linear>
-                    </v-row>
-                    <v-row justify="start" align="center" class="mt-5">
-                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(totalSupply.usdPlusWbnb, 2) }}</label>
-                        <v-spacer></v-spacer>
-                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 2) }}</label>
-                    </v-row>
-                    <v-row justify="start" align="center">
-                        <label class="capacity-status-sub-text">CURRENT TVL</label>
-                        <v-spacer></v-spacer>
-                        <label class="capacity-status-sub-text">MAX TVL</label>
-                    </v-row>
-                </v-col>
-            </v-row>
+                            ></v-progress-linear>
+                        </v-row>
+                        <v-row justify="start" align="center" class="mt-5">
+                            <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(totalSupply.usdPlusWbnb, 2) }}</label>
+                            <v-spacer></v-spacer>
+                            <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 2) }}</label>
+                        </v-row>
+                        <v-row justify="start" align="center">
+                            <label class="capacity-status-sub-text">CURRENT TVL</label>
+                            <v-spacer></v-spacer>
+                            <label class="capacity-status-sub-text">MAX TVL</label>
+                        </v-row>
+                    </v-col>
+                </v-row>
 
-            <v-row v-if="!isOvercapAvailable" class="card-row card-banner-container mt-7" justify="start" align="center">
-                <v-col class="card-banner-body">
-                    <v-row align="center">
-                        <div class="card-banner-icon">
-                            <v-img :src="require('@/assets/icon/history.svg')"/>
-                        </div>
-                        <label :class="$wu.isMobile() ? 'card-info-banner' : 'card-info'" class="ml-2">Hedging against BNB price volatility</label>
-                    </v-row>
-                    <v-row align="center">
-                        <div class="card-banner-icon mt-4">
-                            <v-img :src="require('@/assets/icon/refresh.svg')"/>
-                        </div>
-                        <label :class="$wu.isMobile() ? 'card-info-banner' : 'card-info'" class="mt-4 ml-2">Automatically managed liquidation ratio</label>
-                    </v-row>
-                    <v-row align="center">
-                        <div class="card-banner-icon mt-4">
-                            <v-img :src="require('@/assets/icon/coins.svg')"/>
-                        </div>
-                        <label :class="$wu.isMobile() ? 'card-info-banner' : 'card-info'" class="mt-4 ml-2">Low fees</label>
-                    </v-row>
-                </v-col>
-            </v-row>
+                <v-row class="card-row card-banner-container mt-7" justify="start" align="center">
+                    <v-col class="card-banner-body">
+                        <v-row align="center">
+                            <div class="card-banner-icon">
+                                <v-img :src="require('@/assets/icon/history.svg')"/>
+                            </div>
+                            <label :class="$wu.isMobile() ? 'card-info-banner' : 'card-info'" class="ml-2">Hedging against BNB price volatility</label>
+                        </v-row>
+                        <v-row align="center">
+                            <div class="card-banner-icon mt-4">
+                                <v-img :src="require('@/assets/icon/refresh.svg')"/>
+                            </div>
+                            <label :class="$wu.isMobile() ? 'card-info-banner' : 'card-info'" class="mt-4 ml-2">Automatically managed liquidation ratio</label>
+                        </v-row>
+                        <v-row align="center">
+                            <div class="card-banner-icon mt-4">
+                                <v-img :src="require('@/assets/icon/coins.svg')"/>
+                            </div>
+                            <label :class="$wu.isMobile() ? 'card-info-banner' : 'card-info'" class="mt-4 ml-2">Low fees</label>
+                        </v-row>
+                    </v-col>
+                </v-row>
+            </template>
 
-            <v-row v-if="isOvercapAvailable" class="card-row card-banner-status-container mt-12" justify="start" align="center">
-                <v-col class="card-banner-body">
-                    <v-row justify="start" align="center">
-                        <label class="capacity-status-text">ETS capacity status</label>
-                        <v-spacer></v-spacer>
-                        <label class="capacity-status-value" :class="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply ? (totalSupply.usdPlusWbnb >= (maxUsdPlusWbnbSupply + totalOvercap) ? 'label-error' : 'label-overcap') : ''">
-                            {{ totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply ? (totalSupply.usdPlusWbnb >= (maxUsdPlusWbnbSupply + totalOvercap) ? 'FULL' : 'OVERCAP') : 'AVAILABLE' }}
-                        </label>
-                    </v-row>
-                    <v-row justify="start" align="center" class="mt-5">
-                        <v-progress-linear
+            <template v-else>
+                <v-row class="card-row card-banner-status-container mt-12" justify="start" align="center">
+                    <v-col class="card-banner-body">
+                        <v-row justify="start" align="center">
+                            <label class="capacity-status-text">ETS capacity status</label>
+                            <v-spacer></v-spacer>
+                            <label class="capacity-status-value" :class="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply ? (totalSupply.usdPlusWbnb >= (maxUsdPlusWbnbSupply + totalOvercap) ? 'label-error' : 'label-overcap') : ''">
+                                {{ totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply ? (totalSupply.usdPlusWbnb >= (maxUsdPlusWbnbSupply + totalOvercap) ? 'FULL' : 'OVERCAP') : 'AVAILABLE' }}
+                            </label>
+                        </v-row>
+                        <v-row justify="start" align="center" class="mt-5">
+                            <v-progress-linear
                                 rounded
                                 height="7"
                                 class="progress-info"
                                 background-opacity="0"
                                 :value="(totalSupply.usdPlusWbnb / (maxUsdPlusWbnbSupply + totalOvercap)) * 100"
                                 :color="totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply ? (totalSupply.usdPlusWbnb >= (maxUsdPlusWbnbSupply + totalOvercap) ? '#CF3F92' : '#F3BA2F') : '#1C95E7'"
-                        ></v-progress-linear>
-                    </v-row>
-                    <v-row justify="start" align="center" class="mt-5">
-                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(totalSupply.usdPlusWbnb, 2) }}</label>
-                        <v-spacer></v-spacer>
-                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 2) }} + ${{ $utils.formatMoneyComma(totalOvercap, 2) }}</label>
-                    </v-row>
-                    <v-row justify="start" align="center">
-                        <label class="capacity-status-sub-text mt-1">CURRENT TVL</label>
-                        <v-spacer></v-spacer>
-                        <label class="capacity-status-sub-text mt-1">MAX TVL + OVERCAP</label>
-                        <Tooltip :text="`Extra allocation event! You're eligible to mint ETS: USD+/WBNB $` + $utils.formatMoneyComma(this.overcapRemaining, 2) + ' more overcap'"/>
-                    </v-row>
-                </v-col>
-            </v-row>
+                            ></v-progress-linear>
+                        </v-row>
+                        <v-row justify="start" align="center" class="mt-5">
+                            <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(totalSupply.usdPlusWbnb, 2) }}</label>
+                            <v-spacer></v-spacer>
+                            <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 2) }} + ${{ $utils.formatMoneyComma(totalOvercap, 2) }}</label>
+                        </v-row>
+                        <v-row justify="start" align="center">
+                            <label class="capacity-status-sub-text mt-1">CURRENT TVL</label>
+                            <v-spacer></v-spacer>
+                            <label class="capacity-status-sub-text mt-1">MAX TVL + OVERCAP</label>
+                            <Tooltip :text="`Extra allocation event! You're eligible to mint ETS: USD+/WBNB $` + $utils.formatMoneyComma(this.overcapRemaining, 2) + ' more overcap'"/>
+                        </v-row>
+                    </v-col>
+                </v-row>
 
-            <v-row v-if="isOvercapAvailable" class="card-row card-banner-status-container mt-7" justify="start" align="center">
-                <v-col class="card-banner-body">
-                    <v-row align="center" class="info-row">
-                        <label class="my-2 card-info minor-card-label">Your balance in ETS</label>
-                        <v-spacer></v-spacer>
-                        <label class="card-info-value minor-card-label">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
-                    </v-row>
-                    <v-row align="center" class="mt-4 info-row">
-                        <label class="my-2 card-info minor-card-label">Your profit/loss last day</label>
+                <v-row class="card-row card-banner-status-container mt-7" justify="start" align="center">
+                    <v-col class="card-banner-body">
+                        <v-row align="center" class="info-row">
+                            <label class="my-2 card-info minor-card-label">Your balance in ETS</label>
+                            <v-spacer></v-spacer>
+                            <label class="card-info-value minor-card-label">{{ this.balance.usdPlusWbnb ? ($utils.formatMoneyComma(this.balance.usdPlusWbnb, 2) + ' USD+') : '—' }}</label>
+                        </v-row>
+                        <v-row align="center" class="mt-4 info-row">
+                            <label class="my-2 card-info minor-card-label">Your profit/loss last day</label>
 
-                        <v-spacer></v-spacer>
-                        <label class="card-info-value minor-card-label" :class="clientProfitDayUsdPlusWbnb > 0 ? 'label-success' : ''">
-                            {{ clientProfitDayUsdPlusWbnb ? ((clientProfitDayUsdPlusWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWbnb, 4)) : '—' }}
-                        </label>
-                    </v-row>
-                    <v-row class="mt-4 info-row" justify="start" align="center">
-                        <label class="mt-2 card-info minor-card-label">You minted overcap, USD+</label>
-                    </v-row>
-                    <v-row justify="start" align="center" class="mt-5">
-                        <v-progress-linear
+                            <v-spacer></v-spacer>
+                            <label class="card-info-value minor-card-label" :class="clientProfitDayUsdPlusWbnb > 0 ? 'label-success' : ''">
+                                {{ clientProfitDayUsdPlusWbnb ? ((clientProfitDayUsdPlusWbnb > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(clientProfitDayUsdPlusWbnb, 4)) : '—' }}
+                            </label>
+                        </v-row>
+                        <v-row class="mt-4 info-row" justify="start" align="center">
+                            <label class="mt-2 card-info minor-card-label">You minted overcap, USD+</label>
+                        </v-row>
+                        <v-row justify="start" align="center" class="mt-5">
+                            <v-progress-linear
                                 rounded
                                 height="7"
                                 class="progress-info"
                                 background-opacity="0"
                                 :value="((walletOvercapLimit - overcapRemaining) / walletOvercapLimit) * 100"
                                 color="#F3BA2F"
-                        ></v-progress-linear>
-                    </v-row>
-                    <v-row justify="start" align="center" class="mt-5">
-                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit - overcapRemaining, 2) }}</label>
-                        <v-spacer></v-spacer>
-                        <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit, 2) }}</label>
-                    </v-row>
-                    <v-row justify="start" align="center">
-                        <v-spacer></v-spacer>
-                        <label class="capacity-status-sub-text">OVERCAP LIMIT</label>
-                    </v-row>
-                </v-col>
-            </v-row>
+                            ></v-progress-linear>
+                        </v-row>
+                        <v-row justify="start" align="center" class="mt-5">
+                            <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit - overcapRemaining, 2) }}</label>
+                            <v-spacer></v-spacer>
+                            <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(walletOvercapLimit, 2) }}</label>
+                        </v-row>
+                        <v-row justify="start" align="center">
+                            <v-spacer></v-spacer>
+                            <label class="capacity-status-sub-text">OVERCAP LIMIT</label>
+                        </v-row>
+                    </v-col>
+                </v-row>
+            </template>
         </v-col>
 
         <v-col cols="12" align-self="end">
@@ -209,6 +213,11 @@ export default {
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
         ...mapGetters('overcapData', ['isOvercapAvailable', 'totalOvercap', 'walletOvercapLimit']),
         ...mapGetters('accountData', ['balance']),
+        ...mapGetters('network', ['networkId']),
+
+        networkSupport: function () {
+            return this.networkId === 56;
+        },
     },
 
     data: () => ({
@@ -236,11 +245,6 @@ export default {
     },
 
     methods: {
-        openStrategyAction() {
-            this.$router.push('/ets/wbnb');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        },
-
         openStrategyCard() {
             this.$router.push('/ets/usd-plus-wbnb');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -535,11 +539,11 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #CF3F92;
+    color: #F3BA2F;
 }
 
 .tag-icon {
-    color: #CF3F92;
+    color: #F3BA2F;
 }
 
 .card-title {
@@ -566,7 +570,7 @@ export default {
 }
 
 .card-info-risk {
-    color: #CF3F92 !important;
+    color: #F3BA2F !important;
 }
 
 .info-row {

@@ -63,6 +63,23 @@ const state = {
 function _getParams(networkName) {
 
     if (!networkName) {
+        try {
+            let urlParams = new URLSearchParams(window.location.search);
+
+            if (urlParams.has('network')) {
+                let urlNetworkParameter = urlParams.get('network');
+                console.debug("URL network set to: " + urlNetworkParameter);
+
+                if (urlNetworkParameter) {
+                    networkName = urlNetworkParameter;
+                }
+            }
+        } catch (e) {
+            console.debug("Error occurred when trying to get url network parameter", e);
+        }
+    }
+
+    if (!networkName) {
         networkName = localStorage.getItem('selectedNetwork');
 
         if (!networkName) {
@@ -164,34 +181,40 @@ const actions = {
         dispatch('web3/initWeb3', null, {root: true});
     },
 
+    saveNetworkToLocalStore({commit, dispatch, getters, rootState}, network) {
+
+        switch (network) {
+            case "polygon":
+            case "polygon_dev":
+            case "137":
+            case "31337":
+                localStorage.setItem('selectedNetwork', 'polygon');
+                break;
+            case "bsc":
+            case "56":
+                localStorage.setItem('selectedNetwork', 'bsc');
+                break;
+            case "avax":
+            case "avalanche":
+            case "43114":
+                localStorage.setItem('selectedNetwork', 'avax');
+                break;
+            case "op":
+            case "optimism":
+            case "10":
+                localStorage.setItem('selectedNetwork', 'op');
+                break;
+            default:
+                localStorage.setItem('selectedNetwork', 'polygon');
+                break;
+        }
+    },
+
     async setWalletNetwork({commit, dispatch, getters, rootState}, network) {
 
         if (rootState.web3.provider) {
-            switch (network) {
-                case "polygon":
-                case "polygon_dev":
-                case "137":
-                case "31337":
-                    localStorage.setItem('selectedNetwork', 'polygon');
-                    break;
-                case "bsc":
-                case "56":
-                    localStorage.setItem('selectedNetwork', 'bsc');
-                    break;
-                case "avax":
-                case "avalanche":
-                case "43114":
-                    localStorage.setItem('selectedNetwork', 'avax');
-                    break;
-                case "op":
-                case "optimism":
-                case "10":
-                    localStorage.setItem('selectedNetwork', 'op');
-                    break;
-                default:
-                    localStorage.setItem('selectedNetwork', 'polygon');
-                    break;
-            }
+
+            dispatch('saveNetworkToLocalStore', network);
 
             try {
                 await rootState.web3.provider.request({
@@ -269,7 +292,7 @@ const actions = {
                             break;
                     }
 
-                    await getters.provider.request({
+                    await rootState.web3.provider.request({
                         method: 'wallet_addEthereumChain',
                         params: [params],
                     });

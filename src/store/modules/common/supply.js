@@ -2,13 +2,15 @@ const state = {
 
     totalSupply: {
         usdPlusWmatic: 0,
+        wmaticUsdc: 0,
         usdPlusWbnb: 0,
         busdWbnb: 0,
     },
 
     maxUsdPlusWmaticSupply: 275000.00,
+    maxWmaticUsdcSupply: 500000.00,
     maxUsdPlusWbnbSupply: 500000.00,
-    maxBusdWbnbSupply: 100000.00,
+    maxBusdWbnbSupply: 500000.00,
 };
 
 const getters = {
@@ -19,6 +21,10 @@ const getters = {
 
     maxUsdPlusWmaticSupply(state) {
         return state.maxUsdPlusWmaticSupply;
+    },
+
+    maxWmaticUsdcSupply(state) {
+        return state.maxWmaticUsdcSupply;
     },
 
     maxUsdPlusWbnbSupply(state) {
@@ -34,7 +40,7 @@ const actions = {
 
     async resetSupply({commit, dispatch, getters}) {
 
-        console.log('Supply: resetSupply');
+        console.debug('Supply: resetSupply');
 
         commit('setTotalSupply', {
             usdPlusWmatic: 0,
@@ -46,10 +52,11 @@ const actions = {
 
     async refreshSupply({commit, dispatch, getters, rootState}) {
 
-        console.log('Supply: refreshSupply');
+        console.debug('Supply: refreshSupply');
 
         let web3 = rootState.web3;
         let usdPlusWmatic;
+        let wmaticUsdc;
         let usdPlusWbnb;
         let busdWbnb;
 
@@ -57,21 +64,24 @@ const actions = {
             usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.totalSupply().call();
         } catch (e) {
             usdPlusWmatic = null;
-            console.log('ERROR: ' + e)
+        }
+
+        try {
+            wmaticUsdc = await web3.contracts.wmaticUsdc.methods.totalSupply().call();
+        } catch (e) {
+            wmaticUsdc = null;
         }
 
         try {
             usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.totalSupply().call();
         } catch (e) {
             usdPlusWbnb = null;
-            console.log('ERROR: ' + e)
         }
 
         try {
             busdWbnb = await web3.contracts.busdWbnb.methods.totalSupply().call();
         } catch (e) {
             busdWbnb = null;
-            console.log('ERROR: ' + e)
         }
 
 
@@ -82,7 +92,15 @@ const actions = {
                 usdPlusWmatic = rootState.marketData.wmaticStrategyData.tvl;
             }
         } catch (e) {
-            console.log('ERROR: ' + e)
+        }
+
+        try {
+            if (wmaticUsdc) {
+                wmaticUsdc = web3.web3.utils.fromWei(wmaticUsdc, 'mwei');
+            } else {
+                wmaticUsdc = rootState.marketData.wmaticUsdcStrategyData.tvl;
+            }
+        } catch (e) {
         }
 
         try {
@@ -92,7 +110,6 @@ const actions = {
                 usdPlusWbnb = rootState.marketData.usdPlusWbnbStrategyData.tvl;
             }
         } catch (e) {
-            console.log('ERROR: ' + e)
         }
 
         try {
@@ -102,11 +119,11 @@ const actions = {
                 busdWbnb = rootState.marketData.busdWbnbStrategyData.tvl;
             }
         } catch (e) {
-            console.log('ERROR: ' + e)
         }
 
         commit('setTotalSupply', {
             usdPlusWmatic: usdPlusWmatic,
+            wmaticUsdc: wmaticUsdc,
             usdPlusWbnb: usdPlusWbnb,
             busdWbnb: busdWbnb,
         })

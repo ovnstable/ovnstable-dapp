@@ -25,10 +25,10 @@
 
                             <template v-else>
                                 <v-btn class="header-btn btn-filled" :class="showWrap ? 'mr-5' : 'mr-2'" @click="mintAction" v-if="$wu.isFull()">
-                                    Mint USD+
+                                    Mint / Redeem USD+
                                 </v-btn>
                                 <v-btn class="header-btn btn-outlined mr-2" outlined @click="wrapAction" v-if="showWrap && $wu.isFull()">
-                                    Wrap USD+
+                                    Wrap / Unwrap USD+
                                 </v-btn>
                             </template>
                         </template>
@@ -64,7 +64,10 @@
         </v-row>
 
         <InvestModalWmatic v-if="showUsdPlusWmatic"/>
+        <InvestModalWmaticUsdc v-if="showWmaticUsdc"/>
         <InvestModalWbnb v-if="showUsdPlusWbnb"/>
+        <InvestModalBusdWbnb v-if="showBusdWbnb"/>
+
         <SwapModal/>
         <WrapModal/>
 
@@ -80,7 +83,9 @@ import NetworkSelect from "@/components/common/header/NetworkSelect";
 import MenuSelect from "@/components/common/header/MenuSelect";
 import SwapModal from "@/components/swap/SwapModal";
 import InvestModalWmatic from "@/components/market/modal/wmatic/invest/InvestModal";
+import InvestModalWmaticUsdc from "@/components/market/modal/wmaticUsdc/invest/InvestModal";
 import InvestModalWbnb from "@/components/market/modal/wbnb/invest/InvestModal";
+import InvestModalBusdWbnb from "@/components/market/modal/busdWbnb/invest/InvestModal";
 import WrapModal from "@/components/wrap/WrapModal";
 
 export default {
@@ -89,7 +94,9 @@ export default {
     components: {
         WrapModal,
         InvestModalWmatic,
+        InvestModalWmaticUsdc,
         InvestModalWbnb,
+        InvestModalBusdWbnb,
         SwapModal,
         MenuSelect,
         NetworkSelect,
@@ -107,7 +114,7 @@ export default {
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('wrapUI', ['showWrap']),
-        ...mapGetters('marketUI', ['showUsdPlusWbnb', 'showUsdPlusWmatic']),
+        ...mapGetters('marketUI', ['showUsdPlusWbnb', 'showUsdPlusWmatic', 'showWmaticUsdc', 'showBusdWbnb']),
     },
 
     methods: {
@@ -212,7 +219,7 @@ export default {
     }
 
     .header-btn, .header-btn-connect {
-        width: 200px !important;
+        width: 210px !important;
         height: 36px !important;
 
         font-style: normal !important;

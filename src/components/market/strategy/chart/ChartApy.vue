@@ -122,13 +122,14 @@ export default {
         zoom: "all",
         slice: null,
         chart: null,
+        contractAddress: null,
 
         avgApy: null,
         usdPlusDataEnabled: true,
     }),
 
     computed: {
-        ...mapGetters('network', ['networkName', 'appApiUrl']),
+        ...mapGetters('network', ['polygonApi', 'bscApi']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -145,15 +146,35 @@ export default {
 
     methods: {
         async zoomChart(zoom) {
+
+            let apiUrl;
+
+            switch (this.etsName) {
+                case "USD+/WMATIC":
+                    apiUrl = this.polygonApi;
+                    this.contractAddress = '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf';
+                    break;
+                case "WMATIC/USDC":
+                    apiUrl = this.polygonApi;
+                    this.contractAddress = '0xd52caB8AfC8ECd08b7CFa6D07e224a56F943e4c4';
+                    break;
+                case "USD+/WBNB":
+                    apiUrl = this.bscApi;
+                    this.contractAddress = '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1';
+                    break;
+                case "BUSD/WBNB":
+                    apiUrl = this.bscApi;
+                    this.contractAddress = '0xc6eca7a3b863d720393DFc62494B6eaB22567D37';
+                    break;
+            }
+
             let fetchOptions = {
                 headers: {
-                    "Access-Control-Allow-Origin": this.appApiUrl
+                    "Access-Control-Allow-Origin": apiUrl
                 }
             };
 
-            let contractAddress = this.networkName === 'polygon' ? '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf' : (this.networkName === 'bsc' ? '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1' : '0');
-
-            await fetch(this.appApiUrl + '/hedge-strategies/' + contractAddress + '/avg-apy-info/' + zoom, fetchOptions)
+            await fetch(apiUrl + '/hedge-strategies/' + this.contractAddress + '/avg-apy-info/' + zoom, fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;

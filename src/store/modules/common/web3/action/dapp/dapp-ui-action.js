@@ -16,6 +16,7 @@ const actions = {
                 dispatch('farmUI/hidePage', null, {root: true});
                 dispatch('wrapUI/showPage', null, {root: true});
                 dispatch('marketUI/showUsdPlusWmatic', null, {root: true});
+                dispatch('marketUI/showWmaticUsdc', null, {root: true});
                 dispatch('marketUI/hideUsdPlusWbnb', null, {root: true});
                 dispatch('marketUI/hideBusdWbnb', null, {root: true});
                 break;
@@ -24,6 +25,7 @@ const actions = {
                 dispatch('farmUI/hidePage', null, {root: true});
                 dispatch('wrapUI/hidePage', null, {root: true});
                 dispatch('marketUI/hideUsdPlusWmatic', null, {root: true});
+                dispatch('marketUI/hideWmaticUsdc', null, {root: true});
                 dispatch('marketUI/showUsdPlusWbnb', null, {root: true});
                 dispatch('marketUI/showBusdWbnb', null, {root: true});
                 break;
@@ -33,6 +35,7 @@ const actions = {
                 dispatch('farmUI/hidePage', null, {root: true});
                 dispatch('wrapUI/hidePage', null, {root: true});
                 dispatch('marketUI/hideUsdPlusWmatic', null, {root: true});
+                dispatch('marketUI/hideWmaticUsdc', null, {root: true});
                 dispatch('marketUI/hideUsdPlusWbnb', null, {root: true});
                 dispatch('marketUI/hideBusdWbnb', null, {root: true});
                 break;
@@ -42,6 +45,7 @@ const actions = {
                 dispatch('farmUI/hidePage', null, {root: true});
                 dispatch('wrapUI/showPage', null, {root: true});
                 dispatch('marketUI/hideUsdPlusWmatic', null, {root: true});
+                dispatch('marketUI/hideWmaticUsdc', null, {root: true});
                 dispatch('marketUI/hideUsdPlusWbnb', null, {root: true});
                 dispatch('marketUI/hideBusdWbnb', null, {root: true});
                 break;

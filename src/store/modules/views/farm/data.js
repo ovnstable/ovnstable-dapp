@@ -14,12 +14,12 @@ const getters = {
 const actions = {
 
     async refreshFarm({commit, dispatch, getters, rootState}) {
-        console.log('FarmData: refreshFarm');
+        console.debug('FarmData: refreshFarm');
         dispatch('loadPoolList');
     },
 
     async loadPoolList({commit, dispatch, getters, rootState}) {
-        console.log('Farm: loadPoolList');
+        console.debug('Farm: loadPoolList');
 
         let poolList = [];
 

@@ -3,8 +3,10 @@ const state = {
 
     show: false,
     showBusdWbnbModal: false,
+    showWmaticUsdcModal: false,
 
     usdPlusWmaticApproved: false,
+    wmaticUsdcApproved: false,
     usdPlusWbnbApproved: false,
     busdWbnbApproved: false,
     usdPlusApproved: false,
@@ -24,12 +26,20 @@ const getters = {
         return state.showBusdWbnbModal;
     },
 
+    showWmaticUsdcModal(state) {
+        return state.showWmaticUsdcModal;
+    },
+
     usdPlusWmaticApproved(state) {
         return state.usdPlusWmaticApproved;
     },
 
+    wmaticUsdcApproved(state) {
+        return state.wmaticUsdcApproved;
+    },
+
     usdPlusWbnbApproved(state) {
-        return state.usdPlusWmaticApproved;
+        return state.usdPlusWbnbApproved;
     },
 
     busdWbnbApproved(state) {
@@ -51,6 +61,10 @@ const actions = {
         commit('setShowBusdWbnbModal', true);
     },
 
+    showWmaticUsdcModal({commit, dispatch, getters}) {
+        commit('setShowWmaticUsdcModal', true);
+    },
+
     async showRedeemView({commit, dispatch, getters, rootState}){
         commit('setIsMintView', false)
     },
@@ -67,12 +81,20 @@ const actions = {
         commit('setShowBusdWbnbModal', false);
     },
 
+    closeWmaticUsdcModal({commit, dispatch, getters}) {
+        commit('setShowWmaticUsdcModal', false);
+    },
+
     approveUsdPlusWmatic({commit, dispatch, getters}) {
         commit('setUsdPlusWmaticApproved', true);
     },
 
+    approveWmaticUsdc({commit, dispatch, getters}) {
+        commit('setWmaticUsdcApproved', true);
+    },
+
     approveUsdPlusWbnb({commit, dispatch, getters}) {
-        commit('setUsdPlusWmaticApproved', true);
+        commit('setUsdPlusWbnbApproved', true);
     },
 
     approveBusdWbnb({commit, dispatch, getters}) {
@@ -98,12 +120,20 @@ const mutations = {
         state.showBusdWbnbModal = showBusdWbnbModal;
     },
 
+    setShowWmaticUsdcModal(state, showWmaticUsdcModal) {
+        state.showWmaticUsdcModal = showWmaticUsdcModal;
+    },
+
     setUsdPlusWmaticApproved(state, usdPlusWmaticApproved) {
         state.usdPlusWmaticApproved = usdPlusWmaticApproved;
     },
 
-    setUsdPlusWbnbApproved(state, usdPlusWmaticApproved) {
-        state.usdPlusWmaticApproved = usdPlusWmaticApproved;
+    setWmaticUsdcApproved(state, wmaticUsdcApproved) {
+        state.wmaticUsdcApproved = wmaticUsdcApproved;
+    },
+
+    setUsdPlusWbnbApproved(state, usdPlusWbnbApproved) {
+        state.usdPlusWbnbApproved = usdPlusWbnbApproved;
     },
 
     setBusdWbnbApproved(state, busdWbnbApproved) {

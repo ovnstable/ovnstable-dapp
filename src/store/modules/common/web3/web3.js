@@ -40,10 +40,10 @@ const actions = {
         if (!getters.provider) {
             let provider = await new Web3.providers.HttpProvider(rpcUrl);
             web3 = await new Web3(provider);
-            console.log('InitWeb3: Provider default');
+            console.debug('InitWeb3: Provider default');
         } else {
             web3 = await new Web3(getters.provider);
-            console.log('InitWeb3: Provider Custom');
+            console.debug('InitWeb3: Provider Custom');
         }
 
         commit('setWeb3', web3);

@@ -137,7 +137,7 @@ const actions = {
 
     async refreshStats({commit, dispatch, getters}){
 
-        console.log('StatsData: refreshStats');
+        console.debug('StatsData: refreshStats');
 
         dispatch('refreshPayouts');
         dispatch('refreshCurrentTotalData');

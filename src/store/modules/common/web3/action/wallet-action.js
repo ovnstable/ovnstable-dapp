@@ -37,7 +37,7 @@ const actions = {
 
             subscriptions: {
                 wallet: async wallet => {
-                    console.log('OnBoard: wallet');
+                    console.debug('OnBoard: wallet');
 
                     commit('web3/setProvider', wallet.provider, {root: true});
 
@@ -57,8 +57,10 @@ const actions = {
                             }
 
                             if (SUPPORTED_NETWORKS.includes(newNetworkId)) {
+                                dispatch('network/saveNetworkToLocalStore', newNetworkId.toString(), {root: true});
+
                                 if (rootState.network.networkId !== newNetworkId) {
-                                    dispatch('network/changeDappNetwork', newNetworkId.toString(), {root: true})
+                                    dispatch('network/changeDappNetwork', newNetworkId.toString(), {root: true});
                                 } else {
                                     commit('network/setSwitchToOtherNetwork', false, {root: true});
                                 }
@@ -133,7 +135,14 @@ const actions = {
         let rpcUrl = rootState.network.rpcUrl;
         let appApiUrl = rootState.network.appApiUrl;
 
-        const uauthOnboard = await dispatch('getUnstoppableConfig');
+        // Unstoppable domains config for BNC Onboard
+        const uauthOnboard = new UAuthBncOnboard({
+                uauth: new UAuth({
+                    clientID: process.env.VUE_APP_UD_CLIENT_ID,
+                    redirectUri: process.env.VUE_APP_UD_REDIRECT_URI,
+                    scope: 'openid wallet'
+                })
+            });
 
         return [
             {
@@ -196,19 +205,6 @@ const actions = {
                 preferred: false
             },
         ];
-    },
-
-    async getUnstoppableConfig({commit, dispatch, getters, rootState}) {
-        let appApiUrl = rootState.network.appApiUrl;
-
-        // Unstoppable domains config for BNC Onboard
-        return new UAuthBncOnboard({
-            uauth: new UAuth({
-                clientID: process.env.VUE_APP_UD_CLIENT_ID,
-                redirectUri: appApiUrl,
-                scope: 'openid wallet'
-            })
-        });
     },
 
     async checkAccount({commit, dispatch, getters, rootState}, account) {

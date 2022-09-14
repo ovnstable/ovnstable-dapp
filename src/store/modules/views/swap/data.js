@@ -11,7 +11,7 @@ const actions = {
 
 
     async refreshSwap({commit, dispatch, getters, rootState}) {
-        console.log('SwapData: refreshSwap');
+        console.debug('SwapData: refreshSwap');
 
         dispatch('accountData/refreshBalance', null, {root:true});
     },

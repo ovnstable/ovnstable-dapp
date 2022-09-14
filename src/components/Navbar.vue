@@ -36,7 +36,6 @@
                 </v-list-item-icon>
                 <v-list-item-title>
                     <label class="navbar-page-label" :class="selectedTab === 'market' ? 'selected-page' : ''">Earn</label>
-                    <v-icon class="mb-5" small :class="selectedTab === 'market' ? 'selected-page' : ''">mdi-beta</v-icon>
                 </v-list-item-title>
             </v-list-item>
 

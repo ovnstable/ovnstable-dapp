@@ -18,7 +18,7 @@
                 </label>
                 <label class="tab-btn ml-4" v-bind:class="activeTabOptimism" @click="openLink('https://op.overnight.fi/fund')">
                     Optimism
-                    <v-icon class="ml-n1 mb-5" small color="#C5C9D1">mdi-alpha</v-icon>
+                    <v-icon class="ml-n1 mb-5" small color="#C5C9D1">mdi-beta</v-icon>
                 </label>
             </v-row>
         </div>-->

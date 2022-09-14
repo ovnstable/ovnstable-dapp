@@ -19,23 +19,30 @@
 
 <script>
 import ProposalList from "../../components/governance/ProposalList";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "Proposals",
+
     components: {ProposalList},
+
     data:()=>({
-
-
     }),
 
     computed:{
+        ...mapGetters('web3', ['contracts']),
         ...mapGetters('governance', ['proposalsLoading', 'proposals'])
     },
 
-    methods:{
+    watch: {
+        contracts: async function (newVal, oldVal) {
+            await this.getProposals();
+        },
+    },
 
-    }
+    methods: {
+        ...mapActions('governance', ['getProposals']),
+    },
 }
 </script>
 

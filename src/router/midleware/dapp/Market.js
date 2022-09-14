@@ -1,6 +1,6 @@
 export default async function getMarket({ context, nextMiddleware }){
     try {
-        console.log('Get Dapp/Market');
+        console.debug('Get Dapp/Market');
 
         context.store.dispatch('menuUI/selectTab', 'market');
         context.store.dispatch('statsData/refreshStats');

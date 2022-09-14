@@ -348,7 +348,7 @@
 
         <template v-if="networkSupport">
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-                <v-btn class="header-btn btn-filled" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" @click="showInvestModal" :disabled="totalSupply.usdPlusWmatic > maxUsdPlusWmaticSupply">
+                <v-btn class="header-btn btn-filled" :class="(totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply) ? 'disabled-btn' : ''" @click="mintAction" :disabled="totalSupply.usdPlusWmatic > maxUsdPlusWmaticSupply">
                     MINT ETS: USD+/wMatic
                 </v-btn>
                 <template v-if="totalSupply.usdPlusWmatic >= maxUsdPlusWmaticSupply">
@@ -440,7 +440,7 @@ export default {
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
-        ...mapActions('investModal', ['showInvestModal']),
+        ...mapActions('investModal', ['showInvestModal', 'showMintView']),
 
         shortAddress(address) {
             if (address) {
@@ -464,6 +464,11 @@ export default {
 
         openLink(url) {
             window.open(url, '_blank').focus();
+        },
+
+        mintAction() {
+            this.showMintView();
+            this.showInvestModal();
         },
     }
 
@@ -532,8 +537,8 @@ export default {
     .list-title-num {
         font-style: normal;
         font-weight: 600;
-        font-size: 54px;
-        line-height: 54px;
+        font-size: 50px;
+        line-height: 56px;
     }
 
     .list-sub-title-text {
@@ -628,23 +633,23 @@ export default {
     .strategy-info-label {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .title-card-text {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 18px;
+        line-height: 22px;
         letter-spacing: 0.04em;
     }
 
     .info-card-text {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .title-card-icon {
@@ -655,15 +660,15 @@ export default {
     .section-title-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 18px;
+        line-height: 22px;
         letter-spacing: 0.04em;
     }
 
     .list-title-text {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
+        font-size: 18px;
         line-height: 28px;
     }
 
@@ -671,14 +676,14 @@ export default {
         font-style: normal;
         font-weight: 600;
         font-size: 54px;
-        line-height: 54px;
+        line-height: 60px;
     }
 
     .list-sub-title-text {
         font-style: normal;
         font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .progress-text {
@@ -700,15 +705,15 @@ export default {
     .card-info {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .card-info-value, .card-info-risk {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 18px;
+        line-height: 22px;
         letter-spacing: 0.04em;
     }
 
@@ -743,8 +748,8 @@ export default {
     .full-status-error-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 12px;
-        line-height: 20px;
+        font-size: 14px;
+        line-height: 22px;
     }
 }
 
@@ -766,23 +771,23 @@ export default {
     .strategy-info-label {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .title-card-text {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 18px;
+        line-height: 22px;
         letter-spacing: 0.04em;
     }
 
     .info-card-text {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .title-card-icon {
@@ -793,15 +798,15 @@ export default {
     .section-title-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 18px;
+        line-height: 22px;
         letter-spacing: 0.04em;
     }
 
     .list-title-text {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
+        font-size: 18px;
         line-height: 28px;
     }
 
@@ -809,14 +814,14 @@ export default {
         font-style: normal;
         font-weight: 600;
         font-size: 54px;
-        line-height: 54px;
+        line-height: 60px;
     }
 
     .list-sub-title-text {
         font-style: normal;
         font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .progress-text {
@@ -838,15 +843,15 @@ export default {
     .card-info {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .card-info-value, .card-info-risk {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 18px;
+        line-height: 22px;
         letter-spacing: 0.04em;
     }
 
@@ -1005,7 +1010,7 @@ export default {
     font-style: normal;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #CF3F92;
+    color: #F3BA2F;
 }
 
 .address-card-text {

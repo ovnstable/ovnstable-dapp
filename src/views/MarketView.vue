@@ -5,24 +5,42 @@
         </div>
 
         <v-row align="start" justify="start" class="ma-0">
-          <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
-            <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-              <label  @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabFeatured" disabled>Featured<v-icon size="16">mdi-star-circle</v-icon></label>
-              <label style="color: #C5C9D1 !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabHold">USD+</label>
-              <label style="color: #C5C9D1 !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
-              <label  @click="tab=4"   class="tab-btn ml-4" v-bind:class="activeTabHedged" disabled>ETS</label>
+              <v-col class="ma-n3">
+                    <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
+                          <label  @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabFeatured">Featured&nbsp;<v-icon size="16" class="mb-1">mdi-star-circle</v-icon></label>
+                          <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabHold">USD+</label>
+                          <label style="color: #C5C9D1 !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
+                          <label  @click="tab=4" class="tab-btn ml-4" v-bind:class="activeTabHedged">ETS</label>
 
-              <v-spacer></v-spacer>
+                          <v-spacer></v-spacer>
 
-              <v-menu offset-y v-if="$wu.isFull()"> </v-menu>
-            </v-row>
-          </v-col>
+                          <v-menu offset-y v-if="$wu.isFull()"> </v-menu>
+                    </v-row>
+              </v-col>
         </v-row>
 
         <div class="mt-7 cards-list-container">
             <v-row class="d-flex" justify="start">
-                <WmaticUsdPlus class="ma-3"/>
-                <WbnbUsdPlus class="ma-3"/>
+                <template v-if="tab === 1">
+                    <WmaticUsdc class="ma-3"/>
+                    <WbnbBusd class="ma-3"/>
+                    <WbnbUsdPlus class="ma-3"/>
+                    <WmaticUsdPlus class="ma-3"/>
+                </template>
+
+                <template v-if="tab === 2">
+                    <UsdPlus class="ma-3"/>
+                </template>
+
+                <template v-if="tab === 3">
+                </template>
+
+                <template v-if="tab === 4">
+                    <WmaticUsdc class="ma-3"/>
+                    <WbnbBusd class="ma-3"/>
+                    <WbnbUsdPlus class="ma-3"/>
+                    <WmaticUsdPlus class="ma-3"/>
+                </template>
             </v-row>
         </div>
 
@@ -36,11 +54,17 @@ import WmaticUsdPlus from "@/components/market/cards/wmatic/WmaticUsdPlus";
 import {mapGetters} from "vuex";
 import WbnbUsdPlus from "@/components/market/cards/wbnb/WbnbUsdPlus";
 import OvercapBanner from "@/components/market/cards/wbnb/banner/OvercapBanner";
+import UsdPlus from "@/components/market/cards/hold/UsdPlus";
+import WbnbBusd from "@/components/market/cards/busdWbnb/WbnbBusd";
+import WmaticUsdc from "@/components/market/cards/wmaticUsdc/WmaticUsdc";
 
 export default {
     name: "MarketView",
 
     components: {
+        WmaticUsdc,
+        WbnbBusd,
+        UsdPlus,
         OvercapBanner,
         WbnbUsdPlus,
         WmaticUsdPlus,
@@ -51,7 +75,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb']),
+        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb', 'showBusdWbnb']),
 
         activeTabFeatured: function () {
             return {
@@ -146,7 +170,6 @@ export default {
   color: var(--links-blue) !important;
   cursor: pointer;
 }
-
 
 .tab-button-in-active {
   color: #C5C9D1 !important;

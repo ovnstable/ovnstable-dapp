@@ -42,7 +42,7 @@ const routes = [
                 redirect: '/market',
             },
             {
-                path: '/ets/wbnb',
+                path: '/ets/usd-plus-wbnb',
                 name: 'WbnbPageView',
                 component: () => import('../views/strategy/wbnb/WbnbPageView.vue'),
                 meta: {
@@ -52,9 +52,29 @@ const routes = [
                 }
             },
             {
-                path: '/ets/wmatic',
+                path: '/ets/busd-wbnb',
+                name: 'BusdWbnbPageView',
+                component: () => import('../views/strategy/busdWbnb/BusdWbnbPageView.vue'),
+                meta: {
+                    middleware: [
+                        Wbnb
+                    ]
+                }
+            },
+            {
+                path: '/ets/usd-plus-wmatic',
                 name: 'WmaticPageView',
                 component: () => import('../views/strategy/wmatic/WmaticPageView.vue'),
+                meta: {
+                    middleware: [
+                        Wmatic
+                    ]
+                }
+            },
+            {
+                path: '/ets/wmatic-usdc',
+                name: 'WmaticUsdcPageView',
+                component: () => import('../views/strategy/wmaticUsdc/WmaticUsdcPageView.vue'),
                 meta: {
                     middleware: [
                         Wmatic
@@ -175,11 +195,11 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
 
     if (!to.meta.middleware || !to.meta.middleware.length) {
-        console.log(`root from:${from.path} to:${to.path} to.middleware:`, null);
+        console.debug(`root from:${from.path} to:${to.path} to.middleware:`, null);
         return next();
     }
     const middleware = to.meta.middleware;
-    console.log(`root from:${from.path} to:${to.path} to.middleware:`, middleware);
+    console.debug(`root from:${from.path} to:${to.path} to.middleware:`, middleware);
 
     const context = {
         to,

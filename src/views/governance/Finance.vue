@@ -1,22 +1,28 @@
 <template>
-    <v-container>
+    <v-container class="governance-page-container">
         <v-row justify="center">
             <h1>Finance</h1>
         </v-row>
 
         <v-row>
-            <ChangeWeightPanel/>
+            <v-col cols="10">
+                <ChangeWeightPanel/>
+            </v-col>
+            <v-col cols="2">
+                <WeightActionsPanel/>
+            </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script>
-import ChangeWeightPanel from "../../components/governance/ChangeWeightPanel";
+import ChangeWeightPanel from "../../components/governance/finance/ChangeWeightPanel";
 import {mapActions, mapGetters} from "vuex";
+import WeightActionsPanel from "@/components/governance/finance/WeightActionsPanel";
 
 export default {
     name: "Finance",
-    components: {ChangeWeightPanel},
+    components: {WeightActionsPanel, ChangeWeightPanel},
 
     computed: {
         ...mapGetters('web3', ['contracts']),
@@ -36,4 +42,7 @@ export default {
 
 <style scoped>
 
+.governance-page-container {
+    min-width: 96% !important;
+}
 </style>

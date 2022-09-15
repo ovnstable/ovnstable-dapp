@@ -14,6 +14,7 @@ const state = {
     proposalsLoading: true,
     settings: {},
     settingsLoading: true,
+    financeLoading: true,
 
     strategyWeights: null,
 
@@ -21,6 +22,8 @@ const state = {
     m2mTotal: null,
     usdPlusTotal: null,
     usdPlusLiquidityIndex: null,
+
+    hasChangeAccount: false,
 
     rewardPools: [],
 
@@ -58,6 +61,10 @@ const getters = {
         return state.settingsLoading;
     },
 
+    financeLoading(state) {
+        return state.financeLoading;
+    },
+
     proposals(state) {
         return state.proposals;
     },
@@ -84,6 +91,10 @@ const getters = {
 
     rewardPools(state) {
         return state.rewardPools;
+    },
+
+    hasChangeAccount(state) {
+        return state.hasChangeAccount;
     },
 };
 
@@ -317,7 +328,16 @@ const actions = {
         dispatch('getSettings')
     },
 
-    async setStrategyWeights({commit, dispatch, getters, rootState}, weights) {
+    async checkAccount({commit, dispatch, getters, rootState}) {
+        let pm = rootState.web3.contracts.pm;
+        let account = rootState.accountData.account;
+
+        let hasRole = pm.methods.hasRole((await pm.methods.PORTFOLIO_AGENT_ROLE().call()), account);
+
+        commit('setHasChangeAccount', hasRole);
+    },
+
+    async setStrategiesM2MWeights({commit, dispatch, getters, rootState}, weights) {
 
         let pm = rootState.web3.contracts.pm;
         let account = rootState.accountData.account;
@@ -340,16 +360,7 @@ const actions = {
             items.push(item);
         }
 
-        let network = rootState.network.networkName;
-
-        if (network === "polygon_dev") {
-            pm.methods.setStrategyWeights(items).send(params);
-        } else {
-            let governor = rootState.web3.contracts.governor;
-            let abi = pm.methods.setStrategyWeights(items).encodeABI();
-            let name = 'Proposal #' + getters.proposals.length + 1 + ' Change weights';
-            await governor.methods.proposeExec([pm.options.address], [0], [abi], name).send(params);
-        }
+        pm.methods.setStrategyWeights(items).send(params);
     },
 
     async rebalancePortfolio({commit, dispatch, getters, rootState}) {
@@ -539,9 +550,14 @@ const actions = {
 
     async getFinance({commit, dispatch, getters, rootState}) {
 
+        commit('setFinanceLoading', true);
+
         dispatch('getAbroad');
-        dispatch('getStrategyWeights');
-        dispatch('getM2M');
+        dispatch('checkAccount');
+        await dispatch('getStrategyWeights');
+        await dispatch('getM2M');
+
+        commit('setFinanceLoading', false);
     }
 };
 
@@ -562,6 +578,10 @@ const mutations = {
 
     setSettingsLoading(state, value) {
         state.settingsLoading = value;
+    },
+
+    setFinanceLoading(state, value) {
+        state.financeLoading = value;
     },
 
     setOverviewLoading(state, value) {
@@ -598,6 +618,10 @@ const mutations = {
 
     setRewardPools(state, value) {
         state.rewardPools = value;
+    },
+
+    setHasChangeAccount(state, value) {
+        state.hasChangeAccount = value;
     },
 
 }

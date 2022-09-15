@@ -5,6 +5,8 @@ const state = {
 
     /* buyUSD+, buyAsset, estimateGas, approve */
     errorType: null,
+
+    errorMsg: null,
 };
 
 const getters = {
@@ -16,18 +18,29 @@ const getters = {
     errorType(state) {
         return state.errorType;
     },
+
+    errorMsg(state) {
+        return state.errorMsg;
+    },
 };
 
 const actions = {
 
     showErrorModal({commit, dispatch, getters}, errorType) {
-        commit('setShow', true);
         commit('setErrorType', errorType);
+        commit('setShow', true);
+    },
+
+    showErrorModalWithMsg({commit, dispatch, getters}, errorProperties) {
+        commit('setErrorType', errorProperties.errorType);
+        commit('setErrorMsg', errorProperties.errorMsg);
+        commit('setShow', true);
     },
 
     closeErrorModal({commit, dispatch, getters}) {
-        commit('setShow', false);
         commit('setErrorType', null);
+        commit('setErrorMsg', null);
+        commit('setShow', false);
     },
 
 };
@@ -40,6 +53,10 @@ const mutations = {
 
     setErrorType(state, errorType) {
         state.errorType = errorType;
+    },
+
+    setErrorMsg(state, value) {
+        state.errorMsg = value;
     },
 };
 

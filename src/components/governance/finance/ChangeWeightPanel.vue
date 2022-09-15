@@ -26,35 +26,44 @@
                             <b>{{ item.currentWeight }}</b>
                         </td>
                         <td>
-                            <v-text-field
-                                type="number"
-                                :rules="[rules.required, checkNumber]"
-                                dense
-                                outlined
-                                v-model="item.minWeight"
-                                :disabled="financeLoading || !hasChangeAccount">
-                            </v-text-field>
+                            <v-row class="fill-height" align="center" justify="center">
+                                <v-text-field
+                                    class="m2m-field"
+                                    type="number"
+                                    :rules="[rules.required, checkNumber]"
+                                    dense
+                                    outlined
+                                    v-model="item.minWeight"
+                                    :disabled="financeLoading || !hasChangeAccount">
+                                </v-text-field>
+                            </v-row>
                         </td>
                         <td>
-                            <v-text-field
-                                type="number"
-                                :rules="[rules.required, checkNumber]"
-                                dense
-                                outlined
-                                v-model="item.targetWeight"
-                                :disabled="financeLoading || !hasChangeAccount">
-                            </v-text-field>
+                            <v-row class="fill-height" align="center" justify="center">
+                                <v-text-field
+                                    class="m2m-field"
+                                    type="number"
+                                    :rules="[rules.required, checkNumber]"
+                                    dense
+                                    outlined
+                                    v-model="item.targetWeight"
+                                    :disabled="financeLoading || !hasChangeAccount">
+                                </v-text-field>
+                            </v-row>
                         </td>
                         <td>
-                            <v-text-field
-                                type="number"
-                                :rules="[rules.required, checkNumber]"
-                                dense
-                                outlined
-                                v-model="item.maxWeight"
-                                :disabled="financeLoading || !hasChangeAccount"
-                            >
-                            </v-text-field>
+                            <v-row class="fill-height" align="center" justify="center">
+                                <v-text-field
+                                    class="m2m-field"
+                                    type="number"
+                                    :rules="[rules.required, checkNumber]"
+                                    dense
+                                    outlined
+                                    v-model="item.maxWeight"
+                                    :disabled="financeLoading || !hasChangeAccount"
+                                >
+                                </v-text-field>
+                            </v-row>
                         </td>
                         <td>
                             <v-switch
@@ -68,6 +77,10 @@
                                 v-model="item.enabledReward"
                             ></v-switch>
                         </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="10"></td>
                     </tr>
 
                     <tr>
@@ -97,14 +110,26 @@
                         <td class="text-right">
                             <b>${{ $utils.formatMoney(totalUsdPlusValue, 2) }}</b>
                         </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="10"></td>
+                    </tr>
+
+                    <tr>
                         <td>
+                            <b>USD+ liquidity index</b>
                         </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td colspan="9">
+                            <b>{{ usdPlusLiquidityIndex }}</b>
+                        </td>
                     </tr>
                     </tbody>
                 </template>
@@ -139,7 +164,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('governance', ['m2mItems', 'm2mTotal', 'financeLoading', 'hasChangeAccount']),
+        ...mapGetters('governance', ['m2mItems', 'm2mTotal', 'financeLoading', 'hasChangeAccount', 'usdPlusLiquidityIndex']),
         ...mapGetters('statsData', ['totalUsdPlusValue']),
         ...mapGetters('network', ['explorerUrl']),
 

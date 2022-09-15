@@ -339,6 +339,8 @@ const actions = {
 
     async setStrategiesM2MWeights({commit, dispatch, getters, rootState}, weights) {
 
+        commit('setFinanceLoading', true);
+
         let pm = rootState.web3.contracts.pm;
         let account = rootState.accountData.account;
         let params = {from: account};
@@ -360,16 +362,139 @@ const actions = {
             items.push(item);
         }
 
-        pm.methods.setStrategyWeights(items).send(params);
+        await pm.methods.setStrategyWeights(items).send(params);
+
+        commit('setFinanceLoading', false);
+    },
+
+    async estimateSetStrategiesM2MWeights({commit, dispatch, getters, rootState}, weights) {
+
+        commit('setFinanceLoading', true);
+
+        let result;
+
+        try {
+            let blockNum = await rootState.web3.web3.eth.getBlockNumber();
+            let pm = rootState.web3.contracts.pm;
+            let account = rootState.accountData.account;
+            let estimateOptions = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
+
+            let items = [];
+            for (let i = 0; i < weights.length; i++) {
+
+                let weight = weights[i];
+
+                let item = {};
+
+                item.strategy = weight.address;
+                item.minWeight = weight.minWeight * 1000;
+                item.targetWeight = weight.targetWeight * 1000;
+                item.maxWeight = weight.maxWeight * 1000;
+                item.enabled = weight.enabled;
+                item.enabledReward = weight.enabledReward;
+
+                items.push(item);
+            }
+
+            await pm.methods.setStrategyWeights(items).estimateGas(estimateOptions)
+                .then(function (gasAmount) {
+                    result = {
+                        haveError: false,
+                        gas: gasAmount,
+                    };
+                })
+                .catch(function (error) {
+                    if (error && error.message) {
+                        result = {
+                            haveError: true,
+                            from: account,
+                            to: pm.options.address,
+                            gas: null,
+                            gasPrice: parseInt(estimateOptions.gasPrice, 16),
+                            method: pm.methods.setStrategyWeights(items).encodeABI(),
+                            message: error.message,
+                            block: blockNum
+                        };
+                    } else {
+                        result = {
+                            haveError: true,
+                            message: "Unexpected error",
+                        };
+                    }
+                });
+        } catch (e) {
+            result = {
+                haveError: true,
+                message: "Unexpected error",
+            };
+        }
+
+        commit('setFinanceLoading', false);
+
+        return result;
     },
 
     async rebalancePortfolio({commit, dispatch, getters, rootState}) {
+
+        commit('setFinanceLoading', true);
 
         let pm = rootState.web3.contracts.pm;
         let account = rootState.accountData.account;
         let params = {from: account};
 
-        pm.methods.balance().send(params);
+        await pm.methods.balance().send(params);
+
+        commit('setFinanceLoading', false);
+    },
+
+    async estimateRebalancePortfolio({commit, dispatch, getters, rootState}) {
+
+        commit('setFinanceLoading', true);
+
+        let result;
+
+        try {
+            let blockNum = await rootState.web3.web3.eth.getBlockNumber();
+            let pm = rootState.web3.contracts.pm;
+            let account = rootState.accountData.account;
+            let estimateOptions = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
+
+            await pm.methods.balance().estimateGas(estimateOptions)
+                .then(function (gasAmount) {
+                    result = {
+                        haveError: false,
+                        gas: gasAmount,
+                    };
+                })
+                .catch(function (error) {
+                    if (error && error.message) {
+                        result = {
+                            haveError: true,
+                            from: account,
+                            to: pm.options.address,
+                            gas: null,
+                            gasPrice: parseInt(estimateOptions.gasPrice, 16),
+                            method: pm.methods.balance().encodeABI(),
+                            message: error.message,
+                            block: blockNum
+                        };
+                    } else {
+                        result = {
+                            haveError: true,
+                            message: "Unexpected error",
+                        };
+                    }
+                });
+        } catch (e) {
+            result = {
+                haveError: true,
+                message: "Unexpected error",
+            };
+        }
+
+        commit('setFinanceLoading', false);
+
+        return result;
     },
 
     async getStrategyWeights({commit, dispatch, getters, rootState}) {

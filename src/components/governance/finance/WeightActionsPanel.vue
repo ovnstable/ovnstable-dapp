@@ -15,7 +15,7 @@
             <v-row class="ma-0 mt-4">
                 <v-btn @click="changeWeightsAction"
                        outlined
-                       :disabled="!hasChangeAccount ||financeLoading || !weightsIsBtnEnabled || !weightsIsBtnEnabledMinMax || !weightsIsBtnEnabledTargetWeight || !weightsIsBtnEnabledTurnOn">
+                       :disabled="!hasChangeAccount || financeLoading || !weightsIsBtnEnabled || !weightsIsBtnEnabledMinMax || !weightsIsBtnEnabledTargetWeight || !weightsIsBtnEnabledTurnOn">
                     Change Weights
                 </v-btn>
             </v-row>
@@ -35,16 +35,20 @@
                 <label class="error-label" v-if="!financeLoading && !weightsIsBtnEnabledTargetWeight">Target weight must be between min and max weights</label>
             </v-row>
         </template>
+
+        <ErrorModal/>
     </v-container>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
+import {axios} from "@/plugins/http-axios";
+import ErrorModal from "@/components/common/modal/action/ErrorModal";
 
 export default {
     name: "WeightActionsPanel",
-    components: {Tooltip},
+    components: {ErrorModal, Tooltip},
     data: () => ({
     }),
 
@@ -108,16 +112,39 @@ export default {
     },
 
     methods: {
-        ...mapActions('governance', ['setStrategiesM2MWeights', 'rebalancePortfolio', 'getFinance']),
+        ...mapActions('governance', ['setStrategiesM2MWeights', 'estimateSetStrategiesM2MWeights', 'rebalancePortfolio', 'estimateRebalancePortfolio', 'getFinance']),
+        ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
 
         async changeWeightsAction() {
-            await this.setStrategiesM2MWeights(this.m2mItems);
-            await this.getFinance();
+
+            let estimatedGasValue = await this.estimateSetStrategiesM2MWeights(this.m2mItems);
+
+            if (estimatedGasValue) {
+                if (estimatedGasValue.haveError) {
+                    this.showErrorModalWithMsg({errorType: 'governanceChangeWeights', errorMsg: estimatedGasValue});
+                } else {
+                    await this.setStrategiesM2MWeights(this.m2mItems);
+                    await this.getFinance();
+                }
+            } else {
+                this.showErrorModal('governanceChangeWeights');
+            }
         },
 
         async rebalanceAction() {
-            await this.rebalancePortfolio();
-            await this.getFinance();
+
+            let estimatedGasValue = await this.estimateRebalancePortfolio();
+
+            if (estimatedGasValue) {
+                if (estimatedGasValue.haveError) {
+                    this.showErrorModalWithMsg({errorType: 'governanceRebalance', errorMsg: estimatedGasValue});
+                } else {
+                    await this.rebalancePortfolio();
+                    await this.getFinance();
+                }
+            } else {
+                this.showErrorModal('governanceRebalance');
+            }
         },
 
         updateM2MItems() {

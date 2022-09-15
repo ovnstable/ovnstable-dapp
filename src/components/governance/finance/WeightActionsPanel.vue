@@ -8,7 +8,7 @@
                 </v-btn>
             </v-row>
             <v-row class="ma-0 mt-4">
-                <v-btn @click="rebalanceAction" outlined :disabled="financeLoading && !hasChangeAccount">
+                <v-btn @click="rebalanceAction" outlined :disabled="financeLoading || !hasChangeAccount">
                     Rebalance
                 </v-btn>
             </v-row>

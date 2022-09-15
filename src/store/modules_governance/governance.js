@@ -331,8 +331,8 @@ const actions = {
     async checkAccount({commit, dispatch, getters, rootState}) {
         let pm = rootState.web3.contracts.pm;
         let account = rootState.accountData.account;
-
-        let hasRole = pm.methods.hasRole((await pm.methods.PORTFOLIO_AGENT_ROLE().call()), account);
+        let roleId = await pm.methods.PORTFOLIO_AGENT_ROLE().call();
+        let hasRole = await pm.methods.hasRole(roleId, account).call();
 
         commit('setHasChangeAccount', hasRole);
     },

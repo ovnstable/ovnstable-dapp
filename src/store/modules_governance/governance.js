@@ -369,18 +369,7 @@ const actions = {
         let account = rootState.accountData.account;
         let params = {from: account};
 
-        let network = rootState.network.networkName;
-
-        if (network === "polygon_dev") {
-            pm.methods.balance().send(params);
-        } else {
-            let governor = rootState.web3.contracts.governor;
-            let abi = pm.methods.balance().encodeABI();
-            let name = 'Proposal #' + getters.proposals.length + 1 + ' Balance';
-            await governor.methods.proposeExec([pm.options.address], [0], [abi], name).send(params);
-        }
-
-
+        pm.methods.balance().send(params);
     },
 
     async getStrategyWeights({commit, dispatch, getters, rootState}) {

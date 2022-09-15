@@ -41,9 +41,8 @@
                                 :rules="[rules.required, checkNumber]"
                                 dense
                                 outlined
-                                v-model="item.maxWeight"
-                                :disabled="financeLoading || !hasChangeAccount"
-                            >
+                                v-model="item.targetWeight"
+                                :disabled="financeLoading || !hasChangeAccount">
                             </v-text-field>
                         </td>
                         <td>
@@ -52,8 +51,9 @@
                                 :rules="[rules.required, checkNumber]"
                                 dense
                                 outlined
-                                v-model="item.targetWeight"
-                                :disabled="financeLoading || !hasChangeAccount">
+                                v-model="item.maxWeight"
+                                :disabled="financeLoading || !hasChangeAccount"
+                            >
                             </v-text-field>
                         </td>
                         <td>
@@ -88,6 +88,24 @@
                         <td></td>
                         <td></td>
                     </tr>
+
+                    <tr>
+                        <td>
+                            <b>Total USD+</b>
+                        </td>
+                        <td></td>
+                        <td class="text-right">
+                            <b>${{ $utils.formatMoney(totalUsdPlusValue, 2) }}</b>
+                        </td>
+                        <td>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     </tbody>
                 </template>
             </v-data-table>
@@ -109,8 +127,8 @@ export default {
             {text: 'Liquidation Value', value: 'liquidationValue', width: '140px', align: 'end'},
             {text: 'Current Weight', value: 'currentWeight', width: '80px', align: 'end'},
             {text: 'Min Weight', value: 'minWeight'},
-            {text: 'Max Weight', value: 'maxWeight'},
             {text: 'Target Weight', value: 'targetWeight'},
+            {text: 'Max Weight', value: 'maxWeight'},
             {text: 'Enabled', value: 'enabled'},
             {text: 'Enabled Reward', value: 'enabledReward'},
         ],
@@ -122,6 +140,7 @@ export default {
 
     computed: {
         ...mapGetters('governance', ['m2mItems', 'm2mTotal', 'financeLoading', 'hasChangeAccount']),
+        ...mapGetters('statsData', ['totalUsdPlusValue']),
         ...mapGetters('network', ['explorerUrl']),
 
         totalLiquidationSum: function () {
@@ -130,7 +149,7 @@ export default {
 
             this.m2mItems.forEach(item => {
                 if (item && item.liquidationValue) {
-                    result += item.liquidationValue;
+                    result += parseFloat(item.liquidationValue);
                 }
             });
 

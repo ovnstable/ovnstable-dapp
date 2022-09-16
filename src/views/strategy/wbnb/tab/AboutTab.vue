@@ -390,7 +390,7 @@ export default {
 
 
     computed: {
-        ...mapGetters('network', ['explorerUrl', 'networkId']),
+        ...mapGetters('network', ['explorerUrl', 'networkId', 'bscConfig']),
         ...mapGetters('marketData', ['usdPlusWbnbStrategyData']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
@@ -451,13 +451,13 @@ export default {
 
         openTokenOnScan(hash) {
             if (hash && hash !== '') {
-                window.open(this.explorerUrl + "token/" + hash, '_blank').focus();
+                window.open(this.bscConfig.explorerUrl + "token/" + hash, '_blank').focus();
             }
         },
 
         openStrategyOnScan(hash) {
             if (hash && hash !== '') {
-                window.open(this.explorerUrl + "address/" + hash, '_blank').focus();
+                window.open(this.bscConfig.explorerUrl + "address/" + hash, '_blank').focus();
             }
         },
 

@@ -383,7 +383,7 @@ export default {
 
 
     computed: {
-        ...mapGetters('network', ['explorerUrl', 'networkId']),
+        ...mapGetters('network', ['explorerUrl', 'networkId', 'polygonConfig']),
         ...mapGetters('marketData', ['wmaticUsdcStrategyData']),
         ...mapGetters('supplyData', ['totalSupply', 'maxWmaticUsdcSupply']),
 
@@ -443,13 +443,13 @@ export default {
 
         openTokenOnScan(hash) {
             if (hash && hash !== '') {
-                window.open(this.explorerUrl + "token/" + hash, '_blank').focus();
+                window.open(this.polygonConfig.explorerUrl + "token/" + hash, '_blank').focus();
             }
         },
 
         openStrategyOnScan(hash) {
             if (hash && hash !== '') {
-                window.open(this.explorerUrl + "address/" + hash, '_blank').focus();
+                window.open(this.polygonConfig.explorerUrl + "address/" + hash, '_blank').focus();
             }
         },
 

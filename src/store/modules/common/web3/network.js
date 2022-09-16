@@ -57,6 +57,11 @@ const state = {
     avaxApi: AVALANCHE_PARAMS.appApiUrl,
     opApi: OPTIMISM_PARAMS.appApiUrl,
 
+    polygonConfig: POLYGON_PARAMS,
+    bscConfig: BSC_PARAMS,
+    avaxConfig: AVALANCHE_PARAMS,
+    opConfig: OPTIMISM_PARAMS,
+
     switchToOtherNetwork: false,
 };
 
@@ -161,6 +166,22 @@ const getters = {
 
     switchToOtherNetwork(state) {
         return state.switchToOtherNetwork;
+    },
+
+    polygonConfig(state) {
+        return state.polygonConfig;
+    },
+
+    bscConfig(state) {
+        return state.bscConfig;
+    },
+
+    avaxConfig(state) {
+        return state.avaxConfig;
+    },
+
+    opConfig(state) {
+        return state.opConfig;
     },
 };
 

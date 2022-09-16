@@ -22,9 +22,10 @@
         <div class="mt-7 cards-list-container">
             <v-row class="d-flex" justify="start">
                 <template v-if="tab === 1">
-                    <WmaticUsdc class="ma-3"/>
+                    <EtsMoonstone class="ma-3"/>
                     <WbnbBusd class="ma-3"/>
                     <WbnbUsdPlus class="ma-3"/>
+                    <WmaticUsdc class="ma-3"/>
                     <WmaticUsdPlus class="ma-3"/>
                 </template>
 
@@ -36,9 +37,10 @@
                 </template>
 
                 <template v-if="tab === 4">
-                    <WmaticUsdc class="ma-3"/>
+                    <EtsMoonstone class="ma-3"/>
                     <WbnbBusd class="ma-3"/>
                     <WbnbUsdPlus class="ma-3"/>
+                    <WmaticUsdc class="ma-3"/>
                     <WmaticUsdPlus class="ma-3"/>
                 </template>
             </v-row>
@@ -57,11 +59,13 @@ import OvercapBanner from "@/components/market/cards/wbnb/banner/OvercapBanner";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import WbnbBusd from "@/components/market/cards/busdWbnb/WbnbBusd";
 import WmaticUsdc from "@/components/market/cards/wmaticUsdc/WmaticUsdc";
+import EtsMoonstone from "@/components/market/cards/etsMoonstone/EtsMoonstone";
 
 export default {
     name: "MarketView",
 
     components: {
+        EtsMoonstone,
         WmaticUsdc,
         WbnbBusd,
         UsdPlus,

@@ -2,6 +2,7 @@ import UsdPlusImage from "@/assets/usdPlus.json";
 import WrappedUsdPlusImage from "@/assets/wUsdPlus.json";
 import UsdPlusWmaticImage from "@/assets/usdPlusWmatic.json";
 import WmaticImageUsdc from "@/assets/wmaticUsdc.json";
+import EtsMoonstoneImage from "@/assets/ets_moonstone.json";
 import UsdPlusWbnbImage from "@/assets/usdPlusWbnb.json";
 import BusdWbnbImage from "@/assets/busdWbnb.json";
 import OvnImage from "@/assets/ovn.json";
@@ -104,6 +105,31 @@ const actions = {
             .then((success) => {
                 if (success) {
                     console.log('ETS WMATIC/USDC successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
+    async addEtsMoonstoneToken({commit, dispatch, getters, rootState}) {
+
+        await rootState.web3.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: rootState.web3.contracts.etsMoonstoneToken.options.address,
+                        symbol: process.env.VUE_APP_ETS_MOONSTONE_TOKEN_NAME,
+                        decimals: 6,
+                        image: EtsMoonstoneImage.image,
+                    },
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('ETS MOONSTONE successfully added to wallet!')
                 } else {
                     throw new Error('Something went wrong.')
                 }

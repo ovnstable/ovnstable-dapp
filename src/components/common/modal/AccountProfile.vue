@@ -86,6 +86,12 @@
                         </div>
                         <label class="ml-2 coin-btn-label">WMATIC/USDC</label>
                     </v-btn>
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addEtsMoonstoneToken" v-if="showEtsMoonstone">
+                        <div class="coin-img">
+                            <v-img :src="require('@/assets/currencies/market/ets_moonstone.svg')"/>
+                        </div>
+                        <label class="ml-2 coin-btn-label">ETS MOONSTONE</label>
+                    </v-btn>
                     <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addUsdPlusWbnbToken" v-if="showUsdPlusWbnb">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/currencies/market/UsdPlusWbnb.svg')"/>
@@ -140,7 +146,7 @@ export default {
         ...mapGetters('web3', ['walletName']),
         ...mapGetters('accountUI', ['showAccountProfile']),
         ...mapGetters('wrapUI', ['showWrap']),
-        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showWmaticUsdc', 'showUsdPlusWbnb', 'showBusdWbnb']),
+        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showWmaticUsdc', 'showEtsMoonstone', 'showUsdPlusWbnb', 'showBusdWbnb']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
 
         accountDisplay: function () {
@@ -154,7 +160,6 @@ export default {
         },
     },
 
-
     watch: {
         showAccountProfile: function (newValue, oldValue){
             console.debug('Watch: show ' + newValue);
@@ -167,7 +172,7 @@ export default {
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
         ...mapActions('walletAction', ['disconnectWallet']),
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addWmaticUsdcToken', 'addUsdPlusWbnbToken', 'addBusdWbnbToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addWmaticUsdcToken', 'addEtsMoonstoneToken', 'addUsdPlusWbnbToken', 'addBusdWbnbToken']),
         ...mapActions('transaction', ['loadTransaction']),
 
         openOnExplorer(hash) {

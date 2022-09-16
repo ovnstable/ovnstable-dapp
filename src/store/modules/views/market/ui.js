@@ -3,6 +3,7 @@ const state = {
 
     showUsdPlusWmatic: true,
     showWmaticUsdc: true,
+    showEtsMoonstone: true,
     showUsdPlusWbnb: true,
     showBusdWbnb: true,
 
@@ -16,6 +17,10 @@ const getters = {
 
     showWmaticUsdc(state) {
         return state.showWmaticUsdc;
+    },
+
+    showEtsMoonstone(state) {
+        return state.showEtsMoonstone;
     },
 
     showUsdPlusWbnb(state) {
@@ -46,6 +51,14 @@ const actions = {
         commit('setShowWmaticUsdc', true);
     },
 
+    async hideEtsMoonstone({commit, dispatch, getters, rootState}) {
+        commit('setShowEtsMoonstone', false);
+    },
+
+    async showEtsMoonstone({commit, dispatch, getters, rootState}) {
+        commit('setShowEtsMoonstone', true);
+    },
+
     async hideUsdPlusWbnb({commit, dispatch, getters, rootState}) {
         commit('setShowUsdPlusWbnb', false);
     },
@@ -72,6 +85,10 @@ const mutations = {
 
     setShowWmaticUsdc(state, showWmaticUsdc) {
         state.showWmaticUsdc = showWmaticUsdc;
+    },
+
+    setShowEtsMoonstone(state, value) {
+        state.showEtsMoonstone = value;
     },
 
     setShowUsdPlusWbnb(state, showUsdPlusWbnb) {

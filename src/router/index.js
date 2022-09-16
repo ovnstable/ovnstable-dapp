@@ -83,6 +83,16 @@ const routes = [
                 }
             },
             {
+                path: '/ets/moonstone',
+                name: 'EtsMoonstonePageView',
+                component: () => import('../views/strategy/etsMoonstone/EtsMoonstonePageView.vue'),
+                meta: {
+                    middleware: [
+                        Wmatic
+                    ]
+                }
+            },
+            {
                 path: '/collateral',
                 name: 'CollateralView',
                 component: () => import('../views/performance/view/CollateralView.vue'),

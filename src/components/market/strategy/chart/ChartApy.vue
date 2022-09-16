@@ -158,6 +158,10 @@ export default {
                     apiUrl = this.polygonApi;
                     this.contractAddress = '0xd52caB8AfC8ECd08b7CFa6D07e224a56F943e4c4';
                     break;
+                case "ETS MOONSTONE":
+                    apiUrl = this.polygonApi;
+                    this.contractAddress = '0x719ee857Ae6cf85Cbe7284Bc45ad1f99dd5ff0dB';
+                    break;
                 case "USD+/WBNB":
                     apiUrl = this.bscApi;
                     this.contractAddress = '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1';

@@ -32,7 +32,9 @@
                                     <label class="error-msg-title">Error message</label>
                                 </v-row>
                                 <v-row class="mt-4 error-container-row" justify="center">
-                                    <label class="error-msg-value">{{ errorMsg.message }}</label>
+                                    <v-col class="ma-n3">
+                                        <label class="error-msg-value">{{ errorMsg.message }}</label>
+                                    </v-col>
                                 </v-row>
 
                                 <v-row class="mt-8 error-container-row">
@@ -62,6 +64,7 @@
                 <v-row justify="center" class="mb-5">
                     <label class="discord-label">Please,&nbsp;</label>
                     <v-tooltip
+                        v-if="errorMsg"
                         v-model="showCopyTooltip"
                         color="#202832"
                         bottom
@@ -71,7 +74,8 @@
                         </template>
                         <p class="my-0">Copied!</p>
                     </v-tooltip>
-                    <label class="discord-label">&nbsp;and contact our&nbsp;</label>
+                    <label class="discord-label" v-if="errorMsg">&nbsp;and&nbsp;</label>
+                    <label class="discord-label">contact our&nbsp;</label>
                     <label class="discord-link" @click="openDiscord">Discord Support</label>
                 </v-row>
             </v-card-text>

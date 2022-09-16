@@ -28,6 +28,7 @@ const actions = {
 
     showErrorModal({commit, dispatch, getters}, errorType) {
         commit('setErrorType', errorType);
+        commit('setErrorMsg', null);
         commit('setShow', true);
     },
 

@@ -201,7 +201,7 @@ export default {
 }
 
 .wallet-bar-container:hover > .wallet-col > .eye-icon {
-    color: var(--links-blue);
+    color: var(--hover);
 }
 
 .account-display-container {

@@ -41,7 +41,7 @@
             <v-slider
                     class="percent-slider"
                     color="#1C95E7"
-                    track-color="#DEE1E5"
+                    track-color="var(--main-border)"
                     track-fill-color="#1C95E7"
                     tick-size="10"
                     min="0"
@@ -158,7 +158,7 @@
                     readonly
                     class="step-slider"
                     color="#1C95E7"
-                    track-color="#DEE1E5"
+                    track-color="var(--main-border)"
                     track-fill-color="#1C95E7"
                     tick-size="10"
                     min="0"
@@ -840,7 +840,7 @@ export default {
 }
 
 .v-text-field >>> input::placeholder {
-    color: #C5C9D1 !important;
+    color: var(--input-placeholder) !important;
 }
 
 .v-text-field >>> input, .v-text-field >>> label, .v-text-field >>> button {
@@ -918,6 +918,7 @@ export default {
 
 .action-btn-container {
     width: 100% !important;
+    background: var(--action-btn-bg);
 }
 
 .balance-network-icon {

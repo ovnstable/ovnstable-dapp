@@ -607,7 +607,7 @@ export default {
 }
 
 .progress-info {
-    background: #D7DADF;
+    background: var(--progress-info);
 }
 
 .capacity-status-text {

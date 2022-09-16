@@ -397,18 +397,16 @@ export default {
     letter-spacing: 0.02em !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #707A8B !important;
+    color: var(--zoom-btn-color) !important;
 }
 
 .zoom-btn:hover {
-    background: rgba(28, 149, 231, 0.1);
+    background: var(--hover);
     color: rgba(28, 149, 231, 1) !important;
 }
 
 .zoom-btn:active {
-    background: linear-gradient(rgba(40, 160, 240, 1),
-    rgba(6, 120, 196, 0.99),
-    rgba(28, 149, 231, 0.24));
+    background: var(--active);
 }
 
 .selected {

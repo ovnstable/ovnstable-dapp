@@ -501,7 +501,7 @@ export default {
     }
 
     .container-body-title-row {
-        border-bottom: 1px solid #DEE1E5 !important;
+        border-bottom: 1px solid var(--main-border) !important;
     }
 
     .container-info-sub-title {
@@ -606,7 +606,7 @@ export default {
     }
 
     .container-body-title-row {
-        border-bottom: 1px solid #DEE1E5 !important;
+        border-bottom: 1px solid var(--main-border) !important;
     }
 
     .container-info-sub-title {
@@ -768,7 +768,7 @@ export default {
 }
 
 .toggle-row {
-    border-bottom: 2px solid #DCE3E8;
+    border-bottom: 2px solid var(--main-border);
 }
 
 .title-label {
@@ -879,7 +879,7 @@ export default {
 
 .scroll-container {
     height: 24px !important;
-    background: var(--main-background);
+    background: var(--scroll-color) !important;
 }
 
 .table-scroll-label {

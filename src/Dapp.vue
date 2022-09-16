@@ -54,6 +54,8 @@ export default {
     async created() {
         console.debug('Dapp created')
 
+        await this.initTheme();
+
         await this.initWeb3();
         await this.connectWallet();
         this.initReferralCode();
@@ -76,6 +78,7 @@ export default {
         ...mapActions('web3', ['initWeb3']),
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('referral', ['initReferralCode']),
+        ...mapActions('theme', ['initTheme']),
     }
 }
 </script>

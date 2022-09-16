@@ -339,7 +339,7 @@ export default {
 .banner-container {
     width: 100% !important;
     background-image: url("~@/assets/bg/banner_strategy_bg.svg");
-    background-color: #E5E7EA !important;
+    background-color: var(--main-banner-background) !important;
 }
 
 .main-col {
@@ -350,12 +350,12 @@ export default {
 .banner-title {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .info-container, .info-container-capacity {
-    background-color: #E5E7EA !important;
-    border: 1px solid #CED2D8;
+    background-color: var(--main-banner-background) !important;
+    border: 1px solid var(--secondary-border);
     border-radius: 6px;
 }
 
@@ -364,19 +364,19 @@ export default {
     font-style: normal;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .info-value {
     font-family: 'Roboto', sans-serif;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #1C95E7;
+    color: var(--links-blue);
 }
 
 .bordered-col {
-    border-left: 1px solid #CED2D8 !important;
-    border-right: 1px solid #CED2D8 !important;
+    border-left: 1px solid var(--secondary-border) !important;
+    border-right: 1px solid var(--secondary-border) !important;
 }
 
 .label-error {
@@ -384,26 +384,26 @@ export default {
 }
 
 .progress-info {
-    background: #D7DADF;
+    background: var(--progress-info);
 }
 
 .capacity-status-text {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--secondary-gray-text);
 }
 
 .capacity-status-value {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #1C95E7;
+    color: var(--links-blue);
 }
 
 .capacity-status-sub-text {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--fourth-gray-text);
 }
 </style>

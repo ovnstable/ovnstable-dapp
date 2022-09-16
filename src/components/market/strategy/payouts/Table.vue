@@ -176,6 +176,10 @@ export default {
     }
 }
 
+.current-strategy-table-row:hover {
+    background: var(--current-table-hover) !important;
+}
+
 .table-header-payouts-strategy {
     font-family: 'Roboto', sans-serif !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
@@ -204,7 +208,7 @@ export default {
 }
 
 .table-label-payouts-strategy {
-    border-top: 1px solid #DEE1E5 !important;
+    border-top: 1px solid var(--main-border) !important;
 }
 
 .current-strategy-table-row-total > td, .current-strategy-table-row-total-usd-plus > td {
@@ -222,6 +226,7 @@ export default {
 .current-strategy-table-row-header {
     height: 50px !important;
 }
+
 
 .yield-green {
     color: #22ABAC !important;

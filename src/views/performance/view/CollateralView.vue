@@ -374,7 +374,7 @@ export default {
 }
 
 .toggle-row {
-    border-bottom: 2px solid #DCE3E8;
+    border-bottom: 2px solid var(--main-border);
 }
 
 .title-label {

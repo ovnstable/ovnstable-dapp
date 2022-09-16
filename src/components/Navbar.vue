@@ -190,7 +190,6 @@ export default {
 .footer-social-link {
     cursor: pointer;
     height: 48px !important ;
-    color: var(--third-gray-text);
 }
 
 .navbar-page-link {
@@ -280,11 +279,11 @@ export default {
 }
 
 .list-item-hover:hover {
-    background: #E9F5FD !important;
+    background: var(--hover) !important;
 }
 
 .list-item-hover:active {
-    background: #C9E6F9 !important;
+    background: var(--active) !important;
 }
 
 </style>

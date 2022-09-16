@@ -173,19 +173,17 @@ html {
 
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px !important;
-    background-color: var(--main-background);
+    background-color: var(--scrollbar-track-color);
 }
 
 ::-webkit-scrollbar {
-    width: 12px;
-    background-color: var(--main-background);
+    width: 14px;
+    background-color: var(--scrollbar-track-color);
 }
 
 ::-webkit-scrollbar-thumb {
     border-radius: 10px !important;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-    background-color: #555;
+    background-color: var(--scrollbar-slider-color);
 }
 
 .bn-onboard-modal {
@@ -260,7 +258,7 @@ html {
 }
 
 .progress-col > .v-progress-linear > .v-progress-linear__buffer {
-    background-color: var(--main-banner-background) !important;
+    background-color: var(--progress-card-info) !important;
 }
 
 .progress-col > .v-progress-linear > .v-progress-linear__determinate {
@@ -281,13 +279,13 @@ html {
 .percent-slider .v-slider__tick:nth-child(5n + 1) {
     background-color: var(--secondary) !important;
     border-radius: 5px !important;
-    border: 1px solid #DEE1E5;
+    border: 1px solid var(--main-border);
 }
 
 .step-slider .v-slider__tick:nth-child(n) {
     background-color: var(--secondary) !important;
     border-radius: 5px !important;
-    border: 1px solid #DEE1E5;
+    border: 1px solid var(--main-border);
 }
 
 .v-slider__tick--filled {

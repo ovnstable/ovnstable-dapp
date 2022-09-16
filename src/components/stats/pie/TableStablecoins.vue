@@ -220,7 +220,7 @@ export default {
 }
 
 .table-label-don {
-    border-top: 1px solid #DEE1E5 !important;
+    border-top: 1px solid var(--main-border) !important;
 }
 
 .current-strategy-table-row-total > td, .current-strategy-table-row-total-usd-plus > td {
@@ -237,6 +237,10 @@ export default {
 
 .current-table-row-header {
     height: 50px !important;
+}
+
+.current-table-row:hover {
+    background: var(--current-table-hover) !important;
 }
 
 .high-label {

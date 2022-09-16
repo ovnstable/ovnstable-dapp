@@ -772,7 +772,7 @@ export default {
 }
 
 .toggle-row {
-    border-bottom: 2px solid #DCE3E8;
+    border-bottom: 2px solid var(--main-border);
 }
 
 .tab-btn {
@@ -842,7 +842,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--third-gray-text);
+    color: var(--fourth-gray-text);
 }
 
 .investor-card-sub-title {
@@ -855,12 +855,13 @@ export default {
 .investor-card-sub-title-value {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
+    color: var(--secondary-gray-text);
 }
 
 .value-disabled {
     font-weight: 400 !important;
     text-transform: uppercase !important;
-    color: #C5C9D1 !important;
+    color: var(--disabled-value) !important;
     font-size: 16px;
     line-height: 20px;
 }
@@ -875,7 +876,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #3E5463;
+    color: var(--fee-structure-value);
 }
 
 .about-link-label {
@@ -906,7 +907,7 @@ export default {
 }
 
 .progress-info {
-    background: #D7DADF;
+    background: var(--progress-info);
 }
 
 .capacity-status-sub-text {

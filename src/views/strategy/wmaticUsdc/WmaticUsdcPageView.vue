@@ -641,44 +641,44 @@ export default {
 
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #1C95E7;
+    color: var(--links-blue);
 }
 
 .current-page-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .toggle-row {
-    border-bottom: 2px solid #DCE3E8;
+    border-bottom: 2px solid var(--main-border);
 }
 
 .tab-btn {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
     margin-bottom: -2px;
 }
 
 .tab-button {
-    border-bottom: 2px solid #1C95E7 !important;
-    color: #1C95E7 !important;
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
     cursor: pointer !important;
 }
 
 .tab-button-in-active {
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
     cursor: pointer !important;
 }
 
 .info-card-container-white {
-    background: #FFFFFF;
+    background: var(--secondary);
     border-radius: 8px;
 }
 
 .info-row {
-    border-top: 1px solid #CED2D8;
+    border-top: 1px solid var(--secondary-border);
 }
 
 .header-btn {
@@ -698,7 +698,7 @@ export default {
 
 .btn-investor-outline {
     background: none !important;
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .btn-filled-red {
@@ -721,44 +721,45 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--fourth-gray-text);
 }
 
 .investor-card-sub-title {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--fourth-gray-text);
 }
 
 .investor-card-sub-title-value {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
+    color: var(--secondary-gray-text);
 }
 
 .value-disabled {
     font-weight: 300 !important;
     text-transform: uppercase !important;
-    color: #C5C9D1 !important;
+    color: var(--disabled-value) !important;
 }
 
 .fee-structure-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .fee-structure-value {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #3E5463;
+    color: var(--fee-structure-value);
 }
 
 .about-link-label {
     font-family: 'Roboto', sans-serif !important;
     font-feature-settings: 'liga' off !important;
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
     cursor: pointer !important;
 }
 
@@ -767,7 +768,7 @@ export default {
 }
 
 .disabled-btn {
-    background: #E5E7EA !important;
+    background: var(--main-banner-background) !important;
     color: #9DA4B0 !important;
 }
 

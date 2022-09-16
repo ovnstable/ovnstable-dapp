@@ -898,12 +898,12 @@ export default {
 
 .info-card-container {
     background: linear-gradient(91.26deg, rgba(40, 160, 240, 0.1) 0%, rgba(6, 120, 196, 0.09917) 100%), var(--secondary);
-    border: 1px solid rgba(28, 149, 231, 0.4);
+    border: 1px solid rgba(28, 149, 231, 0.8);
     border-radius: 4px;
 }
 
 .info-card-container-red {
-    background: #FBF0F6;
+    background: rgba(207, 63, 146, 0.08);
     border: 1px solid rgba(207, 63, 146, 0.4);
     border-radius: 4px;
 }
@@ -968,7 +968,7 @@ export default {
 }
 
 .progress-info {
-    background: #D7DADF;
+    background: var(--progress-card-info);
 }
 
 .progress-text {
@@ -986,7 +986,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #BABFC8;
+    color: var(--progress-text);
 }
 
 .info-row {

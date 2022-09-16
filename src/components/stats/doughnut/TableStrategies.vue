@@ -61,7 +61,7 @@
             <td class="table-label-don text-right" v-if="!minimized">
                 <div class="color-rectangle" style="background: transparent"></div>
             </td>
-            <td class="table-label-don text-left">
+            <td class="table-label-don no-hover text-left">
                 <v-row>
                     <b>Total</b>
                 </v-row>
@@ -262,7 +262,7 @@ export default {
 }
 
 .table-label-don {
-    border-top: 1px solid #DEE1E5 !important;
+    border-top: 1px solid var(--main-border) !important;
 }
 
 .current-table-row-total > td {
@@ -282,6 +282,18 @@ export default {
 
 .current-table-row-header {
     height: 50px !important;
+}
+
+.current-table-row:hover {
+    background: var(--current-table-hover) !important;
+}
+
+.current-table-row-total:hover {
+    background: var(--current-table-hover) !important;
+}
+
+.current-table-row-total-usd-plus:hover {
+    background: var(--current-table-hover) !important;
 }
 
 .icon-img-link {

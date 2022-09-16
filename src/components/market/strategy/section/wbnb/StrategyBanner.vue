@@ -443,13 +443,13 @@ export default {
 }
 
 .progress-info {
-    background: #D7DADF;
+    background: var(--progress-info);
 }
 
 .capacity-status-text {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--info-base);
+    color: var(--secondary-gray-text);
 }
 
 .capacity-status-value {
@@ -463,6 +463,6 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--third-gray-text);
+    color: var(--fourth-gray-text);
 }
 </style>

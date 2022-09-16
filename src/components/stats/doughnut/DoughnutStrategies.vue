@@ -1,6 +1,6 @@
 <template>
     <vc-donut
-      :background="'#FFFFFF'"
+      background="var(--secondary)"
       :size="size" unit="px" :thickness="20"
       :sections="sections"
       :start-angle="0"

@@ -32,13 +32,8 @@
 
             <!-- Sizes your content based upon application components -->
             <v-main>
-
-                <!-- Provides the application the proper gutter -->
-                <v-container fluid>
-
-                    <!-- If using vue-router -->
-                    <router-view></router-view>
-                </v-container>
+                <!-- If using vue-router -->
+                <router-view></router-view>
             </v-main>
 
             <v-footer app>
@@ -65,10 +60,17 @@ export default {
         await this.connectWallet();
     },
 
+    watch: {
+        account: function (newVal, oldVal) {
+            this.checkAccount();
+        },
+    },
+
     computed:{
         ...mapGetters('web3', ['web3', 'loadingWeb3']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('network', ['networkName', 'switchToOtherNetwork', 'networkId']),
+        ...mapGetters('accountData', ['account']),
     },
 
     methods:{
@@ -76,6 +78,7 @@ export default {
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('ethers', ['mineBlocks']),
         ...mapActions('tokenAction', ['addOvnToken']),
+        ...mapActions('governance', ['checkAccount']),
 
         async addOvnTokenAction(){
             this.addOvnToken();

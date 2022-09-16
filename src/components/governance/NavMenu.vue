@@ -1,6 +1,7 @@
 <template>
 
-        <v-navigation-drawer app>
+        <v-navigation-drawer app
+                             width="190">
             <v-list-item>
                 <v-list-item-content>
                     <v-list-item-title class="text-h6">
@@ -45,6 +46,7 @@ export default {
             { title: 'Overview', icon: 'mdi-view-dashboard' , to: 'Overview' },
             { title: 'Proposals', icon: 'mdi-folder-table-outline', to: 'Proposals'},
             { title: 'Portfolio Agent', icon: 'mdi-chart-bar', to:  'Finance' },
+            { title: 'Abroad', icon: 'mdi-arrow-left-right', to:  'Abroad' },
             { title: 'Control', icon: 'mdi-clipboard-edit', to: 'Control' },
             { title: 'Reward program', icon: 'mdi-order-bool-descending', to: 'Reward program' },
         ],

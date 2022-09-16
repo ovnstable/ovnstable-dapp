@@ -16,6 +16,7 @@ const actions = {
         const PortfolioManager = require(`@/contracts/${network}/PortfolioManager.json`)
         const TimelockController = require(`@/contracts/${network}/OvnTimelockController.json`)
         const UsdPlusToken = require(`@/contracts/${network}/UsdPlusToken.json`)
+        const M2M = require(`@/contracts/${network}/Mark2Market.json`)
 
         let Market;
         let WrappedUsdPlusToken;
@@ -65,6 +66,7 @@ const actions = {
         contracts.pm = _load(PortfolioManager, web3);
         contracts.timelockController = _load(TimelockController, web3);
         contracts.usdPlus = _load(UsdPlusToken, web3);
+        contracts.m2m = _load(M2M, web3);
 
         if (network !== "avalanche" && network !== "bsc") {
             contracts.market = _load(Market, web3);

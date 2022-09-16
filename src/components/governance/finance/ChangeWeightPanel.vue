@@ -14,8 +14,9 @@
                 <template v-slot:body="{items}">
                     <tbody>
                     <tr v-for="(item, i) in items">
-                        <td>{{ item.name }}</td>
-                        <td>{{ shortAddress(item.address) }}</td>
+                        <td class="strategy-name-col" @click="openOnScan(item.address)">
+                            {{ item.name }}
+                        </td>
                         <td class="text-right">
                             ${{ $utils.formatMoney(item.netAssetValue, 2) }}
                         </td>
@@ -29,7 +30,6 @@
                             <v-row class="fill-height" align="center" justify="center">
                                 <v-text-field
                                     class="m2m-field"
-                                    type="number"
                                     :rules="[rules.required, checkNumber]"
                                     dense
                                     outlined
@@ -42,7 +42,6 @@
                             <v-row class="fill-height" align="center" justify="center">
                                 <v-text-field
                                     class="m2m-field"
-                                    type="number"
                                     :rules="[rules.required, checkNumber]"
                                     dense
                                     outlined
@@ -55,7 +54,6 @@
                             <v-row class="fill-height" align="center" justify="center">
                                 <v-text-field
                                     class="m2m-field"
-                                    type="number"
                                     :rules="[rules.required, checkNumber]"
                                     dense
                                     outlined
@@ -80,14 +78,13 @@
                     </tr>
 
                     <tr>
-                        <td colspan="10"></td>
+                        <td colspan="9"></td>
                     </tr>
 
                     <tr>
                         <td>
                             <b>Total</b>
                         </td>
-                        <td></td>
                         <td class="text-right">
                             <b>${{ $utils.formatMoney(m2mTotal, 2) }}</b>
                         </td>
@@ -106,7 +103,6 @@
                         <td>
                             <b>Total USD+</b>
                         </td>
-                        <td></td>
                         <td class="text-right">
                             <b>${{ $utils.formatMoney(totalUsdPlusValue, 2) }}</b>
                         </td>
@@ -117,19 +113,6 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="10"></td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <b>USD+ liquidity index</b>
-                        </td>
-                        <td colspan="9">
-                            <b>{{ usdPlusLiquidityIndex }}</b>
-                        </td>
                     </tr>
                     </tbody>
                 </template>
@@ -146,11 +129,10 @@ export default {
 
     data: () => ({
         headersM2M: [
-            {text: 'Name', value: 'name', width: '200px'},
-            {text: 'Address', value: 'address'},
+            {text: 'Name', value: 'name', width: '170px'},
             {text: 'Net Asset Value', value: 'netAssetValue', width: '140px', align: 'end'},
             {text: 'Liquidation Value', value: 'liquidationValue', width: '140px', align: 'end'},
-            {text: 'Current Weight', value: 'currentWeight', width: '80px', align: 'end'},
+            {text: 'Current Weight', value: 'currentWeight', align: 'end'},
             {text: 'Min Weight', value: 'minWeight'},
             {text: 'Target Weight', value: 'targetWeight'},
             {text: 'Max Weight', value: 'maxWeight'},
@@ -222,5 +204,13 @@ export default {
 
 .governance-subpage-container {
     min-width: 100% !important;
+}
+
+.strategy-name-col {
+    cursor: pointer !important;
+}
+
+.strategy-name-col:hover {
+    text-decoration: underline !important;
 }
 </style>

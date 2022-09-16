@@ -1,6 +1,7 @@
 <template>
 
-        <v-navigation-drawer app>
+        <v-navigation-drawer app
+                             width="190">
             <v-list-item>
                 <v-list-item-content>
                     <v-list-item-title class="text-h6">

@@ -5,42 +5,34 @@
         </div>
 
         <v-row align="start" justify="start" class="ma-0">
-              <v-col class="ma-n3">
-                    <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-                          <label  @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabFeatured">Featured&nbsp;<v-icon size="16" class="mb-1">mdi-star-circle</v-icon></label>
-                          <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabHold">USD+</label>
-                          <label style="color: #C5C9D1 !important"  class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
-                          <label  @click="tab=4" class="tab-btn ml-4" v-bind:class="activeTabHedged">ETS</label>
+            <v-col class="ma-n3">
+                <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
+                    <label @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabFeatured">
+                        Featured
+                        <v-icon size="12" :color="this.tab === 1 ? '#1C95E7' : '#333333'" class="mb-1">
+                            mdi-star-circle
+                        </v-icon>
+                    </label>
+                    <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabHold">USD+</label>
+                    <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4"
+                           v-bind:class="activeTabPools" disabled>USD+ pools</label>
+                    <label @click="tab=4" class="tab-btn ml-4" v-bind:class="activeTabHedged">ETS</label>
 
-                          <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
 
-                          <v-menu offset-y v-if="$wu.isFull()"> </v-menu>
-                    </v-row>
-              </v-col>
+                    <v-menu offset-y v-if="$wu.isFull()"></v-menu>
+                </v-row>
+            </v-col>
         </v-row>
 
         <div class="mt-7 cards-list-container">
             <v-row class="d-flex" justify="start">
-                <template v-if="tab === 1">
-                    <WmaticUsdc class="ma-3"/>
-                    <WbnbBusd class="ma-3"/>
-                    <WbnbUsdPlus class="ma-3"/>
-                    <WmaticUsdPlus class="ma-3"/>
-                </template>
-
-                <template v-if="tab === 2">
-                    <UsdPlus class="ma-3"/>
-                </template>
-
-                <template v-if="tab === 3">
-                </template>
-
-                <template v-if="tab === 4">
-                    <WmaticUsdc class="ma-3"/>
-                    <WbnbBusd class="ma-3"/>
-                    <WbnbUsdPlus class="ma-3"/>
-                    <WmaticUsdPlus class="ma-3"/>
-                </template>
+                <component
+                    class="ma-3"
+                    v-for="component in (tab === 1 ? sortedCardList.slice(0, 3) : sortedCardList)"
+                    v-bind:is="component.name"
+                    v-if="(tab === 1) || (tab === 2 && component.type === 'usd+') || (tab === 3 && component.type === 'pool') || (tab === 4 && component.type === 'ets')"
+                ></component>
             </v-row>
         </div>
 
@@ -57,6 +49,7 @@ import OvercapBanner from "@/components/market/cards/wbnb/banner/OvercapBanner";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import WbnbBusd from "@/components/market/cards/busdWbnb/WbnbBusd";
 import WmaticUsdc from "@/components/market/cards/wmaticUsdc/WmaticUsdc";
+import moment from "moment";
 
 export default {
     name: "MarketView",
@@ -72,10 +65,14 @@ export default {
 
     data: () => ({
         tab: 1,
+        avgApy: null,
     }),
 
     computed: {
         ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb', 'showBusdWbnb']),
+        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'avaxConfig', 'opConfig']),
+        ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData']),
+        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply', 'maxWmaticUsdcSupply', 'maxUsdPlusWbnbSupply', 'maxBusdWbnbSupply']),
 
         activeTabFeatured: function () {
             return {
@@ -104,9 +101,99 @@ export default {
                 'tab-button-in-active': this.tab !== 4,
             }
         },
+
+        sortedCardList: function () {
+
+            let networkId = this.networkId;
+
+            let cardList = [
+                {
+                    type: 'usd+', // usd+, pool, ets
+                    name: 'UsdPlus', // real component name
+                    chain: networkId,
+                    hasUsdPlus: true,
+                    hasCap: false,
+                    weekApy: (this.avgApy && this.avgApy.value) ? this.avgApy.value : 0,
+                },
+                {
+                    type: 'ets',
+                    name: 'WmaticUsdPlus',
+                    chain: this.polygonConfig.networkId,
+                    hasUsdPlus: true,
+                    hasCap: !this.maxUsdPlusWmaticSupply ? false : (this.totalSupply.usdPlusWmatic < this.maxUsdPlusWmaticSupply),
+                    weekApy: (this.wmaticStrategyData && this.wmaticStrategyData.apy) ? this.wmaticStrategyData.apy : 0,
+                },
+                {
+                    type: 'ets',
+                    name: 'WmaticUsdc',
+                    chain: this.polygonConfig.networkId,
+                    hasUsdPlus: false,
+                    hasCap: !this.maxWmaticUsdcSupply ? false : (this.totalSupply.wmaticUsdc < this.maxWmaticUsdcSupply),
+                    weekApy: (this.wmaticUsdcStrategyData && this.wmaticUsdcStrategyData.apy) ? this.wmaticUsdcStrategyData.apy : 0,
+                },
+                {
+                    type: 'ets',
+                    name: 'WbnbUsdPlus',
+                    chain: this.bscConfig.networkId,
+                    hasUsdPlus: true,
+                    hasCap: !this.maxUsdPlusWbnbSupply ? false : (this.totalSupply.usdPlusWbnb < this.maxUsdPlusWbnbSupply),
+                    weekApy: (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.apy) ? this.usdPlusWbnbStrategyData.apy : 0,
+                },
+                {
+                    type: 'ets',
+                    name: 'WbnbBusd',
+                    chain: this.bscConfig.networkId,
+                    hasUsdPlus: false,
+                    hasCap: !this.maxBusdWbnbSupply ? false : (this.totalSupply.busdWbnb < this.maxBusdWbnbSupply),
+                    weekApy: (this.busdWbnbStrategyData && this.busdWbnbStrategyData.apy) ? this.busdWbnbStrategyData.apy : 0,
+                },
+            ];
+
+            cardList.sort(function (a, b) {
+                if (a.chain === networkId && b.chain !== networkId) return -1;
+                if (a.chain !== networkId && b.chain === networkId) return 1;
+
+                if (a.hasUsdPlus && !b.hasUsdPlus) return -1;
+                if (!a.hasUsdPlus && b.hasUsdPlus) return 1;
+
+                if (a.hasCap && !b.hasCap) return -1;
+                if (!a.hasCap && b.hasCap) return 1;
+
+                return (a.weekApy > b.weekApy) ? -1 : (a.weekApy < b.weekApy ? 1 : 0);
+            });
+
+            return cardList;
+        },
+    },
+
+    watch: {
+        appApiUrl: function (newVal, oldVal) {
+            this.getAvgWeekApy();
+        },
+    },
+
+    created() {
+        this.getAvgWeekApy();
     },
 
     methods: {
+
+        async getUsdPlusAvgWeekApy() {
+            let fetchOptions = {
+                headers: {
+                    "Access-Control-Allow-Origin": this.appApiUrl
+                }
+            };
+
+            await fetch(this.appApiUrl + '/widget/avg-apy-info/week', fetchOptions)
+                .then(value => value.json())
+                .then(value => {
+                    this.avgApy = value;
+                    this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+                }).catch(reason => {
+                    console.log('Error get data: ' + reason);
+                })
+        },
     }
 }
 </script>
@@ -116,10 +203,10 @@ export default {
 /* mobile */
 @media only screen and (max-width: 960px) {
     .tab-btn {
-      font-style: normal;
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 20px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
     }
 
     .title-label {
@@ -133,10 +220,10 @@ export default {
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
     .tab-btn {
-      font-style: normal;
-      font-weight: 400;
-      font-size: 20px;
-      line-height: 32px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .title-label {
@@ -150,10 +237,10 @@ export default {
 /* full */
 @media only screen and (min-width: 1400px) {
     .tab-btn {
-      font-style: normal;
-      font-weight: 400;
-      font-size: 20px;
-      line-height: 32px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
     }
 
 
@@ -166,35 +253,33 @@ export default {
 }
 
 .tab-button {
-  border-bottom: 2px solid #1C95E7 !important;
-  color: #1C95E7 !important;
-  cursor: pointer;
+    border-bottom: 2px solid #1C95E7 !important;
+    color: #1C95E7 !important;
+    cursor: pointer;
 }
 
 .tab-button-in-active {
-  color: #C5C9D1 !important;
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .mdi-star-circle {
-  color: #1C95E7 !important;
-  cursor: pointer !important;
+    cursor: pointer !important;
 }
 
 .tab-btn {
-  font-family: 'Roboto', sans-serif;
-  font-feature-settings: 'liga' off;
-  color: #333333;
-  margin-bottom: -2px;
-  cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: #333333;
+    margin-bottom: -2px;
+    cursor: pointer;
 }
 
 .tab-btn-disabled {
-  cursor: default;
+    cursor: default;
 }
 
 .toggle-row {
-  border-bottom: 2px solid #DCE3E8;
+    border-bottom: 2px solid #DCE3E8;
 }
 
 

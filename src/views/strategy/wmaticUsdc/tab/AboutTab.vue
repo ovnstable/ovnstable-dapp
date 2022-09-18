@@ -1002,7 +1002,7 @@ export default {
     font-style: normal;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #F3BA2F;
+    color: #FE7F2D;
 }
 
 .address-card-text {

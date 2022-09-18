@@ -10,16 +10,6 @@
             </div>
         </template>
         <v-list class="network-select-list">
-            <v-list-item class="menu-item" @click="goToAction('/')">
-                <v-list-item-title class="network-select-list-item">
-                    My Dashboard
-                </v-list-item-title>
-            </v-list-item>
-            <v-list-item class="menu-item" @click="goToAction('/market')">
-                <v-list-item-title class="network-select-list-item">
-                    Earn
-                </v-list-item-title>
-            </v-list-item>
             <v-list-item class="menu-item" @click="goToAction('/stats')">
                 <v-list-item-title class="network-select-list-item">
                     Performance
@@ -30,14 +20,19 @@
                     Collateral
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item class="menu-item" @click="mintAction">
-                <v-list-item-title class="network-select-list-item text-blue">
-                    Mint / Redeem USD+
+            <v-list-item class="menu-item" @click="goToAction('/')">
+                <v-list-item-title class="network-select-list-item">
+                    My Dashboard
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item class="menu-item" @click="wrapAction" v-if="showWrap">
+            <v-list-item class="menu-item" @click="goToAction('/market')">
+                <v-list-item-title class="network-select-list-item">
+                    Earn with USD+
+                </v-list-item-title>
+            </v-list-item>
+            <v-list-item class="menu-item" @click="mintAction">
                 <v-list-item-title class="network-select-list-item text-blue">
-                    Wrap / Unwrap USD+
+                    Swap USD+
                 </v-list-item-title>
             </v-list-item>
             <v-divider></v-divider>
@@ -89,7 +84,6 @@ export default {
 
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-        ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -102,11 +96,6 @@ export default {
         mintAction() {
             this.showMintView();
             this.showSwapModal();
-        },
-
-        wrapAction() {
-            this.showWrapView();
-            this.showWrapModal();
         },
     }
 }

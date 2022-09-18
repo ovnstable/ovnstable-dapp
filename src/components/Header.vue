@@ -1,67 +1,48 @@
 <template>
     <v-app-bar
-            class="app-bar"
+            class="app-bar mr-n3"
             app>
         <v-row class="ma-0 header-container fill-height" align="center">
-            <v-col cols="1" class="fill-height" v-if="!$wu.isFull()">
-                <v-row justify="start" align="center" class="ml-n7 mt-0 fill-height">
-                    <img class="logo-img" :src="require('@/assets/logo.svg')" @click="openLink('https://market.overnight.fi/')">
-                </v-row>
-            </v-col>
+            <div class="">
+                <img v-if="!$wu.isFull()" class="ml-n3 logo-img" :src="require('@/assets/logo.svg')" @click="openLink('https://market.overnight.fi/')">
+            </div>
 
-            <v-col cols="5" class="fill-height">
-                <v-row justify="start" align="center" class="mt-0 fill-height">
-                    <WalletBar v-if="($wu.isMobile() && walletConnected && !switchToOtherNetwork) || !$wu.isMobile()"/>
-                </v-row>
-            </v-col>
+            <v-spacer></v-spacer>
 
-            <v-col :cols="$wu.isFull() ? 6 : ($wu.isMobile() ? 3 : 4)" class="fill-height">
-                <v-row justify="end" align="center" class="mt-0 fill-height">
-                    <template v-if="!loadingWeb3">
-                        <template v-if="walletConnected">
-                            <v-btn v-if="switchToOtherNetwork" :class="$wu.isMobile() ? 'mr-2' : ''" class="header-btn btn-filled" v-on:click="switchToNetwork">
-                                Switch to {{ networkName }}
-                            </v-btn>
+            <template v-if="!loadingWeb3">
+                <template v-if="walletConnected">
+                    <v-btn v-if="switchToOtherNetwork" :class="$wu.isMobile() ? 'mr-2' : ''" class="header-btn btn-filled mt-1" v-on:click="switchToNetwork">
+                        Switch to {{ networkName }}
+                    </v-btn>
 
-                            <template v-else>
-                                <v-btn class="header-btn btn-filled" :class="showWrap ? 'mr-5' : 'mr-2'" @click="mintAction" v-if="$wu.isFull()">
-                                    Mint / Redeem USD+
-                                </v-btn>
-                                <v-btn class="header-btn btn-outlined mr-2" outlined @click="wrapAction" v-if="showWrap && $wu.isFull()">
-                                    Wrap / Unwrap USD+
-                                </v-btn>
-                            </template>
-                        </template>
-
-                        <template v-else>
-                            <v-btn class="header-btn-connect btn-filled mr-2" @click="connectWallet">
-                                Connect wallet
-                            </v-btn>
-                        </template>
-                    </template>
                     <template v-else>
-                        <v-progress-linear
-                                dark
-                                class="progress mt-1 mr-2"
-                                background-opacity="0"
-                                color="var(--main-background)"
-                                indeterminate
-                        ></v-progress-linear>
+                        <WalletBar v-if="($wu.isMobile() && walletConnected && !switchToOtherNetwork) || !$wu.isMobile()"/>
                     </template>
-                </v-row>
-            </v-col>
+                </template>
 
-            <v-col :cols="$wu.isMobile() ? 2 : 1" class="fill-height">
-                <v-row justify="end" align="center" class="mt-0 fill-height">
-                    <NetworkSelect/>
-                </v-row>
-            </v-col>
+                <template v-else>
+                    <v-btn class="header-btn-connect btn-filled mr-2 mt-1" @click="connectWallet">
+                        Connect wallet
+                    </v-btn>
+                </template>
+            </template>
+            <template v-else>
+                <v-progress-linear
+                    dark
+                    class="progress mt-1 mr-2"
+                    background-opacity="0"
+                    color="var(--main-background)"
+                    indeterminate
+                ></v-progress-linear>
+            </template>
 
-            <v-col v-if="!$wu.isFull()" cols="1" class="fill-height">
-                <v-row justify="end" align="center" class="mt-0 fill-height">
-                    <MenuSelect/>
-                </v-row>
-            </v-col>
+            <div class="ml-10">
+                <NetworkSelect/>
+            </div>
+
+            <div v-if="!$wu.isFull()">
+                <MenuSelect/>
+            </div>
         </v-row>
 
         <InvestModalWmatic v-if="showUsdPlusWmatic"/>
@@ -78,7 +59,6 @@
 <script>
 
 import {mapActions, mapGetters} from "vuex";
-import Logo from "./common/header/Logo";
 import WalletBar from "@/components/common/header/WalletBar";
 import NetworkSelect from "@/components/common/header/NetworkSelect";
 import MenuSelect from "@/components/common/header/MenuSelect";
@@ -102,7 +82,6 @@ export default {
         MenuSelect,
         NetworkSelect,
         WalletBar,
-        Logo,
     },
 
     data: () => ({
@@ -114,15 +93,12 @@ export default {
         ...mapGetters('web3', ['loadingWeb3']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('accountData', ['account']),
-        ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('marketUI', ['showUsdPlusWbnb', 'showUsdPlusWmatic', 'showWmaticUsdc', 'showBusdWbnb']),
     },
 
     methods: {
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('network', ['setWalletNetwork']),
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-        ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
 
         switchToNetwork() {
             this.setWalletNetwork(this.networkId.toString());
@@ -130,16 +106,6 @@ export default {
 
         openLink(url) {
             window.open(url, '_blank').focus();
-        },
-
-        mintAction() {
-            this.showMintView();
-            this.showSwapModal();
-        },
-
-        wrapAction() {
-            this.showWrapView();
-            this.showWrapModal();
         },
     }
 }
@@ -149,8 +115,8 @@ export default {
 /* mobile */
 @media only screen and (max-width: 960px) {
     .header-container {
-        margin-left: 3% !important;
-        margin-right: 3% !important;
+        margin-left: 5% !important;
+        margin-right: 5% !important;
     }
 
     .header-btn, .header-btn-connect {
@@ -171,6 +137,8 @@ export default {
     .logo-img {
         width: 28px !important;
         height: 28px !important;
+
+        margin-top: 10px !important;
     }
 }
 
@@ -204,7 +172,7 @@ export default {
         width: 48px !important;
         height: 48px !important;
 
-        margin-top: -6px !important;
+        margin-top: 8px !important;
     }
 }
 
@@ -242,7 +210,6 @@ export default {
 .app-bar {
     box-shadow: none !important;
     background-color: var(--main-background) !important;
-    border-bottom: 1px solid #CED2D8 !important;
 }
 
 .header-btn, .header-btn-connect {
@@ -258,10 +225,6 @@ export default {
 .btn-filled {
     background: var(--blue-gradient);
     color: #FFFFFF !important;
-}
-
-.btn-outlined {
-    color: #1C95E7 !important;
 }
 
 .logo-img {

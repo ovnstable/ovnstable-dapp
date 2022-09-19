@@ -10,6 +10,7 @@
                         {{ isMintView ? 'Mint' : 'Redeem' }}
                     </label>
                     <v-spacer></v-spacer>
+                    <label @click="bridge" class="bridge-label mr-4 mt-4">Bridge (Via.Exchange)</label>
                     <v-btn icon @click="close" class="mt-4">
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
@@ -50,6 +51,7 @@ export default {
     computed: {
         ...mapGetters('investModal', ['showWmaticUsdcModal']),
         ...mapGetters('investModal', ['isMintView']),
+        ...mapGetters('network', ['polygonConfig']),
     },
 
     data: () => ({}),
@@ -69,6 +71,10 @@ export default {
         mintAction() {
             this.showMintView();
             this.showSwapModal();
+        },
+
+        bridge() {
+            window.open(this.polygonConfig.bridgeLink, '_blank').focus();
         },
     },
 }
@@ -162,4 +168,12 @@ export default {
     color: #1C95E7;
     cursor: pointer;
 }
+
+.bridge-label {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: #1C95E7;
+    cursor: pointer;
+}
+
 </style>

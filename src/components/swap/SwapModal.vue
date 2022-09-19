@@ -10,6 +10,7 @@
                         {{ isMintView ? 'Mint' : 'Redeem' }}
                     </label>
                     <v-spacer></v-spacer>
+                    <label @click="bridge" class="bridge-label mr-4 mt-4">Bridge (Via.Exchange)</label>
                     <v-btn icon @click="close" class="mt-4">
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
@@ -46,6 +47,7 @@ export default {
     computed: {
         ...mapGetters('swapModal', ['show']),
         ...mapGetters('swapModal', ['isMintView']),
+        ...mapGetters('network', ['bridgeLink']),
     },
 
     data: () => ({}),
@@ -60,6 +62,10 @@ export default {
         close() {
             this.closeSwapModal();
         },
+
+        bridge() {
+            window.open(this.bridgeLink, '_blank').focus();
+        }
     },
 }
 </script>
@@ -152,4 +158,12 @@ export default {
     color: #1C95E7;
     cursor: pointer;
 }
+
+.bridge-label {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: #1C95E7;
+    cursor: pointer;
+}
+
 </style>

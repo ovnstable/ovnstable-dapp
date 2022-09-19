@@ -33,6 +33,16 @@
                     <v-icon class="mb-5" small color="#333333"></v-icon>
                 </v-list-item-title>
             </v-list-item>
+            <v-list-item style="cursor: pointer" @click="setWalletNetwork('10')">
+                <v-list-item-avatar>
+                    <div class="list-item-icon">
+                        <v-img :src="require('@/assets/network/op.svg')"/>
+                    </div>
+                </v-list-item-avatar>
+                <v-list-item-title class="network-select-list-item">
+                    Optimism
+                </v-list-item-title>
+            </v-list-item>
             <v-list-item style="cursor: pointer" @click="setWalletNetwork('56')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
@@ -42,17 +52,6 @@
                 <v-list-item-title class="network-select-list-item">
                     BSC
                     <v-icon class="mb-5" small color="#333333"></v-icon>
-                </v-list-item-title>
-            </v-list-item>
-            <v-list-item style="cursor: pointer" @click="setWalletNetwork('10')">
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img :src="require('@/assets/network/op.svg')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item">
-                    Optimism
-                    <v-icon class="ml-n1 mb-5" small color="#333333">mdi-beta</v-icon>
                 </v-list-item-title>
             </v-list-item>
             <v-list-item style="cursor: pointer" @click="setWalletNetwork('43114')">
@@ -97,7 +96,7 @@ export default {
     data: () => ({
         openedList: false,
         alphaNetworks: [43114],
-        betaNetworks: [10],
+        betaNetworks: [],
     }),
 
     computed: {

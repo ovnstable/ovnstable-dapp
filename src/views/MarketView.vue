@@ -73,8 +73,8 @@ export default {
     computed: {
         ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb', 'showBusdWbnb']),
         ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'avaxConfig', 'opConfig']),
-        ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData']),
-        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply', 'maxWmaticUsdcSupply', 'maxUsdPlusWbnbSupply', 'maxBusdWbnbSupply']),
+        ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData', 'etsMoonstoneStrategyData']),
+        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply', 'maxWmaticUsdcSupply', 'maxUsdPlusWbnbSupply', 'maxBusdWbnbSupply', 'maxEtsMoonstoneSupply']),
 
         activeTabFeatured: function () {
             return {
@@ -148,6 +148,14 @@ export default {
                     hasUsdPlus: false,
                     hasCap: !this.maxBusdWbnbSupply ? false : (this.totalSupply.busdWbnb < this.maxBusdWbnbSupply),
                     weekApy: (this.busdWbnbStrategyData && this.busdWbnbStrategyData.apy) ? this.busdWbnbStrategyData.apy : 0,
+                },
+                {
+                    type: 'ets',
+                    name: 'EtsMoonstone',
+                    chain: this.polygonConfig.networkId,
+                    hasUsdPlus: false,
+                    hasCap: !this.maxEtsMoonstoneSupply ? false : (this.totalSupply.etsMoonstone < this.maxEtsMoonstoneSupply),
+                    weekApy: (this.etsMoonstoneStrategyData && this.etsMoonstoneStrategyData.apy) ? this.etsMoonstoneStrategyData.apy : 0,
                 },
             ];
 

@@ -3,7 +3,6 @@
         <v-col cols="12" align-self="start">
             <v-row class="card-row mt-7" justify="end" align="center">
                 <label class="tag-label">Exchange-traded strategy / moderate risk</label>
-                <v-icon class="tag-icon" :class="$wu.isMobile() ? 'ml-1' : 'ml-2'" :size="$wu.isMobile() ? 12 : 16">mdi-star-circle</v-icon>
             </v-row>
 
             <v-row class="card-row mt-12" justify="start" align="center">
@@ -439,11 +438,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #F3BA2F;
-}
-
-.tag-icon {
-    color: #F3BA2F;
+    color: #FE7F2D;
 }
 
 .card-title {
@@ -470,7 +465,7 @@ export default {
 }
 
 .card-info-risk {
-    color: #F3BA2F !important;
+    color: #FE7F2D !important;
 }
 
 .info-row {

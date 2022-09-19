@@ -3,12 +3,14 @@ const state = {
     totalSupply: {
         usdPlusWmatic: 0,
         wmaticUsdc: 0,
+        etsMoonstone: 0,
         usdPlusWbnb: 0,
         busdWbnb: 0,
     },
 
     maxUsdPlusWmaticSupply: 275000.00,
     maxWmaticUsdcSupply: 500000.00,
+    maxEtsMoonstoneSupply: 500000.00,
     maxUsdPlusWbnbSupply: 500000.00,
     maxBusdWbnbSupply: 500000.00,
 };
@@ -25,6 +27,10 @@ const getters = {
 
     maxWmaticUsdcSupply(state) {
         return state.maxWmaticUsdcSupply;
+    },
+
+    maxEtsMoonstoneSupply(state) {
+        return state.maxEtsMoonstoneSupply;
     },
 
     maxUsdPlusWbnbSupply(state) {
@@ -44,6 +50,8 @@ const actions = {
 
         commit('setTotalSupply', {
             usdPlusWmatic: 0,
+            wmaticUsdc: 0,
+            etsMoonstone: 0,
             usdPlusWbnb: 0,
             busdWbnb: 0,
         });
@@ -57,6 +65,7 @@ const actions = {
         let web3 = rootState.web3;
         let usdPlusWmatic;
         let wmaticUsdc;
+        let etsMoonstone;
         let usdPlusWbnb;
         let busdWbnb;
 
@@ -70,6 +79,12 @@ const actions = {
             wmaticUsdc = await web3.contracts.wmaticUsdc.methods.totalSupply().call();
         } catch (e) {
             wmaticUsdc = null;
+        }
+
+        try {
+            etsMoonstone = await web3.contracts.etsMoonstoneToken.methods.totalSupply().call();
+        } catch (e) {
+            etsMoonstone = null;
         }
 
         try {
@@ -104,6 +119,15 @@ const actions = {
         }
 
         try {
+            if (etsMoonstone) {
+                etsMoonstone = web3.web3.utils.fromWei(etsMoonstone, 'mwei');
+            } else {
+                etsMoonstone = rootState.marketData.etsMoonstoneStrategyData.tvl;
+            }
+        } catch (e) {
+        }
+
+        try {
             if (usdPlusWbnb) {
                 usdPlusWbnb = web3.web3.utils.fromWei(usdPlusWbnb, 'mwei');
             } else {
@@ -124,6 +148,7 @@ const actions = {
         commit('setTotalSupply', {
             usdPlusWmatic: usdPlusWmatic,
             wmaticUsdc: wmaticUsdc,
+            etsMoonstone: etsMoonstone,
             usdPlusWbnb: usdPlusWbnb,
             busdWbnb: busdWbnb,
         })

@@ -6,6 +6,7 @@ const state = {
         wUsdPlus: 0,
         usdPlusWmatic: 0,
         wmaticUsdc: 0,
+        etsMoonstone: 0,
         usdPlusWbnb: 0,
         busdWbnb: 0,
     },
@@ -43,6 +44,7 @@ const actions = {
             wUsdPlus: 0,
             usdPlusWmatic: 0,
             wmaticUsdc: 0,
+            etsMoonstone: 0,
             usdPlusWbnb: 0,
             busdWbnb: 0,
         });
@@ -76,6 +78,7 @@ const actions = {
         let wUsdPlus;
         let usdPlusWmatic;
         let wmaticUsdc;
+        let etsMoonstone;
         let usdPlusWbnb;
         let busdWbnb;
 
@@ -110,6 +113,13 @@ const actions = {
             }
         }
 
+        if (web3.contracts.etsMoonstoneToken && networkId === 137) {
+            try {
+                etsMoonstone = await web3.contracts.etsMoonstoneToken.methods.balanceOf(getters.account).call();
+            } catch (e) {
+            }
+        }
+
         if (web3.contracts.usdPlusWbnb && networkId === 56) {
             try {
                 usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.balanceOf(getters.account).call();
@@ -132,6 +142,10 @@ const actions = {
 
         if (wmaticUsdc && networkId === 137) {
             wmaticUsdc = web3.web3.utils.fromWei(wmaticUsdc, 'mwei') ;
+        }
+
+        if (etsMoonstone && networkId === 137) {
+            etsMoonstone = web3.web3.utils.fromWei(etsMoonstone, 'mwei') ;
         }
 
         if (usdPlusWbnb && networkId === 56) {
@@ -158,6 +172,7 @@ const actions = {
             wUsdPlus: wUsdPlus,
             usdPlusWmatic: usdPlusWmatic,
             wmaticUsdc: wmaticUsdc,
+            etsMoonstone: etsMoonstone,
             usdPlusWbnb: usdPlusWbnb,
             busdWbnb: busdWbnb
         })

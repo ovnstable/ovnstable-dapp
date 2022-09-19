@@ -4,9 +4,11 @@ const state = {
     show: false,
     showBusdWbnbModal: false,
     showWmaticUsdcModal: false,
+    showEtsMoonstoneModal: false,
 
     usdPlusWmaticApproved: false,
     wmaticUsdcApproved: false,
+    etsMoonstoneApproved: false,
     usdPlusWbnbApproved: false,
     busdWbnbApproved: false,
     usdPlusApproved: false,
@@ -30,12 +32,20 @@ const getters = {
         return state.showWmaticUsdcModal;
     },
 
+    showEtsMoonstoneModal(state) {
+        return state.showEtsMoonstoneModal;
+    },
+
     usdPlusWmaticApproved(state) {
         return state.usdPlusWmaticApproved;
     },
 
     wmaticUsdcApproved(state) {
         return state.wmaticUsdcApproved;
+    },
+
+    etsMoonstoneApproved(state) {
+        return state.etsMoonstoneApproved;
     },
 
     usdPlusWbnbApproved(state) {
@@ -65,6 +75,10 @@ const actions = {
         commit('setShowWmaticUsdcModal', true);
     },
 
+    showEtsMoonstoneModal({commit, dispatch, getters}) {
+        commit('setShowEtsMoonstoneModal', true);
+    },
+
     async showRedeemView({commit, dispatch, getters, rootState}){
         commit('setIsMintView', false)
     },
@@ -85,12 +99,20 @@ const actions = {
         commit('setShowWmaticUsdcModal', false);
     },
 
+    closeEtsMoonstoneModal({commit, dispatch, getters}) {
+        commit('setShowEtsMoonstoneModal', false);
+    },
+
     approveUsdPlusWmatic({commit, dispatch, getters}) {
         commit('setUsdPlusWmaticApproved', true);
     },
 
     approveWmaticUsdc({commit, dispatch, getters}) {
         commit('setWmaticUsdcApproved', true);
+    },
+
+    approveEtsMoonstone({commit, dispatch, getters}) {
+        commit('setEtsMoonstoneApproved', true);
     },
 
     approveUsdPlusWbnb({commit, dispatch, getters}) {
@@ -116,32 +138,40 @@ const mutations = {
         state.show = show;
     },
 
-    setShowBusdWbnbModal(state, showBusdWbnbModal) {
-        state.showBusdWbnbModal = showBusdWbnbModal;
+    setShowBusdWbnbModal(state, value) {
+        state.showBusdWbnbModal = value;
     },
 
-    setShowWmaticUsdcModal(state, showWmaticUsdcModal) {
-        state.showWmaticUsdcModal = showWmaticUsdcModal;
+    setShowWmaticUsdcModal(state, value) {
+        state.showWmaticUsdcModal = value;
     },
 
-    setUsdPlusWmaticApproved(state, usdPlusWmaticApproved) {
-        state.usdPlusWmaticApproved = usdPlusWmaticApproved;
+    setShowEtsMoonstoneModal(state, value) {
+        state.showEtsMoonstoneModal = value;
     },
 
-    setWmaticUsdcApproved(state, wmaticUsdcApproved) {
-        state.wmaticUsdcApproved = wmaticUsdcApproved;
+    setUsdPlusWmaticApproved(state, value) {
+        state.usdPlusWmaticApproved = value;
     },
 
-    setUsdPlusWbnbApproved(state, usdPlusWbnbApproved) {
-        state.usdPlusWbnbApproved = usdPlusWbnbApproved;
+    setWmaticUsdcApproved(state, value) {
+        state.wmaticUsdcApproved = value;
     },
 
-    setBusdWbnbApproved(state, busdWbnbApproved) {
-        state.busdWbnbApproved = busdWbnbApproved;
+    setEtsMoonstoneApproved(state, value) {
+        state.etsMoonstoneApproved = value;
     },
 
-    setUsdPlusApproved(state, usdPlusApproved) {
-        state.usdPlusApproved = usdPlusApproved;
+    setUsdPlusWbnbApproved(state, value) {
+        state.usdPlusWbnbApproved = value;
+    },
+
+    setBusdWbnbApproved(state, value) {
+        state.busdWbnbApproved = value;
+    },
+
+    setUsdPlusApproved(state, value) {
+        state.usdPlusApproved = value;
     },
 };
 

@@ -49,12 +49,14 @@ import OvercapBanner from "@/components/market/cards/wbnb/banner/OvercapBanner";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import WbnbBusd from "@/components/market/cards/busdWbnb/WbnbBusd";
 import WmaticUsdc from "@/components/market/cards/wmaticUsdc/WmaticUsdc";
+import EtsMoonstone from "@/components/market/cards/etsMoonstone/EtsMoonstone";
 import moment from "moment";
 
 export default {
     name: "MarketView",
 
     components: {
+        EtsMoonstone,
         WmaticUsdc,
         WbnbBusd,
         UsdPlus,

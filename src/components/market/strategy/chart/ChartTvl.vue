@@ -104,7 +104,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData']),
+        ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'etsMoonstoneStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -181,6 +181,9 @@ export default {
                     break;
                 case "WMATIC/USDC":
                     this.totalTvl = this.wmaticUsdcStrategyData.tvl;
+                    break;
+                case "ETS MOONSTONE":
+                    this.totalTvl = this.etsMoonstoneStrategyData.tvl;
                     break;
                 case "USD+/WBNB":
                     this.totalTvl = this.usdPlusWbnbStrategyData.tvl;

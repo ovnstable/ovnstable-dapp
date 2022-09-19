@@ -235,4 +235,8 @@ export default {
     border-color: #DEE1E5 !important;
 }
 
+.selected-page {
+    color: #1C95E7 !important;
+}
+
 </style>

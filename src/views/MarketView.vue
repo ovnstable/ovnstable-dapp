@@ -27,9 +27,10 @@
 
         <div class="mt-7 cards-list-container">
             <v-row class="d-flex" justify="start">
+                <!-- removing EtsRuby from featured temporarily -->
                 <component
                     class="ma-3"
-                    v-for="component in (tab === 1 ? sortedCardList.slice(0, 3) : sortedCardList)"
+                    v-for="component in (tab === 1 ? sortedCardList.filter(value => value.name !== 'EtsRuby').slice(0, 3) : sortedCardList)"
                     v-bind:is="component.name"
                     v-if="(tab === 1) || (tab === 2 && component.type === 'usd+') || (tab === 3 && component.type === 'pool') || (tab === 4 && component.type === 'ets')"
                 ></component>

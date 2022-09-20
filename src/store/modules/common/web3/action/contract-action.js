@@ -35,6 +35,9 @@ const actions = {
         let EtsExchangerMoonstone = require(`@/contracts/polygon/HedgeExchangerQsWmaticUsdc.json`);
         let EtsMoonstoneToken = require(`@/contracts/polygon/EtsQsWmaticUsdc.json`);
 
+        let EtsExchangerRuby = require(`@/contracts/optimism/HedgeExchangerWethUsdc.json`);
+        let EtsRubyToken = require(`@/contracts/optimism/RebaseTokenWethUsdc.json`);
+
         let ExchangerUsdPlusWbnb = require(`@/contracts/bsc/HedgeExchangerUsdPlusWbnb.json`);
         let UsdPlusWbnbToken = require(`@/contracts/bsc/RebaseTokenUsdPlusWbnb.json`);
 
@@ -84,6 +87,9 @@ const actions = {
 
         contracts.etsExchangerMoonstone = _load(EtsExchangerMoonstone, web3);
         contracts.etsMoonstoneToken = _load(EtsMoonstoneToken, web3);
+
+        contracts.etsExchangerRuby = _load(EtsExchangerRuby, web3);
+        contracts.etsRubyToken = _load(EtsRubyToken, web3);
 
         contracts.exchangerUsdPlusWbnb = _load(ExchangerUsdPlusWbnb, web3);
         contracts.usdPlusWbnb = _load(UsdPlusWbnbToken, web3);

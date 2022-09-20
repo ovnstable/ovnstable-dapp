@@ -50,6 +50,7 @@ import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import WbnbBusd from "@/components/market/cards/busdWbnb/WbnbBusd";
 import WmaticUsdc from "@/components/market/cards/wmaticUsdc/WmaticUsdc";
 import EtsMoonstone from "@/components/market/cards/etsMoonstone/EtsMoonstone";
+import EtsRuby from "@/components/market/cards/etsRuby/EtsRuby";
 import moment from "moment";
 
 export default {
@@ -57,6 +58,7 @@ export default {
 
     components: {
         EtsMoonstone,
+        EtsRuby,
         WmaticUsdc,
         WbnbBusd,
         UsdPlus,
@@ -71,10 +73,9 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showUsdPlusWbnb', 'showBusdWbnb']),
         ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'avaxConfig', 'opConfig']),
-        ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData', 'etsMoonstoneStrategyData']),
-        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply', 'maxWmaticUsdcSupply', 'maxUsdPlusWbnbSupply', 'maxBusdWbnbSupply', 'maxEtsMoonstoneSupply']),
+        ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData', 'etsMoonstoneStrategyData', 'etsRubyStrategyData']),
+        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply', 'maxWmaticUsdcSupply', 'maxUsdPlusWbnbSupply', 'maxBusdWbnbSupply', 'maxEtsMoonstoneSupply', 'maxEtsRubySupply']),
 
         activeTabFeatured: function () {
             return {
@@ -156,6 +157,14 @@ export default {
                     hasUsdPlus: false,
                     hasCap: !this.maxEtsMoonstoneSupply ? false : (this.totalSupply.etsMoonstone < this.maxEtsMoonstoneSupply),
                     weekApy: (this.etsMoonstoneStrategyData && this.etsMoonstoneStrategyData.apy) ? this.etsMoonstoneStrategyData.apy : 0,
+                },
+                {
+                    type: 'ets',
+                    name: 'EtsRuby',
+                    chain: this.opConfig.networkId,
+                    hasUsdPlus: false,
+                    hasCap: !this.maxEtsRubySupply ? false : (this.totalSupply.etsRuby < this.maxEtsRubySupply),
+                    weekApy: (this.etsRubyStrategyData && this.etsRubyStrategyData.apy) ? this.etsRubyStrategyData.apy : 0,
                 },
             ];
 

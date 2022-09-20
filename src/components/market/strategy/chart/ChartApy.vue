@@ -129,7 +129,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['polygonApi', 'bscApi']),
+        ...mapGetters('network', ['polygonApi', 'bscApi', 'opApi', 'avaxApi']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -169,6 +169,10 @@ export default {
                 case "BUSD/WBNB":
                     apiUrl = this.bscApi;
                     this.contractAddress = '0xc6eca7a3b863d720393DFc62494B6eaB22567D37';
+                    break;
+                case "ETS RUBY":
+                    apiUrl = this.opApi;
+                    this.contractAddress = '0xA88F8c02eBdE678de623C6BCFC886De82e18ad00';
                     break;
             }
 

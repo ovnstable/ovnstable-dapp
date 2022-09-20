@@ -1,12 +1,11 @@
 
 const state = {
-
     showUsdPlusWmatic: true,
     showWmaticUsdc: true,
     showEtsMoonstone: true,
     showUsdPlusWbnb: true,
     showBusdWbnb: true,
-
+    showEtsRuby: true,
 };
 
 const getters = {
@@ -31,6 +30,9 @@ const getters = {
         return state.showBusdWbnb;
     },
 
+    showEtsRuby(state) {
+        return state.showEtsRuby;
+    },
 };
 
 const actions = {
@@ -75,6 +77,13 @@ const actions = {
         commit('setShowBusdWbnb', true);
     },
 
+    async hideEtsRuby({commit, dispatch, getters, rootState}) {
+        commit('setShowEtsRuby', false);
+    },
+
+    async showEtsRuby({commit, dispatch, getters, rootState}) {
+        commit('setShowEtsRuby', true);
+    },
 };
 
 const mutations = {
@@ -97,6 +106,10 @@ const mutations = {
 
     setShowBusdWbnb(state, showBusdWbnb) {
         state.showBusdWbnb = showBusdWbnb;
+    },
+
+    setShowEtsRuby(state, value) {
+        state.showEtsRuby = value;
     },
 };
 

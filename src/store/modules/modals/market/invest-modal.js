@@ -5,12 +5,14 @@ const state = {
     showBusdWbnbModal: false,
     showWmaticUsdcModal: false,
     showEtsMoonstoneModal: false,
+    showEtsRubyModal: false,
 
     usdPlusWmaticApproved: false,
     wmaticUsdcApproved: false,
     etsMoonstoneApproved: false,
     usdPlusWbnbApproved: false,
     busdWbnbApproved: false,
+    etsRubyApproved: false,
     usdPlusApproved: false,
 };
 
@@ -36,6 +38,10 @@ const getters = {
         return state.showEtsMoonstoneModal;
     },
 
+    showEtsRubyModal(state) {
+        return state.showEtsRubyModal;
+    },
+
     usdPlusWmaticApproved(state) {
         return state.usdPlusWmaticApproved;
     },
@@ -54,6 +60,10 @@ const getters = {
 
     busdWbnbApproved(state) {
         return state.busdWbnbApproved;
+    },
+
+    etsRubyApproved(state) {
+        return state.etsRubyApproved;
     },
 
     usdPlusApproved(state) {
@@ -77,6 +87,10 @@ const actions = {
 
     showEtsMoonstoneModal({commit, dispatch, getters}) {
         commit('setShowEtsMoonstoneModal', true);
+    },
+
+    showEtsRubyModal({commit, dispatch, getters}) {
+        commit('setShowEtsRubyModal', true);
     },
 
     async showRedeemView({commit, dispatch, getters, rootState}){
@@ -103,6 +117,10 @@ const actions = {
         commit('setShowEtsMoonstoneModal', false);
     },
 
+    closeEtsRubyModal({commit, dispatch, getters}) {
+        commit('setShowEtsRubyModal', false);
+    },
+
     approveUsdPlusWmatic({commit, dispatch, getters}) {
         commit('setUsdPlusWmaticApproved', true);
     },
@@ -121,6 +139,10 @@ const actions = {
 
     approveBusdWbnb({commit, dispatch, getters}) {
         commit('setBusdWbnbApproved', true);
+    },
+
+    approveEtsRuby({commit, dispatch, getters}) {
+        commit('setEtsRubyApproved', true);
     },
 
     approveUsdPlus({commit, dispatch, getters}) {
@@ -150,6 +172,10 @@ const mutations = {
         state.showEtsMoonstoneModal = value;
     },
 
+    setShowEtsRubyModal(state, value) {
+        state.showEtsRubyModal = value;
+    },
+
     setUsdPlusWmaticApproved(state, value) {
         state.usdPlusWmaticApproved = value;
     },
@@ -168,6 +194,10 @@ const mutations = {
 
     setBusdWbnbApproved(state, value) {
         state.busdWbnbApproved = value;
+    },
+
+    setEtsRubyApproved(state, value) {
+        state.etsRubyApproved = value;
     },
 
     setUsdPlusApproved(state, value) {

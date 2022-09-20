@@ -9,6 +9,7 @@ const state = {
         etsMoonstone: 0,
         usdPlusWbnb: 0,
         busdWbnb: 0,
+        etsRuby: 0,
     },
 
     account: null,
@@ -47,6 +48,7 @@ const actions = {
             etsMoonstone: 0,
             usdPlusWbnb: 0,
             busdWbnb: 0,
+            etsRuby: 0,
         });
 
     },
@@ -81,6 +83,7 @@ const actions = {
         let etsMoonstone;
         let usdPlusWbnb;
         let busdWbnb;
+        let etsRuby;
 
         try {
             asset = await web3.contracts.asset.methods.balanceOf(getters.account).call();
@@ -134,6 +137,13 @@ const actions = {
             }
         }
 
+        if (web3.contracts.etsRubyToken && networkId === 137) {
+            try {
+                etsRuby = await web3.contracts.etsRubyToken.methods.balanceOf(getters.account).call();
+            } catch (e) {
+            }
+        }
+
         usdPlus = web3.web3.utils.fromWei(usdPlus, 'mwei') ;
 
         if (usdPlusWmatic && networkId === 137) {
@@ -166,6 +176,10 @@ const actions = {
             wUsdPlus = web3.web3.utils.fromWei(wUsdPlus, 'mwei') ;
         }
 
+        if (etsRuby && networkId === 10) {
+            etsRuby = web3.web3.utils.fromWei(etsRuby, 'mwei') ;
+        }
+
         commit('setBalance', {
             usdPlus: usdPlus,
             asset: asset,
@@ -174,7 +188,8 @@ const actions = {
             wmaticUsdc: wmaticUsdc,
             etsMoonstone: etsMoonstone,
             usdPlusWbnb: usdPlusWbnb,
-            busdWbnb: busdWbnb
+            busdWbnb: busdWbnb,
+            etsRuby: etsRuby,
         })
 
         commit('accountUI/setLoadingBalance', false, { root: true })

@@ -2,11 +2,11 @@
     <div>
         <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'">
             <label class="strategy-info-label">
-                The exchange-traded strategy WMATIC/USDC ($WMATICUSDC), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WMATIC), pair it with USDC stablecoin, and provide WMATIC/USDC liquidity on Meshswap all in one action. This allows earning high APY and hedging against WMATIC volatility.
+                The exchange-traded strategy Ruby ($RUBY), is an ERC-20 structured product built on Optimism that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WETH), pair it with USDC stablecoin, and provide WETH/USDC liquidity on Velodrome all in one action. This allows earning high APY and hedging against WETH volatility.
                 <br/><br/>
-                The unique feature of WMATIC/USDC ETS is that it automatically administers a health factor of {{ wmaticUsdcStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticUsdcStrategyData.targetHealthFactor, 2) : 1.2}}x on AAVE and rebalances your Lent/Borrowed amounts to maintain a stringent {{ wmaticUsdcStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticUsdcStrategyData.targetHealthFactor, 2) : 1.2}}x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
+                The unique feature of ETS RUBY is that it automatically administers a health factor of {{ (etsRubyStrategyData && etsRubyStrategyData.targetHealthFactor) ? $utils.formatMoneyComma(etsRubyStrategyData.targetHealthFactor, 2) : 1.2}}x on AAVE and rebalances your Lent/Borrowed amounts to maintain a stringent {{ (etsRubyStrategyData && etsRubyStrategyData.targetHealthFactor) ? $utils.formatMoneyComma(etsRubyStrategyData.targetHealthFactor, 2) : 1.2}}x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
                 <br/><br/>
-                Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.
+                Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Optimism - a highly scalable L2 chain.
             </label>
         </v-row>
 
@@ -25,7 +25,7 @@
                             <div class="info-card-icon mt-5">
                                 <v-img :src="require('@/assets/icon/checkbox.svg')"/>
                             </div>
-                            <label class="info-card-text mt-5 ml-2">Hedging against MATIC price volatility</label>
+                            <label class="info-card-text mt-5 ml-2">Hedging against ETH price volatility</label>
                         </v-row>
                         <v-row align="center">
                             <div class="info-card-icon mt-4">
@@ -38,9 +38,9 @@
                                 <v-img :src="require('@/assets/icon/checkbox.svg')"/>
                             </div>
                             <label v-if="!$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed</label>
-                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">Health Factor of {{ wmaticUsdcStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticUsdcStrategyData.targetHealthFactor, 2) : 1.2}}</label>
+                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">Health Factor of {{ (etsRubyStrategyData && etsRubyStrategyData.targetHealthFactor) ? $utils.formatMoneyComma(etsRubyStrategyData.targetHealthFactor, 2) : 1.2}}</label>
 
-                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed Health Factor of {{ wmaticUsdcStrategyData.targetHealthFactor ? $utils.formatMoneyComma(wmaticUsdcStrategyData.targetHealthFactor, 2) : 1.2}}</label>
+                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed Health Factor of {{ (etsRubyStrategyData && etsRubyStrategyData.targetHealthFactor) ? $utils.formatMoneyComma(etsRubyStrategyData.targetHealthFactor, 2) : 1.2}}</label>
                         </v-row>
                         <v-row align="center">
                             <div class="info-card-icon mt-4">
@@ -100,7 +100,7 @@
                             <label class="list-title-text">Deposit Into Strategy</label>
                         </v-row>
                         <v-row class="mt-8">
-                            <label class="list-sub-title-text">Deposit USDC into the vault. This triggers an automatic borrow of value of WMATIC (from AAVE v3 markets), which is invested alongside your USDC deposit into Meshswap’s WMATIC/USDC pool.</label>
+                            <label class="list-sub-title-text">Deposit USDC into the vault. This triggers an automatic borrow of value of WETH (from AAVE v3 markets), which is invested alongside your USDC deposit into Velodrome’s WETH/USDC pool.</label>
                         </v-row>
                     </v-col>
                 </v-row>
@@ -115,7 +115,7 @@
                             <label class="list-title-text">Strategy Generates Yield</label>
                         </v-row>
                         <v-row class="mt-8">
-                            <label class="list-sub-title-text">Strategy automatically stakes the earned pool LP tokens into Meshswap and auto-compounds the rewards by re-investing into the pool for more LP tokens to maximise Yields.</label>
+                            <label class="list-sub-title-text">Strategy automatically stakes the earned pool LP tokens into Velodrome and auto-compounds the rewards by re-investing into the pool for more LP tokens to maximise Yields.</label>
                         </v-row>
                     </v-col>
                 </v-row>
@@ -139,13 +139,13 @@
             </v-col>
             <v-col cols="6" v-if="!$wu.isMobile()">
                 <v-row justify="end">
-                    <v-img class="scheme-img" max-width="700px" :src="require('@/assets/market/schemeWmaticUsdc.svg')"/>
+                    <v-img class="scheme-img" max-width="700px" :src="require('@/assets/market/scheme_ets_ruby.svg')"/>
                 </v-row>
             </v-col>
         </v-row>
 
         <v-row align="center" justify="start" class="ma-0 mt-15" v-if="$wu.isMobile()">
-            <v-img class="scheme-img" :src="require('@/assets/market/schemeWmaticUsdc.svg')"/>
+            <v-img class="scheme-img" :src="require('@/assets/market/scheme_ets_ruby.svg')"/>
         </v-row>
 
         <v-row align="center" justify="start" class="ma-0 mt-15">
@@ -238,13 +238,13 @@
                 <v-row class="info-row" justify="start" align="center">
                     <label class="card-info mt-1">APY</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.apy) ? ($utils.formatMoneyComma(wmaticUsdcStrategyData.apy, 1)) + '%' : '—' }}</label>
+                    <label class="card-info-value">{{ (etsRubyStrategyData && etsRubyStrategyData.apy) ? ($utils.formatMoneyComma(etsRubyStrategyData.apy, 1)) + '%' : '—' }}</label>
                     <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Diff. to USD+</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.diffApy) ? ((wmaticUsdcStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(wmaticUsdcStrategyData.diffApy, 1)) + '%' : '—' }}</label>
+                    <label class="card-info-value">{{ (etsRubyStrategyData && etsRubyStrategyData.diffApy) ? ((etsRubyStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(etsRubyStrategyData.diffApy, 1)) + '%' : '—' }}</label>
                     <Tooltip text="APY difference compared to the base APY USD+ (based on 7-day average)"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
@@ -256,27 +256,27 @@
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">TVL</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value" :class="totalSupply.wmaticUsdc >= maxWmaticUsdcSupply ? 'label-error' : ''">
-                        {{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(wmaticUsdcStrategyData.tvl, 2)) : '—' }}
+                    <label class="card-info-value" :class="totalSupply.etsRuby >= maxEtsRubySupply ? 'label-error' : ''">
+                        {{ (etsRubyStrategyData && etsRubyStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(etsRubyStrategyData.tvl, 2)) : '—' }}
                     </label>
                     <Tooltip text="Past 2 hours"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Users</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.holders) ? $utils.formatMoneyComma(wmaticUsdcStrategyData.holders, 0) : '—' }}</label>
+                    <label class="card-info-value">{{ (etsRubyStrategyData && etsRubyStrategyData.holders) ? $utils.formatMoneyComma(etsRubyStrategyData.holders, 0) : '—' }}</label>
                 </v-row>
 
                 <v-row class="info-row" justify="start" align="center" v-if="$wu.isMobile()">
                     <label class="card-info mt-1">Target Health Factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticUsdcStrategyData.targetHealthFactor, 2)) : '—' }}</label>
+                    <label class="card-info-value">{{ (etsRubyStrategyData && etsRubyStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(etsRubyStrategyData.targetHealthFactor, 2)) : '—' }}</label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center" v-if="$wu.isMobile()">
                     <label class="card-info mt-1">Health Factor check interval</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.healthFactorCheckInterval) ? wmaticUsdcStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
+                    <label class="card-info-value">{{ (etsRubyStrategyData && etsRubyStrategyData.healthFactorCheckInterval) ? etsRubyStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
             </v-col>
@@ -285,13 +285,13 @@
                 <v-row class="info-row" justify="start" align="center">
                     <label class="card-info mt-1">Target Health Factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticUsdcStrategyData.targetHealthFactor, 2)) : '—' }}</label>
+                    <label class="card-info-value">{{ (etsRubyStrategyData && etsRubyStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(etsRubyStrategyData.targetHealthFactor, 2)) : '—' }}</label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Health Factor check interval</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.healthFactorCheckInterval) ? wmaticUsdcStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
+                    <label class="card-info-value">{{ (etsRubyStrategyData && etsRubyStrategyData.healthFactorCheckInterval) ? etsRubyStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
             </v-col>
@@ -299,30 +299,30 @@
 
         <v-row align="center" justify="start" class="ma-0 mt-7 info-container">
             <v-col :class="!$wu.isFull() ? '' : 'ml-5'" :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center" @click="openTokenOnScan(wmaticUsdcStrategyData.rebaseAddress)">
+                <v-row justify="center" align="center" @click="openTokenOnScan(etsRubyStrategyData.rebaseAddress)">
                     <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Token address</label>
                     <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-link ml-3">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.rebaseAddress) ? shortAddress(wmaticUsdcStrategyData.rebaseAddress) : '—' }}</label>
+                    <label class="address-card-link ml-3">{{ (etsRubyStrategyData && etsRubyStrategyData.rebaseAddress) ? shortAddress(etsRubyStrategyData.rebaseAddress) : '—' }}</label>
                     <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
                         <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                     </div>
                 </v-row>
             </v-col>
             <v-col :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center" @click="openStrategyOnScan(wmaticUsdcStrategyData.exchangerAddress)">
+                <v-row justify="center" align="center" @click="openStrategyOnScan(etsRubyStrategyData.exchangerAddress)">
                     <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Pool address</label>
                     <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-link ml-3">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.exchangerAddress) ? shortAddress(wmaticUsdcStrategyData.exchangerAddress) : '—' }}</label>
+                    <label class="address-card-link ml-3">{{ (etsRubyStrategyData && etsRubyStrategyData.exchangerAddress) ? shortAddress(etsRubyStrategyData.exchangerAddress) : '—' }}</label>
                     <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
                         <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                     </div>
                 </v-row>
             </v-col>
             <v-col :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center" @click="openStrategyOnScan(wmaticUsdcStrategyData.strategyAddress)">
+                <v-row justify="center" align="center" @click="openStrategyOnScan(etsRubyStrategyData.strategyAddress)">
                     <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Vault address</label>
                     <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-link ml-3">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.strategyAddress) ? shortAddress(wmaticUsdcStrategyData.strategyAddress) : '—' }}</label>
+                    <label class="address-card-link ml-3">{{ (etsRubyStrategyData && etsRubyStrategyData.strategyAddress) ? shortAddress(etsRubyStrategyData.strategyAddress) : '—' }}</label>
                     <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
                         <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                     </div>
@@ -332,32 +332,32 @@
                 <v-row justify="center" align="center">
                     <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Inception date</label>
                     <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-text ml-3" :class="!$wu.isFull() ? 'mr-2' : ''"><b>14 September 2022</b></label>
+                    <label class="address-card-text ml-3" :class="!$wu.isFull() ? 'mr-2' : ''"><b>20 September 2022</b></label>
                 </v-row>
             </v-col>
         </v-row>
 
         <template v-if="networkSupport">
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-                <v-btn class="header-btn btn-filled" :class="(totalSupply.wmaticUsdc >= maxWmaticUsdcSupply) ? 'disabled-btn' : ''" @click="mintAction" :disabled="totalSupply.wmaticUsdc > maxWmaticUsdcSupply">
-                    MINT ETS: wMatic/USDC
+                <v-btn class="header-btn btn-filled" :class="(totalSupply.etsRuby >= maxEtsRubySupply) ? 'disabled-btn' : ''" @click="mintAction" :disabled="totalSupply.etsRuby > maxEtsRubySupply">
+                    MINT ETS RUBY
                 </v-btn>
-                <template v-if="totalSupply.wmaticUsdc >= maxWmaticUsdcSupply">
-                    <label v-if="$wu.isFull()" class="full-status-error-label ml-4">TVL > ${{ $utils.formatMoneyComma(maxWmaticUsdcSupply, 0) }}. Please check status later.</label>
+                <template v-if="totalSupply.etsRuby >= maxEtsRubySupply">
+                    <label v-if="$wu.isFull()" class="full-status-error-label ml-4">TVL > ${{ $utils.formatMoneyComma(maxEtsRubySupply, 0) }}. Please check status later.</label>
                 </template>
             </v-row>
 
             <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-n8' : 'mt-2'" v-if="!$wu.isFull()">
-                <template v-if="totalSupply.wmaticUsdc >= maxWmaticUsdcSupply">
-                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxWmaticUsdcSupply, 0) }}. Please check status later.</label>
+                <template v-if="totalSupply.etsRuby >= maxEtsRubySupply">
+                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxEtsRubySupply, 0) }}. Please check status later.</label>
                 </template>
             </v-row>
         </template>
 
         <template v-else>
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-                <v-btn class="header-btn btn-filled" @click="setWalletNetwork('137')">
-                    SWITCH TO POLYGON TO MINT
+                <v-btn class="header-btn btn-filled" @click="setWalletNetwork('10')">
+                    SWITCH TO OPTIMISM TO MINT
                 </v-btn>
             </v-row>
         </template>
@@ -383,13 +383,13 @@ export default {
 
 
     computed: {
-        ...mapGetters('network', ['explorerUrl', 'networkId', 'polygonConfig']),
-        ...mapGetters('marketData', ['wmaticUsdcStrategyData']),
-        ...mapGetters('supplyData', ['totalSupply', 'maxWmaticUsdcSupply']),
+        ...mapGetters('network', ['explorerUrl', 'networkId', 'opConfig']),
+        ...mapGetters('marketData', ['etsRubyStrategyData']),
+        ...mapGetters('supplyData', ['totalSupply', 'maxEtsRubySupply']),
 
         entryFee: function () {
-            if (this.wmaticUsdcStrategyData && this.wmaticUsdcStrategyData.fees) {
-                let result = this.wmaticUsdcStrategyData.fees.find(x => x.id === 'buy');
+            if (this.etsRubyStrategyData && this.etsRubyStrategyData.fees) {
+                let result = this.etsRubyStrategyData.fees.find(x => x.id === 'buy');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -397,8 +397,8 @@ export default {
         },
 
         exitFee: function () {
-            if (this.wmaticUsdcStrategyData && this.wmaticUsdcStrategyData.fees) {
-                let result = this.wmaticUsdcStrategyData.fees.find(x => x.id === 'redeem');
+            if (this.etsRubyStrategyData && this.etsRubyStrategyData.fees) {
+                let result = this.etsRubyStrategyData.fees.find(x => x.id === 'redeem');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -406,8 +406,8 @@ export default {
         },
 
         performanceFee: function () {
-            if (this.wmaticUsdcStrategyData && this.wmaticUsdcStrategyData.fees) {
-                let result = this.wmaticUsdcStrategyData.fees.find(x => x.id === 'profit');
+            if (this.etsRubyStrategyData && this.etsRubyStrategyData.fees) {
+                let result = this.etsRubyStrategyData.fees.find(x => x.id === 'profit');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -415,8 +415,8 @@ export default {
         },
 
         managementFee: function () {
-            if (this.wmaticUsdcStrategyData && this.wmaticUsdcStrategyData.fees) {
-                let result = this.wmaticUsdcStrategyData.fees.find(x => x.id === 'tvl');
+            if (this.etsRubyStrategyData && this.etsRubyStrategyData.fees) {
+                let result = this.etsRubyStrategyData.fees.find(x => x.id === 'tvl');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -424,14 +424,14 @@ export default {
         },
 
         networkSupport: function () {
-            return this.networkId === 137;
+            return this.networkId === 10;
         },
     },
 
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
-        ...mapActions('investModal', ['showWmaticUsdcModal', 'showMintView']),
+        ...mapActions('investModal', ['showEtsRubyModal', 'showMintView']),
 
         shortAddress(address) {
             if (address) {
@@ -443,13 +443,13 @@ export default {
 
         openTokenOnScan(hash) {
             if (hash && hash !== '') {
-                window.open(this.polygonConfig.explorerUrl + "token/" + hash, '_blank').focus();
+                window.open(this.opConfig.explorerUrl + "token/" + hash, '_blank').focus();
             }
         },
 
         openStrategyOnScan(hash) {
             if (hash && hash !== '') {
-                window.open(this.polygonConfig.explorerUrl + "address/" + hash, '_blank').focus();
+                window.open(this.opConfig.explorerUrl + "address/" + hash, '_blank').focus();
             }
         },
 
@@ -459,11 +459,9 @@ export default {
 
         mintAction() {
             this.showMintView();
-            this.showWmaticUsdcModal();
+            this.showEtsRubyModal();
         },
-
     }
-
 }
 </script>
 

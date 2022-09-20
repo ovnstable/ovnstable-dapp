@@ -6,11 +6,13 @@ const state = {
         etsMoonstone: 0,
         usdPlusWbnb: 0,
         busdWbnb: 0,
+        etsRuby: 0,
     },
 
     maxUsdPlusWmaticSupply: 275000.00,
     maxWmaticUsdcSupply: 500000.00,
     maxEtsMoonstoneSupply: 500000.00,
+    maxEtsRubySupply: 500000.00,
     maxUsdPlusWbnbSupply: 500000.00,
     maxBusdWbnbSupply: 500000.00,
 };
@@ -40,6 +42,10 @@ const getters = {
     maxBusdWbnbSupply(state) {
         return state.maxBusdWbnbSupply;
     },
+
+    maxEtsRubySupply(state) {
+        return state.maxEtsRubySupply;
+    },
 };
 
 const actions = {
@@ -54,6 +60,7 @@ const actions = {
             etsMoonstone: 0,
             usdPlusWbnb: 0,
             busdWbnb: 0,
+            etsRuby: 0,
         });
 
     },
@@ -68,6 +75,7 @@ const actions = {
         let etsMoonstone;
         let usdPlusWbnb;
         let busdWbnb;
+        let etsRuby;
 
         try {
             usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.totalSupply().call();
@@ -97,6 +105,12 @@ const actions = {
             busdWbnb = await web3.contracts.busdWbnb.methods.totalSupply().call();
         } catch (e) {
             busdWbnb = null;
+        }
+
+        try {
+            etsRuby = await web3.contracts.etsRubyToken.methods.totalSupply().call();
+        } catch (e) {
+            etsRuby = null;
         }
 
 
@@ -145,12 +159,22 @@ const actions = {
         } catch (e) {
         }
 
+        try {
+            if (etsRuby) {
+                etsRuby = web3.web3.utils.fromWei(etsRuby, 'mwei');
+            } else {
+                etsRuby = rootState.marketData.etsRubyStrategyData.tvl;
+            }
+        } catch (e) {
+        }
+
         commit('setTotalSupply', {
             usdPlusWmatic: usdPlusWmatic,
             wmaticUsdc: wmaticUsdc,
             etsMoonstone: etsMoonstone,
             usdPlusWbnb: usdPlusWbnb,
             busdWbnb: busdWbnb,
+            etsRuby: etsRuby,
         })
     },
 };

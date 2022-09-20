@@ -3,9 +3,9 @@ import WrappedUsdPlusImage from "@/assets/wUsdPlus.json";
 import UsdPlusWmaticImage from "@/assets/usdPlusWmatic.json";
 import WmaticImageUsdc from "@/assets/wmaticUsdc.json";
 import EtsMoonstoneImage from "@/assets/ets_moonstone.json";
-import EtsRubyImage from "@/assets/ets_ruby.json";
 import UsdPlusWbnbImage from "@/assets/usdPlusWbnb.json";
 import BusdWbnbImage from "@/assets/busdWbnb.json";
+import EtsRubyImage from "@/assets/ets_ruby.json";
 import OvnImage from "@/assets/ovn.json";
 
 const state = {};
@@ -138,31 +138,6 @@ const actions = {
             .catch(console.error)
     },
 
-    async addEtsRubyToken({commit, dispatch, getters, rootState}) {
-
-        await rootState.web3.provider
-            .request({
-                method: 'wallet_watchAsset',
-                params: {
-                    type: 'ERC20',
-                    options: {
-                        address: rootState.web3.contracts.etsRubyToken.options.address,
-                        symbol: process.env.VUE_APP_ETS_RUBY_TOKEN_NAME,
-                        decimals: 6,
-                        image: EtsRubyImage.image,
-                    },
-                },
-            })
-            .then((success) => {
-                if (success) {
-                    console.log('ETS RUBY successfully added to wallet!')
-                } else {
-                    throw new Error('Something went wrong.')
-                }
-            })
-            .catch(console.error)
-    },
-
     async addUsdPlusWbnbToken({commit, dispatch, getters, rootState}) {
 
         await rootState.web3.provider
@@ -206,6 +181,31 @@ const actions = {
             .then((success) => {
                 if (success) {
                     console.log('BUSD/WBNB successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
+    async addEtsRubyToken({commit, dispatch, getters, rootState}) {
+
+        await rootState.web3.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: rootState.web3.contracts.etsRubyToken.options.address,
+                        symbol: process.env.VUE_APP_ETS_RUBY_TOKEN_NAME,
+                        decimals: 6,
+                        image: EtsRubyImage.image,
+                    },
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('ETS RUBY successfully added to wallet!')
                 } else {
                     throw new Error('Something went wrong.')
                 }

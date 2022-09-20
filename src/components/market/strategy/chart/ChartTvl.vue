@@ -104,7 +104,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'etsMoonstoneStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData']),
+        ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'etsMoonstoneStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData', 'etsRubyStrategyData']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -190,6 +190,9 @@ export default {
                     break;
                 case "BUSD/WBNB":
                     this.totalTvl = this.busdWbnbStrategyData.tvl;
+                    break;
+                case "ETS RUBY":
+                    this.totalTvl = this.etsRubyStrategyData.tvl;
                     break;
             }
 

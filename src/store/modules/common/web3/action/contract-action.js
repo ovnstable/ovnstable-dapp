@@ -35,14 +35,14 @@ const actions = {
         let EtsExchangerMoonstone = require(`@/contracts/polygon/HedgeExchangerQsWmaticUsdc.json`);
         let EtsMoonstoneToken = require(`@/contracts/polygon/EtsQsWmaticUsdc.json`);
 
-        let EtsExchangerRuby = require(`@/contracts/optimism/HedgeExchangerWethUsdc.json`);
-        let EtsRubyToken = require(`@/contracts/optimism/RebaseTokenWethUsdc.json`);
-
         let ExchangerUsdPlusWbnb = require(`@/contracts/bsc/HedgeExchangerUsdPlusWbnb.json`);
         let UsdPlusWbnbToken = require(`@/contracts/bsc/RebaseTokenUsdPlusWbnb.json`);
 
         let ExchangerBusdWbnb = require(`@/contracts/bsc/HedgeExchangerBusdWbnb.json`)
-        let BusdWbnbToken = require(`@/contracts/bsc/RebaseTokenBusdWbnb.json`)
+        let BusdWbnbToken = require(`@/contracts/bsc/RebaseTokenBusdWbnb.json`);
+
+        let EtsExchangerRuby = require(`@/contracts/optimism/HedgeExchangerWethUsdc.json`);
+        let EtsRubyToken = require(`@/contracts/optimism/RebaseTokenWethUsdc.json`);
 
 
         let web3 = rootState.web3.web3;
@@ -88,14 +88,14 @@ const actions = {
         contracts.etsExchangerMoonstone = _load(EtsExchangerMoonstone, web3);
         contracts.etsMoonstoneToken = _load(EtsMoonstoneToken, web3);
 
-        contracts.etsExchangerRuby = _load(EtsExchangerRuby, web3);
-        contracts.etsRubyToken = _load(EtsRubyToken, web3);
-
         contracts.exchangerUsdPlusWbnb = _load(ExchangerUsdPlusWbnb, web3);
         contracts.usdPlusWbnb = _load(UsdPlusWbnbToken, web3);
 
         contracts.exchangerBusdWbnb = _load(ExchangerBusdWbnb, web3);
         contracts.busdWbnb = _load(BusdWbnbToken, web3);
+
+        contracts.etsExchangerRuby = _load(EtsExchangerRuby, web3);
+        contracts.etsRubyToken = _load(EtsRubyToken, web3);
 
         commit('web3/setContracts', contracts, {root: true})
     },

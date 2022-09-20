@@ -50,6 +50,7 @@
         <InvestModalEtsMoonstone v-if="showEtsMoonstone"/>
         <InvestModalWbnb v-if="showUsdPlusWbnb"/>
         <InvestModalBusdWbnb v-if="showBusdWbnb"/>
+        <InvestModalEtsRuby v-if="showEtsRuby"/>
 
         <SwapModal/>
         <WrapModal/>
@@ -69,6 +70,7 @@ import InvestModalWmaticUsdc from "@/components/market/modal/wmaticUsdc/invest/I
 import InvestModalEtsMoonstone from "@/components/market/modal/etsMoonstone/invest/InvestModal";
 import InvestModalWbnb from "@/components/market/modal/wbnb/invest/InvestModal";
 import InvestModalBusdWbnb from "@/components/market/modal/busdWbnb/invest/InvestModal";
+import InvestModalEtsRuby from "@/components/market/modal/etsRuby/invest/InvestModal";
 import WrapModal from "@/components/wrap/WrapModal";
 
 export default {
@@ -81,6 +83,7 @@ export default {
         InvestModalEtsMoonstone,
         InvestModalWbnb,
         InvestModalBusdWbnb,
+        InvestModalEtsRuby,
         SwapModal,
         MenuSelect,
         NetworkSelect,
@@ -96,7 +99,7 @@ export default {
         ...mapGetters('web3', ['loadingWeb3']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('accountData', ['account']),
-        ...mapGetters('marketUI', ['showUsdPlusWbnb', 'showUsdPlusWmatic', 'showWmaticUsdc', 'showEtsMoonstone', 'showBusdWbnb']),
+        ...mapGetters('marketUI', ['showUsdPlusWbnb', 'showUsdPlusWmatic', 'showWmaticUsdc', 'showEtsMoonstone', 'showBusdWbnb', 'showEtsRuby']),
     },
 
     methods: {

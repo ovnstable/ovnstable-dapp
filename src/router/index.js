@@ -12,8 +12,7 @@ import getAbroad from "@/router/midleware/governance/getAbroad";
 
 // Dapp Sections
 import Market from "./midleware/dapp/Market";
-import Wmatic from "./midleware/dapp/Wmatic";
-import Wbnb from "./midleware/dapp/Wbnb";
+import Ets from "./midleware/dapp/Ets";
 import Stats from "./midleware/dapp/Stats";
 import Collateral from "./midleware/dapp/Collateral";
 import Dashboard from "./midleware/dapp/Dashboard";
@@ -48,7 +47,7 @@ const routes = [
                 component: () => import('../views/strategy/wbnb/WbnbPageView.vue'),
                 meta: {
                     middleware: [
-                        Wbnb
+                        Ets
                     ]
                 }
             },
@@ -58,7 +57,7 @@ const routes = [
                 component: () => import('../views/strategy/busdWbnb/BusdWbnbPageView.vue'),
                 meta: {
                     middleware: [
-                        Wbnb
+                        Ets
                     ]
                 }
             },
@@ -68,7 +67,7 @@ const routes = [
                 component: () => import('../views/strategy/wmatic/WmaticPageView.vue'),
                 meta: {
                     middleware: [
-                        Wmatic
+                        Ets
                     ]
                 }
             },
@@ -78,7 +77,7 @@ const routes = [
                 component: () => import('../views/strategy/wmaticUsdc/WmaticUsdcPageView.vue'),
                 meta: {
                     middleware: [
-                        Wmatic
+                        Ets
                     ]
                 }
             },
@@ -88,7 +87,17 @@ const routes = [
                 component: () => import('../views/strategy/etsMoonstone/EtsMoonstonePageView.vue'),
                 meta: {
                     middleware: [
-                        Wmatic
+                        Ets
+                    ]
+                }
+            },
+            {
+                path: '/ets/ruby',
+                name: 'EtsRubyPageView',
+                component: () => import('../views/strategy/etsRuby/EtsRubyPageView.vue'),
+                meta: {
+                    middleware: [
+                        Ets
                     ]
                 }
             },

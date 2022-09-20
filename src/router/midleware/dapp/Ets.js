@@ -1,6 +1,6 @@
-export default async function getWbnb({ context, nextMiddleware }){
+export default async function getWmatic({ context, nextMiddleware }){
     try {
-        console.debug('Get Dapp/Hedged/WBNB');
+        console.debug('Get Dapp/Ets');
 
         context.store.dispatch('menuUI/selectTab', 'market');
         context.store.dispatch('statsData/refreshStats');

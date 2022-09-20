@@ -20,6 +20,7 @@ const actions = {
                 dispatch('marketUI/showEtsMoonstone', null, {root: true});
                 dispatch('marketUI/hideUsdPlusWbnb', null, {root: true});
                 dispatch('marketUI/hideBusdWbnb', null, {root: true});
+                dispatch('marketUI/hideEtsRuby', null, {root: true});
                 break;
             case "bsc":
             case "56":
@@ -30,6 +31,7 @@ const actions = {
                 dispatch('marketUI/hideEtsMoonstone', null, {root: true});
                 dispatch('marketUI/showUsdPlusWbnb', null, {root: true});
                 dispatch('marketUI/showBusdWbnb', null, {root: true});
+                dispatch('marketUI/hideEtsRuby', null, {root: true});
                 break;
             case "avax":
             case "avalanche":
@@ -41,6 +43,7 @@ const actions = {
                 dispatch('marketUI/hideEtsMoonstone', null, {root: true});
                 dispatch('marketUI/hideUsdPlusWbnb', null, {root: true});
                 dispatch('marketUI/hideBusdWbnb', null, {root: true});
+                dispatch('marketUI/hideEtsRuby', null, {root: true});
                 break;
             case "op":
             case "optimism":
@@ -52,6 +55,7 @@ const actions = {
                 dispatch('marketUI/hideEtsMoonstone', null, {root: true});
                 dispatch('marketUI/hideUsdPlusWbnb', null, {root: true});
                 dispatch('marketUI/hideBusdWbnb', null, {root: true});
+                dispatch('marketUI/showEtsRuby', null, {root: true});
                 break;
             default:
                 break;

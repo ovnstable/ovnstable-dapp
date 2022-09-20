@@ -7,12 +7,14 @@ const state = {
     etsMoonstoneStrategyData: null,
     usdPlusWbnbStrategyData: null,
     busdWbnbStrategyData: null,
+    etsRubyStrategyData: null,
 
     clientProfitDayUsdPlusWmatic: null,
     clientProfitDayWmaticUsdc: null,
     clientProfitDayEtsMoonstone: null,
     clientProfitDayUsdPlusWbnb: null,
     clientProfitDayBusdWbnb: null,
+    clientProfitDayEtsRuby: null,
 
     apyDataUsdPlusWmatic: {},
     tvlDataUsdPlusWmatic: {},
@@ -29,8 +31,12 @@ const state = {
     apyDataBusdWbnb: {},
     tvlDataBusdWbnb: {},
 
+    apyDataEtsRuby: {},
+    tvlDataEtsRuby: {},
+
     apyDataUsdPlusPolygon: {},
     apyDataUsdPlusBinance: {},
+    apyDataUsdPlusOp: {},
 };
 
 const getters = {
@@ -55,6 +61,10 @@ const getters = {
         return state.busdWbnbStrategyData;
     },
 
+    etsRubyStrategyData(state) {
+        return state.etsRubyStrategyData;
+    },
+
     clientProfitDayUsdPlusWmatic(state) {
         return state.clientProfitDayUsdPlusWmatic;
     },
@@ -73,6 +83,10 @@ const getters = {
 
     clientProfitDayBusdWbnb(state) {
         return state.clientProfitDayBusdWbnb;
+    },
+
+    clientProfitDayEtsRuby(state) {
+        return state.clientProfitDayEtsRuby;
     },
 
     apyDataUsdPlusWmatic(state) {
@@ -115,12 +129,24 @@ const getters = {
         return state.tvlDataBusdWbnb;
     },
 
+    apyDataEtsRuby(state) {
+        return state.apyDataEtsRuby;
+    },
+
+    tvlDataEtsRuby(state) {
+        return state.tvlDataEtsRuby;
+    },
+
     apyDataUsdPlusPolygon(state) {
         return state.apyDataUsdPlusPolygon;
     },
 
     apyDataUsdPlusBinance(state) {
         return state.apyDataUsdPlusBinance;
+    },
+
+    apyDataUsdPlusOp(state) {
+        return state.apyDataUsdPlusOp;
     },
 };
 
@@ -144,8 +170,12 @@ const actions = {
         dispatch('refreshStrategyData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'});
         dispatch('refreshClientData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'});
 
+        dispatch('refreshStrategyData', {contractAddress: '0xA88F8c02eBdE678de623C6BCFC886De82e18ad00', strategyName: 'etsRuby'});
+        dispatch('refreshClientData', {contractAddress: '0xA88F8c02eBdE678de623C6BCFC886De82e18ad00', strategyName: 'etsRuby'});
+
         dispatch('refreshUsdPlusPayoutsData', "polygon");
         dispatch('refreshUsdPlusPayoutsData', "bsc");
+        dispatch('refreshUsdPlusPayoutsData', "op");
 
         dispatch('accountData/refreshBalance', null, {root:true});
         dispatch('supplyData/refreshSupply', null, {root:true});
@@ -163,6 +193,9 @@ const actions = {
             case "usdPlusWbnb":
             case "busdWbnb":
                 appApiUrl = rootState.network.bscApi;
+                break;
+            case "etsRuby":
+                appApiUrl = rootState.network.opApi;
                 break;
         }
 
@@ -256,6 +289,9 @@ const actions = {
                     case "busdWbnb":
                         commit('setApyDataBusdWbnb', widgetData);
                         break;
+                    case "etsRuby":
+                        commit('setApyDataEtsRuby', widgetData);
+                        break;
                 }
 
                 let widgetTvlDataDict = {};
@@ -295,6 +331,9 @@ const actions = {
                     case "busdWbnb":
                         commit('setTvlDataBusdWbnb', widgetTvlData);
                         break;
+                    case "etsRuby":
+                        commit('setTvlDataEtsRuby', widgetData);
+                        break;
                 }
             }).catch(reason => {
                 console.log('Error get data: ' + reason);
@@ -316,6 +355,9 @@ const actions = {
             case "busdWbnb":
                 commit('setBusdWbnbStrategyData', strategyData);
                 break;
+            case "etsRuby":
+                commit('setEtsRubyStrategyData', strategyData);
+                break;
         }
     },
 
@@ -333,6 +375,9 @@ const actions = {
             case "usdPlusWbnb":
             case "busdWbnb":
                 appApiUrl = rootState.network.bscApi;
+                break;
+            case "etsRuby":
+                appApiUrl = rootState.network.opApi;
                 break;
         }
 
@@ -373,6 +418,9 @@ const actions = {
             case "busdWbnb":
                 commit('setClientProfitDayBusdWbnb', profitDay);
                 break;
+            case "etsRuby":
+                commit('setClientProfitDayEtsRuby', profitDay);
+                break;
         }
     },
 
@@ -387,6 +435,12 @@ const actions = {
                 break;
             case "bsc":
                 appApiUrl = rootState.network.bscApi;
+                break;
+            case "op":
+                appApiUrl = rootState.network.opApi;
+                break;
+            case "avax":
+                appApiUrl = rootState.network.avaxApi;
                 break;
         }
 
@@ -416,6 +470,9 @@ const actions = {
                     case "bsc":
                         commit('setApyDataUsdPlusBinance', resultDataList);
                         break;
+                    case "op":
+                        commit('setApyDataUsdPlusOp', resultDataList);
+                        break;
                 }
             })
     },
@@ -443,6 +500,10 @@ const mutations = {
         state.busdWbnbStrategyData = value;
     },
 
+    setEtsRubyStrategyData(state, value) {
+        state.etsRubyStrategyData = value;
+    },
+
     setClientProfitDayUsdPlusWmatic(state, value) {
         state.clientProfitDayUsdPlusWmatic = value;
     },
@@ -461,6 +522,10 @@ const mutations = {
 
     setClientProfitDayBusdWbnb(state, value) {
         state.clientProfitDayBusdWbnb = value;
+    },
+
+    setClientProfitDayEtsRuby(state, value) {
+        state.clientProfitDayEtsRuby = value;
     },
 
     setApyDataUsdPlusWmatic(state, value) {
@@ -503,12 +568,24 @@ const mutations = {
         state.tvlDataBusdWbnb = value;
     },
 
+    setApyDataEtsRuby(state, value) {
+        state.apyDataEtsRuby = value;
+    },
+
+    setTvlDataEtsRuby(state, value) {
+        state.tvlDataEtsRuby = value;
+    },
+
     setApyDataUsdPlusPolygon(state, value) {
         state.apyDataUsdPlusPolygon = value;
     },
 
     setApyDataUsdPlusBinance(state, value) {
         state.apyDataUsdPlusBinance = value;
+    },
+
+    setApyDataUsdPlusOp(state, value) {
+        state.apyDataUsdPlusOp = value;
     },
 };
 

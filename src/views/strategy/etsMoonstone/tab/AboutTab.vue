@@ -332,7 +332,7 @@
                 <v-row justify="center" align="center">
                     <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Inception date</label>
                     <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-text ml-3" :class="!$wu.isFull() ? 'mr-2' : ''"><b>14 Septemper 2022</b></label>
+                    <label class="address-card-text ml-3" :class="!$wu.isFull() ? 'mr-2' : ''"><b>14 September 2022</b></label>
                 </v-row>
             </v-col>
         </v-row>

@@ -104,6 +104,12 @@
                         </div>
                         <label class="ml-2 coin-btn-label">BUSD/WBNB</label>
                     </v-btn>
+                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addEtsRubyToken" v-if="showEtsRuby">
+                        <div class="coin-img">
+                            <v-img :src="require('@/assets/currencies/market/ets_ruby.svg')"/>
+                        </div>
+                        <label class="ml-2 coin-btn-label">ETS RUBY</label>
+                    </v-btn>
                 </v-row>
             </v-card-text>
         </v-card>
@@ -146,7 +152,7 @@ export default {
         ...mapGetters('web3', ['walletName']),
         ...mapGetters('accountUI', ['showAccountProfile']),
         ...mapGetters('wrapUI', ['showWrap']),
-        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showWmaticUsdc', 'showEtsMoonstone', 'showUsdPlusWbnb', 'showBusdWbnb']),
+        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showWmaticUsdc', 'showEtsMoonstone', 'showUsdPlusWbnb', 'showBusdWbnb', 'showEtsRuby']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
 
         accountDisplay: function () {
@@ -172,7 +178,7 @@ export default {
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
         ...mapActions('walletAction', ['disconnectWallet']),
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addWmaticUsdcToken', 'addEtsMoonstoneToken', 'addUsdPlusWbnbToken', 'addBusdWbnbToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addWmaticUsdcToken', 'addEtsMoonstoneToken', 'addUsdPlusWbnbToken', 'addBusdWbnbToken', 'addEtsRubyToken']),
         ...mapActions('transaction', ['loadTransaction']),
 
         openOnExplorer(hash) {

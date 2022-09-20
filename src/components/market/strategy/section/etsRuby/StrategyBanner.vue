@@ -8,7 +8,7 @@
                 <label class="banner-title ml-4">ETS RUBY</label>
                 <v-spacer></v-spacer>
                 <div class="network-icon">
-                    <v-img :src="require('@/assets/network/polygon.svg')"/>
+                    <v-img :src="require('@/assets/network/op.svg')"/>
                 </div>
             </v-row>
 

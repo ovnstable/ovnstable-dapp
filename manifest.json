@@ -1,0 +1,6 @@
+{
+    "name": "Overnight",
+    "description": "USD+ is USDC that pays you yield daily via rebase.",
+    "iconPath": "https://app.overnight.fi/src/assets/logo.svg",
+    "display": "standalone"
+}

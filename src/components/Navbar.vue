@@ -37,13 +37,17 @@
                     <label class="navbar-page-label" :class="selectedTab === 'collateral' ? 'selected-page' : ''">Collateral</label>
                 </v-list-item-title>
             </v-list-item>
+        </v-list>
+
+        <v-list nav subheader class="mx-3" dense>
+            <v-divider class="navbar-list-divider"></v-divider>
 
             <v-list-item class="list-item-hover mx-n2 mt-2" link @click="swapClick">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/swap_horizontal.svg')">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label">Swap USD+</label>
+                    <label class="navbar-page-label">Mint/redeem USD+</label>
                 </v-list-item-title>
             </v-list-item>
         </v-list>

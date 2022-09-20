@@ -24,7 +24,6 @@ const actions = {
             dispatch('marketData/refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'}, {root:true});
             dispatch('marketData/refreshClientData', {contractAddress: '0xd52caB8AfC8ECd08b7CFa6D07e224a56F943e4c4', strategyName: 'wmaticUsdc'}, {root:true});
             dispatch('marketData/refreshClientData', {contractAddress: '0x719ee857Ae6cf85Cbe7284Bc45ad1f99dd5ff0dB', strategyName: 'etsMoonstone'}, {root:true});
-            dispatch('marketData/refreshClientData', {contractAddress: '0x719ee857Ae6cf85Cbe7284Bc45ad1f99dd5ff0dB', strategyName: 'etsMoonstone'}, {root:true});
         }
 
         if (network === 'bsc') {

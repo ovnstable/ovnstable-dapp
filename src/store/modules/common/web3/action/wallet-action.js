@@ -204,6 +204,10 @@ const actions = {
                 walletName: "ronin",
                 preferred: false
             },
+            {
+                walletName: "gnosis",
+                preferred: false
+            },
         ];
     },
 

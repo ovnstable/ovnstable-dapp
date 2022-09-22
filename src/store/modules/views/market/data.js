@@ -2,19 +2,8 @@ import moment from "moment";
 import {axios} from "@/plugins/http-axios";
 
 const state = {
-    wmaticStrategyData: null,
-    wmaticUsdcStrategyData: null,
-    etsMoonstoneStrategyData: null,
-    usdPlusWbnbStrategyData: null,
-    busdWbnbStrategyData: null,
-    etsRubyStrategyData: null,
-
-    clientProfitDayUsdPlusWmatic: null,
-    clientProfitDayWmaticUsdc: null,
-    clientProfitDayEtsMoonstone: null,
-    clientProfitDayUsdPlusWbnb: null,
-    clientProfitDayBusdWbnb: null,
-    clientProfitDayEtsRuby: null,
+    etsStrategyData: {},
+    etsClientData: {},
 
     apyDataUsdPlusWmatic: {},
     tvlDataUsdPlusWmatic: {},
@@ -41,52 +30,12 @@ const state = {
 
 const getters = {
 
-    wmaticStrategyData(state) {
-        return state.wmaticStrategyData;
+    etsStrategyData(state) {
+        return state.etsStrategyData;
     },
 
-    wmaticUsdcStrategyData(state) {
-        return state.wmaticUsdcStrategyData;
-    },
-
-    etsMoonstoneStrategyData(state) {
-        return state.etsMoonstoneStrategyData;
-    },
-
-    usdPlusWbnbStrategyData(state) {
-        return state.usdPlusWbnbStrategyData;
-    },
-
-    busdWbnbStrategyData(state) {
-        return state.busdWbnbStrategyData;
-    },
-
-    etsRubyStrategyData(state) {
-        return state.etsRubyStrategyData;
-    },
-
-    clientProfitDayUsdPlusWmatic(state) {
-        return state.clientProfitDayUsdPlusWmatic;
-    },
-
-    clientProfitDayWmaticUsdc(state) {
-        return state.clientProfitDayWmaticUsdc;
-    },
-
-    clientProfitDayEtsMoonstone(state) {
-        return state.clientProfitDayEtsMoonstone;
-    },
-
-    clientProfitDayUsdPlusWbnb(state) {
-        return state.clientProfitDayUsdPlusWbnb;
-    },
-
-    clientProfitDayBusdWbnb(state) {
-        return state.clientProfitDayBusdWbnb;
-    },
-
-    clientProfitDayEtsRuby(state) {
-        return state.clientProfitDayEtsRuby;
+    etsClientData(state) {
+        return state.etsClientData;
     },
 
     apyDataUsdPlusWmatic(state) {
@@ -155,23 +104,17 @@ const actions = {
     async refreshMarket({commit, dispatch, getters, rootState}) {
         console.debug('MarketData: refreshMarket');
 
-        dispatch('refreshStrategyData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
-        dispatch('refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
+        rootState.etsAction.etsList.forEach(ets => {
+            dispatch('refreshStrategyData', {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain});
+            dispatch('refreshClientData', {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain});
+        });
 
-        dispatch('refreshStrategyData', {contractAddress: '0xd52caB8AfC8ECd08b7CFa6D07e224a56F943e4c4', strategyName: 'wmaticUsdc'});
-        dispatch('refreshClientData', {contractAddress: '0xd52caB8AfC8ECd08b7CFa6D07e224a56F943e4c4', strategyName: 'wmaticUsdc'});
-
-        dispatch('refreshStrategyData', {contractAddress: '0x719ee857Ae6cf85Cbe7284Bc45ad1f99dd5ff0dB', strategyName: 'etsMoonstone'});
-        dispatch('refreshClientData', {contractAddress: '0x719ee857Ae6cf85Cbe7284Bc45ad1f99dd5ff0dB', strategyName: 'etsMoonstone'});
-
-        dispatch('refreshStrategyData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
-        dispatch('refreshClientData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
-
-        dispatch('refreshStrategyData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'});
-        dispatch('refreshClientData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'});
-
-        dispatch('refreshStrategyData', {contractAddress: '0xA88F8c02eBdE678de623C6BCFC886De82e18ad00', strategyName: 'etsRuby'});
-        dispatch('refreshClientData', {contractAddress: '0xA88F8c02eBdE678de623C6BCFC886De82e18ad00', strategyName: 'etsRuby'});
+        // dispatch('refreshClientData', {contractAddress: '0x719ee857Ae6cf85Cbe7284Bc45ad1f99dd5ff0dB', strategyName: 'etsMoonstone'});
+        // dispatch('refreshClientData', {contractAddress: '0xA88F8c02eBdE678de623C6BCFC886De82e18ad00', strategyName: 'etsRuby'});
+        // dispatch('refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
+        // dispatch('refreshClientData', {contractAddress: '0xd52caB8AfC8ECd08b7CFa6D07e224a56F943e4c4', strategyName: 'wmaticUsdc'});
+        // dispatch('refreshClientData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
+        // dispatch('refreshClientData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'});
 
         dispatch('refreshUsdPlusPayoutsData', "polygon");
         dispatch('refreshUsdPlusPayoutsData', "bsc");
@@ -184,18 +127,21 @@ const actions = {
     async refreshStrategyData({commit, dispatch, getters, rootState}, refreshParams) {
         let appApiUrl;
 
-        switch (refreshParams.strategyName) {
-            case "usdPlusWmatic":
-            case "wmaticUsdc":
-            case "etsMoonstone":
+        switch (refreshParams.chain) {
+            case 137:
                 appApiUrl = rootState.network.polygonApi;
                 break;
-            case "usdPlusWbnb":
-            case "busdWbnb":
+            case 43114:
+                appApiUrl = rootState.network.avaxApi;
+                break;
+            case 10:
+                appApiUrl = rootState.network.opApi;
+                break;
+            case 56:
                 appApiUrl = rootState.network.bscApi;
                 break;
-            case "etsRuby":
-                appApiUrl = rootState.network.opApi;
+            default:
+                appApiUrl = rootState.network.polygonApi;
                 break;
         }
 
@@ -339,26 +285,7 @@ const actions = {
                 console.log('Error get data: ' + reason);
             })
 
-        switch (refreshParams.strategyName) {
-            case "usdPlusWmatic":
-                commit('setWmaticStrategyData', strategyData);
-                break;
-            case "wmaticUsdc":
-                commit('setWmaticUsdcStrategyData', strategyData);
-                break;
-            case "etsMoonstone":
-                commit('setEtsMoonstoneStrategyData', strategyData);
-                break;
-            case "usdPlusWbnb":
-                commit('setUsdPlusWbnbStrategyData', strategyData);
-                break;
-            case "busdWbnb":
-                commit('setBusdWbnbStrategyData', strategyData);
-                break;
-            case "etsRuby":
-                commit('setEtsRubyStrategyData', strategyData);
-                break;
-        }
+        dispatch('addEtsStrategyData', { name: refreshParams.strategyName, data: strategyData});
     },
 
     async refreshClientData({commit, dispatch, getters, rootState}, refreshParams) {
@@ -366,18 +293,21 @@ const actions = {
 
         let appApiUrl;
 
-        switch (refreshParams.strategyName) {
-            case "usdPlusWmatic":
-            case "wmaticUsdc":
-            case "etsMoonstone":
+        switch (refreshParams.chain) {
+            case 137:
                 appApiUrl = rootState.network.polygonApi;
                 break;
-            case "usdPlusWbnb":
-            case "busdWbnb":
+            case 43114:
+                appApiUrl = rootState.network.avaxApi;
+                break;
+            case 10:
+                appApiUrl = rootState.network.opApi;
+                break;
+            case 56:
                 appApiUrl = rootState.network.bscApi;
                 break;
-            case "etsRuby":
-                appApiUrl = rootState.network.opApi;
+            default:
+                appApiUrl = rootState.network.polygonApi;
                 break;
         }
 
@@ -386,7 +316,7 @@ const actions = {
         }
 
         let account = rootState.accountData.account.toLowerCase();
-        let profitDay;
+        let profitDay = null;
 
         let fetchOptions = {
             headers: {
@@ -402,26 +332,7 @@ const actions = {
                 console.log('Error get data: ' + reason);
             })
 
-        switch (refreshParams.strategyName) {
-            case "usdPlusWmatic":
-                commit('setClientProfitDayUsdPlusWmatic', profitDay);
-                break;
-            case "wmaticUsdc":
-                commit('setClientProfitDayWmaticUsdc', profitDay);
-                break;
-            case "etsMoonstone":
-                commit('setClientProfitDayEtsMoonstone', profitDay);
-                break;
-            case "usdPlusWbnb":
-                commit('setClientProfitDayUsdPlusWbnb', profitDay);
-                break;
-            case "busdWbnb":
-                commit('setClientProfitDayBusdWbnb', profitDay);
-                break;
-            case "etsRuby":
-                commit('setClientProfitDayEtsRuby', profitDay);
-                break;
-        }
+        dispatch('addEtsClientData', { name: refreshParams.strategyName, data: profitDay});
     },
 
     async refreshUsdPlusPayoutsData({commit, dispatch, getters, rootState}, network) {
@@ -476,56 +387,34 @@ const actions = {
                 }
             })
     },
+
+    async addEtsStrategyData({commit, dispatch, getters, rootState}, etsDataParams) {
+        console.debug('MarketData: addEtsStrategyData');
+
+        let etsData = getters.etsStrategyData;
+        etsData[etsDataParams.name] = etsDataParams.data;
+
+        commit('setEtsStrategyData', etsData);
+    },
+
+    async addEtsClientData({commit, dispatch, getters, rootState}, etsClientDataParams) {
+        console.debug('MarketData: addEtsClientData');
+
+        let etsClientData = getters.etsClientData;
+        etsClientData[etsClientDataParams.name] = etsClientDataParams.data;
+
+        commit('setEtsClientData', etsClientData);
+    },
 };
 
 const mutations = {
 
-    setWmaticStrategyData(state, value) {
-        state.wmaticStrategyData = value;
+    setEtsStrategyData(state, value) {
+        state.etsStrategyData = value;
     },
 
-    setWmaticUsdcStrategyData(state, value) {
-        state.wmaticUsdcStrategyData = value;
-    },
-
-    setEtsMoonstoneStrategyData(state, value) {
-        state.etsMoonstoneStrategyData = value;
-    },
-
-    setUsdPlusWbnbStrategyData(state, value) {
-        state.usdPlusWbnbStrategyData = value;
-    },
-
-    setBusdWbnbStrategyData(state, value) {
-        state.busdWbnbStrategyData = value;
-    },
-
-    setEtsRubyStrategyData(state, value) {
-        state.etsRubyStrategyData = value;
-    },
-
-    setClientProfitDayUsdPlusWmatic(state, value) {
-        state.clientProfitDayUsdPlusWmatic = value;
-    },
-
-    setClientProfitDayWmaticUsdc(state, value) {
-        state.clientProfitDayWmaticUsdc = value;
-    },
-
-    setClientProfitDayEtsMoonstone(state, value) {
-        state.clientProfitDayEtsMoonstone = value;
-    },
-
-    setClientProfitDayUsdPlusWbnb(state, value) {
-        state.clientProfitDayUsdPlusWbnb = value;
-    },
-
-    setClientProfitDayBusdWbnb(state, value) {
-        state.clientProfitDayBusdWbnb = value;
-    },
-
-    setClientProfitDayEtsRuby(state, value) {
-        state.clientProfitDayEtsRuby = value;
+    setEtsClientData(state, value) {
+        state.etsClientData = value;
     },
 
     setApyDataUsdPlusWmatic(state, value) {

@@ -209,7 +209,7 @@ export default {
         buyCurrencies: [{
             id: 'wUsdPlus',
             title: 'wUSD+',
-            image: require('@/assets/wUsdPlus.svg')
+            image: require('@/assets/currencies/wUsdPlus.svg')
         }],
 
         sum: null,

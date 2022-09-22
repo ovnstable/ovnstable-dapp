@@ -42,59 +42,9 @@ const routes = [
                 redirect: '/market',
             },
             {
-                path: '/ets/usd-plus-wbnb',
-                name: 'WbnbPageView',
-                component: () => import('../views/strategy/wbnb/WbnbPageView.vue'),
-                meta: {
-                    middleware: [
-                        Ets
-                    ]
-                }
-            },
-            {
-                path: '/ets/busd-wbnb',
-                name: 'BusdWbnbPageView',
-                component: () => import('../views/strategy/busdWbnb/BusdWbnbPageView.vue'),
-                meta: {
-                    middleware: [
-                        Ets
-                    ]
-                }
-            },
-            {
-                path: '/ets/usd-plus-wmatic',
-                name: 'WmaticPageView',
-                component: () => import('../views/strategy/wmatic/WmaticPageView.vue'),
-                meta: {
-                    middleware: [
-                        Ets
-                    ]
-                }
-            },
-            {
-                path: '/ets/wmatic-usdc',
-                name: 'WmaticUsdcPageView',
-                component: () => import('../views/strategy/wmaticUsdc/WmaticUsdcPageView.vue'),
-                meta: {
-                    middleware: [
-                        Ets
-                    ]
-                }
-            },
-            {
-                path: '/ets/moonstone',
-                name: 'EtsMoonstonePageView',
-                component: () => import('../views/strategy/etsMoonstone/EtsMoonstonePageView.vue'),
-                meta: {
-                    middleware: [
-                        Ets
-                    ]
-                }
-            },
-            {
-                path: '/ets/ruby',
-                name: 'EtsRubyPageView',
-                component: () => import('../views/strategy/etsRuby/EtsRubyPageView.vue'),
+                path: '/ets/:name',
+                name: 'EtsPageView',
+                component: () => import('../views/strategy/ets/EtsPageView.vue'),
                 meta: {
                     middleware: [
                         Ets

@@ -235,7 +235,7 @@
                                 <v-col :cols="$wu.isFull() ? 3 : 12">
                                     <v-row class="container-body-title-row" justify="start" :align="$wu.isFull() ? 'start' : 'center'" :class="$wu.isFull() ? '' : 'mb-0'">
                                         <div class="coin-img mr-2" :class="$wu.isFull() ? '' : 'mb-1'" v-if="!$wu.isFull()">
-                                            <v-img :src="require('@/assets/wUsdPlus.svg')"/>
+                                            <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
                                         </div>
                                         <label class="container-body-title" :class="$wu.isFull() ? '' : 'mb-1'">Wrapped USD+</label>
                                     </v-row>
@@ -252,7 +252,7 @@
                                 <v-col v-if="$wu.isFull()">
                                     <v-row justify="end" align="start">
                                         <div class="coin-img">
-                                            <v-img :src="require('@/assets/wUsdPlus.svg')"/>
+                                            <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
                                         </div>
                                     </v-row>
                                 </v-col>

@@ -52,6 +52,7 @@ import web3 from "@/store/modules/common/web3/web3";
 import tokenAction from "@/store/modules/common/web3/action/token-action";
 import dappDataAction from "@/store/modules/common/web3/action/dapp/dapp-data-action";
 import dappUIAction from "@/store/modules/common/web3/action/dapp/dapp-ui-action";
+import etsAction from "@/store/modules/common/web3/action/ets-action";
 
 // Common
 import gasPrice from '@/store/modules/common/gas-price';
@@ -109,6 +110,7 @@ export default new Vuex.Store({
         tokenAction,
         dappDataAction,
         dappUIAction,
+        etsAction,
 
         gasPrice,
         supplyData,

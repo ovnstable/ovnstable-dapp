@@ -3,14 +3,10 @@ const state = {
     balance: {
         usdPlus: 0,
         asset: 0,
-        wUsdPlus: 0,
-        usdPlusWmatic: 0,
-        wmaticUsdc: 0,
-        etsMoonstone: 0,
-        usdPlusWbnb: 0,
-        busdWbnb: 0,
-        etsRuby: 0,
+        wUsdPlus: 0
     },
+
+    etsBalance: {},
 
     account: null,
 
@@ -21,6 +17,10 @@ const getters = {
 
     balance(state) {
         return state.balance;
+    },
+
+    etsBalance(state) {
+        return state.etsBalance;
     },
 
     account(state) {
@@ -42,15 +42,8 @@ const actions = {
         commit('setBalance', {
             usdPlus: 0,
             asset: 0,
-            wUsdPlus: 0,
-            usdPlusWmatic: 0,
-            wmaticUsdc: 0,
-            etsMoonstone: 0,
-            usdPlusWbnb: 0,
-            busdWbnb: 0,
-            etsRuby: 0,
+            wUsdPlus: 0
         });
-
     },
 
     async resetUns({commit, dispatch, getters}) {
@@ -78,119 +71,53 @@ const actions = {
         let usdPlus;
         let asset;
         let wUsdPlus;
-        let usdPlusWmatic;
-        let wmaticUsdc;
-        let etsMoonstone;
-        let usdPlusWbnb;
-        let busdWbnb;
-        let etsRuby;
 
         try {
             asset = await web3.contracts.asset.methods.balanceOf(getters.account).call();
+            asset = asset ? web3.web3.utils.fromWei(asset, assetDecimals === 18 ? 'ether' : 'mwei') : null;
         } catch (e) {
         }
 
         try {
             usdPlus = await web3.contracts.usdPlus.methods.balanceOf(getters.account).call();
+            usdPlus = usdPlus ? web3.web3.utils.fromWei(usdPlus, 'mwei') : usdPlus;
         } catch (e) {
         }
 
         if (networkId === 137 || networkId === 10) {
             try {
                 wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
+                wUsdPlus = wUsdPlus ? web3.web3.utils.fromWei(wUsdPlus, 'mwei') : null;
             } catch (e) {
             }
-        }
-
-        if (web3.contracts.usdPlusWmatic && networkId === 137) {
-            try {
-                usdPlusWmatic = await web3.contracts.usdPlusWmatic.methods.balanceOf(getters.account).call();
-            } catch (e) {
-            }
-        }
-
-        if (web3.contracts.wmaticUsdc && networkId === 137) {
-            try {
-                wmaticUsdc = await web3.contracts.wmaticUsdc.methods.balanceOf(getters.account).call();
-            } catch (e) {
-            }
-        }
-
-        if (web3.contracts.etsMoonstoneToken && networkId === 137) {
-            try {
-                etsMoonstone = await web3.contracts.etsMoonstoneToken.methods.balanceOf(getters.account).call();
-            } catch (e) {
-            }
-        }
-
-        if (web3.contracts.usdPlusWbnb && networkId === 56) {
-            try {
-                usdPlusWbnb = await web3.contracts.usdPlusWbnb.methods.balanceOf(getters.account).call();
-            } catch (e) {
-            }
-        }
-
-        if (web3.contracts.busdWbnb && networkId === 56) {
-            try {
-                busdWbnb = await web3.contracts.busdWbnb.methods.balanceOf(getters.account).call();
-            } catch (e) {
-            }
-        }
-
-        if (web3.contracts.etsRubyToken && networkId === 137) {
-            try {
-                etsRuby = await web3.contracts.etsRubyToken.methods.balanceOf(getters.account).call();
-            } catch (e) {
-            }
-        }
-
-        usdPlus = web3.web3.utils.fromWei(usdPlus, 'mwei') ;
-
-        if (usdPlusWmatic && networkId === 137) {
-            usdPlusWmatic = web3.web3.utils.fromWei(usdPlusWmatic, 'mwei') ;
-        }
-
-        if (wmaticUsdc && networkId === 137) {
-            wmaticUsdc = web3.web3.utils.fromWei(wmaticUsdc, 'mwei') ;
-        }
-
-        if (etsMoonstone && networkId === 137) {
-            etsMoonstone = web3.web3.utils.fromWei(etsMoonstone, 'mwei') ;
-        }
-
-        if (usdPlusWbnb && networkId === 56) {
-            usdPlusWbnb = web3.web3.utils.fromWei(usdPlusWbnb, 'mwei') ;
-        }
-
-        if (busdWbnb && networkId === 56) {
-            busdWbnb = web3.web3.utils.fromWei(busdWbnb, 'mwei') ;
-        }
-
-        if (assetDecimals === 18) {
-            asset = web3.web3.utils.fromWei(asset, 'ether') ;
-        } else {
-            asset = web3.web3.utils.fromWei(asset, 'mwei') ;
-        }
-
-        if (wUsdPlus && (networkId === 137 || networkId === 10)) {
-            wUsdPlus = web3.web3.utils.fromWei(wUsdPlus, 'mwei') ;
-        }
-
-        if (etsRuby && networkId === 10) {
-            etsRuby = web3.web3.utils.fromWei(etsRuby, 'mwei') ;
         }
 
         commit('setBalance', {
             usdPlus: usdPlus,
             asset: asset,
             wUsdPlus: wUsdPlus,
-            usdPlusWmatic: usdPlusWmatic,
-            wmaticUsdc: wmaticUsdc,
-            etsMoonstone: etsMoonstone,
-            usdPlusWbnb: usdPlusWbnb,
-            busdWbnb: busdWbnb,
-            etsRuby: etsRuby,
         })
+
+
+        let resultEtsBalance = {};
+        let etsList = rootState.etsAction.etsList;
+
+        if (etsList) {
+            for (let i = 0; i < etsList.length; i++) {
+                let ets = etsList[i];
+                let etsBalance;
+
+                try {
+                    etsBalance = await web3.contracts[ets.tokenContract].methods.balanceOf(getters.account).call();
+                    etsBalance = web3.web3.utils.fromWei(etsBalance, 'mwei');
+                } catch (e) {
+                }
+
+                resultEtsBalance[ets.name] = etsBalance;
+            }
+        }
+
+        commit('setEtsBalance', resultEtsBalance);
 
         commit('accountUI/setLoadingBalance', false, { root: true })
     },
@@ -198,16 +125,20 @@ const actions = {
 
 const mutations = {
 
-    setBalance(state, balance) {
-        state.balance = balance;
+    setBalance(state, value) {
+        state.balance = value;
     },
 
-    setAccount(state, account) {
-        state.account = account;
+    setEtsBalance(state, value) {
+        state.etsBalance = value;
     },
 
-    setUns(state, uns) {
-        state.uns = uns;
+    setAccount(state, value) {
+        state.account = value;
+    },
+
+    setUns(state, value) {
+        state.uns = value;
     }
 };
 

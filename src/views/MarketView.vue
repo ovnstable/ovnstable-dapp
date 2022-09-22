@@ -27,13 +27,15 @@
 
         <div class="mt-7 cards-list-container">
             <v-row class="d-flex" justify="start">
+                <Ets class="ma-3" :ets-data="etsList[0]"/>
+                <Ets class="ma-3" :ets-data="etsList[1]"/>
                 <!-- removing EtsRuby from featured temporarily -->
-                <component
+<!--                <component
                     class="ma-3"
-                    v-for="component in (tab === 1 ? sortedCardList.filter(value => value.name !== 'EtsRuby').slice(0, 3) : sortedCardList)"
+                    v-for="component in (tab === 1 ? sortedCardList.slice(0, 3) : sortedCardList)"
                     v-bind:is="component.name"
                     v-if="(tab === 1) || (tab === 2 && component.type === 'usd+') || (tab === 3 && component.type === 'pool') || (tab === 4 && component.type === 'ets')"
-                ></component>
+                ></component>-->
             </v-row>
         </div>
 
@@ -53,11 +55,13 @@ import WmaticUsdc from "@/components/market/cards/wmaticUsdc/WmaticUsdc";
 import EtsMoonstone from "@/components/market/cards/etsMoonstone/EtsMoonstone";
 import EtsRuby from "@/components/market/cards/etsRuby/EtsRuby";
 import moment from "moment";
+import Ets from "@/components/market/cards/Ets";
 
 export default {
     name: "MarketView",
 
     components: {
+        Ets,
         EtsMoonstone,
         EtsRuby,
         WmaticUsdc,
@@ -77,6 +81,7 @@ export default {
         ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'avaxConfig', 'opConfig']),
         ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData', 'etsMoonstoneStrategyData', 'etsRubyStrategyData']),
         ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply', 'maxWmaticUsdcSupply', 'maxUsdPlusWbnbSupply', 'maxBusdWbnbSupply', 'maxEtsMoonstoneSupply', 'maxEtsRubySupply']),
+        ...mapGetters('etsAction', ['etsList']),
 
         activeTabFeatured: function () {
             return {

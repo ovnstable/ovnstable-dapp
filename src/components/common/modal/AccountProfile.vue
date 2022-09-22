@@ -70,7 +70,7 @@
                     </v-btn>
                     <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addwUsdPlusToken" v-if="showWrap">
                         <div class="coin-img">
-                            <v-img :src="require('@/assets/wUsdPlus.svg')"/>
+                            <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
                         </div>
                         <label class="ml-2 coin-btn-label">wUSD+</label>
                     </v-btn>

@@ -3,7 +3,7 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ totalTvl ? (etsName + '&nbsp;') : ''}}</label>
+                    <label class="chart-title">{{ totalTvl ? (etsData.nameUp + '&nbsp;') : ''}}</label>
                     <label class="chart-title" style="margin-left: 0 !important"><abbr title="Total Value Locked">TVL</abbr></label>
                 </v-row>
 
@@ -81,9 +81,8 @@ export default {
             default: null,
         },
 
-        etsName: {
-            type: String,
-            default: 'USD+/WMATIC',
+        etsData: {
+            type: Object,
         },
     },
 
@@ -104,7 +103,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'etsMoonstoneStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData', 'etsRubyStrategyData']),
+        ...mapGetters('marketData', ['etsStrategyData']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -175,26 +174,7 @@ export default {
                 maxValue = 50;
             }
 
-            switch (this.etsName) {
-                case "USD+/WMATIC":
-                    this.totalTvl = this.wmaticStrategyData.tvl;
-                    break;
-                case "WMATIC/USDC":
-                    this.totalTvl = this.wmaticUsdcStrategyData.tvl;
-                    break;
-                case "ETS MOONSTONE":
-                    this.totalTvl = this.etsMoonstoneStrategyData.tvl;
-                    break;
-                case "USD+/WBNB":
-                    this.totalTvl = this.usdPlusWbnbStrategyData.tvl;
-                    break;
-                case "BUSD/WBNB":
-                    this.totalTvl = this.busdWbnbStrategyData.tvl;
-                    break;
-                case "ETS RUBY":
-                    this.totalTvl = this.etsRubyStrategyData.tvl;
-                    break;
-            }
+            this.totalTvl = this.etsStrategyData[this.etsData.name].tvl;
 
             let options = {
                 series: [{

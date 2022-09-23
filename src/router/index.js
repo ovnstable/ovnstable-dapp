@@ -12,7 +12,6 @@ import getAbroad from "@/router/midleware/governance/getAbroad";
 
 // Dapp Sections
 import Market from "./midleware/dapp/Market";
-import Ets from "./midleware/dapp/Ets";
 import Stats from "./midleware/dapp/Stats";
 import Collateral from "./midleware/dapp/Collateral";
 import Dashboard from "./midleware/dapp/Dashboard";
@@ -33,7 +32,7 @@ const routes = [
                 component: () => import('../views/MarketView.vue'),
                 meta: {
                     middleware: [
-                        Market,
+                        Market
                     ]
                 }
             },
@@ -47,7 +46,7 @@ const routes = [
                 component: () => import('../views/strategy/ets/EtsPageView.vue'),
                 meta: {
                     middleware: [
-                        Ets
+                        Market
                     ]
                 }
             },

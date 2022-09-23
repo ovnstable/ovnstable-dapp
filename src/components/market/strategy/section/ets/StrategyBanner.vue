@@ -3,12 +3,12 @@
         <v-col class="main-col">
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-1 mb-3' : 'mb-12'">
                 <div class="currency-icon">
-                    <v-img :src="require('@/assets/currencies/market/ets_moonstone.svg')"/>
+                    <v-img :src="require('@/assets/currencies/market/ets_' + etsData.name + '.svg')"/>
                 </div>
-                <label class="banner-title ml-4">ETS MOONSTONE</label>
+                <label class="banner-title ml-4">ETS {{ etsData.nameUp }}</label>
                 <v-spacer></v-spacer>
                 <div class="network-icon">
-                    <v-img :src="require('@/assets/network/polygon.svg')"/>
+                    <v-img :src="icon"/>
                 </div>
             </v-row>
 
@@ -20,7 +20,7 @@
                                 <label class="info-title">APY</label>
                             </v-row>
                             <v-row justify="center" align="center" class="mt-2">
-                                <label class="info-value mr-n1">{{ (etsMoonstoneStrategyData && etsMoonstoneStrategyData.apy) ? ($utils.formatMoneyComma(etsMoonstoneStrategyData.apy, 0)) + '%' : '—' }}</label>
+                                <label class="info-value mr-n1">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '—' }}</label>
                                 <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                             </v-row>
                         </v-col>
@@ -29,8 +29,8 @@
                                 <label class="info-title">TVL</label>
                             </v-row>
                             <v-row justify="center" align="center" class="mt-2">
-                                <label class="info-value" :class="(totalSupply.etsMoonstone >= maxEtsMoonstoneSupply) ? 'label-error' : ''">
-                                    {{ (etsMoonstoneStrategyData && etsMoonstoneStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(etsMoonstoneStrategyData.tvl, 2)) : '—' }}
+                                <label class="info-value" :class="(totalSupply[etsData.name] >= etsData.maxSupply) ? 'label-error' : ''">
+                                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
                                 </label>
                                 <Tooltip text="Past 2 hours"/>
                             </v-row>
@@ -40,7 +40,7 @@
                                 <label class="info-title">Users</label>
                             </v-row>
                             <v-row justify="center" align="center" class="mt-2">
-                                <label class="info-value">{{ (etsMoonstoneStrategyData && etsMoonstoneStrategyData.holders) ? $utils.formatMoneyComma(etsMoonstoneStrategyData.holders, 0) : '—' }}</label>
+                                <label class="info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].holders) ? $utils.formatMoneyComma(etsStrategyData[etsData.name].holders, 0) : '—' }}</label>
                             </v-row>
                         </v-col>
                     </v-row>
@@ -51,8 +51,8 @@
                             <v-row class="ma-0" justify="start" align="center">
                                 <label class="capacity-status-text">ETS capacity status</label>
                                 <v-spacer></v-spacer>
-                                <label class="capacity-status-value" :class="totalSupply.etsMoonstone >= maxEtsMoonstoneSupply ? 'label-error' : ''">
-                                    {{ totalSupply.etsMoonstone >= maxEtsMoonstoneSupply ? 'FULL' : 'AVAILABLE' }}
+                                <label class="capacity-status-value" :class="totalSupply[etsData.name] >= etsData.maxSupply ? 'label-error' : ''">
+                                    {{ totalSupply[etsData.name] >= etsData.maxSupply ? 'FULL' : 'AVAILABLE' }}
                                 </label>
                             </v-row>
                             <v-row class="ma-0 mt-2" justify="start" align="center">
@@ -61,14 +61,14 @@
                                         height="7"
                                         class="progress-info"
                                         background-opacity="0"
-                                        :value="(totalSupply.etsMoonstone / maxEtsMoonstoneSupply) * 100"
-                                        :color="totalSupply.etsMoonstone >= maxEtsMoonstoneSupply ? '#CF3F92' : '#1C95E7'"
+                                        :value="(totalSupply[etsData.name] / etsData.maxSupply) * 100"
+                                        :color="totalSupply[etsData.name] >= etsData.maxSupply ? '#CF3F92' : '#1C95E7'"
                                 ></v-progress-linear>
                             </v-row>
                             <v-row class="ma-0 mt-2" justify="start" align="center">
-                                <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(totalSupply.etsMoonstone, 2) }}</label>
+                                <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(totalSupply[etsData.name], 2) }}</label>
                                 <v-spacer></v-spacer>
-                                <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(maxEtsMoonstoneSupply, 2) }}</label>
+                                <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(etsData.maxSupply, 2) }}</label>
                             </v-row>
                             <v-row class="ma-0" justify="start" align="center">
                                 <label class="capacity-status-sub-text">CURRENT TVL</label>
@@ -88,6 +88,10 @@
 <script>
 import {mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
+import polygonIcon from "@/assets/network/polygon.svg";
+import avaxIcon from "@/assets/network/avalanche.svg";
+import optimismIcon from "@/assets/network/op.svg";
+import bscIcon from "@/assets/network/bsc.svg";
 
 export default {
     name: "StrategyBanner",
@@ -104,8 +108,21 @@ export default {
     },
 
     computed: {
-        ...mapGetters('marketData', ['etsMoonstoneStrategyData']),
-        ...mapGetters('supplyData', ['totalSupply', 'maxEtsMoonstoneSupply']),
+        ...mapGetters('marketData', ['etsStrategyData']),
+        ...mapGetters('supplyData', ['totalSupply']),
+
+        icon: function (){
+            switch (this.etsData.chain){
+                case 137:
+                    return polygonIcon;
+                case 43114:
+                    return avaxIcon;
+                case 10:
+                    return optimismIcon;
+                case 56:
+                    return bscIcon;
+            }
+        },
     },
 
     data: () => ({

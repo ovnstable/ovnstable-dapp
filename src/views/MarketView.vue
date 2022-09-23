@@ -27,15 +27,13 @@
 
         <div class="mt-7 cards-list-container">
             <v-row class="d-flex" justify="start">
-                <Ets class="ma-3" :ets-data="etsList[0]"/>
-                <Ets class="ma-3" :ets-data="etsList[1]"/>
-                <!-- removing EtsRuby from featured temporarily -->
-<!--                <component
+                <component
                     class="ma-3"
                     v-for="component in (tab === 1 ? sortedCardList.slice(0, 3) : sortedCardList)"
+                    :ets-data="component.data"
                     v-bind:is="component.name"
                     v-if="(tab === 1) || (tab === 2 && component.type === 'usd+') || (tab === 3 && component.type === 'pool') || (tab === 4 && component.type === 'ets')"
-                ></component>-->
+                ></component>
             </v-row>
         </div>
 
@@ -45,31 +43,17 @@
 
 <script>
 
-import WmaticUsdPlus from "@/components/market/cards/wmatic/WmaticUsdPlus";
 import {mapGetters} from "vuex";
-import WbnbUsdPlus from "@/components/market/cards/wbnb/WbnbUsdPlus";
-import OvercapBanner from "@/components/market/cards/wbnb/banner/OvercapBanner";
-import UsdPlus from "@/components/market/cards/hold/UsdPlus";
-import WbnbBusd from "@/components/market/cards/busdWbnb/WbnbBusd";
-import WmaticUsdc from "@/components/market/cards/wmaticUsdc/WmaticUsdc";
-import EtsMoonstone from "@/components/market/cards/etsMoonstone/EtsMoonstone";
-import EtsRuby from "@/components/market/cards/etsRuby/EtsRuby";
 import moment from "moment";
-import Ets from "@/components/market/cards/Ets";
+import UsdPlus from "@/components/market/cards/hold/UsdPlus";
+import Ets from "@/components/market/cards/ets/Ets";
 
 export default {
     name: "MarketView",
 
     components: {
         Ets,
-        EtsMoonstone,
-        EtsRuby,
-        WmaticUsdc,
-        WbnbBusd,
         UsdPlus,
-        OvercapBanner,
-        WbnbUsdPlus,
-        WmaticUsdPlus,
     },
 
     data: () => ({
@@ -79,8 +63,8 @@ export default {
 
     computed: {
         ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'avaxConfig', 'opConfig']),
-        ...mapGetters('marketData', ['wmaticStrategyData', 'wmaticUsdcStrategyData', 'usdPlusWbnbStrategyData', 'busdWbnbStrategyData', 'etsMoonstoneStrategyData', 'etsRubyStrategyData']),
-        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWmaticSupply', 'maxWmaticUsdcSupply', 'maxUsdPlusWbnbSupply', 'maxBusdWbnbSupply', 'maxEtsMoonstoneSupply', 'maxEtsRubySupply']),
+        ...mapGetters('marketData', ['etsStrategyData']),
+        ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters('etsAction', ['etsList']),
 
         activeTabFeatured: function () {
@@ -119,60 +103,27 @@ export default {
                 {
                     type: 'usd+', // usd+, pool, ets
                     name: 'UsdPlus', // real component name
+                    data: null,
                     chain: networkId,
                     hasUsdPlus: true,
                     hasCap: false,
                     weekApy: (this.avgApy && this.avgApy.value) ? this.avgApy.value : 0,
-                },
-                {
-                    type: 'ets',
-                    name: 'WmaticUsdPlus',
-                    chain: this.polygonConfig.networkId,
-                    hasUsdPlus: true,
-                    hasCap: !this.maxUsdPlusWmaticSupply ? false : (this.totalSupply.usdPlusWmatic < this.maxUsdPlusWmaticSupply),
-                    weekApy: (this.wmaticStrategyData && this.wmaticStrategyData.apy) ? this.wmaticStrategyData.apy : 0,
-                },
-                {
-                    type: 'ets',
-                    name: 'WmaticUsdc',
-                    chain: this.polygonConfig.networkId,
-                    hasUsdPlus: false,
-                    hasCap: !this.maxWmaticUsdcSupply ? false : (this.totalSupply.wmaticUsdc < this.maxWmaticUsdcSupply),
-                    weekApy: (this.wmaticUsdcStrategyData && this.wmaticUsdcStrategyData.apy) ? this.wmaticUsdcStrategyData.apy : 0,
-                },
-                {
-                    type: 'ets',
-                    name: 'WbnbUsdPlus',
-                    chain: this.bscConfig.networkId,
-                    hasUsdPlus: true,
-                    hasCap: !this.maxUsdPlusWbnbSupply ? false : (this.totalSupply.usdPlusWbnb < this.maxUsdPlusWbnbSupply),
-                    weekApy: (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.apy) ? this.usdPlusWbnbStrategyData.apy : 0,
-                },
-                {
-                    type: 'ets',
-                    name: 'WbnbBusd',
-                    chain: this.bscConfig.networkId,
-                    hasUsdPlus: false,
-                    hasCap: !this.maxBusdWbnbSupply ? false : (this.totalSupply.busdWbnb < this.maxBusdWbnbSupply),
-                    weekApy: (this.busdWbnbStrategyData && this.busdWbnbStrategyData.apy) ? this.busdWbnbStrategyData.apy : 0,
-                },
-                {
-                    type: 'ets',
-                    name: 'EtsMoonstone',
-                    chain: this.polygonConfig.networkId,
-                    hasUsdPlus: false,
-                    hasCap: !this.maxEtsMoonstoneSupply ? false : (this.totalSupply.etsMoonstone < this.maxEtsMoonstoneSupply),
-                    weekApy: (this.etsMoonstoneStrategyData && this.etsMoonstoneStrategyData.apy) ? this.etsMoonstoneStrategyData.apy : 0,
-                },
-                {
-                    type: 'ets',
-                    name: 'EtsRuby',
-                    chain: this.opConfig.networkId,
-                    hasUsdPlus: false,
-                    hasCap: !this.maxEtsRubySupply ? false : (this.totalSupply.etsRuby < this.maxEtsRubySupply),
-                    weekApy: (this.etsRubyStrategyData && this.etsRubyStrategyData.apy) ? this.etsRubyStrategyData.apy : 0,
-                },
+                }
             ];
+
+            this.etsList.forEach(ets => {
+                cardList.push(
+                    {
+                        type: 'ets',
+                        name: 'Ets',
+                        data: ets,
+                        chain: ets.chain,
+                        hasUsdPlus: ets.hasUsdPlus,
+                        hasCap: !ets.maxSupply ? false : (this.totalSupply[ets.name] < ets.maxSupply),
+                        weekApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
+                    },
+                );
+            });
 
             cardList.sort(function (a, b) {
                 if (a.chain === networkId && b.chain !== networkId) return -1;

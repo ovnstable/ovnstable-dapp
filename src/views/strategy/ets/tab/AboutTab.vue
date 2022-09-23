@@ -2,18 +2,7 @@
     <div>
         <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'">
             <label class="strategy-info-label">
-                The exchange-traded strategy USD+/WBNB ($USD+WBNB), is an ERC-20 structured product built on Binance Smart chain that lets you leverage a collateralized debt position (BUSD lent on Venus) to borrow a volatile asset (WBNB), pair it with USD+ stablecoin, and provide USD+/WBNB liquidity on Cone all in one action. This allows earning high APY and hedging against WBNB volatility.
-                <br/><br/>
-                The unique feature of USD+/WBNB ETS is that it automatically administers a health factor of {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.2}}x on Venus and rebalances your Lent/Borrowed amounts to maintain a stringent {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.2}}x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
-            </label>
-        </v-row>
-
-        <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'">
-            <div class="alert-icon mr-2" v-if="!$wu.isMobile()">
-                <v-img :src="require('@/assets/icon/alert.svg')"/>
-            </div>
-            <label class="strategy-info-label">
-                Strategy max capacity depends on votes on Cone and is reviewed every Thursday. Add your votes <label class="open-link-label" @click="openLink('https://www.cone.exchange/vote')">here</label>.
+                {{ etsData.aboutText }}
             </label>
         </v-row>
 
@@ -32,7 +21,7 @@
                             <div class="info-card-icon mt-5">
                                 <v-img :src="require('@/assets/icon/checkbox.svg')"/>
                             </div>
-                            <label class="info-card-text mt-5 ml-2">Hedging against BNB price volatility</label>
+                            <label class="info-card-text mt-5 ml-2">Hedging against {{ etsData.hedgeToken }} price volatility</label>
                         </v-row>
                         <v-row align="center">
                             <div class="info-card-icon mt-4">
@@ -45,9 +34,9 @@
                                 <v-img :src="require('@/assets/icon/checkbox.svg')"/>
                             </div>
                             <label v-if="!$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed</label>
-                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">Health Factor of {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.2}}</label>
+                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">Health Factor of {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? $utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2) : 1.2}}</label>
 
-                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed Health Factor of {{ usdPlusWbnbStrategyData.targetHealthFactor ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2) : 1.2}}</label>
+                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed Health Factor of {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? $utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2) : 1.2}}</label>
                         </v-row>
                         <v-row align="center">
                             <div class="info-card-icon mt-4">
@@ -107,7 +96,7 @@
                             <label class="list-title-text">Deposit Into Strategy</label>
                         </v-row>
                         <v-row class="mt-8">
-                            <label class="list-sub-title-text">Deposit USD+ into the vault. This triggers an automatic borrow of an equal value of WBNB (from the Venus), which is invested alongside your USD+ deposit into Cone’s WBNB-USD+ pool.</label>
+                            <label class="list-sub-title-text">Deposit USDC into the vault. This triggers an automatic borrow of value of {{ etsData.token1 }} (from {{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}} markets), which is invested alongside your USDC deposit into {{ etsData.dex }}’s {{ etsData.poolName }} pool.</label>
                         </v-row>
                     </v-col>
                 </v-row>
@@ -122,7 +111,7 @@
                             <label class="list-title-text">Strategy Generates Yield</label>
                         </v-row>
                         <v-row class="mt-8">
-                            <label class="list-sub-title-text">Strategy automatically stakes the earned pool LP tokens into Cone's gauge and auto-compounds the rewards by re-investing into the pool for more LP tokens to maximise Yields.</label>
+                            <label class="list-sub-title-text">Strategy automatically stakes the earned pool LP tokens into {{ etsData.dex }} and auto-compounds the rewards by re-investing into the pool for more LP tokens to maximise Yields.</label>
                         </v-row>
                     </v-col>
                 </v-row>
@@ -146,13 +135,13 @@
             </v-col>
             <v-col cols="6" v-if="!$wu.isMobile()">
                 <v-row justify="end">
-                    <v-img class="scheme-img" max-width="700px" :src="require('@/assets/market/schemeWbnb.svg')"/>
+                    <v-img class="scheme-img" max-width="700px" :src="require('@/assets/market/scheme_ets_' + etsData.name + '.svg')"/>
                 </v-row>
             </v-col>
         </v-row>
 
         <v-row align="center" justify="start" class="ma-0 mt-15" v-if="$wu.isMobile()">
-            <v-img class="scheme-img" :src="require('@/assets/market/schemeWbnb.svg')"/>
+            <v-img class="scheme-img" :src="require('@/assets/market/scheme_ets_' + etsData.name + '.svg')"/>
         </v-row>
 
         <v-row align="center" justify="start" class="ma-0 mt-15">
@@ -195,7 +184,7 @@
                     ></v-progress-linear>
                 </v-row>
                 <v-row justify="start" align="start" class="mt-5">
-                    <label class="progress-text">1/365 of {{ managementFee ? $utils.formatMoneyComma(managementFee, 1) + '%' : '—' }}</label>
+                    <label class="progress-text">1/365 of {{ managementFee ? $utils.formatMoneyComma(managementFee, 0) + '%' : '—' }}</label>
                     <v-spacer></v-spacer>
                     <label class="progress-sub-text">your balance</label>
                 </v-row>
@@ -218,7 +207,7 @@
                     ></v-progress-linear>
                 </v-row>
                 <v-row justify="start" align="start" class="mt-5">
-                    <label class="progress-text">{{ entryFee ? $utils.formatMoneyComma(entryFee, 1) + '%' : '—' }}</label>
+                    <label class="progress-text">{{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}</label>
                     <v-spacer></v-spacer>
                     <label class="progress-sub-text">your balance</label>
                 </v-row>
@@ -245,13 +234,13 @@
                 <v-row class="info-row" justify="start" align="center">
                     <label class="card-info mt-1">APY</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.apy) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.apy, 1)) + '%' : '—' }}</label>
+                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 1)) + '%' : '—' }}</label>
                     <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Diff. to USD+</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.diffApy) ? ((usdPlusWbnbStrategyData.diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(usdPlusWbnbStrategyData.diffApy, 1)) + '%' : '—' }}</label>
+                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].diffApy) ? ((etsStrategyData[etsData.name].diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(etsStrategyData[etsData.name].diffApy, 1)) + '%' : '—' }}</label>
                     <Tooltip text="APY difference compared to the base APY USD+ (based on 7-day average)"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
@@ -263,27 +252,27 @@
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">TVL</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">
-                        {{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.tvl) ? ('$' + $utils.formatMoneyComma(usdPlusWbnbStrategyData.tvl, 2)) : '—' }}
+                    <label class="card-info-value" :class="totalSupply[etsData.name] >= etsData.maxSupply ? 'label-error' : ''">
+                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
                     </label>
                     <Tooltip text="Past 2 hours"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Users</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.holders) ? $utils.formatMoneyComma(usdPlusWbnbStrategyData.holders, 0) : '—' }}</label>
+                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].holders) ? $utils.formatMoneyComma(etsStrategyData[etsData.name].holders, 0) : '—' }}</label>
                 </v-row>
 
                 <v-row class="info-row" justify="start" align="center" v-if="$wu.isMobile()">
                     <label class="card-info mt-1">Target Health Factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2)) : '—' }}</label>
+                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2)) : '—' }}</label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center" v-if="$wu.isMobile()">
                     <label class="card-info mt-1">Health Factor check interval</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.healthFactorCheckInterval) ? usdPlusWbnbStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
+                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].healthFactorCheckInterval) ? etsStrategyData[etsData.name].healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
             </v-col>
@@ -292,13 +281,13 @@
                 <v-row class="info-row" justify="start" align="center">
                     <label class="card-info mt-1">Target Health Factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(usdPlusWbnbStrategyData.targetHealthFactor, 2)) : '—' }}</label>
+                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2)) : '—' }}</label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Health Factor check interval</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.healthFactorCheckInterval) ? usdPlusWbnbStrategyData.healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
+                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].healthFactorCheckInterval) ? etsStrategyData[etsData.name].healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
             </v-col>
@@ -306,30 +295,30 @@
 
         <v-row align="center" justify="start" class="ma-0 mt-7 info-container">
             <v-col :class="!$wu.isFull() ? '' : 'ml-5'" :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center" @click="openTokenOnScan(usdPlusWbnbStrategyData.rebaseAddress)">
+                <v-row justify="center" align="center" @click="openTokenOnScan(etsStrategyData[etsData.name].rebaseAddress)">
                     <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Token address</label>
                     <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-link ml-3">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.rebaseAddress) ? shortAddress(usdPlusWbnbStrategyData.rebaseAddress) : '—' }}</label>
+                    <label class="address-card-link ml-3">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].rebaseAddress) ? shortAddress(etsStrategyData[etsData.name].rebaseAddress) : '—' }}</label>
                     <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
                         <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                     </div>
                 </v-row>
             </v-col>
             <v-col :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center" @click="openStrategyOnScan(usdPlusWbnbStrategyData.exchangerAddress)">
+                <v-row justify="center" align="center" @click="openStrategyOnScan(etsStrategyData[etsData.name].exchangerAddress)">
                     <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Pool address</label>
                     <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-link ml-3">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.exchangerAddress) ? shortAddress(usdPlusWbnbStrategyData.exchangerAddress) : '—' }}</label>
+                    <label class="address-card-link ml-3">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].exchangerAddress) ? shortAddress(etsStrategyData[etsData.name].exchangerAddress) : '—' }}</label>
                     <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
                         <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                     </div>
                 </v-row>
             </v-col>
             <v-col :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center" @click="openStrategyOnScan(usdPlusWbnbStrategyData.strategyAddress)">
+                <v-row justify="center" align="center" @click="openStrategyOnScan(etsStrategyData[etsData.name].strategyAddress)">
                     <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Vault address</label>
                     <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-link ml-3">{{ (usdPlusWbnbStrategyData && usdPlusWbnbStrategyData.strategyAddress) ? shortAddress(usdPlusWbnbStrategyData.strategyAddress) : '—' }}</label>
+                    <label class="address-card-link ml-3">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].strategyAddress) ? shortAddress(etsStrategyData[etsData.name].strategyAddress) : '—' }}</label>
                     <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
                         <v-img :src="require('@/assets/icon/openBlue.svg')"/>
                     </div>
@@ -339,32 +328,32 @@
                 <v-row justify="center" align="center">
                     <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Inception date</label>
                     <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-text ml-3" :class="!$wu.isFull() ? 'mr-2' : ''"><b>24 August 2022</b></label>
+                    <label class="address-card-text ml-3" :class="!$wu.isFull() ? 'mr-2' : ''"><b>{{ etsData.inceptionDate }}</b></label>
                 </v-row>
             </v-col>
         </v-row>
 
         <template v-if="networkSupport">
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-                <v-btn class="header-btn btn-filled" :class="(!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)) ? 'disabled-btn' : ''" @click="showInvestModal" :disabled="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
-                    MINT ETS: USD+/WBNB
+                <v-btn class="header-btn btn-filled" :class="(totalSupply[etsData.name] >= etsData.maxSupply) ? 'disabled-btn' : ''" @click="mintAction" :disabled="totalSupply[etsData.name] > etsData.maxSupply">
+                    MINT ETS {{ etsData.nameUp }}
                 </v-btn>
-                <template v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
-                    <label v-if="$wu.isFull()" class="full-status-error-label ml-4">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 0) }}. Please check status later.</label>
+                <template v-if="totalSupply[etsData.name] >= etsData.maxSupply">
+                    <label v-if="$wu.isFull()" class="full-status-error-label ml-4">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
                 </template>
             </v-row>
 
             <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-n8' : 'mt-2'" v-if="!$wu.isFull()">
-                <template v-if="!isOvercapAvailable && (totalSupply.usdPlusWbnb >= maxUsdPlusWbnbSupply)">
-                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(maxUsdPlusWbnbSupply, 0) }}. Please check status later.</label>
+                <template v-if="totalSupply[etsData.name] >= etsData.maxSupply">
+                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
                 </template>
             </v-row>
         </template>
 
         <template v-else>
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-                <v-btn class="header-btn btn-filled" @click="setWalletNetwork('56')">
-                    SWITCH TO BSC TO MINT
+                <v-btn class="header-btn btn-filled" @click="setWalletNetwork(etsData.chain.toString())">
+                    SWITCH TO {{ etsData.chainName.toUpperCase() }} TO MINT
                 </v-btn>
             </v-row>
         </template>
@@ -388,16 +377,24 @@ export default {
     data: () => ({
     }),
 
+    props: {
+
+        etsData: {
+            type: Object,
+        },
+    },
+
+    watch: {
+    },
 
     computed: {
-        ...mapGetters('network', ['explorerUrl', 'networkId', 'bscConfig']),
-        ...mapGetters('marketData', ['usdPlusWbnbStrategyData']),
-        ...mapGetters('supplyData', ['totalSupply', 'maxUsdPlusWbnbSupply']),
-        ...mapGetters('overcapData', ['isOvercapAvailable']),
+        ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'avaxConfig']),
+        ...mapGetters('marketData', ['etsStrategyData']),
+        ...mapGetters('supplyData', ['totalSupply']),
 
         entryFee: function () {
-            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
-                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'buy');
+            if (this.strategyData && this.strategyData.fees) {
+                let result = this.strategyData.fees.find(x => x.id === 'buy');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -405,8 +402,8 @@ export default {
         },
 
         exitFee: function () {
-            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
-                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'redeem');
+            if (this.strategyData && this.strategyData.fees) {
+                let result = this.strategyData.fees.find(x => x.id === 'redeem');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -414,8 +411,8 @@ export default {
         },
 
         performanceFee: function () {
-            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
-                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'profit');
+            if (this.strategyData && this.strategyData.fees) {
+                let result = this.strategyData.fees.find(x => x.id === 'profit');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -423,8 +420,8 @@ export default {
         },
 
         managementFee: function () {
-            if (this.usdPlusWbnbStrategyData && this.usdPlusWbnbStrategyData.fees) {
-                let result = this.usdPlusWbnbStrategyData.fees.find(x => x.id === 'tvl');
+            if (this.strategyData && this.strategyData.fees) {
+                let result = this.strategyData.fees.find(x => x.id === 'tvl');
                 return result ? result.value : null;
             } else {
                 return null;
@@ -432,14 +429,37 @@ export default {
         },
 
         networkSupport: function () {
-            return this.networkId === 56;
+            return this.networkId === this.etsData.chain;
         },
+
+        strategyData: function () {
+            if (this.etsStrategyData && this.etsData.name) {
+                return this.etsStrategyData[this.etsData.name];
+            } else {
+                return null;
+            }
+        },
+
+        etsChainConfig: function () {
+            switch (this.etsData.chain) {
+                case 137:
+                    return this.polygonConfig;
+                case 43114:
+                    return this.avaxConfig;
+                case 10:
+                    return this.opConfig;
+                case 56:
+                    return this.bscConfig;
+                default:
+                    return this.polygonConfig;
+            }
+        }
     },
 
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
-        ...mapActions('investModal', ['showInvestModal']),
+        ...mapActions('investModal', ['showEtsMoonstoneModal', 'showMintView']),
 
         shortAddress(address) {
             if (address) {
@@ -451,21 +471,25 @@ export default {
 
         openTokenOnScan(hash) {
             if (hash && hash !== '') {
-                window.open(this.bscConfig.explorerUrl + "token/" + hash, '_blank').focus();
+                window.open(this.etsChainConfig.explorerUrl + "token/" + hash, '_blank').focus();
             }
         },
 
         openStrategyOnScan(hash) {
             if (hash && hash !== '') {
-                window.open(this.bscConfig.explorerUrl + "address/" + hash, '_blank').focus();
+                window.open(this.etsChainConfig.explorerUrl + "address/" + hash, '_blank').focus();
             }
         },
 
         openLink(url) {
             window.open(url, '_blank').focus();
         },
-    }
 
+        mintAction() {
+            this.showMintView();
+            this.showEtsMoonstoneModal();
+        },
+    }
 }
 </script>
 
@@ -923,7 +947,7 @@ export default {
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
-    line-height: 24px;
+    line-height: 20px;
     font-feature-settings: 'liga' off;
     color: #1C95E7;
     cursor: pointer;
@@ -1027,8 +1051,8 @@ export default {
 }
 
 .icon-img {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
 }
 

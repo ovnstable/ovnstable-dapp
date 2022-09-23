@@ -15,8 +15,8 @@
                     </v-col>
                 </v-row>
 
-                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="apyDataWmaticUsdc" :usdPlusData="apyDataUsdPlusPolygon" ets-name="WMATIC/USDC"/>
-                <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="tvlDataWmaticUsdc" ets-name="WMATIC/USDC"/>
+                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="etsApyData[etsData.name]" :usdPlusData="usdPlusApyData[etsData.chainName]" :ets-data="etsData"/>
+                <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="etsTvlData[etsData.name]" :ets-data="etsData"/>
             </v-col>
         </v-row>
 
@@ -27,7 +27,7 @@
 
             <v-spacer></v-spacer>
 
-            <div v-if="!$wu.isMobile()" class="info-card-container-debank" @click="openLink('https://debank.com/profile/0x9660025E7BCA017B0CBF3fe96e0c844b69df8B1f')">
+            <div v-if="!$wu.isMobile()" class="info-card-container-debank" @click="openLink('https://debank.com/profile/' + etsStrategyData[etsData.name].strategyAddress)">
                 <v-row class="ma-0" justify="start" align="center">
                     <div class="info-card-icon ml-2 my-2">
                         <v-img class="debank-icon" :src="require('@/assets/currencies/market/debank.svg')"/>
@@ -38,7 +38,7 @@
         </v-row>
 
         <v-row v-if="$wu.isMobile()" align="center" justify="start" class="ma-0 mt-5">
-            <div class="info-card-container-debank" style="width: 100% !important;" @click="openLink('https://debank.com/profile/0x9660025E7BCA017B0CBF3fe96e0c844b69df8B1f')">
+            <div class="info-card-container-debank" style="width: 100% !important;" @click="openLink('https://debank.com/profile/' + etsStrategyData[etsData.name].strategyAddress)">
                 <v-row class="ma-0" justify="center" align="center">
                     <div class="info-card-icon ml-2 my-2">
                         <v-img class="debank-icon" :src="require('@/assets/currencies/market/debank.svg')"/>
@@ -48,7 +48,7 @@
             </div>
         </v-row>
 
-        <v-row v-if="wmaticUsdcStrategyData.ownedAsset" align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-4' : 'mt-4'">
+        <v-row v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].ownedAsset" align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-4' : 'mt-4'">
             <v-col :cols="$wu.isMobile() ? 12 : 0">
                 <v-row class="info-card-container" justify="start" align="center">
                     <v-col class="info-card-body">
@@ -58,7 +58,7 @@
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Token</label>
                             <v-spacer></v-spacer>
-                            <label class="card-info-value">{{ wmaticUsdcStrategyData ? wmaticUsdcStrategyData.ownedAsset.token : '—' }}</label>
+                            <label class="card-info-value">{{ etsStrategyData[etsData.name] ? etsStrategyData[etsData.name].ownedAsset.token : '—' }}</label>
                             <div class="info-card-icon ml-2">
                                 <v-img :src="require('@/assets/currencies/usdc.png')"/>
                             </div>
@@ -67,15 +67,15 @@
                             <label class="card-info mt-2">Balance</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticUsdcStrategyData ? $utils.formatMoneyComma(wmaticUsdcStrategyData.ownedAsset.amount, 0) : '—' }}
-                                {{ wmaticUsdcStrategyData ? wmaticUsdcStrategyData.ownedAsset.token : '—' }}
+                                {{ etsStrategyData[etsData.name] ? $utils.formatMoneyComma(etsStrategyData[etsData.name].ownedAsset.amount, 0) : '—' }}
+                                {{ etsStrategyData[etsData.name] ? etsStrategyData[etsData.name].ownedAsset.token : '—' }}
                             </label>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Value</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticUsdcStrategyData ? $utils.formatMoneyComma(wmaticUsdcStrategyData.ownedAsset.amountUsdc, 0) : '—' }}
+                                {{ etsStrategyData[etsData.name] ? $utils.formatMoneyComma(etsStrategyData[etsData.name].ownedAsset.amountUsdc, 0) : '—' }}
                                 USD
                             </label>
                         </v-row>
@@ -92,7 +92,7 @@
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Token</label>
                             <v-spacer></v-spacer>
-                            <label class="card-info-value">{{ wmaticUsdcStrategyData ? wmaticUsdcStrategyData.depositAsset.token : '—' }}</label>
+                            <label class="card-info-value">{{ etsStrategyData[etsData.name] ? etsStrategyData[etsData.name].depositAsset.token : '—' }}</label>
                             <div class="info-card-icon ml-2">
                                 <v-img :src="require('@/assets/currencies/usdc.png')"/>
                             </div>
@@ -101,15 +101,15 @@
                             <label class="card-info mt-2">Balance</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticUsdcStrategyData ? $utils.formatMoneyComma(wmaticUsdcStrategyData.depositAsset.amount, 0) : '—' }}
-                                {{ wmaticUsdcStrategyData ? wmaticUsdcStrategyData.depositAsset.token : '—' }}
+                                {{ etsStrategyData[etsData.name] ? $utils.formatMoneyComma(etsStrategyData[etsData.name].depositAsset.amount, 0) : '—' }}
+                                {{ etsStrategyData[etsData.name] ? etsStrategyData[etsData.name].depositAsset.token : '—' }}
                             </label>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Value</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticUsdcStrategyData ? $utils.formatMoneyComma(wmaticUsdcStrategyData.depositAsset.amountUsdc, 0) : '—' }}
+                                {{ etsStrategyData[etsData.name] ? $utils.formatMoneyComma(etsStrategyData[etsData.name].depositAsset.amountUsdc, 0) : '—' }}
                                 USD
                             </label>
                         </v-row>
@@ -126,24 +126,26 @@
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Token</label>
                             <v-spacer></v-spacer>
-                            <label class="card-info-value">{{ wmaticUsdcStrategyData ? wmaticUsdcStrategyData.borrowedAsset.token : '—' }}</label>
+                            <label class="card-info-value">{{ etsStrategyData[etsData.name] ? etsStrategyData[etsData.name].borrowedAsset.token : '—' }}</label>
                             <div class="info-card-icon ml-2">
-                                <v-img :src="require('@/assets/currencies/wMatic.svg')"/>
+                                <v-img
+                                    v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].borrowedAsset.token"
+                                    :src="require('@/assets/currencies/' + etsData.hedgeToken + '.svg')"/>
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Balance</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticUsdcStrategyData ? $utils.formatMoneyComma(wmaticUsdcStrategyData.borrowedAsset.amount, 0) : '—' }}
-                                {{ wmaticUsdcStrategyData ? wmaticUsdcStrategyData.borrowedAsset.token : '—' }}
+                                {{ etsStrategyData[etsData.name] ? $utils.formatMoneyComma(etsStrategyData[etsData.name].borrowedAsset.amount, 0) : '—' }}
+                                {{ etsStrategyData[etsData.name] ? etsStrategyData[etsData.name].borrowedAsset.token : '—' }}
                             </label>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
                             <label class="card-info mt-2">Value</label>
                             <v-spacer></v-spacer>
                             <label class="card-info-value">
-                                {{ wmaticUsdcStrategyData ? $utils.formatMoneyComma(wmaticUsdcStrategyData.borrowedAsset.amountUsdc, 0) : '—' }}
+                                {{ etsStrategyData[etsData.name] ? $utils.formatMoneyComma(etsStrategyData[etsData.name].borrowedAsset.amountUsdc, 0) : '—' }}
                                 USD
                             </label>
                         </v-row>
@@ -158,16 +160,16 @@
                     <v-col class="info-card-body-bottom">
                         <v-row align="center">
                             <div class="info-card-icon">
-                                <v-img :src="require('@/assets/currencies/market/Aave.svg')"/>
+                                <v-img :src="require('@/assets/currencies/market/' + etsData.borrowFrom + '.png')"/>
                             </div>
-                            <label class="title-card-text-bottom ml-2">Aave V3</label>
+                            <label class="title-card-text-bottom ml-2">{{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}}</label>
                             <v-spacer></v-spacer>
                             <label class="card-info">Current health factor</label>
-                            <label class="card-info-value ml-2">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.currentHealthFactor) ? ($utils.formatMoneyComma(wmaticUsdcStrategyData.currentHealthFactor, 2)) : '—' }}</label>
+                            <label class="card-info-value ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].currentHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].currentHealthFactor, 2)) : '—' }}</label>
                             <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                             <v-spacer></v-spacer>
                             <label class="card-info">Target Health factor</label>
-                            <label class="card-info-value ml-2">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticUsdcStrategyData.targetHealthFactor, 2)) : '—' }}</label>
+                            <label class="card-info-value ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2)) : '—' }}</label>
                             <v-spacer></v-spacer>
                         </v-row>
                     </v-col>
@@ -179,18 +181,18 @@
                     <v-col class="info-card-body-bottom">
                         <v-row align="center" justify="center">
                             <div class="info-card-icon">
-                                <v-img :src="require('@/assets/currencies/market/Aave.svg')"/>
+                                <v-img :src="require('@/assets/currencies/market/' + etsData.borrowFrom + '.png')"/>
                             </div>
-                            <label class="title-card-text-bottom ml-2">Aave V3</label>
+                            <label class="title-card-text-bottom ml-2">{{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}}</label>
                         </v-row>
                         <v-row align="center" justify="center" class="mt-6">
                             <label class="card-info">Current health factor</label>
-                            <label class="card-info-value ml-2">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.currentHealthFactor) ? ($utils.formatMoneyComma(wmaticUsdcStrategyData.currentHealthFactor, 2)) : '—' }}</label>
+                            <label class="card-info-value ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].currentHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].currentHealthFactor, 2)) : '—' }}</label>
                             <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                         </v-row>
                         <v-row align="center" justify="center" class="mt-4">
                             <label class="card-info">Target Health factor</label>
-                            <label class="card-info-value ml-2">{{ (wmaticUsdcStrategyData && wmaticUsdcStrategyData.targetHealthFactor) ? ($utils.formatMoneyComma(wmaticUsdcStrategyData.targetHealthFactor, 2)) : '—' }}</label>
+                            <label class="card-info-value ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2)) : '—' }}</label>
                         </v-row>
                     </v-col>
                 </v-row>
@@ -200,21 +202,21 @@
         <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-6'" justify="start" align="center">
             <v-col class="info-card-body-bottom">
                 <v-row align="center" justify="start" class="ma-0">
-                    <label class="section-title-label">wMatic/USDC payouts</label>
+                    <label class="section-title-label">ETS {{ etsData.nameUp }} payouts</label>
                 </v-row>
 
                 <v-row align="center" justify="center">
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
                         <Table
                                 v-if="!$wu.isMobile()"
-                                profit-label="USDC per wMatic/USDC"
-                                :payout-data="[...wmaticUsdcStrategyData.payoutItems].reverse()"/>
+                                :profit-label="'USDC per ETS' + etsData.nameUp"
+                                :payout-data="etsStrategyData[etsData.name] ? [...etsStrategyData[etsData.name].payoutItems].reverse() : []"/>
 
                         <Table
                                 v-else
                                 minimized
-                                profit-label="USDC per wMatic/USDC"
-                                :payout-data="[...wmaticUsdcStrategyData.payoutItems].reverse()"/>
+                                :profit-label="'USDC per ETS' + etsData.nameUp"
+                                :payout-data="etsStrategyData[etsData.name] ? [...etsStrategyData[etsData.name].payoutItems].reverse() : []"/>
 
                         <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
                             <label class="table-scroll-label">scroll to see more</label>
@@ -222,7 +224,7 @@
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <Doughnut :size="280" color="#7944DA" :last-date="lastPayoutDate"/>
+                        <Doughnut :size="280" :color="etsData.mainColor" :last-date="lastPayoutDate"/>
                     </v-col>
                 </v-row>
             </v-col>
@@ -258,8 +260,18 @@ export default {
         rateTab: 1,
     }),
 
+    props: {
+
+        etsData: {
+            type: Object,
+        },
+    },
+
+    watch: {
+    },
+
     computed: {
-        ...mapGetters('marketData', ['wmaticUsdcStrategyData', 'apyDataWmaticUsdc', 'tvlDataWmaticUsdc', 'apyDataUsdPlusPolygon']),
+        ...mapGetters('marketData', ['etsStrategyData', 'etsApyData', 'etsTvlData', 'usdPlusApyData']),
 
         activeRateApy: function () {
             return {
@@ -283,7 +295,8 @@ export default {
         },
 
         lastPayoutDate: function () {
-            return this.wmaticUsdcStrategyData.payoutItems[this.wmaticUsdcStrategyData.payoutItems.length - 1].payableDate;
+            let data = this.etsStrategyData[this.etsData.name];
+            return data ? data.payoutItems[data.payoutItems.length - 1].payableDate : null;
         },
     },
 

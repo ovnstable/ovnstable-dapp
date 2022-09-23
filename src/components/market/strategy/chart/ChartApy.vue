@@ -3,7 +3,7 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? etsName : 'ETS: ' + etsName + ' daily net') + '&nbsp;') : ''}}</label>
+                    <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? etsData.nameUp : 'ETS: ' + etsData.nameUp + ' daily net') + '&nbsp;') : ''}}</label>
                     <label class="chart-title" style="margin-left: 0 !important"><abbr title="Annual Percentage Yield">APY</abbr></label>
                 </v-row>
 
@@ -100,9 +100,8 @@ export default {
             default: null,
         },
 
-        etsName: {
-            type: String,
-            default: 'USD+/WMATIC',
+        etsData: {
+            type: Object,
         },
     },
 
@@ -149,30 +148,21 @@ export default {
 
             let apiUrl;
 
-            switch (this.etsName) {
-                case "USD+/WMATIC":
+            switch (this.etsData.chain) {
+                case 137:
                     apiUrl = this.polygonApi;
-                    this.contractAddress = '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf';
                     break;
-                case "WMATIC/USDC":
-                    apiUrl = this.polygonApi;
-                    this.contractAddress = '0xd52caB8AfC8ECd08b7CFa6D07e224a56F943e4c4';
+                case 43114:
+                    apiUrl = this.avaxApi;
                     break;
-                case "ETS MOONSTONE":
-                    apiUrl = this.polygonApi;
-                    this.contractAddress = '0x719ee857Ae6cf85Cbe7284Bc45ad1f99dd5ff0dB';
-                    break;
-                case "USD+/WBNB":
-                    apiUrl = this.bscApi;
-                    this.contractAddress = '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1';
-                    break;
-                case "BUSD/WBNB":
-                    apiUrl = this.bscApi;
-                    this.contractAddress = '0xc6eca7a3b863d720393DFc62494B6eaB22567D37';
-                    break;
-                case "ETS RUBY":
+                case 10:
                     apiUrl = this.opApi;
-                    this.contractAddress = '0xA88F8c02eBdE678de623C6BCFC886De82e18ad00';
+                    break;
+                case 56:
+                    apiUrl = this.bscApi;
+                    break;
+                default:
+                    apiUrl = this.polygonApi;
                     break;
             }
 
@@ -257,7 +247,7 @@ export default {
 
             seriesList.push(
                 {
-                    name: this.etsName + " ETS APY",
+                    name: "ETS " + this.etsData.nameUp + " APY",
                     data: values
                 }
             );

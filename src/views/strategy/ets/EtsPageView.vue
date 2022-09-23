@@ -116,8 +116,8 @@
                         <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabAbout">About ETS</label>
                     </v-row>
 
-                    <PerformanceTab v-if="tab === 1"/>
-                    <AboutTab v-if="tab === 2"/>
+                    <PerformanceTab v-if="tab === 1" :ets-data="etsData"/>
+                    <AboutTab v-if="tab === 2" :ets-data="etsData"/>
 
                     <v-row align="center" justify="start" class="ma-0 mt-6" v-if="tab === 1">
                         <label class="about-link-label" @click="tab=2">
@@ -244,8 +244,8 @@ import StrategyBanner from "@/components/market/strategy/section/ets/StrategyBan
 import RiskDisclosureModal from "@/components/market/modal/ets/RiskDisclosureModal";
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
-import AboutTab from "@/views/strategy/etsMoonstone/tab/AboutTab";
-import PerformanceTab from "@/views/strategy/etsMoonstone/tab/PerformanceTab";
+import AboutTab from "@/views/strategy/ets/tab/AboutTab";
+import PerformanceTab from "@/views/strategy/ets/tab/PerformanceTab";
 
 export default {
     name: "EtsPageView",
@@ -260,6 +260,7 @@ export default {
 
     data: () => ({
         tab: 1,
+        etsData: null,
     }),
 
 
@@ -331,14 +332,20 @@ export default {
                 return null;
             }
         },
+    },
 
-        etsData: function () {
-            let resultList = this.etsList.filter(ets => ets.name === this.$route.params.name);
-            return (resultList && resultList.length > 0) ? resultList[0] : {};
+    watch: {
+        etsList: function (newVal, oldVal) {
+            this.updateEtsData();
         },
     },
 
     created() {
+        this.updateEtsData();
+    },
+
+    mounted() {
+        this.updateEtsData();
     },
 
     methods: {
@@ -358,7 +365,14 @@ export default {
         redeemAction() {
             this.showRedeemView();
             this.showEtsMoonstoneModal();
-        }
+        },
+
+        updateEtsData() {
+            if (this.etsList) {
+                let resultList = this.etsList.filter(ets => ets.name === this.$route.params.name);
+                this.etsData = (resultList && resultList.length > 0) ? resultList[0] : {};
+            }
+        },
     }
 }
 </script>

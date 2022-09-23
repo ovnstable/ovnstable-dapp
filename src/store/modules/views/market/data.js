@@ -4,28 +4,10 @@ import {axios} from "@/plugins/http-axios";
 const state = {
     etsStrategyData: {},
     etsClientData: {},
+    etsApyData: {},
+    etsTvlData: {},
 
-    apyDataUsdPlusWmatic: {},
-    tvlDataUsdPlusWmatic: {},
-
-    apyDataWmaticUsdc: {},
-    tvlDataWmaticUsdc: {},
-
-    apyDataEtsMoonstone: {},
-    tvlDataEtsMoonstone: {},
-
-    apyDataUsdPlusWbnb: {},
-    tvlDataUsdPlusWbnb: {},
-
-    apyDataBusdWbnb: {},
-    tvlDataBusdWbnb: {},
-
-    apyDataEtsRuby: {},
-    tvlDataEtsRuby: {},
-
-    apyDataUsdPlusPolygon: {},
-    apyDataUsdPlusBinance: {},
-    apyDataUsdPlusOp: {},
+    usdPlusApyData: {},
 };
 
 const getters = {
@@ -38,64 +20,16 @@ const getters = {
         return state.etsClientData;
     },
 
-    apyDataUsdPlusWmatic(state) {
-        return state.apyDataUsdPlusWmatic;
+    etsApyData(state) {
+        return state.etsApyData;
     },
 
-    tvlDataUsdPlusWmatic(state) {
-        return state.tvlDataUsdPlusWmatic;
+    etsTvlData(state) {
+        return state.etsTvlData;
     },
 
-    apyDataWmaticUsdc(state) {
-        return state.apyDataWmaticUsdc;
-    },
-
-    tvlDataWmaticUsdc(state) {
-        return state.tvlDataWmaticUsdc;
-    },
-
-    apyDataEtsMoonstone(state) {
-        return state.apyDataEtsMoonstone;
-    },
-
-    tvlDataEtsMoonstone(state) {
-        return state.tvlDataEtsMoonstone;
-    },
-
-    apyDataUsdPlusWbnb(state) {
-        return state.apyDataUsdPlusWbnb;
-    },
-
-    tvlDataUsdPlusWbnb(state) {
-        return state.tvlDataUsdPlusWbnb;
-    },
-
-    apyDataBusdWbnb(state) {
-        return state.apyDataBusdWbnb;
-    },
-
-    tvlDataBusdWbnb(state) {
-        return state.tvlDataBusdWbnb;
-    },
-
-    apyDataEtsRuby(state) {
-        return state.apyDataEtsRuby;
-    },
-
-    tvlDataEtsRuby(state) {
-        return state.tvlDataEtsRuby;
-    },
-
-    apyDataUsdPlusPolygon(state) {
-        return state.apyDataUsdPlusPolygon;
-    },
-
-    apyDataUsdPlusBinance(state) {
-        return state.apyDataUsdPlusBinance;
-    },
-
-    apyDataUsdPlusOp(state) {
-        return state.apyDataUsdPlusOp;
+    usdPlusApyData(state) {
+        return state.usdPlusApyData;
     },
 };
 
@@ -118,7 +52,8 @@ const actions = {
 
         dispatch('refreshUsdPlusPayoutsData', "polygon");
         dispatch('refreshUsdPlusPayoutsData', "bsc");
-        dispatch('refreshUsdPlusPayoutsData', "op");
+        dispatch('refreshUsdPlusPayoutsData', "optimism");
+        dispatch('refreshUsdPlusPayoutsData', "avax");
 
         dispatch('accountData/refreshBalance', null, {root:true});
         dispatch('supplyData/refreshSupply', null, {root:true});
@@ -219,26 +154,7 @@ const actions = {
                     widgetData.datasets[0].data.push(widgetDataDict[key]);
                 }
 
-                switch (refreshParams.strategyName) {
-                    case "usdPlusWmatic":
-                        commit('setApyDataUsdPlusWmatic', widgetData);
-                        break;
-                    case "wmaticUsdc":
-                        commit('setApyDataWmaticUsdc', widgetData);
-                        break;
-                    case "etsMoonstone":
-                        commit('setApyDataEtsMoonstone', widgetData);
-                        break;
-                    case "usdPlusWbnb":
-                        commit('setApyDataUsdPlusWbnb', widgetData);
-                        break;
-                    case "busdWbnb":
-                        commit('setApyDataBusdWbnb', widgetData);
-                        break;
-                    case "etsRuby":
-                        commit('setApyDataEtsRuby', widgetData);
-                        break;
-                }
+                dispatch('addEtsApyData', { name: refreshParams.strategyName, data: widgetData});
 
                 let widgetTvlDataDict = {};
                 let widgetTvlData = {
@@ -261,26 +177,7 @@ const actions = {
                     widgetTvlData.datasets[0].data.push(widgetTvlDataDict[key]);
                 }
 
-                switch (refreshParams.strategyName) {
-                    case "usdPlusWmatic":
-                        commit('setTvlDataUsdPlusWmatic', widgetTvlData);
-                        break;
-                    case "wmaticUsdc":
-                        commit('setTvlDataWmaticUsdc', widgetTvlData);
-                        break;
-                    case "etsMoonstone":
-                        commit('setTvlDataEtsMoonstone', widgetTvlData);
-                        break;
-                    case "usdPlusWbnb":
-                        commit('setTvlDataUsdPlusWbnb', widgetTvlData);
-                        break;
-                    case "busdWbnb":
-                        commit('setTvlDataBusdWbnb', widgetTvlData);
-                        break;
-                    case "etsRuby":
-                        commit('setTvlDataEtsRuby', widgetData);
-                        break;
-                }
+                dispatch('addEtsTvlData', { name: refreshParams.strategyName, data: widgetTvlData});
             }).catch(reason => {
                 console.log('Error get data: ' + reason);
             })
@@ -347,7 +244,7 @@ const actions = {
             case "bsc":
                 appApiUrl = rootState.network.bscApi;
                 break;
-            case "op":
+            case "optimism":
                 appApiUrl = rootState.network.opApi;
                 break;
             case "avax":
@@ -374,23 +271,11 @@ const actions = {
 
                 resultDataList = widgetDataDict;
 
-                switch (network) {
-                    case "polygon":
-                        commit('setApyDataUsdPlusPolygon', resultDataList);
-                        break;
-                    case "bsc":
-                        commit('setApyDataUsdPlusBinance', resultDataList);
-                        break;
-                    case "op":
-                        commit('setApyDataUsdPlusOp', resultDataList);
-                        break;
-                }
+                dispatch('addUsdPlusApyData', { name: network, data: resultDataList});
             })
     },
 
     async addEtsStrategyData({commit, dispatch, getters, rootState}, etsDataParams) {
-        console.debug('MarketData: addEtsStrategyData');
-
         let etsData = getters.etsStrategyData;
         etsData[etsDataParams.name] = etsDataParams.data;
 
@@ -398,12 +283,31 @@ const actions = {
     },
 
     async addEtsClientData({commit, dispatch, getters, rootState}, etsClientDataParams) {
-        console.debug('MarketData: addEtsClientData');
-
         let etsClientData = getters.etsClientData;
         etsClientData[etsClientDataParams.name] = etsClientDataParams.data;
 
         commit('setEtsClientData', etsClientData);
+    },
+
+    async addEtsApyData({commit, dispatch, getters, rootState}, etsApyDataParams) {
+        let etsApyData = getters.etsApyData;
+        etsApyData[etsApyDataParams.name] = etsApyDataParams.data;
+
+        commit('setEtsApyData', etsApyData);
+    },
+
+    async addEtsTvlData({commit, dispatch, getters, rootState}, etsTvlDataParams) {
+        let etsTvlData = getters.etsTvlData;
+        etsTvlData[etsTvlDataParams.name] = etsTvlDataParams.data;
+
+        commit('setEtsTvlData', etsTvlData);
+    },
+
+    async addUsdPlusApyData({commit, dispatch, getters, rootState}, usdPlusApyDataParams) {
+        let usdPlusApyData = getters.usdPlusApyData;
+        usdPlusApyData[usdPlusApyDataParams.name] = usdPlusApyDataParams.data;
+
+        commit('setUsdPlusApyData', usdPlusApyData);
     },
 };
 
@@ -417,64 +321,16 @@ const mutations = {
         state.etsClientData = value;
     },
 
-    setApyDataUsdPlusWmatic(state, value) {
-        state.apyDataUsdPlusWmatic = value;
+    setEtsApyData(state, value) {
+        state.etsApyData = value;
     },
 
-    setTvlDataUsdPlusWmatic(state, value) {
-        state.tvlDataUsdPlusWmatic = value;
+    setEtsTvlData(state, value) {
+        state.etsTvlData = value;
     },
 
-    setApyDataWmaticUsdc(state, value) {
-        state.apyDataWmaticUsdc = value;
-    },
-
-    setTvlDataWmaticUsdc(state, value) {
-        state.tvlDataWmaticUsdc = value;
-    },
-
-    setApyDataEtsMoonstone(state, value) {
-        state.apyDataEtsMoonstone = value;
-    },
-
-    setTvlDataEtsMoonstone(state, value) {
-        state.tvlDataEtsMoonstone = value;
-    },
-
-    setApyDataUsdPlusWbnb(state, value) {
-        state.apyDataUsdPlusWbnb = value;
-    },
-
-    setTvlDataUsdPlusWbnb(state, value) {
-        state.tvlDataUsdPlusWbnb = value;
-    },
-
-    setApyDataBusdWbnb(state, value) {
-        state.apyDataBusdWbnb = value;
-    },
-
-    setTvlDataBusdWbnb(state, value) {
-        state.tvlDataBusdWbnb = value;
-    },
-
-    setApyDataEtsRuby(state, value) {
-        state.apyDataEtsRuby = value;
-    },
-
-    setTvlDataEtsRuby(state, value) {
-        state.tvlDataEtsRuby = value;
-    },
-
-    setApyDataUsdPlusPolygon(state, value) {
-        state.apyDataUsdPlusPolygon = value;
-    },
-
-    setApyDataUsdPlusBinance(state, value) {
-        state.apyDataUsdPlusBinance = value;
-    },
-
-    setApyDataUsdPlusOp(state, value) {
-        state.apyDataUsdPlusOp = value;
+    setUsdPlusApyData(state, value) {
+        state.usdPlusApyData = value;
     },
 };
 

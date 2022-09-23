@@ -24,7 +24,6 @@ const actions = {
         })
 
         await commit('setEtsList', list);
-        dispatch('marketData/refreshMarket', null, {root: true});
     },
 };
 

@@ -12,8 +12,6 @@
         <AccountProfile width="630"/>
         <GasSettings width="510"/>
 
-        <OvercapBanner v-if="isOvercapAvailable && showOvercapBanner && showOvercapModal"/>
-
         <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
@@ -25,12 +23,10 @@ import AccountProfile from "./components/common/modal/AccountProfile";
 import GasSettings from "@/components/common/modal/GasSettings";
 import {mapActions, mapGetters} from "vuex";
 import Navbar from "@/components/Navbar";
-import OvercapBanner from "@/components/market/cards/wbnb/banner/OvercapBanner";
 
 export default {
     name: "Dapp",
     components: {
-        OvercapBanner,
         Navbar,
         GasSettings,
         AccountProfile,

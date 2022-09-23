@@ -1,11 +1,5 @@
 import UsdPlusImage from "@/assets/usdPlus.json";
 import WrappedUsdPlusImage from "@/assets/wUsdPlus.json";
-import UsdPlusWmaticImage from "@/assets/usdPlusWmatic.json";
-import WmaticImageUsdc from "@/assets/wmaticUsdc.json";
-import EtsMoonstoneImage from "@/assets/ets_moonstone.json";
-import UsdPlusWbnbImage from "@/assets/usdPlusWbnb.json";
-import BusdWbnbImage from "@/assets/busdWbnb.json";
-import EtsRubyImage from "@/assets/ets_ruby.json";
 import OvnImage from "@/assets/ovn.json";
 
 const state = {};
@@ -63,7 +57,9 @@ const actions = {
             .catch(console.error)
     },
 
-    async addUsdPlusWmaticToken({commit, dispatch, getters, rootState}) {
+    async addEtsToken({commit, dispatch, getters, rootState}, etsData) {
+
+        let etsImage = require("@/assets/" + etsData.iconName + '.json');
 
         await rootState.web3.provider
             .request({
@@ -71,141 +67,16 @@ const actions = {
                 params: {
                     type: 'ERC20',
                     options: {
-                        address: rootState.web3.contracts.usdPlusWmatic.options.address,
-                        symbol: process.env.VUE_APP_USD_PLUS_WMATIC_TOKEN_NAME,
+                        address: rootState.web3.contracts[etsData.tokenContract].options.address,
+                        symbol: etsData.nameUp,
                         decimals: 6,
-                        image: UsdPlusWmaticImage.image,
+                        image: etsImage.image,
                     },
                 },
             })
             .then((success) => {
                 if (success) {
-                    console.log('USD+/WMATIC successfully added to wallet!')
-                } else {
-                    throw new Error('Something went wrong.')
-                }
-            })
-            .catch(console.error)
-    },
-
-    async addWmaticUsdcToken({commit, dispatch, getters, rootState}) {
-
-        await rootState.web3.provider
-            .request({
-                method: 'wallet_watchAsset',
-                params: {
-                    type: 'ERC20',
-                    options: {
-                        address: rootState.web3.contracts.wmaticUsdc.options.address,
-                        symbol: process.env.VUE_APP_WMATIC_USDC_TOKEN_NAME,
-                        decimals: 6,
-                        image: WmaticImageUsdc.image,
-                    },
-                },
-            })
-            .then((success) => {
-                if (success) {
-                    console.log('ETS WMATIC/USDC successfully added to wallet!')
-                } else {
-                    throw new Error('Something went wrong.')
-                }
-            })
-            .catch(console.error)
-    },
-
-    async addEtsMoonstoneToken({commit, dispatch, getters, rootState}) {
-
-        await rootState.web3.provider
-            .request({
-                method: 'wallet_watchAsset',
-                params: {
-                    type: 'ERC20',
-                    options: {
-                        address: rootState.web3.contracts.etsMoonstoneToken.options.address,
-                        symbol: process.env.VUE_APP_ETS_MOONSTONE_TOKEN_NAME,
-                        decimals: 6,
-                        image: EtsMoonstoneImage.image,
-                    },
-                },
-            })
-            .then((success) => {
-                if (success) {
-                    console.log('ETS MOONSTONE successfully added to wallet!')
-                } else {
-                    throw new Error('Something went wrong.')
-                }
-            })
-            .catch(console.error)
-    },
-
-    async addUsdPlusWbnbToken({commit, dispatch, getters, rootState}) {
-
-        await rootState.web3.provider
-            .request({
-                method: 'wallet_watchAsset',
-                params: {
-                    type: 'ERC20',
-                    options: {
-                        address: rootState.web3.contracts.usdPlusWbnb.options.address,
-                        symbol: process.env.VUE_APP_USD_PLUS_WBNB_TOKEN_NAME,
-                        decimals: 6,
-                        image: UsdPlusWbnbImage.image,
-                    },
-                },
-            })
-            .then((success) => {
-                if (success) {
-                    console.log('USD+/WBNB successfully added to wallet!')
-                } else {
-                    throw new Error('Something went wrong.')
-                }
-            })
-            .catch(console.error)
-    },
-
-    async addBusdWbnbToken({commit, dispatch, getters, rootState}) {
-
-        await rootState.web3.provider
-            .request({
-                method: 'wallet_watchAsset',
-                params: {
-                    type: 'ERC20',
-                    options: {
-                        address: rootState.web3.contracts.busdWbnb.options.address,
-                        symbol: process.env.VUE_APP_BUSD_WBNB_TOKEN_NAME,
-                        decimals: 6,
-                        image: BusdWbnbImage.image,
-                    },
-                },
-            })
-            .then((success) => {
-                if (success) {
-                    console.log('BUSD/WBNB successfully added to wallet!')
-                } else {
-                    throw new Error('Something went wrong.')
-                }
-            })
-            .catch(console.error)
-    },
-
-    async addEtsRubyToken({commit, dispatch, getters, rootState}) {
-
-        await rootState.web3.provider
-            .request({
-                method: 'wallet_watchAsset',
-                params: {
-                    type: 'ERC20',
-                    options: {
-                        address: rootState.web3.contracts.etsRubyToken.options.address,
-                        symbol: process.env.VUE_APP_ETS_RUBY_TOKEN_NAME,
-                        decimals: 6,
-                        image: EtsRubyImage.image,
-                    },
-                },
-            })
-            .then((success) => {
-                if (success) {
-                    console.log('ETS RUBY successfully added to wallet!')
+                    console.debug('ETS successfully added to wallet!')
                 } else {
                     throw new Error('Something went wrong.')
                 }

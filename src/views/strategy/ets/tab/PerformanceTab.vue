@@ -60,7 +60,9 @@
                             <v-spacer></v-spacer>
                             <label class="card-info-value">{{ etsStrategyData[etsData.name] ? etsStrategyData[etsData.name].ownedAsset.token : '—' }}</label>
                             <div class="info-card-icon ml-2">
-                                <v-img :src="require('@/assets/currencies/usdc.png')"/>
+                                <v-img
+                                    v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].ownedAsset.token"
+                                    :src="require('@/assets/currencies/stablecoins/' + etsStrategyData[etsData.name].ownedAsset.token + '.png')"/>
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
@@ -94,7 +96,9 @@
                             <v-spacer></v-spacer>
                             <label class="card-info-value">{{ etsStrategyData[etsData.name] ? etsStrategyData[etsData.name].depositAsset.token : '—' }}</label>
                             <div class="info-card-icon ml-2">
-                                <v-img :src="require('@/assets/currencies/usdc.png')"/>
+                                <v-img
+                                    v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].depositAsset.token"
+                                    :src="require('@/assets/currencies/stablecoins/' + etsStrategyData[etsData.name].depositAsset.token + '.png')"/>
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">

@@ -45,13 +45,7 @@
             </div>
         </v-row>
 
-        <InvestModalWmatic v-if="showUsdPlusWmatic"/>
-        <InvestModalWmaticUsdc v-if="showWmaticUsdc"/>
-        <InvestModalEtsMoonstone v-if="showEtsMoonstone"/>
-        <InvestModalWbnb v-if="showUsdPlusWbnb"/>
-        <InvestModalBusdWbnb v-if="showBusdWbnb"/>
-        <InvestModalEtsRuby v-if="showEtsRuby"/>
-
+        <InvestModal/>
         <SwapModal/>
         <WrapModal/>
 
@@ -65,12 +59,7 @@ import WalletBar from "@/components/common/header/WalletBar";
 import NetworkSelect from "@/components/common/header/NetworkSelect";
 import MenuSelect from "@/components/common/header/MenuSelect";
 import SwapModal from "@/components/swap/SwapModal";
-import InvestModalWmatic from "@/components/market/modal/wmatic/invest/InvestModal";
-import InvestModalWmaticUsdc from "@/components/market/modal/wmaticUsdc/invest/InvestModal";
-import InvestModalEtsMoonstone from "@/components/market/modal/etsMoonstone/invest/InvestModal";
-import InvestModalWbnb from "@/components/market/modal/wbnb/invest/InvestModal";
-import InvestModalBusdWbnb from "@/components/market/modal/busdWbnb/invest/InvestModal";
-import InvestModalEtsRuby from "@/components/market/modal/etsRuby/invest/InvestModal";
+import InvestModal from "@/components/market/modal/ets/invest/InvestModal";
 import WrapModal from "@/components/wrap/WrapModal";
 
 export default {
@@ -78,12 +67,7 @@ export default {
 
     components: {
         WrapModal,
-        InvestModalWmatic,
-        InvestModalWmaticUsdc,
-        InvestModalEtsMoonstone,
-        InvestModalWbnb,
-        InvestModalBusdWbnb,
-        InvestModalEtsRuby,
+        InvestModal,
         SwapModal,
         MenuSelect,
         NetworkSelect,
@@ -99,7 +83,6 @@ export default {
         ...mapGetters('web3', ['loadingWeb3']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('accountData', ['account']),
-        ...mapGetters('marketUI', ['showUsdPlusWbnb', 'showUsdPlusWmatic', 'showWmaticUsdc', 'showEtsMoonstone', 'showBusdWbnb', 'showEtsRuby']),
     },
 
     methods: {

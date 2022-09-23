@@ -10,6 +10,7 @@
   "chainName": "optimism",
   "borrowFrom": "AAVE",
   "dex": "Velodrome",
+  "gauge": "",
   "poolName": "WETH/USDC",
 
   "token1": "WETH",

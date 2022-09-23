@@ -1,7 +1,7 @@
 <template>
-    <div v-if="showWmaticUsdcModal">
+    <div v-if="show && etsData">
         <v-dialog
-                v-model="showWmaticUsdcModal"
+                v-model="show"
                 width="600"
                 persistent>
             <v-card class="container_body airdrop-body">
@@ -34,8 +34,8 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import Invest from "@/components/market/modal/wmaticUsdc/invest/action/Invest";
-import Withdraw from "@/components/market/modal/wmaticUsdc/invest/action/Withdraw";
+import Invest from "@/components/market/modal/ets/invest/action/Invest";
+import Withdraw from "@/components/market/modal/ets/invest/action/Withdraw";
 
 export default {
     name: "InvestModal",
@@ -48,14 +48,14 @@ export default {
     props: {},
 
     computed: {
-        ...mapGetters('investModal', ['showWmaticUsdcModal']),
+        ...mapGetters('investModal', ['show', 'etsData']),
         ...mapGetters('investModal', ['isMintView']),
     },
 
     data: () => ({}),
 
     methods: {
-        ...mapActions('investModal', ['closeWmaticUsdcModal']),
+        ...mapActions('investModal', ['closeInvestModal']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
 
         openLink(link) {
@@ -63,7 +63,7 @@ export default {
         },
 
         close() {
-            this.closeWmaticUsdcModal();
+            this.closeInvestModal();
         },
 
         mintAction() {

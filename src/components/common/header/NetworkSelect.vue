@@ -68,7 +68,7 @@
             <v-list-item disabled>
                 <v-list-item-avatar>
                     <div class="list-item-icon">
-                        <v-img style="filter: grayscale(100%);" :src="require('@/assets/currencies/eth.svg')"/>
+                        <v-img style="filter: grayscale(100%);" :src="require('@/assets/currencies/ETH.svg')"/>
                     </div>
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item list-item-disabled">

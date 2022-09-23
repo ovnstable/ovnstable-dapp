@@ -111,7 +111,7 @@
                             <label class="list-title-text">Strategy Generates Yield</label>
                         </v-row>
                         <v-row class="mt-8">
-                            <label class="list-sub-title-text">Strategy automatically stakes the earned pool LP tokens into {{ etsData.dex }} and auto-compounds the rewards by re-investing into the pool for more LP tokens to maximise Yields.</label>
+                            <label class="list-sub-title-text">Strategy automatically stakes the earned pool LP tokens into {{ (etsData.gauge && etsData.gauge !== '') ? (etsData.gauge + "'s gauge") : etsData.dex }} and auto-compounds the rewards by re-investing into the pool for more LP tokens to maximise Yields.</label>
                         </v-row>
                     </v-col>
                 </v-row>
@@ -459,7 +459,7 @@ export default {
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
-        ...mapActions('investModal', ['showEtsMoonstoneModal', 'showMintView']),
+        ...mapActions('investModal', ['showInvestModal', 'showMintView']),
 
         shortAddress(address) {
             if (address) {
@@ -487,7 +487,7 @@ export default {
 
         mintAction() {
             this.showMintView();
-            this.showEtsMoonstoneModal();
+            this.showInvestModal(this.etsData);
         },
     }
 }

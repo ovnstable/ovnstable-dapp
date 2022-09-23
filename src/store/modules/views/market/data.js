@@ -43,12 +43,9 @@ const actions = {
             dispatch('refreshClientData', {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain});
         });
 
-        // dispatch('refreshClientData', {contractAddress: '0x719ee857Ae6cf85Cbe7284Bc45ad1f99dd5ff0dB', strategyName: 'etsMoonstone'});
-        // dispatch('refreshClientData', {contractAddress: '0xA88F8c02eBdE678de623C6BCFC886De82e18ad00', strategyName: 'etsRuby'});
         // dispatch('refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
         // dispatch('refreshClientData', {contractAddress: '0xd52caB8AfC8ECd08b7CFa6D07e224a56F943e4c4', strategyName: 'wmaticUsdc'});
         // dispatch('refreshClientData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
-        // dispatch('refreshClientData', {contractAddress: '0xc6eca7a3b863d720393DFc62494B6eaB22567D37', strategyName: 'busdWbnb'});
 
         dispatch('refreshUsdPlusPayoutsData', "polygon");
         dispatch('refreshUsdPlusPayoutsData', "bsc");

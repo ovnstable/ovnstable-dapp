@@ -74,41 +74,18 @@
                         </div>
                         <label class="ml-2 coin-btn-label">wUSD+</label>
                     </v-btn>
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addUsdPlusWmaticToken" v-if="showUsdPlusWmatic">
+
+                    <v-btn
+                        v-for="ets in etsList"
+                        class="coin-btn"
+                        :class="$wu.isMobile() ? 'ma-1' : 'ma-2'"
+                        @click="addEtsToken(ets)"
+                        v-if="networkId === ets.chain"
+                    >
                         <div class="coin-img">
-                            <v-img :src="require('@/assets/currencies/market/WmaticUsdPlus.svg')"/>
+                            <v-img :src="require('@/assets/currencies/market/ets_' + ets.name + '.svg')"/>
                         </div>
-                        <label class="ml-2 coin-btn-label">USD+/WMATIC</label>
-                    </v-btn>
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addWmaticUsdcToken" v-if="showWmaticUsdc">
-                        <div class="coin-img">
-                            <v-img :src="require('@/assets/currencies/market/WmaticUsdc.svg')"/>
-                        </div>
-                        <label class="ml-2 coin-btn-label">WMATIC/USDC</label>
-                    </v-btn>
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addEtsMoonstoneToken" v-if="showEtsMoonstone">
-                        <div class="coin-img">
-                            <v-img :src="require('@/assets/currencies/market/ets_moonstone.svg')"/>
-                        </div>
-                        <label class="ml-2 coin-btn-label">ETS MOONSTONE</label>
-                    </v-btn>
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addUsdPlusWbnbToken" v-if="showUsdPlusWbnb">
-                        <div class="coin-img">
-                            <v-img :src="require('@/assets/currencies/market/UsdPlusWbnb.svg')"/>
-                        </div>
-                        <label class="ml-2 coin-btn-label">USD+/WBNB</label>
-                    </v-btn>
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addBusdWbnbToken" v-if="showBusdWbnb">
-                        <div class="coin-img">
-                            <v-img :src="require('@/assets/currencies/market/BusdWbnb.svg')"/>
-                        </div>
-                        <label class="ml-2 coin-btn-label">BUSD/WBNB</label>
-                    </v-btn>
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addEtsRubyToken" v-if="showEtsRuby">
-                        <div class="coin-img">
-                            <v-img :src="require('@/assets/currencies/market/ets_ruby.svg')"/>
-                        </div>
-                        <label class="ml-2 coin-btn-label">ETS RUBY</label>
+                        <label class="ml-2 coin-btn-label">ETS {{ ets.nameUp }}</label>
                     </v-btn>
                 </v-row>
             </v-card-text>
@@ -148,12 +125,11 @@ export default {
     },
 
     computed: {
-        ...mapGetters('network', ['explorerUrl']),
-        ...mapGetters('web3', ['walletName']),
+        ...mapGetters('network', ['networkId', 'explorerUrl']),
         ...mapGetters('accountUI', ['showAccountProfile']),
         ...mapGetters('wrapUI', ['showWrap']),
-        ...mapGetters('marketUI', ['showUsdPlusWmatic', 'showWmaticUsdc', 'showEtsMoonstone', 'showUsdPlusWbnb', 'showBusdWbnb', 'showEtsRuby']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
+        ...mapGetters('etsAction', ['etsList']),
 
         accountDisplay: function () {
             if (this.uns) {
@@ -178,7 +154,7 @@ export default {
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
         ...mapActions('walletAction', ['disconnectWallet']),
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addUsdPlusWmaticToken', 'addWmaticUsdcToken', 'addEtsMoonstoneToken', 'addUsdPlusWbnbToken', 'addBusdWbnbToken', 'addEtsRubyToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken']),
         ...mapActions('transaction', ['loadTransaction']),
 
         openOnExplorer(hash) {

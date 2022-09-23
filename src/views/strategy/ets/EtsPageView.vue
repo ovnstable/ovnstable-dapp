@@ -351,7 +351,7 @@ export default {
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
-        ...mapActions('investModal', ['showEtsMoonstoneModal', 'showMintView', 'showRedeemView']),
+        ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
 
         goToAction(id) {
             this.$router.push(id);
@@ -359,12 +359,12 @@ export default {
 
         mintAction() {
             this.showMintView();
-            this.showEtsMoonstoneModal();
+            this.showInvestModal(this.etsData);
         },
 
         redeemAction() {
             this.showRedeemView();
-            this.showEtsMoonstoneModal();
+            this.showInvestModal(this.etsData);
         },
 
         updateEtsData() {

@@ -22,6 +22,16 @@
             </div>
         </template>
         <v-list class="network-select-list">
+            <v-list-item style="cursor: pointer" @click="setWalletNetwork('10')">
+                <v-list-item-avatar>
+                    <div class="list-item-icon">
+                        <v-img :src="require('@/assets/network/op.svg')"/>
+                    </div>
+                </v-list-item-avatar>
+                <v-list-item-title class="network-select-list-item">
+                    Optimism
+                </v-list-item-title>
+            </v-list-item>
             <v-list-item style="cursor: pointer" @click="setWalletNetwork('137')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
@@ -31,16 +41,6 @@
                 <v-list-item-title class="network-select-list-item">
                     Polygon
                     <v-icon class="mb-5" small color="#333333"></v-icon>
-                </v-list-item-title>
-            </v-list-item>
-            <v-list-item style="cursor: pointer" @click="setWalletNetwork('10')">
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img :src="require('@/assets/network/op.svg')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item">
-                    Optimism
                 </v-list-item-title>
             </v-list-item>
             <v-list-item style="cursor: pointer" @click="setWalletNetwork('56')">

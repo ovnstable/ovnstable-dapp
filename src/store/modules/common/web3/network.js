@@ -88,7 +88,7 @@ function _getParams(networkName) {
         networkName = localStorage.getItem('selectedNetwork');
 
         if (!networkName) {
-            networkName = 'polygon';
+            networkName = 'op';
         }
     }
 
@@ -110,7 +110,7 @@ function _getParams(networkName) {
         case "10":
             return OPTIMISM_PARAMS;
         default:
-            return POLYGON_PARAMS;
+            return OPTIMISM_PARAMS;
     }
 }
 
@@ -226,7 +226,7 @@ const actions = {
                 localStorage.setItem('selectedNetwork', 'op');
                 break;
             default:
-                localStorage.setItem('selectedNetwork', 'polygon');
+                localStorage.setItem('selectedNetwork', 'op');
                 break;
         }
     },

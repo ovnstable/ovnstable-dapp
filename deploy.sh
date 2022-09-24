@@ -43,7 +43,3 @@ ssh $url docker login \
 
 ssh $url docker pull cr.yandex/crpg11k469bhc8lch9gm/overnight/dapp:$tag
 ssh $url docker-compose -f $dockerComposePath up -d --no-deps $nameDapp
-
-
-
-

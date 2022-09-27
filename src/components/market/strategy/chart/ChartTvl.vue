@@ -90,6 +90,10 @@ export default {
         data: function (newVal, oldVal) {
             this.redraw();
         },
+
+        light: function (newVal, oldVal) {
+            this.redraw();
+        },
     },
 
     components: {},
@@ -104,6 +108,7 @@ export default {
 
     computed: {
         ...mapGetters('marketData', ['etsStrategyData']),
+        ...mapGetters('theme', ['light']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -196,7 +201,7 @@ export default {
                         enabled: false
                     },
 
-                    background: '#FFFFFF',
+                    background: 'var(--secondary)',
 
                     toolbar: {
                         show: false
@@ -262,10 +267,10 @@ export default {
                     horizontalAlign: 'left'
                 },
 
-                colors: ['#E6F1FF'],
+                colors: [this.light ? '#E6F1FF' : '#093b5d'],
 
                 theme: {
-                    mode: 'light',
+                    mode: this.light ? 'light' : 'dark',
                 },
 
                 fill: {
@@ -393,7 +398,7 @@ export default {
 
 .selected {
     color: var(--links-blue) !important;
-    background-color: #E8F4FD;
+    background-color: var(--selected-btn-color);
 }
 
 .yaxis-label {

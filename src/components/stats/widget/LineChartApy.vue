@@ -297,10 +297,10 @@ export default {
                     horizontalAlign: 'left'
                 },
 
-                colors: [this.light ? '#E6F1FF' : '#1C95E7'],
+                colors: [this.light ? '#E6F1FF' : '#093b5d'],
 
                 theme: {
-                    mode: 'light',
+                    mode: this.light ? 'light' : 'dark',
                 },
 
                 fill: {

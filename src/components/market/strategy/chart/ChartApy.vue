@@ -110,6 +110,10 @@ export default {
             this.redraw();
         },
 
+        light: function (newVal, oldVal) {
+            this.redraw();
+        },
+
         usdPlusData: function (newVal, oldVal) {
             this.redraw();
         },
@@ -129,6 +133,7 @@ export default {
 
     computed: {
         ...mapGetters('network', ['polygonApi', 'bscApi', 'opApi', 'avaxApi']),
+        ...mapGetters('theme', ['light']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -278,7 +283,7 @@ export default {
                         enabled: false
                     },
 
-                    background: '#FFFFFF',
+                    background: 'var(--secondary)',
 
                     toolbar: {
                         show: false
@@ -358,10 +363,10 @@ export default {
                     show: false,
                 },
 
-                colors: ['#E6F1FF', 'rgba(34, 171, 172, 0.05)'],
+                colors: this.light ? ['#E6F1FF', 'rgba(34, 171, 172, 0.05)'] : ['#093b5d', '#0d4444'],
 
                 theme: {
-                    mode: 'light',
+                    mode: this.light ? 'light' : 'dark',
                 },
 
                 fill: {
@@ -503,7 +508,7 @@ export default {
 
 .selected {
     color: var(--links-blue) !important;
-    background-color: #E8F4FD;
+    background-color: var(--selected-btn-color);
 }
 
 .yaxis-label {

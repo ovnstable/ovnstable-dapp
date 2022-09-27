@@ -1,6 +1,6 @@
 <template>
     <vc-donut
-      :background="'#FFFFFF'"
+      background="var(--secondary)"
       :size="size" unit="px" :thickness="20"
       :sections="sections"
       :start-angle="0"
@@ -152,14 +152,14 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-align: center;
     font-feature-settings: 'liga' off;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .total-sum-label {
     font-family: 'Roboto', sans-serif;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 </style>

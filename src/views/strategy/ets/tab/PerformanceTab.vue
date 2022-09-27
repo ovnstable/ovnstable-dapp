@@ -510,21 +510,21 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     text-transform: uppercase;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .info-card-container {
-    background: #FFFFFF;
+    background: var(--secondary);
     border-radius: 4px;
 }
 
 .info-card-container-bottom {
-    background: #E5E7EA;
+    background: var(--main-banner-background);
     border-radius: 4px;
 }
 
 .info-card-container-debank {
-    background: #FFFFFF;
+    background: var(--secondary);
     border-radius: 4px;
     cursor: pointer !important;
 }
@@ -538,32 +538,32 @@ export default {
 }
 
 .info-row {
-    border-top: 1px solid #CED2D8;
+    border-top: 1px solid var(--secondary-border);
 }
 
 .title-card-text {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .card-info {
     font-family: 'Roboto', sans-serif;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .card-info-value {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #3E5463;
+    color: var(--main-gray-text);
 }
 
 .title-card-text-bottom {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .title-card-debank {
@@ -581,12 +581,12 @@ export default {
     line-height: 20px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-gray-text);
 }
 
 .scroll-container {
     height: 24px !important;
-    background: #F5F5F5;
+    background: var(--scroll-color) !important;
 }
 
 .rate-tab-btn {
@@ -602,13 +602,13 @@ export default {
     background: rgba(28, 149, 231, 0.1);
     border-radius: 4px;
     border: none !important;
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .rate-tab-button-in-active {
     border-radius: 4px;
     color: #707A8B !important;
-    border: 1px solid #DEE1E5 !important;
+    border: 1px solid var(--main-border) !important;
 }
 
 .debank-icon {

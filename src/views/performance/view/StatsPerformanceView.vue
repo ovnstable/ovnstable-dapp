@@ -377,34 +377,34 @@ export default {
 .tab-btn {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
     margin-bottom: -2px;
 }
 
 .tab-button {
-    border-bottom: 2px solid #1C95E7 !important;
-    color: #1C95E7 !important;
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
     cursor: pointer !important;
 }
 
 .tab-button-in-active {
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
     cursor: pointer !important;
 }
 
 .toggle-row {
-    border-bottom: 2px solid #DCE3E8;
+    border-bottom: 2px solid var(--main-border);
 }
 
 .title-label {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .info-card-container {
-    background: #FFFFFF;
+    background: var(--secondary);
     border-radius: 4px;
 }
 
@@ -416,12 +416,12 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     text-transform: capitalize;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .scroll-container {
     height: 24px !important;
-    background: #F5F5F5;
+    background: var(--scroll-color) !important;
 }
 
 .table-scroll-label {
@@ -432,7 +432,7 @@ export default {
     line-height: 20px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-gray-text);
 }
 
 .rate-tab-btn {
@@ -448,13 +448,13 @@ export default {
     background: rgba(28, 149, 231, 0.1);
     border-radius: 4px;
     border: none !important;
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .rate-tab-button-in-active {
     border-radius: 4px;
     color: #707A8B !important;
-    border: 1px solid #DEE1E5 !important;
+    border: 1px solid var(--main-border) !important;
 }
 
 .tab-btn-disabled {
@@ -464,7 +464,7 @@ export default {
 .ready-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .header-btn {

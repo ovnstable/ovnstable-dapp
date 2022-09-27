@@ -163,11 +163,11 @@ export default {
 
 .network-select-list-item {
     font-family: 'Roboto', sans-serif !important;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .text-blue {
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 

@@ -392,7 +392,7 @@ export default {
 }
 
 .selected {
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
     background-color: #E8F4FD;
 }
 
@@ -409,14 +409,14 @@ export default {
     margin-left: 4%;
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .chart-title-apy {
     margin-right: 4%;
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .chart-sub-title-apy {
@@ -430,7 +430,7 @@ export default {
     margin-left: 4%;
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 </style>

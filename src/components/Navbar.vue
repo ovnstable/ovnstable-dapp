@@ -1,9 +1,9 @@
 <template>
     <v-navigation-drawer
-        color="white"
-        app
-        permanent
-        width="228"
+            app
+            permanent
+            width="228"
+            color="var(--secondary)"
     >
         <v-list class="mt-2">
             <v-list-item>
@@ -12,6 +12,13 @@
                 </v-list-item-title>
             </v-list-item>
         </v-list>
+        <template>
+            <v-container>
+                <v-btn @click="switchTheme">
+                    Switch theme
+                </v-btn>
+            </v-container>
+        </template>
 
         <v-list nav subheader class="mx-3" dense>
             <v-subheader class="mx-n2 mb-n2 mt-2">
@@ -117,11 +124,13 @@ export default {
 
     computed: {
         ...mapGetters('menuUI', ['selectedTab']),
+        ...mapGetters('theme', ['light']),
     },
 
     methods: {
         ...mapActions('menuUI', ['selectTab']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('theme', ['switchTheme']),
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -200,7 +209,7 @@ export default {
     font-size: 16px;
     line-height: 24px;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--third-gray-text);
 }
 
 .navbar-page-label {
@@ -212,15 +221,15 @@ export default {
     letter-spacing: 0.03em !important;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .list-item-hover:hover {
-    background: rgba(28, 149, 231, 0.1) !important;
+    background: var(--hover) !important;
 }
 
 .list-item-hover:active {
-    background: linear-gradient(rgba(40, 160, 240, 1), rgba(6, 120, 196, 0.99)) !important;
+    background: var(--active) !important;
 }
 
 .navbar-list-header {
@@ -232,7 +241,7 @@ export default {
     letter-spacing: 0.03em !important;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--links-blue);;
 }
 
 .navbar-list-divider {
@@ -242,5 +251,4 @@ export default {
 .selected-page {
     color: #1C95E7 !important;
 }
-
 </style>

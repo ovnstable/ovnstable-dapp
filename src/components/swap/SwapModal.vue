@@ -149,7 +149,7 @@ export default {
 .modal-link-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #1C95E7;
+    color: var(--links-blue);
     cursor: pointer;
 }
 </style>

@@ -229,9 +229,9 @@ export default {
 }
 
 .tab-button {
-    border-bottom: 2px solid #1C95E7 !important;
-    color: #1C95E7 !important;
-    cursor: pointer;
+  border-bottom: 2px solid var(--links-blue) !important;
+  color: var(--links-blue) !important;
+  cursor: pointer;
 }
 
 .tab-button-in-active {
@@ -239,15 +239,16 @@ export default {
 }
 
 .mdi-star-circle {
-    cursor: pointer !important;
+  color: var(--links-blue) !important;
+  cursor: pointer !important;
 }
 
 .tab-btn {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'liga' off;
-    color: #333333;
-    margin-bottom: -2px;
-    cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-feature-settings: 'liga' off;
+  color: var(--secondary-gray-text);
+  margin-bottom: -2px;
+  cursor: pointer;
 }
 
 .tab-btn-disabled {
@@ -255,7 +256,7 @@ export default {
 }
 
 .toggle-row {
-    border-bottom: 2px solid #DCE3E8;
+  border-bottom: 2px solid var(--main-border);
 }
 
 
@@ -267,6 +268,6 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 </style>

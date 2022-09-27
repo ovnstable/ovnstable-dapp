@@ -1,6 +1,6 @@
 <template>
     <vc-donut
-      :background="'#FFFFFF'"
+      :background="'var(--doughnut-bg)'"
       :size="size" unit="px" :thickness="20"
       :sections="sections"
       :start-angle="0" :auto-adjust-text-size="false">
@@ -116,7 +116,7 @@ export default {
     font-size: 18px;
     line-height: 32px;
     text-align: center;
-    color: #333333;
+    color: var(--doughnut-text);
 }
 
 .total-label-time {
@@ -127,6 +127,6 @@ export default {
     line-height: 60px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--doughnut-text);
 }
 </style>

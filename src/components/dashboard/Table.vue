@@ -195,16 +195,20 @@ export default {
     }
 }
 
+.current-strategy-table-row:hover {
+    background: var(--current-table-hover) !important;
+}
+
 .table-header-payouts-strategy {
     font-family: 'Roboto', sans-serif !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #ADB3BD !important;
+    color: var(--third-gray-text) !important;
 }
 
 .table-label-payouts-strategy {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .current-table-payouts-strategy {
@@ -223,7 +227,7 @@ export default {
 }
 
 .table-label-payouts-strategy {
-    border-top: 1px solid #DEE1E5 !important;
+    border-top: 1px solid var(--main-border) !important;
 }
 
 .current-strategy-table-row-total > td, .current-strategy-table-row-total-usd-plus > td {
@@ -251,7 +255,7 @@ export default {
 }
 
 .yield-default {
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .icon-img {

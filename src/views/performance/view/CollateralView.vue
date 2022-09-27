@@ -339,48 +339,48 @@ export default {
 .tab-btn {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
     margin-bottom: -2px;
 }
 
 .tab-button {
-    border-bottom: 2px solid #1C95E7 !important;
-    color: #1C95E7 !important;
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
     cursor: pointer !important;
 }
 
 .tab-button-in-active {
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
     cursor: pointer !important;
 }
 
 .toggle-row {
-    border-bottom: 2px solid #DCE3E8;
+    border-bottom: 2px solid var(--main-border);
 }
 
 .title-label {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .title-info-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .info-link {
     font-weight: 400;
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
     cursor: pointer;
 }
 
 .ready-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .header-btn {
@@ -399,7 +399,7 @@ export default {
 }
 
 .info-card-container {
-    background: #FFFFFF;
+    background: var(--secondary);
     border-radius: 4px;
 }
 
@@ -411,7 +411,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     text-transform: capitalize;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .tab-btn-disabled {

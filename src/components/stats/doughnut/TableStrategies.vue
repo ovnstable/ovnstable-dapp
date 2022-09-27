@@ -61,7 +61,7 @@
             <td class="table-label-don text-right" v-if="!minimized">
                 <div class="color-rectangle" style="background: transparent"></div>
             </td>
-            <td class="table-label-don text-left">
+            <td class="table-label-don no-hover text-left">
                 <v-row>
                     <b>Total</b>
                 </v-row>
@@ -252,17 +252,17 @@ export default {
 .table-header-don {
     font-family: 'Roboto', sans-serif !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #ADB3BD !important;
+    color: var(--third-gray-text) !important;
 }
 
 .table-label-don {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .table-label-don {
-    border-top: 1px solid #DEE1E5 !important;
+    border-top: 1px solid var(--main-border) !important;
 }
 
 .current-table-row-total > td {
@@ -282,6 +282,18 @@ export default {
 
 .current-table-row-header {
     height: 50px !important;
+}
+
+.current-table-row:hover {
+    background: var(--current-table-hover) !important;
+}
+
+.current-table-row-total:hover {
+    background: var(--current-table-hover) !important;
+}
+
+.current-table-row-total-usd-plus:hover {
+    background: var(--current-table-hover) !important;
 }
 
 .icon-img-link {

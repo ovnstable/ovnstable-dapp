@@ -23,7 +23,7 @@
         <tbody>
         <tr v-for="item in data" :key="item.label" class="current-table-row" @click="openTokenOnScan(item.link)">
             <td class="table-label-don text-right" width="1%">
-                <v-img class="currency-icon" :src="item.logo" />
+                <v-img class="currency-icon" :src="item.logo"/>
             </td>
             <td class="table-label-don text-left">
                 <v-row>
@@ -32,8 +32,7 @@
                     </label>
                     <v-spacer></v-spacer>
                     <label class="link-label mr-6">
-                        <v-img class="icon-img-link" v-if="!minimized"
-                               :src="require('@/assets/icon/open-in-new.svg')" />
+                        <v-img class="icon-img-link" v-if="!minimized" :src="require('@/assets/icon/open-in-new.svg')"/>
                     </label>
                 </v-row>
             </td>
@@ -41,7 +40,7 @@
                 VERY HIGH
             </td>
             <td class="table-label-don text-left">
-                ${{ $utils.formatMoney(item.value, 2) }}
+                ${{ $utils.formatMoney(item.value, 2)}}
             </td>
             <td class="table-label-don text-left progress-col" v-if="!minimized">
                 <v-progress-linear :value="getPercent(item)"
@@ -70,18 +69,19 @@ export default {
     props: {
         data: {
             type: Array,
-            default: null
+            default: null,
         },
 
         minimized: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
 
     components: {},
 
-    data: () => ({}),
+    data: () => ({
+    }),
 
     computed: {
         ...mapGetters('network', ['explorerUrl']),
@@ -103,7 +103,7 @@ export default {
         getTotal() {
             let sum = 0;
             this.data.forEach(dataItem => {
-                sum += dataItem.value;
+                sum += dataItem.value
             });
 
             return sum;
@@ -112,7 +112,7 @@ export default {
         getLiquidationTotal() {
             let sum = 0;
             this.data.forEach(dataItem => {
-                sum += dataItem.liquidationValue;
+                sum += dataItem.liquidationValue
             });
 
             return sum;
@@ -124,7 +124,7 @@ export default {
             }
         }
     }
-};
+}
 </script>
 
 <style scoped>
@@ -140,18 +140,13 @@ export default {
 
     .table-label-don {
         font-style: normal !important;
-        font-weight: 400 !important;
+        font-weight: 300 !important;
         font-size: 14px !important;
         line-height: 22px !important;
     }
 
     .current-table-row {
         height: 48px !important;
-    }
-
-    .currency-icon {
-        width: 24px !important;
-        height: 24px !important;
     }
 }
 
@@ -166,18 +161,13 @@ export default {
 
     .table-label-don {
         font-style: normal !important;
-        font-weight: 400 !important;
+        font-weight: 300 !important;
         font-size: 16px !important;
         line-height: 24px !important;
     }
 
     .current-table-row {
         height: 64px !important;
-    }
-
-    .currency-icon {
-        width: 32px !important;
-        height: 32px !important;
     }
 }
 
@@ -192,18 +182,13 @@ export default {
 
     .table-label-don {
         font-style: normal !important;
-        font-weight: 400 !important;
+        font-weight: 300 !important;
         font-size: 16px !important;
         line-height: 24px !important;
     }
 
     .current-table-row {
         height: 64px !important;
-    }
-
-    .currency-icon {
-        width: 40px !important;
-        height: 40px !important;
     }
 }
 
@@ -223,19 +208,19 @@ export default {
 }
 
 .table-header-don {
-    font-family: 'Roboto', sans-serif !important;
-    font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #ADB3BD !important;
-}
+     font-family: 'Roboto', sans-serif !important;
+     font-feature-settings: 'pnum' on, 'lnum' on !important;
+     color: var(--third-gray-text) !important;
+ }
 
 .table-label-don {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .table-label-don {
-    border-top: 1px solid #DEE1E5 !important;
+    border-top: 1px solid var(--main-border) !important;
 }
 
 .current-strategy-table-row-total > td, .current-strategy-table-row-total-usd-plus > td {
@@ -252,6 +237,10 @@ export default {
 
 .current-table-row-header {
     height: 50px !important;
+}
+
+.current-table-row:hover {
+    background: var(--current-table-hover) !important;
 }
 
 .high-label {

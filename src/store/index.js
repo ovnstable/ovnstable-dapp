@@ -59,6 +59,9 @@ import gasPrice from '@/store/modules/common/gas-price';
 import supplyData from '@/store/modules/common/supply';
 import referral from "@/store/modules/common/referral";
 
+// Theme
+import theme from "@/store/modules/theme/theme";
+
 import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
@@ -114,7 +117,9 @@ export default new Vuex.Store({
 
         gasPrice,
         supplyData,
-        referral
+        referral,
+
+        theme
     },
 
     plugins: [

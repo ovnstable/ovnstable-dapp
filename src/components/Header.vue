@@ -31,7 +31,7 @@
                     dark
                     class="progress mt-1 mr-2"
                     background-opacity="0"
-                    color="var(--main-background)"
+                    color="#F5F5F5"
                     indeterminate
                 ></v-progress-linear>
             </template>
@@ -213,7 +213,7 @@ export default {
 
 .btn-filled {
     background: var(--blue-gradient);
-    color: #FFFFFF !important;
+    color: var(--secondary) !important;
 }
 
 .logo-img {

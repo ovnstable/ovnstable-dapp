@@ -46,7 +46,7 @@ export default {
         font-size: 24px;
         line-height: 28px;
         font-feature-settings: 'liga' off;
-        color: #333333;
+        color: var(--secondary-gray-text);
     }
 
     .v-slider__tick-label {
@@ -83,7 +83,7 @@ export default {
         font-size: 24px;
         line-height: 28px;
         font-feature-settings: 'liga' off;
-        color: #333333;
+        color: var(--secondary-gray-text);
     }
 
     .v-slider__tick-label {
@@ -119,7 +119,7 @@ export default {
         font-size: 30px;
         line-height: 36px;
         font-feature-settings: 'pnum' on, 'lnum' on;
-        color: #333333;
+        color: var(--secondary-gray-text);
     }
 
     .v-slider__tick-label {
@@ -139,12 +139,8 @@ export default {
 
 /* main variables */
 :root {
-    --main-background: #F5F5F5;
-    --secondary: #FFFFFF;
-    --logo-color: #ffffff;
     --orange-gradient: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
     --blue-gradient: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
-    --link: #1C95E7;
 }
 
 html {
@@ -177,19 +173,17 @@ html {
 
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px !important;
-    background-color: #F5F5F5;
+    background-color: var(--scrollbar-track-color);
 }
 
 ::-webkit-scrollbar {
-    width: 12px;
-    background-color: #F5F5F5;
+    width: 14px;
+    background-color: var(--scrollbar-track-color);
 }
 
 ::-webkit-scrollbar-thumb {
     border-radius: 10px !important;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-    background-color: #555;
+    background-color: var(--scrollbar-slider-color);
 }
 
 .bn-onboard-modal {
@@ -210,7 +204,7 @@ html {
 
 .bn-onboard-selected-wallet {
     background: none !important;
-    border: 1px solid var(--link) !important;
+    border: 1px solid var(--links-blue) !important;
     border-radius: 16px !important;
 }
 
@@ -234,7 +228,7 @@ html {
     font-size: 30px;
     line-height: 36px;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
     margin-bottom: 15px !important;
 }
 
@@ -246,13 +240,13 @@ html {
     line-height: 20px;
     letter-spacing: 0.02em;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .bn-onboard-select-wallet-info {
     margin-left: 10px;
     font-family: 'Lato', sans-serif !important;
-    color: var(--link) !important;
+    color: var(--links-blue) !important;
     font-style: normal !important;
     font-weight: normal !important;
     font-size: 14px !important;
@@ -264,7 +258,7 @@ html {
 }
 
 .progress-col > .v-progress-linear > .v-progress-linear__buffer {
-    background-color: #E5E7EA !important;
+    background-color: var(--progress-card-info) !important;
 }
 
 .progress-col > .v-progress-linear > .v-progress-linear__determinate {
@@ -275,7 +269,7 @@ html {
 .v-slider__tick-label {
     font-family: 'Roboto', sans-serif !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #29323E !important;
+    color: var(--main-gray-text) !important;
 }
 
 .percent-slider .v-slider__tick:not(:nth-child(5n + 1)) {
@@ -283,18 +277,18 @@ html {
 }
 
 .percent-slider .v-slider__tick:nth-child(5n + 1) {
-    background-color: #FFFFFF !important;
+    background-color: var(--secondary) !important;
     border-radius: 5px !important;
-    border: 1px solid #DEE1E5;
+    border: 1px solid var(--main-border);
 }
 
 .step-slider .v-slider__tick:nth-child(n) {
-    background-color: #FFFFFF !important;
+    background-color: var(--secondary) !important;
     border-radius: 5px !important;
-    border: 1px solid #DEE1E5;
+    border: 1px solid var(--main-border);
 }
 
 .v-slider__tick--filled {
-    border: 2px solid #1C95E7 !important;
+    border: 2px solid var(--links-blue) !important;
 }
 </style>

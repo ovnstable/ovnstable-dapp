@@ -501,7 +501,7 @@ export default {
     }
 
     .container-body-title-row {
-        border-bottom: 1px solid #DEE1E5 !important;
+        border-bottom: 1px solid var(--main-border) !important;
     }
 
     .container-info-sub-title {
@@ -606,7 +606,7 @@ export default {
     }
 
     .container-body-title-row {
-        border-bottom: 1px solid #DEE1E5 !important;
+        border-bottom: 1px solid var(--main-border) !important;
     }
 
     .container-info-sub-title {
@@ -763,24 +763,24 @@ export default {
 .tab-btn {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
     margin-bottom: -2px;
 }
 
 .toggle-row {
-    border-bottom: 2px solid #DCE3E8;
+    border-bottom: 2px solid var(--main-border);
 }
 
 .title-label {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .tab-button {
-    border-bottom: 2px solid #1C95E7 !important;
-    color: #1C95E7 !important;
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
     cursor: pointer;
 }
 
@@ -789,7 +789,7 @@ export default {
 }
 
 .tab-button-in-active {
-    color: #333333 !important;
+    color: var(--secondary-gray-text) !important;
     cursor: default;
 }
 
@@ -803,7 +803,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #1C95E7;
+    color: var(--links-blue);
 }
 
 .slice-select-list {
@@ -813,11 +813,11 @@ export default {
 
 .slice-select-list-item {
     font-family: 'Roboto', sans-serif !important;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .info-card-container {
-    background: #FFFFFF;
+    background: var(--secondary);
     border-radius: 4px;
 }
 
@@ -828,13 +828,13 @@ export default {
 .container-body-title {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .container-body-text {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .text-wide {
@@ -845,17 +845,17 @@ export default {
 .container-info-sub-title {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-gray-text);
 }
 
 .container-info-text {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .container-body-title-slice {
-    color: #ADB3BD !important;
+    color: var(--third-gray-text) !important;
 }
 
 .dashboard-action-btn {
@@ -874,12 +874,12 @@ export default {
 }
 
 .btn-outlined {
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .scroll-container {
     height: 24px !important;
-    background: #F5F5F5;
+    background: var(--scroll-color) !important;
 }
 
 .table-scroll-label {
@@ -890,20 +890,20 @@ export default {
     line-height: 20px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #ADB3BD;
+    color: var(--third-gray-text);
 }
 
 .useful-title {
     font-family: 'Roboto';
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .useful-link {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #1C95E7;
+    color: var(--links-blue);
     cursor: pointer;
 }
 

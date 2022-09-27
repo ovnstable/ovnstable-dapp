@@ -174,7 +174,7 @@ export default {
     font-size: 16px;
     font-weight: normal;
     background: #181A21;
-    color: var(--link);
+    color: var(--links-blue);
     width: 100%;
     height: 56px;
     border-radius: 40px;

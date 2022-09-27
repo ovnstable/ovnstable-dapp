@@ -166,7 +166,7 @@ export default {
 }
 
 .discord-label {
-    color: #333333;
+    color: var(--secondary-gray-text);
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -175,7 +175,7 @@ export default {
 
 .discord-link {
     cursor: pointer;
-    color: var(--link);
+    color: var(--links-blue);
     font-style: normal;
     font-weight: normal;
     font-size: 14px;

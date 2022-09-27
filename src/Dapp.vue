@@ -51,6 +51,8 @@ export default {
         console.debug('Dapp created')
 
         await this.initEtsList();
+        await this.initTheme();
+
         await this.initWeb3();
         await this.connectWallet();
         this.initReferralCode();
@@ -74,6 +76,7 @@ export default {
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('referral', ['initReferralCode']),
         ...mapActions('etsAction', ['initEtsList']),
+        ...mapActions('theme', ['initTheme']),
     }
 }
 </script>

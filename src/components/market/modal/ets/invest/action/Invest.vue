@@ -41,7 +41,7 @@
             <v-slider
                     class="percent-slider"
                     color="#1C95E7"
-                    track-color="#DEE1E5"
+                    track-color="var(--main-border)"
                     track-fill-color="#1C95E7"
                     tick-size="10"
                     min="0"
@@ -158,7 +158,7 @@
                     readonly
                     class="step-slider"
                     color="#1C95E7"
-                    track-color="#DEE1E5"
+                    track-color="var(--main-border)"
                     track-fill-color="#1C95E7"
                     tick-size="10"
                     min="0"
@@ -829,29 +829,29 @@ export default {
 
 .main-card {
     background: none !important;
-    border: 1px solid #DEE1E5;
+    border: 1px solid var(--main-border);
     border-radius: 8px;
 }
 
 .v-text-field >>> input::placeholder {
-    color: #C5C9D1 !important;
+    color: var(--input-placeholder) !important;
 }
 
 .v-text-field >>> input, .v-text-field >>> label, .v-text-field >>> button {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
 
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .balance-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .max {
-    color: var(--link);
+    color: var(--links-blue);
     cursor: pointer;
 }
 
@@ -861,7 +861,7 @@ export default {
 }
 
 .disabled-buy {
-    background: #E5E7EA !important;
+    background: var(--main-banner-background) !important;
     color: #9DA4B0 !important;
 }
 
@@ -881,37 +881,38 @@ export default {
 }
 
 .coin-card {
-    background: #F5F5F5;
+    background: var(--card-coin-background);
     border-radius: 4px;
 }
 
 .coin-title {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .modal-link-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
-    color: #1C95E7;
+    color: var(--links-blue);
     cursor: pointer;
 }
 
 .action-info-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .action-info-sub-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .action-btn-container {
     width: 100% !important;
+    background: var(--action-btn-bg);
 }
 
 .balance-network-icon {

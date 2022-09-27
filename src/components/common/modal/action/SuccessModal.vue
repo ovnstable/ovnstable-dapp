@@ -124,7 +124,7 @@ export default {
 
 .success-link {
     cursor: pointer;
-    color: var(--link);
+    color: var(--links-blue);
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -150,5 +150,22 @@ export default {
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #FFFFFF;
+}
+
+.promo-container {
+    background: rgba(252, 202, 70, 0.05);
+    border-radius: 4px;
+}
+
+.promo-label-title {
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: var(--secondary-gray-text);
+}
+
+.promo-label-text {
+    font-family: 'Roboto', sans-serif;
+    color: var(--secondary-gray-text);
 }
 </style>

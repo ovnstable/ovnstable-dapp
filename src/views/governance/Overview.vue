@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import {mapGetters} from "vuex";
 import DelegatePanel from "../../components/governance/DelegatePanel";
 import ChangeWeightPanel from "../../components/governance/finance/ChangeWeightPanel";
 import GovSettings from "../../components/governance/GovSettings";

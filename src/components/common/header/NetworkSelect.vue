@@ -85,7 +85,6 @@ import {mapActions, mapGetters} from "vuex";
 
 let polygonIcon = require('@/assets/network/polygon.svg');
 let avaxIcon = require('@/assets/network/avalanche.svg');
-let bscIcon = require('@/assets/network/bsc.svg');
 let optimismIcon = require('@/assets/network/op.svg');
 
 export default {
@@ -110,8 +109,6 @@ export default {
                     return avaxIcon;
                 case 10:
                     return optimismIcon;
-                case 56:
-                    return bscIcon;
             }
         },
 
@@ -135,83 +132,6 @@ export default {
 </script>
 
 <style scoped>
-/* mobile */
-@media only screen and (max-width: 960px) {
-
-    .btn-icon, .list-item-icon {
-        width: 20px;
-        height: 20px;
-    }
-
-    .network-select-list-item {
-        font-size: 14px;
-        margin-left: -12px;
-    }
-
-    .select-bar-container {
-        height: 28px !important;
-    }
-
-    .select-col {
-        margin-top: -8px;
-    }
-
-    .select-bar-main-container {
-        width: 42px !important;
-    }
-}
-
-/* tablet */
-@media only screen and (min-width: 960px) and (max-width: 1400px) {
-
-    .btn-icon, .list-item-icon {
-        width: 28px;
-        height: 28px;
-    }
-
-    .network-select-list-item {
-        font-size: 16px;
-        margin-left: -5px;
-    }
-
-    .select-bar-container {
-        height: 48px !important;
-    }
-
-    .select-col {
-        margin-top: -2px;
-    }
-
-    .select-bar-main-container {
-        width: 56px !important;
-    }
-}
-
-/* full */
-@media only screen and (min-width: 1400px) {
-
-    .btn-icon, .list-item-icon {
-        width: 28px;
-        height: 28px;
-    }
-
-    .network-select-list-item {
-        font-size: 17px;
-        margin-left: -5px;
-    }
-
-    .select-bar-container {
-        height: 48px !important;
-    }
-
-    .select-col {
-        margin-top: -2px;
-    }
-
-    .select-bar-main-container {
-        width: 56px !important;
-    }
-}
 
 .network-select-list {
     background-color: var(--secondary) !important;
@@ -220,18 +140,26 @@ export default {
 }
 
 .network-select-list-item {
-    font-family: 'Roboto', sans-serif !important;
-    color: #333333;
+    color: white;
+    font-weight: 600;
+    font-size: 17px;
+    margin-left: -5px;
+}
+
+.list-item-icon {
+    width: 32px;
+    height: 32px;
 }
 
 .list-item-disabled {
-    color: #C5C9D1 !important;
+    color: rgba(255, 255, 255, 0.15);
+    font-weight: 600;
+    font-size: 17px;
+    margin-left: -5px;
 }
 
-.select-bar-container {
-    background-color: white !important;
-    border-radius: 2px;
-    cursor: pointer;
+.btn-icon {
+    width: 32px;
+    height: 32px;
 }
-
 </style>

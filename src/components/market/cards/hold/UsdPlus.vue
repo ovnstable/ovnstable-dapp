@@ -487,14 +487,14 @@ export default {
 }
 
 .card-container {
-    background: #FFFFFF !important;
+    background: var(--secondary) !important;
     border-radius: 4px !important;
     max-width: 460px !important;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .card-banner-status-container {
-    background: #F5F5F5;
+    background: var(--card-banner-status-container);
     border-radius: 4px;
 }
 
@@ -512,19 +512,19 @@ export default {
 .card-title {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .card-info {
     font-family: 'Roboto', sans-serif;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .card-info-value {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #3E5463;
+    color: var(--main-gray-text);
 }
 
 .card-info-risk {
@@ -532,7 +532,7 @@ export default {
 }
 
 .info-row {
-    border-top: 1px solid #CED2D8;
+    border-top: 1px solid var(--secondary-border);
 }
 
 .card-banner-body {
@@ -556,7 +556,7 @@ export default {
 }
 
 .btn-outlined {
-    color: #1C95E7 !important;
+    color: var(--links-blue) !important;
 }
 
 .label-error {
@@ -581,7 +581,7 @@ export default {
 }
 
 .title-slice {
-    color: #ADB3BD !important;
+    color: var(--third-gray-text) !important;
 }
 
 .overview-link {
@@ -613,7 +613,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #1C95E7;
+    color: var(--links-blue);
 }
 
 .slice-select-list {
@@ -623,6 +623,6 @@ export default {
 
 .slice-select-list-item {
     font-family: 'Roboto', sans-serif !important;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 </style>

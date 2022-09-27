@@ -188,7 +188,7 @@ export default {
 }
 
 .wallet-bar-container {
-    background-color: white !important;
+    background-color: var(--secondary) !important;
     border-radius: 2px;
     cursor: pointer;
 }
@@ -197,15 +197,15 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--secondary-gray-text);
 }
 
 .wallet-bar-container:hover > .wallet-col > .eye-icon {
-    color: #1C95E7;
+    color: var(--hover);
 }
 
 .account-display-container {
-    background: #F5F5F5;
+    background: var(--card-coin-background);
     border-radius: 4px;
 }
 </style>

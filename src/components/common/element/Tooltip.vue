@@ -1,7 +1,7 @@
 <template>
     <v-tooltip
             max-width="220px"
-            color="#FFFFFF"
+            color="var(--tooltip-bg)"
             class="tooltip-container"
             transition="none"
             right
@@ -68,7 +68,7 @@ export default {
     font-size: 14px;
     line-height: 16px;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #333333;
+    color: var(--tooltip-text);
 }
 
 .icon-img, .info-icon {

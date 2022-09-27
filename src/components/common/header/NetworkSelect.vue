@@ -11,9 +11,9 @@
                         <div class="btn-icon"
                              style="display: flex">
                             <v-img class="selected-network-icon" :src="icon"/>
-                            <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="#333333" v-if="alphaNetwork">mdi-alpha</v-icon>
-                            <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="#333333" v-if="betaNetwork">mdi-beta</v-icon>
-                            <v-icon color="#333333" :class="(alphaNetwork || betaNetwork) ? 'ml-n1' : 'ml-2'">
+                            <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="var(--secondary-gray-text)" v-if="alphaNetwork">mdi-alpha</v-icon>
+                            <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="var(--secondary-gray-text)" v-if="betaNetwork">mdi-beta</v-icon>
+                            <v-icon color="var(--secondary-gray-text)" :class="(alphaNetwork || betaNetwork) ? 'ml-n1' : 'ml-2'">
                                 {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
                             </v-icon>
                         </div>
@@ -40,7 +40,7 @@
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item">
                     Polygon
-                    <v-icon class="mb-5" small color="#333333"></v-icon>
+                    <v-icon class="mb-5" small color="var(--secondary-gray-text)"></v-icon>
                 </v-list-item-title>
             </v-list-item>
             <v-list-item style="cursor: pointer" @click="setWalletNetwork('56')">
@@ -51,7 +51,7 @@
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item">
                     BSC
-                    <v-icon class="mb-5" small color="#333333"></v-icon>
+                    <v-icon class="mb-5" small color="var(--secondary-gray-text)"></v-icon>
                 </v-list-item-title>
             </v-list-item>
             <v-list-item style="cursor: pointer" @click="setWalletNetwork('43114')">
@@ -62,7 +62,7 @@
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item">
                     Avalanche
-                    <v-icon class="ml-n1 mb-5" small color="#333333">mdi-alpha</v-icon>
+                    <v-icon class="ml-n1 mb-5" small color="var(--secondary-gray-text)">mdi-alpha</v-icon>
                 </v-list-item-title>
             </v-list-item>
             <v-list-item disabled>
@@ -169,7 +169,7 @@ export default {
 }
 
 .network-select-list-item {
-    color: white;
+    color: var(--secondary-gray-text) !important;
     font-weight: 600;
     font-size: 17px;
     margin-left: -5px;

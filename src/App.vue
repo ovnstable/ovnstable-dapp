@@ -291,4 +291,8 @@ html {
 .v-slider__tick--filled {
     border: 2px solid var(--links-blue) !important;
 }
+
+.close-icon {
+    color: var(--main-gray-text) !important;
+}
 </style>

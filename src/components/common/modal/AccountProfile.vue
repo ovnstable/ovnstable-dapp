@@ -12,7 +12,7 @@
                 </label>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="close">
-                    <v-icon>mdi-close</v-icon>
+                    <v-icon class="close-icon">mdi-close</v-icon>
                 </v-btn>
             </v-toolbar>
 

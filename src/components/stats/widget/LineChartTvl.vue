@@ -276,7 +276,7 @@ export default {
                     horizontalAlign: 'left'
                 },
 
-                colors: ['var(--chart-color)'],
+                colors: [this.light ? '#E6F1FF' : '#1C95E7'],
 
                 theme: {
                     mode: 'light',

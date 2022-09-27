@@ -35,6 +35,10 @@ export default {
             this.redraw();
         },
 
+        light: function (newVal, oldVal) {
+            this.redraw();
+        },
+
         data: function (newVal, oldVal) {
             this.redraw();
         },
@@ -48,6 +52,7 @@ export default {
 
     computed: {
         ...mapGetters('dashboardData', ['slice']),
+        ...mapGetters('theme', ['light']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -120,7 +125,7 @@ export default {
                         enabled: false
                     },
 
-                    background: '#FFFFFF',
+                    background: 'var(--secondary)',
 
                     toolbar: {
                         show: false
@@ -200,35 +205,35 @@ export default {
                         {
                             y: maxValue / 5,
                             strokeDashArray: 2,
-                            borderColor: '#C5C9D1',
+                            borderColor: 'var(--input-placeholder)',
                             offsetY: -3,
                             width: '100%',
                         },
                         {
                             y: 2 * maxValue / 5,
                             strokeDashArray: 2,
-                            borderColor: '#C5C9D1',
+                            borderColor: 'var(--input-placeholder)',
                             offsetY: -3,
                             width: '100%',
                         },
                         {
                             y: 3 * maxValue / 5,
                             strokeDashArray: 2,
-                            borderColor: '#C5C9D1',
+                            borderColor: 'var(--input-placeholder)',
                             offsetY: -3,
                             width: '100%',
                         },
                         {
                             y: 4 * maxValue / 5,
                             strokeDashArray: 2,
-                            borderColor: '#C5C9D1',
+                            borderColor: 'var(--input-placeholder)',
                             offsetY: -3,
                             width: '100%',
                         },
                         {
                             y: maxValue,
                             strokeDashArray: 2,
-                            borderColor: '#C5C9D1',
+                            borderColor: 'var(--input-placeholder)',
                             offsetY: -3,
                             width: '100%',
                         },
@@ -239,7 +244,7 @@ export default {
                     horizontalAlign: 'left'
                 },
 
-                colors: ['#E6F1FF'],
+                colors: [this.light ? '#E6F1FF' : '#1C95E7'],
 
                 theme: {
                     mode: 'light',

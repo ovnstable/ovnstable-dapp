@@ -242,11 +242,11 @@ export default {
     letter-spacing: 0.03em !important;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--links-blue);;
+    color: var(--third-gray-text);
 }
 
 .navbar-list-divider {
-    border-color: #DEE1E5 !important;
+    border-color: var(--fourth-gray-text) !important;
 }
 
 .selected-page {

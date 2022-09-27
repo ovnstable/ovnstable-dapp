@@ -1,5 +1,5 @@
 const state = {
-    etsNames: ['moonstone', 'ruby', 'wbnb_busd'],
+    etsNames: ['wbnb_usd_plus', 'wbnb_busd', 'wmatic_usd_plus', 'wmatic_usdc', 'moonstone', 'ruby'],
     etsList: null,
 };
 

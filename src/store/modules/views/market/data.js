@@ -43,10 +43,6 @@ const actions = {
             dispatch('refreshClientData', {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain});
         });
 
-        // dispatch('refreshClientData', {contractAddress: '0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf', strategyName: 'usdPlusWmatic'});
-        // dispatch('refreshClientData', {contractAddress: '0xd52caB8AfC8ECd08b7CFa6D07e224a56F943e4c4', strategyName: 'wmaticUsdc'});
-        // dispatch('refreshClientData', {contractAddress: '0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1', strategyName: 'usdPlusWbnb'});
-
         dispatch('refreshUsdPlusPayoutsData', "polygon");
         dispatch('refreshUsdPlusPayoutsData', "bsc");
         dispatch('refreshUsdPlusPayoutsData', "optimism");

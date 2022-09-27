@@ -1,6 +1,7 @@
 <template>
     <vc-donut
       :background="'var(--doughnut-bg)'"
+      :foreground="'var(--doughnut-fg)'"
       :size="size" unit="px" :thickness="20"
       :sections="sections"
       :start-angle="0" :auto-adjust-text-size="false">

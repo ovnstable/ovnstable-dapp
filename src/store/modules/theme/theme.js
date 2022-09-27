@@ -90,7 +90,10 @@ const actions = {
 
         // Charts backgrounds
         document.querySelector(":root").style.setProperty('--doughnut-bg', getters.light ? '#FFFFFF' : '#1D2029');
+        document.querySelector(":root").style.setProperty('--doughnut-fg', getters.light ? '#F5F5F5' : '#4C586D');
         document.querySelector(":root").style.setProperty('--doughnut-text', getters.light ? '#333333' : '#FFFFFF');
+        document.querySelector(":root").style.setProperty('--chart-color', getters.light ? '#E6F1FF' : '#1C95E7');
+        document.querySelector(":root").style.setProperty('--selected-btn-color', getters.light ? '#E8F4FD' : '#29323E');
 
         // Tooltips
         document.querySelector(":root").style.setProperty('--tooltip-bg', getters.light ? '#FFFFFF' : '#29323E');

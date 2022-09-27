@@ -148,6 +148,11 @@ export default {
     .current-table-row {
         height: 48px !important;
     }
+
+    .currency-icon {
+        width: 26px !important;
+        height: 26px !important;
+    }
 }
 
 /* tablet */
@@ -169,6 +174,11 @@ export default {
     .current-table-row {
         height: 64px !important;
     }
+
+    .currency-icon {
+        width: 32px !important;
+        height: 32px !important;
+    }
 }
 
 /* full */
@@ -189,6 +199,11 @@ export default {
 
     .current-table-row {
         height: 64px !important;
+    }
+
+    .currency-icon {
+        width: 32px !important;
+        height: 32px !important;
     }
 }
 

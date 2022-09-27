@@ -87,6 +87,10 @@ export default {
             this.redraw();
         },
 
+        light: function (newVal, oldVal) {
+            this.redraw();
+        },
+
         currentTotalData: function (newVal, oldVal) {
             this.totalTvl = this.getTotalTvl();
         },
@@ -104,6 +108,7 @@ export default {
 
     computed: {
         ...mapGetters("statsData", ['currentTotalData']),
+        ...mapGetters('theme', ['light']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -205,7 +210,7 @@ export default {
                         enabled: false
                     },
 
-                    background: '#FFFFFF',
+                    background: 'var(--secondary)',
 
                     toolbar: {
                         show: false
@@ -271,7 +276,7 @@ export default {
                     horizontalAlign: 'left'
                 },
 
-                colors: ['#E6F1FF'],
+                colors: ['var(--chart-color)'],
 
                 theme: {
                     mode: 'light',
@@ -411,7 +416,7 @@ export default {
 
 .selected {
     color: var(--links-blue) !important;
-    background-color: #E8F4FD;
+    background-color: var(--selected-btn-color);
 }
 
 .yaxis-label {

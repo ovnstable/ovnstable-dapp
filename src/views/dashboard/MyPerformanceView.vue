@@ -6,10 +6,13 @@
             <v-row align="start" justify="start" class="ma-0">
                 <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
+                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mr-4"
+                               v-bind:class="activeTabOverall" disabled>Overall</label>
                         <label class="tab-btn mx-4" @click="tab=2" v-bind:class="activeTabUsdPlus">USD+</label>
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabPools" disabled>USD+ pools</label>
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4" v-bind:class="activeTabETS" disabled>ETS</label>
+                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4"
+                               v-bind:class="activeTabPools" disabled>USD+ pools</label>
+                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4"
+                               v-bind:class="activeTabETS" disabled>ETS</label>
 
                         <v-spacer></v-spacer>
 
@@ -82,12 +85,14 @@
 
                         <v-list class="slice-select-list">
                             <v-list-item style="cursor: pointer">
-                                <v-list-item-title class="slice-select-list-item" @click="sliceDashboardByPeriod('week')">
+                                <v-list-item-title class="slice-select-list-item"
+                                                   @click="sliceDashboardByPeriod('week')">
                                     Week
                                 </v-list-item-title>
                             </v-list-item>
                             <v-list-item style="cursor: pointer">
-                                <v-list-item-title class="slice-select-list-item" @click="sliceDashboardByPeriod('month')">
+                                <v-list-item-title class="slice-select-list-item"
+                                                   @click="sliceDashboardByPeriod('month')">
                                     Month
                                 </v-list-item-title>
                             </v-list-item>
@@ -109,22 +114,27 @@
                         <v-col class="info-card-body-bottom">
                             <v-row align="center" justify="start" class="ma-0">
                                 <v-col :cols="$wu.isFull() ? 3 : 12">
-                                    <v-row class="container-body-title-row" justify="start" align="center" :class="$wu.isFull() ? '' : 'mb-0'">
-                                        <div class="coin-img mr-2" :class="$wu.isFull() ? '' : 'mb-1'" v-if="!$wu.isFull() && (!walletConnected || !isLoading)">
+                                    <v-row class="container-body-title-row" justify="start" align="center"
+                                           :class="$wu.isFull() ? '' : 'mb-0'">
+                                        <div class="coin-img mr-2" :class="$wu.isFull() ? '' : 'mb-1'"
+                                             v-if="!$wu.isFull() && (!walletConnected || !isLoading)">
                                             <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
                                         </div>
                                         <v-progress-circular
-                                                v-if="!$wu.isFull() && isLoading && walletConnected"
-                                                width="2"
-                                                size="24"
-                                                color="#8FA2B7"
-                                                indeterminate
-                                                class="mr-2"
+                                            v-if="!$wu.isFull() && isLoading && walletConnected"
+                                            width="2"
+                                            size="24"
+                                            color="#8FA2B7"
+                                            indeterminate
+                                            class="mr-2"
                                         ></v-progress-circular>
-                                        <label class="container-body-title" :class="$wu.isFull() ? '' : 'mb-1'">USD+</label>
-                                        <label class="container-body-title container-body-title-slice" :class="$wu.isFull() ? '' : 'mb-1'" v-if="$wu.isFull()">&nbsp;&nbsp;|&nbsp;</label>
+                                        <label class="container-body-title"
+                                               :class="$wu.isFull() ? '' : 'mb-1'">USD+</label>
+                                        <label class="container-body-title container-body-title-slice"
+                                               :class="$wu.isFull() ? '' : 'mb-1'" v-if="$wu.isFull()">&nbsp;&nbsp;|&nbsp;</label>
                                         <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                                        <label class="container-body-title container-body-title-slice" :class="$wu.isFull() ? '' : 'mb-1'">{{ sliceLabel }}</label>
+                                        <label class="container-body-title container-body-title-slice"
+                                               :class="$wu.isFull() ? '' : 'mb-1'">{{ sliceLabel }}</label>
                                     </v-row>
                                 </v-col>
 
@@ -177,11 +187,11 @@
                                             <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
                                         </div>
                                         <v-progress-circular
-                                                v-if="walletConnected && isLoading"
-                                                width="2"
-                                                size="40"
-                                                color="#8FA2B7"
-                                                indeterminate
+                                            v-if="walletConnected && isLoading"
+                                            width="2"
+                                            size="40"
+                                            color="#8FA2B7"
+                                            indeterminate
                                         ></v-progress-circular>
                                     </v-row>
                                 </v-col>
@@ -189,7 +199,8 @@
                         </v-col>
                     </v-row>
 
-                    <v-row align="center" justify="start" class="ma-0" :class="$wu.isFull() ? 'mt-8' : 'mt-5'" v-if="!anyActivities">
+                    <v-row align="center" justify="start" class="ma-0" :class="$wu.isFull() ? 'mt-8' : 'mt-5'"
+                           v-if="!anyActivities">
                         <v-btn class="dashboard-action-btn btn-filled" @click="mintAction" v-if="walletConnected">
                             Mint USD+ to start
                         </v-btn>
@@ -198,7 +209,8 @@
                         </v-btn>
                     </v-row>
 
-                    <v-row align="center" justify="start" class="ma-0 info-card-container" :class="$wu.isFull() ? 'mt-6' : 'mt-3'" v-if="anyActivities">
+                    <v-row align="center" justify="start" class="ma-0 info-card-container"
+                           :class="$wu.isFull() ? 'mt-6' : 'mt-3'" v-if="anyActivities">
                         <v-col class="info-card-body-bottom">
                             <template v-if="portfolioValue">
                                 <LineChart :data="portfolioValue"/>
@@ -206,21 +218,23 @@
                         </v-col>
                     </v-row>
 
-                    <v-row align="center" justify="start" class="ma-0 info-card-container" :class="$wu.isFull() ? 'mt-6' : 'mt-3'" v-if="anyActivities">
+                    <v-row align="center" justify="start" class="ma-0 info-card-container"
+                           :class="$wu.isFull() ? 'mt-6' : 'mt-3'" v-if="anyActivities">
                         <v-col class="info-card-body-bottom">
                             <v-row align="center" justify="start" class="ma-0">
-                                <label class="container-body-title" :class="$wu.isFull() ? '' : 'mb-1'">USD+ Transactions</label>
+                                <label class="container-body-title" :class="$wu.isFull() ? '' : 'mb-1'">USD+
+                                    Transactions</label>
                             </v-row>
 
                             <v-row align="center" justify="start" class="ma-0 mt-2">
                                 <Table
-                                        v-if="$wu.isFull()"
-                                        :data="activities"/>
+                                    v-if="$wu.isFull()"
+                                    :data="activities"/>
 
                                 <Table
-                                        v-else
-                                        minimized
-                                        :data="activities"/>
+                                    v-else
+                                    minimized
+                                    :data="activities"/>
 
                                 <v-row justify="center" align="center" class="ma-0 scroll-container">
                                     <label class="table-scroll-label">scroll to see more</label>
@@ -229,22 +243,31 @@
                         </v-col>
                     </v-row>
 
-                    <v-row align="center" justify="start" class="ma-0 info-card-container" :class="$wu.isFull() ? 'mt-6' : 'mt-3'" v-if="anyActivities">
+                    <v-row align="center" justify="start" class="ma-0 info-card-container"
+                           :class="$wu.isFull() ? 'mt-6' : 'mt-3'" v-if="anyActivities">
                         <v-col class="info-card-body-bottom">
                             <v-row align="start" justify="start" class="ma-0">
                                 <v-col :cols="$wu.isFull() ? 3 : 12">
-                                    <v-row class="container-body-title-row" justify="start" :align="$wu.isFull() ? 'start' : 'center'" :class="$wu.isFull() ? '' : 'mb-0'">
-                                        <div class="coin-img mr-2" :class="$wu.isFull() ? '' : 'mb-1'" v-if="!$wu.isFull()">
+                                    <v-row class="container-body-title-row" justify="start"
+                                           :align="$wu.isFull() ? 'start' : 'center'"
+                                           :class="$wu.isFull() ? '' : 'mb-0'">
+                                        <div class="coin-img mr-2" :class="$wu.isFull() ? '' : 'mb-1'"
+                                             v-if="!$wu.isFull()">
                                             <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
                                         </div>
-                                        <label class="container-body-title" :class="$wu.isFull() ? '' : 'mb-1'">Wrapped USD+</label>
+                                        <label class="container-body-title" :class="$wu.isFull() ? '' : 'mb-1'">Wrapped
+                                            USD+</label>
                                     </v-row>
                                 </v-col>
 
                                 <v-col :cols="$wu.isFull() ? 8 : 12">
                                     <v-row justify="start" align="start">
                                         <label class="container-body-text text-wide">
-                                            wUSD+ is an index-adjusted wrapper for USD+. Some people may find this useful for cross-blockchain purposes. Unlike your USD+ balance, your wUSD+ balance will not increase over time. When wUSD+ is unwrapped, you receive USD+ based on the latest (ever-increasing) index, so the total yield is the same.
+                                            wUSD+ is an index-adjusted wrapper for USD+. Some people may find this
+                                            useful for cross-blockchain purposes. Unlike your USD+ balance, your wUSD+
+                                            balance will not increase over time. When wUSD+ is unwrapped, you receive
+                                            USD+ based on the latest (ever-increasing) index, so the total yield is the
+                                            same.
                                         </label>
                                     </v-row>
                                 </v-col>
@@ -263,46 +286,53 @@
 
                 <v-col :cols="$wu.isFull() ? 3 : 12">
                     <div :class="$wu.isFull() ? 'sticky' : ''">
-                        <v-row align="center" justify="start" class="ma-0 mt-3 info-card-container" :class="$wu.isFull() ? '' : 'mr-3 ml-n3'">
+                        <v-row align="center" justify="start" class="ma-0 mt-3 info-card-container"
+                               :class="$wu.isFull() ? '' : 'mr-3 ml-n3'">
                             <v-col class="info-card-body-bottom">
                                 <v-row align="start" justify="start" class="ma-0">
                                     <label class="useful-title">Useful articles</label>
                                 </v-row>
 
                                 <v-row align="start" justify="start" class="ma-0 mt-7">
-                                    <label class="useful-link" @click="openLink('https://blog.overnight.fi/how-to-partake-in-liquidity-provisions-for-usd-5c8117e983b2')">
+                                    <label class="useful-link"
+                                           @click="openLink('https://blog.overnight.fi/how-to-partake-in-liquidity-provisions-for-usd-5c8117e983b2')">
                                         How to Partake in Liquidity Provisions for USD+
                                     </label>
                                 </v-row>
 
                                 <v-row align="start" justify="start" class="ma-0 mt-5">
-                                    <label class="useful-link" @click="openLink('https://blog.overnight.fi/tic-how-to-buy-usd-if-you-already-own-cryptocurrency-48c4455f7efd')">
+                                    <label class="useful-link"
+                                           @click="openLink('https://blog.overnight.fi/tic-how-to-buy-usd-if-you-already-own-cryptocurrency-48c4455f7efd')">
                                         How to buy USD+ if you already own cryptocurrency
                                     </label>
                                 </v-row>
 
                                 <v-row align="start" justify="start" class="ma-0 mt-5">
-                                    <label class="useful-link" @click="openLink('https://blog.overnight.fi/how-to-buy-usd-via-fiat-e3ff7818b8cc')">
+                                    <label class="useful-link"
+                                           @click="openLink('https://blog.overnight.fi/how-to-buy-usd-via-fiat-e3ff7818b8cc')">
                                         How to buy USD+ via Fiat
                                     </label>
                                 </v-row>
 
                                 <v-row align="start" justify="start" class="ma-0 mt-5">
-                                    <label class="useful-link" @click="openLink('https://blog.overnight.fi/what-is-yield-farming-fc28736a7f2f')">
+                                    <label class="useful-link"
+                                           @click="openLink('https://blog.overnight.fi/what-is-yield-farming-fc28736a7f2f')">
                                         What is Yield Farming?
                                     </label>
                                 </v-row>
                             </v-col>
                         </v-row>
 
-                        <v-row align="center" justify="start" class="ma-0 mt-3 info-card-container" :class="$wu.isFull() ? '' : 'mr-3 ml-n3'">
+                        <v-row align="center" justify="start" class="ma-0 mt-3 info-card-container"
+                               :class="$wu.isFull() ? '' : 'mr-3 ml-n3'">
                             <v-col class="info-card-body-bottom">
                                 <v-row align="start" justify="start" class="ma-0">
                                     <label class="useful-title">Video tutorials</label>
                                 </v-row>
 
                                 <v-row align="start" justify="start" class="ma-0 mt-7">
-                                    <label class="useful-link" @click="openLink('https://www.youtube.com/watch?v=URHirNqiMiw')">
+                                    <label class="useful-link"
+                                           @click="openLink('https://www.youtube.com/watch?v=URHirNqiMiw')">
                                         Dystopia & Penrose: High-Yield Stablecoin LP Staking
                                     </label>
                                 </v-row>
@@ -387,7 +417,7 @@ export default {
         },
 
         sliceLabel() {
-            switch (this.slice){
+            switch (this.slice) {
                 case 7:
                     return 'WEEK'
                 case 30:
@@ -785,7 +815,7 @@ export default {
 }
 
 .tab-btn-disabled {
-  cursor: default;
+    cursor: default;
 }
 
 .tab-button-in-active {

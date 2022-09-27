@@ -1,35 +1,30 @@
 <template>
-    <v-badge dot
-             :color="badge ? '#CF3F92' : '#FFFFFF'"
-             offset-x="-1"
-             offset-y="2">
-        <div class="wallet-bar-main-container mt-1">
-            <v-row align="center" class="wallet-bar-container" @click="walletClickAction">
-                <v-col cols="1" class="wallet-col mr-4">
-                    <div class="wallet-icon">
-                        <v-img :src="require('@/assets/icon/undefined.svg')"/>
-                    </div>
-                </v-col>
-                <v-col cols="5" class="wallet-col" v-if="!$wu.isMobile()">
-                    <label class="balance-label">
-                        {{ $utils.formatMoney(account ? balance.usdPlus : 0, 2) }}&nbsp;USD+
+    <div class="wallet-bar-main-container mt-1">
+        <v-row align="center" class="wallet-bar-container" @click="walletClickAction">
+            <v-col cols="1" class="wallet-col mr-4">
+                <div class="wallet-icon">
+                    <v-img :src="require('@/assets/icon/undefined.svg')"/>
+                </div>
+            </v-col>
+            <v-col cols="5" class="wallet-col" v-if="!$wu.isMobile()">
+                <label class="balance-label">
+                    {{ $utils.formatMoney(account ? balance.usdPlus : 0, 2) }}&nbsp;USD+
+                </label>
+            </v-col>
+            <v-col :cols="$wu.isMobile() ? 0 : 4" class="wallet-col" :class="$wu.isMobile() ? 'mr-4' : ''">
+                <v-row class="account-display-container" align="center" justify="center">
+                    <label class="account-label">
+                        {{ account ? accountDisplay : 'XXXXX...XXXX' }}
                     </label>
-                </v-col>
-                <v-col :cols="$wu.isMobile() ? 0 : 4" class="wallet-col" :class="$wu.isMobile() ? 'mr-4' : ''">
-                    <v-row class="account-display-container" align="center" justify="center">
-                        <label class="account-label">
-                            {{ account ? accountDisplay : 'XXXXX...XXXX' }}
-                        </label>
-                    </v-row>
-                </v-col>
-                <v-col cols="1" class="wallet-col" v-if="!$wu.isMobile()">
-                    <v-icon class="eye-icon">mdi-eye-outline</v-icon>
-                </v-col>
-            </v-row>
-        </div>
+                </v-row>
+            </v-col>
+            <v-col cols="1" class="wallet-col" v-if="!$wu.isMobile()">
+                <v-icon class="eye-icon">mdi-eye-outline</v-icon>
+            </v-col>
+        </v-row>
 
         <resize-observer @notify="$forceUpdate()"/>
-    </v-badge>
+    </div>
 </template>
 
 <script>
@@ -46,7 +41,6 @@ export default {
 
     computed: {
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
-        ...mapGetters('accountUI', ['badge']),
         ...mapGetters('walletAction', ['walletConnected']),
 
         accountDisplay: function () {
@@ -198,6 +192,10 @@ export default {
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
+}
+
+.eye-icon {
+    color: var(--main-gray-text) !important;
 }
 
 .wallet-bar-container:hover > .wallet-col > .eye-icon {

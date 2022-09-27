@@ -58,7 +58,7 @@ const mutations = {
     },
 
     setBadge(state, value) {
-        state.loadingBalance = badge;
+        state.loadingBalance = value;
     },
 
 };

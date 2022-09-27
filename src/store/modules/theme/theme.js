@@ -13,16 +13,35 @@ const getters = {
 const actions = {
 
     async switchTheme({commit, dispatch, getters}) {
-        await commit('setLight', !getters.light);
+        let isLight;
+
+        if (getters.light === null || getters.light === undefined) {
+            isLight = true;
+        } else {
+            isLight = !getters.light;
+        }
+
+        localStorage.setItem('light_theme_on', isLight);
+
+        await commit('setLight', isLight);
         await dispatch('applyColorVariables');
     },
 
     async initTheme({commit, dispatch, getters}) {
-        await commit('setLight',true);
+        let isLight = localStorage.getItem('light_theme_on');
+
+        if (isLight === null || isLight === undefined) {
+            isLight = true;
+        } else {
+            isLight = (isLight === 'true');
+        }
+
+        await commit('setLight', isLight);
         await dispatch('applyColorVariables');
     },
 
     async applyColorVariables({commit, dispatch, getters}) {
+
         // Main backgrounds
         document.querySelector(":root").style.setProperty('--main-background', getters.light ? '#F5F5F5' : '#13151C');
         document.querySelector(":root").style.setProperty('--card-coin-background', getters.light ? '#F5F5F5' : '#29323E');

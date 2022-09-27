@@ -10,7 +10,7 @@
                     <v-col cols="12" class="select-col">
                         <div class="btn-icon"
                              style="display: flex">
-                            <v-img :src="icon"/>
+                            <v-img class="selected-network-icon" :src="icon"/>
                             <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="#333333" v-if="alphaNetwork">mdi-alpha</v-icon>
                             <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="#333333" v-if="betaNetwork">mdi-beta</v-icon>
                             <v-icon color="#333333" :class="(alphaNetwork || betaNetwork) ? 'ml-n1' : 'ml-2'">
@@ -84,6 +84,7 @@
 import {mapActions, mapGetters} from "vuex";
 
 let polygonIcon = require('@/assets/network/polygon.svg');
+let bscIcon = require('@/assets/network/bsc.svg');
 let avaxIcon = require('@/assets/network/avalanche.svg');
 let optimismIcon = require('@/assets/network/op.svg');
 
@@ -105,6 +106,8 @@ export default {
             switch (this.networkId){
                 case 137:
                     return polygonIcon;
+                case 56:
+                    return bscIcon;
                 case 43114:
                     return avaxIcon;
                 case 10:
@@ -132,6 +135,32 @@ export default {
 </script>
 
 <style scoped>
+/* mobile */
+@media only screen and (max-width: 960px) {
+
+    .list-item-icon, .btn-icon, .selected-network-icon {
+        width: 26px !important;
+        height: 26px !important;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+
+    .list-item-icon, .btn-icon, .selected-network-icon {
+        width: 32px !important;
+        height: 32px !important;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+
+    .list-item-icon, .btn-icon, .selected-network-icon {
+        width: 32px !important;
+        height: 32px !important;
+    }
+}
 
 .network-select-list {
     background-color: var(--secondary) !important;
@@ -146,20 +175,10 @@ export default {
     margin-left: -5px;
 }
 
-.list-item-icon {
-    width: 32px;
-    height: 32px;
-}
-
 .list-item-disabled {
     color: rgba(255, 255, 255, 0.15);
     font-weight: 600;
     font-size: 17px;
     margin-left: -5px;
-}
-
-.btn-icon {
-    width: 32px;
-    height: 32px;
 }
 </style>

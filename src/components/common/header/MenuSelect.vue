@@ -5,7 +5,7 @@
                  v-bind="attrs"
                  v-on="on">
                 <v-row justify="end" align="center" class="select-bar-container">
-                    <v-icon>mdi-view-headline</v-icon>
+                    <v-icon class="menu-icon">mdi-view-headline</v-icon>
                 </v-row>
             </div>
         </template>
@@ -184,4 +184,7 @@ export default {
     cursor: pointer;
 }
 
+.menu-icon {
+    color: var(--main-gray-text) !important;
+}
 </style>

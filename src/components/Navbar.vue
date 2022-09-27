@@ -12,13 +12,6 @@
                 </v-list-item-title>
             </v-list-item>
         </v-list>
-        <template>
-            <v-container>
-                <v-btn @click="switchTheme">
-                    Switch theme
-                </v-btn>
-            </v-container>
-        </template>
 
         <v-list nav subheader class="mx-3" dense>
             <v-subheader class="mx-n2 mb-n2 mt-2">
@@ -87,6 +80,14 @@
 
         <template v-slot:append>
             <v-list nav dense class="footer-list">
+                <div class="ma-2">
+                    <v-list-item-title>
+                        <v-btn @click="switchTheme">
+                            Switch theme
+                        </v-btn>
+                    </v-list-item-title>
+                </div>
+
                 <v-list-item link class="mb-0">
                     <v-list-item-title @click="openLink('https://docs.overnight.fi/')">
                         <label class="footer-item-label">Docs</label>

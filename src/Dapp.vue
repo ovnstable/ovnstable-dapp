@@ -50,8 +50,9 @@ export default {
     async created() {
         console.debug('Dapp created')
 
-        await this.initEtsList();
         await this.initTheme();
+
+        await this.initEtsList();
 
         await this.initWeb3();
         await this.connectWallet();

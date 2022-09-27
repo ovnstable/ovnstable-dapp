@@ -1,9 +1,6 @@
 <template>
     <v-row class="card-container ma-0" @click="openStrategyCard">
         <v-col cols="12" align-self="start">
-            <v-row class="card-row mt-7" justify="end" align="center">
-                <label class="tag-label">Exchange-traded strategy / moderate risk</label>
-            </v-row>
 
             <v-row class="card-row mt-12" justify="start" align="center">
                 <div class="currency-icon">

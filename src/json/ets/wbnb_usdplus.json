@@ -1,31 +1,32 @@
 {
-  "name": "wbnb_busd",
-  "nameUp": "WBNB/BUSD",
+  "name": "wbnb_usdPlus",
+  "nameUp": "WBNB/USD+",
 
-  "tokenContract": "busdWbnb",
-  "exchangeContract": "exchangerBusdWbnb",
+  "tokenContract": "usdPlusWbnb",
+  "exchangeContract": "exchangerUsdPlusWbnb",
 
-  "address": "0xc6eca7a3b863d720393DFc62494B6eaB22567D37",
+  "address": "0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1",
   "chain": 56,
   "chainName": "bsc",
   "borrowFrom": "Venus",
   "dex": "Cone",
   "gauge": "Unknown",
-  "poolName": "WBNB/BUSD",
+  "poolName": "WBNB/USD+",
 
   "token1": "WBNB",
-  "token2": "BUSD",
+  "token2": "USD+",
   "hedgeToken": "BNB",
-  "hasUsdPlus": false,
+  "hasUsdPlus": true,
 
   "maxSupply": 500000.00,
   "inceptionDate": "02 September 2022",
 
-  "iconName": "ets_wbnb_busd",
+  "iconName": "ets_wbnb_usdPlus",
 
   "mainColor": "radial-gradient(#001845, #001845, #001845, #E9B430)",
 
-  "cardTitle": "Generate yield on WBNB-BUSD pool by hedging your risks and simplify process",
+
+  "cardTitle": "Generate yield on WBNB-USD+ pool by hedging your risks and simplify process",
   "aboutText": "The exchange-traded strategy WBNB/BUSD ($WBNBBUSD), is an ERC-20 structured product built on Binance Smart chain that lets you leverage a collateralized debt position (BUSD lent on Venus) to borrow a volatile asset (WBNB), pair it with BUSD stablecoin, and provide WBNB/BUSD liquidity on Cone all in one action. This allows earning high APY and hedging against WBNB volatility.\n\nThe unique feature of WBNB/BUSD ETS is that it automatically administers a health factor of 1.20x on Venus and rebalances your Lent/Borrowed amounts to maintain a stringent 1.20x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.",
   "riskText": "By depositing USD+ into this strategy, you automatically borrow WBNB from Venus at a market rate.\n\nThe strategy's smart contract is designed to automatically invest these equal values of WBNB and BUSD into Cone's WBNB/BUSD Liquidity Pool, after which these LP Tokens are staked into the Gauge Pool on Unknown",
   "impermanentText": "Due to trading activities with the WBNB/BUSD pair on Cone and/or WBNB price change, the pool may become imbalanced, which can cause rebalance of a user’s LP position, resulting in increased or decreased number of WBNB vs. borrowed in a position. When a user withdraws their investment, the strategy's smart contract may need to use a user's funds to buy additional WBNB to repay the lent amount (plus interest), which can result in a net loss from the initial deposit.",

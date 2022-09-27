@@ -62,6 +62,17 @@
                     Vote for new features
                 </v-list-item-title>
             </v-list-item>
+            <v-divider></v-divider>
+            <v-list-item class="menu-item theme-switch-btn" @click="switchTheme">
+                <v-list-item-title class="network-select-list-item">
+                    <v-row class="ma-0 fill-height" align="center" justify="center">
+                        Switch to {{ light ? 'dark' : 'light' }} mode
+                        <v-spacer></v-spacer>
+                        <v-icon class="switch-theme-icon" v-if="light">mdi-moon-waxing-crescent</v-icon>
+                        <v-icon class="switch-theme-icon" v-else>mdi-white-balance-sunny</v-icon>
+                    </v-row>
+                </v-list-item-title>
+            </v-list-item>
         </v-list>
     </v-menu>
 </template>
@@ -80,10 +91,12 @@ export default {
 
     computed: {
         ...mapGetters('wrapUI', ['showWrap']),
+        ...mapGetters('theme', ['light']),
     },
 
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('theme', ['switchTheme']),
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -118,6 +131,11 @@ export default {
     .network-select-list {
         width: 50vw !important;
     }
+
+    .switch-theme-icon {
+        width: 26px !important;
+        height: 26px !important;
+    }
 }
 
 /* tablet */
@@ -136,6 +154,11 @@ export default {
     .network-select-list {
         width: 30vw !important;
     }
+
+    .switch-theme-icon {
+        width: 32px !important;
+        height: 32px !important;
+    }
 }
 
 /* full */
@@ -153,6 +176,11 @@ export default {
 
     .network-select-list {
         width: 20vw !important;
+    }
+
+    .switch-theme-icon {
+        width: 32px !important;
+        height: 32px !important;
     }
 }
 
@@ -186,5 +214,13 @@ export default {
 
 .menu-icon {
     color: var(--main-gray-text) !important;
+}
+
+.switch-theme-icon {
+    color: var(--theme-icon-color) !important;
+}
+
+.theme-switch-btn {
+    background-color: var(--theme-switch-background) !important;
 }
 </style>

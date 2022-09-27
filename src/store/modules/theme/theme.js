@@ -106,6 +106,12 @@ const actions = {
 
         // Inputs
         document.querySelector(":root").style.setProperty('--input-placeholder', getters.light ? '#C5C9D1' : '#4C586D');
+
+        //Theme switcher
+        document.querySelector(":root").style.setProperty('--theme-icon-color', getters.light ? '#ADB3BD' : '#4C586D');
+        document.querySelector(":root").style.setProperty('--theme-icon-color-selected', getters.light ? '#4C586D' : '#ADB3BD');
+        document.querySelector(":root").style.setProperty('--theme-switch-background', getters.light ? '#F5F5F5' : '#29323E');
+        document.querySelector(":root").style.setProperty('--theme-toggle-border', getters.light ? '#E5E7EA' : '#29323E');
     },
 
 };

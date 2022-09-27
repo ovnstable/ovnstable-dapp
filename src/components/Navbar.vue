@@ -82,9 +82,14 @@
             <v-list nav dense class="footer-list">
                 <div class="ma-2">
                     <v-list-item-title>
-                        <v-btn @click="switchTheme">
-                            Switch theme
-                        </v-btn>
+                        <v-btn-toggle class="theme-toggle-group" v-model="light">
+                            <v-btn outlined :class="light ? 'theme-toggle-btn-selected' : 'theme-toggle-btn'" icon @click="toggleTheme('light')" :value="true">
+                                <v-icon :class="light ? 'theme-icon-selected' : 'theme-icon'">mdi-white-balance-sunny</v-icon>
+                            </v-btn>
+                            <v-btn outlined :class="!light ? 'theme-toggle-btn-selected' : 'theme-toggle-btn'" icon @click="toggleTheme('dark')" :value="false">
+                                <v-icon :class="!light ? 'theme-icon-selected' : 'theme-icon'">mdi-moon-waxing-crescent</v-icon>
+                            </v-btn>
+                        </v-btn-toggle>
                     </v-list-item-title>
                 </div>
 
@@ -164,6 +169,12 @@ export default {
         swapClick() {
             this.showMintView();
             this.showSwapModal();
+        },
+
+        toggleTheme(mode) {
+            if ((mode === 'light' && !this.light) || (mode === 'dark' && this.light)) {
+                this.switchTheme();
+            }
         },
     }
 }
@@ -251,5 +262,31 @@ export default {
 
 .selected-page {
     color: #1C95E7 !important;
+}
+
+.theme-toggle-group {
+    background-color: transparent !important;
+    border-radius: 4px !important;
+    border: 1px solid var(--theme-toggle-border) !important;
+}
+
+.theme-toggle-btn, .theme-toggle-btn-selected {
+    border: none !important;
+}
+
+.theme-toggle-btn {
+    background-color: transparent !important;
+}
+
+.theme-toggle-btn-selected {
+    background-color: var(--theme-switch-background) !important;
+}
+
+.theme-icon {
+    color: var(--theme-icon-color) !important;
+}
+
+.theme-icon-selected {
+    color: var(--theme-icon-color-selected) !important;
 }
 </style>

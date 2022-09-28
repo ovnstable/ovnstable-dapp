@@ -47,6 +47,7 @@ import {mapGetters} from "vuex";
 import moment from "moment";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import Ets from "@/components/market/cards/ets/Ets";
+import Featured from "@/components/market/cards/featured/Featured.vue"
 
 export default {
     name: "MarketView",
@@ -54,6 +55,7 @@ export default {
     components: {
         Ets,
         UsdPlus,
+        Featured,
     },
 
     data: () => ({

@@ -1,6 +1,7 @@
 {
     "name": "garnet",
     "nameUp": "GARNET",
+    "nameFooter": "ETS Garnet",
 
     "tokenContract": "etsGarnetToken",
     "exchangeContract": "etsExchangerGarnet",
@@ -11,19 +12,21 @@
     "borrowFrom": "AAVE",
     "dex": "Velodrome",
     "gauge": "",
-    "poolName": "WETH/USDC",
+    "poolName": "wETH/USDC",
 
     "token1": "WETH",
     "token2": "USDC",
     "hedgeToken": "ETH",
     "hasUsdPlus": false,
+    "tokenPair": "wethop_usdc",
 
     "maxSupply": 500000.00,
     "inceptionDate": "20 September 2022",
 
     "iconName": "ets_garnet",
 
-    "mainColor": "radial-gradient(#B2223E, #861322, #240315, #FD0420)",
+    "mainColor": "radial-gradient(circle at 100% 0%, #B2223E 0%, #861322 27%, #240315 52%, #FD0420 100%)",
+    "progressFilled": "",
 
     "cardTitle": "Generate yield on wETH-USDC pool by hedging your risks and simplify process",
     "aboutText": "The exchange-traded strategy Ruby ($RUBY), is an ERC-20 structured product built on Optimism that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WETH), pair it with USDC stablecoin, and provide WETH/USDC liquidity on Velodrome all in one action. This allows earning high APY and hedging against WETH volatility.\n\nThe unique feature of ETS RUBY is that it automatically administers a health factor of 1.20x on AAVE and rebalances your Lent/Borrowed amounts to maintain a stringent 1.20x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.\n\nUsers also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Optimism - a highly scalable L2 chain.",

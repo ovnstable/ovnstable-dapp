@@ -1,6 +1,7 @@
 {
   "name": "moonstone",
   "nameUp": "MOONSTONE",
+  "nameFooter": "ETS Moonstone",
 
   "tokenContract": "etsMoonstoneToken",
   "exchangeContract": "etsExchangerMoonstone",
@@ -11,19 +12,21 @@
   "borrowFrom": "AAVE",
   "dex": "QuickSwap",
   "gauge": "",
-  "poolName": "WMATIC/USDC",
+  "poolName": "wMatic/USDC",
 
   "token1": "WMATIC",
   "token2": "USDC",
   "hedgeToken": "MATIC",
   "hasUsdPlus": false,
+  "tokenPair": "wmatic_usdc",
 
   "maxSupply": 500000.00,
   "inceptionDate": "14 September 2022",
 
   "iconName": "ets_moonstone",
 
-  "mainColor": "radial-gradient(#D6FFFF, #5398F6, #04238E, #8147E5)",
+  "mainColor": "radial-gradient(circle at 100% 0%, #D6FFFF 0%, #5398F6 27%, #04238E 52%, #8147E5 100%)",
+  "progressFilled": "",
 
   "cardTitle": "Generate yield on wMatic-USDC pool by hedging your risks and simplify process",
   "aboutText": "The exchange-traded strategy Moonstone ($MOONSTONE), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WMATIC), pair it with USDC stablecoin, and provide WMATIC/USDC liquidity on QuickSwap all in one action. This allows earning high APY and hedging against WMATIC volatility.\n\nThe unique feature of ETS MOONSTONE is that it automatically administers a health factor of 1.20x on AAVE and rebalances your Lent/Borrowed amounts to maintain a stringent 1.20x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.\n\nUsers also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.",

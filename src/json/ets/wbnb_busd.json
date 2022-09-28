@@ -1,6 +1,7 @@
 {
   "name": "wbnb_busd",
   "nameUp": "WBNB/BUSD",
+  "nameFooter": "ETS:WBNB/BUSD",
 
   "tokenContract": "busdWbnb",
   "exchangeContract": "exchangerBusdWbnb",
@@ -11,19 +12,21 @@
   "borrowFrom": "Venus",
   "dex": "Cone",
   "gauge": "Unknown",
-  "poolName": "WBNB/BUSD",
+  "poolName": "wBNB/BUSD",
 
   "token1": "WBNB",
   "token2": "BUSD",
   "hedgeToken": "BNB",
   "hasUsdPlus": false,
+  "tokenPair": "wbnb_busd",
 
   "maxSupply": 500000.00,
   "inceptionDate": "02 September 2022",
 
   "iconName": "ets_wbnb_busd",
 
-  "mainColor": "radial-gradient(#001845, #001845, #001845, #E9B430)",
+  "mainColor": "radial-gradient(circle at 100% 0%, #001845 0%, #001845 27%, #001845 52%, #E9B430 100%)",
+  "progressFilled": "#F3BA2F",
 
   "cardTitle": "Generate yield on WBNB-BUSD pool by hedging your risks and simplify process",
   "aboutText": "The exchange-traded strategy WBNB/BUSD ($WBNBBUSD), is an ERC-20 structured product built on Binance Smart chain that lets you leverage a collateralized debt position (BUSD lent on Venus) to borrow a volatile asset (WBNB), pair it with BUSD stablecoin, and provide WBNB/BUSD liquidity on Cone all in one action. This allows earning high APY and hedging against WBNB volatility.\n\nThe unique feature of WBNB/BUSD ETS is that it automatically administers a health factor of 1.20x on Venus and rebalances your Lent/Borrowed amounts to maintain a stringent 1.20x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.",

@@ -1,9 +1,8 @@
 <template>
     <v-row class="card-container" @click="openStrategyCard">
         <v-col cols="12">
-            <v-row class="d-flex flex-row align-center header-row pr-5" justify="center"
-                   :style="{'--card-background': etsData.mainColor}">
-                <v-img class="currency" :src="require('@/assets/cards/header/ets_' + etsData.name + '.svg')" />
+            <v-row class="d-flex flex-row align-center header-row pr-5" justify="center">
+                <v-img class="currency" :src="require('@/assets/cards/header/ets_' + etsData.name + '.svg')"/>
                 <v-spacer></v-spacer>
                 <v-row class="d-flex flex-column align-start mr-3">
                     <v-row class="d-flex mb-1">
@@ -12,9 +11,7 @@
                     <v-row class="d-flex">
                         <label class="percentage">20%</label>
                         <label class="apy">APY</label>
-                        <div class="tooltip">
-                            <Tooltip />
-                        </div>
+                        <Tooltip />
                     </v-row>
                 </v-row>
             </v-row>
@@ -22,14 +19,14 @@
             <v-row class="d-flex flex-row body-row align-start pt-5 pr-11 pb-11 pl-11">
                 <v-row class="d-flex justify-space-between mt-4 mb-4">
                     <label class="capacity-status-sub-text">CURRENT TVL</label>
-                    <label class="capacity-status-sub-text mb-5">$296,000.00</label>
+                    <label class="capacity-status-sub-text mb-4">$296,000.00</label>
                     <v-progress-linear
                         rounded
-                        height="4"
+                        height="7"
                         class="progress-info"
                         background-opacity="0"
-                        :value="100"
-                        :color="'#29323E'"
+                        :value="(totalSupply[etsData.name] / etsData.maxSupply) * 100"
+                        :color="totalSupply[etsData.name] >= etsData.maxSupply ? '#CF3F92' : '#000000'"
                     ></v-progress-linear>
                 </v-row>
 
@@ -40,26 +37,17 @@
                 <v-row class="d-flex mt-10 justify-space-between">
                     <div class="box box-one">
                         <label class="box-name">Chain</label>
-                        <div class="icon">
-                            <v-img :src="require('@/assets/network/' + etsData.chainName + '.svg')"
-                                   alt="chain icon" />
-                        </div>
+                        <v-img class="icon" :src="require('@/assets/network/' + etsData.chainName + '.svg')" alt="chain icon"/>
                         <label class="chain-name">{{ etsData.chainName }}</label>
                     </div>
                     <div class="box box-two">
                         <label class="box-name">Platform</label>
-                        <div class="icon">
-                            <v-img :src="require('@/assets/cards/platform/' + etsData.dex + '.svg')"
-                                   alt="platform icon" />
-                        </div>
+                        <v-img class="icon" :src="require('@/assets/cards/platform/' + etsData.dex + '.svg')" alt="platform icon"/>
                         <label class="platform-name">{{ etsData.dex }}</label>
                     </div>
                     <div class="box box-three">
                         <label class="box-name">Token Pair</label>
-                        <div class="icon">
-                            <v-img :src="require('@/assets/cards/token_pair/' + etsData.tokenPair + '.svg')"
-                                   alt="token pair icons" />
-                        </div>
+                        <v-img class="icon token-pair" :src="require('@/assets/cards/token_pair/' + etsData.tokenPair + '.svg')" alt="token pair icons"/>
                         <label class="token-pair-name">{{ etsData.poolName }}</label>
                     </div>
                 </v-row>
@@ -69,14 +57,14 @@
                     <label class="sum-of-money">$1240</label>
                 </v-row>
 
-                <v-row class="d-flex justify-space-between ma-0 mt-10">
+                <v-row class="d-flex action-buttons justify-space-between ma-0 mt-10">
                     <v-btn class="button btn-filled" @click.stop="mintAction">Mint ETS</v-btn>
                     <v-spacer></v-spacer>
                     <v-btn class="button btn-outlined" @click.stop="redeemAction" outlined>Redeem ETS</v-btn>
                 </v-row>
             </v-row>
             <v-row class="footer-row d-flex align-center justify-center">
-                <label class="footer-link">Learn more about {{ etsData.nameFooter }}</label>
+                <label class="footer-link">Learn more about ETS:WBNB/BUSD</label>
                 <img class="open-icon ml-1" src="../../../../assets/icon/open-in-new.svg">
             </v-row>
         </v-col>
@@ -89,7 +77,7 @@ import Tooltip from "@/components/common/element/Tooltip";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-    name: "Ets",
+    name: "Featured",
 
     components: {
         Tooltip
@@ -97,26 +85,28 @@ export default {
 
     props: {
 
-        etsData: {
-            type: Object
-        }
+        featuredData: {
+            type: Object,
+        },
     },
 
     computed: {
-        ...mapGetters("marketData", ["etsStrategyData"]),
-        ...mapGetters("supplyData", ["totalSupply"])
+        ...mapGetters('marketData', ['etsStrategyData']),
+        ...mapGetters('supplyData', ['totalSupply']),
     },
 
-    data: () => ({}),
+    data: () => ({
+    }),
 
-    watch: {},
+    watch: {
+    },
 
     created() {
     },
 
     methods: {
-        ...mapActions("swapModal", ["showSwapModal", "showMintView"]),
-        ...mapActions("swapModal", ["showSwapModal", "showRedeemView"]),
+        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('swapModal', ['showSwapModal', 'showRedeemView']),
 
 
         mintAction() {
@@ -130,69 +120,33 @@ export default {
         },
 
         openStrategyCard() {
-            this.$router.push("/ets/" + this.etsData.name);
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            this.$router.push('/ets/' + this.etsData.name);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-    }
-};
+    },
+}
 </script>
 
 <style scoped>
 
 /* mobile */
 @media only screen and (max-width: 960px) {
-    .card-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 24px;
-        line-height: 28px;
-    }
 
-    .card-info {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
-    }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .card-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 30px;
-        line-height: 40px;
-    }
 
-    .card-info {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
-    }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .card-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 30px;
-        line-height: 40px;
-    }
 
-    .card-info {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
-    }
 }
 
 .card-container {
-    background: var(--secondary) !important;
-    border-radius: 15px !important;
+    background: #FFFFFF !important;
+    border-radius: 4px !important;
     max-width: 484px;
     min-height: 664px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
@@ -201,7 +155,8 @@ export default {
 .header-row {
     max-width: 484px;
     height: 170px !important;
-    border-radius: 15px 15px 0 0;
+    border-radius: 4px 4px 0 0;
+    /*background: radial-gradient(`etsData.mainColor`);*/
 }
 
 .currency {
@@ -215,7 +170,6 @@ export default {
     font-size: 20px;
     line-height: 24px;
     letter-spacing: 0.4px;
-    color: #FFFFFF;
 }
 
 .percentage {
@@ -223,7 +177,6 @@ export default {
     font-weight: 500;
     font-size: 60px;
     line-height: 48px;
-    color: #FFFFFF;
 }
 
 .apy {
@@ -231,7 +184,10 @@ export default {
     font-weight: 600;
     font-size: 20px;
     line-height: 24px;
-    color: #FFFFFF;
+}
+
+.body-row {
+
 }
 
 .capacity-status-sub-text {
@@ -269,8 +225,8 @@ export default {
 }
 
 .icon {
-    height: 36px !important;
-    width: auto !important;
+    width: 34px;
+    height: auto;
 }
 
 .box-one {
@@ -278,7 +234,6 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     text-transform: capitalize;
 }
 
@@ -294,6 +249,11 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.token-pair {
+    height: auto;
+    width: 50%;
 }
 
 .chain-name, .platform-name, .token-pair-name {
@@ -334,7 +294,7 @@ export default {
 .footer-row {
     background-color: #F5F5F5;
     padding: 5px;
-    border-radius: 0 0 15px 15px;
+    border-radius: 0 0 4px 4px;
 }
 
 .footer-link {
@@ -350,29 +310,4 @@ export default {
     height: 18px;
     width: 18px;
 }
-
-.progress-info {
-    background: #D7DADF;
-    color: var(--progress-filled);
-}
-
-.header-row {
-    background: var(--card-background);
-}
-
-.tooltip {
-    width: 13px;
-    height: 13px;
-    margin-top: 2px;
-}
-
-.card-container:hover {
-    filter: none !important;
-    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.05), 0 4px 4px 0 rgba(0, 0, 0, 0.05);
-}
-
-* {
-    cursor: pointer;
-}
-
 </style>

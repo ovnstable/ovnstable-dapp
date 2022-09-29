@@ -1,138 +1,67 @@
 <template>
-    <v-row class="card-container ma-0" v-on:click.prevent @click="openStrategyCard">
-        <v-col cols="12" align-self="start">
-            <v-row class="card-row mt-7" justify="end" align="center">
-                <label class="tag-label">cash management / low risk</label>
-            </v-row>
-
-            <v-row class="card-row mt-12" justify="start" align="center">
-                <div class="currency-icon">
-                    <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
-                </div>
-                <label class="card-title ml-3">USD+</label>
+    <v-row class="card-container" v-on:click.prevent @click="openStrategyCard">
+        <v-col cols="12">
+            <v-row class="d-flex flex-row align-center header-row pr-5" justify="center">
+                <v-img class="currency-icon" :src="require('@/assets/cards/header/USDPlus.svg')"/>
                 <v-spacer></v-spacer>
-                <div class="currency-icon">
-                    <v-img :src="icon"/>
-                </div>
-            </v-row>
-
-            <v-row class="card-row mt-12" :class="$wu.isMobile ? '' : 'mb-15'" justify="start" align="center">
-                <label class="card-info">Park your stables in USD+, and watch your balance grow in your wallet overnight. No staking required</label>
-            </v-row>
-
-            <v-row class="card-row info-row mt-15" justify="start" align="center">
-                <label class="card-info mt-1">APY</label>
-                <v-spacer></v-spacer>
-                <label class="card-info-value">{{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '—' }}</label>
-                <Tooltip text="USD+ APY based on 7-day average, includes fees taken (fee-adjusted)"/>
-            </v-row>
-
-            <v-row class="card-row info-row mt-6" justify="start" align="center">
-                <label class="card-info mt-1">Risk factor</label>
-                <v-spacer></v-spacer>
-                <label class="card-info-value card-info-risk">LOW</label>
-                <Tooltip text="Risk Factor is determined by a Pool's downside volatility. Pools that have a low Risk Factor translates to smaller downside volatility."/>
-            </v-row>
-
-            <v-row class="card-row info-row mt-6" justify="start" align="center">
-                <label class="card-info mt-1">TVL</label>
-                <v-spacer></v-spacer>
-                <label class="card-info-value">
-                    {{ totalTvl ? ('$' + $utils.formatMoneyComma(totalTvl, 2)) : '—' }}
-                </label>
-                <Tooltip text="Past 2 hours"/>
-            </v-row>
-
-            <v-row class="card-row mt-6" justify="start" align="center">
-                <label class="card-info mt-1">&nbsp;</label>
-            </v-row>
-
-            <v-row class="card-row card-banner-status-container mt-12" justify="start" align="center">
-                <v-col class="card-banner-body">
-                    <v-row align="center">
-                        <label class="mb-4 card-info minor-card-label overview-link" @click.stop="openDashboardAction">
-                            OVERVIEW
-                            <v-img class="icon-img ml-2" :src="require('@/assets/icon/openLight.svg')"/>
-                        </label>
-
-                        <v-spacer></v-spacer>
-
-                        <v-menu offset-y>
-                            <template v-slot:activator="{ on, attrs }">
-                                <div class="mb-5 mr-3"
-                                     v-click-outside="clickMenuOutside"
-                                     @click="openedSliceList = !openedSliceList"
-                                     v-bind="attrs"
-                                     v-on="on">
-                                    <v-row justify="center" align="start" class="slice-select-container">
-                                        <v-col cols="12" class="select-col">
-                                            <label class="selected-slice-label">
-                                                {{ sliceLabel }}
-                                                <v-icon color="#1C95E7" class="mb-1">
-                                                    {{ openedSliceList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                                                </v-icon>
-                                            </label>
-                                        </v-col>
-                                    </v-row>
-                                </div>
-                            </template>
-
-                            <v-list class="slice-select-list">
-                                <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('week')">
-                                    <v-list-item-title class="slice-select-list-item">
-                                        Week
-                                    </v-list-item-title>
-                                </v-list-item>
-                                <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('month')">
-                                    <v-list-item-title class="slice-select-list-item">
-                                        Month
-                                    </v-list-item-title>
-                                </v-list-item>
-                                <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('all')">
-                                    <v-list-item-title class="slice-select-list-item">
-                                        All
-                                    </v-list-item-title>
-                                </v-list-item>
-                            </v-list>
-                        </v-menu>
+                <v-row class="d-flex flex-column align-start mr-3">
+                    <v-row class="d-flex mb-1">
+                        <label class="card-title">USD+ ON OPTIMISM</label>
                     </v-row>
-
-                    <v-row align="center" class="info-row">
-                        <label class="my-2 card-info minor-card-label">Current balance</label>
-                        <v-spacer></v-spacer>
-                        <label class="card-info-value minor-card-label">{{ this.balance.usdPlus ? ($utils.formatMoneyComma(this.balance.usdPlus, 2) + ' USD+') : '—' }}</label>
+                    <v-row class="d-flex">
+                        <label class="percentage">20%</label>
+                        <label class="apy">APY</label>
+                        <div class="tooltip">
+                            <Tooltip />
+                        </div>
                     </v-row>
+                </v-row>
+            </v-row>
 
-                    <v-row align="center" class="mt-4 info-row">
-                        <label class="my-2 card-info minor-card-label">Profit</label>
-                        <label class="my-2 card-info minor-card-label title-slice ml-1">&nbsp;|&nbsp; {{ sliceLabel }}</label>
-                        <v-spacer></v-spacer>
-                        <label class="card-info-value minor-card-label" :class="profitUsdPlus > 0 ? 'label-success' : ''">
-                            {{ profitUsdPlus ? ((profitUsdPlus > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(profitUsdPlus, 4)) : '—' }}
-                        </label>
-                    </v-row>
+            <v-row class="d-flex flex-row body-row align-start pt-5 pr-11 pb-11 pl-11">
+            <!--:class="$wu.isMobile ? '' : 'mb-15'"-->
+                <v-row class="d-flex justify-space-between mt-4 mb-4">
+                    <label class="capacity-status-sub-text">CURRENT TVL</label>
+                    <label class="capacity-status-sub-text mb-5">$296,000.00</label>
+                        <v-progress-linear
+                            rounded
+                            height="4"
+                            class="progress-info"
+                            background-opacity="0"
+                            :value="100"
+                            :color="'#29323E'"
+                        ></v-progress-linear>
+                </v-row>
 
-                    <v-row align="center" class="mt-4 info-row">
-                        <label class="my-2 card-info minor-card-label">Your APY</label>
-                        <label class="my-2 card-info minor-card-label title-slice ml-1">&nbsp;|&nbsp; {{ sliceLabel }}</label>
-                        <v-spacer></v-spacer>
-                        <label class="card-info-value minor-card-label">
-                            {{ apy ? ($utils.formatMoneyComma(apy, 1)) + '%' : '—' }}
-                        </label>
-                    </v-row>
-                </v-col>
+                <v-row class="mt-4">
+                    <label class="card-info">Park your stables in USD+, and watch your balance grow in your wallet overnight. No staking required</label>
+                </v-row>
+
+                <v-row class="d-flex mt-10 box box-one justify-lg-center">
+                    <label class="box-name">Chain</label>
+                    <div class="icon">
+                        <v-img :src="require('@/assets/network/optimism.svg')"
+                               alt="chain icon" />
+                    </div>
+                    <label class="chain-name">Optimism</label>
+                </v-row>
+
+                <v-row class="d-flex justify-space-between mt-10">
+                    <label class="your-deposit">Your deposit in ETS</label>
+                    <label class="sum-of-money">$1240</label>
+                </v-row>
+
+                <v-row class="d-flex action-buttons justify-space-between ma-0 mt-10">
+                    <v-btn class="button btn-filled" @click.stop="mintAction">Mint ETS</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn class="button btn-outlined" @click.stop="redeemAction" outlined>Redeem ETS</v-btn>
+                </v-row>
+            </v-row>
+            <v-row class="footer-row d-flex align-center justify-center">
+                <label class="footer-link">View performance</label>
+                <img class="open-icon ml-1" src="../../../../assets/icon/open-in-new.svg">
             </v-row>
         </v-col>
-
-        <v-col cols="12" align-self="end">
-            <v-row class="card-row mt-2" :class="showWrap ? '' : 'mb-7'" justify="center" align="center">
-                <v-btn class="open-strategy-btn btn-filled" @click.stop="mintAction">Mint / Redeem USD+</v-btn>
-            </v-row>
-            <v-row v-if="showWrap" class="card-row mt-6 mb-7" justify="center" align="center">
-                <v-btn class="open-strategy-btn btn-outlined" @click.stop="wrapAction" outlined>Wrap / Unwrap USD+</v-btn>
-            </v-row>
-        </v-col>
-
         <resize-observer @notify="$forceUpdate()"/>
     </v-row>
 </template>
@@ -214,76 +143,22 @@ export default {
     },
 
     methods: {
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-        ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
-        ...mapActions('dashboardData', ['sliceDashboard']),
-        ...mapMutations('dashboardData', ['setSlice']),
+        ...mapActions("swapModal", ["showSwapModal", "showMintView"]),
+        ...mapActions("swapModal", ["showSwapModal", "showRedeemView"]),
 
-        openDashboardAction() {
-            this.$router.push('/');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        },
-
-        openStrategyCard() {
-            this.mintAction();
-        },
 
         mintAction() {
             this.showMintView();
             this.showSwapModal();
         },
 
-        wrapAction() {
-            this.showWrapView();
-            this.showWrapModal();
+        redeemAction() {
+            this.showRedeemView();
+            this.showSwapModal();
         },
 
-        async getAvgWeekApy() {
-            let fetchOptions = {
-                headers: {
-                    "Access-Control-Allow-Origin": this.appApiUrl
-                }
-            };
-
-            await fetch(this.appApiUrl + '/widget/avg-apy-info/week', fetchOptions)
-                .then(value => value.json())
-                .then(value => {
-                    this.avgApy = value;
-                    this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
-                }).catch(reason => {
-                    console.log('Error get data: ' + reason);
-                })
-        },
-
-        getTotalTvl() {
-            let sum = 0;
-            this.currentTotalData.forEach(dataItem => {
-                sum += dataItem.value
-            });
-
-            return sum;
-        },
-
-        clickMenuOutside() {
-            this.openedSliceList = false;
-        },
-
-        sliceDashboardByPeriod(slice) {
-            switch (slice) {
-                case "week":
-                    this.setSlice(7);
-                    break;
-                case "month":
-                    this.setSlice(30)
-                    break;
-                case "all":
-                    this.setSlice(null)
-                    break;
-                default:
-                    this.setSlice(null)
-            }
-
-            this.sliceDashboard();
+        openStrategyCard() {
+            this.mintAction();
         },
     },
 }
@@ -293,24 +168,6 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
-    .tag-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 14px;
-        letter-spacing: 0.04em;
-    }
-
-    .currency-icon {
-        width: 40px;
-        height: 40px;
-    }
-
-    .card-row {
-        margin-left: 3% !important;
-        margin-right: 3% !important;
-    }
-
     .card-title {
         font-style: normal;
         font-weight: 400;
@@ -324,58 +181,10 @@ export default {
         font-size: 16px;
         line-height: 24px;
     }
-
-    .card-info-value {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: 0.02em;
-    }
-
-    .open-strategy-btn {
-        height: 36px !important;
-
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.02em !important;
-    }
-
-    .selected-slice-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
-
-    .slice-select-list-item {
-        font-size: 14px;
-    }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .tag-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 16px;
-        letter-spacing: 0.04em;
-    }
-
-    .currency-icon {
-        width: 40px;
-        height: 40px;
-    }
-
-    .card-row {
-        margin-left: 5% !important;
-        margin-right: 5% !important;
-    }
-
     .card-title {
         font-style: normal;
         font-weight: 400;
@@ -388,59 +197,11 @@ export default {
         font-weight: 300;
         font-size: 16px;
         line-height: 24px;
-    }
-
-    .card-info-value {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: 0.04em;
-    }
-
-    .open-strategy-btn {
-        height: 40px !important;
-
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.02em !important;
-    }
-
-    .selected-slice-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
-
-    .slice-select-list-item {
-        font-size: 16px;
     }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .tag-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 16px;
-        letter-spacing: 0.04em;
-    }
-
-    .currency-icon {
-        width: 40px;
-        height: 40px;
-    }
-
-    .card-row {
-        margin-left: 5% !important;
-        margin-right: 5% !important;
-    }
-
     .card-title {
         font-style: normal;
         font-weight: 400;
@@ -454,121 +215,28 @@ export default {
         font-size: 16px;
         line-height: 24px;
     }
-
-    .card-info-value {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: 0.04em;
-    }
-
-    .open-strategy-btn {
-        height: 40px !important;
-
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.02em !important;
-    }
-
-    .selected-slice-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
-
-    .slice-select-list-item {
-        font-size: 17px;
-    }
 }
 
 .card-container {
     background: var(--secondary) !important;
-    border-radius: 4px !important;
-    max-width: 460px !important;
+    border-radius: 15px !important;
+    max-width: 484px;
+    min-height: 664px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
-.card-banner-status-container {
-    background: var(--card-banner-status-container);
-    border-radius: 4px;
-}
-
-.tag-label {
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #22ABAC;
-}
-
-.tag-icon {
-    color: #22ABAC;
-}
-
 .card-title {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'pnum' on, 'lnum' on;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: 0.4px;
     color: var(--secondary-gray-text);
 }
 
 .card-info {
     font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text);
-}
-
-.card-info-value {
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--main-gray-text);
-}
-
-.card-info-risk {
-    color: #22ABAC !important;
-}
-
-.info-row {
-    border-top: 1px solid var(--secondary-border);
-}
-
-.card-banner-body {
-    margin: 5% 3%;
-}
-
-.open-strategy-btn {
-    width: 100% !important;
-    border-radius: 2px;
-    box-shadow: none !important;
-
-    font-family: 'Roboto', sans-serif !important;
-    text-align: center !important;
-    text-transform: uppercase !important;
-    font-feature-settings: 'pnum' on, 'lnum' on !important;
-}
-
-.btn-filled {
-    background: var(--blue-gradient);
-    color: #FFFFFF !important;
-}
-
-.btn-outlined {
-    color: var(--links-blue) !important;
-}
-
-.label-error {
-    color: #CF3F92 !important;
-}
-
-.label-overcap {
-    color: #F3BA2F !important;
-}
-
-.label-success {
-    color: #22ABAC !important;
 }
 
 * {
@@ -580,49 +248,140 @@ export default {
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.05), 0 4px 4px 0 rgba(0, 0, 0, 0.05);
 }
 
-.title-slice {
-    color: var(--third-gray-text) !important;
+.header-row {
+    background: radial-gradient(circle at 100% 0%, #001845 0%, #001845 27%, #0C255B 52%, #062E80 100%);
+    max-width: 484px;
+    height: 170px !important;
+    border-radius: 15px 15px 0 0;
 }
 
-.overview-link {
-    font-weight: 400 !important;
-    display: inline-flex !important;
+.currency-icon {
+    width: 130px;
+    height: 100%;
 }
 
-.overview-link:hover {
-    text-decoration: underline !important;
+.percentage {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 60px;
+    line-height: 48px;
+    color: #FFFFFF;
 }
 
-.icon-img {
-    width: 24px !important;
-    height: 24px !important;
+.apy {
+    font-family: "Roboto", sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #FFFFFF;
 }
 
-.slice-select-container {
-    background-color: rgba(28, 149, 231, 0.1) !important;
+.tooltip {
+    width: 13px;
+    height: 13px;
+    margin-top: 2px;
+}
+
+.capacity-status-sub-text {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    letter-spacing: 0.4px;
+}
+
+.card-info {
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.box {
+    background-color: #F5F5F5;
+    padding: 8px;
+    min-width: 100%;
     border-radius: 4px;
-    cursor: pointer;
-    height: 28px !important;
+    gap: 10px;
+    text-align: center;
 }
 
-.select-col {
-    margin-top: -10px;
-}
-
-.selected-slice-label {
-    font-family: 'Roboto', sans-serif;
+.box-name {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.3px;
+    color: #707A8B;
     text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--links-blue);
 }
 
-.slice-select-list {
-    background-color: var(--secondary) !important;
-    border-radius: 10px;
+.box-one {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-transform: capitalize;
 }
 
-.slice-select-list-item {
-    font-family: 'Roboto', sans-serif !important;
-    color: var(--secondary-gray-text);
+.icon {
+    height: 36px !important;
+    width: auto !important;
 }
+
+.open-icon {
+    color: #707A8B;
+    height: 18px;
+    width: 18px;
+}
+
+.chain-name {
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    color: #29323E;
+}
+
+.your-deposit, .sum-of-money {
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+}
+
+.button {
+    width: 48%;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+}
+
+.btn-filled {
+    background: linear-gradient(#28A0F0 100%, #0678C4 99%);
+    color: #FFFFFF;
+}
+
+.btn-outlined {
+    border: 1px solid #1C95E7;
+    color: #1C95E7;
+}
+
+.footer-row {
+    background-color: #F5F5F5;
+    padding: 5px;
+    border-radius: 0 0 15px 15px;
+}
+
+.footer-link {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #707A8B;
+}
+
 </style>

@@ -17,6 +17,7 @@
   "token2": "USD+",
   "hedgeToken": "MATIC",
   "hasUsdPlus": true,
+  "tokenPair": "wmatic_usd_plus",
 
   "maxSupply": 275000.00,
   "inceptionDate": "01 July 2022",
@@ -24,6 +25,7 @@
   "iconName": "ets_wmatic_usd_plus",
 
   "mainColor": "#7944DA",
+  "cardBgColor": "radial-gradient(circle at 100% 0%, #001845 0%, #001845 27%, #001845 52%, #7E46E2 100%)",
 
   "cardTitle": "Generate yield on wMatic-USD+ pool by hedging your risks and simplify process",
   "aboutText": "The exchange-traded strategy USD+/WMATIC ($USD+WMATIC), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WMATIC), pair it with USD+ stablecoin, and provide USD+/WMATIC liquidity on Dystopia / Penrose all in one action. This allows earning high APY and hedging against WMATIC volatility.\n\nThe unique feature of USD+/WMATIC ETS is that it automatically administers a health factor of 1.20x on AAVE and rebalances your Lent/Borrowed amounts to maintain a stringent 1.20x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.\n\nUsers also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.",

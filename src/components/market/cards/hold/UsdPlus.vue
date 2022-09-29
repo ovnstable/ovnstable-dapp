@@ -2,7 +2,7 @@
     <v-row class="card-container" v-on:click.prevent @click="openStrategyCard">
         <v-col cols="12">
             <v-row class="d-flex flex-row align-center header-row pr-5" justify="center">
-                <v-img class="currency-icon" :src="require('@/assets/cards/header/USDPlus.svg')"/>
+                <v-img class="currency-icon" :src="require('@/assets/currencies/usdPlus.svg')"/>
                 <v-spacer></v-spacer>
                 <v-row class="d-flex flex-column align-start mr-3">
                     <v-row class="d-flex mb-1">
@@ -47,8 +47,8 @@
                 </v-row>
 
                 <v-row class="d-flex justify-space-between mt-10">
-                    <label class="your-deposit">Your deposit in ETS</label>
-                    <label class="sum-of-money">$1240</label>
+                    <label class="your-deposit">Current balance</label>
+                    <label class="sum-of-money">{{ this.balance.usdPlus ? ($utils.formatMoneyComma(this.balance.usdPlus, 2) + ' USD+') : '—' }}</label>
                 </v-row>
 
                 <v-row class="d-flex action-buttons justify-space-between ma-0 mt-10">
@@ -59,9 +59,10 @@
             </v-row>
             <v-row class="footer-row d-flex align-center justify-center">
                 <label class="footer-link">View performance</label>
-                <img class="open-icon ml-1" src="../../../../assets/icon/open-in-new.svg">
+                <img class="open-icon ml-1" src="@/assets/icon/open-in-new.svg">
             </v-row>
         </v-col>
+
         <resize-observer @notify="$forceUpdate()"/>
     </v-row>
 </template>
@@ -181,6 +182,17 @@ export default {
         font-size: 16px;
         line-height: 24px;
     }
+
+    .button {
+        width: 300px !important;
+        height: 36px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
 }
 
 /* tablet */
@@ -198,6 +210,17 @@ export default {
         font-size: 16px;
         line-height: 24px;
     }
+
+    .button {
+        width: 300px !important;
+        height: 36px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
 }
 
 /* full */
@@ -214,6 +237,17 @@ export default {
         font-weight: 300;
         font-size: 16px;
         line-height: 24px;
+    }
+
+    .button {
+        width: 300px !important;
+        height: 36px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
     }
 }
 
@@ -352,22 +386,22 @@ export default {
 }
 
 .button {
-    width: 48%;
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
-    letter-spacing: 0.2px;
+    border-radius: 2px;
+    box-shadow: none !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
 }
 
 .btn-filled {
-    background: linear-gradient(#28A0F0 100%, #0678C4 99%);
-    color: #FFFFFF;
+    background: var(--blue-gradient);
+    color: #FFFFFF !important;
 }
 
 .btn-outlined {
-    border: 1px solid #1C95E7;
-    color: #1C95E7;
+    color: var(--links-blue) !important;
 }
 
 .footer-row {

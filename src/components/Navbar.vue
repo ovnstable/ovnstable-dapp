@@ -22,7 +22,7 @@
 
             <v-list-item class="list-item-hover mx-n2 mt-2" link @click="statsClick">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'stats' ? 'chartSelected.svg' : 'chart.svg'))">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'stats' ? 'financeSelected.svg' : 'finance.svg'))">
                 </v-list-item-icon>
                 <v-list-item-title>
                     <label class="navbar-page-label" :class="selectedTab === 'stats' ? 'selected-page' : ''">Performance</label>
@@ -40,6 +40,10 @@
         </v-list>
 
         <v-list nav subheader class="mx-3" dense>
+            <v-subheader class="mx-n2 mb-n2">
+                <label class="navbar-list-header">Get USD+</label>
+            </v-subheader>
+
             <v-divider class="navbar-list-divider"></v-divider>
 
             <v-list-item class="list-item-hover mx-n2 mt-2" link @click="swapClick">
@@ -47,7 +51,16 @@
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/swap_horizontal.svg')">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label">Mint/redeem USD+</label>
+                    <label class="navbar-page-label">Mint/redeem</label>
+                </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item class="list-item-hover mx-n2 mt-2" link @click="wrapClick" v-if="(networkId !== 56) && (networkId !== 43114)">
+                <v-list-item-icon>
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/swap_horizontal_circle.svg')">
+                </v-list-item-icon>
+                <v-list-item-title>
+                    <label class="navbar-page-label">Wrap/Unwrap</label>
                 </v-list-item-title>
             </v-list-item>
         </v-list>
@@ -129,6 +142,7 @@ export default {
 
 
     computed: {
+        ...mapGetters('network', ['networkId']),
         ...mapGetters('menuUI', ['selectedTab']),
         ...mapGetters('theme', ['light']),
     },
@@ -136,6 +150,7 @@ export default {
     methods: {
         ...mapActions('menuUI', ['selectTab']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
         ...mapActions('theme', ['switchTheme']),
 
         openLink(url) {
@@ -169,6 +184,11 @@ export default {
         swapClick() {
             this.showMintView();
             this.showSwapModal();
+        },
+
+        wrapClick() {
+            this.showWrapView();
+            this.showWrapModal();
         },
 
         toggleTheme(mode) {
@@ -251,7 +271,6 @@ export default {
     font-size: 14px;
     line-height: 18px;
     letter-spacing: 0.03em !important;
-    text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--third-gray-text);
 }

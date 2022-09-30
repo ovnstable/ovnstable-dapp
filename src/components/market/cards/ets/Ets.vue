@@ -1,82 +1,114 @@
 <template>
     <v-row class="card-container" @click="openStrategyCard">
-        <v-col cols="12">
+        <v-col cols="12" align-self="start">
             <v-row class="d-flex flex-row align-center header-row pr-5" justify="center"
-                   :style="{'--card-background': etsData.cardBgColor}">
-                <v-img class="currency" :src="require('@/assets/currencies/market/ets_' + etsData.name + '.svg')" />
+                   :style="{'--card-background': cardData.data.cardBgColor}">
+                <v-img class="currency" :src="require('@/assets/currencies/market/ets_' + cardData.data.name + '.svg')"/>
                 <v-spacer></v-spacer>
                 <v-row class="d-flex flex-column align-start mr-3">
                     <v-row class="d-flex mb-1">
-                        <label class="card-title">ETS {{ etsData.nameUp }}</label>
+                        <label class="card-title">ETS {{ cardData.data.nameUp }}</label>
                     </v-row>
                     <v-row class="d-flex">
-                        <label class="percentage">20%</label>
+                        <label class="percentage">
+                            {{ cardData.weekApy === 0 ? '—' : ($utils.formatMoneyComma(cardData.weekApy, 0) + '%') }}
+                        </label>
                         <label class="apy">APY</label>
                         <div class="tooltip">
-                            <Tooltip />
+                            <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                         </div>
                     </v-row>
                 </v-row>
             </v-row>
 
-            <v-row class="d-flex flex-row body-row align-start pt-5 pr-11 pb-11 pl-11">
-                <v-row class="d-flex justify-space-between mt-4 mb-4">
-                    <label class="capacity-status-sub-text">CURRENT TVL</label>
-                    <label class="capacity-status-sub-text mb-5">$296,000.00</label>
-                    <v-progress-linear
-                        rounded
-                        height="4"
-                        class="progress-info"
-                        background-opacity="0"
-                        :value="100"
-                        :color="'#29323E'"
-                    ></v-progress-linear>
-                </v-row>
+            <v-container>
+                <template v-if="cardData.overcapEnabled">
+                    <v-row class="d-flex justify-space-between mt-4">
+                        <label>Current tvl</label>
+                        <v-spacer></v-spacer>
+                        <label>Max tvl</label>
+                    </v-row>
+                    <v-row class="d-flex justify-space-between mt-4">
+                        <label>{{ totalSupply[cardData.data.name] }}</label>
+                        <v-spacer></v-spacer>
+                        <label>{{ cardData.data.maxSupply }}</label>
+                    </v-row>
+                    <v-row class="d-flex justify-space-between mt-4">
+                        <v-progress-linear
+                            rounded
+                            height="7"
+                            class="progress-info"
+                            background-opacity="0"
+                            :value="(totalSupply[cardData.data.name] / cardData.data.maxSupply) * 100"
+                            :color="cardData.data.mainColor"
+                        ></v-progress-linear>
+                    </v-row>
+                </template>
+                <template v-else>
+                    <v-row class="d-flex justify-space-between mt-4">
+                        <label class="capacity-status-sub-text">CURRENT TVL</label>
+                        <label class="capacity-status-sub-text mb-5">${{ $utils.formatMoneyComma(cardData.tvl, 2) }}</label>
+                    </v-row>
+                </template>
 
                 <v-row class="mt-4">
-                    <label class="card-info">{{ etsData.cardTitle }}</label>
+                    <label class="card-info">{{ cardData.data.cardTitle }}</label>
                 </v-row>
 
                 <v-row class="d-flex mt-10 justify-space-between">
                     <div class="box box-one">
                         <label class="box-name">Chain</label>
                         <div class="icon">
-                            <v-img :src="require('@/assets/network/' + etsData.chainName + '.svg')"
-                                   alt="chain icon" />
+                            <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
+                                   alt="chain icon"/>
                         </div>
-                        <label class="chain-name">{{ etsData.chainName }}</label>
+                        <label class="chain-name">{{ cardData.data.chainName }}</label>
                     </div>
                     <div class="box box-two">
                         <label class="box-name">Platform</label>
                         <div class="icon">
-                            <v-img :src="require('@/assets/cards/platform/' + etsData.dex + '.svg')"
-                                   alt="platform icon" />
+                            <v-img :src="require('@/assets/cards/platform/' + cardData.data.dex + '.svg')"
+                                   alt="platform icon"/>
                         </div>
-                        <label class="platform-name">{{ etsData.dex }}</label>
+                        <label class="platform-name">{{ cardData.data.dex }}</label>
                     </div>
                     <div class="box box-three">
                         <label class="box-name">Token Pair</label>
                         <div class="icon">
-                            <v-img :src="require('@/assets/cards/token_pair/' + etsData.tokenPair + '.svg')"
-                                   alt="token pair icons" />
+                            <v-img :src="require('@/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg')"
+                                   alt="token pair icons"/>
                         </div>
-                        <label class="token-pair-name">{{ etsData.poolName }}</label>
+                        <label class="token-pair-name">{{ cardData.data.poolName }}</label>
                     </div>
                 </v-row>
 
                 <v-row class="d-flex justify-space-between mt-10">
-                    <label class="your-deposit">Your deposit in ETS</label>
-                    <label class="sum-of-money">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2) + ' USD+') : '—' }}</label>
+                    <template v-if="accountEtsBalance">
+                        <label class="your-deposit">Your deposit in ETS</label>
+                        <label class="sum-of-money">{{
+                                accountEtsBalance ? ($utils.formatMoneyComma(accountEtsBalance, 2) + ' USD+') : '—'
+                            }}</label>
+                    </template>
+                    <template v-else>
+                        <v-spacer></v-spacer>
+                        <label class="your-deposit">You don’t have deposit in this ETS</label>
+                        <v-spacer></v-spacer>
+                    </template>
                 </v-row>
 
                 <v-row class="d-flex justify-space-between ma-0 mt-10">
                     <v-btn class="button btn-filled" @click.stop="mintAction">Mint ETS</v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn class="button btn-outlined" @click.stop="redeemAction" outlined>Redeem ETS</v-btn>
+                    <v-btn class="button btn-outlined" v-if="accountEtsBalance" @click.stop="redeemAction" outlined>
+                        Redeem ETS
+                    </v-btn>
                 </v-row>
-            </v-row>
+            </v-container>
+        </v-col>
+
+        <v-col cols="12" align-self="end">
             <v-row class="footer-row d-flex align-center justify-center">
-                <label class="footer-link">Learn more about ETS {{ etsData.nameUp }}</label>
+                <label class="footer-link">Learn more about ETS {{ cardData.data.nameUp }}</label>
                 <img class="open-icon ml-1" src="@/assets/icon/open-in-new.svg">
             </v-row>
         </v-col>
@@ -86,7 +118,7 @@
 
 <script>
 import Tooltip from "@/components/common/element/Tooltip";
-import { mapActions, mapGetters } from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "Ets",
@@ -97,7 +129,7 @@ export default {
 
     props: {
 
-        etsData: {
+        cardData: {
             type: Object
         }
     },
@@ -106,6 +138,10 @@ export default {
         ...mapGetters("marketData", ["etsStrategyData"]),
         ...mapGetters("supplyData", ["totalSupply"]),
         ...mapGetters('accountData', ['etsBalance']),
+
+        accountEtsBalance: function () {
+            return this.etsBalance[this.cardData.data.name];
+        },
     },
 
     data: () => ({}),
@@ -116,23 +152,22 @@ export default {
     },
 
     methods: {
-        ...mapActions("swapModal", ["showSwapModal", "showMintView"]),
-        ...mapActions("swapModal", ["showSwapModal", "showRedeemView"]),
+        ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
 
 
         mintAction() {
             this.showMintView();
-            this.showSwapModal();
+            this.showInvestModal(this.cardData.data);
         },
 
         redeemAction() {
             this.showRedeemView();
-            this.showSwapModal();
+            this.showInvestModal(this.cardData.data);
         },
 
         openStrategyCard() {
-            this.$router.push("/ets/" + this.etsData.name);
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            this.$router.push("/ets/" + this.cardData.data.name);
+            window.scrollTo({top: 0, behavior: "smooth"});
         }
     }
 };
@@ -387,7 +422,6 @@ export default {
 
 .progress-info {
     background: #D7DADF;
-    color: var(--progress-filled);
 }
 
 .header-row {

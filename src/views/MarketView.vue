@@ -4,25 +4,21 @@
             <label class="title-label">Earn</label>
         </div>
 
-        <v-row align="start" justify="start" class="ma-0">
-            <v-col class="ma-n3">
-                <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-                    <label @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabFeatured">
-                        Featured
-                        <v-icon size="12" :color="this.tab === 1 ? '#1C95E7' : '#333333'" class="mb-1">
-                            mdi-star-circle
-                        </v-icon>
-                    </label>
-                    <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabHold">USD+</label>
-                    <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4"
-                           v-bind:class="activeTabPools" disabled>USD+ pools</label>
-                    <label @click="tab=4" class="tab-btn ml-4" v-bind:class="activeTabHedged">ETS</label>
+        <v-row align="start" justify="start" class="ma-0 mt-10 toggle-row">
+            <label @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabFeatured">
+                Featured
+                <v-icon size="12" :color="this.tab === 1 ? '#1C95E7' : '#333333'" class="mb-1">
+                    mdi-star-circle
+                </v-icon>
+            </label>
+            <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabHold">USD+</label>
+            <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4"
+                   v-bind:class="activeTabPools" disabled>USD+ pools</label>
+            <label @click="tab=4" class="tab-btn ml-4" v-bind:class="activeTabHedged">ETS</label>
 
-                    <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
 
-                    <v-menu offset-y v-if="$wu.isFull()"></v-menu>
-                </v-row>
-            </v-col>
+            <v-menu offset-y v-if="$wu.isFull()"></v-menu>
         </v-row>
 
         <div class="mt-7 cards-list-container">
@@ -30,7 +26,7 @@
                 <component
                     class="ma-3"
                     v-for="component in (tab === 1 ? sortedCardList.slice(0, 3) : sortedCardList)"
-                    :ets-data="component.data"
+                    :card-data="component"
                     v-bind:is="component.name"
                     v-if="(tab === 1) || (tab === 2 && component.type === 'usd+') || (tab === 3 && component.type === 'pool') || (tab === 4 && component.type === 'ets')"
                 ></component>
@@ -58,12 +54,14 @@ export default {
 
     data: () => ({
         tab: 1,
-        avgApy: null,
+        avgUsdPlusApy: null,
+        totalUsdPlusTvl: null,
     }),
 
     computed: {
         ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'avaxConfig', 'opConfig']),
         ...mapGetters('marketData', ['etsStrategyData']),
+        ...mapGetters("statsData", ['currentTotalData']),
         ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters('etsAction', ['etsList']),
 
@@ -100,15 +98,19 @@ export default {
             let networkId = this.networkId;
 
             let cardList = [
-                {
+                /*{
                     type: 'usd+', // usd+, pool, ets
                     name: 'UsdPlus', // real component name
-                    data: null,
+                    data: {
+                        "cardBgColor": "radial-gradient(circle at 100% 0%, #001845 0%, #001845 27%, #0C255B 52%, #062E80 100%)"
+                    },
                     chain: networkId,
                     hasUsdPlus: true,
+                    overcapEnabled: false,
                     hasCap: false,
-                    weekApy: (this.avgApy && this.avgApy.value) ? this.avgApy.value : 0,
-                }
+                    tvl: this.totalUsdPlusTvl,
+                    weekApy: (this.avgUsdPlusApy && this.avgUsdPlusApy.value) ? this.avgUsdPlusApy.value : 0,
+                }*/
             ];
 
             this.etsList.forEach(ets => {
@@ -119,7 +121,9 @@ export default {
                         data: ets,
                         chain: ets.chain,
                         hasUsdPlus: ets.hasUsdPlus,
+                        overcapEnabled: !!ets.maxSupply,
                         hasCap: !ets.maxSupply ? false : (this.totalSupply[ets.name] < ets.maxSupply),
+                        tvl: this.totalSupply[ets.name],
                         weekApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
                     },
                 );
@@ -143,13 +147,18 @@ export default {
     },
 
     watch: {
+        currentTotalData: function (newVal, oldVal) {
+            this.getUsdPlusTotalTvl();
+        },
+
         appApiUrl: function (newVal, oldVal) {
-            this.getAvgWeekApy();
+            this.getUsdPlusAvgWeekApy();
         },
     },
 
     created() {
-        this.getAvgWeekApy();
+        this.getUsdPlusAvgWeekApy();
+        this.getUsdPlusTotalTvl();
     },
 
     methods: {
@@ -164,11 +173,20 @@ export default {
             await fetch(this.appApiUrl + '/widget/avg-apy-info/week', fetchOptions)
                 .then(value => value.json())
                 .then(value => {
-                    this.avgApy = value;
-                    this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+                    this.avgUsdPlusApy = value;
+                    this.avgUsdPlusApy.date = moment(this.avgUsdPlusApy.date).format("DD MMM. ‘YY");
                 }).catch(reason => {
                     console.log('Error get data: ' + reason);
                 })
+        },
+
+        getUsdPlusTotalTvl() {
+            let sum = 0;
+            this.currentTotalData.forEach(dataItem => {
+                sum += dataItem.value
+            });
+
+            this.totalUsdPlusTvl = sum;
         },
     }
 }
@@ -262,6 +280,11 @@ export default {
 
 .cards-list-container {
     margin-bottom: 15% !important;
+    width: 100% !important;
+}
+
+.toggle-row {
+    width: 100% !important;
 }
 
 .title-label {

@@ -4,11 +4,9 @@ const state = {
 
 const getters = {
 
-
 };
 
 const actions = {
-
 
     async refreshSwap({commit, dispatch, getters, rootState}) {
         console.debug('SwapData: refreshSwap');

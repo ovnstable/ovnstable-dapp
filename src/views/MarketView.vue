@@ -119,7 +119,7 @@ export default {
                         data: ets,
                         chain: ets.chain,
                         hasUsdPlus: ets.hasUsdPlus,
-                        hasCap: !ets.maxSupply ? false : (this.totalSupply[ets.name] < ets.maxSupply),
+                        hasCap: ets.maxSupply ? (this.totalSupply[ets.name] < ets.maxSupply) : true,
                         weekApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
                     },
                 );

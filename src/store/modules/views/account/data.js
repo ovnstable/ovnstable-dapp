@@ -76,12 +76,14 @@ const actions = {
             asset = await web3.contracts.asset.methods.balanceOf(getters.account).call();
             asset = asset ? web3.web3.utils.fromWei(asset, assetDecimals === 18 ? 'ether' : 'mwei') : null;
         } catch (e) {
+            asset = getters.balance.asset;
         }
 
         try {
             usdPlus = await web3.contracts.usdPlus.methods.balanceOf(getters.account).call();
             usdPlus = usdPlus ? web3.web3.utils.fromWei(usdPlus, 'mwei') : usdPlus;
         } catch (e) {
+            usdPlus = getters.usdPlus.asset;
         }
 
         if (networkId === 137 || networkId === 10) {
@@ -89,6 +91,7 @@ const actions = {
                 wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
                 wUsdPlus = wUsdPlus ? web3.web3.utils.fromWei(wUsdPlus, 'mwei') : null;
             } catch (e) {
+                wUsdPlus = getters.wUsdPlus.asset;
             }
         }
 
@@ -107,13 +110,19 @@ const actions = {
                 let ets = etsList[i];
                 let etsBalance;
 
-                try {
-                    etsBalance = await web3.contracts[ets.tokenContract].methods.balanceOf(getters.account).call();
-                    etsBalance = web3.web3.utils.fromWei(etsBalance, 'mwei');
-                } catch (e) {
-                }
+                if (ets.chain === networkId) {
+                    try {
+                        etsBalance = await web3.contracts[ets.tokenContract].methods.balanceOf(getters.account).call();
+                        etsBalance = web3.web3.utils.fromWei(etsBalance, 'mwei');
+                    } catch (e) {
+                        try {
+                            etsBalance = getters.etsBalance[ets.name];
+                        } catch (ex) {
+                        }
+                    }
 
-                resultEtsBalance[ets.name] = etsBalance;
+                    resultEtsBalance[ets.name] = etsBalance;
+                }
             }
         }
 

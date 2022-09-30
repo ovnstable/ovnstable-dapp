@@ -8,7 +8,7 @@
   "address": "0x270dF474f4bd2B92A45A46228683c971765E81A7",
   "chain": 10,
   "chainName": "optimism",
-  "borrowFrom": "AAVE",
+  "borrowFrom": "Granary",
   "dex": "Velodrome",
   "gauge": "",
   "poolName": "OP/USDC",

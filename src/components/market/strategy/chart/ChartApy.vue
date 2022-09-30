@@ -242,7 +242,16 @@ export default {
 
             let maxValue;
             try {
-                maxValue = Math.max.apply(Math, values);
+
+                if (this.usdPlusDataEnabled) {
+                    let maxValueEts = Math.max.apply(Math, values);
+                    let maxValueUsdPlus = Math.max.apply(Math, valuesUsdPlus);
+
+                    maxValue = Math.max(maxValueEts, maxValueUsdPlus);
+                } else {
+                    maxValue = Math.max.apply(Math, values);
+                }
+
                 maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
             } catch (e) {
                 maxValue = 50;

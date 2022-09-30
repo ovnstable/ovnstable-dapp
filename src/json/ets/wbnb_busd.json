@@ -18,7 +18,7 @@
   "hedgeToken": "BNB",
   "hasUsdPlus": false,
 
-  "maxSupply": 500000.00,
+  "maxSupply": null,
   "inceptionDate": "02 September 2022",
 
   "iconName": "ets_wbnb_busd",

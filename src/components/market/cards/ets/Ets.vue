@@ -44,13 +44,13 @@
             <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">TVL</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value" :class="totalSupply[etsData.name] >= etsData.maxSupply ? 'label-error' : ''">
+                <label class="card-info-value" :class="(etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'label-error' : ''">
                     {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
                 </label>
                 <Tooltip text="Past 2 hours"/>
             </v-row>
 
-            <v-row class="card-row card-banner-status-container mt-12" justify="start" align="center">
+            <v-row v-if="etsData.maxSupply" class="card-row card-banner-status-container mt-12" justify="start" align="center">
                 <v-col class="card-banner-body">
                     <v-row justify="start" align="center">
                         <label class="capacity-status-text">ETS capacity status</label>
@@ -81,8 +81,10 @@
                     </v-row>
                 </v-col>
             </v-row>
+        </v-col>
 
-            <v-row class="card-row card-banner-container mt-7" justify="start" align="center">
+        <v-col cols="12" align-self="end">
+            <v-row class="card-row card-banner-container mt-3 mb-6" justify="start" align="center">
                 <v-col class="card-banner-body">
                     <v-row align="center">
                         <div class="card-banner-icon">
@@ -104,10 +106,8 @@
                     </v-row>
                 </v-col>
             </v-row>
-        </v-col>
 
-        <v-col cols="12" align-self="end">
-            <v-row class="card-row mt-2 mb-7" justify="center" align="center">
+            <v-row class="card-row mb-7" justify="center" align="center">
                 <v-btn class="open-strategy-btn" v.on:click.prevent>open strategy</v-btn>
             </v-row>
         </v-col>

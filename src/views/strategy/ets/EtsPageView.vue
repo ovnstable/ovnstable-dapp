@@ -59,12 +59,12 @@
                             </template>
 
                             <template v-if="networkSupport">
-                                <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="totalSupply[etsData.name] >= etsData.maxSupply">
+                                <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
                                     <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
                                 </v-row>
 
-                                <v-row align="center" justify="center" class="ma-0" :class="(totalSupply[etsData.name] >= etsData.maxSupply) ? 'mt-2' : 'mt-12'">
-                                    <v-btn class="header-btn btn-investor-invest" :class="(totalSupply[etsData.name] >= etsData.maxSupply) ? 'disabled-btn' : ''" :disabled="totalSupply[etsData.name] >= etsData.maxSupply"  @click="mintAction">
+                                <v-row align="center" justify="center" class="ma-0" :class="(this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'mt-2' : 'mt-12'">
+                                    <v-btn class="header-btn btn-investor-invest" :class="(this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'disabled-btn' : ''" :disabled="this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply"  @click="mintAction">
                                         MINT ETS {{ etsData.nameUp }}
                                     </v-btn>
                                 </v-row>
@@ -163,12 +163,12 @@
                             </template>
 
                             <template v-if="networkSupport">
-                                <v-row align="center" justify="center" class="ma-0 mt-12" v-if="totalSupply[etsData.name] >= etsData.maxSupply">
+                                <v-row align="center" justify="center" class="ma-0 mt-12" v-if="this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
                                     <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
                                 </v-row>
 
-                                <v-row align="center" justify="center" class="ma-0" :class="(totalSupply[etsData.name] >= etsData.maxSupply) ? 'mt-2' : 'mt-12'">
-                                    <v-btn class="header-btn btn-investor-invest" :class="(totalSupply[etsData.name] >= etsData.maxSupply) ? 'disabled-btn' : ''" :disabled="totalSupply[etsData.name] >= etsData.maxSupply" @click="mintAction">
+                                <v-row align="center" justify="center" class="ma-0" :class="(this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'mt-2' : 'mt-12'">
+                                    <v-btn class="header-btn btn-investor-invest" :class="(this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'disabled-btn' : ''" :disabled="this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply" @click="mintAction">
                                         MINT ETS {{ etsData.nameUp }}
                                     </v-btn>
                                 </v-row>

@@ -252,7 +252,7 @@
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">TVL</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value" :class="totalSupply[etsData.name] >= etsData.maxSupply ? 'label-error' : ''">
+                    <label class="card-info-value" :class="etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply ? 'label-error' : ''">
                         {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
                     </label>
                     <Tooltip text="Past 2 hours"/>
@@ -335,16 +335,16 @@
 
         <template v-if="networkSupport">
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-                <v-btn class="header-btn btn-filled" :class="(totalSupply[etsData.name] >= etsData.maxSupply) ? 'disabled-btn' : ''" @click="mintAction" :disabled="totalSupply[etsData.name] > etsData.maxSupply">
+                <v-btn class="header-btn btn-filled" :class="(etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'disabled-btn' : ''" @click="mintAction" :disabled="etsData.maxSupply && totalSupply[etsData.name] > etsData.maxSupply">
                     MINT ETS {{ etsData.nameUp }}
                 </v-btn>
-                <template v-if="totalSupply[etsData.name] >= etsData.maxSupply">
+                <template v-if="etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
                     <label v-if="$wu.isFull()" class="full-status-error-label ml-4">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
                 </template>
             </v-row>
 
             <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-n8' : 'mt-2'" v-if="!$wu.isFull()">
-                <template v-if="totalSupply[etsData.name] >= etsData.maxSupply">
+                <template v-if="etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
                     <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
                 </template>
             </v-row>

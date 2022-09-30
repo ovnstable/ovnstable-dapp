@@ -288,7 +288,7 @@ export default {
                     this.step = 1;
                     return 'Approve USD+';
                 }
-            } else if ((this.totalSupply[this.etsData.name]) >= this.etsData.maxSupply || (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum)) >= parseFloat(this.etsData.maxSupply)) {
+            } else if ((this.etsData.maxSupply && this.totalSupply[this.etsData.name] >= this.etsData.maxSupply) || (this.etsData.maxSupply && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum)) >= parseFloat(this.etsData.maxSupply))) {
                 return 'Over ETS capacity'
             } else if (this.sum > parseFloat(this.balance.usdPlus)) {
                 return 'Invest'
@@ -298,7 +298,7 @@ export default {
         },
 
         isBuy: function () {
-            return this.account && this.sum > 0 && this.numberRule && (this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && ((parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
+            return this.account && this.sum > 0 && this.numberRule && (!this.etsData.maxSupply ||  this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
         },
 
         numberRule: function () {

@@ -13,7 +13,7 @@
             </v-row>
 
             <v-row class="d-flex">
-                <v-col :cols="$wu.isFull() ? 8 : 12">
+                <v-col :cols="$wu.isFull() ? (etsData.maxSupply ? 8 : 12) : 12">
                     <v-row align="center" justify="start" class="info-container ma-0">
                         <v-col>
                             <v-row justify="center" align="center" class="ma-0">
@@ -29,7 +29,7 @@
                                 <label class="info-title">TVL</label>
                             </v-row>
                             <v-row justify="center" align="center" class="mt-2">
-                                <label class="info-value" :class="(totalSupply[etsData.name] >= etsData.maxSupply) ? 'label-error' : ''">
+                                <label class="info-value" :class="(etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'label-error' : ''">
                                     {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
                                 </label>
                                 <Tooltip text="Past 2 hours"/>
@@ -45,7 +45,7 @@
                         </v-col>
                     </v-row>
                 </v-col>
-                <v-col>
+                <v-col v-if="etsData.maxSupply">
                     <v-row align="center" justify="start" class="info-container-capacity ma-0">
                         <v-col class="card-banner-body">
                             <v-row class="ma-0" justify="start" align="center">

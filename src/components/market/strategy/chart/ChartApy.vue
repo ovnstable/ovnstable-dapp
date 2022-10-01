@@ -125,7 +125,6 @@ export default {
         zoom: "all",
         slice: null,
         chart: null,
-        contractAddress: null,
 
         avgApy: null,
         usdPlusDataEnabled: true,
@@ -177,7 +176,7 @@ export default {
                 }
             };
 
-            await fetch(apiUrl + '/hedge-strategies/' + this.contractAddress + '/avg-apy-info/' + zoom, fetchOptions)
+            await fetch(apiUrl + '/hedge-strategies/' + this.etsData.address + '/avg-apy-info/' + zoom, fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;

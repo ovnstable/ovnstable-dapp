@@ -236,7 +236,7 @@ export default {
             labels = this.slice ? labels.slice(this.slice) : labels;
 
             let valuesUsdPlus = [];
-            labels.forEach(v => valuesUsdPlus.push(this.usdPlusData[v]));
+            labels.forEach(v => valuesUsdPlus.push(this.usdPlusData[v] ? this.usdPlusData[v] : null));
 
             let averageValue = this.avgApy.value;
 
@@ -363,7 +363,7 @@ export default {
 
                     y: {
                         formatter: function (val, opts) {
-                            return val + '%';
+                            return val ? (val + '%') : '—';
                         },
                     },
                 },

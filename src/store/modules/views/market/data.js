@@ -270,7 +270,15 @@ const actions = {
 
     async addEtsStrategyData({commit, dispatch, getters, rootState}, etsDataParams) {
         let etsData = getters.etsStrategyData;
-        etsData[etsDataParams.name] = etsDataParams.data;
+        let data = etsDataParams.data;
+
+        if (!data.tvl || data.tvl < 0.0001) {
+            if (data.timeData && data.timeData.length > 0) {
+                data.tvl = data.timeData[data.timeData.length - 1].tvl;
+            }
+        }
+
+        etsData[etsDataParams.name] = data;
 
         commit('setEtsStrategyData', etsData);
     },

@@ -58,7 +58,8 @@ const actions = {
         if (parseInt(currentWalletNetworkId) === rootState.network.networkId) {
             commit('network/setSwitchToOtherNetwork', false, {root: true});
         } else {
-            commit('network/setSwitchToOtherNetwork', true, {root: true});
+            commit('network/setSwitchToOtherNetwork', false, {root: true});
+            dispatch('network/changeDappNetwork', currentWalletNetworkId.toString(), {root: true});
         }
 
         commit('setLoadingWeb3', false);

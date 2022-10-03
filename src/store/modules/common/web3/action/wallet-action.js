@@ -111,8 +111,19 @@ const actions = {
 
         let walletName = localStorage.getItem('walletName');
         await getters.onboard.walletSelect(walletName ? walletName : '');
+    },
 
-        await getters.onboard.walletCheck();
+    async dappInitWalletConnect({commit, dispatch, getters, rootState}) {
+
+        if (!getters.onboard) {
+            await dispatch('initOnboard');
+        }
+
+        let walletName = localStorage.getItem('walletName');
+
+        if (walletName !== undefined && walletName && walletName !== 'undefined') {
+            await getters.onboard.walletSelect(walletName);
+        }
     },
 
     async disconnectWallet({commit, dispatch, getters, rootState}) {
@@ -230,6 +241,12 @@ const actions = {
             dispatch('dappDataAction/resetUserData', null, {root: true});
             commit('accountData/setAccount', null, {root: true});
             dispatch('statsData/refreshStats', null, {root:true});
+        }
+    },
+
+    async checkWallet({commit, dispatch, getters, rootState}) {
+        if (getters.onboard) {
+            await getters.onboard.walletCheck();
         }
     },
 };

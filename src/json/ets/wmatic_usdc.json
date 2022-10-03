@@ -19,7 +19,7 @@
   "hasUsdPlus": false,
   "tokenPair": "wmatic_usdc",
 
-  "maxSupply": 500000.00,
+  "maxSupply": null,
   "inceptionDate": "14 September 2022",
 
   "iconName": "ets_wmatic_usdc",

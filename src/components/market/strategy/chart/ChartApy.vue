@@ -125,7 +125,6 @@ export default {
         zoom: "all",
         slice: null,
         chart: null,
-        contractAddress: null,
 
         avgApy: null,
         usdPlusDataEnabled: true,
@@ -177,7 +176,7 @@ export default {
                 }
             };
 
-            await fetch(apiUrl + '/hedge-strategies/' + this.contractAddress + '/avg-apy-info/' + zoom, fetchOptions)
+            await fetch(apiUrl + '/hedge-strategies/' + this.etsData.address + '/avg-apy-info/' + zoom, fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;
@@ -236,13 +235,22 @@ export default {
             labels = this.slice ? labels.slice(this.slice) : labels;
 
             let valuesUsdPlus = [];
-            labels.forEach(v => valuesUsdPlus.push(this.usdPlusData[v]));
+            labels.forEach(v => valuesUsdPlus.push(this.usdPlusData[v] ? this.usdPlusData[v] : null));
 
             let averageValue = this.avgApy.value;
 
             let maxValue;
             try {
-                maxValue = Math.max.apply(Math, values);
+
+                if (this.usdPlusDataEnabled) {
+                    let maxValueEts = Math.max.apply(Math, values);
+                    let maxValueUsdPlus = Math.max.apply(Math, valuesUsdPlus);
+
+                    maxValue = Math.max(maxValueEts, maxValueUsdPlus);
+                } else {
+                    maxValue = Math.max.apply(Math, values);
+                }
+
                 maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
             } catch (e) {
                 maxValue = 50;
@@ -354,7 +362,7 @@ export default {
 
                     y: {
                         formatter: function (val, opts) {
-                            return val + '%';
+                            return val ? (val + '%') : '—';
                         },
                     },
                 },

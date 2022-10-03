@@ -19,7 +19,7 @@
   "hasUsdPlus": false,
   "tokenPair": "wbnb_busd",
 
-  "maxSupply": 500000.00,
+  "maxSupply": null,
   "inceptionDate": "02 September 2022",
 
   "iconName": "ets_wbnb_busd",

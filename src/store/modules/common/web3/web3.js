@@ -1,6 +1,8 @@
 import Web3 from "web3";
 
 
+const SUPPORTED_NETWORKS = [137, 31337, 56, 43114, 10];
+
 const state = {
     contracts: null,
     web3: null,
@@ -54,12 +56,16 @@ const actions = {
         dispatch('gasPrice/refreshGasPrice', null, {root: true})
 
         let currentWalletNetworkId = await web3.eth.net.getId();
+        currentWalletNetworkId = parseInt(currentWalletNetworkId);
 
-        if (parseInt(currentWalletNetworkId) === rootState.network.networkId) {
+        if (SUPPORTED_NETWORKS.includes(currentWalletNetworkId)) {
             commit('network/setSwitchToOtherNetwork', false, {root: true});
+
+            if (currentWalletNetworkId !== rootState.network.networkId) {
+                dispatch('network/changeDappNetwork', currentWalletNetworkId.toString(), {root: true});
+            }
         } else {
-            commit('network/setSwitchToOtherNetwork', false, {root: true});
-            dispatch('network/changeDappNetwork', currentWalletNetworkId.toString(), {root: true});
+            commit('network/setSwitchToOtherNetwork', true, {root: true});
         }
 
         commit('setLoadingWeb3', false);

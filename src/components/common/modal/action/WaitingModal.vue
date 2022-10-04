@@ -7,7 +7,7 @@
             <v-card-text class="px-5 pt-5">
                 <v-row justify="center" class="mt-10 mb-10">
                     <v-progress-circular
-                            width="1.5"
+                            width="6"
                             :size="70"
                             color="#FCCA46"
                             indeterminate
@@ -19,7 +19,7 @@
                 <v-row justify="center" class="mt-8 mb-3">
                     <label class="loading-sub-label">{{ modalText }}</label>
                 </v-row>
-                <v-row justify="center" class="mb-15" v-if="modalText">
+                <v-row justify="center" class="mb-5" v-if="modalText">
                     <label class="loading-sub2-label">Confirm this transaction in your wallet</label>
                 </v-row>
             </v-card-text>
@@ -78,18 +78,18 @@ export default {
 
 .loading-label {
     color: #FCCA46;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-style: normal;
-    font-weight: 800;
-    font-size: 24px;
-    line-height: 36px;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 40px;
 }
 
 .loading-sub-label {
     color: var(--secondary-gray-text);
     font-style: normal;
     font-weight: normal;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 24px;
 }
 
@@ -98,5 +98,6 @@ export default {
     font-style: normal;
     font-weight: normal;
     line-height: 16px;
+    line-height: 24px;
 }
 </style>

@@ -11,8 +11,7 @@
                         <label class="tab-btn mx-4" @click="tab=2" v-bind:class="activeTabUsdPlus">USD+</label>
                         <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4"
                                v-bind:class="activeTabPools" disabled>USD+ pools</label>
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4"
-                               v-bind:class="activeTabETS" disabled>ETS</label>
+                        <label class="tab-btn ml-4" @click="tab=4" v-bind:class="activeTabETS">ETS</label>
 
                         <v-spacer></v-spacer>
 
@@ -795,6 +794,7 @@ export default {
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text);
     margin-bottom: -2px;
+    cursor: pointer;
 }
 
 .toggle-row {

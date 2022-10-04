@@ -2,37 +2,44 @@
     <v-dialog
             style="z-index: 1000"
             v-model="show"
-            :width="450"
+            :width="650"
             persistent>
-        <v-card class="container_body">
+        <v-card class="container_body align-center">
             <v-toolbar class="container_header" flat>
                 <v-btn icon class="ml-auto" @click="close">
-                    <v-icon class="close-icon">mdi-close</v-icon>
+                    <v-icon class="close-icon mr-10 mt-10">mdi-close</v-icon>
                 </v-btn>
             </v-toolbar>
             <v-card-text class="px-5 pt-5">
-                <v-row justify="center" class="mb-10">
+                <v-row justify="center" align="center" class="mb-5">
                     <div class="loading-img">
-                        <v-img :src="require('@/assets/icon/transation-send.svg')"/>
+                        <v-img :src="require('@/assets/icon/minted.svg')"/>
                     </div>
                 </v-row>
-                <v-row justify="center">
-                    <label class="success-label">Transaction Submitted</label>
+                <v-row justify="center mb-10">
+                    <label class="success-label">You successfully minted USD+</label>
+                </v-row>
+                <v-row justify="center" class="mb-5">
+                    <v-btn dark
+                           height="40"
+                           width="240"
+                           class="dismiss-btn mb-3"
+                           @click="dismiss">
+                        Go to my performance
+                    </v-btn>
                 </v-row>
                 <v-row justify="center" class="mt-8 mb-5">
-                    <label class="success-link" @click="openOnExplorer(successTxHash)">View transaction</label>
+                    <label class="success-link" @click.stop="mintAction">Add USD+ to your wallet</label>
+                    <div class="action-icons mr-15">
+                        <v-img class="ml-1" :src="require('@/assets/icon/wallet_plus.svg')"/>
+                    </div>
+                    <label class="success-link ml-15" @click="openOnExplorer(successTxHash)">View on Polygonscan</label>
+                    <div class="action-icons">
+                        <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
+                    </div>
                 </v-row>
 
-                <v-row>
-                    <v-col>
-                        <v-btn dark
-                               height="56"
-                               class="dismiss-btn mb-3"
-                               @click="dismiss">
-                            Dismiss
-                        </v-btn>
-                    </v-col>
-                </v-row>
+
             </v-card-text>
         </v-card>
 
@@ -63,6 +70,12 @@ export default {
 
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
+        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+
+        mintAction() {
+            this.showMintView();
+            this.showSwapModal();
+        },
 
         openOnExplorer(hash) {
             if (hash) {
@@ -109,17 +122,17 @@ export default {
 }
 
 .loading-img {
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 120px;
 }
 
 .success-label {
-    color: #22ABAC;
-    font-family: 'Raleway', sans-serif;
+    color: var(--secondary-gray-text);
+    font-family: 'Roboto', sans-serif;
     font-style: normal;
-    font-weight: 800;
-    font-size: 24px;
-    line-height: 36px;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 40px;
 }
 
 .success-link {
@@ -137,8 +150,7 @@ export default {
 
 .dismiss-btn {
     background: var(--blue-gradient) !important;
-    width: 100%;
-    height: 48px;
+    height: 40px;
     border-radius: 2px;
 
     font-family: 'Roboto', sans-serif;
@@ -167,5 +179,10 @@ export default {
 .promo-label-text {
     font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text);
+}
+
+.action-icons {
+    width: 20px;
+    height: 20px;
 }
 </style>

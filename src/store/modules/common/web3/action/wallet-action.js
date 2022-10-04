@@ -73,17 +73,24 @@ const actions = {
                         });
                     }
 
+                    if (wallet.name === 'WalletConnect') {
+                        await getters.onboard.walletCheck();
+                    }
+
                     await dispatch('web3/initWeb3', null, {root: true}).then(value => {
                         commit('setWalletConnected', true);
 
-                        localStorage.setItem('walletName', wallet.name);
+                        /* TODO: save WalletConnect after infinite load issue is fixed */
+                        if (wallet.name !== undefined && wallet.name && wallet.name !== 'undefined' && wallet.name !== 'WalletConnect') {
+                            localStorage.setItem('walletName', wallet.name);
+                        }
                         console.log(wallet.name + ' is now connected!');
 
                         if (wallet.name === 'Unstoppable') {
-                            commit('accountData/setUns', wallet.instance.cacheOptions.getDefaultUsername(), {root:true})
+                            commit('accountData/setUns', wallet.instance.cacheOptions.getDefaultUsername(), {root: true})
                         }
 
-                        commit('accountData/setAccount', wallet.address, {root:true});
+                        commit('accountData/setAccount', wallet.address, {root: true});
                         dispatch('checkAccount')
                     });
                 },
@@ -111,6 +118,15 @@ const actions = {
 
         let walletName = localStorage.getItem('walletName');
         await getters.onboard.walletSelect(walletName ? walletName : '');
+
+        try {
+            let netId = await rootState.web3.web3.eth.net.getId();
+
+            if (netId) {
+                await getters.onboard.config({ networkId: netId });
+            }
+        } catch (e) {
+        }
     },
 
     async dappInitWalletConnect({commit, dispatch, getters, rootState}) {

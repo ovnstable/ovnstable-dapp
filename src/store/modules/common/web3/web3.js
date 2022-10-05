@@ -9,6 +9,7 @@ const state = {
     provider: null,
 
     loadingWeb3: true,
+    isProviderDefault: true,
 };
 
 const getters = {
@@ -28,34 +29,58 @@ const getters = {
     loadingWeb3(state) {
         return state.loadingWeb3;
     },
+
+    isProviderDefault(state) {
+        return state.isProviderDefault;
+    },
 };
 
 const actions = {
+
+    async initDefaultProvider({commit, dispatch, getters, rootState}) {
+
+        let rpcUrl = rootState.network.rpcUrl;
+        let web3;
+
+        let provider = await new Web3.providers.HttpProvider(rpcUrl);
+        web3 = await new Web3(provider);
+        console.debug('InitWeb3: Provider default');
+
+        commit('setIsProviderDefault', true);
+        commit('setProvider', provider);
+        commit('setWeb3', web3);
+    },
+
+    async initCustomProvider({commit, dispatch, getters, rootState}, provider) {
+
+        let web3 = await new Web3(provider);
+        console.debug('InitWeb3: Provider custom');
+
+        commit('setIsProviderDefault', false);
+        commit('setProvider', provider);
+        commit('setWeb3', web3);
+    },
 
     async initWeb3({commit, dispatch, getters, rootState}) {
 
         commit('setLoadingWeb3', true);
 
-        let rpcUrl = rootState.network.rpcUrl;
-        let web3;
-
-        if (!getters.provider) {
-            let provider = await new Web3.providers.HttpProvider(rpcUrl);
-            web3 = await new Web3(provider);
-            console.debug('InitWeb3: Provider default');
+        if (getters.provider === undefined || getters.provider === null) {
+            await dispatch('initDefaultProvider');
         } else {
-            web3 = await new Web3(getters.provider);
-            console.debug('InitWeb3: Provider Custom');
+            try {
+                await dispatch('initCustomProvider', getters.provider);
+            } catch (e) {
+                await dispatch('initDefaultProvider');
+            }
         }
-
-        commit('setWeb3', web3);
 
         await dispatch('contractAction/initContracts', null, {root: true});
 
         dispatch('dappUIAction/updateDappPages', null, {root: true});
         dispatch('gasPrice/refreshGasPrice', null, {root: true})
 
-        let currentWalletNetworkId = await web3.eth.net.getId();
+        let currentWalletNetworkId = await getters.web3.eth.net.getId();
         currentWalletNetworkId = parseInt(currentWalletNetworkId);
 
         if (SUPPORTED_NETWORKS.includes(currentWalletNetworkId)) {
@@ -88,6 +113,10 @@ const mutations = {
 
     setLoadingWeb3(state, value) {
         state.loadingWeb3 = value;
+    },
+
+    setIsProviderDefault(state, value) {
+        state.isProviderDefault = value;
     },
 };
 

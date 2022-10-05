@@ -218,7 +218,7 @@ const actions = {
                     params: [{chainId: rootState.web3.web3.utils.toHex(parseInt(network))}],
                 });
 
-                commit('walletAction/setWalletConnected', 'true', {root: true});
+                commit('walletAction/setWalletConnected', true, {root: true});
             } catch (switchError) {
                 try {
                     let params;
@@ -293,7 +293,7 @@ const actions = {
                         params: [params],
                     });
 
-                    commit('walletAction/setWalletConnected', 'true', {root: true});
+                    commit('walletAction/setWalletConnected', true, {root: true});
                 } catch (addError) {
                     console.error(addError);
                 }

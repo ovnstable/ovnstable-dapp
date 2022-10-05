@@ -39,7 +39,7 @@ const actions = {
                 wallet: async wallet => {
                     console.debug('OnBoard: wallet');
 
-                    commit('web3/setProvider', wallet.provider, {root: true});
+                    await commit('web3/setProvider', wallet.provider, {root: true});
 
                     if (rootState.web3.provider) {
 
@@ -74,24 +74,50 @@ const actions = {
                     }
 
                     if (wallet.name === 'WalletConnect') {
-                        await getters.onboard.walletCheck();
+                        try {
+                            let isWalletOk = await getters.onboard.walletCheck();
+
+                            if (!isWalletOk) {
+                                try {
+                                    await dispatch('web3/initCustomProvider', wallet.provider, {root: true});
+
+                                    let netId = await rootState.web3.web3.eth.net.getId();
+                                    if (netId) {
+                                        await getters.onboard.config({networkId: netId});
+                                    }
+
+                                    isWalletOk = await getters.onboard.walletCheck();
+                                } catch (e) {
+                                    await commit('web3/setProvider', null, {root: true});
+                                }
+                            }
+
+                            if (!isWalletOk) {
+                                await commit('web3/setProvider', null, {root: true});
+                            }
+                        } catch (e) {
+                            await commit('web3/setProvider', null, {root: true});
+                        }
                     }
 
                     await dispatch('web3/initWeb3', null, {root: true}).then(value => {
-                        commit('setWalletConnected', true);
 
-                        /* TODO: save WalletConnect after infinite load issue is fixed */
-                        if (wallet.name !== undefined && wallet.name && wallet.name !== 'undefined' && wallet.name !== 'WalletConnect') {
-                            localStorage.setItem('walletName', wallet.name);
+                        if (!rootState.web3.isProviderDefault) {
+                            commit('setWalletConnected', true);
+
+                            if (wallet.name !== undefined && wallet.name && wallet.name !== 'undefined') {
+                                localStorage.setItem('walletName', wallet.name);
+                            }
+                            console.log(wallet.name + ' is now connected!');
+
+                            if (wallet.name === 'Unstoppable') {
+                                commit('accountData/setUns', wallet.instance.cacheOptions.getDefaultUsername(), {root: true})
+                            }
+
+                            commit('accountData/setAccount', wallet.address, {root: true});
                         }
-                        console.log(wallet.name + ' is now connected!');
 
-                        if (wallet.name === 'Unstoppable') {
-                            commit('accountData/setUns', wallet.instance.cacheOptions.getDefaultUsername(), {root: true})
-                        }
-
-                        commit('accountData/setAccount', wallet.address, {root: true});
-                        dispatch('checkAccount')
+                        dispatch('checkAccount');
                     });
                 },
             }
@@ -143,6 +169,8 @@ const actions = {
     },
 
     async disconnectWallet({commit, dispatch, getters, rootState}) {
+
+        await commit('web3/setProvider', null, {root: true});
 
         if (getters.onboard) {
 

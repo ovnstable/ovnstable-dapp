@@ -7,6 +7,7 @@ const POLYGON_PARAMS = {
     assetName: 'USDC',
     assetDecimals: 6,
     nativeAssetName: 'MATIC',
+    bridgeLink: 'https://router.via.exchange/polygon/USD+/polygon/USD+',
 }
 
 const BSC_PARAMS = {
@@ -18,6 +19,7 @@ const BSC_PARAMS = {
     assetName: 'BUSD',
     assetDecimals: 18,
     nativeAssetName: 'BNB',
+    bridgeLink: 'https://router.via.exchange/bsc/USD+/bsc/USD+',
 }
 
 const AVALANCHE_PARAMS = {
@@ -29,6 +31,7 @@ const AVALANCHE_PARAMS = {
     assetName: 'USDC',
     assetDecimals: 6,
     nativeAssetName: 'AVAX',
+    bridgeLink: 'https://router.via.exchange/avalanche/USD+/bsc/USD+',
 }
 
 const OPTIMISM_PARAMS = {
@@ -40,6 +43,7 @@ const OPTIMISM_PARAMS = {
     assetName: 'USDC',
     assetDecimals: 6,
     nativeAssetName: 'ETH',
+    bridgeLink: 'https://router.via.exchange/optimism/USD+/bsc/USD+',
 }
 
 const state = {
@@ -51,6 +55,7 @@ const state = {
     assetName: _getParams(null).assetName,
     assetDecimals: _getParams(null).assetDecimals,
     nativeAssetName: _getParams(null).nativeAssetName,
+    bridgeLink: _getParams(null).bridgeLink,
 
     polygonApi: POLYGON_PARAMS.appApiUrl,
     bscApi: BSC_PARAMS.appApiUrl,
@@ -119,6 +124,10 @@ const getters = {
         return state.nativeAssetName;
     },
 
+    bridgeLink(state) {
+        return state.bridgeLink;
+    },
+
     assetDecimals(state) {
         return state.assetDecimals;
     },
@@ -172,6 +181,7 @@ const actions = {
         commit('setAssetName', _getParams(networkName).assetName);
         commit('setAssetDecimals', _getParams(networkName).assetDecimals);
         commit('setNativeAssetName', _getParams(networkName).nativeAssetName);
+        commit('bridgeLink', _getParams(networkName).bridgeLink);
 
         dispatch('walletAction/updateOnboardNetwork', null, {root: true});
         dispatch('web3/initWeb3', null, {root: true});
@@ -333,6 +343,10 @@ const mutations = {
 
     setNativeAssetName(state, value) {
         state.nativeAssetName = value;
+    },
+
+    setBridgeLink(state, value) {
+        state.bridgeLink = value;
     },
 
     setAssetDecimals(state, value) {

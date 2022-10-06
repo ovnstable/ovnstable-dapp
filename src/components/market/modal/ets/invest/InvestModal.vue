@@ -51,7 +51,7 @@ export default {
     computed: {
         ...mapGetters('investModal', ['show', 'etsData']),
         ...mapGetters('investModal', ['isMintView']),
-        ...mapGetters('network', ['opConfig']),
+        ...mapGetters('network', ['bridgeLink']),
     },
 
     data: () => ({}),
@@ -74,7 +74,7 @@ export default {
         },
 
         bridge() {
-            window.open(this.opConfig.bridgeLink, '_blank').focus();
+            window.open(this.bridgeLink, '_blank').focus();
         },
     },
 }

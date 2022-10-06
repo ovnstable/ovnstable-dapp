@@ -7,7 +7,7 @@ const POLYGON_PARAMS = {
     assetName: 'USDC',
     assetDecimals: 6,
     nativeAssetName: 'MATIC',
-    bridgeLink: 'https://router.via.exchange/polygon/USD+/polygon/USD+',
+    bridgeLink: 'https://router.via.exchange/polygon/USD+/bsc/USD+',
 }
 
 const BSC_PARAMS = {
@@ -19,7 +19,7 @@ const BSC_PARAMS = {
     assetName: 'BUSD',
     assetDecimals: 18,
     nativeAssetName: 'BNB',
-    bridgeLink: 'https://router.via.exchange/bsc/USD+/bsc/USD+',
+    bridgeLink: 'https://router.via.exchange/bsc/USD+/optimism/USD+',
 }
 
 const AVALANCHE_PARAMS = {
@@ -181,7 +181,7 @@ const actions = {
         commit('setAssetName', _getParams(networkName).assetName);
         commit('setAssetDecimals', _getParams(networkName).assetDecimals);
         commit('setNativeAssetName', _getParams(networkName).nativeAssetName);
-        commit('bridgeLink', _getParams(networkName).bridgeLink);
+        commit('setBridgeLink', _getParams(networkName).bridgeLink);
 
         dispatch('walletAction/updateOnboardNetwork', null, {root: true});
         dispatch('web3/initWeb3', null, {root: true});

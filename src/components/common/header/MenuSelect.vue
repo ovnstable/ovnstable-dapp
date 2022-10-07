@@ -35,6 +35,11 @@
                     Mint/redeem USD+
                 </v-list-item-title>
             </v-list-item>
+            <v-list-item v-if="showWrap" class="menu-item" @click="wrapAction">
+                <v-list-item-title class="network-select-list-item text-blue">
+                    Wrap/unwrap USD+
+                </v-list-item-title>
+            </v-list-item>
             <v-divider></v-divider>
             <v-list-item class="menu-item" @click="openLink('https://twitter.com/overnight_fi')">
                 <v-list-item-title class="network-select-list-item">
@@ -92,10 +97,12 @@ export default {
     computed: {
         ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('theme', ['light']),
+        ...mapGetters('wrapUI', ['showWrap']),
     },
 
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
         ...mapActions('theme', ['switchTheme']),
 
         openLink(url) {
@@ -109,6 +116,11 @@ export default {
         mintAction() {
             this.showMintView();
             this.showSwapModal();
+        },
+
+        wrapAction() {
+            this.showWrapView();
+            this.showWrapModal();
         },
     }
 }

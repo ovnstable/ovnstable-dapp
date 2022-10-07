@@ -1,6 +1,10 @@
 const state = {
     show: false,
     successTxHash: null,
+
+    //mintUsdPlus, redeemUsdPlus, wrapUsdPlus, unwrapUsdPlus, mintEts, redeemEts
+    successAction: 'mint',
+    etsData: null,
 };
 
 const getters = {
@@ -12,12 +16,22 @@ const getters = {
     successTxHash(state) {
         return state.successTxHash;
     },
+
+    successAction(state) {
+        return state.successAction;
+    },
+
+    etsData(state) {
+        return state.etsData;
+    },
 };
 
 const actions = {
-    showSuccessModal({commit, dispatch, getters}, successTxHash) {
+    showSuccessModal({commit, dispatch, getters}, successParams) {
         commit('setShow', true);
-        commit('setSuccessTxHash', successTxHash);
+        commit('setSuccessTxHash', successParams.successTxHash);
+        commit('setSuccessAction', successParams.successAction);
+        commit('setEtsData', successParams.etsData);
     },
 
     closeSuccessModal({commit, dispatch, getters}) {
@@ -33,8 +47,16 @@ const mutations = {
         state.show = show;
     },
 
-    setSuccessTxHash(state, successTxHash) {
-        state.successTxHash = successTxHash;
+    setSuccessTxHash(state, value) {
+        state.successTxHash = value;
+    },
+
+    setSuccessAction(state, value) {
+        state.successAction = value;
+    },
+
+    setEtsData(state, value) {
+        state.etsData = value;
     },
 };
 

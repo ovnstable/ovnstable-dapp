@@ -6,18 +6,18 @@
             persistent>
         <v-card class="container_body align-center">
             <v-toolbar class="container_header" flat>
-                <v-btn icon class="ml-auto" @click="close">
-                    <v-icon class="close-icon mr-10 mt-10">mdi-close</v-icon>
+                <v-btn icon class="ml-auto mr-5 mt-10" @click="close">
+                    <v-icon class="close-icon">mdi-close</v-icon>
                 </v-btn>
             </v-toolbar>
             <v-card-text class="px-5 pt-5">
                 <v-row justify="center" align="center" class="mb-5">
                     <div class="loading-img">
-                        <v-img :src="require('@/assets/icon/minted.svg')"/>
+                        <v-img :src="tokenActionIcon"/>
                     </div>
                 </v-row>
                 <v-row justify="center mb-10">
-                    <label class="success-label">You successfully minted USD+</label>
+                    <label class="success-label">You successfully {{ successActionLabel }}</label>
                 </v-row>
                 <v-row justify="center" class="mb-5">
                     <v-btn dark
@@ -25,11 +25,11 @@
                            width="240"
                            class="dismiss-btn mb-3"
                            @click="dismiss">
-                        Go to my performance
+                        Go to my dashboard
                     </v-btn>
                 </v-row>
                 <v-row justify="center" class="mt-8 mb-5">
-                    <label class="success-link" @click.stop="mintAction">Add USD+ to your wallet</label>
+                    <label class="success-link" @click="addTokenAction">Add {{ actionSuccessToken }} to your wallet</label>
                     <div class="action-icons mr-15">
                         <v-img class="ml-1" :src="require('@/assets/icon/wallet_plus.svg')"/>
                     </div>
@@ -61,8 +61,65 @@ export default {
 
     computed: {
         ...mapGetters('network', ['explorerUrl']),
-        ...mapGetters('successModal', ['show', 'successTxHash']),
+        ...mapGetters('successModal', ['show', 'successTxHash', 'successAction', 'etsData']),
         ...mapGetters('web3', ['walletName']),
+
+        successActionLabel: function () {
+            switch (this.successAction){
+                case 'mintUsdPlus':
+                    return 'minted USD+'
+                case 'redeemUsdPlus':
+                    return 'redeemed USD+'
+                case 'wrapUsdPlus':
+                    return 'wrapped USD+'
+                case 'unwrapUsdPlus':
+                    return 'unwrapped USD+'
+                case 'mintEts':
+                    return 'minted ETS ' + this.etsData ? this.etsData.nameUp : '';
+                case 'redeemEts':
+                    return 'redeemed ETS ' + this.etsData ? this.etsData.nameUp : '';
+                default:
+                    return 'done the operation'
+            }
+        },
+
+        actionSuccessToken: function () {
+            switch (this.successAction){
+                case 'mintUsdPlus':
+                    return 'USD+'
+                case 'redeemUsdPlus':
+                    return 'USD+'
+                case 'wrapUsdPlus':
+                    return 'wUSD+'
+                case 'unwrapUsdPlus':
+                    return 'wUSD+'
+                case 'mintEts ':
+                    return 'ETS ' + this.etsData ? this.etsData.nameUp : '';
+                case 'redeemEts':
+                    return 'ETS ' + this.etsData ? this.etsData.nameUp : '';
+                default:
+                    return ''
+            }
+        },
+
+        tokenActionIcon: function () {
+            switch (this.successAction){
+                case 'mintUsdPlus':
+                    return require('@/assets/icon/minted.svg');
+                case 'redeemUsdPlus':
+                    return require('@/assets/icon/redeemed.svg');
+                case 'wrapUsdPlus':
+                    return require('@/assets/icon/wrap.svg');
+                case 'unwrapUsdPlus':
+                    return require('@/assets/icon/unwrap.svg');
+                case 'mintEts':
+                    return require('@/assets/currencies/market/ets_' + this.etsData.name + '.svg');
+                case 'redeemEts':
+                    return require('@/assets/currencies/market/ets_' + this.etsData.name + '.svg');
+                default:
+                    return ''
+            }
+        },
     },
 
     data: () => ({
@@ -71,10 +128,26 @@ export default {
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken']),
 
-        mintAction() {
-            this.showMintView();
-            this.showSwapModal();
+
+        addTokenAction() {
+            switch (this.successAction){
+                case 'mintUsdPlus':
+                case 'redeemUsdPlus':
+                    this.addUsdPlusToken();
+                    break;
+                case 'wrapUsdPlus':
+                case 'unwrapUsdPlus':
+                    this.addwUsdPlusToken();
+                    break;
+                case 'mintEts ':
+                case 'redeemEts':
+                    this.addEtsToken(this.etsData.nameUp);
+                    break;
+                default:
+                    break;
+            }
         },
 
         openOnExplorer(hash) {

@@ -5,8 +5,8 @@
             persistent>
         <v-card class="container_body">
             <v-toolbar class="container_header" flat>
-                <v-btn icon class="ml-auto" @click="close">
-                    <v-icon class="close-icon mr-10 mt-10">mdi-close</v-icon>
+                <v-btn icon class="ml-auto mr-5 mt-10" @click="close">
+                    <v-icon class="close-icon">mdi-close</v-icon>
                 </v-btn>
             </v-toolbar>
             <v-card-text class="px-5 pt-5">

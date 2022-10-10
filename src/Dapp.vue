@@ -55,7 +55,7 @@ export default {
         await this.initEtsList();
 
         await this.initWeb3();
-        await this.connectWallet();
+        await this.dappInitWalletConnect();
         this.initReferralCode();
     },
 
@@ -74,7 +74,7 @@ export default {
 
     methods:{
         ...mapActions('web3', ['initWeb3']),
-        ...mapActions('walletAction', ['connectWallet']),
+        ...mapActions('walletAction', ['dappInitWalletConnect']),
         ...mapActions('referral', ['initReferralCode']),
         ...mapActions('etsAction', ['initEtsList']),
         ...mapActions('theme', ['initTheme']),

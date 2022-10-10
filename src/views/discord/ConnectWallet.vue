@@ -128,9 +128,6 @@ export default {
             this.loading = true;
 
             await this.onboard.walletSelect();
-            await this.onboard.walletCheck();
-
-            // await actions.addUsdPlusToken();
 
             const user = JSON.parse(localStorage.getItem("discord_user"));
             const selectedWallet = (await this.web3.eth.getAccounts())[0];

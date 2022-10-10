@@ -7,6 +7,7 @@ const POLYGON_PARAMS = {
     assetName: 'USDC',
     assetDecimals: 6,
     nativeAssetName: 'MATIC',
+    bridgeLink: 'https://router.via.exchange/polygon/USD+/bsc/USD+',
 }
 
 const BSC_PARAMS = {
@@ -18,6 +19,7 @@ const BSC_PARAMS = {
     assetName: 'BUSD',
     assetDecimals: 18,
     nativeAssetName: 'BNB',
+    bridgeLink: 'https://router.via.exchange/bsc/USD+/optimism/USD+',
 }
 
 const AVALANCHE_PARAMS = {
@@ -29,6 +31,7 @@ const AVALANCHE_PARAMS = {
     assetName: 'USDC',
     assetDecimals: 6,
     nativeAssetName: 'AVAX',
+    bridgeLink: 'https://router.via.exchange/avalanche/USD+/bsc/USD+',
 }
 
 const OPTIMISM_PARAMS = {
@@ -40,6 +43,7 @@ const OPTIMISM_PARAMS = {
     assetName: 'USDC',
     assetDecimals: 6,
     nativeAssetName: 'ETH',
+    bridgeLink: 'https://router.via.exchange/optimism/USD+/bsc/USD+',
 }
 
 const state = {
@@ -51,6 +55,7 @@ const state = {
     assetName: _getParams(null).assetName,
     assetDecimals: _getParams(null).assetDecimals,
     nativeAssetName: _getParams(null).nativeAssetName,
+    bridgeLink: _getParams(null).bridgeLink,
 
     polygonApi: POLYGON_PARAMS.appApiUrl,
     bscApi: BSC_PARAMS.appApiUrl,
@@ -66,31 +71,6 @@ const state = {
 };
 
 function _getParams(networkName) {
-
-    if (!networkName) {
-        try {
-            let urlParams = new URLSearchParams(window.location.search);
-
-            if (urlParams.has('network')) {
-                let urlNetworkParameter = urlParams.get('network');
-                console.debug("URL network set to: " + urlNetworkParameter);
-
-                if (urlNetworkParameter) {
-                    networkName = urlNetworkParameter;
-                }
-            }
-        } catch (e) {
-            console.debug("Error occurred when trying to get url network parameter", e);
-        }
-    }
-
-    if (!networkName) {
-        networkName = localStorage.getItem('selectedNetwork');
-
-        if (!networkName) {
-            networkName = 'op';
-        }
-    }
 
     switch (networkName) {
         case "polygon":
@@ -142,6 +122,10 @@ const getters = {
 
     nativeAssetName(state) {
         return state.nativeAssetName;
+    },
+
+    bridgeLink(state) {
+        return state.bridgeLink;
     },
 
     assetDecimals(state) {
@@ -197,6 +181,7 @@ const actions = {
         commit('setAssetName', _getParams(networkName).assetName);
         commit('setAssetDecimals', _getParams(networkName).assetDecimals);
         commit('setNativeAssetName', _getParams(networkName).nativeAssetName);
+        commit('setBridgeLink', _getParams(networkName).bridgeLink);
 
         dispatch('walletAction/updateOnboardNetwork', null, {root: true});
         dispatch('web3/initWeb3', null, {root: true});
@@ -243,7 +228,7 @@ const actions = {
                     params: [{chainId: rootState.web3.web3.utils.toHex(parseInt(network))}],
                 });
 
-                commit('walletAction/setWalletConnected', 'true', {root: true});
+                commit('walletAction/setWalletConnected', true, {root: true});
             } catch (switchError) {
                 try {
                     let params;
@@ -318,7 +303,7 @@ const actions = {
                         params: [params],
                     });
 
-                    commit('walletAction/setWalletConnected', 'true', {root: true});
+                    commit('walletAction/setWalletConnected', true, {root: true});
                 } catch (addError) {
                     console.error(addError);
                 }
@@ -358,6 +343,10 @@ const mutations = {
 
     setNativeAssetName(state, value) {
         state.nativeAssetName = value;
+    },
+
+    setBridgeLink(state, value) {
+        state.bridgeLink = value;
     },
 
     setAssetDecimals(state, value) {

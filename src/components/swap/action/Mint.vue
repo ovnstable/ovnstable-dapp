@@ -269,6 +269,7 @@ export default {
         buttonLabel: function () {
             this.step = 0;
 
+
             if (!this.account) {
                 return 'Connect to a wallet';
             } else if (this.isBuy) {

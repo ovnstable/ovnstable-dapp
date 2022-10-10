@@ -39,7 +39,7 @@ const actions = {
                 wallet: async wallet => {
                     console.debug('OnBoard: wallet');
 
-                    commit('web3/setProvider', wallet.provider, {root: true});
+                    await commit('web3/setProvider', wallet.provider, {root: true});
 
                     if (rootState.web3.provider) {
 
@@ -73,18 +73,51 @@ const actions = {
                         });
                     }
 
+                    if (wallet.name === 'WalletConnect') {
+                        try {
+                            let isWalletOk = await getters.onboard.walletCheck();
+
+                            if (!isWalletOk) {
+                                try {
+                                    await dispatch('web3/initCustomProvider', wallet.provider, {root: true});
+
+                                    let netId = await rootState.web3.web3.eth.net.getId();
+                                    if (netId) {
+                                        await getters.onboard.config({networkId: netId});
+                                    }
+
+                                    isWalletOk = await getters.onboard.walletCheck();
+                                } catch (e) {
+                                    await commit('web3/setProvider', null, {root: true});
+                                }
+                            }
+
+                            if (!isWalletOk) {
+                                await commit('web3/setProvider', null, {root: true});
+                            }
+                        } catch (e) {
+                            await commit('web3/setProvider', null, {root: true});
+                        }
+                    }
+
                     await dispatch('web3/initWeb3', null, {root: true}).then(value => {
-                        commit('setWalletConnected', true);
 
-                        localStorage.setItem('walletName', wallet.name);
-                        console.log(wallet.name + ' is now connected!');
+                        if (!rootState.web3.isProviderDefault) {
+                            commit('setWalletConnected', true);
 
-                        if (wallet.name === 'Unstoppable') {
-                            commit('accountData/setUns', wallet.instance.cacheOptions.getDefaultUsername(), {root:true})
+                            if (wallet.name !== undefined && wallet.name && wallet.name !== 'undefined') {
+                                localStorage.setItem('walletName', wallet.name);
+                            }
+                            console.log(wallet.name + ' is now connected!');
+
+                            if (wallet.name === 'Unstoppable') {
+                                commit('accountData/setUns', wallet.instance.cacheOptions.getDefaultUsername(), {root: true})
+                            }
+
+                            commit('accountData/setAccount', wallet.address, {root: true});
                         }
 
-                        commit('accountData/setAccount', wallet.address, {root:true});
-                        dispatch('checkAccount')
+                        dispatch('checkAccount');
                     });
                 },
             }
@@ -112,10 +145,32 @@ const actions = {
         let walletName = localStorage.getItem('walletName');
         await getters.onboard.walletSelect(walletName ? walletName : '');
 
-        await getters.onboard.walletCheck();
+        try {
+            let netId = await rootState.web3.web3.eth.net.getId();
+
+            if (netId) {
+                await getters.onboard.config({ networkId: netId });
+            }
+        } catch (e) {
+        }
+    },
+
+    async dappInitWalletConnect({commit, dispatch, getters, rootState}) {
+
+        if (!getters.onboard) {
+            await dispatch('initOnboard');
+        }
+
+        let walletName = localStorage.getItem('walletName');
+
+        if (walletName !== undefined && walletName && walletName !== 'undefined') {
+            await getters.onboard.walletSelect(walletName);
+        }
     },
 
     async disconnectWallet({commit, dispatch, getters, rootState}) {
+
+        await commit('web3/setProvider', null, {root: true});
 
         if (getters.onboard) {
 
@@ -230,6 +285,12 @@ const actions = {
             dispatch('dappDataAction/resetUserData', null, {root: true});
             commit('accountData/setAccount', null, {root: true});
             dispatch('statsData/refreshStats', null, {root:true});
+        }
+    },
+
+    async checkWallet({commit, dispatch, getters, rootState}) {
+        if (getters.onboard) {
+            await getters.onboard.walletCheck();
         }
     },
 };

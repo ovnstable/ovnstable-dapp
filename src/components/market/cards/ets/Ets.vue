@@ -1,4 +1,11 @@
 <template>
+
+    <!-- TODO: add pool card -->
+
+    <!-- TODO: fix usd+ card when ready -->
+
+    <!-- TODO: make tablet mobile version 1 card for width, tablet & desktop versions: 3 cards for width -->
+
     <v-row class="card-container" @click="openStrategyCard">
         <v-col cols="12" align-self="start">
             <v-row class="d-flex flex-row align-center header-row pr-5" justify="center"
@@ -15,13 +22,20 @@
                         </label>
                         <label class="apy">APY</label>
                         <div class="tooltip">
-                            <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
+                            <Tooltip icon-color="#FFFFFF" text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                         </div>
                     </v-row>
                 </v-row>
             </v-row>
 
+            <!-- TODO: fix container border width -->
+
             <v-container>
+
+                <!-- TODO: add ets capacity is full label -->
+
+                <!-- TODO: fix styles -->
+
                 <template v-if="cardData.overcapEnabled">
                     <v-row class="d-flex justify-space-between mt-4">
                         <label>Current tvl</label>
@@ -29,9 +43,9 @@
                         <label>Max tvl</label>
                     </v-row>
                     <v-row class="d-flex justify-space-between mt-4">
-                        <label>{{ totalSupply[cardData.data.name] }}</label>
+                        <label>{{ $utils.formatMoneyComma(totalSupply[cardData.data.name], 2) }}</label>
                         <v-spacer></v-spacer>
-                        <label>{{ cardData.data.maxSupply }}</label>
+                        <label>{{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
                     </v-row>
                     <v-row class="d-flex justify-space-between mt-4">
                         <v-progress-linear
@@ -49,11 +63,16 @@
                         <label class="capacity-status-sub-text">CURRENT TVL</label>
                         <label class="capacity-status-sub-text mb-5">${{ $utils.formatMoneyComma(cardData.tvl, 2) }}</label>
                     </v-row>
+
+                    <!-- TODO: add divider -->
+
                 </template>
 
                 <v-row class="mt-4">
                     <label class="card-info">{{ cardData.data.cardTitle }}</label>
                 </v-row>
+
+                <!-- TODO: fix minicards  width -->
 
                 <v-row class="d-flex mt-10 justify-space-between">
                     <div class="box box-one">
@@ -91,10 +110,13 @@
                     </template>
                     <template v-else>
                         <v-spacer></v-spacer>
+                        <!-- TODO: fix text style -->
                         <label class="your-deposit">You don’t have deposit in this ETS</label>
                         <v-spacer></v-spacer>
                     </template>
                 </v-row>
+
+                <!-- TODO: fix btn width to 50% all -->
 
                 <v-row class="d-flex justify-space-between ma-0 mt-10">
                     <v-btn class="button btn-filled" @click.stop="mintAction">Mint ETS</v-btn>
@@ -401,7 +423,7 @@ export default {
 }
 
 .footer-row {
-    background-color: #F5F5F5;
+    background-color: var(--doughnut-fg) !important;
     padding: 5px;
     border-radius: 0 0 15px 15px;
 }

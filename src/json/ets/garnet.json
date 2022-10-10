@@ -17,6 +17,7 @@
   "token2": "USDC",
   "hedgeToken": "OP",
   "hasUsdPlus": false,
+  "tokenPair": "op_usdc",
 
   "maxSupply": 100000.00,
   "inceptionDate": "30 September 2022",
@@ -24,6 +25,7 @@
   "iconName": "ets_garnet",
 
   "mainColor": "#8a0d31",
+  "cardBgColor": "radial-gradient(circle at 100% 0%, #F96798 0%, #D0225D 27%, #4E0B1B 52%, #FD0420 100%)",
 
   "cardTitle": "Generate yield on OP-USDC pool by hedging your risks and simplify process.",
   "aboutText": "The exchange-traded strategy Garnet ($GARNET) is an ERC-20 structured product built on Optimism Chain that lets you leverage a collateralized debt position (USDC lent on Granary) to borrow a volatile asset (OP), pair it with USDС stablecoin, and provide OP/USDC liquidity on Velodrome all in one action. This allows earning high APY and hedging against OP volatility.\n\nThe unique feature of ETS GARNET is that it automatically administers a health factor of 1.2x on Granary and rebalances your Lent/Borrowed amounts to maintain a stringent 1.2x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.\n\nUsers also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Optimism - a highly scalable L2 chain.",

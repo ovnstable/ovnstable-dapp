@@ -417,5 +417,4 @@ export default {
     line-height: 24px;
     color: #707A8B;
 }
-
 </style>

@@ -2,15 +2,13 @@
 
     <!-- TODO: add pool card -->
 
-    <!-- TODO: fix usd+ card when ready -->
-
-    <!-- TODO: make tablet mobile version 1 card for width, tablet & desktop versions: 3 cards for width -->
-
     <v-row class="card-container" @click="openStrategyCard">
         <v-col cols="12" align-self="start">
-            <v-row class="d-flex flex-row align-center header-row pr-5" justify="center"
+            <v-row class="d-flex flex-row align-center header-row" justify="center"
                    :style="{'--card-background': cardData.data.cardBgColor}">
-                <v-img class="currency" :src="require('@/assets/currencies/market/ets_' + cardData.data.name + '.svg')"/>
+                <span class="currency ml-5">
+                    <v-img :src="require('@/assets/currencies/market/ets_' + cardData.data.name + '.svg')"/>
+                </span>
                 <v-spacer></v-spacer>
                 <v-row class="d-flex flex-column align-start mr-3">
                     <v-row class="d-flex mb-1">
@@ -22,32 +20,33 @@
                         </label>
                         <label class="apy">APY</label>
                         <div class="tooltip">
-                            <Tooltip icon-color="#FFFFFF" text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
+                            <Tooltip icon-color="#FFFFFF"
+                                     text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                         </div>
                     </v-row>
                 </v-row>
             </v-row>
 
-            <!-- TODO: fix container border width -->
-
-            <v-container>
-
-                <!-- TODO: add ets capacity is full label -->
-
-                <!-- TODO: fix styles -->
+            <v-container class="mt-4">
+                <v-row align="center" justify="center" class="ma-0">
+                    <label class="full-status-error-label" v-if="cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply" :style="{color: cardData.data.mainColor}">
+                        ETS capacity is full. Check status later
+                    </label>
+                    <label class="full-status-error-label" v-else>&nbsp;</label>
+                </v-row>
 
                 <template v-if="cardData.overcapEnabled">
-                    <v-row class="d-flex justify-space-between mt-4">
-                        <label>Current tvl</label>
+                    <v-row class="ma-0 mt-3">
+                        <label class="progress-label-header">Current tvl</label>
                         <v-spacer></v-spacer>
-                        <label>Max tvl</label>
+                        <label class="progress-label-header">Max tvl</label>
                     </v-row>
-                    <v-row class="d-flex justify-space-between mt-4">
-                        <label>{{ $utils.formatMoneyComma(totalSupply[cardData.data.name], 2) }}</label>
+                    <v-row class="ma-0">
+                        <label class="progress-label-value">${{ $utils.formatMoneyComma(totalSupply[cardData.data.name], 2) }}</label>
                         <v-spacer></v-spacer>
-                        <label>{{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
+                        <label class="progress-label-value">${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
                     </v-row>
-                    <v-row class="d-flex justify-space-between mt-4">
+                    <v-row class="ma-0 mt-2">
                         <v-progress-linear
                             rounded
                             height="7"
@@ -59,77 +58,90 @@
                     </v-row>
                 </template>
                 <template v-else>
-                    <v-row class="d-flex justify-space-between mt-4">
-                        <label class="capacity-status-sub-text">CURRENT TVL</label>
-                        <label class="capacity-status-sub-text mb-5">${{ $utils.formatMoneyComma(cardData.tvl, 2) }}</label>
+                    <v-row class="d-flex justify-space-between ma-0 mt-3">
+                        <label class="progress-label-value">CURRENT TVL</label>
+                        <label class="progress-label-value mb-5">${{
+                                $utils.formatMoneyComma(cardData.tvl, 2)
+                            }}</label>
                     </v-row>
-
-                    <!-- TODO: add divider -->
-
+                    <v-divider class="card-divider"></v-divider>
                 </template>
+            </v-container>
+        </v-col>
 
-                <v-row class="mt-4">
+        <v-col cols="12" align-self="end">
+            <v-container>
+                <v-row class="ma-0 mt-n6">
                     <label class="card-info">{{ cardData.data.cardTitle }}</label>
                 </v-row>
 
-                <!-- TODO: fix minicards  width -->
-
-                <v-row class="d-flex mt-10 justify-space-between">
-                    <div class="box box-one">
-                        <label class="box-name">Chain</label>
-                        <div class="icon">
-                            <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
-                                   alt="chain icon"/>
+                <v-row class="mt-5">
+                    <v-col cols="6">
+                        <div class="box">
+                            <label class="box-name mt-2">Chain</label>
+                            <div class="icon">
+                                <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
+                                       class="mt-1"
+                                       alt="chain icon"/>
+                            </div>
+                            <label class="chain-name mb-2 mt-1">{{ cardData.data.chainName }}</label>
                         </div>
-                        <label class="chain-name">{{ cardData.data.chainName }}</label>
-                    </div>
-                    <div class="box box-two">
-                        <label class="box-name">Platform</label>
-                        <div class="icon">
-                            <v-img :src="require('@/assets/cards/platform/' + cardData.data.dex + '.svg')"
-                                   alt="platform icon"/>
+                    </v-col>
+                    <v-col cols="6">
+                        <div class="box">
+                            <label class="box-name mt-2">Platform</label>
+                            <div class="icon">
+                                <v-img :src="require('@/assets/cards/platform/' + cardData.data.dex + '.svg')"
+                                       class="mt-1"
+                                       alt="platform icon"/>
+                            </div>
+                            <label class="platform-name mb-2 mt-1">{{ cardData.data.dex }}</label>
                         </div>
-                        <label class="platform-name">{{ cardData.data.dex }}</label>
-                    </div>
-                    <div class="box box-three">
-                        <label class="box-name">Token Pair</label>
-                        <div class="icon">
-                            <v-img :src="require('@/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg')"
-                                   alt="token pair icons"/>
+                    </v-col>
+                    <v-col cols="12">
+                        <div class="box">
+                            <label class="box-name mt-2">Token Pair</label>
+                            <div class="icon">
+                                <v-img :src="require('@/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg')"
+                                       class="mt-1"
+                                       alt="token pair icons"/>
+                            </div>
+                            <label class="token-pair-name mb-2 mt-1">{{ cardData.data.poolName }}</label>
                         </div>
-                        <label class="token-pair-name">{{ cardData.data.poolName }}</label>
-                    </div>
+                    </v-col>
                 </v-row>
 
-                <v-row class="d-flex justify-space-between mt-10">
+                <v-row class="d-flex justify-space-between ma-0 mt-8">
                     <template v-if="accountEtsBalance">
                         <label class="your-deposit">Your deposit in ETS</label>
-                        <label class="sum-of-money">{{
+                        <label class="your-deposit">{{
                                 accountEtsBalance ? ($utils.formatMoneyComma(accountEtsBalance, 2) + ' USD+') : '—'
                             }}</label>
                     </template>
                     <template v-else>
                         <v-spacer></v-spacer>
-                        <!-- TODO: fix text style -->
-                        <label class="your-deposit">You don’t have deposit in this ETS</label>
+                        <label class="your-deposit-disabled">You don’t have deposit in this ETS</label>
                         <v-spacer></v-spacer>
                     </template>
                 </v-row>
 
-                <!-- TODO: fix btn width to 50% all -->
-
-                <v-row class="d-flex justify-space-between ma-0 mt-10">
-                    <v-btn class="button btn-filled" @click.stop="mintAction">Mint ETS</v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn class="button btn-outlined" v-if="accountEtsBalance" @click.stop="redeemAction" outlined>
-                        Redeem ETS
-                    </v-btn>
+                <v-row class="d-flex justify-space-between ma-0 mt-5">
+                    <v-col v-if="!(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)" :class="accountEtsBalance ? 'mr-1' : ''">
+                        <v-row>
+                            <v-btn class="button btn-filled" @click.stop="mintAction">Mint ETS</v-btn>
+                        </v-row>
+                    </v-col>
+                    <v-col v-if="accountEtsBalance" class="ml-1">
+                        <v-row>
+                            <v-btn class="button btn-outlined" @click.stop="redeemAction" outlined>Redeem ETS</v-btn>
+                        </v-row>
+                    </v-col>
                 </v-row>
             </v-container>
         </v-col>
 
         <v-col cols="12" align-self="end">
-            <v-row class="footer-row d-flex align-center justify-center">
+            <v-row class="footer-row align-center justify-center">
                 <label class="footer-link">Learn more about ETS {{ cardData.data.nameUp }}</label>
                 <img class="open-icon ml-1" src="@/assets/icon/open-in-new.svg">
             </v-row>
@@ -199,22 +211,14 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
-    .card-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 24px;
-        line-height: 28px;
-    }
-
     .card-info {
         font-style: normal;
         font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
+        font-size: 14px;
+        line-height: 22px;
     }
 
     .button {
-        width: 300px !important;
         height: 36px !important;
 
         font-style: normal !important;
@@ -222,6 +226,77 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .currency {
+        height: 60px !important;
+        width: 60px !important;
+    }
+
+    .your-deposit, .your-deposit-disabled {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .full-status-error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .progress-label-header {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+        letter-spacing: 0.03em;
+    }
+
+    .progress-label-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
+    }
+
+    .footer-link {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .header-row {
+        height: 120px !important;
+    }
+
+    .card-container {
+    }
+
+    .card-title {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: 0.04em;
+    }
+
+    .percentage {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 40px;
+        line-height: 40px;
+    }
+
+    .apy {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
     }
 }
 
@@ -238,11 +313,10 @@ export default {
         font-style: normal;
         font-weight: 300;
         font-size: 16px;
-        line-height: 24px;
+        line-height: 22px;
     }
 
     .button {
-        width: 300px !important;
         height: 36px !important;
 
         font-style: normal !important;
@@ -251,17 +325,83 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .currency {
+        height: 60px !important;
+        width: 60px !important;
+    }
+
+    .your-deposit, .your-deposit-disabled {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .full-status-error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .progress-label-header {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+        letter-spacing: 0.03em;
+    }
+
+    .progress-label-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.03em;
+    }
+
+    .footer-link {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .header-row {
+        max-width: 440px;
+        height: 130px !important;
+    }
+
+    .card-container {
+        max-width: 440px;
+    }
+
+    .card-title {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.04em;
+    }
+
+    .percentage {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 50px;
+        line-height: 56px;
+    }
+
+    .apy {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 22px;
+    }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .card-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 30px;
-        line-height: 40px;
-    }
-
     .card-info {
         font-style: normal;
         font-weight: 300;
@@ -270,7 +410,6 @@ export default {
     }
 
     .button {
-        width: 300px !important;
         height: 36px !important;
 
         font-style: normal !important;
@@ -279,74 +418,129 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .currency {
+        height: 100px !important;
+        width: 100px !important;
+    }
+
+    .your-deposit, .your-deposit-disabled {
+        font-style: normal;
+        font-weight: 800;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: 0.05em;
+    }
+
+    .full-status-error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .progress-label-header {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+        letter-spacing: 0.03em;
+    }
+
+    .progress-label-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 22px;
+        letter-spacing: 0.04em;
+    }
+
+    .footer-link {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .header-row {
+        max-width: 460px;
+        height: 150px !important;
+    }
+
+    .card-container {
+        max-width: 460px;
+    }
+
+    .card-title {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.04em;
+    }
+
+    .percentage {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 60px;
+        line-height: 48px;
+    }
+
+    .apy {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 24px;
+    }
 }
 
 .card-container {
     background: var(--secondary) !important;
     border-radius: 15px !important;
-    max-width: 484px;
-    min-height: 664px;
+    height: 100% !important;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .header-row {
-    max-width: 484px;
-    height: 170px !important;
     border-radius: 15px 15px 0 0;
 }
 
-.currency {
-    width: 130px;
-    height: 100%;
-}
-
 .card-title {
-    font-family: "Roboto", sans-serif;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 24px;
-    letter-spacing: 0.4px;
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
     color: #FFFFFF;
 }
 
 .percentage {
-    font-family: "Roboto", sans-serif;
-    font-weight: 500;
-    font-size: 60px;
-    line-height: 48px;
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
     color: #FFFFFF;
 }
 
 .apy {
-    font-family: "Roboto", sans-serif;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 24px;
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
     color: #FFFFFF;
 }
 
-.capacity-status-sub-text {
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 22px;
-    letter-spacing: 0.4px;
-}
-
 .card-info {
-    font-family: "Roboto", sans-serif;
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 24px;
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: var(--main-gray-text);
 }
 
 .box {
-    background-color: #F5F5F5;
-    padding: 8px;
-    min-height: 100px;
+    background-color: var(--scroll-color);
     border-radius: 4px;
-    gap: 10px;
     text-align: center;
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-transform: capitalize;
 }
 
 .box-name {
@@ -354,7 +548,7 @@ export default {
     font-weight: 400;
     font-size: 12px;
     line-height: 16px;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.03em;
     color: #707A8B;
     text-transform: uppercase;
 }
@@ -364,48 +558,32 @@ export default {
     width: auto !important;
 }
 
-.box-one {
-    width: 120px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-transform: capitalize;
-}
-
-.box-two {
-    width: 120px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.box-three {
-    width: 148px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .chain-name, .platform-name, .token-pair-name {
     font-family: "Roboto", sans-serif;
     font-weight: 300;
     font-size: 16px;
     line-height: 24px;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
-.your-deposit, .sum-of-money {
-    font-family: "Roboto", sans-serif;
-    font-weight: 900;
-    font-size: 16px;
-    line-height: 24px;
-    letter-spacing: 0.5px;
+.your-deposit, .your-deposit-disabled {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-feature-settings: 'liga' off;
+}
+
+.your-deposit {
+    color: var(--main-gray-text);
+}
+
+.your-deposit-disabled {
+    color: var(--third-gray-text);
 }
 
 .button {
     border-radius: 2px;
     box-shadow: none !important;
+    width: 100% !important;
 
     font-family: 'Roboto', sans-serif !important;
     text-align: center !important;
@@ -423,16 +601,14 @@ export default {
 }
 
 .footer-row {
-    background-color: var(--doughnut-fg) !important;
+    background-color: var(--scroll-color) !important;
     padding: 5px;
     border-radius: 0 0 15px 15px;
 }
 
 .footer-link {
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
     color: #707A8B;
 }
 
@@ -443,7 +619,7 @@ export default {
 }
 
 .progress-info {
-    background: #D7DADF;
+    background: var(--progress-info);
 }
 
 .header-row {
@@ -465,4 +641,27 @@ export default {
     cursor: pointer;
 }
 
+.full-status-error-label {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+}
+
+.progress-label-header {
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: var(--third-gray-text);
+}
+
+.progress-label-value {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: var(--main-gray-text);
+}
+
+.card-divider {
+    border-color: var(--fourth-gray-text) !important;
+}
 </style>

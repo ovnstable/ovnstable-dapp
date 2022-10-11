@@ -11,7 +11,6 @@
                     mdi-star-circle
                 </v-icon>
             </label>
-            <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabHold">USD+</label>
             <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4"
                    v-bind:class="activeTabPools" disabled>USD+ pools</label>
             <label @click="tab=4" class="tab-btn ml-4" v-bind:class="activeTabHedged">ETS</label>
@@ -22,14 +21,32 @@
         </v-row>
 
         <div class="mt-7 cards-list-container">
-            <v-row class="d-flex" justify="start">
-                <component
-                    class="ma-3"
-                    v-for="component in (tab === 1 ? sortedCardList.slice(0, 3) : sortedCardList)"
-                    :card-data="component"
-                    v-bind:is="component.name"
-                    v-if="(tab === 1) || (tab === 2 && component.type === 'usd+') || (tab === 3 && component.type === 'pool') || (tab === 4 && component.type === 'ets')"
-                ></component>
+
+            <v-row class="d-flex" justify="start" v-if="tab === 1">
+                <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
+                       v-for="component in sortedCardList.slice(0, 3)">
+                    <v-row class="fill-height">
+                        <component
+                            class="ma-3"
+                            :card-data="component"
+                            v-bind:is="component.name"
+                        ></component>
+                    </v-row>
+                </v-col>
+            </v-row>
+
+            <v-row class="d-flex" justify="start" v-if="tab === 4">
+                <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
+                       v-for="component in sortedCardList"
+                       v-if="component.type === 'ets'">
+                    <v-row class="fill-height">
+                        <component
+                            class="ma-3"
+                            :card-data="component"
+                            v-bind:is="component.name"
+                        ></component>
+                    </v-row>
+                </v-col>
             </v-row>
         </div>
 
@@ -41,7 +58,6 @@
 
 import {mapGetters} from "vuex";
 import moment from "moment";
-import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import Ets from "@/components/market/cards/ets/Ets";
 
 export default {
@@ -49,13 +65,10 @@ export default {
 
     components: {
         Ets,
-        UsdPlus,
     },
 
     data: () => ({
         tab: 1,
-        avgUsdPlusApy: null,
-        totalUsdPlusTvl: null,
     }),
 
     computed: {
@@ -69,13 +82,6 @@ export default {
             return {
                 'tab-button': this.tab === 1,
                 'tab-button-in-active': this.tab !== 1,
-            }
-        },
-
-        activeTabHold: function () {
-            return {
-                'tab-button': this.tab === 2,
-                'tab-button-in-active': this.tab !== 2,
             }
         },
 
@@ -97,21 +103,7 @@ export default {
 
             let networkId = this.networkId;
 
-            let cardList = [
-                /*{
-                    type: 'usd+', // usd+, pool, ets
-                    name: 'UsdPlus', // real component name
-                    data: {
-                        "cardBgColor": "radial-gradient(circle at 100% 0%, #001845 0%, #001845 27%, #0C255B 52%, #062E80 100%)"
-                    },
-                    chain: networkId,
-                    hasUsdPlus: true,
-                    overcapEnabled: false,
-                    hasCap: false,
-                    tvl: this.totalUsdPlusTvl,
-                    weekApy: (this.avgUsdPlusApy && this.avgUsdPlusApy.value) ? this.avgUsdPlusApy.value : 0,
-                }*/
-            ];
+            let cardList = [];
 
             this.etsList.forEach(ets => {
                 cardList.push(
@@ -147,47 +139,12 @@ export default {
     },
 
     watch: {
-        currentTotalData: function (newVal, oldVal) {
-            this.getUsdPlusTotalTvl();
-        },
-
-        appApiUrl: function (newVal, oldVal) {
-            this.getUsdPlusAvgWeekApy();
-        },
     },
 
     created() {
-        this.getUsdPlusAvgWeekApy();
-        this.getUsdPlusTotalTvl();
     },
 
     methods: {
-
-        async getUsdPlusAvgWeekApy() {
-            let fetchOptions = {
-                headers: {
-                    "Access-Control-Allow-Origin": this.appApiUrl
-                }
-            };
-
-            await fetch(this.appApiUrl + '/widget/avg-apy-info/week', fetchOptions)
-                .then(value => value.json())
-                .then(value => {
-                    this.avgUsdPlusApy = value;
-                    this.avgUsdPlusApy.date = moment(this.avgUsdPlusApy.date).format("DD MMM. ‘YY");
-                }).catch(reason => {
-                    console.log('Error get data: ' + reason);
-                })
-        },
-
-        getUsdPlusTotalTvl() {
-            let sum = 0;
-            this.currentTotalData.forEach(dataItem => {
-                sum += dataItem.value
-            });
-
-            this.totalUsdPlusTvl = sum;
-        },
     }
 }
 </script>

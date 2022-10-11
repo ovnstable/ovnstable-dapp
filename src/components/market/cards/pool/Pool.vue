@@ -1,15 +1,16 @@
 <template>
-    <v-row class="card-container" @click="openStrategyCard">
+    <v-row class="card-container" @click="openPoolCard">
         <v-col cols="12" align-self="start">
             <v-row class="d-flex flex-row align-center header-row" justify="center"
                    :style="{'--card-background': cardData.data.cardBgColor}">
                 <span class="currency ml-5">
-                    <v-img :src="require('@/assets/currencies/market/ets_' + cardData.data.name + '.svg')"/>
+                    <!-- Make coins svg -->
+                    <v-img :src="require('@/assets/currencies/' + cardData.data.tokenName.toLowerCase() + '.png')"/>
                 </span>
                 <v-spacer></v-spacer>
                 <v-row class="d-flex flex-column align-start mr-3">
                     <v-row class="d-flex mb-1">
-                        <label class="card-title">ETS {{ cardData.data.nameUp }}</label>
+                        <label class="card-title">{{ cardData.data.poolName }} pool</label>
                     </v-row>
                     <v-row class="d-flex">
                         <label class="percentage">
@@ -26,50 +27,21 @@
 
             <v-container class="mt-4">
                 <v-row align="center" justify="center" class="ma-0">
-                    <label class="full-status-error-label" v-if="cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply" :style="{color: cardData.data.mainColor}">
-                        ETS capacity is full. Check status later
-                    </label>
-                    <label class="full-status-error-label" v-else>&nbsp;</label>
+                    <label class="full-status-error-label">&nbsp;</label>
                 </v-row>
 
-                <template v-if="cardData.overcapEnabled">
-                    <v-row class="ma-0 mt-3">
-                        <label class="progress-label-header">Current tvl</label>
-                        <v-spacer></v-spacer>
-                        <label class="progress-label-header">Max tvl</label>
-                    </v-row>
-                    <v-row class="ma-0">
-                        <label class="progress-label-value mt-1" :style="(cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? {color: cardData.data.mainColor} : {}">${{ $utils.formatMoneyComma(totalSupply[cardData.data.name], 2) }}</label>
-                        <v-spacer></v-spacer>
-                        <label class="progress-label-value mt-1">${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
-                    </v-row>
-                    <v-row class="ma-0 mt-2">
-                        <v-progress-linear
-                            rounded
-                            height="7"
-                            class="progress-info"
-                            background-opacity="0"
-                            :value="(totalSupply[cardData.data.name] / cardData.data.maxSupply) * 100"
-                            :color="cardData.data.mainColor"
-                        ></v-progress-linear>
-                    </v-row>
-                </template>
-                <template v-else>
-                    <v-row class="d-flex justify-space-between ma-0 mt-3">
-                        <label class="progress-label-value">CURRENT TVL</label>
-                        <label class="progress-label-value mb-5">${{
-                                $utils.formatMoneyComma(cardData.tvl, 2)
-                            }}</label>
-                    </v-row>
-                    <v-divider class="card-divider"></v-divider>
-                </template>
+                <v-row class="d-flex justify-space-between ma-0 mt-3">
+                    <label class="progress-label-value">CURRENT TVL</label>
+                    <label class="progress-label-value mb-5">${{
+                            $utils.formatMoneyComma(cardData.tvl, 2)
+                        }}</label>
+                </v-row>
+                <v-divider class="card-divider"></v-divider>
             </v-container>
-        </v-col>
 
-        <v-col cols="12" align-self="end">
             <v-container>
-                <v-row class="ma-0 mt-n6">
-                    <label class="card-info">{{ cardData.data.cardTitle }}</label>
+                <v-row class="ma-0 mt-2">
+                    <label class="card-info">{{ cardData.data.title }}</label>
                 </v-row>
 
                 <v-row class="mt-5">
@@ -95,51 +67,13 @@
                             <label class="platform-name mb-2 mt-1">{{ cardData.data.dex }}</label>
                         </div>
                     </v-col>
-                    <v-col cols="12">
-                        <div class="box">
-                            <label class="box-name mt-2">Token Pair</label>
-                            <div class="icon">
-                                <v-img :src="require('@/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg')"
-                                       class="mt-1"
-                                       alt="token pair icons"/>
-                            </div>
-                            <label class="token-pair-name mb-2 mt-1">{{ cardData.data.poolName }}</label>
-                        </div>
-                    </v-col>
-                </v-row>
-
-                <v-row class="d-flex justify-space-between ma-0 mt-8">
-                    <template v-if="accountEtsBalance">
-                        <label class="your-deposit">Your deposit in ETS</label>
-                        <label class="your-deposit">{{
-                                accountEtsBalance ? ($utils.formatMoneyComma(accountEtsBalance, 2) + ' USD+') : '—'
-                            }}</label>
-                    </template>
-                    <template v-else>
-                        <v-spacer></v-spacer>
-                        <label class="your-deposit-disabled">You don’t have deposit in this ETS</label>
-                        <v-spacer></v-spacer>
-                    </template>
-                </v-row>
-
-                <v-row class="d-flex justify-space-between ma-0 mt-5">
-                    <v-col v-if="!(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)" :class="accountEtsBalance ? 'mr-1' : ''">
-                        <v-row>
-                            <v-btn class="button btn-filled" @click.stop="mintAction">Mint ETS</v-btn>
-                        </v-row>
-                    </v-col>
-                    <v-col v-if="accountEtsBalance" class="ml-1">
-                        <v-row>
-                            <v-btn class="button btn-outlined" @click.stop="redeemAction" outlined>Redeem ETS</v-btn>
-                        </v-row>
-                    </v-col>
                 </v-row>
             </v-container>
         </v-col>
 
         <v-col cols="12" align-self="end">
             <v-row class="footer-row align-center justify-center">
-                <label class="footer-link">Learn more about ETS {{ cardData.data.nameUp }}</label>
+                <label class="footer-link">View pool on {{ cardData.data.dex }}</label>
                 <img class="open-icon ml-1" src="@/assets/icon/open-in-new.svg">
             </v-row>
         </v-col>
@@ -166,13 +100,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters("marketData", ["etsStrategyData"]),
-        ...mapGetters("supplyData", ["totalSupply"]),
-        ...mapGetters('accountData', ['etsBalance']),
-
-        accountEtsBalance: function () {
-            return this.etsBalance[this.cardData.data.name];
-        },
+        // ...mapGetters("marketData", ["etsStrategyData"]),
     },
 
     data: () => ({}),
@@ -183,22 +111,10 @@ export default {
     },
 
     methods: {
-        ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
+        // ...mapActions('investModal', ['showInvestModal']),
 
-
-        mintAction() {
-            this.showMintView();
-            this.showInvestModal(this.cardData.data);
-        },
-
-        redeemAction() {
-            this.showRedeemView();
-            this.showInvestModal(this.cardData.data);
-        },
-
-        openStrategyCard() {
-            this.$router.push("/ets/" + this.cardData.data.name);
-            window.scrollTo({top: 0, behavior: "smooth"});
+        openPoolCard() {
+            // window.open(url, '_blank').focus();
         }
     }
 };

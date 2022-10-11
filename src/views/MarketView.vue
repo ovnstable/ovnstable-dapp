@@ -11,9 +11,8 @@
                     mdi-star-circle
                 </v-icon>
             </label>
-            <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4"
-                   v-bind:class="activeTabPools" disabled>USD+ pools</label>
-            <label @click="tab=4" class="tab-btn ml-4" v-bind:class="activeTabHedged">ETS</label>
+            <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabHedged">ETS</label>
+            <label @click="tab=3" class="tab-btn mx-4" v-bind:class="activeTabPools">USD+ pools</label>
 
             <v-spacer></v-spacer>
 
@@ -35,10 +34,27 @@
                 </v-col>
             </v-row>
 
-            <v-row class="d-flex" justify="start" v-if="tab === 4">
+            <!-- TODO: make ets list -->
+            <!-- TODO: make ets prototype list -->
+            <v-row class="d-flex" justify="start" v-if="tab === 2">
                 <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
                        v-for="component in sortedCardList"
                        v-if="component.type === 'ets'">
+                    <v-row class="fill-height">
+                        <component
+                            class="ma-3"
+                            :card-data="component"
+                            v-bind:is="component.name"
+                        ></component>
+                    </v-row>
+                </v-col>
+            </v-row>
+
+            <!-- TODO: make pools list -->
+            <v-row class="d-flex" justify="start" v-if="tab === 3">
+                <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
+                       v-for="component in sortedCardList"
+                       v-if="component.type === 'pool'">
                     <v-row class="fill-height">
                         <component
                             class="ma-3"
@@ -59,12 +75,14 @@
 import {mapGetters} from "vuex";
 import moment from "moment";
 import Ets from "@/components/market/cards/ets/Ets";
+import Pool from "@/components/market/cards/pool/Pool";
 
 export default {
     name: "MarketView",
 
     components: {
         Ets,
+        Pool
     },
 
     data: () => ({
@@ -85,17 +103,17 @@ export default {
             }
         },
 
+        activeTabHedged: function () {
+            return {
+                'tab-button': this.tab === 2,
+                'tab-button-in-active': this.tab !== 2,
+            }
+        },
+
         activeTabPools: function () {
             return {
                 'tab-button': this.tab === 3,
                 'tab-button-in-active': this.tab !== 3,
-            }
-        },
-
-        activeTabHedged: function () {
-            return {
-                'tab-button': this.tab === 4,
-                'tab-button-in-active': this.tab !== 4,
             }
         },
 
@@ -120,6 +138,8 @@ export default {
                     },
                 );
             });
+
+            /* TODO: get pools list */
 
             cardList.sort(function (a, b) {
                 if (a.chain === networkId && b.chain !== networkId) return -1;

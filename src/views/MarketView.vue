@@ -9,7 +9,7 @@
                 <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
                     <label @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabFeatured">
                         Featured
-                        <v-icon size="12" :color="this.tab === 1 ? '#1C95E7' : '#333333'" class="mb-1">
+                        <v-icon size="12" :style="{'color' : (this.tab === 1 ? '#1C95E7' : '#333333') + ' !important'}"  class="mb-1">
                             mdi-star-circle
                         </v-icon>
                     </label>
@@ -29,10 +29,11 @@
             <v-row class="d-flex" justify="start">
                 <component
                     class="ma-3"
-                    v-for="component in (tab === 1 ? sortedCardList.slice(0, 3) : sortedCardList)"
-                    :ets-data="component.data"
-                    v-bind:is="component.name"
-                    v-if="(tab === 1) || (tab === 2 && component.type === 'usd+') || (tab === 3 && component.type === 'pool') || (tab === 4 && component.type === 'ets')"
+                    v-for="card in (tab === 1 ? sortedCardList.slice(0, 3) : sortedCardList)"
+                    v-bind:key="`${card.name}_${card.weekApy}`"
+                    :ets-data="card.data"
+                    v-bind:is="card.name"
+                    v-if="(tab === 1) || (tab === 2 && card.type === 'usd+') || (tab === 3 && card.type === 'pool') || (tab === 4 && card.type === 'ets')"
                 ></component>
             </v-row>
         </div>
@@ -59,6 +60,7 @@ export default {
     data: () => ({
         tab: 1,
         avgApy: null,
+        sortedCardList: [],
     }),
 
     computed: {
@@ -94,9 +96,52 @@ export default {
                 'tab-button-in-active': this.tab !== 4,
             }
         },
+    },
 
-        sortedCardList: function () {
+    watch: {
+        appApiUrl: function (newVal, oldVal) {
+            this.getUsdPlusAvgWeekApy();
+            this.getSortedCardList();
+        },
 
+        etsStrategyData: function (newVal, oldVal) {
+            this.getSortedCardList();
+        },
+
+        totalSupply: function (newVal, oldVal) {
+            this.getSortedCardList();
+        },
+
+        etsList: function (newVal, oldVal) {
+            this.getSortedCardList();
+        },
+    },
+
+    created() {
+        this.getUsdPlusAvgWeekApy();
+        this.getSortedCardList();
+    },
+
+    methods: {
+
+        async getUsdPlusAvgWeekApy() {
+            let fetchOptions = {
+                headers: {
+                    "Access-Control-Allow-Origin": this.appApiUrl
+                }
+            };
+
+            await fetch(this.appApiUrl + '/widget/avg-apy-info/week', fetchOptions)
+                .then(value => value.json())
+                .then(value => {
+                    this.avgApy = value;
+                    this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+                }).catch(reason => {
+                    console.log('Error get data: ' + reason);
+                })
+        },
+
+        async getSortedCardList() {
             let networkId = this.networkId;
 
             let cardList = [
@@ -138,38 +183,8 @@ export default {
                 return (a.weekApy > b.weekApy) ? -1 : (a.weekApy < b.weekApy ? 1 : 0);
             });
 
-            return cardList;
-        },
-    },
-
-    watch: {
-        appApiUrl: function (newVal, oldVal) {
-            this.getAvgWeekApy();
-        },
-    },
-
-    created() {
-        this.getAvgWeekApy();
-    },
-
-    methods: {
-
-        async getUsdPlusAvgWeekApy() {
-            let fetchOptions = {
-                headers: {
-                    "Access-Control-Allow-Origin": this.appApiUrl
-                }
-            };
-
-            await fetch(this.appApiUrl + '/widget/avg-apy-info/week', fetchOptions)
-                .then(value => value.json())
-                .then(value => {
-                    this.avgApy = value;
-                    this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
-                }).catch(reason => {
-                    console.log('Error get data: ' + reason);
-                })
-        },
+            this.sortedCardList = cardList;
+        }
     }
 }
 </script>

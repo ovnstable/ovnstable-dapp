@@ -38,10 +38,13 @@ const actions = {
     async refreshMarket({commit, dispatch, getters, rootState}) {
         console.debug('MarketData: refreshMarket');
 
-        rootState.etsAction.etsList.forEach(ets => {
+        for (let ets of rootState.etsAction.etsList) {
             dispatch('refreshStrategyData', {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain});
+        }
+
+        for (let ets of rootState.etsAction.etsList) {
             dispatch('refreshClientData', {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain});
-        });
+        }
 
         dispatch('refreshUsdPlusPayoutsData', "polygon");
         dispatch('refreshUsdPlusPayoutsData', "bsc");
@@ -96,7 +99,6 @@ const actions = {
             .then(value => value.json())
             .then(value => {
                 avgApyStrategyWeek = value;
-
                 avgApyStrategyWeek.date = moment(avgApyStrategyWeek.date).format("DD MMM. ‘YY");
             }).catch(reason => {
                 console.log('Error get data: ' + reason);

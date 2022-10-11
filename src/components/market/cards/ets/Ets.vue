@@ -23,15 +23,33 @@
             <v-row class="card-row info-row mt-15" justify="start" align="center">
                 <label class="card-info mt-1">APY</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 1)) + '%' : '—' }}</label>
-                <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
+                <template v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy">
+                    <label class="card-info-value">{{ $utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 1) }}%</label>
+                    <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
+                </template>
+                <v-progress-circular
+                    v-else
+                    width="1.5"
+                    size="16"
+                    color="#9DA4B0"
+                    indeterminate
+                ></v-progress-circular>
             </v-row>
 
             <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">Diff. to USD+</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].diffApy) ? ((etsStrategyData[etsData.name].diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(etsStrategyData[etsData.name].diffApy, 1)) + '%' : '—' }}</label>
-                <Tooltip text="APY difference compared to the base APY USD+ (based on 7-day average)"/>
+                <template v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].diffApy">
+                    <label class="card-info-value">{{ (etsStrategyData[etsData.name].diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(etsStrategyData[etsData.name].diffApy, 1) }}%</label>
+                    <Tooltip text="APY difference compared to the base APY USD+ (based on 7-day average)"/>
+                </template>
+                <v-progress-circular
+                    v-else
+                    width="1.5"
+                    size="16"
+                    color="#9DA4B0"
+                    indeterminate
+                ></v-progress-circular>
             </v-row>
 
             <v-row class="card-row info-row mt-6" justify="start" align="center">
@@ -44,10 +62,19 @@
             <v-row class="card-row info-row mt-6" justify="start" align="center">
                 <label class="card-info mt-1">TVL</label>
                 <v-spacer></v-spacer>
-                <label class="card-info-value" :class="(etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'label-error' : ''">
-                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
-                </label>
-                <Tooltip text="Past 2 hours"/>
+                <template v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl">
+                    <label class="card-info-value" :class="(etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'label-error' : ''">
+                        ${{ $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2) }}
+                    </label>
+                    <Tooltip text="Past 2 hours"/>
+                </template>
+                <v-progress-circular
+                    v-else
+                    width="1.5"
+                    size="16"
+                    color="#9DA4B0"
+                    indeterminate
+                ></v-progress-circular>
             </v-row>
 
             <v-row v-if="etsData.maxSupply" class="card-row card-banner-status-container mt-12" justify="start" align="center">

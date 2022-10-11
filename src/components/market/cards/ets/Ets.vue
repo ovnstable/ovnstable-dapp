@@ -42,9 +42,9 @@
                         <label class="progress-label-header">Max tvl</label>
                     </v-row>
                     <v-row class="ma-0">
-                        <label class="progress-label-value" :style="(cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? {color: cardData.data.mainColor} : {}">${{ $utils.formatMoneyComma(totalSupply[cardData.data.name], 2) }}</label>
+                        <label class="progress-label-value mt-1" :style="(cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? {color: cardData.data.mainColor} : {}">${{ $utils.formatMoneyComma(totalSupply[cardData.data.name], 2) }}</label>
                         <v-spacer></v-spacer>
-                        <label class="progress-label-value">${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
+                        <label class="progress-label-value mt-1">${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
                     </v-row>
                     <v-row class="ma-0 mt-2">
                         <v-progress-linear

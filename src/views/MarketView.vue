@@ -35,6 +35,7 @@
 
             <template v-if="tab === 2">
                 <EtsListHeader/>
+
                 <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => !value.isPrototype)" v-if="component.type === 'ets'"
                              :featured="i < 3"
                              :card-data="component"/>
@@ -45,6 +46,7 @@
                 <v-divider class="prototypes-list-divider"></v-divider>
 
                 <EtsListHeader class="mt-3"/>
+
                 <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => value.isPrototype)" v-if="component.type === 'ets'"
                              :card-data="component"/>
             </template>
@@ -137,6 +139,7 @@ export default {
                         hasCap: ets.maxSupply ? (this.totalSupply[ets.name] < ets.maxSupply) : true,
                         tvl: this.totalSupply[ets.name],
                         weekApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
+                        cardOpened: false,
                     },
                 );
             });
@@ -158,6 +161,8 @@ export default {
 
                 return (a.weekApy > b.weekApy) ? -1 : (a.weekApy < b.weekApy ? 1 : 0);
             });
+
+            cardList[0].cardOpened = true;
 
             return cardList;
         },

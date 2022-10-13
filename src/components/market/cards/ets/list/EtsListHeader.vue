@@ -5,13 +5,13 @@
                 <label class="list-header-label">Chain / Platform</label>
             </v-row>
         </v-col>
-        <v-col :cols="$wu.isFull() ? 2 : ($wu.isMobile() ? 8 : 3)">
+        <v-col :cols="$wu.isFull() ? 2 : ($wu.isMobile() ? 7 : 3)">
             <v-row :justify="$wu.isMobile() ? 'start' : 'center'" align="center">
                 <label class="list-header-label">ETS name</label>
             </v-row>
         </v-col>
-        <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 4 : 1)">
-            <v-row :justify="$wu.isMobile() ? 'end' : 'center'" align="center">
+        <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)">
+            <v-row justify="center" align="center">
                 <label class="list-header-label">APY</label>
             </v-row>
         </v-col>
@@ -34,6 +34,8 @@
             <v-row justify="end" align="center">
                 <label class="list-header-label">About ETS</label>
             </v-row>
+        </v-col>
+        <v-col v-if="$wu.isMobile()">
         </v-col>
 
         <resize-observer @notify="$forceUpdate()"/>

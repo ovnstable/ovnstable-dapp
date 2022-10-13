@@ -1,5 +1,5 @@
 <template>
-    <v-row class="list-card-container ma-0" @click="openStrategyCard">
+    <v-row class="list-card-container ma-0" @click="$wu.isMobile() ? switchCard() : openStrategyCard()">
         <v-col v-if="!$wu.isMobile()" class="my-1">
             <v-row class="ma-0" justify="start" align="center">
                 <div class="icon mr-3">
@@ -12,7 +12,7 @@
                 </div>
             </v-row>
         </v-col>
-        <v-col :cols="$wu.isFull() ? 2 : ($wu.isMobile() ? 8 : 3)" class="my-1">
+        <v-col :cols="$wu.isFull() ? 2 : ($wu.isMobile() ? 7 : 3)" class="my-1">
             <v-row class="ma-0" justify="start" align="center">
                 <v-badge icon="mdi-star-circle"
                          v-if="featured"
@@ -32,7 +32,7 @@
                 </label>
             </v-row>
         </v-col>
-        <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 4 : 1)" class="my-1">
+        <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)" class="my-1">
             <v-row class="ma-0" justify="end" align="center">
                 <label class="card-label">{{ cardData.weekApy === 0 ? '' : ($utils.formatMoneyComma(cardData.weekApy, 0) + '%') }}</label>
             </v-row>
@@ -49,7 +49,8 @@
         <v-col v-if="!$wu.isMobile()" class="my-1">
             <v-row class="ma-0" justify="center" align="center">
                 <div class="icon-token-pair">
-                    <v-img :src="require('@/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg')" />
+                    <v-img :src="require('@/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg')"
+                           :title="cardData.data.poolName"/>
                 </div>
             </v-row>
         </v-col>
@@ -72,6 +73,118 @@
                        @click.stop="redeemAction" outlined>
                     REDEEM
                 </v-btn>
+            </v-row>
+        </v-col>
+        <v-col v-if="$wu.isMobile()" class="my-1">
+            <v-row class="ma-0" justify="end" align="center">
+                <v-icon color="var(--secondary-gray-text)">
+                    {{ cardOpened ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                </v-icon>
+            </v-row>
+        </v-col>
+
+        <v-col v-if="$wu.isMobile() && cardOpened" cols="12">
+            <v-divider class="card-divider mt-n3"></v-divider>
+
+            <v-row class="ma-0 mt-3" align="center">
+                <v-col>
+                    <v-row justify="start" align="center">
+                        <label class="list-header-label">Chain</label>
+                    </v-row>
+                </v-col>
+                <v-col>
+                    <v-row justify="center" align="center">
+                        <label class="list-header-label">Platform</label>
+                    </v-row>
+                </v-col>
+                <v-col>
+                    <v-row justify="end" align="center">
+                        <label class="list-header-label">Token pair</label>
+                    </v-row>
+                </v-col>
+            </v-row>
+            <v-row class="ma-0 mt-1" align="center">
+                <v-col>
+                    <v-row justify="start" align="center">
+                        <div class="icon mr-3">
+                            <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
+                                   :title="cardData.data.chainName.toUpperCase()"/>
+                        </div>
+                    </v-row>
+                </v-col>
+                <v-col>
+                    <v-row justify="center" align="center">
+                        <div class="icon mr-2">
+                            <v-img :src="require('@/assets/cards/platform/' + cardData.data.dex + '.svg')"
+                                   :title="cardData.data.dex"/>
+                        </div>
+                    </v-row>
+                </v-col>
+                <v-col>
+                    <v-row justify="end" align="center">
+                        <div class="icon-token-pair">
+                            <v-img :src="require('@/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg')"
+                                   :title="cardData.data.poolName"/>
+                        </div>
+                    </v-row>
+                </v-col>
+            </v-row>
+
+            <v-divider class="card-divider mt-3"></v-divider>
+
+            <v-row class="ma-0 mt-3" align="center">
+                <v-col>
+                    <v-row justify="start" align="center">
+                        <label class="list-header-label">Capacity</label>
+                    </v-row>
+                </v-col>
+                <v-col>
+                    <v-row justify="end" align="center">
+                        <label class="list-header-label">My investment</label>
+                    </v-row>
+                </v-col>
+            </v-row>
+
+            <v-row class="ma-0 mt-1" align="center">
+                <v-col>
+                    <v-row justify="start" align="center">
+                        <label class="card-label"
+                               :class="(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
+                            ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
+                        </label>
+                        <label class="card-label list-header-label-gray" v-if="cardData.overcapEnabled">&nbsp;/&nbsp;${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
+                        <v-spacer></v-spacer>
+                        <label class="card-label" :class="accountEtsBalance ? '' : 'list-header-label-gray'">{{ accountEtsBalance ? ('$' + $utils.formatMoneyComma(accountEtsBalance, 2)) : '—' }}</label>
+                    </v-row>
+                </v-col>
+            </v-row>
+
+            <v-row class="ma-0 mt-3" align="center">
+                <v-col>
+                    <v-row justify="start" align="center">
+                        <v-btn x-small
+                               v-if="!cardData.isPrototype && !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)"
+                               class="button btn-filled"
+                               @click.stop="mintAction" outlined>
+                            MINT/REDEEM
+                        </v-btn>
+                        <v-btn x-small
+                               v-else
+                               class="button btn-filled"
+                               @click.stop="redeemAction" outlined>
+                            REDEEM
+                        </v-btn>
+                    </v-row>
+                </v-col>
+                <v-col>
+                    <v-row justify="end" align="center">
+                        <v-btn x-small
+                               class="button btn-outlined"
+                               @click.stop="openStrategyCard" outlined>
+                            ABOUT
+                        </v-btn>
+                    </v-row>
+                </v-col>
             </v-row>
         </v-col>
 
@@ -112,11 +225,14 @@ export default {
         },
     },
 
-    data: () => ({}),
+    data: () => ({
+        cardOpened: false,
+    }),
 
     watch: {},
 
     created() {
+        this.cardOpened = this.cardData.cardOpened;
     },
 
     methods: {
@@ -136,7 +252,11 @@ export default {
         openStrategyCard() {
             this.$router.push("/ets/" + this.cardData.data.name);
             window.scrollTo({top: 0, behavior: "smooth"});
-        }
+        },
+
+        switchCard() {
+            this.cardOpened = !this.cardOpened;
+        },
     }
 };
 </script>
@@ -156,6 +276,7 @@ export default {
     }
 
     .button {
+        width: 95% !important;
         font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
@@ -169,6 +290,13 @@ export default {
         font-weight: 400;
         font-size: 14px;
         line-height: 22px;
+    }
+
+    .list-header-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
     }
 }
 
@@ -199,6 +327,13 @@ export default {
         font-size: 16px;
         line-height: 24px;
     }
+
+    .list-header-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
 }
 
 /* full */
@@ -227,6 +362,13 @@ export default {
         font-weight: 400;
         font-size: 16px;
         line-height: 24px;
+    }
+
+    .list-header-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
     }
 }
 
@@ -285,5 +427,15 @@ export default {
 
 .featured-badge >>> i {
     color: #FE7F2D !important;
+}
+
+.card-divider {
+    border-color: var(--fourth-gray-text) !important;
+}
+
+.list-header-label {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: var(--third-gray-text);
 }
 </style>

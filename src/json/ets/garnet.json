@@ -1,6 +1,7 @@
 {
   "name": "garnet",
   "nameUp": "GARNET",
+  "prototype": false,
 
   "tokenContract": "etsGarnetToken",
   "exchangeContract": "etsExchangerGarnet",

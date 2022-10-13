@@ -1,6 +1,7 @@
 {
   "name": "wmatic_usd_plus",
   "nameUp": "WMATIC/USD+",
+  "prototype": false,
 
   "tokenContract": "usdPlusWmatic",
   "exchangeContract": "exchangerUsdPlusWmatic",

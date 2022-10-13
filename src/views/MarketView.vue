@@ -20,10 +20,9 @@
         </v-row>
 
         <div class="mt-7 cards-list-container">
-
             <v-row class="d-flex" justify="start" v-if="tab === 1">
                 <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
-                       v-for="component in sortedCardList.slice(0, 3)">
+                       v-for="component in sortedCardList.filter(value => !value.isPrototype).slice(0, 3)">
                     <v-row class="fill-height">
                         <component
                             class="ma-3"
@@ -34,23 +33,24 @@
                 </v-col>
             </v-row>
 
-            <!-- TODO: make ets list -->
-            <!-- TODO: make ets prototype list -->
-            <v-row class="d-flex" justify="start" v-if="tab === 2">
-                <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
-                       v-for="component in sortedCardList"
-                       v-if="component.type === 'ets'">
-                    <v-row class="fill-height">
-                        <component
-                            class="ma-3"
-                            :card-data="component"
-                            v-bind:is="component.name"
-                        ></component>
-                    </v-row>
-                </v-col>
-            </v-row>
+            <template v-if="tab === 2">
+                <EtsListHeader/>
+                <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => !value.isPrototype)" v-if="component.type === 'ets'"
+                             :featured="i < 3"
+                             :card-data="component"/>
+
+                <v-row class="ma-0 mb-1 mt-10">
+                    <label class="prototypes-label">Prototypes</label>
+                </v-row>
+                <v-divider class="prototypes-list-divider"></v-divider>
+
+                <EtsListHeader class="mt-3"/>
+                <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => value.isPrototype)" v-if="component.type === 'ets'"
+                             :card-data="component"/>
+            </template>
 
             <!-- TODO: make pools list -->
+
             <v-row class="d-flex" justify="start" v-if="tab === 3">
                 <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
                        v-for="component in sortedCardList"
@@ -73,16 +73,17 @@
 <script>
 
 import {mapGetters} from "vuex";
-import moment from "moment";
 import Ets from "@/components/market/cards/ets/Ets";
-import Pool from "@/components/market/cards/pool/Pool";
+import EtsListCard from "@/components/market/cards/ets/list/EtsListCard";
+import EtsListHeader from "@/components/market/cards/ets/list/EtsListHeader";
 
 export default {
     name: "MarketView",
 
     components: {
+        EtsListHeader,
+        EtsListCard,
         Ets,
-        Pool
     },
 
     data: () => ({
@@ -128,6 +129,7 @@ export default {
                     {
                         type: 'ets',
                         name: 'Ets',
+                        isPrototype: ets.prototype,
                         data: ets,
                         chain: ets.chain,
                         hasUsdPlus: ets.hasUsdPlus,
@@ -142,6 +144,9 @@ export default {
             /* TODO: get pools list */
 
             cardList.sort(function (a, b) {
+                if (!a.isPrototype && b.isPrototype) return -1;
+                if (a.isPrototype && !b.isPrototype) return 1;
+
                 if (a.chain === networkId && b.chain !== networkId) return -1;
                 if (a.chain !== networkId && b.chain === networkId) return 1;
 
@@ -158,14 +163,12 @@ export default {
         },
     },
 
-    watch: {
-    },
+    watch: {},
 
     created() {
     },
 
-    methods: {
-    }
+    methods: {}
 }
 </script>
 
@@ -186,6 +189,14 @@ export default {
         font-size: 32px;
         line-height: 40px;
     }
+
+    .prototypes-label {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.04em;
+    }
 }
 
 /* tablet */
@@ -202,6 +213,14 @@ export default {
         font-weight: 300;
         font-size: 54px;
         line-height: 60px;
+    }
+
+    .prototypes-label {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.04em;
     }
 }
 
@@ -221,12 +240,20 @@ export default {
         font-size: 54px;
         line-height: 60px;
     }
+
+    .prototypes-label {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 22px;
+        letter-spacing: 0.04em;
+    }
 }
 
 .tab-button {
-  border-bottom: 2px solid var(--links-blue) !important;
-  color: var(--links-blue) !important;
-  cursor: pointer;
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
+    cursor: pointer;
 }
 
 .tab-button-in-active {
@@ -234,16 +261,16 @@ export default {
 }
 
 .mdi-star-circle {
-  color: var(--links-blue) !important;
-  cursor: pointer !important;
+    color: var(--links-blue) !important;
+    cursor: pointer !important;
 }
 
 .tab-btn {
-  font-family: 'Roboto', sans-serif;
-  font-feature-settings: 'liga' off;
-  color: var(--secondary-gray-text);
-  margin-bottom: -2px;
-  cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: var(--secondary-gray-text);
+    margin-bottom: -2px;
+    cursor: pointer;
 }
 
 .tab-btn-disabled {
@@ -251,7 +278,7 @@ export default {
 }
 
 .toggle-row {
-  border-bottom: 2px solid var(--main-border);
+    border-bottom: 2px solid var(--main-border);
 }
 
 
@@ -265,6 +292,17 @@ export default {
 }
 
 .title-label {
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: var(--main-gray-text);
+}
+
+.prototypes-list-divider {
+    border-color: var(--fourth-gray-text) !important;
+}
+
+.prototypes-label {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;

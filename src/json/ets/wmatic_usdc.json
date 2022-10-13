@@ -1,6 +1,7 @@
 {
   "name": "wmatic_usdc",
   "nameUp": "WMATIC/USDC",
+  "prototype": true,
 
   "tokenContract": "wmaticUsdc",
   "exchangeContract": "exchangerWmaticUsdc",

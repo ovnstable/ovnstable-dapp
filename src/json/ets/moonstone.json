@@ -1,6 +1,7 @@
 {
   "name": "moonstone",
   "nameUp": "MOONSTONE",
+  "prototype": true,
 
   "tokenContract": "etsMoonstoneToken",
   "exchangeContract": "etsExchangerMoonstone",

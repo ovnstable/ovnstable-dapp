@@ -280,6 +280,8 @@ export default {
 
             if (!this.account) {
                 return 'Connect to a wallet';
+            } else if (this.etsData.prototype) {
+                return "ETS is in prototype"
             } else if (this.isBuy) {
                 if (this.usdPlusApproved) {
                     this.step = 2;
@@ -298,7 +300,7 @@ export default {
         },
 
         isBuy: function () {
-            return this.account && this.sum > 0 && this.numberRule && (!this.etsData.maxSupply ||  this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
+            return this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && (!this.etsData.maxSupply ||  this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
         },
 
         numberRule: function () {

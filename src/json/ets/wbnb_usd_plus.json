@@ -1,6 +1,7 @@
 {
   "name": "wbnb_usd_plus",
   "nameUp": "WBNB/USD+",
+  "prototype": false,
 
   "tokenContract": "usdPlusWbnb",
   "exchangeContract": "exchangerUsdPlusWbnb",

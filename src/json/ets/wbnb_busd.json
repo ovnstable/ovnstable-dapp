@@ -1,6 +1,7 @@
 {
   "name": "wbnb_busd",
   "nameUp": "WBNB/BUSD",
+  "prototype": false,
 
   "tokenContract": "busdWbnb",
   "exchangeContract": "exchangerBusdWbnb",

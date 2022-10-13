@@ -53,6 +53,7 @@ export default {
         await this.initTheme();
 
         await this.initEtsList();
+        await this.getPoolList();
 
         await this.initWeb3();
         await this.dappInitWalletConnect();
@@ -77,6 +78,7 @@ export default {
         ...mapActions('walletAction', ['dappInitWalletConnect']),
         ...mapActions('referral', ['initReferralCode']),
         ...mapActions('etsAction', ['initEtsList']),
+        ...mapActions('poolAction', ['getPoolList']),
         ...mapActions('theme', ['initTheme']),
     }
 }

@@ -51,21 +51,12 @@
                              :card-data="component"/>
             </template>
 
-            <!-- TODO: make pools list -->
+            <template v-if="tab === 3">
+                <PoolListHeader/>
 
-            <v-row class="d-flex" justify="start" v-if="tab === 3">
-                <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
-                       v-for="component in sortedCardList"
-                       v-if="component.type === 'pool'">
-                    <v-row class="fill-height">
-                        <component
-                            class="ma-3"
-                            :card-data="component"
-                            v-bind:is="component.name"
-                        ></component>
-                    </v-row>
-                </v-col>
-            </v-row>
+                <PoolListCard class="mt-2" v-for="(component, i) in sortedPoolList" v-if="component.type === 'pool'"
+                             :card-data="component"/>
+            </template>
         </div>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -78,11 +69,15 @@ import {mapGetters} from "vuex";
 import Ets from "@/components/market/cards/ets/Ets";
 import EtsListCard from "@/components/market/cards/ets/list/EtsListCard";
 import EtsListHeader from "@/components/market/cards/ets/list/EtsListHeader";
+import PoolListHeader from "@/components/market/cards/pool/list/PoolListHeader";
+import PoolListCard from "@/components/market/cards/pool/list/PoolListCard";
 
 export default {
     name: "MarketView",
 
     components: {
+        PoolListCard,
+        PoolListHeader,
         EtsListHeader,
         EtsListCard,
         Ets,
@@ -98,6 +93,7 @@ export default {
         ...mapGetters("statsData", ['currentTotalData']),
         ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters('etsAction', ['etsList']),
+        ...mapGetters('poolAction', ['poolList']),
 
         activeTabFeatured: function () {
             return {
@@ -144,8 +140,6 @@ export default {
                 );
             });
 
-            /* TODO: get pools list */
-
             cardList.sort(function (a, b) {
                 if (!a.isPrototype && b.isPrototype) return -1;
                 if (a.isPrototype && !b.isPrototype) return 1;
@@ -165,6 +159,41 @@ export default {
             cardList[0].cardOpened = true;
 
             return cardList;
+        },
+
+        sortedPoolList: function () {
+
+            let networkId = this.networkId;
+
+            let poolList = [];
+
+            this.poolList.forEach(pool => {
+                poolList.push(
+                    {
+                        type: 'pool',
+                        name: 'Pool',
+                        data: pool,
+                        chain: pool.chain,
+                        hasUsdPlus: true,
+                        overcapEnabled: false,
+                        hasCap: true,
+                        tvl: pool.tvl,
+                        weekApy: 0,
+                        cardOpened: false,
+                    },
+                );
+            });
+
+            poolList.sort(function (a, b) {
+                if (a.chain === networkId && b.chain !== networkId) return -1;
+                if (a.chain !== networkId && b.chain === networkId) return 1;
+
+                return (a.tvl > b.tvl) ? -1 : (a.tvl < b.tvl ? 1 : 0);
+            });
+
+            poolList[0].cardOpened = true;
+
+            return poolList;
         },
     },
 

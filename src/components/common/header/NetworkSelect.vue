@@ -62,7 +62,7 @@
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item">
                     Avalanche
-                    <v-icon class="ml-n1 mb-5" small color="var(--secondary-gray-text)">mdi-alpha</v-icon>
+                    <v-icon class="ml-n1 mb-5" small color="var(--secondary-gray-text)">mdi-beta</v-icon>
                 </v-list-item-title>
             </v-list-item>
             <v-list-item disabled>
@@ -95,8 +95,8 @@ export default {
 
     data: () => ({
         openedList: false,
-        alphaNetworks: [43114],
-        betaNetworks: [],
+        alphaNetworks: [],
+        betaNetworks: [43114],
     }),
 
     computed: {
@@ -176,7 +176,7 @@ export default {
 }
 
 .list-item-disabled {
-    color: rgba(255, 255, 255, 0.15);
+    color: var(--third-gray-text) !important;
     font-weight: 600;
     font-size: 17px;
     margin-left: -5px;

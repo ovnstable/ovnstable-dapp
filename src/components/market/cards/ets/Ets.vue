@@ -123,16 +123,28 @@
                 </v-row>
 
                 <v-row class="d-flex justify-space-between ma-0 mt-5">
-                    <v-col v-if="!(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)" :class="accountEtsBalance ? 'mr-1' : ''">
-                        <v-row>
-                            <v-btn class="button btn-filled" @click.stop="mintAction">Mint ETS</v-btn>
-                        </v-row>
-                    </v-col>
-                    <v-col v-if="accountEtsBalance" class="ml-1">
-                        <v-row>
-                            <v-btn class="button btn-outlined" @click.stop="redeemAction" outlined>Redeem ETS</v-btn>
-                        </v-row>
-                    </v-col>
+                    <template v-if="!networkSupport">
+                        <v-col class="ml-1">
+                            <v-row>
+                                <v-btn class="button btn-outlined" @click.stop="setWalletNetwork(cardData.chain.toString())" outlined>
+                                    SWITCH TO {{ cardData.data.chainName.toUpperCase() }} TO MINT
+                                </v-btn>
+                            </v-row>
+                        </v-col>
+                    </template>
+
+                    <template v-else>
+                        <v-col v-if="!(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)" :class="accountEtsBalance ? 'mr-1' : ''">
+                            <v-row>
+                                <v-btn class="button btn-filled" @click.stop="mintAction">Mint ETS</v-btn>
+                            </v-row>
+                        </v-col>
+                        <v-col v-if="accountEtsBalance" class="ml-1">
+                            <v-row>
+                                <v-btn class="button btn-outlined" @click.stop="redeemAction" outlined>Redeem ETS</v-btn>
+                            </v-row>
+                        </v-col>
+                    </template>
                 </v-row>
             </v-container>
         </v-col>
@@ -166,12 +178,17 @@ export default {
     },
 
     computed: {
+        ...mapGetters('network', ['networkId']),
         ...mapGetters("marketData", ["etsStrategyData"]),
         ...mapGetters("supplyData", ["totalSupply"]),
         ...mapGetters('accountData', ['etsBalance']),
 
         accountEtsBalance: function () {
             return this.etsBalance[this.cardData.data.name];
+        },
+
+        networkSupport: function () {
+            return this.networkId === this.cardData.chain;
         },
     },
 
@@ -183,6 +200,7 @@ export default {
     },
 
     methods: {
+        ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
 
 

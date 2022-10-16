@@ -60,20 +60,32 @@
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()" class="my-1">
-            <v-row class="ma-0" justify="end" align="center">
-                <v-btn x-small
-                       v-if="!cardData.isPrototype && !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)"
-                       class="button btn-outlined"
-                       @click.stop="mintAction" outlined>
-                    MINT/REDEEM
-                </v-btn>
-                <v-btn x-small
-                       v-else
-                       class="button btn-outlined"
-                       @click.stop="redeemAction" outlined>
-                    REDEEM
-                </v-btn>
-            </v-row>
+            <template v-if="!networkSupport">
+                <v-row class="ma-0" justify="end" align="center">
+                    <v-btn x-small
+                           class="button btn-outlined"
+                           @click.stop="openStrategyCard" outlined>
+                        ABOUT
+                    </v-btn>
+                </v-row>
+            </template>
+
+            <template v-else>
+                <v-row class="ma-0" justify="end" align="center">
+                    <v-btn x-small
+                           v-if="!cardData.isPrototype && !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)"
+                           class="button btn-outlined"
+                           @click.stop="mintAction" outlined>
+                        MINT/REDEEM
+                    </v-btn>
+                    <v-btn x-small
+                           v-else
+                           class="button btn-outlined"
+                           @click.stop="redeemAction" outlined>
+                        REDEEM
+                    </v-btn>
+                </v-row>
+            </template>
         </v-col>
         <v-col v-if="$wu.isMobile()" class="my-1">
             <v-row class="ma-0" justify="end" align="center">
@@ -160,7 +172,7 @@
             </v-row>
 
             <v-row class="ma-0 mt-3" align="center">
-                <v-col>
+                <v-col v-if="networkSupport">
                     <v-row justify="start" align="center">
                         <v-btn x-small
                                v-if="!cardData.isPrototype && !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)"
@@ -177,7 +189,7 @@
                     </v-row>
                 </v-col>
                 <v-col>
-                    <v-row justify="end" align="center">
+                    <v-row :justify="networkSupport ? 'end' : 'center'" align="center">
                         <v-btn x-small
                                class="button btn-outlined"
                                @click.stop="openStrategyCard" outlined>
@@ -216,12 +228,17 @@ export default {
     },
 
     computed: {
+        ...mapGetters('network', ['networkId']),
         ...mapGetters("marketData", ["etsStrategyData"]),
         ...mapGetters("supplyData", ["totalSupply"]),
         ...mapGetters('accountData', ['etsBalance']),
 
         accountEtsBalance: function () {
             return this.etsBalance[this.cardData.data.name];
+        },
+
+        networkSupport: function () {
+            return this.networkId === this.cardData.chain;
         },
     },
 
@@ -236,6 +253,7 @@ export default {
     },
 
     methods: {
+        ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
 
 

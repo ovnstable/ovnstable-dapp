@@ -33,17 +33,33 @@
                 </v-row>
 
                 <template v-if="cardData.overcapEnabled">
-                    <v-row class="ma-0 mt-2">
+                    <v-row class="ma-0 mt-2" align="center">
                         <label class="progress-label-header">Current tvl</label>
                         <v-spacer></v-spacer>
                         <label class="progress-label-header">Max tvl</label>
                     </v-row>
-                    <v-row class="ma-0">
-                        <label class="progress-label-value mt-1" :style="(cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? {color: cardData.data.mainColor} : {}">${{ $utils.formatMoneyComma(totalSupply[cardData.data.name], 2) }}</label>
+                    <v-row class="ma-0" align="center">
+                        <label class="progress-label-value mt-2"
+                               v-if="totalSupply && cardData.data && totalSupply[cardData.data.name]"
+                               :style="(cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? {color: cardData.data.mainColor} : {}">
+                            ${{ $utils.formatMoneyComma(totalSupply[cardData.data.name], 2) }}
+                        </label>
+                        <v-progress-circular
+                            v-else
+                            class="mt-2"
+                            width="1.5"
+                            size="16"
+                            color="#9DA4B0"
+                            indeterminate
+                        ></v-progress-circular>
+
                         <v-spacer></v-spacer>
-                        <label class="progress-label-value mt-1">${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
+
+                        <label class="progress-label-value mt-2">
+                            ${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}
+                        </label>
                     </v-row>
-                    <v-row class="ma-0 mt-2">
+                    <v-row class="ma-0 mt-2" align="center">
                         <v-progress-linear
                             rounded
                             height="7"
@@ -57,9 +73,17 @@
                 <template v-else>
                     <v-row class="d-flex justify-space-between ma-0 mt-3">
                         <label class="progress-label-value">CURRENT TVL</label>
-                        <label class="progress-label-value mb-5">${{
-                                $utils.formatMoneyComma(cardData.tvl, 2)
-                            }}</label>
+                        <label class="progress-label-value mb-5" v-if="cardData.tvl">
+                            ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
+                        </label>
+                        <v-progress-circular
+                            v-else
+                            class="mb-5"
+                            width="1.5"
+                            size="16"
+                            color="#9DA4B0"
+                            indeterminate
+                        ></v-progress-circular>
                     </v-row>
                     <v-divider class="card-divider"></v-divider>
                 </template>
@@ -195,6 +219,10 @@ export default {
 
         networkSupport: function () {
             return this.networkId === this.cardData.chain;
+        },
+
+        dataLoaded: function () {
+            return (this.cardData && this.cardData.data && this.totalSupply && this.totalSupply[this.cardData.data.name]);
         },
     },
 

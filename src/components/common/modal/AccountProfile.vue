@@ -61,7 +61,7 @@
                     <label class="add-coins-label" :class="$wu.isMobile() ? 'ml-1' : 'ml-2'">Add tokens to your wallet</label>
                 </v-row>
 
-                <v-row class="account-info-row" justify="start" align="center">
+                <v-row class="add-tokens-row" justify="start" align="center">
                     <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addUsdPlusToken">
                         <div class="coin-img">
                             <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
@@ -233,7 +233,7 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
-    .account-info-row {
+    .account-info-row, .add-tokens-row {
         margin-left: 3% !important;
         margin-right: 3% !important;
     }
@@ -285,7 +285,7 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
-    .account-info-row {
+    .account-info-row, .add-tokens-row {
         margin-left: 5% !important;
         margin-right: 5% !important;
     }
@@ -337,7 +337,7 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
-    .account-info-row {
+    .account-info-row, .add-tokens-row {
         margin-left: 5% !important;
         margin-right: 5% !important;
     }

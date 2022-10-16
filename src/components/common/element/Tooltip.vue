@@ -9,6 +9,7 @@
     >
         <template v-slot:activator="{ on, attrs }">
             <div class="info-icon ml-1"
+                 :style="{width: size + 'px', height: size + 'px'}"
                  v-bind="attrs"
                  v-on="on">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,7 +19,10 @@
         </template>
         <v-row class="ma-1" align="center" @click="openLink">
             <label class="tooltip-text" :class="link ? 'link-container' : ''">{{ text }}</label>
-            <div v-if="link" class="icon-img ml-2" :class="link ? 'link-container' : ''">
+            <div v-if="link"
+                 class="icon-img ml-2"
+                 :style="{width: size + 'px', height: size + 'px'}"
+                 :class="link ? 'link-container' : ''">
                 <v-img :src="require('@/assets/icon/openBlue.svg')"/>
             </div>
         </v-row>
@@ -43,6 +47,11 @@ export default {
         iconColor: {
             type: String,
             default: "#9DA4B0",
+        },
+
+        size: {
+            type: Number,
+            default: 20,
         },
     },
 
@@ -76,11 +85,6 @@ export default {
     line-height: 16px;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--tooltip-text);
-}
-
-.icon-img, .info-icon {
-    width: 20px !important;
-    height: 20px !important;
 }
 
 .link-container {

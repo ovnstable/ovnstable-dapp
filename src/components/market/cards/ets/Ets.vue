@@ -6,25 +6,25 @@
                 <span class="currency ml-5">
                     <v-img :src="require('@/assets/currencies/market/ets_' + cardData.data.name + '.svg')"/>
                 </span>
-                <v-spacer></v-spacer>
-                <v-row class="d-flex flex-column align-start mr-3">
-                    <v-row class="d-flex mb-1">
+                <v-row class="d-flex flex-column align-start mr-3 ml-10">
+                    <v-row class="d-flex">
                         <label class="card-title">ETS {{ cardData.data.nameUp }}</label>
                     </v-row>
-                    <v-row class="d-flex">
+                    <v-row class="d-flex mt-5" v-if="cardData.weekApy">
                         <label class="percentage">
-                            {{ cardData.weekApy === 0 ? '—' : ($utils.formatMoneyComma(cardData.weekApy, 0) + '%') }}
+                            {{ $utils.formatMoneyComma(cardData.weekApy, 0) + '%' }}
                         </label>
-                        <label class="apy">APY</label>
+                        <label class="apy ml-3">APY</label>
                         <div class="tooltip">
                             <Tooltip icon-color="#FFFFFF"
+                                     :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
                                      text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
                         </div>
                     </v-row>
                 </v-row>
             </v-row>
 
-            <v-container class="mt-4">
+            <v-container class="mt-3">
                 <v-row align="center" justify="center" class="ma-0">
                     <label class="full-status-error-label" v-if="cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply" :style="{color: cardData.data.mainColor}">
                         ETS capacity is full. Check status later
@@ -33,7 +33,7 @@
                 </v-row>
 
                 <template v-if="cardData.overcapEnabled">
-                    <v-row class="ma-0 mt-3">
+                    <v-row class="ma-0 mt-2">
                         <label class="progress-label-header">Current tvl</label>
                         <v-spacer></v-spacer>
                         <label class="progress-label-header">Max tvl</label>
@@ -72,19 +72,22 @@
                     <label class="card-info">{{ cardData.data.cardTitle }}</label>
                 </v-row>
 
-                <v-row class="mt-5">
+                <v-row class="mt-3">
                     <v-col cols="6">
-                        <div class="box">
-                            <label class="box-name mt-2">Chain</label>
-                            <div class="icon">
-                                <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
-                                       class="mt-1"
-                                       alt="chain icon"/>
+                        <v-row class="ma-0 mr-n2">
+                            <div class="box">
+                                <label class="box-name mt-2">Chain</label>
+                                <div class="icon">
+                                    <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
+                                           class="mt-1"
+                                           alt="chain icon"/>
+                                </div>
+                                <label class="chain-name mb-2 mt-1">{{ cardData.data.chainName }}</label>
                             </div>
-                            <label class="chain-name mb-2 mt-1">{{ cardData.data.chainName }}</label>
-                        </div>
+                        </v-row>
                     </v-col>
                     <v-col cols="6">
+                        <v-row class="ma-0 ml-n2">
                         <div class="box">
                             <label class="box-name mt-2">Platform</label>
                             <div class="icon">
@@ -94,8 +97,10 @@
                             </div>
                             <label class="platform-name mb-2 mt-1">{{ cardData.data.dex }}</label>
                         </div>
+                        </v-row>
                     </v-col>
                     <v-col cols="12">
+                        <v-row class="ma-0 mt-n4">
                         <div class="box">
                             <label class="box-name mt-2">Token Pair</label>
                             <div class="icon">
@@ -105,10 +110,11 @@
                             </div>
                             <label class="token-pair-name mb-2 mt-1">{{ cardData.data.poolName }}</label>
                         </div>
+                        </v-row>
                     </v-col>
                 </v-row>
 
-                <v-row class="d-flex justify-space-between ma-0 mt-8">
+                <v-row class="d-flex justify-space-between ma-0 mt-6" v-if="cardData.weekApy">
                     <template v-if="accountEtsBalance">
                         <label class="your-deposit">Your deposit in ETS</label>
                         <label class="your-deposit">{{
@@ -122,7 +128,7 @@
                     </template>
                 </v-row>
 
-                <v-row class="d-flex justify-space-between ma-0 mt-5">
+                <v-row class="d-flex justify-space-between ma-0 mt-2">
                     <template v-if="!networkSupport">
                         <v-col class="ml-1">
                             <v-row>
@@ -286,7 +292,7 @@ export default {
     }
 
     .header-row {
-        height: 120px !important;
+        height: 100px !important;
     }
 
     .card-container {
@@ -312,6 +318,10 @@ export default {
         font-weight: 600;
         font-size: 14px;
         line-height: 16px;
+    }
+
+    .tooltip {
+        margin-top: -4px;
     }
 }
 
@@ -385,7 +395,7 @@ export default {
 
     .header-row {
         max-width: 440px;
-        height: 130px !important;
+        height: 110px !important;
     }
 
     .card-container {
@@ -412,6 +422,10 @@ export default {
         font-weight: 600;
         font-size: 16px;
         line-height: 22px;
+    }
+
+    .tooltip {
+        margin-top: 1px;
     }
 }
 
@@ -479,7 +493,7 @@ export default {
 
     .header-row {
         max-width: 460px;
-        height: 150px !important;
+        height: 130px !important;
     }
 
     .card-container {
@@ -507,6 +521,10 @@ export default {
         font-size: 20px;
         line-height: 24px;
     }
+
+    .tooltip {
+        margin-top: 2px;
+    }
 }
 
 .card-container {
@@ -518,6 +536,7 @@ export default {
 
 .header-row {
     border-radius: 15px 15px 0 0;
+    background: var(--card-background);
 }
 
 .card-title {
@@ -635,16 +654,6 @@ export default {
 
 .progress-info {
     background: var(--progress-info);
-}
-
-.header-row {
-    background: var(--card-background);
-}
-
-.tooltip {
-    width: 13px;
-    height: 13px;
-    margin-top: 2px;
 }
 
 .card-container:hover {

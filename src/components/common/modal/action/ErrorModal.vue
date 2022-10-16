@@ -5,19 +5,19 @@
             persistent>
         <v-card class="container_body">
             <v-toolbar class="container_header" flat>
-                <v-btn icon class="ml-auto" @click="close">
+                <v-btn icon class="ml-auto mr-5 mt-10" @click="close">
                     <v-icon class="close-icon">mdi-close</v-icon>
                 </v-btn>
             </v-toolbar>
             <v-card-text class="px-5 pt-5">
-                <v-row justify="center" class="mb-5">
+                <v-row justify="center" class="mb-10">
                     <div class="loading-img">
-                        <v-img :src="require('@/assets/icon/error-cross.svg')"/>
+                        <v-img :src="require('@/assets/icon/error-circle.svg')"/>
                     </div>
                 </v-row>
 
                 <v-row justify="center">
-                    <label class="error-label">Transaction execution error</label>
+                    <label class="error-label mb-5">Transaction execution error</label>
                 </v-row>
 
                 <template v-if="errorMsg">
@@ -157,12 +157,12 @@ export default {
 }
 
 .error-label {
-    color: #CF3F92;
-    font-family: 'Raleway', sans-serif;
+    color: var(--secondary-gray-text);
+    font-family: 'Roboto', sans-serif;
     font-style: normal;
-    font-weight: 800;
-    font-size: 24px;
-    line-height: 36px;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 40px;
 }
 
 .discord-label {
@@ -188,21 +188,21 @@ export default {
 
 .error-msg-title {
     color: #333333;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 300;
-    font-size: 13px;
-    line-height: 16px;
+    font-size: 16px;
+    line-height: 24px;
 }
 
 .error-msg-value {
     text-align: center;
     color: #707A8B;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 16px;
+    line-height: 24px;
 }
 
 .error-container, .error-container-row, .error-container-row > label {

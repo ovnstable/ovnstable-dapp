@@ -409,7 +409,7 @@ export default {
                     let buyResult = await contracts[this.etsData.exchangeContract].methods.buy(sum, referral).send(buyParams);
 
                     this.closeWaitingModal();
-                    this.showSuccessModal(buyResult.transactionHash);
+                    this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'mintEts'});
                 } catch (e) {
                     console.log(e);
                     this.closeWaitingModal();

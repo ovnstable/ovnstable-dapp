@@ -406,7 +406,7 @@ export default {
                     let buyResult = await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).send(buyParams);
 
                     this.closeWaitingModal();
-                    this.showSuccessModal(buyResult.transactionHash);
+                    this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'redeemUsdPlus'});
                 } catch (e) {
                     console.log(e)
                     this.closeWaitingModal();

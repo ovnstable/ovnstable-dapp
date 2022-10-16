@@ -437,7 +437,7 @@ export default {
                     let buyResult = await this.contracts.market.methods.unwrap(this.tokenContract.options.address, sum, this.account).send(buyParams);
 
                     this.closeWaitingModal();
-                    this.showSuccessModal(buyResult.transactionHash);
+                    this.showSuccessModal({ successTxHash: '0xblablabla123', successAction: 'unwrapUsdPlus' });
                 } catch (e) {
                     console.log(e)
                     this.closeWaitingModal();

@@ -406,7 +406,7 @@ export default {
                     let buyResult = await contracts[this.etsData.exchangeContract].methods.redeem(sum).send(buyParams);
 
                     this.closeWaitingModal();
-                    this.showSuccessModal(buyResult.transactionHash);
+                    this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'redeemEts'});
                 } catch (e) {
                     console.log(e)
                     this.closeWaitingModal();

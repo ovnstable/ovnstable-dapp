@@ -417,7 +417,7 @@ export default {
                     let buyResult = await contracts.exchange.methods.mint(mintParams).send(buyParams);
 
                     this.closeWaitingModal();
-                    this.showSuccessModal(buyResult.transactionHash);
+                    this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'mintUsdPlus'});
                 } catch (e) {
                     console.log(e);
                     this.closeWaitingModal();

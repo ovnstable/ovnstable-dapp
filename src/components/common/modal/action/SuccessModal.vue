@@ -1,9 +1,9 @@
 <template>
     <v-dialog
-            style="z-index: 1000"
-            v-model="show"
-            :width="650"
-            persistent>
+        style="z-index: 1000"
+        v-model="show"
+        :width="650"
+        persistent>
         <v-card class="container_body align-center">
             <v-toolbar class="container_header" flat>
                 <v-btn icon class="ml-auto mr-5 mt-10" @click="close">
@@ -16,7 +16,7 @@
                         <v-img :src="tokenActionIcon"/>
                     </div>
                 </v-row>
-                <v-row justify="center mb-10">
+                <v-row justify="center" class="mb-8" :class="$wu.isMobile() ? '' : 'mx-8'">
                     <label class="success-label">You successfully {{ successActionLabel }}</label>
                 </v-row>
                 <v-row justify="center" class="mb-5">
@@ -24,22 +24,32 @@
                            height="40"
                            width="240"
                            class="dismiss-btn mb-3"
-                           @click="dismiss">
+                           @click="goToDashboard">
                         Go to my dashboard
                     </v-btn>
                 </v-row>
-                <v-row justify="center" class="mt-8 mb-5">
-                    <label class="success-link" @click="addTokenAction">Add {{ actionSuccessToken }} to your wallet</label>
-                    <div class="action-icons mr-15">
-                        <v-img class="ml-1" :src="require('@/assets/icon/wallet_plus.svg')"/>
-                    </div>
-                    <label class="success-link ml-15" @click="openOnExplorer(successTxHash)">View on Polygonscan</label>
-                    <div class="action-icons">
-                        <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
-                    </div>
+                <v-row class="mt-8 mb-5">
+                    <v-col :cols="$wu.isMobile() ? 12 : 6">
+                        <v-row :justify="$wu.isMobile() ? 'center' : 'start'" align="center" :class="$wu.isMobile() ? '' : 'ml-8'">
+                            <label class="success-link" @click="addTokenAction">Add {{ actionSuccessToken }} to your
+                                wallet
+                            </label>
+                            <div class="action-icons ml-1">
+                                <v-img :src="require('@/assets/icon/wallet_plus.svg')"/>
+                            </div>
+                        </v-row>
+                    </v-col>
+                    <v-col :cols="$wu.isMobile() ? 12 : 6">
+                        <v-row :justify="$wu.isMobile() ? 'center' : 'end'" align="center" :class="$wu.isMobile() ? '' : 'mr-8'">
+                            <label class="success-link" @click="openOnExplorer(successTxHash)">View on
+                                Polygonscan
+                            </label>
+                            <div class="action-icons ml-1">
+                                <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
+                            </div>
+                        </v-row>
+                    </v-col>
                 </v-row>
-
-
             </v-card-text>
         </v-card>
 
@@ -53,19 +63,16 @@ import {mapActions, mapGetters} from "vuex";
 export default {
     name: "SuccessModal",
 
-    components: {
-    },
+    components: {},
 
-    props: {
-    },
+    props: {},
 
     computed: {
         ...mapGetters('network', ['explorerUrl']),
         ...mapGetters('successModal', ['show', 'successTxHash', 'successAction', 'etsData']),
-        ...mapGetters('web3', ['walletName']),
 
         successActionLabel: function () {
-            switch (this.successAction){
+            switch (this.successAction) {
                 case 'mintUsdPlus':
                     return 'minted USD+'
                 case 'redeemUsdPlus':
@@ -75,16 +82,16 @@ export default {
                 case 'unwrapUsdPlus':
                     return 'unwrapped USD+'
                 case 'mintEts':
-                    return 'minted ETS ' + this.etsData ? this.etsData.nameUp : '';
+                    return 'minted ETS ' + (this.etsData ? this.etsData.nameUp : '');
                 case 'redeemEts':
-                    return 'redeemed ETS ' + this.etsData ? this.etsData.nameUp : '';
+                    return 'redeemed ETS ' + (this.etsData ? this.etsData.nameUp : '');
                 default:
                     return 'done the operation'
             }
         },
 
         actionSuccessToken: function () {
-            switch (this.successAction){
+            switch (this.successAction) {
                 case 'mintUsdPlus':
                     return 'USD+'
                 case 'redeemUsdPlus':
@@ -93,17 +100,17 @@ export default {
                     return 'wUSD+'
                 case 'unwrapUsdPlus':
                     return 'wUSD+'
-                case 'mintEts ':
-                    return 'ETS ' + this.etsData ? this.etsData.nameUp : '';
+                case 'mintEts':
+                    return 'ETS ' + (this.etsData ? this.etsData.nameUp : '');
                 case 'redeemEts':
-                    return 'ETS ' + this.etsData ? this.etsData.nameUp : '';
+                    return 'ETS ' + (this.etsData ? this.etsData.nameUp : '');
                 default:
                     return ''
             }
         },
 
         tokenActionIcon: function () {
-            switch (this.successAction){
+            switch (this.successAction) {
                 case 'mintUsdPlus':
                     return require('@/assets/icon/minted.svg');
                 case 'redeemUsdPlus':
@@ -122,17 +129,19 @@ export default {
         },
     },
 
-    data: () => ({
-    }),
+    data: () => ({}),
 
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken']),
+        ...mapActions('swapModal', ['closeSwapModal']),
+        ...mapActions('wrapModal', ['closeWrapModal']),
+        ...mapActions('investModal', ['closeInvestModal']),
 
 
         addTokenAction() {
-            switch (this.successAction){
+            switch (this.successAction) {
                 case 'mintUsdPlus':
                 case 'redeemUsdPlus':
                     this.addUsdPlusToken();
@@ -141,9 +150,9 @@ export default {
                 case 'unwrapUsdPlus':
                     this.addwUsdPlusToken();
                     break;
-                case 'mintEts ':
+                case 'mintEts':
                 case 'redeemEts':
-                    this.addEtsToken(this.etsData.nameUp);
+                    this.addEtsToken(this.etsData);
                     break;
                 default:
                     break;
@@ -166,6 +175,14 @@ export default {
         dismiss() {
             this.close();
         },
+
+        goToDashboard() {
+            this.closeSwapModal();
+            this.closeWrapModal();
+            this.closeInvestModal();
+            this.$router.push('/');
+            this.close();
+        }
     },
 }
 </script>
@@ -175,14 +192,35 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
+
+    .success-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 22px;
+        line-height: 30px;
+    }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
+
+    .success-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 34px;
+    }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
+
+    .success-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 26px;
+        line-height: 36px;
+    }
 }
 
 .container_body {
@@ -202,10 +240,7 @@ export default {
 .success-label {
     color: var(--secondary-gray-text);
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 30px;
-    line-height: 40px;
+    text-align: center !important;
 }
 
 .success-link {
@@ -257,5 +292,6 @@ export default {
 .action-icons {
     width: 20px;
     height: 20px;
+    margin-top: 2px;
 }
 </style>

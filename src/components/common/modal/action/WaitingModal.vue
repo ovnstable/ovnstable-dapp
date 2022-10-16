@@ -71,6 +71,39 @@ export default {
     }
 }
 
+/* mobile */
+@media only screen and (max-width: 960px) {
+
+    .loading-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 22px;
+        line-height: 30px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+
+    .loading-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 34px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+
+    .loading-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 26px;
+        line-height: 36px;
+    }
+}
+
 .container_body {
     border-radius: 24px !important;
     background-color: var(--secondary) !important;
@@ -79,10 +112,6 @@ export default {
 .loading-label {
     color: #FCCA46;
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 30px;
-    line-height: 40px;
 }
 
 .loading-sub-label {

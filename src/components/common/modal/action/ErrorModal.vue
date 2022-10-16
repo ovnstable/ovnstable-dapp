@@ -147,6 +147,40 @@ export default {
 </script>
 
 <style scoped>
+
+/* mobile */
+@media only screen and (max-width: 960px) {
+
+    .error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 22px;
+        line-height: 30px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+
+    .error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 34px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+
+    .error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 26px;
+        line-height: 36px;
+    }
+}
+
 .container_body {
     border-radius: 24px !important;
     background-color: var(--secondary) !important;
@@ -159,10 +193,6 @@ export default {
 .error-label {
     color: var(--secondary-gray-text);
     font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 30px;
-    line-height: 40px;
 }
 
 .discord-label {

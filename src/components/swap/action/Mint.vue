@@ -443,7 +443,7 @@ export default {
                     sum = this.web3.utils.toWei(this.sum, 'mwei');
                 }
 
-                this.showWaitingModal();
+                this.showWaitingModal(null);
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {

@@ -409,7 +409,7 @@ export default {
                     let buyResult = await contracts[this.etsData.exchangeContract].methods.buy(sum, referral).send(buyParams);
 
                     this.closeWaitingModal();
-                    this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'mintEts'});
+                    this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'mintEts', etsData: this.etsData});
                 } catch (e) {
                     console.log(e);
                     this.closeWaitingModal();
@@ -429,7 +429,7 @@ export default {
             try {
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
 
-                this.showWaitingModal();
+                this.showWaitingModal(null);
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {

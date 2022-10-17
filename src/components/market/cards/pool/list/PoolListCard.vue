@@ -154,8 +154,14 @@ export default {
                 case 'Cone':
                     url = 'https://www.cone.exchange/liquidity/';
                     break;
+                case 'QuickSwap':
+                    url = 'https://info.quickswap.exchange/#/pair/'
+                    break;
                 case 'Meshswap':
                     url = 'https://meshswap.fi/exchange/pool/detail/';
+                    break;
+                case 'Velodrome':
+                    url = 'https://app.velodrome.finance/liquidity/manage?address=';
                     break;
                 default:
                     url = this.cardData.data.explorerUrl + '/address/';
@@ -353,5 +359,10 @@ export default {
 
 .button-full-width {
     width: 100% !important;
+}
+
+.icon > .v-image {
+    border-radius: 9999px !important;
+
 }
 </style>

@@ -16,7 +16,7 @@ const actions = {
         dispatch('swapData/refreshSwap', null, {root:true});
         dispatch('statsData/refreshStats', null, {root:true});
         dispatch('dashboardData/refreshDashboard', null, {root:true});
-        dispatch('farmData/refreshFarm', null, {root:true});
+        dispatch('marketData/refreshMarket', null, {root:true});
 
         let network = rootState.network.networkName;
 

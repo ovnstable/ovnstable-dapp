@@ -40,6 +40,7 @@ const actions = {
                     console.debug('OnBoard: wallet');
 
                     await commit('web3/setProvider', wallet.provider, {root: true});
+                    await commit('web3/setIsProviderDefault', false, {root: true});
 
                     if (rootState.web3.provider) {
 
@@ -100,9 +101,15 @@ const actions = {
                         }
                     }
 
-                    await dispatch('web3/initWeb3', null, {root: true}).then(value => {
+                    await dispatch('web3/initWeb3', null, {root: true}).then(async value => {
 
                         if (!rootState.web3.isProviderDefault) {
+
+                            let accounts = await rootState.web3.web3.eth.getAccounts();
+                            if (!accounts || accounts.length === 0) {
+                                dispatch('checkWallet');
+                            }
+
                             commit('setWalletConnected', true);
 
                             if (wallet.name !== undefined && wallet.name && wallet.name !== 'undefined') {
@@ -285,6 +292,7 @@ const actions = {
             dispatch('dappDataAction/resetUserData', null, {root: true});
             commit('accountData/setAccount', null, {root: true});
             dispatch('statsData/refreshStats', null, {root:true});
+            dispatch('marketData/refreshMarket', null, {root:true});
         }
     },
 

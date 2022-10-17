@@ -218,7 +218,7 @@ const actions = {
 
     async setWalletNetwork({commit, dispatch, getters, rootState}, network) {
 
-        if (rootState.web3.provider) {
+        if (rootState.web3.provider && !rootState.web3.isProviderDefault) {
 
             dispatch('saveNetworkToLocalStore', network);
 

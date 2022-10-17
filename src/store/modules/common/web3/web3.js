@@ -65,7 +65,7 @@ const actions = {
 
         commit('setLoadingWeb3', true);
 
-        if (getters.provider === undefined || getters.provider === null) {
+        if (getters.provider === undefined || getters.provider === null || getters.isProviderDefault) {
             await dispatch('initDefaultProvider');
         } else {
             try {
@@ -79,18 +79,21 @@ const actions = {
 
         dispatch('dappUIAction/updateDappPages', null, {root: true});
         dispatch('gasPrice/refreshGasPrice', null, {root: true})
+        dispatch('marketData/refreshMarket', null, {root:true});
 
-        let currentWalletNetworkId = await getters.web3.eth.net.getId();
-        currentWalletNetworkId = parseInt(currentWalletNetworkId);
+        if (!getters.isProviderDefault) {
+            let currentWalletNetworkId = await getters.web3.eth.net.getId();
+            currentWalletNetworkId = parseInt(currentWalletNetworkId);
 
-        if (SUPPORTED_NETWORKS.includes(currentWalletNetworkId)) {
-            commit('network/setSwitchToOtherNetwork', false, {root: true});
+            if (SUPPORTED_NETWORKS.includes(currentWalletNetworkId)) {
+                commit('network/setSwitchToOtherNetwork', false, {root: true});
 
-            if (currentWalletNetworkId !== rootState.network.networkId) {
-                dispatch('network/changeDappNetwork', currentWalletNetworkId.toString(), {root: true});
+                if (currentWalletNetworkId !== rootState.network.networkId) {
+                    dispatch('network/changeDappNetwork', currentWalletNetworkId.toString(), {root: true});
+                }
+            } else {
+                commit('network/setSwitchToOtherNetwork', true, {root: true});
             }
-        } else {
-            commit('network/setSwitchToOtherNetwork', true, {root: true});
         }
 
         commit('setLoadingWeb3', false);

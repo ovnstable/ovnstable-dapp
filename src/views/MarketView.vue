@@ -22,12 +22,13 @@
         <div class="mt-7 cards-list-container">
             <v-row class="d-flex" justify="start" v-if="tab === 1">
                 <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
-                       v-for="component in sortedCardList.filter(value => !value.isPrototype).slice(0, 3)">
+                       v-for="card in sortedCardList.filter(value => !value.isPrototype).slice(0, 3)">
                     <v-row class="fill-height">
                         <component
                             class="ma-3"
-                            :card-data="component"
-                            v-bind:is="component.name"
+                            v-bind:key="`${card.name}_${card.weekApy}_${card.tvl}`"
+                            :card-data="card"
+                            v-bind:is="card.name"
                         ></component>
                     </v-row>
                 </v-col>
@@ -85,6 +86,7 @@ export default {
 
     data: () => ({
         tab: 1,
+        sortedCardList: [],
     }),
 
     computed: {
@@ -116,7 +118,66 @@ export default {
             }
         },
 
-        sortedCardList: function () {
+        sortedPoolList: function () {
+
+            let networkId = this.networkId;
+
+            let poolList = [];
+
+            this.poolList.forEach(pool => {
+                poolList.push(
+                    {
+                        type: 'pool',
+                        name: 'Pool',
+                        data: pool,
+                        chain: pool.chain,
+                        hasUsdPlus: true,
+                        overcapEnabled: false,
+                        hasCap: true,
+                        tvl: pool.tvl,
+                        weekApy: 0,
+                        cardOpened: false,
+                    },
+                );
+            });
+
+            poolList.sort(function (a, b) {
+                if (a.chain === networkId && b.chain !== networkId) return -1;
+                if (a.chain !== networkId && b.chain === networkId) return 1;
+
+                return (a.tvl > b.tvl) ? -1 : (a.tvl < b.tvl ? 1 : 0);
+            });
+
+            poolList[0].cardOpened = true;
+
+            return poolList;
+        },
+    },
+    watch: {
+        appApiUrl: function (newVal, oldVal) {
+            this.getSortedCardList();
+        },
+
+        etsStrategyData: function (newVal, oldVal) {
+            this.getSortedCardList();
+        },
+
+        totalSupply: function (newVal, oldVal) {
+            this.getSortedCardList();
+        },
+
+        etsList: function (newVal, oldVal) {
+            this.getSortedCardList();
+        },
+    },
+
+    created() {
+        this.getSortedCardList();
+    },
+
+    methods: {
+
+        getSortedCardList() {
 
             let networkId = this.networkId;
 
@@ -158,51 +219,9 @@ export default {
 
             cardList[0].cardOpened = true;
 
-            return cardList;
-        },
-
-        sortedPoolList: function () {
-
-            let networkId = this.networkId;
-
-            let poolList = [];
-
-            this.poolList.forEach(pool => {
-                poolList.push(
-                    {
-                        type: 'pool',
-                        name: 'Pool',
-                        data: pool,
-                        chain: pool.chain,
-                        hasUsdPlus: true,
-                        overcapEnabled: false,
-                        hasCap: true,
-                        tvl: pool.tvl,
-                        weekApy: 0,
-                        cardOpened: false,
-                    },
-                );
-            });
-
-            poolList.sort(function (a, b) {
-                if (a.chain === networkId && b.chain !== networkId) return -1;
-                if (a.chain !== networkId && b.chain === networkId) return 1;
-
-                return (a.tvl > b.tvl) ? -1 : (a.tvl < b.tvl ? 1 : 0);
-            });
-
-            poolList[0].cardOpened = true;
-
-            return poolList;
-        },
-    },
-
-    watch: {},
-
-    created() {
-    },
-
-    methods: {}
+            this.sortedCardList = cardList;
+        }
+    }
 }
 </script>
 

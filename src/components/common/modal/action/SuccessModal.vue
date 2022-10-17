@@ -41,9 +41,7 @@
                     </v-col>
                     <v-col :cols="$wu.isMobile() ? 12 : 6">
                         <v-row :justify="$wu.isMobile() ? 'center' : 'end'" align="center" :class="$wu.isMobile() ? '' : 'mr-8'">
-                            <label class="success-link" @click="openOnExplorer(successTxHash)">View on
-                                Polygonscan
-                            </label>
+                            <label class="success-link" @click="openOnExplorer(successTxHash)">View transaction</label>
                             <div class="action-icons ml-1">
                                 <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
                             </div>

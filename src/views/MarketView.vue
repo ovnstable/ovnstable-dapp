@@ -314,7 +314,6 @@ export default {
 }
 
 .mdi-star-circle {
-    color: var(--links-blue) !important;
     cursor: pointer !important;
 }
 

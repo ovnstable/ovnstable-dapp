@@ -434,6 +434,7 @@ export default {
                     this.gasAmountInMatic = null;
                     this.gasAmountInUsd = null;
 
+                    this.trackClick({value: 0, category: 'Redeem confirm', label: 'Confirm Redeem Action'});
                     await this.redeemAction();
                     this.closeWaitingModal();
                 } else {
@@ -456,6 +457,7 @@ export default {
         async approveAction() {
             try {
                 this.showWaitingModal('Approving in process');
+                this.trackClick({value: 0, category: 'Redeem approve', label: 'Approve Redeem Action'});
 
                 let approveSum = "10000000";
                 let sum = this.web3.utils.toWei(approveSum, 'mwei');
@@ -471,6 +473,7 @@ export default {
             } catch (e) {
                 console.log(e)
                 this.showErrorModal('approve');
+                this.trackClick({value: 0, category: 'Redeem error', label: 'Error Redeem Showed'});
             }
         },
 
@@ -492,6 +495,7 @@ export default {
                     while (minted) {
                         await new Promise(resolve => setTimeout(resolve, 2000));
                         let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
+                        this.trackClick({value: 0, category: 'Redeem tx scan', label: 'Redeem Go to Scan'});
 
                         if (receipt) {
                             if (receipt.status)
@@ -560,6 +564,17 @@ export default {
             }
 
             return result;
+        },
+
+        trackClick(trackParams) {
+            this.$gtm.trackEvent({
+                event: null,
+                category: '',
+                action: 'click',
+                label: '',
+                value: 1,
+                noninteraction: false, // Optional
+            });
         },
     }
 }

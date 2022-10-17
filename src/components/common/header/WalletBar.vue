@@ -75,9 +75,21 @@ export default {
         walletClickAction() {
             if (this.account) {
                 this.showAccountProfile();
+                this.trackClick({value: 0, category: 'Account', label: 'Connect wallet'});
             } else {
                 this.connectWallet();
             }
+        },
+
+        trackClick(trackParams) {
+            this.$gtm.trackEvent({
+                event: null,
+                category: 'Account',
+                action: 'click',
+                label: 'Show account',
+                value: 1,
+                noninteraction: false, // Optional
+            });
         }
     }
 }

@@ -444,6 +444,7 @@ export default {
                 }
 
                 this.showWaitingModal(null);
+                this.trackClick({value: 0, category: 'Mint', label: 'Confirm Confirm Mint Action'});
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
@@ -485,6 +486,7 @@ export default {
 
                 let allowApprove = await this.checkAllowance(sum);
                 if (!allowApprove) {
+                    this.trackClick({value: 0, category: 'Mint', label: 'Approve Mint Action'});
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
                 } else {
@@ -494,6 +496,7 @@ export default {
             } catch (e) {
                 console.log(e)
                 this.showErrorModal('approve');
+                this.trackClick({value: 0, category: 'Mint error', label: 'Mint Error Showed'});
             }
         },
 
@@ -515,6 +518,7 @@ export default {
                     while (minted) {
                         await new Promise(resolve => setTimeout(resolve, 2000));
                         let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
+                        this.trackClick({value: 0, category: 'Redeem tx scan', label: 'Mint Go to Scan'});
 
                         if (receipt) {
                             if (receipt.status)
@@ -589,6 +593,17 @@ export default {
             }
 
             return result;
+        },
+
+        trackClick(trackParams) {
+            this.$gtm.trackEvent({
+                event: null,
+                category: '',
+                action: 'click',
+                label: '',
+                value: 1,
+                noninteraction: false, // Optional
+            });
         },
     }
 }

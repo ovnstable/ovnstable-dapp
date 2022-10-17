@@ -241,17 +241,30 @@ export default {
         mintAction() {
             this.showMintView();
             this.showInvestModal(this.cardData.data);
+            this.trackClick({value: 0, category: 'Mint View', label: 'Open Mint'});
         },
 
         redeemAction() {
             this.showRedeemView();
             this.showInvestModal(this.cardData.data);
+            this.trackClick({value: 0, category: 'Redeem View', label: 'Open Redeem'});
         },
 
         openStrategyCard() {
             this.$router.push("/ets/" + this.cardData.data.name);
             window.scrollTo({top: 0, behavior: "smooth"});
-        }
+        },
+
+        trackClick(trackParams) {
+            this.$gtm.trackEvent({
+                event: null,
+                category: '',
+                action: 'click',
+                label: '',
+                value: 1,
+                noninteraction: false, // Optional
+            });
+        },
     }
 };
 </script>

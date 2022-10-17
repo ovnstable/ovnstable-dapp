@@ -129,12 +129,15 @@ export default {
 
             switch (zoom) {
                 case "week":
+                    this.trackClick({value: 0, category: 'Widgets range', label: 'Change Range Week'});
                     this.slice = -7;
                     break;
                 case "month":
+                    this.trackClick({value: 0, category: 'Widgets range', label: 'Change Range Month'});
                     this.slice = -30;
                     break;
                 case "all":
+                    this.trackClick({value: 0, category: 'Widgets range', label: 'Change Range All'});
                     this.slice = null;
                     break;
                 default:

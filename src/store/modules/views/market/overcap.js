@@ -19,6 +19,7 @@ const state = {
         "0xF4B67f83a65500D2692e2637acFe382cE09fC90b": 10000,
         "0x12a79E67ed7f4fd0a0318d331941800898DAB30d": 10000,
         "0x826b8d2d523E7af40888754E3De64348C00B99f4": 1000000,
+        "0xf3c9Bb7aaaB08C20FbFbba8EeB216AC0b87FB37E": 250000,
     },
 
     showOvercapBanner: true,

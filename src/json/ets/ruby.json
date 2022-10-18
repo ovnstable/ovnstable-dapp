@@ -2,6 +2,7 @@
   "name": "ruby",
   "nameUp": "RUBY",
   "prototype": false,
+  "highRisk": false,
 
   "exchangeContract": "etsExchangerRuby",
 

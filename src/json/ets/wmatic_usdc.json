@@ -2,6 +2,7 @@
   "name": "wmatic_usdc",
   "nameUp": "WMATIC/USDC",
   "prototype": true,
+  "highRisk": false,
 
   "exchangeContract": "exchangerWmaticUsdc",
 

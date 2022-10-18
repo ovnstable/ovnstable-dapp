@@ -246,7 +246,7 @@
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Risk factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-risk">Moderate</label>
+                    <label class="card-info-risk" :class="etsData.highRisk ? 'risk-high' : ''">{{ etsData.highRisk ? 'High' : 'Moderate' }}</label>
                     <Tooltip text="Risk Factor is determined by a Pool's downside volatility. Pools that have a low Risk Factor translates to smaller downside volatility."/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
@@ -270,9 +270,9 @@
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center" v-if="$wu.isMobile()">
-                    <label class="card-info mt-1">Health Factor check interval</label>
+                    <label class="card-info mt-1">Health Factor check</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].healthFactorCheckInterval) ? etsStrategyData[etsData.name].healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
+                    <label class="card-info-value">24/7</label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
             </v-col>
@@ -285,9 +285,9 @@
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
-                    <label class="card-info mt-1">Health Factor check interval</label>
+                    <label class="card-info mt-1">Health Factor check</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].healthFactorCheckInterval) ? etsStrategyData[etsData.name].healthFactorCheckInterval : '—' }}<label style="text-transform: none">&nbsp;hours</label></label>
+                    <label class="card-info-value">24/7</label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
             </v-col>
@@ -1029,6 +1029,10 @@ export default {
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #FE7F2D;
+}
+
+.risk-high {
+    color: #CF3F92;
 }
 
 .address-card-text {

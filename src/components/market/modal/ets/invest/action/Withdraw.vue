@@ -246,7 +246,7 @@ export default {
             return {
                 id: this.etsData.actionAsset,
                 title: this.etsData.actionTokenName,
-                image: require('@/assets/currencies/' + this.etsData.actionAsset + '.svg')
+                image: require('@/assets/currencies/' + this.etsData.actionTokenName + '.png')
             }
         },
 

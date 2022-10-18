@@ -47,6 +47,9 @@ const actions = {
         let EtsExchangerGarnet = require(`@/contracts/optimism/HedgeExchangerOpUsdc.json`);
         let EtsGarnetToken = require(`@/contracts/optimism/EtsOpUsdc.json`);
 
+        let EtsExchangerWethUsdcUniV3 = require(`@/contracts/polygon/HedgeExchangerUniV3WethUsdc.json`);
+        let EtsWethUsdcUniV3Token = require(`@/contracts/polygon/RebaseTokenUniV3WethUsdc.json`);
+
 
         let web3 = rootState.web3.web3;
 
@@ -102,6 +105,9 @@ const actions = {
 
         contracts.etsExchangerGarnet = _load(EtsExchangerGarnet, web3);
         contracts.etsGarnetToken = _load(EtsGarnetToken, web3);
+
+        contracts.etsExchangerWethUsdcUniV3 = _load(EtsExchangerWethUsdcUniV3, web3);
+        contracts.etsWethUsdcUniV3Token = _load(EtsWethUsdcUniV3Token, web3);
 
         commit('web3/setContracts', contracts, {root: true})
     },

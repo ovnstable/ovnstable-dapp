@@ -114,7 +114,7 @@
                         <v-row class="ma-0 ml-n2">
                         <div class="box">
                             <label class="box-name mt-2">Platform</label>
-                            <div class="icon">
+                            <div class="icon platform-logo">
                                 <v-img :src="require('@/assets/cards/platform/' + cardData.data.dex + '.svg')"
                                        class="mt-1"
                                        alt="platform icon"/>
@@ -618,6 +618,11 @@ export default {
 .icon {
     height: 36px !important;
     width: auto !important;
+}
+
+.platform-logo {
+    height: 36px !important;
+    width: 36px !important;
 }
 
 .chain-name, .platform-name, .token-pair-name {

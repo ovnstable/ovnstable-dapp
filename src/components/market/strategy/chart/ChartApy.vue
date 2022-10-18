@@ -256,6 +256,23 @@ export default {
                 maxValue = 50;
             }
 
+            let minValue;
+            try {
+
+                if (this.usdPlusDataEnabled) {
+                    let minValueEts = Math.min.apply(Math, values);
+                    let minValueUsdPlus = Math.min.apply(Math, valuesUsdPlus);
+
+                    minValue = Math.min(minValueEts, minValueUsdPlus);
+                } else {
+                    minValue = Math.min.apply(Math, values);
+                }
+
+                minValue = Math.min(Math.round(Math.ceil(minValue / 10)) * 10, 0);
+            } catch (e) {
+                minValue = 0;
+            }
+
             let seriesList = [];
 
             seriesList.push(
@@ -349,7 +366,7 @@ export default {
                     opposite: false,
 
                     tickAmount: 5,
-                    min: 0,
+                    min: minValue,
                     max: maxValue,
 
                     labels: {

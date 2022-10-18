@@ -335,16 +335,16 @@
 
         <template v-if="networkSupport">
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-10 mb-10' : 'mt-15'">
-                <v-btn class="header-btn btn-filled" :class="(etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'disabled-btn' : ''" @click="mintAction" :disabled="etsData.maxSupply && totalSupply[etsData.name] > etsData.maxSupply">
+                <v-btn class="header-btn btn-filled" :class="(!isOvercapAvailable && etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'disabled-btn' : ''" @click="mintAction" :disabled="!isOvercapAvailable && etsData.maxSupply && totalSupply[etsData.name] > etsData.maxSupply">
                     MINT ETS {{ etsData.nameUp }}
                 </v-btn>
-                <template v-if="etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
+                <template v-if="!isOvercapAvailable && etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
                     <label v-if="$wu.isFull()" class="full-status-error-label ml-4">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
                 </template>
             </v-row>
 
             <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-n8' : 'mt-2'" v-if="!$wu.isFull()">
-                <template v-if="etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
+                <template v-if="!isOvercapAvailable && etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
                     <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
                 </template>
             </v-row>
@@ -391,6 +391,7 @@ export default {
         ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'avaxConfig']),
         ...mapGetters('marketData', ['etsStrategyData']),
         ...mapGetters('supplyData', ['totalSupply']),
+        ...mapGetters('overcapData', ['isOvercapAvailable']),
 
         entryFee: function () {
             if (this.strategyData && this.strategyData.fees) {

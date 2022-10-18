@@ -30,7 +30,7 @@
   "maxSupply": 1000.00,
   "inceptionDate": "18 October 2022",
 
-  "iconName": "ets_matic_usdc_uni_v3",
+  "iconName": "ets_wmatic_usdc_uni_v3",
 
   "mainColor": "#7944DA",
   "cardBgColor": "radial-gradient(circle at 100% 0%, #001845 0%, #001845 27%, #001845 52%, #7E46E2 100%)",

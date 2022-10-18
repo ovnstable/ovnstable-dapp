@@ -320,6 +320,7 @@ export default {
                 }
             } else {
                 if (this.isOvercapAvailable) {
+
                     if (this.account && this.sum > 0 && this.numberRule) {
                         let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
                         let useOvercapSum;
@@ -333,6 +334,8 @@ export default {
                         if (useOvercapSum <= this.overcapRemaining) {
                             return 'Invest';
                         }
+                    } else {
+                        return 'Invest';
                     }
                 }
 

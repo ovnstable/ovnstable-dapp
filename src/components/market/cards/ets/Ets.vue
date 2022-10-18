@@ -164,7 +164,7 @@
                     </template>
 
                     <template v-else>
-                        <v-col v-if="!(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)" :class="accountEtsBalance ? 'mr-1' : ''">
+                        <v-col v-if="isOvercapAvailable || !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)" :class="accountEtsBalance ? 'mr-1' : ''">
                             <v-row>
                                 <v-btn class="button btn-filled" @click.stop="mintAction">Mint ETS</v-btn>
                             </v-row>
@@ -212,6 +212,7 @@ export default {
         ...mapGetters("marketData", ["etsStrategyData"]),
         ...mapGetters("supplyData", ["totalSupply"]),
         ...mapGetters('accountData', ['etsBalance']),
+        ...mapGetters('overcapData', ['isOvercapAvailable']),
 
         accountEtsBalance: function () {
             return this.etsBalance[this.cardData.data.name];

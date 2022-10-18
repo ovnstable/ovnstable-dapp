@@ -73,7 +73,7 @@
             <template v-else>
                 <v-row class="ma-0" justify="end" align="center">
                     <v-btn x-small
-                           v-if="!cardData.isPrototype && !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)"
+                           v-if="isOvercapAvailable || (!cardData.isPrototype &&  !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply))"
                            class="button btn-outlined"
                            @click.stop="mintAction" outlined>
                         MINT/REDEEM
@@ -175,7 +175,7 @@
                 <v-col v-if="networkSupport">
                     <v-row justify="start" align="center">
                         <v-btn x-small
-                               v-if="!cardData.isPrototype && !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)"
+                               v-if="isOvercapAvailable || (!cardData.isPrototype &&  !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply))"
                                class="button btn-filled"
                                @click.stop="mintAction" outlined>
                             MINT/REDEEM
@@ -232,6 +232,7 @@ export default {
         ...mapGetters("marketData", ["etsStrategyData"]),
         ...mapGetters("supplyData", ["totalSupply"]),
         ...mapGetters('accountData', ['etsBalance']),
+        ...mapGetters('overcapData', ['isOvercapAvailable']),
 
         accountEtsBalance: function () {
             return this.etsBalance[this.cardData.data.name];

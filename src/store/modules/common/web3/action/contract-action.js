@@ -50,6 +50,9 @@ const actions = {
         let EtsExchangerWethUsdcUniV3 = require(`@/contracts/polygon/HedgeExchangerUniV3WethUsdc.json`);
         let EtsWethUsdcUniV3Token = require(`@/contracts/polygon/RebaseTokenUniV3WethUsdc.json`);
 
+        let EtsExchangerWmaticUsdcUniV3 = require(`@/contracts/polygon/HedgeExchangerUniV3WmaticUsdc.json`);
+        let EtsWmaticUsdcUniV3Token = require(`@/contracts/polygon/RebaseTokenUniV3WmaticUsdc.json`);
+
 
         let web3 = rootState.web3.web3;
 
@@ -108,6 +111,9 @@ const actions = {
 
         contracts.etsExchangerWethUsdcUniV3 = _load(EtsExchangerWethUsdcUniV3, web3);
         contracts.etsWethUsdcUniV3Token = _load(EtsWethUsdcUniV3Token, web3);
+
+        contracts.etsExchangerWmaticUsdcUniV3 = _load(EtsExchangerWmaticUsdcUniV3, web3);
+        contracts.etsWmaticUsdcUniV3Token = _load(EtsWmaticUsdcUniV3Token, web3);
 
         commit('web3/setContracts', contracts, {root: true})
     },

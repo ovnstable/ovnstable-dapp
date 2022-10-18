@@ -27,7 +27,7 @@
   "hasUsdPlus": true,
   "tokenPair": "wbnb_usd_plus",
 
-  "maxSupply": 500000.00,
+  "maxSupply": 100000.00,
   "inceptionDate": "24 August 2022",
 
   "iconName": "ets_wbnb_usd_plus",

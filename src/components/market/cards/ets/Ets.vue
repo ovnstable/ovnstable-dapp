@@ -142,7 +142,7 @@
                     <template v-if="accountEtsBalance">
                         <label class="your-deposit">Your deposit in ETS</label>
                         <label class="your-deposit">{{
-                                accountEtsBalance ? ($utils.formatMoneyComma(accountEtsBalance, 2) + ' USD+') : '—'
+                                accountEtsBalance ? ($utils.formatMoneyComma(accountEtsBalance, 2) + ' ' + cardData.data.actionTokenName) : '—'
                             }}</label>
                     </template>
                     <template v-else>

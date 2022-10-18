@@ -33,7 +33,7 @@
                                             <label class="investor-card-sub-title">Your balance in ETS</label>
                                         </v-row>
                                         <v-row align="center" class="mt-5">
-                                            <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2) + ' USD+') : '—' }}</label>
+                                            <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2) + ' ' + etsData.actionTokenName) : '—' }}</label>
                                         </v-row>
                                     </v-col>
                                 </v-row>
@@ -143,7 +143,7 @@
                                     <label class="investor-card-sub-title">Your balance in ETS</label>
                                 </v-row>
                                 <v-row align="center" class="mt-5">
-                                    <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2) + ' USD+') : '—' }}</label>
+                                    <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2) + ' ' + etsData.actionTokenName) : '—' }}</label>
                                 </v-row>
                                 <v-row align="center" class="mt-10">
                                     <label class="investor-card-sub-title">Profit/loss</label>

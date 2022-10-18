@@ -215,22 +215,6 @@ export default {
 
         sliderPercent: 0,
         step: 0,
-
-        get overcapRemaining() {
-
-            let overcapValue = localStorage.getItem('overcapRemainingValue');
-
-            if (overcapValue == null) {
-                localStorage.setItem('overcapRemainingValue', '-1');
-                overcapValue = localStorage.getItem('overcapRemainingValue');
-            }
-
-            try {
-                return parseFloat(overcapValue);
-            } catch (e) {
-                return null;
-            }
-        },
     }),
 
     computed: {
@@ -241,7 +225,7 @@ export default {
         ...mapGetters("network", ['networkId', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
-        ...mapGetters('overcapData', ['isOvercapAvailable']),
+        ...mapGetters('overcapData', ['isOvercapAvailable', 'walletOvercapLimit']),
 
         icon: function () {
             switch (this.networkId) {
@@ -331,7 +315,7 @@ export default {
                             useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
                         }
 
-                        if (useOvercapSum <= this.overcapRemaining) {
+                        if (useOvercapSum <= this.overcapRemaining()) {
                             return 'Invest';
                         }
                     } else {
@@ -361,7 +345,7 @@ export default {
                         useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
                     }
 
-                    return useOvercapSum <= this.overcapRemaining;
+                    return useOvercapSum <= this.overcapRemaining();
                 } else {
                     return false;
                 }
@@ -502,7 +486,7 @@ export default {
                         }
 
                         await this.useOvercap({
-                            overcapLeft: this.overcapRemaining,
+                            overcapLeft: this.overcapRemaining(),
                             overcapVolume: useOvercapSum
                         });
                     }
@@ -700,6 +684,27 @@ export default {
             }
 
             return result;
+        },
+
+        overcapRemaining() {
+
+            let overcapValue = localStorage.getItem('overcapRemainingValue');
+
+            if (overcapValue == null || overcapValue === '-1') {
+                if (this.isOvercapAvailable && this.walletOvercapLimit) {
+                    localStorage.setItem('overcapRemainingValue', this.walletOvercapLimit.toString());
+                } else {
+                    localStorage.setItem('overcapRemainingValue', '-1');
+                }
+
+                overcapValue = localStorage.getItem('overcapRemainingValue');
+            }
+
+            try {
+                return parseFloat(overcapValue);
+            } catch (e) {
+                return null;
+            }
         },
     }
 }

@@ -27,7 +27,7 @@
   "hasUsdPlus": false,
   "tokenPair": "weth_usdc",
 
-  "maxSupply": 1000.00,
+  "maxSupply": 25000.00,
   "inceptionDate": "18 October 2022",
 
   "iconName": "ets_weth_usdc_uni_v3",

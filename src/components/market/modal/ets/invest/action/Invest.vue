@@ -308,7 +308,7 @@ export default {
 
             if (!this.account) {
                 return 'Connect to a wallet';
-            } else if (this.etsData.prototype) {
+            } else if (!this.isOvercapAvailable && this.etsData.prototype) {
                 return "ETS is in prototype"
             } else if (this.isBuy) {
                 if (this.actionAssetApproved) {
@@ -351,7 +351,7 @@ export default {
 
         isBuy: function () {
             if (this.isOvercapAvailable) {
-                if (this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule) {
+                if (this.account && this.sum > 0 && this.numberRule) {
                     let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
                     let useOvercapSum;
 

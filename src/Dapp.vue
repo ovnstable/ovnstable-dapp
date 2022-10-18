@@ -62,8 +62,8 @@ export default {
 
     watch: {
         account: function (newVal, oldVal) {
-            if (newVal && localStorage.getItem('overcapRemaining') === '-1') {
-                localStorage.setItem('overcapRemaining', this.walletOvercapLimit.toString());
+            if (newVal && localStorage.getItem('overcapRemainingValue') === '-1') {
+                localStorage.setItem('overcapRemainingValue', this.walletOvercapLimit.toString());
             }
         },
     },

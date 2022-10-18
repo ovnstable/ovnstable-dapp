@@ -214,7 +214,23 @@ export default {
         gasAmountInUsd: null,
 
         sliderPercent: 0,
-        step: 0
+        step: 0,
+
+        get overcapRemaining() {
+
+            let overcapValue = localStorage.getItem('overcapRemainingValue');
+
+            if (overcapValue == null) {
+                localStorage.setItem('overcapRemainingValue', '-1');
+                overcapValue = localStorage.getItem('overcapRemainingValue');
+            }
+
+            try {
+                return parseFloat(overcapValue);
+            } catch (e) {
+                return null;
+            }
+        },
     }),
 
     computed: {
@@ -224,6 +240,7 @@ export default {
         ...mapGetters("network", ['networkId', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
+        ...mapGetters('overcapData', ['isOvercapAvailable']),
 
         icon: function () {
             switch (this.networkId) {
@@ -360,6 +377,8 @@ export default {
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
 
+        ...mapActions("overcapData", ['returnOvercap']),
+
         changeSliderPercent() {
             this.sum = (this.etsBalance[this.etsData.name] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
@@ -425,6 +444,13 @@ export default {
                     }
 
                     let buyResult = await contracts[this.etsData.exchangeContract].methods.redeem(sum).send(buyParams);
+
+                    if (this.isOvercapAvailable) {
+                        await this.returnOvercap({
+                            overcapLeft: this.overcapRemaining,
+                            overcapVolume: this.sum
+                        });
+                    }
 
                     this.closeWaitingModal();
                     this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'redeemEts'});

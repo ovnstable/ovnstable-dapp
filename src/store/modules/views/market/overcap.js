@@ -15,6 +15,8 @@ const state = {
         "0x8fda1ead2709923c058217b441ef5a5bf09f4022": 10000,
 
         "0x92b8f9fe69D7A0fF316De2FbEADd1a5c29f774eC": 10000,
+        "0xC8BD407d9A361Cb2eAf439565F61C92B968ac956": 10000,
+        "0xF4B67f83a65500D2692e2637acFe382cE09fC90b": 10000,
     },
 
     showOvercapBanner: true,
@@ -65,14 +67,14 @@ const actions = {
 
         if (request.overcapLeft != null && parseFloat(request.overcapLeft) >= parseFloat(request.overcapVolume)) {
             let overcapRemainingValue = parseFloat(request.overcapLeft) - parseFloat(request.overcapVolume);
-            localStorage.setItem('overcapRemaining', overcapRemainingValue.toString());
+            localStorage.setItem('overcapRemainingValue', overcapRemainingValue.toString());
         }
     },
 
     async returnOvercap({commit, dispatch, getters, rootState}, request) {
         if (request.overcapLeft != null) {
             let overcapRemainingValue = parseFloat(request.overcapLeft) + parseFloat(request.overcapVolume);
-            localStorage.setItem('overcapRemaining', Math.min(overcapRemainingValue, getters.walletOvercapLimit).toString());
+            localStorage.setItem('overcapRemainingValue', Math.min(overcapRemainingValue, getters.walletOvercapLimit).toString());
         }
     },
 

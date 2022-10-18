@@ -214,7 +214,23 @@ export default {
         gasAmountInUsd: null,
 
         sliderPercent: 0,
-        step: 0
+        step: 0,
+
+        get overcapRemaining() {
+
+            let overcapValue = localStorage.getItem('overcapRemainingValue');
+
+            if (overcapValue == null) {
+                localStorage.setItem('overcapRemainingValue', '-1');
+                overcapValue = localStorage.getItem('overcapRemainingValue');
+            }
+
+            try {
+                return parseFloat(overcapValue);
+            } catch (e) {
+                return null;
+            }
+        },
     }),
 
     computed: {
@@ -225,6 +241,7 @@ export default {
         ...mapGetters("network", ['networkId', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
+        ...mapGetters('overcapData', ['isOvercapAvailable']),
 
         icon: function () {
             switch (this.networkId) {
@@ -301,17 +318,53 @@ export default {
                     this.step = 1;
                     return 'Approve ' + this.etsData.actionTokenName;
                 }
-            } else if ((this.etsData.maxSupply && this.totalSupply[this.etsData.name] >= this.etsData.maxSupply) || (this.etsData.maxSupply && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum)) >= parseFloat(this.etsData.maxSupply))) {
-                return 'Over ETS capacity'
-            } else if (this.sum > parseFloat(this.actionAssetBalance[this.etsData.actionAsset])) {
-                return 'Invest'
             } else {
-                return 'Invest';
+                if (this.isOvercapAvailable) {
+                    if (this.account && this.sum > 0 && this.numberRule) {
+                        let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
+                        let useOvercapSum;
+
+                        if (noOvercapSum <= 0) {
+                            useOvercapSum = this.sum;
+                        } else {
+                            useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
+                        }
+
+                        if (useOvercapSum <= this.overcapRemaining) {
+                            return 'Invest';
+                        }
+                    }
+                }
+
+                if ((this.etsData.maxSupply && this.totalSupply[this.etsData.name] >= this.etsData.maxSupply) || (this.etsData.maxSupply && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum)) >= parseFloat(this.etsData.maxSupply))) {
+                    return 'Over ETS capacity'
+                } else if (this.sum > parseFloat(this.actionAssetBalance[this.etsData.actionAsset])) {
+                    return 'Invest'
+                } else {
+                    return 'Invest';
+                }
             }
         },
 
         isBuy: function () {
-            return this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && (!this.etsData.maxSupply || this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
+            if (this.isOvercapAvailable) {
+                if (this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule) {
+                    let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
+                    let useOvercapSum;
+
+                    if (noOvercapSum <= 0) {
+                        useOvercapSum = this.sum;
+                    } else {
+                        useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
+                    }
+
+                    return useOvercapSum <= this.overcapRemaining;
+                } else {
+                    return false;
+                }
+            } else {
+                return this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && (!this.etsData.maxSupply || this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
+            }
         },
 
         numberRule: function () {
@@ -365,6 +418,8 @@ export default {
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
+
+        ...mapActions("overcapData", ['useOvercap']),
 
         changeSliderPercent() {
             this.sum = (this.actionAssetBalance[this.etsData.actionAsset] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
@@ -432,6 +487,22 @@ export default {
 
                     let referral = await this.getReferralCode();
                     let buyResult = await contracts[this.etsData.exchangeContract].methods.buy(sum, referral).send(buyParams);
+
+                    if (this.isOvercapAvailable) {
+                        let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
+                        let useOvercapSum;
+
+                        if (noOvercapSum <= 0) {
+                            useOvercapSum = this.sum;
+                        } else {
+                            useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
+                        }
+
+                        await this.useOvercap({
+                            overcapLeft: this.overcapRemaining,
+                            overcapVolume: useOvercapSum
+                        });
+                    }
 
                     this.closeWaitingModal();
                     this.showSuccessModal({

@@ -208,9 +208,6 @@ export default {
                 if (a.chain === networkId && b.chain !== networkId) return -1;
                 if (a.chain !== networkId && b.chain === networkId) return 1;
 
-                if (a.hasUsdPlus && !b.hasUsdPlus) return -1;
-                if (!a.hasUsdPlus && b.hasUsdPlus) return 1;
-
                 if (a.hasCap && !b.hasCap) return -1;
                 if (!a.hasCap && b.hasCap) return 1;
 

@@ -299,7 +299,7 @@ export default {
         },
 
         estimateResult: function () {
-            return this.sum * (1 - (this.exitFee ? (this.exitFee / 100.0) : 0.0004));
+            return this.sum * (1 - (this.exitFee ? (this.exitFee / 100.0) : 0));
         },
 
         buttonLabel: function () {

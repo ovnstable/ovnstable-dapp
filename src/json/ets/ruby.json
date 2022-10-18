@@ -3,8 +3,14 @@
   "nameUp": "RUBY",
   "prototype": false,
 
-  "tokenContract": "etsRubyToken",
   "exchangeContract": "etsExchangerRuby",
+
+  "tokenContract": "etsRubyToken",
+  "etsTokenDecimals": 6,
+
+  "actionAsset": "usdPlus",
+  "actionTokenName": "USD+",
+  "actionTokenDecimals": 6,
 
   "address": "0xA88F8c02eBdE678de623C6BCFC886De82e18ad00",
   "chain": 10,

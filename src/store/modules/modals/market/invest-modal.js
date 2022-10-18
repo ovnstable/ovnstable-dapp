@@ -5,7 +5,7 @@ const state = {
     etsData: null,
 
     etsTokenApproved: false,
-    usdPlusApproved: false,
+    actionAssetApproved: false,
 };
 
 const getters = {
@@ -26,8 +26,8 @@ const getters = {
         return state.etsTokenApproved;
     },
 
-    usdPlusApproved(state) {
-        return state.usdPlusApproved;
+    actionAssetApproved(state) {
+        return state.actionAssetApproved;
     },
 };
 
@@ -56,8 +56,8 @@ const actions = {
         commit('setEtsTokenApproved', true);
     },
 
-    approveUsdPlus({commit, dispatch, getters}) {
-        commit('setUsdPlusApproved', true);
+    approveActionAsset({commit, dispatch, getters}) {
+        commit('setActionAssetApproved', true);
     },
 };
 
@@ -79,8 +79,8 @@ const mutations = {
         state.etsTokenApproved = value;
     },
 
-    setUsdPlusApproved(state, value) {
-        state.usdPlusApproved = value;
+    setActionAssetApproved(state, value) {
+        state.actionAssetApproved = value;
     },
 };
 

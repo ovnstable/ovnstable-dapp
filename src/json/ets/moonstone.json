@@ -3,8 +3,14 @@
   "nameUp": "MOONSTONE",
   "prototype": true,
 
-  "tokenContract": "etsMoonstoneToken",
   "exchangeContract": "etsExchangerMoonstone",
+
+  "tokenContract": "etsMoonstoneToken",
+  "etsTokenDecimals": 6,
+
+  "actionAsset": "usdPlus",
+  "actionTokenName": "USD+",
+  "actionTokenDecimals": 6,
 
   "address": "0x719ee857Ae6cf85Cbe7284Bc45ad1f99dd5ff0dB",
   "chain": 137,

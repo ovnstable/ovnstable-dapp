@@ -3,8 +3,14 @@
   "nameUp": "WMATIC/USD+",
   "prototype": false,
 
-  "tokenContract": "usdPlusWmatic",
   "exchangeContract": "exchangerUsdPlusWmatic",
+
+  "tokenContract": "usdPlusWmatic",
+  "etsTokenDecimals": 6,
+
+  "actionAsset": "usdPlus",
+  "actionTokenName": "USD+",
+  "actionTokenDecimals": 6,
 
   "address": "0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf",
   "chain": 137,

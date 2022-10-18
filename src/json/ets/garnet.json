@@ -3,8 +3,14 @@
   "nameUp": "GARNET",
   "prototype": false,
 
-  "tokenContract": "etsGarnetToken",
   "exchangeContract": "etsExchangerGarnet",
+
+  "tokenContract": "etsGarnetToken",
+  "etsTokenDecimals": 6,
+
+  "actionAsset": "usdPlus",
+  "actionTokenName": "USD+",
+  "actionTokenDecimals": 6,
 
   "address": "0x270dF474f4bd2B92A45A46228683c971765E81A7",
   "chain": 10,

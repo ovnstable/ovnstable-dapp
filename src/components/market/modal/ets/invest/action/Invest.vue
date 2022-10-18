@@ -39,18 +39,18 @@
 
         <v-row class="mt-5">
             <v-slider
-                    class="percent-slider"
-                    color="#1C95E7"
-                    track-color="var(--main-border)"
-                    track-fill-color="#1C95E7"
-                    tick-size="10"
-                    min="0"
-                    max="100"
-                    v-model="sliderPercent"
-                    step="5"
-                    ticks
-                    :tick-labels="percentLabels"
-                    v-on:end="changeSliderPercent"
+                class="percent-slider"
+                color="#1C95E7"
+                track-color="var(--main-border)"
+                track-fill-color="#1C95E7"
+                tick-size="10"
+                min="0"
+                max="100"
+                v-model="sliderPercent"
+                step="5"
+                ticks
+                :tick-labels="percentLabels"
+                v-on:end="changeSliderPercent"
             ></v-slider>
         </v-row>
 
@@ -65,7 +65,9 @@
         <v-row class="mt-8 mx-n3 main-card">
             <v-col>
                 <v-row align="center" class="ma-0">
-                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(etsBalance[etsData.name], 3) }}</label>
+                    <label class="balance-label ml-3">Balance: {{
+                            $utils.formatMoney(etsBalance[etsData.name], 3)
+                        }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>
@@ -103,7 +105,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 USD+ = 1 ETS {{ etsData.nameUp }}</label>
+            <label class="exchange-label">1 {{ etsData.actionTokenName }} = 1 ETS {{ etsData.nameUp }}</label>
         </v-row>
 
         <!-- TODO: add gas fee section -->
@@ -117,10 +119,14 @@
             </v-col>
             <v-col>
                 <v-row>
-                    <label class="action-info-sub-label">{{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}</label>
+                    <label class="action-info-sub-label">{{
+                            entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—'
+                        }}</label>
                     <v-spacer></v-spacer>
                     <label class="action-info-label">You mint:</label>
-                    <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma(estimateResult, 2) : '0') }}</label>
+                    <label class="action-info-sub-label ml-2">{{
+                            '$' + (estimateResult ? $utils.formatMoneyComma(estimateResult, 2) : '0')
+                        }}</label>
                 </v-row>
             </v-col>
         </v-row>
@@ -134,7 +140,7 @@
             </div>
 
             <div class="action-btn-container" v-else>
-                <v-btn v-if="usdPlusApproved"
+                <v-btn v-if="actionAssetApproved"
                        height="56"
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
@@ -155,18 +161,18 @@
 
         <v-row class="mt-5" :class="$wu.isFull() ? '' : 'mb-4'">
             <v-slider
-                    readonly
-                    class="step-slider"
-                    color="#1C95E7"
-                    track-color="var(--main-border)"
-                    track-fill-color="#1C95E7"
-                    tick-size="10"
-                    min="0"
-                    max="2"
-                    v-model="step"
-                    step="1"
-                    ticks
-                    :tick-labels="stepLabels"
+                readonly
+                class="step-slider"
+                color="#1C95E7"
+                track-color="var(--main-border)"
+                track-fill-color="#1C95E7"
+                tick-size="10"
+                min="0"
+                max="2"
+                v-model="step"
+                step="1"
+                ticks
+                :tick-labels="stepLabels"
             ></v-slider>
         </v-row>
 
@@ -200,12 +206,6 @@ export default {
     },
 
     data: () => ({
-        currency: {
-            id: 'usdPlus',
-            title: 'USD+',
-            image: require('@/assets/currencies/usdPlus.svg')
-        },
-
         sum: null,
 
         estimatedGas: null,
@@ -214,13 +214,12 @@ export default {
         gasAmountInUsd: null,
 
         sliderPercent: 0,
-        stepLabels: ['', 'Approve USD+', 'Confirmation'],
         step: 0
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'etsBalance', 'account']),
-        ...mapGetters('investModal', ['etsData', 'usdPlusApproved']),
+        ...mapGetters('accountData', ['balance', 'etsBalance', 'actionAssetBalance', 'account']),
+        ...mapGetters('investModal', ['etsData', 'actionAssetApproved']),
         ...mapGetters('marketData', ['etsStrategyData']),
         ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters("network", ['networkId', 'polygonApi']),
@@ -228,7 +227,7 @@ export default {
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
         icon: function () {
-            switch (this.networkId){
+            switch (this.networkId) {
                 case 137:
                     return polygonIcon;
                 case 43114:
@@ -237,6 +236,18 @@ export default {
                     return optimismIcon;
                 case 56:
                     return bscIcon;
+            }
+        },
+
+        stepLabels: function () {
+            return ['', 'Approve ' + this.etsData.actionTokenName, 'Confirmation'];
+        },
+
+        currency: function () {
+            return {
+                id: this.etsData.actionAsset,
+                title: this.etsData.actionTokenName,
+                image: require('@/assets/currencies/' + this.etsData.actionAsset + '.svg')
             }
         },
 
@@ -249,11 +260,11 @@ export default {
         },
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.balance.usdPlus, 3);
+            return this.$utils.formatMoney(this.actionAssetBalance[this.etsData.actionAsset], 3);
         },
 
         sumResult: function () {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.usdPlus) * 100;
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.actionAssetBalance[this.etsData.actionAsset]) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -283,16 +294,16 @@ export default {
             } else if (this.etsData.prototype) {
                 return "ETS is in prototype"
             } else if (this.isBuy) {
-                if (this.usdPlusApproved) {
+                if (this.actionAssetApproved) {
                     this.step = 2;
                     return 'Confirm transaction'
                 } else {
                     this.step = 1;
-                    return 'Approve USD+';
+                    return 'Approve ' + this.etsData.actionTokenName;
                 }
             } else if ((this.etsData.maxSupply && this.totalSupply[this.etsData.name] >= this.etsData.maxSupply) || (this.etsData.maxSupply && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum)) >= parseFloat(this.etsData.maxSupply))) {
                 return 'Over ETS capacity'
-            } else if (this.sum > parseFloat(this.balance.usdPlus)) {
+            } else if (this.sum > parseFloat(this.actionAssetBalance[this.etsData.actionAsset])) {
                 return 'Invest'
             } else {
                 return 'Invest';
@@ -300,7 +311,7 @@ export default {
         },
 
         isBuy: function () {
-            return this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && (!this.etsData.maxSupply ||  this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
+            return this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && (!this.etsData.maxSupply || this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
         },
 
         numberRule: function () {
@@ -314,7 +325,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlus)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.actionAssetBalance[this.etsData.actionAsset])) return true;
 
             return false;
         },
@@ -345,7 +356,7 @@ export default {
     methods: {
 
         ...mapActions("marketData", ['refreshMarket']),
-        ...mapActions("investModal", ['showRedeemView', 'approveUsdPlus']),
+        ...mapActions("investModal", ['showRedeemView', 'approveActionAsset']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
@@ -356,10 +367,10 @@ export default {
         ...mapActions("successModal", ['showSuccessModal']),
 
         changeSliderPercent() {
-            this.sum = (this.balance.usdPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.actionAssetBalance[this.etsData.actionAsset] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
 
-        isNumber: function(evt) {
+        isNumber: function (evt) {
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;
 
@@ -385,10 +396,24 @@ export default {
 
         async buyAction() {
 
-            this.showWaitingModal('Swapping ' + this.sumResult + ' USD+ for ' + this.sumResult + ' ETS ' + this.etsData.nameUp);
+            this.showWaitingModal('Swapping ' + this.sumResult + ' ' + this.etsData.actionTokenName + ' for ' + this.sumResult + ' ETS ' + this.etsData.nameUp);
 
             try {
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+                let sum;
+
+                switch (this.etsData.actionTokenDecimals) {
+                    case 6:
+                        sum = this.web3.utils.toWei(this.sum, 'mwei');
+                        break;
+                    case 8:
+                        sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
+                        break;
+                    case 18:
+                        sum = this.web3.utils.toWei(this.sum, 'ether');
+                        break;
+                    default:
+                        break;
+                }
 
                 let contracts = this.contracts;
                 let from = this.account;
@@ -409,7 +434,11 @@ export default {
                     let buyResult = await contracts[this.etsData.exchangeContract].methods.buy(sum, referral).send(buyParams);
 
                     this.closeWaitingModal();
-                    this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'mintEts', etsData: this.etsData});
+                    this.showSuccessModal({
+                        successTxHash: buyResult.transactionHash,
+                        successAction: 'mintEts',
+                        etsData: this.etsData
+                    });
                 } catch (e) {
                     console.log(e);
                     this.closeWaitingModal();
@@ -427,7 +456,21 @@ export default {
 
         async confirmSwapAction() {
             try {
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+                let sum;
+
+                switch (this.etsData.actionTokenDecimals) {
+                    case 6:
+                        sum = this.web3.utils.toWei(this.sum, 'mwei');
+                        break;
+                    case 8:
+                        sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
+                        break;
+                    case 18:
+                        sum = this.web3.utils.toWei(this.sum, 'ether');
+                        break;
+                    default:
+                        break;
+                }
 
                 this.showWaitingModal(null);
 
@@ -464,7 +507,21 @@ export default {
 
                 let approveSum = "10000000";
 
-                let sum = this.web3.utils.toWei(approveSum, 'mwei');
+                let sum;
+
+                switch (this.etsData.actionTokenDecimals) {
+                    case 6:
+                        sum = this.web3.utils.toWei(approveSum, 'mwei');
+                        break;
+                    case 8:
+                        sum = this.web3.utils.toWei(approveSum, 'mwei') * 100;
+                        break;
+                    case 18:
+                        sum = this.web3.utils.toWei(approveSum, 'ether');
+                        break;
+                    default:
+                        break;
+                }
 
                 let allowApprove = await this.checkAllowance(sum);
                 if (!allowApprove) {
@@ -472,7 +529,7 @@ export default {
                     this.showErrorModal('approve');
                     return;
                 } else {
-                    this.approveUsdPlus();
+                    this.approveActionAsset();
                     this.closeWaitingModal();
                 }
             } catch (e) {
@@ -486,14 +543,14 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts.usdPlus.methods.allowance(from, contracts[this.etsData.exchangeContract].options.address).call();
+            let allowanceValue = await contracts[this.etsData.actionAsset].methods.allowance(from, contracts[this.etsData.exchangeContract].options.address).call();
 
             if (allowanceValue < sum) {
                 try {
                     await this.refreshGasPrice();
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                    let tx = await contracts.usdPlus.methods.approve(contracts[this.etsData.exchangeContract].options.address, sum).send(approveParams);
+                    let tx = await contracts[this.etsData.actionAsset].methods.approve(contracts[this.etsData.exchangeContract].options.address, sum).send(approveParams);
 
                     let minted = true;
                     while (minted) {

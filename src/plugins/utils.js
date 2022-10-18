@@ -3,6 +3,12 @@ import BN from "bn.js";
 let accounting = require("accounting-js")
 let moment = require("moment");
 
+let accountingEightConfig = {
+    symbol: "",
+    precision: 8,
+    thousand: " ",
+}
+
 let accountingConfig = {
     symbol: "",
     precision: 6,

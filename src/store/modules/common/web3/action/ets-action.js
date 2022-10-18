@@ -19,9 +19,13 @@ const actions = {
 
         let list = [];
 
-        getters.etsNames.forEach(value => {
-            list.push(require('@/json/ets/' + value + '.json'));
-        })
+        for (let i = 0; i < getters.etsNames.length; i++) {
+            let ets = require('@/json/ets/' + getters.etsNames[i] + '.json');
+
+            // May add some fields
+
+            list.push(ets);
+        }
 
         await commit('setEtsList', list);
     },

@@ -3,8 +3,14 @@
   "nameUp": "WBNB/USD+",
   "prototype": false,
 
-  "tokenContract": "usdPlusWbnb",
   "exchangeContract": "exchangerUsdPlusWbnb",
+
+  "tokenContract": "usdPlusWbnb",
+  "etsTokenDecimals": 6,
+
+  "actionAsset": "usdPlus",
+  "actionTokenName": "USD+",
+  "actionTokenDecimals": 6,
 
   "address": "0xbAAc6ED05b2fEb47ef04b63018A27d80cbeA10d1",
   "chain": 56,

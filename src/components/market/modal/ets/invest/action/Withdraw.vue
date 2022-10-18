@@ -39,18 +39,18 @@
 
         <v-row class="mt-5">
             <v-slider
-                    class="percent-slider"
-                    color="#1C95E7"
-                    track-color="var(--main-border)"
-                    track-fill-color="#1C95E7"
-                    tick-size="10"
-                    min="0"
-                    max="100"
-                    v-model="sliderPercent"
-                    step="5"
-                    ticks
-                    :tick-labels="percentLabels"
-                    v-on:end="changeSliderPercent"
+                class="percent-slider"
+                color="#1C95E7"
+                track-color="var(--main-border)"
+                track-fill-color="#1C95E7"
+                tick-size="10"
+                min="0"
+                max="100"
+                v-model="sliderPercent"
+                step="5"
+                ticks
+                :tick-labels="percentLabels"
+                v-on:end="changeSliderPercent"
             ></v-slider>
         </v-row>
 
@@ -65,7 +65,8 @@
         <v-row class="mt-8 mx-n3 main-card">
             <v-col>
                 <v-row align="center" class="ma-0">
-                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.usdPlus, 3) }}</label>
+                    <label class="balance-label ml-3">Balance:
+                        {{ $utils.formatMoney(actionAssetBalance[etsData.actionAsset], 3) }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>
@@ -103,7 +104,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 ETS {{ etsData.nameUp }} = 1 USD+</label>
+            <label class="exchange-label">1 ETS {{ etsData.nameUp }} = 1 {{ etsData.actionTokenName }}</label>
         </v-row>
 
         <!-- TODO: add gas fee section -->
@@ -117,10 +118,14 @@
             </v-col>
             <v-col>
                 <v-row>
-                    <label class="action-info-sub-label">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
+                    <label class="action-info-sub-label">{{
+                            exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—'
+                        }}</label>
                     <v-spacer></v-spacer>
                     <label class="action-info-label">You redeem:</label>
-                    <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma(estimateResult, 2) : '0') }}</label>
+                    <label class="action-info-sub-label ml-2">{{
+                            '$' + (estimateResult ? $utils.formatMoneyComma(estimateResult, 2) : '0')
+                        }}</label>
                 </v-row>
             </v-col>
         </v-row>
@@ -156,18 +161,18 @@
 
         <v-row class="mt-5" :class="$wu.isFull() ? '' : 'mb-4'">
             <v-slider
-                    readonly
-                    class="step-slider"
-                    color="#1C95E7"
-                    track-color="var(--main-border)"
-                    track-fill-color="#1C95E7"
-                    tick-size="10"
-                    min="0"
-                    max="2"
-                    v-model="step"
-                    step="1"
-                    ticks
-                    :tick-labels="stepLabels"
+                readonly
+                class="step-slider"
+                color="#1C95E7"
+                track-color="var(--main-border)"
+                track-fill-color="#1C95E7"
+                tick-size="10"
+                min="0"
+                max="2"
+                v-model="step"
+                step="1"
+                ticks
+                :tick-labels="stepLabels"
             ></v-slider>
         </v-row>
 
@@ -201,12 +206,6 @@ export default {
     },
 
     data: () => ({
-        buyCurrency: {
-            id: 'usdPlus',
-            title: 'USD+',
-            image: require('@/assets/currencies/usdPlus.svg')
-        },
-
         sum: null,
 
         estimatedGas: null,
@@ -219,7 +218,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'etsBalance', 'account']),
+        ...mapGetters('accountData', ['balance', 'etsBalance', 'actionAssetBalance', 'account']),
         ...mapGetters('investModal', ['etsData', 'etsTokenApproved']),
         ...mapGetters('marketData', ['etsStrategyData']),
         ...mapGetters("network", ['networkId', 'polygonApi']),
@@ -227,7 +226,7 @@ export default {
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
         icon: function () {
-            switch (this.networkId){
+            switch (this.networkId) {
                 case 137:
                     return polygonIcon;
                 case 43114:
@@ -241,6 +240,14 @@ export default {
 
         maxResult: function () {
             return this.$utils.formatMoney(this.etsBalance[this.etsData.name], 3);
+        },
+
+        buyCurrency: function () {
+            return {
+                id: this.etsData.actionAsset,
+                title: this.etsData.actionTokenName,
+                image: require('@/assets/currencies/' + this.etsData.actionAsset + '.svg')
+            }
         },
 
         currency: function () {
@@ -357,7 +364,7 @@ export default {
             this.sum = (this.etsBalance[this.etsData.name] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
 
-        isNumber: function(evt) {
+        isNumber: function (evt) {
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;
 
@@ -383,10 +390,24 @@ export default {
 
         async redeemAction() {
 
-            this.showWaitingModal('Withdrawing ' + this.sumResult + ' ETS ' + this.etsData.nameUp + ' for ' + this.sumResult + ' USD+');
+            this.showWaitingModal('Withdrawing ' + this.sumResult + ' ETS ' + this.etsData.nameUp + ' for ' + this.sumResult + ' ' + this.etsData.actionTokenName);
 
             try {
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+                let sum;
+
+                switch (this.etsData.etsTokenDecimals) {
+                    case 6:
+                        sum = this.web3.utils.toWei(this.sum, 'mwei');
+                        break;
+                    case 8:
+                        sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
+                        break;
+                    case 18:
+                        sum = this.web3.utils.toWei(this.sum, 'ether');
+                        break;
+                    default:
+                        break;
+                }
 
                 let contracts = this.contracts;
                 let from = this.account;
@@ -424,7 +445,21 @@ export default {
 
         async confirmSwapAction() {
             try {
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+                let sum;
+
+                switch (this.etsData.etsTokenDecimals) {
+                    case 6:
+                        sum = this.web3.utils.toWei(this.sum, 'mwei');
+                        break;
+                    case 8:
+                        sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
+                        break;
+                    case 18:
+                        sum = this.web3.utils.toWei(this.sum, 'ether');
+                        break;
+                    default:
+                        break;
+                }
 
                 this.showWaitingModal(null);
 
@@ -461,7 +496,21 @@ export default {
 
                 let approveSum = "10000000";
 
-                let sum = this.web3.utils.toWei(approveSum, 'mwei');
+                let sum;
+
+                switch (this.etsData.etsTokenDecimals) {
+                    case 6:
+                        sum = this.web3.utils.toWei(approveSum, 'mwei');
+                        break;
+                    case 8:
+                        sum = this.web3.utils.toWei(approveSum, 'mwei') * 100;
+                        break;
+                    case 18:
+                        sum = this.web3.utils.toWei(approveSum, 'ether');
+                        break;
+                    default:
+                        break;
+                }
 
                 let allowApprove = await this.checkAllowance(sum);
                 if (!allowApprove) {

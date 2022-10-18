@@ -1,15 +1,10 @@
 const state = {
 
-    balance: {
-        usdPlus: 0,
-        asset: 0,
-        wUsdPlus: 0
-    },
-
+    balance: {},
+    actionAssetBalance: {},
     etsBalance: {},
 
     account: null,
-
     uns: null,
 };
 
@@ -21,6 +16,10 @@ const getters = {
 
     etsBalance(state) {
         return state.etsBalance;
+    },
+
+    actionAssetBalance(state) {
+        return state.actionAssetBalance;
     },
 
     account(state) {
@@ -39,11 +38,9 @@ const actions = {
 
         console.debug('AccountData: resetBalance');
 
-        commit('setBalance', {
-            usdPlus: 0,
-            asset: 0,
-            wUsdPlus: 0
-        });
+        commit('setBalance', {});
+        commit('setEtsBalance', {});
+        commit('setActionAssetBalance', {});
     },
 
     async resetUns({commit, dispatch, getters}) {
@@ -128,6 +125,41 @@ const actions = {
 
         commit('setEtsBalance', resultEtsBalance);
 
+
+        let resultActionAssetBalance = {};
+
+        if (etsList) {
+            for (let i = 0; i < etsList.length; i++) {
+                let ets = etsList[i];
+                let actionAssetBalance;
+
+                if (!resultActionAssetBalance[ets.actionAsset]) {
+                    try {
+                        actionAssetBalance = await web3.contracts[ets.actionAsset].methods.balanceOf(getters.account).call();
+
+                        switch (ets.actionTokenDecimals) {
+                            case 6:
+                                actionAssetBalance = web3.web3.utils.fromWei(actionAssetBalance, 'mwei');
+                                break;
+                            case 8:
+                                actionAssetBalance = parseFloat(web3.web3.utils.fromWei(actionAssetBalance, 'mwei')) / 100.0;
+                                break;
+                            case 18:
+                                actionAssetBalance = web3.web3.utils.fromWei(actionAssetBalance, 'ether');
+                                break;
+                            default:
+                                break;
+                        }
+                    } catch (e) {
+                    }
+
+                    resultActionAssetBalance[ets.actionAsset] = actionAssetBalance;
+                }
+            }
+        }
+
+        commit('setActionAssetBalance', resultActionAssetBalance);
+
         commit('accountUI/setLoadingBalance', false, { root: true })
     },
 };
@@ -148,6 +180,10 @@ const mutations = {
 
     setUns(state, value) {
         state.uns = value;
+    },
+
+    setActionAssetBalance(state, value) {
+        state.actionAssetBalance = value;
     }
 };
 

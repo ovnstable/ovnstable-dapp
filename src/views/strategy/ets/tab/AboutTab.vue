@@ -207,12 +207,12 @@
                     ></v-progress-linear>
                 </v-row>
                 <v-row justify="start" align="start" class="mt-5">
-                    <label class="progress-text">{{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}</label>
+                    <label class="progress-text">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
                     <v-spacer></v-spacer>
                     <label class="progress-sub-text">your balance</label>
                 </v-row>
                 <v-row justify="start" align="start">
-                    <label class="progress-text">Enter</label>
+                    <label class="progress-text">Exit</label>
                     <v-spacer></v-spacer>
                     <label class="progress-sub-text">in strategy</label>
                 </v-row>

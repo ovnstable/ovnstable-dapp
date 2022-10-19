@@ -294,6 +294,8 @@ export default {
                 return 'Connect to a wallet';
             } else if (!this.isOvercapAvailable && this.etsData.prototype) {
                 return "ETS is in prototype"
+            } else if (this.etsData.disabled) {
+                return "Temporarily unavailable"
             } else if (this.isBuy) {
                 if (this.actionAssetApproved) {
                     this.step = 2;
@@ -335,7 +337,7 @@ export default {
 
         isBuy: function () {
             if (this.isOvercapAvailable) {
-                if (this.account && this.sum > 0 && this.numberRule) {
+                if (!this.etsData.disabled && this.account && this.sum > 0 && this.numberRule) {
                     let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
                     let useOvercapSum;
 
@@ -350,7 +352,7 @@ export default {
                     return false;
                 }
             } else {
-                return this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && (!this.etsData.maxSupply || this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
+                return !this.etsData.disabled && this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && (!this.etsData.maxSupply || this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
             }
         },
 

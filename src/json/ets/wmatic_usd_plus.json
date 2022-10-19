@@ -2,6 +2,7 @@
   "name": "wmatic_usd_plus",
   "nameUp": "WMATIC/USD+",
   "prototype": false,
+  "disabled": false,
   "highRisk": false,
 
   "exchangeContract": "exchangerUsdPlusWmatic",

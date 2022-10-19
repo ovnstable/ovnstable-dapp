@@ -64,7 +64,7 @@
                                 </v-row>
 
                                 <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'mt-2' : 'mt-12'">
-                                    <v-btn class="header-btn btn-investor-invest" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'disabled-btn' : ''" :disabled="!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply"  @click="mintAction">
+                                    <v-btn class="header-btn btn-investor-invest" :class="(this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)) ? 'disabled-btn' : ''" :disabled="this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)"  @click="mintAction">
                                         MINT ETS {{ etsData.nameUp }}
                                     </v-btn>
                                 </v-row>
@@ -167,8 +167,8 @@
                                     <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
                                 </v-row>
 
-                                <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'mt-2' : 'mt-12'">
-                                    <v-btn class="header-btn btn-investor-invest" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'disabled-btn' : ''" :disabled="!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply" @click="mintAction">
+                                <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)? 'mt-2' : 'mt-12'">
+                                    <v-btn class="header-btn btn-investor-invest" :class="(this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)) ? 'disabled-btn' : ''" :disabled="this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)" @click="mintAction">
                                         MINT ETS {{ etsData.nameUp }}
                                     </v-btn>
                                 </v-row>

@@ -2,6 +2,7 @@
   "name": "moonstone",
   "nameUp": "MOONSTONE",
   "prototype": true,
+  "disabled": false,
   "highRisk": false,
 
   "exchangeContract": "etsExchangerMoonstone",

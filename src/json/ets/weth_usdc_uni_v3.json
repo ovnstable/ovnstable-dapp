@@ -2,6 +2,7 @@
   "name": "weth_usdc_uni_v3",
   "nameUp": "WETH/USDC",
   "prototype": true,
+  "disabled": true,
   "highRisk": true,
 
   "exchangeContract": "etsExchangerWethUsdcUniV3",

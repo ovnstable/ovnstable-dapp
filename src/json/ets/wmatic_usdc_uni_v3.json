@@ -1,7 +1,7 @@
 {
   "name": "wmatic_usdc_uni_v3",
   "nameUp": "WMATIC/USDC",
-  "prototype": false,
+  "prototype": true,
   "disabled": true,
   "highRisk": true,
 

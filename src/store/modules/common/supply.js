@@ -16,6 +16,8 @@ const actions = {
 
         console.debug('Supply: refreshSupply');
 
+        let networkId = rootState.network.networkId;
+
         let resultSupply = {};
         let web3 = rootState.web3;
 
@@ -25,11 +27,14 @@ const actions = {
             let ets = etsList[i];
             let etsSupply;
 
-            try {
-                etsSupply = await web3.contracts[ets.tokenContract].methods.totalSupply().call();
-                etsSupply = web3.web3.utils.fromWei(etsSupply, 'mwei');
-            } catch (e) {
-                console.log(e)
+            if (ets.chain === networkId) {
+                try {
+                    etsSupply = await web3.contracts[ets.tokenContract].methods.totalSupply().call();
+                    etsSupply = web3.web3.utils.fromWei(etsSupply, 'mwei');
+                } catch (e) {
+                    etsSupply = rootState.marketData.etsStrategyData[ets.name].tvl;
+                }
+            } else {
                 etsSupply = rootState.marketData.etsStrategyData[ets.name].tvl;
             }
 

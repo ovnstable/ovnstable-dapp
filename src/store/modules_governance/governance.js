@@ -343,7 +343,7 @@ const actions = {
 
         let pm = rootState.web3.contracts.pm;
         let account = rootState.accountData.account;
-        let params = {from: account};
+        let params = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
 
         let items = [];
         for (let i = 0; i < weights.length; i++) {
@@ -362,7 +362,11 @@ const actions = {
             items.push(item);
         }
 
-        await pm.methods.setStrategyWeights(items).send(params);
+        try {
+            await pm.methods.setStrategyWeights(items).send(params);
+        } catch (e) {
+            console.log(e)
+        }
 
         commit('setFinanceLoading', false);
     },
@@ -440,9 +444,13 @@ const actions = {
 
         let pm = rootState.web3.contracts.pm;
         let account = rootState.accountData.account;
-        let params = {from: account};
+        let params = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
 
-        await pm.methods.balance().send(params);
+        try {
+            await pm.methods.balance().send(params);
+        } catch (e) {
+            console.log(e)
+        }
 
         commit('setFinanceLoading', false);
     },

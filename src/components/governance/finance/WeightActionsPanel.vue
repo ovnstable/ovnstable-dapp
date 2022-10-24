@@ -8,22 +8,21 @@
                 </v-btn>
             </v-row>
             <v-row class="ma-0 mt-4">
-                <v-btn @click="rebalanceAction" outlined :disabled="financeLoading || !hasChangeAccount">
+                <v-btn @click="rebalanceAction"
+                       outlined
+                       :disabled="financeLoading || !hasChangeAccount">
                     Rebalance
                 </v-btn>
             </v-row>
             <v-row class="ma-0 mt-4">
                 <v-btn @click="changeWeightsAction"
                        outlined
-                       :disabled="!hasChangeAccount || financeLoading || !weightsIsBtnEnabled || !weightsIsBtnEnabledMinMax || !weightsIsBtnEnabledTargetWeight || !weightsIsBtnEnabledTurnOn">
+                       :disabled="!hasChangeAccount || financeLoading || !weightsIsBtnEnabled || !weightsIsBtnEnabledMinMax || !weightsIsBtnEnabledTargetWeight">
                     Change Weights
                 </v-btn>
             </v-row>
             <v-row class="ma-0 mt-1">
                 <label class="error-label" v-if="!hasChangeAccount">Current wallet is not Portfolio Agent</label>
-            </v-row>
-            <v-row class="ma-0 mt-1">
-                <label class="error-label" v-if="!financeLoading && !weightsIsBtnEnabledTurnOn">At least one strategy or reward should be enabled</label>
             </v-row>
             <v-row class="ma-0 mt-1">
                 <label class="error-label" v-if="!financeLoading && !weightsIsBtnEnabled">The sum of all target weights must be equal to 100</label>
@@ -59,7 +58,7 @@ export default {
             let targetWeightSum = 0.0;
 
             this.m2mItems.forEach(item => {
-                if (item && item.targetWeight && (item.enabled || item.enabledReward)) {
+                if (item && item.targetWeight) {
                     targetWeightSum += parseFloat(item.targetWeight);
                 }
             })
@@ -96,19 +95,6 @@ export default {
 
             return result;
         },
-
-        weightsIsBtnEnabledTurnOn: function () {
-
-            let result = 0;
-
-            this.m2mItems.forEach(item => {
-                if (item && (item.enabled || item.enabledReward)) {
-                    result++;
-                }
-            });
-
-            return result > 0;
-        },
     },
 
     methods: {
@@ -122,10 +108,10 @@ export default {
             if (estimatedGasValue) {
                 if (estimatedGasValue.haveError) {
                     this.showErrorModalWithMsg({errorType: 'governanceChangeWeights', errorMsg: estimatedGasValue});
-                } else {
-                    await this.setStrategiesM2MWeights(this.m2mItems);
-                    await this.getFinance();
                 }
+
+                await this.setStrategiesM2MWeights(this.m2mItems);
+                await this.getFinance();
             } else {
                 this.showErrorModal('governanceChangeWeights');
             }
@@ -138,10 +124,10 @@ export default {
             if (estimatedGasValue) {
                 if (estimatedGasValue.haveError) {
                     this.showErrorModalWithMsg({errorType: 'governanceRebalance', errorMsg: estimatedGasValue});
-                } else {
-                    await this.rebalancePortfolio();
-                    await this.getFinance();
                 }
+
+                await this.rebalancePortfolio();
+                await this.getFinance();
             } else {
                 this.showErrorModal('governanceRebalance');
             }

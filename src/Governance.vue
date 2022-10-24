@@ -56,6 +56,7 @@ export default {
     }),
 
     async created() {
+        await this.initTheme();
         await this.initWeb3();
         await this.connectWallet();
     },
@@ -79,6 +80,7 @@ export default {
         ...mapActions('ethers', ['mineBlocks']),
         ...mapActions('tokenAction', ['addOvnToken']),
         ...mapActions('governance', ['checkAccount']),
+        ...mapActions('theme', ['initTheme']),
 
         async addOvnTokenAction(){
             this.addOvnToken();

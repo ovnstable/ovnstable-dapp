@@ -59,7 +59,7 @@
                 </v-row>
 
                 <v-row align="start" justify="start" class="account-info-row ma-0 mt-10 toggle-row">
-                    <label @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabTx">Transactions</label>
+                    <label @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabTx">History</label>
                     <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabTokens">Tokens</label>
 
                     <v-spacer></v-spacer>

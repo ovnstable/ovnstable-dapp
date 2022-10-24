@@ -430,7 +430,7 @@ export default {
                     // this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'mintUsdPlus'});
                 } catch (e) {
                     console.log(e);
-                    this.closeWaitingModal();
+                    // this.closeWaitingModal();
                     this.showErrorModal('buyUSD+');
                     return;
                 }
@@ -472,7 +472,7 @@ export default {
                     this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
 
                     await this.buyAction();
-                    this.closeWaitingModal();
+                    // this.closeWaitingModal();
                 }
             } catch (e) {
                 console.log(e)

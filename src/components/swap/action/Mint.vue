@@ -352,6 +352,8 @@ export default {
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
 
+        ...mapActions("transaction", ['putTransaction']),
+
         changeSliderPercent() {
             this.sum = (this.balance.asset * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
@@ -382,7 +384,7 @@ export default {
 
         async buyAction() {
 
-            this.showWaitingModal('Minting ' + this.sumResult + ' ' + this.assetName + ' for ' + this.sumResult + ' USD+');
+            // this.showWaitingModal('Minting ' + this.sumResult + ' ' + this.assetName + ' for ' + this.sumResult + ' USD+');
 
             try {
                 let sum;
@@ -414,10 +416,18 @@ export default {
                         referral: await this.getReferralCode(),
                     }
 
-                    let buyResult = await contracts.exchange.methods.mint(mintParams).send(buyParams);
+                    let buyResult = await contracts.exchange.methods.mint(mintParams).send(buyParams).on('transactionHash', function (hash) {
+                        let tx = {
+                            text: 'Mint USD+',
+                            hash: hash,
+                            pending: true
+                        };
 
-                    this.closeWaitingModal();
-                    this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'mintUsdPlus'});
+                        self.putTransaction(tx);
+                    });
+
+                    // this.closeWaitingModal();
+                    // this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'mintUsdPlus'});
                 } catch (e) {
                     console.log(e);
                     this.closeWaitingModal();
@@ -443,7 +453,7 @@ export default {
                     sum = this.web3.utils.toWei(this.sum, 'mwei');
                 }
 
-                this.showWaitingModal(null);
+                // this.showWaitingModal(null);
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
@@ -452,7 +462,7 @@ export default {
                     this.gasAmountInUsd = null;
 
                     await this.buyAction();
-                    this.closeWaitingModal();
+                    // this.closeWaitingModal();
                 } else {
                     this.estimatedGas = estimatedGasValue;
 

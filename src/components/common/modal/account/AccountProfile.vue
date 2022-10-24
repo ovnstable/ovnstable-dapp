@@ -1,10 +1,10 @@
 <template>
     <v-dialog
-            :value="showAccountProfile"
-            :width="width"
-            @input="close"
-            :persistent="persistent"
-            scrollable>
+        :value="showAccountProfile"
+        :width="width"
+        @input="close"
+        :persistent="persistent"
+        scrollable>
         <v-card class="container_body">
             <v-toolbar class="container_header" flat>
                 <label class="title-modal">
@@ -23,7 +23,8 @@
                         <v-img :src="require('@/assets/icon/undefined.svg')"/>
                     </div>
 
-                    <v-row class="account-display-container ml-4" align="center" justify="center" @click="viewInExplorer">
+                    <v-row class="account-display-container ml-4" align="center" justify="center"
+                           @click="viewInExplorer">
                         <label class="account-label">
                             {{ account ? accountDisplay : 'XXXXX...XXXX' }}
                         </label>
@@ -33,9 +34,9 @@
                     </v-row>
 
                     <v-tooltip
-                            v-model="showCopyTooltip"
-                            color="#202832"
-                            bottom
+                        v-model="showCopyTooltip"
+                        color="#202832"
+                        bottom
                     >
                         <template v-slot:activator="{on}">
                             <div class="icon-img ml-8" @click="copyAddressToClipboard">
@@ -57,37 +58,15 @@
                     </v-btn>
                 </v-row>
 
-                <v-row class="account-info-row mt-8" align="center">
-                    <label class="add-coins-label" :class="$wu.isMobile() ? 'ml-1' : 'ml-2'">Add tokens to your wallet</label>
+                <v-row align="start" justify="start" class="account-info-row ma-0 mt-10 toggle-row">
+                    <label @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabTx">Transactions</label>
+                    <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabTokens">Tokens</label>
+
+                    <v-spacer></v-spacer>
                 </v-row>
 
-                <v-row class="add-tokens-row" justify="start" align="center">
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addUsdPlusToken">
-                        <div class="coin-img">
-                            <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
-                        </div>
-                        <label class="ml-2 coin-btn-label">USD+</label>
-                    </v-btn>
-                    <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addwUsdPlusToken" v-if="showWrap">
-                        <div class="coin-img">
-                            <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
-                        </div>
-                        <label class="ml-2 coin-btn-label">wUSD+</label>
-                    </v-btn>
-
-                    <v-btn
-                        v-for="ets in etsList"
-                        class="coin-btn"
-                        :class="$wu.isMobile() ? 'ma-1' : 'ma-2'"
-                        @click="addEtsToken(ets)"
-                        v-if="networkId === ets.chain"
-                    >
-                        <div class="coin-img">
-                            <v-img :src="require('@/assets/currencies/market/ets_' + ets.name + '.svg')"/>
-                        </div>
-                        <label class="ml-2 coin-btn-label">ETS {{ ets.nameUp }}</label>
-                    </v-btn>
-                </v-row>
+                <TxTab v-if="tab === 1"/>
+                <TokensTab v-if="tab === 2"/>
             </v-card-text>
         </v-card>
 
@@ -97,13 +76,16 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import TokensTab from "@/components/common/modal/account/tabs/TokensTab";
+import TxTab from "@/components/common/modal/account/tabs/tx/TxTab";
 
 export default {
     name: "AccountProfile",
 
-    components: {},
+    components: {TxTab, TokensTab},
 
     data: () => ({
+        tab: 1,
         showCopyTooltip: false,
     }),
 
@@ -140,12 +122,25 @@ export default {
                 return null;
             }
         },
+
+        activeTabTx: function () {
+            return {
+                'tab-button': this.tab === 1,
+                'tab-button-in-active': this.tab !== 1,
+            }
+        },
+
+        activeTabTokens: function () {
+            return {
+                'tab-button': this.tab === 2,
+                'tab-button-in-active': this.tab !== 2,
+            }
+        },
     },
 
     watch: {
-        showAccountProfile: function (newValue, oldValue){
-            console.debug('Watch: show ' + newValue);
-            if (newValue){
+        showAccountProfile: function (newValue, oldValue) {
+            if (newValue) {
                 this.loadTransaction();
             }
         },
@@ -154,7 +149,6 @@ export default {
     methods: {
         ...mapActions('accountUI', ['hideAccountProfile']),
         ...mapActions('walletAction', ['disconnectWallet']),
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken']),
         ...mapActions('transaction', ['loadTransaction']),
 
         openOnExplorer(hash) {
@@ -203,11 +197,6 @@ export default {
         height: 28px !important;
     }
 
-    .coin-img {
-        width: 20px;
-        height: 20px;
-    }
-
     .account-label {
         font-style: normal;
         font-weight: 400;
@@ -216,24 +205,7 @@ export default {
         letter-spacing: 0.02em;
     }
 
-    .add-coins-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
-    }
-
-    .coin-btn {
-        height: 46px !important;
-
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 12px !important;
-        line-height: 14px !important;
-        letter-spacing: 0.02em !important;
-    }
-
-    .account-info-row, .add-tokens-row {
+    .account-info-row {
         margin-left: 3% !important;
         margin-right: 3% !important;
     }
@@ -241,6 +213,13 @@ export default {
     .container_header {
         margin-left: 3% !important;
         margin-right: 3% !important;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
     }
 }
 
@@ -255,11 +234,6 @@ export default {
         height: 36px !important;
     }
 
-    .coin-img {
-        width: 32px;
-        height: 32px;
-    }
-
     .account-label {
         font-style: normal;
         font-weight: 400;
@@ -268,24 +242,7 @@ export default {
         letter-spacing: 0.02em;
     }
 
-    .add-coins-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
-    }
-
-    .coin-btn {
-        height: 56px !important;
-
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.02em !important;
-    }
-
-    .account-info-row, .add-tokens-row {
+    .account-info-row {
         margin-left: 5% !important;
         margin-right: 5% !important;
     }
@@ -293,6 +250,13 @@ export default {
     .container_header {
         margin-left: 5% !important;
         margin-right: 5% !important;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
     }
 }
 
@@ -307,11 +271,6 @@ export default {
         height: 36px !important;
     }
 
-    .coin-img {
-        width: 32px;
-        height: 32px;
-    }
-
     .account-label {
         font-style: normal;
         font-weight: 400;
@@ -320,24 +279,7 @@ export default {
         letter-spacing: 0.02em;
     }
 
-    .add-coins-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
-    }
-
-    .coin-btn {
-        height: 56px !important;
-
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.02em !important;
-    }
-
-    .account-info-row, .add-tokens-row {
+    .account-info-row {
         margin-left: 5% !important;
         margin-right: 5% !important;
     }
@@ -345,6 +287,13 @@ export default {
     .container_header {
         margin-left: 5% !important;
         margin-right: 5% !important;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
     }
 }
 
@@ -412,20 +361,30 @@ export default {
     cursor: pointer !important;
 }
 
-.add-coins-label {
-    font-family: 'Roboto', sans-serif;
-    color: var(--secondary-gray-text);
+.toggle-row {
+    border-bottom: 2px solid var(--main-border);
+    height: auto !important;
 }
 
-.coin-btn {
-    background: var(--card-coin-background) !important;
-    border-radius: 4px !important;
-    box-shadow: none !important;
+.tab-button {
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
+    cursor: pointer;
+}
 
-    font-family: 'Roboto', sans-serif !important;
-    font-style: normal !important;
-    text-transform: uppercase !important;
-    font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: var(--secondary-gray-text) !important;
+.tab-button-in-active {
+    cursor: pointer;
+}
+
+.tab-btn {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: var(--secondary-gray-text);
+    margin-bottom: -2px;
+    cursor: pointer;
+}
+
+.tab-btn-disabled {
+    cursor: default;
 }
 </style>

@@ -103,6 +103,10 @@ export default {
 <style scoped>
 /* mobile */
 @media only screen and (max-width: 960px) {
+    .progress {
+        width: 150px;
+    }
+
     .header-container {
         margin-left: 5% !important;
         margin-right: 5% !important;

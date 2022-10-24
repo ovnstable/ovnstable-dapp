@@ -9,7 +9,7 @@
             </div>
         </v-main>
 
-        <AccountProfile width="630"/>
+        <AccountProfile width="760"/>
         <GasSettings width="510"/>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -19,7 +19,7 @@
 <script>
 
 import Header from "./components/Header";
-import AccountProfile from "./components/common/modal/AccountProfile";
+import AccountProfile from "./components/common/modal/account/AccountProfile";
 import GasSettings from "@/components/common/modal/GasSettings";
 import {mapActions, mapGetters} from "vuex";
 import Navbar from "@/components/Navbar";

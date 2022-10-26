@@ -1,3 +1,4 @@
+import moment from "moment";
 const Promise = require("bluebird");
 
 const state = {
@@ -14,6 +15,11 @@ const getters = {
 const actions = {
 
     async putTransaction({commit, dispatch, getters, rootState}, tx) {
+        tx.date = moment.utc(new Date());
+        tx.pending = true;
+        tx.isError = false;
+        tx.chain = rootState.network.networkId;
+
         getters.transactions.push(tx);
         commit('setTransactions', getters.transactions);
     },
@@ -46,6 +52,7 @@ const actions = {
                 let filteredTx = getters.transactions.find(tx => tx.hash === receipt.transactionHash);
                 filteredTx.pending = false;
                 filteredTx.receipt = receipt;
+                filteredTx.isError = !receipt.status;
 
                 commit('setTransactions', getters.transactions)
             })

@@ -6,8 +6,8 @@
 
         <TxListHeader/>
 
-<!--        <template v-for="tx in transactions">-->
-        <template v-for="tx in transactionsMock">
+        <template v-for="tx in transactionsList">
+<!--        <template v-for="tx in transactionsMock">-->
             <TxCard class="ma-0 mt-2" :tx-data="tx" v-bind:key="`${tx.hash}_${tx.pending}`" />
         </template>
 
@@ -19,6 +19,7 @@
 import {mapActions, mapGetters} from "vuex";
 import TxCard from "@/components/common/modal/account/tabs/tx/component/TxCard";
 import TxListHeader from "@/components/common/modal/account/tabs/tx/component/TxListHeader";
+import moment from "moment";
 
 export default {
     name: "TxTab",
@@ -29,7 +30,7 @@ export default {
         transactionsMock: [
             {
                 hash: '0x127581hk51k236g12l3hj1g235g1k23g162',
-                date: '2022-04-02T07:05:58',
+                date: '2022-04-12T02:05:58',
                 text: 'Redeem ETS WMATIC/USD+',
                 product: 'ets_wmatic_usd_plus',
                 productName: 'ETS WMATIC/USD+',
@@ -41,7 +42,7 @@ export default {
             },
             {
                 hash: '0x127581hk51k236g12l3hj1g235g1k23g162',
-                date: '2022-04-02T07:05:58',
+                date: '2022-04-25T11:05:58',
                 text: 'Mint ETS GARNET',
                 product: 'ets_garnet',
                 productName: 'ETS GARNET',
@@ -53,7 +54,7 @@ export default {
             },
             {
                 hash: '0x127581hk51k236g12l3hj1g235g1k23g162',
-                date: '2022-04-02T07:05:58',
+                date: '2022-10-26T04:01:58',
                 text: 'Mint USD+',
                 product: 'usdPlus',
                 productName: 'USD+',
@@ -71,6 +72,14 @@ export default {
 
     computed: {
         ...mapGetters('transaction', ['transactions']),
+
+        transactionsList: function () {
+            return [...this.transactions].sort(
+                function(o1,o2){
+                    return moment(o1.date).isBefore(moment(o2.date)) ? 1 : moment(o1.date).isAfter(moment(o2.date)) ? -1 : 0;
+                }
+            );
+        },
     },
 
     watch: {

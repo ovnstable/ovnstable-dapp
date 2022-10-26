@@ -1,6 +1,6 @@
 <template>
     <v-row class="ma-0 account-info-row list-card-container" align="center" @click="switchCard">
-        <v-col :cols="$wu.isMobile() ? 1 : 4">
+        <v-col class="my-3" :cols="$wu.isMobile() ? 1 : 4">
             <v-row justify="start" align="center">
                 <div class="icon" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'">
                     <v-img :src="require('@/assets/currencies/market/' + txData.product + '.svg')"/>
@@ -12,7 +12,7 @@
             <v-row justify="end" align="center">
                 <label class="card-label label-amount">
                     {{ (txData.action === 'mint' || txData.action === 'wrap') ? '+' : ((txData.action === 'redeem' || txData.action === 'unwrap') ? '-' : '') }}
-                    {{$utils.formatMoneyComma(txData.amount, 2)}}
+                    ${{$utils.formatMoneyComma(txData.amount, 2)}}
                 </label>
             </v-row>
         </v-col>
@@ -28,7 +28,6 @@
         </v-col>
         <v-col :cols="$wu.isMobile() ? 3 : 2">
             <v-row justify="center" align="center">
-
                 <template v-if="$wu.isMobile()">
                     <v-progress-circular
                         v-if="txData.pending"
@@ -56,6 +55,96 @@
             </v-row>
         </v-col>
 
+        <v-col v-if="cardOpened" cols="12">
+            <v-divider class="card-divider mt-n2"></v-divider>
+
+            <template v-if="txData.pending">
+                <v-row justify="start" align="center" class="mt-4">
+                    <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="openPendingFaq()">
+                        Why does pending take so long?
+                    </label>
+                    <div class="action-icons ml-1">
+                        <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
+                    </div>
+                </v-row>
+            </template>
+
+            <template v-if="!txData.pending && !txData.isError">
+                <v-row justify="start" align="center" class="mt-4 mb-1">
+                    <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="openOnExplorer()">
+                        View transaction
+                    </label>
+                    <div class="action-icons ml-1">
+                        <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
+                    </div>
+
+                    <template v-if="this.networkId === this.txData.chain">
+                        <label class="success-link ml-5" @click.stop="addToken()">
+                            Add token
+                        </label>
+                        <div class="action-icons ml-1">
+                            <v-img :src="require('@/assets/icon/wallet_plus.svg')"/>
+                        </div>
+                    </template>
+                </v-row>
+            </template>
+
+            <template v-if="!txData.pending && txData.isError">
+                <v-row justify="start" align="center" class="mt-4" :class="$wu.isMobile() ? '' : 'mb-1'">
+                    <v-tooltip
+                        v-model="showCopyTooltip"
+                        color="#202832"
+                        bottom
+                    >
+                        <template v-slot:activator="{on}">
+                            <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="copyTxIdToClipboard()">
+                                Copy tx ID
+                                <v-icon class="copy-icon" small>mdi-content-copy</v-icon>
+                            </label>
+                        </template>
+                        <p class="my-0">Copied!</p>
+                    </v-tooltip>
+
+                    <label class="success-link ml-5" @click.stop="openFaq()">
+                        Open FAQ
+                    </label>
+                    <div class="action-icons ml-1">
+                        <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
+                    </div>
+
+                    <template v-if="!$wu.isMobile()">
+                        <v-spacer></v-spacer>
+
+                        <label class="success-link" @click.stop="openDiscord()">
+                            Contact our support
+                        </label>
+                        <div class="action-icons ml-1" :class="$wu.isMobile() ? 'mr-3' : 'mr-5'">
+                            <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
+                        </div>
+                    </template>
+                </v-row>
+                <v-row v-if="$wu.isMobile()" justify="start" align="center" class="mt-5 mb-1">
+                    <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="openDiscord()">
+                        Contact our support
+                    </label>
+                    <div class="action-icons ml-1">
+                        <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
+                    </div>
+                </v-row>
+            </template>
+        </v-col>
+
+        <v-col v-if="cardOpened && $wu.isMobile()" cols="12">
+            <v-row justify="start" align="center" class="mb-1">
+                <label class="date-label" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'">
+                    {{ formatDate(txData.date) }}
+                </label>
+                <label class="date-label ml-2">
+                    {{ formatTime(txData.date) }}
+                </label>
+            </v-row>
+        </v-col>
+
         <resize-observer @notify="$forceUpdate()"/>
     </v-row>
 </template>
@@ -70,6 +159,7 @@ export default {
 
     data: () => ({
         cardOpened: false,
+        showCopyTooltip: false,
     }),
 
     props: {
@@ -81,6 +171,9 @@ export default {
 
     computed: {
         ...mapGetters('transaction', ['transactions']),
+        ...mapGetters('network', ['opConfig', 'polygonConfig', 'avaxConfig', 'bscConfig']),
+        ...mapGetters('etsAction', ['etsList']),
+        ...mapGetters('network', ['networkId']),
     },
 
     watch: {
@@ -88,6 +181,7 @@ export default {
 
     methods: {
         ...mapActions('transaction', ['loadTransaction']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken']),
 
         formatDate(date) {
             return this.$moment.utc(date).format('DD.MM.YYYY');
@@ -99,6 +193,73 @@ export default {
 
         switchCard() {
             this.cardOpened = !this.cardOpened;
+        },
+
+        openOnExplorer() {
+            let explorerUrl;
+
+            switch (this.txData.chain) {
+                case 137:
+                    explorerUrl = this.polygonConfig.explorerUrl;
+                    break;
+                case 43114:
+                    explorerUrl = this.avaxConfig.explorerUrl;
+                    break;
+                case 10:
+                    explorerUrl = this.opConfig.explorerUrl;
+                    break;
+                case 56:
+                    explorerUrl = this.bscConfig.explorerUrl;
+                    break;
+                default:
+                    explorerUrl = this.polygonConfig.explorerUrl;
+                    break;
+            }
+
+            window.open(explorerUrl + `tx/${this.txData.hash}`, '_blank').focus();
+        },
+
+        openPendingFaq() {
+            // TODO: add pending FAQ link
+            window.open("https://overnight.fi", '_blank').focus();
+        },
+
+
+        openFaq() {
+            // TODO: add error FAQ link
+            window.open("https://overnight.fi", '_blank').focus();
+        },
+
+        addToken() {
+            switch (this.product) {
+                case 'usdPlus':
+                    this.addUsdPlusToken();
+                    break;
+                case 'wUsdPlus':
+                    this.addwUsdPlusToken();
+                    break;
+                default:
+                    try {
+                        let etsData = this.etsList.filter(ets => ('ets_' + ets.name) === this.txData.product);
+                        this.addEtsToken(etsData[0])
+                    } catch (e) {
+                        console.log("Can not add token " + this.txData.productName + " to a wallet");
+                    }
+                    break;
+            }
+        },
+
+        async copyTxIdToClipboard() {
+            this.showCopyTooltip = true;
+
+            await navigator.clipboard.writeText(this.txData.hash);
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            this.showCopyTooltip = false;
+        },
+
+        openDiscord() {
+            window.open(`https://discord.gg/overnight-fi`, '_blank').focus();
         },
     },
 }
@@ -121,6 +282,18 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .success-link {
+        font-style: normal !important;
+        font-size: 12px !important;
+        line-height: 16px !important;
+    }
+
+    .date-label {
+        font-style: normal !important;
+        font-size: 12px !important;
+        line-height: 16px !important;
+    }
 }
 
 /* tablet */
@@ -137,6 +310,18 @@ export default {
         font-size: 14px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .success-link {
+        font-style: normal !important;
+        font-size: 14px !important;
+        line-height: 18px !important;
+    }
+
+    .date-label {
+        font-style: normal !important;
+        font-size: 12px !important;
+        line-height: 16px !important;
     }
 }
 
@@ -155,12 +340,24 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .success-link {
+        font-style: normal !important;
+        font-size: 14px !important;
+        line-height: 18px !important;
+    }
+
+    .date-label {
+        font-style: normal !important;
+        font-size: 12px !important;
+        line-height: 16px !important;
+    }
 }
 
 .list-card-container {
     background: var(--card-coin-background);
     border-radius: 8px;
-    height: 56px !important;
+    height: 100% !important;
 }
 
 .list-card-container:hover {
@@ -198,5 +395,38 @@ export default {
 
 .status-icon {
     height: 20px !important;
+}
+
+.card-divider {
+    border-color: var(--fourth-gray-text) !important;
+}
+
+.success-link {
+    font-family: 'Roboto', sans-serif !important;
+    font-style: normal;
+
+    cursor: pointer;
+    color: var(--links-blue);
+}
+
+.date-label {
+    font-family: 'Roboto', sans-serif !important;
+    font-style: normal;
+
+    cursor: pointer;
+    color: var(--fourth-gray-text);
+}
+
+.copy-icon {
+    color: var(--links-blue);
+}
+
+.success-link:hover {
+    text-decoration: underline;
+}
+
+.action-icons {
+    width: 16px;
+    height: 16px;
 }
 </style>

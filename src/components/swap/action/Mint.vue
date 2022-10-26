@@ -387,6 +387,7 @@ export default {
             // this.showWaitingModal('Minting ' + this.sumResult + ' ' + this.assetName + ' for ' + this.sumResult + ' USD+');
 
             try {
+                let sumInUsd = this.sum;
                 let sum;
 
                 if (this.assetDecimals === 18) {
@@ -418,9 +419,12 @@ export default {
 
                     let buyResult = await contracts.exchange.methods.mint(mintParams).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {
-                            text: 'Mint USD+',
                             hash: hash,
-                            pending: true
+                            text: 'Mint USD+',
+                            product: 'usdPlus',
+                            productName: 'USD+',
+                            action: 'mint',
+                            amount: sumInUsd,
                         };
 
                         self.putTransaction(tx);

@@ -388,6 +388,16 @@ export default {
             return {
                 'tab-button': this.tab === 2,
                 'tab-button-in-active': this.tab !== 2,
+                trackClick(trackParams) {
+                    this.$gtm.trackEvent({
+                        event: null,
+                        category: 'Dashboard Usd+',
+                        action: 'click',
+                        label: 'Open USD+ Tab',
+                        value: 1,
+                        noninteraction: false, // Optional
+                    });
+                },
             }
         },
 
@@ -395,6 +405,16 @@ export default {
             return {
                 'tab-button': this.tab === 4,
                 'tab-button-in-active': this.tab !== 4,
+                trackClick(trackParams) {
+                    this.$gtm.trackEvent({
+                        event: null,
+                        category: 'Dashboard ETS',
+                        action: 'click',
+                        label: 'Open ETS Tab',
+                        value: 1,
+                        noninteraction: false, // Optional
+                    });
+                },
             }
         },
 
@@ -441,12 +461,15 @@ export default {
             switch (slice) {
                 case "week":
                     this.setSlice(7);
+                    this.trackClick({value: 0, category: 'Dashboard range', label: 'Change range Week'});
                     break;
                 case "month":
                     this.setSlice(30)
+                    this.trackClick({value: 0, category: 'Dashboard range', label: 'Change range Month'});
                     break;
                 case "all":
                     this.setSlice(null)
+                    this.trackClick({value: 0, category: 'Dashboard range', label: 'Change range All'});
                     break;
                 default:
                     this.setSlice(null)
@@ -458,6 +481,17 @@ export default {
         mintAction() {
             this.showMintView();
             this.showSwapModal();
+        },
+
+        trackClick(trackParams) {
+            this.$gtm.trackEvent({
+                event: null,
+                category: '',
+                action: 'click',
+                label: '',
+                value: 1,
+                noninteraction: false, // Optional
+            });
         },
     }
 }

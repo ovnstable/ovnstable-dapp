@@ -116,11 +116,24 @@ export default {
         mintAction() {
             this.showMintView();
             this.showSwapModal();
+            this.trackClick({value: 0, category: 'Menu select', label: 'Open Mint Menu'});
         },
 
         wrapAction() {
             this.showWrapView();
             this.showWrapModal();
+            this.trackClick({value: 0, category: 'Menu select', label: 'Open Wrap Menu'});
+        },
+
+        trackClick(trackParams) {
+            this.$gtm.trackEvent({
+                event: null,
+                category: '',
+                action: 'click',
+                label: '',
+                value: 1,
+                noninteraction: false, // Optional
+            });
         },
     }
 }

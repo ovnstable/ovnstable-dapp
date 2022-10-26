@@ -91,10 +91,22 @@ export default {
 
         switchToNetwork() {
             this.setWalletNetwork(this.networkId.toString());
+            this.trackClick({value: 0, category: 'Chain Switch', label: 'Switch network'});
         },
 
         openLink(url) {
             window.open(url, '_blank').focus();
+        },
+
+        trackClick(trackParams) {
+            this.$gtm.trackEvent({
+                event: null,
+                category: '',
+                action: 'click',
+                label: '',
+                value: 1,
+                noninteraction: false, // Optional
+            });
         },
     }
 }

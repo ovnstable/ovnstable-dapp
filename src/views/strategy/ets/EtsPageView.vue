@@ -276,6 +276,16 @@ export default {
             return {
                 'tab-button': this.tab === 1,
                 'tab-button-in-active': this.tab !== 1,
+                trackClick(trackParams) {
+                    this.$gtm.trackEvent({
+                        event: null,
+                        category: 'ETS performance',
+                        action: 'click',
+                        label: 'Open ETS performance Tab',
+                        value: 1,
+                        noninteraction: false, // Optional
+                    });
+                },
             }
         },
 
@@ -283,6 +293,16 @@ export default {
             return {
                 'tab-button': this.tab === 2,
                 'tab-button-in-active': this.tab !== 2,
+                trackClick(trackParams) {
+                    this.$gtm.trackEvent({
+                        event: null,
+                        category: 'ETS about',
+                        action: 'click',
+                        label: 'Open About ETS Tab',
+                        value: 1,
+                        noninteraction: false, // Optional
+                    });
+                },
             }
         },
 
@@ -373,6 +393,17 @@ export default {
                 let resultList = this.etsList.filter(ets => ets.name === this.$route.params.name);
                 this.etsData = (resultList && resultList.length > 0) ? resultList[0] : {};
             }
+        },
+
+        trackClick(trackParams) {
+            this.$gtm.trackEvent({
+                event: null,
+                category: 'ETS',
+                action: 'click',
+                label: '',
+                value: 1,
+                noninteraction: false, // Optional
+            });
         },
     }
 }

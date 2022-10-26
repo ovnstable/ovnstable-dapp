@@ -143,14 +143,17 @@ export default {
                 case 'mintUsdPlus':
                 case 'redeemUsdPlus':
                     this.addUsdPlusToken();
+                    this.trackClick({value: 0, category: 'Add token & Mint', label: 'Minted and Add UsdPlus Token'});
                     break;
                 case 'wrapUsdPlus':
                 case 'unwrapUsdPlus':
                     this.addwUsdPlusToken();
+                    this.trackClick({value: 0, category: 'Add token & Mint', label: 'Minted and Add wUsdPlus Token'});
                     break;
                 case 'mintEts':
                 case 'redeemEts':
                     this.addEtsToken(this.etsData);
+                    this.trackClick({value: 0, category: 'Add token & Mint ETS', label: 'Minted and Add ETS Token'});
                     break;
                 default:
                     break;
@@ -160,11 +163,13 @@ export default {
         openOnExplorer(hash) {
             if (hash) {
                 window.open(this.explorerUrl + `tx/${hash}`, '_blank').focus();
+                this.trackClick({value: 0, category: 'Mint Scan TX', label: 'Open Scan tx'});
             }
         },
 
         close() {
             this.closeSuccessModal();
+            this.trackClick({value: 0, category: 'Mint & Redeem Close', label: 'Close Success Modal'});
 
             this.$emit('input', false);
             this.$emit('m-close');
@@ -180,7 +185,18 @@ export default {
             this.closeInvestModal();
             this.$router.push('/');
             this.close();
-        }
+        },
+
+        trackClick(trackParams) {
+            this.$gtm.trackEvent({
+                event: null,
+                category: '',
+                action: 'click',
+                label: '',
+                value: 1,
+                noninteraction: false, // Optional
+            });
+        },
     },
 }
 </script>

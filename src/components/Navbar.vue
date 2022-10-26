@@ -164,37 +164,55 @@ export default {
         dashBoardClick() {
             this.selectTab('dashboard');
             this.goToAction('/');
+            this.trackClick({value: 0, category: 'View page', label: 'Open Dashboard Page'});
         },
 
         collateralClick() {
             this.selectTab('collateral');
             this.goToAction('/collateral');
+            this.trackClick({value: 0, category: 'View page', label: 'Open Collateral Page'});
         },
 
         statsClick() {
             this.selectTab('stats');
             this.goToAction('/stats');
+            this.trackClick({value: 0, category: 'View page', label: 'Open Stats Page'});
         },
 
         marketClick() {
             this.selectTab('market');
             this.goToAction('/market')
+            this.trackClick({value: 0, category: 'View page', label: 'Open Market Page'});
         },
 
         swapClick() {
             this.showMintView();
             this.showSwapModal();
+            this.trackClick({value: 0, category: 'Mint', label: 'Open Mint Modal'});
         },
 
         wrapClick() {
             this.showWrapView();
             this.showWrapModal();
+            this.trackClick({value: 0, category: 'Wrap', label: 'Open Wrap Modal'});
         },
 
         toggleTheme(mode) {
             if ((mode === 'light' && !this.light) || (mode === 'dark' && this.light)) {
                 this.switchTheme();
+                this.trackClick({value: 0, category: 'Theme', label: 'Switch Theme'});
             }
+        },
+
+        trackClick(trackParams) {
+            this.$gtm.trackEvent({
+                event: null,
+                category: '',
+                action: 'click',
+                label: '',
+                value: 1,
+                noninteraction: false, // Optional
+            });
         },
     }
 }

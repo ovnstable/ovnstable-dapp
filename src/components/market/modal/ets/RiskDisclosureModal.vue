@@ -68,6 +68,7 @@ export default {
 
     methods: {
         ...mapActions('riskModal', ['showRiskModal', 'closeRiskModal']),
+        ...mapActions('track', ['trackClick']),
 
         close() {
             this.closeRiskModal();

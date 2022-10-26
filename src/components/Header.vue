@@ -83,6 +83,7 @@ export default {
         ...mapGetters('web3', ['loadingWeb3']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('accountData', ['account']),
+        ...mapActions('track', ['trackClick']),
     },
 
     methods: {
@@ -96,17 +97,6 @@ export default {
 
         openLink(url) {
             window.open(url, '_blank').focus();
-        },
-
-        trackClick(trackParams) {
-            this.$gtm.trackEvent({
-                event: null,
-                category: '',
-                action: 'click',
-                label: '',
-                value: 1,
-                noninteraction: false, // Optional
-            });
         },
     }
 }

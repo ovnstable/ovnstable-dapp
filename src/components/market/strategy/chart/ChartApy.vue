@@ -81,7 +81,7 @@
 <script>
 /* eslint-disable no-unused-vars,no-undef */
 
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import moment from "moment";
 
 import ApexCharts from 'apexcharts'
@@ -148,6 +148,8 @@ export default {
     },
 
     methods: {
+        ...mapActions('track', ['trackClick']),
+
         async zoomChart(zoom) {
 
             let apiUrl;

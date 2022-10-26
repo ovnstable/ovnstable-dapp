@@ -136,7 +136,7 @@ export default {
         ...mapActions('swapModal', ['closeSwapModal']),
         ...mapActions('wrapModal', ['closeWrapModal']),
         ...mapActions('investModal', ['closeInvestModal']),
-
+        ...mapActions('track', ['trackClick']),
 
         addTokenAction() {
             switch (this.successAction) {
@@ -185,17 +185,6 @@ export default {
             this.closeInvestModal();
             this.$router.push('/');
             this.close();
-        },
-
-        trackClick(trackParams) {
-            this.$gtm.trackEvent({
-                event: null,
-                category: '',
-                action: 'click',
-                label: '',
-                value: 1,
-                noninteraction: false, // Optional
-            });
         },
     },
 }

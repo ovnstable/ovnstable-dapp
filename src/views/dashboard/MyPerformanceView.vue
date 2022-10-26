@@ -385,36 +385,19 @@ export default {
         },
 
         activeTabUsdPlus: function () {
+            this.trackClick({category: 'Dashboard USD+', label: 'Open USD+ Tab', value: 1,});
+
             return {
                 'tab-button': this.tab === 2,
                 'tab-button-in-active': this.tab !== 2,
-                trackClick(trackParams) {
-                    this.$gtm.trackEvent({
-                        event: null,
-                        category: 'Dashboard Usd+',
-                        action: 'click',
-                        label: 'Open USD+ Tab',
-                        value: 1,
-                        noninteraction: false, // Optional
-                    });
-                },
             }
         },
 
         activeTabETS: function () {
+            this.trackClick({category: 'Dashboard ETS', label: 'Open ETS Tab', value: 1,});
             return {
                 'tab-button': this.tab === 4,
                 'tab-button-in-active': this.tab !== 4,
-                trackClick(trackParams) {
-                    this.$gtm.trackEvent({
-                        event: null,
-                        category: 'Dashboard ETS',
-                        action: 'click',
-                        label: 'Open ETS Tab',
-                        value: 1,
-                        noninteraction: false, // Optional
-                    });
-                },
             }
         },
 
@@ -446,6 +429,7 @@ export default {
         ...mapActions('dashboardData', ['sliceDashboard']),
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('track', ['trackClick']),
 
         ...mapMutations('dashboardData', ['setSlice']),
 
@@ -481,17 +465,6 @@ export default {
         mintAction() {
             this.showMintView();
             this.showSwapModal();
-        },
-
-        trackClick(trackParams) {
-            this.$gtm.trackEvent({
-                event: null,
-                category: '',
-                action: 'click',
-                label: '',
-                value: 1,
-                noninteraction: false, // Optional
-            });
         },
     }
 }

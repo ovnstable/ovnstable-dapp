@@ -240,7 +240,7 @@
 
 <script>
 
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import Table from "@/components/market/strategy/payouts/Table";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut";
@@ -281,16 +281,6 @@ export default {
             return {
                 'rate-tab-button': this.rateTab === 1,
                 'rate-tab-button-in-active': this.rateTab !== 1,
-                trackClick(trackParams) {
-                    this.$gtm.trackEvent({
-                        event: null,
-                        category: 'APY rate',
-                        action: 'click',
-                        label: 'Open APY Chart',
-                        value: 1,
-                        noninteraction: false, // Optional
-                    });
-                },
             }
         },
 
@@ -305,16 +295,6 @@ export default {
             return {
                 'rate-tab-button': this.rateTab === 3,
                 'rate-tab-button-in-active': this.rateTab !== 3,
-                trackClick(trackParams) {
-                    this.$gtm.trackEvent({
-                        event: null,
-                        category: 'TVL',
-                        action: 'click',
-                        label: 'Open TVL Chart',
-                        value: 1,
-                        noninteraction: false, // Optional
-                    });
-                },
             }
         },
 

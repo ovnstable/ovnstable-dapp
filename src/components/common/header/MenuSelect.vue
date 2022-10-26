@@ -104,6 +104,7 @@ export default {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
         ...mapActions('theme', ['switchTheme']),
+        ...mapActions('track', ['trackClick']),
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -123,17 +124,6 @@ export default {
             this.showWrapView();
             this.showWrapModal();
             this.trackClick({value: 0, category: 'Menu select', label: 'Open Wrap Menu'});
-        },
-
-        trackClick(trackParams) {
-            this.$gtm.trackEvent({
-                event: null,
-                category: '',
-                action: 'click',
-                label: '',
-                value: 1,
-                noninteraction: false, // Optional
-            });
         },
     }
 }

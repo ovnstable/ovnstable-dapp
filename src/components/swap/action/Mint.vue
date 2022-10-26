@@ -351,6 +351,7 @@ export default {
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
+        ...mapActions('track', ['trackClick']),
 
         changeSliderPercent() {
             this.sum = (this.balance.asset * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
@@ -593,17 +594,6 @@ export default {
             }
 
             return result;
-        },
-
-        trackClick(trackParams) {
-            this.$gtm.trackEvent({
-                event: null,
-                category: '',
-                action: 'click',
-                label: '',
-                value: 1,
-                noninteraction: false, // Optional
-            });
         },
     }
 }

@@ -61,6 +61,7 @@ import poolAction from "@/store/modules/common/web3/action/pool-action";
 import gasPrice from '@/store/modules/common/gas-price';
 import supplyData from '@/store/modules/common/supply';
 import referral from "@/store/modules/common/referral";
+import track from "@/store/modules/common/track";
 
 // Theme
 import theme from "@/store/modules/theme/theme";
@@ -123,6 +124,7 @@ export default new Vuex.Store({
         gasPrice,
         supplyData,
         referral,
+        track,
 
         theme
     },

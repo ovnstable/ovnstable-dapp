@@ -54,6 +54,7 @@ export default {
 
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'closeSwapModal']),
+        ...mapActions('track', ['trackClick']),
 
         openLink(link) {
             window.open(link, '_blank').focus();
@@ -66,17 +67,6 @@ export default {
         bridge() {
             window.open(this.bridgeLink, '_blank').focus();
             this.trackClick({value: 0, category: 'Bridge', label: 'Open Bridge From Swap Modal'});
-        },
-
-        trackClick(trackParams) {
-            this.$gtm.trackEvent({
-                event: null,
-                category: '',
-                action: 'click',
-                label: '',
-                value: 1,
-                noninteraction: false, // Optional
-            });
         },
     },
 }

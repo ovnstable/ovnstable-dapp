@@ -67,6 +67,7 @@ export default {
         ...mapActions('accountUI', ['showAccountProfile']),
         ...mapActions('accountData', ['refreshBalance']),
         ...mapActions('supplyData', ['refreshSupply']),
+        ...mapActions('track', ['trackClick']),
 
         goToAction(id) {
             this.$router.push(id);
@@ -75,22 +76,12 @@ export default {
         walletClickAction() {
             if (this.account) {
                 this.showAccountProfile();
-                this.trackClick({value: 0, category: 'Account', label: 'Connect wallet'});
+                this.trackClick({value: 0, category: 'Account', label: 'Show account'});
             } else {
                 this.connectWallet();
+                this.trackClick({value: 0, category: 'Account', label: 'Connect wallet'});
             }
         },
-
-        trackClick(trackParams) {
-            this.$gtm.trackEvent({
-                event: null,
-                category: 'Account',
-                action: 'click',
-                label: 'Show account',
-                value: 1,
-                noninteraction: false, // Optional
-            });
-        }
     }
 }
 </script>

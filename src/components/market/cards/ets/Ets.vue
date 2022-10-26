@@ -237,7 +237,7 @@ export default {
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
-
+        ...mapActions('track', ['trackClick']),
 
         mintAction() {
             this.showMintView();
@@ -254,17 +254,6 @@ export default {
         openStrategyCard() {
             this.$router.push("/ets/" + this.cardData.data.name);
             window.scrollTo({top: 0, behavior: "smooth"});
-        },
-
-        trackClick(trackParams) {
-            this.$gtm.trackEvent({
-                event: null,
-                category: '',
-                action: 'click',
-                label: '',
-                value: 1,
-                noninteraction: false, // Optional
-            });
         },
     }
 };

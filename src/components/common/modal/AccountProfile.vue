@@ -156,6 +156,7 @@ export default {
         ...mapActions('walletAction', ['disconnectWallet']),
         ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken']),
         ...mapActions('transaction', ['loadTransaction']),
+        ...mapActions('track', ['trackClick']),
 
         openOnExplorer(hash) {
             window.open(this.explorerUrl + `tx/${hash}`, '_blank').focus();
@@ -187,17 +188,6 @@ export default {
             await new Promise(resolve => setTimeout(resolve, 1000));
             this.showCopyTooltip = false;
             this.trackClick({value: 0, category: 'Account Copy', label: 'Copy Account Address'});
-        },
-
-        trackClick(trackParams) {
-            this.$gtm.trackEvent({
-                event: null,
-                category: 'Account',
-                action: 'click',
-                label: '',
-                value: 1,
-                noninteraction: false, // Optional
-            });
         },
     },
 }

@@ -152,6 +152,7 @@ export default {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
         ...mapActions('theme', ['switchTheme']),
+        ...mapActions('track', ['trackClick']),
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -202,17 +203,6 @@ export default {
                 this.switchTheme();
                 this.trackClick({value: 0, category: 'Theme', label: 'Switch Theme'});
             }
-        },
-
-        trackClick(trackParams) {
-            this.$gtm.trackEvent({
-                event: null,
-                category: '',
-                action: 'click',
-                label: '',
-                value: 1,
-                noninteraction: false, // Optional
-            });
         },
     }
 }

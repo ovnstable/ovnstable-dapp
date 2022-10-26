@@ -83,10 +83,10 @@ const actions = {
         };
 
         let avgApy;
-        let avgApyStrategyWeek;
+        let avgApyStrategyMonth;
         let strategyData;
 
-        await fetch(appApiUrl + '/widget/avg-apy-info/week', fetchOptions)
+        await fetch(appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
             .then(value => value.json())
             .then(value => {
                 avgApy = value;
@@ -95,11 +95,11 @@ const actions = {
                 console.log('Error get data: ' + reason);
             })
 
-        await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress + '/avg-apy-info/week', fetchOptions)
+        await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress + '/avg-apy-info/month', fetchOptions)
             .then(value => value.json())
             .then(value => {
-                avgApyStrategyWeek = value;
-                avgApyStrategyWeek.date = moment(avgApyStrategyWeek.date).format("DD MMM. ‘YY");
+                avgApyStrategyMonth = value;
+                avgApyStrategyMonth.date = moment(avgApyStrategyMonth.date).format("DD MMM. ‘YY");
             }).catch(reason => {
                 console.log('Error get data: ' + reason);
             })
@@ -108,7 +108,7 @@ const actions = {
             .then(value => value.json())
             .then(value => {
                 strategyData = value;
-                strategyData.apy = (avgApyStrategyWeek && avgApyStrategyWeek.value) ? (avgApyStrategyWeek.value) : strategyData.apy;
+                strategyData.apy = (avgApyStrategyMonth && avgApyStrategyMonth.value) ? (avgApyStrategyMonth.value) : strategyData.apy;
                 strategyData.diffApy = (avgApy && avgApy.value && strategyData.apy) ? (strategyData.apy - avgApy.value) : null;
 
                 /* TODO: get onChain */

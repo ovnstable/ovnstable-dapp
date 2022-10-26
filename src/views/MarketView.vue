@@ -26,7 +26,7 @@
                     <v-row class="fill-height">
                         <component
                             class="ma-3"
-                            v-bind:key="`${card.name}_${card.weekApy}_${card.tvl}`"
+                            v-bind:key="`${card.name}_${card.monthApy}_${card.tvl}`"
                             :card-data="card"
                             v-bind:is="card.name"
                         ></component>
@@ -135,7 +135,7 @@ export default {
                         overcapEnabled: false,
                         hasCap: true,
                         tvl: pool.tvl,
-                        weekApy: 0,
+                        monthApy: 0,
                         cardOpened: false,
                     },
                 );
@@ -195,7 +195,7 @@ export default {
                         overcapEnabled: !!ets.maxSupply,
                         hasCap: ets.maxSupply ? (this.totalSupply[ets.name] < ets.maxSupply) : true,
                         tvl: this.totalSupply[ets.name],
-                        weekApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
+                        monthApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
                         cardOpened: false,
                     },
                 );
@@ -211,7 +211,7 @@ export default {
                 if (a.hasCap && !b.hasCap) return -1;
                 if (!a.hasCap && b.hasCap) return 1;
 
-                return (a.weekApy > b.weekApy) ? -1 : (a.weekApy < b.weekApy ? 1 : 0);
+                return (a.monthApy > b.monthApy) ? -1 : (a.monthApy < b.monthApy ? 1 : 0);
             });
 
             cardList[0].cardOpened = true;

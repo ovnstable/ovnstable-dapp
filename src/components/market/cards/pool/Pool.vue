@@ -14,12 +14,12 @@
                     </v-row>
                     <v-row class="d-flex">
                         <label class="percentage">
-                            {{ cardData.weekApy === 0 ? '—' : ($utils.formatMoneyComma(cardData.weekApy, 0) + '%') }}
+                            {{ cardData.monthApy === 0 ? '—' : ($utils.formatMoneyComma(cardData.monthApy, 0) + '%') }}
                         </label>
                         <label class="apy">APY</label>
                         <div class="tooltip">
                             <Tooltip icon-color="#FFFFFF"
-                                     text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
+                                     text="Strategy APY based on 30-day average, includes fees taken (fee-adjusted)"/>
                         </div>
                     </v-row>
                 </v-row>

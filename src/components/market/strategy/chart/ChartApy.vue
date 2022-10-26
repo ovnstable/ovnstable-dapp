@@ -122,7 +122,7 @@ export default {
     components: {},
 
     data: () => ({
-        zoom: "all",
+        zoom: "month",
         slice: null,
         chart: null,
 
@@ -144,7 +144,7 @@ export default {
     },
 
     created() {
-        this.zoomChart("all");
+        this.zoomChart("month");
     },
 
     methods: {

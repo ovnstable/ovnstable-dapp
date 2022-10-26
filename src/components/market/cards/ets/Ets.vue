@@ -10,15 +10,15 @@
                     <v-row class="d-flex">
                         <label class="card-title">ETS {{ cardData.data.nameUp }}</label>
                     </v-row>
-                    <v-row class="d-flex mt-5" v-if="cardData.weekApy">
+                    <v-row class="d-flex mt-5" v-if="cardData.monthApy">
                         <label class="percentage">
-                            {{ $utils.formatMoneyComma(cardData.weekApy, 0) + '%' }}
+                            {{ $utils.formatMoneyComma(cardData.monthApy, 0) + '%' }}
                         </label>
                         <label class="apy ml-3">APY</label>
                         <div class="tooltip">
                             <Tooltip icon-color="#FFFFFF"
                                      :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
-                                     text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
+                                     text="Strategy APY based on 30-day average, includes fees taken (fee-adjusted)"/>
                         </div>
                     </v-row>
                 </v-row>
@@ -138,7 +138,7 @@
                     </v-col>
                 </v-row>
 
-                <v-row class="d-flex justify-space-between ma-0 mt-6" v-if="cardData.weekApy">
+                <v-row class="d-flex justify-space-between ma-0 mt-6" v-if="cardData.monthApy">
                     <template v-if="accountEtsBalance">
                         <label class="your-deposit">Your deposit in ETS</label>
                         <label class="your-deposit">{{

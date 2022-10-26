@@ -21,7 +21,7 @@
                             </v-row>
                             <v-row justify="center" align="center" class="mt-2">
                                 <label class="info-value mr-n1">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '—' }}</label>
-                                <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
+                                <Tooltip text="Strategy APY based on 30-day average, includes fees taken (fee-adjusted)"/>
                             </v-row>
                         </v-col>
                         <v-col class="bordered-col" cols="5">

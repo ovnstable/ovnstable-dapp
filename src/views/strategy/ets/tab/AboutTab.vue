@@ -235,13 +235,13 @@
                     <label class="card-info mt-1">APY</label>
                     <v-spacer></v-spacer>
                     <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 1)) + '%' : '—' }}</label>
-                    <Tooltip text="Strategy APY based on 7-day average, includes fees taken (fee-adjusted)"/>
+                    <Tooltip text="Strategy APY based on 30-day average, includes fees taken (fee-adjusted)"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Diff. to USD+</label>
                     <v-spacer></v-spacer>
                     <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].diffApy) ? ((etsStrategyData[etsData.name].diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(etsStrategyData[etsData.name].diffApy, 1)) + '%' : '—' }}</label>
-                    <Tooltip text="APY difference compared to the base APY USD+ (based on 7-day average)"/>
+                    <Tooltip text="APY difference compared to the base APY USD+ (based on 30-day average)"/>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Risk factor</label>

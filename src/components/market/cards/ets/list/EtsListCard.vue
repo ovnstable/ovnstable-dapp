@@ -34,7 +34,7 @@
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)" class="my-1">
             <v-row class="ma-0" justify="end" align="center">
-                <label class="card-label">{{ cardData.weekApy === 0 ? '' : ($utils.formatMoneyComma(cardData.weekApy, 0) + '%') }}</label>
+                <label class="card-label">{{ cardData.monthApy === 0 ? '' : ($utils.formatMoneyComma(cardData.monthApy, 0) + '%') }}</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()" cols="3" class="my-1">

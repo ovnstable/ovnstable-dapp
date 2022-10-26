@@ -59,8 +59,8 @@
                 </v-row>
 
                 <v-row align="start" justify="start" class="account-info-row ma-0 mt-10 toggle-row">
-                    <label @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabTx">History</label>
-                    <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabTokens">Tokens</label>
+                    <label @click="openTab(1)" class="tab-btn mr-4" v-bind:class="activeTabTx">History</label>
+                    <label @click="openTab(2)" class="tab-btn mx-4" v-bind:class="activeTabTokens">Tokens</label>
 
                     <v-spacer></v-spacer>
                 </v-row>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import TokensTab from "@/components/common/modal/account/tabs/TokensTab";
 import TxTab from "@/components/common/modal/account/tabs/tx/TxTab";
 
@@ -85,7 +85,6 @@ export default {
     components: {TxTab, TokensTab},
 
     data: () => ({
-        tab: 2,
         showCopyTooltip: false,
     }),
 
@@ -108,7 +107,7 @@ export default {
 
     computed: {
         ...mapGetters('network', ['networkId', 'explorerUrl']),
-        ...mapGetters('accountUI', ['showAccountProfile']),
+        ...mapGetters('accountUI', ['showAccountProfile', 'tab']),
         ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
         ...mapGetters('etsAction', ['etsList']),
@@ -151,6 +150,8 @@ export default {
         ...mapActions('walletAction', ['disconnectWallet']),
         ...mapActions('transaction', ['loadTransaction']),
 
+        ...mapMutations('accountUI', ['setTab']),
+
         openOnExplorer(hash) {
             window.open(this.explorerUrl + `tx/${hash}`, '_blank').focus();
         },
@@ -170,6 +171,10 @@ export default {
         viewInExplorer() {
             let url = this.explorerUrl + 'address/' + this.account;
             window.open(url, '_blank');
+        },
+
+        openTab(tabNumber) {
+            this.setTab(tabNumber);
         },
 
         async copyAddressToClipboard() {

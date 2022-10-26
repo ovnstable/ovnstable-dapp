@@ -1,4 +1,3 @@
-
 const state = {
 
     showAccountProfile: false,
@@ -6,6 +5,8 @@ const state = {
     loadingBalance: true,
 
     badge: false,
+
+    tab: 2,
 };
 
 const getters = {
@@ -23,28 +24,33 @@ const getters = {
         return state.badge;
     },
 
+    tab(state) {
+        return state.tab;
+    },
 };
 
 const actions = {
 
-
-    async showAccountProfile({commit, dispatch, getters, rootState}){
+    async showAccountProfile({commit, dispatch, getters, rootState}) {
         commit('setShowAccountProfile', true)
     },
 
-    async hideAccountProfile({commit, dispatch, getters, rootState}){
+    async showTxHistory({commit, dispatch, getters, rootState}) {
+        commit('setTab', 1);
+        commit('setShowAccountProfile', true);
+    },
+
+    async hideAccountProfile({commit, dispatch, getters, rootState}) {
         commit('setShowAccountProfile', false)
     },
 
-    async showBadge({commit, dispatch, getters, rootState}){
+    async showBadge({commit, dispatch, getters, rootState}) {
         commit('setBadge', true)
     },
 
-    async hideBadge({commit, dispatch, getters, rootState}){
+    async hideBadge({commit, dispatch, getters, rootState}) {
         commit('setBadge', false)
     },
-
-
 };
 
 const mutations = {
@@ -61,6 +67,9 @@ const mutations = {
         state.loadingBalance = value;
     },
 
+    setTab(state, value) {
+        state.tab = value;
+    },
 };
 
 export default {

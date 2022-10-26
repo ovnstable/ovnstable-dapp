@@ -59,13 +59,19 @@
             <v-divider class="card-divider mt-n2"></v-divider>
 
             <template v-if="txData.pending">
-                <v-row justify="start" align="center" class="mt-4 mb-1">
+                <v-row justify="start" align="center" class="mt-4">
                     <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="openPendingFaq()">
                         Why does pending take so long?
                     </label>
                     <div class="action-icons ml-1">
                         <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
                     </div>
+                </v-row>
+                <v-row justify="start" align="center" class="mt-5 mb-1">
+                    <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="deleteTx()">
+                        Delete transaction from history
+                        <v-icon class="copy-icon" small>mdi-close</v-icon>
+                    </label>
                 </v-row>
             </template>
 
@@ -180,7 +186,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('transaction', ['loadTransaction']),
+        ...mapActions('transaction', ['loadTransaction', 'deleteTxFromHistory']),
         ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken']),
 
         formatDate(date) {
@@ -260,6 +266,10 @@ export default {
 
         openDiscord() {
             window.open(`https://discord.gg/overnight-fi`, '_blank').focus();
+        },
+
+        deleteTx() {
+            this.deleteTxFromHistory(this.txData.hash);
         },
     },
 }

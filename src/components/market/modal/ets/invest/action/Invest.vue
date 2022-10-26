@@ -219,6 +219,7 @@ export default {
 
     computed: {
         ...mapGetters('accountData', ['balance', 'etsBalance', 'actionAssetBalance', 'account']),
+        ...mapGetters('transaction', ['transactions']),
         ...mapGetters('investModal', ['etsData', 'actionAssetApproved']),
         ...mapGetters('marketData', ['etsStrategyData']),
         ...mapGetters('supplyData', ['totalSupply']),
@@ -296,6 +297,8 @@ export default {
                 return "ETS is in prototype"
             } else if (this.etsData.disabled) {
                 return "Temporarily unavailable"
+            } else if (this.transactionPending) {
+                return 'Transaction is pending';
             } else if (this.isBuy) {
                 if (this.actionAssetApproved) {
                     this.step = 2;
@@ -337,7 +340,7 @@ export default {
 
         isBuy: function () {
             if (this.isOvercapAvailable) {
-                if (!this.etsData.disabled && this.account && this.sum > 0 && this.numberRule) {
+                if (!this.etsData.disabled && this.account && this.sum > 0 && this.numberRule && !this.transactionPending) {
                     let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
                     let useOvercapSum;
 
@@ -352,8 +355,12 @@ export default {
                     return false;
                 }
             } else {
-                return !this.etsData.disabled && this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && (!this.etsData.maxSupply || this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
+                return !this.etsData.disabled && this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && !this.transactionPending && (!this.etsData.maxSupply || this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
             }
+        },
+
+        transactionPending: function () {
+            return this.transactions.filter(value => (value.pending && (value.product === ('ets_' + this.etsData.name)) && (value.action === 'mint'))).length > 0;
         },
 
         numberRule: function () {
@@ -410,7 +417,7 @@ export default {
 
         ...mapActions("overcapData", ['useOvercap']),
 
-        ...mapActions("transaction", ['putTransaction']),
+        ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         changeSliderPercent() {
             this.sum = (this.actionAssetBalance[this.etsData.actionAsset] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
@@ -488,6 +495,12 @@ export default {
                         };
 
                         self.putTransaction(tx);
+                        self.showSuccessModal({
+                            successTxHash: hash,
+                            successAction: 'mintEts',
+                            etsData: etsActionData
+                        });
+                        self.loadTransaction();
                     });
 
                     if (this.isOvercapAvailable) {
@@ -505,12 +518,6 @@ export default {
                             overcapVolume: useOvercapSum
                         });
                     }
-
-                    /*this.showSuccessModal({
-                        successTxHash: buyResult.transactionHash,
-                        successAction: 'mintEts',
-                        etsData: this.etsData
-                    });*/
                 } catch (e) {
                     console.log(e);
                     return;

@@ -219,6 +219,7 @@ export default {
 
     computed: {
         ...mapGetters('accountData', ['balance', 'etsBalance', 'actionAssetBalance', 'account']),
+        ...mapGetters('transaction', ['transactions']),
         ...mapGetters('investModal', ['etsData', 'etsTokenApproved']),
         ...mapGetters('marketData', ['etsStrategyData']),
         ...mapGetters("network", ['networkId', 'polygonApi']),
@@ -291,6 +292,8 @@ export default {
 
             if (!this.account) {
                 return 'Connect to a wallet';
+            } else if (this.transactionPending) {
+                return 'Transaction is pending';
             } else if (this.isBuy) {
                 if (this.etsTokenApproved) {
                     this.step = 2;
@@ -307,7 +310,11 @@ export default {
         },
 
         isBuy: function () {
-            return this.account && this.sum > 0 && this.numberRule;
+            return this.account && this.sum > 0 && this.numberRule && !this.transactionPending;
+        },
+
+        transactionPending: function () {
+            return this.transactions.filter(value => (value.pending && (value.product === ('ets_' + this.etsData.name)) && (value.action === 'redeem'))).length > 0;
         },
 
         numberRule: function () {
@@ -363,7 +370,7 @@ export default {
 
         ...mapActions("overcapData", ['returnOvercap']),
 
-        ...mapActions("transaction", ['putTransaction']),
+        ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         changeSliderPercent() {
             this.sum = (this.etsBalance[this.etsData.name] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
@@ -440,6 +447,12 @@ export default {
                         };
 
                         self.putTransaction(tx);
+                        self.showSuccessModal({
+                            successTxHash: hash,
+                            successAction: 'redeemEts',
+                            etsData: etsActionData
+                        });
+                        self.loadTransaction();
                     });
 
                     if (this.isOvercapAvailable) {

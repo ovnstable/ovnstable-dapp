@@ -28,6 +28,11 @@ const actions = {
         commit('setTransactions', [])
     },
 
+    deleteTxFromHistory({commit, dispatch, getters, rootState}, hash) {
+        let filteredTx = getters.transactions.filter(tx => tx.hash !== hash);
+        commit('setTransactions', filteredTx);
+    },
+
     loadTransaction({commit, dispatch, getters, rootState}) {
 
         console.debug('Transaction: loadTransaction');
@@ -44,7 +49,7 @@ const actions = {
                     if (receipt != null) {
                         return receipt;
                     } else {
-                        return Promise.delay(500).then(transactionReceiptRetry)
+                        return Promise.delay(1000).then(transactionReceiptRetry)
                     }
                 });
 
@@ -54,7 +59,7 @@ const actions = {
                 filteredTx.receipt = receipt;
                 filteredTx.isError = !receipt.status;
 
-                commit('setTransactions', getters.transactions)
+                commit('setTransactions', getters.transactions);
             })
         }
     }

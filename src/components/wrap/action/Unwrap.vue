@@ -227,6 +227,7 @@ export default {
 
     computed: {
         ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('wrapData', ['index', 'amountPerUsdPlus']),
         ...mapGetters('wrapModal', ['wUsdPlusApproved']),
@@ -265,6 +266,8 @@ export default {
 
             if (!this.account) {
                 return 'Connect to a wallet';
+            } else if (this.transactionPending) {
+                return 'Transaction is pending';
             } else if (this.isBuy) {
                 if (this.wUsdPlusApproved) {
                     this.step = 2;
@@ -288,7 +291,11 @@ export default {
         },
 
         isBuy: function () {
-            return this.account && this.sum > 0 && this.numberRule;
+            return this.account && this.sum > 0 && this.numberRule && !this.transactionPending;
+        },
+
+        transactionPending: function () {
+            return this.transactions.filter(value => (value.pending && (value.product === 'wUsdPlus') && (value.action === 'unwrap'))).length > 0;
         },
 
         numberRule: function () {
@@ -367,7 +374,7 @@ export default {
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
 
-        ...mapActions("transaction", ['putTransaction']),
+        ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         changeSliderPercent() {
             this.sum = (this.balance.wUsdPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
@@ -445,6 +452,8 @@ export default {
                         };
 
                         self.putTransaction(tx);
+                        self.showSuccessModal({successTxHash: hash, successAction: 'unwrapUsdPlus'});
+                        self.loadTransaction();
                     });
                 } catch (e) {
                     console.log(e);

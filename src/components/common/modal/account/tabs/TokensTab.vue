@@ -1,17 +1,17 @@
 <template>
-    <div>
+    <div class="ml-n1">
         <v-row class="account-info-row mt-3" align="center">
-            <label class="add-coins-label" :class="$wu.isMobile() ? 'ml-1' : 'ml-2'">Add tokens to your wallet</label>
+            <label class="add-coins-label ml-1">Add tokens to your wallet</label>
         </v-row>
 
         <v-row class="add-tokens-row" justify="start" align="center">
-            <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addUsdPlusToken">
+            <v-btn class="coin-btn ma-1" @click="addUsdPlusToken">
                 <div class="coin-img">
                     <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
                 </div>
                 <label class="ml-2 coin-btn-label">USD+</label>
             </v-btn>
-            <v-btn class="coin-btn" :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" @click="addwUsdPlusToken" v-if="showWrap">
+            <v-btn class="coin-btn ma-1" @click="addwUsdPlusToken" v-if="showWrap">
                 <div class="coin-img">
                     <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
                 </div>
@@ -20,8 +20,7 @@
 
             <v-btn
                 v-for="ets in etsList"
-                class="coin-btn"
-                :class="$wu.isMobile() ? 'ma-1' : 'ma-2'"
+                class="coin-btn ma-1"
                 @click="addEtsToken(ets)"
                 v-if="networkId === ets.chain"
             >

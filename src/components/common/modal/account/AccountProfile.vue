@@ -85,7 +85,7 @@ export default {
     components: {TxTab, TokensTab},
 
     data: () => ({
-        tab: 1,
+        tab: 2,
         showCopyTooltip: false,
     }),
 

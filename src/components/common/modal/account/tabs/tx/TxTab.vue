@@ -6,8 +6,7 @@
 
         <TxListHeader/>
 
-        <template v-for="tx in transactionsList">
-<!--        <template v-for="tx in transactionsMock">-->
+        <template v-for="tx in transactions.slice().reverse()">
             <TxCard class="ma-0 mt-2" :tx-data="tx" v-bind:key="`${tx.hash}_${tx.pending}`" />
         </template>
 
@@ -27,44 +26,6 @@ export default {
     components: {TxListHeader, TxCard},
 
     data: () => ({
-        transactionsMock: [
-            {
-                hash: '0x127581hk51k236g12l3hj1g235g1k23g162',
-                date: '2022-04-12T02:05:58',
-                text: 'Redeem ETS WMATIC/USD+',
-                product: 'ets_wmatic_usd_plus',
-                productName: 'ETS WMATIC/USD+',
-                action: 'redeem',
-                amount: 1225465.98,
-                pending: false,
-                isError: false,
-                chain: 137,
-            },
-            {
-                hash: '0x127581hk51k236g12l3hj1g235g1k23g162',
-                date: '2022-04-25T11:05:58',
-                text: 'Mint ETS GARNET',
-                product: 'ets_garnet',
-                productName: 'ETS GARNET',
-                action: 'mint',
-                amount: 165.71,
-                pending: false,
-                isError: true,
-                chain: 10,
-            },
-            {
-                hash: '0x127581hk51k236g12l3hj1g235g1k23g162',
-                date: '2022-10-26T04:01:58',
-                text: 'Mint USD+',
-                product: 'usdPlus',
-                productName: 'USD+',
-                action: 'mint',
-                amount: 1009.80,
-                pending: true,
-                isError: false,
-                chain: 56,
-            },
-        ]
     }),
 
     props: {

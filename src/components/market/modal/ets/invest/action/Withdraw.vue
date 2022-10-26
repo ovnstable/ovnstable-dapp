@@ -363,6 +363,8 @@ export default {
 
         ...mapActions("overcapData", ['returnOvercap']),
 
+        ...mapActions("transaction", ['putTransaction']),
+
         changeSliderPercent() {
             this.sum = (this.etsBalance[this.etsData.name] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
@@ -392,10 +394,8 @@ export default {
         },
 
         async redeemAction() {
-
-            this.showWaitingModal('Withdrawing ' + this.sumResult + ' ETS ' + this.etsData.nameUp + ' for ' + this.sumResult + ' ' + this.etsData.actionTokenName);
-
             try {
+                let sumInUsd = this.sum;
                 let sum;
 
                 switch (this.etsData.etsTokenDecimals) {
@@ -427,7 +427,20 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    let buyResult = await contracts[this.etsData.exchangeContract].methods.redeem(sum).send(buyParams);
+                    let etsActionData = this.etsData;
+
+                    let buyResult = await contracts[this.etsData.exchangeContract].methods.redeem(sum).send(buyParams).on('transactionHash', function (hash) {
+                        let tx = {
+                            hash: hash,
+                            text: 'Redeem ETS ' + etsActionData.nameUp,
+                            product: 'ets_' + etsActionData.name,
+                            productName: 'ETS ' + etsActionData.nameUp,
+                            action: 'redeem',
+                            amount: sumInUsd,
+                        };
+
+                        self.putTransaction(tx);
+                    });
 
                     if (this.isOvercapAvailable) {
                         await this.returnOvercap({
@@ -435,21 +448,15 @@ export default {
                             overcapVolume: this.sum
                         });
                     }
-
-                    this.closeWaitingModal();
-                    this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'redeemEts'});
                 } catch (e) {
-                    console.log(e)
-                    this.closeWaitingModal();
-                    this.showErrorModal('withdrawETS');
+                    console.log(e);
                     return;
                 }
 
                 self.refreshMarket();
                 self.setSum(null);
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('withdrawEts');
+                console.log(e);
             }
         },
 
@@ -470,8 +477,6 @@ export default {
                     default:
                         break;
                 }
-
-                this.showWaitingModal(null);
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {

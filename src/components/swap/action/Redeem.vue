@@ -353,6 +353,8 @@ export default {
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
 
+        ...mapActions("transaction", ['putTransaction']),
+
         changeSliderPercent() {
             this.sum = (this.balance.usdPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
@@ -382,10 +384,8 @@ export default {
         },
 
         async redeemAction() {
-
-            this.showWaitingModal('Redeeming ' + this.sumResult + ' USD+ for ' + this.sumResult + ' ' + this.assetName);
-
             try {
+                let sumInUsd = this.sum;
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
 
                 let contracts = this.contracts;
@@ -403,30 +403,33 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    let buyResult = await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).send(buyParams);
+                    let buyResult = await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).send(buyParams).on('transactionHash', function (hash) {
+                        let tx = {
+                            hash: hash,
+                            text: 'Redeem USD+',
+                            product: 'usdPlus',
+                            productName: 'USD+',
+                            action: 'redeem',
+                            amount: sumInUsd,
+                        };
 
-                    this.closeWaitingModal();
-                    this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'redeemUsdPlus'});
+                        self.putTransaction(tx);
+                    });
                 } catch (e) {
                     console.log(e)
-                    this.closeWaitingModal();
-                    this.showErrorModal('redeemUSD+');
                     return;
                 }
 
                 self.refreshSwap();
                 self.setSum(null);
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('redeemUSD+');
+                console.log(e);
             }
         },
 
         async confirmSwapAction() {
             try {
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
-
-                this.showWaitingModal(null);
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {

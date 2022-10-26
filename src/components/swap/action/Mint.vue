@@ -383,9 +383,6 @@ export default {
         },
 
         async buyAction() {
-
-            // this.showWaitingModal('Minting ' + this.sumResult + ' ' + this.assetName + ' for ' + this.sumResult + ' USD+');
-
             try {
                 let sumInUsd = this.sum;
                 let sum;
@@ -429,21 +426,15 @@ export default {
 
                         self.putTransaction(tx);
                     });
-
-                    // this.closeWaitingModal();
-                    // this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'mintUsdPlus'});
                 } catch (e) {
                     console.log(e);
-                    // this.closeWaitingModal();
-                    this.showErrorModal('buyUSD+');
                     return;
                 }
 
                 self.refreshSwap();
                 self.setSum(null);
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('buyUSD+');
+                console.log(e);
             }
         },
 
@@ -457,8 +448,6 @@ export default {
                     sum = this.web3.utils.toWei(this.sum, 'mwei');
                 }
 
-                // this.showWaitingModal(null);
-
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
                     this.gas = null;
@@ -466,7 +455,6 @@ export default {
                     this.gasAmountInUsd = null;
 
                     await this.buyAction();
-                    // this.closeWaitingModal();
                 } else {
                     this.estimatedGas = estimatedGasValue;
 
@@ -476,7 +464,6 @@ export default {
                     this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
 
                     await this.buyAction();
-                    // this.closeWaitingModal();
                 }
             } catch (e) {
                 console.log(e)

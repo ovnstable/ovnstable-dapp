@@ -367,6 +367,8 @@ export default {
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
 
+        ...mapActions("transaction", ['putTransaction']),
+
         changeSliderPercent() {
             this.sum = (this.balance.wUsdPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
@@ -413,10 +415,8 @@ export default {
         },
 
         async redeemAction() {
-
-            this.showWaitingModal('Unwrapping ' + this.sumResult + ' wUSD+ for ' + this.sumResult + ' ' + this.currency.title);
-
             try {
+                let sumInUsd = this.sum;
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
 
                 let contracts = this.contracts;
@@ -434,30 +434,33 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    let buyResult = await this.contracts.market.methods.unwrap(this.tokenContract.options.address, sum, this.account).send(buyParams);
+                    let buyResult = await this.contracts.market.methods.unwrap(this.tokenContract.options.address, sum, this.account).send(buyParams).on('transactionHash', function (hash) {
+                        let tx = {
+                            hash: hash,
+                            text: 'Unwrap USD+',
+                            product: 'wUsdPlus',
+                            productName: 'wUSD+',
+                            action: 'unwrap',
+                            amount: sumInUsd,
+                        };
 
-                    this.closeWaitingModal();
-                    this.showSuccessModal({ successTxHash: buyResult.transactionHash, successAction: 'unwrapUsdPlus' });
+                        self.putTransaction(tx);
+                    });
                 } catch (e) {
-                    console.log(e)
-                    this.closeWaitingModal();
-                    this.showErrorModal('unwrap');
+                    console.log(e);
                     return;
                 }
 
                 self.refreshWrap();
                 self.setSum(null);
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('unwrap');
+                console.log(e);
             }
         },
 
         async confirmSwapAction() {
             try {
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
-
-                this.showWaitingModal(null);
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {

@@ -37,13 +37,15 @@
                         indeterminate
                     ></v-progress-circular>
 
-                    <v-icon class="status-icon" v-else :class="txData.isError ? 'status-failed' : 'status-success'">
-                        {{ txData.isError ? 'mdi-close' : 'mdi-check' }}
+                    <v-icon class="status-icon" v-else :class="txData.isError ? 'status-failed' : (txData.isCancelled ? 'status-cancelled' : 'status-success')">
+                        {{ (txData.isError || txData.isCancelled) ? 'mdi-close' : 'mdi-check' }}
                     </v-icon>
                 </template>
 
-                <label v-else class="card-label" :class="txData.pending ? 'status-pending' : (txData.isError ? 'status-failed' : 'status-success')">
-                    {{ txData.pending ? 'Pending' : (txData.isError ? 'Failed' : 'Success') }}
+                <label v-else
+                       class="card-label"
+                       :class="txData.pending ? 'status-pending' : (txData.isError ? 'status-failed' : (txData.isCancelled ? 'status-cancelled' : 'status-success'))">
+                    {{ txData.pending ? 'Pending' : (txData.isError ? 'Failed' : (txData.isCancelled ? 'Cancelled' : 'Success')) }}
                 </label>
             </v-row>
         </v-col>
@@ -75,7 +77,7 @@
                 </v-row>
             </template>
 
-            <template v-if="!txData.pending && !txData.isError">
+            <template v-if="!txData.pending && !txData.isError && !txData.isCancelled">
                 <v-row justify="start" align="center" class="mt-4 mb-1">
                     <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="openOnExplorer()">
                         View transaction
@@ -95,7 +97,7 @@
                 </v-row>
             </template>
 
-            <template v-if="!txData.pending && txData.isError">
+            <template v-if="!txData.pending && (txData.isError || txData.isCancelled)">
                 <v-row justify="start" align="center" class="mt-4" :class="$wu.isMobile() ? '' : 'mb-1'">
                     <v-tooltip
                         v-model="showCopyTooltip"
@@ -118,25 +120,30 @@
                         <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
                     </div>
 
-                    <template v-if="!$wu.isMobile()">
-                        <v-spacer></v-spacer>
+                    <template v-if="txData.isError">
+                        <template v-if="!$wu.isMobile()">
+                            <v-spacer></v-spacer>
 
-                        <label class="success-link" @click.stop="openDiscord()">
-                            Contact our support
-                        </label>
-                        <div class="action-icons ml-1" :class="$wu.isMobile() ? 'mr-3' : 'mr-5'">
-                            <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
-                        </div>
+                            <label class="success-link" @click.stop="openDiscord()">
+                                Contact our support
+                            </label>
+                            <div class="action-icons ml-1" :class="$wu.isMobile() ? 'mr-3' : 'mr-5'">
+                                <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
+                            </div>
+                        </template>
                     </template>
                 </v-row>
-                <v-row v-if="$wu.isMobile()" justify="start" align="center" class="mt-5 mb-1">
-                    <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="openDiscord()">
-                        Contact our support
-                    </label>
-                    <div class="action-icons ml-1">
-                        <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
-                    </div>
-                </v-row>
+
+                <template v-if="txData.isError">
+                    <v-row v-if="$wu.isMobile()" justify="start" align="center" class="mt-5 mb-1">
+                        <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="openDiscord()">
+                            Contact our support
+                        </label>
+                        <div class="action-icons ml-1">
+                            <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
+                        </div>
+                    </v-row>
+                </template>
             </template>
         </v-col>
 
@@ -392,6 +399,10 @@ export default {
 
 .status-success {
     color: #22ABAC !important;
+}
+
+.status-cancelled {
+    color: var(--fourth-gray-text) !important;
 }
 
 .label-amount {

@@ -2,6 +2,10 @@
     <div>
         <v-row class="account-info-row mt-3" align="center">
             <label class="tx-history-label">Transaction history</label>
+            <v-spacer></v-spacer>
+            <label class="clear-btn-label" @click="clearTransaction">
+                Clear history
+            </label>
         </v-row>
 
         <TxListHeader/>
@@ -47,7 +51,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('transaction', ['loadTransaction']),
+        ...mapActions('transaction', ['loadTransaction', 'clearTransaction']),
     },
 }
 </script>
@@ -68,6 +72,12 @@ export default {
         font-size: 16px;
         line-height: 24px;
     }
+
+    .clear-btn-label {
+        font-style: normal !important;
+        font-size: 12px !important;
+        line-height: 16px !important;
+    }
 }
 
 /* tablet */
@@ -83,6 +93,12 @@ export default {
         font-weight: 300;
         font-size: 20px;
         line-height: 32px;
+    }
+
+    .clear-btn-label {
+        font-style: normal !important;
+        font-size: 12px !important;
+        line-height: 16px !important;
     }
 }
 
@@ -100,6 +116,12 @@ export default {
         font-size: 20px;
         line-height: 32px;
     }
+
+    .clear-btn-label {
+        font-style: normal !important;
+        font-size: 12px !important;
+        line-height: 16px !important;
+    }
 }
 
 .account-info-row {
@@ -109,5 +131,17 @@ export default {
 .tx-history-label {
     font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text);
+}
+
+.clear-btn-label {
+    font-family: 'Roboto', sans-serif !important;
+    font-style: normal;
+
+    cursor: pointer;
+    color: var(--fourth-gray-text);
+}
+
+.clear-btn-label:hover {
+    color: var(--secondary-gray-text) !important;
 }
 </style>

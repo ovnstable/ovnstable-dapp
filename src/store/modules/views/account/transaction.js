@@ -47,9 +47,17 @@ const actions = {
             const transactionReceiptRetry = () => rootState.web3.web3.eth.getTransactionReceipt(transaction.hash)
                 .then((receipt) => {
                     if (receipt != null) {
+                        receipt.cancel = false;
                         return receipt;
                     } else {
-                        return Promise.delay(1000).then(transactionReceiptRetry)
+                        let minutes = moment.duration(moment.utc(new Date()).diff(transaction.date)).asMinutes();
+
+                        if (minutes > 10) {
+                            receipt = { transactionHash: transaction.hash, cancel: true };
+                            return receipt;
+                        } else {
+                            return Promise.delay(1000).then(transactionReceiptRetry)
+                        }
                     }
                 });
 
@@ -57,7 +65,14 @@ const actions = {
                 let filteredTx = getters.transactions.find(tx => tx.hash === receipt.transactionHash);
                 filteredTx.pending = false;
                 filteredTx.receipt = receipt;
-                filteredTx.isError = !receipt.status;
+
+                if (receipt && !receipt.cancel) {
+                    filteredTx.isError = !receipt.status;
+                    filteredTx.isCancelled = false;
+                } else {
+                    filteredTx.isError = false;
+                    filteredTx.isCancelled = true;
+                }
 
                 commit('setTransactions', getters.transactions);
             })

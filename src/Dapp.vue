@@ -20,7 +20,7 @@
 
 import Header from "./components/Header";
 import AccountProfile from "./components/common/modal/account/AccountProfile";
-import GasSettings from "@/components/common/modal/GasSettings";
+import GasSettings from "@/components/common/modal/gas/GasSettings";
 import {mapActions, mapGetters} from "vuex";
 import Navbar from "@/components/Navbar";
 

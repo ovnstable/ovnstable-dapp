@@ -107,10 +107,25 @@
             <label class="exchange-label">1 USD+ = {{ $utils.formatMoney(Number.parseFloat(amountPerUsdPlus), 2) }} wUSD+</label>
         </v-row>
 
-        <!-- TODO: add gas fee section -->
-
-
         <v-row class="mt-10">
+            <v-col cols="3">
+                <v-row align="center">
+                    <label class="action-info-label">Gas settings:</label>
+                </v-row>
+            </v-col>
+            <v-col>
+                <v-row align="center">
+                    <GasSettingsMenu />
+                </v-row>
+            </v-col>
+            <v-col cols="1">
+                <v-row align="center" justify="end">
+                    <Tooltip text="Accelerating a transaction by using a higher gas price increases its chances of getting processed by the network faster, but it is not always guaranteed."/>
+                </v-row>
+            </v-col>
+        </v-row>
+
+        <v-row class="mt-5">
             <v-col cols="3">
                 <v-row>
                     <label class="action-info-label">Overnight fee:</label>
@@ -142,6 +157,13 @@
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
                        @click="confirmSwapAction">
+                    <v-progress-circular
+                        v-if="transactionPending"
+                        class="mr-2"
+                        width="2"
+                        :size="18"
+                        indeterminate
+                    ></v-progress-circular>
                     {{ buttonLabel }}
                 </v-btn>
                 <v-btn v-else
@@ -190,11 +212,15 @@ import polygonIcon from "@/assets/network/polygon.svg";
 import avaxIcon from "@/assets/network/avalanche.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import bscIcon from "@/assets/network/bsc.svg";
+import Tooltip from "@/components/common/element/Tooltip";
+import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
 
 export default {
     name: "Unwrap",
 
     components: {
+        GasSettingsMenu,
+        Tooltip,
         ErrorModal,
         WaitingModal,
         SuccessModal,

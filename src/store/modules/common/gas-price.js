@@ -67,10 +67,27 @@ const actions = {
         else if(networkId === 56)
             url = "https://gbsc.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
         else if (networkId === 10){
+            console.log('GAS STATION: fixed for op');
 
-            // Fixed price for Optimism
-            commit('setGasPrice', "0.001");
-            commit('setGasPriceGwei', rootState.web3.web3.utils.toWei("0.001" + "", 'gwei'));
+            try {
+                let price = {
+                    low: 0.001,
+                    standard: 0.001,
+                    fast: 0.001,
+                    ultra: 0.001,
+
+                    usdPrice: 0
+                }
+                commit('setGasPriceStation', price);
+
+                let element = price[getters.gasPriceType];
+
+                commit('setGasPrice', element)
+                commit('setGasPriceGwei', rootState.web3.web3.utils.toWei(element + "", 'gwei'))
+            } catch (reason) {
+                console.debug('Error get gas price: ' + reason);
+            }
+
             return;
         }
 
@@ -93,7 +110,7 @@ const actions = {
             commit('setGasPrice', element)
             commit('setGasPriceGwei', rootState.web3.web3.utils.toWei(element + "", 'gwei'))
         }).catch(reason => {
-            console.debug('Error get gas price: ' + reason)
+            console.debug('Error get gas price: ' + reason);
         })
     },
 };

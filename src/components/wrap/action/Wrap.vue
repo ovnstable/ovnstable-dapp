@@ -332,7 +332,7 @@ export default {
         },
 
         transactionPending: function () {
-            return this.transactions.filter(value => (value.pending && (value.product === 'wUsdPlus') && (value.action === 'wrap'))).length > 0;
+            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === 'wUsdPlus') && (value.action === 'wrap'))).length > 0;
         },
 
         numberRule: function () {

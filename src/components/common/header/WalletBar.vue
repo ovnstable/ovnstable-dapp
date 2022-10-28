@@ -53,6 +53,7 @@ export default {
 
     computed: {
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
+        ...mapGetters('network', ['networkId']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('transaction', ['transactions']),
 
@@ -67,7 +68,7 @@ export default {
         },
 
         pendingTx: function () {
-            return (this.transactions.filter(tx => tx.pending).length > 0);
+            return (this.transactions.filter(tx => (tx.pending && (tx.chain === this.networkId))).length > 0);
         },
     },
 

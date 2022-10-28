@@ -323,7 +323,7 @@ export default {
         },
 
         transactionPending: function () {
-            return this.transactions.filter(value => (value.pending && (value.product === 'usdPlus') && (value.action === 'redeem'))).length > 0;
+            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === 'usdPlus') && (value.action === 'redeem'))).length > 0;
         },
 
         numberRule: function () {

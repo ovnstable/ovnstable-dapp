@@ -48,7 +48,7 @@
                 <label v-else
                        class="card-label"
                        :class="txData.pending ? 'status-pending' : (txData.isError ? 'status-failed' : (txData.isCancelled ? 'status-cancelled' : 'status-success'))">
-                    {{ txData.pending ? 'Pending' : (txData.isError ? 'Failed' : (txData.isCancelled ? 'Cancelled' : 'Success')) }}
+                    {{ txData.pending ? 'Pending' : (txData.isError ? 'Failed' : (txData.isCancelled ? 'Stuck' : 'Success')) }}
                 </label>
             </v-row>
         </v-col>
@@ -101,8 +101,9 @@
             </template>
 
             <template v-if="!txData.pending && (txData.isError || txData.isCancelled)">
-                <v-row justify="start" align="center" class="mt-4" :class="$wu.isMobile() ? '' : 'mb-1'">
+                <v-row justify="start" align="center" class="mt-4" :class="$wu.isMobile() ? (txData.isCancelled ? 'mb-1' : '') : 'mb-1'">
                     <v-tooltip
+                        v-if="txData.isError"
                         v-model="showCopyTooltip"
                         color="#202832"
                         bottom
@@ -116,12 +117,23 @@
                         <p class="my-0">Copied!</p>
                     </v-tooltip>
 
-                    <label class="success-link ml-5" @click.stop="openFaq()">
-                        Open FAQ
-                    </label>
-                    <div class="action-icons ml-1">
-                        <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
-                    </div>
+                    <template v-else>
+                        <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="openOnExplorer()">
+                            View transaction
+                        </label>
+                        <div class="action-icons ml-1">
+                            <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
+                        </div>
+                    </template>
+
+                    <template v-if="txData.isCancelled">
+                        <label class="success-link ml-5" @click.stop="openFaq()">
+                            Open FAQ
+                        </label>
+                        <div class="action-icons ml-1">
+                            <v-img :src="require('@/assets/icon/open_in_new_blue.svg')"/>
+                        </div>
+                    </template>
 
                     <template v-if="txData.isError">
                         <template v-if="!$wu.isMobile()">
@@ -253,14 +265,11 @@ export default {
         },
 
         openPendingFaq() {
-            // TODO: add pending FAQ link
-            window.open("https://overnight.fi", '_blank').focus();
+            window.open("https://overnight.fi/blog/2022/10/28/what-to-do-if-your-transaction-is-still-stuck/", '_blank').focus();
         },
 
-
         openFaq() {
-            // TODO: add error FAQ link
-            window.open("https://overnight.fi", '_blank').focus();
+            window.open("https://overnight.fi/blog/2022/10/28/what-to-do-if-your-transaction-is-still-stuck/", '_blank').focus();
         },
 
         addToken() {

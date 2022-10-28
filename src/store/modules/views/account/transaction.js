@@ -46,6 +46,10 @@ const actions = {
 
             const transactionReceiptRetry = () => rootState.web3.web3.eth.getTransactionReceipt(transaction.hash)
                 .then((receipt) => {
+                    if (transaction.chain !== rootState.network.networkId) {
+                        return Promise.delay(1000).then(transactionReceiptRetry);
+                    }
+
                     if (receipt != null) {
                         receipt.cancel = false;
                         return receipt;

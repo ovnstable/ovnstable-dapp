@@ -77,7 +77,6 @@ export default {
     data: () => ({
     }),
 
-
     computed: {
         ...mapGetters('network', ['networkName', 'networkId', 'switchToOtherNetwork']),
         ...mapGetters('web3', ['loadingWeb3']),
@@ -85,9 +84,18 @@ export default {
         ...mapGetters('accountData', ['account']),
     },
 
+    watch: {
+        networkId: function (newValue, oldValue) {
+            if (newValue) {
+                this.loadTransaction();
+            }
+        },
+    },
+
     methods: {
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('network', ['setWalletNetwork']),
+        ...mapActions('transaction', ['loadTransaction']),
 
         switchToNetwork() {
             this.setWalletNetwork(this.networkId.toString());

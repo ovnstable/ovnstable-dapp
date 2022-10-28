@@ -365,7 +365,7 @@ export default {
         },
 
         isBuy: function () {
-            if (this.isOvercapAvailable) {
+            if (this.isOvercapAvailable && this.etsData.overcapEnabled) {
                 if (!this.etsData.disabled && this.account && this.sum > 0 && this.numberRule && !this.transactionPending) {
                     let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
                     let useOvercapSum;
@@ -381,7 +381,7 @@ export default {
                     return false;
                 }
             } else {
-                return !this.etsData.disabled && this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && !this.transactionPending && (!this.etsData.maxSupply || this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
+                return !this.etsData.disabled && this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && !this.transactionPending && (!this.etsData.maxSupply || (this.totalSupply[this.etsData.name] < this.etsData.maxSupply)) && (!this.etsData.maxSupply || ((parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply)));
             }
         },
 

@@ -1,14 +1,17 @@
 <template>
     <v-row class="ma-0 account-info-row list-card-container" align="center" @click="switchCard">
-        <v-col class="my-3" :cols="$wu.isMobile() ? 1 : 4">
+        <v-col class="my-3" :cols="$wu.isMobile() ? 2 : 4">
             <v-row justify="start" align="center">
                 <div class="icon" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'">
                     <v-img :src="require('@/assets/currencies/market/' + txData.product + '.svg')"/>
                 </div>
+                <div class="network-icon">
+                    <v-img class="network-chain-icon" :src="icon"/>
+                </div>
                 <label class="card-label ml-2" v-if="!$wu.isMobile()">{{ txData.productName }}</label>
             </v-row>
         </v-col>
-        <v-col :cols="$wu.isMobile() ? 6 : 2">
+        <v-col :cols="$wu.isMobile() ? 5 : 2">
             <v-row justify="end" align="center">
                 <label class="card-label label-amount">
                     {{ (txData.action === 'mint' || txData.action === 'wrap') ? '+' : ((txData.action === 'redeem' || txData.action === 'unwrap') ? '-' : '') }}
@@ -164,6 +167,10 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import polygonIcon from "@/assets/network/polygon.svg";
+import bscIcon from "@/assets/network/bsc.svg";
+import avaxIcon from "@/assets/network/avalanche.svg";
+import optimismIcon from "@/assets/network/op.svg";
 
 export default {
     name: "TxCard",
@@ -187,6 +194,19 @@ export default {
         ...mapGetters('network', ['opConfig', 'polygonConfig', 'avaxConfig', 'bscConfig']),
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('network', ['networkId']),
+
+        icon: function () {
+            switch (this.txData.chain){
+                case 137:
+                    return polygonIcon;
+                case 56:
+                    return bscIcon;
+                case 43114:
+                    return avaxIcon;
+                case 10:
+                    return optimismIcon;
+            }
+        },
     },
 
     watch: {
@@ -412,6 +432,20 @@ export default {
 .icon {
     height: 24px !important;
     width: 24px !important;
+}
+
+.network-icon {
+    height: 16px !important;
+    width: 16px !important;
+    margin-top: -20px !important;
+    margin-left: -8px !important;
+    z-index: 1000 !important;
+    background-color: var(--card-coin-background);
+    border-radius: 9999px !important;
+}
+
+.network-chain-icon {
+    margin: 2px;
 }
 
 .status-icon {

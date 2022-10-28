@@ -1,11 +1,11 @@
 <template>
     <v-row class="ma-0 account-info-row mt-2 mb-n5" align="center">
-        <v-col :cols="$wu.isMobile() ? 1 : 4">
+        <v-col :cols="$wu.isMobile() ? 2 : 4">
             <v-row justify="start" align="center">
                 <label class="list-header-label" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'">Product</label>
             </v-row>
         </v-col>
-        <v-col :cols="$wu.isMobile() ? 6 : 2">
+        <v-col :cols="$wu.isMobile() ? 5 : 2">
             <v-row justify="end" align="center">
                 <label class="list-header-label">Amount</label>
             </v-row>

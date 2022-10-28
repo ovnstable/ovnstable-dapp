@@ -108,10 +108,25 @@
             <label class="exchange-label">1 {{ etsData.actionTokenName }} = 1 ETS {{ etsData.nameUp }}</label>
         </v-row>
 
-        <!-- TODO: add gas fee section -->
-
-
         <v-row class="mt-10">
+            <v-col cols="3">
+                <v-row align="center">
+                    <label class="action-info-label">Gas settings:</label>
+                </v-row>
+            </v-col>
+            <v-col>
+                <v-row align="center">
+                    <GasSettingsMenu />
+                </v-row>
+            </v-col>
+            <v-col cols="1">
+                <v-row align="center" justify="end">
+                    <Tooltip text="Accelerating a transaction by using a higher gas price increases its chances of getting processed by the network faster, but it is not always guaranteed."/>
+                </v-row>
+            </v-col>
+        </v-row>
+
+        <v-row class="mt-5">
             <v-col cols="3">
                 <v-row>
                     <label class="action-info-label">Enter fee:</label>
@@ -146,6 +161,13 @@
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
                        @click="confirmSwapAction">
+                    <v-progress-circular
+                        v-if="transactionPending"
+                        class="mr-2"
+                        width="2"
+                        :size="18"
+                        indeterminate
+                    ></v-progress-circular>
                     {{ buttonLabel }}
                 </v-btn>
                 <v-btn v-else
@@ -195,11 +217,15 @@ import avaxIcon from "@/assets/network/avalanche.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import {axios} from "@/plugins/http-axios";
+import Tooltip from "@/components/common/element/Tooltip";
+import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
 
 export default {
     name: "Invest",
 
     components: {
+        GasSettingsMenu,
+        Tooltip,
         ErrorModal,
         WaitingModal,
         SuccessModal,
@@ -219,6 +245,7 @@ export default {
 
     computed: {
         ...mapGetters('accountData', ['balance', 'etsBalance', 'actionAssetBalance', 'account']),
+        ...mapGetters('transaction', ['transactions']),
         ...mapGetters('investModal', ['etsData', 'actionAssetApproved']),
         ...mapGetters('marketData', ['etsStrategyData']),
         ...mapGetters('supplyData', ['totalSupply']),
@@ -296,6 +323,8 @@ export default {
                 return "ETS is in prototype"
             } else if (this.etsData.disabled) {
                 return "Temporarily unavailable"
+            } else if (this.transactionPending) {
+                return 'Transaction is pending';
             } else if (this.isBuy) {
                 if (this.actionAssetApproved) {
                     this.step = 2;
@@ -336,8 +365,8 @@ export default {
         },
 
         isBuy: function () {
-            if (this.isOvercapAvailable) {
-                if (!this.etsData.disabled && this.account && this.sum > 0 && this.numberRule) {
+            if (this.isOvercapAvailable && this.etsData.overcapEnabled) {
+                if (!this.etsData.disabled && this.account && this.sum > 0 && this.numberRule && !this.transactionPending) {
                     let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
                     let useOvercapSum;
 
@@ -352,8 +381,12 @@ export default {
                     return false;
                 }
             } else {
-                return !this.etsData.disabled && this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && (!this.etsData.maxSupply || this.totalSupply[this.etsData.name] < this.etsData.maxSupply) && (!this.etsData.maxSupply || (parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply));
+                return !this.etsData.disabled && this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && !this.transactionPending && (!this.etsData.maxSupply || (this.totalSupply[this.etsData.name] < this.etsData.maxSupply)) && (!this.etsData.maxSupply || ((parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply)));
             }
+        },
+
+        transactionPending: function () {
+            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === ('ets_' + this.etsData.name)) && (value.action === 'mint'))).length > 0;
         },
 
         numberRule: function () {
@@ -410,6 +443,8 @@ export default {
 
         ...mapActions("overcapData", ['useOvercap']),
 
+        ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
+
         changeSliderPercent() {
             this.sum = (this.actionAssetBalance[this.etsData.actionAsset] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
@@ -439,10 +474,8 @@ export default {
         },
 
         async buyAction() {
-
-            this.showWaitingModal('Swapping ' + this.sumResult + ' ' + this.etsData.actionTokenName + ' for ' + this.sumResult + ' ETS ' + this.etsData.nameUp);
-
             try {
+                let sumInUsd = this.sum;
                 let sum;
 
                 switch (this.etsData.actionTokenDecimals) {
@@ -475,7 +508,26 @@ export default {
                     }
 
                     let referral = await this.getReferralCode();
-                    let buyResult = await contracts[this.etsData.exchangeContract].methods.buy(sum, referral).send(buyParams);
+                    let etsActionData = this.etsData;
+
+                    let buyResult = await contracts[this.etsData.exchangeContract].methods.buy(sum, referral).send(buyParams).on('transactionHash', function (hash) {
+                        let tx = {
+                            hash: hash,
+                            text: 'Mint ETS ' + etsActionData.nameUp,
+                            product: 'ets_' + etsActionData.name,
+                            productName: 'ETS ' + etsActionData.nameUp,
+                            action: 'mint',
+                            amount: sumInUsd,
+                        };
+
+                        self.putTransaction(tx);
+                        self.showSuccessModal({
+                            successTxHash: hash,
+                            successAction: 'mintEts',
+                            etsData: etsActionData
+                        });
+                        self.loadTransaction();
+                    });
 
                     if (this.isOvercapAvailable) {
                         let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
@@ -492,25 +544,15 @@ export default {
                             overcapVolume: useOvercapSum
                         });
                     }
-
-                    this.closeWaitingModal();
-                    this.showSuccessModal({
-                        successTxHash: buyResult.transactionHash,
-                        successAction: 'mintEts',
-                        etsData: this.etsData
-                    });
                 } catch (e) {
                     console.log(e);
-                    this.closeWaitingModal();
-                    this.showErrorModal('buyETS');
                     return;
                 }
 
                 self.refreshMarket();
                 self.setSum(null);
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('buyETS');
+                console.log(e);
             }
         },
 
@@ -531,8 +573,6 @@ export default {
                     default:
                         break;
                 }
-
-                this.showWaitingModal(null);
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {

@@ -17,15 +17,15 @@
                     </div>
                 </v-row>
                 <v-row justify="center" class="mb-8" :class="$wu.isMobile() ? '' : 'mx-8'">
-                    <label class="success-label">You successfully {{ successActionLabel }}</label>
+                    <label class="success-label">Transaction successfully submitted</label>
                 </v-row>
                 <v-row justify="center" class="mb-5">
                     <v-btn dark
                            height="40"
-                           width="240"
+                           width="300"
                            class="dismiss-btn mb-3"
-                           @click="goToDashboard">
-                        Go to my dashboard
+                           @click="goToTransactionHistory">
+                        Go to my transaction history
                     </v-btn>
                 </v-row>
                 <v-row class="mt-8 mb-5">
@@ -68,25 +68,6 @@ export default {
     computed: {
         ...mapGetters('network', ['explorerUrl']),
         ...mapGetters('successModal', ['show', 'successTxHash', 'successAction', 'etsData']),
-
-        successActionLabel: function () {
-            switch (this.successAction) {
-                case 'mintUsdPlus':
-                    return 'minted USD+'
-                case 'redeemUsdPlus':
-                    return 'redeemed USD+'
-                case 'wrapUsdPlus':
-                    return 'wrapped USD+'
-                case 'unwrapUsdPlus':
-                    return 'unwrapped USD+'
-                case 'mintEts':
-                    return 'minted ETS ' + (this.etsData ? this.etsData.nameUp : '');
-                case 'redeemEts':
-                    return 'redeemed ETS ' + (this.etsData ? this.etsData.nameUp : '');
-                default:
-                    return 'done the operation'
-            }
-        },
 
         actionSuccessToken: function () {
             switch (this.successAction) {
@@ -137,6 +118,8 @@ export default {
         ...mapActions('wrapModal', ['closeWrapModal']),
         ...mapActions('investModal', ['closeInvestModal']),
         ...mapActions('track', ['trackClick']),
+        ...mapActions('accountUI', ['showTxHistory']),
+
 
         addTokenAction() {
             switch (this.successAction) {
@@ -179,11 +162,13 @@ export default {
             this.close();
         },
 
-        goToDashboard() {
+        goToTransactionHistory() {
             this.closeSwapModal();
             this.closeWrapModal();
             this.closeInvestModal();
-            this.$router.push('/');
+
+            this.showTxHistory();
+
             this.close();
         },
     },

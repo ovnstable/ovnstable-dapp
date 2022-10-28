@@ -107,10 +107,25 @@
             <label class="exchange-label">1 ETS {{ etsData.nameUp }} = 1 {{ etsData.actionTokenName }}</label>
         </v-row>
 
-        <!-- TODO: add gas fee section -->
-
-
         <v-row class="mt-10">
+            <v-col cols="3">
+                <v-row align="center">
+                    <label class="action-info-label">Gas settings:</label>
+                </v-row>
+            </v-col>
+            <v-col>
+                <v-row align="center">
+                    <GasSettingsMenu />
+                </v-row>
+            </v-col>
+            <v-col cols="1">
+                <v-row align="center" justify="end">
+                    <Tooltip text="Accelerating a transaction by using a higher gas price increases its chances of getting processed by the network faster, but it is not always guaranteed."/>
+                </v-row>
+            </v-col>
+        </v-row>
+
+        <v-row class="mt-5">
             <v-col cols="3">
                 <v-row>
                     <label class="action-info-label">Exit fee:</label>
@@ -146,6 +161,13 @@
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
                        @click="confirmSwapAction">
+                    <v-progress-circular
+                        v-if="transactionPending"
+                        class="mr-2"
+                        width="2"
+                        :size="18"
+                        indeterminate
+                    ></v-progress-circular>
                     {{ buttonLabel }}
                 </v-btn>
                 <v-btn v-else
@@ -195,11 +217,15 @@ import avaxIcon from "@/assets/network/avalanche.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import {axios} from "@/plugins/http-axios";
+import Tooltip from "@/components/common/element/Tooltip";
+import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
 
 export default {
     name: "Withdraw",
 
     components: {
+        GasSettingsMenu,
+        Tooltip,
         ErrorModal,
         WaitingModal,
         SuccessModal,
@@ -219,6 +245,7 @@ export default {
 
     computed: {
         ...mapGetters('accountData', ['balance', 'etsBalance', 'actionAssetBalance', 'account']),
+        ...mapGetters('transaction', ['transactions']),
         ...mapGetters('investModal', ['etsData', 'etsTokenApproved']),
         ...mapGetters('marketData', ['etsStrategyData']),
         ...mapGetters("network", ['networkId', 'polygonApi']),
@@ -291,6 +318,8 @@ export default {
 
             if (!this.account) {
                 return 'Connect to a wallet';
+            } else if (this.transactionPending) {
+                return 'Transaction is pending';
             } else if (this.isBuy) {
                 if (this.etsTokenApproved) {
                     this.step = 2;
@@ -307,7 +336,11 @@ export default {
         },
 
         isBuy: function () {
-            return this.account && this.sum > 0 && this.numberRule;
+            return this.account && this.sum > 0 && this.numberRule && !this.transactionPending;
+        },
+
+        transactionPending: function () {
+            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === ('ets_' + this.etsData.name)) && (value.action === 'redeem'))).length > 0;
         },
 
         numberRule: function () {
@@ -363,6 +396,8 @@ export default {
 
         ...mapActions("overcapData", ['returnOvercap']),
 
+        ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
+
         changeSliderPercent() {
             this.sum = (this.etsBalance[this.etsData.name] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
@@ -392,10 +427,8 @@ export default {
         },
 
         async redeemAction() {
-
-            this.showWaitingModal('Withdrawing ' + this.sumResult + ' ETS ' + this.etsData.nameUp + ' for ' + this.sumResult + ' ' + this.etsData.actionTokenName);
-
             try {
+                let sumInUsd = this.sum;
                 let sum;
 
                 switch (this.etsData.etsTokenDecimals) {
@@ -427,7 +460,26 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    let buyResult = await contracts[this.etsData.exchangeContract].methods.redeem(sum).send(buyParams);
+                    let etsActionData = this.etsData;
+
+                    let buyResult = await contracts[this.etsData.exchangeContract].methods.redeem(sum).send(buyParams).on('transactionHash', function (hash) {
+                        let tx = {
+                            hash: hash,
+                            text: 'Redeem ETS ' + etsActionData.nameUp,
+                            product: 'ets_' + etsActionData.name,
+                            productName: 'ETS ' + etsActionData.nameUp,
+                            action: 'redeem',
+                            amount: sumInUsd,
+                        };
+
+                        self.putTransaction(tx);
+                        self.showSuccessModal({
+                            successTxHash: hash,
+                            successAction: 'redeemEts',
+                            etsData: etsActionData
+                        });
+                        self.loadTransaction();
+                    });
 
                     if (this.isOvercapAvailable) {
                         await this.returnOvercap({
@@ -435,21 +487,15 @@ export default {
                             overcapVolume: this.sum
                         });
                     }
-
-                    this.closeWaitingModal();
-                    this.showSuccessModal({successTxHash: buyResult.transactionHash, successAction: 'redeemEts'});
                 } catch (e) {
-                    console.log(e)
-                    this.closeWaitingModal();
-                    this.showErrorModal('withdrawETS');
+                    console.log(e);
                     return;
                 }
 
                 self.refreshMarket();
                 self.setSum(null);
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('withdrawEts');
+                console.log(e);
             }
         },
 
@@ -470,8 +516,6 @@ export default {
                     default:
                         break;
                 }
-
-                this.showWaitingModal(null);
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {

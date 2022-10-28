@@ -77,7 +77,6 @@ export default {
     data: () => ({
     }),
 
-
     computed: {
         ...mapGetters('network', ['networkName', 'networkId', 'switchToOtherNetwork']),
         ...mapGetters('web3', ['loadingWeb3']),
@@ -86,9 +85,18 @@ export default {
         ...mapActions('track', ['trackClick']),
     },
 
+    watch: {
+        networkId: function (newValue, oldValue) {
+            if (newValue) {
+                this.loadTransaction();
+            }
+        },
+    },
+
     methods: {
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('network', ['setWalletNetwork']),
+        ...mapActions('transaction', ['loadTransaction']),
 
         switchToNetwork() {
             this.setWalletNetwork(this.networkId.toString());
@@ -105,6 +113,10 @@ export default {
 <style scoped>
 /* mobile */
 @media only screen and (max-width: 960px) {
+    .progress {
+        width: 150px;
+    }
+
     .header-container {
         margin-left: 5% !important;
         margin-right: 5% !important;

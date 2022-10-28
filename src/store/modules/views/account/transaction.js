@@ -1,5 +1,5 @@
+import moment from "moment";
 const Promise = require("bluebird");
-
 
 const state = {
     transactions: [],
@@ -10,22 +10,28 @@ const getters = {
     transactions(state) {
         return state.transactions;
     },
-
-
 };
 
 const actions = {
 
-    putTransaction({commit, dispatch, getters}, tx) {
+    async putTransaction({commit, dispatch, getters, rootState}, tx) {
+        tx.date = moment.utc(new Date());
+        tx.pending = true;
+        tx.isError = false;
+        tx.chain = rootState.network.networkId;
+
         getters.transactions.push(tx);
         commit('setTransactions', getters.transactions);
     },
-
 
     clearTransaction({commit, dispatch, getters, rootState}) {
         commit('setTransactions', [])
     },
 
+    deleteTxFromHistory({commit, dispatch, getters, rootState}, hash) {
+        let filteredTx = getters.transactions.filter(tx => tx.hash !== hash);
+        commit('setTransactions', filteredTx);
+    },
 
     loadTransaction({commit, dispatch, getters, rootState}) {
 
@@ -33,43 +39,56 @@ const actions = {
 
         for (let i = 0; i < getters.transactions.length; i++) {
             let transaction = getters.transactions[i];
-            if (transaction == null)
-                continue;
 
-            if (transaction.pending !== true) {
+            if (transaction == null || transaction.pending !== true) {
                 continue;
             }
 
             const transactionReceiptRetry = () => rootState.web3.web3.eth.getTransactionReceipt(transaction.hash)
                 .then((receipt) => {
+                    if (transaction.chain !== rootState.network.networkId) {
+                        return Promise.delay(1000).then(transactionReceiptRetry);
+                    }
+
                     if (receipt != null) {
+                        receipt.cancel = false;
                         return receipt;
                     } else {
-                        return Promise.delay(500).then(transactionReceiptRetry)
+                        let minutes = moment.duration(moment.utc(new Date()).diff(transaction.date)).asMinutes();
+
+                        if (minutes > 10) {
+                            receipt = { transactionHash: transaction.hash, cancel: true };
+                            return receipt;
+                        } else {
+                            return Promise.delay(1000).then(transactionReceiptRetry)
+                        }
                     }
                 });
 
-            transactionReceiptRetry().then(value => {
-                let filter = getters.transactions.find(tx => tx.hash === value.transactionHash);
-                filter.pending = false;
+            transactionReceiptRetry().then(receipt => {
+                let filteredTx = getters.transactions.find(tx => tx.hash === receipt.transactionHash);
+                filteredTx.pending = false;
+                filteredTx.receipt = receipt;
 
-                commit('setTransactions', getters.transactions)
+                if (receipt && !receipt.cancel) {
+                    filteredTx.isError = !receipt.status;
+                    filteredTx.isCancelled = false;
+                } else {
+                    filteredTx.isError = false;
+                    filteredTx.isCancelled = true;
+                }
+
+                commit('setTransactions', getters.transactions);
             })
         }
-
     }
-
-
 };
 
 const mutations = {
 
-
     setTransactions(state, transactions) {
         state.transactions = transactions;
     },
-
-
 };
 
 export default {

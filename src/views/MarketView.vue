@@ -15,8 +15,6 @@
             <label @click="tab=3" class="tab-btn mx-4" v-bind:class="activeTabPools">USD+ pools</label>
 
             <v-spacer></v-spacer>
-
-            <v-menu offset-y v-if="$wu.isFull()"></v-menu>
         </v-row>
 
         <div class="mt-7 cards-list-container">
@@ -282,7 +280,6 @@ export default {
         font-size: 18px;
         line-height: 28px;
     }
-
 
     .title-label {
         font-style: normal;

@@ -44,7 +44,6 @@ Vue.use(Donut);
 
 Vue.component('resize-observer', ResizeObserver)
 
-
 new Vue({
   store,
   vuetify,

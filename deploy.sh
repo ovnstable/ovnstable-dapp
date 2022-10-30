@@ -4,7 +4,7 @@
 token=$1
 url=$2
 stand=$3
-dockerComposePath="/root/docker-compose.yaml"
+dockerComposePath="/home/ubuntu/docker-compose.yaml"
 
 
 if [ "$stand" = "prod" ]

@@ -1,9 +1,9 @@
 <template>
     <div class="apy-chart-container">
         <v-row class="chart-header-row">
-            <v-col>
+            <v-col cols="8">
                 <v-row justify="start">
-                    <label class="chart-title">{{ totalTvl ? (etsData.nameUp + '&nbsp;') : ''}}</label>
+                    <label class="chart-title">{{ totalTvl ? ('ETS: ' + etsData.nameUp + '&nbsp;') : ''}}</label>
                     <label class="chart-title" style="margin-left: 0 !important"><abbr title="Total Value Locked">TVL</abbr></label>
                 </v-row>
 

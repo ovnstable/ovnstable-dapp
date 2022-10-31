@@ -27,7 +27,7 @@
                 <div class="icon mr-2" v-else>
                     <v-img :src="require('@/assets/currencies/market/ets_' + cardData.data.name + '.svg')"/>
                 </div>
-                <label class="card-label">
+                <label class="card-label ml-2">
                     {{ cardData.data.nameUp }}
                 </label>
             </v-row>
@@ -343,7 +343,7 @@ export default {
     .card-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 16px;
+        font-size: 14px;
         line-height: 24px;
     }
 
@@ -379,8 +379,8 @@ export default {
     .card-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 16px;
-        line-height: 24px;
+        font-size: 14px;
+        line-height: 28px;
     }
 
     .list-header-label {

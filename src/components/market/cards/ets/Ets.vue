@@ -6,7 +6,7 @@
                 <span class="currency ml-5">
                     <v-img :src="require('@/assets/currencies/market/ets_' + cardData.data.name + '.svg')"/>
                 </span>
-                <v-row class="d-flex flex-column align-start mr-3 ml-10">
+                <v-row class="d-flex flex-column align-start mr-3 ml-8">
                     <v-row class="d-flex">
                         <label class="card-title">ETS {{ cardData.data.nameUp }}</label>
                     </v-row>
@@ -358,13 +358,6 @@ export default {
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .card-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 30px;
-        line-height: 40px;
-    }
-
     .card-info {
         font-style: normal;
         font-weight: 300;
@@ -480,8 +473,8 @@ export default {
     }
 
     .currency {
-        height: 100px !important;
-        width: 100px !important;
+        height: 78px !important;
+        width: 78px !important;
     }
 
     .your-deposit, .your-deposit-disabled {
@@ -518,8 +511,8 @@ export default {
     .footer-link {
         font-style: normal;
         font-weight: 400;
-        font-size: 16px;
-        line-height: 24px;
+        font-size: 14px;
+        line-height: 22px;
     }
 
     .header-row {
@@ -534,8 +527,8 @@ export default {
     .card-title {
         font-style: normal;
         font-weight: 600;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 16px;
+        line-height: 18px;
         letter-spacing: 0.04em;
     }
 

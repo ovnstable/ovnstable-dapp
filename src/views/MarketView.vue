@@ -190,7 +190,7 @@ export default {
                         data: ets,
                         chain: ets.chain,
                         hasUsdPlus: ets.hasUsdPlus,
-                        overcapEnabled: !!ets.maxSupply,
+                        overcapEnabled: (!!(ets.maxSupply && ets.maxSupply > 0)),
                         hasCap: ets.maxSupply ? (this.totalSupply[ets.name] < ets.maxSupply) : true,
                         tvl: this.totalSupply[ets.name],
                         monthApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,

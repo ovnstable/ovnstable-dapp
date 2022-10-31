@@ -25,9 +25,9 @@
                     </v-row>
 
                     <v-row class="info-card-container-white ma-0 mt-5" justify="start" align="center" v-if="!$wu.isFull()">
-                        <v-col class="my-10 mx-8">
+                        <v-col class="my-10">
                             <template v-if="networkSupport">
-                                <v-row align="center">
+                                <v-row align="center" class="ma-0">
                                     <v-col cols="12">
                                         <v-row align="center">
                                             <label class="investor-card-sub-title">Your balance in ETS</label>
@@ -37,7 +37,7 @@
                                         </v-row>
                                     </v-col>
                                 </v-row>
-                                <v-row align="center">
+                                <v-row align="center" class="ma-0">
                                     <v-col cols="12">
                                         <v-row align="center" :class="$wu.isMobile() ? 'mt-2' : 'mt-4'">
                                             <label class="investor-card-sub-title">Profit/loss</label>
@@ -49,17 +49,12 @@
                                                 {{ etsClientData[this.etsData.name] ? ((etsClientData[this.etsData.name] > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—' }}
                                             </label>
                                         </v-row>
-                                        <v-row class="info-row mt-6" justify="start" align="center">
-                                            <label class="fee-structure-label mt-1">All time</label>
-                                            <v-spacer></v-spacer>
-                                            <label class="investor-card-sub-title-value value-disabled">Soon</label>
-                                        </v-row>
                                     </v-col>
                                 </v-row>
                             </template>
 
                             <template v-if="networkSupport">
-                                <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
+                                <v-row align="center" justify="center" class="ma-0 mx-3" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
                                     <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
                                 </v-row>
 
@@ -84,25 +79,25 @@
                                 </v-row>
                             </template>
 
-                            <v-row align="center" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'">
+                            <v-row align="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'">
                                 <label class="investor-card-title">Fee structure</label>
                             </v-row>
-                            <v-row class="info-row mt-8" justify="start" align="center">
+                            <v-row class="info-row ma-0 mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Entry</label>
                                 <v-spacer></v-spacer>
                                 <label class="fee-structure-value mt-1">{{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}</label>
                             </v-row>
-                            <v-row class="info-row mt-8" justify="start" align="center">
+                            <v-row class="info-row ma-0 mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Exit</label>
                                 <v-spacer></v-spacer>
                                 <label class="fee-structure-value mt-1">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
                             </v-row>
-                            <v-row class="info-row mt-8" justify="start" align="center">
+                            <v-row class="info-row ma-0 mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Performance</label>
                                 <v-spacer></v-spacer>
                                 <label class="fee-structure-value mt-1">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 2) + '%' : '—' }}</label>
                             </v-row>
-                            <v-row class="info-row mt-8" justify="start" align="center">
+                            <v-row class="info-row ma-0 mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Management</label>
                                 <v-spacer></v-spacer>
                                 <label class="fee-structure-value mt-1">{{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
@@ -137,7 +132,7 @@
                     </v-row>
 
                     <v-row class="info-card-container-white ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
-                        <v-col class="my-10 mx-8">
+                        <v-col class="my-10 mx-6">
                             <template v-if="networkSupport">
                                 <v-row align="center">
                                     <label class="investor-card-sub-title">Your balance in ETS</label>
@@ -155,25 +150,20 @@
                                         {{ etsClientData[this.etsData.name] ? ((etsClientData[this.etsData.name] > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—' }}
                                     </label>
                                 </v-row>
-                                <v-row class="info-row mt-6" justify="start" align="center">
-                                    <label class="fee-structure-label mt-1">All time</label>
-                                    <v-spacer></v-spacer>
-                                    <label class="investor-card-sub-title-value value-disabled">Soon</label>
-                                </v-row>
                             </template>
 
                             <template v-if="networkSupport">
-                                <v-row align="center" justify="center" class="ma-0 mt-12" v-if="!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
+                                <v-row align="center" justify="center" class="mt-15" v-if="!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
                                     <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
                                 </v-row>
 
-                                <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)? 'mt-2' : 'mt-12'">
+                                <v-row align="center" justify="center" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)? 'mt-5' : 'mt-15'">
                                     <v-btn class="header-btn btn-investor-invest" :class="(this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)) ? 'disabled-btn' : ''" :disabled="this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)" @click="mintAction">
                                         MINT ETS {{ etsData.nameUp }}
                                     </v-btn>
                                 </v-row>
 
-                                <v-row align="center" justify="center" class="ma-0 mt-4">
+                                <v-row align="center" justify="center" class="mt-6">
                                     <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
                                         REDEEM ETS {{ etsData.nameUp }}
                                     </v-btn>
@@ -181,7 +171,7 @@
                             </template>
 
                             <template v-else>
-                                <v-row align="center" justify="center" class="ma-0">
+                                <v-row align="center" justify="center" class="mt-0">
                                     <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork(etsData.chain.toString())">
                                         SWITCH TO {{ etsData.chainName.toUpperCase() }} TO MINT
                                     </v-btn>
@@ -434,7 +424,7 @@ export default {
     }
 
     .btn-investor-invest {
-        width: calc(100% + 24px) !important;
+        width: 100% !important;
         height: 40px !important;
     }
 
@@ -528,7 +518,7 @@ export default {
     }
 
     .btn-investor-invest {
-        width: calc(100% + 24px) !important;
+        width: 100% !important;
         height: 44px !important;
     }
 
@@ -622,7 +612,7 @@ export default {
     }
 
     .btn-investor-invest {
-        width: calc(100% + 24px) !important;
+        width: 100% !important;
         height: 44px !important;
     }
 

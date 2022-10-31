@@ -213,13 +213,13 @@
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
                         <Table
                                 v-if="!$wu.isMobile()"
-                                :profit-label="'USDC per ETS' + etsData.nameUp"
+                                :profit-label="'USDC per ETS'"
                                 :payout-data="etsStrategyData[etsData.name] ? [...etsStrategyData[etsData.name].payoutItems].reverse() : []"/>
 
                         <Table
                                 v-else
                                 minimized
-                                :profit-label="'USDC per ETS' + etsData.nameUp"
+                                :profit-label="'USDC per ETS'"
                                 :payout-data="etsStrategyData[etsData.name] ? [...etsStrategyData[etsData.name].payoutItems].reverse() : []"/>
 
                         <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
@@ -228,7 +228,7 @@
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <Doughnut :size="280" :color="etsData.mainColor" :last-date="lastPayoutDate"/>
+                        <Doughnut :size="260" :color="etsData.mainColor" :last-date="lastPayoutDate"/>
                     </v-col>
                 </v-row>
             </v-col>

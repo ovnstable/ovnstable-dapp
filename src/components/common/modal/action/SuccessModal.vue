@@ -80,9 +80,9 @@ export default {
                 case 'unwrapUsdPlus':
                     return 'wUSD+'
                 case 'mintEts':
-                    return 'ETS ' + (this.etsData ? this.etsData.nameUp : '');
+                    return 'ETS ' + (this.etsData ? this.etsData.nameToken : '');
                 case 'redeemEts':
-                    return 'ETS ' + (this.etsData ? this.etsData.nameUp : '');
+                    return 'ETS ' + (this.etsData ? this.etsData.nameToken : '');
                 default:
                     return ''
             }

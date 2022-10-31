@@ -68,7 +68,7 @@ const actions = {
                     type: 'ERC20',
                     options: {
                         address: rootState.web3.contracts[etsData.tokenContract].options.address,
-                        symbol: etsData.nameUp,
+                        symbol: etsData.nameToken,
                         decimals: 6,
                         image: etsImage.image,
                     },

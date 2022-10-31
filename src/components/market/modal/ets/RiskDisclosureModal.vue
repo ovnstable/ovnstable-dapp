@@ -20,20 +20,7 @@
 
             <v-card-text class="pt-8 content-container">
                 <v-row class="modal-info-row" align="center">
-                    <label class="modal-info-text">
-                        {{ etsData.riskText }}
-                        <br/><br/>
-                        <b>Impermanent loss risk</b>
-                        <br/>
-                        {{ etsData.impermanentText }}
-                        <br/><br/>
-                        <b>AMM contract hack risk</b>
-                        <br/>
-                        {{ etsData.ammText }}
-                        <br/><br/>
-                        <label class="important-label"><b>IMPORTANT: </b></label>
-                        {{ etsData.importantText }}
-                    </label>
+                    <label class="modal-info-text" v-html="fullRiskText"></label>
                 </v-row>
 
                 <v-row class="modal-info-row mt-12" align="center">
@@ -61,6 +48,20 @@ export default {
 
     computed: {
         ...mapGetters('riskModal', ['show']),
+
+        fullRiskText: function () {
+            return this.etsData.riskText +
+                '<br/><br/>' +
+                '<b>Impermanent loss risk</b>' +
+                '<br/>' +
+                this.etsData.impermanentText +
+                '<br/><br/>' +
+                '<b>AMM contract hack risk</b>' +
+                this.etsData.ammText +
+                '<br/><br/>' +
+                '<b style="color: #CF3F92">IMPORTANT: </b>' +
+                this.etsData.importantText;
+        },
     },
 
     data: () => ({
@@ -220,10 +221,6 @@ export default {
     font-family: 'Roboto', sans-serif !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
-    color: #CF3F92 !important;
-}
-
-.important-label {
     color: #CF3F92 !important;
 }
 </style>

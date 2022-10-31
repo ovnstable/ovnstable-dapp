@@ -1,9 +1,7 @@
 <template>
     <div>
         <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'">
-            <label class="strategy-info-label">
-                {{ etsData.aboutText }}
-            </label>
+            <label class="strategy-info-label" v-html="etsData.aboutText"></label>
         </v-row>
 
         <v-row align="start" justify="start" class="ma-0 mt-10">

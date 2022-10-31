@@ -1,7 +1,7 @@
 <template>
     <v-col>
         <v-row class="mx-n3 main-card">
-            <v-col>
+            <v-col :cols="$wu.isMobile() ? 9 : 6">
                 <v-row align="center" class="ma-0">
                     <label class="balance-label ml-3">Balance: {{ maxResult }}</label>
                     <div class="balance-network-icon ml-2">
@@ -27,10 +27,10 @@
                     <v-spacer></v-spacer>
                     <div class="coin-card mr-3">
                         <v-row class="ma-2" align="center">
-                            <div class="coin-img mr-2">
+                            <div class="coin-img" :class="$wu.isMobile() ? '' : 'mr-2'">
                                 <v-img :src="currency.image"/>
                             </div>
-                            <label class="coin-title">{{ currency.title }}</label>
+                            <label class="coin-title" v-if="!$wu.isMobile()">{{ currency.title }}</label>
                         </v-row>
                     </div>
                 </v-row>
@@ -63,7 +63,7 @@
         </v-row>
 
         <v-row class="mt-8 mx-n3 main-card">
-            <v-col>
+            <v-col :cols="$wu.isMobile() ? 9 : 6">
                 <v-row align="center" class="ma-0">
                     <label class="balance-label ml-3">Balance:
                         {{ $utils.formatMoney(actionAssetBalance[etsData.actionAsset], 3) }}</label>
@@ -90,10 +90,10 @@
                     <v-spacer></v-spacer>
                     <div class="coin-card mr-3">
                         <v-row class="ma-2" align="center">
-                            <div class="coin-img mr-2">
+                            <div class="coin-img" :class="$wu.isMobile() ? '' : 'mr-2'">
                                 <v-img :src="buyCurrency.image"/>
                             </div>
-                            <label class="coin-title">{{ buyCurrency.title }}</label>
+                            <label class="coin-title" v-if="!$wu.isMobile()">{{ buyCurrency.title }}</label>
                         </v-row>
                     </div>
                 </v-row>
@@ -104,7 +104,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 ETS {{ etsData.nameUp }} = 1 {{ etsData.actionTokenName }}</label>
+            <label class="exchange-label">1 ETS {{ etsData.nameToken }} = 1 {{ etsData.actionTokenName }}</label>
         </v-row>
 
         <v-row class="mt-10">
@@ -281,13 +281,13 @@ export default {
         currency: function () {
             return {
                 id: this.etsData.name,
-                title: 'ETS ' + this.etsData.nameUp,
+                title: 'ETS ' + this.etsData.nameToken,
                 image: require('@/assets/currencies/market/ets_' + this.etsData.name + '.svg')
             }
         },
 
         stepLabels: function () {
-            return ['', 'Approve ETS ' + this.etsData.nameUp, 'Confirmation'];
+            return ['', 'Approve ETS', 'Confirmation'];
         },
 
         sumResult: function () {
@@ -326,7 +326,7 @@ export default {
                     return 'Confirm transaction'
                 } else {
                     this.step = 1;
-                    return 'Approve ETS ' + this.etsData.nameUp;
+                    return 'Approve ETS';
                 }
             } else if (this.sum > parseFloat(this.etsBalance[this.etsData.name])) {
                 return 'Withdraw'

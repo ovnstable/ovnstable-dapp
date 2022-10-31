@@ -147,7 +147,7 @@ export default {
 /* mobile */
 @media only screen and (max-width: 960px) {
     .banner-container {
-        height: 350px !important;
+        height: 200px !important;
     }
 
     .currency-icon {
@@ -158,8 +158,8 @@ export default {
     .banner-title {
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 16px;
+        line-height: 22px;
     }
 
     .network-icon {
@@ -229,7 +229,7 @@ export default {
     .banner-title {
         font-style: normal;
         font-weight: 300;
-        font-size: 56px;
+        font-size: 48px;
         line-height: 65px;
     }
 
@@ -300,7 +300,7 @@ export default {
     .banner-title {
         font-style: normal;
         font-weight: 300;
-        font-size: 56px;
+        font-size: 48px;
         line-height: 65px;
     }
 

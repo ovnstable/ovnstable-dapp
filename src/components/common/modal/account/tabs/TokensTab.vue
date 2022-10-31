@@ -27,7 +27,7 @@
                 <div class="coin-img">
                     <v-img :src="require('@/assets/currencies/market/ets_' + ets.name + '.svg')"/>
                 </div>
-                <label class="ml-2 coin-btn-label">ETS {{ ets.nameUp }}</label>
+                <label class="ml-2 coin-btn-label">ETS {{ ets.nameToken }}</label>
             </v-btn>
         </v-row>
 

@@ -8,7 +8,7 @@
                 <div class="network-icon">
                     <v-img class="network-chain-icon" :src="icon"/>
                 </div>
-                <label class="card-label ml-2" v-if="!$wu.isMobile()">{{ txData.productName }}</label>
+                <label class="card-label product-label ml-2" v-if="!$wu.isMobile()">{{ txData.productName }}</label>
             </v-row>
         </v-col>
         <v-col :cols="$wu.isMobile() ? 5 : 2">
@@ -329,6 +329,13 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
+    .product-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        line-height: 18px !important;
+    }
+
     .success-link {
         font-style: normal !important;
         font-size: 12px !important;
@@ -358,6 +365,13 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
+    .product-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        line-height: 18px !important;
+    }
+
     .success-link {
         font-style: normal !important;
         font-size: 14px !important;
@@ -385,6 +399,13 @@ export default {
         font-size: 14px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .product-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        line-height: 18px !important;
     }
 
     .success-link {

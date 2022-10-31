@@ -10,7 +10,7 @@
                         {{ isMintView ? 'Mint' : 'Redeem' }}
                     </label>
                     <v-spacer></v-spacer>
-                    <label @click="bridge" class="bridge-label mr-4 mt-4">Bridge (Via.Exchange)</label>
+                    <label @click="bridge" class="bridge-label mr-4 mt-4">Bridge</label>
                     <v-btn icon @click="close" class="mt-4">
                         <v-icon class="close-icon">mdi-close</v-icon>
                     </v-btn>

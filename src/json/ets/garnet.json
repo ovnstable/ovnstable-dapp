@@ -1,7 +1,7 @@
 {
   "name": "garnet",
   "nameUp": "GARNET",
-  "prototype": false,
+  "prototype": true,
   "disabled": false,
   "highRisk": false,
 

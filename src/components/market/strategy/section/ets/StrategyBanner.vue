@@ -147,7 +147,7 @@ export default {
 /* mobile */
 @media only screen and (max-width: 960px) {
     .banner-container {
-        height: 200px !important;
+        height: 350px !important;
     }
 
     .currency-icon {

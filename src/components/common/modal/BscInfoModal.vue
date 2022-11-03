@@ -21,14 +21,15 @@
             <v-card-text class="pt-8 content-container">
                 <v-row class="modal-info-row" align="center">
                     <label class="modal-info-text">
-                        As you know, Aequinox Dex on BNB chain accidentally locked in funds held by USD+ to 404k USD. As stated involved, multiple counterparties, including the Balancer/Beethoven experts, evaluated the situation and jointly concluded that funds couldn't be recovered for at least 500 weeks.
+                        As you know, Aequinox Dex on BNB chain accidentally locked in funds held by USD+ to 404k USD.
+                        As stated involved, multiple counterparties, including the Balancer/Beethoven experts, evaluated the situation and jointly concluded that funds couldn't be recovered for at least 500 weeks.
                         <br/><br/>
                         Read more here:
                         <label class="discord-link" @click.stop="openDiscord()">
                             open our Discord
                         </label>
-                        <br/><br/><br/>
-                        How will I be affected?
+                        <br/><br/>
+                        <b>How will I be affected?</b>
                         <br/><br/>
                         1.  For continuing USD+ operations on BSC, Aequinox LP will be valued at 0. This will result in a negative rebase to the amount of the Aequinox exposure.
                         On the block of the rebase, we will take the snapshot of USD+ holders to record the wallets affected and entitled to compensation.
@@ -36,8 +37,8 @@
                         2. We will put to the vote locked LP distribution: to receive the locked LP or prefer to keep it in the Overnight protocol until recovery
                         <br/><br/>
                         3. The remainder loss will be compensated through the airdrop of OVN tokens at OVN token sale. The airdrop will come from team allocation on the team and early investor terms: linear 30 months vest with a 6-month cliff.
-                        <br/><br/><br/>
-                        This situation is only limited to USD+ mints/redeems on BNB Chain - other chains remain unaffected.
+                        <br/><br/>
+                        <b>This situation is only limited to USD+ mints/redeems on BNB Chain - other chains remain unaffected.</b>
                     </label>
                 </v-row>
 

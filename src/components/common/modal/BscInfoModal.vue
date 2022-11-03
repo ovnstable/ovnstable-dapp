@@ -21,22 +21,32 @@
             <v-card-text class="pt-8 content-container">
                 <v-row class="modal-info-row" align="center">
                     <label class="modal-info-text">
-                        As you know, Aequinox Dex on BNB chain accidentally locked in funds held by USD+ to 404k USD.
-                        As stated involved, multiple counterparties, including the Balancer/Beethoven experts, evaluated the situation and jointly concluded that funds couldn't be recovered for at least 500 weeks.
+                        Dear Users,
+                        <br/><br/>
+                        It came to our knowledge on 3/11/22 that the Aequinox Dex on BNB chain had accidentally locked in funds held by Overnight - this was $404K in total.
+                        The situation has multiple counterparties, including team members from Balancer, Yearn, and Curve evaluated.
+                        Upon evaluation, it was concluded that the funds could not be recovered for at least 10 years (500 weeks).
                         <br/><br/>
                         Read more here:
                         <label class="discord-link" @click.stop="openDiscord()">
                             open our Discord
                         </label>
                         <br/><br/>
-                        <b>How will I be affected?</b>
+                        <b>How will this affect USD+ Holders?</b>
                         <br/><br/>
-                        1.  For continuing USD+ operations on BSC, Aequinox LP will be valued at 0. This will result in a negative rebase to the amount of the Aequinox exposure.
-                        On the block of the rebase, we will take the snapshot of USD+ holders to record the wallets affected and entitled to compensation.
+                        1.  We'll continue operations for USD+ on BSC, and hence, the nominal value for Aequinox LP will be 0; this will result in a negative rebase to the amount of the Aequinox exposure.
                         <br/><br/>
-                        2. We will put to the vote locked LP distribution: to receive the locked LP or prefer to keep it in the Overnight protocol until recovery
+                        2. We will take a snapshot of USD+ holders to record the wallets affected - during the block of rebase - and they, in turn, will be entitled to compensation.
                         <br/><br/>
-                        3. The remainder loss will be compensated through the airdrop of OVN tokens at OVN token sale. The airdrop will come from team allocation on the team and early investor terms: linear 30 months vest with a 6-month cliff.
+                        3. We will have a governance vote pertaining to the distribution of locked LPs: either distribute the locked LP among users or keep it in Overnight's treasury until recovery.
+                        <br/><br/>
+                        4. The remainder of the losses shall be compensated through the airdrop of OVN tokens during the token sale. The airdrop will come from team allocation on the team and early investor terms: linear 30 months vest with a 6-month cliff.
+                        <br/><br/>
+                        <b>How will this affect ETS Holders?</b>
+                        <br/><br/>
+                        a) WBNB/BUSD ETS: The minting/redeeming token will be changed to BUSD as the strategy has no direct exposure to USD+; in accordance, it remains unaffected. No action is required on behalf of users.
+                        <br/><br/>
+                        b) WBNB/USD+ ETS: The strategy will be liquidated. The LP will be withdrawn to repay the BNB loan, and the BUSD obtained from this will compensate for 50% of the users funds. The other 50% will be repaid in USD+. Refer to the repayment for USD+ above for more information on this.
                         <br/><br/>
                         <b>This situation is only limited to USD+ mints/redeems on BNB Chain - other chains remain unaffected.</b>
                     </label>

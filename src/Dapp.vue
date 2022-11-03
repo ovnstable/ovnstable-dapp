@@ -12,6 +12,8 @@
         <AccountProfile width="760"/>
         <GasSettings width="510"/>
 
+        <BscInfoModal v-if="networkId === 56"/>
+
         <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
@@ -23,10 +25,12 @@ import AccountProfile from "./components/common/modal/account/AccountProfile";
 import GasSettings from "@/components/common/modal/gas/GasSettings";
 import {mapActions, mapGetters} from "vuex";
 import Navbar from "@/components/Navbar";
+import BscInfoModal from "@/components/common/modal/BscInfoModal";
 
 export default {
     name: "Dapp",
     components: {
+        BscInfoModal,
         Navbar,
         GasSettings,
         AccountProfile,
@@ -71,6 +75,7 @@ export default {
     computed: {
         ...mapGetters('overcapData', ['isOvercapAvailable', 'showOvercapBanner', 'walletOvercapLimit']),
         ...mapGetters('accountData', ['account']),
+        ...mapGetters('network', ['networkId']),
     },
 
     methods:{

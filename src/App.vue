@@ -43,8 +43,8 @@ export default {
         font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
-        font-size: 24px;
-        line-height: 28px;
+        font-size: 18px;
+        line-height: 22px;
         font-feature-settings: 'liga' off;
         color: var(--secondary-gray-text);
     }
@@ -80,8 +80,8 @@ export default {
         font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
-        font-size: 24px;
-        line-height: 28px;
+        font-size: 22px;
+        line-height: 26px;
         font-feature-settings: 'liga' off;
         color: var(--secondary-gray-text);
     }

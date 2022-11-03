@@ -2,8 +2,8 @@
   "name": "wbnb_usd_plus",
   "nameUp": "WBNB/USD+",
   "nameToken": "WBNB/USD+",
-  "prototype": false,
-  "disabled": false,
+  "prototype": true,
+  "disabled": true,
   "highRisk": false,
 
   "exchangeContract": "exchangerUsdPlusWbnb",

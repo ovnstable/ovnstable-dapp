@@ -2,7 +2,7 @@
   "name": "night_ov_ar",
   "nameUp": "NIGHT OVER ARRAKIS",
   "nameToken": "NIGHT OV AR",
-  "prototype": true,
+  "prototype": false,
   "disabled": false,
   "highRisk": false,
 
@@ -29,7 +29,7 @@
   "hasUsdPlus": false,
   "tokenPair": "weth_usdc",
 
-  "maxSupply": 25000.00,
+  "maxSupply": 100000.00,
   "overcapEnabled": true,
   "inceptionDate": "31 October 2022",
 

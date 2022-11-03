@@ -27,7 +27,7 @@
                         <label class="discord-link" @click.stop="openDiscord()">
                             open our Discord
                         </label>
-                        <br/><br/>
+                        <br/><br/><br/>
                         How will I be affected?
                         <br/><br/>
                         1.  For continuing USD+ operations on BSC, Aequinox LP will be valued at 0. This will result in a negative rebase to the amount of the Aequinox exposure.

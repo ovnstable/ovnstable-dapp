@@ -182,7 +182,7 @@
                     ></v-progress-linear>
                 </v-row>
                 <v-row justify="start" align="start" class="mt-5">
-                    <label class="progress-text">1/365 of {{ managementFee ? $utils.formatMoneyComma(managementFee, 0) + '%' : '—' }}</label>
+                    <label class="progress-text">1/365 of {{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
                     <v-spacer></v-spacer>
                     <label class="progress-sub-text">your balance</label>
                 </v-row>

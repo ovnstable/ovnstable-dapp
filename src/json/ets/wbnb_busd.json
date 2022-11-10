@@ -2,7 +2,7 @@
   "name": "wbnb_busd",
   "nameUp": "WBNB/BUSD",
   "nameToken": "WBNB/BUSD",
-  "prototype": false,
+  "prototype": true,
   "disabled": false,
   "highRisk": false,
 

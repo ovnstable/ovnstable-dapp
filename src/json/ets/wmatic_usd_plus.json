@@ -2,7 +2,7 @@
   "name": "wmatic_usd_plus",
   "nameUp": "WMATIC/USD+",
   "nameToken": "WMATIC/USD+",
-  "prototype": false,
+  "prototype": true,
   "disabled": false,
   "highRisk": false,
 

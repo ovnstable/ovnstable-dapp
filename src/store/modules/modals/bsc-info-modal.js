@@ -1,3 +1,4 @@
+/*
 const state = {
     show: true,
 };
@@ -35,3 +36,4 @@ export default {
     actions,
     mutations
 };
+*/

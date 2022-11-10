@@ -15,6 +15,7 @@ import Donut from 'vue-css-donut-chart';
 import 'vue-css-donut-chart/dist/vcdonut.css';
 import 'vue-resize/dist/vue-resize.css'
 import {ResizeObserver} from 'vue-resize'
+import VueGtagEsm from "vue-gtag";
 
 Vue.use(Vuex)
 
@@ -25,6 +26,13 @@ Vue.prototype.$abiDecoder = abiDecoder;
 Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;
+
+Vue.use(VueGtagEsm, {
+  config: { id: 'G-MQS0HH5R8S',
+    vueRouter: router,
+    enabled: true,
+    debug: false, },
+});
 
 Vue.use(VueGtm, {
   id: 'GTM-TBCD9KR',

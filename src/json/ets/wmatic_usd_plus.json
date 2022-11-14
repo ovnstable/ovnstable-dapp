@@ -5,6 +5,7 @@
   "prototype": true,
   "disabled": false,
   "highRisk": false,
+  "achieved": true,
 
   "exchangeContract": "exchangerUsdPlusWmatic",
 

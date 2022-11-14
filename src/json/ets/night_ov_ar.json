@@ -29,7 +29,7 @@
   "hasUsdPlus": false,
   "tokenPair": "weth_usdc",
 
-  "maxSupply": 200000.00,
+  "maxSupply": 250000.00,
   "overcapEnabled": true,
   "inceptionDate": "31 October 2022",
 

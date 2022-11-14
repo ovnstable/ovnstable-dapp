@@ -242,13 +242,13 @@ export default {
         mintAction() {
             this.showMintView();
             this.showInvestModal(this.cardData.data);
-            this.trackClick({value: 0, category: 'Mint View', label: 'Open Mint'});
+            this.trackClick({action: 'mint-action-click', event_category: 'Mint View', event_label: 'Open mint', value: 1 });
         },
 
         redeemAction() {
             this.showRedeemView();
             this.showInvestModal(this.cardData.data);
-            this.trackClick({value: 0, category: 'Redeem View', label: 'Open Redeem'});
+            this.trackClick({action: 'redeem-action-click', event_category: 'Redeem View', event_label: 'Open redeem', value: 1 });
         },
 
         openStrategyCard() {

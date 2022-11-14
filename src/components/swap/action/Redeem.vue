@@ -473,7 +473,7 @@ export default {
                     this.gasAmountInMatic = null;
                     this.gasAmountInUsd = null;
 
-                    this.trackClick({value: 0, category: 'Redeem confirm', label: 'Confirm Redeem Action'});
+                    this.trackClick({action: 'confirm-redeem-click', event_category: 'Redeem confirm', event_label: 'Confirm Redeem Action', value: 1 });
                     await this.redeemAction();
                     this.closeWaitingModal();
                 } else {
@@ -496,7 +496,8 @@ export default {
         async approveAction() {
             try {
                 this.showWaitingModal('Approving in process');
-                this.trackClick({value: 0, category: 'Redeem approve', label: 'Approve Redeem Action'});
+                this.trackClick({action: 'approve-redeem-click', event_category: 'Redeem approve', event_label: 'Approve Redeem Action', value: 1 });
+
 
                 let approveSum = "10000000";
                 let sum = this.web3.utils.toWei(approveSum, 'mwei');
@@ -512,7 +513,7 @@ export default {
             } catch (e) {
                 console.log(e)
                 this.showErrorModal('approve');
-                this.trackClick({value: 0, category: 'Redeem error', label: 'Error Redeem Showed'});
+                this.trackClick({action: 'redeem-error-click', event_category: 'Redeem error', event_label: 'Error Redeem Showed', value: 1 });
             }
         },
 
@@ -534,7 +535,7 @@ export default {
                     while (minted) {
                         await new Promise(resolve => setTimeout(resolve, 2000));
                         let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
-                        this.trackClick({value: 0, category: 'Redeem tx scan', label: 'Redeem Go to Scan'});
+                        this.trackClick({action: 'redeem-tx-show-click', event_category: 'Redeem tx scan', event_label: 'Redeem Go to Scan', value: 1 });
 
                         if (receipt) {
                             if (receipt.status)

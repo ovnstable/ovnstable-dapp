@@ -131,15 +131,16 @@ export default {
 
             switch (zoom) {
                 case "week":
-                    this.trackClick({value: 0, category: 'Widgets range', label: 'Change Range Week'});
+                    this.trackClick({action: 'switch-zoom-week-click', event_category: 'Widgets range', event_label: 'Change Range Week', value: 1 });
                     this.slice = -7;
                     break;
                 case "month":
-                    this.trackClick({value: 0, category: 'Widgets range', label: 'Change Range Month'});
+                    this.trackClick({action: 'switch-zoom-month-click', event_category: 'Widgets range', event_label: 'Change Range Month', value: 1 });
+
                     this.slice = -30;
                     break;
                 case "all":
-                    this.trackClick({value: 0, category: 'Widgets range', label: 'Change Range All'});
+                    this.trackClick({action: 'switch-zoom-all-click', event_category: 'Widgets range', event_label: 'Change Range All', value: 1 });
                     this.slice = null;
                     break;
                 default:

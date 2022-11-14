@@ -117,13 +117,13 @@ export default {
         mintAction() {
             this.showMintView();
             this.showSwapModal();
-            this.trackClick({value: 0, category: 'Menu select', label: 'Open Mint Menu'});
+            this.trackClick({action: 'mint-action-click', event_category: 'Menu Select', event_label: 'Open mint menu', value: 1 });
         },
 
         wrapAction() {
             this.showWrapView();
             this.showWrapModal();
-            this.trackClick({value: 0, category: 'Menu select', label: 'Open Wrap Menu'});
+            this.trackClick({action: 'wrap-action-click', event_category: 'Menu Select', event_label: 'Open wrap menu', value: 1 });
         },
     }
 }

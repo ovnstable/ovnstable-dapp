@@ -100,7 +100,7 @@ export default {
 
         switchToNetwork() {
             this.setWalletNetwork(this.networkId.toString());
-            this.trackClick({value: 0, category: 'Chain Switch', label: 'Switch network'});
+            this.trackClick({action: 'switch_network', event_category: 'Chain Switch', event_label: 'Switch network', value: 1 });
         },
 
         openLink(url) {

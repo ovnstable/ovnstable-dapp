@@ -483,7 +483,7 @@ export default {
                     sum = this.web3.utils.toWei(this.sum, 'mwei');
                 }
 
-                this.trackClick({value: 0, category: 'Mint', label: 'Confirm Confirm Mint Action'});
+                this.trackClick({action: 'confirm-swap-click', event_category: 'Mint', event_label: 'Confirm Mint Action', value: 1 });
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
@@ -523,7 +523,7 @@ export default {
 
                 let allowApprove = await this.checkAllowance(sum);
                 if (!allowApprove) {
-                    this.trackClick({value: 0, category: 'Mint', label: 'Approve Mint Action'});
+                    this.trackClick({action: 'approve-action-click', event_category: 'Mint', event_label: 'Approve Mint Action', value: 1 });
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
                 } else {
@@ -533,7 +533,8 @@ export default {
             } catch (e) {
                 console.log(e)
                 this.showErrorModal('approve');
-                this.trackClick({value: 0, category: 'Mint error', label: 'Mint Error Showed'});
+                this.trackClick({action: 'mint-error-showed-click', event_category: 'Mint error', event_label: 'Mint Error Showed', value: 1 });
+
             }
         },
 
@@ -555,7 +556,7 @@ export default {
                     while (minted) {
                         await new Promise(resolve => setTimeout(resolve, 2000));
                         let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
-                        this.trackClick({value: 0, category: 'Redeem tx scan', label: 'Mint Go to Scan'});
+                        this.trackClick({action: 'mint-tx-scan-click', event_category: 'Redeem tx scan', event_label: 'Mint Go to Scan', value: 1 });
 
                         if (receipt) {
                             if (receipt.status)

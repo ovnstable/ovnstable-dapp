@@ -76,7 +76,7 @@ export default {
 
         bridge() {
             window.open(this.bridgeLink, '_blank').focus();
-            this.trackClick({value: 0, category: 'Bridge', label: 'Open Bridge From Invest Modal'});
+            this.trackClick({action: 'open-bridge-click', event_category: 'Bridge', event_label: 'Open Bridge From Invest Modal', value: 1 });
         },
     },
 }

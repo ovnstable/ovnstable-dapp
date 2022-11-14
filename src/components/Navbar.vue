@@ -165,43 +165,43 @@ export default {
         dashBoardClick() {
             this.selectTab('dashboard');
             this.goToAction('/');
-            this.trackClick({value: 0, category: 'View page', label: 'Open Dashboard Page'});
+            this.trackClick({action: 'dashboard-click', event_category: 'View Page', event_label: 'Open dashboard page', value: 1 });
         },
 
         collateralClick() {
             this.selectTab('collateral');
             this.goToAction('/collateral');
-            this.trackClick({value: 0, category: 'View page', label: 'Open Collateral Page'});
+            this.trackClick({action: 'collateral-click', event_category: 'View Page', event_label: 'Open collateral page', value: 1 });
         },
 
         statsClick() {
             this.selectTab('stats');
             this.goToAction('/stats');
-            this.trackClick({value: 0, category: 'View page', label: 'Open Stats Page'});
+            this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open stats page', value: 1 });
         },
 
         marketClick() {
             this.selectTab('market');
             this.goToAction('/market')
-            this.trackClick({value: 0, category: 'View page', label: 'Open Market Page'});
+            this.trackClick({action: 'market-click', event_category: 'View Page', event_label: 'Open market page', value: 1 });
         },
 
         swapClick() {
             this.showMintView();
             this.showSwapModal();
-            this.trackClick({value: 0, category: 'Mint', label: 'Open Mint Modal'});
+            this.trackClick({action: 'swap-click', event_category: 'Mint', event_label: 'Open mint modal', value: 1 });
         },
 
         wrapClick() {
             this.showWrapView();
             this.showWrapModal();
-            this.trackClick({value: 0, category: 'Wrap', label: 'Open Wrap Modal'});
+            this.trackClick({action: 'wrap-click', event_category: 'Wrap', event_label: 'Open wrap modal', value: 1 });
         },
 
         toggleTheme(mode) {
             if ((mode === 'light' && !this.light) || (mode === 'dark' && this.light)) {
                 this.switchTheme();
-                this.trackClick({value: 0, category: 'Theme', label: 'Switch Theme'});
+                this.trackClick({action: 'toggle-theme', event_category: 'Theme', event_label: 'Switch theme', value: 1 });
             }
         },
     }

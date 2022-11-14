@@ -385,7 +385,7 @@ export default {
         },
 
         activeTabUsdPlus: function () {
-            this.trackClick({category: 'Dashboard USD+', label: 'Open USD+ Tab', value: 1,});
+            this.trackClick({action: 'open-usdplustab-action-click', event_category: 'Dashboard USD+', event_label: 'Open USD+ Tab', value: 1 });
 
             return {
                 'tab-button': this.tab === 2,
@@ -394,7 +394,7 @@ export default {
         },
 
         activeTabETS: function () {
-            this.trackClick({category: 'Dashboard ETS', label: 'Open ETS Tab', value: 1,});
+            this.trackClick({action: 'open-etstab-action-click', event_category: 'Dashboard ETS', event_label: 'Open ETS Tab', value: 1 });
             return {
                 'tab-button': this.tab === 4,
                 'tab-button-in-active': this.tab !== 4,
@@ -445,15 +445,15 @@ export default {
             switch (slice) {
                 case "week":
                     this.setSlice(7);
-                    this.trackClick({value: 0, category: 'Dashboard range', label: 'Change range Week'});
+                    this.trackClick({action: 'week-tab-action-click', event_category: 'Dashboard range', event_label: 'Change range Week', value: 1 });
                     break;
                 case "month":
                     this.setSlice(30)
-                    this.trackClick({value: 0, category: 'Dashboard range', label: 'Change range Month'});
+                    this.trackClick({action: 'month-tab-action-click', event_category: 'Dashboard range', event_label: 'Change range Month', value: 1 });
                     break;
                 case "all":
                     this.setSlice(null)
-                    this.trackClick({value: 0, category: 'Dashboard range', label: 'Change range All'});
+                    this.trackClick({action: 'all-tab-action-click', event_category: 'Dashboard range', event_label: 'Change range All', value: 1 });
                     break;
                 default:
                     this.setSlice(null)

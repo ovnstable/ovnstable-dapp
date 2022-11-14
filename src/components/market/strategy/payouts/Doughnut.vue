@@ -5,10 +5,17 @@
       :size="size" unit="px" :thickness="20"
       :sections="sections"
       :start-angle="0" :auto-adjust-text-size="false">
-        <p class="total-label mt-5">Last payout was on</p>
-        <p class="total-label-time mt-n3 mb-0">{{ timestamp }}</p>
-        <p class="total-label mb-0">Please withdraw</p>
-        <p class="total-label mt-n2">your funds</p>
+<!--     if archived display lastdate, else display old timer   -->
+
+        <template v-if="archived">
+            <p class="total-label mt-5">Last payout was on</p>
+            <p class="total-label-time mt-n3 mb-0">{{ timestamp }}</p>
+            <p class="total-label mb-0">Please withdraw</p>
+            <p class="total-label mt-n2">your funds</p>
+        </template>
+        <template v-else>
+
+        </template>
     </vc-donut>
 </template>
 
@@ -34,6 +41,11 @@ export default {
             type: String,
             default: null,
         },
+
+        archived: {
+            type: Boolean,
+            default: false,
+        }
     },
 
     watch: {

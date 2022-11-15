@@ -5,9 +5,17 @@
       :size="size" unit="px" :thickness="20"
       :sections="sections"
       :start-angle="0" :auto-adjust-text-size="false">
-        <p class="total-label mt-5">Last payout was</p>
-        <p class="total-label-time mt-n3 mb-0">{{ timeDisplay === "00 : 00" ? '—' : timeDisplay }}</p>
-        <p class="total-label">hours ago</p>
+        <template v-if="archived">
+            <p class="total-label mt-5">Last payout was on</p>
+            <p class="total-label-time mt-n3 mb-0">{{ formatDate(lastDate) }}</p>
+            <p class="total-label mb-0">Please withdraw</p>
+            <p class="total-label mt-n2">your funds</p>
+        </template>
+        <template v-else>
+            <p class="total-label mt-5">Last payout was</p>
+            <p class="total-label-time mt-n3 mb-0">{{ timeDisplay === "00 : 00" ? '—' : timeDisplay }}</p>
+            <p class="total-label">hours ago</p>
+        </template>
     </vc-donut>
 </template>
 
@@ -33,6 +41,11 @@ export default {
             type: String,
             default: null,
         },
+
+        archived: {
+            type: Boolean,
+            default: false,
+        }
     },
 
     watch: {
@@ -48,7 +61,7 @@ export default {
     components: {},
 
     data: () => ({
-        sections: [],
+        timestamp: ""
     }),
 
     computed: {
@@ -73,10 +86,23 @@ export default {
     },
 
     created() {
+        setInterval(this.getNow);
         this.updateSectionsData();
     },
 
     methods: {
+
+        formatDate(date) {
+            return this.$moment.utc(date).format('DD.MM.YYYY');
+        },
+
+        getNow: function() {
+            let today = new Date();
+            let date = today.getFullYear() + '.' + (today.getMonth() + 1) + '.' + today.getDate();
+            let dateTime = date;
+            this.timestamp = dateTime;
+        },
+
         getHours() {
             if (this.lastDate) {
                 let now = this.$moment.utc(new Date());
@@ -104,6 +130,7 @@ export default {
                 }
             );
         },
+
     }
 }
 </script>
@@ -114,7 +141,7 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 300;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 32px;
     text-align: center;
     color: var(--doughnut-text);
@@ -124,8 +151,8 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 54px;
-    line-height: 60px;
+    font-size: 40px;
+    line-height: 54px;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--doughnut-text);

@@ -6,6 +6,7 @@
   "archive": true,
   "disabled": true,
   "highRisk": false,
+  "archived": false,
 
   "exchangeContract": "etsExchangerGarnet",
 

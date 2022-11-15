@@ -10,7 +10,7 @@ const actions = {
 
     async trackClick({commit, dispatch, getters, rootState}, trackParams) {
         Vue.prototype.$gtag.trackEvent({
-            action: trackParams.click,
+            action: trackParams.action,
             event_category: trackParams.event_category,
             event_label: trackParams.event_label,
             value: trackParams.value,

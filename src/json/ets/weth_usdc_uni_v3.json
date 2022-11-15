@@ -5,6 +5,7 @@
   "prototype": true,
   "disabled": true,
   "highRisk": true,
+  "archived": false,
 
   "exchangeContract": "etsExchangerWethUsdcUniV3",
 

@@ -5,6 +5,7 @@
   "prototype": true,
   "disabled": true,
   "highRisk": false,
+  "archived": false,
 
   "exchangeContract": "exchangerUsdPlusWbnb",
 

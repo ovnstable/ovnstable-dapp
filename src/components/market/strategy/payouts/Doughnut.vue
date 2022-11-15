@@ -5,16 +5,16 @@
       :size="size" unit="px" :thickness="20"
       :sections="sections"
       :start-angle="0" :auto-adjust-text-size="false">
-<!--     if archived display lastdate, else display old timer   -->
-
         <template v-if="archived">
             <p class="total-label mt-5">Last payout was on</p>
-            <p class="total-label-time mt-n3 mb-0">{{ timestamp }}</p>
+            <p class="total-label-time mt-n3 mb-0">{{ formatDate(lastDate) }}</p>
             <p class="total-label mb-0">Please withdraw</p>
             <p class="total-label mt-n2">your funds</p>
         </template>
         <template v-else>
-
+            <p class="total-label mt-5">Last payout was</p>
+            <p class="total-label-time mt-n3 mb-0">{{ timeDisplay === "00 : 00" ? '—' : timeDisplay }}</p>
+            <p class="total-label">hours ago</p>
         </template>
     </vc-donut>
 </template>
@@ -65,23 +65,72 @@ export default {
     }),
 
     computed: {
+        timeDisplay: function () {
+            let hours = Math.trunc(this.getHours());
+            let minutes = Math.trunc((this.getHours() - Math.trunc(this.getHours())) * 60.0);
 
+            if (hours < 10) {
+                hours = "0" + hours;
+            }
+
+            if (minutes < 10) {
+                minutes = "0" + minutes;
+            }
+
+            return hours + " : " + minutes;
+        },
     },
 
     mounted() {
+        this.updateSectionsData();
     },
 
     created() {
         setInterval(this.getNow);
+        this.updateSectionsData();
     },
 
     methods: {
+
+        formatDate(date) {
+            return this.$moment.utc(date).format('DD.MM.YYYY');
+        },
+
         getNow: function() {
             let today = new Date();
-            let date = today.getFullYear()+'.'+(today.getMonth()+1)+'.'+today.getDate();
-            const dateTime = date;
+            let date = today.getFullYear() + '.' + (today.getMonth() + 1) + '.' + today.getDate();
+            let dateTime = date;
             this.timestamp = dateTime;
-        }
+        },
+
+        getHours() {
+            if (this.lastDate) {
+                let now = this.$moment.utc(new Date());
+                let lastPayoutDateTime = this.$moment.utc(this.lastDate);
+                let duration = this.$moment.duration(now.diff(lastPayoutDateTime));
+
+                return duration.asHours();
+            } else {
+                return 0;
+            }
+        },
+
+        getPercent(item, data) {
+            return Math. min((this.getHours() / 24.0) * 100, 100);
+        },
+
+        updateSectionsData() {
+            this.sections = [];
+
+            this.sections.push(
+                {
+                    color: this.color,
+                    label: "Time",
+                    value: this.getPercent(),
+                }
+            );
+        },
+
     }
 }
 </script>

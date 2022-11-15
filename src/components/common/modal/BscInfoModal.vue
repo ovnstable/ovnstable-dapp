@@ -1,4 +1,3 @@
-<!--
 <template>
     <v-dialog
             v-model="show"
@@ -212,11 +211,11 @@ export default {
 .container_body {
     border-radius: 8px !important;
     box-shadow: 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12), 0px 7px 8px -4px rgba(0, 0, 0, 0.2);
-    background-color: var(&#45;&#45;secondary) !important;
+    background-color: var(--secondary) !important;
 }
 
 .container_header {
-    background-color: var(&#45;&#45;secondary) !important;
+    background-color: var(--secondary) !important;
     margin-top: 5% !important;
 }
 
@@ -226,7 +225,7 @@ export default {
 
 .modal-info-text {
     font-family: 'Roboto', sans-serif;
-    color: var(&#45;&#45;secondary-gray-text) !important;
+    color: var(--secondary-gray-text) !important;
 }
 
 .understand-btn {
@@ -243,7 +242,7 @@ export default {
     font-style: normal;
 
     cursor: pointer;
-    color: var(&#45;&#45;links-blue);
+    color: var(--links-blue);
 }
 
 .discord-link:hover {
@@ -255,4 +254,3 @@ export default {
     height: 18px;
 }
 </style>
--->

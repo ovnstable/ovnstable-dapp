@@ -10,6 +10,7 @@ import riskModal from '@/store/modules/modals/market/risk-disclosure-modal';
 import investModal from '@/store/modules/modals/market/invest-modal';
 import swapModal from '@/store/modules/modals/swap/swap-modal';
 import wrapModal from '@/store/modules/modals/wrap/wrap-modal';
+import bscInfoModal from '@/store/modules/modals/bsc-info-modal';
 
 
 // Views
@@ -79,6 +80,7 @@ export default new Vuex.Store({
         swapModal,
         wrapModal,
         riskModal,
+        bscInfoModal,
 
         dashboardData,
         dashboardUI,

@@ -6,7 +6,6 @@
   "archive": true,
   "disabled": true,
   "highRisk": false,
-  "archived": true,
 
   "exchangeContract": "exchangerUsdPlusWmatic",
 

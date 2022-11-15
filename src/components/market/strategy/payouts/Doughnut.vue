@@ -61,7 +61,7 @@ export default {
     components: {},
 
     data: () => ({
-        timestamp: ""
+        sections: [],
     }),
 
     computed: {
@@ -86,21 +86,13 @@ export default {
     },
 
     created() {
-        setInterval(this.getNow);
         this.updateSectionsData();
     },
 
     methods: {
 
         formatDate(date) {
-            return this.$moment.utc(date).format('DD.MM.YYYY');
-        },
-
-        getNow: function() {
-            let today = new Date();
-            let date = today.getFullYear() + '.' + (today.getMonth() + 1) + '.' + today.getDate();
-            let dateTime = date;
-            this.timestamp = dateTime;
+            return this.$moment.utc(date).format('DD.MM.YY');
         },
 
         getHours() {

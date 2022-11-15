@@ -3,6 +3,7 @@
   "nameUp": "NIGHT OVER ARRAKIS",
   "nameToken": "NIGHT OV AR",
   "prototype": false,
+  "archive": false,
   "disabled": false,
   "highRisk": false,
 

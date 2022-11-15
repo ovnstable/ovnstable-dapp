@@ -20,7 +20,7 @@
         <div class="mt-7 cards-list-container">
             <v-row class="d-flex" justify="start" v-if="tab === 1">
                 <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
-                       v-for="card in sortedCardList.filter(value => !value.isPrototype).slice(0, 3)">
+                       v-for="card in sortedCardList.filter(value => (!value.isPrototype && !value.isArchive)).slice(0, 3)">
                     <v-row class="fill-height">
                         <component
                             class="ma-3"
@@ -35,19 +35,33 @@
             <template v-if="tab === 2">
                 <EtsListHeader/>
 
-                <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => !value.isPrototype)" v-if="component.type === 'ets'"
+                <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => (!value.isPrototype && !value.isArchive))" v-if="component.type === 'ets'"
                              :featured="i < 3"
                              :card-data="component"/>
 
-                <v-row class="ma-0 mb-1 mt-10">
-                    <label class="prototypes-label">Prototypes</label>
-                </v-row>
-                <v-divider class="prototypes-list-divider"></v-divider>
+                <template v-if="sortedCardList.filter(value => value.isPrototype).length > 0">
+                    <v-row class="ma-0 mb-1 mt-10">
+                        <label class="prototypes-label">Prototypes</label>
+                    </v-row>
+                    <v-divider class="prototypes-list-divider"></v-divider>
 
-                <EtsListHeader class="mt-3"/>
+                    <EtsListHeader class="mt-3"/>
 
-                <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => value.isPrototype)" v-if="component.type === 'ets'"
-                             :card-data="component"/>
+                    <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => value.isPrototype)" v-if="component.type === 'ets'"
+                                 :card-data="component"/>
+                </template>
+
+                <template v-if="sortedCardList.filter(value => value.isArchive).length > 0">
+                    <v-row class="ma-0 mb-1 mt-10">
+                        <label class="prototypes-label">Archive</label>
+                    </v-row>
+                    <v-divider class="prototypes-list-divider"></v-divider>
+
+                    <EtsListHeader class="mt-3"/>
+
+                    <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => value.isArchive)" v-if="component.type === 'ets'"
+                                 :card-data="component"/>
+                </template>
             </template>
 
             <template v-if="tab === 3">
@@ -187,6 +201,7 @@ export default {
                         type: 'ets',
                         name: 'Ets',
                         isPrototype: ets.prototype,
+                        isArchive: ets.archive,
                         data: ets,
                         chain: ets.chain,
                         hasUsdPlus: ets.hasUsdPlus,
@@ -202,6 +217,9 @@ export default {
             cardList.sort(function (a, b) {
                 if (!a.isPrototype && b.isPrototype) return -1;
                 if (a.isPrototype && !b.isPrototype) return 1;
+
+                if (!a.isArchive && b.isArchive) return -1;
+                if (a.isArchive && !b.isArchive) return 1;
 
                 if (a.chain === networkId && b.chain !== networkId) return -1;
                 if (a.chain !== networkId && b.chain === networkId) return 1;

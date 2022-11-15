@@ -2,8 +2,9 @@
   "name": "wmatic_usd_plus",
   "nameUp": "WMATIC/USD+",
   "nameToken": "WMATIC/USD+",
-  "prototype": true,
-  "disabled": false,
+  "prototype": false,
+  "archive": true,
+  "disabled": true,
   "highRisk": false,
 
   "exchangeContract": "exchangerUsdPlusWmatic",

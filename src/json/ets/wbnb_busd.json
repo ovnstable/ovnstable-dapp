@@ -2,8 +2,9 @@
   "name": "wbnb_busd",
   "nameUp": "WBNB/BUSD",
   "nameToken": "WBNB/BUSD",
-  "prototype": true,
-  "disabled": false,
+  "prototype": false,
+  "archive": true,
+  "disabled": true,
   "highRisk": false,
 
   "exchangeContract": "exchangerBusdWbnb",

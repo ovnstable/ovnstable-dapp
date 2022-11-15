@@ -2,8 +2,9 @@
   "name": "wmatic_usdc",
   "nameUp": "WMATIC/USDC",
   "nameToken": "WMATIC/USDC",
-  "prototype": true,
-  "disabled": false,
+  "prototype": false,
+  "archive": true,
+  "disabled": true,
   "highRisk": false,
 
   "exchangeContract": "exchangerWmaticUsdc",

@@ -322,7 +322,7 @@ export default {
             } else if (!this.isOvercapAvailable && this.etsData.prototype) {
                 return "ETS is in prototype"
             } else if (this.etsData.disabled) {
-                return "Temporarily unavailable"
+                return "Unavailable"
             } else if (this.transactionPending) {
                 return 'Transaction is pending';
             } else if (this.isBuy) {

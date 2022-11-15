@@ -32,12 +32,6 @@ const actions = {
         let ExchangerWmaticUsdc = require(`@/contracts/polygon/HedgeExchangerWmaticUsdc.json`);
         let WmaticUsdcToken = require(`@/contracts/polygon/EtsWmaticUsdc.json`);
 
-        let EtsExchangerMoonstone = require(`@/contracts/polygon/HedgeExchangerQsWmaticUsdc.json`);
-        let EtsMoonstoneToken = require(`@/contracts/polygon/EtsQsWmaticUsdc.json`);
-
-        let ExchangerUsdPlusWbnb = require(`@/contracts/bsc/HedgeExchangerUsdPlusWbnb.json`);
-        let UsdPlusWbnbToken = require(`@/contracts/bsc/RebaseTokenUsdPlusWbnb.json`);
-
         let ExchangerBusdWbnb = require(`@/contracts/bsc/HedgeExchangerBusdWbnb.json`)
         let BusdWbnbToken = require(`@/contracts/bsc/RebaseTokenBusdWbnb.json`);
 
@@ -49,12 +43,6 @@ const actions = {
 
         let EtsExchangerNightOvAr = require(`@/contracts/optimism/HedgeExchangerArrakisWethUsdc.json`);
         let EtsNightOvArToken = require(`@/contracts/optimism/RebaseTokenArrakisWethUsdc.json`);
-
-        let EtsExchangerWethUsdcUniV3 = require(`@/contracts/polygon/HedgeExchangerUniV3WethUsdc.json`);
-        let EtsWethUsdcUniV3Token = require(`@/contracts/polygon/RebaseTokenUniV3WethUsdc.json`);
-
-        let EtsExchangerWmaticUsdcUniV3 = require(`@/contracts/polygon/HedgeExchangerUniV3WmaticUsdc.json`);
-        let EtsWmaticUsdcUniV3Token = require(`@/contracts/polygon/RebaseTokenUniV3WmaticUsdc.json`);
 
 
         let web3 = rootState.web3.web3;
@@ -97,12 +85,6 @@ const actions = {
         contracts.exchangerWmaticUsdc = _load(ExchangerWmaticUsdc, web3);
         contracts.wmaticUsdc = _load(WmaticUsdcToken, web3);
 
-        contracts.etsExchangerMoonstone = _load(EtsExchangerMoonstone, web3);
-        contracts.etsMoonstoneToken = _load(EtsMoonstoneToken, web3);
-
-        contracts.exchangerUsdPlusWbnb = _load(ExchangerUsdPlusWbnb, web3);
-        contracts.usdPlusWbnb = _load(UsdPlusWbnbToken, web3);
-
         contracts.exchangerBusdWbnb = _load(ExchangerBusdWbnb, web3);
         contracts.busdWbnb = _load(BusdWbnbToken, web3);
 
@@ -114,12 +96,6 @@ const actions = {
 
         contracts.etsExchangerNightOvAr = _load(EtsExchangerNightOvAr, web3);
         contracts.etsNightOvArToken = _load(EtsNightOvArToken, web3);
-
-        contracts.etsExchangerWethUsdcUniV3 = _load(EtsExchangerWethUsdcUniV3, web3);
-        contracts.etsWethUsdcUniV3Token = _load(EtsWethUsdcUniV3Token, web3);
-
-        contracts.etsExchangerWmaticUsdcUniV3 = _load(EtsExchangerWmaticUsdcUniV3, web3);
-        contracts.etsWmaticUsdcUniV3Token = _load(EtsWmaticUsdcUniV3Token, web3);
 
         commit('web3/setContracts', contracts, {root: true})
     },

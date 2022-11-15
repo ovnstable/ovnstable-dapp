@@ -2,8 +2,9 @@
   "name": "garnet",
   "nameUp": "GARNET",
   "nameToken": "GARNET",
-  "prototype": true,
-  "disabled": false,
+  "prototype": false,
+  "archive": true,
+  "disabled": true,
   "highRisk": false,
 
   "exchangeContract": "etsExchangerGarnet",

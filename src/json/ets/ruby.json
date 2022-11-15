@@ -3,6 +3,7 @@
   "nameUp": "RUBY",
   "nameToken": "RUBY",
   "prototype": false,
+  "archive": false,
   "disabled": false,
   "highRisk": false,
 

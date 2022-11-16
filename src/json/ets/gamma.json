@@ -5,7 +5,7 @@
   "prototype": true,
   "archive": false,
   "disabled": false,
-  "highRisk": false,
+  "highRisk": true,
 
   "exchangeContract": "ets_gamma_exchanger",
 

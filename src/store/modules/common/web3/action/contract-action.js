@@ -66,6 +66,23 @@ const actions = {
                 break;
         }
 
+        let etsNames = [
+            { network: 'polygon', name: 'alpha' },
+            { network: 'polygon', name: 'beta' },
+            { network: 'polygon', name: 'gamma' },
+            { network: 'polygon', name: 'delta' }
+        ];
+
+        for (let i = 0; i < etsNames.length; i++) {
+            if (network === etsNames[i].network) {
+                let ExchangerContract = require(`@/contracts/${etsNames[i].network}/ets/${etsNames[i].name}/exchanger.json`);
+                let TokenContract = require(`@/contracts/${etsNames[i].network}/ets/${etsNames[i].name}/token.json`);
+
+                contracts['ets_' + etsNames[i].name + '_exchanger'] = _load(ExchangerContract, web3);
+                contracts['ets_' + etsNames[i].name + '_token'] = _load(TokenContract, web3);
+            }
+        }
+
         contracts.exchange = _load(Exchange, web3);
         contracts.govToken = _load(OvnToken, web3);
         contracts.governor = _load(OvnGovernor, web3);

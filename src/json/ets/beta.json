@@ -31,7 +31,7 @@
   "tokenPair": "wmatic_usdc",
 
   "maxSupply": 10000.00,
-  "overcapEnabled": false,
+  "overcapEnabled": true,
   "inceptionDate": "15 November 2022",
 
   "iconName": "ets_beta",

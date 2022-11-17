@@ -163,6 +163,9 @@ export default {
                 case 'Velodrome':
                     url = 'https://app.velodrome.finance/liquidity/manage?address=';
                     break;
+                case 'Beethoven':
+                    url = 'https://op.beets.fi/pool/';
+                    break;
                 case 'Uniswap':
                     url = 'https://info.uniswap.org/#/polygon/pools/';
                     break;

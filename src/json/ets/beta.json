@@ -30,7 +30,7 @@
   "hasUsdPlus": false,
   "tokenPair": "wmatic_usdc",
 
-  "maxSupply": 10000.00,
+  "maxSupply": 100000.00,
   "overcapEnabled": true,
   "inceptionDate": "15 November 2022",
 

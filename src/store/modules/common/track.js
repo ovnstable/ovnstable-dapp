@@ -9,10 +9,10 @@ const getters = {
 const actions = {
 
     async trackClick({commit, dispatch, getters, rootState}, trackParams) {
-        Vue.prototype.$gtag.trackEvent({
+        Vue.prototype.$gtm.trackEvent({
             action: trackParams.action,
-            event_category: trackParams.event_category,
-            event_label: trackParams.event_label,
+            category: trackParams.event_category,
+            label: trackParams.event_label,
             value: trackParams.value,
         });
     },

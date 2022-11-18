@@ -9,7 +9,8 @@ import vuetify from './plugins/vuetify'
 import router from './router/index'
 import {axios} from './plugins/http-axios';
 import moment from 'moment';
-import VueGtag from 'vue-gtag';
+import VueGtm from '@gtm-support/vue2-gtm';
+import VueYandexMetrika from 'vue-yandex-metrika'
 import Donut from 'vue-css-donut-chart';
 import 'vue-css-donut-chart/dist/vcdonut.css';
 import 'vue-resize/dist/vue-resize.css'
@@ -25,9 +26,19 @@ Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;
 
-Vue.use(VueGtag, {
-  config: { id: "G-MQS0HH5R8S" }
+Vue.use(VueGtm, {
+  id: 'GTM-TBCD9KR',
+  enabled: true,
+  vueRouter: router,
+  debug: false,
 });
+
+Vue.use(VueYandexMetrika, {
+  id: 86928892,
+  router: router,
+  env: process.env.NODE_ENV,
+  options: {clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true}
+})
 
 Vue.use(Donut);
 

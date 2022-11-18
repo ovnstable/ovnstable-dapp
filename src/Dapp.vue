@@ -58,6 +58,8 @@ export default {
         await this.initWeb3();
         await this.dappInitWalletConnect();
         this.initReferralCode();
+
+        this.$gtm.enable(true);
     },
 
     watch: {

@@ -164,7 +164,7 @@ export default {
 
         close() {
             this.hideAccountProfile();
-            this.trackClick({value: 0, category, label: 'Close account'});
+            this.trackClick({action: 'hide-account-profile-click', event_category: 'Account', event_label: 'Close account', value: 1 });
 
             this.$emit('input', false);
             this.$emit('m-close');
@@ -186,7 +186,7 @@ export default {
 
             await new Promise(resolve => setTimeout(resolve, 1000));
             this.showCopyTooltip = false;
-            this.trackClick({value: 0, category: 'Account Copy', label: 'Copy Account Address'});
+            this.trackClick({action: 'copy-address-click', event_category: 'Account Copy', event_label: 'Copy account address', value: 1 });
         },
     },
 }

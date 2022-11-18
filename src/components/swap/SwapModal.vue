@@ -66,7 +66,7 @@ export default {
 
         bridge() {
             window.open(this.bridgeLink, '_blank').focus();
-            this.trackClick({value: 0, category: 'Bridge', label: 'Open Bridge From Swap Modal'});
+            this.trackClick({action: 'bridge-click', event_category: 'Bridge', event_label: 'Open Bridge From Swap Modal', value: 1 });
         },
     },
 }

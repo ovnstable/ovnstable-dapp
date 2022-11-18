@@ -126,17 +126,17 @@ export default {
                 case 'mintUsdPlus':
                 case 'redeemUsdPlus':
                     this.addUsdPlusToken();
-                    this.trackClick({value: 0, category: 'Add token & Mint', label: 'Minted and Add UsdPlus Token'});
+                    this.trackClick({action: 'add-usdplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add usdplus token', value: 1 });
                     break;
                 case 'wrapUsdPlus':
                 case 'unwrapUsdPlus':
                     this.addwUsdPlusToken();
-                    this.trackClick({value: 0, category: 'Add token & Mint', label: 'Minted and Add wUsdPlus Token'});
+                    this.trackClick({action: 'add-wusdplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add wusdplus token', value: 1 });
                     break;
                 case 'mintEts':
                 case 'redeemEts':
                     this.addEtsToken(this.etsData);
-                    this.trackClick({value: 0, category: 'Add token & Mint ETS', label: 'Minted and Add ETS Token'});
+                    this.trackClick({action: 'add-ets-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add ets token', value: 1 });
                     break;
                 default:
                     break;
@@ -146,13 +146,14 @@ export default {
         openOnExplorer(hash) {
             if (hash) {
                 window.open(this.explorerUrl + `tx/${hash}`, '_blank').focus();
-                this.trackClick({value: 0, category: 'Mint Scan TX', label: 'Open Scan tx'});
+                this.trackClick({action: 'open-tx-click', event_category: 'Mint Scan TX', event_label: 'Open scan tx', value: 1 });
             }
         },
 
         close() {
             this.closeSuccessModal();
-            this.trackClick({value: 0, category: 'Mint & Redeem Close', label: 'Close Success Modal'});
+            this.trackClick({action: 'close-success-modal-click', event_category: 'Mint And Redeem Close', event_label: 'Close success modal', value: 1 });
+
 
             this.$emit('input', false);
             this.$emit('m-close');

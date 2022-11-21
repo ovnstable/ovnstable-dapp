@@ -27,7 +27,7 @@
                                 <v-row align="center" class="ma-0">
                                     <v-col cols="12">
                                         <v-row align="center">
-                                            <label class="investor-card-sub-title">Your balance in ETS, USD+</label>
+                                            <label class="investor-card-sub-title">Your balance in ETS, {{ etsData.actionTokenName }}</label>
                                         </v-row>
                                         <v-row align="center" class="mt-5">
                                             <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}</label>
@@ -129,7 +129,7 @@
                         <v-col class="my-10 mx-6">
                             <template v-if="networkSupport">
                                 <v-row align="center">
-                                    <label class="investor-card-sub-title">Your balance in ETS, USD+</label>
+                                    <label class="investor-card-sub-title">Your balance in ETS, {{ etsData.actionTokenName }}</label>
                                 </v-row>
                                 <v-row align="center" class="mt-5">
                                     <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}</label>

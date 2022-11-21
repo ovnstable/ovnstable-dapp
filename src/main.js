@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import store from "./store/index.js";
 import utils from "./plugins/utils";
 import wu from "./plugins/window-utils";
+import colorUtils from "./plugins/color-utils";
 import abiDecoder from "./plugins/abiDecoder";
 import vuetify from './plugins/vuetify'
 import router from './router/index'
@@ -21,6 +22,7 @@ Vue.use(Vuex)
 Vue.prototype.$moment = moment;
 Vue.prototype.$utils = utils;
 Vue.prototype.$wu = wu;
+Vue.prototype.$colorUtils = colorUtils;
 Vue.prototype.$abiDecoder = abiDecoder;
 Vue.prototype.$axios = axios;
 

@@ -187,6 +187,8 @@ export default {
 
             this.totalTvl = this.etsStrategyData[this.etsData.name].tvl;
 
+            let chartColor = this.$colorUtils.hexToRgb(this.etsData.mainColor);
+
             let options = {
                 series: [{
                     name: "TVL",
@@ -225,7 +227,7 @@ export default {
                 stroke: {
                     curve: 'straight',
                     width: this.isMobile ? 1 : 2,
-                    colors: ["#1C95E7"],
+                    colors: [this.etsData.mainColor],
                 },
 
                 xaxis: {
@@ -273,7 +275,7 @@ export default {
                     horizontalAlign: 'left'
                 },
 
-                colors: [this.light ? '#E6F1FF' : '#093b5d'],
+                colors: [this.light ? `rgba(${chartColor.r}, ${chartColor.g}, ${chartColor.b}, 0.3)` : this.etsData.mainColor],
 
                 theme: {
                     mode: this.light ? 'light' : 'dark',

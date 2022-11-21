@@ -278,6 +278,8 @@ export default {
                 minValue = 0;
             }
 
+            let chartColor = this.$colorUtils.hexToRgb(this.etsData.mainColor);
+
             let seriesList = [];
 
             seriesList.push(
@@ -325,8 +327,8 @@ export default {
                     yaxis: [{
                         y: averageValue,
                         strokeDashArray: 5,
-                        borderColor: '#1C95E7',
-                        fillColor: '#1C95E7',
+                        borderColor: this.etsData.mainColor,
+                        fillColor: this.etsData.mainColor,
                         label: {
                             show: false,
                         },
@@ -345,7 +347,7 @@ export default {
                 stroke: {
                     curve: 'straight',
                     width: this.isMobile ? 1 : 2,
-                    colors: ["#1C95E7", "#22ABAC"],
+                    colors: [this.etsData.mainColor, "#22ABAC"],
                 },
 
                 xaxis: {
@@ -393,7 +395,7 @@ export default {
                     show: false,
                 },
 
-                colors: this.light ? ['#E6F1FF', 'rgba(34, 171, 172, 0.05)'] : ['#093b5d', '#0d4444'],
+                colors: this.light ? [`rgba(${chartColor.r}, ${chartColor.g}, ${chartColor.b}, 0.3)`, 'rgba(34, 171, 172, 0.3)'] : [this.etsData.mainColor, '#0d4444'],
 
                 theme: {
                     mode: this.light ? 'light' : 'dark',

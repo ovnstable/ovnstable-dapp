@@ -1,81 +1,85 @@
 <template>
-    <v-row align="center" justify="start" class="banner-container ma-0">
+    <v-row class="banner-container ma-0" :style="{'background': etsData.cardBgColor}">
         <v-col class="main-col">
-            <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-1 mb-3' : 'mb-12'">
-                <div class="currency-icon">
-                    <v-img :src="require('@/assets/currencies/market/ets_' + etsData.name + '.svg')"/>
+            <v-row align="start" :justify="$wu.isMobile() ? 'start' : 'end'" class="ma-0">
+                <template v-if="$wu.isMobile()">
+                    <div class="currency-icon">
+                        <v-img :src="require('@/assets/currencies/market/ets_' + etsData.name + '.svg')"/>
+                    </div>
+                    <v-spacer></v-spacer>
+                </template>
+
+                <div :class="$wu.isMobile() ? 'currency-icon' : 'icon'" class="mr-3">
+                    <v-img :src="require('@/assets/network/' + etsData.chainName + '.svg')"/>
                 </div>
-                <label class="banner-title ml-4">ETS {{ etsData.nameUp }}</label>
-                <v-spacer></v-spacer>
-                <div class="network-icon">
-                    <v-img :src="icon"/>
+
+                <div class="bordered-col">
+                    <div :class="$wu.isMobile() ? 'currency-icon' : 'icon'" class="mx-3">
+                        <v-img :src="require('@/assets/cards/platform/' + etsData.dex + '.svg')"/>
+                    </div>
+                </div>
+                <div class="icon ml-3">
+                    <v-img :src="require('@/assets/cards/token_pair/' + etsData.tokenPair + '.svg')"/>
                 </div>
             </v-row>
 
-            <v-row class="d-flex">
-                <v-col :cols="$wu.isFull() ? (etsData.maxSupply ? 8 : 12) : 12">
-                    <v-row align="center" justify="start" class="info-container ma-0">
-                        <v-col>
-                            <v-row justify="center" align="center" class="ma-0">
-                                <label class="info-title">APY</label>
-                            </v-row>
-                            <v-row justify="center" align="center" class="mt-2">
-                                <label class="info-value mr-n1">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '—' }}</label>
-                                <Tooltip text="Strategy APY based on 30-day average, includes fees taken (fee-adjusted)"/>
-                            </v-row>
-                        </v-col>
-                        <v-col class="bordered-col" cols="5">
-                            <v-row justify="center" align="center" class="ma-0">
-                                <label class="info-title">TVL</label>
-                            </v-row>
-                            <v-row justify="center" align="center" class="mt-2">
-                                <label class="info-value" :class="(etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'label-error' : ''">
-                                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
-                                </label>
-                                <Tooltip text="Past 2 hours"/>
-                            </v-row>
-                        </v-col>
-                        <v-col>
-                            <v-row justify="center" align="center" class="ma-0">
-                                <label class="info-title">Users</label>
-                            </v-row>
-                            <v-row justify="center" align="center" class="mt-2">
-                                <label class="info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].holders) ? $utils.formatMoneyComma(etsStrategyData[etsData.name].holders, 0) : '—' }}</label>
-                            </v-row>
-                        </v-col>
+            <v-row align="start" class="ma-0 mt-5">
+                <v-col cols="2" v-if="!$wu.isMobile()">
+                    <v-row align="center">
+                        <div class="currency-icon">
+                            <v-img :src="require('@/assets/currencies/market/ets_' + etsData.name + '.svg')"/>
+                        </div>
                     </v-row>
                 </v-col>
-                <v-col v-if="etsData.maxSupply">
-                    <v-row align="center" justify="start" class="info-container-capacity ma-0">
-                        <v-col class="card-banner-body">
-                            <v-row class="ma-0" justify="start" align="center">
-                                <label class="capacity-status-text">ETS capacity status</label>
-                                <v-spacer></v-spacer>
-                                <label class="capacity-status-value" :class="totalSupply[etsData.name] >= etsData.maxSupply ? 'label-error' : ''">
-                                    {{ totalSupply[etsData.name] >= etsData.maxSupply ? 'FULL' : 'AVAILABLE' }}
-                                </label>
-                            </v-row>
-                            <v-row class="ma-0 mt-2" justify="start" align="center">
-                                <v-progress-linear
-                                        rounded
-                                        height="7"
-                                        class="progress-info"
-                                        background-opacity="0"
-                                        :value="(totalSupply[etsData.name] / etsData.maxSupply) * 100"
-                                        :color="totalSupply[etsData.name] >= etsData.maxSupply ? '#CF3F92' : '#1C95E7'"
-                                ></v-progress-linear>
-                            </v-row>
-                            <v-row class="ma-0 mt-2" justify="start" align="center">
-                                <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(totalSupply[etsData.name], 2) }}</label>
-                                <v-spacer></v-spacer>
-                                <label class="capacity-status-sub-text">${{ $utils.formatMoneyComma(etsData.maxSupply, 2) }}</label>
-                            </v-row>
-                            <v-row class="ma-0" justify="start" align="center">
-                                <label class="capacity-status-sub-text">CURRENT TVL</label>
-                                <v-spacer></v-spacer>
-                                <label class="capacity-status-sub-text">MAX TVL</label>
-                            </v-row>
-                        </v-col>
+
+                <v-col>
+                    <v-row align="center" :justify="$wu.isMobile() ? 'center' : 'start'">
+                        <label class="banner-title" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">ETS {{ etsData.nameUp }}</label>
+                    </v-row>
+
+                    <v-row align="center" class="ma-0 mt-8">
+                        <div>
+                            <v-col>
+                                <v-row :justify="$wu.isMobile() ? 'start' : 'center'" class="mr-3">
+                                    <label class="info-value">
+                                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '—' }}
+                                    </label>
+                                </v-row>
+                                <v-row :justify="$wu.isMobile() ? 'start' : 'center'" class="mr-3 mt-5">
+                                    <label class="info-title">APY</label>
+                                    <div style="margin-top: -2px">
+                                        <Tooltip icon-color="rgba(255, 255, 255, 0.6)" size="16" text="Strategy APY based on 30-day average, includes fees taken (fee-adjusted)"/>
+                                    </div>
+                                </v-row>
+                            </v-col>
+                        </div>
+
+                        <div class="bordered-col" v-if="!$wu.isMobile()">
+                            <v-col>
+                                <v-row justify="center" class="mx-3">
+                                    <label class="info-value">
+                                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].diffApy) ? (etsStrategyData[etsData.name].diffApy > 0 ? '+' : '') + ($utils.formatMoneyComma(etsStrategyData[etsData.name].diffApy, 0)) + '%' : '—' }}
+                                    </label>
+                                </v-row>
+                                <v-row justify="center" class="mx-3 mt-5">
+                                    <label class="info-title">Diff. to USD+</label>
+                                </v-row>
+                            </v-col>
+                        </div>
+                        <v-spacer v-else></v-spacer>
+
+                        <div>
+                            <v-col>
+                                <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="ml-3">
+                                    <label class="info-value">
+                                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
+                                    </label>
+                                </v-row>
+                                <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="ml-3 mt-5">
+                                    <label class="info-title">Current TVL</label>
+                                </v-row>
+                            </v-col>
+                        </div>
                     </v-row>
                 </v-col>
             </v-row>
@@ -147,19 +151,19 @@ export default {
 /* mobile */
 @media only screen and (max-width: 960px) {
     .banner-container {
-        height: 350px !important;
+        /*height: 350px !important;*/
     }
 
     .currency-icon {
-        width: 28px;
-        height: 28px;
+        width: 36px;
+        height: 36px;
     }
 
     .banner-title {
         font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 22px;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
     }
 
     .network-icon {
@@ -188,7 +192,7 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
-        line-height: 20px;
+        line-height: 24px;
     }
 
     .capacity-status-text {
@@ -213,24 +217,28 @@ export default {
         line-height: 20px;
         letter-spacing: 0.02em;
     }
+
+    .icon {
+        height: 36px !important;
+    }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
     .banner-container {
-        height: 420px !important;
+        /*height: 420px !important;*/
     }
 
     .currency-icon {
-        width: 60px;
-        height: 60px;
+        width: 120px;
+        height: 120px;
     }
 
     .banner-title {
         font-style: normal;
-        font-weight: 300;
-        font-size: 48px;
-        line-height: 65px;
+        font-weight: 500;
+        font-size: 36px;
+        line-height: 46px;
     }
 
     .network-icon {
@@ -252,14 +260,14 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 14px;
-        line-height: 16px;
+        line-height: 18px;
     }
 
     .info-value {
         font-style: normal;
         font-weight: 400;
         font-size: 30px;
-        line-height: 36px;
+        line-height: 40px;
     }
 
     .capacity-status-text {
@@ -284,24 +292,28 @@ export default {
         line-height: 18px;
         letter-spacing: 0.03em;
     }
+
+    .icon {
+        height: 36px !important;
+    }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
     .banner-container {
-        height: 300px !important;
+        /*height: 300px !important;*/
     }
 
     .currency-icon {
-        width: 60px;
-        height: 60px;
+        width: 150px;
+        height: 150px;
     }
 
     .banner-title {
         font-style: normal;
-        font-weight: 300;
-        font-size: 48px;
-        line-height: 65px;
+        font-weight: 500;
+        font-size: 40px;
+        line-height: 48px;
     }
 
     .network-icon {
@@ -323,14 +335,14 @@ export default {
         font-style: normal;
         font-weight: 400;
         font-size: 14px;
-        line-height: 16px;
+        line-height: 18px;
     }
 
     .info-value {
         font-style: normal;
         font-weight: 400;
         font-size: 30px;
-        line-height: 36px;
+        line-height: 40px;
     }
 
     .capacity-status-text {
@@ -355,23 +367,25 @@ export default {
         line-height: 18px;
         letter-spacing: 0.03em;
     }
+
+    .icon {
+        height: 36px !important;
+    }
 }
 
 .banner-container {
     width: 100% !important;
-    background-image: url("~@/assets/bg/banner_strategy_bg.svg");
-    background-color: var(--main-banner-background) !important;
+    border-radius: 8px;
 }
 
 .main-col {
-    margin-left: 3%;
-    margin-right: 3%;
+    margin: 2%;
 }
 
 .banner-title {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
-    color: var(--secondary-gray-text);
+    color: white;
 }
 
 .info-container, .info-container-capacity {
@@ -383,21 +397,22 @@ export default {
 .info-title {
     font-family: 'Roboto', sans-serif;
     font-style: normal;
-    text-align: center;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--secondary-gray-text);
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .info-value {
     font-family: 'Roboto', sans-serif;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--links-blue);
+    color: white;
 }
 
 .bordered-col {
-    border-left: 1px solid var(--secondary-border) !important;
-    border-right: 1px solid var(--secondary-border) !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.6) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
 }
 
 .label-error {
@@ -426,5 +441,9 @@ export default {
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--fourth-gray-text);
+}
+
+.icon {
+    width: auto !important;
 }
 </style>

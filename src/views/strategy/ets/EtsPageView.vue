@@ -17,9 +17,6 @@
 
                     <v-row align="center" justify="start" class="ma-0 mt-5" v-if="!$wu.isFull()">
                         <v-btn class="header-btn btn-filled-red" @click="showRiskModal">
-                            <div class="info-card-icon mr-2">
-                                <v-img :src="require('@/assets/icon/bellWhite.svg')"/>
-                            </div>
                             Investment risks
                         </v-btn>
                     </v-row>
@@ -30,10 +27,10 @@
                                 <v-row align="center" class="ma-0">
                                     <v-col cols="12">
                                         <v-row align="center">
-                                            <label class="investor-card-sub-title">Your balance in ETS</label>
+                                            <label class="investor-card-sub-title">Your balance in ETS, USD+</label>
                                         </v-row>
                                         <v-row align="center" class="mt-5">
-                                            <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2) + ' ' + etsData.actionTokenName) : '—' }}</label>
+                                            <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}</label>
                                         </v-row>
                                     </v-col>
                                 </v-row>
@@ -124,9 +121,6 @@
                 <v-col cols="3" v-if="$wu.isFull()">
                     <v-row align="center" justify="start" class="ma-0 sticky" style="width: 20%;">
                         <v-btn class="header-btn btn-filled-red" @click="showRiskModal">
-                            <div class="info-card-icon mr-2">
-                                <v-img :src="require('@/assets/icon/bellWhite.svg')"/>
-                            </div>
                             Investment risks
                         </v-btn>
                     </v-row>
@@ -135,10 +129,10 @@
                         <v-col class="my-10 mx-6">
                             <template v-if="networkSupport">
                                 <v-row align="center">
-                                    <label class="investor-card-sub-title">Your balance in ETS</label>
+                                    <label class="investor-card-sub-title">Your balance in ETS, USD+</label>
                                 </v-row>
                                 <v-row align="center" class="mt-5">
-                                    <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2) + ' ' + etsData.actionTokenName) : '—' }}</label>
+                                    <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}</label>
                                 </v-row>
                                 <v-row align="center" class="mt-10">
                                     <label class="investor-card-sub-title">Profit/loss</label>
@@ -724,8 +718,9 @@ export default {
 .btn-filled-red {
     width: 100%;
     height: 44px !important;
-    background: #CF3F92 !important;
-    color: #FFFFFF !important;
+    background: rgba(207, 63, 146, 0.1) !important;
+    color: #CF3F92 !important;
+    border-radius: 4px;
 }
 
 .success-color {

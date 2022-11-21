@@ -160,20 +160,20 @@
 
         <v-row align="start" justify="start" class="ma-0 mt-6">
             <v-col cols="12" v-if="!$wu.isMobile()">
-                <v-row class="info-card-container-bottom" justify="start" align="center">
+                <v-row class="info-card-container-bottom" :style="{'background': etsData.cardBgColor}" justify="start" align="center">
                     <v-col class="info-card-body-bottom">
                         <v-row align="center">
                             <div class="info-card-icon">
                                 <v-img :src="require('@/assets/currencies/market/' + etsData.borrowFrom + '.png')"/>
                             </div>
-                            <label class="title-card-text-bottom ml-2">{{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}}</label>
+                            <label class="title-card-text-bottom label-light ml-2">{{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}}</label>
                             <v-spacer></v-spacer>
-                            <label class="card-info">Current health factor</label>
-                            <label class="card-info-value ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].currentHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].currentHealthFactor, 2)) : '—' }}</label>
+                            <label class="card-info label-light">Current health factor</label>
+                            <label class="card-info-value label-light ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].currentHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].currentHealthFactor, 2)) : '—' }}</label>
                             <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                             <v-spacer></v-spacer>
-                            <label class="card-info">Target Health factor</label>
-                            <label class="card-info-value ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2)) : '—' }}</label>
+                            <label class="card-info label-light">Target Health factor</label>
+                            <label class="card-info-value label-light ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2)) : '—' }}</label>
                             <v-spacer></v-spacer>
                         </v-row>
                     </v-col>
@@ -181,22 +181,22 @@
             </v-col>
 
             <v-col cols="12" v-else>
-                <v-row class="info-card-container-bottom">
+                <v-row class="info-card-container-bottom" :style="{'background': etsData.cardBgColor}">
                     <v-col class="info-card-body-bottom">
                         <v-row align="center" justify="center">
                             <div class="info-card-icon">
                                 <v-img :src="require('@/assets/currencies/market/' + etsData.borrowFrom + '.png')"/>
                             </div>
-                            <label class="title-card-text-bottom ml-2">{{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}}</label>
+                            <label class="title-card-text-bottom label-light ml-2">{{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}}</label>
                         </v-row>
                         <v-row align="center" justify="center" class="mt-6">
-                            <label class="card-info">Current health factor</label>
-                            <label class="card-info-value ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].currentHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].currentHealthFactor, 2)) : '—' }}</label>
+                            <label class="card-info label-light">Current health factor</label>
+                            <label class="card-info-value label-light ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].currentHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].currentHealthFactor, 2)) : '—' }}</label>
                             <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                         </v-row>
                         <v-row align="center" justify="center" class="mt-4">
-                            <label class="card-info">Target Health factor</label>
-                            <label class="card-info-value ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2)) : '—' }}</label>
+                            <label class="card-info label-light">Target Health factor</label>
+                            <label class="card-info-value label-light ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2)) : '—' }}</label>
                         </v-row>
                     </v-col>
                 </v-row>
@@ -519,7 +519,6 @@ export default {
 }
 
 .info-card-container-bottom {
-    background: var(--main-banner-background);
     border-radius: 4px;
 }
 
@@ -564,6 +563,10 @@ export default {
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
+}
+
+.label-light {
+    color: white !important;
 }
 
 .title-card-debank {

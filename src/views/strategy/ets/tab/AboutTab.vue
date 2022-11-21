@@ -6,52 +6,47 @@
 
         <v-row align="start" justify="start" class="ma-0 mt-10">
             <v-col :cols="$wu.isMobile() ? 12 : 6">
-                <v-row class="info-card-container" justify="start" align="center">
+                <v-row class="info-card-container" :style="{'border-left': `2px solid ${etsData.mainColor}`}" justify="start" align="center">
                     <v-col class="info-card-body">
                         <v-row align="center">
-                            <label class="title-card-text">Your benefits</label>
-                            <v-spacer></v-spacer>
-                            <div class="title-card-icon">
-                                <v-img :src="require('@/assets/icon/addtask.svg')"/>
-                            </div>
-                        </v-row>
-                        <v-row align="center">
-                            <div class="info-card-icon mt-5">
-                                <v-img :src="require('@/assets/icon/checkbox.svg')"/>
-                            </div>
-                            <label class="info-card-text mt-5 ml-2">Hedging against {{ etsData.hedgeToken }} price volatility</label>
-                        </v-row>
-                        <v-row align="center">
-                            <div class="info-card-icon mt-4">
-                                <v-img :src="require('@/assets/icon/checkbox.svg')"/>
-                            </div>
-                            <label class="info-card-text mt-4 ml-2">Hassle-free all-in-one swap action</label>
-                        </v-row>
-                        <v-row align="center">
-                            <div class="info-card-icon mt-4">
-                                <v-img :src="require('@/assets/icon/checkbox.svg')"/>
-                            </div>
-                            <label v-if="!$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed</label>
-                            <label v-if="!$wu.isHuge()" class="info-card-text" :class="$wu.isMobile() ? 'ml-7' : 'ml-8'">Health Factor of {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? $utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2) : 1.2}}</label>
+                            <label class="title-card-text" :style="{'color': etsData.mainColor}">Your benefits</label>
+                            <div class="title-card-icon ml-2">
+                                <svg :style="{'width': ($wu.isFull() ? 24 : 18).toString() + 'px !important', 'height': ($wu.isFull() ? 24 : 18).toString() + 'px !important'}" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" id="addtask-svg">
+                                    <g>
+                                        <path d="M29.3334 6.9065L14.12 22.1332L8.46669 16.4798L10.3467 14.5998L14.12 18.3732L27.4534 5.03984L29.3334 6.9065ZM16 26.6665C10.12 26.6665 5.33335 21.8798 5.33335 15.9998C5.33335 10.1198 10.12 5.33317 16 5.33317C18.0934 5.33317 20.0534 5.9465 21.7067 6.99984L23.64 5.0665C21.4667 3.55984 18.84 2.6665 16 2.6665C8.64002 2.6665 2.66669 8.63984 2.66669 15.9998C2.66669 23.3598 8.64002 29.3332 16 29.3332C18.3067 29.3332 20.48 28.7465 22.3734 27.7065L20.3734 25.7065C19.04 26.3198 17.56 26.6665 16 26.6665ZM25.3334 19.9998H21.3334V22.6665H25.3334V26.6665H28V22.6665H32V19.9998H28V15.9998H25.3334V19.9998Z"
+                                              :fill="etsData.mainColor"/>
+                                    </g>
+                                </svg>
 
-                            <label v-if="$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically monitored and managed Health Factor of {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? $utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2) : 1.2}}</label>
+                            </div>
                         </v-row>
                         <v-row align="center">
                             <div class="info-card-icon mt-4">
-                                <v-img :src="require('@/assets/icon/checkbox.svg')"/>
+                                <v-icon :color="etsData.mainColor">mdi-checkbox-marked</v-icon>
+                            </div>
+                            <label class="info-card-text mt-5 ml-2">Monitoring your leveraged loan 24/7</label>
+                        </v-row>
+                        <v-row align="center">
+                            <div class="info-card-icon mt-3">
+                                <v-icon :color="etsData.mainColor">mdi-checkbox-marked</v-icon>
+                            </div>
+                            <label v-if="!$wu.isHuge()" class="info-card-text mt-4 ml-2">Automatically managed liquidation ratio</label>
+                        </v-row>
+                        <v-row align="center">
+                            <div class="info-card-icon mt-3">
+                                <v-icon :color="etsData.mainColor">mdi-checkbox-marked</v-icon>
                             </div>
                             <label class="info-card-text mt-4 ml-2">Low fees</label>
                         </v-row>
                     </v-col>
                 </v-row>
             </v-col>
-            <v-col :class="$wu.isMobile() ? 'mt-2' : 'ml-5'">
+            <v-col :class="$wu.isMobile() ? 'mt-10' : 'ml-5'">
                 <v-row class="info-card-container-red" justify="start" align="center">
                     <v-col class="info-card-body">
                         <v-row align="center">
-                            <label class="title-card-text">Your risks</label>
-                            <v-spacer></v-spacer>
-                            <div class="title-card-icon">
+                            <label class="title-card-text" style="color:#CF3F92">Your risks</label>
+                            <div class="title-card-icon ml-2">
                                 <v-img :src="require('@/assets/icon/bell.svg')"/>
                             </div>
                         </v-row>
@@ -65,7 +60,7 @@
                             <div class="info-card-icon mt-4">
                                 <v-img :src="require('@/assets/icon/remove.svg')"/>
                             </div>
-                            <label class="info-card-text mt-4 ml-2">AMM contract hack risk</label>
+                            <label class="info-card-text mt-4 ml-2">Flash crash of automated market maker</label>
                         </v-row>
                         <v-row align="center">
                             <label class="info-card-link mt-4 ml-1" @click="showRiskModal">Learn more about risks</label>
@@ -111,6 +106,23 @@
                         <v-row class="mt-8">
                             <label class="list-sub-title-text">Strategy automatically stakes the earned pool LP tokens into {{ (etsData.gauge && etsData.gauge !== '') ? (etsData.gauge + "'s gauge") : etsData.dex }} and auto-compounds the rewards by re-investing into the pool for more LP tokens to maximise Yields.</label>
                         </v-row>
+
+                        <v-row class="important-card-container mt-8" justify="start">
+                            <v-col cols="1" class="ml-3 mt-6">
+                                <v-row align="start">
+                                    <div class="title-card-icon">
+                                        <v-img :src="require('@/assets/icon/bell.svg')"/>
+                                    </div>
+                                </v-row>
+                            </v-col>
+                            <v-col class="mr-3 mb-4">
+                                <v-row align="start">
+                                    <label class="important-card-text mt-5">
+                                        It's important to compare your price invested and the current price, as a greater volatility causes a greater loss - is leading to  the LP tokens may result in an amount of tokens that are smaller than what was lent, in which case Strategy will swap the corresponding amount to repay the lender.
+                                    </label>
+                                </v-row>
+                            </v-col>
+                        </v-row>
                     </v-col>
                 </v-row>
                 <v-row justify="start" align="start" class="mt-15">
@@ -142,191 +154,72 @@
             <v-img class="scheme-img" :src="require('@/assets/market/scheme_ets_' + etsData.name + '.svg')"/>
         </v-row>
 
-        <v-row align="center" justify="start" class="ma-0 mt-15">
-            <label class="section-title-label">
-                fee structure
-            </label>
-        </v-row>
-
-        <v-row align="center" justify="start" class="ma-0 mt-7">
-            <v-col :cols="$wu.isMobile() ? 12 : 0">
-                <v-row justify="start" align="start">
-                    <v-progress-linear
-                            rounded
-                            height="7"
-                            class="progress-info"
-                            background-opacity="0"
-                            value="10"
-                            color="#1C95E7"
-                    ></v-progress-linear>
-                </v-row>
-                <v-row justify="start" align="start" class="mt-5">
-                    <label class="progress-text">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 0) + '%' : '—' }}</label>
-                </v-row>
-                <v-row justify="start" align="start">
-                    <label class="progress-text">Performance weekly fee</label>
-                    <v-spacer></v-spacer>
-                    <label class="progress-sub-text">your profit</label>
-                </v-row>
-            </v-col>
-
-            <v-col :class="$wu.isMobile() ? 'mt-4' : 'ml-8'" :cols="$wu.isMobile() ? 12 : 0">
-                <v-row justify="start" align="start">
-                    <v-progress-linear
-                            rounded
-                            height="7"
-                            class="progress-info"
-                            background-opacity="0"
-                            value="1"
-                            color="#1C95E7"
-                    ></v-progress-linear>
-                </v-row>
-                <v-row justify="start" align="start" class="mt-5">
-                    <label class="progress-text">1/365 of {{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
-                    <v-spacer></v-spacer>
-                    <label class="progress-sub-text">your balance</label>
-                </v-row>
-                <v-row justify="start" align="start">
-                    <label class="progress-text">management daily fee</label>
-                    <v-spacer></v-spacer>
-                    <label class="progress-sub-text">in strategy</label>
-                </v-row>
-            </v-col>
-
-            <v-col :class="$wu.isMobile() ? 'mt-4' : 'ml-8'" :cols="$wu.isMobile() ? 12 : 0">
-                <v-row justify="start" align="start">
-                    <v-progress-linear
-                            rounded
-                            height="7"
-                            class="progress-info"
-                            background-opacity="0"
-                            value="1"
-                            color="#1C95E7"
-                    ></v-progress-linear>
-                </v-row>
-                <v-row justify="start" align="start" class="mt-5">
-                    <label class="progress-text">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
-                    <v-spacer></v-spacer>
-                    <label class="progress-sub-text">your balance</label>
-                </v-row>
-                <v-row justify="start" align="start">
-                    <label class="progress-text">Exit</label>
-                    <v-spacer></v-spacer>
-                    <label class="progress-sub-text">in strategy</label>
-                </v-row>
-            </v-col>
-        </v-row>
-
-        <v-row align="center" justify="start" class="ma-0 mt-7">
-            <label class="list-sub-title-text">If the daily strategy is profitable, the daily performance fee is charged on the premiums earned, and the day-to-day management fee is set on the assets managed by the strategy. If the daily strategy is unprofitable, there are no performance fees charged.</label>
-        </v-row>
-
-        <v-row align="center" justify="start" class="ma-0 mt-15">
-            <label class="section-title-label">
-                important data
-            </label>
-        </v-row>
-
-        <v-row class="ma-0 mt-7" justify="start" align="start">
-            <v-col>
+        <v-row class="ma-0 mt-7 info-card-container-bottom" justify="start" align="start" :style="{'background': etsData.cardBgColor}">
+            <v-col class="info-card-body-bottom" :cols="$wu.isMobile() ? 0 : 5">
                 <v-row class="info-row" justify="start" align="center">
-                    <label class="card-info mt-1">APY</label>
+                    <label class="card-info mt-1">Investors</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 1)) + '%' : '—' }}</label>
-                    <Tooltip text="Strategy APY based on 30-day average, includes fees taken (fee-adjusted)"/>
-                </v-row>
-                <v-row class="info-row mt-6" justify="start" align="center">
-                    <label class="card-info mt-1">Diff. to USD+</label>
-                    <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].diffApy) ? ((etsStrategyData[etsData.name].diffApy >= 0 ? '+' : '') + $utils.formatMoneyComma(etsStrategyData[etsData.name].diffApy, 1)) + '%' : '—' }}</label>
-                    <Tooltip text="APY difference compared to the base APY USD+ (based on 30-day average)"/>
+                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].holders) ? $utils.formatMoneyComma(etsStrategyData[etsData.name].holders, 0) : '—' }}</label>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Risk factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-risk" :class="etsData.highRisk ? 'risk-high' : ''">{{ etsData.highRisk ? 'High' : 'Moderate' }}</label>
+                    <label class="card-info-value">{{ etsData.highRisk ? 'high' : 'moderate' }}</label>
                     <Tooltip text="Risk Factor is determined by a Pool's downside volatility. Pools that have a low Risk Factor translates to smaller downside volatility."/>
                 </v-row>
-                <v-row class="info-row mt-6" justify="start" align="center">
-                    <label class="card-info mt-1">TVL</label>
-                    <v-spacer></v-spacer>
-                    <label class="card-info-value" :class="etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply ? 'label-error' : ''">
-                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
-                    </label>
-                    <Tooltip text="Past 2 hours"/>
-                </v-row>
-                <v-row class="info-row mt-6" justify="start" align="center">
-                    <label class="card-info mt-1">Users</label>
-                    <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].holders) ? $utils.formatMoneyComma(etsStrategyData[etsData.name].holders, 0) : '—' }}</label>
-                </v-row>
 
-                <v-row class="info-row" justify="start" align="center" v-if="$wu.isMobile()">
+                <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Target Health Factor</label>
                     <v-spacer></v-spacer>
                     <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2)) : '—' }}</label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
-                <v-row class="info-row mt-6" justify="start" align="center" v-if="$wu.isMobile()">
+
+                <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Health Factor check</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">24/7</label>
+                    <label class="card-info-value">24 hours</label>
                     <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
             </v-col>
-            <v-col cols="1" v-if="!$wu.isMobile()"></v-col>
-            <v-col v-if="!$wu.isMobile()">
+
+            <v-col :cols="$wu.isMobile() ? 12 : 1"></v-col>
+
+            <v-col class="info-card-body-bottom" :cols="$wu.isMobile() ? 0 : 5">
                 <v-row class="info-row" justify="start" align="center">
-                    <label class="card-info mt-1">Target Health Factor</label>
+                    <label class="card-info mt-1">Token address</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2)) : '—' }}</label>
-                    <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
+                    <label class="card-info-value info-value-address" @click="openTokenOnScan(etsStrategyData[etsData.name].rebaseAddress)">
+                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].rebaseAddress) ? shortAddress(etsStrategyData[etsData.name].rebaseAddress) : '—' }}
+                    </label>
+                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''" @click="openTokenOnScan(etsStrategyData[etsData.name].rebaseAddress)">
+                        <v-icon size="20" style="margin-top: -2px" color="rgba(255, 255, 255, 0.5)">mdi-open-in-new</v-icon>
+                    </div>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
-                    <label class="card-info mt-1">Health Factor check</label>
+                    <label class="card-info mt-1">Pool address</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">24/7</label>
-                    <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
-                </v-row>
-            </v-col>
-        </v-row>
-
-        <v-row align="center" justify="start" class="ma-0 mt-7 info-container">
-            <v-col :class="!$wu.isFull() ? '' : 'ml-5'" :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center" @click="openTokenOnScan(etsStrategyData[etsData.name].rebaseAddress)">
-                    <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Token address</label>
-                    <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-link ml-3">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].rebaseAddress) ? shortAddress(etsStrategyData[etsData.name].rebaseAddress) : '—' }}</label>
-                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
-                        <v-img :src="require('@/assets/icon/openBlue.svg')"/>
+                    <label class="card-info-value info-value-address" @click="openStrategyOnScan(etsStrategyData[etsData.name].exchangerAddress)">
+                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].exchangerAddress) ? shortAddress(etsStrategyData[etsData.name].exchangerAddress) : '—' }}
+                    </label>
+                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''" @click="openStrategyOnScan(etsStrategyData[etsData.name].exchangerAddress)">
+                        <v-icon size="20" style="margin-top: -2px" color="rgba(255, 255, 255, 0.5)">mdi-open-in-new</v-icon>
                     </div>
                 </v-row>
-            </v-col>
-            <v-col :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center" @click="openStrategyOnScan(etsStrategyData[etsData.name].exchangerAddress)">
-                    <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Pool address</label>
-                    <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-link ml-3">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].exchangerAddress) ? shortAddress(etsStrategyData[etsData.name].exchangerAddress) : '—' }}</label>
-                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
-                        <v-img :src="require('@/assets/icon/openBlue.svg')"/>
+                <v-row class="info-row mt-6" justify="start" align="center">
+                    <label class="card-info mt-1">Vault address</label>
+                    <v-spacer></v-spacer>
+                    <label class="card-info-value info-value-address" @click="openStrategyOnScan(etsStrategyData[etsData.name].strategyAddress)">
+                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].strategyAddress) ? shortAddress(etsStrategyData[etsData.name].strategyAddress) : '—' }}
+                    </label>
+                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''" @click="openStrategyOnScan(etsStrategyData[etsData.name].strategyAddress)">
+                        <v-icon size="20" style="margin-top: -2px" color="rgba(255, 255, 255, 0.5)">mdi-open-in-new</v-icon>
                     </div>
                 </v-row>
-            </v-col>
-            <v-col :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center" @click="openStrategyOnScan(etsStrategyData[etsData.name].strategyAddress)">
-                    <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Vault address</label>
-                    <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-link ml-3">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].strategyAddress) ? shortAddress(etsStrategyData[etsData.name].strategyAddress) : '—' }}</label>
-                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''">
-                        <v-img :src="require('@/assets/icon/openBlue.svg')"/>
-                    </div>
-                </v-row>
-            </v-col>
-            <v-col :class="!$wu.isFull() ? '' : 'mr-5'" :cols="!$wu.isFull() ? 12 : 0">
-                <v-row justify="center" align="center">
-                    <label class="address-card-text" :class="!$wu.isFull() ? 'ml-2' : ''">Inception date</label>
-                    <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="address-card-text ml-3" :class="!$wu.isFull() ? 'mr-2' : ''"><b>{{ etsData.inceptionDate }}</b></label>
+                <v-row class="info-row mt-6" justify="start" align="center">
+                    <label class="card-info mt-1">Inception date</label>
+                    <v-spacer></v-spacer>
+                    <label class="card-info-value">{{ etsData.inceptionDate }}</label>
                 </v-row>
             </v-col>
         </v-row>
@@ -531,9 +424,16 @@ export default {
         line-height: 20px;
     }
 
+    .important-card-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
     .title-card-icon {
-        width: 24px;
-        height: 24px;
+        width: 18px;
+        height: 18px;
     }
 
     .section-title-label {
@@ -554,8 +454,12 @@ export default {
     .list-title-num {
         font-style: normal;
         font-weight: 600;
-        font-size: 50px;
-        line-height: 56px;
+        font-size: 24px;
+        line-height: 20px;
+
+        padding: 2px;
+        width: 26px;
+        height: 26px;
     }
 
     .list-sub-title-text {
@@ -669,9 +573,16 @@ export default {
         line-height: 28px;
     }
 
+    .important-card-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
     .title-card-icon {
-        width: 32px;
-        height: 32px;
+        width: 24px;
+        height: 24px;
     }
 
     .section-title-label {
@@ -692,8 +603,12 @@ export default {
     .list-title-num {
         font-style: normal;
         font-weight: 600;
-        font-size: 54px;
-        line-height: 60px;
+        font-size: 36px;
+        line-height: 30px;
+
+        padding: 2px;
+        width: 38px;
+        height: 38px;
     }
 
     .list-sub-title-text {
@@ -807,9 +722,16 @@ export default {
         line-height: 28px;
     }
 
+    .important-card-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
     .title-card-icon {
-        width: 32px;
-        height: 32px;
+        width: 24px;
+        height: 24px;
     }
 
     .section-title-label {
@@ -830,8 +752,12 @@ export default {
     .list-title-num {
         font-style: normal;
         font-weight: 600;
-        font-size: 54px;
-        line-height: 60px;
+        font-size: 36px;
+        line-height: 30px;
+
+        padding: 2px;
+        width: 38px;
+        height: 38px;
     }
 
     .list-sub-title-text {
@@ -914,19 +840,19 @@ export default {
 }
 
 .info-card-container {
-    background: linear-gradient(91.26deg, rgba(40, 160, 240, 0.1) 0%, rgba(6, 120, 196, 0.09917) 100%), var(--secondary);
-    border: 1px solid var(--links-blue);
-    border-radius: 4px;
 }
 
 .info-card-container-red {
+    border-left: 2px solid #CF3F92;
+}
+
+.important-card-container {
     background: rgba(207, 63, 146, 0.08);
-    border: 1px solid rgba(207, 63, 146, 0.4);
     border-radius: 4px;
 }
 
 .info-card-body {
-    margin: 5% 3%;
+    margin: 0% 3%;
 }
 
 .info-card-text {
@@ -934,9 +860,13 @@ export default {
     color: var(--secondary-gray-text);
 }
 
+.important-card-text {
+    font-family: 'Roboto', sans-serif;
+    color: var(--main-gray-text);
+}
+
 .title-card-text {
     font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
 }
@@ -966,11 +896,11 @@ export default {
 .list-title-num {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
+    color: var(--main-gray-text);
+
+    border-radius: 50%;
+    text-align: center;
+    border: 1px solid var(--progress-card-info) !important;
 }
 
 .list-title-text {
@@ -1012,14 +942,17 @@ export default {
 
 .card-info {
     font-family: 'Roboto', sans-serif;
-    color: var(--secondary-gray-text);
+    color: white;
 }
 
 .card-info-value {
     font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--main-gray-text);
+    color: white;
+}
+
+.info-value-address {
+    cursor: pointer;
 }
 
 .card-info-risk {
@@ -1093,5 +1026,13 @@ export default {
 
 .label-error {
     color: #CF3F92 !important;
+}
+
+.info-card-container-bottom {
+    border-radius: 8px;
+}
+
+.info-card-body-bottom {
+    margin: 2% 2% !important;
 }
 </style>

@@ -2,9 +2,9 @@
   "name": "delta",
   "nameUp": "DELTA",
   "nameToken": "DELTA",
-  "prototype": true,
+  "prototype": false,
   "archive": false,
-  "disabled": true,
+  "disabled": false,
   "highRisk": false,
 
   "exchangeContract": "ets_delta_exchanger",

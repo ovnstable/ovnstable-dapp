@@ -2,9 +2,9 @@
   "name": "beta",
   "nameUp": "BETA",
   "nameToken": "BETA",
-  "prototype": true,
+  "prototype": false,
   "archive": false,
-  "disabled": true,
+  "disabled": false,
   "highRisk": false,
 
   "exchangeContract": "ets_beta_exchanger",

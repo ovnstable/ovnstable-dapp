@@ -4,7 +4,7 @@
   "nameToken": "DELTA",
   "prototype": true,
   "archive": false,
-  "disabled": false,
+  "disabled": true,
   "highRisk": false,
 
   "exchangeContract": "ets_delta_exchanger",

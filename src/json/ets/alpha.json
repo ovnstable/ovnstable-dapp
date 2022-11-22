@@ -4,7 +4,7 @@
   "nameToken": "ALPHA",
   "prototype": true,
   "archive": false,
-  "disabled": false,
+  "disabled": true,
   "highRisk": true,
 
   "exchangeContract": "ets_alpha_exchanger",

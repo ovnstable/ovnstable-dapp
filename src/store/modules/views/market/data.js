@@ -282,6 +282,7 @@ const actions = {
 
         etsData[etsDataParams.name] = data;
 
+        commit('setEtsStrategyData', null);
         commit('setEtsStrategyData', etsData);
     },
 

@@ -128,6 +128,7 @@ export default {
 
         avgApy: null,
         usdPlusDataEnabled: true,
+        alreadyRendered: false,
     }),
 
     computed: {
@@ -225,6 +226,10 @@ export default {
         },
 
         redraw() {
+            if (this.alreadyRendered) {
+                return;
+            }
+
             if (this.chart) {
                 this.chart.destroy();
             }
@@ -417,6 +422,8 @@ export default {
 
             this.chart = new ApexCharts(document.querySelector("#line-chart-apy"), options);
             this.chart.render();
+
+            this.alreadyRendered = true;
         },
     }
 }

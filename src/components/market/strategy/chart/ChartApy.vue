@@ -15,10 +15,10 @@
 
                 <v-row justify="start" v-if="!isMobile">
                     <v-checkbox
-                            class="hold-checkbox"
-                            color="#22ABAC"
-                            @click="redraw"
-                            v-model="usdPlusDataEnabled"
+                        class="hold-checkbox"
+                        color="#22ABAC"
+                        @click="redraw"
+                        v-model="usdPlusDataEnabled"
                     >
                         <template v-slot:label>
                             <label class="hold-checkbox-label">USD+ APY</label>
@@ -46,29 +46,29 @@
         <v-row class="zoom-row" style="margin-top: -40px !important;">
             <v-spacer></v-spacer>
             <v-btn
-                    text
-                    id="week-zoom-btn"
-                    class="zoom-btn"
-                    dark
-                    @click="zoomChart('week')"
+                text
+                id="week-zoom-btn"
+                class="zoom-btn"
+                dark
+                @click="zoomChart('week')"
             >
                 <label>Week</label>
             </v-btn>
             <v-btn
-                    text
-                    id="month-zoom-btn"
-                    class="zoom-btn"
-                    dark
-                    @click="zoomChart('month')"
+                text
+                id="month-zoom-btn"
+                class="zoom-btn"
+                dark
+                @click="zoomChart('month')"
             >
                 Month
             </v-btn>
             <v-btn
-                    text
-                    id="all-zoom-btn"
-                    class="zoom-btn mr-3"
-                    dark
-                    @click="zoomChart('all')"
+                text
+                id="all-zoom-btn"
+                class="zoom-btn mr-3"
+                dark
+                @click="zoomChart('all')"
             >
                 All
             </v-btn>

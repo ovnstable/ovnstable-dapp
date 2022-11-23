@@ -73,6 +73,8 @@ const actions = {
             "#2775CA",
             "#26A17B",
             "#23DD00",
+            "#6E56C4",
+            "#002868"
         ];
 
         for (let i = 0; i < strategies.length; i++) {
@@ -111,6 +113,9 @@ const actions = {
             "#002868",
             "#26A17B",
             "#23DD00",
+            "#3D8DFF",
+            "#FE7F2D",
+            "#B22174"
         ];
 
         for (let i = 0; i < stablecoinList.length; i++) {

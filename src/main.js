@@ -30,7 +30,7 @@ Vue.config.productionTip = false;
 
 Vue.use(VueGtm, {
   id: 'GTM-TBCD9KR',
-  enabled: true,
+  enabled: false,
   vueRouter: router,
   debug: false,
 });

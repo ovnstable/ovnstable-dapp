@@ -13,6 +13,7 @@
             </label>
             <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabHedged">ETS</label>
             <label @click="tab=3" class="tab-btn mx-4" v-bind:class="activeTabPools">USD+ pools</label>
+            <label @click="tab=4" class="tab-btn mx-4" v-bind:class="activeTabUsd">USD+</label>
 
             <v-spacer></v-spacer>
         </v-row>
@@ -70,6 +71,10 @@
                 <PoolListCard class="mt-2" v-for="(component, i) in sortedPoolList" v-if="component.type === 'pool'"
                              :card-data="component"/>
             </template>
+
+            <template v-if="tab === 4">
+              <UsdPlus />
+            </template>
         </div>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -84,6 +89,9 @@ import EtsListCard from "@/components/market/cards/ets/list/EtsListCard";
 import EtsListHeader from "@/components/market/cards/ets/list/EtsListHeader";
 import PoolListHeader from "@/components/market/cards/pool/list/PoolListHeader";
 import PoolListCard from "@/components/market/cards/pool/list/PoolListCard";
+import Featured from "@/components/market/cards/featured/Featured"
+import UsdPlus from "@/components/market/cards/hold/UsdPlus";
+
 
 export default {
     name: "MarketView",
@@ -94,6 +102,8 @@ export default {
         EtsListHeader,
         EtsListCard,
         Ets,
+        UsdPlus,
+        Featured,
     },
 
     data: () => ({
@@ -129,6 +139,59 @@ export default {
                 'tab-button-in-active': this.tab !== 3,
             }
         },
+
+        activeTabUsd: function() {
+            return {
+              'tab-button': this.tab === 4,
+              'tab-button-in-active': this.tab !==4,
+            }
+        },
+
+        sortedCardList: function () {
+
+          let networkId = this.networkId;
+
+          let cardList = [
+            {
+              type: 'usd+', // usd+, pool, ets
+              name: 'UsdPlus', // real component name
+              data: null,
+              chain: networkId,
+              hasUsdPlus: true,
+              hasCap: false,
+              weekApy: (this.avgApy && this.avgApy.value) ? this.avgApy.value : 0,
+            }];
+
+          this.etsList.forEach(ets => {
+            cardList.push(
+              {
+                type: 'ets',
+                name: 'Ets',
+                data: ets,
+                chain: ets.chain,
+                hasUsdPlus: ets.hasUsdPlus,
+                hasCap: !ets.maxSupply ? false : (this.totalSupply[ets.name] < ets.maxSupply),
+                weekApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
+              },
+            );
+          });
+
+          cardList.sort(function (a, b) {
+            if (a.chain === networkId && b.chain !== networkId) return -1;
+            if (a.chain !== networkId && b.chain === networkId) return 1;
+
+            if (a.hasUsdPlus && !b.hasUsdPlus) return -1;
+            if (!a.hasUsdPlus && b.hasUsdPlus) return 1;
+
+            if (a.hasCap && !b.hasCap) return -1;
+            if (!a.hasCap && b.hasCap) return 1;
+
+            return (a.weekApy > b.weekApy) ? -1 : (a.weekApy < b.weekApy ? 1 : 0);
+          });
+
+          return cardList;
+        },
+
 
         sortedPoolList: function () {
 
@@ -233,7 +296,24 @@ export default {
             cardList[0].cardOpened = true;
 
             this.sortedCardList = cardList;
-        }
+        },
+
+        async getUsdPlusAvgWeekApy() {
+          let fetchOptions = {
+            headers: {
+              "Access-Control-Allow-Origin": this.appApiUrl
+            }
+          };
+
+          await fetch(this.appApiUrl + '/widget/avg-apy-info/week', fetchOptions)
+            .then(value => value.json())
+            .then(value => {
+              this.avgApy = value;
+              this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+            }).catch(reason => {
+              console.log('Error get data: ' + reason);
+            })
+        },
     }
 }
 </script>

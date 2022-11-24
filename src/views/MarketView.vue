@@ -12,8 +12,8 @@
                 </v-icon>
             </label>
             <label @click="tab=2" class="tab-btn mx-4" v-bind:class="activeTabHedged">ETS</label>
-            <label @click="tab=3" class="tab-btn mx-4" v-bind:class="activeTabPools">USD+ pools</label>
-            <label @click="tab=4" class="tab-btn mx-4" v-bind:class="activeTabUsd">USD+</label>
+            <label @click="tab=3" class="tab-btn mx-4" v-bind:class="activeTabUsd">USD+</label>
+            <label @click="tab=4" class="tab-btn mx-4" v-bind:class="activeTabPools">USD+ pools</label>
 
             <v-spacer></v-spacer>
         </v-row>
@@ -25,7 +25,7 @@
                     <v-row class="fill-height">
                         <component
                             class="ma-3"
-                            v-bind:key="`${card.name}_${card.monthApy}_${card.tvl}`"
+                            v-bind:key="card.type === 'ets' ? `${card.name}_${card.monthApy}_${card.tvl}` : card.type"
                             :card-data="card"
                             v-bind:is="card.name"
                         ></component>
@@ -36,7 +36,9 @@
             <template v-if="tab === 2">
                 <EtsListHeader/>
 
-                <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => (!value.isPrototype && !value.isArchive))" v-if="component.type === 'ets'"
+                <EtsListCard class="mt-2"
+                             v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ets' && !value.isPrototype && !value.isArchive))"
+                             v-if="component.type === 'ets'"
                              :featured="i < 3"
                              :card-data="component"/>
 
@@ -48,7 +50,9 @@
 
                     <EtsListHeader class="mt-3"/>
 
-                    <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => value.isPrototype)" v-if="component.type === 'ets'"
+                    <EtsListCard class="mt-2"
+                                 v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ets' && value.isPrototype))"
+                                 v-if="component.type === 'ets'"
                                  :card-data="component"/>
                 </template>
 
@@ -60,20 +64,25 @@
 
                     <EtsListHeader class="mt-3"/>
 
-                    <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => value.isArchive)" v-if="component.type === 'ets'"
+                    <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ets' && value.isArchive))"
+                                 v-if="component.type === 'ets'"
                                  :card-data="component"/>
                 </template>
             </template>
 
-            <template v-if="tab === 3">
+            <v-row class="d-flex" justify="start" v-if="tab === 3">
+                <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)">
+                    <v-row class="fill-height">
+                        <UsdPlus class="ma-3"/>
+                    </v-row>
+                </v-col>
+            </v-row>
+
+            <template v-if="tab === 4">
                 <PoolListHeader/>
 
                 <PoolListCard class="mt-2" v-for="(component, i) in sortedPoolList" v-if="component.type === 'pool'"
-                             :card-data="component"/>
-            </template>
-
-            <template v-if="tab === 4">
-              <UsdPlus />
+                              :card-data="component"/>
             </template>
         </div>
 
@@ -89,8 +98,8 @@ import EtsListCard from "@/components/market/cards/ets/list/EtsListCard";
 import EtsListHeader from "@/components/market/cards/ets/list/EtsListHeader";
 import PoolListHeader from "@/components/market/cards/pool/list/PoolListHeader";
 import PoolListCard from "@/components/market/cards/pool/list/PoolListCard";
-import Featured from "@/components/market/cards/featured/Featured"
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
+import moment from "moment";
 
 
 export default {
@@ -103,18 +112,18 @@ export default {
         EtsListCard,
         Ets,
         UsdPlus,
-        Featured,
     },
 
     data: () => ({
         tab: 1,
+        avgApy: null,
         sortedCardList: [],
     }),
 
     computed: {
         ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'avaxConfig', 'opConfig']),
         ...mapGetters('marketData', ['etsStrategyData']),
-        ...mapGetters("statsData", ['currentTotalData']),
+        ...mapGetters("statsData", ['currentTotalData', 'totalUsdPlusValue']),
         ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('poolAction', ['poolList']),
@@ -133,65 +142,19 @@ export default {
             }
         },
 
-        activeTabPools: function () {
+        activeTabUsd: function () {
             return {
                 'tab-button': this.tab === 3,
                 'tab-button-in-active': this.tab !== 3,
             }
         },
 
-        activeTabUsd: function() {
+        activeTabPools: function () {
             return {
-              'tab-button': this.tab === 4,
-              'tab-button-in-active': this.tab !==4,
+                'tab-button': this.tab === 4,
+                'tab-button-in-active': this.tab !== 4,
             }
         },
-
-        sortedCardList: function () {
-
-          let networkId = this.networkId;
-
-          let cardList = [
-            {
-              type: 'usd+', // usd+, pool, ets
-              name: 'UsdPlus', // real component name
-              data: null,
-              chain: networkId,
-              hasUsdPlus: true,
-              hasCap: false,
-              weekApy: (this.avgApy && this.avgApy.value) ? this.avgApy.value : 0,
-            }];
-
-          this.etsList.forEach(ets => {
-            cardList.push(
-              {
-                type: 'ets',
-                name: 'Ets',
-                data: ets,
-                chain: ets.chain,
-                hasUsdPlus: ets.hasUsdPlus,
-                hasCap: !ets.maxSupply ? false : (this.totalSupply[ets.name] < ets.maxSupply),
-                weekApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
-              },
-            );
-          });
-
-          cardList.sort(function (a, b) {
-            if (a.chain === networkId && b.chain !== networkId) return -1;
-            if (a.chain !== networkId && b.chain === networkId) return 1;
-
-            if (a.hasUsdPlus && !b.hasUsdPlus) return -1;
-            if (!a.hasUsdPlus && b.hasUsdPlus) return 1;
-
-            if (a.hasCap && !b.hasCap) return -1;
-            if (!a.hasCap && b.hasCap) return 1;
-
-            return (a.weekApy > b.weekApy) ? -1 : (a.weekApy < b.weekApy ? 1 : 0);
-          });
-
-          return cardList;
-        },
-
 
         sortedPoolList: function () {
 
@@ -230,23 +193,28 @@ export default {
     },
     watch: {
         appApiUrl: function (newVal, oldVal) {
+            this.getUsdPlusAvgMonthApy();
             this.getSortedCardList();
         },
 
         etsStrategyData: function (newVal, oldVal) {
+            this.getUsdPlusAvgMonthApy();
             this.getSortedCardList();
         },
 
         totalSupply: function (newVal, oldVal) {
+            this.getUsdPlusAvgMonthApy();
             this.getSortedCardList();
         },
 
         etsList: function (newVal, oldVal) {
+            this.getUsdPlusAvgMonthApy();
             this.getSortedCardList();
         },
     },
 
     created() {
+        this.getUsdPlusAvgMonthApy();
         this.getSortedCardList();
     },
 
@@ -256,7 +224,20 @@ export default {
 
             let networkId = this.networkId;
 
-            let cardList = [];
+            let cardList = [
+                {
+                    type: 'usdPlus',
+                    name: 'UsdPlus',
+                    isPrototype: false,
+                    isArchive: false,
+                    chain: networkId,
+                    hasUsdPlus: true,
+                    overcapEnabled: false,
+                    hasCap: true,
+                    tvl: this.totalUsdPlusValue,
+                    monthApy: this.avgApy ? this.avgApy.value : 0,
+                }
+            ];
 
             this.etsList.forEach(ets => {
                 cardList.push(
@@ -298,21 +279,21 @@ export default {
             this.sortedCardList = cardList;
         },
 
-        async getUsdPlusAvgWeekApy() {
-          let fetchOptions = {
-            headers: {
-              "Access-Control-Allow-Origin": this.appApiUrl
-            }
-          };
+        async getUsdPlusAvgMonthApy() {
+            let fetchOptions = {
+                headers: {
+                    "Access-Control-Allow-Origin": this.appApiUrl
+                }
+            };
 
-          await fetch(this.appApiUrl + '/widget/avg-apy-info/week', fetchOptions)
-            .then(value => value.json())
-            .then(value => {
-              this.avgApy = value;
-              this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
-            }).catch(reason => {
-              console.log('Error get data: ' + reason);
-            })
+            await fetch(this.appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
+                .then(value => value.json())
+                .then(value => {
+                    this.avgApy = value;
+                    this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+                }).catch(reason => {
+                    console.log('Error get data: ' + reason);
+                })
         },
     }
 }

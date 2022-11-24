@@ -1,8 +1,7 @@
 <template>
     <v-row class="card-container" @click="openStrategyCard">
         <v-col cols="12" align-self="start">
-            <v-row class="d-flex flex-row align-center header-row" justify="center"
-                   :style="{'--card-background': cardData.data.cardBgColor}">
+            <v-row class="d-flex flex-row align-center header-row" justify="center" :style="{'--card-background': cardData.data.cardBgColor}">
                 <span class="currency ml-5">
                     <v-img :src="require('@/assets/currencies/market/ets_' + cardData.data.name + '.svg')"/>
                 </span>

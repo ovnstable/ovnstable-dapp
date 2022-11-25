@@ -6,8 +6,14 @@
                     <v-img :src="require('@/assets/currencies/market/ets_' + cardData.data.name + '.svg')"/>
                 </span>
                 <v-row class="d-flex flex-column align-start mr-3 ml-8">
-                    <v-row class="d-flex">
+                    <v-row class="d-flex" align="center" style="width: 100% !important;">
                         <label class="card-title">ETS {{ cardData.data.nameUp }}</label>
+                        <v-spacer></v-spacer>
+                        <v-icon v-if="cardData.data['prototype'] || cardData.data.openPrototype"
+                                title="ETS is in prototype"
+                                color="#FFFFFF">
+                            mdi-test-tube
+                        </v-icon>
                     </v-row>
                     <v-row class="d-flex mt-5" v-if="cardData.monthApy">
                         <label class="percentage">
@@ -138,7 +144,7 @@
                 </v-row>
 
                 <v-row class="d-flex justify-space-between ma-0 mt-6" v-if="cardData.monthApy">
-                    <template v-if="accountEtsBalance">
+                    <template v-if="accountEtsBalance && (accountEtsBalance > 0)">
                         <label class="your-deposit">Your deposit in ETS</label>
                         <label class="your-deposit">{{
                                 accountEtsBalance ? ($utils.formatMoneyComma(accountEtsBalance, 2) + ' ' + cardData.data.actionTokenName) : '—'

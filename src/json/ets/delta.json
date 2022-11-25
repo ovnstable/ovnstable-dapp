@@ -3,6 +3,7 @@
   "nameUp": "DELTA",
   "nameToken": "DELTA",
   "prototype": false,
+  "openPrototype": false,
   "archive": false,
   "disabled": false,
   "highRisk": false,
@@ -30,8 +31,8 @@
   "hasUsdPlus": false,
   "tokenPair": "weth_usdc",
 
-  "maxSupply": 150000.00,
-  "overcapEnabled": true,
+  "maxSupply": null,
+  "overcapEnabled": false,
   "inceptionDate": "15 November 2022",
 
   "iconName": "ets_delta",

@@ -37,28 +37,30 @@
                 <EtsListHeader/>
 
                 <EtsListCard class="mt-2"
-                             v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ets' && !value.isPrototype && !value.isArchive))"
+                             v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ets' && !value.isPrototype && !value.isOpenPrototype && !value.isArchive))"
                              v-if="component.type === 'ets'"
                              :featured="i < 3"
                              :card-data="component"/>
 
-                <template v-if="sortedCardList.filter(value => value.isPrototype).length > 0">
-                    <v-row class="ma-0 mb-1 mt-10">
-                        <label class="prototypes-label">Prototypes</label>
+                <template v-if="sortedCardList.filter(value => (value.isPrototype || value.isOpenPrototype)).length > 0">
+                    <v-row class="ma-0 mb-1 mt-10" align="center">
+                        <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-test-tube</v-icon>
+                        <label class="prototypes-label ml-2">Prototypes</label>
                     </v-row>
                     <v-divider class="prototypes-list-divider"></v-divider>
 
                     <EtsListHeader class="mt-3"/>
 
                     <EtsListCard class="mt-2"
-                                 v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ets' && value.isPrototype))"
+                                 v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ets' && (value.isPrototype || value.isOpenPrototype)))"
                                  v-if="component.type === 'ets'"
                                  :card-data="component"/>
                 </template>
 
                 <template v-if="sortedCardList.filter(value => value.isArchive).length > 0">
-                    <v-row class="ma-0 mb-1 mt-10">
-                        <label class="prototypes-label">Archive</label>
+                    <v-row class="ma-0 mb-1 mt-10" align="center">
+                        <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-archive-outline</v-icon>
+                        <label class="prototypes-label ml-2">Archive</label>
                     </v-row>
                     <v-divider class="prototypes-list-divider"></v-divider>
 
@@ -245,6 +247,7 @@ export default {
                         type: 'ets',
                         name: 'Ets',
                         isPrototype: ets.prototype,
+                        isOpenPrototype: ets.openPrototype,
                         isArchive: ets.archive,
                         data: ets,
                         chain: ets.chain,
@@ -431,6 +434,10 @@ export default {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
+    color: var(--main-gray-text);
+}
+
+.prototypes-icon {
     color: var(--main-gray-text);
 }
 </style>

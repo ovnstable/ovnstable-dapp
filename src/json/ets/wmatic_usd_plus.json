@@ -3,6 +3,7 @@
   "nameUp": "WMATIC/USD+",
   "nameToken": "WMATIC/USD+",
   "prototype": false,
+  "openPrototype": false,
   "archive": true,
   "disabled": true,
   "highRisk": false,

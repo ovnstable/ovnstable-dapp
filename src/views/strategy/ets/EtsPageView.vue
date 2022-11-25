@@ -93,6 +93,7 @@
                                 <label class="fee-structure-label mt-1">Performance</label>
                                 <v-spacer></v-spacer>
                                 <label class="fee-structure-value mt-1">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 2) + '%' : '—' }}</label>
+                                <Tooltip v-if="etsData.openPrototype || etsData['prototype']" text="The current commission is set for the duration of the prototype status of ets"/>
                             </v-row>
                             <v-row class="info-row ma-0 mt-8" justify="start" align="center">
                                 <label class="fee-structure-label mt-1">Management</label>
@@ -187,6 +188,7 @@
                                 <v-col class="ml-6">
                                     <v-row class="info-row" justify="start" align="center">
                                         <label class="fee-structure-label">Performance</label>
+                                        <Tooltip v-if="etsData.openPrototype || etsData['prototype']" text="The current commission is set for the duration of the prototype status of ets"/>
                                         <v-spacer></v-spacer>
                                         <label class="fee-structure-value">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 2) + '%' : '—' }}</label>
                                     </v-row>

@@ -2,9 +2,10 @@
   "name": "alpha",
   "nameUp": "ALPHA",
   "nameToken": "ALPHA",
-  "prototype": true,
+  "prototype": false,
+  "openPrototype": true,
   "archive": false,
-  "disabled": true,
+  "disabled": false,
   "highRisk": true,
 
   "exchangeContract": "ets_alpha_exchanger",
@@ -30,7 +31,7 @@
   "hasUsdPlus": false,
   "tokenPair": "wmatic_usdc",
 
-  "maxSupply": 50000.00,
+  "maxSupply": 250000.00,
   "overcapEnabled": true,
   "inceptionDate": "15 November 2022",
 

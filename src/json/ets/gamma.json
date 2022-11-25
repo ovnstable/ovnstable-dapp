@@ -2,9 +2,10 @@
   "name": "gamma",
   "nameUp": "GAMMA",
   "nameToken": "GAMMA",
-  "prototype": true,
+  "prototype": false,
+  "openPrototype": true,
   "archive": false,
-  "disabled": true,
+  "disabled": false,
   "highRisk": true,
 
   "exchangeContract": "ets_gamma_exchanger",
@@ -30,7 +31,7 @@
   "hasUsdPlus": false,
   "tokenPair": "weth_usdc",
 
-  "maxSupply": 50000.00,
+  "maxSupply": 250000.00,
   "overcapEnabled": true,
   "inceptionDate": "15 November 2022",
 

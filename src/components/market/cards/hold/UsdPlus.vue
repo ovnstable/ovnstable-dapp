@@ -6,7 +6,7 @@
                     <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
                 </span>
                 <v-row class="d-flex flex-column align-start mr-3 ml-8">
-                    <v-row class="d-flex">
+                    <v-row class="d-flex" align="center">
                         <label class="card-title">USD+ ON {{ networkName }}</label>
                     </v-row>
                     <v-row class="d-flex mt-5">

@@ -3,6 +3,7 @@
   "nameUp": "WBNB/BUSD",
   "nameToken": "WBNB/BUSD",
   "prototype": false,
+  "openPrototype": false,
   "archive": true,
   "disabled": true,
   "highRisk": false,

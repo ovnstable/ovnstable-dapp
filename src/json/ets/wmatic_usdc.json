@@ -3,6 +3,7 @@
   "nameUp": "WMATIC/USDC",
   "nameToken": "WMATIC/USDC",
   "prototype": false,
+  "openPrototype": false,
   "archive": true,
   "disabled": true,
   "highRisk": false,

@@ -9,7 +9,7 @@
                 </span>
                 <v-spacer></v-spacer>
                 <v-row class="d-flex flex-column align-start mr-3">
-                    <v-row class="d-flex mb-1">
+                    <v-row class="d-flex mb-1" align="center">
                         <label class="card-title">{{ cardData.data.poolName }} pool</label>
                     </v-row>
                     <v-row class="d-flex">

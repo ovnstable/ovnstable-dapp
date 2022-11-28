@@ -3,7 +3,7 @@
   "nameUp": "GAMMA",
   "nameToken": "GAMMA",
   "prototype": false,
-  "openPrototype": true,
+  "openPrototype": false,
   "archive": false,
   "disabled": false,
   "highRisk": true,

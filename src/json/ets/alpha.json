@@ -3,7 +3,7 @@
   "nameUp": "ALPHA",
   "nameToken": "ALPHA",
   "prototype": false,
-  "openPrototype": true,
+  "openPrototype": false,
   "archive": false,
   "disabled": false,
   "highRisk": true,

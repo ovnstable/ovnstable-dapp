@@ -1,74 +1,26 @@
 <template>
     <div class="page-container">
-        <div class="mt-10">
+        <div class="mt-10 mb-10">
             <label class="title-label">Collateral</label>
         </div>
 
-        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-7'" justify="start" align="center">
-            <v-col class="info-card-body-bottom">
-                <v-row align="center" justify="start" class="ma-0">
-                    <label class="section-title-label">Collateral assets</label>
-                </v-row>
-
-                <v-row align="center" justify="center">
-                    <v-col :cols="!$wu.isFull() ? 12 : 8">
-                        <TableStablecoins
-                                v-if="!$wu.isMobile()"
-                                :data="stablecoinData"/>
-
-                        <TableStablecoins
-                                v-else
-                                minimized
-                                :data="stablecoinData"/>
-                    </v-col>
-
-                    <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <PieStablecoins :data="stablecoinData" :size="!$wu.isFull() ? 200 : 300"/>
-                    </v-col>
-                </v-row>
-            </v-col>
+        <v-row class="d-flex justify-space-between ma-0 mt-2">
+            <template>
+                <v-col class="mr-1">
+                    <v-row>
+                        <v-btn class="wide-btn" @click="tab=1" v-bind:class="activeTabUsd">USD+</v-btn>
+                    </v-row>
+                </v-col>
+                <v-col class="ml-1">
+                    <v-row>
+                        <v-btn class="wide-btn" @click="tab=2" v-bind:class="activeTabDai">DAI+</v-btn>
+                    </v-row>
+                </v-col>
+            </template>
         </v-row>
 
-        <!-- TODO: add collateral time rate -->
-
-        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
-            <v-col class="info-card-body-bottom">
-                <v-row align="center" justify="start" class="ma-0">
-                    <label class="section-title-label">USD+ portfolio</label>
-                </v-row>
-
-                <v-row align="center" justify="center">
-                    <v-col :cols="!$wu.isFull() ? 12 : 8">
-                        <TableStrategies
-                                v-if="!$wu.isMobile()"
-                                :data="currentTotalData"/>
-
-                        <TableStrategies
-                                v-else
-                                minimized
-                                :data="currentTotalData"/>
-                    </v-col>
-
-                    <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <DoughnutStrategies :data="currentTotalData" :size="!$wu.isFull() ? 200 : 300"/>
-                    </v-col>
-                </v-row>
-            </v-col>
-        </v-row>
-
-        <!-- TODO: add strategies time rate -->
-
-        <div class="mt-12">
-            <v-row align="center" justify="center" class="ma-0 mt-10">
-                <label class="ready-label">Ready to use?</label>
-            </v-row>
-        </div>
-
-        <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-7 mb-10' : 'mt-7'">
-            <v-btn class="header-btn btn-filled" @click="mintAction">
-                Mint USD+
-            </v-btn>
-        </v-row>
+        <UsdPlusTab v-if="tab === 1"/>
+        <DaiPlusTab v-if="tab === 2"/>
 
         <resize-observer @notify="$forceUpdate()"/>
     </div>
@@ -77,70 +29,37 @@
 <script>
 
 import {mapActions, mapGetters} from "vuex";
-import TableStablecoins from "@/components/stats/pie/TableStablecoins";
-import PieStablecoins from "@/components/stats/pie/PieStablecoins";
-import TableStrategies from "@/components/stats/doughnut/TableStrategies";
-import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies";
+import UsdPlusTab from "@/views/performance/view/tab/UsdPlusTab";
+import DaiPlusTab from "@/views/performance/view/tab/DaiPlusTab";
+
 
 export default {
     name: "CollateralView",
 
     components: {
-        DoughnutStrategies,
-        TableStrategies,
-        PieStablecoins,
-        TableStablecoins
+        UsdPlusTab,
+        DaiPlusTab,
     },
 
     data: () => ({
-        tab: null,
+        tab: 1,
     }),
 
     computed: {
         ...mapGetters("network", ['networkId']),
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
 
-        activeTabPolygon: function () {
+        activeTabUsd: function () {
             return {
                 'tab-button': this.tab === 1,
-                'tab-button-in-active': this.tab !== 1,
-                'tab-btn-disabled': this.tab !== 1,
             }
         },
 
-        activeTabBsc: function () {
+        activeTabDai: function () {
             return {
                 'tab-button': this.tab === 2,
-                'tab-button-in-active': this.tab !== 2,
-                'tab-btn-disabled': this.tab !== 2,
             }
         },
-
-        activeTabAvalanche: function () {
-            return {
-                'tab-button': this.tab === 3,
-                'tab-button-in-active': this.tab !== 3,
-                'tab-btn-disabled': this.tab !== 3,
-            }
-        },
-
-        activeTabOptimism: function () {
-            return {
-                'tab-button': this.tab === 4,
-                'tab-button-in-active': this.tab !== 4,
-                'tab-btn-disabled': this.tab !== 4,
-            }
-        },
-    },
-
-    created() {
-        if (this.networkId === 137) {
-            this.tab = 1;
-        }
-
-        if (this.networkId === 56) {
-            this.tab = 2;
-        }
     },
 
     methods: {
@@ -169,7 +88,7 @@ export default {
             } else {
                 this.openLink('https://bsc.overnight.fi/stats');
             }
-        }
+        },
     }
 }
 </script>
@@ -179,10 +98,10 @@ export default {
 /* mobile */
 @media only screen and (max-width: 960px) {
     .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
     }
 
     .title-label {
@@ -226,15 +145,20 @@ export default {
         line-height: 20px;
         letter-spacing: 0.02em;
     }
+
+    .wide-btn {
+        font-size: 14px;
+        line-height: 18px;
+    }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
     .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 32px;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 28px;
     }
 
     .title-label {
@@ -277,16 +201,21 @@ export default {
         font-size: 20px;
         line-height: 24px;
         letter-spacing: 0.04em;
+    }
+
+    .wide-btn {
+        font-size: 16px;
+        line-height: 20px;
     }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
     .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 32px;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 28px;
     }
 
     .title-label {
@@ -329,6 +258,11 @@ export default {
         font-size: 20px;
         line-height: 24px;
         letter-spacing: 0.04em;
+    }
+
+    .wide-btn {
+        font-size: 16px;
+        line-height: 20px;
     }
 }
 
@@ -343,13 +277,13 @@ export default {
     margin-bottom: -2px;
 }
 
-.tab-button {
+.tab-chain-button {
     border-bottom: 2px solid var(--links-blue) !important;
     color: var(--links-blue) !important;
     cursor: pointer !important;
 }
 
-.tab-button-in-active {
+.tab-chain-button-in-active {
     color: var(--secondary-gray-text) !important;
     cursor: pointer !important;
 }
@@ -414,7 +348,35 @@ export default {
     color: var(--secondary-gray-text);
 }
 
-.tab-btn-disabled {
-    color: #C5C9D1 !important;
+.toggle-row {
+    border-bottom: 2px solid var(--main-border);
 }
+
+.wide-btn {
+    min-width: 100% !important;
+    height: 40px;
+    border: 1px solid var(--input-placeholder);
+
+    background-color: var(--card-coin-background) !important;
+    color: var(--zoom-btn-color);
+
+    font-weight: 400;
+    font-family: "Roboto", sans-serif;
+
+    letter-spacing: 0.2;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    box-shadow: none;
+}
+
+.wide-btn:hover {
+    background: var(--hover);
+    color: rgba(28, 149, 231, 1) !important;
+}
+
+.tab-button {
+    background: rgba(28, 149, 231, 0.1) !important;
+    border: none;
+}
+
 </style>

@@ -21,86 +21,85 @@
                         </v-btn>
                     </v-row>
 
-                    <v-row class="info-card-container-white ma-0 mt-5" justify="start" align="center" v-if="!$wu.isFull()">
-                        <v-col class="my-10">
-                            <template v-if="networkSupport">
+                    <v-row class="ma-0 mt-5" justify="start" align="center" v-if="!$wu.isFull()">
+                        <v-col class="info-card-container-white" cols="12">
+                            <div class="my-4">
+                                <template v-if="networkSupport">
+                                    <v-row align="center" class="ma-0">
+                                        <v-col cols="12">
+                                            <v-row align="center">
+                                                <label class="investor-card-sub-title">Your balance in ETS, {{ etsData.actionTokenName }}</label>
+                                            </v-row>
+                                            <v-row align="center" class="mt-5">
+                                                <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}</label>
+                                            </v-row>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row align="center" class="ma-0">
+                                        <v-col cols="12">
+                                            <v-row align="center" :class="$wu.isMobile() ? 'mt-2' : 'mt-4'">
+                                                <label class="investor-card-sub-title">Profit/loss</label>
+                                            </v-row>
+                                            <v-row class="info-row mt-6" justify="start" align="center">
+                                                <label class="fee-structure-label mt-1">Last day</label>
+                                                <v-spacer></v-spacer>
+                                                <label class="investor-card-sub-title-value" :class="etsClientData[this.etsData.name] > 0 ? 'success-color' : ''">
+                                                    {{ etsClientData[this.etsData.name] ? ((etsClientData[this.etsData.name] > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—' }}
+                                                </label>
+                                            </v-row>
+                                        </v-col>
+                                    </v-row>
+                                </template>
+
+                                <template v-if="networkSupport">
+                                    <v-row align="center" justify="center" class="ma-0 mx-3" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
+                                        <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
+                                    </v-row>
+
+                                    <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'mt-2' : 'mt-12'">
+                                        <v-btn class="header-btn btn-investor-invest" :class="(this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)) ? 'disabled-btn' : ''" :disabled="this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)"  @click="mintAction">
+                                            MINT ETS {{ etsData.nameUp }}
+                                        </v-btn>
+                                    </v-row>
+
+                                    <v-row align="center" justify="center" class="ma-0 mt-4">
+                                        <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
+                                            REDEEM ETS {{ etsData.nameUp }}
+                                        </v-btn>
+                                    </v-row>
+                                </template>
+
+                                <template v-else>
+                                    <v-row align="center" justify="center" class="ma-0">
+                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork(etsData.chain.toString())">
+                                            SWITCH TO {{ etsData.chainName.toUpperCase() }} TO MINT
+                                        </v-btn>
+                                    </v-row>
+                                </template>
+                            </div>
+                        </v-col>
+
+                        <v-col class="info-card-container-white mt-4" cols="12">
+                            <div class="my-4">
                                 <v-row align="center" class="ma-0">
-                                    <v-col cols="12">
-                                        <v-row align="center">
-                                            <label class="investor-card-sub-title">Your balance in ETS, {{ etsData.actionTokenName }}</label>
-                                        </v-row>
-                                        <v-row align="center" class="mt-5">
-                                            <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}</label>
-                                        </v-row>
-                                    </v-col>
+                                    <label class="investor-card-title">Fee structure</label>
+                                    <div style="margin-top: -2px">
+                                        <Tooltip text="Overnight takes a part of ETS's profitability as management and performance fees. Net APY you see is shown with these fees taken."/>
+                                    </div>
                                 </v-row>
-                                <v-row align="center" class="ma-0">
-                                    <v-col cols="12">
-                                        <v-row align="center" :class="$wu.isMobile() ? 'mt-2' : 'mt-4'">
-                                            <label class="investor-card-sub-title">Profit/loss</label>
-                                        </v-row>
-                                        <v-row class="info-row mt-6" justify="start" align="center">
-                                            <label class="fee-structure-label mt-1">Last day</label>
-                                            <v-spacer></v-spacer>
-                                            <label class="investor-card-sub-title-value" :class="etsClientData[this.etsData.name] > 0 ? 'success-color' : ''">
-                                                {{ etsClientData[this.etsData.name] ? ((etsClientData[this.etsData.name] > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—' }}
-                                            </label>
-                                        </v-row>
-                                    </v-col>
+                                <v-row class="info-row ma-0 mt-8" justify="start" align="center">
+                                    <label class="fee-structure-label mt-1">Mint fee</label>
+                                    <v-spacer></v-spacer>
+                                    <label class="fee-structure-value mt-1">
+                                        {{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}
+                                    </label>
                                 </v-row>
-                            </template>
-
-                            <template v-if="networkSupport">
-                                <v-row align="center" justify="center" class="ma-0 mx-3" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
-                                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
+                                <v-row class="info-row ma-0 mt-4" justify="start" align="center">
+                                    <label class="fee-structure-label mt-1">Redeem fee</label>
+                                    <v-spacer></v-spacer>
+                                    <label class="fee-structure-value mt-1">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
                                 </v-row>
-
-                                <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'mt-2' : 'mt-12'">
-                                    <v-btn class="header-btn btn-investor-invest" :class="(this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)) ? 'disabled-btn' : ''" :disabled="this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)"  @click="mintAction">
-                                        MINT ETS {{ etsData.nameUp }}
-                                    </v-btn>
-                                </v-row>
-
-                                <v-row align="center" justify="center" class="ma-0 mt-4">
-                                    <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                        REDEEM ETS {{ etsData.nameUp }}
-                                    </v-btn>
-                                </v-row>
-                            </template>
-
-                            <template v-else>
-                                <v-row align="center" justify="center" class="ma-0">
-                                    <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork(etsData.chain.toString())">
-                                        SWITCH TO {{ etsData.chainName.toUpperCase() }} TO MINT
-                                    </v-btn>
-                                </v-row>
-                            </template>
-
-                            <v-row align="center" class="ma-0" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'">
-                                <label class="investor-card-title">Fee structure</label>
-                            </v-row>
-                            <v-row class="info-row ma-0 mt-8" justify="start" align="center">
-                                <label class="fee-structure-label mt-1">Entry</label>
-                                <v-spacer></v-spacer>
-                                <label class="fee-structure-value mt-1">{{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}</label>
-                            </v-row>
-                            <v-row class="info-row ma-0 mt-8" justify="start" align="center">
-                                <label class="fee-structure-label mt-1">Exit</label>
-                                <v-spacer></v-spacer>
-                                <label class="fee-structure-value mt-1">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
-                            </v-row>
-                            <v-row class="info-row ma-0 mt-8" justify="start" align="center">
-                                <label class="fee-structure-label mt-1">Performance</label>
-                                <v-spacer></v-spacer>
-                                <label class="fee-structure-value mt-1">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 2) + '%' : '—' }}</label>
-                                <Tooltip v-if="etsData.openPrototype || etsData['prototype']" text="The current commission is set for the duration of the prototype status of ets"/>
-                            </v-row>
-                            <v-row class="info-row ma-0 mt-8" justify="start" align="center">
-                                <label class="fee-structure-label mt-1">Management</label>
-                                <v-spacer></v-spacer>
-                                <label class="fee-structure-value mt-1">{{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
-                                <Tooltip text="An annual fee that will be charged 1/365 per day, regardless of the strategy's performance."/>
-                            </v-row>
+                            </div>
                         </v-col>
                     </v-row>
 
@@ -126,92 +125,85 @@
                         </v-btn>
                     </v-row>
 
-                    <v-row class="info-card-container-white ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
-                        <v-col class="my-10 mx-6">
-                            <template v-if="networkSupport">
+                    <v-row class=" ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
+                        <v-col class="info-card-container-white" cols="12">
+                            <div class="my-6 mx-6">
+                                <template v-if="networkSupport">
+                                    <v-row align="center">
+                                        <label class="investor-card-sub-title">Your balance in ETS, {{ etsData.actionTokenName }}</label>
+                                    </v-row>
+                                    <v-row align="center" class="mt-5">
+                                        <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}</label>
+                                    </v-row>
+                                    <v-row align="center" class="mt-10">
+                                        <label class="investor-card-sub-title">Profit/loss</label>
+                                    </v-row>
+                                    <v-row class="info-row mt-6" justify="start" align="center">
+                                        <label class="fee-structure-label mt-1">Last day</label>
+                                        <v-spacer></v-spacer>
+                                        <label class="investor-card-sub-title-value" :class="etsClientData[this.etsData.name] > 0 ? 'success-color' : ''">
+                                            {{ etsClientData[this.etsData.name] ? ((etsClientData[this.etsData.name] > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—' }}
+                                        </label>
+                                    </v-row>
+                                </template>
+
+                                <template v-if="networkSupport">
+                                    <v-row align="center" justify="center" class="mt-15" v-if="!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
+                                        <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
+                                    </v-row>
+
+                                    <v-row align="center" justify="center" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)? 'mt-5' : 'mt-15'">
+                                        <v-btn class="header-btn btn-investor-invest" :class="(this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)) ? 'disabled-btn' : ''" :disabled="this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)" @click="mintAction">
+                                            MINT ETS {{ etsData.nameUp }}
+                                        </v-btn>
+                                    </v-row>
+
+                                    <v-row align="center" justify="center" class="mt-6">
+                                        <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
+                                            REDEEM ETS {{ etsData.nameUp }}
+                                        </v-btn>
+                                    </v-row>
+                                </template>
+
+                                <template v-else>
+                                    <v-row align="center" justify="center" class="mt-0">
+                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork(etsData.chain.toString())">
+                                            SWITCH TO {{ etsData.chainName.toUpperCase() }} TO MINT
+                                        </v-btn>
+                                    </v-row>
+                                </template>
+                            </div>
+                        </v-col>
+
+                        <v-col class="info-card-container-white mt-4" cols="12">
+                            <div class="my-6 mx-6">
                                 <v-row align="center">
-                                    <label class="investor-card-sub-title">Your balance in ETS, {{ etsData.actionTokenName }}</label>
-                                </v-row>
-                                <v-row align="center" class="mt-5">
-                                    <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}</label>
-                                </v-row>
-                                <v-row align="center" class="mt-10">
-                                    <label class="investor-card-sub-title">Profit/loss</label>
-                                </v-row>
-                                <v-row class="info-row mt-6" justify="start" align="center">
-                                    <label class="fee-structure-label mt-1">Last day</label>
-                                    <v-spacer></v-spacer>
-                                    <label class="investor-card-sub-title-value" :class="etsClientData[this.etsData.name] > 0 ? 'success-color' : ''">
-                                        {{ etsClientData[this.etsData.name] ? ((etsClientData[this.etsData.name] > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—' }}
-                                    </label>
-                                </v-row>
-                            </template>
-
-                            <template v-if="networkSupport">
-                                <v-row align="center" justify="center" class="mt-15" v-if="!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
-                                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
+                                    <label class="investor-card-title">Fee structure</label>
+                                    <Tooltip text="Overnight takes a part of ETS's profitability as management and performance fees. Net APY you see is shown with these fees taken."/>
                                 </v-row>
 
-                                <v-row align="center" justify="center" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)? 'mt-5' : 'mt-15'">
-                                    <v-btn class="header-btn btn-investor-invest" :class="(this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)) ? 'disabled-btn' : ''" :disabled="this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)" @click="mintAction">
-                                        MINT ETS {{ etsData.nameUp }}
-                                    </v-btn>
+                                <v-row class="mt-8" justify="start" align="center">
+                                    <v-col>
+                                        <v-row class="info-row" justify="start" align="center">
+                                            <label class="fee-structure-label">Mint fee</label>
+                                            <v-spacer></v-spacer>
+                                            <label class="fee-structure-value">
+                                                {{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}
+                                            </label>
+                                        </v-row>
+                                    </v-col>
                                 </v-row>
 
-                                <v-row align="center" justify="center" class="mt-6">
-                                    <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                        REDEEM ETS {{ etsData.nameUp }}
-                                    </v-btn>
+                                <v-row class="mt-8" justify="start" align="center">
+                                    <v-col>
+                                        <v-row class="info-row" justify="start" align="center">
+                                            <label class="fee-structure-label">Redeem fee</label>
+                                            <v-spacer></v-spacer>
+                                            <label class="fee-structure-value">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
+                                        </v-row>
+                                    </v-col>
                                 </v-row>
-                            </template>
-
-                            <template v-else>
-                                <v-row align="center" justify="center" class="mt-0">
-                                    <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork(etsData.chain.toString())">
-                                        SWITCH TO {{ etsData.chainName.toUpperCase() }} TO MINT
-                                    </v-btn>
-                                </v-row>
-                            </template>
-
-                            <v-row align="center" class="mt-12">
-                                <label class="investor-card-title">Fee structure</label>
-                            </v-row>
-
-                            <v-row class="mt-8" justify="start" align="center">
-                                <v-col cols="4">
-                                    <v-row class="info-row" justify="start" align="center">
-                                        <label class="fee-structure-label">Entry</label>
-                                        <v-spacer></v-spacer>
-                                        <label class="fee-structure-value">{{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}</label>
-                                    </v-row>
-                                </v-col>
-                                <v-col class="ml-6">
-                                    <v-row class="info-row" justify="start" align="center">
-                                        <label class="fee-structure-label">Performance</label>
-                                        <Tooltip v-if="etsData.openPrototype || etsData['prototype']" text="The current commission is set for the duration of the prototype status of ets"/>
-                                        <v-spacer></v-spacer>
-                                        <label class="fee-structure-value">{{ performanceFee ? $utils.formatMoneyComma(performanceFee, 2) + '%' : '—' }}</label>
-                                    </v-row>
-                                </v-col>
-                            </v-row>
-
-                            <v-row class="mt-8" justify="start" align="center">
-                                <v-col cols="4">
-                                    <v-row class="info-row" justify="start" align="center">
-                                        <label class="fee-structure-label">Exit</label>
-                                        <v-spacer></v-spacer>
-                                        <label class="fee-structure-value">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
-                                    </v-row>
-                                </v-col>
-                                <v-col class="ml-6">
-                                    <v-row class="info-row" justify="start" align="center">
-                                        <label class="fee-structure-label">Management</label>
-                                        <Tooltip text="An annual fee that will be charged 1/365 per day, regardless of the strategy's performance."/>
-                                        <v-spacer></v-spacer>
-                                        <label class="fee-structure-value">{{ managementFee ? $utils.formatMoneyComma(managementFee, 2) + '%' : '—' }}</label>
-                                    </v-row>
-                                </v-col>
-                            </v-row>
+                            </div>
                         </v-col>
                     </v-row>
                 </v-col>

@@ -128,7 +128,7 @@
         <v-row class="mt-5">
             <v-col cols="3">
                 <v-row>
-                    <label class="action-info-label">Exit fee:</label>
+                    <label class="action-info-label">Redeem fee:</label>
                 </v-row>
             </v-col>
             <v-col>

@@ -129,7 +129,7 @@
         <v-row class="mt-5">
             <v-col cols="3">
                 <v-row>
-                    <label class="action-info-label">Enter fee:</label>
+                    <label class="action-info-label">Mint fee:</label>
                 </v-row>
             </v-col>
             <v-col>

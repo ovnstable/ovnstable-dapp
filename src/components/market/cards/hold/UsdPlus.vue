@@ -17,7 +17,7 @@
                         <div class="tooltip">
                             <Tooltip icon-color="#FFFFFF"
                                      :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
-                                     text="Strategy APY based on 30-day average, includes fees taken (fee-adjusted)"/>
+                                     text="Strategy net APY based on 30-day average, includes fees taken (fee-adjusted)"/>
                         </div>
                     </v-row>
                 </v-row>

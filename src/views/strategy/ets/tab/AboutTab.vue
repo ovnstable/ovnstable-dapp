@@ -284,42 +284,6 @@ export default {
         ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
 
-        entryFee: function () {
-            if (this.strategyData && this.strategyData.fees) {
-                let result = this.strategyData.fees.find(x => x.id === 'buy');
-                return result ? result.value : null;
-            } else {
-                return null;
-            }
-        },
-
-        exitFee: function () {
-            if (this.strategyData && this.strategyData.fees) {
-                let result = this.strategyData.fees.find(x => x.id === 'redeem');
-                return result ? result.value : null;
-            } else {
-                return null;
-            }
-        },
-
-        performanceFee: function () {
-            if (this.strategyData && this.strategyData.fees) {
-                let result = this.strategyData.fees.find(x => x.id === 'profit');
-                return result ? result.value : null;
-            } else {
-                return null;
-            }
-        },
-
-        managementFee: function () {
-            if (this.strategyData && this.strategyData.fees) {
-                let result = this.strategyData.fees.find(x => x.id === 'tvl');
-                return result ? result.value : null;
-            } else {
-                return null;
-            }
-        },
-
         networkSupport: function () {
             return this.networkId === this.etsData.chain;
         },

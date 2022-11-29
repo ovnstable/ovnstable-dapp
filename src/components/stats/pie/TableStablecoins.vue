@@ -6,11 +6,11 @@
                 Stablecoin
             </th>
             <th class="table-header-don text-left" v-if="!minimized">
-                Safety score
+                {{ onlyPercents ? '' : 'Safety score' }}
                 <!-- TODO: add info -->
             </th>
             <th class="table-header-don text-left" :colspan="minimized ? 2 : 1">
-                Net Asset Value
+                {{ onlyPercents ? '' : 'Net Asset Value' }}
                 <!-- TODO: add info -->
             </th>
             <th class="table-header-don text-left" width="180px" v-if="!minimized">
@@ -30,17 +30,23 @@
                     <label class="link-label">
                         {{ item.label }}
                     </label>
-                    <v-spacer></v-spacer>
-                    <label class="link-label mr-6">
-                        <v-img class="icon-img-link" v-if="!minimized" :src="require('@/assets/icon/open-in-new.svg')"/>
-                    </label>
+                    <template v-if="!onlyPercents">
+                        <v-spacer></v-spacer>
+                        <label class="link-label mr-6">
+                            <v-img class="icon-img-link" v-if="!minimized" :src="require('@/assets/icon/open-in-new.svg')"/>
+                        </label>
+                    </template>
                 </v-row>
             </td>
             <td class="table-label-don text-left high-label" v-if="!minimized">
-                VERY HIGH
+                <template v-if="!onlyPercents">
+                    VERY HIGH
+                </template>
             </td>
             <td class="table-label-don text-left">
-                ${{ $utils.formatMoney(item.value, 2)}}
+                <template v-if="!onlyPercents">
+                    ${{ $utils.formatMoney(item.value, 2)}}
+                </template>
             </td>
             <td class="table-label-don text-left progress-col" v-if="!minimized">
                 <v-progress-linear :value="getPercent(item)"
@@ -49,7 +55,7 @@
                                    height="16">
                 </v-progress-linear>
             </td>
-            <td class="table-label-don text-left">
+            <td class="table-label-don text-left" width="1%">
                 {{ getPercent(item) }}%
             </td>
         </tr>
@@ -73,6 +79,11 @@ export default {
         },
 
         minimized: {
+            type: Boolean,
+            default: false,
+        },
+
+        onlyPercents: {
             type: Boolean,
             default: false,
         },

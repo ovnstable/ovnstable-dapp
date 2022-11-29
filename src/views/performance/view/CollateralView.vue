@@ -1,10 +1,10 @@
 <template>
     <div class="page-container">
-        <div class="mt-10 mb-10">
+        <div class="mt-10">
             <label class="title-label">Collateral</label>
         </div>
 
-        <v-row class="d-flex justify-space-between ma-0 mt-2">
+        <v-row class="d-flex justify-space-between ma-0 mt-7" v-if="networkId === 10">
             <template>
                 <v-col class="mr-1">
                     <v-row>
@@ -19,7 +19,7 @@
             </template>
         </v-row>
 
-        <UsdPlusTab v-if="tab === 1"/>
+        <UsdPlusTab :class="networkId === 10 ? '' : 'mt-7'" v-if="tab === 1"/>
         <DaiPlusTab v-if="tab === 2"/>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -45,6 +45,14 @@ export default {
         tab: 1,
     }),
 
+    watch: {
+        networkId: function (newValue, oldValue) {
+            if (newValue !== 10) {
+                this.tab = 1;
+            }
+        },
+    },
+
     computed: {
         ...mapGetters("network", ['networkId']),
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
@@ -52,12 +60,14 @@ export default {
         activeTabUsd: function () {
             return {
                 'tab-button': this.tab === 1,
+                'tab-button-inactive': this.tab !== 1,
             }
         },
 
         activeTabDai: function () {
             return {
                 'tab-button': this.tab === 2,
+                'tab-button-inactive': this.tab !== 2,
             }
         },
     },
@@ -72,22 +82,6 @@ export default {
         mintAction() {
             this.showMintView();
             this.showSwapModal();
-        },
-
-        clickPolygon() {
-            if (this.networkId === 137) {
-                this.tab = 1;
-            } else {
-                this.openLink('https://market.overnight.fi/stats');
-            }
-        },
-
-        clickBsc() {
-            if (this.networkId === 56) {
-                this.tab = 2;
-            } else {
-                this.openLink('https://bsc.overnight.fi/stats');
-            }
         },
     }
 }
@@ -357,7 +351,7 @@ export default {
     height: 40px;
     border: 1px solid var(--input-placeholder);
 
-    background-color: var(--card-coin-background) !important;
+    background-color: var(--action-btn-bg) !important;
     color: var(--zoom-btn-color);
 
     font-weight: 400;
@@ -375,8 +369,10 @@ export default {
 }
 
 .tab-button {
-    background: rgba(28, 149, 231, 0.1) !important;
-    border: none;
+}
+
+.tab-button-inactive {
+    background: transparent !important;
 }
 
 </style>

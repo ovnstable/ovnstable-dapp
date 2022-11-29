@@ -25,8 +25,6 @@
             </v-col>
         </v-row>
 
-        <!-- TODO: add collateral time rate -->
-
         <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-3'" justify="start" align="center">
             <v-col class="info-card-body-bottom">
                 <v-row align="center" justify="start" class="ma-0">
@@ -52,40 +50,40 @@
             </v-col>
         </v-row>
 
-        <v-row class="d-flex justify-space-between mt-0">
-            <template>
-                <v-col>
-                    <div class="currency-box d-flex" :class="$wu.isMobile() ? 'pa-5' : 'pa-5'">
-                        <div>
-                            <v-img class="currency" :class="$wu.isMobile() ? 'mt-1' : 'ml-5'" :src="require('@/assets/currencies/USD+_NEW.svg')" />
-                        </div>
-                        <div :class="$wu.isMobile() ? 'ml-1 mt-2' : 'mt-2 ml-2'">
-                            <label class="currency-text">USD+ token address</label>
-                        </div>
-                        <div class="ml-auto d-flex" :class="$wu.isMobile() ? 'mt-2 ml-1' : 'mt-2 ml-2'">
-                            <label class="address-text ml-auto">0x9ff...x9ob</label>
-                            <v-img class="open-new mt-0 ml-1" :src="require('@/assets/icon/open-in-new.svg')"/>
-                        </div>
+        <v-row class=" ma-0 mt-3">
+            <v-col class="currency-box" :cols="$wu.isFull() ? 6 : 12" :class="$wu.isFull() ? 'mr-1' : ''">
+                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openLink('https://optimistic.etherscan.io/address/' + contracts.usdPlus.options.address)">
+                    <div>
+                        <v-img class="currency" :src="require('@/assets/currencies/USD+.png')" />
                     </div>
-                </v-col>
-                <v-col>
-                    <div class="currency-box d-flex" :class="$wu.isMobile() ? 'pa-5' : 'pa-5'">
-                        <div>
-                            <v-img class="currency" :class="$wu.isMobile() ? '' : 'ml-5'" :src="require('@/assets/currencies/Hacken.svg')" />
-                        </div>
-                        <div :class="$wu.isMobile() ? 'mt-1 ml-1' : 'mt-2 ml-2'">
-                            <label class="currency-text">Audit</label>
-                        </div>
-                        <div class="ml-auto d-flex" :class="$wu.isMobile() ? 'mt-2 ml-1' : 'mt-2 ml-2'">
-                            <label class="address-text ml-auto">0x9ff...x9ob</label>
-                            <v-img class="open-new mt-0 ml-1" :src="require('@/assets/icon/open-in-new.svg')"/>
-                        </div>
+                    <label class="currency-text ml-2">USD+ token address</label>
+
+                    <v-spacer></v-spacer>
+
+                    <label class="address-text ml-auto">{{ shortAddress(contracts.usdPlus.options.address) }}</label>
+                    <div class="ml-auto d-flex">
+                        <v-img class="open-new mt-0 ml-1" :src="require('@/assets/icon/open-in-new.svg')"/>
                     </div>
-                </v-col>
-            </template>
+                </v-row>
+            </v-col>
+
+            <v-col class="currency-box" :cols="$wu.isFull() ? '' : 12" :class="$wu.isFull() ? 'ml-1' : 'mt-3'">
+                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openLink('https://hacken.io/audits/#overnight')">
+                    <div>
+                        <v-img class="currency" :src="require('@/assets/currencies/Hacken.svg')" />
+                    </div>
+                    <label class="currency-text ml-2">Audit</label>
+
+                    <v-spacer></v-spacer>
+
+                    <div class="ml-auto d-flex">
+                        <v-img class="open-new mt-0 ml-1" :src="require('@/assets/icon/open-in-new.svg')"/>
+                    </div>
+                </v-row>
+            </v-col>
         </v-row>
 
-        <v-row align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5 mb-10' : 'mt-3'">
+        <v-row align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5 mb-10' : 'mt-8'">
             <v-btn class="header-btn btn-filled" @click="mintAction">
                 Mint USD+
             </v-btn>
@@ -119,7 +117,7 @@ export default {
     computed: {
         ...mapGetters("network", ['networkId']),
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
-
+        ...mapGetters("web3", ['contracts']),
     },
 
     methods: {
@@ -132,6 +130,14 @@ export default {
         mintAction() {
             this.showMintView();
             this.showSwapModal();
+        },
+
+        shortAddress(address) {
+            if (address) {
+                return address.substring(0, 5) + '...' + address.substring(address.length - 4);
+            } else {
+                return null;
+            }
         },
     }
 }
@@ -439,5 +445,8 @@ export default {
     color: var(--secondary-gray-text);
 }
 
+.currency-box, .currency-box >>> * {
+    cursor: pointer;
+}
 
 </style>

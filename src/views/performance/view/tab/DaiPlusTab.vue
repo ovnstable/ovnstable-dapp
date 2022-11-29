@@ -1,28 +1,30 @@
 <template>
     <div class="page-container">
-        <div class="ma-0 info-card-container d-flex" :class="$wu.isMobile() ? 'mt-5' : 'mt-5'" >
-            <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-10' : 'ml-10 mr-5 my-5'" >
+        <div class="ma-0 info-card-container d-flex mt-5">
+            <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
                 <v-img class="currency" :src="require('@/assets/currencies/DAI+.svg')" />
             </div>
-            <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-3'" >
+            <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'" >
                 <label class="section-title-label">About DAI+</label>
                 <label class="section-text">DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoveen) on Optimism. It cannot be minted separately.</label>
             </div>
         </div>
-        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-3'" justify="start" align="center">
+        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-3'" justify="start" align="start">
             <v-col class="info-card-body-bottom">
-                <v-row align="center" justify="start" class="ma-0">
+                <v-row align="start" justify="start" class="ma-0">
                     <label class="section-title-label">DAI+ collateral assets</label>
                 </v-row>
 
-                <v-row align="center" justify="center">
+                <v-row align="start" justify="center">
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
                         <TableStablecoins
+                            only-percents
                             v-if="!$wu.isMobile()"
                             :data="stablecoinData"/>
 
                         <TableStablecoins
                             v-else
+                            only-percents
                             minimized
                             :data="stablecoinData"/>
                     </v-col>
@@ -34,47 +36,24 @@
             </v-col>
         </v-row>
 
-        <!-- TODO: add collateral time rate -->
+        <v-row class=" ma-0 mt-3">
+            <v-col class="currency-box" :cols="$wu.isFull() ? 6 : 12">
+                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openLink('https://optimistic.etherscan.io/address/0x970d50d09f3a656b43e11b0d45241a84e3a6e011')">
+                    <div>
+                        <v-img class="currency-dai" :src="require('@/assets/currencies/DAI+.svg')" />
+                    </div>
+                    <label class="currency-text ml-2">DAI+ token address</label>
 
-        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-3'" justify="start" align="center">
-            <v-col class="info-card-body-bottom">
-                <v-row align="center" justify="start" class="ma-0">
-                    <label class="section-title-label">DAI+ portfolio</label>
-                </v-row>
+                    <v-spacer></v-spacer>
 
-                <v-row align="center" justify="center">
-                    <v-col :cols="!$wu.isFull() ? 12 : 8">
-                        <TableStrategies
-                            v-if="!$wu.isMobile()"
-                            :data="currentTotalData"/>
-
-                        <TableStrategies
-                            v-else
-                            minimized
-                            :data="currentTotalData"/>
-                    </v-col>
-
-                    <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <DoughnutStrategies :data="currentTotalData" :size="!$wu.isFull() ? 200 : 300"/>
-                    </v-col>
+                    <label class="address-text ml-auto">{{ shortAddress('0x970D50d09F3a656b43E11B0D45241a84e3a6e011') }}</label>
+                    <div class="ml-auto d-flex">
+                        <v-img class="open-new mt-0 ml-1" :src="require('@/assets/icon/open-in-new.svg')"/>
+                    </div>
                 </v-row>
             </v-col>
         </v-row>
 
-        <v-row class=" ma-0 mt-3">
-            <div class="currency-box d-flex" :class="$wu.isMobile() ? 'pa-5' : 'pa-5'">
-                <div>
-                    <v-img class="currency-dai" :class="$wu.isMobile() ? 'mt-1' : 'ml-5'" :src="require('@/assets/currencies/DAI+.svg')" />
-                </div>
-                <div :class="$wu.isMobile() ? 'ml-1 mt-1' : 'mt-2 ml-2'">
-                    <label class="currency-text">DAI+ token address</label>
-                </div>
-                <div class="ml-auto d-flex" :class="$wu.isMobile() ? 'mt-2 ml-1' : 'mt-2 ml-2'">
-                    <label class="address-text ml-auto">0x9ff...x9ob</label>
-                    <v-img class="open-new mt-0 ml-1" :src="require('@/assets/icon/open-in-new.svg')"/>
-                </div>
-            </div>
-        </v-row>
         <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
@@ -98,23 +77,31 @@ export default {
     },
 
     data: () => ({
-
+        stablecoinData: [
+            {
+                label: 'USD+',
+                value: 97.5,
+                link: '0x73cb180bf0521828d8849bc8CF2B920918e23032',
+                color: "#2775CA",
+                logo: require('@/assets/currencies/USD+.png')
+            },
+            {
+                label: 'DAI',
+                value: 2.5,
+                link: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
+                color: "#FCCA46",
+                logo: require('@/assets/currencies/stablecoins/DAI.png')
+            },
+        ],
     }),
 
     computed: {
         ...mapGetters("network", ['networkId']),
-        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
+        ...mapGetters("statsData", ['currentTotalData']),
 
     },
 
     created() {
-        if (this.networkId === 137) {
-            this.tab = 1;
-        }
-
-        if (this.networkId === 56) {
-            this.tab = 2;
-        }
     },
 
     methods: {
@@ -124,9 +111,12 @@ export default {
             window.open(url, '_blank').focus();
         },
 
-        mintAction() {
-            this.showMintView();
-            this.showSwapModal();
+        shortAddress(address) {
+            if (address) {
+                return address.substring(0, 5) + '...' + address.substring(address.length - 4);
+            } else {
+                return null;
+            }
         },
     }
 }
@@ -478,7 +468,24 @@ export default {
 .currency-box {
     background: var(--secondary);
     border-radius: 12px;
-    min-width: 50%;
+}
+
+.currency-box, .currency-box >>> * {
+    cursor: pointer;
+}
+
+.address-text {
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    color: var(--secondary-gray-text);
+}
+
+.currency-text {
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    color: var(--secondary-gray-text);
 }
 
 </style>

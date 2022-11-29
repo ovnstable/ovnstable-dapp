@@ -186,22 +186,6 @@ export default {
             this.showMintView();
             this.showSwapModal();
         },
-
-        clickPolygon() {
-            if (this.networkId === 137) {
-                this.tab = 1;
-            } else {
-                this.openLink('https://market.overnight.fi/stats');
-            }
-        },
-
-        clickBsc() {
-            if (this.networkId === 56) {
-                this.tab = 2;
-            } else {
-                this.openLink('https://bsc.overnight.fi/stats');
-            }
-        }
     }
 }
 </script>
@@ -405,7 +389,7 @@ export default {
 
 .info-card-container {
     background: var(--secondary);
-    border-radius: 4px;
+    border-radius: 12px;
 }
 
 .info-card-body-bottom {

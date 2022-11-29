@@ -1,5 +1,5 @@
 <template>
-    <v-row class="card-container" v-on:click.prevent @click="openCard">
+    <v-row class="card-container" v-on:click.prevent @click="openPerformance">
         <v-col cols="12" align-self="start">
             <v-row class="d-flex flex-row align-center header-row" justify="center" :style="{'--card-background': getBgColor()}">
                 <span class="currency ml-5">
@@ -183,10 +183,6 @@ export default {
         redeemAction() {
             this.showRedeemView();
             this.showSwapModal();
-        },
-
-        openCard() {
-            this.mintAction();
         },
 
         openPerformance() {

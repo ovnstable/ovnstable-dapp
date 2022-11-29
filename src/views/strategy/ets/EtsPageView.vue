@@ -82,9 +82,9 @@
                         <v-col class="info-card-container-white mt-4" cols="12">
                             <div class="my-4">
                                 <v-row align="center" class="ma-0">
-                                    <label class="investor-card-title">Fee structure</label>
+                                    <label class="investor-card-title">One-time fees</label>
                                     <div style="margin-top: -2px">
-                                        <Tooltip text="Overnight takes a part of ETS's profitability as management and performance fees. Net APY you see is shown with these fees taken."/>
+                                        <Tooltip text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
                                     </div>
                                 </v-row>
                                 <v-row class="info-row ma-0 mt-8" justify="start" align="center">
@@ -178,8 +178,8 @@
                         <v-col class="info-card-container-white mt-4" cols="12">
                             <div class="my-6 mx-6">
                                 <v-row align="center">
-                                    <label class="investor-card-title">Fee structure</label>
-                                    <Tooltip text="Overnight takes a part of ETS's profitability as management and performance fees. Net APY you see is shown with these fees taken."/>
+                                    <label class="investor-card-title">One-time fees</label>
+                                    <Tooltip text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
                                 </v-row>
 
                                 <v-row class="mt-8" justify="start" align="center">

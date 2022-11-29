@@ -2,9 +2,14 @@
     <div class="apy-chart-container">
         <v-row class="chart-header-row">
             <v-col cols="8">
-                <v-row justify="start">
+                <v-row justify="start" align="center">
                     <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? etsData.nameUp : 'ETS: ' + etsData.nameUp + ' daily net') + '&nbsp;') : ''}}</label>
-                    <label class="chart-title" style="margin-left: 0 !important"><abbr title="Annual Percentage Yield">APY</abbr></label>
+                    <label class="chart-title" style="margin-left: 0 !important">
+                        <abbr title="Annual Percentage Yield">APY</abbr>
+                    </label>
+                    <div class="mt-7 ml-1">
+                        <Tooltip text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
+                    </div>
                 </v-row>
 
                 <v-row justify="start">
@@ -85,6 +90,7 @@ import {mapActions, mapGetters} from "vuex";
 import moment from "moment";
 
 import ApexCharts from 'apexcharts'
+import Tooltip from "@/components/common/element/Tooltip";
 
 export default {
     name: "ChartApy",
@@ -119,7 +125,7 @@ export default {
         },
     },
 
-    components: {},
+    components: {Tooltip},
 
     data: () => ({
         zoom: "month",

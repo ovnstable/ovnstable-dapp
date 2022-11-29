@@ -186,7 +186,7 @@
 
         <v-col cols="12" align-self="end">
             <v-row class="footer-row align-center justify-center">
-                <label class="footer-link">Learn more about ETS {{ cardData.data.nameUp }}</label>
+                <label class="footer-link">View ETS {{ cardData.data.nameUp }} performance</label>
                 <img class="open-icon ml-1" src="@/assets/icon/open-in-new.svg">
             </v-row>
         </v-col>

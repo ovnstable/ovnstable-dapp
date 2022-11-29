@@ -271,10 +271,13 @@ export default {
                 if (a.chain === networkId && b.chain !== networkId) return -1;
                 if (a.chain !== networkId && b.chain === networkId) return 1;
 
+                if (a.monthApy > b.monthApy) return -1;
+                if (a.monthApy < b.monthApy) return 1;
+
                 if (a.hasCap && !b.hasCap) return -1;
                 if (!a.hasCap && b.hasCap) return 1;
 
-                return (a.monthApy > b.monthApy) ? -1 : (a.monthApy < b.monthApy ? 1 : 0);
+                return 0;
             });
 
             cardList[0].cardOpened = true;

@@ -344,6 +344,7 @@ const actions = {
         let pm = rootState.web3.contracts.pm;
         let account = rootState.accountData.account;
         let params = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
+        let networkId = rootState.network.networkId;
 
         let items = [];
         for (let i = 0; i < weights.length; i++) {
@@ -358,6 +359,10 @@ const actions = {
             item.maxWeight = weight.maxWeight * 1000;
             item.enabled = weight.enabled;
             item.enabledReward = weight.enabledReward;
+
+            if (networkId === 137) {
+                item.riskFactor = weight.riskFactor * 1000;
+            }
 
             items.push(item);
         }
@@ -376,6 +381,7 @@ const actions = {
         commit('setFinanceLoading', true);
 
         let result;
+        let networkId = rootState.network.networkId;
 
         try {
             let blockNum = await rootState.web3.web3.eth.getBlockNumber();
@@ -396,6 +402,10 @@ const actions = {
                 item.maxWeight = weight.maxWeight * 1000;
                 item.enabled = weight.enabled;
                 item.enabledReward = weight.enabledReward;
+
+                if (networkId === 137) {
+                    item.riskFactor = weight.riskFactor * 1000;
+                }
 
                 items.push(item);
             }
@@ -509,6 +519,7 @@ const actions = {
 
         let pm = rootState.web3.contracts.pm;
         let weights = await pm.methods.getAllStrategyWeights().call();
+        let networkId = rootState.network.networkId;
 
         let items = [];
 
@@ -531,10 +542,17 @@ const actions = {
                 item.maxWeight = weight.maxWeight / 1000;
                 item.enabled = weight.enabled;
                 item.enabledReward = weight.enabledReward;
+
+                if (networkId === 137) {
+                    item.riskFactor = weight.riskFactor / 1000;
+                } else {
+                    item.riskFactor = 0;
+                }
             } else {
                 item.minWeight = 0;
                 item.targetWeight = 0;
                 item.maxWeight = 0;
+                item.riskFactor = 0;
                 item.enabled = false;
                 item.enabledReward = false;
             }
@@ -582,6 +600,7 @@ const actions = {
                     liquidationValue: (fromAsset6 ? _fromE6(asset.liquidationValue.toString()) : _fromE18(asset.liquidationValue.toString())),
                     minWeight: (weight.minWeight ? parseInt(weight.minWeight) / 1000 : 0),
                     maxWeight: (weight.maxWeight ? parseInt(weight.maxWeight) / 1000 : 0),
+                    riskFactor: (weight.riskFactor ? parseInt(weight.riskFactor) / 1000 : 0),
                     targetWeight: (weight.targetWeight ? parseInt(weight.targetWeight) / 1000 : 0),
                     enabled: weight.enabled,
                     enabledReward: weight.enabledReward
@@ -603,6 +622,7 @@ const actions = {
                         liquidationValue: 0,
                         minWeight: 0,
                         maxWeight: 0,
+                        riskFactor: 0,
                         targetWeight: 0,
                         enabled: false,
                         enabledReward: false

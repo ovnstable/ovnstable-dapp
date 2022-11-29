@@ -75,10 +75,22 @@
                                 v-model="item.enabledReward"
                             ></v-switch>
                         </td>
+                        <td v-if="networkId === 137">
+                            <v-row class="fill-height" align="center" justify="center">
+                                <v-text-field
+                                    class="m2m-field"
+                                    :rules="[rules.required, checkNumber]"
+                                    dense
+                                    outlined
+                                    v-model="item.riskFactor"
+                                    :disabled="financeLoading || !hasChangeAccount">
+                                </v-text-field>
+                            </v-row>
+                        </td>
                     </tr>
 
                     <tr>
-                        <td colspan="9"></td>
+                        <td :colspan="networkId === 137 ? 10 : 9"></td>
                     </tr>
 
                     <tr>
@@ -91,12 +103,7 @@
                         <td class="text-right">
                             <b>${{ $utils.formatMoney(totalLiquidationSum, 2) }}</b>
                         </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td :colspan="networkId === 137 ? 7 : 6"></td>
                     </tr>
 
                     <tr>
@@ -106,13 +113,7 @@
                         <td class="text-right">
                             <b>${{ $utils.formatMoney(totalUsdPlusValue, 2) }}</b>
                         </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td :colspan="networkId === 137 ? 7 : 6"></td>
                     </tr>
                     </tbody>
                 </template>
@@ -145,10 +146,16 @@ export default {
         },
     }),
 
+    watch: {
+        networkId: function (newValue, oldValue) {
+            this.updateHeaders();
+        },
+    },
+
     computed: {
         ...mapGetters('governance', ['m2mItems', 'm2mTotal', 'financeLoading', 'hasChangeAccount', 'usdPlusLiquidityIndex']),
         ...mapGetters('statsData', ['totalUsdPlusValue']),
-        ...mapGetters('network', ['explorerUrl']),
+        ...mapGetters('network', ['explorerUrl', 'networkId']),
 
         totalLiquidationSum: function () {
 
@@ -162,6 +169,10 @@ export default {
 
             return result;
         },
+    },
+
+    created() {
+        this.updateHeaders();
     },
 
     methods: {
@@ -194,6 +205,16 @@ export default {
                 }
             } else {
                 return true;
+            }
+        },
+
+        updateHeaders() {
+            if (this.networkId === 137) {
+                if (!this.headersM2M.find(value => value.text === 'Risk Factor')) {
+                    this.headersM2M.push({text: 'Risk Factor', value: 'riskFactor'});
+                }
+            } else {
+                this.headersM2M = this.headersM2M.filter(value => value.text !== 'Risk Factor');
             }
         },
     }

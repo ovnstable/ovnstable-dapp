@@ -196,13 +196,13 @@ export default {
         getBgColor() {
             switch (this.networkId) {
                 case 137:
-                    return 'radial-gradient(117.22% 424.06% at 96.59% -5.17%, #7E46E2 0%, #4088F5 28.42%, #3430AF 52.52%, #7E46E2 100%)';
+                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #7E46E3 100%)';
                 case 43114:
-                    return 'radial-gradient(circle at 100% 0%, #4E0B1B 0%, #D0225D 27%, #FD0420 52%, #4E0B1B 100%)';
+                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #D74F49 100%)';
                 case 10:
-                    return 'radial-gradient(circle at 100% 0%, #FD0420 0%, #D0225D 27%, #4E0B1B 52%, #FD0420 100%)';
+                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #FF0420 100%)';
                 case 56:
-                    return 'radial-gradient(circle at 100% 0%, #E9B430 0%, #001845 27%, #001845 52%, #E9B430 100%)';
+                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #F3BA2F 100%)';
             }
         },
 

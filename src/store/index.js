@@ -130,9 +130,8 @@ export default new Vuex.Store({
 
         theme
     },
-/*
+
     plugins: [
         createPersistedState({paths: ['transaction']})
-        // createPersistedState({paths: ['transaction', 'bscInfoModal']}),
-    ]*/
+    ]
 });

@@ -81,6 +81,19 @@
         <v-list nav subheader class="mx-3" dense>
             <v-divider class="navbar-list-divider"></v-divider>
 
+            <v-list-item class="list-item-hover mx-n2 mt-2" link @click="insuranceClick">
+                <v-list-item-icon>
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'insurance' ? 'shieldSelected.svg' : 'shield.svg'))">
+                </v-list-item-icon>
+                <v-list-item-title>
+                    <label class="navbar-page-label" :class="selectedTab === 'insurance' ? 'selected-page' : ''">Insure USD+</label>
+                </v-list-item-title>
+            </v-list-item>
+        </v-list>
+
+        <v-list nav subheader class="mx-3" dense>
+            <v-divider class="navbar-list-divider"></v-divider>
+
             <v-list-item class="list-item-hover mx-n2 mt-2" link @click="dashBoardClick">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'dashboard' ? 'avatarSelected.svg' : 'avatar.svg'))">
@@ -184,6 +197,12 @@ export default {
             this.selectTab('market');
             this.goToAction('/market')
             this.trackClick({action: 'market-click', event_category: 'View Page', event_label: 'Open market page', value: 1 });
+        },
+
+        insuranceClick() {
+            this.selectTab('insurance');
+            this.goToAction('/insurance')
+            this.trackClick({action: 'insurance-click', event_category: 'View Page', event_label: 'Open insurance page', value: 1 });
         },
 
         swapClick() {

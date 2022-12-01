@@ -83,6 +83,22 @@ const actions = {
             }
         }
 
+        let insurances = [
+            { network: 'polygon' },
+        ];
+
+        for (let i = 0; i < insurances.length; i++) {
+            if (network === insurances[i].network) {
+                let ExchangerContract = require(`@/contracts/${insurances[i].network}/insurance/exchanger.json`);
+                let TokenContract = require(`@/contracts/${insurances[i].network}/insurance/token.json`);
+
+                contracts.insurance = {};
+
+                contracts.insurance[insurances[i].network + '_exchanger'] = _load(ExchangerContract, web3);
+                contracts.insurance[insurances[i].network + '_token'] = _load(TokenContract, web3);
+            }
+        }
+
         contracts.exchange = _load(Exchange, web3);
         contracts.govToken = _load(OvnToken, web3);
         contracts.governor = _load(OvnGovernor, web3);

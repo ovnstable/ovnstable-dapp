@@ -104,6 +104,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--box-divider',
+        enabled: true,
+        theme: {
+            light: '#DEE1E5',
+            dark: '#1D2029'
+        }
+    },
+    {
         name: '--secondary-border',
         enabled: true,
         theme: {

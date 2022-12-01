@@ -1,6 +1,6 @@
 <template>
     <v-tooltip
-            max-width="220px"
+            :max-width="maxWidth + 'px'"
             color="var(--tooltip-bg)"
             class="tooltip-container"
             transition="none"
@@ -18,7 +18,7 @@
             </div>
         </template>
         <v-row class="ma-1" align="center" @click="openLink">
-            <label class="tooltip-text" :class="link ? 'link-container' : ''">{{ text }}</label>
+            <label class="tooltip-text" :class="link ? 'link-container' : ''" v-html="text"></label>
             <div v-if="link"
                  class="icon-img ml-2"
                  :style="{width: size + 'px', height: size + 'px'}"
@@ -52,6 +52,11 @@ export default {
         size: {
             type: Number,
             default: 20,
+        },
+
+        maxWidth: {
+            type: Number,
+            default: 220,
         },
     },
 

@@ -8,9 +8,9 @@
   "disabled": false,
   "highRisk": false,
 
-  "exchangeContract": "etsExchangerRuby",
+  "exchangeContract": "ets_ruby_exchanger",
 
-  "tokenContract": "etsRubyToken",
+  "tokenContract": "ets_ruby_token",
   "etsTokenDecimals": 6,
 
   "actionAsset": "usdPlus",

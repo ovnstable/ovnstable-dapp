@@ -8,9 +8,9 @@
   "disabled": true,
   "highRisk": false,
 
-  "exchangeContract": "exchangerUsdPlusWmatic",
+  "exchangeContract": "ets_wmatic_usd_plus_exchanger",
 
-  "tokenContract": "usdPlusWmatic",
+  "tokenContract": "ets_wmatic_usd_plus_token",
   "etsTokenDecimals": 6,
 
   "actionAsset": "usdPlus",

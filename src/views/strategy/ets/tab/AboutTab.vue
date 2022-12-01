@@ -164,7 +164,7 @@
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Risk factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ etsData.highRisk ? 'high' : 'moderate' }}</label>
+                    <label class="card-info-value">{{ etsData.highRisk ? 'HIGH' : 'MODERATE' }}</label>
                     <Tooltip text="Risk Factor is determined by a Pool's downside volatility. Pools that have a low Risk Factor translates to smaller downside volatility."/>
                 </v-row>
 

@@ -26,29 +26,9 @@ const actions = {
             WrappedUsdPlusToken = require(`@/contracts/${network}/WrappedUsdPlusToken.json`)
         }
 
-        let ExchangerUsdPlusWmatic = require(`@/contracts/polygon/HedgeExchangerUsdPlusWmatic.json`);
-        let UsdPlusWmaticToken = require(`@/contracts/polygon/RebaseTokenUsdPlusWmatic.json`);
-
-        let ExchangerWmaticUsdc = require(`@/contracts/polygon/HedgeExchangerWmaticUsdc.json`);
-        let WmaticUsdcToken = require(`@/contracts/polygon/EtsWmaticUsdc.json`);
-
-        let ExchangerBusdWbnb = require(`@/contracts/bsc/HedgeExchangerBusdWbnb.json`)
-        let BusdWbnbToken = require(`@/contracts/bsc/RebaseTokenBusdWbnb.json`);
-
-        let EtsExchangerRuby = require(`@/contracts/optimism/HedgeExchangerWethUsdc.json`);
-        let EtsRubyToken = require(`@/contracts/optimism/RebaseTokenWethUsdc.json`);
-
-        let EtsExchangerGarnet = require(`@/contracts/optimism/HedgeExchangerOpUsdc.json`);
-        let EtsGarnetToken = require(`@/contracts/optimism/EtsOpUsdc.json`);
-
-        let EtsExchangerNightOvAr = require(`@/contracts/optimism/HedgeExchangerArrakisWethUsdc.json`);
-        let EtsNightOvArToken = require(`@/contracts/optimism/RebaseTokenArrakisWethUsdc.json`);
-
-
         let web3 = rootState.web3.web3;
 
         let contracts = {};
-
 
         switch (network) {
             case "avalanche":
@@ -70,7 +50,11 @@ const actions = {
             { network: 'polygon', name: 'qs_alpha_wmatic_usdc' },
             { network: 'polygon', name: 'qs_beta_wmatic_usdc' },
             { network: 'polygon', name: 'qs_gamma_weth_usdc' },
-            { network: 'polygon', name: 'qs_delta_weth_usdc' }
+            { network: 'polygon', name: 'qs_delta_weth_usdc' },
+            { network: 'polygon', name: 'wmatic_usd_plus' },
+            { network: 'bsc', name: 'wbnb_busd' },
+            { network: 'optimism', name: 'ruby' },
+            { network: 'optimism', name: 'night_ov_ar' },
         ];
 
         for (let i = 0; i < etsNames.length; i++) {
@@ -95,24 +79,6 @@ const actions = {
             contracts.market = _load(Market, web3);
             contracts.wUsdPlus = _load(WrappedUsdPlusToken, web3);
         }
-
-        contracts.exchangerUsdPlusWmatic = _load(ExchangerUsdPlusWmatic, web3);
-        contracts.usdPlusWmatic = _load(UsdPlusWmaticToken, web3);
-
-        contracts.exchangerWmaticUsdc = _load(ExchangerWmaticUsdc, web3);
-        contracts.wmaticUsdc = _load(WmaticUsdcToken, web3);
-
-        contracts.exchangerBusdWbnb = _load(ExchangerBusdWbnb, web3);
-        contracts.busdWbnb = _load(BusdWbnbToken, web3);
-
-        contracts.etsExchangerRuby = _load(EtsExchangerRuby, web3);
-        contracts.etsRubyToken = _load(EtsRubyToken, web3);
-
-        contracts.etsExchangerGarnet = _load(EtsExchangerGarnet, web3);
-        contracts.etsGarnetToken = _load(EtsGarnetToken, web3);
-
-        contracts.etsExchangerNightOvAr = _load(EtsExchangerNightOvAr, web3);
-        contracts.etsNightOvArToken = _load(EtsNightOvArToken, web3);
 
         commit('web3/setContracts', contracts, {root: true})
     },

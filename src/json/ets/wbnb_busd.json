@@ -8,9 +8,9 @@
   "disabled": true,
   "highRisk": false,
 
-  "exchangeContract": "exchangerBusdWbnb",
+  "exchangeContract": "ets_wbnb_busd_exchanger",
 
-  "tokenContract": "busdWbnb",
+  "tokenContract": "ets_wbnb_busd_token",
   "etsTokenDecimals": 6,
 
   "actionAsset": "usdPlus",

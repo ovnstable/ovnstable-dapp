@@ -37,13 +37,15 @@
                         <label class="banner-title" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">ETS {{ etsData.nameUp }}</label>
 
                         <v-spacer v-if="etsData.range"></v-spacer>
-                        <div class="range-container" v-if="etsData.range">
-                            <label class="range-title">{{ (etsData.range) }} range</label>
-                            <Tooltip
-                                icon-color="#FFFFFF"
-                                :size="$wu.isFull() ? 20 : ($wu.isTablet() ? 18 : 18)"
-                                text="WETH price range which depends on the market and conditions on it"
-                                top />
+                        <div class="range-container" v-if="etsData.range" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">
+                            <v-row :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" align="center">
+                                <label class="range-title">{{ etsData.range }}</label>
+                                <Tooltip
+                                    icon-color="#FFFFFF"
+                                    :size="$wu.isFull() ? 20 : ($wu.isTablet() ? 18 : 18)"
+                                    text="WETH price range which depends on the market and conditions on it"
+                                    top />
+                            </v-row>
                         </div>
                     </v-row>
 
@@ -230,13 +232,6 @@ export default {
     .info-value-max {
         font-size: 12px;
     }
-
-    .range-container {
-        padding: 5px 10px;
-    }
-
-    .bordered-box {
-    }
 }
 
 /* tablet */
@@ -279,14 +274,6 @@ export default {
     .info-value-max {
         font-size: 14px;
     }
-
-    .range-container {
-        padding: 10px 15px;
-        margin-left: 10px;
-    }
-
-    .bordered-box {
-    }
 }
 
 /* full */
@@ -328,13 +315,6 @@ export default {
     .range-title {
         font-size: 14px;
         line-height: 18px;
-    }
-
-    .range-container {
-        padding: 10px 20px;
-    }
-
-    .bordered-box {
     }
 }
 
@@ -407,9 +387,6 @@ export default {
 }
 
 .range-container {
-    display: flex;
-    align-items: end;
-
     border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: 4px;
 }

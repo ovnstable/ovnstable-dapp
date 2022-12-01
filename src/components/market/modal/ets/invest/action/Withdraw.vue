@@ -467,7 +467,7 @@ export default {
                             hash: hash,
                             text: 'Redeem ETS ' + etsActionData.nameUp,
                             product: 'ets_' + etsActionData.name,
-                            productName: 'ETS ' + etsActionData.nameUp,
+                            productName: 'ETS ' + etsActionData.nameToken,
                             action: 'redeem',
                             amount: sumInUsd,
                         };

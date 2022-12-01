@@ -515,7 +515,7 @@ export default {
                             hash: hash,
                             text: 'Mint ETS ' + etsActionData.nameUp,
                             product: 'ets_' + etsActionData.name,
-                            productName: 'ETS ' + etsActionData.nameUp,
+                            productName: 'ETS ' + etsActionData.nameToken,
                             action: 'mint',
                             amount: sumInUsd,
                         };

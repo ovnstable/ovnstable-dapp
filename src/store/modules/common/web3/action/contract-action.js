@@ -67,10 +67,10 @@ const actions = {
         }
 
         let etsNames = [
-            { network: 'polygon', name: 'alpha' },
-            { network: 'polygon', name: 'beta' },
-            { network: 'polygon', name: 'gamma' },
-            { network: 'polygon', name: 'delta' }
+            { network: 'polygon', name: 'qs_alpha_wmatic_usdc' },
+            { network: 'polygon', name: 'qs_beta_wmatic_usdc' },
+            { network: 'polygon', name: 'qs_gamma_weth_usdc' },
+            { network: 'polygon', name: 'qs_delta_weth_usdc' }
         ];
 
         for (let i = 0; i < etsNames.length; i++) {

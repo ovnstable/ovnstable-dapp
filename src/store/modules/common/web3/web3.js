@@ -79,7 +79,7 @@ const actions = {
 
         dispatch('dappUIAction/updateDappPages', null, {root: true});
         dispatch('gasPrice/refreshGasPrice', null, {root: true})
-        dispatch('marketData/refreshMarket', null, {root:true});
+        // dispatch('marketData/refreshMarket', null, {root:true});
 
         if (!getters.isProviderDefault) {
             let currentWalletNetworkId = await getters.web3.eth.net.getId();

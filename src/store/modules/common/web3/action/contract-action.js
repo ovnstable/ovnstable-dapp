@@ -7,44 +7,19 @@ const getters = {};
 
 const actions = {
     async initContracts({commit, dispatch, getters, rootState}) {
-
-        let network = rootState.network.networkName;
-
-        const Exchange = require(`@/contracts/${network}/Exchange.json`)
-        const OvnToken = require(`@/contracts/${network}/OvnToken.json`)
-        const OvnGovernor = require(`@/contracts/${network}/OvnGovernor.json`)
-        const PortfolioManager = require(`@/contracts/${network}/PortfolioManager.json`)
-        const TimelockController = require(`@/contracts/${network}/OvnTimelockController.json`)
-        const UsdPlusToken = require(`@/contracts/${network}/UsdPlusToken.json`)
-        const M2M = require(`@/contracts/${network}/Mark2Market.json`)
-
-        let Market;
-        let WrappedUsdPlusToken;
-
-        if (network !== "avalanche" && network !== "bsc") {
-            Market = require(`@/contracts/${network}/Market.json`)
-            WrappedUsdPlusToken = require(`@/contracts/${network}/WrappedUsdPlusToken.json`)
-        }
+        console.debug("contractAction/initContracts");
 
         let web3 = rootState.web3.web3;
-
+        let network = rootState.network.networkName;
         let contracts = {};
 
-        switch (network) {
-            case "avalanche":
-                contracts.asset = _load(ERC20, web3, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E');
-                break;
-            case "polygon":
-            case "polygon_dev":
-                contracts.asset = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
-                break;
-            case "optimism":
-                contracts.asset = _load(ERC20, web3, '0x7F5c764cBc14f9669B88837ca1490cCa17c31607');
-                break;
-            case "bsc":
-                contracts.asset = _load(ERC20, web3, '0xe9e7cea3dedca5984780bafc599bd69add087d56');
-                break;
-        }
+        let networkAssetMap = {
+            avalanche: '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E',
+            polygon: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+            polygon_dev: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+            optimism: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
+            bsc: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
+        };
 
         let etsNames = [
             { network: 'polygon', name: 'qs_alpha_wmatic_usdc' },
@@ -57,28 +32,37 @@ const actions = {
             { network: 'optimism', name: 'night_ov_ar' },
         ];
 
-        for (let i = 0; i < etsNames.length; i++) {
-            if (network === etsNames[i].network) {
-                let ExchangerContract = require(`@/contracts/${etsNames[i].network}/ets/${etsNames[i].name}/exchanger.json`);
-                let TokenContract = require(`@/contracts/${etsNames[i].network}/ets/${etsNames[i].name}/token.json`);
+        [
+            contracts.exchange,
+            contracts.govToken,
+            contracts.governor,
+            contracts.pm,
+            contracts.timelockController,
+            contracts.usdPlus,
+            contracts.m2m,
+            contracts.market,
+            contracts.wUsdPlus,
+            contracts.asset,
+        ] = await Promise.all([
+            _load(require(`@/contracts/${network}/Exchange.json`), web3),
+            _load(require(`@/contracts/${network}/OvnToken.json`), web3),
+            _load(require(`@/contracts/${network}/OvnGovernor.json`), web3),
+            _load(require(`@/contracts/${network}/PortfolioManager.json`), web3),
+            _load(require(`@/contracts/${network}/OvnTimelockController.json`), web3),
+            _load(require(`@/contracts/${network}/UsdPlusToken.json`), web3),
+            _load(require(`@/contracts/${network}/Mark2Market.json`), web3),
+            (network !== "avalanche" && network !== "bsc") ? _load(require(`@/contracts/${network}/Market.json`), web3) : _load_empty(),
+            (network !== "avalanche" && network !== "bsc") ? _load(require(`@/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
+            networkAssetMap[network] ? _load(ERC20, web3, networkAssetMap[network]) : _load_empty(),
+        ]);
 
-                contracts['ets_' + etsNames[i].name + '_exchanger'] = _load(ExchangerContract, web3);
-                contracts['ets_' + etsNames[i].name + '_token'] = _load(TokenContract, web3);
-            }
-        }
-
-        contracts.exchange = _load(Exchange, web3);
-        contracts.govToken = _load(OvnToken, web3);
-        contracts.governor = _load(OvnGovernor, web3);
-        contracts.pm = _load(PortfolioManager, web3);
-        contracts.timelockController = _load(TimelockController, web3);
-        contracts.usdPlus = _load(UsdPlusToken, web3);
-        contracts.m2m = _load(M2M, web3);
-
-        if (network !== "avalanche" && network !== "bsc") {
-            contracts.market = _load(Market, web3);
-            contracts.wUsdPlus = _load(WrappedUsdPlusToken, web3);
-        }
+        await Promise.all(
+            etsNames.map(async etsName => {
+                if (network === etsName.network) {
+                    _load_ets(etsName, contracts, web3);
+                }
+            })
+        );
 
         commit('web3/setContracts', contracts, {root: true})
     },
@@ -105,4 +89,13 @@ function _load(file, web3, address) {
     }
 
     return new web3.eth.Contract(abi, address);
+}
+
+function _load_ets(etsName, contracts, web3) {
+    contracts['ets_' + etsName.name + '_exchanger'] = _load(require(`@/contracts/${etsName.network}/ets/${etsName.name}/exchanger.json`), web3);
+    contracts['ets_' + etsName.name + '_token'] = _load(require(`@/contracts/${etsName.network}/ets/${etsName.name}/token.json`), web3);
+}
+
+function _load_empty() {
+    return null;
 }

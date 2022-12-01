@@ -25,17 +25,23 @@ const actions = {
 
         for (let i = 0; i < etsList.length; i++) {
             let ets = etsList[i];
-            let etsSupply;
+            let etsSupply = null;
 
             if (ets.chain === networkId) {
                 try {
                     etsSupply = await web3.contracts[ets.tokenContract].methods.totalSupply().call();
                     etsSupply = web3.web3.utils.fromWei(etsSupply, 'mwei');
                 } catch (e) {
-                    etsSupply = rootState.marketData.etsStrategyData[ets.name].tvl;
+                    try {
+                        etsSupply = rootState.marketData.etsStrategyData[ets.name].tvl;
+                    } catch (ex) {
+                    }
                 }
             } else {
-                etsSupply = rootState.marketData.etsStrategyData[ets.name].tvl;
+                try {
+                    etsSupply = rootState.marketData.etsStrategyData[ets.name].tvl;
+                } catch (ex) {
+                }
             }
 
             resultSupply[ets.name] = etsSupply;

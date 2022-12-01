@@ -21,13 +21,21 @@ const actions = {
             bsc: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
         };
 
+        let networkDaiMap = {
+            polygon: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+        };
+
         let etsNames = [
             { network: 'polygon', name: 'qs_alpha_wmatic_usdc' },
             { network: 'polygon', name: 'qs_beta_wmatic_usdc' },
             { network: 'polygon', name: 'qs_gamma_weth_usdc' },
             { network: 'polygon', name: 'qs_delta_weth_usdc' },
             { network: 'polygon', name: 'wmatic_usd_plus' },
+            { network: 'polygon', name: 'qs_zeta_wbtc_usdc' },
+            { network: 'polygon', name: 'qs_epsilon_weth_dai' },
+
             { network: 'bsc', name: 'wbnb_busd' },
+
             { network: 'optimism', name: 'ruby' },
             { network: 'optimism', name: 'night_ov_ar' },
         ];
@@ -43,6 +51,7 @@ const actions = {
             contracts.market,
             contracts.wUsdPlus,
             contracts.asset,
+            contracts.dai,
         ] = await Promise.all([
             _load(require(`@/contracts/${network}/Exchange.json`), web3),
             _load(require(`@/contracts/${network}/OvnToken.json`), web3),
@@ -54,6 +63,7 @@ const actions = {
             (network !== "avalanche" && network !== "bsc") ? _load(require(`@/contracts/${network}/Market.json`), web3) : _load_empty(),
             (network !== "avalanche" && network !== "bsc") ? _load(require(`@/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
             networkAssetMap[network] ? _load(ERC20, web3, networkAssetMap[network]) : _load_empty(),
+            networkDaiMap[network] ? _load(ERC20, web3, networkDaiMap[network]) : _load_empty(),
         ]);
 
         await Promise.all(

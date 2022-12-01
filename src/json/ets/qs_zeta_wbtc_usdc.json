@@ -1,0 +1,50 @@
+{
+  "name": "qs_zeta_wbtc_usdc",
+  "nameUp": "QS ZETA WBTC/USDC",
+  "nameToken": "ZETA",
+  "prototype": false,
+  "openPrototype": true,
+  "archive": false,
+  "disabled": false,
+  "highRisk": true,
+
+  "exchangeContract": "ets_qs_zeta_wbtc_usdc_exchanger",
+
+  "tokenContract": "ets_qs_zeta_wbtc_usdc_token",
+  "etsTokenDecimals": 6,
+
+  "actionAsset": "asset",
+  "actionTokenName": "USDC",
+  "actionTokenDecimals": 6,
+
+  "address": "0x0Eec93122d95198baeC9EF16f1BE4f567ea2a750",
+  "chain": 137,
+  "chainName": "polygon",
+  "borrowFrom": "AAVE",
+  "dex": "QuickSwap",
+  "gauge": "",
+  "poolName": "WBTC/USDC",
+  "range" : "NARROW",
+
+  "token1": "WBTC",
+  "token2": "USDC",
+  "hedgeToken": "WBTC",
+  "hasUsdPlus": false,
+  "tokenPair": "wbtc_usdc",
+
+  "maxSupply": 10000.00,
+  "overcapEnabled": true,
+  "inceptionDate": "30 November 2022",
+
+  "iconName": "ets_qs_zeta_wbtc_usdc",
+
+  "mainColor": "#7944DA",
+  "cardBgColor": "radial-gradient(117.22% 424.06% at 96.59% -5.17%, #F4F4F4 0%, #FDD09C 23.74%, #F2901A 45.14%, #7E46E2 100%)",
+
+  "cardTitle": "Generate yield on WBTC-USDC pool by hedging your risks and simplify process.",
+  "aboutText": "The exchange-traded strategy “Zeta” is an ERC-20 structured product built on Polygon Chain that lets you leverage a collateralized debt position (USDC lent on Aave) to borrow a volatile asset (WBTC), pair it with USDС stablecoin, and provide WBTC/USDC liquidity on QuickSwap all in one action. This allows earning high APY and hedging against WBTC volatility. ETS “Zeta” keeps track of WBTC price changes. There are 3 types of price ranges: wide, narrow, very narrow. ETS “Zeta” has narrow WBTC price range. It can be changed depending on the market and conditions on it.<br/><br/>The unique feature of ETS “Zeta” is that it automatically administers a health factor on Aave and rebalances your Lent/Borrowed amounts to maintain a stringent Health Factor meaning. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.\n<br/><br/>Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.",
+  "riskText": "By depositing USDC into this strategy, you are automatically borrowing an equal value of WBTC from AAVE at a rate roughly equal to the current price of WBTC denoted above. <br/><br/>The strategy's smart contract is designed to automatically invest these equal values of WBTC & USDC into QuickSwap WBTC/USDC Liquidity Pool, after which these LP Tokens are staked into the Gauge Pool.",
+  "impermanentText": "While the QuickSwap pools will accrue transaction fees that generate yields, the pool may become imbalanced; when the user withdraws their investment, the strategy's smart contract may need to use the user's funds to buy additional WBTC to repay the lent amount (plus interest), which can result in a net loss from the initial deposit.",
+  "ammText": "The strategy's smart contract automatically moves your deposit into the said Automated Market Maker (i.e., QuickSwap) and, in doing so, may incur an AMM’s smart contract risk.<br/><br/>By depositing funds into this smart contract, a user understands and agrees to the strategies to which it will invest underlying assets.",
+  "importantText": "Yield/APY is not guaranteed and can be highly variable depending on the volume and rewards from the underlying AMM as well as the price of a volatile asset (WBTC). Farmers may incur net losses if the impermanent loss is more significant than the yield earned."
+}

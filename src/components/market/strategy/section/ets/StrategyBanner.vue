@@ -369,7 +369,7 @@ export default {
 }
 
 .progress-info {
-    background: var(--progress-info);
+    background: #D7DADF;
 }
 
 .icon {

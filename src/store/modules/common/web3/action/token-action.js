@@ -69,7 +69,7 @@ const actions = {
                     options: {
                         address: rootState.web3.contracts[etsData.tokenContract].options.address,
                         symbol: etsData.nameToken,
-                        decimals: 6,
+                        decimals: etsData.etsTokenDecimals,
                         image: etsImage.image,
                     },
                 },

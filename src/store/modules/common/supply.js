@@ -30,7 +30,7 @@ const actions = {
             if (ets.chain === networkId) {
                 try {
                     etsSupply = await web3.contracts[ets.tokenContract].methods.totalSupply().call();
-                    etsSupply = web3.web3.utils.fromWei(etsSupply, 'mwei');
+                    etsSupply = web3.web3.utils.fromWei(etsSupply, ets.etsTokenDecimals === 18 ? 'ether' : 'mwei');
                 } catch (e) {
                     try {
                         etsSupply = rootState.marketData.etsStrategyData[ets.name].tvl;

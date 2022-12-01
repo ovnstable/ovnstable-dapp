@@ -24,6 +24,7 @@
   "dex": "Meshswap",
   "gauge": "",
   "poolName": "WMATIC/USDC",
+  "range" : null,
 
   "token1": "WMATIC",
   "token2": "USDC",

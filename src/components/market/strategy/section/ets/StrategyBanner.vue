@@ -36,92 +36,62 @@
                     <v-row align="center" :justify="$wu.isMobile() ? 'center' : 'start'">
                         <label class="banner-title" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">ETS {{ etsData.nameUp }}</label>
 
-                        <template v-if="!$wu.isFull()">
-                            <v-spacer></v-spacer>
-                            <div class="range-container">
-                                <label class="range-title">{{ (etsData.range) }} range</label>
-                                <Tooltip
-                                    icon-color="#FFFFFF"
-                                    :size="$wu.isFull() ? 20 : ($wu.isTablet() ? 18 : 18)"
-                                    text="WETH price range which depends on the market and conditions on it"
-                                    top />
-                            </div>
-                        </template>
+                        <v-spacer v-if="etsData.range"></v-spacer>
+                        <div class="range-container" v-if="etsData.range">
+                            <label class="range-title">{{ (etsData.range) }} range</label>
+                            <Tooltip
+                                icon-color="#FFFFFF"
+                                :size="$wu.isFull() ? 20 : ($wu.isTablet() ? 18 : 18)"
+                                text="WETH price range which depends on the market and conditions on it"
+                                top />
+                        </div>
                     </v-row>
 
-                    <v-row align="center" class="ma-0 mt-8">
-                        <div>
-                            <v-col>
-                                <v-row :justify="$wu.isMobile() ? 'start' : 'center'" class="mr-3">
-                                    <label class="info-value">
-                                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '—' }}
-                                    </label>
-                                </v-row>
-                                <v-row :justify="$wu.isMobile() ? 'start' : 'center'" class="mr-3 mt-5">
-                                    <label class="info-title">APY</label>
-                                    <div style="margin-top: -2px">
-                                        <Tooltip icon-color="rgba(255, 255, 255, 0.6)" size="16" text="Strategy net APY based on 30-day average, includes fees taken (fee-adjusted)"/>
-                                    </div>
-                                </v-row>
-                            </v-col>
-                        </div>
+                    <v-row align="center" :justify="$wu.isMobile() ? 'center' : 'start'" class="ma-0 mt-8">
+                        <v-col :cols="$wu.isMobile() ? 6 : 2">
+                            <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2">
+                                <label class="info-value">
+                                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '—' }}
+                                </label>
+                            </v-row>
+                            <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2 mt-5">
+                                <label class="info-title">APY</label>
+                                <div style="margin-top: -2px">
+                                    <Tooltip icon-color="rgba(255, 255, 255, 0.6)" size="16" text="Strategy net APY based on 30-day average, includes fees taken (fee-adjusted)"/>
+                                </div>
+                            </v-row>
+                        </v-col>
 
-                        <div class="bordered-col">
-                            <v-col>
-                                <v-row justify="center" class="mx-3">
-                                    <label class="info-value">
-                                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].diffApy) ? (etsStrategyData[etsData.name].diffApy > 0 ? '+' : '') + ($utils.formatMoneyComma(etsStrategyData[etsData.name].diffApy, 0)) + '%' : '—' }}
-                                    </label>
-                                </v-row>
-                                <v-row justify="center" class="mx-3 mt-5">
-                                    <label class="info-title">Diff. to USD+</label>
-                                </v-row>
-                            </v-col>
-                        </div>
+                        <v-col class="bordered-col" :cols="$wu.isMobile() ? 6 : 3">
+                            <v-row justify="center" class="">
+                                <label class="info-value">
+                                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].diffApy) ? (etsStrategyData[etsData.name].diffApy > 0 ? '+' : '') + ($utils.formatMoneyComma(etsStrategyData[etsData.name].diffApy, 0)) + '%' : '—' }}
+                                </label>
+                            </v-row>
+                            <v-row justify="center" class="mt-5">
+                                <label class="info-title">Diff. to USD+</label>
+                            </v-row>
+                        </v-col>
 
                         <template v-if="etsData.maxSupply">
-                            <div class="bordered-box" v-if="!$wu.isMobile()">
-                                <v-col>
-                                    <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="">
-                                        <label class="info-value" :class="$wu.isMobile() ? 'mt-2 ml-3' : 'ml-3'">
-                                            {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
-                                        </label>
-                                        <label class="info-value-max ml-15 mt-3">
-                                            {{ ('$' + $utils.formatMoneyComma(etsData.maxSupply, 2)) }}
-                                        </label>
-                                    </v-row>
-                                    <v-row class="mb-1" :justify="$wu.isMobile() ? 'end' : 'center'">
-                                        <label class="info-title" :class="$wu.isMobile() ? 'ml-4' : 'ml-4'">Current TVL</label>
-                                        <label class="info-title ml-auto">Max TVL</label>
-                                    </v-row>
-                                    <v-row class="ml-2">
-                                        <v-progress-linear
-                                            rounded
-                                            height="7"
-                                            class="progress-info"
-                                            background-opacity="0"
-                                            :value="(totalSupply[etsData.name] / etsData.maxSupply) * 100"
-                                            :color="etsData.mainColor"
-                                        ></v-progress-linear>
-                                    </v-row>
-                                </v-col>
-                            </div>
-                            <div class="bordered-box mt-5" v-else>
-                                <v-row>
-                                    <v-col>
-                                        <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="">
-                                            <label class="info-value" :class="$wu.isMobile() ? 'mt-2 ml-3' : 'ml-3'">
+                            <v-col :cols="$wu.isMobile() ? 12 : 7">
+                                <v-row :class="$wu.isMobile() ? 'mt-4' : ''" justify="end">
+                                    <v-col class="bordered-box" :class="$wu.isMobile() ? '' : 'mr-n3'">
+                                        <v-row class="mx-2 mt-1" align="end">
+                                            <label class="info-value">
                                                 {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
                                             </label>
-                                            <label class="info-value-max ml-15 mt-3">
+                                            <v-spacer></v-spacer>
+                                            <label class="info-value-max">
                                                 {{ ('$' + $utils.formatMoneyComma(etsData.maxSupply, 2)) }}
                                             </label>
                                         </v-row>
-                                        <v-row class="mb-1" :justify="$wu.isMobile() ? 'end' : 'center'">
-                                            <label class="info-title" :class="$wu.isMobile() ? 'ml-4' : 'ml-4'">Current TVL</label>
+                                        <v-row class="mx-2 mb-1" align="center">
+                                            <label class="info-title">Current TVL</label>
+                                            <v-spacer></v-spacer>
                                             <label class="info-title ml-auto">Max TVL</label>
                                         </v-row>
-                                        <v-row class="ml-0">
+                                        <v-row class="mx-2 mb-1">
                                             <v-progress-linear
                                                 rounded
                                                 height="7"
@@ -133,32 +103,24 @@
                                         </v-row>
                                     </v-col>
                                 </v-row>
-
-                            </div>
-
-                            <div class="range-container ml-auto" v-if="$wu.isFull()">
-                                <label class="range-title">{{ (etsData.range) }} range</label>
-                                <Tooltip
-                                    icon-color="#FFFFFF"
-                                    :size="$wu.isFull() ? 20 : ($wu.isTablet() ? 18 : 18)"
-                                    text="WETH price range which depends on the market and conditions on it"
-                                    top />
-                            </div>
+                            </v-col>
                         </template>
 
                         <template v-else>
-                            <div>
-                                <v-col>
-                                    <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="ml-3">
-                                        <label class="info-value">
-                                            {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
-                                        </label>
-                                    </v-row>
-                                    <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="ml-3 mt-5">
-                                        <label class="info-title">Current TVL</label>
-                                    </v-row>
-                                </v-col>
-                            </div>
+                            <v-col :cols="$wu.isMobile() ? 12 : 7">
+                                <v-row :class="$wu.isMobile() ? 'mt-4' : ''" justify="end">
+                                    <v-col :class="$wu.isMobile() ? '' : 'mr-n3'">
+                                        <v-row :justify="!$wu.isMobile() ? 'end' : 'center'">
+                                            <label class="info-value">
+                                                {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—'  }}
+                                            </label>
+                                        </v-row>
+                                        <v-row :justify="!$wu.isMobile() ? 'end' : 'center'" class="mt-5">
+                                            <label class="info-title">Current TVL</label>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                            </v-col>
                         </template>
                     </v-row>
                 </v-col>
@@ -271,11 +233,9 @@ export default {
 
     .range-container {
         padding: 5px 10px;
-        margin-top: 10px;
     }
 
     .bordered-box {
-        padding: 10px 35px 25px 25px;
     }
 }
 
@@ -322,12 +282,10 @@ export default {
 
     .range-container {
         padding: 10px 15px;
-        margin-top: 30px;
         margin-left: 10px;
     }
 
     .bordered-box {
-        padding: 10px 20px 10px 0;
     }
 }
 
@@ -374,11 +332,9 @@ export default {
 
     .range-container {
         padding: 10px 20px;
-        margin-top: 75px;
     }
 
     .bordered-box {
-        padding: 20px 30px 20px 5px;
     }
 }
 

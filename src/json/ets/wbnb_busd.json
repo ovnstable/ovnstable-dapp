@@ -24,6 +24,7 @@
   "dex": "Cone",
   "gauge": "Unknown",
   "poolName": "WBNB/BUSD",
+  "range" : null,
 
   "token1": "WBNB",
   "token2": "BUSD",

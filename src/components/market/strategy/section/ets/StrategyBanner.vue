@@ -13,13 +13,13 @@
                     <v-img :src="require('@/assets/network/' + etsData.chainName + '.svg')"/>
                 </div>
 
-                <div class="bordered-col">
+                <div class="icon-border">
                     <div :class="$wu.isMobile() ? 'currency-icon' : 'icon'" class="mx-3">
                         <v-img :src="require('@/assets/cards/platform/' + etsData.dex + '.svg')"/>
                     </div>
                 </div>
                 <div class="icon ml-3">
-                    <v-img :src="require('@/assets/cards/token_pair/' + etsData.tokenPair + '.svg')"/>
+                    <v-img class="token-pair" :src="require('@/assets/cards/token_pair/' + etsData.tokenPair + '.svg')"/>
                 </div>
             </v-row>
 
@@ -35,6 +35,18 @@
                 <v-col>
                     <v-row align="center" :justify="$wu.isMobile() ? 'center' : 'start'">
                         <label class="banner-title" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">ETS {{ etsData.nameUp }}</label>
+
+                        <template v-if="!$wu.isFull()">
+                            <v-spacer></v-spacer>
+                            <div class="range-container">
+                                <label class="range-title">{{ (etsData.range) }} range</label>
+                                <Tooltip
+                                    icon-color="#FFFFFF"
+                                    :size="$wu.isFull() ? 20 : ($wu.isTablet() ? 18 : 18)"
+                                    text="WETH price range which depends on the market and conditions on it"
+                                    top />
+                            </div>
+                        </template>
                     </v-row>
 
                     <v-row align="center" class="ma-0 mt-8">
@@ -54,7 +66,7 @@
                             </v-col>
                         </div>
 
-                        <div class="bordered-col" v-if="!$wu.isMobile()">
+                        <div class="bordered-col">
                             <v-col>
                                 <v-row justify="center" class="mx-3">
                                     <label class="info-value">
@@ -66,20 +78,88 @@
                                 </v-row>
                             </v-col>
                         </div>
-                        <v-spacer v-else></v-spacer>
 
-                        <div>
-                            <v-col>
-                                <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="ml-3">
-                                    <label class="info-value">
-                                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
-                                    </label>
+                        <template v-if="etsData.maxSupply">
+                            <div class="bordered-box" v-if="!$wu.isMobile()">
+                                <v-col>
+                                    <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="">
+                                        <label class="info-value" :class="$wu.isMobile() ? 'mt-2 ml-3' : 'ml-3'">
+                                            {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
+                                        </label>
+                                        <label class="info-value-max ml-15 mt-3">
+                                            {{ ('$' + $utils.formatMoneyComma(etsData.maxSupply, 2)) }}
+                                        </label>
+                                    </v-row>
+                                    <v-row class="mb-1" :justify="$wu.isMobile() ? 'end' : 'center'">
+                                        <label class="info-title" :class="$wu.isMobile() ? 'ml-4' : 'ml-4'">Current TVL</label>
+                                        <label class="info-title ml-auto">Max TVL</label>
+                                    </v-row>
+                                    <v-row class="ml-2">
+                                        <v-progress-linear
+                                            rounded
+                                            height="7"
+                                            class="progress-info"
+                                            background-opacity="0"
+                                            :value="(totalSupply[etsData.name] / etsData.maxSupply) * 100"
+                                            :color="etsData.mainColor"
+                                        ></v-progress-linear>
+                                    </v-row>
+                                </v-col>
+                            </div>
+                            <div class="bordered-box mt-5" v-else>
+                                <v-row>
+                                    <v-col>
+                                        <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="">
+                                            <label class="info-value" :class="$wu.isMobile() ? 'mt-2 ml-3' : 'ml-3'">
+                                                {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
+                                            </label>
+                                            <label class="info-value-max ml-15 mt-3">
+                                                {{ ('$' + $utils.formatMoneyComma(etsData.maxSupply, 2)) }}
+                                            </label>
+                                        </v-row>
+                                        <v-row class="mb-1" :justify="$wu.isMobile() ? 'end' : 'center'">
+                                            <label class="info-title" :class="$wu.isMobile() ? 'ml-4' : 'ml-4'">Current TVL</label>
+                                            <label class="info-title ml-auto">Max TVL</label>
+                                        </v-row>
+                                        <v-row class="ml-0">
+                                            <v-progress-linear
+                                                rounded
+                                                height="7"
+                                                class="progress-info"
+                                                background-opacity="0"
+                                                :value="(totalSupply[etsData.name] / etsData.maxSupply) * 100"
+                                                :color="etsData.mainColor"
+                                            ></v-progress-linear>
+                                        </v-row>
+                                    </v-col>
                                 </v-row>
-                                <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="ml-3 mt-5">
-                                    <label class="info-title">Current TVL</label>
-                                </v-row>
-                            </v-col>
-                        </div>
+
+                            </div>
+
+                            <div class="range-container ml-auto" v-if="$wu.isFull()">
+                                <label class="range-title">{{ (etsData.range) }} range</label>
+                                <Tooltip
+                                    icon-color="#FFFFFF"
+                                    :size="$wu.isFull() ? 20 : ($wu.isTablet() ? 18 : 18)"
+                                    text="WETH price range which depends on the market and conditions on it"
+                                    top />
+                            </div>
+                        </template>
+
+                        <template v-else>
+                            <div>
+                                <v-col>
+                                    <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="ml-3">
+                                        <label class="info-value">
+                                            {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
+                                        </label>
+                                    </v-row>
+                                    <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="ml-3 mt-5">
+                                        <label class="info-title">Current TVL</label>
+                                    </v-row>
+                                </v-col>
+                            </div>
+                        </template>
                     </v-row>
                 </v-col>
             </v-row>
@@ -150,10 +230,6 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
-    .banner-container {
-        /*height: 350px !important;*/
-    }
-
     .currency-icon {
         width: 36px;
         height: 36px;
@@ -164,21 +240,6 @@ export default {
         font-weight: 500;
         font-size: 20px;
         line-height: 24px;
-    }
-
-    .network-icon {
-        width: 28px;
-        height: 28px;
-    }
-
-    .info-container {
-        width: 100% !important;
-        height: 70px !important;
-    }
-
-    .info-container-capacity {
-        width: 100% !important;
-        height: 110px !important;
     }
 
     .info-title {
@@ -195,40 +256,31 @@ export default {
         line-height: 24px;
     }
 
-    .capacity-status-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 20px;
-    }
-
-    .capacity-status-value {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 20px;
-        letter-spacing: 0.02em;
-    }
-
-    .capacity-status-sub-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 20px;
-        letter-spacing: 0.02em;
-    }
-
     .icon {
         height: 36px !important;
+    }
+
+    .range-title {
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .info-value-max {
+        font-size: 12px;
+    }
+
+    .range-container {
+        padding: 5px 10px;
+        margin-top: 10px;
+    }
+
+    .bordered-box {
+        padding: 10px 35px 25px 25px;
     }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .banner-container {
-        /*height: 420px !important;*/
-    }
-
     .currency-icon {
         width: 120px;
         height: 120px;
@@ -241,21 +293,6 @@ export default {
         line-height: 46px;
     }
 
-    .network-icon {
-        width: 40px;
-        height: 40px;
-    }
-
-    .info-container {
-        width: 100% !important;
-        height: 110px !important;
-    }
-
-    .info-container-capacity {
-        width: 100% !important;
-        height: 100px !important;
-    }
-
     .info-title {
         font-style: normal;
         font-weight: 400;
@@ -270,40 +307,32 @@ export default {
         line-height: 40px;
     }
 
-    .capacity-status-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 22px;
-    }
-
-    .capacity-status-value {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
-
-    .capacity-status-sub-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
-
     .icon {
         height: 36px !important;
+    }
+
+    .range-title {
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    .info-value-max {
+        font-size: 14px;
+    }
+
+    .range-container {
+        padding: 10px 15px;
+        margin-top: 30px;
+        margin-left: 10px;
+    }
+
+    .bordered-box {
+        padding: 10px 20px 10px 0;
     }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .banner-container {
-        /*height: 300px !important;*/
-    }
-
     .currency-icon {
         width: 150px;
         height: 150px;
@@ -316,21 +345,6 @@ export default {
         line-height: 48px;
     }
 
-    .network-icon {
-        width: 40px;
-        height: 40px;
-    }
-
-    .info-container {
-        width: 100% !important;
-        height: 110px !important;
-    }
-
-    .info-container-capacity {
-        width: 100% !important;
-        height: 110px !important;
-    }
-
     .info-title {
         font-style: normal;
         font-weight: 400;
@@ -345,31 +359,26 @@ export default {
         line-height: 40px;
     }
 
-    .capacity-status-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 22px;
-    }
-
-    .capacity-status-value {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
-
-    .capacity-status-sub-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
-
     .icon {
         height: 36px !important;
+    }
+
+    .info-value-max {
+        font-size: 14px;
+    }
+
+    .range-title {
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+    .range-container {
+        padding: 10px 20px;
+        margin-top: 75px;
+    }
+
+    .bordered-box {
+        padding: 20px 30px 20px 5px;
     }
 }
 
@@ -388,12 +397,6 @@ export default {
     color: white;
 }
 
-.info-container, .info-container-capacity {
-    background-color: var(--main-banner-background) !important;
-    border: 1px solid var(--secondary-border);
-    border-radius: 6px;
-}
-
 .info-title {
     font-family: 'Roboto', sans-serif;
     font-style: normal;
@@ -410,40 +413,57 @@ export default {
     color: white;
 }
 
-.bordered-col {
-    border-left: 1px solid rgba(255, 255, 255, 0.6) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
+.info-value-max {
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: rgba(255, 255, 255, 0.6);
 }
 
-.label-error {
-    color: #CF3F92 !important;
+.bordered-col {
+    border-left: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
+
+.icon-border {
+    border-left: 1px solid rgba(255, 255, 255, 0.6) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
 }
 
 .progress-info {
     background: var(--progress-info);
 }
 
-.capacity-status-text {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--secondary-gray-text);
-}
-
-.capacity-status-value {
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--links-blue);
-}
-
-.capacity-status-sub-text {
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--fourth-gray-text);
-}
-
 .icon {
     width: auto !important;
+}
+
+.bordered-box {
+    border: solid 1px rgba(255, 255, 255, 0.6);
+    border-radius: 4px;
+}
+
+.token-pair {
+    width: 70px;
+    height: 100%;
+}
+
+.range-container {
+    display: flex;
+    align-items: end;
+
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 4px;
+}
+
+.range-title {
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    letter-spacing: 0.03em;
 }
 </style>

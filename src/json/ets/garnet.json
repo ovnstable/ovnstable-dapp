@@ -24,6 +24,7 @@
   "dex": "Velodrome",
   "gauge": "",
   "poolName": "OP/USDC",
+  "range" : null,
 
   "token1": "OP",
   "token2": "USDC",

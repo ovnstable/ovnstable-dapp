@@ -24,6 +24,7 @@
   "dex": "Dystopia",
   "gauge": "Penrose",
   "poolName": "WMATIC/USD+",
+  "range" : null,
 
   "token1": "WMATIC",
   "token2": "USD+",

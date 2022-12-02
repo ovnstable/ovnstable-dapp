@@ -84,22 +84,27 @@
 
         <v-col align-self="end">
             <v-container :class="$wu.isFull() ? 'mb-6' : 'mb-6'">
-                <v-row class="d-flex justify-space-between ma-0">
+                <v-row class="d-flex ma-0" align="center">
                     <label class="your-deposit">Your deposit</label>
+                    <v-spacer></v-spacer>
                     <label class="your-deposit">
-                        {{ this.insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(this.insuranceBalance.polygon, 2)) : "—"  }}
+                        {{ (this.insuranceBalance.polygon && this.insuranceBalance.polygon > 0) ? ('$' + $utils.formatMoneyComma(this.insuranceBalance.polygon, 2)) : "—"  }}
                     </label>
-                    <!-- TODO: add lock icon -->
+                    <label class="your-deposit ml-1">
+                        <v-icon color="var(--disabled-value)">
+                            {{ insuranceRedemptionData.request === 'CAN_WITHDRAW' ? 'mdi-lock-open-variant' : 'mdi-lock' }}
+                        </v-icon>
+                    </label>
                 </v-row>
 
                 <v-row class="d-flex justify-space-between ma-0 mt-2">
                     <template v-if="networkId === 137">
-                        <v-col class="mr-1">
+                        <v-col :class="insuranceRedemptionData.request === 'CAN_WITHDRAW' ? 'mr-1' : ''">
                             <v-row>
                                 <v-btn class="button btn-filled" @click.stop="mintAction">Mint</v-btn>
                             </v-row>
                         </v-col>
-                        <v-col class="ml-1">
+                        <v-col class="ml-1" v-if="insuranceRedemptionData.request === 'CAN_WITHDRAW'">
                             <v-row>
                                 <v-btn class="button btn-outlined" @click.stop="redeemAction" outlined>
                                     REDEEM
@@ -147,7 +152,7 @@ export default {
         ...mapGetters("accountData", ["insuranceBalance"]),
         ...mapGetters("supplyData", ["totalInsuranceSupply"]),
         ...mapGetters("statsData", ["totalUsdPlusValue"]),
-        ...mapGetters("insuranceData", ["insuranceStrategyData"]),
+        ...mapGetters("insuranceData", ["insuranceStrategyData", 'insuranceRedemptionData']),
         ...mapGetters("network", ["appApiUrl", "networkId", "networkName"]),
 
         coverageValue: function () {
@@ -188,7 +193,6 @@ export default {
         },
 
         openInsurance() {
-            /* TODO: open insurance page view */
             this.goToAction('/insurance/polygon');
         },
 
@@ -197,17 +201,6 @@ export default {
         },
 
         getBgColor() {
-            /*switch (this.insuranceStrategyData.polygon.chainId) {
-                case 137:
-                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #7E46E3 100%)';
-                case 43114:
-                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #D74F49 100%)';
-                case 10:
-                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #FF0420 100%)';
-                case 56:
-                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #F3BA2F 100%)';
-            }*/
-
             return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #7E46E3 100%)';
         },
     }

@@ -59,9 +59,23 @@
                                     </v-row>
 
                                     <v-row align="center" justify="center" class="ma-0 mt-4">
-                                        <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                            REDEEM INSURANCE
-                                        </v-btn>
+                                        <template v-if="insuranceRedemptionData.request === 'CAN_WITHDRAW'">
+                                            <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
+                                                WITHDRAW WITHIN {{ insuranceRedemptionData.hours }} HOURS
+                                            </v-btn>
+                                        </template>
+                                        <template v-if="insuranceRedemptionData.request === 'NEED_WAIT'">
+                                            <v-btn class="header-btn btn-investor-invest btn-investor-outline disabled-btn-outline" disabled outlined>
+                                                <label style="color: var(--progress-text)">
+                                                    WITHDRAW IN {{ insuranceRedemptionData.hours }} HOURS
+                                                </label>
+                                            </v-btn>
+                                        </template>
+                                        <template v-if="insuranceRedemptionData.request === 'NEED_REQUEST'">
+                                            <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redemptionRequestAction">
+                                                REDEMPTION REQUEST
+                                            </v-btn>
+                                        </template>
                                     </v-row>
                                 </template>
 
@@ -125,6 +139,9 @@
                                     </v-row>
                                     <v-row align="center" class="mt-5">
                                         <label class="investor-card-sub-title-value">{{ insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
+                                        <v-icon class="ml-1" color="var(--disabled-value)">
+                                            {{ insuranceRedemptionData.request === 'CAN_WITHDRAW' ? 'mdi-lock-open-variant' : 'mdi-lock' }}
+                                        </v-icon>
                                     </v-row>
                                     <v-row align="center" class="mt-10">
                                         <label class="investor-card-sub-title">Profit/loss</label>
@@ -146,9 +163,23 @@
                                     </v-row>
 
                                     <v-row align="center" justify="center" class="mt-6">
-                                        <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                            REDEEM INSURANCE
-                                        </v-btn>
+                                        <template v-if="insuranceRedemptionData.request === 'CAN_WITHDRAW'">
+                                            <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
+                                                WITHDRAW WITHIN {{ insuranceRedemptionData.hours }} HOURS
+                                            </v-btn>
+                                        </template>
+                                        <template v-if="insuranceRedemptionData.request === 'NEED_WAIT'">
+                                            <v-btn class="header-btn btn-investor-invest btn-investor-outline disabled-btn-outline" disabled outlined>
+                                                <label style="color: var(--progress-text)">
+                                                    WITHDRAW IN {{ insuranceRedemptionData.hours }} HOURS
+                                                </label>
+                                            </v-btn>
+                                        </template>
+                                        <template v-if="insuranceRedemptionData.request === 'NEED_REQUEST'">
+                                            <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redemptionRequestAction">
+                                                REDEMPTION REQUEST
+                                            </v-btn>
+                                        </template>
                                     </v-row>
                                 </template>
 
@@ -235,7 +266,7 @@ export default {
         ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
-        ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData']),
+        ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData', 'insuranceRedemptionData']),
 
         activeTabPerformance: function () {
             return {
@@ -268,7 +299,7 @@ export default {
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('insuranceRiskModal', ['showRiskModal']),
-        ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
+        ...mapActions('insuranceInvestModal', ['showInvestModal', 'showMintView', 'showRedeemView', 'showRedemptionRequestModal']),
 
         goToAction(id) {
             this.$router.push(id);
@@ -282,6 +313,10 @@ export default {
         redeemAction() {
             // this.showRedeemView();
             // this.showInvestModal(this.insuranceStrategyData);
+        },
+
+        redemptionRequestAction() {
+            this.showRedemptionRequestModal();
         },
     }
 }
@@ -716,5 +751,10 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #CF3F92;
+}
+
+.disabled-btn-outline {
+    color: var(--progress-text) !important;
+    border-color: var(--progress-text) !important;
 }
 </style>

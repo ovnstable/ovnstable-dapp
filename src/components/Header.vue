@@ -48,6 +48,7 @@
         <InvestModal/>
         <SwapModal/>
         <WrapModal/>
+        <RedemptionRequestModal/>
 
         <resize-observer @notify="$forceUpdate()"/>
     </v-app-bar>
@@ -61,11 +62,13 @@ import MenuSelect from "@/components/common/header/MenuSelect";
 import SwapModal from "@/components/swap/SwapModal";
 import InvestModal from "@/components/market/modal/ets/invest/InvestModal";
 import WrapModal from "@/components/wrap/WrapModal";
+import RedemptionRequestModal from "@/components/insurance/modal/action/RedemptionRequestModal";
 
 export default {
     name: 'Header',
 
     components: {
+        RedemptionRequestModal,
         WrapModal,
         InvestModal,
         SwapModal,

@@ -6,6 +6,7 @@ const state = {
     insuranceClientData: {},
     insuranceApyData: {},
     insuranceTvlData: {},
+    insuranceRedemptionData: {},
 
     usdPlusApyData: {},
 };
@@ -26,6 +27,10 @@ const getters = {
 
     insuranceTvlData(state) {
         return state.insuranceTvlData;
+    },
+
+    insuranceRedemptionData(state) {
+        return state.insuranceRedemptionData;
     },
 
     usdPlusApyData(state) {
@@ -224,6 +229,9 @@ const actions = {
             })
 
         dispatch('addInsuranceClientData', { name: refreshParams.chain.chainName, data: profitDay});
+
+        dispatch('loadTVL');
+        dispatch('refreshIsNeedRedemption');
     },
 
     async refreshUsdPlusPayoutsData({commit, dispatch, getters, rootState}, network) {
@@ -268,6 +276,95 @@ const actions = {
                 dispatch('addUsdPlusApyData', { name: network, data: resultDataList});
             })
     },
+
+    async loadTVL({commit, dispatch, getters, rootState}) {
+
+        let web3 = rootState.web3;
+
+        //TODO hardhcode
+        let insurance = {
+            chainName: 'polygon'
+        }
+
+        let tvl = await web3.contracts.insurance[insurance.chainName + '_m2m'].methods.totalNetAssets().call()
+
+        // hardcode: 6 decimals
+        tvl = web3.web3.utils.fromWei(tvl,   'mwei');
+
+        console.log('TVL: ' + tvl);
+    },
+
+    async redemptionRequest({commit, dispatch, getters, rootState}) {
+
+        let web3 = rootState.web3;
+
+        //TODO hardhcode
+        let insurance = {
+            chainName: 'polygon'
+        }
+
+        await web3.contracts.insurance[insurance.chainName + '_exchanger'].methods.requestWithdraw().call();
+
+    },
+
+    async refreshIsNeedRedemption({commit, dispatch, getters, rootState}) {
+
+        let web3 = rootState.web3;
+        let account = rootState.accountData.account;
+
+        //TODO hardhcode
+        let insurance = {
+            chainName: 'polygon'
+        }
+
+
+        let date = await web3.contracts.insurance[insurance.chainName + '_exchanger'].methods.withdrawRequests(account).call();
+
+        let repemptionData = {
+            request: null,
+            date: null,
+            hours: 0,
+        }
+
+        if (date === 0){
+            repemptionData.request = 'NEED_REQUEST';
+            repemptionData.date = null;
+            repemptionData.hours = 0;
+        }else if (date > 0) {
+
+            date = new Date(date  * 1000);
+            let currentDate = new Date();
+
+            if (currentDate.getTime() > date.getTime()) {
+
+                let withdrawPeriod = await web3.contracts.insurance[insurance.chainName + '_exchanger'].methods.withdrawRequests(account).call();
+                let withdrawDate = new Date(date.getTime() + withdrawPeriod);
+
+                if (withdrawDate.getTime() > currentDate.getTime()){
+
+                    let hours = moment.duration(moment(withdrawDate).diff(moment(currentDate))).asHours();
+                    repemptionData.request = 'CAN_WITHDRAW';
+                    repemptionData.date = date;
+                    repemptionData.hours = hours;
+                }else {
+                    repemptionData.request = 'NEED_REQUEST';
+                    repemptionData.date = null;
+                    repemptionData.hours = 0;
+                }
+
+            } else {
+
+                let hours = moment.duration(moment(date).diff(moment(currentDate))).asHours();
+                repemptionData.request = 'NEED_WAIT';
+                repemptionData.date = date;
+                repemptionData.hours = hours;
+            }
+        }
+
+        commit('setInsuranceRedemptionData', repemptionData);
+    },
+
+
 
     async addInsuranceStrategyData({commit, dispatch, getters, rootState}, insuranceDataParams) {
         let insuranceData = getters.insuranceStrategyData;
@@ -317,7 +414,11 @@ const actions = {
 const mutations = {
 
     setInsuranceStrategyData(state, value) {
-        state.InsuranceStrategyData = value;
+        state.insuranceStrategyData = value;
+    },
+
+    setInsuranceRedemptionData(state, value) {
+        state.insuranceRedemptionData = value;
     },
 
     setInsuranceClientData(state, value) {

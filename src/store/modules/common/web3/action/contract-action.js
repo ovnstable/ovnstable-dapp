@@ -82,11 +82,13 @@ const actions = {
             if (network === insurances[i].network) {
                 let ExchangerContract = require(`@/contracts/${insurances[i].network}/insurance/exchanger.json`);
                 let TokenContract = require(`@/contracts/${insurances[i].network}/insurance/token.json`);
+                let M2MContract = require(`@/contracts/${insurances[i].network}/insurance/m2m.json`);
 
                 contracts.insurance = {};
 
                 contracts.insurance[insurances[i].network + '_exchanger'] = _load(ExchangerContract, web3);
                 contracts.insurance[insurances[i].network + '_token'] = _load(TokenContract, web3);
+                contracts.insurance[insurances[i].network + '_m2m'] = _load(M2MContract, web3);
             }
         }
 

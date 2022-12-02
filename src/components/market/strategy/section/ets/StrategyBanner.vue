@@ -72,7 +72,7 @@
                             <v-col>
                                 <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="ml-3">
                                     <label class="info-value">
-                                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
+                                        {{ (totalSupply && totalSupply[etsData.name]) ? ('$' + $utils.formatMoneyComma(totalSupply[etsData.name], 2)) : '—' }}
                                     </label>
                                 </v-row>
                                 <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="ml-3 mt-5">

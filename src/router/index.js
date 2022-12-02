@@ -48,6 +48,16 @@ const routes = [
                 }
             },
             {
+                path: '/insurance/polygon',
+                name: 'InsurancePageView',
+                component: () => import('../views/insurance/InsurancePageView.vue'),
+                meta: {
+                    middleware: [
+                        Insurance
+                    ]
+                }
+            },
+            {
                 path: '/ets',
                 redirect: '/market',
             },

@@ -189,7 +189,7 @@ export default {
 
         openInsurance() {
             /* TODO: open insurance page view */
-            // this.goToAction('/stats');
+            this.goToAction('/insurance/polygon');
         },
 
         goToAction(id) {

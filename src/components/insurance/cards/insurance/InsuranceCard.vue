@@ -14,13 +14,13 @@
                     </v-row>
                     <v-row class="d-flex mt-4">
                         <label class="percentage">
-                            {{ $utils.formatMoneyComma(insuranceStrategyData.polygon.apy, 0) + '%' }}
+                            {{ insuranceStrategyData.polygon ? ($utils.formatMoneyComma(insuranceStrategyData.polygon.lastApy, 0) + '%') : '—' }}
                         </label>
                         <label class="apy ml-3">APY</label>
                         <div class="tooltip">
                             <Tooltip icon-color="#FFFFFF"
                                      :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
-                                     text="Insurance net APY based on 30-day average, includes fees taken (fee-adjusted)"/>
+                                     text="Last day net APY, includes fees taken (fee-adjusted)"/>
                         </div>
                     </v-row>
                 </v-row>
@@ -31,7 +31,7 @@
                     <v-col cols="12">
                         <v-row class="ma-0 mb-2" justify="center">
                             <label class="apy-box-total-label">
-                                Total apy – {{ $utils.formatMoneyComma(insuranceStrategyData.polygon.apy, 0) + '%' }}
+                                Total apy – {{ insuranceStrategyData.polygon ? ($utils.formatMoneyComma(insuranceStrategyData.polygon.lastApy, 0) + '%') : '—' }}
                             </label>
                         </v-row>
                         <v-divider class="card-divider"></v-divider>
@@ -42,7 +42,7 @@
                                 </v-row>
                                 <v-row justify="center" class="mt-4" align="center">
                                     <label class="apy-box-total-label">
-                                        {{ $utils.formatMoneyComma(insuranceStrategyData.polygon.apyPremium, 0) + '%' }} APY
+                                        {{ insuranceStrategyData.polygon ? ($utils.formatMoneyComma(insuranceStrategyData.polygon.lastApyPremium, 0) + '%') : '—' }} APY
                                     </label>
                                     <Tooltip :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
                                              :maxWidth="300"
@@ -55,7 +55,7 @@
                                 </v-row>
                                 <v-row justify="center" class="mt-4" align="center">
                                     <label class="apy-box-total-label">
-                                        {{ $utils.formatMoneyComma(insuranceStrategyData.polygon.apyInvestment, 0) + '%' }} APY
+                                        {{ insuranceStrategyData.polygon ? ($utils.formatMoneyComma(insuranceStrategyData.polygon.lastApyInvestment, 0) + '%') : '—' }} APY
                                     </label>
                                     <Tooltip :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
                                              text="APY which comes from reserving USD+ Insurance token in other assets."/>
@@ -72,7 +72,7 @@
 
                 <v-row class="ma-0 mt-3 insurance-card-info-row d-flex justify-space-between">
                     <label class="card-info-label mt-2">Insurance coverage</label>
-                    <label class="card-info-value mt-2">{{ $utils.formatMoneyComma(coverageValue, 0) }}%</label>
+                    <label class="card-info-value mt-2">{{ (coverageValue !== null) ? ($utils.formatMoneyComma(coverageValue, 0) + '%') : '—' }}</label>
                 </v-row>
 
                 <v-row class="ma-0 mt-3 insurance-card-info-row d-flex justify-space-between">
@@ -151,7 +151,11 @@ export default {
         ...mapGetters("network", ["appApiUrl", "networkId", "networkName"]),
 
         coverageValue: function () {
-            return 100.00 * this.totalInsuranceSupply / this.totalUsdPlusValue;
+            if (this.totalInsuranceSupply && this.totalUsdPlusValue) {
+                return 100.00 * this.totalInsuranceSupply / this.totalUsdPlusValue;
+            } else {
+                return null;
+            }
         },
     },
 

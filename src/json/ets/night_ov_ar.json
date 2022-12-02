@@ -8,9 +8,9 @@
   "disabled": false,
   "highRisk": false,
 
-  "exchangeContract": "etsExchangerNightOvAr",
+  "exchangeContract": "ets_night_ov_ar_exchanger",
 
-  "tokenContract": "etsNightOvArToken",
+  "tokenContract": "ets_night_ov_ar_token",
   "etsTokenDecimals": 6,
 
   "actionAsset": "asset",
@@ -24,6 +24,7 @@
   "dex": "Arrakis",
   "gauge": "",
   "poolName": "WETH/USDC",
+  "range" : null,
 
   "token1": "WETH",
   "token2": "USDC",

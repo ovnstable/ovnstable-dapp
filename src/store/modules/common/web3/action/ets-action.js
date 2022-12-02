@@ -1,5 +1,16 @@
 const state = {
-    etsNames: ['wbnb_busd', 'wmatic_usd_plus', 'ruby', 'night_ov_ar', 'alpha', 'beta', 'gamma', 'delta'],
+    etsNames: [
+        'wbnb_busd',
+        'wmatic_usd_plus',
+        'ruby',
+        'night_ov_ar',
+        'qs_alpha_wmatic_usdc',
+        'qs_beta_wmatic_usdc',
+        'qs_gamma_weth_usdc',
+        'qs_delta_weth_usdc',
+        'qs_zeta_wbtc_usdc',
+        'qs_epsilon_weth_dai',
+    ],
     etsList: null,
 };
 

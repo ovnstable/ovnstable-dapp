@@ -116,7 +116,7 @@ const actions = {
                 if (ets.chain === networkId) {
                     try {
                         etsBalance = await web3.contracts[ets.tokenContract].methods.balanceOf(getters.account).call();
-                        etsBalance = web3.web3.utils.fromWei(etsBalance, 'mwei');
+                        etsBalance = web3.web3.utils.fromWei(etsBalance, ets.etsTokenDecimals === 18 ? 'ether' : 'mwei');
                     } catch (e) {
                         try {
                             etsBalance = getters.etsBalance[ets.name];

@@ -13,13 +13,13 @@
                     <v-img :src="require('@/assets/network/' + etsData.chainName + '.svg')"/>
                 </div>
 
-                <div class="bordered-col">
+                <div class="icon-border">
                     <div :class="$wu.isMobile() ? 'currency-icon' : 'icon'" class="mx-3">
                         <v-img :src="require('@/assets/cards/platform/' + etsData.dex + '.svg')"/>
                     </div>
                 </div>
                 <div class="icon ml-3">
-                    <v-img :src="require('@/assets/cards/token_pair/' + etsData.tokenPair + '.svg')"/>
+                    <v-img class="token-pair" :src="require('@/assets/cards/token_pair/' + etsData.tokenPair + '.svg')"/>
                 </div>
             </v-row>
 
@@ -35,51 +35,95 @@
                 <v-col>
                     <v-row align="center" :justify="$wu.isMobile() ? 'center' : 'start'">
                         <label class="banner-title" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">ETS {{ etsData.nameUp }}</label>
+
+                        <v-spacer v-if="etsData.range"></v-spacer>
+                        <div class="range-container" v-if="etsData.range" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">
+                            <v-row :class="$wu.isMobile() ? 'ma-1' : 'ma-2'" align="center">
+                                <label class="range-title">{{ etsData.range }}</label>
+                                <Tooltip
+                                    icon-color="#FFFFFF"
+                                    :size="$wu.isFull() ? 20 : ($wu.isTablet() ? 18 : 18)"
+                                    text="WETH price range which depends on the market and conditions on it"
+                                    top />
+                            </v-row>
+                        </div>
                     </v-row>
 
-                    <v-row align="center" class="ma-0 mt-8">
-                        <div>
-                            <v-col>
-                                <v-row :justify="$wu.isMobile() ? 'start' : 'center'" class="mr-3">
-                                    <label class="info-value">
-                                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '—' }}
-                                    </label>
-                                </v-row>
-                                <v-row :justify="$wu.isMobile() ? 'start' : 'center'" class="mr-3 mt-5">
-                                    <label class="info-title">APY</label>
-                                    <div style="margin-top: -2px">
-                                        <Tooltip icon-color="rgba(255, 255, 255, 0.6)" size="16" text="Strategy net APY based on 30-day average, includes fees taken (fee-adjusted)"/>
-                                    </div>
-                                </v-row>
-                            </v-col>
-                        </div>
+                    <v-row align="center" :justify="$wu.isMobile() ? 'center' : 'start'" class="ma-0 mt-8">
+                        <v-col :cols="$wu.isMobile() ? 6 : 2">
+                            <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2">
+                                <label class="info-value">
+                                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '—' }}
+                                </label>
+                            </v-row>
+                            <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2 mt-5">
+                                <label class="info-title">APY</label>
+                                <div style="margin-top: -2px">
+                                    <Tooltip icon-color="rgba(255, 255, 255, 0.6)" size="16" text="Strategy net APY based on 30-day average, includes fees taken (fee-adjusted)"/>
+                                </div>
+                            </v-row>
+                        </v-col>
 
-                        <div class="bordered-col" v-if="!$wu.isMobile()">
-                            <v-col>
-                                <v-row justify="center" class="mx-3">
-                                    <label class="info-value">
-                                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].diffApy) ? (etsStrategyData[etsData.name].diffApy > 0 ? '+' : '') + ($utils.formatMoneyComma(etsStrategyData[etsData.name].diffApy, 0)) + '%' : '—' }}
-                                    </label>
-                                </v-row>
-                                <v-row justify="center" class="mx-3 mt-5">
-                                    <label class="info-title">Diff. to USD+</label>
-                                </v-row>
-                            </v-col>
-                        </div>
-                        <v-spacer v-else></v-spacer>
+                        <v-col class="bordered-col" :cols="$wu.isMobile() ? 6 : 3">
+                            <v-row justify="center" class="">
+                                <label class="info-value">
+                                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].diffApy) ? (etsStrategyData[etsData.name].diffApy > 0 ? '+' : '') + ($utils.formatMoneyComma(etsStrategyData[etsData.name].diffApy, 0)) + '%' : '—' }}
+                                </label>
+                            </v-row>
+                            <v-row justify="center" class="mt-5">
+                                <label class="info-title">Diff. to USD+</label>
+                            </v-row>
+                        </v-col>
 
-                        <div>
-                            <v-col>
-                                <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="ml-3">
-                                    <label class="info-value">
-                                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
-                                    </label>
-                                </v-row>
-                                <v-row :justify="$wu.isMobile() ? 'end' : 'center'" class="ml-3 mt-5">
-                                    <label class="info-title">Current TVL</label>
+                        <template v-if="etsData.maxSupply">
+                            <v-col :cols="$wu.isMobile() ? 12 : 7">
+                                <v-row :class="$wu.isMobile() ? 'mt-4' : ''" justify="end">
+                                    <v-col class="bordered-box" :class="$wu.isMobile() ? '' : 'mr-n3'">
+                                        <v-row class="mx-2 mt-1" align="end">
+                                            <label class="info-value">
+                                                {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
+                                            </label>
+                                            <v-spacer></v-spacer>
+                                            <label class="info-value-max">
+                                                {{ ('$' + $utils.formatMoneyComma(etsData.maxSupply, 2)) }}
+                                            </label>
+                                        </v-row>
+                                        <v-row class="mx-2 mb-1" align="center">
+                                            <label class="info-title">Current TVL</label>
+                                            <v-spacer></v-spacer>
+                                            <label class="info-title ml-auto">Max TVL</label>
+                                        </v-row>
+                                        <v-row class="mx-2 mb-1">
+                                            <v-progress-linear
+                                                rounded
+                                                height="7"
+                                                class="progress-info"
+                                                background-opacity="0"
+                                                :value="(totalSupply[etsData.name] / etsData.maxSupply) * 100"
+                                                :color="etsData.mainColor"
+                                            ></v-progress-linear>
+                                        </v-row>
+                                    </v-col>
                                 </v-row>
                             </v-col>
-                        </div>
+                        </template>
+
+                        <template v-else>
+                            <v-col :cols="$wu.isMobile() ? 12 : 7">
+                                <v-row :class="$wu.isMobile() ? 'mt-4' : ''" justify="end">
+                                    <v-col :class="$wu.isMobile() ? '' : 'mr-n3'">
+                                        <v-row :justify="!$wu.isMobile() ? 'end' : 'center'">
+                                            <label class="info-value">
+                                                {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—'  }}
+                                            </label>
+                                        </v-row>
+                                        <v-row :justify="!$wu.isMobile() ? 'end' : 'center'" class="mt-5">
+                                            <label class="info-title">Current TVL</label>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                            </v-col>
+                        </template>
                     </v-row>
                 </v-col>
             </v-row>
@@ -150,10 +194,6 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
-    .banner-container {
-        /*height: 350px !important;*/
-    }
-
     .currency-icon {
         width: 36px;
         height: 36px;
@@ -164,21 +204,6 @@ export default {
         font-weight: 500;
         font-size: 20px;
         line-height: 24px;
-    }
-
-    .network-icon {
-        width: 28px;
-        height: 28px;
-    }
-
-    .info-container {
-        width: 100% !important;
-        height: 70px !important;
-    }
-
-    .info-container-capacity {
-        width: 100% !important;
-        height: 110px !important;
     }
 
     .info-title {
@@ -195,40 +220,22 @@ export default {
         line-height: 24px;
     }
 
-    .capacity-status-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 20px;
-    }
-
-    .capacity-status-value {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 20px;
-        letter-spacing: 0.02em;
-    }
-
-    .capacity-status-sub-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 20px;
-        letter-spacing: 0.02em;
-    }
-
     .icon {
         height: 36px !important;
+    }
+
+    .range-title {
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .info-value-max {
+        font-size: 12px;
     }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .banner-container {
-        /*height: 420px !important;*/
-    }
-
     .currency-icon {
         width: 120px;
         height: 120px;
@@ -241,21 +248,6 @@ export default {
         line-height: 46px;
     }
 
-    .network-icon {
-        width: 40px;
-        height: 40px;
-    }
-
-    .info-container {
-        width: 100% !important;
-        height: 110px !important;
-    }
-
-    .info-container-capacity {
-        width: 100% !important;
-        height: 100px !important;
-    }
-
     .info-title {
         font-style: normal;
         font-weight: 400;
@@ -270,40 +262,22 @@ export default {
         line-height: 40px;
     }
 
-    .capacity-status-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 22px;
-    }
-
-    .capacity-status-value {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
-
-    .capacity-status-sub-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
-
     .icon {
         height: 36px !important;
+    }
+
+    .range-title {
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    .info-value-max {
+        font-size: 14px;
     }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .banner-container {
-        /*height: 300px !important;*/
-    }
-
     .currency-icon {
         width: 150px;
         height: 150px;
@@ -316,21 +290,6 @@ export default {
         line-height: 48px;
     }
 
-    .network-icon {
-        width: 40px;
-        height: 40px;
-    }
-
-    .info-container {
-        width: 100% !important;
-        height: 110px !important;
-    }
-
-    .info-container-capacity {
-        width: 100% !important;
-        height: 110px !important;
-    }
-
     .info-title {
         font-style: normal;
         font-weight: 400;
@@ -345,31 +304,17 @@ export default {
         line-height: 40px;
     }
 
-    .capacity-status-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 22px;
-    }
-
-    .capacity-status-value {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
-
-    .capacity-status-sub-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
-
     .icon {
         height: 36px !important;
+    }
+
+    .info-value-max {
+        font-size: 14px;
+    }
+
+    .range-title {
+        font-size: 14px;
+        line-height: 18px;
     }
 }
 
@@ -388,12 +333,6 @@ export default {
     color: white;
 }
 
-.info-container, .info-container-capacity {
-    background-color: var(--main-banner-background) !important;
-    border: 1px solid var(--secondary-border);
-    border-radius: 6px;
-}
-
 .info-title {
     font-family: 'Roboto', sans-serif;
     font-style: normal;
@@ -410,40 +349,54 @@ export default {
     color: white;
 }
 
+.info-value-max {
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: rgba(255, 255, 255, 0.6);
+}
+
 .bordered-col {
+    border-left: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
+
+.icon-border {
     border-left: 1px solid rgba(255, 255, 255, 0.6) !important;
     border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
 }
 
-.label-error {
-    color: #CF3F92 !important;
-}
-
 .progress-info {
-    background: var(--progress-info);
-}
-
-.capacity-status-text {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--secondary-gray-text);
-}
-
-.capacity-status-value {
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--links-blue);
-}
-
-.capacity-status-sub-text {
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--fourth-gray-text);
+    background: #D7DADF;
 }
 
 .icon {
     width: auto !important;
+}
+
+.bordered-box {
+    border: solid 1px rgba(255, 255, 255, 0.6);
+    border-radius: 4px;
+}
+
+.token-pair {
+    width: 70px;
+    height: 100%;
+}
+
+.range-container {
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 4px;
+}
+
+.range-title {
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    letter-spacing: 0.03em;
 }
 </style>

@@ -7,81 +7,72 @@ const getters = {};
 
 const actions = {
     async initContracts({commit, dispatch, getters, rootState}) {
-
-        let network = rootState.network.networkName;
-
-        const Exchange = require(`@/contracts/${network}/Exchange.json`)
-        const OvnToken = require(`@/contracts/${network}/OvnToken.json`)
-        const OvnGovernor = require(`@/contracts/${network}/OvnGovernor.json`)
-        const PortfolioManager = require(`@/contracts/${network}/PortfolioManager.json`)
-        const TimelockController = require(`@/contracts/${network}/OvnTimelockController.json`)
-        const UsdPlusToken = require(`@/contracts/${network}/UsdPlusToken.json`)
-        const M2M = require(`@/contracts/${network}/Mark2Market.json`)
-
-        let Market;
-        let WrappedUsdPlusToken;
-
-        if (network !== "avalanche" && network !== "bsc") {
-            Market = require(`@/contracts/${network}/Market.json`)
-            WrappedUsdPlusToken = require(`@/contracts/${network}/WrappedUsdPlusToken.json`)
-        }
-
-        let ExchangerUsdPlusWmatic = require(`@/contracts/polygon/HedgeExchangerUsdPlusWmatic.json`);
-        let UsdPlusWmaticToken = require(`@/contracts/polygon/RebaseTokenUsdPlusWmatic.json`);
-
-        let ExchangerWmaticUsdc = require(`@/contracts/polygon/HedgeExchangerWmaticUsdc.json`);
-        let WmaticUsdcToken = require(`@/contracts/polygon/EtsWmaticUsdc.json`);
-
-        let ExchangerBusdWbnb = require(`@/contracts/bsc/HedgeExchangerBusdWbnb.json`)
-        let BusdWbnbToken = require(`@/contracts/bsc/RebaseTokenBusdWbnb.json`);
-
-        let EtsExchangerRuby = require(`@/contracts/optimism/HedgeExchangerWethUsdc.json`);
-        let EtsRubyToken = require(`@/contracts/optimism/RebaseTokenWethUsdc.json`);
-
-        let EtsExchangerGarnet = require(`@/contracts/optimism/HedgeExchangerOpUsdc.json`);
-        let EtsGarnetToken = require(`@/contracts/optimism/EtsOpUsdc.json`);
-
-        let EtsExchangerNightOvAr = require(`@/contracts/optimism/HedgeExchangerArrakisWethUsdc.json`);
-        let EtsNightOvArToken = require(`@/contracts/optimism/RebaseTokenArrakisWethUsdc.json`);
-
+        console.debug("contractAction/initContracts");
 
         let web3 = rootState.web3.web3;
-
+        let network = rootState.network.networkName;
         let contracts = {};
 
+        let networkAssetMap = {
+            avalanche: '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E',
+            polygon: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+            polygon_dev: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+            optimism: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
+            bsc: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
+        };
 
-        switch (network) {
-            case "avalanche":
-                contracts.asset = _load(ERC20, web3, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E');
-                break;
-            case "polygon":
-            case "polygon_dev":
-                contracts.asset = _load(ERC20, web3, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
-                break;
-            case "optimism":
-                contracts.asset = _load(ERC20, web3, '0x7F5c764cBc14f9669B88837ca1490cCa17c31607');
-                break;
-            case "bsc":
-                contracts.asset = _load(ERC20, web3, '0xe9e7cea3dedca5984780bafc599bd69add087d56');
-                break;
-        }
+        let networkDaiMap = {
+            polygon: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+        };
 
         let etsNames = [
-            { network: 'polygon', name: 'alpha' },
-            { network: 'polygon', name: 'beta' },
-            { network: 'polygon', name: 'gamma' },
-            { network: 'polygon', name: 'delta' }
+            { network: 'polygon', name: 'qs_alpha_wmatic_usdc' },
+            { network: 'polygon', name: 'qs_beta_wmatic_usdc' },
+            { network: 'polygon', name: 'qs_gamma_weth_usdc' },
+            { network: 'polygon', name: 'qs_delta_weth_usdc' },
+            { network: 'polygon', name: 'wmatic_usd_plus' },
+            { network: 'polygon', name: 'qs_zeta_wbtc_usdc' },
+            { network: 'polygon', name: 'qs_epsilon_weth_dai' },
+
+            { network: 'bsc', name: 'wbnb_busd' },
+
+            { network: 'optimism', name: 'ruby' },
+            { network: 'optimism', name: 'night_ov_ar' },
         ];
 
-        for (let i = 0; i < etsNames.length; i++) {
-            if (network === etsNames[i].network) {
-                let ExchangerContract = require(`@/contracts/${etsNames[i].network}/ets/${etsNames[i].name}/exchanger.json`);
-                let TokenContract = require(`@/contracts/${etsNames[i].network}/ets/${etsNames[i].name}/token.json`);
+        [
+            contracts.exchange,
+            contracts.govToken,
+            contracts.governor,
+            contracts.pm,
+            contracts.timelockController,
+            contracts.usdPlus,
+            contracts.m2m,
+            contracts.market,
+            contracts.wUsdPlus,
+            contracts.asset,
+            contracts.dai,
+        ] = await Promise.all([
+            _load(require(`@/contracts/${network}/Exchange.json`), web3),
+            _load(require(`@/contracts/${network}/OvnToken.json`), web3),
+            _load(require(`@/contracts/${network}/OvnGovernor.json`), web3),
+            _load(require(`@/contracts/${network}/PortfolioManager.json`), web3),
+            _load(require(`@/contracts/${network}/OvnTimelockController.json`), web3),
+            _load(require(`@/contracts/${network}/UsdPlusToken.json`), web3),
+            _load(require(`@/contracts/${network}/Mark2Market.json`), web3),
+            (network !== "avalanche" && network !== "bsc") ? _load(require(`@/contracts/${network}/Market.json`), web3) : _load_empty(),
+            (network !== "avalanche" && network !== "bsc") ? _load(require(`@/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
+            networkAssetMap[network] ? _load(ERC20, web3, networkAssetMap[network]) : _load_empty(),
+            networkDaiMap[network] ? _load(ERC20, web3, networkDaiMap[network]) : _load_empty(),
+        ]);
 
-                contracts['ets_' + etsNames[i].name + '_exchanger'] = _load(ExchangerContract, web3);
-                contracts['ets_' + etsNames[i].name + '_token'] = _load(TokenContract, web3);
-            }
-        }
+        await Promise.all(
+            etsNames.map(async etsName => {
+                if (network === etsName.network) {
+                    _load_ets(etsName, contracts, web3);
+                }
+            })
+        );
 
         let insurances = [
             { network: 'polygon' },
@@ -98,37 +89,6 @@ const actions = {
                 contracts.insurance[insurances[i].network + '_token'] = _load(TokenContract, web3);
             }
         }
-
-        contracts.exchange = _load(Exchange, web3);
-        contracts.govToken = _load(OvnToken, web3);
-        contracts.governor = _load(OvnGovernor, web3);
-        contracts.pm = _load(PortfolioManager, web3);
-        contracts.timelockController = _load(TimelockController, web3);
-        contracts.usdPlus = _load(UsdPlusToken, web3);
-        contracts.m2m = _load(M2M, web3);
-
-        if (network !== "avalanche" && network !== "bsc") {
-            contracts.market = _load(Market, web3);
-            contracts.wUsdPlus = _load(WrappedUsdPlusToken, web3);
-        }
-
-        contracts.exchangerUsdPlusWmatic = _load(ExchangerUsdPlusWmatic, web3);
-        contracts.usdPlusWmatic = _load(UsdPlusWmaticToken, web3);
-
-        contracts.exchangerWmaticUsdc = _load(ExchangerWmaticUsdc, web3);
-        contracts.wmaticUsdc = _load(WmaticUsdcToken, web3);
-
-        contracts.exchangerBusdWbnb = _load(ExchangerBusdWbnb, web3);
-        contracts.busdWbnb = _load(BusdWbnbToken, web3);
-
-        contracts.etsExchangerRuby = _load(EtsExchangerRuby, web3);
-        contracts.etsRubyToken = _load(EtsRubyToken, web3);
-
-        contracts.etsExchangerGarnet = _load(EtsExchangerGarnet, web3);
-        contracts.etsGarnetToken = _load(EtsGarnetToken, web3);
-
-        contracts.etsExchangerNightOvAr = _load(EtsExchangerNightOvAr, web3);
-        contracts.etsNightOvArToken = _load(EtsNightOvArToken, web3);
 
         commit('web3/setContracts', contracts, {root: true})
     },
@@ -155,4 +115,13 @@ function _load(file, web3, address) {
     }
 
     return new web3.eth.Contract(abi, address);
+}
+
+function _load_ets(etsName, contracts, web3) {
+    contracts['ets_' + etsName.name + '_exchanger'] = _load(require(`@/contracts/${etsName.network}/ets/${etsName.name}/exchanger.json`), web3);
+    contracts['ets_' + etsName.name + '_token'] = _load(require(`@/contracts/${etsName.network}/ets/${etsName.name}/token.json`), web3);
+}
+
+function _load_empty() {
+    return null;
 }

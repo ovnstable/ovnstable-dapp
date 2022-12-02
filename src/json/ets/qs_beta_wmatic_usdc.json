@@ -1,0 +1,50 @@
+{
+  "name": "qs_beta_wmatic_usdc",
+  "nameUp": "QS BETA WMATIC/USDC",
+  "nameToken": "BETA",
+  "prototype": false,
+  "openPrototype": false,
+  "archive": false,
+  "disabled": false,
+  "highRisk": false,
+
+  "exchangeContract": "ets_qs_beta_wmatic_usdc_exchanger",
+
+  "tokenContract": "ets_qs_beta_wmatic_usdc_token",
+  "etsTokenDecimals": 6,
+
+  "actionAsset": "asset",
+  "actionTokenName": "USDC",
+  "actionTokenDecimals": 6,
+
+  "address": "0x025656862635b670FC62e4BaD9D20744258dbb02",
+  "chain": 137,
+  "chainName": "polygon",
+  "borrowFrom": "AAVE",
+  "dex": "QuickSwap",
+  "gauge": "",
+  "poolName": "WMATIC/USDC",
+  "range" : "WIDE",
+
+  "token1": "WMATIC",
+  "token2": "USDC",
+  "hedgeToken": "WMATIC",
+  "hasUsdPlus": false,
+  "tokenPair": "wmatic_usdc",
+
+  "maxSupply": null,
+  "overcapEnabled": false,
+  "inceptionDate": "15 November 2022",
+
+  "iconName": "ets_qs_beta_wmatic_usdc",
+
+  "mainColor": "#7944DA",
+  "cardBgColor": "radial-gradient(117.22% 424.06% at 96.59% -5.17%, #D7FFFF 0%, #4088F5 28.42%, #3430AF 52.52%, #7E46E2 100%)",
+
+  "cardTitle": "Generate yield on WMATIC-USDC pool by hedging your risks and simplify process.",
+  "aboutText": "The exchange-traded strategy “Beta” is an ERC-20 structured product built on Polygon Chain that lets you leverage a collateralized debt position (USDC lent on Aave) to borrow a volatile asset (WMATIC), pair it with USDС stablecoin, and provide WMATIC/USDC liquidity on QuickSwap all in one action. This allows earning high APY and hedging against WMATIC volatility. ETS “Beta” keeps track of WMATIC price changes. There are 3 types of price ranges: wide, narrow, very narrow. ETS “Beta” has wide WMATIC price range. It can be changed depending on the market and conditions on it.\n<br/><br/>The unique feature of ETS “Beta” is that it automatically administers a health factor on Aave and rebalances your Lent/Borrowed amounts to maintain a stringent Health Factor meaning. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.<br/><br/>Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.",
+  "riskText": "By depositing USDC into this strategy, you are automatically borrowing an equal value of WMATIC from AAVE at a rate roughly equal to the current price of WMATIC denoted above. <br/><br/>The strategy's smart contract is designed to automatically invest these equal values of WMATIC & USDC into QuickSwap WMATIC/USDC Liquidity Pool, after which these LP Tokens are staked into the Gauge Pool.",
+  "impermanentText": "While the QuickSwap pools will accrue transaction fees that generate yields, the pool may become imbalanced; when the user withdraws their investment, the strategy's smart contract may need to use the user's funds to buy additional WMATIC to repay the lent amount (plus interest), which can result in a net loss from the initial deposit.",
+  "ammText": "The strategy's smart contract automatically moves your deposit into the said Automated Market Maker (i.e., QuickSwap) and, in doing so, may incur an AMM’s smart contract risk.<br/><br/>By depositing funds into this smart contract, a user understands and agrees to the strategies to which it will invest underlying assets.",
+  "importantText": "Yield/APY is not guaranteed and can be highly variable depending on the volume and rewards from the underlying AMM as well as the price of a volatile asset (WMATIC). Farmers may incur net losses if the impermanent loss is more significant than the yield earned."
+}

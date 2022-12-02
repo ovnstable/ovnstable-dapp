@@ -4,7 +4,10 @@
             color="var(--tooltip-bg)"
             class="tooltip-container"
             transition="none"
-            right
+            :left="left"
+            :bottom="bottom"
+            :top="top"
+            :right="right"
             :close-delay="link ? 4000 : 100"
     >
         <template v-slot:activator="{ on, attrs }">
@@ -57,6 +60,26 @@ export default {
         maxWidth: {
             type: Number,
             default: 220,
+        },
+
+        right: {
+            type: Boolean,
+            default: true,
+        },
+
+        left: {
+            type: Boolean,
+            default: false,
+        },
+
+        top: {
+            type: Boolean,
+            default: false,
+        },
+
+        bottom: {
+            type: Boolean,
+            default: false,
         },
     },
 

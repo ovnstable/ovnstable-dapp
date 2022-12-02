@@ -273,7 +273,7 @@ export default {
         },
 
         addToken() {
-            switch (this.product) {
+            switch (this.txData.product) {
                 case 'usdPlus':
                     this.addUsdPlusToken();
                     break;

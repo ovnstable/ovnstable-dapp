@@ -17,9 +17,6 @@ import bscInfoModal from '@/store/modules/modals/bsc-info-modal';
 import dashboardData from '@/store/modules/views/dashboard/data';
 import dashboardUI from '@/store/modules/views/dashboard/ui';
 
-import farmData from "@/store/modules/views/farm/data";
-import farmUI from "@/store/modules/views/farm/ui";
-
 import statsData from "@/store/modules/views/stats/data";
 import statsUI from "@/store/modules/views/stats/ui";
 
@@ -87,9 +84,6 @@ export default new Vuex.Store({
 
         dashboardData,
         dashboardUI,
-
-        farmData,
-        farmUI,
 
         statsData,
         statsUI,

@@ -2,7 +2,7 @@
     <div>
         <div class="mt-10">
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'ml-3' : ''">
-                <label class="parent-page-label" @click="goToAction('/market')">Insurе USD+</label>
+                <label class="parent-page-label" @click="goToAction('/insurance')">Insurе USD+</label>
                 <label class="current-page-label">
                     <v-icon size="18" class="mx-2">mdi-chevron-right</v-icon>
                     USD+ Insurance on Polygon
@@ -13,7 +13,7 @@
         <div class="mt-1">
             <v-row align="start" justify="start" class="main-container ma-0">
                 <v-col :cols="$wu.isFull() ? 9 : 12" :class="$wu.isFull() ? 'ml-n3' : ''">
-<!--                    <StrategyBanner :ets-data="insuranceStrategyData"/>-->
+                    <InsuranceBanner :insurance-data="insuranceStrategyData"/>
 
 <!--                    <v-row align="center" justify="start" class="ma-0 mt-5" v-if="!$wu.isFull()">
                         <v-btn class="header-btn btn-filled-red" @click="showRiskModal">
@@ -110,7 +110,6 @@
                         <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabAbout">About ETS</label>
                     </v-row>
 
-<!--                    <PerformanceTab v-if="tab === 1" :ets-data="insuranceStrategyData"/>-->
                     <AboutTab v-if="tab === 2" :insurance-data="insuranceStrategyData"/>
                 </v-col>
 
@@ -214,27 +213,25 @@
 
 <script>
 
-import StrategyBanner from "@/components/market/strategy/section/ets/StrategyBanner";
 import RiskDisclosureModal from "@/components/market/modal/ets/RiskDisclosureModal";
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import AboutTab from "@/views/insurance/tab/AboutTab";
+import InsuranceBanner from "@/components/insurance/section/InsuranceBanner";
 
 export default {
     name: "InsurancePageView",
 
     components: {
+        InsuranceBanner,
         AboutTab,
         Tooltip,
         RiskDisclosureModal,
-        StrategyBanner
     },
 
     data: () => ({
         tab: 2,
-        insuranceStrategyData: null,
     }),
-
 
     computed: {
         ...mapGetters('network', ['networkId']),

@@ -22,16 +22,16 @@
                     </v-row>
 
                     <v-row class="ma-0 mt-5" justify="start" align="center" v-if="!$wu.isFull()">
-<!--                        <v-col class="info-card-container-white" cols="12">
+                        <v-col class="info-card-container-white" cols="12">
                             <div class="my-4">
                                 <template v-if="networkSupport">
                                     <v-row align="center" class="ma-0">
                                         <v-col cols="12">
                                             <v-row align="center">
-                                                <label class="investor-card-sub-title">Your balance in ETS, {{ insuranceStrategyData.actionTokenName }}</label>
+                                                <label class="investor-card-sub-title">Your balance in INSURANCE</label>
                                             </v-row>
                                             <v-row align="center" class="mt-5">
-                                                <label class="investor-card-sub-title-value">{{ insuranceBalance.polygon ? ($utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
+                                                <label class="investor-card-sub-title-value">{{ insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
                                             </v-row>
                                         </v-col>
                                     </v-row>
@@ -52,32 +52,28 @@
                                 </template>
 
                                 <template v-if="networkSupport">
-                                    <v-row align="center" justify="center" class="ma-0 mx-3" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'" v-if="!isOvercapAvailable && this.insuranceStrategyData.maxSupply && totalSupply.polygon >= insuranceStrategyData.maxSupply">
-                                        <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(insuranceStrategyData.maxSupply, 0) }}. Please check status later.</label>
-                                    </v-row>
-
-                                    <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && this.insuranceStrategyData.maxSupply && totalSupply.polygon >= insuranceStrategyData.maxSupply) ? 'mt-2' : 'mt-12'">
-                                        <v-btn class="header-btn btn-investor-invest" :class="(this.insuranceStrategyData.disabled || (!isOvercapAvailable && this.insuranceStrategyData.maxSupply && totalSupply.polygon >= insuranceStrategyData.maxSupply)) ? 'disabled-btn' : ''" :disabled="this.insuranceStrategyData.disabled || (!isOvercapAvailable && this.insuranceStrategyData.maxSupply && totalSupply.polygon >= insuranceStrategyData.maxSupply)"  @click="mintAction">
-                                            MINT ETS {{ insuranceStrategyData.nameUp }}
+                                    <v-row align="center" justify="center" class="ma-0 mt-12">
+                                        <v-btn class="header-btn btn-investor-invest"  @click="mintAction">
+                                            MINT INSURANCE
                                         </v-btn>
                                     </v-row>
 
                                     <v-row align="center" justify="center" class="ma-0 mt-4">
                                         <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                            REDEEM ETS {{ insuranceStrategyData.nameUp }}
+                                            REDEEM INSURANCE
                                         </v-btn>
                                     </v-row>
                                 </template>
 
                                 <template v-else>
                                     <v-row align="center" justify="center" class="ma-0">
-                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork(insuranceStrategyData.chain.toString())">
-                                            SWITCH TO {{ insuranceStrategyData.chainName.toUpperCase() }} TO MINT
+                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('polygon')">
+                                            SWITCH TO POLYGON TO MINT
                                         </v-btn>
                                     </v-row>
                                 </template>
                             </div>
-                        </v-col>-->
+                        </v-col>
 
                         <v-col class="info-card-container-white mt-4" cols="12">
                             <div class="my-4">
@@ -120,15 +116,15 @@
                         </v-btn>
                     </v-row>
 
-                    <v-row class=" ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
-<!--                        <v-col class="info-card-container-white" cols="12">
+                    <v-row class="ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
+                        <v-col class="info-card-container-white" cols="12">
                             <div class="my-6 mx-6">
                                 <template v-if="networkSupport">
                                     <v-row align="center">
-                                        <label class="investor-card-sub-title">Your balance in ETS, {{ insuranceStrategyData.actionTokenName }}</label>
+                                        <label class="investor-card-sub-title">Your balance in INSURANCE</label>
                                     </v-row>
                                     <v-row align="center" class="mt-5">
-                                        <label class="investor-card-sub-title-value">{{ insuranceBalance.polygon ? ($utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
+                                        <label class="investor-card-sub-title-value">{{ insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
                                     </v-row>
                                     <v-row align="center" class="mt-10">
                                         <label class="investor-card-sub-title">Profit/loss</label>
@@ -143,32 +139,28 @@
                                 </template>
 
                                 <template v-if="networkSupport">
-                                    <v-row align="center" justify="center" class="mt-15" v-if="!isOvercapAvailable && this.insuranceStrategyData.maxSupply && totalSupply.polygon >= insuranceStrategyData.maxSupply">
-                                        <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(insuranceStrategyData.maxSupply, 0) }}. Please check status later.</label>
-                                    </v-row>
-
-                                    <v-row align="center" justify="center" :class="(!isOvercapAvailable && this.insuranceStrategyData.maxSupply && totalSupply.polygon >= insuranceStrategyData.maxSupply)? 'mt-5' : 'mt-15'">
-                                        <v-btn class="header-btn btn-investor-invest" :class="(this.insuranceStrategyData.disabled || (!isOvercapAvailable && this.insuranceStrategyData.maxSupply && totalSupply.polygon >= insuranceStrategyData.maxSupply)) ? 'disabled-btn' : ''" :disabled="this.insuranceStrategyData.disabled || (!isOvercapAvailable && this.insuranceStrategyData.maxSupply && totalSupply.polygon >= insuranceStrategyData.maxSupply)" @click="mintAction">
-                                            MINT ETS {{ insuranceStrategyData.nameUp }}
+                                    <v-row align="center" justify="center" class="mt-15">
+                                        <v-btn class="header-btn btn-investor-invest" @click="mintAction">
+                                            MINT INSURANCE
                                         </v-btn>
                                     </v-row>
 
                                     <v-row align="center" justify="center" class="mt-6">
                                         <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                            REDEEM ETS {{ insuranceStrategyData.nameUp }}
+                                            REDEEM INSURANCE
                                         </v-btn>
                                     </v-row>
                                 </template>
 
                                 <template v-else>
                                     <v-row align="center" justify="center" class="mt-0">
-                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork(insuranceStrategyData.chain.toString())">
-                                            SWITCH TO {{ insuranceStrategyData.chainName.toUpperCase() }} TO MINT
+                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('polygon')">
+                                            SWITCH TO POLYGON TO MINT
                                         </v-btn>
                                     </v-row>
                                 </template>
                             </div>
-                        </v-col>-->
+                        </v-col>
 
                         <v-col class="info-card-container-white mt-4" cols="12">
                             <div class="my-6 mx-6">
@@ -260,7 +252,7 @@ export default {
         },
 
         networkSupport: function () {
-            return this.networkId === this.insuranceStrategyData.chainId;
+            return this.networkId === this.insuranceStrategyData.polygon.chainId;
         },
     },
 

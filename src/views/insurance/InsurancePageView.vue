@@ -21,8 +21,8 @@
                         </v-btn>
                     </v-row>
 
-<!--                    <v-row class="ma-0 mt-5" justify="start" align="center" v-if="!$wu.isFull()">
-                        <v-col class="info-card-container-white" cols="12">
+                    <v-row class="ma-0 mt-5" justify="start" align="center" v-if="!$wu.isFull()">
+<!--                        <v-col class="info-card-container-white" cols="12">
                             <div class="my-4">
                                 <template v-if="networkSupport">
                                     <v-row align="center" class="ma-0">
@@ -77,7 +77,7 @@
                                     </v-row>
                                 </template>
                             </div>
-                        </v-col>
+                        </v-col>-->
 
                         <v-col class="info-card-container-white mt-4" cols="12">
                             <div class="my-4">
@@ -101,7 +101,7 @@
                                 </v-row>
                             </div>
                         </v-col>
-                    </v-row>-->
+                    </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
                         <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabPerformance" disabled>
@@ -120,8 +120,8 @@
                         </v-btn>
                     </v-row>
 
-<!--                    <v-row class=" ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
-                        <v-col class="info-card-container-white" cols="12">
+                    <v-row class=" ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
+<!--                        <v-col class="info-card-container-white" cols="12">
                             <div class="my-6 mx-6">
                                 <template v-if="networkSupport">
                                     <v-row align="center">
@@ -168,7 +168,7 @@
                                     </v-row>
                                 </template>
                             </div>
-                        </v-col>
+                        </v-col>-->
 
                         <v-col class="info-card-container-white mt-4" cols="12">
                             <div class="my-6 mx-6">
@@ -183,7 +183,7 @@
                                             <label class="fee-structure-label">Mint fee</label>
                                             <v-spacer></v-spacer>
                                             <label class="fee-structure-value">
-                                                {{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}
+                                                {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.mintFee > 0) ? $utils.formatMoneyComma(insuranceStrategyData.polygon.mintFee, 2) + '%' : '—' }}
                                             </label>
                                         </v-row>
                                     </v-col>
@@ -194,13 +194,15 @@
                                         <v-row class="info-row" justify="start" align="center">
                                             <label class="fee-structure-label">Redeem fee</label>
                                             <v-spacer></v-spacer>
-                                            <label class="fee-structure-value">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
+                                            <label class="fee-structure-value">
+                                                {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.redeemFee > 0) ? $utils.formatMoneyComma(insuranceStrategyData.polygon.redeemFee, 2) + '%' : '—' }}
+                                            </label>
                                         </v-row>
                                     </v-col>
                                 </v-row>
                             </div>
                         </v-col>
-                    </v-row>-->
+                    </v-row>
                 </v-col>
             </v-row>
         </div>

@@ -7,6 +7,7 @@ import errorModal from '@/store/modules/modals/error-modal';
 import waitingModal from '@/store/modules/modals/waiting-modal';
 import successModal from '@/store/modules/modals/success-modal';
 import riskModal from '@/store/modules/modals/market/risk-disclosure-modal';
+import insuranceRiskModal from '@/store/modules/modals/insurance/insuranse-risk-modal';
 import investModal from '@/store/modules/modals/market/invest-modal';
 import swapModal from '@/store/modules/modals/swap/swap-modal';
 import wrapModal from '@/store/modules/modals/wrap/wrap-modal';
@@ -80,6 +81,7 @@ export default new Vuex.Store({
         swapModal,
         wrapModal,
         riskModal,
+        insuranceRiskModal,
         bscInfoModal,
 
         dashboardData,

@@ -15,11 +15,11 @@
                 <v-col :cols="$wu.isFull() ? 9 : 12" :class="$wu.isFull() ? 'ml-n3' : ''">
                     <InsuranceBanner :insurance-data="insuranceStrategyData"/>
 
-<!--                    <v-row align="center" justify="start" class="ma-0 mt-5" v-if="!$wu.isFull()">
+                    <v-row align="center" justify="start" class="ma-0 mt-5" v-if="!$wu.isFull()">
                         <v-btn class="header-btn btn-filled-red" @click="showRiskModal">
                             Investment risks
                         </v-btn>
-                    </v-row>-->
+                    </v-row>
 
 <!--                    <v-row class="ma-0 mt-5" justify="start" align="center" v-if="!$wu.isFull()">
                         <v-col class="info-card-container-white" cols="12">
@@ -114,11 +114,11 @@
                 </v-col>
 
                 <v-col cols="3" v-if="$wu.isFull()">
-<!--                    <v-row align="center" justify="start" class="ma-0 sticky" style="width: 20%;">
+                    <v-row align="center" justify="start" class="ma-0 sticky" style="width: 20%;">
                         <v-btn class="header-btn btn-filled-red" @click="showRiskModal">
                             Investment risks
                         </v-btn>
-                    </v-row>-->
+                    </v-row>
 
 <!--                    <v-row class=" ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
                         <v-col class="info-card-container-white" cols="12">
@@ -205,7 +205,7 @@
             </v-row>
         </div>
 
-        <RiskDisclosureModal :ets-data="insuranceStrategyData"/>
+        <InsuranceRiskModal/>
 
         <resize-observer @notify="$forceUpdate()"/>
     </div>
@@ -218,11 +218,13 @@ import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import AboutTab from "@/views/insurance/tab/AboutTab";
 import InsuranceBanner from "@/components/insurance/section/InsuranceBanner";
+import InsuranceRiskModal from "@/components/insurance/modal/InsuranceRiskModal";
 
 export default {
     name: "InsurancePageView",
 
     components: {
+        InsuranceRiskModal,
         InsuranceBanner,
         AboutTab,
         Tooltip,
@@ -271,7 +273,7 @@ export default {
 
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
-        ...mapActions('riskModal', ['showRiskModal']),
+        ...mapActions('insuranceRiskModal', ['showRiskModal']),
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
 
         goToAction(id) {

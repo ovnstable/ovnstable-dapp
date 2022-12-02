@@ -81,7 +81,7 @@
                                     <v-col class="bordered-box" :class="$wu.isMobile() ? '' : 'mr-n3'">
                                         <v-row class="mx-2 mt-1" align="end">
                                             <label class="info-value">
-                                                {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—' }}
+                                                ${{ $utils.formatMoneyComma(totalSupply[etsData.name], 2) }}
                                             </label>
                                             <v-spacer></v-spacer>
                                             <label class="info-value-max">
@@ -114,7 +114,7 @@
                                     <v-col :class="$wu.isMobile() ? '' : 'mr-n3'">
                                         <v-row :justify="!$wu.isMobile() ? 'end' : 'center'">
                                             <label class="info-value">
-                                                {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—'  }}
+                                                ${{ $utils.formatMoneyComma(totalSupply[etsData.name], 2) }}
                                             </label>
                                         </v-row>
                                         <v-row :justify="!$wu.isMobile() ? 'end' : 'center'" class="mt-5">

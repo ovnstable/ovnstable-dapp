@@ -5,7 +5,7 @@
                 USD+ Insurance on Polygon is a structured DeFi product enabling users to gain high yields at the expense of insuring of USD+. Underwrite in USD+ Insurance on Polygon underwrite every strategy in the USD+ collateral on Polygon. Each strategy has its own Risk Factor which governs APY shares for premiums:
             </label>
         </v-row>
-        <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-2' : 'mt-5'">
+        <v-row align="center" justify="start" class="ma-0 mt-2">
             <v-col :cols="$wu.isFull() ? 7 : 12" class="premiums-box">
                 <v-row class="ma-0">
                     <v-col :cols="$wu.isMobile() ? 12 : 3">
@@ -49,13 +49,13 @@
 
         <v-row align="center" justify="start" class="ma-0 notify-risk-box" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'">
             <v-col>
-                <v-row class="ma-0" align="center" :justify="$wu.isMobile() ? 'center' : 'start'">
+                <v-row class="ma-2" align="center" :justify="$wu.isMobile() ? 'center' : 'start'">
                     <div class="title-modal-icon mr-2">
                         <v-img :src="require('@/assets/icon/bellRed.svg')"/>
                     </div>
                     <label class="risk-box-title">risks of Insurance providers</label>
                 </v-row>
-                <v-row class="ma-0 mt-3">
+                <v-row class="ma-2 mt-4">
                     <label class="risk-box-text">Overnight Finance is an Asset Management Protocol that offers low to medium risk passive yield product. Overnight Finance offers protection on USD+ the yield bearing token that represents user’s deposits. User can file an event if USD+ will face the negative rebase.</label>
                 </v-row>
             </v-col>

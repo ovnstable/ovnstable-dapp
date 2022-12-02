@@ -29,13 +29,13 @@
             <v-container class="mt-6">
                 <v-row class="ma-0 box">
                     <v-col cols="12">
-                        <v-row class="ma-0 mb-2" justify="center">
+                        <v-row class="ma-0 mb-3" justify="center">
                             <label class="apy-box-total-label">
                                 Total apy – {{ insuranceStrategyData.polygon ? ($utils.formatMoneyComma(insuranceStrategyData.polygon.lastApy, 0) + '%') : '—' }}
                             </label>
                         </v-row>
                         <v-divider class="card-divider"></v-divider>
-                        <v-row class="ma-0 mt-2">
+                        <v-row class="ma-0 mt-3">
                             <v-col>
                                 <v-row justify="center">
                                     <label class="apy-box-subtitle-label">insurance premiums</label>
@@ -65,7 +65,7 @@
                     </v-col>
                 </v-row>
 
-                <v-row class="ma-0 mt-5 insurance-card-info-row d-flex justify-space-between">
+                <v-row class="ma-0 mt-6 insurance-card-info-row d-flex justify-space-between">
                     <label class="card-info-label mt-2">Insurance fund</label>
                     <label class="card-info-value mt-2">${{ $utils.formatMoneyComma(totalInsuranceSupply.polygon, 2) }}</label>
                 </v-row>

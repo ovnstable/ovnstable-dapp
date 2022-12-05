@@ -67,7 +67,7 @@
         <v-row class="mt-8 mx-n3 main-card">
             <v-col>
                 <v-row align="center" class="ma-0">
-                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.usdPlus, 3) }}</label>
+                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(insuranceBalance.polygon, 3) }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>
@@ -231,9 +231,9 @@ export default {
 
         buyCurrency: null,
         buyCurrencies: [{
-            id: 'usdPlus',
-            title: 'USD+',
-            image: require('@/assets/currencies/usdPlus.svg')
+            id: 'insurance',
+            title: 'USD+ INS',
+            image: require('@/assets/currencies/insurance/INSURANCE.svg')
         }],
 
         sum: null,
@@ -287,11 +287,11 @@ export default {
         },
 
         overnightFee: function () {
-            return 0.04;
+            return this.insuranceStrategyData.mintFee;
         },
 
         estimateResult: function () {
-            return this.sum * (1 - (this.overnightFee ? (this.overnightFee / 100.0) : 0.0004));
+            return this.sum * (1 - (this.overnightFee ? (this.overnightFee / 100.0) : 0));
         },
 
         buttonLabel: function () {
@@ -410,7 +410,7 @@ export default {
         },
 
         max() {
-            let balanceElement = this.balance[this.currency.id];
+            let balanceElement = this.insuranceBalance.polygon;
             this.sum = balanceElement + "";
         },
 
@@ -441,22 +441,21 @@ export default {
                     }
 
                     let mintParams = {
-                        asset: contracts.asset.options.address,
                         amount: sum,
                     }
 
-                    let buyResult = await contracts.exchange.methods.mint(mintParams).send(buyParams).on('transactionHash', function (hash) {
+                    let buyResult = await contracts.insurance.polygon_exchanger.methods.mint(mintParams).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {
                             hash: hash,
-                            text: 'Mint USD+',
-                            product: 'usdPlus',
-                            productName: 'USD+',
+                            text: 'Mint USD+ INS',
+                            product: 'insurance',
+                            productName: 'USD+ INS',
                             action: 'mint',
                             amount: sumInUsd,
                         };
 
                         self.putTransaction(tx);
-                        self.showSuccessModal({successTxHash: hash, successAction: 'mintUsdPlus'});
+                        self.showSuccessModal({successTxHash: hash, successAction: 'mintInsurance'});
                         self.loadTransaction();
                     });
                 } catch (e) {
@@ -537,14 +536,14 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts.asset.methods.allowance(from, contracts.exchange.options.address).call();
+            let allowanceValue = await contracts.asset.methods.allowance(from, contracts.insurance.polygon_exchanger.options.address).call();
 
             if (allowanceValue < sum) {
                 try {
                     await this.refreshGasPrice();
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                    let tx = await contracts.asset.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
+                    let tx = await contracts.asset.methods.approve(contracts.insurance.polygon_exchanger.options.address, sum).send(approveParams);
 
                     let minted = true;
                     while (minted) {
@@ -583,11 +582,10 @@ export default {
                 let errorApi = this.polygonApi;
 
                 let mintParams = {
-                    asset: contracts.asset.options.address,
                     amount: sum,
                 }
 
-                await contracts.exchange.methods.mint(mintParams).estimateGas(estimateOptions)
+                await contracts.insurance.polygon_exchanger.methods.mint(mintParams).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })
@@ -596,13 +594,13 @@ export default {
                             let msg = error.message.replace(/(?:\r\n|\r|\n)/g, '');
 
                             let errorMsg = {
-                                product: 'USD+',
+                                product: 'USD+ INS',
                                 data: {
                                     from: from,
-                                    to: contracts.exchange.options.address,
+                                    to: contracts.insurance.polygon_exchanger.options.address,
                                     gas: null,
                                     gasPrice: parseInt(estimateOptions.gasPrice, 16),
-                                    method: contracts.exchange.methods.buy(contracts.asset.options.address, sum).encodeABI(),
+                                    method: contracts.insurance.polygon_exchanger.methods.mint(mintParams).encodeABI(),
                                     message: msg,
                                     block: blockNum
                                 }

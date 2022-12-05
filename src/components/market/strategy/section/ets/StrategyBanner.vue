@@ -114,7 +114,7 @@
                                     <v-col :class="$wu.isMobile() ? '' : 'mr-n3'">
                                         <v-row :justify="!$wu.isMobile() ? 'end' : 'center'">
                                             <label class="info-value">
-                                                {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].tvl) ? ('$' + $utils.formatMoneyComma(etsStrategyData[etsData.name].tvl, 2)) : '—'  }}
+                                                {{ (totalSupply && totalSupply[etsData.name]) ? ('$' + $utils.formatMoneyComma(totalSupply[etsData.name], 2)) : '—' }}
                                             </label>
                                         </v-row>
                                         <v-row :justify="!$wu.isMobile() ? 'end' : 'center'" class="mt-5">

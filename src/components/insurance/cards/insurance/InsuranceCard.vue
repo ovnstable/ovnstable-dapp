@@ -14,7 +14,7 @@
                     </v-row>
                     <v-row class="d-flex mt-4">
                         <label class="percentage">
-                            {{ insuranceStrategyData.polygon ? ($utils.formatMoneyComma(insuranceStrategyData.polygon.lastApy, 0) + '%') : '—' }}
+                            {{ insuranceStrategyData.polygon ? ((insuranceStrategyData.polygon.apy > 500 ? '>500' : $utils.formatMoneyComma(insuranceStrategyData.polygon.apy, 0)) + '%') : '—' }}
                         </label>
                         <label class="apy ml-3">APY</label>
                         <div class="tooltip">
@@ -27,7 +27,7 @@
             </v-row>
 
             <v-container class="mt-6">
-                <v-row class="ma-0 box">
+<!--                <v-row class="ma-0 box">
                     <v-col cols="12">
                         <v-row class="ma-0 mb-3" justify="center">
                             <label class="apy-box-total-label">
@@ -63,9 +63,9 @@
                             </v-col>
                         </v-row>
                     </v-col>
-                </v-row>
+                </v-row>-->
 
-                <v-row class="ma-0 mt-6 insurance-card-info-row d-flex justify-space-between">
+                <v-row class="ma-0 insurance-card-info-row d-flex justify-space-between">
                     <label class="card-info-label mt-2">Insurance fund</label>
                     <label class="card-info-value mt-2">${{ $utils.formatMoneyComma(totalInsuranceSupply.polygon, 2) }}</label>
                 </v-row>

@@ -98,7 +98,7 @@ const actions = {
         let avgApyStrategyMonth;
         let strategyData;
 
-        /*await fetch(appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
+        await fetch(appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
             .then(value => value.json())
             .then(value => {
                 avgApy = value;
@@ -114,19 +114,19 @@ const actions = {
                 avgApyStrategyMonth.date = moment(avgApyStrategyMonth.date).format("DD MMM. ‘YY");
             }).catch(reason => {
                 console.log('Error get data: ' + reason);
-            })*/
+            })
 
         await fetch(appApiUrl + '/insurance/', fetchOptions)
             .then(value => value.json())
             .then(value => {
                 strategyData = value;
 
-                // strategyData.apy = (avgApyStrategyMonth && avgApyStrategyMonth.value) ? (avgApyStrategyMonth.value) : strategyData.lastApy;
-                // strategyData.diffApy = (avgApy && avgApy.value && strategyData.apy) ? (strategyData.apy - avgApy.value) : null;
+                strategyData.apy = (avgApyStrategyMonth && avgApyStrategyMonth.value) ? (avgApyStrategyMonth.value) : strategyData.lastApy;
+                strategyData.diffApy = (avgApy && avgApy.value && strategyData.apy) ? (strategyData.apy - avgApy.value) : null;
 
                 strategyData.chainId = refreshParams.chain.chainId;
 
-                /*strategyData.payouts.sort(
+                strategyData.payouts.sort(
                     function(o1,o2){
                         return moment(o1.date).isBefore(moment(o2.date)) ? -1 : moment(o1.date).isAfter(moment(o2.date)) ? 1 : 0;
                     }
@@ -178,7 +178,7 @@ const actions = {
                     widgetTvlData.datasets[0].data.push(widgetTvlDataDict[key]);
                 }
 
-                dispatch('addInsuranceTvlData', { name: refreshParams.chain.chainName, data: widgetTvlData});*/
+                dispatch('addInsuranceTvlData', { name: refreshParams.chain.chainName, data: widgetTvlData});
             }).catch(reason => {
                 console.log('Error get data: ' + reason);
             })

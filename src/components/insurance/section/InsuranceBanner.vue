@@ -32,7 +32,7 @@
                         <v-col :cols="$wu.isMobile() ? 6 : 2">
                             <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2">
                                 <label class="info-value">
-                                    {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.lastApy) ? ($utils.formatMoneyComma(insuranceStrategyData.polygon.lastApy, 0)) + '%' : '—' }}
+                                    {{ (insuranceStrategyData.polygon) ? (insuranceStrategyData.polygon.apy > 500 ? '>500' : $utils.formatMoneyComma(insuranceStrategyData.polygon.apy, 0)) + '%' : '—' }}
                                 </label>
                             </v-row>
                             <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2 mt-5">

@@ -61,13 +61,13 @@
                                     <v-row align="center" justify="center" class="ma-0 mt-4">
                                         <template v-if="insuranceRedemptionData.request === 'CAN_WITHDRAW'">
                                             <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                                WITHDRAW WITHIN {{ insuranceRedemptionData.hours }} HOURS
+                                                WITHDRAW WITHIN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
                                             </v-btn>
                                         </template>
                                         <template v-if="insuranceRedemptionData.request === 'NEED_WAIT'">
                                             <v-btn class="header-btn btn-investor-invest btn-investor-outline disabled-btn-outline" disabled outlined>
                                                 <label style="color: var(--progress-text)">
-                                                    WITHDRAW IN {{ insuranceRedemptionData.hours }} HOURS
+                                                    WITHDRAW IN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
                                                 </label>
                                             </v-btn>
                                         </template>
@@ -165,13 +165,13 @@
                                     <v-row align="center" justify="center" class="mt-6">
                                         <template v-if="insuranceRedemptionData.request === 'CAN_WITHDRAW'">
                                             <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                                                WITHDRAW WITHIN {{ insuranceRedemptionData.hours }} HOURS
+                                                WITHDRAW WITHIN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
                                             </v-btn>
                                         </template>
                                         <template v-if="insuranceRedemptionData.request === 'NEED_WAIT'">
                                             <v-btn class="header-btn btn-investor-invest btn-investor-outline disabled-btn-outline" disabled outlined>
                                                 <label style="color: var(--progress-text)">
-                                                    WITHDRAW IN {{ insuranceRedemptionData.hours }} HOURS
+                                                    WITHDRAW IN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
                                                 </label>
                                             </v-btn>
                                         </template>

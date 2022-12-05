@@ -226,7 +226,7 @@ export default {
 
     methods: {
         ...mapActions('transaction', ['loadTransaction', 'deleteTxFromHistory']),
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
 
         formatDate(date) {
             return this.$moment.utc(date).format('DD.MM.YYYY');
@@ -279,6 +279,9 @@ export default {
                     break;
                 case 'wUsdPlus':
                     this.addwUsdPlusToken();
+                    break;
+                case 'USD+ INS':
+                    this.addInsuranceToken();
                     break;
                 default:
                     try {

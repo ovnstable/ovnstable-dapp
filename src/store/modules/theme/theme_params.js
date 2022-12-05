@@ -343,4 +343,13 @@ export const THEME_MODE_PARAMS = [
             dark: '#29323E'
         }
     },
+
+    {
+        name: '--hide-account',
+        enabled: true,
+        theme: {
+            light: 'rgba(242, 247, 254, 1)',
+            dark: 'rgba(19, 21, 28, 1)'
+        }
+    },
 ]

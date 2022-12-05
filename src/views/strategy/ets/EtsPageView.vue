@@ -129,11 +129,11 @@
                         <v-col class="info-card-container-white" cols="12">
                             <div class="my-6 mx-6">
                                 <template v-if="networkSupport">
-                                    <v-row align="center">
-                                        <label class="investor-card-sub-title">Your balance in ETS, {{ etsData.actionTokenName }}</label>
+                                    <v-row align="center" >
+                                        <label class="investor-card-sub-title">Your balance in ETS, {{etsData.actionTokenName }}</label>
                                     </v-row>
                                     <v-row align="center" class="mt-5">
-                                        <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}</label>
+                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">{{ dataHidden ? '' : etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}</label>
                                     </v-row>
                                     <v-row align="center" class="mt-10">
                                         <label class="investor-card-sub-title">Profit/loss</label>
@@ -141,8 +141,8 @@
                                     <v-row class="info-row mt-6" justify="start" align="center">
                                         <label class="fee-structure-label mt-1">Last day</label>
                                         <v-spacer></v-spacer>
-                                        <label class="investor-card-sub-title-value" :class="etsClientData[this.etsData.name] > 0 ? 'success-color' : ''">
-                                            {{ etsClientData[this.etsData.name] ? ((etsClientData[this.etsData.name] > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—' }}
+                                        <label class="investor-card-sub-title-value" :class="etsClientData[this.etsData.name] > 0 ? 'success-color' : ''" v-bind="dataHidden ? 'hidden-label' : ''">
+                                            {{etsClientData[this.etsData.name] ? ((dataHidden ? '' : etsClientData[this.etsData.name] > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—' }}
                                         </label>
                                     </v-row>
                                 </template>
@@ -249,6 +249,7 @@ export default {
         ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
+        ...mapGetters('magicEye', ['dataHidden']),
 
         activeTabPerformance: function () {
             return {
@@ -331,6 +332,7 @@ export default {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('riskModal', ['showRiskModal']),
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
+        ...mapActions('magicEye', ['switchEye']),
 
         goToAction(id) {
             this.$router.push(id);
@@ -785,5 +787,11 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #CF3F92;
+}
+
+.hidden-label {
+    width: 100px;
+    height: 28px;
+    background: var(--hide-account);
 }
 </style>

@@ -61,6 +61,8 @@ import supplyData from '@/store/modules/common/supply';
 import referral from "@/store/modules/common/referral";
 import track from "@/store/modules/common/track";
 
+import magicEye from "@/store/modules/magic-eye/magic-eye";
+
 // Theme
 import theme from "@/store/modules/theme/theme";
 
@@ -122,7 +124,9 @@ export default new Vuex.Store({
         referral,
         track,
 
-        theme
+        theme,
+
+        magicEye
     },
 
     plugins: [

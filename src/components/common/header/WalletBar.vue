@@ -7,8 +7,8 @@
                 </div>
             </v-col>
             <v-col cols="5" class="wallet-col" v-if="!$wu.isMobile()">
-                <label class="balance-label">
-                    {{ $utils.formatMoney(account ? balance.usdPlus : 0, 2) }}&nbsp;USD+
+                <label class="balance-label" :class="dataHidden ? 'hidden-label' : ''">
+                    {{ dataHidden ? '' : $utils.formatMoney(account ? balance.usdPlus : 0, 2) }}&nbsp;USD+
                 </label>
             </v-col>
             <v-col :cols="$wu.isMobile() ? 0 : 4" class="wallet-col" :class="$wu.isMobile() ? 'mr-4' : ''">
@@ -25,13 +25,15 @@
                         </label>
                     </template>
 
-                    <label v-else class="account-label">
-                        {{ account ? accountDisplay : 'XXXXX...XXXX' }}
+                    <label v-else class="account-label" :class="dataHidden ? 'hidden-label' : ''">
+                        {{ account ? (dataHidden ? '' : accountDisplay) : 'XXXXX...XXXX' }}
                     </label>
                 </v-row>
             </v-col>
-            <v-col cols="1" class="wallet-col" v-if="!$wu.isMobile()">
-                <v-icon class="eye-icon">mdi-eye-outline</v-icon>
+            <v-col cols="1" class="wallet-col" v-if="!$wu.isMobile()" @click.stop="switchEye">
+                <v-icon class="eye-icon">
+                    {{ dataHidden ? 'mdi-eye-off-outline' : 'mdi-eye-outline'}}
+                </v-icon>
             </v-col>
         </v-row>
 
@@ -56,6 +58,7 @@ export default {
         ...mapGetters('network', ['networkId']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('transaction', ['transactions']),
+        ...mapGetters('magicEye', ['dataHidden']),
 
         accountDisplay: function () {
             if (this.uns) {
@@ -86,6 +89,7 @@ export default {
         ...mapActions('accountData', ['refreshBalance']),
         ...mapActions('supplyData', ['refreshSupply']),
         ...mapActions('track', ['trackClick']),
+        ...mapActions('magicEye', ['switchEye']),
 
         goToAction(id) {
             this.$router.push(id);
@@ -221,7 +225,7 @@ export default {
 }
 
 .eye-icon {
-    color: var(--main-gray-text) !important;
+    color: var(--disabled-value) !important;
 }
 
 .wallet-bar-container:hover > .wallet-col > .eye-icon {
@@ -235,5 +239,11 @@ export default {
 
 .account-display-container, .account-display-container > * {
     cursor: pointer !important;
+}
+
+.hidden-label {
+    width: 130px;
+    height: 28px;
+    background: var(--hide-account);
 }
 </style>

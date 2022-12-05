@@ -144,8 +144,8 @@
                                                 </label>
                                             </v-row>
                                             <v-row justify="center" align="center">
-                                                <label class="container-info-text">
-                                                    ${{ $utils.formatMoney(balance.usdPlus, 2) }}
+                                                <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
+                                                    {{ dataHidden ? '' : '$' + $utils.formatMoney(balance.usdPlus, 2) }}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -157,8 +157,8 @@
                                                 </label>
                                             </v-row>
                                             <v-row justify="center" align="center">
-                                                <label class="container-info-text">
-                                                    ${{ $utils.formatMoney(profitUsdPlus, isMobile ? 2 : 6) }}
+                                                <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
+                                                    {{ dataHidden ? '' : '$' + $utils.formatMoney(profitUsdPlus, isMobile ? 2 : 6) }}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -170,8 +170,8 @@
                                                 </label>
                                             </v-row>
                                             <v-row justify="center" align="center">
-                                                <label class="container-info-text">
-                                                    {{ apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}
+                                                <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
+                                                    {{ dataHidden ? '' : apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -376,6 +376,7 @@ export default {
         ...mapGetters('accountData', ['balance', 'account']),
         ...mapGetters('dashboardData', ['profitUsdPlus', 'apy', 'activities', 'slice', 'portfolioValue']),
         ...mapGetters('walletAction', ['walletConnected']),
+        ...mapGetters('magicEye', ['dataHidden']),
 
         activeTabOverall: function () {
             return {
@@ -430,6 +431,7 @@ export default {
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('track', ['trackClick']),
+        ...mapActions('magicEye', ['switchEye']),
 
         ...mapMutations('dashboardData', ['setSlice']),
 
@@ -943,5 +945,11 @@ export default {
 .sticky {
     margin-right: 4% !important;
     position: fixed !important;
+}
+
+.hidden-label {
+    width: 100px;
+    height: 28px;
+    background: var(--hide-account);
 }
 </style>

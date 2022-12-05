@@ -17,6 +17,12 @@
                 </div>
                 <label class="ml-2 coin-btn-label">wUSD+</label>
             </v-btn>
+            <v-btn class="coin-btn ma-1" @click="addInsuranceToken" v-if="networkId === 137">
+                <div class="coin-img">
+                    <v-img :src="require('@/assets/currencies/insurance/INSURANCE.svg')"/>
+                </div>
+                <label class="ml-2 coin-btn-label">USD+ INS</label>
+            </v-btn>
 
             <v-btn
                 v-for="ets in etsList"
@@ -60,7 +66,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
     },
 }
 </script>

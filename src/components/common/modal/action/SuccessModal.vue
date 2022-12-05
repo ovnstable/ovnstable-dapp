@@ -102,6 +102,10 @@ export default {
                     return require('@/assets/currencies/market/ets_' + this.etsData.name + '.svg');
                 case 'redeemEts':
                     return require('@/assets/currencies/market/ets_' + this.etsData.name + '.svg');
+                case 'mintInsurance':
+                    return require('@/assets/currencies/insurance/INSURANCE.svg');
+                case 'withdrawInsurance':
+                    return require('@/assets/currencies/insurance/INSURANCE.svg');
                 default:
                     return ''
             }
@@ -113,7 +117,7 @@ export default {
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
         ...mapActions('swapModal', ['closeSwapModal']),
         ...mapActions('wrapModal', ['closeWrapModal']),
         ...mapActions('investModal', ['closeInvestModal']),
@@ -137,6 +141,10 @@ export default {
                 case 'redeemEts':
                     this.addEtsToken(this.etsData);
                     this.trackClick({action: 'add-ets-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add ets token', value: 1 });
+                    break;
+                case 'mintInsurance':
+                case 'withdrawInsurance':
+                    this.addInsuranceToken();
                     break;
                 default:
                     break;

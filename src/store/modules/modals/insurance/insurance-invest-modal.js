@@ -3,6 +3,7 @@ const state = {
 
     show: false,
     showRedemptionRequest: false,
+    showRedemptionRequestSuccess: false,
 
     insuranceTokenApproved: false,
     actionAssetApproved: false,
@@ -20,6 +21,10 @@ const getters = {
 
     showRedemptionRequest(state) {
         return state.showRedemptionRequest;
+    },
+
+    showRedemptionRequestSuccess(state) {
+        return state.showRedemptionRequestSuccess;
     },
 
     insuranceTokenApproved(state) {
@@ -58,6 +63,14 @@ const actions = {
         commit('setShowRedemptionRequest', false);
     },
 
+    showRedemptionRequestSuccessModal({commit, dispatch, getters}) {
+        commit('setShowRedemptionRequestSuccess', true);
+    },
+
+    closeRedemptionRequestSuccessModal({commit, dispatch, getters}) {
+        commit('setShowRedemptionRequestSuccess', false);
+    },
+
     approveEtsToken({commit, dispatch, getters}) {
         commit('setInsuranceTokenApproved', true);
     },
@@ -79,6 +92,10 @@ const mutations = {
 
     setShowRedemptionRequest(state, value) {
         state.showRedemptionRequest = value;
+    },
+
+    setShowRedemptionRequestSuccess(state, value) {
+        state.showRedemptionRequestSuccess = value;
     },
 
     setInsuranceTokenApproved(state, value) {

@@ -24,7 +24,7 @@
                     </v-row>
 
                     <v-row class="invest-body-row mx-n2 mt-10 mb-2" align="center">
-                        <v-btn class="redemption-btn" @click="sendRedemptionRequest">
+                        <v-btn class="redemption-btn" @click="sendRedemptionRequest" v-if="!redemptionRequestSent">
                             send redemption request
                         </v-btn>
                     </v-row>
@@ -32,29 +32,42 @@
             </v-card>
         </v-dialog>
 
+        <ErrorModal/>
+
         <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import ErrorModal from "@/components/common/modal/action/ErrorModal";
 
 export default {
     name: "RedemptionRequestModal",
 
     components: {
+        ErrorModal
     },
 
     props: {},
 
     computed: {
         ...mapGetters('insuranceInvestModal', ['showRedemptionRequest']),
+        ...mapGetters('web3', ['web3', 'contracts']),
+        ...mapGetters('network', ['networkId']),
+        ...mapGetters('accountData', ['account']),
+        ...mapGetters('gasPrice', ['gasPriceGwei']),
     },
 
-    data: () => ({}),
+    data: () => ({
+        redemptionRequestSent: false,
+    }),
 
     methods: {
         ...mapActions('insuranceInvestModal', ['closeRedemptionRequestModal']),
+        ...mapActions('errorModal', ['showErrorModalWithMsg']),
+        ...mapActions('insuranceData', ['refreshIsNeedRedemption']),
+        ...mapActions('insuranceInvestModal', ['showRedemptionRequestSuccessModal']),
 
         openLink(link) {
             window.open(link, '_blank').focus();
@@ -64,8 +77,76 @@ export default {
             this.closeRedemptionRequestModal();
         },
 
-        sendRedemptionRequest() {
-            // TODO: add sending redemption request
+        async sendRedemptionRequest() {
+            let insurance = {
+                chainName: 'polygon'
+            }
+
+            let estimateResult = await this.estimateRedemptionRequest(insurance);
+
+            if (estimateResult.haveError) {
+                this.showErrorModalWithMsg({errorType: 'redemptionRequest', errorMsg: estimateResult});
+            } else {
+                this.redemptionRequestSent = true;
+
+                let requestParams = {from: this.account, gasPrice: this.gasPriceGwei};
+                await this.contracts.insurance[insurance.chainName + '_exchanger'].methods.requestWithdraw().send(requestParams);
+
+                this.showRedemptionRequestSuccessModal();
+                await this.refreshIsNeedRedemption();
+
+                this.redemptionRequestSent = false;
+                this.close();
+            }
+        },
+
+        async estimateRedemptionRequest(insurance) {
+
+            let result;
+
+            try {
+                let blockNum = await this.web3.eth.getBlockNumber();
+                let contract = this.contracts.insurance[insurance.chainName + '_exchanger'];
+                let estimateOptions = {from: this.account, "gasPrice": this.gasPriceGwei};
+
+                await contract.methods.requestWithdraw().estimateGas(estimateOptions)
+                    .then(function (gasAmount) {
+                        result = {
+                            haveError: false,
+                            gas: gasAmount,
+                        };
+                    })
+                    .catch(function (error) {
+                        if (error && error.message) {
+                            result = {
+                                haveError: true,
+                                from: this.account,
+                                to: contract.options.address,
+                                gas: null,
+                                gasPrice: parseInt(estimateOptions.gasPrice, 16),
+                                method: contract.methods.requestWithdraw().encodeABI(),
+                                message: error.message,
+                                block: blockNum
+                            };
+                        } else {
+                            result = {
+                                haveError: true,
+                                message: "Unexpected error",
+                            };
+                        }
+                    });
+            } catch (e) {
+                result = {
+                    haveError: true,
+                    message: "Unexpected error",
+                };
+            }
+
+            return result;
+        },
+
+        async redemptionRequest(insurance) {
+            await this.contracts.insurance[insurance.chainName + '_exchanger'].methods.requestWithdraw().call();
         },
     },
 }
@@ -88,7 +169,7 @@ export default {
 
     .redemption-btn {
         width: 100%;
-        height: 36px !important;
+        height: 42px !important;
 
         font-style: normal !important;
         font-weight: 400 !important;
@@ -123,7 +204,7 @@ export default {
 
     .redemption-btn {
         width: 100%;
-        height: 40px !important;
+        height: 48px !important;
 
         font-style: normal !important;
         font-weight: 400 !important;
@@ -158,7 +239,7 @@ export default {
 
     .redemption-btn {
         width: 100%;
-        height: 40px !important;
+        height: 48px !important;
 
         font-style: normal !important;
         font-weight: 400 !important;
@@ -194,7 +275,7 @@ export default {
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     background: var(--blue-gradient);
-    color: var(--secondary) !important;
+    color: white !important;
 }
 
 </style>

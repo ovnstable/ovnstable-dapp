@@ -275,17 +275,6 @@ const actions = {
             })
     },
 
-    async redemptionRequest({commit, dispatch, getters, rootState}) {
-
-        let web3 = rootState.web3;
-
-        let insurance = {
-            chainName: 'polygon'
-        }
-
-        await web3.contracts.insurance[insurance.chainName + '_exchanger'].methods.requestWithdraw().call();
-    },
-
     async refreshIsNeedRedemption({commit, dispatch, getters, rootState}) {
         console.debug('Insurance/redemptionCheck')
 

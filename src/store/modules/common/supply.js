@@ -78,7 +78,7 @@ const actions = {
             if (insurance.chainId === networkId) {
                 try {
                     supply = await web3.contracts.insurance[insurance.chainName + '_m2m'].methods.totalNetAssets().call()
-                    supply = web3.web3.utils.fromWei(supply,   'mwei');
+                    supply = web3.web3.utils.fromWei(supply, 'mwei');
                 } catch (e) {
                     supply = rootState.insuranceData.insuranceStrategyData[insurance.chainName].lastTvl;
                 }

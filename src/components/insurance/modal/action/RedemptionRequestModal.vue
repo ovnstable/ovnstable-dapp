@@ -1,13 +1,13 @@
 <template>
-    <div v-if="show && etsData">
+    <div v-if="showRedemptionRequest">
         <v-dialog
-                v-model="show"
-                width="600"
+                v-model="showRedemptionRequest"
+                width="650"
                 persistent>
             <v-card class="container_body airdrop-body">
                 <v-toolbar class="container_header" flat>
                     <label class="title-modal mt-4">
-                        {{ isMintView ? 'Mint' : 'Redeem' }}
+                        Redeem Insurance
                     </label>
                     <v-spacer></v-spacer>
                     <v-btn icon @click="close" class="mt-4">
@@ -17,10 +17,17 @@
 
                 <v-card-text class="pt-8 content-container">
                     <v-row class="invest-body-row mx-n2" align="center">
-                        <label class="modal-link-label" @click="mintAction">Mint USD+</label>
+                        <label class="request-info-text">
+                            By design redemptions take 72 hours from the time of your request. You will have 96 hours to withdraw redemption. After this time in order to withdraw your deposit you would need to submit another request.
+                            <br/><br/>After sending redemption request your funds continue to generate profits and are subject to risk.
+                        </label>
                     </v-row>
 
-
+                    <v-row class="invest-body-row mx-n2 mt-10 mb-2" align="center">
+                        <v-btn class="redemption-btn" @click="sendRedemptionRequest">
+                            send redemption request
+                        </v-btn>
+                    </v-row>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -41,34 +48,24 @@ export default {
     props: {},
 
     computed: {
-        ...mapGetters('investModal', ['show', 'etsData']),
-        ...mapGetters('investModal', ['isMintView']),
-        ...mapGetters('network', ['bridgeLink']),
+        ...mapGetters('insuranceInvestModal', ['showRedemptionRequest']),
     },
 
     data: () => ({}),
 
     methods: {
-        ...mapActions('investModal', ['closeInvestModal']),
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-        ...mapActions('track', ['trackClick']),
+        ...mapActions('insuranceInvestModal', ['closeRedemptionRequestModal']),
 
         openLink(link) {
             window.open(link, '_blank').focus();
         },
 
         close() {
-            this.closeInvestModal();
+            this.closeRedemptionRequestModal();
         },
 
-        mintAction() {
-            this.showMintView();
-            this.showSwapModal();
-        },
-
-        bridge() {
-            window.open(this.bridgeLink, '_blank').focus();
-            this.trackClick({action: 'open-bridge-click', event_category: 'Bridge', event_label: 'Open Bridge From Invest Modal', value: 1 });
+        sendRedemptionRequest() {
+            // TODO: add sending redemption request
         },
     },
 }
@@ -82,11 +79,22 @@ export default {
         width: 100% !important;
     }
 
-    .modal-link-label {
+    .request-info-text {
         font-style: normal;
-        font-weight: 400;
+        font-weight: 300;
         font-size: 16px;
-        line-height: 20px;
+        line-height: 22px;
+    }
+
+    .redemption-btn {
+        width: 100%;
+        height: 36px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.04em !important;
     }
 }
 
@@ -106,11 +114,22 @@ export default {
         margin-right: 5% !important;
     }
 
-    .modal-link-label {
+    .request-info-text {
         font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .redemption-btn {
+        width: 100%;
+        height: 40px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 20px !important;
+        line-height: 24px !important;
+        letter-spacing: 0.04em !important;
     }
 }
 
@@ -130,15 +149,22 @@ export default {
         margin-right: 5% !important;
     }
 
-    .modal-link-label {
+    .request-info-text {
         font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 28px;
     }
 
-    .invest-body-row {
-        margin-bottom: 5% !important;
+    .redemption-btn {
+        width: 100%;
+        height: 40px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 20px !important;
+        line-height: 24px !important;
+        letter-spacing: 0.04em !important;
     }
 }
 
@@ -156,18 +182,19 @@ export default {
     background-color: var(--secondary) !important;
 }
 
-.modal-link-label {
+.request-info-text {
     font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'liga' off;
-    color: var(--links-blue);
-    cursor: pointer;
+    color: var(--secondary-gray-text) !important;
 }
 
-.bridge-label {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'liga' off;
-    color: #1C95E7;
-    cursor: pointer;
+.redemption-btn {
+    border-radius: 2px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    text-transform: uppercase !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+    background: var(--blue-gradient);
+    color: var(--secondary) !important;
 }
 
 </style>

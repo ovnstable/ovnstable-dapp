@@ -99,11 +99,9 @@
             </v-col>
         </v-row>
 
-        <!-- TODO: add wrap checkbox -->
-
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 USD+ = 1 {{ assetName }}</label>
+            <label class="exchange-label">1 USD+ INS = 1 {{ assetName }}</label>
         </v-row>
 
         <v-row class="mt-10">
@@ -150,29 +148,46 @@
             </div>
 
             <div class="action-btn-container" v-else>
-                <v-btn v-if="usdPlusApproved"
-                       height="56"
-                       class="buy"
-                       :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
-                       :disabled="!isBuy"
-                       @click="confirmSwapAction">
-                    <v-progress-circular
-                        v-if="transactionPending"
-                        class="mr-2"
-                        width="2"
-                        :size="18"
-                        indeterminate
-                    ></v-progress-circular>
-                    {{ buttonLabel }}
-                </v-btn>
-                <v-btn v-else
-                       height="56"
-                       class="buy"
-                       :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
-                       :disabled="!isBuy"
-                       @click="approveAction">
-                    {{ buttonLabel }}
-                </v-btn>
+                <template v-if="insuranceRedemptionData.request === 'NEED_WAIT'">
+                    <v-btn height="56"
+                           class="buy disabled-buy"
+                           disabled
+                           @click="approveAction">
+                        WITHDRAW IN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
+                    </v-btn>
+                </template>
+                <template v-if="insuranceRedemptionData.request === 'NEED_REQUEST'">
+                    <v-btn height="56"
+                           class="buy enabled-buy"
+                           @click="redemptionRequestAction">
+                        REDEMPTION REQUEST
+                    </v-btn>
+                </template>
+                <template v-if="CAN_WITHDRAW">
+                    <v-btn v-if="insuranceTokenApproved"
+                           height="56"
+                           class="buy"
+                           :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                           :disabled="!isBuy"
+                           @click="confirmSwapAction">
+                        <v-progress-circular
+                            v-if="transactionPending"
+                            class="mr-2"
+                            width="2"
+                            :size="18"
+                            indeterminate
+                        ></v-progress-circular>
+                        {{ buttonLabel }}
+                    </v-btn>
+                    <v-btn v-else
+                           height="56"
+                           class="buy"
+                           :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                           :disabled="!isBuy"
+                           @click="approveAction">
+                        {{ buttonLabel }}
+                    </v-btn>
+                </template>
             </div>
         </v-row>
 
@@ -230,9 +245,9 @@ export default {
         currency: null,
         currencies: [
             {
-                id: 'usdPlus',
-                title: 'USD+',
-                image: require('@/assets/currencies/usdPlus.svg')
+                id: 'insurance',
+                title: 'USD+ INS',
+                image: require('@/assets/currencies/insurance/INSURANCE.svg')
             }
         ],
 
@@ -252,10 +267,11 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('accountData', ['balance', 'account', 'insuranceBalance']),
         ...mapGetters('transaction', ['transactions']),
 
-        ...mapGetters('swapModal', ['usdPlusApproved']),
+        ...mapGetters('insuranceInvestModal', ['insuranceTokenApproved']),
+        ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceRedemptionData']),
 
         ...mapGetters("network", ['networkId', 'assetName', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
@@ -275,11 +291,11 @@ export default {
         },
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.balance.usdPlus, 3);
+            return this.$utils.formatMoney(this.insuranceBalance.polygon, 3);
         },
 
         sumResult: function () {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.usdPlus) * 100;
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.insuranceBalance.polygon) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -289,11 +305,11 @@ export default {
         },
 
         overnightFee: function () {
-            return 0.04;
+            return this.insuranceStrategyData.redeemFee;
         },
 
         estimateResult: function () {
-            return this.sum * (1 - (this.overnightFee ? (this.overnightFee / 100.0) : 0.0004));
+            return this.sum * (1 - (this.overnightFee ? (this.overnightFee / 100.0) : 0));
         },
 
         buttonLabel: function () {
@@ -304,14 +320,14 @@ export default {
             } else if (this.transactionPending) {
                 return 'Transaction is pending';
             } else if (this.isBuy) {
-                if (this.usdPlusApproved) {
+                if (this.insuranceTokenApproved) {
                     this.step = 2;
                     return 'Confirm transaction'
                 } else {
                     this.step = 1;
-                    return 'Approve USD+';
+                    return 'Approve USD+ INS';
                 }
-            } else if (this.sum > parseFloat(this.balance.usdPlus)) {
+            } else if (this.sum > parseFloat(this.insuranceBalance.polygon)) {
                 return 'Redeem'
             } else {
                 return 'Redeem';
@@ -323,7 +339,7 @@ export default {
         },
 
         transactionPending: function () {
-            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === 'usdPlus') && (value.action === 'redeem'))).length > 0;
+            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === 'insurance') && (value.action === 'withdraw'))).length > 0;
         },
 
         numberRule: function () {
@@ -337,7 +353,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlus)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.insuranceBalance.polygon)) return true;
 
             return false;
         },
@@ -376,8 +392,8 @@ export default {
 
     methods: {
 
-        ...mapActions("swapData", ['refreshSwap']),
-        ...mapActions("swapModal", ['showMintView', 'approveUsdPlus']),
+        ...mapActions("insuranceData", ['refreshInsurance']),
+        ...mapActions("insuranceInvestModal", ['showMintView', 'approveInsuranceToken', 'showRedemptionRequestModal']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
@@ -385,12 +401,11 @@ export default {
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
-        ...mapActions('track', ['trackClick']),
 
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         changeSliderPercent() {
-            this.sum = (this.balance.usdPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.insuranceBalance.polygon * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
 
         isNumber: function(evt) {
@@ -413,8 +428,12 @@ export default {
         },
 
         max() {
-            let balanceElement = this.balance[this.currency.id];
+            let balanceElement = this.insuranceBalance.polygon;
             this.sum = balanceElement + "";
+        },
+
+        redemptionRequestAction() {
+            this.showRedemptionRequestModal();
         },
 
         async redeemAction() {
@@ -437,18 +456,18 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    let buyResult = await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).send(buyParams).on('transactionHash', function (hash) {
+                    let buyResult = await contracts.insurance.polygon_exchanger.methods.redeem({ amount: sum }).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {
                             hash: hash,
-                            text: 'Redeem USD+',
-                            product: 'usdPlus',
-                            productName: 'USD+',
-                            action: 'redeem',
+                            text: 'Withdraw USD+ INS',
+                            product: 'insurance',
+                            productName: 'USD+ INS',
+                            action: 'withdraw',
                             amount: sumInUsd,
                         };
 
                         self.putTransaction(tx);
-                        self.showSuccessModal({successTxHash: hash, successAction: 'redeemUsdPlus'});
+                        self.showSuccessModal({successTxHash: hash, successAction: 'withdrawInsurance'});
                         self.loadTransaction();
                     });
                 } catch (e) {
@@ -456,7 +475,7 @@ export default {
                     return;
                 }
 
-                self.refreshSwap();
+                self.refreshInsurance();
                 self.setSum(null);
             } catch (e) {
                 console.log(e);
@@ -473,7 +492,6 @@ export default {
                     this.gasAmountInMatic = null;
                     this.gasAmountInUsd = null;
 
-                    this.trackClick({action: 'confirm-redeem-click', event_category: 'Redeem confirm', event_label: 'Confirm Redeem Action', value: 1 });
                     await this.redeemAction();
                     this.closeWaitingModal();
                 } else {
@@ -496,8 +514,6 @@ export default {
         async approveAction() {
             try {
                 this.showWaitingModal('Approving in process');
-                this.trackClick({action: 'approve-redeem-click', event_category: 'Redeem approve', event_label: 'Approve Redeem Action', value: 1 });
-
 
                 let approveSum = "10000000";
                 let sum = this.web3.utils.toWei(approveSum, 'mwei');
@@ -507,13 +523,12 @@ export default {
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
                 } else {
-                    this.approveUsdPlus();
+                    this.approveInsuranceToken();
                     this.closeWaitingModal();
                 }
             } catch (e) {
                 console.log(e)
                 this.showErrorModal('approve');
-                this.trackClick({action: 'redeem-error-click', event_category: 'Redeem error', event_label: 'Error Redeem Showed', value: 1 });
             }
         },
 
@@ -522,20 +537,19 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts.usdPlus.methods.allowance(from, contracts.exchange.options.address).call()
+            let allowanceValue = await contracts.insurance.polygon_token.methods.allowance(from, contracts.insurance.polygon_exchanger.options.address).call()
 
             if (allowanceValue < sum) {
                 try {
                     await this.refreshGasPrice();
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                    let tx = await contracts.usdPlus.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
+                    let tx = await contracts.insurance.polygon_token.methods.approve(contracts.insurance.polygon_exchanger.options.address, sum).send(approveParams);
 
                     let minted = true;
                     while (minted) {
                         await new Promise(resolve => setTimeout(resolve, 2000));
                         let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
-                        this.trackClick({action: 'redeem-tx-show-click', event_category: 'Redeem tx scan', event_label: 'Redeem Go to Scan', value: 1 });
 
                         if (receipt) {
                             if (receipt.status)
@@ -568,7 +582,7 @@ export default {
                 let blockNum = await this.web3.eth.getBlockNumber();
                 let errorApi = this.polygonApi;
 
-                await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).estimateGas(estimateOptions)
+                await contracts.insurance.polygon_exchanger.methods.redeem({ amount: sum }).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })
@@ -577,13 +591,13 @@ export default {
                             let msg = error.message.replace(/(?:\r\n|\r|\n)/g, '');
 
                             let errorMsg = {
-                                product: 'USD+',
+                                product: 'USD+ INS',
                                 data: {
                                     from: from,
-                                    to: contracts.exchange.options.address,
+                                    to: contracts.insurance.polygon_exchanger.options.address,
                                     gas: null,
                                     gasPrice: parseInt(estimateOptions.gasPrice, 16),
-                                    method: contracts.exchange.methods.redeem(contracts.asset.options.address, sum).encodeABI(),
+                                    method: contracts.insurance.polygon_exchanger.methods.redeem({ amount: sum }).encodeABI(),
                                     message: msg,
                                     block: blockNum
                                 }

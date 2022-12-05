@@ -46,7 +46,7 @@
                         <v-col :cols="$wu.isMobile() ? 6 : 2">
                             <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2">
                                 <label class="info-value">
-                                    {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.lastTvl) ? ('$' + $utils.formatMoneyComma(insuranceStrategyData.polygon.lastTvl, 2)) : '—'  }}
+                                    {{ (totalInsuranceSupply && totalInsuranceSupply.polygon) ? ('$' + $utils.formatMoneyComma(totalInsuranceSupply.polygon, 2)) : '—'  }}
                                 </label>
                             </v-row>
                             <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2 mt-5">
@@ -86,7 +86,7 @@ export default {
 
     computed: {
         ...mapGetters('insuranceData', ['insuranceStrategyData']),
-        ...mapGetters('supplyData', ['totalSupply']),
+        ...mapGetters('supplyData', ['totalSupply', 'totalInsuranceSupply']),
 
         icon: function (){
             switch (this.insuranceData.chainId){

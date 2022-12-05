@@ -24,7 +24,17 @@
                     </v-row>
 
                     <v-row class="invest-body-row mx-n2 mt-10 mb-2" align="center">
-                        <v-btn class="redemption-btn" @click="sendRedemptionRequest" v-if="!redemptionRequestSent">
+                        <v-btn class="redemption-btn"
+                               :class="redemptionRequestSent ? 'disabled-redemption-btn' : ''"
+                               @click="sendRedemptionRequest"
+                               :disabled="redemptionRequestSent">
+                            <v-progress-circular
+                                v-if="redemptionRequestSent"
+                                class="mr-2"
+                                width="2"
+                                :size="18"
+                                indeterminate
+                            ></v-progress-circular>
                             send redemption request
                         </v-btn>
                     </v-row>
@@ -90,10 +100,15 @@ export default {
                 this.redemptionRequestSent = true;
 
                 let requestParams = {from: this.account, gasPrice: this.gasPriceGwei};
-                await this.contracts.insurance[insurance.chainName + '_exchanger'].methods.requestWithdraw().send(requestParams);
 
-                this.showRedemptionRequestSuccessModal();
+                try {
+                    await this.contracts.insurance[insurance.chainName + '_exchanger'].methods.requestWithdraw().send(requestParams);
+                } catch (e) {
+                    this.redemptionRequestSent = false;
+                }
+
                 await this.refreshIsNeedRedemption();
+                this.showRedemptionRequestSuccessModal();
 
                 this.redemptionRequestSent = false;
                 this.close();
@@ -276,6 +291,11 @@ export default {
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     background: var(--blue-gradient);
     color: white !important;
+}
+
+.disabled-redemption-btn {
+    background: var(--main-banner-background) !important;
+    color: #9DA4B0 !important;
 }
 
 </style>

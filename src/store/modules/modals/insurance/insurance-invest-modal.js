@@ -71,7 +71,7 @@ const actions = {
         commit('setShowRedemptionRequestSuccess', false);
     },
 
-    approveEtsToken({commit, dispatch, getters}) {
+    approveInsuranceToken({commit, dispatch, getters}) {
         commit('setInsuranceTokenApproved', true);
     },
 

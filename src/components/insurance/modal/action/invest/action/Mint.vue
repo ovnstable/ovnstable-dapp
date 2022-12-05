@@ -103,7 +103,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 {{ assetName }} = 1 USD+</label>
+            <label class="exchange-label">1 {{ assetName }} = 1 USD+ INS</label>
         </v-row>
 
         <v-row class="mt-10">

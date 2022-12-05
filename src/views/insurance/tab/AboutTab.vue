@@ -61,7 +61,40 @@
             </v-col>
         </v-row>
 
-        <!-- TODO: add notify risk box -->
+        <v-row class="ma-0 mt-7 info-card-container-bottom" justify="start" align="start" :style="{'background': 'radial-gradient(128.35% 221.83% at 66.7% -84.67%, #011845 0%, #011439 31.55%, #011233 56.82%, #6135BD 93.94%)'}">
+            <v-col class="info-card-body-bottom" :cols="$wu.isMobile() ? 0 : 5">
+                <v-row class="info-row" justify="start" align="center">
+                    <label class="card-info mt-1">Investors</label>
+                    <v-spacer></v-spacer>
+                    <label class="card-info-value">{{ (insuranceData.polygon && insuranceData.polygon.holders) ? $utils.formatMoneyComma(insuranceData.polygon.holders, 0) : '—' }}</label>
+                </v-row>
+                <v-row class="info-row mt-6" justify="start" align="center">
+                    <label class="card-info mt-1">Risk factor</label>
+                    <v-spacer></v-spacer>
+                    <label class="card-info-value">HIGH</label>
+                </v-row>
+            </v-col>
+
+            <v-col :cols="$wu.isMobile() ? 12 : 1"></v-col>
+
+            <v-col class="info-card-body-bottom" :cols="$wu.isMobile() ? 0 : 5">
+                <v-row class="info-row" justify="start" align="center">
+                    <label class="card-info mt-1">Token address</label>
+                    <v-spacer></v-spacer>
+                    <label class="card-info-value info-value-address" @click="openTokenOnScan(insuranceData.polygon.rebaseAddress)">
+                        {{ (insuranceData.polygon && insuranceData.polygon.rebaseAddress) ? shortAddress(insuranceData.polygon.rebaseAddress) : '—' }}
+                    </label>
+                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''" @click="openTokenOnScan(insuranceData.polygon.rebaseAddress)">
+                        <v-icon size="20" style="margin-top: -2px" color="rgba(255, 255, 255, 0.5)">mdi-open-in-new</v-icon>
+                    </div>
+                </v-row>
+                <v-row class="info-row mt-6" justify="start" align="center">
+                    <label class="card-info mt-1">Inception date</label>
+                    <v-spacer></v-spacer>
+                    <label class="card-info-value">06 December 2022</label>
+                </v-row>
+            </v-col>
+        </v-row>
 
         <resize-observer @notify="$forceUpdate()"/>
     </div>
@@ -93,18 +126,22 @@ export default {
     },
 
     computed: {
-        ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'avaxConfig']),
-        ...mapGetters('marketData', ['etsStrategyData']),
-        ...mapGetters('supplyData', ['totalSupply']),
-        ...mapGetters('overcapData', ['isOvercapAvailable']),
-
-        networkSupport: function () {
-            return this.networkId === this.insuranceData.chainId;
-        },
     },
 
     methods: {
+        shortAddress(address) {
+            if (address) {
+                return address.substring(0, 5) + '...' + address.substring(address.length - 4);
+            } else {
+                return null;
+            }
+        },
 
+        openTokenOnScan(hash) {
+            if (hash && hash !== '') {
+                window.open("https://polygonscan.com/token/" + hash, '_blank').focus();
+            }
+        },
     }
 }
 </script>
@@ -149,6 +186,21 @@ export default {
         font-size: 16px;
         line-height: 24px;
     }
+
+    .card-info {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .card-info-value, .card-info-risk {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
 }
 
 /* tablet */
@@ -189,6 +241,21 @@ export default {
         font-size: 16px;
         line-height: 24px;
     }
+
+    .card-info {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .card-info-value, .card-info-risk {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 22px;
+        letter-spacing: 0.04em;
+    }
 }
 
 /* full */
@@ -228,6 +295,21 @@ export default {
         font-weight: 300;
         font-size: 18px;
         line-height: 28px;
+    }
+
+    .card-info {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .card-info-value, .card-info-risk {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 22px;
+        letter-spacing: 0.04em;
     }
 }
 
@@ -279,5 +361,46 @@ export default {
 .title-modal-icon {
     width: 24px;
     height: 24px;
+}
+
+.info-card-container-bottom {
+    border-radius: 8px;
+}
+
+.info-card-body-bottom {
+    margin: 2% 2% !important;
+}
+
+.info-row {
+    border-top: 1px solid var(--secondary-border);
+}
+
+.card-info {
+    font-family: 'Roboto', sans-serif;
+    color: white;
+}
+
+.card-info-value {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: white;
+}
+
+.card-info-risk {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #FE7F2D;
+}
+
+.info-value-address {
+    cursor: pointer;
+}
+
+.icon-img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
 }
 </style>

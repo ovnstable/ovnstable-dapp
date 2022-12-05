@@ -46,6 +46,7 @@
         </v-row>
 
         <InvestModal/>
+        <InsuranceInvestModal/>
         <SwapModal/>
         <WrapModal/>
         <RedemptionRequestModal/>
@@ -66,11 +67,13 @@ import WrapModal from "@/components/wrap/WrapModal";
 import RedemptionRequestModal from "@/components/insurance/modal/action/redemption-request/RedemptionRequestModal";
 import RedemptionRequestSuccessModal
     from "@/components/insurance/modal/action/redemption-request/RedemptionRequestSuccessModal";
+import InsuranceInvestModal from "@/components/insurance/modal/action/invest/InsuranceInvestModal";
 
 export default {
     name: 'Header',
 
     components: {
+        InsuranceInvestModal,
         RedemptionRequestSuccessModal,
         RedemptionRequestModal,
         WrapModal,

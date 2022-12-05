@@ -114,12 +114,13 @@
                     </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabPerformance" disabled>
+                        <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPerformance">
                             Performance
                         </label>
                         <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabAbout">About ETS</label>
                     </v-row>
 
+                    <PerformanceTab v-if="tab === 1" :insurance-data="insuranceStrategyData"/>
                     <AboutTab v-if="tab === 2" :insurance-data="insuranceStrategyData"/>
                 </v-col>
 
@@ -244,11 +245,13 @@ import Tooltip from "@/components/common/element/Tooltip";
 import AboutTab from "@/views/insurance/tab/AboutTab";
 import InsuranceBanner from "@/components/insurance/section/InsuranceBanner";
 import InsuranceRiskModal from "@/components/insurance/modal/InsuranceRiskModal";
+import PerformanceTab from "@/views/insurance/tab/PerformanceTab";
 
 export default {
     name: "InsurancePageView",
 
     components: {
+        PerformanceTab,
         InsuranceRiskModal,
         InsuranceBanner,
         AboutTab,
@@ -257,7 +260,7 @@ export default {
     },
 
     data: () => ({
-        tab: 2,
+        tab: 1,
     }),
 
     computed: {
@@ -306,13 +309,13 @@ export default {
         },
 
         mintAction() {
-            // this.showMintView();
-            // this.showInvestModal(this.insuranceStrategyData);
+            this.showMintView();
+            this.showInvestModal();
         },
 
         redeemAction() {
-            // this.showRedeemView();
-            // this.showInvestModal(this.insuranceStrategyData);
+            this.showRedeemView();
+            this.showInvestModal();
         },
 
         redemptionRequestAction() {

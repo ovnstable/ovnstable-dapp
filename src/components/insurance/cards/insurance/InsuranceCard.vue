@@ -176,20 +176,19 @@ export default {
     methods: {
         ...mapActions("swapModal", ["showSwapModal", "showMintView"]),
         ...mapActions("swapModal", ["showSwapModal", "showRedeemView"]),
+        ...mapActions("insuranceInvestModal", ["showInvestModal", "showMintView", "showRedeemView"]),
         ...mapActions("network", ["setWalletNetwork"]),
         ...mapActions("insuranceData", ["refreshInsurance"]),
 
 
         mintAction() {
-            /* TODO: show mint insurance modal */
-            /*this.showMintView();
-            this.showSwapModal();*/
+            this.showMintView();
+            this.showInvestModal();
         },
 
         redeemAction() {
-            /* TODO: show redeem insurance modal */
-            /*this.showRedeemView();
-            this.showSwapModal();*/
+            this.showRedeemView();
+            this.showInvestModal();
         },
 
         openInsurance() {

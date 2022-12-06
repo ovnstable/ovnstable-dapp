@@ -152,7 +152,7 @@ const actions = {
 
                 for(let key in widgetDataDict) {
                     widgetData.labels.push(key);
-                    widgetData.datasets[0].data.push(widgetDataDict[key]);
+                    widgetData.datasets[0].data.push(widgetDataDict[key] > 500 ? 500.00 : widgetDataDict[key]);
                 }
 
                 dispatch('addInsuranceApyData', { name: refreshParams.chain.chainName, data: widgetData});

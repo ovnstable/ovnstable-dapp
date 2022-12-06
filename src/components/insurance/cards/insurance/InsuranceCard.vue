@@ -72,12 +72,12 @@
 
                 <v-row class="ma-0 mt-3 insurance-card-info-row d-flex justify-space-between">
                     <label class="card-info-label mt-2">Insurance coverage</label>
-                    <label class="card-info-value mt-2">{{ (coverageValue !== null) ? ($utils.formatMoneyComma(coverageValue, 0) + '%') : '—' }}</label>
+                    <label class="card-info-value mt-2">{{ (coverageValue !== null) ? ($utils.formatMoneyComma(coverageValue, 2) + '%') : '—' }}</label>
                 </v-row>
 
                 <v-row class="ma-0 mt-3 insurance-card-info-row d-flex justify-space-between">
                     <label class="card-info-label mt-2">Risk factor</label>
-                    <label class="card-info-value mt-2">HIGH</label>
+                    <label class="card-info-value mt-2">VERY HIGH</label>
                 </v-row>
             </v-container>
         </v-col>
@@ -157,7 +157,7 @@ export default {
 
         coverageValue: function () {
             if (this.totalInsuranceSupply && this.totalUsdPlusValue) {
-                return 100.00 * this.totalInsuranceSupply / this.totalUsdPlusValue;
+                return 100.00 * this.totalInsuranceSupply.polygon / this.totalUsdPlusValue;
             } else {
                 return null;
             }
@@ -493,6 +493,36 @@ export default {
         font-weight: 400;
         font-size: 18px;
         line-height: 28px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .card-title {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 18px;
+        letter-spacing: 0.03em;
+    }
+
+    .percentage {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 40px;
+        line-height: 42px;
+    }
+
+    .apy {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 24px;
     }
 }
 

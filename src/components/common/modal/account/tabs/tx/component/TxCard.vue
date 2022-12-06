@@ -280,7 +280,7 @@ export default {
                 case 'wUsdPlus':
                     this.addwUsdPlusToken();
                     break;
-                case 'USD+ INS':
+                case 'insurance':
                     this.addInsuranceToken();
                     break;
                 default:

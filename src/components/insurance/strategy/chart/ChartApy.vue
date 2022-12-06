@@ -387,7 +387,7 @@ export default {
 
                     y: {
                         formatter: function (val, opts) {
-                            return val ? (val + '%') : '—';
+                            return val ? ((val === 500 ? '>500' : val) + '%') : '—';
                         },
                     },
                 },

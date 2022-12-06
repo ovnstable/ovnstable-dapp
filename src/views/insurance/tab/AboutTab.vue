@@ -71,7 +71,7 @@
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Risk factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">HIGH</label>
+                    <label class="card-info-value">VERY HIGH</label>
                 </v-row>
             </v-col>
 
@@ -91,7 +91,7 @@
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Inception date</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">06 December 2022</label>
+                    <label class="card-info-value">05 December 2022</label>
                 </v-row>
             </v-col>
         </v-row>

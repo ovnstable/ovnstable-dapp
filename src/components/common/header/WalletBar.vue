@@ -8,7 +8,10 @@
             </v-col>
             <v-col cols="5" class="wallet-col" v-if="!$wu.isMobile()">
                 <label class="balance-label" :class="dataHidden ? 'hidden-label' : ''">
-                    {{ dataHidden ? '' : $utils.formatMoney(account ? balance.usdPlus : 0, 2) }}&nbsp;USD+
+                    {{ dataHidden ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : ($utils.formatMoney(account ? balance.usdPlus : 0, 2)) }}
+                </label>
+                <label class="balance-label">
+                    &nbsp;USD+
                 </label>
             </v-col>
             <v-col :cols="$wu.isMobile() ? 0 : 4" class="wallet-col" :class="$wu.isMobile() ? 'mr-4' : ''">
@@ -26,7 +29,7 @@
                     </template>
 
                     <label v-else class="account-label" :class="dataHidden ? 'hidden-label' : ''">
-                        {{ account ? (dataHidden ? '' : accountDisplay) : 'XXXXX...XXXX' }}
+                        {{ account ? ($wu.isMobile() ? accountDisplay : (dataHidden ? '' : accountDisplay)) : 'XXXXX...XXXX' }}
                     </label>
                 </v-row>
             </v-col>

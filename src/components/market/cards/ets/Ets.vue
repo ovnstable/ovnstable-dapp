@@ -146,8 +146,8 @@
                 <v-row class="d-flex justify-space-between ma-0 mt-6" v-if="cardData.monthApy">
                     <template v-if="accountEtsBalance && (accountEtsBalance > 0)">
                         <label class="your-deposit">Your deposit in ETS</label>
-                        <label class="your-deposit">{{
-                                accountEtsBalance ? ($utils.formatMoneyComma(accountEtsBalance, 2) + ' ' + cardData.data.actionTokenName) : '—'
+                        <label class="your-deposit" :class="dataHidden ? 'hidden-label' : ''">{{
+                                dataHidden ? '' : accountEtsBalance ? ($utils.formatMoneyComma(accountEtsBalance, 2) + ' ' + cardData.data.actionTokenName) : '—'
                             }}</label>
                     </template>
                     <template v-else>
@@ -218,6 +218,7 @@ export default {
         ...mapGetters("supplyData", ["totalSupply"]),
         ...mapGetters('accountData', ['etsBalance']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
+        ...mapGetters('magicEye', ['dataHidden']),
 
         accountEtsBalance: function () {
             return this.etsBalance[this.cardData.data.name];
@@ -243,6 +244,7 @@ export default {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
         ...mapActions('track', ['trackClick']),
+        ...mapActions('magicEye', ['switchEye']),
 
         mintAction() {
             this.showMintView();
@@ -721,5 +723,11 @@ export default {
 
 .card-divider {
     border-color: var(--fourth-gray-text) !important;
+}
+
+.hidden-label {
+    width: 100px;
+    height: 28px;
+    background: var(--hide-account);
 }
 </style>

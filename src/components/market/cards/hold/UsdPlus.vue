@@ -73,8 +73,8 @@
                 <v-row class="d-flex justify-space-between ma-0">
                     <label class="your-deposit">Current balance</label>
                     <label
-                        class="your-deposit">{{
-                            this.balance.usdPlus ? ($utils.formatMoneyComma(this.balance.usdPlus, 2) + " USD+") : "—"
+                        class="your-deposit" :class="dataHidden ? 'hidden-label' : ''">{{
+                            dataHidden ? '' : this.balance.usdPlus ? ($utils.formatMoneyComma(this.balance.usdPlus, 2) + " USD+") : "—"
                         }}</label>
                 </v-row>
 
@@ -130,6 +130,7 @@ export default {
         ...mapGetters("accountData", ["balance"]),
         ...mapGetters("wrapUI", ["showWrap"]),
         ...mapGetters("network", ["appApiUrl", "networkId", "networkName"]),
+        ...mapGetters('magicEye', ['dataHidden']),
 
         icon: function () {
             switch (this.networkId) {
@@ -173,6 +174,7 @@ export default {
     methods: {
         ...mapActions("swapModal", ["showSwapModal", "showMintView"]),
         ...mapActions("swapModal", ["showSwapModal", "showRedeemView"]),
+        ...mapActions('magicEye', ['switchEye']),
 
 
         mintAction() {
@@ -639,5 +641,11 @@ export default {
 .full-status-error-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
+}
+
+.hidden-label {
+    width: 100px;
+    height: 28px;
+    background: var(--hide-account);
 }
 </style>

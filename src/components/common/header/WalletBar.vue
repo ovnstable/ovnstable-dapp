@@ -172,6 +172,12 @@ export default {
         line-height: 20px;
         letter-spacing: 0.02em;
     }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
+    }
 }
 
 /* full */
@@ -203,6 +209,12 @@ export default {
         font-size: 16px;
         line-height: 20px;
         letter-spacing: 0.02em;
+    }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
     }
 }
 
@@ -239,11 +251,5 @@ export default {
 
 .account-display-container, .account-display-container > * {
     cursor: pointer !important;
-}
-
-.hidden-label {
-    width: 130px;
-    height: 28px;
-    background: var(--hide-account);
 }
 </style>

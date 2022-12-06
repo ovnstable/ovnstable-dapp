@@ -682,6 +682,12 @@ export default {
         line-height: 18px;
         letter-spacing: 0.03em;
     }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
+    }
 }
 
 /* full */
@@ -782,6 +788,12 @@ export default {
         font-size: 16px;
         line-height: 20px;
         letter-spacing: 0.02em;
+    }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
     }
 }
 
@@ -945,11 +957,5 @@ export default {
 .sticky {
     margin-right: 4% !important;
     position: fixed !important;
-}
-
-.hidden-label {
-    width: 100px;
-    height: 28px;
-    background: var(--hide-account);
 }
 </style>

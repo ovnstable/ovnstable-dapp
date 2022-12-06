@@ -31,7 +31,9 @@
                                                 <label class="investor-card-sub-title">Your balance in ETS, {{ etsData.actionTokenName }}</label>
                                             </v-row>
                                             <v-row align="center" class="mt-5">
-                                                <label class="investor-card-sub-title-value">{{ etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}</label>
+                                                <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">
+                                                    {{ dataHidden ? '' : etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}
+                                                </label>
                                             </v-row>
                                         </v-col>
                                     </v-row>
@@ -43,8 +45,8 @@
                                             <v-row class="info-row mt-6" justify="start" align="center">
                                                 <label class="fee-structure-label mt-1">Last day</label>
                                                 <v-spacer></v-spacer>
-                                                <label class="investor-card-sub-title-value" :class="etsClientData[this.etsData.name] > 0 ? 'success-color' : ''">
-                                                    {{ etsClientData[this.etsData.name] ? ((etsClientData[this.etsData.name] > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—' }}
+                                                <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label mt-1' : (etsClientData[this.etsData.name] > 0 ? 'success-color' : '')">
+                                                    {{ dataHidden ? '' : (etsClientData[this.etsData.name] ? ((etsClientData[this.etsData.name] > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—') }}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -133,7 +135,9 @@
                                         <label class="investor-card-sub-title">Your balance in ETS, {{etsData.actionTokenName }}</label>
                                     </v-row>
                                     <v-row align="center" class="mt-5">
-                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">{{ dataHidden ? '' : etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}</label>
+                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">
+                                            {{ dataHidden ? '' : etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}
+                                        </label>
                                     </v-row>
                                     <v-row align="center" class="mt-10">
                                         <label class="investor-card-sub-title">Profit/loss</label>
@@ -141,8 +145,8 @@
                                     <v-row class="info-row mt-6" justify="start" align="center">
                                         <label class="fee-structure-label mt-1">Last day</label>
                                         <v-spacer></v-spacer>
-                                        <label class="investor-card-sub-title-value" :class="etsClientData[this.etsData.name] > 0 ? 'success-color' : ''" v-bind="dataHidden ? 'hidden-label' : ''">
-                                            {{etsClientData[this.etsData.name] ? ((dataHidden ? '' : etsClientData[this.etsData.name] > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—' }}
+                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label mt-1' : (etsClientData[this.etsData.name] > 0 ? 'success-color' : '')">
+                                            {{ dataHidden ? '' : (etsClientData[this.etsData.name] ? ((etsClientData[this.etsData.name] > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—') }}
                                         </label>
                                     </v-row>
                                 </template>
@@ -546,6 +550,12 @@ export default {
         font-size: 12px;
         line-height: 20px;
     }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
+    }
 }
 
 /* full */
@@ -639,6 +649,12 @@ export default {
         font-weight: 400;
         font-size: 14px;
         line-height: 22px;
+    }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
     }
 }
 
@@ -787,11 +803,5 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #CF3F92;
-}
-
-.hidden-label {
-    width: 100px;
-    height: 28px;
-    background: var(--hide-account);
 }
 </style>

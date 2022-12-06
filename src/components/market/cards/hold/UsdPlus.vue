@@ -70,7 +70,7 @@
 
         <v-col align-self="end">
             <v-container :class="$wu.isFull() ? 'mb-6' : 'mb-6'">
-                <v-row class="d-flex justify-space-between ma-0">
+                <v-row class="d-flex justify-space-between ma-0" align="center">
                     <label class="your-deposit">Current balance</label>
                     <label
                         class="your-deposit" :class="dataHidden ? 'hidden-label' : ''">{{
@@ -404,6 +404,12 @@ export default {
         font-size: 14px;
         line-height: 22px;
     }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
+    }
 }
 
 /* full */
@@ -493,6 +499,12 @@ export default {
         font-weight: 400;
         font-size: 14px;
         line-height: 22px;
+    }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
     }
 }
 
@@ -641,11 +653,5 @@ export default {
 .full-status-error-label {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-}
-
-.hidden-label {
-    width: 100px;
-    height: 28px;
-    background: var(--hide-account);
 }
 </style>

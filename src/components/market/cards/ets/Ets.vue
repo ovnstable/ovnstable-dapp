@@ -143,7 +143,7 @@
                     </v-col>
                 </v-row>
 
-                <v-row class="d-flex justify-space-between ma-0 mt-6" v-if="cardData.monthApy">
+                <v-row class="d-flex justify-space-between ma-0 mt-6" v-if="cardData.monthApy" align="center">
                     <template v-if="accountEtsBalance && (accountEtsBalance > 0)">
                         <label class="your-deposit">Your deposit in ETS</label>
                         <label class="your-deposit" :class="dataHidden ? 'hidden-label' : ''">{{
@@ -458,6 +458,12 @@ export default {
     .tooltip {
         margin-top: 1px;
     }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
+    }
 }
 
 /* full */
@@ -555,6 +561,12 @@ export default {
 
     .tooltip {
         margin-top: 2px;
+    }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
     }
 }
 
@@ -723,11 +735,5 @@ export default {
 
 .card-divider {
     border-color: var(--fourth-gray-text) !important;
-}
-
-.hidden-label {
-    width: 100px;
-    height: 28px;
-    background: var(--hide-account);
 }
 </style>

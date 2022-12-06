@@ -103,15 +103,16 @@ export default {
 
                 try {
                     await this.contracts.insurance[insurance.chainName + '_exchanger'].methods.requestWithdraw().send(requestParams);
+
+                    await this.refreshIsNeedRedemption();
+                    this.showRedemptionRequestSuccessModal();
+
+                    this.redemptionRequestSent = false;
+
+                    this.close();
                 } catch (e) {
                     this.redemptionRequestSent = false;
                 }
-
-                await this.refreshIsNeedRedemption();
-                this.showRedemptionRequestSuccessModal();
-
-                this.redemptionRequestSent = false;
-                this.close();
             }
         },
 

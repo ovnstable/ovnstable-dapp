@@ -104,6 +104,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--box-divider',
+        enabled: true,
+        theme: {
+            light: '#DEE1E5',
+            dark: '#1D2029'
+        }
+    },
+    {
         name: '--secondary-border',
         enabled: true,
         theme: {
@@ -163,7 +171,7 @@ export const THEME_MODE_PARAMS = [
         name: '--red-container',
         enabled: true,
         theme: {
-            light: 'linear-gradient(rgba(207, 63, 146, 0.4), rgba(207, 63, 146, 0.08), rgba(207, 63, 146, 0.4))',
+            light: 'linear-gradient(0deg, rgba(207, 63, 146, 0.08), rgba(207, 63, 146, 0.08)), #FFFFFF',
             dark: 'rgba(207, 63, 146, 0.08)'
         }
     },

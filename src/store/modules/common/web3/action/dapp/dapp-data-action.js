@@ -13,10 +13,12 @@ const actions = {
     async updateUserData({commit, dispatch, getters, rootState}) {
         dispatch('accountData/refreshBalance', null, {root:true});
         dispatch('supplyData/refreshSupply', null, {root:true});
+        dispatch('supplyData/refreshInsuranceSupply', null, {root:true});
         dispatch('swapData/refreshSwap', null, {root:true});
         dispatch('statsData/refreshStats', null, {root:true});
         dispatch('dashboardData/refreshDashboard', null, {root:true});
         dispatch('marketData/refreshClientData', null, {root:true});
+        dispatch('insuranceData/refreshInsurance', null, {root:true});
 
         let network = rootState.network.networkName;
 

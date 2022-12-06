@@ -13,24 +13,20 @@ const actions = {
             case "polygon_dev":
             case "137":
             case "31337":
-                dispatch('farmUI/hidePage', null, {root: true});
                 dispatch('wrapUI/showPage', null, {root: true});
                 break;
             case "bsc":
             case "56":
-                dispatch('farmUI/hidePage', null, {root: true});
                 dispatch('wrapUI/hidePage', null, {root: true});
                 break;
             case "avax":
             case "avalanche":
             case "43114":
-                dispatch('farmUI/hidePage', null, {root: true});
                 dispatch('wrapUI/hidePage', null, {root: true});
                 break;
             case "op":
             case "optimism":
             case "10":
-                dispatch('farmUI/hidePage', null, {root: true});
                 dispatch('wrapUI/showPage', null, {root: true});
                 break;
             default:

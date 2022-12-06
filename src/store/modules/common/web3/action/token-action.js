@@ -1,5 +1,6 @@
 import UsdPlusImage from "@/assets/usdPlus.json";
 import WrappedUsdPlusImage from "@/assets/wUsdPlus.json";
+import PolygonInsurance from "@/assets/polygon_insurance.json";
 import OvnImage from "@/assets/ovn.json";
 
 const state = {};
@@ -50,6 +51,31 @@ const actions = {
             .then((success) => {
                 if (success) {
                     console.log('wUSD+ successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
+    async addInsuranceToken({commit, dispatch, getters, rootState}) {
+
+        await rootState.web3.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: rootState.web3.contracts.insurance.polygon_token.options.address,
+                        symbol: 'USD+ INS',
+                        decimals: 6,
+                        image: PolygonInsurance.image,
+                    },
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('USD+ INS successfully added to wallet!')
                 } else {
                     throw new Error('Something went wrong.')
                 }

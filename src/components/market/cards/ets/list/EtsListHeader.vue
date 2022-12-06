@@ -1,37 +1,37 @@
 <template>
     <v-row class="ma-0" justify="start">
         <v-col v-if="!$wu.isMobile()">
-            <v-row justify="start" align="center">
+            <v-row class="ma-0" justify="start" align="center">
                 <label class="list-header-label">Chain / Platform</label>
             </v-row>
         </v-col>
-        <v-col :cols="$wu.isFull() ? 2 : ($wu.isMobile() ? 7 : 3)">
-            <v-row :justify="$wu.isMobile() ? 'start' : 'center'" align="center">
+        <v-col :cols="$wu.isFull() ? 3 : ($wu.isMobile() ? 7 : 3)">
+            <v-row class="ma-0" :justify="$wu.isMobile() ? 'start' : 'center'" align="center">
                 <label class="list-header-label">ETS name</label>
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)">
-            <v-row justify="center" align="center">
+            <v-row class="ma-0" justify="end" align="center">
                 <label class="list-header-label">APY</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()" cols="3">
-            <v-row justify="center" align="center">
+            <v-row class="ma-0" justify="end" align="center">
                 <label class="list-header-label">TVL</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()">
-            <v-row justify="center" align="center">
+            <v-row class="ma-0" justify="center" align="center">
                 <label class="list-header-label">Token pair</label>
             </v-row>
         </v-col>
         <v-col v-if="$wu.isFull()" cols="1">
-            <v-row justify="center" align="center">
+            <v-row class="ma-0" justify="center" align="center">
                 <label class="list-header-label">My investment</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()">
-            <v-row justify="end" align="center">
+            <v-row class="ma-0" justify="end" align="center">
                 <label class="list-header-label">About ETS</label>
             </v-row>
         </v-col>
@@ -101,6 +101,22 @@ export default {
         font-weight: 400;
         font-size: 14px;
         line-height: 22px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+
+    .list-header-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
     }
 }
 

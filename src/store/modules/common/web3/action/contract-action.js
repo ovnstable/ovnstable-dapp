@@ -31,8 +31,8 @@ const actions = {
             { network: 'polygon', name: 'qs_gamma_weth_usdc' },
             { network: 'polygon', name: 'qs_delta_weth_usdc' },
             { network: 'polygon', name: 'wmatic_usd_plus' },
-            { network: 'polygon', name: 'qs_zeta_wbtc_usdc' },
-            { network: 'polygon', name: 'qs_epsilon_weth_dai' },
+            // { network: 'polygon', name: 'qs_zeta_wbtc_usdc' },
+            // { network: 'polygon', name: 'qs_epsilon_weth_dai' },
 
             { network: 'bsc', name: 'wbnb_busd' },
 
@@ -73,6 +73,24 @@ const actions = {
                 }
             })
         );
+
+        let insurances = [
+            { network: 'polygon' },
+        ];
+
+        for (let i = 0; i < insurances.length; i++) {
+            if (network === insurances[i].network) {
+                let ExchangerContract = require(`@/contracts/${insurances[i].network}/insurance/exchanger.json`);
+                let TokenContract = require(`@/contracts/${insurances[i].network}/insurance/token.json`);
+                let M2MContract = require(`@/contracts/${insurances[i].network}/insurance/m2m.json`);
+
+                contracts.insurance = {};
+
+                contracts.insurance[insurances[i].network + '_exchanger'] = _load(ExchangerContract, web3);
+                contracts.insurance[insurances[i].network + '_token'] = _load(TokenContract, web3);
+                contracts.insurance[insurances[i].network + '_m2m'] = _load(M2MContract, web3);
+            }
+        }
 
         commit('web3/setContracts', contracts, {root: true})
     },

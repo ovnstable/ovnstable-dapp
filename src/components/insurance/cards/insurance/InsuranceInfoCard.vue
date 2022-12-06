@@ -8,7 +8,11 @@
 
                 <v-row class="ma-0 mt-8">
                     <label class="card-info">
-                        Overnight Insurance is a structured DeFi product enabling users to gain high yields at the expense of insuring of USD+. Underwrite in USD+ Insurance underwrite every strategy in the USD+ collateral. Each strategy has its own Risk Factor which governs APY shares for premiums. To supply high APY for Insurance providers  USD+ Insurance token is reserved in other assets.
+                        Overnight insurance is a structured DeFi product enabling users to obtain high yields by providing insurance for USD+.
+                        Insurance providers earn premiums and yield from the investment of insurance reserves (mostly, into narrow range ETSes) in case of positive rebase by USD+.
+                        Premiums are retained from the daily yield of USD+.
+                        However, in case of negative rebase, the insurance fund capital serves to compensate the negative rebase and [1] BPS of yield in addition.
+                        Please be aware of risks related to insurance - there is a min 3 day lockup period for the funds provided, no compensation will be provided in case of losses from insurance.
                     </label>
                 </v-row>
 

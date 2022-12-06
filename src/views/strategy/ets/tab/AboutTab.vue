@@ -89,7 +89,7 @@
                             <label class="list-title-text">Deposit Into Strategy</label>
                         </v-row>
                         <v-row class="mt-8">
-                            <label class="list-sub-title-text">Deposit USDC into the vault. This triggers an automatic borrow of value of {{ etsData.token1 }} (from {{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}} markets), which is invested alongside your USDC deposit into {{ etsData.dex }}’s {{ etsData.poolName }} pool.</label>
+                            <label class="list-sub-title-text">Deposit {{ etsData.actionTokenName }} into the vault. This triggers an automatic borrow of value of {{ etsData.token1 }} (from {{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}} markets), which is invested alongside your {{ etsData.actionTokenName }} deposit into {{ etsData.dex }}’s {{ etsData.poolName }} pool.</label>
                         </v-row>
                     </v-col>
                 </v-row>

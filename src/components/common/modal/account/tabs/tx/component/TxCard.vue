@@ -48,7 +48,7 @@
                 <label v-else
                        class="card-label"
                        :class="txData.pending ? 'status-pending' : (txData.isError ? 'status-failed' : (txData.isCancelled ? 'status-cancelled' : 'status-success'))">
-                    {{ txData.pending ? 'Pending' : (txData.isError ? 'Failed' : (txData.isCancelled ? 'Stuck' : 'Success')) }}
+                    {{ txData.pending ? 'Pending' : (txData.isError ? 'Failed' : (txData.isCancelled ? 'Failed' : 'Success')) }}
                 </label>
             </v-row>
         </v-col>

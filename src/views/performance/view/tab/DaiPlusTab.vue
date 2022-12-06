@@ -1,15 +1,6 @@
 <template>
     <div class="page-container">
-        <div class="ma-0 info-card-container d-flex mt-5">
-            <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
-                <v-img class="currency" :src="require('@/assets/currencies/DAI+.svg')" />
-            </div>
-            <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'" >
-                <label class="section-title-label">About DAI+</label>
-                <label class="section-text">DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoveen) on Optimism. It cannot be minted separately.</label>
-            </div>
-        </div>
-        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-3'" justify="start" align="start">
+        <v-row class="ma-0 info-card-container mt-5" justify="start" align="start">
             <v-col class="info-card-body-bottom">
                 <v-row align="start" justify="start" class="ma-0">
                     <label class="section-title-label">DAI+ collateral assets</label>
@@ -35,6 +26,41 @@
                 </v-row>
             </v-col>
         </v-row>
+
+<!--        <v-row class="ma-0 info-card-container mt-3" justify="start" align="start">
+            <v-col class="info-card-body-bottom">
+                <v-row align="center" justify="start" class="ma-0">
+                    <label class="section-title-label">DAI+ portfolio</label>
+                </v-row>
+
+                <v-row align="center" justify="center">
+                    <v-col :cols="!$wu.isFull() ? 12 : 8">
+                        <TableStrategies
+                            v-if="!$wu.isMobile()"
+                            :data="currentTotalData"/>
+
+                        <TableStrategies
+                            v-else
+                            minimized
+                            :data="currentTotalData"/>
+                    </v-col>
+
+                    <v-col :cols="!$wu.isFull() ? 12 : 4">
+                        <DoughnutStrategies :data="currentTotalData" :size="!$wu.isFull() ? 200 : 300"/>
+                    </v-col>
+                </v-row>
+            </v-col>
+        </v-row>-->
+
+        <div class="ma-0 info-card-container d-flex mt-3">
+            <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
+                <v-img class="currency" :src="require('@/assets/currencies/DAI+.svg')" />
+            </div>
+            <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'" >
+                <label class="section-title-label">About DAI+</label>
+                <label class="section-text">DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoveen) on Optimism. It cannot be minted separately.</label>
+            </div>
+        </div>
 
         <v-row class=" ma-0 mt-3">
             <v-col class="currency-box" :cols="$wu.isFull() ? 6 : 12">

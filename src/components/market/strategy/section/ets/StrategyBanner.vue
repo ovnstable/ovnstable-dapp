@@ -43,7 +43,7 @@
                                 <Tooltip
                                     icon-color="#FFFFFF"
                                     :size="$wu.isFull() ? 20 : ($wu.isTablet() ? 18 : 18)"
-                                    text="WETH price range which depends on the market and conditions on it"
+                                    :text="rangePercents"
                                     top />
                             </v-row>
                         </div>
@@ -169,6 +169,18 @@ export default {
                     return optimismIcon;
                 case 56:
                     return bscIcon;
+            }
+        },
+
+        rangePercents: function (){
+            if (this.etsData.range) {
+                let plusmnSign = '±';
+
+                return this.etsData.range + ' price range is set by Overnight, and can be from '
+                    + (this.etsData.range === 'NARROW' ? (plusmnSign + '1% to ' + plusmnSign + '10%') : (plusmnSign + '10% to ' + plusmnSign + '100%'))
+                    + ' of the current price';
+            } else {
+                return '';
             }
         },
     },

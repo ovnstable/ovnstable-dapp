@@ -3,7 +3,7 @@
   "nameUp": "QS EPSILON WETH/DAI",
   "nameToken": "EPSILON",
   "prototype": false,
-  "openPrototype": true,
+  "openPrototype": false,
   "archive": false,
   "disabled": false,
   "highRisk": true,
@@ -32,9 +32,9 @@
   "hasUsdPlus": false,
   "tokenPair": "weth_dai",
 
-  "maxSupply": 10000.00,
+  "maxSupply": 250000.00,
   "overcapEnabled": true,
-  "inceptionDate": "30 November 2022",
+  "inceptionDate": "06 December 2022",
 
   "iconName": "ets_qs_epsilon_weth_dai",
 

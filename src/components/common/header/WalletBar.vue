@@ -29,7 +29,7 @@
                     </template>
 
                     <label v-else class="account-label" :class="dataHidden ? 'hidden-label' : ''">
-                        {{ account ? ($wu.isMobile() ? accountDisplay : (dataHidden ? '' : accountDisplay)) : 'XXXXX...XXXX' }}
+                        {{ account ? (dataHidden ? '' : accountDisplay) : 'XXXXX...XXXX' }}
                     </label>
                 </v-row>
             </v-col>

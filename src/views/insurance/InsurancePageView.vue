@@ -101,13 +101,15 @@
                                     <label class="fee-structure-label mt-1">Mint fee</label>
                                     <v-spacer></v-spacer>
                                     <label class="fee-structure-value mt-1">
-                                        {{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}
+                                        {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.mintFee > 0) ? $utils.formatMoneyComma(insuranceStrategyData.polygon.mintFee, 2) + '%' : '—' }}
                                     </label>
                                 </v-row>
                                 <v-row class="info-row ma-0 mt-4" justify="start" align="center">
                                     <label class="fee-structure-label mt-1">Redeem fee</label>
                                     <v-spacer></v-spacer>
-                                    <label class="fee-structure-value mt-1">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
+                                    <label class="fee-structure-value mt-1">
+                                        {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.redeemFee > 0) ? $utils.formatMoneyComma(insuranceStrategyData.polygon.redeemFee, 2) + '%' : '—' }}
+                                    </label>
                                 </v-row>
                             </div>
                         </v-col>

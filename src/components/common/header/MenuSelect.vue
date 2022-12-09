@@ -30,6 +30,11 @@
                     Earn with USD+
                 </v-list-item-title>
             </v-list-item>
+            <v-list-item class="menu-item" @click="goToAction('/insurance')">
+                <v-list-item-title class="network-select-list-item">
+                    Insure USD+
+                </v-list-item-title>
+            </v-list-item>
             <v-list-item class="menu-item" @click="mintAction">
                 <v-list-item-title class="network-select-list-item text-blue">
                     Mint/redeem USD+

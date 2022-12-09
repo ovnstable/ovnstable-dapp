@@ -274,7 +274,7 @@ export default {
                     minValue = Math.min.apply(Math, values);
                 }
 
-                minValue = Math.min(Math.round(Math.ceil(minValue / 10)) * 10, 0);
+                minValue = Math.min(Math.floor(Math.floor(minValue / 10)) * 10, 0);
             } catch (e) {
                 minValue = 0;
             }

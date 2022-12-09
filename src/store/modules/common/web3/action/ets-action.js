@@ -10,6 +10,9 @@ const state = {
         'qs_delta_weth_usdc',
         'qs_zeta_wbtc_usdc',
         'qs_epsilon_weth_dai',
+        'uni_eta_wmatic_usdc',
+        'uni_alpha_weth_usdc',
+        'uni_beta_weth_dai',
     ],
     etsList: null,
 };

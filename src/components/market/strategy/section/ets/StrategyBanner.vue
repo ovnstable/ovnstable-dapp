@@ -238,7 +238,7 @@ export default {
 
     .range-title {
         font-size: 12px;
-        line-height: 16px;
+        line-height: 18px;
     }
 
     .info-value-max {
@@ -279,8 +279,9 @@ export default {
     }
 
     .range-title {
+        margin-top: 2px !important;
         font-size: 14px;
-        line-height: 16px;
+        line-height: 18px;
     }
 
     .info-value-max {
@@ -325,8 +326,9 @@ export default {
     }
 
     .range-title {
+        margin-top: 2px !important;
         font-size: 14px;
-        line-height: 18px;
+        line-height: 20px;
     }
 }
 

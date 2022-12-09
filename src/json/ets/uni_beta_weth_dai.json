@@ -3,7 +3,7 @@
   "nameUp": "UNI BETA WETH/DAI",
   "nameToken": "BETA",
   "prototype": false,
-  "openPrototype": false,
+  "openPrototype": true,
   "archive": false,
   "disabled": false,
   "highRisk": true,
@@ -17,10 +17,10 @@
   "actionTokenName": "DAI",
   "actionTokenDecimals": 18,
 
-  "address": "",
-  "tokenAddress": "",
+  "address": "0x0FE7AA84db235656D09C5B41deAd2784EFda3b39",
+  "tokenAddress": "0x611aabb813dD868c600383D1BD4ca901dE37a502",
 
-  "chain": 137,
+  "chain": 10,
   "chainName": "optimism",
   "borrowFrom": "AAVE",
   "dex": "Uniswap",

@@ -23,6 +23,7 @@ const actions = {
 
         let networkDaiMap = {
             polygon: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+            optimism: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
         };
 
         let etsNames = [
@@ -33,9 +34,12 @@ const actions = {
             { network: 'polygon', name: 'wmatic_usd_plus' },
             { network: 'polygon', name: 'qs_zeta_wbtc_usdc' },
             { network: 'polygon', name: 'qs_epsilon_weth_dai' },
+            { network: 'polygon', name: 'uni_eta_wmatic_usdc' },
 
             { network: 'bsc', name: 'wbnb_busd' },
 
+            { network: 'optimism', name: 'uni_alpha_weth_usdc' },
+            { network: 'optimism', name: 'uni_beta_weth_dai' },
             { network: 'optimism', name: 'ruby' },
             { network: 'optimism', name: 'night_ov_ar' },
         ];

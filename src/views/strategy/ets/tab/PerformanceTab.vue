@@ -213,13 +213,13 @@
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
                         <Table
                                 v-if="!$wu.isMobile()"
-                                :profit-label="'USDC per ETS'"
+                                :profit-label="etsData.actionTokenName + ' per ETS'"
                                 :payout-data="etsStrategyData[etsData.name] ? [...etsStrategyData[etsData.name].payoutItems].reverse() : []"/>
 
                         <Table
                                 v-else
                                 minimized
-                                :profit-label="'USDC per ETS'"
+                                :profit-label="etsData.actionTokenName + ' per ETS'"
                                 :payout-data="etsStrategyData[etsData.name] ? [...etsStrategyData[etsData.name].payoutItems].reverse() : []"/>
 
                         <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">

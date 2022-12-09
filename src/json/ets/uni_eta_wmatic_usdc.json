@@ -17,8 +17,8 @@
   "actionTokenName": "USDC",
   "actionTokenDecimals": 6,
 
-  "address": "",
-  "tokenAddress": "",
+  "address": "0x5b72258392d31d6B64e16e885758dcf2910895E4",
+  "tokenAddress": "0xD7E26D385EC86847944Dff76cd4B19B3BBf910f8",
 
   "chain": 137,
   "chainName": "polygon",

@@ -18,6 +18,8 @@
   "actionTokenDecimals": 6,
 
   "address": "0x4b5e0af6AE8Ef52c304CD55f546342ca0d3050bf",
+  "tokenAddress": "0xfec31BC5e213615b013Eb58f1B8185868Ee4BD12",
+
   "chain": 137,
   "chainName": "polygon",
   "borrowFrom": "AAVE",
@@ -42,7 +44,7 @@
   "cardBgColor": "radial-gradient(circle at 100% 0%, #001845 0%, #001845 27%, #001845 52%, #7E46E2 100%)",
 
   "cardTitle": "Generate yield on wMatic-USD+ pool by hedging your risks and simplify process",
-  "aboutText": "The exchange-traded strategy USD+/WMATIC ($USD+WMATIC), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WMATIC), pair it with USD+ stablecoin, and provide USD+/WMATIC liquidity on Dystopia / Penrose all in one action. This allows earning high APY and hedging against WMATIC volatility.<br/><br/>The unique feature of USD+/WMATIC ETS is that it automatically administers a health factor of 1.20x on AAVE and rebalances your Lent/Borrowed amounts to maintain a stringent 1.20x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.<br/><br/>Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.",
+  "aboutText": "The exchange-traded strategy USD+/WMATIC ($USD+WMATIC), is an ERC-20 structured product built on Polygon that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WMATIC), pair it with USD+ stablecoin, and provide USD+/WMATIC liquidity on Dystopia / Penrose all in one action. This allows earning high APY and hedging against WMATIC volatility.<br/><br/>The unique feature of USD+/WMATIC ETS is that it automatically administers a health factor of 1.20x on AAVE and rebalances your Lent/Borrowed amounts to maintain a stringent 1.20x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards. This product might occasionally produce negative rebases, which will not be compensated.<br/><br/>Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Polygon - a highly scalable L2 chain.",
   "riskText": "By depositing USD+ into this strategy, you automatically borrow WMATIC from AAVE v3 at a market rate.<br/><br/>The strategy's smart contract is designed to automatically invest these equal values of WMATIC and USD+ into Dystopia's USD+/WMATIC Liquidity Pool, after which these LP Tokens are staked into the Gauge Pool on Penrose.",
   "impermanentText": "Due to trading activities with the USD+/WMATIC pair on Dystopia and/or WMATIC price change, the pool may become imbalanced, which can cause rebalance of a user’s LP position, resulting in increased or decreased number of WMATIC vs. borrowed in a position. When a user withdraws their investment, the strategy's smart contract may need to use a user's funds to buy additional WMATIC to repay the lent amount (plus interest), which can result in a net loss from the initial deposit.",
   "ammText": "The strategy's smart contract automatically moves your deposit into the said Automated Market Maker (i.e., Dystopia) and, in doing so, may incur an AMM’s smart contract risk.<br/><br/>By depositing funds into this smart contract, a user understands and agrees to the strategies to which it will invest underlying assets.",

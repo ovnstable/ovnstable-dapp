@@ -18,6 +18,8 @@
   "actionTokenDecimals": 6,
 
   "address": "0x5651D18F066E132bB90102954429aef1a636576F",
+  "tokenAddress": "0xCa98d642E158c3016E1c75dbcC3D5ECFe3E02A19",
+
   "chain": 10,
   "chainName": "optimism",
   "borrowFrom": "AAVE",
@@ -42,7 +44,7 @@
   "cardBgColor": "radial-gradient(108.67% 595.92% at 100% -3.25%, #F4F4F4 0%, #A0A9B6 27.05%, #242323 52.07%, #FD0420 100%)",
 
   "cardTitle": "Generate yield on WETH-USDC pool by hedging your risks and simplify process.",
-  "aboutText": "The exchange-traded strategy “Night over Arrakis” is an ERC-20 structured product built on Optimism Chain that lets you leverage a collateralized debt position (USDC lent on Aave) to borrow a volatile asset (WETH), pair it with USDС stablecoin, and provide WETH/USDC liquidity on Arrakis all in one action. This allows earning high APY and hedging against WETH volatility.<br/><br/>The unique feature of ETS “Night over Arrakis” is that it automatically administers a health factor of 1.2x on Aave and rebalances your Lent/Borrowed amounts to maintain a stringent 1.2x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.<br/><br/>Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Optimism - a highly scalable L2 chain.",
+  "aboutText": "The exchange-traded strategy “Night over Arrakis” is an ERC-20 structured product built on Optimism Chain that lets you leverage a collateralized debt position (USDC lent on Aave) to borrow a volatile asset (WETH), pair it with USDС stablecoin, and provide WETH/USDC liquidity on Arrakis all in one action. This allows earning high APY and hedging against WETH volatility.<br/><br/>The unique feature of ETS “Night over Arrakis” is that it automatically administers a health factor of 1.2x on Aave and rebalances your Lent/Borrowed amounts to maintain a stringent 1.2x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards. This product might occasionally produce negative rebases, which will not be compensated.<br/><br/>Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Optimism - a highly scalable L2 chain.",
   "riskText": "By depositing USDC into this strategy, you are automatically borrowing an equal value of WETH from AAVE at a rate roughly equal to the current price of WETH denoted above. <br/><br/>The strategy's smart contract is designed to automatically invest these equal values of WETH & USDC into Arrakis WETH/USDC Liquidity Pool, after which these LP Tokens are staked into the Gauge Pool.",
   "impermanentText": "While the Arrakis pools will accrue transaction fees that generate yields, the pool may become imbalanced; when the user withdraws their investment, the strategy's smart contract may need to use the user's funds to buy additional WETH to repay the lent amount (plus interest), which can result in a net loss from the initial deposit.",
   "ammText": "The strategy's smart contract automatically moves your deposit into the said Automated Market Maker (i.e., Arrakis) and, in doing so, may incur an AMM’s smart contract risk.<br/><br/>By depositing funds into this smart contract, a user understands and agrees to the strategies to which it will invest underlying assets.",

@@ -120,8 +120,22 @@ function _load(file, web3, address) {
 }
 
 function _load_ets(etsName, contracts, web3) {
-    contracts['ets_' + etsName.name + '_exchanger'] = _load(require(`@/contracts/${etsName.network}/ets/${etsName.name}/exchanger.json`), web3);
-    contracts['ets_' + etsName.name + '_token'] = _load(require(`@/contracts/${etsName.network}/ets/${etsName.name}/token.json`), web3);
+
+    let etsParams = require('@/json/ets/' + etsName.name + '.json');
+
+    let exchangerContract;
+    let tokenContract;
+
+    try {
+        exchangerContract = _load(require('@/contracts/abi/ets/exchanger.json'), web3, etsParams.address);
+        tokenContract = _load(require('@/contracts/abi/ets/token.json'), web3, etsParams.tokenAddress);
+    } catch (e) {
+        exchangerContract = _load(require(`@/contracts/${etsName.network}/ets/${etsName.name}/exchanger.json`), web3);
+        tokenContract = _load(require(`@/contracts/${etsName.network}/ets/${etsName.name}/token.json`), web3);
+    }
+
+    contracts['ets_' + etsName.name + '_exchanger'] = exchangerContract;
+    contracts['ets_' + etsName.name + '_token'] = tokenContract;
 }
 
 function _load_empty() {

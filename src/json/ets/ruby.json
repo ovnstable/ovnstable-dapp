@@ -18,6 +18,8 @@
   "actionTokenDecimals": 6,
 
   "address": "0xA88F8c02eBdE678de623C6BCFC886De82e18ad00",
+  "tokenAddress": "0xcb4D907c8caD49c5e9ad77014935839B3b9eDb57",
+
   "chain": 10,
   "chainName": "optimism",
   "borrowFrom": "AAVE",
@@ -42,7 +44,7 @@
   "cardBgColor": "radial-gradient(circle at 100% 0%, #F96798 0%, #D0225D 27%, #4E0B1B 52%, #FD0420 100%)",
 
   "cardTitle": "Generate yield on WETH-USDC pool by hedging your risks and simplify process",
-  "aboutText": "The exchange-traded strategy Ruby ($RUBY), is an ERC-20 structured product built on Optimism that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WETH), pair it with USDC stablecoin, and provide WETH/USDC liquidity on Velodrome all in one action. This allows earning high APY and hedging against WETH volatility.<br/><br/>The unique feature of ETS RUBY is that it automatically administers a health factor of 1.20x on AAVE and rebalances your Lent/Borrowed amounts to maintain a stringent 1.20x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.<br/><br/>Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Optimism - a highly scalable L2 chain.",
+  "aboutText": "The exchange-traded strategy Ruby ($RUBY), is an ERC-20 structured product built on Optimism that lets you leverage a collateralized debt position (USDC lent on AAVE) to borrow a volatile asset (WETH), pair it with USDC stablecoin, and provide WETH/USDC liquidity on Velodrome all in one action. This allows earning high APY and hedging against WETH volatility.<br/><br/>The unique feature of ETS RUBY is that it automatically administers a health factor of 1.20x on AAVE and rebalances your Lent/Borrowed amounts to maintain a stringent 1.20x Health Factor. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards. This product might occasionally produce negative rebases, which will not be compensated.<br/><br/>Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Optimism - a highly scalable L2 chain.",
   "riskText": "By depositing USD+ into this strategy, you are automatically borrowing an equal value of WETH from AAVE at a rate roughly equal to the current price of WETH denoted above.<br/><br/>The strategy's smart contract is designed to automatically invest these equal values of WETH & USDC into Velodrome WETH/USDC Liquidity Pool, after which these LP Tokens are staked into the Gauge Pool.",
   "impermanentText": "While the Velodrome pools will accrue transaction fees that generate yields, the pool may become imbalanced; when the user withdraws their investment, the strategy's smart contract may need to use the user's funds to buy additional WETH to repay the lent amount (plus interest), which can result in a net loss from the initial deposit.",
   "ammText": "The strategy's smart contract automatically moves your deposit into the said Automated Market Maker (i.e., Velodrome) and, in doing so, may incur an AMM’s smart contract risk.<br/><br/>By depositing funds into this smart contract, a user understands and agrees to the strategies to which it will invest underlying assets.",

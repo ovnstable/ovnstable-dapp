@@ -332,6 +332,53 @@ export default {
     }
 }
 
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .currency-icon {
+        width: 140px;
+        height: 140px;
+    }
+
+    .banner-title {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 34px;
+        line-height: 40px;
+    }
+
+    .info-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+    .info-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 25px;
+        line-height: 28px;
+    }
+
+    .icon {
+        height: 36px !important;
+    }
+
+    .info-value-max {
+        font-size: 14px;
+    }
+
+    .range-title {
+        font-size: 14px;
+        line-height: 18px;
+    }
+}
+
 .banner-container {
     width: 100% !important;
     border-radius: 8px;

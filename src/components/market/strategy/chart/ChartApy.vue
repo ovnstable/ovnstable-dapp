@@ -464,6 +464,11 @@ export default {
         font-size: 16px;
         line-height: 20px;
     }
+
+    .zoom-btn {
+        font-size: 16px !important;
+        line-height: 20px !important;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
@@ -517,6 +522,74 @@ export default {
         font-size: 16px;
         line-height: 20px;
     }
+
+    .zoom-btn {
+        font-size: 16px !important;
+        line-height: 20px !important;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .chart-title {
+        margin-top: 30px !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 23px;
+        line-height: 28px;
+    }
+
+    .chart-title-apy {
+        margin-top: 30px !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 36px;
+        line-height: 42px;
+    }
+
+    .chart-sub-title-apy {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .mobile-info-title {
+        display: none !important;
+    }
+
+    .zoom-row {
+        height: 20px !important;
+    }
+
+    .chart-header-row {
+        height: 150px !important;
+    }
+
+    .chart-row {
+        height: 300px !important;
+    }
+
+    .apy-chart-container {
+        height: 420px !important;
+    }
+
+    .hold-checkbox-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .zoom-btn {
+        font-size: 15px !important;
+        line-height: 20px !important;
+    }
 }
 
 #line-chart-apy {
@@ -536,8 +609,6 @@ export default {
     font-family: 'Roboto', sans-serif !important;
     font-style: normal !important;
     font-weight: 400 !important;
-    font-size: 16px !important;
-    line-height: 20px !important;
     letter-spacing: 0.02em !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;

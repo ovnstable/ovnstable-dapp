@@ -112,12 +112,6 @@
 
                     <PerformanceTab v-if="tab === 1" :ets-data="etsData"/>
                     <AboutTab v-if="tab === 2" :ets-data="etsData"/>
-
-                    <v-row align="center" justify="start" class="ma-0 mt-6" v-if="tab === 1">
-                        <label class="about-link-label" @click="tab=2">
-                            About ETS
-                        </label>
-                    </v-row>
                 </v-col>
 
                 <v-col cols="3" v-if="$wu.isFull()">
@@ -621,6 +615,111 @@ export default {
         font-weight: 400;
         font-size: 20px;
         line-height: 32px;
+    }
+
+    .parent-page-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .current-page-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .about-link-label {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 18px !important;
+        line-height: 24px !important;
+    }
+
+    .full-status-error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .info-card-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .investor-card-sub-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
+        letter-spacing: 0.02em;
+    }
+
+    .investor-card-sub-title-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .investor-card-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .fee-structure-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 24px;
+    }
+
+    .fee-structure-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.04em;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 13px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-investor-invest {
+        width: 100% !important;
+        height: 36px !important;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
     }
 
     .parent-page-label {

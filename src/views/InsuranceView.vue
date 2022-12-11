@@ -163,6 +163,29 @@ export default {
     }
 }
 
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
+    }
+
+    .title-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 48px;
+        line-height: 60px;
+    }
+}
+
 .tab-button {
     border-bottom: 2px solid var(--links-blue) !important;
     color: var(--links-blue) !important;

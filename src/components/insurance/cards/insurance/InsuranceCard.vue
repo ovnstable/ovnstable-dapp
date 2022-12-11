@@ -506,7 +506,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .card-title {
         font-style: normal;
         font-weight: 600;
-        font-size: 12px;
+        font-size: 16px;
         line-height: 18px;
         letter-spacing: 0.03em;
     }
@@ -514,7 +514,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .percentage {
         font-style: normal;
         font-weight: 600;
-        font-size: 40px;
+        font-size: 38px;
         line-height: 42px;
     }
 
@@ -522,6 +522,79 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-style: normal;
         font-weight: 600;
         font-size: 18px;
+        line-height: 24px;
+    }
+
+    .button {
+        height: 36px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 15px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .currency {
+        height: 78px !important;
+        width: 78px !important;
+    }
+
+    .your-deposit {
+        font-style: normal;
+        font-weight: 800;
+        font-size: 15px;
+        line-height: 24px;
+        letter-spacing: 0.05em;
+    }
+
+    .footer-link {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .header-row {
+        max-width: 460px;
+        height: 130px !important;
+    }
+
+    .card-container {
+        max-width: 460px;
+    }
+
+    .tooltip {
+        margin-top: 1px;
+    }
+
+    .apy-box-total-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .apy-box-subtitle-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+        letter-spacing: 0.03em;
+    }
+
+    .card-info-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .card-info-value {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
         line-height: 24px;
     }
 }

@@ -29,11 +29,11 @@
             </td>
             <td class="table-label-don text-left">
                 <v-row>
-                    <label class="link-label" :title="item.fullName">
+                    <label class="link-label align-center" :title="item.fullName">
                         {{ item.label }}
                     </label>
                     <v-spacer></v-spacer>
-                    <label class="link-label mr-6">
+                    <label class="link-label mr-6" v-if="!$wu.isFull()">
                         <v-img class="icon-img-link" v-if="!minimized" :src="require('@/assets/icon/open-in-new.svg')"/>
                     </label>
                 </v-row>
@@ -83,7 +83,7 @@
                     <b>Total USD+ in circulation</b>
                 </v-row>
             </td>
-            <td class="table-label-don text-left" :colspan="minimized ? 3 : 1">
+            <td class="table-label-don table-label-don-total text-left" :colspan="minimized ? 3 : 1">
                 <b>${{ $utils.formatMoney(totalUsdPlusValue, 2) }}</b>
             </td>
             <td class="table-empty" v-if="!minimized"></td>
@@ -190,6 +190,16 @@ export default {
     .current-table-row {
         height: 48px !important;
     }
+
+    .icon-img-link {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .color-rectangle {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 /* tablet */
@@ -211,6 +221,16 @@ export default {
     .current-table-row {
         height: 64px !important;
     }
+
+    .icon-img-link {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .color-rectangle {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 /* full */
@@ -231,6 +251,60 @@ export default {
 
     .current-table-row {
         height: 64px !important;
+    }
+
+    .icon-img-link {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .color-rectangle {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .table-header-don {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
+    }
+
+    .table-label-don {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
+    }
+
+    .current-table-row {
+        height: 60px !important;
+    }
+
+    .icon-img-link {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    .link-label {
+        margin-right: 1px !important;
+    }
+
+    .color-rectangle {
+        width: 18px;
+        height: 18px;
+    }
+
+    .table-label-don-total {
+        width: 20% !important;
     }
 }
 
@@ -297,8 +371,6 @@ export default {
 }
 
 .icon-img-link {
-    width: 20px !important;
-    height: 20px !important;
     cursor: pointer;
 }
 
@@ -307,8 +379,6 @@ export default {
 }
 
 .color-rectangle {
-    width: 20px;
-    height: 20px;
     border-radius: 4px;
 }
 </style>

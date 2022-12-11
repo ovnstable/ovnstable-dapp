@@ -216,6 +216,38 @@ export default {
     }
 }
 
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .progress {
+        width: 300px;
+    }
+
+    .header-container {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
+
+    .header-btn, .header-btn-connect {
+        width: 210px !important;
+        height: 36px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 15px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .app-bar {
+        height: 72px !important;
+    }
+}
+
 .progress {
     background: var(--blue-gradient);
 }

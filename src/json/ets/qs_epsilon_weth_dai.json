@@ -34,7 +34,7 @@
   "hasUsdPlus": false,
   "tokenPair": "weth_dai",
 
-  "maxSupply": 250000.00,
+  "maxSupply": 100000.00,
   "overcapEnabled": true,
   "inceptionDate": "05 December 2022",
 

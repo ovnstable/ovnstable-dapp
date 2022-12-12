@@ -34,8 +34,8 @@
   "hasUsdPlus": true,
   "tokenPair": "wmatic_usd_plus",
 
-  "maxSupply": 250000.00,
-  "overcapEnabled": true,
+  "maxSupply": null,
+  "overcapEnabled": false,
   "inceptionDate": "01 July 2022",
 
   "iconName": "ets_wmatic_usd_plus",

@@ -309,8 +309,8 @@ const actions = {
                     let currentDate = new Date();
 
                     if (currentDate.getTime() > date.getTime()) {
-                        let withdrawPeriod = await web3.contracts.insurance[insurance.chainName + '_exchanger'].methods.withdrawRequests(account).call();
-                        let withdrawDate = new Date(date.getTime() + withdrawPeriod);
+                        let withdrawPeriod = await web3.contracts.insurance[insurance.chainName + '_exchanger'].methods.withdrawPeriod().call();
+                        let withdrawDate = new Date(date.getTime() + (withdrawPeriod * 1000));
 
                         if (withdrawDate.getTime() > currentDate.getTime()){
                             let hours = moment.duration(moment(withdrawDate).diff(moment(currentDate))).asHours();

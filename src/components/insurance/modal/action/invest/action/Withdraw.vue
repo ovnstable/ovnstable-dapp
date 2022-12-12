@@ -163,7 +163,7 @@
                         REDEMPTION REQUEST
                     </v-btn>
                 </template>
-                <template v-if="CAN_WITHDRAW">
+                <template v-if="insuranceRedemptionData.request === 'CAN_WITHDRAW'">
                     <v-btn v-if="insuranceTokenApproved"
                            height="56"
                            class="buy"

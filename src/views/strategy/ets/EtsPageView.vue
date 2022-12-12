@@ -81,25 +81,30 @@
                             </div>
                         </v-col>
 
-                        <v-col class="info-card-container-white mt-4" cols="12">
+                        <v-col class="info-card-container-white mt-4" cols="12" v-if="networkSupport">
                             <div class="my-4">
                                 <v-row align="center" class="ma-0">
                                     <label class="investor-card-title">One-time fees</label>
                                     <div style="margin-top: -2px">
-                                        <Tooltip text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
+                                        <Tooltip v-if="minRedeemFee || minRedeemFee" text="ETS rebalances at each mint/redeem. Every rebalance makes the impermanent loss, permanent, i.e. creating a fixed cost. The minimum fee is introduced to minimize the # of mint/redeems, thus minimizing the cost and maximizing the return for the users."/>
+                                        <Tooltip v-else text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
                                     </div>
                                 </v-row>
                                 <v-row class="info-row ma-0 mt-8" justify="start" align="center">
                                     <label class="fee-structure-label mt-1">Mint fee</label>
                                     <v-spacer></v-spacer>
                                     <label class="fee-structure-value mt-1">
-                                        {{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}
+                                        {{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '' }}
+                                        {{ (minMintFee && minMintFee !== 0) ? ((entryFee ? ' (min $' : 'min $') + $utils.formatMoneyComma(minMintFee, 0) + (entryFee ? ')' : '')) : ('') }}
                                     </label>
                                 </v-row>
                                 <v-row class="info-row ma-0 mt-4" justify="start" align="center">
                                     <label class="fee-structure-label mt-1">Redeem fee</label>
                                     <v-spacer></v-spacer>
-                                    <label class="fee-structure-value mt-1">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
+                                    <label class="fee-structure-value mt-1">
+                                        {{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '' }}
+                                        {{ (minRedeemFee && minRedeemFee !== 0) ? ((exitFee ? ' (min $' : 'min $') + $utils.formatMoneyComma(minRedeemFee, 0) + (exitFee ? ')' : '')) : ('') }}
+                                    </label>
                                 </v-row>
                             </div>
                         </v-col>
@@ -179,11 +184,12 @@
                             </div>
                         </v-col>
 
-                        <v-col class="info-card-container-white mt-4" cols="12">
+                        <v-col class="info-card-container-white mt-4" cols="12" v-if="networkSupport">
                             <div class="my-6 mx-6">
                                 <v-row align="center">
                                     <label class="investor-card-title">One-time fees</label>
-                                    <Tooltip text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
+                                    <Tooltip v-if="minRedeemFee || minRedeemFee" text="ETS rebalances at each mint/redeem. Every rebalance makes the impermanent loss, permanent, i.e. creating a fixed cost. The minimum fee is introduced to minimize the # of mint/redeems, thus minimizing the cost and maximizing the return for the users."/>
+                                    <Tooltip v-else text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
                                 </v-row>
 
                                 <v-row class="mt-8" justify="start" align="center">
@@ -192,7 +198,8 @@
                                             <label class="fee-structure-label">Mint fee</label>
                                             <v-spacer></v-spacer>
                                             <label class="fee-structure-value">
-                                                {{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—' }}
+                                                {{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '' }}
+                                                {{ (minMintFee && minMintFee !== 0) ? ((entryFee ? ' (min $' : 'min $') + $utils.formatMoneyComma(minMintFee, 0) + (entryFee ? ')' : '')) : ('') }}
                                             </label>
                                         </v-row>
                                     </v-col>
@@ -203,7 +210,10 @@
                                         <v-row class="info-row" justify="start" align="center">
                                             <label class="fee-structure-label">Redeem fee</label>
                                             <v-spacer></v-spacer>
-                                            <label class="fee-structure-value">{{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—' }}</label>
+                                            <label class="fee-structure-value">
+                                                {{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '' }}
+                                                {{ (minRedeemFee && minRedeemFee !== 0) ? ((exitFee ? ' (min $' : 'min $') + $utils.formatMoneyComma(minRedeemFee, 0) + (exitFee ? ')' : '')) : ('') }}
+                                            </label>
                                         </v-row>
                                     </v-col>
                                 </v-row>
@@ -243,6 +253,8 @@ export default {
     data: () => ({
         tab: 1,
         etsData: null,
+        minMintFee: null,
+        minRedeemFee: null,
     }),
 
 
@@ -254,6 +266,7 @@ export default {
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
         ...mapGetters('magicEye', ['dataHidden']),
+        ...mapGetters('web3', ['web3', 'contracts']),
 
         activeTabPerformance: function () {
             return {
@@ -326,6 +339,8 @@ export default {
 
     created() {
         this.updateEtsData();
+        this.getEntryMinFee();
+        this.getExitMinFee();
     },
 
     mounted() {
@@ -356,6 +371,32 @@ export default {
             if (this.etsList) {
                 let resultList = this.etsList.filter(ets => ets.name === this.$route.params.name);
                 this.etsData = (resultList && resultList.length > 0) ? resultList[0] : {};
+            }
+        },
+
+        async getEntryMinFee() {
+            let result = 0;
+
+            try {
+                result = await this.contracts[this.etsData.exchangeContract].methods.buyMinFee().call();
+                result = this.web3.utils.fromWei(result, this.etsData.etsTokenDecimals === 18 ? 'ether' : 'mwei');
+
+                this.minMintFee = result;
+            } catch (e) {
+                this.minMintFee = 0;
+            }
+        },
+
+        async getExitMinFee() {
+            let result = 0;
+
+            try {
+                result = await this.contracts[this.etsData.exchangeContract].methods.redeemMinFee().call();
+                result = this.web3.utils.fromWei(result, this.etsData.etsTokenDecimals === 18 ? 'ether' : 'mwei');
+
+                this.minRedeemFee = result;
+            } catch (e) {
+                this.minRedeemFee = 0;
             }
         },
     }

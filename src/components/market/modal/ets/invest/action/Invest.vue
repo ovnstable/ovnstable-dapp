@@ -134,14 +134,14 @@
             </v-col>
             <v-col>
                 <v-row>
-                    <label class="action-info-sub-label">{{
-                            entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '—'
-                        }}</label>
+                    <label class="action-info-sub-label">
+                        {{ resultMintFee ? '$' + $utils.formatMoneyComma(resultMintFee, 2) : '—'  }}
+                    </label>
                     <v-spacer></v-spacer>
                     <label class="action-info-label">You mint:</label>
-                    <label class="action-info-sub-label ml-2">{{
-                            '$' + (estimateResult ? $utils.formatMoneyComma(estimateResult, 2) : '0')
-                        }}</label>
+                    <label class="action-info-sub-label ml-2">
+                        {{ '$' + ((sum - resultMintFee) ? $utils.formatMoneyComma(((sum - resultMintFee > 0 ) ? (sum - resultMintFee) : 0), 2) : '0') }}
+                    </label>
                 </v-row>
             </v-col>
         </v-row>
@@ -241,6 +241,9 @@ export default {
 
         sliderPercent: 0,
         step: 0,
+
+        minMintFee: null,
+        contractCapacity: null,
     }),
 
     computed: {
@@ -310,8 +313,9 @@ export default {
             }
         },
 
-        estimateResult: function () {
-            return this.sum * (1 - (this.entryFee ? (this.entryFee / 100.0) : 0));
+        resultMintFee: function () {
+            let entryFeeValue = this.sum * (this.entryFee ? (this.entryFee / 100.0) : 0);
+            return this.minMintFee ? (entryFeeValue > this.minMintFee ? entryFeeValue : this.minMintFee) : entryFeeValue;
         },
 
         buttonLabel: function () {
@@ -325,6 +329,10 @@ export default {
                 return "Unavailable"
             } else if (this.transactionPending) {
                 return 'Transaction is pending';
+            } else if (parseFloat(this.sum) < this.resultMintFee) {
+                return 'Sum is less than mint fee';
+            } else if (this.contractCapacity && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum) > this.contractCapacity)) {
+                return 'Over ETS capacity';
             } else if (this.isBuy) {
                 if (this.actionAssetApproved) {
                     this.step = 2;
@@ -366,7 +374,11 @@ export default {
 
         isBuy: function () {
             if (this.isOvercapAvailable && this.etsData.overcapEnabled) {
-                if (!this.etsData.disabled && this.account && this.sum > 0 && this.numberRule && !this.transactionPending) {
+                if (this.contractCapacity && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum) > this.contractCapacity)) {
+                    return false;
+                }
+
+                if (!this.etsData.disabled && this.account && this.sum > 0 && (parseFloat(this.sum) >= this.resultMintFee) && this.numberRule && !this.transactionPending) {
                     let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
                     let useOvercapSum;
 
@@ -381,7 +393,16 @@ export default {
                     return false;
                 }
             } else {
-                return !this.etsData.disabled && this.account && !this.etsData.prototype && this.sum > 0 && this.numberRule && !this.transactionPending && (!this.etsData.maxSupply || (this.totalSupply[this.etsData.name] < this.etsData.maxSupply)) && (!this.etsData.maxSupply || ((parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply)));
+                return !this.etsData.disabled
+                    && this.account
+                    && !this.etsData.prototype
+                    && this.sum > 0
+                    && (parseFloat(this.sum) >= this.resultMintFee)
+                    && !(this.contractCapacity && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum) > this.contractCapacity))
+                    && this.numberRule
+                    && !this.transactionPending
+                    && (!this.etsData.maxSupply || (this.totalSupply[this.etsData.name] < this.etsData.maxSupply))
+                    && (!this.etsData.maxSupply || ((parseFloat(this.sum) + parseFloat(this.totalSupply[this.etsData.name])) < parseFloat(this.etsData.maxSupply)));
             }
         },
 
@@ -426,6 +447,9 @@ export default {
         this.gas = null;
         this.gasAmountInMatic = null;
         this.gasAmountInUsd = null;
+
+        this.getEntryMinFee();
+        this.getContractCapacityValue();
     },
 
     methods: {
@@ -746,6 +770,32 @@ export default {
                 return parseFloat(overcapValue);
             } catch (e) {
                 return null;
+            }
+        },
+
+        async getEntryMinFee() {
+            let result = 0;
+
+            try {
+                result = await this.contracts[this.etsData.exchangeContract].methods.buyMinFee().call();
+                result = this.web3.utils.fromWei(result, this.etsData.etsTokenDecimals === 18 ? 'ether' : 'mwei');
+
+                this.minMintFee = result;
+            } catch (e) {
+                this.minMintFee = 0;
+            }
+        },
+
+        async getContractCapacityValue() {
+            let result = 0;
+
+            try {
+                result = await this.contracts[this.etsData.exchangeContract].methods.capacity().call();
+                result = this.web3.utils.fromWei(result, this.etsData.etsTokenDecimals === 18 ? 'ether' : 'mwei');
+
+                this.contractCapacity = result;
+            } catch (e) {
+                this.contractCapacity = 0;
             }
         },
     }

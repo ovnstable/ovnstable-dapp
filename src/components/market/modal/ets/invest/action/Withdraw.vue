@@ -133,14 +133,14 @@
             </v-col>
             <v-col>
                 <v-row>
-                    <label class="action-info-sub-label">{{
-                            exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '—'
-                        }}</label>
+                    <label class="action-info-sub-label">
+                        {{ resultRedeemFee ? '$' + $utils.formatMoneyComma(resultRedeemFee, 2) : '—'  }}
+                    </label>
                     <v-spacer></v-spacer>
                     <label class="action-info-label">You redeem:</label>
-                    <label class="action-info-sub-label ml-2">{{
-                            '$' + (estimateResult ? $utils.formatMoneyComma(estimateResult, 2) : '0')
-                        }}</label>
+                    <label class="action-info-sub-label ml-2">
+                        {{ '$' + ((sum - resultRedeemFee) ? $utils.formatMoneyComma(((sum - resultRedeemFee > 0 ) ? (sum - resultRedeemFee) : 0), 2) : '0') }}
+                    </label>
                 </v-row>
             </v-col>
         </v-row>
@@ -241,6 +241,8 @@ export default {
 
         sliderPercent: 0,
         step: 0,
+
+        minRedeemFee: null,
     }),
 
     computed: {
@@ -309,8 +311,9 @@ export default {
             }
         },
 
-        estimateResult: function () {
-            return this.sum * (1 - (this.exitFee ? (this.exitFee / 100.0) : 0));
+        resultRedeemFee: function () {
+            let exitFeeValue = this.sum * (this.exitFee ? (this.exitFee / 100.0) : 0);
+            return this.minRedeemFee ? (exitFeeValue > this.minRedeemFee ? exitFeeValue : this.minRedeemFee) : exitFeeValue;
         },
 
         buttonLabel: function () {
@@ -320,6 +323,8 @@ export default {
                 return 'Connect to a wallet';
             } else if (this.transactionPending) {
                 return 'Transaction is pending';
+            } else if (parseFloat(this.sum) < this.resultRedeemFee) {
+                return 'Sum is less than redeem fee';
             } else if (this.isBuy) {
                 if (this.etsTokenApproved) {
                     this.step = 2;
@@ -336,7 +341,11 @@ export default {
         },
 
         isBuy: function () {
-            return this.account && this.sum > 0 && this.numberRule && !this.transactionPending;
+            return this.account
+                && this.sum > 0
+                && (parseFloat(this.sum) >= this.resultRedeemFee)
+                && this.numberRule
+                && !this.transactionPending;
         },
 
         transactionPending: function () {
@@ -380,6 +389,8 @@ export default {
         this.gas = null;
         this.gasAmountInMatic = null;
         this.gasAmountInUsd = null;
+
+        this.getExitMinFee();
     },
 
     methods: {
@@ -687,6 +698,19 @@ export default {
                 return parseFloat(overcapValue);
             } catch (e) {
                 return null;
+            }
+        },
+
+        async getExitMinFee() {
+            let result = 0;
+
+            try {
+                result = await this.contracts[this.etsData.exchangeContract].methods.redeemMinFee().call();
+                result = this.web3.utils.fromWei(result, this.etsData.etsTokenDecimals === 18 ? 'ether' : 'mwei');
+
+                this.minRedeemFee = result;
+            } catch (e) {
+                this.minRedeemFee = 0;
             }
         },
     }

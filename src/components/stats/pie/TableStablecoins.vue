@@ -32,7 +32,7 @@
                     </label>
                     <template v-if="!onlyPercents">
                         <v-spacer></v-spacer>
-                        <label class="link-label mr-6">
+                        <label class="link-label align-center mr-6">
                             <v-img class="icon-img-link" v-if="!minimized" :src="require('@/assets/icon/open-in-new.svg')"/>
                         </label>
                     </template>
@@ -52,7 +52,7 @@
                 <v-progress-linear :value="getPercent(item)"
                                    :color="item.color"
                                    rounded
-                                   height="16">
+                                   height="14">
                 </v-progress-linear>
             </td>
             <td class="table-label-don text-left" width="1%">
@@ -164,6 +164,11 @@ export default {
         width: 26px !important;
         height: 26px !important;
     }
+
+    .icon-img-link {
+        width: 20px !important;
+        height: 20px !important;
+    }
 }
 
 /* tablet */
@@ -190,6 +195,11 @@ export default {
         width: 32px !important;
         height: 32px !important;
     }
+
+    .icon-img-link {
+        width: 20px !important;
+        height: 20px !important;
+    }
 }
 
 /* full */
@@ -215,6 +225,47 @@ export default {
     .currency-icon {
         width: 32px !important;
         height: 32px !important;
+    }
+
+    .icon-img-link {
+        width: 20px !important;
+        height: 20px !important;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .table-header-don {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
+    }
+
+    .table-label-don {
+        font-style: normal !important;
+        font-weight: 300 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
+    }
+
+    .current-table-row {
+        height: 54px !important;
+    }
+
+    .currency-icon {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    .icon-img-link {
+        width: 18px !important;
+        height: 18px !important;
     }
 }
 
@@ -274,8 +325,6 @@ export default {
 }
 
 .icon-img-link {
-    width: 20px !important;
-    height: 20px !important;
     cursor: pointer;
 }
 

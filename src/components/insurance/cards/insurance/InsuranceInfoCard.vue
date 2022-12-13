@@ -118,6 +118,32 @@ export default {
     }
 }
 
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .card-info {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .card-info-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 22px;
+        line-height: 36px;
+    }
+
+    .card-container {
+        max-width: 920px;
+    }
+}
+
 @media only screen and (max-width: 1260px) {
     .img-wide {
         display: none;

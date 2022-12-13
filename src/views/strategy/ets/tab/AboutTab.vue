@@ -798,6 +798,160 @@ export default {
     }
 }
 
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .info-card-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 15px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .strategy-info-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 28px;
+    }
+
+    .title-card-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 17px;
+        line-height: 22px;
+        letter-spacing: 0.04em;
+    }
+
+    .info-card-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 28px;
+    }
+
+    .important-card-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .title-card-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .section-title-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 22px;
+        letter-spacing: 0.04em;
+    }
+
+    .list-title-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .list-title-num {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 30px;
+        line-height: 32px;
+
+        padding: 5px;
+        width: 48px;
+        height: 48px;
+    }
+
+    .list-sub-title-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 28px;
+    }
+
+    .progress-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .progress-sub-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
+
+    .card-info {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 28px;
+    }
+
+    .card-info-value, .card-info-risk {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        letter-spacing: 0.04em;
+    }
+
+    .info-container {
+        height: 64px !important;
+    }
+
+    .btn-filled {
+        width: 40%;
+        height: 40px !important;
+    }
+
+    .address-card-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .address-card-link {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .alert-icon {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .full-status-error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+    }
+}
+
 .strategy-info-label {
     font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text);

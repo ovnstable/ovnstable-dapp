@@ -194,13 +194,6 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
-    .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
-    }
-
     .title-label {
         font-style: normal;
         font-weight: 300;
@@ -248,13 +241,6 @@ export default {
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 32px;
-    }
-
     .title-label {
         font-style: normal;
         font-weight: 300;
@@ -302,13 +288,6 @@ export default {
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 32px;
-    }
-
     .title-label {
         font-style: normal;
         font-weight: 300;
@@ -354,15 +333,60 @@ export default {
     }
 }
 
-.page-container {
-    margin-bottom: 5% !important;
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .title-label {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 48px;
+        line-height: 60px;
+    }
+
+    .section-title-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 24px;
+        letter-spacing: 0.04em;
+    }
+
+    .rate-tab-btn {
+        height: 40px !important;
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .ready-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 15px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-filled {
+        width: 20%;
+        height: 38px !important;
+    }
 }
 
-.tab-btn {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'liga' off;
-    color: var(--secondary-gray-text);
-    margin-bottom: -2px;
+.page-container {
+    margin-bottom: 5% !important;
 }
 
 .tab-button {
@@ -439,10 +463,6 @@ export default {
     border-radius: 4px;
     color: #707A8B !important;
     border: 1px solid var(--main-border) !important;
-}
-
-.tab-btn-disabled {
-    color: #C5C9D1 !important;
 }
 
 .ready-label {

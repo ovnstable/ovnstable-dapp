@@ -132,6 +132,11 @@ export default {
     .current-strategy-table-row {
         height: 48px !important;
     }
+
+    .icon-img {
+        width: 22px !important;
+        height: 22px !important;
+    }
 }
 
 /* tablet */
@@ -153,6 +158,11 @@ export default {
     .current-strategy-table-row {
         height: 64px !important;
     }
+
+    .icon-img {
+        width: 22px !important;
+        height: 22px !important;
+    }
 }
 
 /* full */
@@ -173,6 +183,43 @@ export default {
 
     .current-strategy-table-row {
         height: 64px !important;
+    }
+
+    .icon-img {
+        width: 22px !important;
+        height: 22px !important;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .table-header-payouts-strategy {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 13px !important;
+        line-height: 18px !important;
+    }
+
+    .table-label-payouts-strategy {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 15px !important;
+        line-height: 24px !important;
+    }
+
+    .current-strategy-table-row {
+        height: 64px !important;
+    }
+
+    .icon-img {
+        width: 18px !important;
+        height: 18px !important;
+        margin-top: 3px !important;
     }
 }
 
@@ -237,8 +284,6 @@ export default {
 }
 
 .icon-img {
-    width: 24px !important;
-    height: 24px !important;
     cursor: pointer;
 }
 

@@ -147,27 +147,6 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
-    .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
-    }
-
-    .title-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 32px;
-        line-height: 40px;
-    }
-
-    .title-info-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
-    }
-
     .header-btn {
         font-style: normal !important;
         font-weight: 400 !important;
@@ -212,27 +191,6 @@ export default {
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 28px;
-    }
-
-    .title-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 54px;
-        line-height: 60px;
-    }
-
-    .title-info-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
-    }
-
     .header-btn {
         font-style: normal !important;
         font-weight: 400 !important;
@@ -277,27 +235,6 @@ export default {
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 28px;
-    }
-
-    .title-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 54px;
-        line-height: 60px;
-    }
-
-    .title-info-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
-    }
-
     .header-btn {
         font-style: normal !important;
         font-weight: 400 !important;
@@ -317,11 +254,6 @@ export default {
         font-size: 20px;
         line-height: 24px;
         letter-spacing: 0.04em;
-    }
-
-    .wide-btn {
-        font-size: 16px;
-        line-height: 20px;
     }
 
     .currency {
@@ -345,15 +277,57 @@ export default {
     }
 }
 
-.page-container {
-    margin-bottom: 5% !important;
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-filled {
+        width: 20%;
+        height: 40px !important;
+    }
+
+    .section-title-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 24px;
+        letter-spacing: 0.04em;
+    }
+
+    .currency {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .currency-text {
+        font-size: 16px;
+        line-height: 25px;
+    }
+
+    .address-text {
+        font-size: 16px;
+        line-height: 28px;
+    }
+
+    .open-new {
+        width: 22px;
+        height: 22px;
+    }
 }
 
-.tab-btn {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'liga' off;
-    color: var(--secondary-gray-text);
-    margin-bottom: -2px;
+.page-container {
+    margin-bottom: 5% !important;
 }
 
 .tab-chain-button {
@@ -369,19 +343,6 @@ export default {
 
 .toggle-row {
     border-bottom: 2px solid var(--main-border);
-}
-
-.title-label {
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--main-gray-text);
-}
-
-.title-info-label {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--main-gray-text);
 }
 
 .info-link {

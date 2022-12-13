@@ -86,7 +86,6 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
-
     .container_header {
         margin-left: 3% !important;
         margin-right: 3% !important;
@@ -123,7 +122,6 @@ export default {
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-
     .container_header {
         margin-left: 5% !important;
         margin-right: 5% !important;
@@ -160,7 +158,6 @@ export default {
 
 /* full */
 @media only screen and (min-width: 1400px) {
-
     .container_header {
         margin-left: 5% !important;
         margin-right: 5% !important;
@@ -190,6 +187,53 @@ export default {
         font-style: normal !important;
         font-weight: 400 !important;
         font-size: 20px !important;
+        line-height: 24px !important;
+        letter-spacing: 0.04em !important;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .container_header {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
+
+    .modal-info-row {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+    }
+
+    .title-modal-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .title-modal {
+        font-family: "Roboto", sans-serif;
+        font-size: 28px;
+        line-height: 32px;
+    }
+
+    .modal-info-text {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 32px;
+    }
+
+    .understand-btn {
+        width: 50%;
+        height: 40px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 18px !important;
         line-height: 24px !important;
         letter-spacing: 0.04em !important;
     }

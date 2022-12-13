@@ -148,6 +148,28 @@ export default {
     }
 }
 
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .total-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .total-sum-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 36px;
+        line-height: 48px;
+    }
+}
+
 .total-label {
     font-family: 'Roboto', sans-serif;
     text-align: center;
@@ -161,5 +183,4 @@ export default {
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
 }
-
 </style>

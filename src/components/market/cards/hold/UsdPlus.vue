@@ -515,10 +515,20 @@ only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px)
 only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
 only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
 only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .button {
+        height: 36px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 15px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
     .card-title {
         font-style: normal;
         font-weight: 600;
-        font-size: 12px;
+        font-size: 16px;
         line-height: 18px;
         letter-spacing: 0.03em;
     }
@@ -526,7 +536,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .percentage {
         font-style: normal;
         font-weight: 600;
-        font-size: 40px;
+        font-size: 38px;
         line-height: 42px;
     }
 

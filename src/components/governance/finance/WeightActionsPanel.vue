@@ -55,7 +55,7 @@ export default {
         ...mapGetters('governance', ['m2mItems', 'financeLoading', 'hasChangeAccount']),
 
         weightsIsBtnEnabled: function () {
-            let targetWeightSum = 0.0;
+            let targetWeightSum = 0.000;
 
             this.m2mItems.forEach(item => {
                 if (item && item.targetWeight) {
@@ -63,7 +63,7 @@ export default {
                 }
             })
 
-            return (targetWeightSum == 100);
+            return (targetWeightSum.toFixed(3) == 100.000);
         },
 
         weightsIsBtnEnabledMinMax: function () {

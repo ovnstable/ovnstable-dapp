@@ -14,7 +14,7 @@
         <v-col :cols="$wu.isMobile() ? 5 : 2">
             <v-row justify="end" align="center">
                 <label class="card-label label-amount">
-                    {{ (txData.action === 'mint' || txData.action === 'wrap') ? '+' : ((txData.action === 'redeem' || txData.action === 'unwrap') ? '-' : '') }}
+                    {{ (txData.action === 'mint' || txData.action === 'wrap') ? '+' : ((txData.action === 'redeem' || txData.action === 'unwrap' || txData.action === 'withdraw') ? '-' : '') }}
                     ${{$utils.formatMoneyComma(txData.amount, 2)}}
                 </label>
             </v-row>

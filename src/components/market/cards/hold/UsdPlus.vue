@@ -528,7 +528,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .card-title {
         font-style: normal;
         font-weight: 600;
-        font-size: 16px;
+        font-size: 14px;
         line-height: 18px;
         letter-spacing: 0.03em;
     }

@@ -186,4 +186,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     background: var(--hover);
     color: rgba(28, 149, 231, 1) !important;
 }
+
+.tab-button {
+}
+
+.tab-button-inactive {
+    background: transparent !important;
+}
 </style>

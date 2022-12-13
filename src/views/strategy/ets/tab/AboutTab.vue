@@ -421,7 +421,7 @@ export default {
         font-size: 24px;
         line-height: 20px;
 
-        padding: 2px;
+        /*padding: 2px;*/
         width: 26px;
         height: 26px;
     }
@@ -570,7 +570,7 @@ export default {
         font-size: 36px;
         line-height: 30px;
 
-        padding: 2px;
+        /*padding: 2px;*/
         width: 38px;
         height: 38px;
     }
@@ -719,7 +719,7 @@ export default {
         font-size: 36px;
         line-height: 30px;
 
-        padding: 2px;
+        /*padding: 2px;*/
         width: 38px;
         height: 38px;
     }
@@ -873,7 +873,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-size: 30px;
         line-height: 32px;
 
-        padding: 5px;
+        /*padding: 5px;*/
         width: 48px;
         height: 48px;
     }
@@ -1018,7 +1018,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
     border-radius: 50%;
     text-align: center;
-    border: 1px solid var(--progress-card-info) !important;
+    /*border: 1px solid var(--progress-card-info) !important;*/
 }
 
 .list-title-text {

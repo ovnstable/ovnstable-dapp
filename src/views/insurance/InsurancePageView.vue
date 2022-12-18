@@ -119,7 +119,7 @@
                         <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPerformance">
                             Performance
                         </label>
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4" v-bind:class="activeTabAbout" disabled>
+                        <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabAbout">
                             Insurance reserves
                         </label>
                     </v-row>
@@ -274,6 +274,7 @@ export default {
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
         ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData', 'insuranceRedemptionData']),
+        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
 
         activeTabPerformance: function () {
             return {

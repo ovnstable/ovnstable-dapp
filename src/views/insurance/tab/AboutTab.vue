@@ -21,7 +21,7 @@
             </v-col>
         </v-row>
 
-        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-3'" justify="start" align="center" :style="{'background': 'radial-gradient(128.35% 221.83% at 66.7% -84.67%, #011845 0%, #011439 31.55%, #011233 56.82%, #6135BD 93.94%)'}">
+        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-3'" justify="start" align="center">
             <v-col class="info-card-body-bottom">
                 <v-row align="center" justify="start" class="ma-0">
                     <label class="section-title-label">Insurance reserves portfolio</label>
@@ -43,18 +43,17 @@
             </v-col>
         </v-row>
 
-        <v-row class="ma-0 mt-7 info-card-container-bottom" justify="start" align="start" :style="{'background': insuranceData.cardBgColor}">
+        <v-row class="ma-0 mt-3 info-card-container-bottom" justify="start" align="start" :style="{'background': 'radial-gradient(128.35% 221.83% at 66.7% -84.67%, #011845 0%, #011439 31.55%, #011233 56.82%, #6135BD 93.94%)'}">
             <v-col class="info-card-body-bottom" :cols="$wu.isMobile() ? 0 : 5">
                 <v-row class="info-row" justify="start" align="center">
                     <label class="card-info mt-1">Investors</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].holders) ? $utils.formatMoneyComma(etsStrategyData[etsData.name].holders, 0) : '—' }}</label>
+                    <label class="card-info-value">{{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.holders) ? $utils.formatMoneyComma(insuranceStrategyData.polygon.holders, 0) : '—' }}</label>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Risk factor</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ etsData.highRisk ? 'HIGH' : 'MODERATE' }}</label>
-                    <Tooltip text="Risk Factor is determined by a Pool's downside volatility. Pools that have a low Risk Factor translates to smaller downside volatility."/>
+                    <label class="card-info-value">VERY HIGH</label>
                 </v-row>
             </v-col>
 
@@ -64,17 +63,17 @@
                 <v-row class="info-row" justify="start" align="center">
                     <label class="card-info mt-1">Token address</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value info-value-address" @click="openTokenOnScan(etsStrategyData[etsData.name].rebaseAddress)">
-                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].rebaseAddress) ? shortAddress(etsStrategyData[etsData.name].rebaseAddress) : '—' }}
+                    <label class="card-info-value info-value-address" @click="openTokenOnScan(insuranceStrategyData.polygon.rebaseAddress)">
+                        {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.rebaseAddress) ? shortAddress(insuranceStrategyData.polygon.rebaseAddress) : '—' }}
                     </label>
-                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''" @click="openTokenOnScan(etsStrategyData[etsData.name].rebaseAddress)">
+                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''" @click="openTokenOnScan(insuranceStrategyData.polygon.rebaseAddress)">
                         <v-icon size="20" style="margin-top: -2px" color="rgba(255, 255, 255, 0.5)">mdi-open-in-new</v-icon>
                     </div>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Inception date</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ etsData.inceptionDate }}</label>
+                    <label class="card-info-value">05 December 2022</label>
                 </v-row>
             </v-col>
         </v-row>
@@ -115,7 +114,7 @@ export default {
         ...mapGetters("network", ['networkId']),
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
         ...mapGetters("web3", ['contracts']),
-        ...mapGetters('marketData', ['etsStrategyData']),
+        ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData', 'insuranceRedemptionData']),
     },
 
     methods: {
@@ -185,6 +184,21 @@ export default {
         width: 20px;
         height: 20px;
     }
+
+    .card-info {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .card-info-value, .card-info-risk {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
+    }
 }
 
 /* tablet */
@@ -229,6 +243,21 @@ export default {
         width: 24px;
         height: 24px;
     }
+
+    .card-info {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .card-info-value, .card-info-risk {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 22px;
+        letter-spacing: 0.04em;
+    }
 }
 
 /* full */
@@ -272,6 +301,21 @@ export default {
     .open-new {
         width: 24px;
         height: 24px;
+    }
+
+    .card-info {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 28px;
+    }
+
+    .card-info-value, .card-info-risk {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        letter-spacing: 0.04em;
     }
 }
 
@@ -321,6 +365,21 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .open-new {
         width: 22px;
         height: 22px;
+    }
+
+    .card-info {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 28px;
+    }
+
+    .card-info-value, .card-info-risk {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        letter-spacing: 0.04em;
     }
 }
 
@@ -412,4 +471,22 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     cursor: pointer;
 }
 
+.card-info {
+    font-family: 'Roboto', sans-serif;
+    color: white;
+}
+
+.card-info-value {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: white;
+}
+
+.info-row {
+    border-top: 1px solid var(--secondary-border);
+}
+
+.info-card-container-bottom {
+    border-radius: 8px;
+}
 </style>

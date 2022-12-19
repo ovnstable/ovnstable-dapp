@@ -119,7 +119,7 @@
                         <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPerformance">
                             Performance
                         </label>
-                        <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabAbout">
+                        <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabAbout" disabled="">
                             Insurance reserves
                         </label>
                     </v-row>

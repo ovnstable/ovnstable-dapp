@@ -79,13 +79,40 @@
             </v-col>
         </v-row>
 
-        <v-row align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5 mb-10' : 'mt-3'">
-            <v-btn class="header-btn btn-filled" @click="mintAction">
-                Mint Insurance
-            </v-btn>
-            <v-btn class="header-btn btn-outlined ml-3" outlined @click="mintAction">
-                withdraw within 12 hours
-            </v-btn>
+        <template v-if="networkSupport">
+            <v-row align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5 mb-5' : 'mt-3'">
+                <v-btn class="header-btn btn-investor-invest btn-filled"  @click="mintAction">
+                    MINT INSURANCE
+                </v-btn>
+                <template v-if="insuranceRedemptionData.request === 'CAN_WITHDRAW'">
+                    <v-btn class="header-btn btn-investor-invest btn-outlined ml-3" outlined @click="redeemAction">
+                        WITHDRAW WITHIN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
+                    </v-btn>
+                </template>
+                <template v-if="insuranceRedemptionData.request === 'NEED_WAIT'">
+                    <v-btn class="header-btn btn-investor-invest btn-outlined ml-3" outlined>
+                        <label style="color: var(--blue-link)">
+                            WITHDRAW IN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
+                        </label>
+                    </v-btn>
+                </template>
+                <template v-if="insuranceRedemptionData.request === 'NEED_REQUEST'">
+                    <v-btn class="header-btn btn-investor-invest btn-outlined ml-3" outlined @click="redemptionRequestAction">
+                        REDEMPTION REQUEST
+                    </v-btn>
+                </template>
+            </v-row>
+        </template>
+        <template v-else>
+            <v-row align="start" justify="start" class=" ma-0 mt-5">
+                <v-btn class="header-btn btn-investor-invest btn-filled" @click="setWalletNetwork('polygon')">
+                    SWITCH TO POLYGON TO MINT
+                </v-btn>
+            </v-row>
+        </template>
+
+        <v-row align="center" justify="center" class="ma-0 mt-4">
+
         </v-row>
         <resize-observer @notify="$forceUpdate()"/>
     </div>
@@ -112,14 +139,18 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("network", ['networkId']),
+        ...mapGetters("network", ['networkId', 'setWalletNetwork']),
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData', 'insuranceData']),
         ...mapGetters("web3", ['contracts']),
         ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData', 'insuranceRedemptionData']),
+
+        networkSupport: function () {
+            return this.networkId === this.insuranceStrategyData.polygon.chainId;
+        },
     },
 
     methods: {
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('insuranceInvestModal', ['showInvestModal', 'showMintView', 'showRedeemView', 'showRedemptionRequestModal']),
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -127,7 +158,16 @@ export default {
 
         mintAction() {
             this.showMintView();
-            this.showSwapModal();
+            this.showInvestModal();
+        },
+
+        redeemAction() {
+            this.showRedeemView();
+            this.showInvestModal();
+        },
+
+        redemptionRequestAction() {
+            this.showRedemptionRequestModal();
         },
 
         shortAddress(address) {
@@ -151,6 +191,11 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .btn-investor-invest {
+        width: 100% !important;
+        height: 40px !important;
     }
 
     .btn-filled {
@@ -217,6 +262,11 @@ export default {
         height: 40px !important;
     }
 
+    .btn-investor-invest {
+        width: 25% !important;
+        height: 44px !important;
+    }
+
     .section-title-label {
         font-style: normal;
         font-weight: 400;
@@ -276,6 +326,11 @@ export default {
         height: 40px !important;
     }
 
+    .btn-investor-invest {
+        width: 25% !important;
+        height: 44px !important;
+    }
+
     .section-title-label {
         font-style: normal;
         font-weight: 400;
@@ -330,7 +385,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .header-btn {
         font-style: normal !important;
         font-weight: 400 !important;
-        font-size: 16px !important;
+        font-size: 14px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
@@ -419,7 +474,13 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-feature-settings: 'pnum' on, 'lnum' on !important;
 }
 
+.btn-investor-invest {
+    background: var(--blue-gradient);
+    color: #FFFFFF !important;
+}
+
 .btn-outlined {
+    background: none !important;
     color: var(--links-blue) !important;
 }
 
@@ -490,4 +551,5 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .info-card-container-bottom {
     border-radius: 8px;
 }
+
 </style>

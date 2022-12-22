@@ -79,25 +79,26 @@
             </v-col>
         </v-row>
 
-        <template v-if="networkSupport">
+        <template v-if="networkSupport" >
             <v-row align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5 mb-5' : 'mt-3'">
                 <v-btn class="header-btn btn-investor-invest btn-filled"  @click="mintAction">
                     MINT INSURANCE
                 </v-btn>
+
                 <template v-if="insuranceRedemptionData.request === 'CAN_WITHDRAW'">
-                    <v-btn class="header-btn btn-investor-invest btn-outlined ml-3" outlined @click="redeemAction">
+                    <v-btn class="header-btn btn-investor-invest btn-outlined " :class="$wu.isMobile() ? 'mt-3' : 'ml-3'" outlined @click="redeemAction">
                         WITHDRAW WITHIN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
                     </v-btn>
                 </template>
                 <template v-if="insuranceRedemptionData.request === 'NEED_WAIT'">
-                    <v-btn class="header-btn btn-investor-invest btn-outlined ml-3" outlined>
+                    <v-btn class="header-btn btn-investor-invest btn-outlined" :class="$wu.isMobile() ? 'mt-3' : 'ml-3'" outlined>
                         <label style="color: var(--blue-link)">
                             WITHDRAW IN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
                         </label>
                     </v-btn>
                 </template>
                 <template v-if="insuranceRedemptionData.request === 'NEED_REQUEST'">
-                    <v-btn class="header-btn btn-investor-invest btn-outlined ml-3" outlined @click="redemptionRequestAction">
+                    <v-btn class="header-btn btn-investor-invest btn-outlined" :class="$wu.isMobile() ? 'mt-3' : 'ml-3'" outlined @click="redemptionRequestAction">
                         REDEMPTION REQUEST
                     </v-btn>
                 </template>

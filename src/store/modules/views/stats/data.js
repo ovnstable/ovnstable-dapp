@@ -1,9 +1,11 @@
 import {axios} from "@/plugins/http-axios";
 import moment from "moment";
+import * as numberUtils from '@/utils/number-utils';
 
 const state = {
     currentTotalData: null,
     stablecoinData: null,
+    insuranceData: null,
 
     payouts: [],
 
@@ -24,6 +26,10 @@ const getters = {
 
     stablecoinData(state) {
         return state.stablecoinData;
+    },
+
+    insuranceData(state) {
+        return state.insuranceData;
     },
 
     payouts(state) {
@@ -138,8 +144,58 @@ const actions = {
 
         commit('setStablecoinData', result);
     },
+    async refreshInsuranceData({commit, dispatch, getters, rootState}) {
+        let result = [];
 
+        try {
+            let insurance = rootState.web3.contracts.insurance;
+            let strategies = await insurance.polygon_m2m.methods.strategyAssets().call();
+            let strategiesList = [...strategies];
 
+            strategiesList.sort((a,b) => b.netAssetValue * 1 - a.netAssetValue * 1);
+            strategiesList = strategiesList.filter(el => numberUtils._fromE6(el.netAssetValue) > 0);
+
+            let colors = [
+                "#2775CA",
+                "#26A17B",
+                "#FCCA46",
+                "#6E56C4",
+                "#002868",
+                "#26A17B",
+                "#23DD00",
+                "#3D8DFF",
+                "#FE7F2D",
+                "#B22174"
+            ];
+
+            for (let i = 0; i < strategies.length; i++) {
+                result.push({
+                    label: getStrategyName(strategiesList[i].strategy),
+                    link: strategiesList[i].strategy,
+                    color: colors[i],
+                    value: numberUtils._fromE6(strategiesList[i].netAssetValue),
+                    liquidationValue: numberUtils._fromE6(strategiesList[i].liquidationValue),
+
+                    // logo:  require('@/assets/currencies/stablecoins/' + element.id.tokenName + '.png');
+                });
+            }
+
+            // + 1 взять decimals(мб где-то есть маппинг по address с нужными данными) как в USD+ 6значный
+            // + 2 посчитать проценты (percent in portfolio)
+            // + 3 сделать стейт и использовать его в верстке
+            // 4 захардкодить 3 стратегии collateral
+
+            // + Aave: 0x82d8F924b71459bAC871A9F0163d73B6a3FBbb10
+            // + Gamma+: 0x446e79Fd6793c2c3a4C69F112374edB86fe4F82a
+            // + Alfa+: 0x85e8c510DA139E41225ecb61954417dd2F953681
+
+            // console.log("Strategy Weights: ", strategies);
+        } catch(e) {
+            console.log("Error Strategy Weights: ", e);
+        }
+
+        commit('setInsuranceData', result);
+    },
     async refreshStats({commit, dispatch, getters}){
 
         console.debug('StatsData: refreshStats');
@@ -149,6 +205,7 @@ const actions = {
         dispatch('refreshTotalUsdPlus');
         dispatch('refreshTotalUsdPlusProfit');
         dispatch('refreshStablecoinData');
+        dispatch('refreshInsuranceData');
     },
 
     async refreshPayouts({commit, dispatch, getters, rootState}) {
@@ -249,6 +306,10 @@ const mutations = {
         state.stablecoinData = stablecoinData;
     },
 
+    setInsuranceData(state, insuranceData) {
+        state.insuranceData = insuranceData;
+    },
+
     setGasPrice(state, price) {
         state.gasPrice = price;
     },
@@ -285,3 +346,13 @@ export default {
     actions,
     mutations
 };
+
+// todo: hardcode -> get info from api
+const strategyMap = new Map();
+strategyMap.set('0x82d8F924b71459bAC871A9F0163d73B6a3FBbb10', 'Aave');
+strategyMap.set('0x446e79Fd6793c2c3a4C69F112374edB86fe4F82a', 'Gamma+');
+strategyMap.set('0x85e8c510DA139E41225ecb61954417dd2F953681', 'Alfa+');
+
+function getStrategyName(strategyAddress) {
+    return strategyMap.get(strategyAddress);
+}

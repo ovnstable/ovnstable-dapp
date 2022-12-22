@@ -2,6 +2,7 @@ import BN from "bn.js";
 
 const {axios} = require('@/plugins/http-axios');
 const {utils} = require('@/plugins/utils');
+import * as numberUtils from '@/utils/number-utils'
 
 const proposalStates = ['Pending', 'Active', 'Canceled', 'Defeated', 'Succeeded', 'Queued', 'Expired', 'Executed'];
 
@@ -596,8 +597,8 @@ const actions = {
                 {
                     name: mapping ? mapping.name : asset.strategy,
                     address: asset.strategy,
-                    netAssetValue: (fromAsset6 ? _fromE6(asset.netAssetValue.toString()) : _fromE18(asset.netAssetValue.toString())),
-                    liquidationValue: (fromAsset6 ? _fromE6(asset.liquidationValue.toString()) : _fromE18(asset.liquidationValue.toString())),
+                    netAssetValue: (fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : numberUtils._fromE18(asset.netAssetValue.toString())),
+                    liquidationValue: (fromAsset6 ? numberUtils._fromE6(asset.liquidationValue.toString()) : numberUtils._fromE18(asset.liquidationValue.toString())),
                     minWeight: (weight.minWeight ? parseInt(weight.minWeight) / 1000 : 0),
                     maxWeight: (weight.maxWeight ? parseInt(weight.maxWeight) / 1000 : 0),
                     riskFactor: (weight.riskFactor ? parseInt(weight.riskFactor) / 1000 : 0),
@@ -606,7 +607,7 @@ const actions = {
                     enabledReward: weight.enabledReward
                 });
 
-            sum += parseFloat((fromAsset6 ? _fromE6(asset.netAssetValue.toString()) : _fromE18(asset.netAssetValue.toString())));
+            sum += parseFloat((fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : numberUtils._fromE18(asset.netAssetValue.toString())));
         }
 
         for (let i = 0; i < strategiesMapping.length; i++) {
@@ -635,10 +636,10 @@ const actions = {
         }
 
         commit('setM2mItems', items);
-        commit('setM2mTotal', (fromAsset6 ? _fromE6(totalNetAssets.toString()) : _fromE18(totalNetAssets.toString())));
+        commit('setM2mTotal', (fromAsset6 ? numberUtils._fromE6(totalNetAssets.toString()) : numberUtils._fromE18(totalNetAssets.toString())));
 
         if (usdPlus) {
-            let totalUsdPlus = _fromE6(await usdPlus.methods.totalSupply().call());
+            let totalUsdPlus = numberUtils._fromE6(await usdPlus.methods.totalSupply().call());
             let liquidityIndex = (await usdPlus.methods.liquidityIndex().call()).toString();
 
             commit('setUsdPlusTotal', totalUsdPlus);
@@ -775,13 +776,3 @@ export default {
     actions,
     mutations
 };
-
-
-
-function _fromE6(value) {
-    return value / 10 ** 6;
-}
-
-function _fromE18(value) {
-    return new BN(value.toString()).divRound(new BN(10).pow(new BN(18))).toString();
-}

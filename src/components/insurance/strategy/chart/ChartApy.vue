@@ -8,7 +8,7 @@
                         <abbr title="Annual Percentage Yield">APY</abbr>
                     </label>
                     <div class="mt-7 ml-1">
-                        <Tooltip text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
+                        <Tooltip :size="16" text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
                     </div>
                 </v-row>
 

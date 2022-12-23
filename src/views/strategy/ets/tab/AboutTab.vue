@@ -165,21 +165,21 @@
                     <label class="card-info mt-1">Risk factor</label>
                     <v-spacer></v-spacer>
                     <label class="card-info-value">{{ etsData.highRisk ? 'HIGH' : 'MODERATE' }}</label>
-                    <Tooltip text="Risk Factor is determined by a Pool's downside volatility. Pools that have a low Risk Factor translates to smaller downside volatility."/>
+                    <Tooltip :size="16" text="Risk Factor is determined by a Pool's downside volatility. Pools that have a low Risk Factor translates to smaller downside volatility."/>
                 </v-row>
 
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Target Health Factor</label>
                     <v-spacer></v-spacer>
                     <label class="card-info-value">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2)) : '—' }}</label>
-                    <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
+                    <Tooltip :size="16" text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
 
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Health Factor check</label>
                     <v-spacer></v-spacer>
                     <label class="card-info-value">24 hours</label>
-                    <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
+                    <Tooltip :size="16" text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                 </v-row>
             </v-col>
 

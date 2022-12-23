@@ -121,7 +121,7 @@
             </v-col>
             <v-col cols="1">
                 <v-row align="center" justify="end">
-                    <Tooltip text="Accelerating a transaction by using a higher gas price increases its chances of getting processed by the network faster, but it is not always guaranteed."/>
+                    <Tooltip :size="16" text="Accelerating a transaction by using a higher gas price increases its chances of getting processed by the network faster, but it is not always guaranteed."/>
                 </v-row>
             </v-col>
         </v-row>

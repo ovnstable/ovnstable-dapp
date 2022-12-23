@@ -170,7 +170,7 @@
                             <v-spacer></v-spacer>
                             <label class="card-info label-light">Current health factor</label>
                             <label class="card-info-value label-light ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].currentHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].currentHealthFactor, 2)) : '—' }}</label>
-                            <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
+                            <Tooltip :size="16" text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                             <v-spacer></v-spacer>
                             <label class="card-info label-light">Target Health factor</label>
                             <label class="card-info-value label-light ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].targetHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].targetHealthFactor, 2)) : '—' }}</label>
@@ -192,7 +192,7 @@
                         <v-row align="center" justify="center" class="mt-6">
                             <label class="card-info label-light">Current health factor</label>
                             <label class="card-info-value label-light ml-2">{{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].currentHealthFactor) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].currentHealthFactor, 2)) : '—' }}</label>
-                            <Tooltip text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
+                            <Tooltip :size="16" text="What is Health Factor?" link="https://docs.aave.com/risk/asset-risk/risk-parameters#health-factor"/>
                         </v-row>
                         <v-row align="center" justify="center" class="mt-4">
                             <label class="card-info label-light">Target Health factor</label>

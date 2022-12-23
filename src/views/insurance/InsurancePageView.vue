@@ -94,7 +94,7 @@
                                 <v-row align="center" class="ma-0">
                                     <label class="investor-card-title">One-time fees</label>
                                     <div style="margin-top: -2px">
-                                        <Tooltip text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
+                                        <Tooltip :size="16" text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
                                     </div>
                                 </v-row>
                                 <v-row class="info-row ma-0 mt-8" justify="start" align="center">
@@ -202,7 +202,7 @@
                             <div class="my-6 mx-6">
                                 <v-row align="center">
                                     <label class="investor-card-title">One-time fees</label>
-                                    <Tooltip text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
+                                    <Tooltip :size="16" text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
                                 </v-row>
 
                                 <v-row class="mt-8" justify="start" align="center">
@@ -243,7 +243,6 @@
 
 <script>
 
-import RiskDisclosureModal from "@/components/market/modal/ets/RiskDisclosureModal";
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import AboutTab from "@/views/insurance/tab/AboutTab";
@@ -260,7 +259,6 @@ export default {
         InsuranceBanner,
         AboutTab,
         Tooltip,
-        RiskDisclosureModal,
     },
 
     data: () => ({

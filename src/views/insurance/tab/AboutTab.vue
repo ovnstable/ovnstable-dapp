@@ -11,12 +11,12 @@
                     <v-col :cols="!$wu.isFull() ? 12 : 12">
                         <TableStablecoins
                             v-if="!$wu.isMobile()"
-                            :data="insuranceData"/>
+                            :data="insuranceAssetData"/>
 
                         <TableStablecoins
                             v-else
                             minimized
-                            :data="insuranceData"/>
+                            :data="insuranceAssetData"/>
                     </v-col>
                 </v-row>
             </v-col>
@@ -32,12 +32,16 @@
                     <v-col :cols="!$wu.isFull() ? 12 : 12">
                         <TableStrategies
                             v-if="!$wu.isMobile()"
-                            :data="insuranceData"/>
+                            :data="insuranceTotalData"
+                            :total-supply="insuranceTotalSupplyData"
+                            :total-title="'Total USD+ Insurance in circulation'"/>
 
                         <TableStrategies
                             v-else
                             minimized
-                            :data="insuranceData"/>
+                            :data="insuranceTotalData"
+                            :total-supply="insuranceTotalSupplyData"
+                            :total-title="'Total USD+ Insurance in circulation'"/>
                     </v-col>
 
                 </v-row>
@@ -141,7 +145,7 @@ export default {
 
     computed: {
         ...mapGetters("network", ['networkId', 'setWalletNetwork']),
-        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData', 'insuranceData']),
+        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData', 'insuranceTotalData', 'insuranceAssetData', 'insuranceTotalSupplyData']),
         ...mapGetters("web3", ['contracts']),
         ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData', 'insuranceRedemptionData']),
 

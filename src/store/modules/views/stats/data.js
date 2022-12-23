@@ -5,7 +5,9 @@ import * as numberUtils from '@/utils/number-utils';
 const state = {
     currentTotalData: null,
     stablecoinData: null,
-    insuranceData: null,
+    insuranceTotalData: null,
+    insuranceAssetData: null,
+    insuranceTotalSupplyData: null,
 
     payouts: [],
 
@@ -28,8 +30,16 @@ const getters = {
         return state.stablecoinData;
     },
 
-    insuranceData(state) {
-        return state.insuranceData;
+    insuranceTotalData(state) {
+        return state.insuranceTotalData;
+    },
+
+    insuranceAssetData(state) {
+        return state.insuranceAssetData;
+    },
+
+    insuranceTotalSupplyData(state) {
+        return state.insuranceTotalSupplyData;
     },
 
     payouts(state) {
@@ -137,6 +147,7 @@ const actions = {
                         logo: require('@/assets/currencies/stablecoins/' + element.id.tokenName + '.png')
                     }
                 );
+                console.log("Token name : ", element.id.tokenName);
             } catch (e) {
                 console.error("Error while adding stablecoin to list: " + e);
             }
@@ -144,7 +155,70 @@ const actions = {
 
         commit('setStablecoinData', result);
     },
-    async refreshInsuranceData({commit, dispatch, getters, rootState}) {
+    async refreshInsuranceAssetData({commit, dispatch, getters, rootState}) {
+        let result = [];
+        let totalSupply = 0;
+
+        try {
+            let insurance = rootState.web3.contracts.insurance;
+            let strategies = await insurance.polygon_m2m.methods.strategyAssets().call();
+            let strategiesList = [...strategies];
+
+            strategiesList.sort((a,b) => b.netAssetValue * 1 - a.netAssetValue * 1);
+            strategiesList = strategiesList.filter(el => numberUtils._fromE6(el.netAssetValue) > 0);
+
+            let colors = [
+                "#2775CA",
+                "#26A17B",
+                "#FCCA46",
+                "#6E56C4",
+                "#002868",
+                "#26A17B",
+                "#23DD00",
+                "#3D8DFF",
+                "#FE7F2D",
+                "#B22174"
+            ];
+
+            let resAssets = new Map();
+
+            for (let i = 0; i < strategies.length; i++) {
+                let assets = getAssetsByStrategy(strategiesList[i].strategy);
+                for (let j = 0; j < assets.length; j++) {
+                    let resAsset = resAssets.get(assets[j].name);
+                    if (resAsset) {
+                        resAsset.value += Math.round(numberUtils._fromE6(strategiesList[i].netAssetValue) * assets[j].percent)  / 100;
+                        resAssets.set(assets[j].name, resAsset);
+                        continue;
+                    }
+
+                    resAssets.set(assets[j].name,
+                      {
+                          label: assets[j].name,
+                          color: colors[i+j],
+                          value: Math.round(numberUtils._fromE6(strategiesList[i].netAssetValue) * assets[j].percent)  / 100,
+                          logo: require('@/assets/currencies/stablecoins/' + assets[j].name + '.png')
+                      })
+                }
+            }
+
+            console.log(resAssets)
+            for (let value of resAssets.values()) {
+                result.push(value);
+            }
+
+
+            totalSupply = numberUtils._fromE6(await insurance.polygon_token.methods.totalSupply().call())
+            console.log("Total supply", totalSupply)
+
+        } catch (e) {
+            console.log("Error when load insurance assets", e)
+        }
+
+        commit('setInsuranceAssetData', result);
+        commit('setInsuranceTotalSupplyData', totalSupply);
+    },
+    async refreshInsuranceTotalData({commit, dispatch, getters, rootState}) {
         let result = [];
 
         try {
@@ -194,7 +268,7 @@ const actions = {
             console.log("Error Strategy Weights: ", e);
         }
 
-        commit('setInsuranceData', result);
+        commit('setInsuranceTotalData', result);
     },
     async refreshStats({commit, dispatch, getters}){
 
@@ -205,7 +279,8 @@ const actions = {
         dispatch('refreshTotalUsdPlus');
         dispatch('refreshTotalUsdPlusProfit');
         dispatch('refreshStablecoinData');
-        dispatch('refreshInsuranceData');
+        dispatch('refreshInsuranceAssetData');
+        dispatch('refreshInsuranceTotalData');
     },
 
     async refreshPayouts({commit, dispatch, getters, rootState}) {
@@ -306,8 +381,16 @@ const mutations = {
         state.stablecoinData = stablecoinData;
     },
 
-    setInsuranceData(state, insuranceData) {
-        state.insuranceData = insuranceData;
+    setInsuranceTotalData(state, insuranceTotalData) {
+        state.insuranceTotalData = insuranceTotalData;
+    },
+
+    setInsuranceAssetData(state, insuranceAssetData) {
+        state.insuranceAssetData = insuranceAssetData;
+    },
+
+    setInsuranceTotalSupplyData(state, insuranceTotalSupplyData) {
+        state.insuranceTotalSupplyData = insuranceTotalSupplyData;
     },
 
     setGasPrice(state, price) {
@@ -349,10 +432,29 @@ export default {
 
 // todo: hardcode -> get info from api
 const strategyMap = new Map();
-strategyMap.set('0x82d8F924b71459bAC871A9F0163d73B6a3FBbb10', 'Aave');
-strategyMap.set('0x446e79Fd6793c2c3a4C69F112374edB86fe4F82a', 'Gamma+');
-strategyMap.set('0x85e8c510DA139E41225ecb61954417dd2F953681', 'Alfa+');
+strategyMap.set('0x82d8F924b71459bAC871A9F0163d73B6a3FBbb10',
+    {
+        name: 'Aave', assets: [{name: 'USDC', percent: 100}]
+    }
+);
+
+strategyMap.set('0x446e79Fd6793c2c3a4C69F112374edB86fe4F82a',
+  {
+      name: 'Gamma+', assets: [{name: 'USDC (delta-neutral)', percent: 100}]
+  }
+);
+strategyMap.set('0x85e8c510DA139E41225ecb61954417dd2F953681',
+  {
+      name: 'Alfa+', assets: [{name: 'USDC (delta-neutral)', percent: 100}]
+  }
+);
 
 function getStrategyName(strategyAddress) {
-    return strategyMap.get(strategyAddress);
+    let strategy = strategyMap.get(strategyAddress);
+    return strategy ? strategy.name : null;
+}
+
+function getAssetsByStrategy(strategyAddress) {
+    let strategy = strategyMap.get(strategyAddress);
+    return strategy ? strategy.assets : null;
 }

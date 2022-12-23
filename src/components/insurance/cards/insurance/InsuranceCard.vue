@@ -87,8 +87,8 @@
                 <v-row class="d-flex ma-0" align="center">
                     <label class="your-deposit">Your deposit</label>
                     <v-spacer></v-spacer>
-                    <label class="your-deposit">
-                        {{ (this.insuranceBalance.polygon && this.insuranceBalance.polygon > 0) ? ('$' + $utils.formatMoneyComma(this.insuranceBalance.polygon, 2)) : "—"  }}
+                    <label class="your-deposit" :class="dataHidden ? 'hidden-label' : ''">
+                        {{ dataHidden ? '' : (this.insuranceBalance.polygon && this.insuranceBalance.polygon > 0) ? ('$' + $utils.formatMoneyComma(this.insuranceBalance.polygon, 2)) : "—"  }}
                     </label>
                     <label class="your-deposit ml-1">
                         <v-icon color="var(--disabled-value)">
@@ -154,6 +154,7 @@ export default {
         ...mapGetters("statsData", ["totalUsdPlusValue"]),
         ...mapGetters("insuranceData", ["insuranceStrategyData", 'insuranceRedemptionData']),
         ...mapGetters("network", ["appApiUrl", "networkId", "networkName"]),
+        ...mapGetters('magicEye', ['dataHidden']),
 
         coverageValue: function () {
             if (this.totalInsuranceSupply && this.totalUsdPlusValue) {
@@ -396,6 +397,12 @@ export default {
         font-size: 16px;
         line-height: 24px;
     }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
+    }
 }
 
 /* full */
@@ -493,6 +500,12 @@ export default {
         font-weight: 400;
         font-size: 18px;
         line-height: 28px;
+    }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
     }
 }
 

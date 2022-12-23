@@ -31,7 +31,7 @@
                                                 <label class="investor-card-sub-title">Your balance in INSURANCE</label>
                                             </v-row>
                                             <v-row align="center" class="mt-5">
-                                                <label class="investor-card-sub-title-value">{{ insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
+                                                <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">{{ dataHidden ? '' : insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
                                             </v-row>
                                         </v-col>
                                     </v-row>
@@ -43,8 +43,8 @@
                                             <v-row class="info-row mt-6" justify="start" align="center">
                                                 <label class="fee-structure-label mt-1">Last day</label>
                                                 <v-spacer></v-spacer>
-                                                <label class="investor-card-sub-title-value" :class="insuranceClientData.polygon > 0 ? 'success-color' : ''">
-                                                    {{ insuranceClientData.polygon ? ((insuranceClientData.polygon > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(insuranceClientData.polygon, 4)) : '—' }}
+                                                <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label mt-1' : (insuranceClientData.polygon > 0 ? 'success-color' : '')">
+                                                    {{ dataHidden ? '' : insuranceClientData.polygon ? ((insuranceClientData.polygon > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(insuranceClientData.polygon, 4)) : '—' }}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -143,7 +143,7 @@
                                         <label class="investor-card-sub-title">Your balance in INSURANCE</label>
                                     </v-row>
                                     <v-row align="center" class="mt-5">
-                                        <label class="investor-card-sub-title-value">{{ insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
+                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">{{ dataHidden ? '' : insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
                                         <v-icon class="ml-1" color="var(--disabled-value)">
                                             {{ insuranceRedemptionData.request === 'CAN_WITHDRAW' ? 'mdi-lock-open-variant' : 'mdi-lock' }}
                                         </v-icon>
@@ -154,8 +154,8 @@
                                     <v-row class="info-row mt-6" justify="start" align="center">
                                         <label class="fee-structure-label mt-1">Last day</label>
                                         <v-spacer></v-spacer>
-                                        <label class="investor-card-sub-title-value" :class="insuranceClientData.polygon > 0 ? 'success-color' : ''">
-                                            {{ insuranceClientData.polygon ? ((insuranceClientData.polygon > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(insuranceClientData.polygon, 4)) : '—' }}
+                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label mt-1' : (insuranceClientData.polygon > 0 ? 'success-color' : '')">
+                                            {{ dataHidden ? '' : insuranceClientData.polygon ? ((insuranceClientData.polygon > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(insuranceClientData.polygon, 4)) : '—' }}
                                         </label>
                                     </v-row>
                                 </template>
@@ -274,6 +274,7 @@ export default {
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
         ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData', 'insuranceRedemptionData']),
+        ...mapGetters('magicEye', ['dataHidden']),
 
         activeTabPerformance: function () {
             return {
@@ -517,6 +518,12 @@ export default {
         font-size: 12px;
         line-height: 20px;
     }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
+    }
 }
 
 /* full */
@@ -610,6 +617,12 @@ export default {
         font-weight: 400;
         font-size: 14px;
         line-height: 22px;
+    }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
     }
 }
 

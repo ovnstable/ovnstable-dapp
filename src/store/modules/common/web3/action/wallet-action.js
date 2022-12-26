@@ -8,6 +8,7 @@ const SUPPORTED_NETWORKS = [137, 31337, 56, 43114, 10];
 const state = {
     onboard: null,
     walletConnected: false,
+    walletIcon: '',
 };
 
 const getters = {
@@ -18,6 +19,10 @@ const getters = {
 
     walletConnected(state) {
         return state.walletConnected;
+    },
+
+    walletIcon(state) {
+        return state.walletIcon;
     },
 };
 
@@ -311,6 +316,10 @@ const mutations = {
 
     setWalletConnected(state, walletConnected) {
         state.walletConnected = walletConnected;
+    },
+
+    setWalletIcon(state, value) {
+        state.walletIcon = value;
     },
 };
 

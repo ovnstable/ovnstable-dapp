@@ -20,7 +20,7 @@
                 <v-row class="account-info-row" align="center">
 
                     <div class="wallet-img">
-                        <v-img :src="require('@/assets/icon/undefined.svg')"/>
+                        <v-img :src="icon"/>
                     </div>
 
                     <v-row class="account-display-container ml-4" align="center" justify="center"
@@ -79,6 +79,15 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import TokensTab from "@/components/common/modal/account/tabs/TokensTab";
 import TxTab from "@/components/common/modal/account/tabs/tx/TxTab";
 
+let metamaskIcon = require('@/assets/wallet/metamask_wallet.svg');
+let binanceIcon = require('@/assets/wallet/binance_wallet.svg');
+let coinbaseIcon = require('@/assets/wallet/coinbase_wallet.svg');
+let connectIcon = require('@/assets/wallet/connect_wallet.svg');
+let ledgerIcon = require('@/assets/wallet/ledger_wallet.svg');
+let roninIcon = require('@/assets/wallet/ronin_wallet.svg');
+let unstoppableIcon = require('@/assets/wallet/unstoppable_wallet.svg');
+
+
 export default {
     name: "AccountProfile",
 
@@ -111,6 +120,25 @@ export default {
         ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
         ...mapGetters('etsAction', ['etsList']),
+
+        icon: function() {
+            switch (this.walletName) {
+                case "metamask":
+                    return metamaskIcon;
+                case "binance":
+                    return binanceIcon;
+                case "coinbase":
+                    return coinbaseIcon;
+                case "walletConnect":
+                    return connectIcon;
+                case "ledger":
+                    return ledgerIcon;
+                case "ronin":
+                    return roninIcon;
+                case "unstoppable":
+                    return unstoppableIcon;
+            }
+        },
 
         accountDisplay: function () {
             if (this.uns) {

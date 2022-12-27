@@ -16,7 +16,7 @@
             </th>
             <th class="table-header-don text-left" :class="minimized ? 'text-right' : 'text-left'"
                 :width="minimized ? '' : '180px'" :colspan="minimized ? 2 : 1">
-                {{ minimized ? '' : 'Percent in portfolio' }}
+                {{ minimized ? 'Percent in portfolio' : 'Percent in portfolio' }}
             </th>
             <th class="table-header-don" v-if="!minimized"></th>
         </tr>
@@ -78,12 +78,12 @@
 
         <tr class="current-table-row-total-usd-plus">
             <td class="table-label-don" v-if="!minimized"></td>
-            <td class="table-label-don text-left">
+            <td class="table-label-don text-left pb-6">
                 <v-row>
                     <b>{{totalTitle}}</b>
                 </v-row>
             </td>
-            <td class="table-label-don table-label-don-total text-left" :colspan="minimized ? 3 : 1">
+            <td class="table-label-don table-label-don-total text-left pb-6" :colspan="minimized ? 3 : 1">
                 <b>${{ $utils.formatMoney(totalSupply, 2) }}</b>
             </td>
             <td class="table-empty" v-if="!minimized"></td>

@@ -27,12 +27,17 @@
             </v-row>
 
             <v-container class="mt-6">
-<!--                <v-row class="ma-0 box">
+                <v-row class="ma-0 box">
                     <v-col cols="12">
                         <v-row class="ma-0 mb-3" justify="center">
                             <label class="apy-box-total-label">
                                 Total apy – {{ insuranceStrategyData.polygon ? ($utils.formatMoneyComma(insuranceStrategyData.polygon.lastApy, 0) + '%') : '—' }}
                             </label>
+                            <div>
+                                <Tooltip
+                                    :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
+                                    text="The sum of 2 parts of APY is higher due to compound interest calculations." />
+                            </div>
                         </v-row>
                         <v-divider class="card-divider"></v-divider>
                         <v-row class="ma-0 mt-3">
@@ -46,7 +51,7 @@
                                     </label>
                                     <Tooltip :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
                                              :maxWidth="300"
-                                             text="APY which comes from USD+ collateral and depend on Risk Factor of each strategy in collateral.<br/><br/>Premiums (share of yield):<ul><li>Strategy with low risk – 0%</li><li>Strategy with medium risk – 2%</li><li>Strategy with high risk – 10%</li></ul>"/>
+                                             text="Insurance premiums APY comes from USD+ collateral"/>
                                 </v-row>
                             </v-col>
                             <v-col>
@@ -58,12 +63,12 @@
                                         {{ insuranceStrategyData.polygon ? ($utils.formatMoneyComma(insuranceStrategyData.polygon.lastApyInvestment, 0) + '%') : '—' }} APY
                                     </label>
                                     <Tooltip :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
-                                             text="APY which comes from reserving USD+ Insurance token in other assets."/>
+                                             text="Reserve investment APY comes from reserving USD+ insurance token in other assets. <a>See Insurance reserves page</a>"/>
                                 </v-row>
                             </v-col>
                         </v-row>
                     </v-col>
-                </v-row>-->
+                </v-row>
 
                 <v-row class="ma-0 insurance-card-info-row d-flex justify-space-between">
                     <label class="card-info-label mt-2">Insurance fund</label>
@@ -713,7 +718,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--fourth-gray-text);
+    color: var(--main-gray-text);
 }
 
 .insurance-card-info-row {

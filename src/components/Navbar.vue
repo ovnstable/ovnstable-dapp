@@ -8,7 +8,7 @@
         <v-list class="mt-2">
             <v-list-item>
                 <v-list-item-title>
-                    <img class="logo-img" :src="require('@/assets/ovn_logo_hat.svg')" @click="openLink('https://overnight.fi/')">
+                    <img class="logo-img" :src="require('@/assets/logo_with_hat.svg')" @click="openLink('https://overnight.fi/')">
                 </v-list-item-title>
             </v-list-item>
         </v-list>
@@ -243,8 +243,8 @@ export default {
 
 .logo-img {
     cursor: pointer;
-    height: 56px !important;
-    width: 56px !important;
+    height: 48px !important;
+    width: 48px !important;
 }
 
 .footer-social-link {

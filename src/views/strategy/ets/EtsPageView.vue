@@ -86,8 +86,8 @@
                                 <v-row align="center" class="ma-0">
                                     <label class="investor-card-title">One-time fees</label>
                                     <div style="margin-top: -2px">
-                                        <Tooltip v-if="minRedeemFee || minRedeemFee" text="ETS rebalances at each mint/redeem. Every rebalance makes the impermanent loss, permanent, i.e. creating a fixed cost. The minimum fee is introduced to minimize the # of mint/redeems, thus minimizing the cost and maximizing the return for the users."/>
-                                        <Tooltip v-else text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
+                                        <Tooltip v-if="minRedeemFee || minRedeemFee" :size="16" text="ETS rebalances at each mint/redeem. Every rebalance makes the impermanent loss, permanent, i.e. creating a fixed cost. The minimum fee is introduced to minimize the # of mint/redeems, thus minimizing the cost and maximizing the return for the users."/>
+                                        <Tooltip v-else :size="16" text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
                                     </div>
                                 </v-row>
                                 <v-row class="info-row ma-0 mt-8" justify="start" align="center">
@@ -182,8 +182,8 @@
                             <div class="my-6 mx-6">
                                 <v-row align="center">
                                     <label class="investor-card-title">One-time fees</label>
-                                    <Tooltip v-if="minRedeemFee || minRedeemFee" text="ETS rebalances at each mint/redeem. Every rebalance makes the impermanent loss, permanent, i.e. creating a fixed cost. The minimum fee is introduced to minimize the # of mint/redeems, thus minimizing the cost and maximizing the return for the users."/>
-                                    <Tooltip v-else text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
+                                    <Tooltip v-if="minRedeemFee || minRedeemFee" :size="16" text="ETS rebalances at each mint/redeem. Every rebalance makes the impermanent loss, permanent, i.e. creating a fixed cost. The minimum fee is introduced to minimize the # of mint/redeems, thus minimizing the cost and maximizing the return for the users."/>
+                                    <Tooltip v-else :size="16" text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
                                 </v-row>
 
                                 <v-row class="mt-8" justify="start" align="center">

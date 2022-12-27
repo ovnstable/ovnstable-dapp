@@ -38,7 +38,7 @@
                             <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2 mt-5">
                                 <label class="info-title">APY</label>
                                 <div style="margin-top: -2px">
-                                    <Tooltip icon-color="rgba(255, 255, 255, 0.6)" size="16" text="Last day net APY, includes fees taken (fee-adjusted)"/>
+                                    <Tooltip icon-color="rgba(255, 255, 255, 0.6)" :size="16" text="Last day net APY, includes fees taken (fee-adjusted)"/>
                                 </div>
                             </v-row>
                         </v-col>

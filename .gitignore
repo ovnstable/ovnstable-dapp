@@ -5,4 +5,4 @@ node_modules/
 dist/
 src/contracts/local
 .env
-package-lock.json
+#package-lock.json

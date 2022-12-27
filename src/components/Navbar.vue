@@ -243,8 +243,8 @@ export default {
 
 .logo-img {
     cursor: pointer;
-    height: 56px !important;
-    width: 56px !important;
+    height: 48px !important;
+    width: 48px !important;
 }
 
 .footer-social-link {

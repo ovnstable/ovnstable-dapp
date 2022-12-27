@@ -9,11 +9,11 @@
                 {{ onlyPercents ? '' : 'Safety score' }}
                 <!-- TODO: add info -->
             </th>
-            <th class="table-header-don text-left" :colspan="minimized ? 2 : 1">
+            <th class="table-header-don text-left" :colspan="1">
                 {{ onlyPercents ? '' : 'Net Asset Value' }}
                 <!-- TODO: add info -->
             </th>
-            <th class="table-header-don text-left" width="180px" v-if="!minimized">
+            <th class="table-header-don text-left" width="180px" >
                 Percent in portfolio
             </th>
             <th class="table-header-don" v-if="!minimized"></th>

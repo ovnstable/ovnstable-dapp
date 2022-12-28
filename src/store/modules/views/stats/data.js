@@ -73,8 +73,6 @@ const actions = {
     async refreshCurrentTotalData({commit, dispatch, getters, rootState}) {
         commit('statsUI/setLoadingCurrentTotalData', true, { root: true });
 
-        console.log('!!!!!!!!!!')
-
         let result = [];
 
         let appApiUrl = rootState.network.appApiUrl;

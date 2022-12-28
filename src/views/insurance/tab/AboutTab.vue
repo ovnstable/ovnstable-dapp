@@ -1,72 +1,59 @@
 <template>
-    <div>
-        <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'">
-            <label class="strategy-info-label">
-                USD+ Insurance on Polygon is a structured DeFi product enabling users to gain high yields at the expense of insuring of USD+. Underwrite in USD+ Insurance on Polygon underwrite every strategy in the USD+ collateral on Polygon. Each strategy has its own Risk Factor which governs APY shares for premiums:
-            </label>
-        </v-row>
-        <v-row align="center" justify="start" class="ma-0 mt-2">
-            <v-col :cols="$wu.isFull() ? 7 : 12" class="premiums-box">
-                <v-row class="ma-0">
-                    <v-col :cols="$wu.isMobile() ? 12 : 3">
-                        <v-row justify="center" class="mb-5" v-if="!$wu.isMobile()">
-                            <label></label>
-                        </v-row>
-                        <v-row :justify="$wu.isMobile() ? 'center' : 'start'" :align="$wu.isMobile() ? 'start' : 'end'" :class="$wu.isMobile() ? 'mb-0' : ''">
-                            <label class="premium-box-value">USD+ premiums (share of yield)</label>
-                        </v-row>
-                    </v-col>
-                    <v-divider v-if="!$wu.isMobile()" vertical class="card-divider"></v-divider>
-                    <v-col>
-                        <v-row justify="center" class="mb-5">
-                            <label class="premium-box-title">low risk</label>
-                        </v-row>
-                        <v-row justify="center" align="end">
-                            <label class="premium-box-value">0%</label>
-                        </v-row>
-                    </v-col>
-                    <v-divider vertical class="card-divider"></v-divider>
-                    <v-col>
-                        <v-row justify="center" class="mb-5">
-                            <label class="premium-box-title">medium risk</label>
-                        </v-row>
-                        <v-row justify="center" align="end">
-                            <label class="premium-box-value">2%</label>
-                        </v-row>
-                    </v-col>
-                    <v-divider vertical class="card-divider"></v-divider>
-                    <v-col>
-                        <v-row justify="center" class="mb-5">
-                            <label class="premium-box-title">high risk</label>
-                        </v-row>
-                        <v-row justify="center" align="end">
-                            <label class="premium-box-value">10%</label>
-                        </v-row>
+    <div class="page-container">
+        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-5'" justify="start" align="center">
+            <v-col class="info-card-body-bottom">
+                <v-row align="center" justify="start" class="ma-0">
+                    <label class="section-title-label">Insurance reserves assets</label>
+                </v-row>
+
+                <v-row align="center" justify="center">
+
+                    <v-col :cols="!$wu.isFull() ? 12 : 12">
+                        <TableStablecoins
+                            v-if="!$wu.isMobile()"
+                            :data="insuranceAssetData"/>
+
+                        <TableStablecoins
+                            v-else
+                            minimized
+                            :data="insuranceAssetData"/>
                     </v-col>
                 </v-row>
             </v-col>
         </v-row>
 
-        <v-row align="center" justify="start" class="ma-0 notify-risk-box" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'">
-            <v-col>
-                <v-row class="ma-2" align="center" :justify="$wu.isMobile() ? 'center' : 'start'">
-                    <div class="title-modal-icon mr-2">
-                        <v-img :src="require('@/assets/icon/bellRed.svg')"/>
-                    </div>
-                    <label class="risk-box-title">risks of Insurance providers</label>
+        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-3'" justify="start" align="center">
+            <v-col class="info-card-body-bottom">
+                <v-row align="center" justify="start" class="ma-0">
+                    <label class="section-title-label">Insurance reserves portfolio</label>
                 </v-row>
-                <v-row class="ma-2 mt-4">
-                    <label class="risk-box-text">Overnight Finance is an Asset Management Protocol that offers low to medium risk passive yield product. Overnight Finance offers protection on USD+ the yield bearing token that represents user’s deposits. User can file an event if USD+ will face the negative rebase.</label>
+
+                <v-row align="center" justify="center">
+                    <v-col :cols="!$wu.isFull() ? 12 : 12">
+                        <TableStrategies
+                            v-if="!$wu.isMobile()"
+                            :data="insuranceTotalData"
+                            :total-supply="totalInsuranceSupply.polygon"
+                            :total-title="'Total USD+ Insurance in circulation'"/>
+
+                        <TableStrategies
+                            v-else
+                            minimized
+                            :data="insuranceTotalData"
+                            :total-supply="totalInsuranceSupply"
+                            :total-title="'Total USD+ Insurance in circulation'"/>
+                    </v-col>
+
                 </v-row>
             </v-col>
         </v-row>
 
-        <v-row class="ma-0 mt-7 info-card-container-bottom" justify="start" align="start" :style="{'background': 'radial-gradient(128.35% 221.83% at 66.7% -84.67%, #011845 0%, #011439 31.55%, #011233 56.82%, #6135BD 93.94%)'}">
+        <v-row class="ma-0 mt-3 info-card-container-bottom" justify="start" align="start" :style="{'background': 'radial-gradient(128.35% 221.83% at 66.7% -84.67%, #011845 0%, #011439 31.55%, #011233 56.82%, #6135BD 93.94%)'}">
             <v-col class="info-card-body-bottom" :cols="$wu.isMobile() ? 0 : 5">
                 <v-row class="info-row" justify="start" align="center">
                     <label class="card-info mt-1">Investors</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (insuranceData.polygon && insuranceData.polygon.holders) ? $utils.formatMoneyComma(insuranceData.polygon.holders, 0) : '—' }}</label>
+                    <label class="card-info-value">{{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.holders) ? $utils.formatMoneyComma(insuranceStrategyData.polygon.holders, 0) : '—' }}</label>
                 </v-row>
                 <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="card-info mt-1">Risk factor</label>
@@ -81,10 +68,10 @@
                 <v-row class="info-row" justify="start" align="center">
                     <label class="card-info mt-1">Token address</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value info-value-address" @click="openTokenOnScan(insuranceData.polygon.rebaseAddress)">
-                        {{ (insuranceData.polygon && insuranceData.polygon.rebaseAddress) ? shortAddress(insuranceData.polygon.rebaseAddress) : '—' }}
+                    <label class="card-info-value info-value-address" @click="openTokenOnScan(insuranceStrategyData.polygon.rebaseAddress)">
+                        {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.rebaseAddress) ? shortAddress(insuranceStrategyData.polygon.rebaseAddress) : '—' }}
                     </label>
-                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''" @click="openTokenOnScan(insuranceData.polygon.rebaseAddress)">
+                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''" @click="openTokenOnScan(insuranceStrategyData.polygon.rebaseAddress)">
                         <v-icon size="20" style="margin-top: -2px" color="rgba(255, 255, 255, 0.5)">mdi-open-in-new</v-icon>
                     </div>
                 </v-row>
@@ -96,6 +83,42 @@
             </v-col>
         </v-row>
 
+        <template v-if="networkSupport" >
+            <v-row align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5 mb-5' : 'mt-3'">
+                <v-btn class="header-btn btn-investor-invest btn-filled"  @click="mintAction">
+                    MINT INSURANCE
+                </v-btn>
+
+                <template v-if="insuranceRedemptionData.request === 'CAN_WITHDRAW'">
+                    <v-btn class="header-btn btn-investor-invest btn-outlined " :class="$wu.isMobile() ? 'mt-3' : 'ml-3'" outlined @click="redeemAction">
+                        WITHDRAW WITHIN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
+                    </v-btn>
+                </template>
+                <template v-if="insuranceRedemptionData.request === 'NEED_WAIT'">
+                    <v-btn class="header-btn btn-investor-invest btn-outlined" :class="$wu.isMobile() ? 'mt-3' : 'ml-3'" outlined>
+                        <label style="color: var(--blue-link)">
+                            WITHDRAW IN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
+                        </label>
+                    </v-btn>
+                </template>
+                <template v-if="insuranceRedemptionData.request === 'NEED_REQUEST'">
+                    <v-btn class="header-btn btn-investor-invest btn-outlined" :class="$wu.isMobile() ? 'mt-3' : 'ml-3'" outlined @click="redemptionRequestAction">
+                        REDEMPTION REQUEST
+                    </v-btn>
+                </template>
+            </v-row>
+        </template>
+        <template v-else>
+            <v-row align="start" justify="start" class=" ma-0 mt-5">
+                <v-btn class="header-btn btn-investor-invest btn-filled" @click="setWalletNetwork('polygon')">
+                    SWITCH TO POLYGON TO MINT
+                </v-btn>
+            </v-row>
+        </template>
+
+        <v-row align="center" justify="center" class="ma-0 mt-4">
+
+        </v-row>
         <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
@@ -103,43 +126,60 @@
 <script>
 
 import {mapActions, mapGetters} from "vuex";
-import Tooltip from "@/components/common/element/Tooltip";
+import TableStablecoins from "@/components/stats/pie/TableStablecoins";
+import PieStablecoins from "@/components/stats/pie/PieStablecoins";
+import TableStrategies from "@/components/stats/doughnut/TableStrategies";
+import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies";
 
 export default {
-    name: "AboutTab",
+    name: "CollateralView",
 
     components: {
-        Tooltip,
+        TableStrategies,
+        TableStablecoins
     },
 
     data: () => ({
+
     }),
 
-    props: {
-
-        insuranceData: {
-            type: Object,
+    computed: {
+        ...mapGetters("network", ['networkId', 'setWalletNetwork']),
+        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData', 'insuranceTotalData', 'insuranceAssetData', 'insuranceTotalSupplyData']),
+        ...mapGetters("web3", ['contracts']),
+        ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData', 'insuranceRedemptionData']),
+        ...mapGetters("supplyData", ["totalInsuranceSupply"]),
+        networkSupport: function () {
+            return this.networkId === this.insuranceStrategyData.polygon.chainId;
         },
     },
 
-    watch: {
-    },
-
-    computed: {
-    },
-
     methods: {
+        ...mapActions('insuranceInvestModal', ['showInvestModal', 'showMintView', 'showRedeemView', 'showRedemptionRequestModal']),
+
+        openLink(url) {
+            window.open(url, '_blank').focus();
+        },
+
+        mintAction() {
+            this.showMintView();
+            this.showInvestModal();
+        },
+
+        redeemAction() {
+            this.showRedeemView();
+            this.showInvestModal();
+        },
+
+        redemptionRequestAction() {
+            this.showRedemptionRequestModal();
+        },
+
         shortAddress(address) {
             if (address) {
                 return address.substring(0, 5) + '...' + address.substring(address.length - 4);
             } else {
                 return null;
-            }
-        },
-
-        openTokenOnScan(hash) {
-            if (hash && hash !== '') {
-                window.open("https://polygonscan.com/token/" + hash, '_blank').focus();
             }
         },
     }
@@ -150,41 +190,50 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
-    .strategy-info-label {
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-investor-invest {
+        width: 100% !important;
+        height: 40px !important;
+    }
+
+    .btn-filled {
+        width: 100%;
+        height: 36px !important;
+    }
+
+    .section-title-label {
         font-style: normal;
-        font-weight: 300;
+        font-weight: 400;
         font-size: 16px;
-        line-height: 24px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
     }
 
-    .premium-box-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 16px;
-        letter-spacing: 0.03em;
+    .currency {
+        width: 30px ;
+        height: 30px;
     }
 
-    .premium-box-value {
-        font-style: normal;
-        font-weight: 400;
+    .currency-text {
         font-size: 14px;
-        line-height: 18px;
+        line-height: 22px;
     }
 
-    .risk-box-title {
-        font-style: normal;
-        font-weight: 400;
+    .address-text {
         font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
+        line-height: 22px;
     }
 
-    .risk-box-text {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
+    .open-new {
+        width: 20px;
+        height: 20px;
     }
 
     .card-info {
@@ -205,41 +254,50 @@ export default {
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .strategy-info-label {
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-filled {
+        width: 20%;
+        height: 40px !important;
+    }
+
+    .btn-investor-invest {
+        width: 25% !important;
+        height: 44px !important;
+    }
+
+    .section-title-label {
         font-style: normal;
-        font-weight: 300;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.04em;
+    }
+
+    .currency {
+        width: 38px;
+        height: 38px;
+    }
+
+    .currency-text {
         font-size: 18px;
         line-height: 28px;
     }
 
-    .premium-box-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
+    .address-text {
+        font-size: 18px;
+        line-height: 28px;
     }
 
-    .premium-box-value {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 22px;
-    }
-
-    .risk-box-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: 0.04em;
-    }
-
-    .risk-box-text {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
+    .open-new {
+        width: 24px;
+        height: 24px;
     }
 
     .card-info {
@@ -260,54 +318,63 @@ export default {
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .strategy-info-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 18px;
-        line-height: 28px;
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
     }
 
-    .premium-box-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
+    .btn-filled {
+        width: 20%;
+        height: 40px !important;
     }
 
-    .premium-box-value {
+    .btn-investor-invest {
+        width: 25% !important;
+        height: 44px !important;
+    }
+
+    .section-title-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 16px;
+        font-size: 20px;
         line-height: 24px;
-    }
-
-    .risk-box-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 22px;
         letter-spacing: 0.04em;
     }
 
-    .risk-box-text {
-        font-style: normal;
-        font-weight: 300;
+    .currency {
+        width: 38px !important;
+        height: 38px !important;
+    }
+
+    .currency-text {
         font-size: 18px;
         line-height: 28px;
+    }
+
+    .address-text {
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .open-new {
+        width: 24px;
+        height: 24px;
     }
 
     .card-info {
         font-style: normal;
         font-weight: 300;
-        font-size: 18px;
+        font-size: 16px;
         line-height: 28px;
     }
 
     .card-info-value, .card-info-risk {
         font-style: normal;
         font-weight: 400;
-        font-size: 18px;
+        font-size: 16px;
         line-height: 22px;
         letter-spacing: 0.04em;
     }
@@ -320,119 +387,155 @@ only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px)
 only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
 only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
 only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
-    .strategy-info-label {
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-filled {
+        width: 20%;
+        height: 40px !important;
+    }
+
+    .section-title-label {
         font-style: normal;
-        font-weight: 300;
+        font-weight: 400;
         font-size: 18px;
-        line-height: 28px;
-    }
-
-    .premium-box-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
-
-    .premium-box-value {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
         line-height: 24px;
-    }
-
-    .risk-box-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 22px;
         letter-spacing: 0.04em;
     }
 
-    .risk-box-text {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 18px;
+    .currency {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .currency-text {
+        font-size: 16px;
+        line-height: 25px;
+    }
+
+    .address-text {
+        font-size: 16px;
         line-height: 28px;
+    }
+
+    .open-new {
+        width: 22px;
+        height: 22px;
     }
 
     .card-info {
         font-style: normal;
         font-weight: 300;
-        font-size: 18px;
+        font-size: 16px;
         line-height: 28px;
     }
 
     .card-info-value, .card-info-risk {
         font-style: normal;
         font-weight: 400;
-        font-size: 18px;
+        font-size: 16px;
         line-height: 22px;
         letter-spacing: 0.04em;
     }
 }
 
-.strategy-info-label {
-    font-family: 'Roboto', sans-serif;
-    color: var(--secondary-gray-text);
+.page-container {
+    margin-bottom: 5% !important;
 }
 
-.premiums-box {
-    border: 1px solid var(--main-border);
-    border-radius: 4px;
+.tab-chain-button {
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
+    cursor: pointer !important;
 }
 
-.premium-box-title {
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--main-gray-text);
+.tab-chain-button-in-active {
+    color: var(--secondary-gray-text) !important;
+    cursor: pointer !important;
 }
 
-.premium-box-value {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'liga' off;
-    color: var(--main-gray-text);
+.toggle-row {
+    border-bottom: 2px solid var(--main-border);
 }
 
-.card-divider {
-    border-color: var(--main-border) !important;
+.info-link {
+    font-weight: 400;
+    color: var(--links-blue) !important;
+    cursor: pointer;
 }
 
-.notify-risk-box {
-    background: var(--red-container);
-    border: 1px solid rgba(207, 63, 146, 0.4);
-    border-radius: 4px;
+.header-btn {
+    border-radius: 4px !important;
+    box-shadow: none !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
 }
 
-.risk-box-title {
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--main-gray-text);
+.btn-investor-invest {
+    background: var(--blue-gradient);
+    color: #FFFFFF !important;
 }
 
-.risk-box-text {
-    font-family: 'Roboto', sans-serif;
-    color: var(--main-gray-text);
+.btn-outlined {
+    background: none !important;
+    color: var(--links-blue) !important;
 }
 
-.title-modal-icon {
-    width: 24px;
-    height: 24px;
+.btn-filled {
+    background: var(--blue-gradient);
+    color: #FFFFFF !important;
 }
 
-.info-card-container-bottom {
-    border-radius: 8px;
+.info-card-container {
+    background: var(--secondary);
+    border-radius: 12px;
+}
+
+.currency-box {
+    background: var(--secondary);
+    border-radius: 12px;
 }
 
 .info-card-body-bottom {
     margin: 2% 2% !important;
 }
 
-.info-row {
-    border-top: 1px solid var(--secondary-border);
+.section-title-label {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    text-transform: none;
+    color: var(--secondary-gray-text);
+}
+
+.currency-text {
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    color: var(--secondary-gray-text);
+}
+
+.open-link {
+    width: 18px;
+    height: 18px;
+}
+
+.address-text {
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    color: var(--secondary-gray-text);
+}
+
+.currency-box, .currency-box >>> * {
+    cursor: pointer;
 }
 
 .card-info {
@@ -446,21 +549,12 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     color: white;
 }
 
-.card-info-risk {
-    font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #FE7F2D;
+.info-row {
+    border-top: 1px solid var(--secondary-border);
 }
 
-.info-value-address {
-    cursor: pointer;
+.info-card-container-bottom {
+    border-radius: 8px;
 }
 
-.icon-img {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-}
 </style>

@@ -83,7 +83,11 @@ const actions = {
                     supply = rootState.insuranceData.insuranceStrategyData[insurance.chainName].lastTvl;
                 }
             } else {
-                supply = rootState.insuranceData.insuranceStrategyData[insurance.chainName].lastTvl;
+                try {
+                    supply = rootState.insuranceData.insuranceStrategyData[insurance.chainName].lastTvl;
+                } catch (e) {
+                    console.log("Error: ", e)
+                }
             }
 
             resultSupply[insurance.chainName] = supply;

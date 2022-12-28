@@ -116,8 +116,7 @@ const actions = {
     async refreshStablecoinData({commit, dispatch, getters, rootState}) {
         let result = [];
 
-        let appApiUrl = rootState.network.appApiUrl;
-
+        let appApiUrl = rootState.network.polygonApi;
         let stablecoinList = (await axios.get(appApiUrl + '/dapp/collateral/total')).data;
         stablecoinList.sort((a,b) => b.netAssetValue - a.netAssetValue);
         stablecoinList = stablecoinList.filter(el => el.netAssetValue > 0);
@@ -158,11 +157,10 @@ const actions = {
     },
     async refreshInsuranceAssetData({commit, dispatch, getters, rootState}) {
         let result = [];
-        let totalSupply = 0;
 
         try {
-            let appApiUrl = rootState.network.appApiUrl;
-//            let collateralsTotal = getInsuranceColateralFromBackend();
+            let appApiUrl = rootState.network.polygonApi;
+            //            let collateralsTotal = getInsuranceColateralFromBackend();
             let collateralsTotal = (await axios.get(appApiUrl + '/insurance/collateral/total')).data;
             console.log(collateralsTotal);
 
@@ -207,8 +205,6 @@ const actions = {
                 result.push(value);
             }
 
-            totalSupply = numberUtils._fromE6(await insurance.polygon_token.methods.totalSupply().call())
-            console.log("Total supply", totalSupply)
         } catch (e) {
             console.log("Error when load insurance assets", e)
         }
@@ -219,6 +215,7 @@ const actions = {
         let result = [];
 
         try {
+            let appApiUrl = rootState.network.polygonApi;
 //            let collateralsTotal = getInsuranceColateralFromBackend();
             let collateralsTotal = (await axios.get(appApiUrl + '/insurance/collateral/total')).data;
 

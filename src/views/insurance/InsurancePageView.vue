@@ -290,7 +290,7 @@ export default {
         },
 
         networkSupport: function () {
-            return this.networkId === this.insuranceStrategyData.polygon.chainId;
+            return this.networkId === this.insuranceStrategyData.polygon ? this.insuranceStrategyData.polygon.chainId : null;
         },
     },
 

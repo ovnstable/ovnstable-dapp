@@ -73,10 +73,11 @@ const actions = {
     async refreshCurrentTotalData({commit, dispatch, getters, rootState}) {
         commit('statsUI/setLoadingCurrentTotalData', true, { root: true });
 
+        console.log('!!!!!!!!!!')
+
         let result = [];
 
         let appApiUrl = rootState.network.appApiUrl;
-
         let strategies = (await axios.get(appApiUrl + '/dapp/strategies')).data;
         strategies.sort((a,b) => b.netAssetValue - a.netAssetValue);
 
@@ -160,12 +161,13 @@ const actions = {
         let totalSupply = 0;
 
         try {
-            let insurance = rootState.web3.contracts.insurance;
-            let strategies = await insurance.polygon_m2m.methods.strategyAssets().call();
-            let strategiesList = [...strategies];
+            let appApiUrl = rootState.network.appApiUrl;
+//            let collateralsTotal = getInsuranceColateralFromBackend();
+            let collateralsTotal = (await axios.get(appApiUrl + '/insurance/collateral/total')).data;
+            console.log(collateralsTotal);
 
-            strategiesList.sort((a,b) => b.netAssetValue * 1 - a.netAssetValue * 1);
-            strategiesList = strategiesList.filter(el => numberUtils._fromE6(el.netAssetValue) > 0);
+            collateralsTotal.sort((a,b) => b.netAssetValue * 1 - a.netAssetValue * 1);
+            collateralsTotal = collateralsTotal.filter(el => el.netAssetValue > 0);
 
             let colors = [
                 "#2775CA",
@@ -182,24 +184,22 @@ const actions = {
 
             let resAssets = new Map();
 
-            for (let i = 0; i < strategies.length; i++) {
-                let assets = getAssetsByStrategy(strategiesList[i].strategy);
-                for (let j = 0; j < assets.length; j++) {
-                    let resAsset = resAssets.get(assets[j].name);
+            for (let i = 0; i < collateralsTotal.length; i++) {
+                let colleteral = collateralsTotal[i];
+                let resAsset = resAssets.get(colleteral.id.tokenName);
                     if (resAsset) {
-                        resAsset.value += Math.round(numberUtils._fromE6(strategiesList[i].netAssetValue) * assets[j].percent)  / 100;
-                        resAssets.set(assets[j].name, resAsset);
+                        resAsset.value += Math.round(colleteral.netAssetValue * colleteral.percentage)  / 100;
+                        resAssets.set(colleteral.id.tokenName, resAsset);
                         continue;
                     }
-
-                    resAssets.set(assets[j].name,
+//
+                resAssets.set(colleteral.id.tokenName,
                       {
-                          label: assets[j].name,
-                          color: colors[i+j],
-                          value: Math.round(numberUtils._fromE6(strategiesList[i].netAssetValue) * assets[j].percent)  / 100,
-                          logo: require('@/assets/currencies/stablecoins/' + assets[j].name + '.png')
+                          label: colleteral.id.tokenName,
+                          color: colors[i],
+                          value: Math.round(colleteral.netAssetValue * colleteral.percentage)  / 100,
+                          logo: require('@/assets/currencies/stablecoins/' + colleteral.id.tokenName + '.png')
                       })
-                }
             }
 
             console.log(resAssets)
@@ -207,27 +207,23 @@ const actions = {
                 result.push(value);
             }
 
-
             totalSupply = numberUtils._fromE6(await insurance.polygon_token.methods.totalSupply().call())
             console.log("Total supply", totalSupply)
-
         } catch (e) {
             console.log("Error when load insurance assets", e)
         }
 
         commit('setInsuranceAssetData', result);
-        commit('setInsuranceTotalSupplyData', totalSupply);
     },
     async refreshInsuranceTotalData({commit, dispatch, getters, rootState}) {
         let result = [];
 
         try {
-            let insurance = rootState.web3.contracts.insurance;
-            let strategies = await insurance.polygon_m2m.methods.strategyAssets().call();
-            let strategiesList = [...strategies];
+//            let collateralsTotal = getInsuranceColateralFromBackend();
+            let collateralsTotal = (await axios.get(appApiUrl + '/insurance/collateral/total')).data;
 
-            strategiesList.sort((a,b) => b.netAssetValue * 1 - a.netAssetValue * 1);
-            strategiesList = strategiesList.filter(el => numberUtils._fromE6(el.netAssetValue) > 0);
+            collateralsTotal.sort((a,b) => b.netAssetValue * 1 - a.netAssetValue * 1);
+            collateralsTotal = collateralsTotal.filter(el => numberUtils._fromE6(el.netAssetValue) > 0);
 
             let colors = [
                 "#2775CA",
@@ -242,37 +238,26 @@ const actions = {
                 "#B22174"
             ];
 
-            for (let i = 0; i < strategies.length; i++) {
+            for (let i = 0; i < collateralsTotal.length; i++) {
                 result.push({
-                    label: getStrategyName(strategiesList[i].strategy),
-                    link: strategiesList[i].strategy,
+                    label: collateralsTotal[i].id.strategyName,
+                    link: collateralsTotal[i].strategyAddress,
                     color: colors[i],
-                    value: numberUtils._fromE6(strategiesList[i].netAssetValue),
-                    liquidationValue: numberUtils._fromE6(strategiesList[i].liquidationValue),
-
-                    // logo:  require('@/assets/currencies/stablecoins/' + element.id.tokenName + '.png');
+                    value: collateralsTotal[i].netAssetValue,
+                    liquidationValue: collateralsTotal[i].liquidationValue,
+                    logo:  require('@/assets/currencies/stablecoins/' + collateralsTotal[i].id.tokenName + '.png')
                 });
             }
-
-            // + 1 взять decimals(мб где-то есть маппинг по address с нужными данными) как в USD+ 6значный
-            // + 2 посчитать проценты (percent in portfolio)
-            // + 3 сделать стейт и использовать его в верстке
-            // 4 захардкодить 3 стратегии collateral
-
-            // + Aave: 0x82d8F924b71459bAC871A9F0163d73B6a3FBbb10
-            // + Gamma+: 0x446e79Fd6793c2c3a4C69F112374edB86fe4F82a
-            // + Alfa+: 0x85e8c510DA139E41225ecb61954417dd2F953681
-
-            // console.log("Strategy Weights: ", strategies);
         } catch(e) {
             console.log("Error Strategy Weights: ", e);
         }
+
 
         commit('setInsuranceTotalData', result);
     },
     async refreshStats({commit, dispatch, getters}){
 
-        console.debug('StatsData: refreshStats');
+        console.log('StatsData: refreshStats');
 
         dispatch('refreshPayouts');
         dispatch('refreshCurrentTotalData');
@@ -430,31 +415,9 @@ export default {
     mutations
 };
 
-// todo: hardcode -> get info from api
-const strategyMap = new Map();
-strategyMap.set('0x82d8F924b71459bAC871A9F0163d73B6a3FBbb10',
-    {
-        name: 'Aave', assets: [{name: 'USDC', percent: 100}]
-    }
-);
 
-strategyMap.set('0x446e79Fd6793c2c3a4C69F112374edB86fe4F82a',
-  {
-      name: 'Gamma+', assets: [{name: 'USDC (delta-neutral)', percent: 100}]
-  }
-);
-strategyMap.set('0x85e8c510DA139E41225ecb61954417dd2F953681',
-  {
-      name: 'Alfa+', assets: [{name: 'USDC (delta-neutral)', percent: 100}]
-  }
-);
+function getInsuranceColateralFromBackend() {
+    return [
 
-function getStrategyName(strategyAddress) {
-    let strategy = strategyMap.get(strategyAddress);
-    return strategy ? strategy.name : null;
-}
-
-function getAssetsByStrategy(strategyAddress) {
-    let strategy = strategyMap.get(strategyAddress);
-    return strategy ? strategy.assets : null;
+    ]
 }

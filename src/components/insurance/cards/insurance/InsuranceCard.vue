@@ -74,7 +74,7 @@
                     <label class="card-info-label mt-2">Insurance fund</label>
                     <label class="card-info-value mt-2">${{ $utils.formatMoneyComma(totalInsuranceSupply.polygon, 2) }}</label>
                 </v-row>
-
+  
                 <v-row class="ma-0 mt-3 insurance-card-info-row d-flex justify-space-between">
                     <label class="card-info-label mt-2">Insurance coverage</label>
                     <label class="card-info-value mt-2">{{ (coverageValue !== null) ? ($utils.formatMoneyComma(coverageValue, 2) + '%') : '—' }}</label>

@@ -33,14 +33,14 @@
                         <TableStrategies
                             v-if="!$wu.isMobile()"
                             :data="insuranceTotalData"
-                            :total-supply="insuranceTotalSupplyData"
+                            :total-supply="totalInsuranceSupply.polygon"
                             :total-title="'Total USD+ Insurance in circulation'"/>
 
                         <TableStrategies
                             v-else
                             minimized
                             :data="insuranceTotalData"
-                            :total-supply="insuranceTotalSupplyData"
+                            :total-supply="totalInsuranceSupply"
                             :total-title="'Total USD+ Insurance in circulation'"/>
                     </v-col>
 
@@ -148,7 +148,7 @@ export default {
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData', 'insuranceTotalData', 'insuranceAssetData', 'insuranceTotalSupplyData']),
         ...mapGetters("web3", ['contracts']),
         ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData', 'insuranceRedemptionData']),
-
+        ...mapGetters("supplyData", ["totalInsuranceSupply"]),
         networkSupport: function () {
             return this.networkId === this.insuranceStrategyData.polygon.chainId;
         },

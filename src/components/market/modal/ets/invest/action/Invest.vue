@@ -374,7 +374,7 @@ export default {
 
         isBuy: function () {
             if (this.isOvercapAvailable && this.etsData.overcapEnabled) {
-                if (this.contractCapacity && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum) > this.contractCapacity)) {
+                if (this.contractCapacity > 0 && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum) > this.contractCapacity)) {
                     return false;
                 }
 
@@ -398,7 +398,7 @@ export default {
                     && !this.etsData.prototype
                     && this.sum > 0
                     && (parseFloat(this.sum) >= this.resultMintFee)
-                    && !(this.contractCapacity && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum) > this.contractCapacity))
+                    && !(this.contractCapacity > 0 && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum) > this.contractCapacity))
                     && this.numberRule
                     && !this.transactionPending
                     && (!this.etsData.maxSupply || (this.totalSupply[this.etsData.name] < this.etsData.maxSupply))

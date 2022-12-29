@@ -331,7 +331,7 @@ export default {
                 return 'Transaction is pending';
             } else if (parseFloat(this.sum) < this.resultMintFee) {
                 return 'Sum is less than mint fee';
-            } else if (this.contractCapacity && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum) > this.contractCapacity)) {
+            } else if (this.contractCapacity > 0 && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum) > this.contractCapacity)) {
                 return 'Over ETS capacity';
             } else if (this.isBuy) {
                 if (this.actionAssetApproved) {

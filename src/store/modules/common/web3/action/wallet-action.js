@@ -8,7 +8,6 @@ const SUPPORTED_NETWORKS = [137, 31337, 56, 43114, 10];
 const state = {
     onboard: null,
     walletConnected: false,
-    walletIcon: '',
 };
 
 const getters = {
@@ -19,10 +18,6 @@ const getters = {
 
     walletConnected(state) {
         return state.walletConnected;
-    },
-
-    walletIcon(state) {
-        return state.walletIcon;
     },
 };
 
@@ -120,7 +115,6 @@ const actions = {
                             if (wallet.name !== undefined && wallet.name && wallet.name !== 'undefined') {
                                 localStorage.setItem('walletName', wallet.name);
                             }
-                            console.log(wallet.name + ' is now connected!');
 
                             if (wallet.name === 'Unstoppable') {
                                 commit('accountData/setUns', wallet.instance.cacheOptions.getDefaultUsername(), {root: true})
@@ -155,6 +149,7 @@ const actions = {
         }
 
         let walletName = localStorage.getItem('walletName');
+        console.log('WalletName:', walletName);
         await getters.onboard.walletSelect(walletName ? walletName : '');
 
         try {

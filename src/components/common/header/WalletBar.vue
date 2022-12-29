@@ -1,9 +1,9 @@
 <template>
     <div class="wallet-bar-main-container mt-1">
-        <v-row align="center" class="wallet-bar-container">
+        <v-row align="center" class="wallet-bar-container" @click="walletClickAction()">
             <v-col cols="1" class="wallet-col mr-4">
                 <div class="wallet-icon">
-                    <v-img :src="icon"/>
+                    <v-img :src="require('@/assets/wallet/' + walletName.toLowerCase() + '.svg')"/>
                 </div>
             </v-col>
             <v-col cols="5" class="wallet-col" v-if="!$wu.isMobile()">
@@ -47,14 +47,6 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 
-let metamaskIcon = require('@/assets/wallet/metamask_wallet.svg');
-let binanceIcon = require('@/assets/wallet/binance_wallet.svg');
-let coinbaseIcon = require('@/assets/wallet/coinbase_wallet.svg');
-let connectIcon = require('@/assets/wallet/connect_wallet.svg');
-let ledgerIcon = require('@/assets/wallet/ledger_wallet.svg');
-let roninIcon = require('@/assets/wallet/ronin_wallet.svg');
-let unstoppableIcon = require('@/assets/wallet/unstoppable_wallet.svg');
-
 export default {
     name: "WalletBar",
 
@@ -62,6 +54,7 @@ export default {
     },
 
     data: () => ({
+        walletName: 'undefined',
     }),
 
     computed: {
@@ -70,25 +63,6 @@ export default {
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('transaction', ['transactions']),
         ...mapGetters('magicEye', ['dataHidden']),
-
-        icon: function() {
-            switch (this.walletName) {
-                case "metamask":
-                    return metamaskIcon;
-                case "binance":
-                    return binanceIcon;
-                case "coinbase":
-                    return coinbaseIcon;
-                case "walletConnect":
-                    return connectIcon;
-                case "ledger":
-                    return ledgerIcon;
-                case "ronin":
-                    return roninIcon;
-                case "unstoppable":
-                    return unstoppableIcon;
-            }
-        },
 
         accountDisplay: function () {
             if (this.uns) {
@@ -111,6 +85,10 @@ export default {
             this.refreshSupply();
             this.refreshInsuranceSupply();
         }, 5000)
+    },
+
+    mounted() {
+        this.walletName = localStorage.getItem('walletName');
     },
 
     methods: {
@@ -252,7 +230,7 @@ export default {
 .wallet-bar-container {
     background-color: var(--secondary) !important;
     border-radius: 2px;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 .balance-label, .account-label {

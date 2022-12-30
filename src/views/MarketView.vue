@@ -101,8 +101,8 @@ import EtsListHeader from "@/components/market/cards/ets/list/EtsListHeader";
 import PoolListHeader from "@/components/market/cards/pool/list/PoolListHeader";
 import PoolListCard from "@/components/market/cards/pool/list/PoolListCard";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
+import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
 import moment from "moment";
-
 
 export default {
     name: "MarketView",
@@ -114,6 +114,7 @@ export default {
         EtsListCard,
         Ets,
         UsdPlus,
+        InsuranceCard,
     },
 
     data: () => ({
@@ -126,9 +127,10 @@ export default {
         ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'avaxConfig', 'opConfig']),
         ...mapGetters('marketData', ['etsStrategyData']),
         ...mapGetters("statsData", ['currentTotalData', 'totalUsdPlusValue']),
-        ...mapGetters('supplyData', ['totalSupply']),
+        ...mapGetters('supplyData', ['totalSupply', 'totalInsuranceSupply']),
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('poolAction', ['poolList']),
+        ...mapGetters('insuranceData', ['insuranceStrategyData']),
 
         activeTabFeatured: function () {
             return {
@@ -213,6 +215,16 @@ export default {
             this.getUsdPlusAvgMonthApy();
             this.getSortedCardList();
         },
+
+        insuranceStrategyData: function(newVal, oldVal) {
+            this.getUsdPlusAvgMonthApy();
+            this.getSortedCardList();
+        },
+
+        totalInsuranceSupply: function(newVal, oldVal) {
+            this.getUsdPlusAvgMonthApy();
+            this.getSortedCardList();
+        },
     },
 
     created() {
@@ -238,7 +250,7 @@ export default {
                     hasCap: true,
                     tvl: this.totalUsdPlusValue,
                     monthApy: this.avgApy ? this.avgApy.value : 0,
-                }
+                },
             ];
 
             this.etsList.forEach(ets => {
@@ -260,6 +272,22 @@ export default {
                     },
                 );
             });
+
+            cardList.push(
+                {
+                    type: 'insurance',
+                    name: 'Insurance',
+                    isPrototype: false,
+                    isArchive: false,
+                    chain: networkId,
+                    hasUsdPlus: true,
+                    overcapEnabled: false,
+                    hasCap: this.totalInsuranceSupply,
+                    tvl: this.insuranceStrategyData.polygon.lastApy,
+                    monthApy: (this.insuranceStrategyData.polygon && this.insuranceStrategyData.polygon.apy) ? this.insuranceStrategyData.polygon.apy : 0,
+                    cardOpened: false,
+                },
+            );
 
             cardList.sort(function (a, b) {
                 if (!a.isPrototype && b.isPrototype) return -1;

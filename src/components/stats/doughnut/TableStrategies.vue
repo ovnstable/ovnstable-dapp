@@ -84,7 +84,9 @@
                 </v-row>
             </td>
             <td class="table-label-don table-label-don-total text-left pb-6" :colspan="minimized ? 3 : 1">
-                <b>${{ $utils.formatMoney(totalSupply, 2) }}</b>
+                <b>
+                  ${{ $utils.formatMoney(totalSupply, 2) }}
+                </b>
             </td>
             <td class="table-empty" v-if="!minimized"></td>
             <td class="table-empty" v-if="!minimized"></td>

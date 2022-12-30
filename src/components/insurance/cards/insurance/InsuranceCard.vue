@@ -189,7 +189,6 @@ export default {
         ...mapActions("network", ["setWalletNetwork"]),
         ...mapActions("insuranceData", ["refreshInsurance"]),
 
-
         mintAction() {
             this.showMintView();
             this.showInvestModal();

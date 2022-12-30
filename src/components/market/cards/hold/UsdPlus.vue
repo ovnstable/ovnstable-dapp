@@ -73,9 +73,9 @@
                 <v-row class="d-flex justify-space-between ma-0" align="center">
                     <label class="your-deposit">Current balance</label>
                     <label
-                        class="your-deposit" :class="dataHidden ? 'hidden-label' : ''">{{
-                            dataHidden ? '' : this.balance.usdPlus ? ($utils.formatMoneyComma(this.balance.usdPlus, 2) + " USD+") : "—"
-                        }}</label>
+                        class="your-deposit" :class="dataHidden ? 'hidden-label' : ''">
+                      {{dataHidden ? '' : this.balance.usdPlus ? ($utils.formatMoneyComma(this.balance.usdPlus, 2) + " USD+") : "—" }}
+                    </label>
                 </v-row>
 
                 <v-row class="d-flex justify-space-between ma-0 mt-2">

@@ -12,7 +12,7 @@
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)">
             <v-row class="ma-0" justify="end" align="center">
-                <label class="list-header-label">APY</label>
+                <label class="list-header-label">30-day APY</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()" cols="3">

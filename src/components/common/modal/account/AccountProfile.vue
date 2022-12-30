@@ -20,7 +20,7 @@
                 <v-row class="account-info-row" align="center">
 
                     <div class="wallet-img">
-                        <v-img :src="require('@/assets/icon/undefined.svg')"/>
+                        <v-img :src="require('@/assets/wallet/' + walletName.toLowerCase() + '.svg')"/>
                     </div>
 
                     <v-row class="account-display-container ml-4" align="center" justify="center"
@@ -86,6 +86,7 @@ export default {
 
     data: () => ({
         showCopyTooltip: false,
+        walletName: 'undefined',
     }),
 
     props: {
@@ -143,6 +144,10 @@ export default {
                 this.loadTransaction();
             }
         },
+    },
+
+    mounted() {
+        this.walletName = localStorage.getItem('walletName');
     },
 
     methods: {

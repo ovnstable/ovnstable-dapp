@@ -82,7 +82,7 @@
                                 <template v-else>
                                     <v-row align="center" justify="center" class="ma-0">
                                         <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('polygon')">
-                                            SWITCH TO POLYGON TO MINT
+                                            SWITCH TO POLYGON TO MINT1
                                         </v-btn>
                                     </v-row>
                                 </template>
@@ -290,7 +290,7 @@ export default {
         },
 
         networkSupport: function () {
-            return this.networkId === this.insuranceStrategyData.polygon ? this.insuranceStrategyData.polygon.chainId : null;
+            return this.networkId === this.insuranceStrategyData.polygon.chainId ? this.insuranceStrategyData.polygon.chainId : null;
         },
     },
 

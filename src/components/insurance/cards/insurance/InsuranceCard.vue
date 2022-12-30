@@ -91,7 +91,9 @@
         <v-col align-self="end">
             <v-container :class="$wu.isFull() ? 'mb-6' : 'mb-6'">
                 <v-row class="d-flex ma-0" align="center">
-                    <label class="your-deposit">Your deposit</label>
+                    <label class="your-deposit">
+                      Your deposit
+                    </label>
                     <v-spacer></v-spacer>
                     <label class="your-deposit" :class="dataHidden ? 'hidden-label' : ''">
                         {{ dataHidden ? '' : (this.insuranceBalance.polygon && this.insuranceBalance.polygon > 0) ? ('$' + $utils.formatMoneyComma(this.insuranceBalance.polygon, 2)) : "—"  }}

@@ -1,9 +1,9 @@
 <template>
     <div class="wallet-bar-main-container mt-1">
-        <v-row align="center" class="wallet-bar-container" @click="walletClickAction">
+        <v-row align="center" class="wallet-bar-container" @click="walletClickAction()">
             <v-col cols="1" class="wallet-col mr-4">
                 <div class="wallet-icon">
-                    <v-img :src="require('@/assets/icon/undefined.svg')"/>
+                    <v-img :src="require('@/assets/wallet/' + walletName.toLowerCase() + '.svg')"/>
                 </div>
             </v-col>
             <v-col cols="5" class="wallet-col" v-if="!$wu.isMobile()">
@@ -54,6 +54,7 @@ export default {
     },
 
     data: () => ({
+        walletName: 'undefined',
     }),
 
     computed: {
@@ -84,6 +85,10 @@ export default {
             this.refreshSupply();
             this.refreshInsuranceSupply();
         }, 5000)
+    },
+
+    mounted() {
+        this.walletName = localStorage.getItem('walletName');
     },
 
     methods: {
@@ -225,7 +230,7 @@ export default {
 .wallet-bar-container {
     background-color: var(--secondary) !important;
     border-radius: 2px;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 .balance-label, .account-label {

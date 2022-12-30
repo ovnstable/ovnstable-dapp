@@ -115,7 +115,6 @@ const actions = {
                             if (wallet.name !== undefined && wallet.name && wallet.name !== 'undefined') {
                                 localStorage.setItem('walletName', wallet.name);
                             }
-                            console.log(wallet.name + ' is now connected!');
 
                             if (wallet.name === 'Unstoppable') {
                                 commit('accountData/setUns', wallet.instance.cacheOptions.getDefaultUsername(), {root: true})
@@ -150,6 +149,7 @@ const actions = {
         }
 
         let walletName = localStorage.getItem('walletName');
+        console.log('WalletName:', walletName);
         await getters.onboard.walletSelect(walletName ? walletName : '');
 
         try {
@@ -311,6 +311,10 @@ const mutations = {
 
     setWalletConnected(state, walletConnected) {
         state.walletConnected = walletConnected;
+    },
+
+    setWalletIcon(state, value) {
+        state.walletIcon = value;
     },
 };
 

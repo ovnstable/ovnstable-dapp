@@ -3,7 +3,7 @@
   "nameUp": "QS ZETA WBTC/USDC",
   "nameToken": "ZETA",
   "prototype": false,
-  "openPrototype": true,
+  "openPrototype": false,
   "archive": false,
   "disabled": false,
   "highRisk": true,
@@ -34,7 +34,7 @@
   "hasUsdPlus": false,
   "tokenPair": "wbtc_usdc",
 
-  "maxSupply": 10000.00,
+  "maxSupply": 250000.00,
   "overcapEnabled": true,
   "inceptionDate": "05 December 2022",
 

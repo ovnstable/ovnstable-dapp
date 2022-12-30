@@ -276,7 +276,7 @@ export default {
             cardList.push(
                 {
                     type: 'insurance',
-                    name: 'Insurance',
+                    name: 'InsuranceCard',
                     isPrototype: false,
                     isArchive: false,
                     chain: networkId,
@@ -288,6 +288,7 @@ export default {
                     cardOpened: false,
                 },
             );
+
 
             cardList.sort(function (a, b) {
                 if (!a.isPrototype && b.isPrototype) return -1;

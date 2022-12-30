@@ -35,12 +35,16 @@
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
                         <TableStrategies
                             v-if="!$wu.isMobile()"
-                            :data="currentTotalData"/>
+                            :data="currentTotalData"
+                            :total-supply="totalUsdPlusValue"
+                            :total-title="'Total USD+ in circulation'"/>
 
                         <TableStrategies
                             v-else
                             minimized
-                            :data="currentTotalData"/>
+                            :data="currentTotalData"
+                            :total-supply="totalUsdPlusValue"
+                            :total-title="'Total USD+ in circulation'"/>
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
@@ -116,7 +120,7 @@ export default {
 
     computed: {
         ...mapGetters("network", ['networkId']),
-        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
+        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData', 'totalUsdPlusValue']),
         ...mapGetters("web3", ['contracts']),
     },
 

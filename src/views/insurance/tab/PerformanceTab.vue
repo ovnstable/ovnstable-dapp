@@ -27,9 +27,6 @@
 <script>
 
 import {mapActions, mapGetters} from "vuex";
-import Tooltip from "@/components/common/element/Tooltip";
-import Doughnut from "@/components/market/strategy/payouts/Doughnut";
-import LineChartApy from "@/components/stats/widget/LineChartApy";
 import ChartApy from "@/components/insurance/strategy/chart/ChartApy";
 import ChartTvl from "@/components/insurance/strategy/chart/ChartTvl";
 
@@ -39,9 +36,6 @@ export default {
     components: {
         ChartTvl,
         ChartApy,
-        LineChartApy,
-        Doughnut,
-        Tooltip,
     },
 
     data: () => ({

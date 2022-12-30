@@ -31,7 +31,7 @@
                                                 <label class="investor-card-sub-title">Your balance in INSURANCE</label>
                                             </v-row>
                                             <v-row align="center" class="mt-5">
-                                                <label class="investor-card-sub-title-value">{{ insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
+                                                <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">{{ dataHidden ? '' : insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
                                             </v-row>
                                         </v-col>
                                     </v-row>
@@ -43,8 +43,8 @@
                                             <v-row class="info-row mt-6" justify="start" align="center">
                                                 <label class="fee-structure-label mt-1">Last day</label>
                                                 <v-spacer></v-spacer>
-                                                <label class="investor-card-sub-title-value" :class="insuranceClientData.polygon > 0 ? 'success-color' : ''">
-                                                    {{ insuranceClientData.polygon ? ((insuranceClientData.polygon > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(insuranceClientData.polygon, 4)) : '—' }}
+                                                <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label mt-1' : (insuranceClientData.polygon > 0 ? 'success-color' : '')">
+                                                    {{ dataHidden ? '' : insuranceClientData.polygon ? ((insuranceClientData.polygon > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(insuranceClientData.polygon, 4)) : '—' }}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -82,7 +82,7 @@
                                 <template v-else>
                                     <v-row align="center" justify="center" class="ma-0">
                                         <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('polygon')">
-                                            SWITCH TO POLYGON TO MINT
+                                            SWITCH TO POLYGON TO MINT1
                                         </v-btn>
                                     </v-row>
                                 </template>
@@ -94,7 +94,7 @@
                                 <v-row align="center" class="ma-0">
                                     <label class="investor-card-title">One-time fees</label>
                                     <div style="margin-top: -2px">
-                                        <Tooltip text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
+                                        <Tooltip :size="16" text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
                                     </div>
                                 </v-row>
                                 <v-row class="info-row ma-0 mt-8" justify="start" align="center">
@@ -119,7 +119,7 @@
                         <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPerformance">
                             Performance
                         </label>
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4" v-bind:class="activeTabAbout" disabled>
+                        <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabAbout" disabled="">
                             Insurance reserves
                         </label>
                     </v-row>
@@ -143,7 +143,7 @@
                                         <label class="investor-card-sub-title">Your balance in INSURANCE</label>
                                     </v-row>
                                     <v-row align="center" class="mt-5">
-                                        <label class="investor-card-sub-title-value">{{ insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
+                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">{{ dataHidden ? '' : insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
                                         <v-icon class="ml-1" color="var(--disabled-value)">
                                             {{ insuranceRedemptionData.request === 'CAN_WITHDRAW' ? 'mdi-lock-open-variant' : 'mdi-lock' }}
                                         </v-icon>
@@ -154,8 +154,8 @@
                                     <v-row class="info-row mt-6" justify="start" align="center">
                                         <label class="fee-structure-label mt-1">Last day</label>
                                         <v-spacer></v-spacer>
-                                        <label class="investor-card-sub-title-value" :class="insuranceClientData.polygon > 0 ? 'success-color' : ''">
-                                            {{ insuranceClientData.polygon ? ((insuranceClientData.polygon > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(insuranceClientData.polygon, 4)) : '—' }}
+                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label mt-1' : (insuranceClientData.polygon > 0 ? 'success-color' : '')">
+                                            {{ dataHidden ? '' : insuranceClientData.polygon ? ((insuranceClientData.polygon > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(insuranceClientData.polygon, 4)) : '—' }}
                                         </label>
                                     </v-row>
                                 </template>
@@ -202,7 +202,7 @@
                             <div class="my-6 mx-6">
                                 <v-row align="center">
                                     <label class="investor-card-title">One-time fees</label>
-                                    <Tooltip text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
+                                    <Tooltip :size="16" text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
                                 </v-row>
 
                                 <v-row class="mt-8" justify="start" align="center">
@@ -243,7 +243,6 @@
 
 <script>
 
-import RiskDisclosureModal from "@/components/market/modal/ets/RiskDisclosureModal";
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import AboutTab from "@/views/insurance/tab/AboutTab";
@@ -260,7 +259,6 @@ export default {
         InsuranceBanner,
         AboutTab,
         Tooltip,
-        RiskDisclosureModal,
     },
 
     data: () => ({
@@ -274,6 +272,8 @@ export default {
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
         ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData', 'insuranceRedemptionData']),
+        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
+        ...mapGetters('magicEye', ['dataHidden']),
 
         activeTabPerformance: function () {
             return {
@@ -290,7 +290,7 @@ export default {
         },
 
         networkSupport: function () {
-            return this.networkId === this.insuranceStrategyData.polygon.chainId;
+            return this.networkId === this.insuranceStrategyData.polygon.chainId ? this.insuranceStrategyData.polygon.chainId : null;
         },
     },
 
@@ -517,6 +517,12 @@ export default {
         font-size: 12px;
         line-height: 20px;
     }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
+    }
 }
 
 /* full */
@@ -610,6 +616,12 @@ export default {
         font-weight: 400;
         font-size: 14px;
         line-height: 22px;
+    }
+
+    .hidden-label {
+        width: 130px;
+        height: 28px;
+        background: var(--hide-account);
     }
 }
 

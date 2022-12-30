@@ -1,9 +1,13 @@
 import {axios} from "@/plugins/http-axios";
 import moment from "moment";
+import * as numberUtils from '@/utils/number-utils';
 
 const state = {
     currentTotalData: null,
     stablecoinData: null,
+    insuranceTotalData: null,
+    insuranceAssetData: null,
+    insuranceTotalSupplyData: null,
 
     payouts: [],
 
@@ -24,6 +28,18 @@ const getters = {
 
     stablecoinData(state) {
         return state.stablecoinData;
+    },
+
+    insuranceTotalData(state) {
+        return state.insuranceTotalData;
+    },
+
+    insuranceAssetData(state) {
+        return state.insuranceAssetData;
+    },
+
+    insuranceTotalSupplyData(state) {
+        return state.insuranceTotalSupplyData;
     },
 
     payouts(state) {
@@ -60,7 +76,6 @@ const actions = {
         let result = [];
 
         let appApiUrl = rootState.network.appApiUrl;
-
         let strategies = (await axios.get(appApiUrl + '/dapp/strategies')).data;
         strategies.sort((a,b) => b.netAssetValue - a.netAssetValue);
 
@@ -99,8 +114,7 @@ const actions = {
     async refreshStablecoinData({commit, dispatch, getters, rootState}) {
         let result = [];
 
-        let appApiUrl = rootState.network.appApiUrl;
-
+        let appApiUrl = rootState.network.polygonApi;
         let stablecoinList = (await axios.get(appApiUrl + '/dapp/collateral/total')).data;
         stablecoinList.sort((a,b) => b.netAssetValue - a.netAssetValue);
         stablecoinList = stablecoinList.filter(el => el.netAssetValue > 0);
@@ -131,6 +145,7 @@ const actions = {
                         logo: require('@/assets/currencies/stablecoins/' + element.id.tokenName + '.png')
                     }
                 );
+                console.log("Token name : ", element.id.tokenName);
             } catch (e) {
                 console.error("Error while adding stablecoin to list: " + e);
             }
@@ -138,17 +153,114 @@ const actions = {
 
         commit('setStablecoinData', result);
     },
+    async refreshInsuranceAssetData({commit, dispatch, getters, rootState}) {
+        let result = [];
+
+        try {
+            let appApiUrl = rootState.network.polygonApi;
+            //            let collateralsTotal = getInsuranceColateralFromBackend();
+            let collateralsTotal = (await axios.get(appApiUrl + '/insurance/collateral/total')).data;
+            console.log(collateralsTotal);
+
+            collateralsTotal.sort((a,b) => b.netAssetValue * 1 - a.netAssetValue * 1);
+            collateralsTotal = collateralsTotal.filter(el => el.netAssetValue > 0);
+
+            let colors = [
+                "#2775CA",
+                "#26A17B",
+                "#FCCA46",
+                "#6E56C4",
+                "#002868",
+                "#26A17B",
+                "#23DD00",
+                "#3D8DFF",
+                "#FE7F2D",
+                "#B22174"
+            ];
+
+            let resAssets = new Map();
+
+            for (let i = 0; i < collateralsTotal.length; i++) {
+                let colleteral = collateralsTotal[i];
+                let resAsset = resAssets.get(colleteral.id.tokenName);
+                    if (resAsset) {
+                        resAsset.value += Math.round(colleteral.netAssetValue * colleteral.percentage)  / 100;
+                        resAssets.set(colleteral.id.tokenName, resAsset);
+                        continue;
+                    }
+//
+                resAssets.set(colleteral.id.tokenName,
+                      {
+                          label: colleteral.id.tokenName,
+                          color: colors[i],
+                          value: Math.round(colleteral.netAssetValue * colleteral.percentage)  / 100,
+                          logo: require('@/assets/currencies/stablecoins/' + colleteral.id.tokenName + '.png')
+                      })
+            }
+
+            console.log(resAssets)
+            for (let value of resAssets.values()) {
+                result.push(value);
+            }
+
+        } catch (e) {
+            console.log("Error when load insurance assets", e)
+        }
+
+        commit('setInsuranceAssetData', result);
+    },
+    async refreshInsuranceTotalData({commit, dispatch, getters, rootState}) {
+        let result = [];
+
+        try {
+            let appApiUrl = rootState.network.polygonApi;
+//            let collateralsTotal = getInsuranceColateralFromBackend();
+            let collateralsTotal = (await axios.get(appApiUrl + '/insurance/collateral/total')).data;
+
+            collateralsTotal.sort((a,b) => b.netAssetValue * 1 - a.netAssetValue * 1);
+            collateralsTotal = collateralsTotal.filter(el => numberUtils._fromE6(el.netAssetValue) > 0);
+
+            let colors = [
+                "#2775CA",
+                "#26A17B",
+                "#FCCA46",
+                "#6E56C4",
+                "#002868",
+                "#26A17B",
+                "#23DD00",
+                "#3D8DFF",
+                "#FE7F2D",
+                "#B22174"
+            ];
+
+            for (let i = 0; i < collateralsTotal.length; i++) {
+                result.push({
+                    label: collateralsTotal[i].id.strategyName,
+                    link: collateralsTotal[i].strategyAddress,
+                    color: colors[i],
+                    value: collateralsTotal[i].netAssetValue,
+                    liquidationValue: collateralsTotal[i].liquidationValue,
+                    logo:  require('@/assets/currencies/stablecoins/' + collateralsTotal[i].id.tokenName + '.png')
+                });
+            }
+        } catch(e) {
+            console.log("Error Strategy Weights: ", e);
+        }
 
 
+        commit('setInsuranceTotalData', result);
+    },
     async refreshStats({commit, dispatch, getters}){
 
-        console.debug('StatsData: refreshStats');
+        console.log('StatsData: refreshStats');
 
         dispatch('refreshPayouts');
         dispatch('refreshCurrentTotalData');
         dispatch('refreshTotalUsdPlus');
         dispatch('refreshTotalUsdPlusProfit');
         dispatch('refreshStablecoinData');
+        dispatch('refreshInsuranceAssetData');
+        dispatch('refreshInsuranceTotalData');
     },
 
     async refreshPayouts({commit, dispatch, getters, rootState}) {
@@ -249,6 +361,18 @@ const mutations = {
         state.stablecoinData = stablecoinData;
     },
 
+    setInsuranceTotalData(state, insuranceTotalData) {
+        state.insuranceTotalData = insuranceTotalData;
+    },
+
+    setInsuranceAssetData(state, insuranceAssetData) {
+        state.insuranceAssetData = insuranceAssetData;
+    },
+
+    setInsuranceTotalSupplyData(state, insuranceTotalSupplyData) {
+        state.insuranceTotalSupplyData = insuranceTotalSupplyData;
+    },
+
     setGasPrice(state, price) {
         state.gasPrice = price;
     },
@@ -285,3 +409,10 @@ export default {
     actions,
     mutations
 };
+
+
+function getInsuranceColateralFromBackend() {
+    return [
+
+    ]
+}

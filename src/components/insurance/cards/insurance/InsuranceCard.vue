@@ -36,7 +36,7 @@
                             <div>
                                 <Tooltip
                                     :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
-                                    text="Overall APY is the result of compounding (not addition) of APYs coming from insurance premiums and reserve investment." />
+                                    text="Last day APY. Overall APY is the result of compounding (not addition) of APYs coming from insurance premiums and reserve investment." />
                             </div>
                         </v-row>
                         <v-divider class="card-divider"></v-divider>

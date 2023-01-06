@@ -1,5 +1,4 @@
-import ERC20 from "@/contracts/ERC20.json";
-import contract from "@truffle/contract";
+import loadJSON from '@/utils/http-utils.js'
 
 const state = {};
 
@@ -7,6 +6,8 @@ const getters = {};
 
 const actions = {
     async initContracts({commit, dispatch, getters, rootState}) {
+        const ERC20 = await loadJSON('/contracts/ERC20.json');
+
         console.debug("contractAction/initContracts");
 
         let web3 = rootState.web3.web3;
@@ -57,15 +58,15 @@ const actions = {
             contracts.asset,
             contracts.dai,
         ] = await Promise.all([
-            _load(require(`@/contracts/${network}/Exchange.json`), web3),
-            _load(require(`@/contracts/${network}/OvnToken.json`), web3),
-            _load(require(`@/contracts/${network}/OvnGovernor.json`), web3),
-            _load(require(`@/contracts/${network}/PortfolioManager.json`), web3),
-            _load(require(`@/contracts/${network}/OvnTimelockController.json`), web3),
-            _load(require(`@/contracts/${network}/UsdPlusToken.json`), web3),
-            _load(require(`@/contracts/${network}/Mark2Market.json`), web3),
-            (network !== "avalanche" && network !== "bsc") ? _load(require(`@/contracts/${network}/Market.json`), web3) : _load_empty(),
-            (network !== "avalanche" && network !== "bsc") ? _load(require(`@/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
+            _load(await loadJSON(`/contracts/${network}/Exchange.json`), web3),
+            _load(await loadJSON(`/contracts/${network}/OvnToken.json`), web3),
+            _load(await loadJSON(`/contracts/${network}/OvnGovernor.json`), web3),
+            _load(await loadJSON(`/contracts/${network}/PortfolioManager.json`), web3),
+            _load(await loadJSON(`/contracts/${network}/OvnTimelockController.json`), web3),
+            _load(await loadJSON(`/contracts/${network}/UsdPlusToken.json`), web3),
+            _load(await loadJSON(`/contracts/${network}/Mark2Market.json`), web3),
+            (network !== "avalanche" && network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/Market.json`), web3) : _load_empty(),
+            (network !== "avalanche" && network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
             networkAssetMap[network] ? _load(ERC20, web3, networkAssetMap[network]) : _load_empty(),
             networkDaiMap[network] ? _load(ERC20, web3, networkDaiMap[network]) : _load_empty(),
         ]);
@@ -84,9 +85,9 @@ const actions = {
 
         for (let i = 0; i < insurances.length; i++) {
             if (network === insurances[i].network) {
-                let ExchangerContract = require(`@/contracts/${insurances[i].network}/insurance/exchanger.json`);
-                let TokenContract = require(`@/contracts/${insurances[i].network}/insurance/token.json`);
-                let M2MContract = require(`@/contracts/${insurances[i].network}/insurance/m2m.json`);
+                let ExchangerContract = await loadJSON(`/contracts/${insurances[i].network}/insurance/exchanger.json`);
+                let TokenContract = await loadJSON(`/contracts/${insurances[i].network}/insurance/token.json`);
+                let M2MContract = await loadJSON(`/contracts/${insurances[i].network}/insurance/m2m.json`);
 
                 contracts.insurance = {};
 
@@ -112,30 +113,26 @@ export default {
 
 
 function _load(file, web3, address) {
-
-    let contractConfig = contract(file);
-    const {abi} = contractConfig
-
     if (!address) {
         address = file.address;
     }
 
-    return new web3.eth.Contract(abi, address);
+    return new web3.eth.Contract(file.abi, address);
 }
 
-function _load_ets(etsName, contracts, web3) {
+async function _load_ets(etsName, contracts, web3) {
 
-    let etsParams = require('@/json/ets/' + etsName.name + '.json');
+    let etsParams = await loadJSON('/json/ets/' + etsName.name + '.json');
 
     let exchangerContract;
     let tokenContract;
 
     try {
-        exchangerContract = _load(require('@/contracts/abi/ets/exchanger.json'), web3, etsParams.address);
-        tokenContract = _load(require('@/contracts/abi/ets/token.json'), web3, etsParams.tokenAddress);
+        exchangerContract = _load(await loadJSON('/contracts/abi/ets/exchanger.json'), web3, etsParams.address);
+        tokenContract = _load(await loadJSON('/contracts/abi/ets/token.json'), web3, etsParams.tokenAddress);
     } catch (e) {
-        exchangerContract = _load(require(`@/contracts/${etsName.network}/ets/${etsName.name}/exchanger.json`), web3);
-        tokenContract = _load(require(`@/contracts/${etsName.network}/ets/${etsName.name}/token.json`), web3);
+        exchangerContract = _load(await loadJSON(`/contracts/${etsName.network}/ets/${etsName.name}/exchanger.json`), web3);
+        tokenContract = _load(await loadJSON(`/contracts/${etsName.network}/ets/${etsName.name}/token.json`), web3);
     }
 
     contracts['ets_' + etsName.name + '_exchanger'] = exchangerContract;
@@ -145,3 +142,4 @@ function _load_ets(etsName, contracts, web3) {
 function _load_empty() {
     return null;
 }
+

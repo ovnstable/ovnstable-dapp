@@ -1,3 +1,5 @@
+import loadJSON from '@/utils/http-utils.js'
+
 const state = {
     etsNames: [
         'wbnb_busd',
@@ -34,7 +36,7 @@ const actions = {
         let list = [];
 
         for (let i = 0; i < getters.etsNames.length; i++) {
-            let ets = require('@/json/ets/' + getters.etsNames[i] + '.json');
+            let ets = await loadJSON('/json/ets/' + getters.etsNames[i] + '.json');
 
             // May add some fields
 

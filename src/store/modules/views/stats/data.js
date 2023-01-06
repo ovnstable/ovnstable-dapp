@@ -158,7 +158,6 @@ const actions = {
 
         try {
             let appApiUrl = rootState.network.polygonApi;
-            //            let collateralsTotal = getInsuranceColateralFromBackend();
             let collateralsTotal = (await axios.get(appApiUrl + '/insurance/collateral/total')).data;
             console.log(collateralsTotal);
 
@@ -214,7 +213,6 @@ const actions = {
 
         try {
             let appApiUrl = rootState.network.polygonApi;
-//            let collateralsTotal = getInsuranceColateralFromBackend();
             let collateralsTotal = (await axios.get(appApiUrl + '/insurance/collateral/total')).data;
 
             collateralsTotal.sort((a,b) => b.netAssetValue * 1 - a.netAssetValue * 1);

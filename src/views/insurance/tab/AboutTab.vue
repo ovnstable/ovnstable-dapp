@@ -144,14 +144,19 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("network", ['networkId', 'setWalletNetwork']),
+        ...mapGetters("network", ['networkId', 'setWalletNetwork', 'polygonConfig']),
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData', 'insuranceTotalData', 'insuranceAssetData', 'insuranceTotalSupplyData']),
         ...mapGetters("web3", ['contracts']),
         ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData', 'insuranceRedemptionData']),
         ...mapGetters("supplyData", ["totalInsuranceSupply"]),
+
         networkSupport: function () {
             return this.networkId === this.insuranceStrategyData.polygon.chainId;
         },
+
+        insuranceChainConfig: function() {
+            return this.polygonConfig;
+        }
     },
 
     methods: {
@@ -180,6 +185,12 @@ export default {
                 return address.substring(0, 5) + '...' + address.substring(address.length - 4);
             } else {
                 return null;
+            }
+        },
+
+        openTokenOnScan(hash) {
+            if (hash && hash !== '') {
+                window.open(this.insuranceChainConfig.explorerUrl + "token/" + hash, '_blank').focus();
             }
         },
     }
@@ -557,4 +568,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     border-radius: 8px;
 }
 
+.icon-img, .info-value-address {
+    cursor: pointer;
+}
 </style>

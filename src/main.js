@@ -17,6 +17,9 @@ import 'vue-css-donut-chart/dist/vcdonut.css';
 import 'vue-resize/dist/vue-resize.css'
 import {ResizeObserver} from 'vue-resize'
 
+import * as Sentry from "@sentry/vue";
+import { BrowserTracing } from "@sentry/tracing";
+
 Vue.use(Vuex)
 
 Vue.prototype.$moment = moment;
@@ -41,6 +44,22 @@ Vue.use(VueYandexMetrika, {
   env: process.env.NODE_ENV,
   options: {clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true}
 })
+
+Sentry.init({
+  Vue,
+  dsn: "https://3ba3e27bc8674321b5e4177080ca8bf9@o4504417259552768.ingest.sentry.io/4504417260863488",
+  integrations: [
+    new BrowserTracing({
+      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+      tracePropagationTargets: ["localhost", "dev.overnight.fi", "app.overnight.fi", /^\//],
+    }),
+  ],
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
+
 
 Vue.use(Donut);
 

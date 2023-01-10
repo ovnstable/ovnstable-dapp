@@ -298,6 +298,8 @@ export default {
     },
 
     created() {
+      this.refreshInsuranceAssetData();
+      this.refreshInsuranceTotalData();
     },
 
     mounted() {
@@ -307,8 +309,9 @@ export default {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('insuranceRiskModal', ['showRiskModal']),
         ...mapActions('insuranceInvestModal', ['showInvestModal', 'showMintView', 'showRedeemView', 'showRedemptionRequestModal']),
+        ...mapActions('statsData', ['refreshInsuranceAssetData', 'refreshInsuranceTotalData']),
 
-        goToAction(id) {
+      goToAction(id) {
             this.$router.push(id);
         },
 

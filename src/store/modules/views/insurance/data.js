@@ -233,7 +233,7 @@ const actions = {
     },
 
     async refreshUsdPlusPayoutsData({commit, dispatch, getters, rootState}, network) {
-        console.debug('InsuranceData: refreshUsdPlusPayoutsData');
+        console.debug('InsuranceData: refreshUsdPlusPayoutsData', network);
 
         let appApiUrl;
 

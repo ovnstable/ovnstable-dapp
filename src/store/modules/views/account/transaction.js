@@ -1,5 +1,4 @@
 import moment from "moment";
-const Promise = require("bluebird");
 
 const state = {
     transactions: [],
@@ -44,25 +43,27 @@ const actions = {
                 continue;
             }
 
+            const delay = t => new Promise(resolve => setTimeout(resolve, t));
+
             const transactionReceiptRetry = () => rootState.web3.web3.eth.getTransactionReceipt(transaction.hash)
                 .then((receipt) => {
-                    if (transaction.chain !== rootState.network.networkId) {
-                        return Promise.delay(1000).then(transactionReceiptRetry);
-                    }
+                  if (transaction.chain !== rootState.network.networkId) {
+                    return delay(1000).then(transactionReceiptRetry);
+                  }
 
-                    if (receipt != null) {
-                        receipt.cancel = false;
-                        return receipt;
+                  if (receipt != null) {
+                    receipt.cancel = false;
+                    return receipt;
+                  } else {
+                    let minutes = moment.duration(moment.utc(new Date()).diff(transaction.date)).asMinutes();
+
+                    if (minutes > 10) {
+                      receipt = { transactionHash: transaction.hash, cancel: true };
+                      return receipt;
                     } else {
-                        let minutes = moment.duration(moment.utc(new Date()).diff(transaction.date)).asMinutes();
-
-                        if (minutes > 10) {
-                            receipt = { transactionHash: transaction.hash, cancel: true };
-                            return receipt;
-                        } else {
-                            return Promise.delay(1000).then(transactionReceiptRetry)
-                        }
+                      return delay(1000).then(transactionReceiptRetry)
                     }
+                  }
                 });
 
             transactionReceiptRetry().then(receipt => {

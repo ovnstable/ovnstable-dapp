@@ -41,7 +41,6 @@
                              v-if="component.type === 'ets'"
                              :featured="i < 3"
                              :card-data="component"/>
-
                 <template v-if="sortedCardList.filter(value => (value.isPrototype || value.isOpenPrototype)).length > 0">
                     <v-row class="ma-0 mb-1 mt-10" align="center">
                         <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-test-tube</v-icon>
@@ -273,7 +272,7 @@ export default {
                 );
             });
 
-            cardList.push(
+            if (networkId === 137) cardList.push(
                 {
                     type: 'insurance',
                     name: 'InsuranceCard',
@@ -308,7 +307,6 @@ export default {
 
                 return 0;
             });
-
             cardList[0].cardOpened = true;
 
             this.sortedCardList = cardList;

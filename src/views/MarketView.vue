@@ -272,8 +272,9 @@ export default {
                 );
             });
 
-            if (networkId === 137) cardList.push(
-                {
+            if (networkId === 137) {
+              cardList.push(
+                  {
                     type: 'insurance',
                     name: 'InsuranceCard',
                     isPrototype: false,
@@ -285,9 +286,9 @@ export default {
                     tvl: this.insuranceStrategyData.polygon.lastApy,
                     monthApy: (this.insuranceStrategyData.polygon && this.insuranceStrategyData.polygon.apy) ? this.insuranceStrategyData.polygon.apy : 0,
                     cardOpened: false,
-                },
-            );
-
+                  },
+              );
+            }
 
             cardList.sort(function (a, b) {
                 if (!a.isPrototype && b.isPrototype) return -1;

@@ -1,8 +1,11 @@
 node_modules
 
 .idea/
+.fleet/
 node_modules/
 dist/
 src/contracts/local
 .env
 #package-lock.json
+
+public/.DS_Store

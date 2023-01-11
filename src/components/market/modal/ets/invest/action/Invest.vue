@@ -278,7 +278,7 @@ export default {
             return {
                 id: this.etsData.actionAsset,
                 title: this.etsData.actionTokenName,
-                image: '@/assets/currencies/' + this.etsData.actionTokenName + '.png'
+                image: '/assets/currencies/' + this.etsData.actionTokenName + '.png'
             }
         },
 
@@ -286,7 +286,7 @@ export default {
             return {
                 id: this.etsData.name,
                 title: 'ETS ' + this.etsData.nameToken,
-                image: '@/assets/currencies/market/ets_' + this.etsData.name + '.svg'
+                image: '/assets/currencies/market/ets_' + this.etsData.name + '.svg'
             }
         },
 

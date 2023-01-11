@@ -21,11 +21,12 @@
         <div class="mt-7 cards-list-container">
             <v-row class="d-flex" justify="start" v-if="tab === 1">
                 <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
-                       v-for="card in sortedCardList.filter(value => (!value.isPrototype && !value.isArchive)).slice(0, 3)">
+                       v-for="card in sortedCardList.filter(value => (!value.isPrototype && !value.isArchive)).slice(0, 3)"
+                       :key="card.id">
                     <v-row class="fill-height">
                         <component
                             class="ma-3"
-                            v-bind:key="card.type === 'ets' ? `${card.name}_${card.monthApy}_${card.tvl}` : card.type"
+                            v-bind:key="card.id"
                             :card-data="card"
                             v-bind:is="card.name"
                         ></component>
@@ -239,6 +240,7 @@ export default {
 
             let cardList = [
                 {
+                    id: 'usdPlus' + networkId,
                     type: 'usdPlus',
                     name: 'UsdPlus',
                     isPrototype: false,
@@ -255,6 +257,7 @@ export default {
             this.etsList.forEach(ets => {
                 cardList.push(
                     {
+                        id: 'ets' + ets.chain + ets.name,
                         type: 'ets',
                         name: 'Ets',
                         isPrototype: ets.prototype,
@@ -275,20 +278,22 @@ export default {
             if (networkId === 137) {
               cardList.push(
                   {
-                    type: 'insurance',
-                    name: 'InsuranceCard',
-                    isPrototype: false,
-                    isArchive: false,
-                    chain: networkId,
-                    hasUsdPlus: true,
-                    overcapEnabled: false,
-                    hasCap: this.totalInsuranceSupply,
-                    tvl: this.insuranceStrategyData.polygon.lastApy,
-                    monthApy: (this.insuranceStrategyData.polygon && this.insuranceStrategyData.polygon.apy) ? this.insuranceStrategyData.polygon.apy : 0,
-                    cardOpened: false,
+                      id: 'insurance' + networkId,
+                      type: 'insurance',
+                      name: 'InsuranceCard',
+                      isPrototype: false,
+                      isArchive: false,
+                      chain: networkId,
+                      hasUsdPlus: true,
+                      overcapEnabled: false,
+                      hasCap: this.totalInsuranceSupply,
+                      tvl: this.insuranceStrategyData.polygon.lastApy,
+                      monthApy: (this.insuranceStrategyData.polygon && this.insuranceStrategyData.polygon.apy) ? this.insuranceStrategyData.polygon.apy : 0,
+                      cardOpened: false,
                   },
               );
             }
+
 
             cardList.sort(function (a, b) {
                 if (!a.isPrototype && b.isPrototype) return -1;
@@ -308,8 +313,8 @@ export default {
 
                 return 0;
             });
-            cardList[0].cardOpened = true;
 
+            cardList[0].cardOpened = true;
             this.sortedCardList = cardList;
         },
 

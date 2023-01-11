@@ -4,7 +4,7 @@
             <v-row align="start" :justify="$wu.isMobile() ? 'start' : 'end'" class="ma-0">
                 <template v-if="$wu.isMobile()">
                     <div class="currency-icon">
-                        <v-img :src="require('@/assets/currencies/insurance/INSURANCE.svg')"/>
+                        <v-img :src="require('@/assets/currencies/insurance/insurancePolygon.svg')"/>
                     </div>
                     <v-spacer></v-spacer>
                 </template>
@@ -18,7 +18,7 @@
                 <v-col cols="2" v-if="!$wu.isMobile()">
                     <v-row align="center">
                         <div class="currency-icon">
-                            <v-img :src="require('@/assets/currencies/insurance/INSURANCE.svg')"/>
+                            <v-img :src="require('@/assets/currencies/insurance/insurancePolygon.svg')"/>
                         </div>
                     </v-row>
                 </v-col>

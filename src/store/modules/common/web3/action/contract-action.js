@@ -37,6 +37,7 @@ const actions = {
             { network: 'polygon', name: 'uni_eta_wmatic_usdc' },
 
             { network: 'bsc', name: 'wbnb_busd' },
+            { network: 'bsc', name: 'qs_alpha_wbnb_busd' },
 
             { network: 'optimism', name: 'uni_alpha_weth_usdc' },
             { network: 'optimism', name: 'uni_beta_weth_dai' },

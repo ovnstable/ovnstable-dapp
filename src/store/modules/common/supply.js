@@ -40,12 +40,14 @@ const actions = {
                     try {
                         etsSupply = rootState.marketData.etsStrategyData[ets.name].tvl;
                     } catch (ex) {
+                        console.error('Equal chain supply error. Name:' + ets.name + ' chain: ' + ets.chain, ex)
                     }
                 }
             } else {
                 try {
                     etsSupply = rootState.marketData.etsStrategyData[ets.name].tvl;
                 } catch (ex) {
+                    console.error('Supply error. Name:' + ets.name + ' chain: ' + ets.chain, ex)
                 }
             }
 

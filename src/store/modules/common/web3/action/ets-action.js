@@ -4,6 +4,7 @@ const state = {
         'wmatic_usd_plus',
         'ruby',
         'night_ov_ar',
+        'qs_alpha_wbnb_busd',
         'qs_alpha_wmatic_usdc',
         'qs_beta_wmatic_usdc',
         'qs_gamma_weth_usdc',

@@ -191,7 +191,8 @@ const actions = {
                     } catch (e) {
                     }
 
-                    resultActionAssetBalance[ets.actionAsset] = actionAssetBalance;
+                    const assetProperty = ets.actionAsset + '_' + ets.actionTokenDecimals; // asset may be with different decimals.
+                    resultActionAssetBalance[assetProperty] = actionAssetBalance;
                 }
             }
         }

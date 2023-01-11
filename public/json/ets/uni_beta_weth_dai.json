@@ -3,7 +3,7 @@
   "nameUp": "UNI BETA WETH/DAI",
   "nameToken": "BETA",
   "prototype": false,
-  "openPrototype": true,
+  "openPrototype": false,
   "archive": false,
   "disabled": false,
   "highRisk": true,
@@ -34,7 +34,7 @@
   "hasUsdPlus": false,
   "tokenPair": "weth_dai",
 
-  "maxSupply": 10000.00,
+  "maxSupply": 200000.00,
   "overcapEnabled": true,
   "inceptionDate": "09 December 2022",
 

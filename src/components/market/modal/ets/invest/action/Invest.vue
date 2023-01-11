@@ -291,11 +291,11 @@ export default {
         },
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.actionAssetBalance[this.etsData.actionAsset], 3);
+            return this.$utils.formatMoney(this.actionAssetBalance[this.etsData.actionAsset + '_' + this.etsData.actionTokenDecimals], 3);
         },
 
         sumResult: function () {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.actionAssetBalance[this.etsData.actionAsset]) * 100;
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.actionAssetBalance[this.etsData.actionAsset + '_' + this.etsData.actionTokenDecimals]) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -364,7 +364,7 @@ export default {
 
                 if ((this.etsData.maxSupply && this.totalSupply[this.etsData.name] >= this.etsData.maxSupply) || (this.etsData.maxSupply && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum)) >= parseFloat(this.etsData.maxSupply))) {
                     return 'Over ETS capacity'
-                } else if (this.sum > parseFloat(this.actionAssetBalance[this.etsData.actionAsset])) {
+                } else if (this.sum > parseFloat(this.actionAssetBalance[this.etsData.actionAsset + '_' + this.etsData.actionTokenDecimals])) {
                     return 'Invest'
                 } else {
                     return 'Invest';
@@ -421,7 +421,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.actionAssetBalance[this.etsData.actionAsset])) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.actionAssetBalance[this.etsData.actionAsset + '_' + this.etsData.actionTokenDecimals])) return true;
 
             return false;
         },
@@ -470,7 +470,7 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         changeSliderPercent() {
-            this.sum = (this.actionAssetBalance[this.etsData.actionAsset] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.actionAssetBalance[this.etsData.actionAsset + '_' + this.etsData.actionTokenDecimals] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
         },
 
         isNumber: function (evt) {

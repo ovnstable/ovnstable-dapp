@@ -3,7 +3,7 @@
   "nameUp": "UNI ALPHA WETH/USDC",
   "nameToken": "ALPHA",
   "prototype": false,
-  "openPrototype": true,
+  "openPrototype": false,
   "archive": false,
   "disabled": false,
   "highRisk": true,
@@ -34,7 +34,7 @@
   "hasUsdPlus": false,
   "tokenPair": "weth_usdc",
 
-  "maxSupply": 10000.00,
+  "maxSupply": 200000.00,
   "overcapEnabled": true,
   "inceptionDate": "09 December 2022",
 

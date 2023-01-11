@@ -66,7 +66,7 @@
             <v-col :cols="$wu.isMobile() ? 9 : 6">
                 <v-row align="center" class="ma-0">
                     <label class="balance-label ml-3">Balance:
-                        {{ $utils.formatMoney(actionAssetBalance[etsData.actionAsset], 3) }}</label>
+                        {{ $utils.formatMoney(actionAssetBalance[etsData.actionAsset + '_' + etsData.actionTokenDecimals], 3) }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>

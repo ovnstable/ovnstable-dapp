@@ -154,6 +154,9 @@ export default {
                 case 'Cone':
                     url = 'https://www.cone.exchange/liquidity/';
                     break;
+                case 'Thena':
+                    url = 'https://www.thena.fi/liquidity/';
+                    break;
                 case 'QuickSwap':
                     url = 'https://info.quickswap.exchange/#/pair/'
                     break;
@@ -172,6 +175,11 @@ export default {
                 default:
                     url = this.cardData.data.explorerUrl + '/address/';
                     break;
+            }
+
+            if (this.cardData.data.dex === 'Thena') {
+              window.open(url, '_blank').focus();
+              return;
             }
 
             url += this.cardData.data.address;

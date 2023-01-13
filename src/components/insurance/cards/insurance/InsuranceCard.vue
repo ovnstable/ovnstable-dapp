@@ -33,7 +33,7 @@
 
                         <v-row class="ma-0 d-flex justify-space-between  info-container">
                           <label class="card-info-label mt-2 card-about-label ">
-                            OVERALL APY CONSISTS OF:
+                            OVERALL 30-DAY APY CONSISTS OF:
                           </label>
                            <div class="tooltip-info">
                             <Tooltip :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"

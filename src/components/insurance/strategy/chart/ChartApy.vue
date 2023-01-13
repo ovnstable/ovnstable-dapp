@@ -3,9 +3,13 @@
         <v-row class="chart-header-row">
             <v-col cols="8">
                 <v-row justify="start" align="center">
-                    <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? 'Insurance' : 'Insurance daily net') + '&nbsp;') : ''}}</label>
+                    <label class="chart-title">
+                      {{ (avgApy && avgApy.value) ? ((isMobile ? 'Insurance' : 'Insurance daily net') + '&nbsp;') : ''}}
+                    </label>
                     <label class="chart-title" style="margin-left: 0 !important">
-                        <abbr title="Annual Percentage Yield">APY</abbr>
+                        <abbr title="Annual Percentage Yield">
+                          APY
+                        </abbr>
                     </label>
                     <div class="mt-7 ml-1">
                         <Tooltip :size="16" text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
@@ -91,6 +95,7 @@ import moment from "moment";
 
 import ApexCharts from 'apexcharts'
 import Tooltip from "@/components/common/element/Tooltip";
+import { insuranceApiService } from "@/services/insurance-api-service";
 
 export default {
     name: "ChartApy",
@@ -173,23 +178,19 @@ export default {
                     break;
             }
 
-            let fetchOptions = {
-                headers: {
-                    "Access-Control-Allow-Origin": apiUrl
-                }
-            };
+            insuranceApiService.getAvgApyInfo(apiUrl, zoom)
+            .then(data => {
+              console.log("avg apy info: ", data);
 
-            await fetch(apiUrl + '/insurance/avg-apy-info/' + zoom, fetchOptions)
-                .then(value => value.json())
-                .then(value => {
-                    this.avgApy = value;
+              this.avgApy = data;
 
-                    if (this.avgApy.date) {
-                        this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
-                    }
-                }).catch(reason => {
-                    console.log('Error get data: ' + reason);
-                })
+              if (this.avgApy.date) {
+                this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+              }
+            })
+            .catch(e => {
+              console.log('Error get data: ' + e);
+            })
 
             this.zoom = zoom;
 

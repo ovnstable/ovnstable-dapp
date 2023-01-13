@@ -113,7 +113,7 @@ export default {
 
       lastPayoutDate: function () {
         let data = this.insuranceStrategyData.polygon;
-        return data ? data.payouts[data.payouts.length - 1].date : null`;`
+        return data ? data.payouts[data.payouts.length - 1].payableDate : null;
       },
       payouts: function () {
         let data = this.insuranceStrategyData.polygon;

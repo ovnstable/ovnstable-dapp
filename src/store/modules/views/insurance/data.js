@@ -61,7 +61,6 @@ const actions = {
         dispatch('refreshUsdPlusPayoutsData', "polygon");
         dispatch('refreshUsdPlusPayoutsData', "bsc");
         dispatch('refreshUsdPlusPayoutsData', "optimism");
-        dispatch('refreshUsdPlusPayoutsData', "avax");
 
         dispatch('accountData/refreshBalance', null, {root:true});
         dispatch('supplyData/refreshInsuranceSupply', null, {root:true});
@@ -73,9 +72,6 @@ const actions = {
         switch (refreshParams.chain.chainId) {
             case 137:
                 appApiUrl = rootState.network.polygonApi;
-                break;
-            case 43114:
-                appApiUrl = rootState.network.avaxApi;
                 break;
             case 10:
                 appApiUrl = rootState.network.opApi;
@@ -193,9 +189,6 @@ const actions = {
             case 137:
                 appApiUrl = rootState.network.polygonApi;
                 break;
-            case 43114:
-                appApiUrl = rootState.network.avaxApi;
-                break;
             case 10:
                 appApiUrl = rootState.network.opApi;
                 break;
@@ -246,9 +239,6 @@ const actions = {
                 break;
             case "optimism":
                 appApiUrl = rootState.network.opApi;
-                break;
-            case "avax":
-                appApiUrl = rootState.network.avaxApi;
                 break;
         }
 

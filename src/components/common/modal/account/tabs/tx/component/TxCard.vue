@@ -181,7 +181,6 @@
 import {mapActions, mapGetters} from "vuex";
 import polygonIcon from "@/assets/network/polygon.svg";
 import bscIcon from "@/assets/network/bsc.svg";
-import avaxIcon from "@/assets/network/avalanche.svg";
 import optimismIcon from "@/assets/network/op.svg";
 
 export default {
@@ -203,7 +202,7 @@ export default {
 
     computed: {
         ...mapGetters('transaction', ['transactions']),
-        ...mapGetters('network', ['opConfig', 'polygonConfig', 'avaxConfig', 'bscConfig']),
+        ...mapGetters('network', ['opConfig', 'polygonConfig', 'bscConfig']),
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('network', ['networkId']),
 
@@ -213,8 +212,6 @@ export default {
                     return polygonIcon;
                 case 56:
                     return bscIcon;
-                case 43114:
-                    return avaxIcon;
                 case 10:
                     return optimismIcon;
             }
@@ -246,9 +243,6 @@ export default {
             switch (this.txData.chain) {
                 case 137:
                     explorerUrl = this.polygonConfig.explorerUrl;
-                    break;
-                case 43114:
-                    explorerUrl = this.avaxConfig.explorerUrl;
                     break;
                 case 10:
                     explorerUrl = this.opConfig.explorerUrl;

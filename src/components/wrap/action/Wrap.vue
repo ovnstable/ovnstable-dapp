@@ -208,7 +208,6 @@ import WaitingModal from "@/components/common/modal/action/WaitingModal";
 import SuccessModal from "@/components/common/modal/action/SuccessModal";
 import BN from "bn.js";
 import polygonIcon from "@/assets/network/polygon.svg";
-import avaxIcon from "@/assets/network/avalanche.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import Tooltip from "@/components/common/element/Tooltip";
@@ -263,8 +262,6 @@ export default {
             switch (this.networkId){
                 case 137:
                     return polygonIcon;
-                case 43114:
-                    return avaxIcon;
                 case 10:
                     return optimismIcon;
                 case 56:

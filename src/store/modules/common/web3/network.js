@@ -22,18 +22,6 @@ const BSC_PARAMS = {
     bridgeLink: 'https://router.via.exchange/bsc/USD+/optimism/USD+',
 }
 
-const AVALANCHE_PARAMS = {
-    appApiUrl: 'https://avax.overnight.fi/api',
-    networkName: 'avalanche',
-    networkId: 43114,
-    rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
-    explorerUrl: 'https://snowtrace.io/',
-    assetName: 'USDC',
-    assetDecimals: 6,
-    nativeAssetName: 'AVAX',
-    bridgeLink: 'https://router.via.exchange/avalanche/USD+/bsc/USD+',
-}
-
 const OPTIMISM_PARAMS = {
     appApiUrl: 'https://op.overnight.fi/api',
     networkName: 'optimism',
@@ -59,12 +47,10 @@ const state = {
 
     polygonApi: POLYGON_PARAMS.appApiUrl,
     bscApi: BSC_PARAMS.appApiUrl,
-    avaxApi: AVALANCHE_PARAMS.appApiUrl,
     opApi: OPTIMISM_PARAMS.appApiUrl,
 
     polygonConfig: POLYGON_PARAMS,
     bscConfig: BSC_PARAMS,
-    avaxConfig: AVALANCHE_PARAMS,
     opConfig: OPTIMISM_PARAMS,
 
     switchToOtherNetwork: false,
@@ -81,10 +67,6 @@ function _getParams(networkName) {
         case "bsc":
         case "56":
             return BSC_PARAMS;
-        case "avax":
-        case "avalanche":
-        case "43114":
-            return AVALANCHE_PARAMS;
         case "op":
         case "optimism":
         case "10":
@@ -140,10 +122,6 @@ const getters = {
         return state.bscApi;
     },
 
-    avaxApi(state) {
-        return state.avaxApi;
-    },
-
     opApi(state) {
         return state.opApi;
     },
@@ -159,11 +137,6 @@ const getters = {
     bscConfig(state) {
         return state.bscConfig;
     },
-
-    avaxConfig(state) {
-        return state.avaxConfig;
-    },
-
     opConfig(state) {
         return state.opConfig;
     },
@@ -199,11 +172,6 @@ const actions = {
             case "bsc":
             case "56":
                 localStorage.setItem('selectedNetwork', 'bsc');
-                break;
-            case "avax":
-            case "avalanche":
-            case "43114":
-                localStorage.setItem('selectedNetwork', 'avax');
                 break;
             case "op":
             case "optimism":
@@ -259,21 +227,6 @@ const actions = {
                                 nativeCurrency: {
                                     symbol: 'BNB',
                                     name: 'BNB',
-                                    decimals: 18,
-                                }
-                            };
-                            break;
-                        case "avax":
-                        case "avalanche":
-                        case "43114":
-                            params = {
-                                chainId: rootState.web3.web3.utils.toHex(43114),
-                                rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
-                                blockExplorerUrls: ['https://snowtrace.io/'],
-                                chainName: 'Avalanche',
-                                nativeCurrency: {
-                                    symbol: 'AVAX',
-                                    name: 'AVAX',
                                     decimals: 18,
                                 }
                             };

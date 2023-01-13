@@ -19,11 +19,6 @@ const actions = {
             case "56":
                 dispatch('wrapUI/hidePage', null, {root: true});
                 break;
-            case "avax":
-            case "avalanche":
-            case "43114":
-                dispatch('wrapUI/hidePage', null, {root: true});
-                break;
             case "op":
             case "optimism":
             case "10":

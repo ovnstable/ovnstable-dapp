@@ -137,7 +137,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['polygonApi', 'bscApi', 'opApi', 'avaxApi']),
+        ...mapGetters('network', ['polygonApi', 'bscApi', 'opApi']),
         ...mapGetters('theme', ['light']),
 
         isMobile() {
@@ -163,9 +163,6 @@ export default {
             switch (this.etsData.chain) {
                 case 137:
                     apiUrl = this.polygonApi;
-                    break;
-                case 43114:
-                    apiUrl = this.avaxApi;
                     break;
                 case 10:
                     apiUrl = this.opApi;

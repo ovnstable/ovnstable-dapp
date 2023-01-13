@@ -123,14 +123,6 @@ export default {
             }
         },
 
-        activeTabAvalanche: function () {
-            return {
-                'tab-button': this.tab === 3,
-                'tab-button-in-active': this.tab !== 3,
-                'tab-btn-disabled': this.tab !== 3,
-            }
-        },
-
         activeTabOptimism: function () {
             return {
                 'tab-button': this.tab === 4,

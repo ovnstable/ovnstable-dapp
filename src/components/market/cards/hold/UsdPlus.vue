@@ -110,7 +110,6 @@
 import Tooltip from "@/components/common/element/Tooltip";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import polygonIcon from "@/assets/network/polygon.svg";
-import avaxIcon from "@/assets/network/avalanche.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import moment from "moment";
@@ -136,8 +135,6 @@ export default {
             switch (this.networkId) {
                 case 137:
                     return polygonIcon;
-                case 43114:
-                    return avaxIcon;
                 case 10:
                     return optimismIcon;
                 case 56:
@@ -198,9 +195,7 @@ export default {
         getBgColor() {
             switch (this.networkId) {
                 case 137:
-                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #7E46E3 100%)';
-                case 43114:
-                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #D74F49 100%)';
+                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #7E46E3 100%)';``
                 case 10:
                     return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #FF0420 100%)';
                 case 56:

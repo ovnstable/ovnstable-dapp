@@ -55,7 +55,7 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-item class="list-item-hover mx-n2 mt-2" link @click="wrapClick" v-if="(networkId !== 56) && (networkId !== 43114)">
+            <v-list-item class="list-item-hover mx-n2 mt-2" link @click="wrapClick" v-if="(networkId !== 56)">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/swap_horizontal_circle.svg')">
                 </v-list-item-icon>

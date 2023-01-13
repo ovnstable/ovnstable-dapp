@@ -54,17 +54,6 @@
                     <v-icon class="mb-5" small color="var(--secondary-gray-text)"></v-icon>
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item style="cursor: pointer" @click="setWalletNetwork('43114')">
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img :src="require('@/assets/network/avalanche.svg')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item">
-                    Avalanche
-                    <v-icon class="ml-n1 mb-5" small color="var(--secondary-gray-text)">mdi-beta</v-icon>
-                </v-list-item-title>
-            </v-list-item>
             <v-list-item disabled>
                 <v-list-item-avatar>
                     <div class="list-item-icon">
@@ -85,7 +74,6 @@ import {mapActions, mapGetters} from "vuex";
 
 let polygonIcon = require('@/assets/network/polygon.svg');
 let bscIcon = require('@/assets/network/bsc.svg');
-let avaxIcon = require('@/assets/network/avalanche.svg');
 let optimismIcon = require('@/assets/network/op.svg');
 
 export default {
@@ -96,7 +84,7 @@ export default {
     data: () => ({
         openedList: false,
         alphaNetworks: [],
-        betaNetworks: [43114],
+        betaNetworks: [],
     }),
 
     computed: {
@@ -108,8 +96,6 @@ export default {
                     return polygonIcon;
                 case 56:
                     return bscIcon;
-                case 43114:
-                    return avaxIcon;
                 case 10:
                     return optimismIcon;
             }

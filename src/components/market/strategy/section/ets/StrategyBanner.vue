@@ -137,7 +137,6 @@
 import {mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import polygonIcon from "@/assets/network/polygon.svg";
-import avaxIcon from "@/assets/network/avalanche.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 
@@ -163,8 +162,6 @@ export default {
             switch (this.etsData.chain){
                 case 137:
                     return polygonIcon;
-                case 43114:
-                    return avaxIcon;
                 case 10:
                     return optimismIcon;
                 case 56:

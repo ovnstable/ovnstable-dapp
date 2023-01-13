@@ -56,9 +56,6 @@ const actions = {
                     case 137:
                         appApiUrl = rootState.network.polygonApi;
                         break;
-                    case 43114:
-                        appApiUrl = rootState.network.avaxApi;
-                        break;
                     case 10:
                         appApiUrl = rootState.network.opApi;
                         break;
@@ -193,9 +190,6 @@ const actions = {
                     case 137:
                         appApiUrl = rootState.network.polygonApi;
                         break;
-                    case 43114:
-                        appApiUrl = rootState.network.avaxApi;
-                        break;
                     case 10:
                         appApiUrl = rootState.network.opApi;
                         break;
@@ -233,7 +227,7 @@ const actions = {
         console.debug('MarketData: refreshUsdPlusPayoutsData');
 
         await Promise.all(
-            ['polygon', 'bsc', 'optimism', 'avax'].map(async network => {
+            ['polygon', 'bsc', 'optimism'].map(async network => {
 
                 let appApiUrl;
 
@@ -246,9 +240,6 @@ const actions = {
                         break;
                     case "optimism":
                         appApiUrl = rootState.network.opApi;
-                        break;
-                    case "avax":
-                        appApiUrl = rootState.network.avaxApi;
                         break;
                 }
 

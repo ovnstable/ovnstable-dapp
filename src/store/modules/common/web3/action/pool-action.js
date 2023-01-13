@@ -15,7 +15,7 @@ const actions = {
     async getPoolList({commit, dispatch, getters, rootState}) {
 
         let list = [];
-        let networkConfigList = [rootState.network.opConfig, rootState.network.polygonConfig, rootState.network.bscConfig, rootState.network.avaxConfig];
+        let networkConfigList = [rootState.network.opConfig, rootState.network.polygonConfig, rootState.network.bscConfig];
 
         for (let networkConfig of networkConfigList) {
 

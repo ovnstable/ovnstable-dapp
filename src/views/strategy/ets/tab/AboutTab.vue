@@ -279,7 +279,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'avaxConfig']),
+        ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig']),
         ...mapGetters('marketData', ['etsStrategyData']),
         ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
@@ -300,8 +300,6 @@ export default {
             switch (this.etsData.chain) {
                 case 137:
                     return this.polygonConfig;
-                case 43114:
-                    return this.avaxConfig;
                 case 10:
                     return this.opConfig;
                 case 56:

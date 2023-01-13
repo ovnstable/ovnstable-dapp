@@ -1,24 +1,55 @@
 <template>
     <div>
-        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'" justify="start" align="center">
-            <v-col class="info-card-body-bottom">
-                <v-row align="center" justify="start" class="ma-0">
-                    <v-col class="ml-n3 mt-n3">
-                        <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
-                            APY
-                        </v-btn>
-                    </v-col>
-                    <v-col class="mr-n3 mt-n3">
-                        <v-btn outlined class="rate-tab-btn" @click="rateTab=3" v-bind:class="activeRateTvl">
-                            TVL
-                        </v-btn>
-                    </v-col>
-                </v-row>
+      <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'" justify="start" align="center">
+          <v-col class="info-card-body-bottom">
+              <v-row align="center" justify="start" class="ma-0">
+                  <v-col class="ml-n3 mt-n3">
+                      <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
+                          APY
+                      </v-btn>
+                  </v-col>
+                  <v-col class="mr-n3 mt-n3">
+                      <v-btn outlined class="rate-tab-btn" @click="rateTab=3" v-bind:class="activeRateTvl">
+                          TVL
+                      </v-btn>
+                  </v-col>
+              </v-row>
 
-                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="insuranceApyData.polygon" :usdPlusData="usdPlusApyData.polygon" :insurance-data="insuranceData"/>
-                <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="insuranceTvlData.polygon" :insurance-data="insuranceData"/>
+              <ChartApy class="mx-n3" v-if="rateTab === 1" :data="insuranceApyData.polygon" :usdPlusData="usdPlusApyData.polygon" :insurance-data="insuranceData"/>
+              <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="insuranceTvlData.polygon" :insurance-data="insuranceData"/>
+          </v-col>
+      </v-row>
+
+      <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
+        <v-col class="info-card-body-bottom">
+          <v-row align="center" justify="start" class="ma-0">
+            <label class="section-title-label">Insurance payouts</label>
+          </v-row>
+
+          <v-row align="center" justify="center">
+            <v-col :cols="!$wu.isFull() ? 12 : 8">
+              <Table
+                  v-if="!$wu.isMobile()"
+                  :profit-label="' per USD+'"
+                  :payout-data="payouts"/>
+
+              <Table
+                  v-else
+                  minimized
+                  :profit-label="' per USD+'"
+                  :payout-data="payouts"/>
+
+              <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
+                <label class="table-scroll-label">scroll to see more</label>
+              </v-row>
             </v-col>
-        </v-row>
+
+            <v-col :cols="!$wu.isFull() ? 12 : 4">
+              <Doughnut :size="280" color="#3D8DFF" :last-date="lastPayoutDate"/>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
 
         <resize-observer @notify="$forceUpdate()"/>
     </div>
@@ -29,6 +60,8 @@
 import {mapActions, mapGetters} from "vuex";
 import ChartApy from "@/components/insurance/strategy/chart/ChartApy";
 import ChartTvl from "@/components/insurance/strategy/chart/ChartTvl";
+import Doughnut from "@/components/market/strategy/payouts/Doughnut.vue";
+import Table from "@/components/market/strategy/payouts/Table.vue";
 
 export default {
     name: "PerformanceTab",
@@ -36,6 +69,8 @@ export default {
     components: {
         ChartTvl,
         ChartApy,
+        Doughnut,
+        Table
     },
 
     data: () => ({
@@ -53,33 +88,37 @@ export default {
     },
 
     computed: {
-        ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceApyData', 'insuranceTvlData', 'usdPlusApyData']),
+      ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceApyData', 'insuranceTvlData', 'usdPlusApyData']),
 
-        activeRateApy: function () {
-            return {
-                'rate-tab-button': this.rateTab === 1,
-                'rate-tab-button-in-active': this.rateTab !== 1,
-            }
-        },
+    activeRateApy: function () {
+          return {
+              'rate-tab-button': this.rateTab === 1,
+              'rate-tab-button-in-active': this.rateTab !== 1,
+          }
+      },
 
-        activeRateDist: function () {
-            return {
-                'rate-tab-button': this.rateTab === 2,
-                'rate-tab-button-in-active': this.rateTab !== 2,
-            }
-        },
+      activeRateDist: function () {
+          return {
+              'rate-tab-button': this.rateTab === 2,
+              'rate-tab-button-in-active': this.rateTab !== 2,
+          }
+      },
 
-        activeRateTvl: function () {
-            return {
-                'rate-tab-button': this.rateTab === 3,
-                'rate-tab-button-in-active': this.rateTab !== 3,
-            }
-        },
+      activeRateTvl: function () {
+          return {
+              'rate-tab-button': this.rateTab === 3,
+              'rate-tab-button-in-active': this.rateTab !== 3,
+          }
+      },
 
-        lastPayoutDate: function () {
-            let data = this.insuranceStrategyData.polygon;
-            return data ? data.payouts[data.payouts.length - 1].date : null;
-        },
+      lastPayoutDate: function () {
+        let data = this.insuranceStrategyData.polygon;
+        return data ? data.payouts[data.payouts.length - 1].date : null`;`
+      },
+      payouts: function () {
+        let data = this.insuranceStrategyData.polygon;
+        return data ? data.payouts : null;
+      }
     },
 
     methods: {

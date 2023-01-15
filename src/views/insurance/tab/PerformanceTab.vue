@@ -62,6 +62,7 @@ import ChartApy from "@/components/insurance/strategy/chart/ChartApy";
 import ChartTvl from "@/components/insurance/strategy/chart/ChartTvl";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut.vue";
 import Table from "@/components/market/strategy/payouts/Table.vue";
+import moment from "moment/moment";
 
 export default {
     name: "PerformanceTab",
@@ -113,11 +114,15 @@ export default {
 
       lastPayoutDate: function () {
         let data = this.insuranceStrategyData.polygon;
-        return data ? data.payouts[data.payouts.length - 1].payableDate : null;
+        return data ? data.payouts[0].payableDate : null;
       },
       payouts: function () {
         let data = this.insuranceStrategyData.polygon;
-        return data ? data.payouts : null;
+        return data ? data.payouts.sort(
+            function(o1,o2){
+              return moment(o2.payableDate).isBefore(moment(o1.payableDate)) ? -1 : moment(o2.payableDate).isAfter(moment(o1.payableDate)) ? 1 : 0;
+            }
+        ) : null;
       }
     },
 

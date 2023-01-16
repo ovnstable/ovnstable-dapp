@@ -124,7 +124,7 @@ const actions = {
 
                 strategyData.payouts.sort(
                     function(o1,o2){
-                        return moment(o1.date).isBefore(moment(o2.date)) ? -1 : moment(o1.date).isAfter(moment(o2.date)) ? 1 : 0;
+                        return moment(o1.payableDate).isBefore(moment(o2.payableDate)) ? -1 : moment(o1.payableDate).isAfter(moment(o2.payableDate)) ? 1 : 0;
                     }
                 );
 
@@ -143,7 +143,11 @@ const actions = {
                 };
 
                 [...clientData].forEach(item => {
-                    widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
+                    try {
+                        widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
+                    } catch (e) {
+                        console.error("strategyData build Widget Data Dict insurance error:", e)
+                    }
                 });
 
                 for(let key in widgetDataDict) {
@@ -166,7 +170,11 @@ const actions = {
                 };
 
                 [...clientData].forEach(item => {
-                    widgetTvlDataDict[moment(item.date).format('DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
+                    try {
+                        widgetTvlDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
+                    } catch (e) {
+                        console.error("strategyData build Widget Tvl Dict insurance error:", e)
+                    }
                 });
 
                 for(let key in widgetTvlDataDict) {

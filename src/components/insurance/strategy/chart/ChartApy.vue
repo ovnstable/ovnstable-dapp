@@ -241,7 +241,7 @@ export default {
             let valuesUsdPlus = [];
             labels.forEach(v => valuesUsdPlus.push(this.usdPlusData[v] ? this.usdPlusData[v] : null));
 
-            let averageValue = this.avgApy.value;
+            let averageValue = this.avgApy ? this.avgApy.value : 0;
 
             let maxValue;
             try {

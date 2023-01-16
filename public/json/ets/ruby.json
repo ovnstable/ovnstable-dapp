@@ -2,9 +2,9 @@
   "name": "ruby",
   "nameUp": "RUBY",
   "nameToken": "RUBY",
-  "prototype": true,
+  "prototype": false,
   "openPrototype": false,
-  "archive": false,
+  "archive": true,
   "disabled": false,
   "highRisk": false,
 

@@ -5,7 +5,7 @@
   "prototype": false,
   "openPrototype": false,
   "archive": true,
-  "disabled": false,
+  "disabled": true,
   "highRisk": false,
 
   "exchangeContract": "ets_qs_delta_weth_usdc_exchanger",

@@ -2,10 +2,10 @@
   "name": "qs_epsilon_weth_dai",
   "nameUp": "QS EPSILON WETH/DAI",
   "nameToken": "EPSILON",
-  "prototype": true,
+  "prototype": false,
   "openPrototype": true,
-  "archive": false,
-  "disabled": false,
+  "archive": true,
+  "disabled": true,
   "highRisk": true,
 
   "exchangeContract": "ets_qs_epsilon_weth_dai_exchanger",

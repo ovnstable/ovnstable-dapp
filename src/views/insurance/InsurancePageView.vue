@@ -116,10 +116,10 @@
                     </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-                        <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPerformance">
+                        <label class="tab-btn mr-4" @click="setTab(1)" v-bind:class="activeTabPerformance">
                             Performance
                         </label>
-                        <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabAbout" disabled="">
+                        <label class="tab-btn ml-4" @click="setTab(2)" v-bind:class="activeTabAbout" disabled="">
                             Insurance reserves
                         </label>
                     </v-row>
@@ -275,6 +275,10 @@ export default {
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
         ...mapGetters('magicEye', ['dataHidden']),
 
+        activeTabName: function() {
+            return this.$route.query.tabName || 'performance';
+        },
+
         activeTabPerformance: function () {
             return {
                 'tab-button': this.tab === 1,
@@ -295,6 +299,9 @@ export default {
     },
 
     watch: {
+        activeTabName() {
+            this.initTab();
+        }
     },
 
     created() {
@@ -303,6 +310,8 @@ export default {
     },
 
     mounted() {
+        console.log(this.$route.query.tabName);
+        this.initTab();
     },
 
     methods: {
@@ -310,6 +319,20 @@ export default {
         ...mapActions('insuranceRiskModal', ['showRiskModal']),
         ...mapActions('insuranceInvestModal', ['showInvestModal', 'showMintView', 'showRedeemView', 'showRedemptionRequestModal']),
         ...mapActions('statsData', ['refreshInsuranceAssetData', 'refreshInsuranceTotalData']),
+
+        setTab(tabId) {
+            this.tab = tabId;
+        },
+
+        initTab() {
+            if(this.$route.query.tabName === 'reserves') {
+                this.setTab(2);
+            }
+
+            if(this.$route.query.tabName === 'performance') {
+                this.setTab(1);
+            }
+        },
 
       goToAction(id) {
             this.$router.push(id);

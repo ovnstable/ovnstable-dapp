@@ -15,80 +15,121 @@
 
         <v-list nav subheader class="mx-3" dense>
             <v-subheader class="mx-n2 mb-n2 mt-2">
-                <label class="navbar-list-header">About USD+</label>
+                <label class="navbar-list-header">EARN</label>
             </v-subheader>
 
-            <v-divider class="navbar-list-divider"></v-divider>
+            <v-divider class="navbar-list-divider mt-2"></v-divider>
 
-            <v-list-item class="list-item-hover mx-n2 mt-2" link @click="statsClick">
+            <v-list-item class="list-item-hover mx-n2 mt-5" link @click="featuredClick">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'stats' ? 'financeSelected.svg' : 'finance.svg'))">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'stats' ? 'featuredSelected.svg' : 'featured.svg'))">
                 </v-list-item-icon>
-                <v-list-item-title>
-                    <label class="navbar-page-label" :class="selectedTab === 'stats' ? 'selected-page' : ''">Performance</label>
+                <v-list-item-title class="mx-n1">
+                    <label class="navbar-page-label" :class="selectedTab === 'market' ? 'selected-page' : ''">FEATURED</label>
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-item class="list-item-hover mx-n2 mt-2" link @click="collateralClick">
+            <v-list-group :append-icon="null">
+                <template v-slot:activator>
+                    <v-list-item-icon class="mx-n2">
+                        <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'stats' ? 'usdplusSelected.svg' : 'usdplus.svg'))">
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <label class="navbar-page-label">USD+</label>
+                    </v-list-item-title>
+                    <v-icon>
+                        mdi-chevron-right
+                    </v-icon>
+                </template>
+                <v-list-item class="list-item-hover" link @click="statsClick">
+                    <v-list-item-title>
+                        <label class="navbar-list-label mx-8" :class="selectedTab === 'stats' ? 'selected-page' : ''">Performance</label>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="list-item-hover " link @click="collateralClick">
+                    <v-list-item-title>
+                        <label class="navbar-list-label mx-8" :class="selectedTab === 'collateral' ? 'selected-page' : ''">Collateral</label>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item link @click="usdPlusPoolsClick">
+                    <v-list-item-title>
+                        <label class="navbar-list-label mx-8" :class="selectedTab === 'market' ? 'selected-page' : ''">USD+ pools</label>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item link @click="swapClick">
+                    <v-list-item-title>
+                        <label class="navbar-page-label mx-8">Mint/redeem</label>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item link @click="wrapClick" v-if="(networkId !== 56)">
+                    <v-list-item-title>
+                        <label class="navbar-page-label mx-8">Wrap/Unwrap</label>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
+
+            <v-list-item class="list-item-hover mx-n2" link @click="etsClick">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'collateral' ? 'addchartSelected.svg' : 'addchart.svg'))">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/etsicon.svg')">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label" :class="selectedTab === 'collateral' ? 'selected-page' : ''">Collateral</label>
+                    <label class="navbar-page-label" :class="selectedTab === 'market' ? 'selected-page' : ''">ETS</label>
                 </v-list-item-title>
             </v-list-item>
+
+            <v-list-group :append-icon="null">
+                <template v-slot:activator>
+                    <v-list-item-icon class="mx-n2">
+                        <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'insurance' ? 'insuranceSelected.svg' : 'insurance.svg'))">
+                    </v-list-item-icon>
+                    <v-list-item-title >
+                        <label class="navbar-page-label">INSURANCE</label>
+                    </v-list-item-title>
+                    <v-icon>
+                        mdi-chevron-right
+                    </v-icon>
+                </template>
+
+                <div style="position: relative;">
+                    <div  style="background-color: #4C586D; width: 1px; min-height: 110%; position: absolute; left: 20px"></div>
+                    <v-list-item class="list-item-hover" link @click="insuranceClick">
+                        <label class="navbar-list-label mx-8">About</label>
+                    </v-list-item>
+                </div>
+
+                <div style="position: relative;">
+                    <div  style="background-color: #4C586D; width: 1px; min-height: 110%; position: absolute; left: 20px"></div>
+                    <v-list-item class="list-item-hover" @click="insurancePerformanceClick">
+                        <label class="navbar-list-label mx-8">Performance</label>
+                    </v-list-item>
+                </div>
+
+                <div style="position: relative;">
+                    <div  style="background-color: #4C586D; width: 1px; min-height: 110%; position: absolute; left: 20px"></div>
+                    <v-list-item class="list-item-hover" @click="insuranceReservesClick">
+                            <label class="navbar-list-label mx-8">Reserves</label>
+                    </v-list-item>
+                </div>
+
+                <div style="position: relative;">
+                    <div  style="background-color: #4C586D; width: 1px; min-height: 110%; position: absolute; left: 20px"></div>
+                    <v-list-item link @click="swapClick">
+                        <v-list-item-title>
+                                <label class="navbar-page-label mx-8">Mint/redeem</label>
+                        </v-list-item-title>
+                    </v-list-item>
+                </div>
+
+            </v-list-group>
+
         </v-list>
 
         <v-list nav subheader class="mx-3" dense>
-            <v-subheader class="mx-n2 mb-n2">
-                <label class="navbar-list-header">Get USD+</label>
-            </v-subheader>
 
-            <v-divider class="navbar-list-divider"></v-divider>
-
-            <v-list-item class="list-item-hover mx-n2 mt-2" link @click="swapClick">
-                <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/swap_horizontal.svg')">
-                </v-list-item-icon>
-                <v-list-item-title>
-                    <label class="navbar-page-label">Mint/redeem</label>
-                </v-list-item-title>
-            </v-list-item>
-
-            <v-list-item class="list-item-hover mx-n2 mt-2" link @click="wrapClick" v-if="(networkId !== 56)">
-                <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/swap_horizontal_circle.svg')">
-                </v-list-item-icon>
-                <v-list-item-title>
-                    <label class="navbar-page-label">Wrap/Unwrap</label>
-                </v-list-item-title>
-            </v-list-item>
-        </v-list>
-
-        <v-list nav subheader class="mx-3" dense>
-            <v-divider class="navbar-list-divider"></v-divider>
-
-            <v-list-item class="list-item-hover mx-n2 mt-2" link @click="marketClick">
-                <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'market' ? 'earnSelected.svg' : 'earn.svg'))">
-                </v-list-item-icon>
-                <v-list-item-title>
-                    <label class="navbar-page-label" :class="selectedTab === 'market' ? 'selected-page' : ''">Earn with USD+</label>
-                </v-list-item-title>
-            </v-list-item>
-        </v-list>
-
-        <v-list nav subheader class="mx-3" dense>
-            <v-divider class="navbar-list-divider"></v-divider>
-
-            <v-list-item class="list-item-hover mx-n2 mt-2" link @click="insuranceClick">
-                <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'insurance' ? 'shieldSelected.svg' : 'shield.svg'))">
-                </v-list-item-icon>
-                <v-list-item-title>
-                    <label class="navbar-page-label" :class="selectedTab === 'insurance' ? 'selected-page' : ''">Insure USD+</label>
-                </v-list-item-title>
-            </v-list-item>
         </v-list>
 
         <v-list nav subheader class="mx-3" dense>
@@ -167,42 +208,68 @@ export default {
         ...mapActions('theme', ['switchTheme']),
         ...mapActions('track', ['trackClick']),
 
-        openLink(url) {
-            window.open(url, '_blank').focus();
+        openLink(url, isNotBlank) {
+            window.open(url, isNotBlank ? '_self' : '_blank').focus();
         },
 
         goToAction(id) {
             this.$router.push(id);
         },
 
+        goToActionByPath(path, queryParams) {
+              this.$router.push({
+                  path: path,
+                  query: queryParams ? queryParams : {}
+              });
+        },
+
+        featuredClick() {
+            this.selectTab('featured');
+            this.goToActionByPath('/market', {tabName: 'featured'});
+        },
+
         dashBoardClick() {
             this.selectTab('dashboard');
-            this.goToAction('/');
+            this.goToActionByPath('/', {tabName: 'dashboard'});
             this.trackClick({action: 'dashboard-click', event_category: 'View Page', event_label: 'Open dashboard page', value: 1 });
         },
 
         collateralClick() {
             this.selectTab('collateral');
-            this.goToAction('/collateral');
+            this.goToActionByPath('/collateral', {tabName: 'collateral'});
             this.trackClick({action: 'collateral-click', event_category: 'View Page', event_label: 'Open collateral page', value: 1 });
+        },
+
+        usdPlusPoolsClick() {
+            this.selectTab('usd-pools');
+            this.goToActionByPath('/market', {tabName: 'usdPlusPools'});
         },
 
         statsClick() {
             this.selectTab('stats');
-            this.goToAction('/stats');
+            this.goToActionByPath('/stats', {tabName: 'performance'});
             this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open stats page', value: 1 });
         },
 
-        marketClick() {
+        etsClick() {
             this.selectTab('market');
-            this.goToAction('/market')
-            this.trackClick({action: 'market-click', event_category: 'View Page', event_label: 'Open market page', value: 1 });
+            this.goToActionByPath('/market', {tabName: 'ets'});
         },
 
         insuranceClick() {
             this.selectTab('insurance');
-            this.goToAction('/insurance')
+            this.goToActionByPath('/insurance', {tabName: 'about'});
             this.trackClick({action: 'insurance-click', event_category: 'View Page', event_label: 'Open insurance page', value: 1 });
+        },
+
+        insurancePerformanceClick() {
+            this.selectTab('insurance-performance');
+            this.goToActionByPath('/insurance/polygon', {tabName: 'performance'});
+        },
+
+        insuranceReservesClick() {
+            this.selectTab('insurance-reserves');
+            this.goToActionByPath('/insurance/polygon', {tabName: 'reserves'});
         },
 
         swapClick() {
@@ -241,6 +308,7 @@ export default {
 @media only screen and (min-width: 1400px) {
 }
 
+
 .logo-img {
     cursor: pointer;
     height: 48px !important;
@@ -275,9 +343,9 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 18px;
-    letter-spacing: 0.03em !important;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.02em !important;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
@@ -295,11 +363,20 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 18px;
-    letter-spacing: 0.03em !important;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.02em !important;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--third-gray-text);
+}
+
+.navbar-list-label {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.05em;
 }
 
 .navbar-list-divider {
@@ -307,7 +384,7 @@ export default {
 }
 
 .selected-page {
-    color: #1C95E7 !important;
+    color: #29323E;
 }
 
 .theme-toggle-group {

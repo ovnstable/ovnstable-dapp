@@ -132,6 +132,10 @@ export default {
         ...mapGetters('poolAction', ['poolList']),
         ...mapGetters('insuranceData', ['insuranceStrategyData']),
 
+        activeTabName: function() {
+            return this.$route.query.tabName || 'featured';
+        },
+
         activeTabFeatured: function () {
             return {
                 'tab-button': this.tab === 1,
@@ -225,6 +229,10 @@ export default {
             this.getUsdPlusAvgMonthApy();
             this.getSortedCardList();
         },
+
+        activeTabName() {
+            this.initTab();
+        },
     },
 
     created() {
@@ -232,7 +240,34 @@ export default {
         this.getSortedCardList();
     },
 
+    mounted() {
+        console.log(this.$route.query.tabName);
+        this.initTab();
+    },
+
     methods: {
+
+        setTab(tabId) {
+            this.tab = tabId;
+        },
+
+        initTab() {
+            if(this.$route.query.tabName === 'featured') {
+                this.setTab(1);
+            }
+
+            if(this.$route.query.tabName === 'ets') {
+                this.setTab(2);
+            }
+
+            if(this.$route.query.tabName === 'usdPlus') {
+                this.setTab(3);
+            }
+
+            if(this.$route.query.tabName === 'usdPlusPools') {
+                this.setTab(4);
+            }
+        },
 
         getSortedCardList() {
 

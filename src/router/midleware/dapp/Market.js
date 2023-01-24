@@ -2,7 +2,7 @@ export default async function getMarket({ context, nextMiddleware }){
     try {
         console.debug('Get Dapp/Market');
 
-        context.store.dispatch('menuUI/selectTab', 'market');
+        context.store.dispatch('menuUI/selectTab', 'ets');
 
         await context.store.dispatch('etsAction/initEtsList').then(value => {
             context.store.dispatch('marketData/refreshMarket');

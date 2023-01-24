@@ -2,7 +2,7 @@ export default async function getStats({ context, nextMiddleware }){
     try {
         console.debug('Get Dapp/Stats');
 
-        context.store.dispatch('menuUI/selectTab', 'stats');
+        context.store.dispatch('menuUI/selectTab', 'usdplus_performance');
         context.store.dispatch('statsData/refreshStats');
     }
     catch(e){

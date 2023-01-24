@@ -1,68 +1,46 @@
 <template>
     <div>
         <div class="mt-10">
-            <label class="title-label">exchange-traded strategies (ETS)</label>
+            <label class="title-label">featured</label>
         </div>
 
         <div class="mt-7 cards-list-container">
-            <EtsListHeader/>
-
-            <EtsListCard class="mt-2"
-                         v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ets' && !value.isPrototype && !value.isOpenPrototype && !value.isArchive))"
-                         v-if="component.type === 'ets'"
-                         :featured="i < 3"
-                         :card-data="component"/>
-            <template v-if="sortedCardList.filter(value => (value.isPrototype || value.isOpenPrototype)).length > 0">
-                <v-row class="ma-0 mb-1 mt-10" align="center">
-                    <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-test-tube</v-icon>
-                    <label class="prototypes-label ml-2">Prototypes</label>
-                </v-row>
-                <v-divider class="prototypes-list-divider"></v-divider>
-
-                <EtsListHeader class="mt-3"/>
-
-                <EtsListCard class="mt-2"
-                             v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ets' && (value.isPrototype || value.isOpenPrototype)))"
-                             v-if="component.type === 'ets'"
-                             :card-data="component"/>
-            </template>
-
-            <template v-if="sortedCardList.filter(value => value.isArchive).length > 0">
-                <v-row class="ma-0 mb-1 mt-10" align="center">
-                    <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-archive-outline</v-icon>
-                    <label class="prototypes-label ml-2">Archive</label>
-                </v-row>
-                <v-divider class="prototypes-list-divider"></v-divider>
-
-                <EtsListHeader class="mt-3"/>
-
-                <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ets' && value.isArchive))"
-                             v-if="component.type === 'ets'"
-                             :card-data="component"/>
-            </template>
+            <v-row class="d-flex" justify="start">
+                <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
+                       v-for="card in sortedCardList.filter(value => (!value.isPrototype && !value.isArchive)).slice(0, 3)"
+                       :key="card.id">
+                    <v-row class="fill-height">
+                        <component
+                            class="ma-3"
+                            v-bind:key="card.id"
+                            :card-data="card"
+                            v-bind:is="card.name"
+                        ></component>
+                    </v-row>
+                </v-col>
+            </v-row>
         </div>
-
-        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 
 <script>
-
 import {mapGetters} from "vuex";
-import EtsListCard from "@/components/market/cards/ets/list/EtsListCard";
-import EtsListHeader from "@/components/market/cards/ets/list/EtsListHeader";
 import moment from "moment";
+import Ets from "@/components/market/cards/ets/Ets";
+import UsdPlus from "@/components/market/cards/hold/UsdPlus";
+import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
 
 export default {
-    name: "MarketView",
+    name: "FeaturedView",
 
     components: {
-        EtsListHeader,
-        EtsListCard,
+        Ets,
+        UsdPlus,
+        InsuranceCard,
     },
 
     data: () => ({
-        tab: 1,
+        tab: null,
         avgApy: null,
         sortedCardList: [],
     }),
@@ -73,76 +51,13 @@ export default {
         ...mapGetters("statsData", ['currentTotalData', 'totalUsdPlusValue']),
         ...mapGetters('supplyData', ['totalSupply', 'totalInsuranceSupply']),
         ...mapGetters('etsAction', ['etsList']),
-        ...mapGetters('poolAction', ['poolList']),
         ...mapGetters('insuranceData', ['insuranceStrategyData']),
 
         activeTabName: function() {
             return this.$route.query.tabName || 'featured';
         },
-
-        activeTabFeatured: function () {
-            return {
-                'tab-button': this.tab === 1,
-                'tab-button-in-active': this.tab !== 1,
-            }
-        },
-
-        activeTabHedged: function () {
-            return {
-                'tab-button': this.tab === 2,
-                'tab-button-in-active': this.tab !== 2,
-            }
-        },
-
-        activeTabUsd: function () {
-            return {
-                'tab-button': this.tab === 3,
-                'tab-button-in-active': this.tab !== 3,
-            }
-        },
-
-        activeTabPools: function () {
-            return {
-                'tab-button': this.tab === 4,
-                'tab-button-in-active': this.tab !== 4,
-            }
-        },
-
-        sortedPoolList: function () {
-
-            let networkId = this.networkId;
-
-            let poolList = [];
-
-            this.poolList.forEach(pool => {
-                poolList.push(
-                    {
-                        type: 'pool',
-                        name: 'Pool',
-                        data: pool,
-                        chain: pool.chain,
-                        hasUsdPlus: true,
-                        overcapEnabled: false,
-                        hasCap: true,
-                        tvl: pool.tvl,
-                        monthApy: 0,
-                        cardOpened: false,
-                    },
-                );
-            });
-
-            poolList.sort(function (a, b) {
-                if (a.chain === networkId && b.chain !== networkId) return -1;
-                if (a.chain !== networkId && b.chain === networkId) return 1;
-
-                return (a.tvl > b.tvl) ? -1 : (a.tvl < b.tvl ? 1 : 0);
-            });
-
-            poolList[0].cardOpened = true;
-
-            return poolList;
-        },
     },
+
     watch: {
         appApiUrl: function (newVal, oldVal) {
             this.getUsdPlusAvgMonthApy();
@@ -190,26 +105,21 @@ export default {
     },
 
     methods: {
-
         setTab(tabId) {
             this.tab = tabId;
         },
 
         initTab() {
-            if(this.$route.query.tabName === 'featured') {
+            if(this.$route.query.tabName === 'optimism') {
                 this.setTab(1);
             }
 
-            if(this.$route.query.tabName === 'ets') {
+            if(this.$route.query.tabName === 'polygon') {
                 this.setTab(2);
             }
 
-            if(this.$route.query.tabName === 'usdPlus') {
+            if(this.$route.query.tabName === 'bsc') {
                 this.setTab(3);
-            }
-
-            if(this.$route.query.tabName === 'usdPlusPools') {
-                this.setTab(4);
             }
         },
 
@@ -255,22 +165,22 @@ export default {
             });
 
             if (networkId === 137) {
-              cardList.push(
-                  {
-                      id: 'insurance' + networkId,
-                      type: 'insurance',
-                      name: 'InsuranceCard',
-                      isPrototype: false,
-                      isArchive: false,
-                      chain: networkId,
-                      hasUsdPlus: true,
-                      overcapEnabled: false,
-                      hasCap: this.totalInsuranceSupply,
-                      tvl: this.insuranceStrategyData.polygon.lastApy,
-                      monthApy: (this.insuranceStrategyData.polygon && this.insuranceStrategyData.polygon.apy) ? this.insuranceStrategyData.polygon.apy : 0,
-                      cardOpened: false,
-                  },
-              );
+                cardList.push(
+                    {
+                        id: 'insurance' + networkId,
+                        type: 'insurance',
+                        name: 'InsuranceCard',
+                        isPrototype: false,
+                        isArchive: false,
+                        chain: networkId,
+                        hasUsdPlus: true,
+                        overcapEnabled: false,
+                        hasCap: this.totalInsuranceSupply,
+                        tvl: this.insuranceStrategyData.polygon.lastApy,
+                        monthApy: (this.insuranceStrategyData.polygon && this.insuranceStrategyData.polygon.apy) ? this.insuranceStrategyData.polygon.apy : 0,
+                        cardOpened: false,
+                    },
+                );
             }
 
 
@@ -313,63 +223,60 @@ export default {
                     console.log('Error get data: ' + reason);
                 })
         },
-    }
+    },
 }
-</script>
 
+</script>
 <style scoped>
 
 /* mobile */
 @media only screen and (max-width: 960px) {
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
     .title-label {
         font-style: normal;
         font-weight: 300;
         font-size: 32px;
         line-height: 40px;
     }
-
-    .prototypes-label {
-        font-style: normal;
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 20px;
-        letter-spacing: 0.04em;
-    }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+    }
+
     .title-label {
         font-style: normal;
         font-weight: 300;
         font-size: 54px;
         line-height: 60px;
-    }
-
-    .prototypes-label {
-        font-style: normal;
-        font-weight: 700;
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: 0.04em;
     }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+    }
+
     .title-label {
         font-style: normal;
         font-weight: 300;
         font-size: 54px;
         line-height: 60px;
-    }
-
-    .prototypes-label {
-        font-style: normal;
-        font-weight: 700;
-        font-size: 18px;
-        line-height: 22px;
-        letter-spacing: 0.04em;
     }
 }
 
@@ -380,47 +287,62 @@ only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px)
 only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
 only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
 only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
+    }
+
     .title-label {
         font-style: normal;
         font-weight: 300;
         font-size: 48px;
         line-height: 60px;
     }
-
-    .prototypes-label {
-        font-style: normal;
-        font-weight: 700;
-        font-size: 16px;
-        line-height: 22px;
-        letter-spacing: 0.04em;
-    }
 }
+
+.tab-button {
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
+    cursor: pointer;
+}
+
+.tab-button-in-active {
+    cursor: pointer;
+}
+
+
+.tab-btn {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: var(--secondary-gray-text);
+    margin-bottom: -2px;
+    cursor: pointer;
+}
+
+.tab-btn-disabled {
+    cursor: default;
+}
+
+.toggle-row {
+    border-bottom: 2px solid var(--main-border);
+}
+
 
 .cards-list-container {
     margin-bottom: 15% !important;
     width: 100% !important;
 }
 
+.toggle-row {
+    width: 100% !important;
+}
 
 .title-label {
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--main-gray-text);
-}
-
-.prototypes-list-divider {
-    border-color: var(--fourth-gray-text) !important;
-}
-
-.prototypes-label {
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--main-gray-text);
-}
-
-.prototypes-icon {
     color: var(--main-gray-text);
 }
 </style>

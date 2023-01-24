@@ -1,7 +1,7 @@
 <template>
     <div class="page-container">
         <div class="mt-10">
-            <label class="title-label">Performance</label>
+            <label class="title-label">usd+ Performance</label>
         </div>
 
         <v-row v-if="!$wu.isMobile()" class="ma-0 mt-7" justify="start" align="center">
@@ -99,37 +99,13 @@ export default {
     },
 
     data: () => ({
-        tab: null,
+        tab: 1,
         rateTab: 1,
     }),
 
     computed: {
         ...mapGetters("network", ['networkId', 'assetName']),
         ...mapGetters('statsData', ['payouts', 'payoutsApyData', 'payoutsTvlData']),
-
-        activeTabPolygon: function () {
-            return {
-                'tab-button': this.tab === 1,
-                'tab-button-in-active': this.tab !== 1,
-                'tab-btn-disabled': this.tab !== 1,
-            }
-        },
-
-        activeTabBsc: function () {
-            return {
-                'tab-button': this.tab === 2,
-                'tab-button-in-active': this.tab !== 2,
-                'tab-btn-disabled': this.tab !== 2,
-            }
-        },
-
-        activeTabOptimism: function () {
-            return {
-                'tab-button': this.tab === 4,
-                'tab-button-in-active': this.tab !== 4,
-                'tab-btn-disabled': this.tab !== 4,
-            }
-        },
 
         activeRateApy: function () {
             return {

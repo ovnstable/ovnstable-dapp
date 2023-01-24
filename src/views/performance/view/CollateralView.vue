@@ -187,10 +187,13 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     color: rgba(28, 149, 231, 1) !important;
 }
 
-.tab-button {
-}
-
 .tab-button-inactive {
     background: transparent !important;
+}
+
+.tab-button-upper {
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
+    cursor: pointer;
 }
 </style>

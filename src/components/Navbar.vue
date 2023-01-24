@@ -22,107 +22,94 @@
 
             <v-list-item class="list-item-hover mx-n2 mt-5" link @click="featuredClick">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'stats' ? 'featuredSelected.svg' : 'featured.svg'))">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/featured.svg')">
                 </v-list-item-icon>
                 <v-list-item-title class="mx-n1">
-                    <label class="navbar-page-label" :class="selectedTab === 'market' ? 'selected-page' : ''">FEATURED</label>
+                    <label class="navbar-page-label" :class="selectedTab === 'featured' ? 'selected-page' : ''">FEATURED</label>
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-group :append-icon="null">
-                <template v-slot:activator>
+            <v-list-group :append-icon="null" @click="isShow = !isShow">
+                <template v-slot:activator >
                     <v-list-item-icon class="mx-n2">
-                        <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'stats' ? 'usdplusSelected.svg' : 'usdplus.svg'))">
+                        <img class="navbar-page-link" :src="require('@/assets/icon/menu/usdplus.svg')">
                     </v-list-item-icon>
                     <v-list-item-title>
-                        <label class="navbar-page-label">USD+</label>
+                        <label class="navbar-page-label" :class="selectedTab.startsWith('usdplus_') ? 'selected-page' : ''">USD+</label>
                     </v-list-item-title>
-                    <v-icon>
-                        mdi-chevron-right
-                    </v-icon>
+                    <div >
+                        <v-icon class="toggleUpDown" :class='{ "rotate": isShow }'>mdi-chevron-right</v-icon>
+                    </div>
                 </template>
                 <v-list-item class="list-item-hover" link @click="statsClick">
                     <v-list-item-title>
-                        <label class="navbar-list-label mx-8" :class="selectedTab === 'stats' ? 'selected-page' : ''">Performance</label>
+                        <label class="navbar-list-label mx-5" :class="selectedTab === 'usdplus_performance' ? 'selected-page' : ''">Performance</label>
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item class="list-item-hover " link @click="collateralClick">
+                <v-list-item class="list-item-hover " @click="collateralClick">
                     <v-list-item-title>
-                        <label class="navbar-list-label mx-8" :class="selectedTab === 'collateral' ? 'selected-page' : ''">Collateral</label>
+                        <label class="navbar-list-label mx-5" :class="selectedTab === 'usdplus_collateral' ? 'selected-page' : ''">Collateral</label>
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item link @click="usdPlusPoolsClick">
+                <v-list-item class="list-item-hover " @click="usdPlusPoolsClick">
                     <v-list-item-title>
-                        <label class="navbar-list-label mx-8" :class="selectedTab === 'market' ? 'selected-page' : ''">USD+ pools</label>
+                        <label class="navbar-list-label mx-5" :class="selectedTab === 'usdplus_pools' ? 'selected-page' : ''">USD+ pools</label>
                     </v-list-item-title>
                 </v-list-item>
 
                 <v-list-item link @click="swapClick">
                     <v-list-item-title>
-                        <label class="navbar-page-label mx-8">Mint/redeem</label>
+                        <label class="navbar-page-label-modal mx-5">Mint/redeem</label>
                     </v-list-item-title>
                 </v-list-item>
 
                 <v-list-item link @click="wrapClick" v-if="(networkId !== 56)">
                     <v-list-item-title>
-                        <label class="navbar-page-label mx-8">Wrap/Unwrap</label>
+                        <label class="navbar-page-label-modal mx-5">Wrap/Unwrap</label>
                     </v-list-item-title>
                 </v-list-item>
             </v-list-group>
 
             <v-list-item class="list-item-hover mx-n2" link @click="etsClick">
                 <v-list-item-icon>
-                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/etsicon.svg')">
+                    <img class="navbar-page-link" :src="require('@/assets/icon/menu/etsIcon.svg')">
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <label class="navbar-page-label" :class="selectedTab === 'market' ? 'selected-page' : ''">ETS</label>
+                    <label class="navbar-page-label" :class="selectedTab === 'ets' ? 'selected-page' : ''" >ETS</label>
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-group :append-icon="null">
+            <v-list-group :append-icon="null" @click="isShow = !isShow">
                 <template v-slot:activator>
                     <v-list-item-icon class="mx-n2">
-                        <img class="navbar-page-link" :src="require('@/assets/icon/menu/' + (selectedTab === 'insurance' ? 'insuranceSelected.svg' : 'insurance.svg'))">
+                        <img class="navbar-page-link" :src="require('@/assets/icon/menu/insurance.svg')">
                     </v-list-item-icon>
                     <v-list-item-title >
-                        <label class="navbar-page-label">INSURANCE</label>
+                        <label class="navbar-page-label" :class="selectedTab.startsWith('insurance_') ? 'selected-page' : ''">INSURANCE</label>
                     </v-list-item-title>
-                    <v-icon>
-                        mdi-chevron-right
-                    </v-icon>
+                    <div>
+                        <v-icon class="toggleUpDown" :class='{ "rotate": isShow }'>mdi-chevron-right</v-icon>
+                    </div>
                 </template>
-
-                <div style="position: relative;">
-                    <div  style="background-color: #4C586D; width: 1px; min-height: 110%; position: absolute; left: 20px"></div>
                     <v-list-item class="list-item-hover" link @click="insuranceClick">
-                        <label class="navbar-list-label mx-8">About</label>
+                        <label class="navbar-list-label mx-7" :class="selectedTab === 'insurance_about' ? 'selected-page' : ''">About</label>
                     </v-list-item>
-                </div>
 
-                <div style="position: relative;">
-                    <div  style="background-color: #4C586D; width: 1px; min-height: 110%; position: absolute; left: 20px"></div>
                     <v-list-item class="list-item-hover" @click="insurancePerformanceClick">
-                        <label class="navbar-list-label mx-8">Performance</label>
+                        <label class="navbar-list-label mx-7" :class="selectedTab === 'insurance_performance' ? 'selected-page' : ''">Performance</label>
                     </v-list-item>
-                </div>
 
-                <div style="position: relative;">
-                    <div  style="background-color: #4C586D; width: 1px; min-height: 110%; position: absolute; left: 20px"></div>
                     <v-list-item class="list-item-hover" @click="insuranceReservesClick">
-                            <label class="navbar-list-label mx-8">Reserves</label>
+                            <label class="navbar-list-label mx-7" :class="selectedTab === 'insurance_reserves' ? 'selected-page' : ''">Reserves</label>
                     </v-list-item>
-                </div>
 
-                <div style="position: relative;">
-                    <div  style="background-color: #4C586D; width: 1px; min-height: 110%; position: absolute; left: 20px"></div>
-                    <v-list-item link @click="swapClick">
+                    <v-list-item link @click="mintAction">
                         <v-list-item-title>
-                                <label class="navbar-page-label mx-8">Mint/redeem</label>
+                                <label class="navbar-page-label-modal mx-7">Mint/redeem</label>
                         </v-list-item-title>
                     </v-list-item>
-                </div>
 
             </v-list-group>
 
@@ -183,7 +170,7 @@
 </template>
 <script>
 
-import {mapActions, mapGetters} from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 export default {
     name: 'Navbar',
@@ -207,6 +194,7 @@ export default {
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
         ...mapActions('theme', ['switchTheme']),
         ...mapActions('track', ['trackClick']),
+        ...mapActions('insuranceInvestModal', ['showInvestModal', 'showMintView', 'showRedeemView', 'showRedemptionRequestModal']),
 
         openLink(url, isNotBlank) {
             window.open(url, isNotBlank ? '_self' : '_blank').focus();
@@ -225,7 +213,7 @@ export default {
 
         featuredClick() {
             this.selectTab('featured');
-            this.goToActionByPath('/market', {tabName: 'featured'});
+            this.goToActionByPath('/featured', {tabName: 'featured'});
         },
 
         dashBoardClick() {
@@ -235,18 +223,18 @@ export default {
         },
 
         collateralClick() {
-            this.selectTab('collateral');
+            this.selectTab('usdplus_collateral');
             this.goToActionByPath('/collateral', {tabName: 'collateral'});
             this.trackClick({action: 'collateral-click', event_category: 'View Page', event_label: 'Open collateral page', value: 1 });
         },
 
         usdPlusPoolsClick() {
-            this.selectTab('usd-pools');
-            this.goToActionByPath('/market', {tabName: 'usdPlusPools'});
+            this.selectTab('usdplus_pools');
+            this.goToActionByPath('/pools', {tabName: 'usdPlusPools'});
         },
 
         statsClick() {
-            this.selectTab('stats');
+            this.selectTab('usdplus_performance');
             this.goToActionByPath('/stats', {tabName: 'performance'});
             this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open stats page', value: 1 });
         },
@@ -257,18 +245,18 @@ export default {
         },
 
         insuranceClick() {
-            this.selectTab('insurance');
+            this.selectTab('insurance_about');
             this.goToActionByPath('/insurance', {tabName: 'about'});
             this.trackClick({action: 'insurance-click', event_category: 'View Page', event_label: 'Open insurance page', value: 1 });
         },
 
         insurancePerformanceClick() {
-            this.selectTab('insurance-performance');
+            this.selectTab('insurance_performance');
             this.goToActionByPath('/insurance/polygon', {tabName: 'performance'});
         },
 
         insuranceReservesClick() {
-            this.selectTab('insurance-reserves');
+            this.selectTab('insurance_reserves');
             this.goToActionByPath('/insurance/polygon', {tabName: 'reserves'});
         },
 
@@ -289,6 +277,20 @@ export default {
                 this.switchTheme();
                 this.trackClick({action: 'toggle-theme', event_category: 'Theme', event_label: 'Switch theme', value: 1 });
             }
+        },
+
+        mintAction() {
+            this.showMintView();
+            this.showInvestModal();
+        },
+
+        redeemAction() {
+            this.showRedeemView();
+            this.showInvestModal();
+        },
+
+        redemptionRequestAction() {
+            this.showRedemptionRequestModal();
         },
     }
 }
@@ -368,6 +370,7 @@ export default {
     letter-spacing: 0.02em !important;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--third-gray-text);
+    cursor: pointer;
 }
 
 .navbar-list-label {
@@ -377,6 +380,20 @@ export default {
     font-size: 16px;
     line-height: 24px;
     letter-spacing: 0.05em;
+    color: var(--main-gray-text);
+    cursor: pointer;
+}
+
+.navbar-page-label-modal {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--links-blue);
+    cursor: pointer;
 }
 
 .navbar-list-divider {
@@ -384,7 +401,8 @@ export default {
 }
 
 .selected-page {
-    color: #29323E;
+    color: var(--main-gray-text);
+    font-weight: 700;
 }
 
 .theme-toggle-group {
@@ -411,5 +429,14 @@ export default {
 
 .theme-icon-selected {
     color: var(--theme-icon-color-selected) !important;
+}
+
+.toggleUpDown {
+    transition: transform .3s ease-in-out !important;
+    color: var(--main-gray-text) !important;
+}
+
+.toggleUpDown.rotate {
+    transform: rotate(90deg);
 }
 </style>

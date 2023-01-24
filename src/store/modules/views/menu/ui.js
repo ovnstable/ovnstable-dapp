@@ -12,6 +12,7 @@ const getters = {
 const actions = {
 
     async selectTab({commit, dispatch, getters, rootState}, tab) {
+        console.log('setSelectTab: ' + tab)
         commit('setSelectedTab', tab);
     },
 };

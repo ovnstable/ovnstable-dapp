@@ -2,7 +2,7 @@ export default async function getCollateral({ context, nextMiddleware }){
     try {
         console.debug('Get Dapp/Collateral');
 
-        context.store.dispatch('menuUI/selectTab', 'collateral');
+        context.store.dispatch('menuUI/selectTab', 'usdplus_collateral');
         context.store.dispatch('statsData/refreshStats');
     }
     catch(e){

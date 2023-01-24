@@ -12,10 +12,12 @@ import getAbroad from "@/router/midleware/governance/getAbroad";
 
 // Dapp Sections
 import Market from "./midleware/dapp/Market";
+import Featured from "./midleware/dapp/Featured";
 import Insurance from "./midleware/dapp/Insurance";
 import Stats from "./midleware/dapp/Stats";
 import Collateral from "./midleware/dapp/Collateral";
 import Dashboard from "./midleware/dapp/Dashboard";
+import Pools from "./midleware/dapp/Pools";
 
 Vue.use(VueRouter)
 
@@ -34,6 +36,26 @@ const routes = [
                 meta: {
                     middleware: [
                         Market
+                    ]
+                }
+            },
+            {
+                path: '/featured',
+                name: 'FeaturedView',
+                component: () => import('../views/FeaturedView.vue'),
+                meta: {
+                    middleware: [
+                        Featured
+                    ]
+                }
+            },
+            {
+                path: '/pools',
+                name: 'UsdPoolsView',
+                component: () => import('../views/UsdPoolsView.vue'),
+                meta: {
+                    middleware: [
+                        Pools
                     ]
                 }
             },

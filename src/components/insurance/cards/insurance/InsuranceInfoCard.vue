@@ -74,6 +74,7 @@ export default {
     }
 
     .card-container {
+
     }
 }
 
@@ -94,6 +95,7 @@ export default {
     }
 
     .card-container {
+        max-height: 100%;
     }
 }
 

@@ -374,6 +374,8 @@ export default {
     }
 
     .card-container {
+        max-width: 440px;
+        max-height: 600px;
     }
 
     .card-title {

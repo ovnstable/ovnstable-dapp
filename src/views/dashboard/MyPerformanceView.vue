@@ -8,8 +8,8 @@
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
 
                         <label class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
-                        <label class="tab-btn mx-4" @click="tab=2" v-bind:class="activeTabUsdPlus">USD+</label>
-                        <label class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabETS" disabled>ETS</label>
+                        <label class="tab-btn mx-4" @click="tab = 2" v-bind:class="activeTabUsdPlus">USD+</label>
+                        <label class="tab-btn mx-4" @click="tab = 4" v-bind:class="activeTabETS" disabled>ETS</label>
 
                         <v-spacer></v-spacer>
 
@@ -106,7 +106,12 @@
 
         <div>
             <v-row align="start" justify="start" class="page-container ma-0">
-                <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
+
+                <v-col v-if="tab === 4" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
+                  <EtsTab></EtsTab>
+                </v-col>
+
+                <v-col v-if="tab === 2" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
                     <v-row class="ma-0 info-card-container" :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
                         <v-col class="info-card-body-bottom">
                             <v-row align="center" justify="start" class="ma-0">
@@ -347,23 +352,17 @@
 <script>
 
 import Table from "@/components/dashboard/Table";
-import Doughnut from "@/components/market/strategy/payouts/Doughnut";
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import LineChartApy from "@/components/stats/widget/LineChartApy";
-import LineChartTvl from "@/components/stats/widget/LineChartTvl";
-import DashboardWidget from "@/components/dashboard/DashboardWidget";
 import LineChart from "@/components/widget/LineChart";
+import EtsTab from "@/views/dashboard/tab/ets/EtsTab.vue";
 
 export default {
     name: "MyPerformanceView",
 
     components: {
-        LineChart,
-        DashboardWidget,
-        LineChartTvl,
-        LineChartApy,
-        Doughnut,
-        Table,
+      EtsTab,
+      LineChart,
+      Table,
     },
 
     data: () => ({

@@ -2,10 +2,10 @@
   "name": "uni_gamma_weth_dai",
   "nameUp": "UNI GAMMA WETH/DAI",
   "nameToken": "GAMMA",
-  "prototype": false,
-  "openPrototype": false,
+  "prototype": true,
+  "openPrototype": true,
   "archive": false,
-  "disabled": false,
+  "disabled": true,
   "highRisk": true,
 
   "exchangeContract": "ets_uni_gamma_weth_dai_exchanger",

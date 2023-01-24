@@ -1,13 +1,13 @@
 <template>
     <div>
         <v-row class="chart-header-row" justify="start" align="center">
-            <label class="chart-title">{{name}} {{type}}</label>
+          <label class="chart-title">{{name}} {{type}}</label>
             <label class="chart-title chart-title-slice" v-if="$wu.isFull()">&nbsp;&nbsp;|&nbsp;</label>
             <v-spacer v-if="!$wu.isFull()"></v-spacer>
             <label class="chart-title chart-title-slice">{{ sliceLabel }}</label>
         </v-row>
 
-        <div class="chart-row mt-4" :id="'line-chart-dashboard-' + id"></div>
+        <div class="chart-row mt-4" :id="'bar-chart-dashboard-' + id"></div>
 
         <resize-observer @notify="$forceUpdate()"/>
     </div>
@@ -21,7 +21,7 @@ import {mapActions, mapGetters} from "vuex";
 import ApexCharts from 'apexcharts'
 
 export default {
-    name: "LineChart",
+    name: "BarChart",
 
     props: {
         data: {
@@ -126,7 +126,7 @@ export default {
                 labels: labels,
 
                 chart: {
-                    type: 'area',
+                    type: 'bar',
                     height: this.isMobile ? 230 : 300,
 
                     sparkline: {
@@ -276,7 +276,7 @@ export default {
                 }
             };
 
-            this.chart = new ApexCharts(document.querySelector("#line-chart-dashboard-" + this.id), options);
+            this.chart = new ApexCharts(document.querySelector("#bar-chart-dashboard-" + this.id), options);
             try {
                 this.chart.render();
             } catch (e) {

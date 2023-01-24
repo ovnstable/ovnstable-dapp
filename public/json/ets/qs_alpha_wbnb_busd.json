@@ -34,7 +34,7 @@
   "hasUsdPlus": false,
   "tokenPair": "wbnb_busd",
 
-  "maxSupply": 1000000.00,
+  "maxSupply": 1500000.00,
   "overcapEnabled": true,
   "inceptionDate": "11 January 2023",
 

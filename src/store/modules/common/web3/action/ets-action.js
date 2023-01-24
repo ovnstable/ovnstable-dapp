@@ -16,6 +16,7 @@ const state = {
         'uni_eta_wmatic_usdc',
         'uni_alpha_weth_usdc',
         'uni_beta_weth_dai',
+        'uni_gamma_weth_dai',
     ],
     etsList: null,
 };

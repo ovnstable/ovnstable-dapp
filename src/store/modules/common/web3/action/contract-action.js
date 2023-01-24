@@ -41,6 +41,7 @@ const actions = {
 
             { network: 'optimism', name: 'uni_alpha_weth_usdc' },
             { network: 'optimism', name: 'uni_beta_weth_dai' },
+            { network: 'optimism', name: 'uni_gamma_weth_dai' },
             { network: 'optimism', name: 'ruby' },
             { network: 'optimism', name: 'night_ov_ar' },
         ];

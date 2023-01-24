@@ -3,7 +3,7 @@
   "nameUp": "QS EPSILON WETH/DAI",
   "nameToken": "EPSILON",
   "prototype": false,
-  "openPrototype": true,
+  "openPrototype": false,
   "archive": true,
   "disabled": true,
   "highRisk": true,

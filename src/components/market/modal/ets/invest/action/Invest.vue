@@ -566,14 +566,14 @@ export default {
                         });
                     }
                 } catch (e) {
-                    console.log(e);
-                    return;
+                  console.error(`Market Invest blockchain buy error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                  return;
                 }
 
                 self.refreshMarket();
                 self.setSum(null);
             } catch (e) {
-                console.log(e);
+              console.error(`Market Invest buy error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             }
         },
 
@@ -617,8 +617,8 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('estimateGas');
+              console.error(`Market Invest swap action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              this.showErrorModal('estimateGas');
             }
         },
 
@@ -654,8 +654,8 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('approve');
+              console.error(`Market Invest approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              this.showErrorModal('approve');
             }
         },
 
@@ -689,8 +689,8 @@ export default {
 
                     return true;
                 } catch (e) {
-                    console.log(e)
-                    return false;
+                  console.error(`Market Invest allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                  return false;
                 }
             }
 
@@ -742,7 +742,7 @@ export default {
                         return -1;
                     });
             } catch (e) {
-                console.log(e);
+                console.error(`Market Invest estimate action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 return -1;
             }
 
@@ -779,7 +779,8 @@ export default {
 
                 this.minMintFee = result;
             } catch (e) {
-                this.minMintFee = 0;
+              console.error(`Market Invest buy min fee action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              this.minMintFee = 0;
             }
         },
 
@@ -792,7 +793,8 @@ export default {
 
                 this.contractCapacity = result;
             } catch (e) {
-                this.contractCapacity = 0;
+              console.error(`Market Invest capacity action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              this.contractCapacity = 0;
             }
         },
     }

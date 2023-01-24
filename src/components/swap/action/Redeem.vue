@@ -449,14 +449,14 @@ export default {
                         self.loadTransaction();
                     });
                 } catch (e) {
-                    console.log(e)
-                    return;
+                  console.error(`Swap Redeem blockchain redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                  return;
                 }
 
                 self.refreshSwap();
                 self.setSum(null);
             } catch (e) {
-                console.log(e);
+              console.error(`Swap Redeem redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             }
         },
 
@@ -485,7 +485,7 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
+                console.error(`Swap Redeem swap action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('estimateGas');
             }
         },
@@ -508,7 +508,7 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
+                console.error(`Swap Redeem approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('approve');
                 this.trackClick({action: 'redeem-error-click', event_category: 'Redeem error', event_label: 'Error Redeem Showed', value: 1 });
             }
@@ -545,7 +545,7 @@ export default {
 
                     return true;
                 } catch (e) {
-                    console.log(e)
+                    console.error(`Swap Redeem allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                     return false;
                 }
             }
@@ -590,13 +590,13 @@ export default {
 
                             console.log(errorMsg);
                         } else {
-                            console.log(error);
+                          console.error(`Swap Redeem blockchain estimate action error: ${error}. Sum: ${this.sum}. Account: ${this.account}. `);
                         }
 
                         return -1;
                     });
             } catch (e) {
-                console.log(e);
+                console.error(`Swap Redeem estimate action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 return -1;
             }
 

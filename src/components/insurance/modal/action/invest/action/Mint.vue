@@ -456,14 +456,14 @@ export default {
                         self.loadTransaction();
                     });
                 } catch (e) {
-                    console.log(e);
-                    return;
+                  console.error(`Mint Insurance error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                  return;
                 }
 
                 self.refreshInsurance();
                 self.setSum(null);
             } catch (e) {
-                console.log(e);
+                console.error(`Mint Insurance by action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             }
         },
 
@@ -495,8 +495,8 @@ export default {
                     await this.buyAction();
                 }
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('estimateGas');
+              console.error(`Mint Insurance Confirm swap error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              this.showErrorModal('estimateGas');
             }
         },
 
@@ -522,8 +522,8 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('approve');
+              console.error(`Mint Insurance approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              this.showErrorModal('approve');
 
             }
         },
@@ -607,14 +607,14 @@ export default {
 
                             console.log(errorMsg);
                         } else {
-                            console.log(error);
+                          console.error(`Mint Insurance blockcnain estimateGas error: ${error}. Sum: ${this.sum}. Account: ${this.account}. `);
                         }
 
                         return -1;
                     });
             } catch (e) {
-                console.log(e);
-                return -1;
+              console.error(`Mint Insurance estimateGas error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              return -1;
             }
 
             return result;

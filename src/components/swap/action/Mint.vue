@@ -459,14 +459,14 @@ export default {
                         self.loadTransaction();
                     });
                 } catch (e) {
-                    console.log(e);
+                    console.error(`Swap Mint contract buy action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                     return;
                 }
 
                 self.refreshSwap();
                 self.setSum(null);
             } catch (e) {
-                console.log(e);
+              console.error(`Swap Mint buy action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             }
         },
 
@@ -500,8 +500,8 @@ export default {
                     await this.buyAction();
                 }
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('estimateGas');
+              console.error(`Swap Mint estimateGas action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              this.showErrorModal('estimateGas');
             }
         },
 
@@ -528,7 +528,7 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
+                console.error(`Swap Mint approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('approve');
                 this.trackClick({action: 'mint-error-showed-click', event_category: 'Mint error', event_label: 'Mint Error Showed', value: 1 });
 
@@ -566,7 +566,7 @@ export default {
 
                     return true;
                 } catch (e) {
-                    console.log(e)
+                    console.error(`Swap Mint allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                     return false;
                 }
             }
@@ -597,6 +597,8 @@ export default {
                         result = gasAmount;
                     })
                     .catch(function (error) {
+                        console.error(`Swap Mint blockchain estimate action error: ${error}. Sum: ${this.sum}. Account: ${this.account}. `);
+
                         if (error && error.message) {
                             let msg = error.message.replace(/(?:\r\n|\r|\n)/g, '');
 
@@ -623,8 +625,8 @@ export default {
                         return -1;
                     });
             } catch (e) {
-                console.log(e);
-                return -1;
+              console.error(`Swap Mint estimate action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              return -1;
             }
 
             return result;

@@ -503,7 +503,7 @@ export default {
                 self.refreshMarket();
                 self.setSum(null);
             } catch (e) {
-                console.log(e);
+              console.error(`Market Withdraw redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             }
         },
 
@@ -547,7 +547,7 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
+                console.error(`Market Withdraw swap action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('estimateGas');
             }
         },
@@ -584,7 +584,7 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
+                console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('approve');
             }
         },
@@ -619,7 +619,7 @@ export default {
 
                     return true;
                 } catch (e) {
-                    console.log(e)
+                    console.error(`Market Withdraw allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                     return false;
                 }
             }
@@ -664,13 +664,13 @@ export default {
 
                             console.log(errorMsg);
                         } else {
-                            console.log(error);
+                          console.error(`Market Withdraw blockchain estimate action error: ${error}. Sum: ${this.sum}. Account: ${this.account}. `);
                         }
 
                         return -1;
                     });
             } catch (e) {
-                console.log(e);
+                console.error(`Market Withdraw action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 return -1;
             }
 
@@ -707,7 +707,8 @@ export default {
 
                 this.minRedeemFee = result;
             } catch (e) {
-                this.minRedeemFee = 0;
+              console.error(`Market Withdraw redeem min fee error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              this.minRedeemFee = 0;
             }
         },
     }

@@ -3,9 +3,9 @@
   "nameUp": "QS GAMMA WETH/USDC",
   "nameToken": "GAMMA",
   "prototype": true,
-  "openPrototype": false,
+  "openPrototype": true,
   "archive": false,
-  "disabled": false,
+  "disabled": true,
   "highRisk": true,
 
   "exchangeContract": "ets_qs_gamma_weth_usdc_exchanger",

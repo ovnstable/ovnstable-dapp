@@ -491,14 +491,14 @@ export default {
                         self.loadTransaction();
                     });
                 } catch (e) {
-                    console.log(e);
+                    console.error(`Wrap Wrap blockchain buy action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                     return;
                 }
 
                 self.refreshWrap();
                 self.setSum(null);
             } catch (e) {
-                console.log(e);
+              console.error(`Wrap Wrap buy action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             }
         },
 
@@ -526,7 +526,7 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
+                console.error(`Wrap Wrap estimate action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('estimateGas');
             }
         },
@@ -555,7 +555,7 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
+                console.error(`Wrap Wrap approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('approve');
             }
         },
@@ -590,8 +590,8 @@ export default {
 
                     return true;
                 } catch (e) {
-                    console.log(e)
-                    return false;
+                  console.error(`Wrap Wrap allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                  return false;
                 }
             }
 
@@ -613,11 +613,11 @@ export default {
                         result = gasAmount;
                     })
                     .catch(function (error) {
-                        console.log(error);
-                        return -1;
+                      console.error(`Wrap Wrap  blockchain estimate action error: ${error}. Sum: ${this.sum}. Account: ${this.account}. `);
+                      return -1;
                     });
             } catch (e) {
-                console.log(e);
+                console.error(`Wrap Wrap estimate action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 return -1;
             }
 

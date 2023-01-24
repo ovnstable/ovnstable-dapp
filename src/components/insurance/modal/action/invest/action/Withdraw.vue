@@ -468,14 +468,14 @@ export default {
                         self.loadTransaction();
                     });
                 } catch (e) {
-                    console.log(e)
-                    return;
+                  console.error(`Withdraw Insurance blockchain redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                  return;
                 }
 
                 self.refreshInsurance();
                 self.setSum(null);
             } catch (e) {
-                console.log(e);
+              console.error(`Withdraw Insurance redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             }
         },
 
@@ -503,8 +503,8 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('estimateGas');
+              console.error(`Withdraw Insurance confirm swap error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              this.showErrorModal('estimateGas');
             }
         },
 
@@ -524,8 +524,8 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
-                this.showErrorModal('approve');
+              console.error(`Withdraw Insurance approve error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              this.showErrorModal('approve');
             }
         },
 
@@ -559,8 +559,8 @@ export default {
 
                     return true;
                 } catch (e) {
-                    console.log(e)
-                    return false;
+                  console.error(`Withdraw Insurance allowance error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                  return false;
                 }
             }
 
@@ -604,13 +604,13 @@ export default {
 
                             console.log(errorMsg);
                         } else {
-                            console.log(error);
+                          console.error(`Withdraw Insurance blockchain redeem error: ${error}. Sum: ${this.sum}. Account: ${this.account}. `);
                         }
 
                         return -1;
                     });
             } catch (e) {
-                console.log(e);
+                console.error(`Withdraw Insurance redeem error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 return -1;
             }
 

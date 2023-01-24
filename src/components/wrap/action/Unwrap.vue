@@ -479,7 +479,7 @@ export default {
                         self.loadTransaction();
                     });
                 } catch (e) {
-                    console.log(e);
+                    console.error(`Wrap Unwrap redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                     return;
                 }
 
@@ -514,7 +514,7 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
+                console.error(`Wrap Unwrap swap action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('estimateGas');
             }
         },
@@ -537,7 +537,7 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.log(e)
+                console.error(`Wrap Unwrap approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('approve');
             }
         },
@@ -599,7 +599,7 @@ export default {
                         return -1;
                     });
             } catch (e) {
-                console.log(e);
+                console.error(`Wrap Unwrap estimate action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 return -1;
             }
 

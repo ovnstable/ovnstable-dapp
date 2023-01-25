@@ -16,6 +16,14 @@
       <div>
         <EtsStrategyList :strategies="strategies" :statistics="strategyStatistics"></EtsStrategyList>
       </div>
+      <v-row v-if="!strategies || strategies.length === 0" align="center" justify="start" class="ma-0" :class="$wu.isFull() ? 'mt-8' : 'mt-5'">
+        <v-btn class="dashboard-action-btn btn-filled" @click="mintAction" v-if="walletConnected">
+          Mint USD+ to start
+        </v-btn>
+        <v-btn class="dashboard-action-btn btn-outlined" outlined @click="connectWallet" v-else>
+          Connect wallet
+        </v-btn>
+      </v-row>
 
       <div v-if="statisticsLoading">
         <v-row align="center" justify="center" class="pt-15">
@@ -32,21 +40,7 @@
         <div v-for="(statistic, index) in strategyStatistics" :key="statistic.product">
          <div class="statistic-container">
            <v-row @click="toggleStrategyStatistic(statistic)" style="cursor: pointer">
-             <v-col cols="1" class="coin-img" :class="$wu.isFull() ? '' : 'mb-1'">
-               <!--              <v-img :src="'/assets/currencies/market/ets_' + statistic.name + '.svg'"/>-->
-             </v-col>
-
-             <v-col cols="9" class="statistic-title">
-               {{statistic.name}}
-             </v-col>
-
-             <v-col cols="1">
-               <label>
-                 <v-icon color="#ADB3BD" class="mb-1">
-                   {{ statistic.isOpen ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                 </v-icon>
-               </label>
-             </v-col>
+             <StatisticListCard :statistic="statistic"></StatisticListCard>
            </v-row>
          </div>
 
@@ -64,16 +58,6 @@
         </div>
       </div>
 
-      <v-row v-else align="center" justify="start" class="ma-0" :class="$wu.isFull() ? 'mt-8' : 'mt-5'">
-        <v-btn class="dashboard-action-btn btn-filled" @click="mintAction" v-if="walletConnected">
-          Mint USD+ to start
-        </v-btn>
-        <v-btn class="dashboard-action-btn btn-outlined" outlined @click="connectWallet" v-else>
-          Connect wallet
-        </v-btn>
-      </v-row>
-
-
     </div>
 
   </div>
@@ -86,10 +70,12 @@ import { dashboardApiService } from "@/services/dashboard-api-service";
 import moment from "moment/moment";
 import EtsStrategyStatistic from "@/views/dashboard/tab/ets/EtsStrategyStatistic.vue";
 import EtsStrategyList from "@/views/dashboard/tab/ets/EtsStrategyList.vue";
+import StatisticListCard from "@/views/dashboard/tab/ets/StatisticListCard.vue";
 
 export default {
   name: "EtsTab",
   components: {
+    StatisticListCard,
     EtsStrategyStatistic,
     EtsStrategyList
   },
@@ -100,22 +86,31 @@ export default {
       statisticsLoading: true,
       strategies: null,
       strategyStatistics: null,
+      productTransactionsMap: new Map(),
+      etsAliasesMap: null,
     }
   },
   mounted() {
+    this.etsAliasesMap = this.getEtsAliasesMap();
     this.loadData();
   },
   computed: {
     ...mapGetters('walletAction', ['walletConnected']),
     ...mapGetters('accountData', ['balance', 'account', 'uns']),
-    ...mapGetters("network", ["appApiUrl"]),
-
+    ...mapGetters("network", ["appApiUrl", "networkId"]),
+    ...mapGetters('marketData', ['etsStrategyData']),
+    ...mapGetters('etsAction', ['etsList']),
 
   },
   watch: {
     account: function () {
+      this.clearPrevData();
       this.loadData();
-    }
+    },
+    networkId: function () {
+      this.clearPrevData();
+      this.loadData();
+    },
   },
   methods: {
     ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
@@ -133,7 +128,8 @@ export default {
         return;
       }
 
-      dashboardApiService.getClientStrategies(this.appApiUrl, this.account.toLowerCase())
+      dashboardApiService.getClientStrategies('http://localhost:9999/api', this.account.toLowerCase())
+      // dashboardApiService.getClientStrategies(this.appApiUrl, this.account.toLowerCase())
       .then(data => {
         this.strategies = data;
         this.strategiesLoading = false;
@@ -153,33 +149,98 @@ export default {
         return;
       }
 
-      this.strategyStatistics = [];
-      for (let i = 0; i < strategies.length; i++) {
-        let strategy = strategies[i];
-        let statistic = await this.getStatistic(strategy.product);
-        this.summaryData(statistic);
+      console.log("productTransactionsMap strategies ", strategies);
+      this.productTransactionsMap = await this.loadProductTransactionToMap(strategies);
+      console.log("productTransactionsMap loaded ", this.productTransactionsMap);
+      let strategyStatisticsMap = this.mergeTransactionsWithDifferentAliases(this.productTransactionsMap);
 
-        // open first
-        if (i === 0) {
+
+      this.strategyStatistics = [];
+      for (let [key, value] of strategyStatisticsMap.entries()) {
+        let ets = this.getEts(key);
+        if (!ets) {
+          console.log("Ets not found by name when handle strategyStatisticsMap");
+          continue;
+        }
+
+        console.log("this.etsClientData key;", key);
+        console.log("this.etsClientData value;", value);
+        let statistic = this.getStatistic(ets, value);
+        this.summaryData(statistic);
+        console.log("this.etsClientData statistic;", statistic);
+
+        // // open first
+        if (this.strategyStatistics.length === 0) {
           this.toggleStrategyStatistic(statistic);
         }
 
+
         this.strategyStatistics.push(statistic);
-        console.log("strategyStatistics ", this.strategyStatistics)
       }
 
+      console.log("strategyStatistics ", this.strategyStatistics)
       this.statisticsLoading = false;
     },
-    async getStatistic(product) {
+    mergeTransactionsWithDifferentAliases(productTransactionsMap) {
+      let strategyStatisticsMap = new Map();
+
+      for (let [key, value] of productTransactionsMap.entries()) { // key => alias, value => [txs]
+        let etsName = this.getEtsByAlias(key);
+        if (!etsName) {
+          console.error("Ets not found when merge transactions. Alias:", key);
+          continue;
+        }
+
+        let transactions = strategyStatisticsMap.get(etsName);
+        if (!transactions) {
+          console.log('firs transactions init: ', etsName, value)
+          strategyStatisticsMap.set(etsName, value);
+          continue;
+        }
+
+        let mergedTransactions = [...transactions, ...value];
+        mergedTransactions = mergedTransactions.sort(function(a, b) {
+          return new Date(b.date) - new Date(a.date);
+        });
+
+        console.log('mergeTransactionsWithDifferentAliases: ', etsName, mergedTransactions)
+        strategyStatisticsMap.set(etsName, mergedTransactions);
+      }
+
+      return strategyStatisticsMap;
+    },
+    async loadProductTransactionToMap(strategies) {
+      let productTransactionsMap = new Map();
+
+      for (let i = 0; i < strategies.length; i++) {
+        let strategy = strategies[i];
+        if (!this.getEtsByAlias(strategy.product)) {
+          console.log("Ets not found by alias when load product transactions", strategy.product);
+          continue;
+        }
+
+        let transactions = await this.getProductTransactions(strategy.product); // strategy.product -> alias like "BetaOp DAI/WETH 5%,  10% --> 5%" not strategy name;
+        console.log("loadProductTransactionToMap: ", transactions);
+        productTransactionsMap.set(strategy.product, transactions); // map with key alias - [txs]
+      }
+
+      return productTransactionsMap;
+    },
+    async getProductTransactions(product) {
       let productData = await this.loadProductStatistic(product);
       console.log("strategyStatistics productData", productData);
+      return productData;
+    },
 
+    getStatistic(ets, productData) {
       let balancesWidgetData = this.getWidgetData(productData, 'closingBalance', '#8247E5');
       let profitWidgetData = this.getWidgetData(productData, 'dailyProfit', '#8247E5');
       let apyWidgetData = this.getWidgetData(productData, 'apy', '#8247E5');
       return {
         isOpen: false,
-        name: product,
+        name: ets.nameUp,
+        etsName: ets.name,
+        ets: ets,
         charts: {
           balance: balancesWidgetData,
           profit: profitWidgetData,
@@ -193,7 +254,8 @@ export default {
     },
     loadProductStatistic(product) {
       console.log("EtsTab loaded data:loadStatistic ", product)
-      return dashboardApiService.getClientBalanceChanges(this.appApiUrl, this.account.toLowerCase(), product)
+      // return dashboardApiService.getClientBalanceChanges(this.appApiUrl, this.account.toLowerCase(), product)
+      return dashboardApiService.getClientBalanceChanges('http://localhost:9999/api', this.account.toLowerCase(), product)
             .then(data => {
               console.log("EtsTab loaded data statistic:3 ", data)
               return  data.map(item => {
@@ -275,8 +337,131 @@ export default {
         strategyStatistic.totalValue = lastData.closingBalance;
       }
     },
+    clearPrevData() {
+      this.chartTab = 'BALANCE';
+      this.strategiesLoading = true;
+      this.statisticsLoading = true;
+      this.strategies = null;
+      this.strategyStatistics = null;
+      this.productTransactionsMap = new Map();
+    },
     toggleStrategyStatistic(statistic) {
       statistic.isOpen = !statistic.isOpen;
+    },
+    getEts(etsName) {
+      for (let i = 0; i < this.etsList.length; i++) {
+        if (this.etsList[i].name === etsName) {
+          return this.etsList[i];
+        }
+      }
+
+      return null;
+    },
+    getEtsByAlias(alias) {
+      for (let [key, value] of this.etsAliasesMap.entries()) {
+        for (let i = 0; i < value.length; i++) {
+          if (value[i] === alias) {
+            return key;
+          }
+        }
+      }
+
+      return null;
+    },
+    getAliasesByEts(etsName) {
+      return this.etsAliasesMap.get(etsName);
+    },
+    getEtsAliasesMap() {
+      let etsAliasesMap = new Map();
+
+      etsAliasesMap.set('ar_delta_weth_dai', [
+        'Delta WETH/DAI',
+      ]);
+
+      etsAliasesMap.set('night_ov_ar', [
+        'ARRAKIS WETH/USDC',
+      ]);
+
+      etsAliasesMap.set('qs_alpha_wbnb_busd', [
+        'Alpha WBNB/BUSD',
+      ]);
+
+      etsAliasesMap.set('qs_alpha_wmatic_usdc', [
+        "ALFA",
+        "ALFA USDC/WMATIC, 5%, 15%",
+        "Alfa WMATIC/USDC 5%/5%, 10%",
+        "Alfa WMATIC/USDC 5%/5%, 15%"
+      ]);
+
+      etsAliasesMap.set('qs_beta_wmatic_usdc', [
+        "BETA",
+        "BETA, USDC/WMATIC, 100%, 1.5%",
+        "Beta WMATIC/USDC 50%/100%, 1%",
+        "Beta WMATIC/USDC 50%/100%, 2%",
+      ]);
+
+      etsAliasesMap.set('qs_delta_weth_usdc', [
+        "DELTA",
+        "DELTA, USDC/WETH, 100%, 1.5%",
+        "Delta USDC/WETH 50%/100%, 2%",
+        "Delta USDC/WETH 90%/800%, 1%",
+      ]);
+
+      etsAliasesMap.set('qs_epsilon_weth_dai', [
+        "EPSILON",
+        "EPSILON+",
+        "EPSILON+, DAI/WETH, 5%, 10%",
+        "EPSILON, DAI/WETH, 5%, 10%"
+      ]);
+
+      etsAliasesMap.set('qs_gamma_weth_usdc', [
+        "GAMMA",
+        "GAMMA, USDC/WETH, 5%, 10%",
+        "Gamma USDC/WETH 5%/5%, 10%"
+      ]);
+
+      etsAliasesMap.set('qs_zeta_wbtc_usdc', [
+        'ZETA',
+        'ZETA+',
+        'ZETA+, USDC/WBTC, 5%, 10%',
+        'ZETA, USDC/WBTC, 5%, 10%',
+      ]);
+
+      etsAliasesMap.set('ruby', [
+        "RUBY",
+      ]);
+
+      etsAliasesMap.set('uni_alpha_weth_usdc', [
+        "WETH/USDC",
+      ]);
+
+      etsAliasesMap.set('uni_beta_weth_dai', [
+        "BETA, OP",
+        "BETA+ OP, DAI/WETH, 5%, 10%",
+        "BETA, OP, DAI/WETH, 5%, 10%",
+        "BetaOp DAI/WETH 5%,  10% --> 5%",
+        "BetaPlusOp DAI/WETH 5%,  10% --> 5%"
+      ]);
+
+      etsAliasesMap.set('uni_eta_wmatic_usdc', [
+        "ETA",
+        "ETA, USDC/WMATIC, 5%, 15%"
+      ]);
+
+      etsAliasesMap.set('uni_gamma_weth_dai', [
+        "Gamma WETH/DAI"
+      ]);
+
+      etsAliasesMap.set('wbnb_busd', [
+        "BUSD/WBNB"
+      ]);
+
+      etsAliasesMap.set('ets_wmatic_usd_plus_token', [
+        "WMATIC/USD+",
+        "USD+/WMATIC"
+      ]);
+
+      return etsAliasesMap;
     }
   }
 }

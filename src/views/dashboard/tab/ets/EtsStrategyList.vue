@@ -3,8 +3,7 @@
     <v-row class="ma-0 info-card-container mt-6">
       <v-col class="info-card-body-bottom">
         <v-row align="center" justify="start" class="ma-0">
-
-          <v-col :cols="3">
+          <v-col :cols="$wu.isFull() ? 3 : 12">
             <v-row class="container-body-title-row" justify="start" align="center">
               <label class="container-body-title"
                      :class="$wu.isFull() ? '' : 'mb-1'">ETS</label>
@@ -15,12 +14,12 @@
             </v-row>
           </v-col>
 
-          <v-col :cols="9">
+          <v-col :cols="$wu.isFull() ? 9 : 12">
             <v-row justify="end" align="center">
               <v-col>
                 <v-row justify="center" align="center">
                   <label class="container-info-sub-title">
-                    Total investment value
+                    {{$wu.isMobile() ? 'Total investment value' : 'Total value'}}
                   </label>
                 </v-row>
                 <v-row justify="center" align="center">
@@ -59,42 +58,49 @@
           </v-col>
         </v-row>
 
-        <v-divider v-if="statistics" class="ets-list-divider"></v-divider>
-
         <div v-if="statistics">
-          <v-row align="center" justify="start" class="pt-7">
 
-            <v-row v-for="statistic in statistics" :key="statistic.name" class="pt-4 pb-4 pl-5">
-              <v-col>
-                <v-row justify="start" align="start">
-                  <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                    {{statistic.name}}
-                  </label>
-                </v-row>
-              </v-col>
-              <v-col>
-                <v-row justify="center" align="center">
-                  <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                    {{ dataHidden ? '' : '$' + $utils.formatMoney(statistic.totalValue, $wu.isMobile() ? 2 : 6) }}
-                  </label>
-                </v-row>
-              </v-col>
-              <v-col>
-                <v-row justify="center" align="center">
-                  <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                    {{ dataHidden ? '' : '$' + $utils.formatMoney(statistic.profit, $wu.isMobile() ? 2 : 6) }}
-                  </label>
-                </v-row>
-              </v-col>
-              <v-col>
-                <v-row justify="center" align="center">
-                  <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                    {{ dataHidden ? '' : statistic.apy === 0 ? '—' : ($utils.formatMoney(statistic.apy, 2) + '%') }}
-                  </label>
-                </v-row>
-              </v-col>
-            </v-row>
+          <v-divider class="ets-list-divider"></v-divider>
+
+          <v-row v-for="statistic in statistics" :key="statistic.name" align="center" justify="start" class="ma-0 my-5">
+
+            <v-col :cols="$wu.isFull() ? 3 : 12">
+              <v-row justify="start" align="center">
+                <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
+                  {{statistic.name}}
+                </label>
+              </v-row>
+            </v-col>
+
+            <v-col :cols="$wu.isFull() ? 9 : 12">
+              <v-row justify="end" align="center">
+                <v-col>
+                  <v-row justify="center" align="center">
+                    <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
+                      {{ dataHidden ? '' : '$' + $utils.formatMoney(statistic.totalValue, $wu.isMobile() ? 2 : 6) }}
+                    </label>
+                  </v-row>
+                </v-col>
+
+                <v-col>
+                  <v-row justify="center" align="center">
+                    <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
+                      {{ dataHidden ? '' : '$' + $utils.formatMoney(statistic.profit, $wu.isMobile() ? 2 : 6) }}
+                    </label>
+                  </v-row>
+                </v-col>
+
+                <v-col>
+                  <v-row justify="center" align="center">
+                    <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
+                      {{ dataHidden ? '' : statistic.apy === 0 ? '—' : ($utils.formatMoney(statistic.apy, 2) + '%') }}
+                    </label>
+                  </v-row>
+                </v-col>
+              </v-row>
+            </v-col>
           </v-row>
+
         </div>
       </v-col>
     </v-row>

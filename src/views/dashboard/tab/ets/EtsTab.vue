@@ -128,8 +128,7 @@ export default {
         return;
       }
 
-      dashboardApiService.getClientStrategies('http://localhost:9999/api', this.account.toLowerCase())
-      // dashboardApiService.getClientStrategies(this.appApiUrl, this.account.toLowerCase())
+      dashboardApiService.getClientStrategies(this.appApiUrl, this.account.toLowerCase())
       .then(data => {
         this.strategies = data;
         this.strategiesLoading = false;
@@ -159,7 +158,7 @@ export default {
       for (let [key, value] of strategyStatisticsMap.entries()) {
         let ets = this.getEts(key);
         if (!ets) {
-          console.log("Ets not found by name when handle strategyStatisticsMap");
+          console.log("Ets not found by name when handle strategyStatisticsMap", key);
           continue;
         }
 
@@ -254,8 +253,7 @@ export default {
     },
     loadProductStatistic(product) {
       console.log("EtsTab loaded data:loadStatistic ", product)
-      // return dashboardApiService.getClientBalanceChanges(this.appApiUrl, this.account.toLowerCase(), product)
-      return dashboardApiService.getClientBalanceChanges('http://localhost:9999/api', this.account.toLowerCase(), product)
+      return dashboardApiService.getClientBalanceChanges(this.appApiUrl, this.account.toLowerCase(), product)
             .then(data => {
               console.log("EtsTab loaded data statistic:3 ", data)
               return  data.map(item => {
@@ -318,11 +316,21 @@ export default {
 
       for (let i = 0; i < days; i++) {
         productResult = productResult * (1.0 + apyDataList[i].changePercent);
-        durationSum = durationSum + apyDataList[i].duration;
+        durationSum = durationSum + (apyDataList[i].duration ? apyDataList[i].duration : 0);
       }
 
-      let apy = Math.pow(productResult, 365.0 / (durationSum / 24.0)) - 1.0;
+      let apy = 0;
+      if (durationSum) {
+        apy = Math.pow(productResult, 365.0 / (durationSum / 24.0)) - 1.0;
+      }
+
+      console.log('Ets tab apy productResult: ', apy);
+      console.log('Ets tab apy durationSum: ', durationSum);
+      console.log('Ets tab apy apyDataList: ', apyDataList);
+
+
       if (apy) {
+        console.log('Ets tab apy: ', apy);
         strategyStatistic.apy = apy * 100;
       }
 
@@ -445,7 +453,8 @@ export default {
 
       etsAliasesMap.set('uni_eta_wmatic_usdc', [
         "ETA",
-        "ETA, USDC/WMATIC, 5%, 15%"
+        "ETA, USDC/WMATIC, 5%, 15%",
+        "ETA, USDC/WMATIC, 5%, 10%",
       ]);
 
       etsAliasesMap.set('uni_gamma_weth_dai', [
@@ -456,7 +465,7 @@ export default {
         "BUSD/WBNB"
       ]);
 
-      etsAliasesMap.set('ets_wmatic_usd_plus_token', [
+      etsAliasesMap.set('wmatic_usd_plus', [
         "WMATIC/USD+",
         "USD+/WMATIC"
       ]);

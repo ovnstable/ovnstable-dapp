@@ -8,7 +8,7 @@
               <label class="container-body-title"
                      :class="$wu.isFull() ? '' : 'mb-1'">ETS</label>
               <label class="container-body-title container-body-title-slice"
-                     :class="$wu.isFull() ? '' : 'mb-1'" v-if="$wu.isFull()">&nbsp;&nbsp;|&nbsp;</label>
+                     :class="$wu.isFull() ? '' : 'mb-1'">&nbsp;&nbsp;|&nbsp;</label>
               <label class="container-body-title container-body-title-slice"
                      :class="$wu.isFull() ? '' : 'mb-1'">{{ sliceLabel }}</label>
             </v-row>
@@ -19,7 +19,7 @@
               <v-col>
                 <v-row justify="center" align="center">
                   <label class="container-info-sub-title">
-                    {{$wu.isMobile() ? 'Total investment value' : 'Total value'}}
+                    {{$wu.isMobile() ? 'Total value' : 'Total investment value' }}
                   </label>
                 </v-row>
                 <v-row justify="center" align="center">
@@ -50,7 +50,7 @@
                 </v-row>
                 <v-row justify="center" align="center">
                   <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                    {{ dataHidden ? '' : avgApy === 0 ? '—' : ($utils.formatMoney(avgApy, 2) + '%') }}
+                    {{ dataHidden ? '' : avgApy === 0 || !avgApy ? '—' : ($utils.formatMoney(avgApy, 2) + '%') }}
                   </label>
                 </v-row>
               </v-col>
@@ -60,7 +60,7 @@
 
         <div v-if="statistics">
 
-          <v-divider class="ets-list-divider"></v-divider>
+          <v-divider v-if="statistics.length > 0" class="ets-list-divider"></v-divider>
 
           <v-row v-for="statistic in statistics" :key="statistic.name" align="center" justify="start" class="ma-0 my-5">
 

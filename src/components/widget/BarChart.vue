@@ -112,7 +112,11 @@ export default {
             let maxValue;
             try {
                 maxValue = Math.max.apply(Math, values);
-                maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
+                if (maxValue > 1) {
+                  maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
+                } else {
+                  maxValue = 1;
+                }
             } catch (e) {
                 maxValue = 50;
             }

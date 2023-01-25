@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row align="center" justify="start" class="ma-0 info-card-container"
-           :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
+           :class="$wu.isFull() ? 'mb-6' : 'mb-3'">
       <v-col class="info-card-body-bottom">
         <template v-if="charts && charts.balance">
 
@@ -49,7 +49,7 @@
     </v-row>
 
     <v-row align="center" justify="start" class="ma-0 info-card-container"
-           :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
+           :class="$wu.isFull() ? 'my-6' : 'my-3'">
       <v-col class="info-card-body-bottom">
         <v-row align="center" justify="start" class="ma-0">
           <label class="container-body-title" :class="$wu.isFull() ? '' : 'mb-1'">

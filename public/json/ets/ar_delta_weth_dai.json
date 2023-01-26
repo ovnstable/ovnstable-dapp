@@ -23,7 +23,7 @@
   "chain": 10,
   "chainName": "optimism",
   "borrowFrom": "AAVE",
-  "dex": "Uniswap",
+  "dex": "Arrakis",
   "gauge": "Arrakis",
   "poolName": "WETH/DAI",
   "range" : "WIDE",

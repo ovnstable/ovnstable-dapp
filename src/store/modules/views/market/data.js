@@ -99,6 +99,7 @@ const actions = {
                     .then(value => value.json())
                     .then(value => {
                         strategyData = value;
+                        strategyData.lastApy = strategyData.apy;
                         strategyData.apy = (avgApyStrategyMonth && avgApyStrategyMonth.value) ? (avgApyStrategyMonth.value) : strategyData.apy;
                         strategyData.diffApy = (avgApy && avgApy.value && strategyData.apy) ? (strategyData.apy - avgApy.value) : null;
 

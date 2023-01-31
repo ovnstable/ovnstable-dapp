@@ -27,18 +27,29 @@
                              :card-data="component"/>
             </template>
 
-            <template v-if="sortedCardList.filter(value => value.isArchive).length > 0">
+            <template v-if="sortedCardList.filter(value => value.isArchive).length > 0" >
                 <v-row class="ma-0 mb-1 mt-10" align="center">
                     <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-archive-outline</v-icon>
                     <label class="prototypes-label ml-2">Archive</label>
+                    <div class="select-bar-main-container ml-7" @click="openedList = !openedList">
+                        <v-row justify="end" align="center" class="select-bar-container">
+                            <v-icon color="var(--secondary-gray-text)" >
+                                {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                            </v-icon>
+                        </v-row>
+                    </div>
                 </v-row>
+
                 <v-divider class="prototypes-list-divider"></v-divider>
 
-                <EtsListHeader class="mt-3"/>
+                <template v-if="openedList">
+                    <EtsListHeader class="mt-3"/>
 
-                <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ets' && value.isArchive))"
-                             v-if="component.type === 'ets'"
-                             :card-data="component"/>
+                    <EtsListCard class="mt-2" v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ets' && value.isArchive))"
+                                 v-if="component.type === 'ets'"
+                                 :card-data="component"/>
+                </template>
+
             </template>
         </div>
 
@@ -62,6 +73,7 @@ export default {
     },
 
     data: () => ({
+        openedList: false,
         tab: 1,
         avgApy: null,
         sortedCardList: [],
@@ -249,6 +261,7 @@ export default {
                         hasCap: ets.maxSupply ? (this.totalSupply[ets.name] < ets.maxSupply) : true,
                         tvl: this.totalSupply[ets.name],
                         monthApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
+                        lastApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].lastApy) ? this.etsStrategyData[ets.name].lastApy : 0,
                         cardOpened: false,
                     },
                 );
@@ -422,5 +435,9 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .prototypes-icon {
     color: var(--main-gray-text);
+}
+
+.select-bar-main-container {
+    cursor: pointer;
 }
 </style>

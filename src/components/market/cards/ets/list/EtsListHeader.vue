@@ -11,7 +11,12 @@
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)">
-            <v-row class="ma-0" justify="end" align="center">
+            <v-row class="ma-0" justify="center" align="center">
+                <label class="list-header-label">Last day APY</label>
+            </v-row>
+        </v-col>
+        <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)">
+            <v-row class="ma-0" justify="center" align="center">
                 <label class="list-header-label">30-day APY</label>
             </v-row>
         </v-col>

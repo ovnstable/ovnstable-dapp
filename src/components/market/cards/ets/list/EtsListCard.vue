@@ -33,7 +33,12 @@
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)" class="my-1">
-            <v-row class="ma-0" justify="end" align="center">
+            <v-row class="ma-0" justify="center" align="center">
+                <label class="card-label">{{ cardData.lastApy === 0 ? '' : ($utils.formatMoneyComma(cardData.lastApy, 0) + '%') }}</label>
+            </v-row>
+        </v-col>
+        <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)" class="my-1">
+            <v-row class="ma-0" justify="center" align="center">
                 <label class="card-label">{{ cardData.monthApy === 0 ? '' : ($utils.formatMoneyComma(cardData.monthApy, 0) + '%') }}</label>
             </v-row>
         </v-col>

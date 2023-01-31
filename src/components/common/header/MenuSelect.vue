@@ -10,7 +10,7 @@
             </div>
         </template>
         <v-list class="main-container">
-            <v-list-item class="list-item-hover mx-n2 mt-0" link @click="featuredClick">
+            <v-list-item class="list-item-hover mx-n2 mt-0" @click="featuredClick" :class="selectedTab === 'featured' ? 'selected-page-item' : ''">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/featured.svg')">
                 </v-list-item-icon>
@@ -19,7 +19,7 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-group :append-icon="null" @click="isShow = !isShow">
+            <v-list-group :append-icon="null"  @click="isShowUsd = !isShowUsd">
                 <template v-slot:activator class="list-item-hover">
                     <v-list-item-icon class="mx-n2">
                         <img class="navbar-page-link" :src="require('@/assets/icon/menu/usdplus.svg')">
@@ -27,35 +27,39 @@
                     <v-list-item-title>
                         <label class="navbar-page-label ml-6" :class="selectedTab.startsWith('usdplus_') ? 'selected-page' : ''">USD+</label>
                     </v-list-item-title>
-                    <div>
-                        <v-icon class="toggleUpDown" :class='{ "rotate": isShow }'>mdi-chevron-right</v-icon>
+                    <div class="select-bar-main-container" >
+                        <v-row>
+                            <v-icon color="var(--secondary-gray-text)" >
+                                {{ isShowUsd ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
+                            </v-icon>
+                        </v-row>
                     </div>
                 </template>
-                <v-list-item class="list-item-hover" link @click="statsClick">
+                <v-list-item class="list-item-hover" link @click="statsClick" :class="selectedTab === 'usdplus_performance' ? 'selected-page-item' : ''">
                     <v-list-item-title>
                         <label class="navbar-list-label mx-5" :class="selectedTab === 'usdplus_performance' ? 'selected-page' : ''">Performance</label>
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item class="list-item-hover " @click="collateralClick">
+                <v-list-item class="list-item-hover " @click="collateralClick" :class="selectedTab === 'usdplus_collateral' ? 'selected-page-item' : ''">
                     <v-list-item-title>
                         <label class="navbar-list-label mx-5" :class="selectedTab === 'usdplus_collateral' ? 'selected-page' : ''">Collateral</label>
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item class="list-item-hover " @click="usdPlusPoolsClick">
+                <v-list-item class="list-item-hover " @click="usdPlusPoolsClick" :class="selectedTab === 'usdplus_pools' ? 'selected-page-item' : ''">
                     <v-list-item-title>
                         <label class="navbar-list-label mx-5" :class="selectedTab === 'usdplus_pools' ? 'selected-page' : ''">USD+ pools</label>
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item class="list-item-hover" @click="swapClick">
+                <v-list-item @click="swapClick">
                     <v-list-item-title>
                         <label class="navbar-page-label-modal mx-5">Mint/redeem</label>
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item class="list-item-hover" @click="wrapClick" v-if="(networkId !== 56)">
+                <v-list-item @click="wrapClick" v-if="(networkId !== 56)">
                     <v-list-item-title>
                         <label class="navbar-page-label-modal mx-5">Wrap/Unwrap</label>
                     </v-list-item-title>
@@ -63,7 +67,7 @@
             </v-list-group>
 
 
-            <v-list-item class="list-item-hover mx-n2" link @click="etsClick">
+            <v-list-item class="list-item-hover mx-n2" @click="etsClick"  :class="selectedTab === 'ets' ? 'selected-page-item' : ''">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/etsIcon.svg')">
                 </v-list-item-icon>
@@ -72,33 +76,37 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-group :append-icon="null" @click="isShow = !isShow">
-                <template v-slot:activator class="list-item-hover">
+            <v-list-group :append-icon="null"  @click="isShowInsurance = !isShowInsurance">
+                <template v-slot:activator class="list-item-hover" >
                     <v-list-item-icon class="mx-n2" light>
                         <img class="navbar-page-link" :src="require('@/assets/icon/menu/insurance.svg')">
                     </v-list-item-icon>
                     <v-list-item-title >
-                        <label class="navbar-page-label ml-6" :class="selectedTab === 'insurance' ? 'selected-page' : ''">INSURANCE</label>
+                        <label class="navbar-page-label ml-6" :class="selectedTab.startsWith('insurance_') ? 'selected-page' : ''">INSURANCE</label>
                     </v-list-item-title>
-                    <div >
-                        <v-icon class="toggleUpDown" :class='{ "rotate": isShow }'>mdi-chevron-right</v-icon>
+                    <div class="select-bar-main-container ml-5" >
+                        <v-row>
+                            <v-icon color="var(--secondary-gray-text)" >
+                                {{ isShowInsurance ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
+                            </v-icon>
+                        </v-row>
                     </div>
                 </template>
-                <v-list-item class="list-item-hover" link @click="insuranceClick" v-bind:class="activeTabAbout">
-                    <label class="navbar-list-label mx-7" >About</label>
+                <v-list-item @click="insuranceClick" :class="selectedTab === 'insurance_about' ? 'selected-page-item' : ''">
+                    <label class="navbar-list-label mx-7" :class="selectedTab === 'insurance_about' ? 'selected-page' : ''" >About</label>
                 </v-list-item>
 
-                <v-list-item class="list-item-hover" @click="insurancePerformanceClick">
-                    <label class="navbar-list-label mx-7" >Performance</label>
+                <v-list-item class="list-item-hover" @click="insurancePerformanceClick" :class="selectedTab === 'insurance-performance' ? 'selected-page-item' : ''">
+                    <label class="navbar-list-label mx-7" :class="selectedTab === 'insurance-performance' ? 'selected-page' : ''">Performance</label>
                 </v-list-item>
 
-                <v-list-item class="list-item-hover" @click="insuranceReservesClick">
-                    <label class="navbar-list-label mx-7" >Reserves</label>
+                <v-list-item class="list-item-hover" @click="insuranceReservesClick" :class="selectedTab === 'insurance-reserves' ? 'selected-page-item' : ''">
+                    <label class="navbar-list-label mx-7" :class="selectedTab === 'insurance-reserves' ? 'selected-page' : ''">Reserves</label>
                 </v-list-item>
 
-                <v-list-item class="list-item-hover" @click="mintAction">
+                <v-list-item @click="mintAction">
                     <v-list-item-title>
-                        <label class="list-item-hover navbar-page-label-modal mx-7">Mint/redeem</label>
+                        <label class="navbar-page-label-modal mx-7">Mint/redeem</label>
                     </v-list-item-title>
                 </v-list-item>
             </v-list-group>
@@ -106,12 +114,12 @@
 
             <v-divider class="navbar-list-divider"></v-divider>
 
-            <v-list-item class="list-item-hover mx-n2 mt-0" @click="dashBoardClick">
+            <v-list-item class="list-item-hover mx-n2 mt-0" @click="dashBoardClick" :class="selectedTab === 'dashboard' ? 'selected-page-item' : ''">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/my-dashboard.svg')">
                 </v-list-item-icon>
                 <v-list-item-title class="mx-n4">
-                    <label class="navbar-page-label icon-dashboard" :class="selectedTab === 'dashboard' ? 'selected-page' : ''">My Dashboard</label>
+                    <label class="navbar-page-label" :class="selectedTab === 'dashboard' ? 'selected-page' : ''">My Dashboard</label>
                 </v-list-item-title>
             </v-list-item>
 
@@ -149,6 +157,8 @@ export default {
     components: {},
 
     data: () => ({
+        isShowUsd: false,
+        isShowInsurance: false,
         closeOnContentClick: false,
     }),
 
@@ -232,8 +242,8 @@ export default {
         },
 
         insuranceClick() {
-            this.selectTab('insurance');
-            this.goToActionByPath('/insurance', { tabName: 'about' });
+            this.selectTab('insurance_about');
+            this.goToActionByPath('/insurance', {tabName: 'about'});
             this.trackClick({
                 action: 'insurance-click',
                 event_category: 'View Page',
@@ -439,14 +449,13 @@ export default {
     color: var(--links-blue);
 }
 
-.navbar-page-label-modal:hover {
-    background: linear-gradient(#28A0F0 100%, #0678C4 99.17%, #FFFFFF 16%);
-    color: #FFFFFF;
-}
-
 .selected-page {
     color: var(--main-gray-text);
-    font-weight: 700;
+    font-weight: 700 !important;
+}
+
+.selected-page-item {
+    background-color: var(--card-banner-status-container) !important;
 }
 
 .navbar-page-label {
@@ -462,9 +471,6 @@ export default {
     cursor: pointer;
 }
 
-.navbar-page-label:hover {
-    color: #FFFFFF !important;
-}
 
 .navbar-page-link {
     width: 25px;
@@ -473,9 +479,10 @@ export default {
 }
 
 .main-container {
-    background-color: var(--secondary);
+    background-color: var(--secondary) !important;
 }
 .list-item-hover:hover, .footer-social-link:hover {
+    color: var(--main-gray-text);
     background: linear-gradient(#28A0F0 100%, #0678C4 99.17%, #FFFFFF 16%);
 }
 

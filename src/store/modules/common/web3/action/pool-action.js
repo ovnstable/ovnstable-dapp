@@ -76,6 +76,8 @@ const actions = {
                 })
         }
 
+        console.log("setPoolList", list);
+
         await commit('setPoolList', list);
     },
 };

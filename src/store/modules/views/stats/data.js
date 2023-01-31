@@ -114,7 +114,7 @@ const actions = {
     async refreshStablecoinData({commit, dispatch, getters, rootState}) {
         let result = [];
 
-        let appApiUrl = rootState.network.polygonApi;
+        let appApiUrl = rootState.network.appApiUrl;
         let stablecoinList = (await axios.get(appApiUrl + '/dapp/collateral/total')).data;
         stablecoinList.sort((a,b) => b.netAssetValue - a.netAssetValue);
         stablecoinList = stablecoinList.filter(el => el.netAssetValue > 0);

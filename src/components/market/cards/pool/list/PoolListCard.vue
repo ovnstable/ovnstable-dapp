@@ -112,14 +112,11 @@
 </template>
 
 <script>
-import Tooltip from "@/components/common/element/Tooltip";
-import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "PoolListCard",
 
     components: {
-        Tooltip
     },
 
     props: {
@@ -171,6 +168,9 @@ export default {
                     break;
                 case 'Uniswap':
                     url = 'https://info.uniswap.org/#/polygon/pools/';
+                    break;
+                case 'Sushiswap':
+                    url = 'https://www.sushi.com/earn/matic:';
                     break;
                 default:
                     url = this.cardData.data.explorerUrl + '/address/';

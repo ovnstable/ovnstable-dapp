@@ -83,7 +83,6 @@
 
 <script>
 import Tooltip from "@/components/common/element/Tooltip";
-import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "Ets",

@@ -4,7 +4,7 @@
   "nameToken": "GAMMA",
   "prototype": true,
   "openPrototype": true,
-  "archive": false,
+  "archive": true,
   "disabled": true,
   "highRisk": true,
 

@@ -1,6 +1,6 @@
 export default async function getCollateral({ context, nextMiddleware }){
     try {
-        console.debug('Get Dapp/Collateral');
+        console.log('Get Dapp/Collateral');
 
         context.store.dispatch('menuUI/selectTab', 'usdplus_collateral');
         context.store.dispatch('statsData/refreshStats');
@@ -10,4 +10,4 @@ export default async function getCollateral({ context, nextMiddleware }){
         return context.next(false);
     }
     return nextMiddleware()
-};
+}

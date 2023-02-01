@@ -1,6 +1,6 @@
 export default async function getFeatured({ context, nextMiddleware }){
   try {
-    console.debug('Get Dapp/Featured');
+    console.log('Get Dapp/Featured');
 
     context.store.dispatch('menuUI/selectTab', 'featured');
 
@@ -15,4 +15,4 @@ export default async function getFeatured({ context, nextMiddleware }){
     return context.next(false);
   }
   return nextMiddleware()
-};
+}

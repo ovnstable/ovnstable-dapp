@@ -44,7 +44,7 @@ const actions = {
 
         let provider = await new Web3.providers.HttpProvider(rpcUrl);
         web3 = await new Web3(provider);
-        console.debug('InitWeb3: Provider default');
+        console.log('InitWeb3: Provider default');
 
         commit('setIsProviderDefault', true);
         commit('setProvider', provider);
@@ -54,7 +54,7 @@ const actions = {
     async initCustomProvider({commit, dispatch, getters, rootState}, provider) {
 
         let web3 = await new Web3(provider);
-        console.debug('InitWeb3: Provider custom');
+        console.log('InitWeb3: Provider custom');
 
         commit('setIsProviderDefault', false);
         commit('setProvider', provider);

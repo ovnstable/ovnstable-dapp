@@ -102,7 +102,7 @@ const actions = {
             })
             .then((success) => {
                 if (success) {
-                    console.debug('ETS successfully added to wallet!')
+                    console.log('ETS successfully added to wallet!')
                 } else {
                     throw new Error('Something went wrong.')
                 }

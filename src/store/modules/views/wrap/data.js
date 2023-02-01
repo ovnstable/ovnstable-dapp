@@ -23,7 +23,7 @@ const getters = {
 const actions = {
 
     async refreshWrap({commit, dispatch, getters, rootState}) {
-        console.debug('WrapData: refreshWrap');
+        console.log('WrapData: refreshWrap');
 
         if (rootState.web3.contracts === null)
             return;

@@ -9,7 +9,7 @@ const getters = {
 const actions = {
 
     async refreshSwap({commit, dispatch, getters, rootState}) {
-        console.debug('SwapData: refreshSwap');
+        console.log('SwapData: refreshSwap');
 
         dispatch('accountData/refreshBalance', null, {root:true});
     },

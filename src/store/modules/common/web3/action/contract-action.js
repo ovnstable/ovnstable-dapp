@@ -8,7 +8,7 @@ const actions = {
     async initContracts({commit, dispatch, getters, rootState}) {
         const ERC20 = await loadJSON('/contracts/ERC20.json');
 
-        console.debug("contractAction/initContracts");
+        console.log("contractAction/initContracts");
 
         let web3 = rootState.web3.web3;
         let network = rootState.network.networkName;

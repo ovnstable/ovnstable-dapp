@@ -1,6 +1,6 @@
 export default async function getInsurance({ context, nextMiddleware }){
     try {
-        console.debug('Get Dapp/Insurance');
+        console.log('Get Dapp/Insurance');
 
         context.store.dispatch('insuranceData/refreshInsurance');
     }
@@ -9,4 +9,4 @@ export default async function getInsurance({ context, nextMiddleware }){
         return context.next(false);
     }
     return nextMiddleware()
-};
+}

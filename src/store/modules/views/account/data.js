@@ -41,7 +41,7 @@ const actions = {
 
     async resetBalance({commit, dispatch, getters}) {
 
-        console.debug('AccountData: resetBalance');
+        console.log('AccountData: resetBalance');
 
         commit('setBalance', {});
         commit('setEtsBalance', {});
@@ -51,7 +51,7 @@ const actions = {
 
     async resetUns({commit, dispatch, getters}) {
 
-        console.debug('AccountData: resetUns');
+        console.log('AccountData: resetUns');
 
         commit('setUns', null);
     },
@@ -59,7 +59,7 @@ const actions = {
 
     async refreshBalance({commit, dispatch, getters, rootState}) {
 
-        console.debug('AccountData: refreshBalance');
+        console.log('AccountData: refreshBalance');
 
         if (getters.account === null || getters.account === undefined){
             return;

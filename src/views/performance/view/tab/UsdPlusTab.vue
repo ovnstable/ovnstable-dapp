@@ -48,7 +48,7 @@
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <DoughnutStrategies :data="currentTotalData" :size="!$wu.isFull() ? 200 : 300"/>
+                        <DoughnutStrategies :data="currentTotalData" :total-value="totalUsdPlusValue" :size="!$wu.isFull() ? 200 : 300"/>
                     </v-col>
                 </v-row>
             </v-col>

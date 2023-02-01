@@ -7,7 +7,7 @@
       :auto-adjust-text-size="false">
 
         <p class="total-label">Total USD+</p>
-        <p class="total-sum-label">{{ $utils.formatMoneyComma(totalUsdPlusValue, 2) }}</p>
+        <p class="total-sum-label">{{ $utils.formatMoneyComma(totalValue, 2) }}</p>
     </vc-donut>
 </template>
 
@@ -24,6 +24,11 @@ export default {
         data: {
             type: Array,
             default: null,
+        },
+
+        totalValue: {
+            type: Number,
+            default: 0
         },
 
         size: {
@@ -49,8 +54,6 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("statsData", ['totalUsdPlusValue', 'currentTotalData',]),
-        ...mapGetters("statsUI", [ 'loadingCurrentTotalData']),
     },
 
     mounted() {

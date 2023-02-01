@@ -404,11 +404,36 @@ only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px)
 only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
 only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
 
+    .icon {
+        height: 28px !important;
+        width: 28px !important;
+    }
+
+    .icon-token-pair {
+        width: 54px !important;
+    }
+
+    .button {
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px !important;
+        line-height: 18px !important;
+        letter-spacing: 0.03em;
+    }
+
     .card-label {
         font-style: normal;
         font-weight: 400;
         font-size: 13px;
         line-height: 18px;
+    }
+
+    .list-header-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
     }
 }
 

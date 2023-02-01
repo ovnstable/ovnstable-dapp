@@ -1,5 +1,5 @@
 const state = {
-    selectedTab: 'dashboard',
+    selectedTab: '',
 };
 
 const getters = {

@@ -2,10 +2,11 @@ export default async function getPools({ context, nextMiddleware }){
   try {
     console.debug('Get Dapp/Pools');
 
-    context.store.dispatch('menuUI/selectTab', 'pools');
+    context.store.dispatch('menuUI/selectTab', 'usdplus_pools');
 
-    context.store.dispatch('statsData/refreshStats')
-    context.store.dispatch('poolAction/getPoolList');
+    await context.store.dispatch('poolAction/getPoolList').then(value => {
+      context.store.dispatch('statsData/refreshStats')
+    });
   }
   catch(e){
     console.error(e);

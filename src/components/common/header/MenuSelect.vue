@@ -10,7 +10,7 @@
             </div>
         </template>
         <v-list class="main-container">
-            <v-list-item class="list-item-hover mx-n2 mt-0" @click="featuredClick" :class="selectedTab === 'featured' ? 'selected-page-item' : ''">
+            <v-list-item class="mx-n2 mt-0" @click="featuredClick" :class="selectedTab === 'featured' ? 'selected-page-item' : ''">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/featured.svg')">
                 </v-list-item-icon>
@@ -20,7 +20,7 @@
             </v-list-item>
 
             <v-list-group :append-icon="null"  @click="isShowUsd = !isShowUsd">
-                <template v-slot:activator class="list-item-hover">
+                <template v-slot:activator>
                     <v-list-item-icon class="mx-n2">
                         <img class="navbar-page-link" :src="require('@/assets/icon/menu/usdplus.svg')">
                     </v-list-item-icon>
@@ -35,19 +35,19 @@
                         </v-row>
                     </div>
                 </template>
-                <v-list-item class="list-item-hover" link @click="statsClick" :class="selectedTab === 'usdplus_performance' ? 'selected-page-item' : ''">
+                <v-list-item @click="statsClick" :class="selectedTab === 'usdplus_performance' ? 'selected-page-item' : ''">
                     <v-list-item-title>
                         <label class="navbar-list-label mx-5" :class="selectedTab === 'usdplus_performance' ? 'selected-page' : ''">Performance</label>
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item class="list-item-hover " @click="collateralClick" :class="selectedTab === 'usdplus_collateral' ? 'selected-page-item' : ''">
+                <v-list-item @click="collateralClick" :class="selectedTab === 'usdplus_collateral' ? 'selected-page-item' : ''">
                     <v-list-item-title>
                         <label class="navbar-list-label mx-5" :class="selectedTab === 'usdplus_collateral' ? 'selected-page' : ''">Collateral</label>
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item class="list-item-hover " @click="usdPlusPoolsClick" :class="selectedTab === 'usdplus_pools' ? 'selected-page-item' : ''">
+                <v-list-item @click="usdPlusPoolsClick" :class="selectedTab === 'usdplus_pools' ? 'selected-page-item' : ''">
                     <v-list-item-title>
                         <label class="navbar-list-label mx-5" :class="selectedTab === 'usdplus_pools' ? 'selected-page' : ''">USD+ pools</label>
                     </v-list-item-title>
@@ -67,7 +67,7 @@
             </v-list-group>
 
 
-            <v-list-item class="list-item-hover mx-n2" @click="etsClick"  :class="selectedTab === 'ets' ? 'selected-page-item' : ''">
+            <v-list-item class="mx-n2" @click="etsClick"  :class="selectedTab === 'ets' ? 'selected-page-item' : ''">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/etsIcon.svg')">
                 </v-list-item-icon>
@@ -77,7 +77,7 @@
             </v-list-item>
 
             <v-list-group :append-icon="null"  @click="isShowInsurance = !isShowInsurance">
-                <template v-slot:activator class="list-item-hover" >
+                <template v-slot:activator>
                     <v-list-item-icon class="mx-n2" light>
                         <img class="navbar-page-link" :src="require('@/assets/icon/menu/insurance.svg')">
                     </v-list-item-icon>
@@ -96,11 +96,11 @@
                     <label class="navbar-list-label mx-7" :class="selectedTab === 'insurance_about' ? 'selected-page' : ''" >About</label>
                 </v-list-item>
 
-                <v-list-item class="list-item-hover" @click="insurancePerformanceClick" :class="selectedTab === 'insurance-performance' ? 'selected-page-item' : ''">
+                <v-list-item @click="insurancePerformanceClick" :class="selectedTab === 'insurance-performance' ? 'selected-page-item' : ''">
                     <label class="navbar-list-label mx-7" :class="selectedTab === 'insurance-performance' ? 'selected-page' : ''">Performance</label>
                 </v-list-item>
 
-                <v-list-item class="list-item-hover" @click="insuranceReservesClick" :class="selectedTab === 'insurance-reserves' ? 'selected-page-item' : ''">
+                <v-list-item @click="insuranceReservesClick" :class="selectedTab === 'insurance-reserves' ? 'selected-page-item' : ''">
                     <label class="navbar-list-label mx-7" :class="selectedTab === 'insurance-reserves' ? 'selected-page' : ''">Reserves</label>
                 </v-list-item>
 
@@ -114,7 +114,7 @@
 
             <v-divider class="navbar-list-divider"></v-divider>
 
-            <v-list-item class="list-item-hover mx-n2 mt-0" @click="dashBoardClick" :class="selectedTab === 'dashboard' ? 'selected-page-item' : ''">
+            <v-list-item class="mx-n2 mt-0" @click="dashBoardClick" :class="selectedTab === 'dashboard' ? 'selected-page-item' : ''">
                 <v-list-item-icon>
                     <img class="navbar-page-link" :src="require('@/assets/icon/menu/my-dashboard.svg')">
                 </v-list-item-icon>
@@ -123,12 +123,12 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-item class="menu-item list-item-hover" @click="openLink('https://docs.overnight.fi/')">
+            <v-list-item class="menu-item" @click="openLink('https://docs.overnight.fi/')">
                 <v-list-item-title class="network-select-list-item text-gray">
                     Docs
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item class="list-item-hover menu-item theme-switch-btn" @click="switchTheme">
+            <v-list-item class="menu-item theme-switch-btn" @click="switchTheme">
                 <v-list-item-title class="network-select-list-item">
                     <v-row class="ma-0 fill-height" align="center" justify="center">
                         Switch to {{ light ? 'dark' : 'light' }} mode
@@ -432,10 +432,6 @@ export default {
     letter-spacing: 0.05em;
     color: var(--main-gray-text);
     cursor: pointer;
-}
-
-.navbar-list-label:hover {
-    color: #FFFFFF;
 }
 
 .navbar-page-label-modal {

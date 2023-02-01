@@ -35,6 +35,7 @@ const actions = {
             { network: 'polygon', name: 'qs_zeta_wbtc_usdc' },
             { network: 'polygon', name: 'qs_epsilon_weth_dai' },
             { network: 'polygon', name: 'uni_eta_wmatic_usdc' },
+            { network: 'polygon', name: 'uni_theta_weth_usdc' },
 
             { network: 'bsc', name: 'wbnb_busd' },
             { network: 'bsc', name: 'qs_alpha_wbnb_busd' },

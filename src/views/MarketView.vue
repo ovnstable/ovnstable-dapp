@@ -12,7 +12,7 @@
                          v-if="component.type === 'ets'"
                          :featured="i < 3"
                          :card-data="component"/>
-            <template v-if="sortedCardList.filter(value => (value.isPrototype || value.isOpenPrototype)).length > 0">
+            <template v-if="sortedCardList.filter(value => (value.isPrototype || value.isOpenPrototype)).length > 0" >
                 <v-row class="ma-0 mb-1 mt-10" align="center">
                     <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-test-tube</v-icon>
                     <label class="prototypes-label ml-2">Prototypes</label>
@@ -30,7 +30,7 @@
             <template v-if="sortedCardList.filter(value => value.isArchive).length > 0" >
                 <v-row class="ma-0 mb-1 mt-10" align="center">
                     <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-archive-outline</v-icon>
-                    <label class="prototypes-label ml-2">Archive</label>
+                    <label class="prototypes-label ml-2 archive-label" @click="openedList = !openedList">Archive</label>
                     <div class="select-bar-main-container ml-7" @click="openedList = !openedList">
                         <v-row justify="end" align="center" class="select-bar-container">
                             <v-icon color="var(--secondary-gray-text)" >
@@ -438,6 +438,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .select-bar-main-container {
+    cursor: pointer;
+}
+
+.archive-label {
     cursor: pointer;
 }
 </style>

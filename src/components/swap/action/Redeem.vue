@@ -498,8 +498,9 @@ export default {
 
                 let approveSum = "10000000";
                 let sum = this.web3.utils.toWei(approveSum, 'mwei');
+                console.debug(`Swap Mint blockchain. Approve action. Sum: ${sum}. Account: ${this.account}.`);
 
-                let allowApprove = await this.checkAllowance(sum);
+              let allowApprove = await this.checkAllowance(sum);
                 if (!allowApprove) {
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
@@ -520,6 +521,7 @@ export default {
             let from = this.account;
 
             let allowanceValue = await contracts.usdPlus.methods.allowance(from, contracts.exchange.options.address).call()
+            console.debug(`Swap Mint blockchain. Allowance value: ${allowanceValue}. Account: ${this.account}.`);
 
             if (allowanceValue < sum) {
                 try {
@@ -527,6 +529,7 @@ export default {
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
                     let tx = await contracts.usdPlus.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
+                    console.debug(`Swap Mint blockchain. Allowance Sum: ${sum}. Account: ${this.account}.`);
 
                     let minted = true;
                     while (minted) {
@@ -565,6 +568,7 @@ export default {
                 let blockNum = await this.web3.eth.getBlockNumber();
                 let errorApi = this.polygonApi;
 
+                console.debug(`Swap Mint blockchain. Estimate gas action Sum: ${sum}. Account: ${this.account}.`);
                 await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;

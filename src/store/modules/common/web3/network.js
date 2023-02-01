@@ -36,6 +36,7 @@ const OPTIMISM_PARAMS = {
 
 const state = {
     appApiUrl: _getParams(null).appApiUrl,
+    apiUrl: "https://api.overnight.fi",
     networkName: _getParams(null).networkName,
     networkId: _getParams(null).networkId,
     rpcUrl: _getParams(null).rpcUrl,
@@ -80,6 +81,10 @@ const getters = {
 
     appApiUrl(state) {
         return state.appApiUrl;
+    },
+
+    apiUrl(state) {
+        return state.apiUrl;
     },
 
     networkName(state) {

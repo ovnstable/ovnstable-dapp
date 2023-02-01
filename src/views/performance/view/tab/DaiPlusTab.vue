@@ -1,6 +1,17 @@
 <template>
     <div class="page-container">
-        <v-row class="ma-0 info-card-container mt-5" justify="start" align="start">
+
+        <v-row v-if="isCollateralLoading">
+          <v-row align="center" justify="center" class="py-15">
+            <v-progress-circular
+                width="2"
+                size="24"
+                color="#8FA2B7"
+                indeterminate
+            ></v-progress-circular>
+          </v-row>
+        </v-row>
+        <v-row v-else class="ma-0 info-card-container mt-5" justify="start" align="start">
             <v-col class="info-card-body-bottom">
                 <v-row align="start" justify="start" class="ma-0">
                     <label class="section-title-label">DAI+ collateral assets</label>
@@ -11,7 +22,7 @@
                         <TableStablecoins
                             only-percents
                             v-if="!$wu.isMobile()"
-                            :data="stablecoinData"/>
+                            :data="collateralData"/>
 
                         <TableStablecoins
                             v-else
@@ -21,13 +32,23 @@
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <PieStablecoins :data="stablecoinData" :size="!$wu.isFull() ? 200 : 300"/>
+                        <PieStablecoins :data="collateralData" :size="!$wu.isFull() ? 200 : 300"/>
                     </v-col>
                 </v-row>
             </v-col>
         </v-row>
 
-<!--        <v-row class="ma-0 info-card-container mt-3" justify="start" align="start">
+        <v-row v-if="isCurrentTotalDataLoading">
+          <v-row align="center" justify="center" class="py-15">
+            <v-progress-circular
+                width="2"
+                size="24"
+                color="#8FA2B7"
+                indeterminate
+            ></v-progress-circular>
+          </v-row>
+        </v-row>
+        <v-row v-else class="ma-0 info-card-container mt-3" justify="start" align="start">
             <v-col class="info-card-body-bottom">
                 <v-row align="center" justify="start" class="ma-0">
                     <label class="section-title-label">DAI+ portfolio</label>
@@ -37,20 +58,22 @@
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
                         <TableStrategies
                             v-if="!$wu.isMobile()"
-                            :data="currentTotalData"/>
+                            :data="currentTotalData"
+                            :total-supply="totalValue"/>
 
                         <TableStrategies
                             v-else
                             minimized
-                            :data="currentTotalData"/>
+                            :data="currentTotalData"
+                            :total-supply="totalValue"/>
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <DoughnutStrategies :data="currentTotalData" :size="!$wu.isFull() ? 200 : 300"/>
+                        <DoughnutStrategies :data="currentTotalData" :total-value="totalValue" :size="!$wu.isFull() ? 200 : 300"/>
                     </v-col>
                 </v-row>
             </v-col>
-        </v-row>-->
+        </v-row>
 
         <div class="ma-0 info-card-container d-flex mt-3">
             <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
@@ -92,6 +115,10 @@ import PieStablecoins from "@/components/stats/pie/PieStablecoins";
 import TableStrategies from "@/components/stats/doughnut/TableStrategies";
 import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies";
 
+import {collateralApiService} from "@/services/collateral-api-service";
+import {strategiesApiService} from "@/services/strategies-api-service";
+import * as numberUtils from "@/utils/number-utils";
+
 export default {
     name: "CollateralView",
 
@@ -101,49 +128,139 @@ export default {
         PieStablecoins,
         TableStablecoins
     },
-
     data: () => ({
-        stablecoinData: [
-            {
-                label: 'USD+',
-                value: 97.5,
-                link: '0x73cb180bf0521828d8849bc8CF2B920918e23032',
-                color: "#2775CA",
-                logo: require('@/assets/currencies/USD+.png')
-            },
-            {
-                label: 'DAI',
-                value: 2.5,
-                link: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
-                color: "#FCCA46",
-                logo: require('@/assets/currencies/stablecoins/DAI.png')
-            },
-        ],
+      isCurrentTotalDataLoading: true,
+      isCollateralLoading: true,
+
+      collateralData: null,
+      currentTotalData: null,
+      totalValue: 0
     }),
 
     computed: {
-        ...mapGetters("network", ['networkId']),
-        ...mapGetters("statsData", ['currentTotalData']),
-
+        ...mapGetters("network", ['networkId', 'apiUrl']),
     },
 
     created() {
     },
 
+    mounted() {
+      this.loadCurrentTotalData()
+      this.loadCollateralData()
+    },
+
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
 
-        openLink(url) {
-            window.open(url, '_blank').focus();
-        },
+      openLink(url) {
+          window.open(url, '_blank').focus();
+      },
 
-        shortAddress(address) {
-            if (address) {
-                return address.substring(0, 5) + '...' + address.substring(address.length - 4);
-            } else {
-                return null;
+      shortAddress(address) {
+          if (address) {
+              return address.substring(0, 5) + '...' + address.substring(address.length - 4);
+          } else {
+              return null;
+          }
+      },
+      loadCurrentTotalData() {
+        this.isCurrentTotalDataLoading = true;
+
+        strategiesApiService.getStrategies(this.apiUrl + '/optimism/dai+')
+          .then(data => {
+            let strategies = data;
+            strategies.sort((a,b) => b.netAssetValue - a.netAssetValue);
+
+            let colors = [
+              "#FCCA46",
+              "#FE7F2D",
+              "#3D8DFF",
+              "#22ABAC",
+              "#B22174",
+              "#2775CA",
+              "#26A17B",
+              "#23DD00",
+              "#6E56C4",
+              "#002868"
+            ];
+
+            this.currentTotalData = [];
+            this.totalValue = 0;
+
+            for (let i = 0; i < strategies.length; i++) {
+              let element = strategies[i];
+
+              this.currentTotalData.push(
+                  {
+                    label: element.name,
+                    fullName: element.fullName,
+                    value: element.netAssetValue,
+                    liquidationValue: element.liquidationValue,
+                    color: colors[i],
+                    link: (element.address || element.explorerAddress) ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + (element.explorerAddress ? element.explorerAddress : element.address)) : ''
+                  }
+              );
+
+              this.totalValue += element.netAssetValue ? element.netAssetValue : 0;
             }
-        },
+
+            this.isCurrentTotalDataLoading = false;
+          })
+          .catch(e => {
+            console.error("Error while adding stablecoins to list: " + e);
+            this.isCurrentTotalDataLoading = false;
+          })
+
+      },
+      loadCollateralData() {
+          this.isCollateralLoading = true;
+
+        collateralApiService.getCollateralData(this.apiUrl + '/optimism/dai+')
+        .then(data => {
+          let stablecoinList = data;
+          stablecoinList.sort((a,b) => b.netAssetValue - a.netAssetValue);
+          stablecoinList = stablecoinList.filter(el => el.netAssetValue > 0);
+
+          let colors = [
+            "#2775CA",
+            "#26A17B",
+            "#FCCA46",
+            "#6E56C4",
+            "#002868",
+            "#26A17B",
+            "#23DD00",
+            "#3D8DFF",
+            "#FE7F2D",
+            "#B22174"
+          ];
+
+          this.collateralData = [];
+          for (let i = 0; i < stablecoinList.length; i++) {
+            let element = stablecoinList[i];
+
+            try {
+              this.collateralData.push(
+                  {
+                    label: element.id.tokenName,
+                    value: element.netAssetValue,
+                    link: element.tokenAddress ? element.tokenAddress : '',
+                    color: colors[i],
+                    logo: require('@/assets/currencies/stablecoins/' + element.id.tokenName + '.png')
+                  }
+              );
+              console.log("Token name : ", element.id.tokenName);
+            } catch (e) {
+              console.error("Error while adding stablecoin to list: " + e);
+            }
+          }
+
+          this.isCollateralLoading = false;
+        })
+        .catch(e => {
+          console.log("Error Strategy Weights: ", e);
+          this.isCollateralLoading = false;
+        })
+      },
     }
 }
 </script>

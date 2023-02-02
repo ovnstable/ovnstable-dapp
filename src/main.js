@@ -18,6 +18,7 @@ import 'vue-resize/dist/vue-resize.css'
 import {ResizeObserver} from 'vue-resize'
 
 import * as Sentry from "@sentry/vue";
+import { CaptureConsole } from '@sentry/integrations';
 import { BrowserTracing } from "@sentry/tracing";
 
 Vue.use(Vuex)
@@ -51,6 +52,9 @@ Sentry.init({
   dsn: "https://e237794d4a6d441f9f9e8b4b8cd62a96@o4504559540305920.ingest.sentry.io/4504559547121664",
   logErrors: true,
   integrations: [
+    new CaptureConsole({
+      levels: ['debug', 'error']
+    }),
     new BrowserTracing({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
       tracePropagationTargets: ["app.overnight.fi", /^\//],

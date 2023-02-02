@@ -48,7 +48,7 @@ export default {
     }),
 
     async created() {
-``        console.log('Dapp created')
+        console.log('Dapp created')
 
         await this.initTheme();
 

@@ -435,6 +435,11 @@ export default {
 
         async redeemAction() {
             try {
+
+                if (this.sliderPercent === 100) {
+                  this.max();
+                }
+
                 let sumInUsd = this.sum;
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
 
@@ -452,6 +457,8 @@ export default {
                     } else {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
+
+                    console.debug(`Insurance blockchain. Withdraw action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
 
                     let buyResult = await contracts.insurance.polygon_exchanger.methods.redeem({ amount: sum }).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {

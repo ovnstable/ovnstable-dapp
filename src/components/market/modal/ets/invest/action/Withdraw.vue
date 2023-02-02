@@ -436,9 +436,13 @@ export default {
 
         async redeemAction() {
             try {
-                let sumInUsd = this.sum;
-                let sum;
 
+              if (this.sliderPercent === 100) {
+                this.max();
+              }
+
+              let sumInUsd = this.sum;
+              let sum;
                 switch (this.etsData.etsTokenDecimals) {
                     case 6:
                         sum = this.web3.utils.toWei(this.sum, 'mwei');
@@ -469,36 +473,7 @@ export default {
                     }
 
                     let etsActionData = this.etsData;
-
                     console.debug(`Withdraw blockchain. Redeem action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
-                  // this.etsBalance[this.etsData.name] * (this.sliderPercent
-                    if (this.sliderPercent === 100) {
-                      let etsBalanceFromWallet = this.etsBalance[this.etsData.name];
-                      let weiEtsBalanceFromWallet = 0;
-                      switch (this.etsData.etsTokenDecimals) {
-                        case 6:
-                          weiEtsBalanceFromWallet = this.web3.utils.toWei(etsBalanceFromWallet + '', 'mwei');
-                          break;
-                        case 8:
-                          weiEtsBalanceFromWallet = this.web3.utils.toWei(etsBalanceFromWallet + '', 'mwei') * 100;
-                          break;
-                        case 18:
-                          weiEtsBalanceFromWallet = this.web3.utils.toWei(etsBalanceFromWallet + '', 'ether');
-                          break;
-                        default:
-                          console.error("When 100% slider, ets decemals not found for get wei sum.", this.etsData.etsTokenDecimals)
-                          break;
-                      }
-
-
-                      console.debug("100% -> get balance from blockchain. etsBalanceFromWallet: ", etsBalanceFromWallet);
-                      console.debug("100% -> get balance from blockchain. weiEtsBalanceFromWallet: ", weiEtsBalanceFromWallet);
-
-                      if (weiEtsBalanceFromWallet) {
-                        sum = weiEtsBalanceFromWallet;
-                        console.debug(`Withdraw blockchain. Redeem action Updated Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
-                      }
-                    }
 
                     let buyResult = await contracts[this.etsData.exchangeContract].methods.redeem(sum).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {

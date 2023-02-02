@@ -496,6 +496,11 @@ export default {
 
         async buyAction() {
             try {
+
+              if (this.sliderPercent === 100) {
+                this.max();
+              }
+
                 let sumInUsd = this.sum;
                 let sum;
 
@@ -531,7 +536,8 @@ export default {
                     let referral = await this.getReferralCode();
                     let etsActionData = this.etsData;
 
-                    let buyResult = await contracts[this.etsData.exchangeContract].methods.buy(sum, referral).send(buyParams).on('transactionHash', function (hash) {
+                  console.debug(`Invest blockchain. Buy action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
+                  let buyResult = await contracts[this.etsData.exchangeContract].methods.buy(sum, referral).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {
                             hash: hash,
                             text: 'Mint ETS ' + etsActionData.nameUp,

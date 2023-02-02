@@ -416,6 +416,11 @@ export default {
 
         async redeemAction() {
             try {
+
+              if (this.sliderPercent === 100) {
+                this.max();
+              }
+
                 let sumInUsd = this.sum;
                 let sum = this.web3.utils.toWei(this.sum, 'mwei');
 
@@ -434,6 +439,7 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
+                    console.debug(`Swap blockchain. Redeem action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
                     let buyResult = await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {
                             hash: hash,

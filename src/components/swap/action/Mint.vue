@@ -414,6 +414,11 @@ export default {
 
         async buyAction() {
             try {
+
+                if (this.sliderPercent === 100) {
+                  this.max();
+                }
+
                 let sumInUsd = this.sum;
                 let sum;
 
@@ -444,6 +449,7 @@ export default {
                         referral: await this.getReferralCode(),
                     }
 
+                    console.debug(`Swap blockchain. Mint action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
                     let buyResult = await contracts.exchange.methods.mint(mintParams).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {
                             hash: hash,

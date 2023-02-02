@@ -413,6 +413,11 @@ export default {
 
         async buyAction() {
             try {
+
+              if (this.sliderPercent === 100) {
+                this.max();
+              }
+
                 let sumInUsd = this.sum;
                 let sum;
 
@@ -441,6 +446,7 @@ export default {
                         amount: sum,
                     }
 
+                    console.debug(`Insurance blockchain. Mit action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
                     let buyResult = await contracts.insurance.polygon_exchanger.methods.mint(mintParams).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {
                             hash: hash,

@@ -2,7 +2,7 @@
     <v-row class="list-card-container ma-0" @click="$wu.isMobile() ? switchCard() : openStrategyCard()">
         <v-col v-if="!$wu.isMobile()" class="my-1">
             <v-row class="ma-0" justify="start" align="center">
-                <div class="icon mr-3">
+                <div class="icon mr-2">
                     <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
                            :title="cardData.data.chainName.toUpperCase()"/>
                 </div>
@@ -13,7 +13,7 @@
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 3 : ($wu.isMobile() ? 7 : 3)" class="my-1">
-            <v-row class="ma-0" justify="start" align="center">
+            <v-row class="ma-0" justify="start ml-5" align="center">
                 <v-badge icon="mdi-star-circle"
                          v-if="featured"
                          :color="featured ? 'var(--secondary)' : ''"
@@ -42,8 +42,8 @@
                 <label class="card-label">{{ cardData.monthApy === 0 ? '' : ($utils.formatMoneyComma(cardData.monthApy, 0) + '%') }}</label>
             </v-row>
         </v-col>
-        <v-col v-if="!$wu.isMobile()" cols="3" class="my-1">
-            <v-row class="ma-0" justify="end" align="center">
+        <v-col v-if="!$wu.isMobile()" cols="3" class="my-1" style="max-width: 269px">
+            <v-row class="ma-0 mr-10" justify="end" align="center">
                 <label class="card-label"
                        :class="(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
                     ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
@@ -59,32 +59,38 @@
                 </div>
             </v-row>
         </v-col>
-        <v-col v-if="$wu.isFull()" class="my-1" cols="1">
-            <v-row class="ma-0" justify="end" align="center">
+        <v-col v-if="$wu.isFull()" class="my-1" cols="1" >
+            <v-row class="ma-0 mr-5" justify="start" align="center">
                 <label class="card-label">{{ accountEtsBalance ? ('$' + $utils.formatMoneyComma(accountEtsBalance, 2)) : '' }}</label>
             </v-row>
         </v-col>
-        <v-col v-if="!$wu.isMobile()" class="my-1">
+        <v-col v-if="!$wu.isMobile()" class="my-1" style="max-width: 100px">
             <template v-if="!networkSupport">
-                <v-row class="ma-0" justify="end" align="center">
-                    <v-btn x-small
-                           class="button btn-outlined"
-                           @click.stop="openStrategyCard" outlined>
-                        ABOUT
-                    </v-btn>
-                </v-row>
+                <div >
+                    <v-row class="ma-0" justify="end" align="center">
+                        <v-btn x-small
+                               width="100px"
+                               class="button btn-outlined"
+                               @click.stop="openStrategyCard" outlined>
+                            ABOUT
+                        </v-btn>
+                    </v-row>
+                </div>
             </template>
 
             <template v-else>
                 <v-row class="ma-0" justify="end" align="center">
                     <v-btn x-small
+                           width="100px"
                            v-if="!cardData.data.disabled && (isOvercapAvailable || (!cardData.isPrototype &&  !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)))"
                            class="button btn-outlined"
                            @click.stop="mintAction" outlined>
                         MINT/REDEEM
                     </v-btn>
                     <v-btn x-small
+                           width="100px"
                            v-else
+                           max-width="120px"
                            class="button btn-outlined"
                            @click.stop="redeemAction" outlined>
                         REDEEM
@@ -417,7 +423,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
-        font-size: 14px !important;
+        font-size: 13px !important;
         line-height: 18px !important;
         letter-spacing: 0.03em;
     }
@@ -425,7 +431,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .card-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 13px;
+        font-size: 14px;
         line-height: 18px;
     }
 

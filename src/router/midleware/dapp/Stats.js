@@ -1,6 +1,6 @@
-export default async function getStats({ context, nextMiddleware }){
+export default async function getStats({ context, nextMiddleware }) {
     try {
-        console.debug('Get Dapp/Stats');
+        console.log('Get Dapp/Stats');
 
         context.store.dispatch('menuUI/selectTab', 'usdplus_performance');
         context.store.dispatch('statsData/refreshStats');
@@ -10,4 +10,4 @@ export default async function getStats({ context, nextMiddleware }){
         return context.next(false);
     }
     return nextMiddleware()
-};
+}

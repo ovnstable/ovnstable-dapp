@@ -2,9 +2,9 @@
   "name": "qs_gamma_weth_usdc",
   "nameUp": "QS GAMMA WETH/USDC",
   "nameToken": "GAMMA",
-  "prototype": true,
-  "openPrototype": true,
-  "archive": false,
+  "prototype": false,
+  "openPrototype": false,
+  "archive": true,
   "disabled": true,
   "highRisk": true,
 

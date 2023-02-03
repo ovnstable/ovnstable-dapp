@@ -414,6 +414,11 @@ export default {
 
         async buyAction() {
             try {
+
+                if (this.sliderPercent === 100) {
+                  this.max();
+                }
+
                 let sumInUsd = this.sum;
                 let sum;
 
@@ -444,6 +449,7 @@ export default {
                         referral: await this.getReferralCode(),
                     }
 
+                    console.debug(`Swap blockchain. Mint action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
                     let buyResult = await contracts.exchange.methods.mint(mintParams).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {
                             hash: hash,
@@ -479,6 +485,8 @@ export default {
                 } else {
                     sum = this.web3.utils.toWei(this.sum, 'mwei');
                 }
+
+                console.debug(`Swap Mint blockchain. Confirm swap action Sum: ${sum}. Account: ${this.account}.`);
 
                 this.trackClick({action: 'confirm-swap-click', event_category: 'Mint', event_label: 'Confirm Mint Action', value: 1 });
 
@@ -518,7 +526,8 @@ export default {
                     sum = this.web3.utils.toWei(approveSum, 'mwei');
                 }
 
-                let allowApprove = await this.checkAllowance(sum);
+              console.debug(`Swap Mint blockchain. Approve action Sum: ${sum}. Account: ${this.account}.`);
+              let allowApprove = await this.checkAllowance(sum);
                 if (!allowApprove) {
                     this.trackClick({action: 'approve-action-click', event_category: 'Mint', event_label: 'Approve Mint Action', value: 1 });
                     this.closeWaitingModal();
@@ -547,7 +556,8 @@ export default {
                     await this.refreshGasPrice();
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                    let tx = await contracts.asset.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
+                  console.debug(`Swap Mint blockchain. Check allowance Sum: ${sum}. Account: ${this.account}.`);
+                  let tx = await contracts.asset.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
 
                     let minted = true;
                     while (minted) {
@@ -592,6 +602,7 @@ export default {
                     referral: await this.getReferralCode(),
                 }
 
+                console.debug(`Swap Mint blockchain. Estimate gas Sum: ${sum}. Account: ${this.account}.`);
                 await contracts.exchange.methods.mint(mintParams).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;

@@ -57,7 +57,7 @@ const actions = {
 
         let networkId = rootState.network.networkId;
 
-        console.debug("Getting gas price for network_id=" + networkId);
+        console.log("Getting gas price for network_id=" + networkId);
 
         let url;
         if (networkId === 137)

@@ -1,6 +1,6 @@
 export default async function getPreOvn({ context, nextMiddleware }){
     try {
-        console.debug('Get Dapp/PreOvn');
+        console.log('Get Dapp/PreOvn');
 
 
     }
@@ -9,4 +9,4 @@ export default async function getPreOvn({ context, nextMiddleware }){
         return context.next(false);
     }
     return nextMiddleware()
-};
+}

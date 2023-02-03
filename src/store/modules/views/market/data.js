@@ -36,7 +36,7 @@ const getters = {
 const actions = {
 
     async refreshMarket({commit, dispatch, getters, rootState}) {
-        console.debug('MarketData: refreshMarket');
+        console.log('MarketData: refreshMarket');
 
         dispatch('refreshStrategyData');
         dispatch('refreshClientData');
@@ -175,7 +175,7 @@ const actions = {
     },
 
     async refreshClientData({commit, dispatch, getters, rootState}) {
-        console.debug('MarketData: refreshClientData');
+        console.log('MarketData: refreshClientData');
 
         await Promise.all(
             rootState.etsAction.etsList.map(async ets => {
@@ -225,7 +225,7 @@ const actions = {
     },
 
     async refreshUsdPlusPayoutsData({commit, dispatch, getters, rootState}) {
-        console.debug('MarketData: refreshUsdPlusPayoutsData');
+        console.log('MarketData: refreshUsdPlusPayoutsData');
 
         await Promise.all(
             ['polygon', 'bsc', 'optimism'].map(async network => {

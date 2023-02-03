@@ -1,6 +1,6 @@
 export default async function getDapp({ context, nextMiddleware }){
     try {
-        console.debug('Get Dapp');
+        console.log('Get Dapp');
     }
     catch(e){
         console.error(e);

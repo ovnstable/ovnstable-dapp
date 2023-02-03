@@ -1,6 +1,6 @@
 export default async function getPools({ context, nextMiddleware }){
   try {
-    console.debug('Get Dapp/Pools');
+    console.log('Get Dapp/Pools');
 
     context.store.dispatch('menuUI/selectTab', 'usdplus_pools');
 
@@ -13,4 +13,4 @@ export default async function getPools({ context, nextMiddleware }){
     return context.next(false);
   }
   return nextMiddleware()
-};
+}

@@ -41,7 +41,7 @@ const getters = {
 const actions = {
 
     async refreshInsurance({commit, dispatch, getters, rootState}) {
-        console.debug('InsuranceData: refreshInsurance');
+        console.log('InsuranceData: refreshInsurance');
 
         let insuranceChainList = [
             {
@@ -234,7 +234,7 @@ const actions = {
     },
 
     async refreshUsdPlusPayoutsData({commit, dispatch, getters, rootState}, network) {
-        console.debug('InsuranceData: refreshUsdPlusPayoutsData', network);
+        console.log('InsuranceData: refreshUsdPlusPayoutsData', network);
 
         let appApiUrl;
 
@@ -274,7 +274,7 @@ const actions = {
     },
 
     async refreshIsNeedRedemption({commit, dispatch, getters, rootState}) {
-        console.debug('Insurance/redemptionCheck')
+        console.log('Insurance/redemptionCheck')
 
         let web3 = rootState.web3;
         let account = rootState.accountData.account;

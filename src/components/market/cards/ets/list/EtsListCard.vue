@@ -33,17 +33,17 @@
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)" class="my-1">
-            <v-row class="ma-0" justify="center" align="center">
+            <v-row class="ma-0" justify="start" align="center">
                 <label class="card-label">{{ cardData.lastApy === 0 ? '' : ($utils.formatMoneyComma(cardData.lastApy, 0) + '%') }}</label>
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)" class="my-1">
-            <v-row class="ma-0" justify="center" align="center">
+            <v-row class="ma-0" justify="start" align="center">
                 <label class="card-label">{{ cardData.monthApy === 0 ? '' : ($utils.formatMoneyComma(cardData.monthApy, 0) + '%') }}</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()" cols="3" class="my-1" style="max-width: 269px">
-            <v-row class="ma-0 mr-10" justify="end" align="center">
+            <v-row class="ma-0 mr-10" justify="center" align="center">
                 <label class="card-label"
                        :class="(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
                     ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
@@ -59,18 +59,19 @@
                 </div>
             </v-row>
         </v-col>
-        <v-col v-if="$wu.isFull()" class="my-1" cols="1" >
+        <v-col v-if="$wu.isFull()" class="my-1" cols="1" style="max-width: 100px">
             <v-row class="ma-0 mr-5" justify="start" align="center">
                 <label class="card-label">{{ accountEtsBalance ? ('$' + $utils.formatMoneyComma(accountEtsBalance, 2)) : '' }}</label>
             </v-row>
         </v-col>
-        <v-col v-if="!$wu.isMobile()" class="my-1" style="max-width: 100px">
+        <v-col v-if="!$wu.isMobile()" class="my-1 button-width" style="max-width: 90px">
             <template v-if="!networkSupport">
                 <div >
                     <v-row class="ma-0" justify="end" align="center">
                         <v-btn x-small
-                               width="100px"
+                               width="120px"
                                class="button btn-outlined"
+                               max-width="100px"
                                @click.stop="openStrategyCard" outlined>
                             ABOUT
                         </v-btn>
@@ -81,16 +82,17 @@
             <template v-else>
                 <v-row class="ma-0" justify="end" align="center">
                     <v-btn x-small
-                           width="100px"
+                           width="105px"
+                           max-width="105px"
                            v-if="!cardData.data.disabled && (isOvercapAvailable || (!cardData.isPrototype &&  !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)))"
                            class="button btn-outlined"
                            @click.stop="mintAction" outlined>
                         MINT/REDEEM
                     </v-btn>
                     <v-btn x-small
-                           width="100px"
+                           width="105px"
+                           max-width="100px"
                            v-else
-                           max-width="120px"
                            class="button btn-outlined"
                            @click.stop="redeemAction" outlined>
                         REDEEM

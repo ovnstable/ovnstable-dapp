@@ -1,24 +1,10 @@
 import loadJSON from '@/utils/http-utils.js'
 
 const state = {
-    etsNames: [
-        'wbnb_busd',
-        'wmatic_usd_plus',
-        'ruby',
-        'night_ov_ar',
-        'qs_alpha_wbnb_busd',
-        'qs_alpha_wmatic_usdc',
-        'qs_beta_wmatic_usdc',
-        'qs_gamma_weth_usdc',
-        'qs_delta_weth_usdc',
-        'qs_zeta_wbtc_usdc',
-        'qs_epsilon_weth_dai',
-        'uni_eta_wmatic_usdc',
-        'uni_alpha_weth_usdc',
-        'uni_beta_weth_dai',
-        'uni_gamma_weth_dai',
-        'ar_delta_weth_dai',
-        'uni_theta_weth_usdc',
+    etsNetworkUrl: [
+        'https://api.overnight.fi/optimism/usd+/design_ets/list',
+        'https://api.overnight.fi/polygon/usd+/design_ets/list',
+        'https://api.overnight.fi/bsc/usd+/design_ets/list'
     ],
     etsList: null,
 };
@@ -27,6 +13,10 @@ const getters = {
 
     etsNames(state) {
         return state.etsNames;
+    },
+
+    etsNetworkUrl(state) {
+        return state.etsNetworkUrl;
     },
 
     etsList(state) {
@@ -39,12 +29,10 @@ const actions = {
 
         let list = [];
 
-        for (let i = 0; i < getters.etsNames.length; i++) {
-            let ets = await loadJSON('/json/ets/' + getters.etsNames[i] + '.json');
-
+        for (let i = 0; i < getters.etsNetworkUrl.length; i++) {
+            let etses = await loadJSON(getters.etsNetworkUrl[i]);
             // May add some fields
-
-            list.push(ets);
+            list.push(...etses);
         }
 
         await commit('setEtsList', list);

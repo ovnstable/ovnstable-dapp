@@ -8,8 +8,8 @@
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
 
                         <label class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
-                        <label class="tab-btn mx-4" @click="tab = 2" v-bind:class="activeTabUsdPlus">USD+</label>
-                        <label class="tab-btn mx-4" @click="tab = 4" v-bind:class="activeTabETS" disabled>ETS</label>
+                        <label class="tab-btn mx-4" @click="setTab(2)" v-bind:class="activeTabUsdPlus">USD+</label>
+                        <label class="tab-btn mx-4" @click="setTab(4)" v-bind:class="activeTabETS" disabled>ETS</label>
 
                         <v-spacer></v-spacer>
 
@@ -112,7 +112,18 @@
                 </v-col>
 
                 <v-col v-if="tab === 2" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
-                    <v-row class="ma-0 info-card-container" :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
+
+                    <v-row v-if="isUsdPlusLoading">
+                      <v-row align="center" justify="center" class="py-15">
+                        <v-progress-circular
+                            width="2"
+                            size="24"
+                            color="#8FA2B7"
+                            indeterminate
+                        ></v-progress-circular>
+                      </v-row>
+                    </v-row>
+                    <v-row v-if="!isUsdPlusLoading" class="ma-0 info-card-container" :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
                         <v-col class="info-card-body-bottom">
                             <v-row align="center" justify="start" class="ma-0">
                                 <v-col :cols="$wu.isFull() ? 3 : 12">
@@ -201,8 +212,7 @@
                         </v-col>
                     </v-row>
 
-                    <v-row align="center" justify="start" class="ma-0" :class="$wu.isFull() ? 'mt-8' : 'mt-5'"
-                           v-if="!anyActivities">
+                    <v-row v-if="!isUsdPlusLoading && !anyActivities" align="center" justify="start" class="ma-0" :class="$wu.isFull() ? 'mt-8' : 'mt-5'">
                         <v-btn class="dashboard-action-btn btn-filled" @click="mintAction" v-if="walletConnected">
                             Mint USD+ to start
                         </v-btn>
@@ -211,8 +221,8 @@
                         </v-btn>
                     </v-row>
 
-                    <v-row align="center" justify="start" class="ma-0 info-card-container"
-                           :class="$wu.isFull() ? 'mt-6' : 'mt-3'" v-if="anyActivities">
+                    <v-row v-if="!isUsdPlusLoading && anyActivities" align="center" justify="start" class="ma-0 info-card-container"
+                           :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
                         <v-col class="info-card-body-bottom">
                             <template v-if="portfolioValue">
                                 <LineChart :data="portfolioValue"/>
@@ -220,8 +230,8 @@
                         </v-col>
                     </v-row>
 
-                    <v-row align="center" justify="start" class="ma-0 info-card-container"
-                           :class="$wu.isFull() ? 'mt-6' : 'mt-3'" v-if="anyActivities">
+                    <v-row v-if="!isUsdPlusLoading && anyActivities" align="center" justify="start" class="ma-0 info-card-container"
+                           :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
                         <v-col class="info-card-body-bottom">
                             <v-row align="center" justify="start" class="ma-0">
                                 <label class="container-body-title" :class="$wu.isFull() ? '' : 'mb-1'">USD+
@@ -245,8 +255,8 @@
                         </v-col>
                     </v-row>
 
-                    <v-row align="center" justify="start" class="ma-0 info-card-container"
-                           :class="$wu.isFull() ? 'mt-6' : 'mt-3'" v-if="anyActivities">
+                    <v-row v-if="!isUsdPlusLoading && anyActivities" align="center" justify="start" class="ma-0 info-card-container"
+                           :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
                         <v-col class="info-card-body-bottom">
                             <v-row align="start" justify="start" class="ma-0">
                                 <v-col :cols="$wu.isFull() ? 3 : 12">
@@ -355,6 +365,8 @@ import Table from "@/components/dashboard/Table";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import LineChart from "@/components/widget/LineChart";
 import EtsTab from "@/views/dashboard/tab/ets/EtsTab.vue";
+import {axios} from "@/plugins/http-axios";
+import moment from "moment/moment";
 
 export default {
     name: "MyPerformanceView",
@@ -366,14 +378,30 @@ export default {
     },
 
     data: () => ({
-        tab: 2,
+      tab: 2,
 
-        openedSliceList: false,
+      openedSliceList: false,
+
+      isUsdPlusLoading: true,
+      profitUsdPlus: null,
+      apy: null,
+      activities: null,
+      slice: null,
+      portfolioValue: {
+        labels: [],
+        datasets: [
+          {
+            fill: false,
+            borderColor: '#69a5fd',
+            data: [],
+          }
+        ]
+      }
     }),
 
     computed: {
+        ...mapGetters('network', ['appApiUrl']),
         ...mapGetters('accountData', ['balance', 'account']),
-        ...mapGetters('dashboardData', ['profitUsdPlus', 'apy', 'activities', 'slice', 'portfolioValue']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('magicEye', ['dataHidden']),
 
@@ -424,15 +452,38 @@ export default {
             return window.innerWidth <= 1400;
         }
     },
-
+    watch: {
+      account: function () {
+        this.loadData();
+      },
+      appApiUrl: function () {
+        this.loadData();
+      }
+    },
+    mounted() {
+     this.loadData();
+    },
     methods: {
-        ...mapActions('dashboardData', ['sliceDashboard']),
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('track', ['trackClick']),
         ...mapActions('magicEye', ['switchEye']),
 
-        ...mapMutations('dashboardData', ['setSlice']),
+      setTab(tab) {
+          if (tab === 2) {
+            this.tab = tab;
+            this.loadData();
+            return
+          }
+
+          this.tab = tab;
+      },
+
+      loadData() {
+        this.isUsdPlusLoading = true;
+        this.resetDashboard();
+        this.refreshDashboard();
+      },
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -467,6 +518,115 @@ export default {
             this.showMintView();
             this.showSwapModal();
         },
+
+      setSlice(slice) {
+        this.slice = slice;
+        // this.sliceDashboard();
+      },
+      resetDashboard() {
+          this.profitUsdPlus = null;
+          this.portfolioValue = null;
+          this.apy = null;
+          this.activities = null;
+          this.slice = null;
+      },
+      async refreshDashboard() {
+
+        console.log("Dashboard: refreshDashboard");
+        if (!this.account) {
+          this.isUsdPlusLoading = false;
+          return;
+        }
+
+        console.log("Dashboard: refreshDashboard after");
+
+        let account  = this.account.toLowerCase();
+
+        let appApiUrl = this.appApiUrl;
+        let response = (await axios.get(appApiUrl + `/dapp/clientBalanceChanges?address=${account}`)).data;
+
+        let clientData = response.map(item => {
+          return {
+            transactionHash: item.transaction_hash,
+            date: item.date,
+            type: item.type,
+            openingBalance: item.opening_balance,
+            balanceChange: item.change_balance,
+            closingBalance: item.closing_balance,
+            dailyProfit: item.type === 'PAYOUT' ? item.change_balance : null,
+            fee: item.fee,
+            apy: item.apy,
+            duration: item.elapsed_time,
+          }
+        });
+
+        this.activities = clientData;
+
+
+        let widgetDataDict = {};
+        let widgetData = {
+          labels: [],
+          datasets: [
+            {
+              fill: false,
+              borderColor: '#69a5fd',
+              data: [],
+            }
+          ]
+        };
+
+        [...clientData].reverse().forEach(item => {
+          widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = item.closingBalance;
+        });
+
+        for (let key in widgetDataDict) {
+          widgetData.labels.push(key);
+          widgetData.datasets[0].data.push(widgetDataDict[key]);
+        }
+
+        this.portfolioValue = widgetData;
+
+        this.isUsdPlusLoading = false;
+        this.sliceDashboard();
+      },
+      sliceDashboard() {
+
+        let clientData = this.activities.filter(value => value.type === 'PAYOUT');
+        clientData = this.slice ? clientData.slice(0, this.slice) : clientData;
+
+        let apyDataList = [...clientData];
+
+        let days = apyDataList.length;
+
+        apyDataList.forEach(value => {
+          value.changePercent = value.balanceChange / value.openingBalance;
+        })
+
+        let productResult = 1.0;
+        let durationSum = 0.0;
+
+        for (let i = 0; i < days; i++) {
+          productResult = productResult * (1.0 + apyDataList[i].changePercent);
+          durationSum = durationSum + apyDataList[i].duration;
+        }
+
+        let apy = Math.pow(productResult, 365.0 / (durationSum / 24.0)) - 1.0;
+
+        if (apy) {
+          this.apy = apy * 100.0;
+        } else {
+          this.apy = 0;
+        }
+
+        let profitList = clientData.map(item => item.dailyProfit ? item.dailyProfit : 0).filter(item => item !== 0);
+        if (profitList && (profitList.length > 0)) {
+          const sum = profitList.reduce((a, b) => a + b, 0);
+
+          this.profitUsdPlus = sum;
+        } else {
+          this.profitUsdPlus = 0;
+        }
+      }
     }
 }
 </script>

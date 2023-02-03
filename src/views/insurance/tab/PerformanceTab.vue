@@ -1,6 +1,16 @@
 <template>
     <div>
-      <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'" justify="start" align="center">
+      <v-row v-if="!isAllDataLoaded">
+        <v-row align="center" justify="center" class="py-15">
+          <v-progress-circular
+              width="2"
+              size="24"
+              color="#8FA2B7"
+              indeterminate
+          ></v-progress-circular>
+        </v-row>
+      </v-row>
+      <v-row v-if="isAllDataLoaded" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'" justify="start" align="center">
           <v-col class="info-card-body-bottom">
               <v-row align="center" justify="start" class="ma-0">
                   <v-col class="ml-n3 mt-n3">
@@ -20,7 +30,7 @@
           </v-col>
       </v-row>
 
-      <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
+      <v-row v-if="isAllDataLoaded" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
         <v-col class="info-card-body-bottom">
           <v-row align="center" justify="start" class="ma-0">
             <label class="section-title-label">Insurance payouts</label>
@@ -63,6 +73,7 @@ import ChartTvl from "@/components/insurance/strategy/chart/ChartTvl";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut.vue";
 import Table from "@/components/market/strategy/payouts/Table.vue";
 import moment from "moment/moment";
+import {axios} from "@/plugins/http-axios";
 
 export default {
     name: "PerformanceTab",
@@ -76,7 +87,18 @@ export default {
 
     data: () => ({
         rateTab: 1,
-    }),
+        isUsdPlusPayoutsDataLoading: true,
+        isClientDataLoading: true,
+        isStrategyDataLoading: true,
+
+        insuranceStrategyData: {},
+        insuranceClientData: {},
+        insuranceApyData: {},
+        insuranceTvlData: {},
+        insuranceRedemptionData: {},
+
+        usdPlusApyData: {},
+      }),
 
     props: {
 
@@ -86,10 +108,17 @@ export default {
     },
 
     watch: {
+
     },
 
     computed: {
-      ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceApyData', 'insuranceTvlData', 'usdPlusApyData']),
+      ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig']),
+      ...mapGetters('accountData', ['account']),
+      ...mapGetters('web3', ['contracts', 'web3']),
+
+      isAllDataLoaded: function () {
+        return !this.isUsdPlusPayoutsDataLoading && !this.isClientDataLoading && !this.isStrategyDataLoading;
+      },
 
     activeRateApy: function () {
           return {
@@ -126,10 +155,357 @@ export default {
       }
     },
 
+    mounted() {
+      this.loadData();
+    },
+
     methods: {
         openLink(url) {
             window.open(url, '_blank').focus();
         },
+
+      loadData() {
+          this.refreshInsurance();
+      },
+      async refreshInsurance() {
+        console.log('InsuranceData: refreshInsurance');
+
+        let insuranceChainList = [
+          {
+            chainName: 'polygon',
+            chainId: 137
+          }
+        ];
+
+        for (let insuranceChain of insuranceChainList) {
+          this.refreshStrategyData({chain: insuranceChain});
+        }
+
+        for (let insuranceChain of insuranceChainList) {
+          this.refreshClientData( {chain: insuranceChain});
+        }
+
+        this.refreshUsdPlusPayoutsData("polygon");
+        this.refreshUsdPlusPayoutsData("bsc");
+        this.refreshUsdPlusPayoutsData("optimism");
+
+        // dispatch('accountData/refreshBalance', null, {root:true});
+        // dispatch('supplyData/refreshInsuranceSupply', null, {root:true});
+      },
+
+      async refreshStrategyData(refreshParams) {
+        let appApiUrl;
+
+        this.isStrategyDataLoading = true;
+
+        switch (refreshParams.chain.chainId) {
+          case 137:
+            appApiUrl = this.polygonConfig.appApiUrl;
+            break;
+          case 10:
+            appApiUrl = this.opConfig.appApiUrl;
+            break;
+          case 56:
+            appApiUrl = this.bscConfig.appApiUrl;
+            break;
+          default:
+            appApiUrl = this.polygonConfig.appApiUrl;
+            break;
+        }
+
+        let fetchOptions = {
+          headers: {
+            "Access-Control-Allow-Origin": appApiUrl
+          }
+        };
+
+        let avgApy;
+        let avgApyStrategyMonth;
+        let strategyData;
+
+        await fetch(appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
+            .then(value => value.json())
+            .then(value => {
+              avgApy = value;
+              avgApy.date = moment(avgApy.date).format("DD MMM. ‘YY");
+            }).catch(reason => {
+              console.log('Error get data: ' + reason);
+            })
+
+        await fetch(appApiUrl + '/insurance/avg-apy-info/month', fetchOptions)
+            .then(value => value.json())
+            .then(value => {
+              avgApyStrategyMonth = value;
+              avgApyStrategyMonth.date = moment(avgApyStrategyMonth.date).format("DD MMM. ‘YY");
+            }).catch(reason => {
+              console.log('Error get data: ' + reason);
+            })
+
+        await fetch(appApiUrl + '/insurance/', fetchOptions)
+            .then(value => value.json())
+            .then(value => {
+              strategyData = value;
+
+              strategyData.apy = (avgApyStrategyMonth && avgApyStrategyMonth.value) ? (avgApyStrategyMonth.value) : strategyData.lastApy;
+              strategyData.diffApy = (avgApy && avgApy.value && strategyData.apy) ? (strategyData.apy - avgApy.value) : null;
+
+              strategyData.chainId = refreshParams.chain.chainId;
+
+              strategyData.payouts.sort(
+                  function(o1,o2){
+                    return moment(o1.payableDate).isBefore(moment(o2.payableDate)) ? -1 : moment(o1.payableDate).isAfter(moment(o2.payableDate)) ? 1 : 0;
+                  }
+              );
+
+              let clientData = strategyData.payouts;
+
+              let widgetDataDict = {};
+              let widgetData = {
+                labels: [],
+                datasets: [
+                  {
+                    fill: false,
+                    borderColor: '#1C95E7',
+                    data: [],
+                  }
+                ]
+              };
+
+              [...clientData].forEach(item => {
+                try {
+                  widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
+                } catch (e) {
+                  console.error("strategyData build Widget Data Dict insurance error:", e)
+                }
+              });
+
+              for(let key in widgetDataDict) {
+                widgetData.labels.push(key);
+                widgetData.datasets[0].data.push(widgetDataDict[key] > 500 ? 500.00 : widgetDataDict[key]);
+              }
+
+              this.addInsuranceApyData({name: refreshParams.chain.chainName, data: widgetData});
+
+              let widgetTvlDataDict = {};
+              let widgetTvlData = {
+                labels: [],
+                datasets: [
+                  {
+                    fill: false,
+                    borderColor: '#1C95E7',
+                    data: [],
+                  }
+                ]
+              };
+
+              [...clientData].forEach(item => {
+                try {
+                  widgetTvlDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
+                } catch (e) {
+                  console.error("strategyData build Widget Tvl Dict insurance error:", e)
+                }
+              });
+
+              for(let key in widgetTvlDataDict) {
+                widgetTvlData.labels.push(key);
+                widgetTvlData.datasets[0].data.push(widgetTvlDataDict[key]);
+              }
+
+              this.addInsuranceTvlData({ name: refreshParams.chain.chainName, data: widgetTvlData});
+            }).catch(reason => {
+              console.log('Error get data: ' + reason);
+            })
+
+        this.addInsuranceStrategyData({ name: refreshParams.chain.chainName, data: strategyData});
+        this.isStrategyDataLoading = false;
+      },
+
+      async refreshClientData(refreshParams) {
+        let appApiUrl;
+
+        this.isClientDataLoading = true;
+
+        switch (refreshParams.chain.chainId) {
+          case 137:
+            appApiUrl = this.polygonConfig.appApiUrl;
+            break;
+          case 10:
+            appApiUrl = this.opConfig.appApiUrl;
+            break;
+          case 56:
+            appApiUrl = this.bscConfig.appApiUrl;
+            break;
+          default:
+            appApiUrl = this.polygonConfig.appApiUrl;
+            break;
+        }
+
+        if (!this.account){
+          this.isClientDataLoading = false;
+          return;
+        }
+
+        let account = this.account.toLowerCase();
+        let profitDay = null;
+
+        let fetchOptions = {
+          headers: {
+            "Access-Control-Allow-Origin": appApiUrl
+          }
+        };
+
+        await fetch(appApiUrl + '/insurance/account/' + account, fetchOptions)
+            .then(value => value.json())
+            .then(value => {
+              profitDay = value.profit;
+            }).catch(reason => {
+              console.log('Error get data: ' + reason);
+            })
+
+        this.addInsuranceClientData({ name: refreshParams.chain.chainName, data: profitDay});
+        this.isClientDataLoading = false;
+
+        await this.refreshIsNeedRedemption();
+      },
+
+      async refreshUsdPlusPayoutsData(network) {
+        console.log('InsuranceData: refreshUsdPlusPayoutsData', network);
+
+        this.isUsdPlusPayoutsDataLoading = true;
+
+        let appApiUrl;
+
+        switch (network) {
+          case "polygon":
+            appApiUrl = this.polygonConfig.appApiUrl;
+            break;
+          case "bsc":
+            appApiUrl = this.bscConfig.appApiUrl;
+            break;
+          case "optimism":
+            appApiUrl = this.opConfig.appApiUrl;
+            break;
+        }
+
+        let fetchOptions = {
+          headers: {
+            "Access-Control-Allow-Origin": appApiUrl
+          }
+        };
+
+        let resultDataList;
+
+        axios.get(appApiUrl + `/dapp/payouts`, fetchOptions)
+            .then(value => {
+              let clientData = value.data;
+              let widgetDataDict = {};
+
+              [...clientData].reverse().forEach(item => {
+                widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
+              });
+
+              resultDataList = widgetDataDict;
+
+              this.addUsdPlusApyData({name: network, data: resultDataList});
+              this.isUsdPlusPayoutsDataLoading = false;
+            }).catch(e => {
+              console.error("Error when load insurance payouts: ", e);
+              this.isUsdPlusPayoutsDataLoading = false;
+        })
+      },
+
+      async refreshIsNeedRedemption() {
+        console.log('Insurance/redemptionCheck')
+
+        let account = this.account;
+
+        if (account) {
+          let insurance = {
+            chainName: 'polygon'
+          }
+
+          let date = await this.contracts.insurance[insurance.chainName + '_exchanger'].methods.withdrawRequests(account).call();
+          try {
+            date = parseFloat(date);
+          } catch (e) {
+            date = null;
+          }
+
+          if (date !== null) {
+            let redemptionData = {
+              request: null,
+              date: null,
+              hours: 0,
+            }
+
+            if (date === 0) {
+              redemptionData.request = 'NEED_REQUEST';
+              redemptionData.date = null;
+              redemptionData.hours = 0;
+            } else if (date > 0) {
+              date = new Date(date  * 1000);
+              let currentDate = new Date();
+
+              if (currentDate.getTime() > date.getTime()) {
+                let withdrawPeriod = await this.contracts.insurance[insurance.chainName + '_exchanger'].methods.withdrawPeriod().call();
+                let withdrawDate = new Date(date.getTime() + (withdrawPeriod * 1000));
+
+                if (withdrawDate.getTime() > currentDate.getTime()){
+                  let hours = moment.duration(moment(withdrawDate).diff(moment(currentDate))).asHours();
+                  redemptionData.request = 'CAN_WITHDRAW';
+                  redemptionData.date = date;
+                  redemptionData.hours = hours;
+                } else {
+                  redemptionData.request = 'NEED_REQUEST';
+                  redemptionData.date = null;
+                  redemptionData.hours = 0;
+                }
+              } else {
+                let hours = moment.duration(moment(date).diff(moment(currentDate))).asHours();
+                redemptionData.request = 'NEED_WAIT';
+                redemptionData.date = date;
+                redemptionData.hours = hours;
+              }
+            }
+
+            console.log("REDEMPTION REQUEST: " + JSON.stringify(redemptionData))
+
+            this.insuranceRedemptionData = redemptionData;
+          }
+        }
+      },
+
+      addInsuranceStrategyData(insuranceDataParams) {
+        let insuranceData = this.insuranceStrategyData;
+        let data = insuranceDataParams.data;
+
+        if (!data.tvl || data.tvl < 0.0001) {
+          if (data.payouts && data.payouts.length > 0) {
+            data.tvl = data.payouts[data.payouts.length - 1].tvl;
+          }
+        }
+
+        insuranceData[insuranceDataParams.name] = data;
+
+        this.insuranceStrategyData = null;
+        this.insuranceStrategyData = insuranceData;
+      },
+
+      addInsuranceClientData(insuranceClientDataParams) {
+        this.insuranceClientData[insuranceClientDataParams.name] = insuranceClientDataParams.data;
+      },
+
+      addInsuranceApyData(insuranceApyDataParams) {
+        this.insuranceApyData[insuranceApyDataParams.name] = insuranceApyDataParams.data;
+      },
+
+      addInsuranceTvlData(insuranceTvlDataParams) {
+        this.insuranceTvlData[insuranceTvlDataParams.name] = insuranceTvlDataParams.data;
+      },
+
+      addUsdPlusApyData(usdPlusApyDataParams) {
+        this.usdPlusApyData[usdPlusApyDataParams.name] = usdPlusApyDataParams.data;
+      },
     }
 }
 </script>

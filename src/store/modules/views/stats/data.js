@@ -16,8 +16,8 @@ const state = {
     payoutsApyDataDict: [],
 
     payoutsTvlData: {},
-    totalUsdPlusValue: null,
-    totalUsdPlusProfit: null,
+    // totalUsdPlusValue: null,
+    // totalUsdPlusProfit: null,
 };
 
 const getters = {
@@ -62,9 +62,9 @@ const getters = {
         return state.totalUsdPlusValue;
     },
 
-    totalUsdPlusProfit(state) {
-        return state.totalUsdPlusProfit;
-    },
+    // totalUsdPlusProfit(state) {
+    //     return state.totalUsdPlusProfit;
+    // },
 };
 
 const actions = {
@@ -254,8 +254,8 @@ const actions = {
 
         dispatch('refreshPayouts');
         dispatch('refreshCurrentTotalData');
-        dispatch('refreshTotalUsdPlus');
-        dispatch('refreshTotalUsdPlusProfit');
+        // dispatch('refreshTotalUsdPlus');
+        // dispatch('refreshTotalUsdPlusProfit');
         dispatch('refreshStablecoinData');
         dispatch('refreshInsuranceAssetData');
         dispatch('refreshInsuranceTotalData');
@@ -323,29 +323,29 @@ const actions = {
             })
     },
 
-    async refreshTotalUsdPlus({commit, dispatch, getters, rootState}) {
-        commit('statsUI/setLoadingTotalUsdPlus', true, { root: true });
+    // async refreshTotalUsdPlus({commit, dispatch, getters, rootState}) {
+    //     commit('statsUI/setLoadingTotalUsdPlus', true, { root: true });
+    //
+    //     let appApiUrl = rootState.network.appApiUrl;
+    //
+    //     let usdPlusValue = (await axios.get(appApiUrl + '/dapp/getTotalUsdPlusValue')).data;
+    //     commit('setTotalUsdPlusValue', usdPlusValue);
+    //
+    //     commit('statsUI/setLoadingTotalUsdPlus', false, { root: true });
+    //
+    // },
 
-        let appApiUrl = rootState.network.appApiUrl;
-
-        let usdPlusValue = (await axios.get(appApiUrl + '/dapp/getTotalUsdPlusValue')).data;
-        commit('setTotalUsdPlusValue', usdPlusValue);
-
-        commit('statsUI/setLoadingTotalUsdPlus', false, { root: true });
-
-    },
-
-    async refreshTotalUsdPlusProfit({commit, dispatch, getters, rootState}) {
-        commit('statsUI/setLoadingTotalUsdPlus', true, { root: true });
-
-        let appApiUrl = rootState.network.appApiUrl;
-
-        let usdPlusProfit = (await axios.get(appApiUrl + '/dapp/getTotalUsdPlusProfit')).data;
-        commit('setTotalUsdPlusProfit', usdPlusProfit);
-
-        commit('statsUI/setLoadingTotalUsdPlus', false, { root: true });
-
-    },
+    // async refreshTotalUsdPlusProfit({commit, dispatch, getters, rootState}) {
+    //     commit('statsUI/setLoadingTotalUsdPlus', true, { root: true });
+    //
+    //     let appApiUrl = rootState.network.appApiUrl;
+    //
+    //     let usdPlusProfit = (await axios.get(appApiUrl + '/dapp/getTotalUsdPlusProfit')).data;
+    //     commit('setTotalUsdPlusProfit', usdPlusProfit);
+    //
+    //     commit('statsUI/setLoadingTotalUsdPlus', false, { root: true });
+    //
+    // },
 
 };
 

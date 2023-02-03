@@ -1,6 +1,9 @@
 const zlib = require("zlib");
 
 module.exports = {
+    chainWebpack: config => {
+        config.optimization.delete('splitChunks')
+    },
     pluginOptions: {
         compression: {
             modes: ['production'],

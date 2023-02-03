@@ -58,7 +58,6 @@ import dappUIAction from "@/store/modules/common/web3/action/dapp/dapp-ui-action
 
 //Market
 import etsAction from "@/store/modules/common/web3/action/ets-action";
-import poolAction from "@/store/modules/common/web3/action/pool-action";
 
 // Common
 import gasPrice from '@/store/modules/common/gas-price';
@@ -127,7 +126,6 @@ export default new Vuex.Store({
         dappUIAction,
 
         etsAction,
-        poolAction,
 
         gasPrice,
         supplyData,

@@ -75,7 +75,7 @@
             </v-col>
         </v-row>
 
-        <div class="ma-0 info-card-container d-flex mt-3">
+        <div v-if="!isCurrentTotalDataLoading" class="ma-0 info-card-container d-flex mt-3">
             <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
                 <v-img class="currency" :src="require('@/assets/currencies/DAI+.svg')" />
             </div>
@@ -85,7 +85,7 @@
             </div>
         </div>
 
-        <v-row class=" ma-0 mt-3">
+        <v-row v-if="!isCurrentTotalDataLoading" class=" ma-0 mt-3">
             <v-col class="currency-box" :cols="$wu.isFull() ? 6 : 12">
                 <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openLink('https://optimistic.etherscan.io/address/0x970d50d09f3a656b43e11b0d45241a84e3a6e011')">
                     <div>

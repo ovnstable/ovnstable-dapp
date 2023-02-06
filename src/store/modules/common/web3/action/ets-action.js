@@ -1,18 +1,18 @@
 import loadJSON from '@/utils/http-utils.js'
 
 const state = {
-    etsNetworkUrl: [
-        'https://api.overnight.fi/optimism/usd+/design_ets/list',
-        'https://api.overnight.fi/polygon/usd+/design_ets/list',
-        'https://api.overnight.fi/bsc/usd+/design_ets/list'
+    etsNetworkNames: [
+        'optimism',
+        'polygon',
+        'bsc'
     ],
     etsList: null,
 };
 
 const getters = {
 
-    etsNames(state) {
-        return state.etsNames;
+    etsNetworkNames(state) {
+        return state.etsNetworkNames;
     },
 
     etsNetworkUrl(state) {
@@ -29,8 +29,8 @@ const actions = {
 
         let list = [];
 
-        for (let i = 0; i < getters.etsNetworkUrl.length; i++) {
-            let etses = await loadJSON(getters.etsNetworkUrl[i]);
+        for (let i = 0; i < getters.etsNetworkNames.length; i++) {
+            let etses = await loadJSON(`https://api.overnight.fi/${getters.etsNetworkNames[i]}/usd+/design_ets/list`);
             // May add some fields
             list.push(...etses);
         }

@@ -26,27 +26,27 @@ const actions = {
             optimism: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
         };
 
-        let etsNames = [
-            { network: 'polygon', name: 'qs_alpha_wmatic_usdc' },
-            { network: 'polygon', name: 'qs_beta_wmatic_usdc' },
-            { network: 'polygon', name: 'qs_gamma_weth_usdc' },
-            { network: 'polygon', name: 'qs_delta_weth_usdc' },
-            { network: 'polygon', name: 'wmatic_usd_plus' },
-            { network: 'polygon', name: 'qs_zeta_wbtc_usdc' },
-            { network: 'polygon', name: 'qs_epsilon_weth_dai' },
-            { network: 'polygon', name: 'uni_eta_wmatic_usdc' },
-            { network: 'polygon', name: 'uni_theta_weth_usdc' },
-
-            { network: 'bsc', name: 'wbnb_busd' },
-            { network: 'bsc', name: 'qs_alpha_wbnb_busd' },
-
-            { network: 'optimism', name: 'uni_alpha_weth_usdc' },
-            { network: 'optimism', name: 'uni_beta_weth_dai' },
-            { network: 'optimism', name: 'uni_gamma_weth_dai' },
-            { network: 'optimism', name: 'ruby' },
-            { network: 'optimism', name: 'night_ov_ar' },
-            { network: 'optimism', name: 'ar_delta_weth_dai' },
-        ];
+        // let etsNames = [
+        //     { network: 'polygon', name: 'qs_alpha_wmatic_usdc' },
+        //     { network: 'polygon', name: 'qs_beta_wmatic_usdc' },
+        //     { network: 'polygon', name: 'qs_gamma_weth_usdc' },
+        //     { network: 'polygon', name: 'qs_delta_weth_usdc' },
+        //     { network: 'polygon', name: 'wmatic_usd_plus' },
+        //     { network: 'polygon', name: 'qs_zeta_wbtc_usdc' },
+        //     { network: 'polygon', name: 'qs_epsilon_weth_dai' },
+        //     { network: 'polygon', name: 'uni_eta_wmatic_usdc' },
+        //     { network: 'polygon', name: 'uni_theta_weth_usdc' },
+        //
+        //     { network: 'bsc', name: 'wbnb_busd' },
+        //     { network: 'bsc', name: 'qs_alpha_wbnb_busd' },
+        //
+        //     { network: 'optimism', name: 'uni_alpha_weth_usdc' },
+        //     { network: 'optimism', name: 'uni_beta_weth_dai' },
+        //     { network: 'optimism', name: 'uni_gamma_weth_dai' },
+        //     { network: 'optimism', name: 'ruby' },
+        //     { network: 'optimism', name: 'night_ov_ar' },
+        //     { network: 'optimism', name: 'ar_delta_weth_dai' },
+        // ];
 
         [
             contracts.exchange,
@@ -74,11 +74,11 @@ const actions = {
             networkDaiMap[network] ? _load(ERC20, web3, networkDaiMap[network]) : _load_empty(),
         ]);
 
+        let etsesByNetwork = await loadJSON(`https://api.overnight.fi/${network}/usd+/design_ets/list`);
+
         await Promise.all(
-            etsNames.map(async etsName => {
-                if (network === etsName.network) {
-                    _load_ets(etsName, contracts, web3);
-                }
+            etsesByNetwork.map(async ets => {
+                await _load_ets(network, ets, contracts, web3);
             })
         );
 
@@ -123,9 +123,7 @@ function _load(file, web3, address) {
     return new web3.eth.Contract(file.abi, address);
 }
 
-async function _load_ets(etsName, contracts, web3) {
-
-    let etsParams = await loadJSON('/json/ets/' + etsName.name + '.json');
+async function _load_ets(network, etsParams, contracts, web3) {
 
     let exchangerContract;
     let tokenContract;
@@ -134,12 +132,12 @@ async function _load_ets(etsName, contracts, web3) {
         exchangerContract = _load(await loadJSON('/contracts/abi/ets/exchanger.json'), web3, etsParams.address);
         tokenContract = _load(await loadJSON('/contracts/abi/ets/token.json'), web3, etsParams.tokenAddress);
     } catch (e) {
-        exchangerContract = _load(await loadJSON(`/contracts/${etsName.network}/ets/${etsName.name}/exchanger.json`), web3);
-        tokenContract = _load(await loadJSON(`/contracts/${etsName.network}/ets/${etsName.name}/token.json`), web3);
+        exchangerContract = _load(await loadJSON(`/contracts/${network}/ets/${etsParams.name}/exchanger.json`), web3);
+        tokenContract = _load(await loadJSON(`/contracts/${network}/ets/${etsParams.name}/token.json`), web3);
     }
 
-    contracts['ets_' + etsName.name + '_exchanger'] = exchangerContract;
-    contracts['ets_' + etsName.name + '_token'] = tokenContract;
+    contracts['ets_' + etsParams.name + '_exchanger'] = exchangerContract;
+    contracts['ets_' + etsParams.name + '_token'] = tokenContract;
 }
 
 function _load_empty() {

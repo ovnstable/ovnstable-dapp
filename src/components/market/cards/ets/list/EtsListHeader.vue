@@ -11,32 +11,32 @@
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)">
-            <v-row class="ma-0" justify="center" align="center">
+            <v-row class="ma-0" justify="end" align="center">
                 <label class="list-header-label">Last day APY</label>
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)">
-            <v-row class="ma-0" justify="center" align="center">
+            <v-row class="ma-0" justify="end" align="center">
                 <label class="list-header-label">30-day APY</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()" cols="3">
-            <v-row class="ma-0" justify="end" align="center">
+            <v-row class="ma-0" justify="center" align="center">
                 <label class="list-header-label">TVL</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()">
-            <v-row class="ma-0" justify="center" align="center">
+            <v-row class="ma-0 mr-3" justify="center" align="center">
                 <label class="list-header-label">Token pair</label>
             </v-row>
         </v-col>
         <v-col v-if="$wu.isFull()" cols="1">
-            <v-row class="ma-0" justify="center" align="center">
+            <v-row class="ma-0" justify="start" align="center">
                 <label class="list-header-label">My investment</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()">
-            <v-row class="ma-0" justify="end" align="center">
+            <v-row class="ma-0" justify="center" align="center">
                 <label class="list-header-label">About ETS</label>
             </v-row>
         </v-col>

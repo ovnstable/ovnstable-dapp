@@ -2,7 +2,7 @@
     <div>
         <div class="mt-10">
             <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'ml-3' : ''">
-                <label class="parent-page-label" @click="goToAction('/market')">Earn</label>
+                <label class="parent-page-label" @click="goToAction('/market')">ETS</label>
                 <label class="current-page-label">
                     <v-icon size="18" class="mx-2">mdi-chevron-right</v-icon>
                     ETS {{ etsData.nameUp }}

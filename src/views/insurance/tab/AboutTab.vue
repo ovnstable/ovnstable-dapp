@@ -48,41 +48,6 @@
             </v-col>
         </v-row>
 
-        <v-row class="ma-0 mt-3 info-card-container-bottom" justify="start" align="start" :style="{'background': 'radial-gradient(128.35% 221.83% at 66.7% -84.67%, #011845 0%, #011439 31.55%, #011233 56.82%, #6135BD 93.94%)'}">
-            <v-col class="info-card-body-bottom" :cols="$wu.isMobile() ? 0 : 5">
-                <v-row class="info-row" justify="start" align="center">
-                    <label class="card-info mt-1">Investors</label>
-                    <v-spacer></v-spacer>
-                    <label class="card-info-value">{{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.holders) ? $utils.formatMoneyComma(insuranceStrategyData.polygon.holders, 0) : '—' }}</label>
-                </v-row>
-                <v-row class="info-row mt-6" justify="start" align="center">
-                    <label class="card-info mt-1">Risk factor</label>
-                    <v-spacer></v-spacer>
-                    <label class="card-info-value">VERY HIGH</label>
-                </v-row>
-            </v-col>
-
-            <v-col :cols="$wu.isMobile() ? 12 : 1"></v-col>
-
-            <v-col class="info-card-body-bottom" :cols="$wu.isMobile() ? 0 : 5">
-                <v-row class="info-row" justify="start" align="center">
-                    <label class="card-info mt-1">Token address</label>
-                    <v-spacer></v-spacer>
-                    <label class="card-info-value info-value-address" @click="openTokenOnScan(insuranceStrategyData.polygon.rebaseAddress)">
-                        {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.rebaseAddress) ? shortAddress(insuranceStrategyData.polygon.rebaseAddress) : '—' }}
-                    </label>
-                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''" @click="openTokenOnScan(insuranceStrategyData.polygon.rebaseAddress)">
-                        <v-icon size="20" style="margin-top: -2px" color="rgba(255, 255, 255, 0.5)">mdi-open-in-new</v-icon>
-                    </div>
-                </v-row>
-                <v-row class="info-row mt-6" justify="start" align="center">
-                    <label class="card-info mt-1">Inception date</label>
-                    <v-spacer></v-spacer>
-                    <label class="card-info-value">05 December 2022</label>
-                </v-row>
-            </v-col>
-        </v-row>
-
         <template v-if="networkSupport" >
             <v-row align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5 mb-5' : 'mt-3'">
                 <v-btn class="header-btn btn-investor-invest btn-filled"  @click="mintAction">

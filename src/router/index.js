@@ -14,6 +14,7 @@ import getAbroad from "@/router/midleware/governance/getAbroad";
 import Market from "./midleware/dapp/Market";
 import Featured from "./midleware/dapp/Featured";
 import Insurance from "./midleware/dapp/Insurance";
+import Reserves from "./midleware/dapp/Reserves";
 import Stats from "./midleware/dapp/Stats";
 import Collateral from "./midleware/dapp/Collateral";
 import Dashboard from "./midleware/dapp/Dashboard";
@@ -76,6 +77,16 @@ const routes = [
                 meta: {
                     middleware: [
                         Insurance
+                    ]
+                }
+            },
+            {
+                path: '/reserves',
+                name: 'InsuranceReservesView',
+                component: () => import('../views/InsuranceReservesView.vue'),
+                meta: {
+                    middleware: [
+                        Reserves
                     ]
                 }
             },

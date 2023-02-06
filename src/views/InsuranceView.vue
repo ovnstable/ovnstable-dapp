@@ -1,10 +1,10 @@
 <template>
     <div>
         <div class="mt-10">
-            <label class="title-label">Insure USD+</label>
+            <label class="title-label">About Insurance</label>
         </div>
 
-        <v-row align="start" justify="start" class="ma-0 mt-10 toggle-row">
+        <v-row align="start" justify="start" class="ma-0 mt-5 toggle-row">
             <label @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabAbout">About Insurance</label>
             <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabAll" disabled>
                 All Insurance

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="mt-10">
-            <label class="title-label">Insurance Performance</label>
+            <label class="title-label">Insurance Reserves</label>
         </div>
 
         <div class="mt-1">
@@ -108,7 +108,7 @@
                         </v-col>
                     </v-row>
 
-                    <v-row align="center" justify="start" class="ma-0 toggle-row ">
+                    <v-row align="center" justify="start" class="ma-0 toggle-row">
                         <label class="tab-btn mr-4" @click="setTab(1)" v-bind:class="activeTabPolygon">
                             Polygon
                         </label>
@@ -117,7 +117,7 @@
                         </label>
                     </v-row>
 
-                    <PerformanceTab v-if="tab === 1" :insurance-data="insuranceStrategyData"/>
+                    <AboutTab v-if="tab === 1" :insurance-data="insuranceStrategyData"/>
                 </v-col>
 
                 <v-col cols="3" v-if="$wu.isFull()">
@@ -297,8 +297,8 @@ export default {
     },
 
     created() {
-      this.refreshInsuranceAssetData();
-      this.refreshInsuranceTotalData();
+        this.refreshInsuranceAssetData();
+        this.refreshInsuranceTotalData();
     },
 
     mounted() {
@@ -318,15 +318,11 @@ export default {
 
         initTab() {
             if(this.$route.query.tabName === 'reserves') {
-                this.setTab(2);
-            }
-
-            if(this.$route.query.tabName === 'performance') {
                 this.setTab(1);
             }
         },
 
-      goToAction(id) {
+        goToAction(id) {
             this.$router.push(id);
         },
 

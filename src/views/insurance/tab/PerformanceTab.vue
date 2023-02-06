@@ -1,6 +1,6 @@
 <template>
     <div>
-      <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-10'" justify="start" align="center">
+      <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-5'" justify="start" align="center">
           <v-col class="info-card-body-bottom">
               <v-row align="center" justify="start" class="ma-0">
                   <v-col class="ml-n3 mt-n3">
@@ -406,7 +406,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .info-card-container {
     background: var(--secondary);
-    border-radius: 4px;
+    border-radius: 12px;
 }
 
 .info-card-container-bottom {

@@ -355,7 +355,7 @@ export default {
 
         insuranceReservesClick() {
             this.selectTab('insurance_reserves');
-            this.goToActionByPath('/insurance/polygon', {tabName: 'reserves'});
+            this.goToActionByPath('/reserves', {tabName: 'reserves'});
         },
 
         swapClick() {

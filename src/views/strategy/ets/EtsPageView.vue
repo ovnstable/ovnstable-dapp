@@ -10,7 +10,26 @@
             </v-row>
         </div>
 
-        <div class="mt-1">
+      <div>
+        etsApyData
+        {{etsApyData}}
+      </div>
+
+
+        <div v-if="isEtsLoading">
+          <v-row>
+            <v-row align="center" justify="center" class="py-15">
+              <v-progress-circular
+                  width="2"
+                  size="24"
+                  color="#8FA2B7"
+                  indeterminate
+              ></v-progress-circular>
+            </v-row>
+          </v-row>
+        </div>
+
+        <div v-else class="mt-1">
             <v-row align="start" justify="start" class="main-container ma-0">
                 <v-col :cols="$wu.isFull() ? 9 : 12" :class="$wu.isFull() ? 'ml-n3' : ''">
                     <StrategyBanner :ets-data="etsData"/>
@@ -115,7 +134,12 @@
                         <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabAbout">About ETS</label>
                     </v-row>
 
-                    <PerformanceTab v-if="tab === 1" :ets-data="etsData"/>
+                    <PerformanceTab v-if="tab === 1"
+                                    :ets-data="etsData"
+                                    :ets-strategy-data="etsStrategyData"
+                                    :ets-apy-data="etsApyData"
+                                    :ets-tvl-data="etsTvlData"
+                                    :usd-plus-apy-data="usdPlusApyData"/>
                     <AboutTab v-if="tab === 2" :ets-data="etsData"/>
                 </v-col>
 
@@ -232,6 +256,8 @@ import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import AboutTab from "@/views/strategy/ets/tab/AboutTab";
 import PerformanceTab from "@/views/strategy/ets/tab/PerformanceTab";
+import moment from "moment/moment";
+import {axios} from "@/plugins/http-axios";
 
 export default {
     name: "EtsPageView",
@@ -246,15 +272,22 @@ export default {
 
     data: () => ({
         tab: 1,
-        etsData: null,
+        isEtsLoading: true,
+
+        etsData: {},
+        etsApyData: {},
+        etsTvlData: {},
+        usdPlusApyData: {},
+        etsStrategyData: {},
+
         minMintFee: null,
         minRedeemFee: null,
     }),
 
 
     computed: {
-        ...mapGetters('network', ['networkId']),
-        ...mapGetters('marketData', ['etsStrategyData', 'etsClientData']),
+        ...mapGetters('network', ['networkId', 'polygonConfig', 'opConfig', 'bscConfig']),
+        ...mapGetters('marketData', ['etsClientData']),
         ...mapGetters('accountData', ['etsBalance']),
         ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters('etsAction', ['etsList']),
@@ -327,18 +360,13 @@ export default {
 
     watch: {
         etsList: function (newVal, oldVal) {
-            this.updateEtsData();
+          this.loadData();
         },
     },
-
-    created() {
-        this.updateEtsData();
-        this.getEntryMinFee();
-        this.getExitMinFee();
-    },
-
     mounted() {
-        this.updateEtsData();
+      if (this.etsList) {
+        this.loadData();
+      }
     },
 
     methods: {
@@ -346,6 +374,14 @@ export default {
         ...mapActions('riskModal', ['showRiskModal']),
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
         ...mapActions('magicEye', ['switchEye']),
+
+      loadData() {
+        this.loadStrategyData();
+        this.loadUsdPlusPayoutsData();
+        this.updateEtsData();
+        this.getEntryMinFee();
+        this.getExitMinFee();
+      },
 
         goToAction(id) {
             this.$router.push(id);
@@ -393,6 +429,177 @@ export default {
                 this.minRedeemFee = 0;
             }
         },
+
+        async loadStrategyData() {
+          this.isEtsLoading = true;
+          let ets = this.etsData;
+          let refreshParams = {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain};
+          let appApiUrl;
+
+          switch (refreshParams.chain) {
+            case 137:
+              appApiUrl = this.polygonConfig.appApiUrl;
+              break;
+            case 10:
+              appApiUrl = this.opConfig.appApiUrl;
+              break;
+            case 56:
+              appApiUrl = this.opConfig.appApiUrl;
+              break;
+            default:
+              appApiUrl = this.polygonConfig.appApiUrl;
+              break;
+          }
+
+              let fetchOptions = {
+                headers: {
+                  "Access-Control-'Allow'-Origin": appApiUrl
+                }
+              };
+
+              let avgApy;
+              let avgApyStrategyMonth;
+              let strategyData;
+
+              await fetch(appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
+                  .then(value => value.json())
+                  .then(value => {
+                    avgApy = value;
+                    avgApy.date = moment(avgApy.date).format("DD MMM. ‘YY");
+                  }).catch(reason => {
+                    console.log('Error get data: ' + reason);
+                  })
+
+              await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress + '/avg-apy-info/month', fetchOptions)
+                  .then(value => value.json())
+                  .then(value => {
+                    avgApyStrategyMonth = value;
+                    avgApyStrategyMonth.date = moment(avgApyStrategyMonth.date).format("DD MMM. ‘YY");
+                  }).catch(reason => {
+                    console.log('Error get data: ' + reason);
+                  })
+
+              await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress, fetchOptions)
+                  .then(value => value.json())
+                  .then(value => {
+                    strategyData = value;
+                    strategyData.lastApy = strategyData.apy;
+                    strategyData.apy = (avgApyStrategyMonth && avgApyStrategyMonth.value) ? (avgApyStrategyMonth.value) : strategyData.apy;
+                    strategyData.diffApy = (avgApy && avgApy.value && strategyData.apy) ? (strategyData.apy - avgApy.value) : null;
+
+                    /* TODO: get onChain */
+                    strategyData.targetHealthFactor = 1.2;
+
+                    strategyData.payoutItems.sort(
+                        function(o1,o2){
+                          return moment(o1.payableDate).isBefore(moment(o2.payableDate)) ? -1 : moment(o1.payableDate).isAfter(moment(o2.payableDate)) ? 1 : 0;
+                        }
+                    );
+
+                    strategyData.timeData.sort(
+                        function(o1,o2){
+                          return moment(o1.date).isBefore(moment(o2.date)) ? -1 : moment(o1.date).isAfter(moment(o2.date)) ? 1 : 0;
+                        }
+                    );
+
+                    let clientData = strategyData.timeData;
+
+                    let widgetDataDict = {};
+                    let widgetData = {
+                      labels: [],
+                      datasets: [
+                        {
+                          fill: false,
+                          borderColor: '#1C95E7',
+                          data: [],
+                        }
+                      ]
+                    };
+
+                    [...clientData].forEach(item => {
+                      widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
+                    });
+
+                    for(let key in widgetDataDict) {
+                      widgetData.labels.push(key);
+                      widgetData.datasets[0].data.push(widgetDataDict[key]);
+                    }
+
+                    this.etsApyData[refreshParams.strategyName] = widgetData;
+
+                    let widgetTvlDataDict = {};
+                    let widgetTvlData = {
+                      labels: [],
+                      datasets: [
+                        {
+                          fill: false,
+                          borderColor: '#1C95E7',
+                          data: [],
+                        }
+                      ]
+                    };
+
+                    [...clientData].forEach(item => {
+                      widgetTvlDataDict[moment(item.date).format('DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
+                    });
+
+                    for(let key in widgetTvlDataDict) {
+                      widgetTvlData.labels.push(key);
+                      widgetTvlData.datasets[0].data.push(widgetTvlDataDict[key]);
+                    }
+
+                    this.etsTvlData[refreshParams.strategyName] = widgetData;
+                  }).catch(reason => {
+                    console.log('Error get data: ' + reason);
+                  })
+
+                this.etsStrategyData[refreshParams.strategyName] = strategyData
+                this.isEtsLoading = false;
+        },
+        async loadUsdPlusPayoutsData() {
+        console.log('MarketData: refreshUsdPlusPayoutsData');
+
+        await Promise.all(
+            ['polygon', 'bsc', 'optimism'].map(async network => {
+
+              let appApiUrl;
+
+              switch (network) {
+                case "polygon":
+                  appApiUrl = this.polygonConfig.appApiUrl;
+                  break;
+                case "bsc":
+                  appApiUrl = this.opConfig.appApiUrl;
+                  break;
+                case "optimism":
+                  appApiUrl = this.polygonConfig.appApiUrl;
+                  break;
+              }
+
+              let fetchOptions = {
+                headers: {
+                  "Access-Control-Allow-Origin": appApiUrl
+                }
+              };
+
+              let resultDataList;
+
+              axios.get(appApiUrl + `/dapp/payouts`, fetchOptions)
+                  .then(value => {
+                    let clientData = value.data;
+                    let widgetDataDict = {};
+
+                    [...clientData].reverse().forEach(item => {
+                      widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
+                    });
+
+                    resultDataList = widgetDataDict;
+
+                    this.usdPlusApyData[network] = resultDataList;
+                  })
+            })
+        );
+      }
     }
 }
 </script>

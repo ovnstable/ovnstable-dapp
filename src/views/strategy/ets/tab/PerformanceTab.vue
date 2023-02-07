@@ -240,11 +240,10 @@
 
 <script>
 
-import {mapActions, mapGetters} from "vuex";
+import {mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import Table from "@/components/market/strategy/payouts/Table";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut";
-import LineChartApy from "@/components/stats/widget/LineChartApy";
 import ChartApy from "@/components/market/strategy/chart/ChartApy";
 import ChartTvl from "@/components/market/strategy/chart/ChartTvl";
 
@@ -254,7 +253,6 @@ export default {
     components: {
         ChartTvl,
         ChartApy,
-        LineChartApy,
         Doughnut,
         Table,
         Tooltip,
@@ -266,9 +264,21 @@ export default {
 
     props: {
 
-        etsData: {
-            type: Object,
-        },
+      etsData: {
+          type: Object,
+      },
+      // etsStrategyData: {
+      //     type: Object
+      // },
+      // etsApyData: {
+      //     type: Object
+      // },
+      // etsTvlData: {
+      //     type: Object
+      // },
+      // usdPlusApyData: {
+      //     type: Object
+      // },
     },
 
     watch: {

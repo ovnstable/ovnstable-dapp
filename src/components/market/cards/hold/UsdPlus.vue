@@ -113,6 +113,7 @@ import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import moment from "moment";
+import {axios} from "@/plugins/http-axios";
 
 export default {
     name: "UsdPlus",
@@ -125,7 +126,6 @@ export default {
 
     computed: {
         ...mapGetters("dashboardData", ["profitUsdPlus", "apy", "slice"]),
-        ...mapGetters("statsData", ["totalUsdPlusValue"]),
         ...mapGetters("accountData", ["balance"]),
         ...mapGetters("wrapUI", ["showWrap"]),
         ...mapGetters("network", ["appApiUrl", "networkId", "networkName"]),
@@ -156,16 +156,17 @@ export default {
 
     data: () => ({
         avgApy: null,
+        totalUsdPlusValue: null
     }),
 
     watch: {
         appApiUrl: function (newVal, oldVal) {
-            this.getUsdPlusAvgMonthApy();
+          this.loadData();
         }
     },
 
-    created() {
-        this.getUsdPlusAvgMonthApy();
+    mounted() {
+        this.loadData();
     },
 
     methods: {
@@ -173,6 +174,10 @@ export default {
         ...mapActions("swapModal", ["showSwapModal", "showRedeemView"]),
         ...mapActions('magicEye', ['switchEye']),
 
+        loadData() {
+          this.getUsdPlusAvgMonthApy();
+          this.loadTotalUsdPlus();
+        },
 
         mintAction() {
             this.showMintView();
@@ -202,6 +207,11 @@ export default {
                     return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #F3BA2F 100%)';
             }
         },
+
+      async loadTotalUsdPlus() {
+        let usdPlusValue = (await axios.get(this.appApiUrl + '/dapp/getTotalUsdPlusValue')).data;
+        this.totalUsdPlusValue = usdPlusValue
+      },
 
         async getUsdPlusAvgMonthApy() {
             let fetchOptions = {

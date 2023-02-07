@@ -4,79 +4,90 @@
             <label class="title-label">usd+ Performance</label>
         </div>
 
-        <v-row v-if="!$wu.isMobile()" class="ma-0 mt-7" justify="start" align="center">
-            <v-col class="info-card-container mr-2">
-                <LineChartApy :data="payoutsApyData"/>
-            </v-col>
-            <v-col class="info-card-container ml-2">
-                <LineChartTvl :data="payoutsTvlData"/>
-            </v-col>
+      <v-row v-if="isPayoutsLoading">
+        <v-row align="center" justify="center" class="py-15">
+          <v-progress-circular
+              width="2"
+              size="24"
+              color="#8FA2B7"
+              indeterminate
+          ></v-progress-circular>
         </v-row>
+      </v-row>
 
-        <v-row v-else class="ma-0 mt-5 info-card-container" justify="start" align="center">
-            <v-col class="info-card-body-bottom">
-                <v-row align="center" justify="start" class="ma-0">
-                    <v-col class="ml-n3 mt-n3">
-                        <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
-                            APY
-                        </v-btn>
-                    </v-col>
-                    <v-col class="mr-n3 mt-n3">
-                        <v-btn outlined class="rate-tab-btn" @click="rateTab=3" v-bind:class="activeRateTvl">
-                            TVL
-                        </v-btn>
-                    </v-col>
-                </v-row>
+      <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0 mt-7" justify="start" align="center">
+        <v-col class="info-card-container mr-2">
+          <LineChartApy :data="payoutsApyData"/>
+        </v-col>
+        <v-col class="info-card-container ml-2">
+          <LineChartTvl :data="payoutsTvlData"/>
+        </v-col>
+      </v-row>
 
-                <LineChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData"/>
-                <LineChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData"/>
+      <v-row v-else-if="!isPayoutsLoading && $wu.isMobile()" class="ma-0 mt-5 info-card-container" justify="start" align="center">
+        <v-col class="info-card-body-bottom">
+          <v-row align="center" justify="start" class="ma-0">
+            <v-col class="ml-n3 mt-n3">
+              <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
+                APY
+              </v-btn>
             </v-col>
-        </v-row>
-
-        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
-            <v-col class="info-card-body-bottom">
-                <v-row align="center" justify="start" class="ma-0">
-                    <label class="section-title-label">USD+ payouts</label>
-                </v-row>
-
-                <v-row align="center" justify="center">
-                    <v-col :cols="!$wu.isFull() ? 12 : 8">
-                        <Table
-                                v-if="!$wu.isMobile()"
-                                :profit-label="assetName + ' per USD+'"
-                                :payout-data="payouts"/>
-
-                        <Table
-                                v-else
-                                minimized
-                                :profit-label="assetName + ' per USD+'"
-                                :payout-data="payouts"/>
-
-                        <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
-                            <label class="table-scroll-label">scroll to see more</label>
-                        </v-row>
-                    </v-col>
-
-                    <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <Doughnut :size="280" color="#3D8DFF" :last-date="lastPayoutDate"/>
-                    </v-col>
-                </v-row>
+            <v-col class="mr-n3 mt-n3">
+              <v-btn outlined class="rate-tab-btn" @click="rateTab=3" v-bind:class="activeRateTvl">
+                TVL
+              </v-btn>
             </v-col>
+          </v-row>
+
+          <LineChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData"/>
+          <LineChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData"/>
+        </v-col>
+      </v-row>
+
+      <v-row v-if="!isPayoutsLoading" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
+        <v-col class="info-card-body-bottom">
+          <v-row align="center" justify="start" class="ma-0">
+            <label class="section-title-label">USD+ payouts</label>
+          </v-row>
+
+          <v-row align="center" justify="center">
+            <v-col :cols="!$wu.isFull() ? 12 : 8">
+              <Table
+                  v-if="!$wu.isMobile()"
+                  :profit-label="assetName + ' per USD+'"
+                  :payout-data="payouts"/>
+
+              <Table
+                  v-else
+                  minimized
+                  :profit-label="assetName + ' per USD+'"
+                  :payout-data="payouts"/>
+
+              <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
+                <label class="table-scroll-label">scroll to see more</label>
+              </v-row>
+            </v-col>
+
+            <v-col :cols="!$wu.isFull() ? 12 : 4">
+              <Doughnut :size="280" color="#3D8DFF" :last-date="lastPayoutDate"/>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+
+      <div v-if="!isPayoutsLoading" class="mt-12">
+        <v-row align="center" justify="center" class="ma-0 mt-10">
+          <label class="ready-label">Ready to use?</label>
         </v-row>
+      </div>
 
-        <div class="mt-12">
-            <v-row align="center" justify="center" class="ma-0 mt-10">
-                <label class="ready-label">Ready to use?</label>
-            </v-row>
-        </div>
+      <v-row v-if="!isPayoutsLoading" align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-7 mb-10' : 'mt-7'">
+        <v-btn class="header-btn btn-filled" @click="mintAction">
+          Mint USD+
+        </v-btn>
+      </v-row>
 
-        <v-row align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-7 mb-10' : 'mt-7'">
-            <v-btn class="header-btn btn-filled" @click="mintAction">
-                Mint USD+
-            </v-btn>
-        </v-row>
-
-        <resize-observer @notify="$forceUpdate()"/>
+      <resize-observer v-if="!isPayoutsLoading" @notify="$forceUpdate()"/>
     </div>
 </template>
 
@@ -87,6 +98,9 @@ import Doughnut from "@/components/market/strategy/payouts/Doughnut";
 import {mapActions, mapGetters} from "vuex";
 import LineChartApy from "@/components/stats/widget/LineChartApy";
 import LineChartTvl from "@/components/stats/widget/LineChartTvl";
+import {axios} from "@/plugins/http-axios";
+import moment from "moment/moment";
+import {payoutsApiService} from "@/services/payouts-api-service";
 
 export default {
     name: "StatsPerformanceView",
@@ -99,13 +113,19 @@ export default {
     },
 
     data: () => ({
-        tab: 1,
-        rateTab: 1,
+      tab: 1,
+      rateTab: 1,
+
+      isPayoutsLoading: true,
+
+      payoutsApyData: null,
+      payoutsTvlData: null,
+      payoutsApyDataDict: null,
+      payouts: null,
     }),
 
     computed: {
-        ...mapGetters("network", ['networkId', 'assetName']),
-        ...mapGetters('statsData', ['payouts', 'payoutsApyData', 'payoutsTvlData']),
+      ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl']),
 
         activeRateApy: function () {
             return {
@@ -129,10 +149,14 @@ export default {
         },
 
         lastPayoutDate: function () {
-            return this.payouts[0].payableDate;
+            return this.payouts && this.payouts.length ? this.payouts[0].payableDate : '';
         },
     },
-
+    watch: {
+      networkId: function () {
+        this.loadData();
+      }
+    },
     created() {
         if (this.networkId === 137) {
             this.tab = 1;
@@ -141,6 +165,10 @@ export default {
         if (this.networkId === 56) {
             this.tab = 2;
         }
+    },
+
+    mounted() {
+      this.loadData();
     },
 
     methods: {
@@ -154,6 +182,77 @@ export default {
             this.showMintView();
             this.showSwapModal();
         },
+        loadData() {
+          this.payoutsApyData = null;
+          this.payoutsTvlData = null;
+          this.payoutsApyDataDict = null;
+          this.payouts = null;
+
+          this.loadPayouts();
+        },
+        loadPayouts() {
+          this.isPayoutsLoading = true;
+
+          payoutsApiService.getPayouts(this.appApiUrl)
+              .then(data => {
+                this.payouts = data
+                let clientData = data;
+
+                let widgetDataDict = {};
+                let widgetData = {
+                  labels: [],
+                  datasets: [
+                    {
+                      fill: false,
+                      borderColor: '#69a5fd',
+                      data: [],
+                    }
+                  ]
+                };
+
+                [...clientData].reverse().forEach(item => {
+                  widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
+                });
+
+                this.payoutsApyDataDict = widgetDataDict;
+
+                for(let key in widgetDataDict) {
+                  widgetData.labels.push(key);
+                  widgetData.datasets[0].data.push(widgetDataDict[key]);
+                }
+
+                this.payoutsApyData = widgetData;
+
+                let widgetDataDictTvl = {};
+                let widgetDataTvl = {
+                  labels: [],
+                  datasets: [
+                    {
+                      fill: false,
+                      borderColor: '#69a5fd',
+                      data: [],
+                    }
+                  ]
+                };
+
+                [...clientData].reverse().forEach(item => {
+                  widgetDataDictTvl[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.totalUsdc ? item.totalUsdc : 0.0).toFixed(2);
+                });
+
+                for(let key in widgetDataDictTvl) {
+                  widgetDataTvl.labels.push(key);
+                  widgetDataTvl.datasets[0].data.push(widgetDataDictTvl[key]);
+                }
+
+                this.payoutsTvlData = widgetDataTvl;
+
+                this.isPayoutsLoading = false;
+              })
+              .catch(e => {
+                this.isPayoutsLoading = false;
+                console.error("Payouts loading error: ", e)
+              })
+        }
     }
 }
 </script>

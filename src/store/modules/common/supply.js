@@ -59,7 +59,7 @@ const actions = {
 
     async refreshInsuranceSupply({commit, dispatch, getters, rootState}) {
 
-        console.log('Supply: refreshInsuranceSupply');
+        // console.log('Supply: refreshInsuranceSupply');
 
         let networkId = rootState.network.networkId;
 

@@ -40,13 +40,6 @@
 <script>
 
 import {mapGetters} from "vuex";
-import Ets from "@/components/market/cards/ets/Ets";
-import EtsListCard from "@/components/market/cards/ets/list/EtsListCard";
-import EtsListHeader from "@/components/market/cards/ets/list/EtsListHeader";
-import PoolListHeader from "@/components/market/cards/pool/list/PoolListHeader";
-import PoolListCard from "@/components/market/cards/pool/list/PoolListCard";
-import UsdPlus from "@/components/market/cards/hold/UsdPlus";
-import moment from "moment";
 import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
 import InsuranceInfoCard from "@/components/insurance/cards/insurance/InsuranceInfoCard";
 
@@ -57,12 +50,6 @@ export default {
     components: {
         InsuranceInfoCard,
         InsuranceCard,
-        PoolListCard,
-        PoolListHeader,
-        EtsListHeader,
-        EtsListCard,
-        Ets,
-        UsdPlus,
     },
 
     data: () => ({

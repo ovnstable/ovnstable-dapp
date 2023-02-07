@@ -96,7 +96,7 @@ export default {
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('accountUI', ['showAccountProfile', 'showTxHistory']),
         ...mapActions('accountData', ['refreshBalance']),
-        ...mapActions('supplyData', ['refreshSupply', 'refreshInsuranceSupply']),
+        // ...mapActions('supplyData', ['refreshSupply', 'refreshInsuranceSupply']),
         ...mapActions('track', ['trackClick']),
         ...mapActions('magicEye', ['switchEye']),
 

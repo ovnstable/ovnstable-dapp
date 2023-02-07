@@ -4,12 +4,22 @@
             <label class="title-label">usd+ pools</label>
         </div>
 
-        <PoolListHeader/>
+        <v-row v-if="isPoolsLoading">
+          <v-row align="center" justify="center" class="py-15">
+            <v-progress-circular
+                width="2"
+                size="24"
+                color="#8FA2B7"
+                indeterminate
+            ></v-progress-circular>
+          </v-row>
+        </v-row>
 
-        <PoolListCard class="mt-2" v-for="(component, i) in sortedPoolList" v-if="component.type === 'pool'"
-                      :card-data="component"/>
-
-        <resize-observer @notify="$forceUpdate()"/>
+       <div v-else>
+         <PoolListHeader/>
+         <PoolListCard class="mt-2" v-for="component in sortedCardList" :card-data="component" :key="component.id"/>
+         <resize-observer @notify="$forceUpdate()"/>
+       </div>
     </div>
 </template>
 
@@ -18,7 +28,8 @@
 import {mapGetters} from "vuex";
 import PoolListHeader from "@/components/market/cards/pool/list/PoolListHeader";
 import PoolListCard from "@/components/market/cards/pool/list/PoolListCard";
-import moment from "moment";
+
+import {poolApiService} from "@/services/pool-api-service";
 
 export default {
     name: "UsdPools",
@@ -31,56 +42,16 @@ export default {
     data: () => ({
         avgApy: null,
         sortedCardList: [],
+        pools: [],
+        isPoolsLoading: true,
     }),
 
     computed: {
         ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig']),
-        ...mapGetters('marketData', ['etsStrategyData']),
-        ...mapGetters("statsData", ['currentTotalData', 'totalUsdPlusValue']),
-        ...mapGetters('supplyData', ['totalSupply', 'totalInsuranceSupply']),
-        ...mapGetters('poolAction', ['poolList']),
 
         activeTabName: function() {
             return this.$route.query.tabName || 'usd-pools';
         },
-
-        sortedPoolList: function () {
-
-            let networkId = this.networkId;
-
-            let poolList = [];
-
-            this.poolList.forEach(pool => {
-                poolList.push(
-                    {
-                        type: 'pool',
-                        name: 'Pool',
-                        data: pool,
-                        chain: pool.chain,
-                        hasUsdPlus: true,
-                        overcapEnabled: false,
-                        hasCap: true,
-                        tvl: pool.tvl,
-                        monthApy: 0,
-                        cardOpened: false,
-                    },
-                );
-            });
-
-            poolList.sort(function (a, b) {
-                if (a.chain === networkId && b.chain !== networkId) return -1;
-                if (a.chain !== networkId && b.chain === networkId) return 1;
-
-                return (a.tvl > b.tvl) ? -1 : (a.tvl < b.tvl ? 1 : 0);
-            });
-
-            poolList[0].cardOpened = true;
-
-            return poolList;
-        },
-    },
-
-    watch: {
     },
 
     created() {
@@ -88,18 +59,112 @@ export default {
 
     mounted() {
         this.initTab();
+        this.loadPools();
     },
 
     methods: {
-        setTab(tabId) {
-            this.tab = tabId;
-        },
+      setTab(tabId) {
+          this.tab = tabId;
+      },
 
-        initTab() {
-            if (this.$route.query.tabName === 'usd-pools') {
-                this.setTab(1);
-            }
+      initTab() {
+          if (this.$route.query.tabName === 'usd-pools') {
+              this.setTab(1);
+          }
+      },
+
+      async loadPools() {
+        this.isPoolsLoading = true;
+
+        this.pools = [];
+        let networkConfigList = [this.opConfig, this.polygonConfig, this.bscConfig];
+
+        for (let networkConfig of networkConfigList) {
+          await poolApiService.getAllPools(networkConfig.appApiUrl)
+              .then(data => {
+                if (data) {
+                  data.forEach(pool => {
+
+                    let token0Icon;
+                    let token1Icon;
+
+                    let tokenNames = pool.id.name.split('/');
+
+                    try {
+                      token0Icon = require('@/assets/currencies/farm/' + tokenNames[0] + '.svg');
+                    } catch (e) {
+                      try {
+                        token0Icon = require('@/assets/currencies/farm/' + tokenNames[0] + '.png');
+                      } catch (ex) {
+                        token0Icon = require('@/assets/currencies/undefined.svg');
+                      }
+                    }
+
+                    try {
+                      token1Icon = require('@/assets/currencies/farm/' + tokenNames[1] + '.svg');
+                    } catch (e) {
+                      try {
+                        token1Icon = require('@/assets/currencies/farm/' + tokenNames[1] + '.png');
+                      } catch (ex) {
+                        token1Icon = require('@/assets/currencies/undefined.svg');
+                      }
+                    }
+
+                    if (pool && pool.tvl && pool.tvl >= 10000.00) {
+                      this.pools.push({
+                        name: pool.id.name,
+                        token0Icon: token0Icon,
+                        token1Icon: token1Icon,
+                        chain: networkConfig.networkId,
+                        chainName: networkConfig.networkName,
+                        address: pool.id.address,
+                        dex: pool.platform,
+                        tvl: pool.tvl,
+                        explorerUrl: networkConfig.explorerUrl,
+                      });
+                    }
+                  })
+                }
+              }).catch(reason => {
+                console.log('Error get pools data: ' + reason);
+              })
         }
+
+        this.sortedCardList = this.getSortedPoolList();
+        this.isPoolsLoading = false;
+      },
+      getSortedPoolList() {
+        let networkId = this.networkId;
+        let sortedPoolList = [];
+
+        for (let i = 0; i < this.pools.length; i++) {
+          let pool = this.pools[i];
+          sortedPoolList.push(
+              {
+                id: pool.name,
+                type: 'pool',
+                name: 'Pool',
+                data: pool,
+                chain: pool.chain,
+                hasUsdPlus: true,
+                overcapEnabled: false,
+                hasCap: true,
+                tvl: pool.tvl,
+                monthApy: 0,
+                cardOpened: false,
+              },
+          );
+        }
+
+        sortedPoolList.sort(function (a, b) {
+          if (a.chain === networkId && b.chain !== networkId) return -1;
+          if (a.chain !== networkId && b.chain === networkId) return 1;
+
+          return (a.tvl > b.tvl) ? -1 : (a.tvl < b.tvl ? 1 : 0);
+        });
+
+        return sortedPoolList;
+      },
     }
 }
 </script>

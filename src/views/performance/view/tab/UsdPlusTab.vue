@@ -1,60 +1,83 @@
 <template>
     <div class="page-container">
-        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-5'" justify="start" align="center">
-            <v-col class="info-card-body-bottom">
-                <v-row align="center" justify="start" class="ma-0">
-                    <label class="section-title-label">USD+ collateral assets</label>
-                </v-row>
 
-                <v-row align="center" justify="center">
-                    <v-col :cols="!$wu.isFull() ? 12 : 8">
-                        <TableStablecoins
-                            v-if="!$wu.isMobile()"
-                            :data="stablecoinData"/>
-
-                        <TableStablecoins
-                            v-else
-                            minimized
-                            :data="stablecoinData"/>
-                    </v-col>
-
-                    <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <PieStablecoins :data="stablecoinData" :size="!$wu.isFull() ? 200 : 300"/>
-                    </v-col>
-                </v-row>
-            </v-col>
+      <v-row v-if="isCollateralLoading">
+        <v-row align="center" justify="center" class="py-15">
+          <v-progress-circular
+              width="2"
+              size="24"
+              color="#8FA2B7"
+              indeterminate
+          ></v-progress-circular>
         </v-row>
+      </v-row>
 
-        <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-3'" justify="start" align="center">
-            <v-col class="info-card-body-bottom">
-                <v-row align="center" justify="start" class="ma-0">
-                    <label class="section-title-label">USD+ portfolio</label>
-                </v-row>
+      <v-row v-else class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-5'" justify="start" align="center">
+          <v-col class="info-card-body-bottom">
+              <v-row align="center" justify="start" class="ma-0">
+                  <label class="section-title-label">USD+ collateral assets</label>
+              </v-row>
 
-                <v-row align="center" justify="center">
-                    <v-col :cols="!$wu.isFull() ? 12 : 8">
-                        <TableStrategies
-                            v-if="!$wu.isMobile()"
-                            :data="currentTotalData"
-                            :total-supply="totalUsdPlusValue"
-                            :total-title="'Total USD+ in circulation'"/>
+              <v-row align="center" justify="center">
+                  <v-col :cols="!$wu.isFull() ? 12 : 8">
+                      <TableStablecoins
+                          v-if="!$wu.isMobile()"
+                          :data="collateralData"/>
 
-                        <TableStrategies
-                            v-else
-                            minimized
-                            :data="currentTotalData"
-                            :total-supply="totalUsdPlusValue"
-                            :total-title="'Total USD+ in circulation'"/>
-                    </v-col>
+                      <TableStablecoins
+                          v-else
+                          minimized
+                          :data="collateralData"/>
+                  </v-col>
 
-                    <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <DoughnutStrategies :data="currentTotalData" :total-value="totalUsdPlusValue" :size="!$wu.isFull() ? 200 : 300"/>
-                    </v-col>
-                </v-row>
-            </v-col>
+                  <v-col :cols="!$wu.isFull() ? 12 : 4">
+                      <PieStablecoins :data="collateralData" :size="!$wu.isFull() ? 200 : 300"/>
+                  </v-col>
+              </v-row>
+          </v-col>
+      </v-row>
+
+      <v-row v-if="isCurrentTotalDataLoading">
+        <v-row align="center" justify="center" class="py-15">
+          <v-progress-circular
+              width="2"
+              size="24"
+              color="#8FA2B7"
+              indeterminate
+          ></v-progress-circular>
         </v-row>
+      </v-row>
 
-        <v-row class=" ma-0 mt-3">
+      <v-row v-else class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-3'" justify="start" align="center">
+          <v-col class="info-card-body-bottom">
+              <v-row align="center" justify="start" class="ma-0">
+                  <label class="section-title-label">USD+ portfolio</label>
+              </v-row>
+
+              <v-row align="center" justify="center">
+                  <v-col :cols="!$wu.isFull() ? 12 : 8">
+                      <TableStrategies
+                          v-if="!$wu.isMobile()"
+                          :data="currentTotalData"
+                          :total-supply="totalValue"
+                          :total-title="'Total USD+ in circulation'"/>
+
+                      <TableStrategies
+                          v-else
+                          minimized
+                          :data="currentTotalData"
+                          :total-supply="totalValue"
+                          :total-title="'Total USD+ in circulation'"/>
+                  </v-col>
+
+                  <v-col :cols="!$wu.isFull() ? 12 : 4">
+                      <DoughnutStrategies :data="currentTotalData" :total-value="totalValue" :size="!$wu.isFull() ? 200 : 300"/>
+                  </v-col>
+              </v-row>
+          </v-col>
+      </v-row>
+
+        <v-row v-if="!isCurrentTotalDataLoading" class=" ma-0 mt-3">
             <v-col class="currency-box" :cols="$wu.isFull() ? 6 : 12" :class="$wu.isFull() ? 'mr-1' : ''">
                 <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openLink('https://optimistic.etherscan.io/address/' + contracts.usdPlus.options.address)">
                     <div>
@@ -87,7 +110,7 @@
             </v-col>
         </v-row>
 
-        <v-row align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5 mb-10' : 'mt-8'">
+        <v-row v-if="!isCurrentTotalDataLoading" align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5 mb-10' : 'mt-8'">
             <v-btn class="header-btn btn-filled" @click="mintAction">
                 Mint USD+
             </v-btn>
@@ -103,6 +126,8 @@ import TableStablecoins from "@/components/stats/pie/TableStablecoins";
 import PieStablecoins from "@/components/stats/pie/PieStablecoins";
 import TableStrategies from "@/components/stats/doughnut/TableStrategies";
 import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies";
+import {strategiesApiService} from "@/services/strategies-api-service";
+import {collateralApiService} from "@/services/collateral-api-service";
 
 export default {
     name: "CollateralView",
@@ -115,17 +140,133 @@ export default {
     },
 
     data: () => ({
+      isCurrentTotalDataLoading: true,
+      isCollateralLoading: true,
 
+      collateralData: null,
+      currentTotalData: null,
+      totalValue: 0
     }),
 
     computed: {
-        ...mapGetters("network", ['networkId']),
-        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData', 'totalUsdPlusValue']),
+        ...mapGetters("network", ['appApiUrl']),
         ...mapGetters("web3", ['contracts']),
     },
 
+    watch: {
+      appApiUrl: function () {
+        this.loadData();
+      }
+    },
+    mounted() {
+      this.loadData();
+    },
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+
+      loadData() {
+        this.loadCurrentTotalData()
+        this.loadCollateralData()
+      },
+
+      loadCurrentTotalData() {
+        this.isCurrentTotalDataLoading = true;
+
+        strategiesApiService.getStrategies(this.appApiUrl)
+            .then(data => {
+              let strategies = data;
+              strategies.sort((a,b) => b.netAssetValue - a.netAssetValue);
+
+              let colors = [
+                "#FCCA46",
+                "#FE7F2D",
+                "#3D8DFF",
+                "#22ABAC",
+                "#B22174",
+                "#2775CA",
+                "#26A17B",
+                "#23DD00",
+                "#6E56C4",
+                "#002868"
+              ];
+
+              this.currentTotalData = [];
+              this.totalValue = 0;
+
+              for (let i = 0; i < strategies.length; i++) {
+                let element = strategies[i];
+
+                this.currentTotalData.push(
+                    {
+                      label: element.name,
+                      fullName: element.fullName,
+                      value: element.netAssetValue,
+                      liquidationValue: element.liquidationValue,
+                      color: colors[i],
+                      link: (element.address || element.explorerAddress) ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + (element.explorerAddress ? element.explorerAddress : element.address)) : ''
+                    }
+                );
+
+                this.totalValue += element.netAssetValue ? element.netAssetValue : 0;
+              }
+
+              this.isCurrentTotalDataLoading = false;
+            })
+            .catch(e => {
+              console.error("Error while adding stablecoins to list: " + e);
+              this.isCurrentTotalDataLoading = false;
+            })
+
+      },
+      loadCollateralData() {
+        this.isCollateralLoading = true;
+
+        collateralApiService.getCollateralData(this.appApiUrl)
+            .then(data => {
+              let stablecoinList = data;
+              stablecoinList.sort((a,b) => b.netAssetValue - a.netAssetValue);
+              stablecoinList = stablecoinList.filter(el => el.netAssetValue > 0);
+
+              let colors = [
+                "#2775CA",
+                "#26A17B",
+                "#FCCA46",
+                "#6E56C4",
+                "#002868",
+                "#26A17B",
+                "#23DD00",
+                "#3D8DFF",
+                "#FE7F2D",
+                "#B22174"
+              ];
+
+              this.collateralData = [];
+              for (let i = 0; i < stablecoinList.length; i++) {
+                let element = stablecoinList[i];
+
+                try {
+                  this.collateralData.push(
+                      {
+                        label: element.id.tokenName,
+                        value: element.netAssetValue,
+                        link: element.tokenAddress ? element.tokenAddress : '',
+                        color: colors[i],
+                        logo: require('@/assets/currencies/stablecoins/' + element.id.tokenName + '.png')
+                      }
+                  );
+                  console.log("Token name : ", element.id.tokenName);
+                } catch (e) {
+                  console.error("Error while adding stablecoin to list: " + e);
+                }
+              }
+
+              this.isCollateralLoading = false;
+            })
+            .catch(e => {
+              console.log("Error Strategy Weights: ", e);
+              this.isCollateralLoading = false;
+            })
+      },
 
         openLink(url) {
             window.open(url, '_blank').focus();

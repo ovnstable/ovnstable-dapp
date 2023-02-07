@@ -7,7 +7,6 @@ const actions = {
     async resetUserData({commit, dispatch, getters, rootState}) {
         dispatch('accountData/resetBalance', null, {root:true});
         dispatch('accountData/resetUns', null, {root:true})
-        dispatch('dashboardData/resetDashboard', null, {root:true});
     },
 
     async updateUserData({commit, dispatch, getters, rootState}) {
@@ -16,7 +15,6 @@ const actions = {
         dispatch('supplyData/refreshInsuranceSupply', null, {root:true});
         dispatch('swapData/refreshSwap', null, {root:true});
         dispatch('statsData/refreshStats', null, {root:true});
-        dispatch('dashboardData/refreshDashboard', null, {root:true});
         dispatch('marketData/refreshClientData', null, {root:true});
         dispatch('insuranceData/refreshInsurance', null, {root:true});
 

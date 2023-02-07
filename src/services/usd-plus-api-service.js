@@ -1,9 +1,9 @@
 import {apiService} from '../services/api-service'
 import {getErrorObject} from '../utils/errors'
 
-class InsuranceApiService {
+class UsdPlusApiService {
 
-    getAvgApyInfo(apiUrl, type) {
+    getTotalUsdPlus(apiUrl) {
         let fetchOptions = {
             headers: {
                 "Access-Control-Allow-Origin": apiUrl
@@ -11,7 +11,7 @@ class InsuranceApiService {
         };
 
         return new Promise((resolve, reject) => {
-            apiService.get(apiUrl + '/insurance/avg-apy-info/' + type, fetchOptions)
+            apiService.get(apiUrl + '/dapp/getTotalUsdPlusValue', fetchOptions)
             .then(data => {
                 resolve(data)
             })
@@ -21,7 +21,7 @@ class InsuranceApiService {
         })
     }
 
-    getStrategyData(apiUrl) {
+    refreshTotalUsdPlusProfit(apiUrl) {
         let fetchOptions = {
             headers: {
                 "Access-Control-Allow-Origin": apiUrl
@@ -29,7 +29,7 @@ class InsuranceApiService {
         };
 
         return new Promise((resolve, reject) => {
-            apiService.get(apiUrl + '/insurance/', fetchOptions)
+            apiService.get(apiUrl + '/dapp/getTotalUsdPlusProfit', fetchOptions)
             .then(data => {
                 resolve(data)
             })
@@ -38,6 +38,5 @@ class InsuranceApiService {
             })
         })
     }
-
 }
-export const insuranceApiService = new InsuranceApiService()
+export const usdPlusApiService = new UsdPlusApiService()

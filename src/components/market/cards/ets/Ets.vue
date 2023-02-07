@@ -237,7 +237,8 @@ export default {
 
     watch: {},
 
-    created() {
+    mounted() {
+      this.refreshSupply();
     },
 
     methods: {
@@ -245,6 +246,7 @@ export default {
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
         ...mapActions('track', ['trackClick']),
         ...mapActions('magicEye', ['switchEye']),
+        ...mapActions('supplyData', ['refreshSupply']),
 
         mintAction() {
             this.showMintView();

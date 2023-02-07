@@ -90,7 +90,6 @@ export default {
     },
 
     methods: {
-        ...mapActions('dashboardData', ['sliceDashboard']),
 
         redraw() {
             if (this.chart) {

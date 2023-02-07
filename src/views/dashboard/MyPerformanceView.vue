@@ -386,7 +386,6 @@ export default {
       profitUsdPlus: null,
       apy: null,
       activities: null,
-      slice: null,
       portfolioValue: {
         labels: [],
         datasets: [
@@ -402,6 +401,7 @@ export default {
     computed: {
         ...mapGetters('network', ['appApiUrl']),
         ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('dashboardData', ['slice']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('magicEye', ['dataHidden']),
 
@@ -469,6 +469,8 @@ export default {
         ...mapActions('track', ['trackClick']),
         ...mapActions('magicEye', ['switchEye']),
 
+      ...mapMutations('dashboardData', ['setSlice']),
+
       setTab(tab) {
           if (tab === 2) {
             this.tab = tab;
@@ -518,11 +520,6 @@ export default {
             this.showMintView();
             this.showSwapModal();
         },
-
-      setSlice(slice) {
-        this.slice = slice;
-        // this.sliceDashboard();
-      },
       resetDashboard() {
           this.profitUsdPlus = null;
           this.portfolioValue = null;
@@ -590,6 +587,8 @@ export default {
         this.sliceDashboard();
       },
       sliceDashboard() {
+          console.log("sliceDashboard this.slice: ", this.slice);
+          console.log("sliceDashboard this.activities: ", this.activities);
 
         let clientData = this.activities.filter(value => value.type === 'PAYOUT');
         clientData = this.slice ? clientData.slice(0, this.slice) : clientData;

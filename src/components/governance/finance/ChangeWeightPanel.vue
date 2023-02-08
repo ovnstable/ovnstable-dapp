@@ -126,6 +126,7 @@
 import {mapActions, mapGetters} from "vuex";
 
 import { usdPlusApiService } from "@/services/usd-plus-api-service";
+import * as numberUtils from '@/utils/number-utils'
 
 export default {
     name: "ChangeWeightPanel",
@@ -152,11 +153,17 @@ export default {
     watch: {
         networkId: function (newValue, oldValue) {
             this.updateHeaders();
+            this.loadData();
+        },
+        account: function (newValue, oldValue) {
+            this.loadData();
         },
     },
 
     computed: {
         ...mapGetters('governance', ['m2mItems', 'm2mTotal', 'financeLoading', 'hasChangeAccount', 'usdPlusLiquidityIndex']),
+        ...mapGetters('web3', ['contracts']),
+        ...mapGetters('accountData', ['account']),
         ...mapGetters('network', ['explorerUrl', 'networkId', 'appApiUrl']),
 
         totalLiquidationSum: function () {
@@ -220,9 +227,17 @@ export default {
             }
         },
         loadData() {
-          this.loadTotalUsdPlusValue();
+          this.loadTotalUsdPlusPlus();
         },
-        loadTotalUsdPlusValue() {
+        loadTotalUsdPlusPlus() {
+          if (!this.account) {
+            this.loadApiTotalUsdPlusValue();
+            return;
+          }
+
+          this.loadBlockchainTotalUsdPlusValue();
+        },
+        loadApiTotalUsdPlusValue() {
           usdPlusApiService.getTotalUsdPlus(this.appApiUrl)
               .then(data => {
                 this.totalUsdPlusValue = data;
@@ -231,6 +246,14 @@ export default {
                 console.error("Error when load usd+ total in governance", e);
               });
 
+        },
+        async loadBlockchainTotalUsdPlusValue() {
+          setTimeout(async () => {
+            let assetDecimals = (await this.contracts.usdPlus.methods.decimals().call()) * 1;
+            let blockchainValue = await this.contracts.usdPlus.methods.totalSupply().call();
+            let fromAsset6 = assetDecimals === 6;
+            this.totalUsdPlusValue = (fromAsset6 ? numberUtils._fromE6(blockchainValue.toString()) : numberUtils._fromE18(blockchainValue.toString()))
+          }, 3000)
         },
     }
 }

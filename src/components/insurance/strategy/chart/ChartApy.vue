@@ -2,18 +2,16 @@
     <div class="apy-chart-container">
         <v-row class="chart-header-row">
             <v-col cols="6">
-                <v-row justify="start" align="center">
+                <v-row justify="start" align="left">
                     <label class="chart-title">
-                      {{ (avgApy && avgApy.value) ? ((isMobile ? 'Insurance' : 'Insurance daily net') + '&nbsp;') : ''}}
+                      USD+ Insurance
                     </label>
-                    <label class="chart-title" style="margin-left: 0 !important">
-                        <abbr title="Annual Percentage Yield">
-                          APY
-                        </abbr>
-                    </label>
-                    <div class="mt-7 ml-1">
-                        <Tooltip :size="16" text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
-                    </div>
+                </v-row>
+                <v-row justify="start" align="left">
+                  <label class="chart-sub-title-apy">
+  <!--                  TODO COMPOUND -->
+                    Inception date: Oct. 28, 2022
+                  </label>
                 </v-row>
 
                 <v-row justify="start">
@@ -22,18 +20,18 @@
                     </label>
                 </v-row>
 
-                <v-row justify="start" v-if="!isMobile">
-                    <v-checkbox
-                        class="hold-checkbox"
-                        color="#22ABAC"
-                        @click="redraw"
-                        v-model="usdPlusDataEnabled"
-                    >
-                        <template v-slot:label>
-                            <label class="hold-checkbox-label">USD+ APY</label>
-                        </template>
-                    </v-checkbox>
-                </v-row>
+<!--                <v-row justify="start" v-if="!isMobile">-->
+<!--                    <v-checkbox-->
+<!--                        class="hold-checkbox"-->
+<!--                        color="#22ABAC"-->
+<!--                        @click="redraw"-->
+<!--                        v-model="usdPlusDataEnabled"-->
+<!--                    >-->
+<!--                        <template v-slot:label>-->
+<!--                            <label class="hold-checkbox-label">USD+ APY</label>-->
+<!--                        </template>-->
+<!--                    </v-checkbox>-->
+<!--                </v-row>-->
             </v-col>
 
           <v-col class="add-chart-info-col pt-10">
@@ -185,7 +183,7 @@ export default {
         chart: null,
 
         avgApy: null,
-        usdPlusDataEnabled: true,
+        usdPlusDataEnabled: false,
     }),
 
     computed: {
@@ -330,7 +328,7 @@ export default {
 
             seriesList.push(
                 {
-                    name: "Insurance APY",
+                    name: "Performanc",
                     data: values
                 }
             );
@@ -669,7 +667,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .chart-title {
-    margin-left: 4%;
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text) !important;

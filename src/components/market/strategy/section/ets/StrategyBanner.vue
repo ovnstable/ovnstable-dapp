@@ -65,9 +65,9 @@
                             </v-row>
                             <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2 mt-5">
                                 <label class="info-title">30 day return per 100$</label>
-                                <div style="margin-top: -2px">
-                                    <Tooltip :size="16" icon-color="rgba(255, 255, 255, 0.6)" text="Strategy net APY based on 30-day average, includes fees taken (fee-adjusted)"/>
-                                </div>
+<!--                                <div style="margin-top: -2px">-->
+<!--                                    <Tooltip :size="16" icon-color="rgba(255, 255, 255, 0.6)" text="Strategy net APY based on 30-day average, includes fees taken (fee-adjusted)"/>-->
+<!--                                </div>-->
                             </v-row>
                         </v-col>
 

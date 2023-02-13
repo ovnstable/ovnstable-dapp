@@ -260,12 +260,12 @@ export default {
 
     data: () => ({
         rateTab: 1,
-      compoundData: { //   TODO COMPOUND
-        day: 1.22,
-        week: 10.23,
-        month: 25.45,
-        all: 6.16,
-      }
+        compoundData: { //   TODO COMPOUND
+          day: 1.22,
+          week: 10.23,
+          month: 25.45,
+          all: 6.16,
+        }
     }),
 
     props: {

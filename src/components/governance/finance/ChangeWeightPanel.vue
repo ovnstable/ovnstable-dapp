@@ -13,7 +13,7 @@
             >
                 <template v-slot:body="{items}">
                     <tbody>
-                    <tr v-for="(item, i) in items">
+                    <tr v-for="item in items" v-bind:key="item.name">
                         <td class="strategy-name-col" @click="openOnScan(item.address)">
                             {{ item.name }}
                         </td>
@@ -125,6 +125,9 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 
+import { usdPlusApiService } from "@/services/usd-plus-api-service";
+import * as numberUtils from '@/utils/number-utils'
+
 export default {
     name: "ChangeWeightPanel",
 
@@ -140,6 +143,7 @@ export default {
             {text: 'Enabled', value: 'enabled'},
             {text: 'Enabled Reward', value: 'enabledReward'},
         ],
+        totalUsdPlusValue: null,
 
         rules: {
             required: val => (val === 0 || !!val) || 'Need to be filled',
@@ -149,13 +153,18 @@ export default {
     watch: {
         networkId: function (newValue, oldValue) {
             this.updateHeaders();
+            this.loadData();
+        },
+        account: function (newValue, oldValue) {
+            this.loadData();
         },
     },
 
     computed: {
         ...mapGetters('governance', ['m2mItems', 'm2mTotal', 'financeLoading', 'hasChangeAccount', 'usdPlusLiquidityIndex']),
-        ...mapGetters('statsData', ['totalUsdPlusValue']),
-        ...mapGetters('network', ['explorerUrl', 'networkId']),
+        ...mapGetters('web3', ['contracts']),
+        ...mapGetters('accountData', ['account']),
+        ...mapGetters('network', ['explorerUrl', 'networkId', 'appApiUrl']),
 
         totalLiquidationSum: function () {
 
@@ -173,10 +182,10 @@ export default {
 
     created() {
         this.updateHeaders();
+        this.loadData();
     },
 
     methods: {
-
         openOnScan(address) {
             let url = this.explorerUrl + "address/" + address;
             window.open(url, '_blank').focus();
@@ -216,6 +225,35 @@ export default {
             } else {
                 this.headersM2M = this.headersM2M.filter(value => value.text !== 'Risk Factor');
             }
+        },
+        loadData() {
+          this.loadTotalUsdPlusPlus();
+        },
+        loadTotalUsdPlusPlus() {
+          if (!this.account) {
+            this.loadApiTotalUsdPlusValue();
+            return;
+          }
+
+          this.loadBlockchainTotalUsdPlusValue();
+        },
+        loadApiTotalUsdPlusValue() {
+          usdPlusApiService.getTotalUsdPlus(this.appApiUrl)
+              .then(data => {
+                this.totalUsdPlusValue = data;
+              })
+              .catch(e => {
+                console.error("Error when load usd+ total in governance", e);
+              });
+
+        },
+        async loadBlockchainTotalUsdPlusValue() {
+          setTimeout(async () => {
+            let assetDecimals = (await this.contracts.usdPlus.methods.decimals().call()) * 1;
+            let blockchainValue = await this.contracts.usdPlus.methods.totalSupply().call();
+            let fromAsset6 = assetDecimals === 6;
+            this.totalUsdPlusValue = (fromAsset6 ? numberUtils._fromE6(blockchainValue.toString()) : numberUtils._fromE18(blockchainValue.toString()))
+          }, 3000)
         },
     }
 }

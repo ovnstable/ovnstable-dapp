@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="mt-10">
+        <div class="mt-10" :class="$wu.isMobile() ? 'ml-5' : ''">
             <label class="title-label">My dashboard</label>
 
             <v-row align="start" justify="start" class="ma-0">
@@ -9,7 +9,7 @@
 
                         <label class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
                         <label class="tab-btn mx-4" @click="setTab(2)" v-bind:class="activeTabUsdPlus">USD+</label>
-                        <label class="tab-btn mx-4" @click="setTab(4)" v-bind:class="activeTabETS" disabled>ETS</label>
+                        <label class="tab-btn mx-4" @click="setTab(3)" v-bind:class="activeTabETS" disabled>ETS</label>
 
                         <v-spacer></v-spacer>
 
@@ -104,10 +104,10 @@
             </v-row>
         </div>
 
-        <div>
+        <div :class="$wu.isMobile() ? 'ml-5' : ''">
             <v-row align="start" justify="start" class="page-container ma-0">
 
-                <v-col v-if="tab === 4" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
+                <v-col v-if="tab === 3" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
                   <EtsTab></EtsTab>
                 </v-col>
 
@@ -307,28 +307,28 @@
 
                                 <v-row align="start" justify="start" class="ma-0 mt-7">
                                     <label class="useful-link"
-                                           @click="openLink('https://blog.overnight.fi/how-to-partake-in-liquidity-provisions-for-usd-5c8117e983b2')">
+                                           @click="openLink('https://overnight.fi/blog/2022/05/20/how-to-partake-in-liquidity-provisions-for-usd-on-polygon/')">
                                         How to Partake in Liquidity Provisions for USD+
                                     </label>
                                 </v-row>
 
                                 <v-row align="start" justify="start" class="ma-0 mt-5">
                                     <label class="useful-link"
-                                           @click="openLink('https://blog.overnight.fi/tic-how-to-buy-usd-if-you-already-own-cryptocurrency-48c4455f7efd')">
+                                           @click="openLink('https://overnight.fi/blog/2022/05/08/how-to-buy-usd-if-you-already-own-cryptocurrency/')">
                                         How to buy USD+ if you already own cryptocurrency
                                     </label>
                                 </v-row>
 
                                 <v-row align="start" justify="start" class="ma-0 mt-5">
                                     <label class="useful-link"
-                                           @click="openLink('https://blog.overnight.fi/how-to-buy-usd-via-fiat-e3ff7818b8cc')">
+                                           @click="openLink('https://overnight.fi/blog/2022/05/07/how-to-buy-usd-with-fiat/')">
                                         How to buy USD+ via Fiat
                                     </label>
                                 </v-row>
 
                                 <v-row align="start" justify="start" class="ma-0 mt-5">
                                     <label class="useful-link"
-                                           @click="openLink('https://blog.overnight.fi/what-is-yield-farming-fc28736a7f2f')">
+                                           @click="openLink('https://overnight.fi/blog/2022/09/05/yield-farming-for-the-pros-overnight-launches-its-ets-on-bnb-chain/')">
                                         What is Yield Farming?
                                     </label>
                                 </v-row>
@@ -344,8 +344,14 @@
 
                                 <v-row align="start" justify="start" class="ma-0 mt-7">
                                     <label class="useful-link"
-                                           @click="openLink('https://www.youtube.com/watch?v=URHirNqiMiw')">
-                                        Dystopia & Penrose: High-Yield Stablecoin LP Staking
+                                           @click="openLink('https://www.youtube.com/watch?v=AqNqkQ9m_rI')">
+                                        What is USD+
+                                    </label>
+                                </v-row>
+                                <v-row align="start" justify="start" class="ma-0 mt-7">
+                                    <label class="useful-link"
+                                           @click="openLink('https://www.youtube.com/watch?v=wIVAiUMLmvA')">
+                                        Exchange Trading Strategies explained
                                     </label>
                                 </v-row>
                             </v-col>
@@ -425,8 +431,8 @@ export default {
         activeTabETS: function () {
             this.trackClick({action: 'open-etstab-action-click', event_category: 'Dashboard ETS', event_label: 'Open ETS Tab', value: 1 });
             return {
-                'tab-button': this.tab === 4,
-                'tab-button-in-active': this.tab !== 4,
+                'tab-button': this.tab === 3,
+                'tab-button-in-active': this.tab !== 3,
             }
         },
 
@@ -1099,7 +1105,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .tab-button-in-active {
     color: var(--secondary-gray-text) !important;
-    cursor: default;
+    cursor: pointer;
 }
 
 .tab-btn-disabled {

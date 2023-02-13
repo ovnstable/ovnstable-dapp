@@ -15,6 +15,9 @@
                         <label class="card-title">
                           ON polygon
                         </label>
+                        <div>
+                            <v-img :src="require('@/assets/icon/betaGray.svg')" />
+                        </div>
                     </v-row>
                     <v-row class="d-flex mt-4">
                         <label class="percentage">

@@ -13,15 +13,12 @@
       </v-row>
     </div>
     <div v-else>
-      <div>
+      <div >
         <EtsStrategyList :strategies="strategies" :statistics="strategyStatistics"></EtsStrategyList>
       </div>
       <v-row v-if="!strategies || strategies.length === 0" align="center" justify="start" class="ma-0" :class="$wu.isFull() ? 'mt-8' : 'mt-5'">
-        <v-btn class="dashboard-action-btn btn-filled" @click="mintAction" v-if="walletConnected">
-          Mint USD+ to start
-        </v-btn>
-        <v-btn class="dashboard-action-btn btn-outlined" outlined @click="connectWallet" v-else>
-          Connect wallet
+        <v-btn class="dashboard-action-btn btn-filled" @click="etsClick()">
+          Mint ETS
         </v-btn>
       </v-row>
 
@@ -113,10 +110,27 @@ export default {
     },
   },
   methods: {
+      ...mapActions('menuUI', ['selectTab']),
     ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
     ...mapActions('walletAction', ['connectWallet']),
 
-    mintAction() {
+      openLink(url, isNotBlank) {
+          window.open(url, isNotBlank ? '_self' : '_blank').focus();
+      },
+
+      goToActionByPath(path, queryParams) {
+          this.$router.push({
+              path: path,
+              query: queryParams ? queryParams : {}
+          });
+      },
+
+      etsClick() {
+          this.selectTab('market');
+          this.goToActionByPath('/market', {tabName: 'ets'});
+      },
+
+      mintAction() {
       this.showMintView();
       this.showSwapModal();
     },
@@ -170,11 +184,8 @@ export default {
 
         // // open first
         if (this.strategyStatistics.length === 0) {
-          this.toggleStrategyStatistic(statistic);
+            this.strategyStatistics.push(statistic);
         }
-
-
-        this.strategyStatistics.push(statistic);
       }
 
       console.log("strategyStatistics ", this.strategyStatistics)

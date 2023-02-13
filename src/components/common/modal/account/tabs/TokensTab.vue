@@ -25,10 +25,10 @@
             </v-btn>
 
             <v-btn
-                v-for="ets in etsList"
+                v-for="ets in sortedCardList"
+                :key="ets.name"
                 class="coin-btn ma-1"
                 @click="addEtsToken(ets)"
-                v-if="networkId === ets.chain"
             >
                 <div class="coin-img">
                     <v-img :src="require('@/assets/currencies/market/ets_' + ets.name + '.svg')"/>
@@ -50,6 +50,7 @@ export default {
     components: {},
 
     data: () => ({
+        sortedCardList: [],
     }),
 
     props: {
@@ -63,10 +64,22 @@ export default {
     },
 
     watch: {
+        networkId: function (newVal, oldVal) {
+            this.getSortedCardList();
+        }
+    },
+
+    mounted() {
+        this.getSortedCardList()
     },
 
     methods: {
         ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
+        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig']),
+
+        getSortedCardList() {
+            this.sortedCardList = this.etsList.filter(ets => (!ets.archive && this.networkId === ets.chain))
+        },
     },
 }
 </script>

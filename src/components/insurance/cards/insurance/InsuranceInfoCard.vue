@@ -13,7 +13,7 @@
                         Premiums are retained from the daily yield of USD+.
                         However, in case of negative rebase, the insurance fund capital serves to compensate the negative rebase and [1] BPS of yield in addition.
                         Please be aware of risks related to insurance - there is a min 3 day lockup period for the funds provided, no compensation will be provided in case of losses from insurance.
-                        This insurance product covers only USD+, and to no other Overnight product.
+                        This insurance product covers only USD+, and to no other Overnight product. Now USD+ Insurance is in Beta version.
                     </label>
                 </v-row>
 

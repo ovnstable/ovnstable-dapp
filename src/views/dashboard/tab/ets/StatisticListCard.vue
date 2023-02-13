@@ -7,7 +7,7 @@
 <!--                    <v-img :src="require('@/assets/network/' + statistic.ets.chainName + '.svg')"-->
 <!--                           :title="statistic.ets.chainName.toUpperCase()"/>-->
                 </div>
-                <div class="mr-2 card-label-container">
+                <div class="card-label-container">
                   <label class="card-label">
                     {{ statistic.name }}
                   </label>

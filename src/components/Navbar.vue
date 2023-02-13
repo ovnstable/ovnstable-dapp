@@ -233,6 +233,12 @@
                 </v-list-item>
 
                 <v-list-item link class="mb-0">
+                    <v-list-item-title @click="openLink('https://docs.overnight.fi/advanced/terms-of-service')">
+                        <label class="footer-item-label">Terms of Service</label>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item link class="mb-0">
                     <v-list-item-title @click="openLink('https://overnight.canny.io/')">
                         <label class="footer-item-label">Vote for new features</label>
                     </v-list-item-title>

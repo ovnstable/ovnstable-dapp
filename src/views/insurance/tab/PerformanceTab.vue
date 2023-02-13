@@ -15,7 +15,7 @@
               <v-row align="center" justify="start" class="ma-0">
                   <v-col class="ml-n3 mt-n3">
                       <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
-                          APY
+                          PERFORMANCE
                       </v-btn>
                   </v-col>
                   <v-col class="mr-n3 mt-n3">
@@ -25,7 +25,7 @@
                   </v-col>
               </v-row>
 
-              <ChartApy class="mx-n3" v-if="rateTab === 1" :data="insuranceApyData.polygon" :usdPlusData="usdPlusApyData.polygon" :insurance-data="insuranceData"/>
+              <ChartApy class="mx-n3" v-if="rateTab === 1" :data="insuranceApyData.polygon" :usdPlusData="usdPlusApyData.polygon" :insurance-data="insuranceData" :compound-data="compoundData"/>
               <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="insuranceTvlData.polygon" :insurance-data="insuranceData"/>
           </v-col>
       </v-row>
@@ -98,6 +98,13 @@ export default {
         insuranceRedemptionData: {},
 
         usdPlusApyData: {},
+
+        compoundData: { //   TODO COMPOUND
+          day: 1.22,
+          week: 10.23,
+          month: 25.45,
+          all: 6.16,
+        }
       }),
 
     props: {

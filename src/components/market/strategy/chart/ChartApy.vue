@@ -1,7 +1,7 @@
 <template>
     <div class="apy-chart-container">
         <v-row class="chart-header-row">
-            <v-col cols="8">
+            <v-col cols="6">
                 <v-row justify="start" align="center">
                     <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? etsData.nameUp : 'ETS: ' + etsData.nameUp + ' daily net') + '&nbsp;') : ''}}</label>
                     <label class="chart-title" style="margin-left: 0 !important">
@@ -14,7 +14,7 @@
 
                 <v-row justify="start">
                     <label class="mobile-info-title">
-                        {{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '' }}
+                        {{ (compoundData && compoundData.day) ? ($utils.formatMoneyComma(compoundData.day, 2)) + '%' : '' }}
                     </label>
                 </v-row>
 
@@ -32,17 +32,60 @@
                 </v-row>
             </v-col>
 
-            <v-col class="add-chart-info-col">
-                <v-row justify="end">
-                    <label class="chart-title-apy">
-                        {{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '' }}
-                    </label>
-                </v-row>
-                <v-row justify="end">
-                    <label class="chart-sub-title-apy">
-                        {{ (avgApy && avgApy.date) ? 'from ' + avgApy.date : '' }}
-                    </label>
-                </v-row>
+            <v-col class="add-chart-info-col pt-10">
+               <v-row>
+                 <v-col cols="3">
+                   <v-row justify="center">
+                     <label class="chart-title-compound">
+                       {{ (compoundData && compoundData.day) ? ($utils.formatMoneyComma(compoundData.day, 2)) + '%' : '' }}
+                     </label>
+                   </v-row>
+                   <v-row justify="center">
+                     <label class="chart-sub-title-apy">
+                       1 day
+                     </label>
+                   </v-row>
+                 </v-col>
+
+                 <v-col cols="3">
+                   <v-row justify="center" class="chart-title-compound-container">
+                     <label class="chart-title-compound">
+                       {{ (compoundData && compoundData.week) ? ($utils.formatMoneyComma(compoundData.week, 2)) + '%' : '' }}
+                     </label>
+                   </v-row>
+                   <v-row justify="center">
+                     <label class="chart-sub-title-apy">
+                       1 week
+                     </label>
+                   </v-row>
+                 </v-col>
+
+                 <v-col cols="3">
+                   <v-row justify="center" class="chart-title-compound-container">
+                     <label class="chart-title-compound">
+                       {{ (compoundData && compoundData.month) ? ($utils.formatMoneyComma(compoundData.month, 2)) + '%' : '' }}
+                     </label>
+                   </v-row>
+                   <v-row justify="center">
+                     <label class="chart-sub-title-apy">
+                       1 month
+                     </label>
+                   </v-row>
+                 </v-col>
+
+                 <v-col cols="3">
+                   <v-row justify="center" class="chart-title-compound-container">
+                     <label class="chart-title-compound">
+                       {{ (compoundData && compoundData.all) ? ($utils.formatMoneyComma(compoundData.all, 2)) + '%' : '' }}
+                     </label>
+                   </v-row>
+                   <v-row justify="center">
+                     <label class="chart-sub-title-apy">
+                       All
+                     </label>
+                   </v-row>
+                 </v-col>
+               </v-row>
             </v-col>
         </v-row>
 
@@ -107,6 +150,10 @@ export default {
         },
 
         etsData: {
+            type: Object,
+        },
+
+        compoundData: {
             type: Object,
         },
     },
@@ -638,6 +685,20 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text) !important;
+}
+
+.chart-title-compound-container {
+  border-left: 1px solid #CED2D8;
+}
+
+.chart-title-compound {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 36px;
+
+  color: #22ABAC;
 }
 
 .chart-sub-title-apy {

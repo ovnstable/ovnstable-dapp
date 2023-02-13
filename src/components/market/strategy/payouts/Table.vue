@@ -8,8 +8,19 @@
             <th class="table-header-payouts-strategy text-right" v-if="!minimized">
                 Daily profit{{ minimized ? '' : (profitLabel ? ', ' + profitLabel : '')}}
             </th>
+
+<!--          TODO COMPOUND -->
             <th v-if="(payoutData && payoutData[0]) ? payoutData[0].annualizedYield : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
-                Annualized yield{{ minimized ? '' : ', % per year'}}
+              <div>
+                <label>
+                  Return
+                </label>
+
+                <!--          TODO COMPOUND -->
+                <!--                <div style="margin-top: -2px">-->
+<!--                  <Tooltip :size="16" icon-color="rgba(255, 255, 255, 0.6)" text="Strategy net APY based on 30-day average, includes fees taken (fee-adjusted)"/>-->
+<!--                </div>-->
+              </div>
             </th>
             <th class="table-header-payouts-strategy text-right" width="180px" v-if="!minimized">
                 Explorer
@@ -54,13 +65,14 @@
 <script>
 
 import {mapGetters} from "vuex";
+import Tooltip from "@/components/common/element/Tooltip";
 
 /* eslint-disable no-unused-vars,no-undef */
 
 export default {
     name: "Table",
 
-    components: {},
+    components: {Tooltip},
 
     data: () => ({}),
 
@@ -77,7 +89,7 @@ export default {
 
         payoutData: {
             type: Array,
-            default: [],
+            default: () => {},
         },
     },
 

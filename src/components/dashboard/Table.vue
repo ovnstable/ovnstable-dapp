@@ -21,7 +21,7 @@
                 Closing balance
             </th>
             <th class="table-header-payouts-strategy text-right">
-                APY
+                Return
             </th>
             <th class="table-header-payouts-strategy text-right" v-if="!$wu.isMobile()">
                 Explorer
@@ -56,8 +56,10 @@
                 ${{ $utils.formatMoney(item.closingBalance, 6) }}
             </td>
             <td class="table-label-payouts-strategy text-right">
-                <label :class="(item.apy == null || item.apy === 0) ? 'yield-default' : (item.apy > 0 ? 'yield-green' : 'yield-red')">
-                    {{ (item.apy == null || item.apy === 0) ? '—' : ($utils.formatMoney(item.apy, 1) + '%') }}
+
+<!--               TODO COMPOUND -->
+                <label :class="(item.comp == null || item.comp === 0) ? 'yield-default' : (item.comp > 0 ? 'yield-green' : 'yield-red')">
+                    {{ (item.comp == null || item.comp === 0) ? '—' : ($utils.formatMoney(item.comp, 1) + '%') }}
                 </label>
             </td>
             <td class="table-label-payouts-strategy text-right" @click="openOnScan(item)" v-if="!$wu.isMobile()">
@@ -96,7 +98,7 @@ export default {
 
         data: {
             type: Array,
-            default: [],
+            default: () => {},
         },
     },
 

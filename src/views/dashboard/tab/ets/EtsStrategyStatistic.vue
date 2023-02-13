@@ -19,8 +19,8 @@
                   </v-btn>
                 </v-col>
                 <v-col class="mr-n3 mt-n3">
-                  <v-btn outlined class="rate-tab-btn" @click="setTab('APY')" v-bind:class="activeChartApy">
-                    APY
+                  <v-btn outlined class="rate-tab-btn" @click="setTab('PERFORMANCE')" v-bind:class="activeChartApy">
+                    PERFORMANCE
                   </v-btn>
                 </v-col>
               </v-row>
@@ -37,8 +37,10 @@
                         :type="'profit & loss'"
                         :id="index"/>
 
-              <LineChart v-if="chartTab === 'APY'"
-                         :data="charts.apy"
+
+<!--               TODO COMPOUND -->
+              <LineChart v-if="chartTab === 'PERFORMANCE'"
+                         :data="charts.comp"
                          :type="'APY'"
                          :id="index"/>
             </v-col>
@@ -102,7 +104,7 @@ export default {
       return this.chartTab === 'PROFIT' ? 'rate-tab-button' : 'rate-tab-button-in-active'
     },
     activeChartApy: function () {
-      return this.chartTab === 'APY' ? 'rate-tab-button' : 'rate-tab-button-in-active'
+      return this.chartTab === 'PERFORMANCE' ? 'rate-tab-button' : 'rate-tab-button-in-active'
     },
   },
   methods: {

@@ -45,12 +45,13 @@
               <v-col>
                 <v-row justify="center" align="center">
                   <label class="container-info-sub-title">
-                    Average APY
+                    Return
                   </label>
                 </v-row>
                 <v-row justify="center" align="center">
                   <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                    {{ dataHidden ? '' : avgApy === 0 || !avgApy ? '—' : ($utils.formatMoney(avgApy, 2) + '%') }}
+<!--                       TODO COMPOUND -->
+                    {{ dataHidden ? '' : avgComp === 0 || !avgComp ? '—' : ($utils.formatMoney(avgComp, 2) + '%') }}
                   </label>
                 </v-row>
               </v-col>
@@ -93,7 +94,8 @@
                 <v-col>
                   <v-row justify="center" align="center">
                     <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                      {{ dataHidden ? '' : statistic.apy === 0 ? '—' : ($utils.formatMoney(statistic.apy, 2) + '%') }}
+<!--                        TODO COMPOUND -->
+                      {{ dataHidden ? '' : statistic.comp === 0 ? '—' : ($utils.formatMoney(statistic.comp, 2) + '%') }}
                     </label>
                   </v-row>
                 </v-col>
@@ -128,17 +130,18 @@ export default {
       }
     },
 
-    avgApy: function () {
-      let res = 0;
-      if (!this.statistics || this.statistics.length === 0) {
-        return res;
-      }
-
-      for (let i = 0; i < this.statistics.length; i++) {
-        res += this.statistics[i].apy;
-      }
-
-      return res / this.statistics.length;
+    comp: function () {
+      return 0;  //   TODO COMPOUND
+      // let res = 0;
+      // if (!this.statistics || this.statistics.length === 0) {
+      //   return res;
+      // }
+      //
+      // for (let i = 0; i < this.statistics.length; i++) {
+      //   res += this.statistics[i].comp;
+      // }
+      //
+      // return res / this.statistics.length;
     },
 
     totalValue: function () {

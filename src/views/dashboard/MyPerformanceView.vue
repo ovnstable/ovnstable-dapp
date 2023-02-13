@@ -182,12 +182,12 @@
                                         <v-col>
                                             <v-row justify="center" align="center">
                                                 <label class="container-info-sub-title">
-                                                    Average APY
+                                                    Return
                                                 </label>
                                             </v-row>
                                             <v-row justify="center" align="center">
                                                 <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                                                    {{ dataHidden ? '' : apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}
+                                                    {{ dataHidden ? '' : comp === 0 ? '—' : ($utils.formatMoney(comp, 2) + '%') }}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -385,6 +385,7 @@ export default {
       isUsdPlusLoading: true,
       profitUsdPlus: null,
       apy: null,
+      comp: null,
       activities: null,
       portfolioValue: {
         labels: [],

@@ -16,7 +16,7 @@ const state = {
     payoutsApyDataDict: [],
 
     payoutsTvlData: {},
-    // totalUsdPlusValue: null,
+    totalUsdPlusValue: null,
     // totalUsdPlusProfit: null,
 };
 

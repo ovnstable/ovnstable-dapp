@@ -15,7 +15,7 @@
                     </v-col>
                 </v-row>
 
-                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="etsApyData[etsData.name]" :usdPlusData="usdPlusApyData[etsData.chainName]" :compound-data="compoundData" :ets-data="etsData"/>
+                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="etsApyData[etsData.name]" :usdPlusData="usdPlusApyData[etsData.chainName]" :compound-data="compoundData[etsData.name]" :ets-data="etsData"/>
                 <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="etsTvlData[etsData.name]" :ets-data="etsData"/>
             </v-col>
         </v-row>
@@ -260,12 +260,6 @@ export default {
 
     data: () => ({
         rateTab: 1,
-        compoundData: { //   TODO COMPOUND
-          day: 1.22,
-          week: 10.23,
-          month: 25.45,
-          all: 6.16,
-        }
     }),
 
     props: {
@@ -291,7 +285,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('marketData', ['etsStrategyData', 'etsApyData', 'etsTvlData', 'usdPlusApyData']),
+        ...mapGetters('marketData', ['etsStrategyData', 'etsApyData', 'etsTvlData', 'usdPlusApyData', 'compoundData']),
 
         activeRateApy: function () {
             return {

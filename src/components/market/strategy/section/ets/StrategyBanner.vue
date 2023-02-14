@@ -53,14 +53,11 @@
                         <v-col class="bordered-col" :cols="$wu.isMobile() ? 12 : 4">
                             <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2">
                                 <label class="info-value-per100">
-                                  <!--          TODO COMPOUND -->
-
-                                  {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].per100) ?  '$' + ($utils.formatMoneyComma(etsStrategyData[etsData.name].per100, 0)) : '$132.43' }}
+<!--                                  {{ (compoundData[etsData.name] && compoundData[etsData.name].month) ?  '$' + ($utils.formatMoneyComma((compoundData[etsData.name].month + 100) * 100, 2)) : '-' }}-->
+                                  {{ (compoundData[etsData.name] && compoundData[etsData.name].month) ?  '$' + (compoundData[etsData.name].month * 1 + 100) : ''}}
                                 </label>
                               <label class="info-value-compound info-value-compound-container">
-                                <!--          TODO COMPOUND -->
-
-                                {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].comp) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].comp, 0)) + '%' : '+25.43%' }}
+                                {{ (compoundData[etsData.name] && compoundData[etsData.name].month) ? compoundData[etsData.name].month + '%' : '-' }}
                               </label>
                             </v-row>
                             <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2 mt-5">
@@ -151,7 +148,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('marketData', ['etsStrategyData']),
+        ...mapGetters('marketData', ['etsStrategyData', 'compoundData']),
         ...mapGetters('supplyData', ['totalSupply']),
 
         icon: function (){
@@ -459,7 +456,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
   font-style: normal;
   font-weight: 400;
   font-size: 30px;
-  line-height: 40px;
+  line-height: 36px;
   color: #FFFFFF;
 }
 
@@ -467,7 +464,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
   border: 1px solid #F3BA2F;
   border-radius: 5px;
   margin-left: 8px;
-  padding: 6px 4px 4px;
+  padding: 4px 4px 4px;
 }
 
 .info-value-compound {

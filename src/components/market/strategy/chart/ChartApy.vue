@@ -8,10 +8,14 @@
                 </label>
               </v-row>
               <v-row justify="start" align="left">
-                <label class="chart-sub-title-apy">
-                  <!--                  TODO COMPOUND -->
-                  Inception date: Oct. 28, 2022
-                </label>
+                <div>
+                  <label class="mobile-info-title">
+                    {{ (compoundData && compoundData.all) ? ($utils.formatMoneyComma(compoundData.all, 2)) + '%' : '' }}
+                  </label>
+                </div>
+                <div class="chart-sub-title-apy">
+                  {{ (compoundData && compoundData.firstDate) ? compoundData.firstDate : '-'}}
+                </div>
               </v-row>
 
 <!--                <v-row justify="start" v-if="!isMobile">-->
@@ -32,7 +36,7 @@
                <v-row>
                  <v-col cols="3">
                    <v-row justify="center">
-                     <label class="chart-title-compound">
+                     <label :class="compoundData.day >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
                        {{ (compoundData && compoundData.day) ? ($utils.formatMoneyComma(compoundData.day, 2)) + '%' : '' }}
                      </label>
                    </v-row>
@@ -45,7 +49,7 @@
 
                  <v-col cols="3">
                    <v-row justify="center" class="chart-title-compound-container">
-                     <label class="chart-title-compound">
+                     <label :class="compoundData.week >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
                        {{ (compoundData && compoundData.week) ? ($utils.formatMoneyComma(compoundData.week, 2)) + '%' : '' }}
                      </label>
                    </v-row>
@@ -58,7 +62,7 @@
 
                  <v-col cols="3">
                    <v-row justify="center" class="chart-title-compound-container">
-                     <label class="chart-title-compound">
+                     <label :class="compoundData.month >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
                        {{ (compoundData && compoundData.month) ? ($utils.formatMoneyComma(compoundData.month, 2)) + '%' : '' }}
                      </label>
                    </v-row>
@@ -71,7 +75,7 @@
 
                  <v-col cols="3">
                    <v-row justify="center" class="chart-title-compound-container">
-                     <label class="chart-title-compound">
+                     <label :class="compoundData.all >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
                        {{ (compoundData && compoundData.all) ? ($utils.formatMoneyComma(compoundData.all, 2)) + '%' : '' }}
                      </label>
                    </v-row>
@@ -296,13 +300,14 @@ export default {
                 if (this.usdPlusDataEnabled) {
                     let maxValueEts = Math.max.apply(Math, values);
                     let maxValueUsdPlus = Math.max.apply(Math, valuesUsdPlus);
-
                     maxValue = Math.max(maxValueEts, maxValueUsdPlus);
                 } else {
                     maxValue = Math.max.apply(Math, values);
                 }
 
-                maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
+                if (maxValue > 5) {
+                  maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
+                }
             } catch (e) {
                 maxValue = 50;
             }
@@ -319,7 +324,9 @@ export default {
                     minValue = Math.min.apply(Math, values);
                 }
 
-                minValue = Math.min(Math.floor(Math.floor(minValue / 10)) * 10, 0);
+                if (minValue < -5) {
+                    minValue = Math.min(Math.floor(Math.floor(minValue / 10)) * 10, 0);
+                }
             } catch (e) {
                 minValue = 0;
             }
@@ -694,6 +701,16 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
   line-height: 36px;
 
   color: #22ABAC;
+}
+
+.chart-title-compound-minus {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 36px;
+
+  color: #CF3F92 !important;
 }
 
 .chart-sub-title-apy {

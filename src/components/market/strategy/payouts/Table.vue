@@ -9,8 +9,7 @@
                 Daily profit{{ minimized ? '' : (profitLabel ? ', ' + profitLabel : '')}}
             </th>
 
-<!--          TODO COMPOUND -->
-            <th v-if="(payoutData && payoutData[0]) ? payoutData[0].annualizedYield : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
+            <th v-if="(payoutData && payoutData[0]) ? payoutData[0].comp : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
               <div>
                 <label>
                   Return
@@ -41,9 +40,9 @@
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">
                 $ {{ $utils.formatMoney(item.dailyProfit, 6) }}
             </td>
-            <td v-if="item.annualizedYield" class="table-label-payouts-strategy text-right">
-                <label :class="item.annualizedYield > 0 ? 'yield-green' : 'yield-red'">
-                    {{ $utils.formatMoney(item.annualizedYield, 1) }}%
+            <td v-if="item.comp" class="table-label-payouts-strategy text-right">
+                <label :class="item.comp >= 0 ? 'yield-green' : 'yield-red'">
+                    {{ $utils.formatMoney(item.comp, 2) }}%
                 </label>
             </td>
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">

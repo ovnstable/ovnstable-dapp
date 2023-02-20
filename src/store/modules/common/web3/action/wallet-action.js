@@ -33,6 +33,12 @@ const actions = {
             darkMode: false,
             walletSelect: {
                 wallets: wallets,
+
+                agreement: {
+                    version: "1.0.0",
+                    termsUrl: "https://docs.overnight.fi/advanced/terms-of-service",
+                    privacyUrl: "https://docs.overnight.fi/advanced/privacy-policy",
+                },
             },
 
             subscriptions: {
@@ -310,10 +316,6 @@ const mutations = {
 
     setWalletConnected(state, walletConnected) {
         state.walletConnected = walletConnected;
-    },
-
-    setWalletIcon(state, value) {
-        state.walletIcon = value;
     },
 };
 

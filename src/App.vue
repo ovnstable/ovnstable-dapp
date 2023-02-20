@@ -141,6 +141,10 @@ export default {
 :root {
     --orange-gradient: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
     --blue-gradient: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+
+    --onboard-checkbox-background: red;
+    --onboard-font-family-normal: monospace;
+    --onboard-wallet-columns: 5;
 }
 
 html {

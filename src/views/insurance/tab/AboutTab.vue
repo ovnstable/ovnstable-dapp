@@ -33,14 +33,14 @@
                         <TableStrategies
                             v-if="!$wu.isMobile()"
                             :data="insuranceTotalData"
-                            :total-supply="totalInsuranceSupply.polygon"
+                            :total-supply="totalInsuranceSupply.polygon * 1"
                             :total-title="'Total USD+ Insurance in circulation'"/>
 
                         <TableStrategies
                             v-else
                             minimized
                             :data="insuranceTotalData"
-                            :total-supply="totalInsuranceSupply"
+                            :total-supply="totalInsuranceSupply * 1"
                             :total-title="'Total USD+ Insurance in circulation'"/>
                     </v-col>
 

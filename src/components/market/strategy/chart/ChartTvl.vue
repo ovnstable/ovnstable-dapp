@@ -180,7 +180,9 @@ export default {
             let maxValue;
             try {
                 maxValue = Math.max.apply(Math, values);
-                maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
+                if (maxValue > 5) {
+                  maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
+                }
             } catch (e) {
                 maxValue = 50;
             }

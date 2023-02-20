@@ -255,7 +255,9 @@ export default {
                     maxValue = Math.max.apply(Math, values);
                 }
 
+              if (maxValue > 5) {
                 maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
+              }
             } catch (e) {
                 maxValue = 50;
             }

@@ -88,7 +88,7 @@ const actions = {
                 try {
                     supply = rootState.insuranceData.insuranceStrategyData[insurance.chainName].lastTvl;
                 } catch (e) {
-                    console.log("Error: ", e)
+                    // console.log("Error: ", e)
                 }
             }
 

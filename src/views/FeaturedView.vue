@@ -227,6 +227,7 @@ export default {
     async refreshSupply() {
 
       console.log('Supply: refreshSupply start');
+      this.isTotalSupplyLoading = true;
 
       let networkId = this.networkId;
 
@@ -459,7 +460,7 @@ export default {
       this.isClientDataLoading = true;
 
       if (!this.account){
-        this.isClientDataLoading = true;
+        this.isClientDataLoading = false;
         return;
       }
 

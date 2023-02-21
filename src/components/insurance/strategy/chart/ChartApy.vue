@@ -332,7 +332,7 @@ export default {
 
             seriesList.push(
                 {
-                    name: "Performanc",
+                    name: "Performance",
                     data: values
                 }
             );

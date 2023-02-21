@@ -305,64 +305,58 @@
                                     <label class="useful-title">Useful articles</label>
                                 </v-row>
 
-                                <v-row align="start" justify="start" class="ma-0 mt-7">
-                                    <label class="useful-link"
-                                           @click="openLink('https://overnight.fi/blog/2022/05/20/how-to-partake-in-liquidity-provisions-for-usd-on-polygon/')">
-                                        How to Partake in Liquidity Provisions for USD+
-                                    </label>
-                                </v-row>
+                <v-row align="start" justify="start" class="ma-0 mt-7">
+                  <label class="useful-link"
+                         @click="openLink('https://blog.overnight.fi/how-to-partake-in-liquidity-provisions-for-usd-5c8117e983b2')">
+                    How to Partake in Liquidity Provisions for USD+
+                  </label>
+                </v-row>
 
-                                <v-row align="start" justify="start" class="ma-0 mt-5">
-                                    <label class="useful-link"
-                                           @click="openLink('https://overnight.fi/blog/2022/05/08/how-to-buy-usd-if-you-already-own-cryptocurrency/')">
-                                        How to buy USD+ if you already own cryptocurrency
-                                    </label>
-                                </v-row>
+                <v-row align="start" justify="start" class="ma-0 mt-5">
+                  <label class="useful-link"
+                         @click="openLink('https://blog.overnight.fi/tic-how-to-buy-usd-if-you-already-own-cryptocurrency-48c4455f7efd')">
+                    How to buy USD+ if you already own cryptocurrency
+                  </label>
+                </v-row>
 
-                                <v-row align="start" justify="start" class="ma-0 mt-5">
-                                    <label class="useful-link"
-                                           @click="openLink('https://overnight.fi/blog/2022/05/07/how-to-buy-usd-with-fiat/')">
-                                        How to buy USD+ via Fiat
-                                    </label>
-                                </v-row>
+                <v-row align="start" justify="start" class="ma-0 mt-5">
+                  <label class="useful-link"
+                         @click="openLink('https://blog.overnight.fi/how-to-buy-usd-via-fiat-e3ff7818b8cc')">
+                    How to buy USD+ via Fiat
+                  </label>
+                </v-row>
 
-                                <v-row align="start" justify="start" class="ma-0 mt-5">
-                                    <label class="useful-link"
-                                           @click="openLink('https://overnight.fi/blog/2022/09/05/yield-farming-for-the-pros-overnight-launches-its-ets-on-bnb-chain/')">
-                                        What is Yield Farming?
-                                    </label>
-                                </v-row>
-                            </v-col>
-                        </v-row>
-
-                        <v-row align="center" justify="start" class="ma-0 mt-3 info-card-container"
-                               :class="$wu.isFull() ? '' : 'mr-3 ml-n3'">
-                            <v-col class="info-card-body-bottom">
-                                <v-row align="start" justify="start" class="ma-0">
-                                    <label class="useful-title">Video tutorials</label>
-                                </v-row>
-
-                                <v-row align="start" justify="start" class="ma-0 mt-7">
-                                    <label class="useful-link"
-                                           @click="openLink('https://www.youtube.com/watch?v=AqNqkQ9m_rI')">
-                                        What is USD+
-                                    </label>
-                                </v-row>
-                                <v-row align="start" justify="start" class="ma-0 mt-7">
-                                    <label class="useful-link"
-                                           @click="openLink('https://www.youtube.com/watch?v=wIVAiUMLmvA')">
-                                        Exchange Trading Strategies explained
-                                    </label>
-                                </v-row>
-                            </v-col>
-                        </v-row>
-                    </div>
-                </v-col>
+                <v-row align="start" justify="start" class="ma-0 mt-5">
+                  <label class="useful-link"
+                         @click="openLink('https://blog.overnight.fi/what-is-yield-farming-fc28736a7f2f')">
+                    What is Yield Farming?
+                  </label>
+                </v-row>
+              </v-col>
             </v-row>
-        </div>
 
-        <resize-observer @notify="$forceUpdate()"/>
+            <v-row align="center" justify="start" class="ma-0 mt-3 info-card-container"
+                   :class="$wu.isFull() ? '' : 'mr-3 ml-n3'">
+              <v-col class="info-card-body-bottom">
+                <v-row align="start" justify="start" class="ma-0">
+                  <label class="useful-title">Video tutorials</label>
+                </v-row>
+
+                <v-row align="start" justify="start" class="ma-0 mt-7">
+                  <label class="useful-link"
+                         @click="openLink('https://www.youtube.com/watch?v=URHirNqiMiw')">
+                    Dystopia & Penrose: High-Yield Stablecoin LP Staking
+                  </label>
+                </v-row>
+              </v-col>
+            </v-row>
+          </div>
+        </v-col>
+      </v-row>
     </div>
+
+    <resize-observer @notify="$forceUpdate()"/>
+  </div>
 </template>
 
 <script>
@@ -375,13 +369,13 @@ import {axios} from "@/plugins/http-axios";
 import moment from "moment/moment";
 
 export default {
-    name: "MyPerformanceView",
+  name: "MyPerformanceView",
 
-    components: {
-      EtsTab,
-      LineChart,
-      Table,
-    },
+  components: {
+    EtsTab,
+    LineChart,
+    Table,
+  },
 
     data: () => ({
       tab: 2,
@@ -412,48 +406,48 @@ export default {
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('magicEye', ['dataHidden']),
 
-        activeTabOverall: function () {
-            return {
-                'tab-button': this.tab === 1,
-                'tab-button-in-active': this.tab !== 1,
-            }
-        },
+    activeTabOverall: function () {
+      return {
+        'tab-button': this.tab === 1,
+        'tab-button-in-active': this.tab !== 1,
+      }
+    },
 
-        activeTabUsdPlus: function () {
-            this.trackClick({action: 'open-usdplustab-action-click', event_category: 'Dashboard USD+', event_label: 'Open USD+ Tab', value: 1 });
+    activeTabUsdPlus: function () {
+      this.trackClick({action: 'open-usdplustab-action-click', event_category: 'Dashboard USD+', event_label: 'Open USD+ Tab', value: 1 });
 
-            return {
-                'tab-button': this.tab === 2,
-                'tab-button-in-active': this.tab !== 2,
-            }
-        },
+      return {
+        'tab-button': this.tab === 2,
+        'tab-button-in-active': this.tab !== 2,
+      }
+    },
 
-        activeTabETS: function () {
-            this.trackClick({action: 'open-etstab-action-click', event_category: 'Dashboard ETS', event_label: 'Open ETS Tab', value: 1 });
-            return {
-                'tab-button': this.tab === 3,
-                'tab-button-in-active': this.tab !== 3,
-            }
-        },
+    activeTabETS: function () {
+      this.trackClick({action: 'open-etstab-action-click', event_category: 'Dashboard ETS', event_label: 'Open ETS Tab', value: 1 });
+      return {
+        'tab-button': this.tab === 4,
+        'tab-button-in-active': this.tab !== 4,
+      }
+    },
 
-        anyActivities() {
-            return this.activities && this.activities.length > 0;
-        },
+    anyActivities() {
+      return this.activities && this.activities.length > 0;
+    },
 
-        isLoading() {
-            return !this.account;
-        },
+    isLoading() {
+      return !this.account;
+    },
 
-        sliceLabel() {
-            switch (this.slice) {
-                case 7:
-                    return 'WEEK'
-                case 30:
-                    return 'MONTH'
-                default:
-                    return 'ALL';
-            }
-        },
+    sliceLabel() {
+      switch (this.slice) {
+        case 7:
+          return 'WEEK'
+        case 30:
+          return 'MONTH'
+        default:
+          return 'ALL';
+      }
+    },
 
         isMobile() {
             return window.innerWidth <= 1400;
@@ -498,30 +492,30 @@ export default {
             window.open(url, '_blank').focus();
         },
 
-        clickMenuOutside() {
-            this.openedSliceList = false;
-        },
+    clickMenuOutside() {
+      this.openedSliceList = false;
+    },
 
-        sliceDashboardByPeriod(slice) {
-            switch (slice) {
-                case "week":
-                    this.setSlice(7);
-                    this.trackClick({action: 'week-tab-action-click', event_category: 'Dashboard range', event_label: 'Change range Week', value: 1 });
-                    break;
-                case "month":
-                    this.setSlice(30)
-                    this.trackClick({action: 'month-tab-action-click', event_category: 'Dashboard range', event_label: 'Change range Month', value: 1 });
-                    break;
-                case "all":
-                    this.setSlice(null)
-                    this.trackClick({action: 'all-tab-action-click', event_category: 'Dashboard range', event_label: 'Change range All', value: 1 });
-                    break;
-                default:
-                    this.setSlice(null)
-            }
+    sliceDashboardByPeriod(slice) {
+      switch (slice) {
+        case "week":
+          this.setSlice(7);
+          this.trackClick({action: 'week-tab-action-click', event_category: 'Dashboard range', event_label: 'Change range Week', value: 1 });
+          break;
+        case "month":
+          this.setSlice(30)
+          this.trackClick({action: 'month-tab-action-click', event_category: 'Dashboard range', event_label: 'Change range Month', value: 1 });
+          break;
+        case "all":
+          this.setSlice(null)
+          this.trackClick({action: 'all-tab-action-click', event_category: 'Dashboard range', event_label: 'Change range All', value: 1 });
+          break;
+        default:
+          this.setSlice(null)
+      }
 
-            this.sliceDashboard();
-        },
+      this.sliceDashboard();
+    },
 
         mintAction() {
             this.showMintView();
@@ -641,325 +635,325 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
-    .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
-    }
+  .tab-btn {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+  }
 
-    .title-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 32px;
-        line-height: 40px;
-    }
+  .title-label {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 32px;
+    line-height: 40px;
+  }
 
-    .slice-select-main-container {
-        width: 100% !important;
-    }
+  .slice-select-main-container {
+    width: 100% !important;
+  }
 
-    .slice-select-container {
-        height: 40px !important;
-    }
+  .slice-select-container {
+    height: 40px !important;
+  }
 
-    .selected-slice-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
+  .selected-slice-label {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.03em;
+  }
 
-    .slice-select-list-item {
-        font-size: 14px;
-    }
+  .slice-select-list-item {
+    font-size: 14px;
+  }
 
-    .coin-img {
-        width: 24px !important;
-        height: 24px !important;
-    }
+  .coin-img {
+    width: 24px !important;
+    height: 24px !important;
+  }
 
-    .container-body-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 28px;
-    }
+  .container-body-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+  }
 
-    .container-body-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 22px;
-    }
+  .container-body-text {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+  }
 
-    .container-body-title-row {
-        border-bottom: 1px solid var(--main-border) !important;
-    }
+  .container-body-title-row {
+    border-bottom: 1px solid var(--main-border) !important;
+  }
 
-    .container-info-sub-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 16px;
-    }
+  .container-info-sub-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+  }
 
-    .container-info-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 24px;
-    }
+  .container-info-text {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+  }
 
-    .container-body-title-slice {
-        font-size: 14px !important;
-        line-height: 18px !important;
-    }
+  .container-body-title-slice {
+    font-size: 14px !important;
+    line-height: 18px !important;
+  }
 
-    .dashboard-action-btn {
-        width: 100% !important;
-        height: 36px !important;
+  .dashboard-action-btn {
+    width: 100% !important;
+    height: 36px !important;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.04em !important;
-    }
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    letter-spacing: 0.04em !important;
+  }
 
-    .useful-link {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
-    }
+  .useful-link {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+  }
 
-    .useful-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
+  .useful-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.03em;
+  }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 32px;
-    }
+  .tab-btn {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 32px;
+  }
 
-    .title-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 54px;
-        line-height: 60px;
-    }
+  .title-label {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 54px;
+    line-height: 60px;
+  }
 
-    .slice-select-main-container {
-        width: 100% !important;
-    }
+  .slice-select-main-container {
+    width: 100% !important;
+  }
 
-    .slice-select-container {
-        height: 40px !important;
-    }
+  .slice-select-container {
+    height: 40px !important;
+  }
 
-    .selected-slice-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
+  .selected-slice-label {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.03em;
+  }
 
-    .slice-select-list-item {
-        font-size: 16px;
-    }
+  .slice-select-list-item {
+    font-size: 16px;
+  }
 
-    .coin-img {
-        width: 24px !important;
-        height: 24px !important;
-    }
+  .coin-img {
+    width: 24px !important;
+    height: 24px !important;
+  }
 
-    .container-body-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 28px;
-    }
+  .container-body-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+  }
 
-    .container-body-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 22px;
-    }
+  .container-body-text {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+  }
 
-    .container-body-title-row {
-        border-bottom: 1px solid var(--main-border) !important;
-    }
+  .container-body-title-row {
+    border-bottom: 1px solid var(--main-border) !important;
+  }
 
-    .container-info-sub-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 16px;
-    }
+  .container-info-sub-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+  }
 
-    .container-info-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 24px;
-    }
+  .container-info-text {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+  }
 
-    .container-body-title-slice {
-        font-size: 14px !important;
-        line-height: 18px !important;
-    }
+  .container-body-title-slice {
+    font-size: 14px !important;
+    line-height: 18px !important;
+  }
 
-    .dashboard-action-btn {
-        width: 300px !important;
-        height: 36px !important;
+  .dashboard-action-btn {
+    width: 300px !important;
+    height: 36px !important;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.04em !important;
-    }
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    letter-spacing: 0.04em !important;
+  }
 
-    .useful-link {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
-    }
+  .useful-link {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+  }
 
-    .useful-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
+  .useful-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.03em;
+  }
 
-    .hidden-label {
-        width: 130px;
-        height: 28px;
-        background: var(--hide-account);
-    }
+  .hidden-label {
+    width: 130px;
+    height: 28px;
+    background: var(--hide-account);
+  }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 32px;
-    }
+  .tab-btn {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 32px;
+  }
 
-    .title-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 54px;
-        line-height: 60px;
-    }
+  .title-label {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 54px;
+    line-height: 60px;
+  }
 
-    .slice-select-container {
-        height: 28px !important;
-    }
+  .slice-select-container {
+    height: 28px !important;
+  }
 
-    .select-col {
-        margin-top: -10px;
-    }
+  .select-col {
+    margin-top: -10px;
+  }
 
-    .selected-slice-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0.03em;
-    }
+  .selected-slice-label {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.03em;
+  }
 
-    .slice-select-list-item {
-        font-size: 17px;
-    }
+  .slice-select-list-item {
+    font-size: 17px;
+  }
 
-    .coin-img {
-        width: 40px !important;
-        height: 40px !important;
-    }
+  .coin-img {
+    width: 40px !important;
+    height: 40px !important;
+  }
 
-    .container-body-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 24px;
-        line-height: 32px;
-    }
+  .container-body-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 32px;
+  }
 
-    .container-body-text {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
-    }
+  .container-body-text {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+  }
 
-    .container-info-sub-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 22px;
-    }
+  .container-info-sub-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+  }
 
-    .container-info-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 28px;
-    }
+  .container-info-text {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+  }
 
-    .container-body-title-slice {
-        font-size: 16px !important;
-        line-height: 20px !important;
-    }
+  .container-body-title-slice {
+    font-size: 16px !important;
+    line-height: 20px !important;
+  }
 
-    .dashboard-action-btn {
-        width: 300px !important;
-        height: 36px !important;
+  .dashboard-action-btn {
+    width: 300px !important;
+    height: 36px !important;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.02em !important;
-    }
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    letter-spacing: 0.02em !important;
+  }
 
-    .useful-link {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 24px;
-    }
+  .useful-link {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+  }
 
-    .useful-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: 0.02em;
-    }
+  .useful-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.02em;
+  }
 
-    .hidden-label {
-        width: 130px;
-        height: 28px;
-        background: var(--hide-account);
-    }
+  .hidden-label {
+    width: 130px;
+    height: 28px;
+    background: var(--hide-account);
+  }
 }
 
 @media
@@ -969,270 +963,270 @@ only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px)
 only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
 only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
 only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
-    .tab-btn {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 28px;
-    }
+  .tab-btn {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 28px;
+  }
 
-    .title-label {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 48px;
-        line-height: 60px;
-    }
+  .title-label {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 48px;
+    line-height: 60px;
+  }
 
-    .slice-select-container {
-        height: 28px !important;
-    }
+  .slice-select-container {
+    height: 28px !important;
+  }
 
-    .select-col {
-        margin-top: -10px;
-    }
+  .select-col {
+    margin-top: -10px;
+  }
 
-    .selected-slice-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 12px;
-        letter-spacing: 0.03em;
-    }
+  .selected-slice-label {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 12px;
+    letter-spacing: 0.03em;
+  }
 
-    .slice-select-list-item {
-        font-size: 15px;
-    }
+  .slice-select-list-item {
+    font-size: 15px;
+  }
 
-    .coin-img {
-        width: 38px !important;
-        height: 38px !important;
-    }
+  .coin-img {
+    width: 38px !important;
+    height: 38px !important;
+  }
 
-    .container-body-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 32px;
-    }
+  .container-body-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 32px;
+  }
 
-    .container-body-text {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 14px;
-        line-height: 24px;
-    }
+  .container-body-text {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 24px;
+  }
 
-    .container-info-sub-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 22px;
-    }
-
-    .container-info-text {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 28px;
-    }
-
-    .container-body-title-slice {
-        font-size: 16px !important;
-        line-height: 20px !important;
-    }
-
-    .dashboard-action-btn {
-        width: 250px !important;
-        height: 36px !important;
-
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 14px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.02em !important;
-    }
-
-    .useful-link {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 15px;
-        line-height: 24px;
-    }
-
-    .useful-title {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: 0.02em;
-    }
-
-    .hidden-label {
-        width: 130px;
-        height: 28px;
-        background: var(--hide-account);
-    }
-}
-
-.page-container {
-    margin-bottom: 5% !important;
-}
-
-.tab-btn {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'liga' off;
-    color: var(--secondary-gray-text);
-    margin-bottom: -2px;
-    cursor: pointer;
-}
-
-.toggle-row {
-    border-bottom: 2px solid var(--main-border);
-}
-
-.title-label {
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--main-gray-text);
-}
-
-.tab-button {
-    border-bottom: 2px solid var(--links-blue) !important;
-    color: var(--links-blue) !important;
-    cursor: pointer;
-}
-
-.tab-button-in-active {
-    color: var(--secondary-gray-text) !important;
-    cursor: pointer;
-}
-
-.tab-btn-disabled {
-    cursor: default;
-    color: var(--disabled-value) !important;
-}
-
-.slice-select-container {
-    background-color: rgba(28, 149, 231, 0.1) !important;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.selected-slice-label {
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--links-blue);
-}
-
-.slice-select-list {
-    background-color: var(--secondary) !important;
-    border-radius: 10px;
-}
-
-.slice-select-list-item {
-    font-family: 'Roboto', sans-serif !important;
-    color: var(--secondary-gray-text);
-}
-
-.info-card-container {
-    background: var(--secondary);
-    border-radius: 4px;
-}
-
-.info-card-body-bottom {
-    margin: 2% 2% !important;
-}
-
-.container-body-title {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'liga' off;
-    color: var(--main-gray-text);
-}
-
-.container-body-text {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--main-gray-text);
-}
-
-.text-wide {
-    text-align: justify;
-    width: 100%;
-}
-
-.container-info-sub-title {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--third-gray-text);
-}
-
-.container-info-text {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'liga' off;
-    color: var(--main-gray-text);
-}
-
-.container-body-title-slice {
-    color: var(--third-gray-text) !important;
-}
-
-.dashboard-action-btn {
-    border-radius: 2px;
-    box-shadow: none !important;
-
-    font-family: 'Roboto', sans-serif !important;
-    text-align: center !important;
-    text-transform: uppercase !important;
-    font-feature-settings: 'pnum' on, 'lnum' on !important;
-}
-
-.btn-filled {
-    background: var(--blue-gradient);
-    color: #FFFFFF !important;
-}
-
-.btn-outlined {
-    color: var(--links-blue) !important;
-}
-
-.scroll-container {
-    height: 24px !important;
-    background: var(--scroll-color) !important;
-}
-
-.table-scroll-label {
-    font-family: 'Roboto', sans-serif;
+  .container-info-sub-title {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
+    line-height: 22px;
+  }
+
+  .container-info-text {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 28px;
+  }
+
+  .container-body-title-slice {
+    font-size: 16px !important;
+    line-height: 20px !important;
+  }
+
+  .dashboard-action-btn {
+    width: 250px !important;
+    height: 36px !important;
+
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 20px !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  .useful-link {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 24px;
+  }
+
+  .useful-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
     line-height: 20px;
-    text-align: center;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--third-gray-text);
+    letter-spacing: 0.02em;
+  }
+
+  .hidden-label {
+    width: 130px;
+    height: 28px;
+    background: var(--hide-account);
+  }
+}
+
+.page-container {
+  margin-bottom: 5% !important;
+}
+
+.tab-btn {
+  font-family: 'Roboto', sans-serif;
+  font-feature-settings: 'liga' off;
+  color: var(--secondary-gray-text);
+  margin-bottom: -2px;
+  cursor: pointer;
+}
+
+.toggle-row {
+  border-bottom: 2px solid var(--main-border);
+}
+
+.title-label {
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  font-feature-settings: 'pnum' on, 'lnum' on;
+  color: var(--main-gray-text);
+}
+
+.tab-button {
+  border-bottom: 2px solid var(--links-blue) !important;
+  color: var(--links-blue) !important;
+  cursor: pointer;
+}
+
+.tab-button-in-active {
+  color: var(--secondary-gray-text) !important;
+  cursor: default;
+}
+
+.tab-btn-disabled {
+  cursor: default;
+  color: var(--disabled-value) !important;
+}
+
+.slice-select-container {
+  background-color: rgba(28, 149, 231, 0.1) !important;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.selected-slice-label {
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  font-feature-settings: 'pnum' on, 'lnum' on;
+  color: var(--links-blue);
+}
+
+.slice-select-list {
+  background-color: var(--secondary) !important;
+  border-radius: 10px;
+}
+
+.slice-select-list-item {
+  font-family: 'Roboto', sans-serif !important;
+  color: var(--secondary-gray-text);
+}
+
+.info-card-container {
+  background: var(--secondary);
+  border-radius: 4px;
+}
+
+.info-card-body-bottom {
+  margin: 2% 2% !important;
+}
+
+.container-body-title {
+  font-family: 'Roboto', sans-serif;
+  font-feature-settings: 'liga' off;
+  color: var(--main-gray-text);
+}
+
+.container-body-text {
+  font-family: 'Roboto', sans-serif;
+  font-feature-settings: 'pnum' on, 'lnum' on;
+  color: var(--main-gray-text);
+}
+
+.text-wide {
+  text-align: justify;
+  width: 100%;
+}
+
+.container-info-sub-title {
+  font-family: 'Roboto', sans-serif;
+  font-feature-settings: 'pnum' on, 'lnum' on;
+  color: var(--third-gray-text);
+}
+
+.container-info-text {
+  font-family: 'Roboto', sans-serif;
+  font-feature-settings: 'liga' off;
+  color: var(--main-gray-text);
+}
+
+.container-body-title-slice {
+  color: var(--third-gray-text) !important;
+}
+
+.dashboard-action-btn {
+  border-radius: 2px;
+  box-shadow: none !important;
+
+  font-family: 'Roboto', sans-serif !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  font-feature-settings: 'pnum' on, 'lnum' on !important;
+}
+
+.btn-filled {
+  background: var(--blue-gradient);
+  color: #FFFFFF !important;
+}
+
+.btn-outlined {
+  color: var(--links-blue) !important;
+}
+
+.scroll-container {
+  height: 24px !important;
+  background: var(--scroll-color) !important;
+}
+
+.table-scroll-label {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  font-feature-settings: 'pnum' on, 'lnum' on;
+  color: var(--third-gray-text);
 }
 
 .useful-title {
-    font-family: 'Roboto';
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--main-gray-text);
+  font-family: 'Roboto';
+  text-transform: uppercase;
+  font-feature-settings: 'pnum' on, 'lnum' on;
+  color: var(--main-gray-text);
 }
 
 .useful-link {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--links-blue);
-    cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-feature-settings: 'pnum' on, 'lnum' on;
+  color: var(--links-blue);
+  cursor: pointer;
 }
 
 .useful-link:hover {
-    text-decoration: underline !important;
+  text-decoration: underline !important;
 }
 
 .sticky {
-    margin-right: 4% !important;
-    position: fixed !important;
+  margin-right: 4% !important;
+  position: fixed !important;
 }
 </style>

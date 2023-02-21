@@ -173,7 +173,7 @@ export default {
             }
         },
         compoundStyle: function () {
-          return `border: 1px solid ${this.etsData.mainColor}; color: ${this.etsData.mainColor};`;
+          return `border: 1px solid #ffffff; color: #ffffff;`;
         }
     },
 

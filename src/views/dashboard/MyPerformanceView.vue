@@ -425,8 +425,8 @@ export default {
     activeTabETS: function () {
       this.trackClick({action: 'open-etstab-action-click', event_category: 'Dashboard ETS', event_label: 'Open ETS Tab', value: 1 });
       return {
-        'tab-button': this.tab === 4,
-        'tab-button-in-active': this.tab !== 4,
+        'tab-button': this.tab === 3,
+        'tab-button-in-active': this.tab !== 3,
       }
     },
 

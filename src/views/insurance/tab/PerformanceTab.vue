@@ -290,10 +290,9 @@ export default {
                 try {
 
                   // all
-                  accumulator += payout.dailyProfit;
-
+                  accumulator = accumulator * (1 + payout.dailyProfit);
                   payout.comp =  (accumulator * 100 / startValue - 100);
-                  payout.comp =  parseFloat(payout.comp ? payout.comp : 0.0).toFixed(2);
+                  payout.comp =  parseFloat(payout.comp ? payout.comp : 0.0).toFixed(3);
                   widgetDataDict[moment(payout.payableDate).format('DD.MM.YYYY')] = payout.comp;
 
                   // date
@@ -304,29 +303,29 @@ export default {
 
                   // week
                   if (clientDataLengthCounter === 7) {
-                    accumulatorWeek += payout.dailyProfit;
+                    accumulatorWeek = accumulatorWeek * (1 + payout.dailyProfit);
                   }
 
                   // month
                   if (clientDataLengthCounter === 30) {
-                    accumulatorMonth += payout.dailyProfit;
+                    accumulatorMonth = accumulatorMonth * (1 + payout.dailyProfit);
                   }
 
                   // day
                   if (clientDataLengthCounter === 1) {
                     // day
-                    accumulatorDay += payout.dailyProfit;
+                    accumulatorDay = accumulatorDay * (1 + payout.dailyProfit);
                     let dayComp = (accumulatorDay * 100 / startValue - 100);
-                    this.compoundData.day = parseFloat(dayComp ? dayComp : 0.0).toFixed(2)
+                    this.compoundData.day = parseFloat(dayComp ? dayComp : 0.0).toFixed(3)
 
 
                     // week
                     let weekComp = (accumulatorWeek * 100 / startValue - 100);
-                    this.compoundData.week = parseFloat(weekComp ? weekComp : 0.0).toFixed(2)
+                    this.compoundData.week = parseFloat(weekComp ? weekComp : 0.0).toFixed(3)
 
                     // month
                     let monthComp = (accumulatorMonth * 100 / startValue - 100);
-                    this.compoundData.month = parseFloat(monthComp ? monthComp : 0.0).toFixed(2)
+                    this.compoundData.month = parseFloat(monthComp ? monthComp : 0.0).toFixed(3)
 
                     this.compoundData.all = payout.comp // last payout comp
                   }

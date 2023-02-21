@@ -53,10 +53,9 @@
                         <v-col class="bordered-col" :cols="$wu.isMobile() ? 12 : 4">
                             <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2">
                                 <label class="info-value-per100">
-<!--                                  {{ (compoundData[etsData.name] && compoundData[etsData.name].month) ?  '$' + ($utils.formatMoneyComma((compoundData[etsData.name].month + 100) * 100, 2)) : '-' }}-->
                                   {{ (compoundData[etsData.name] && compoundData[etsData.name].month) ?  '$' + (compoundData[etsData.name].month * 1 + 100) : ''}}
                                 </label>
-                              <label class="info-value-compound info-value-compound-container">
+                              <label class="info-value-compound info-value-compound-container" v-bind:style="compoundStyle">
                                 {{ (compoundData[etsData.name] && compoundData[etsData.name].month) ? compoundData[etsData.name].month + '%' : '-' }}
                               </label>
                             </v-row>
@@ -173,6 +172,9 @@ export default {
                 return '';
             }
         },
+        compoundStyle: function () {
+          return `border: 1px solid ${this.etsData.mainColor}; color: ${this.etsData.mainColor};`;
+        }
     },
 
     data: () => ({
@@ -461,7 +463,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .info-value-compound-container {
-  border: 1px solid #F3BA2F;
   border-radius: 5px;
   margin-left: 8px;
   padding: 4px 4px 4px;
@@ -475,7 +476,5 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
   line-height: 26px;
 
   text-align: center;
-
-  color: #F3BA2F;
 }
 </style>

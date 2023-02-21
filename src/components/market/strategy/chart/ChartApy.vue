@@ -79,10 +79,16 @@
                        {{ (compoundData && compoundData.all) ? ($utils.formatMoneyComma(compoundData.all, 2)) + '%' : '' }}
                      </label>
                    </v-row>
-                   <v-row justify="center">
+                   <v-row justify="center" class="all-compound-container">
                      <label class="chart-sub-title-apy">
                        All
                      </label>
+
+                     <div class="tooltip-compound">
+                       <v-row align="center" justify="end">
+                         <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'" text="Cumulative return for the period"/>
+                       </v-row>
+                     </div>
                    </v-row>
                  </v-col>
                </v-row>
@@ -739,6 +745,16 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #707A8B !important;
+}
+
+.tooltip-compound {
+  position: absolute;
+  right: 30px;
+  top: 11px;
+}
+
+.all-compound-container {
+  position: relative;
 }
 
 </style>

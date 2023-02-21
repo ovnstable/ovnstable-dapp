@@ -5,7 +5,7 @@
                 <v-row align="center" justify="start" class="ma-0">
                     <v-col class="ml-n3 mt-n3">
                         <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
-                            APY
+                          Performance
                         </v-btn>
                     </v-col>
                     <v-col class="mr-n3 mt-n3">
@@ -15,7 +15,7 @@
                     </v-col>
                 </v-row>
 
-                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="etsApyData[etsData.name]" :usdPlusData="usdPlusApyData[etsData.chainName]" :ets-data="etsData"/>
+                <ChartApy class="mx-n3" v-if="rateTab === 1" :data="etsApyData[etsData.name]" :usdPlusData="usdPlusApyData[etsData.chainName]" :compound-data="compoundData[etsData.name]" :ets-data="etsData"/>
                 <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="etsTvlData[etsData.name]" :ets-data="etsData"/>
             </v-col>
         </v-row>
@@ -285,7 +285,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('marketData', ['etsStrategyData', 'etsApyData', 'etsTvlData', 'usdPlusApyData']),
+        ...mapGetters('marketData', ['etsStrategyData', 'etsApyData', 'etsTvlData', 'usdPlusApyData', 'compoundData']),
 
         activeRateApy: function () {
             return {

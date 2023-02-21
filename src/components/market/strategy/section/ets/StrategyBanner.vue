@@ -50,35 +50,28 @@
                     </v-row>
 
                     <v-row align="center" :justify="$wu.isMobile() ? 'center' : 'start'" class="ma-0 mt-8">
-                        <v-col :cols="$wu.isMobile() ? 6 : 2">
+                        <v-col class="bordered-col" :cols="$wu.isMobile() ? 12 : 4">
                             <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2">
-                                <label class="info-value">
-                                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '—' }}
+                                <label class="info-value-per100">
+<!--                                  {{ (compoundData[etsData.name] && compoundData[etsData.name].month) ?  '$' + ($utils.formatMoneyComma((compoundData[etsData.name].month + 100) * 100, 2)) : '-' }}-->
+                                  {{ (compoundData[etsData.name] && compoundData[etsData.name].month) ?  '$' + (compoundData[etsData.name].month * 1 + 100) : ''}}
                                 </label>
+                              <label class="info-value-compound info-value-compound-container">
+                                {{ (compoundData[etsData.name] && compoundData[etsData.name].month) ? compoundData[etsData.name].month + '%' : '-' }}
+                              </label>
                             </v-row>
                             <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2 mt-5">
-                                <label class="info-title">APY</label>
-                                <div style="margin-top: -2px">
-                                    <Tooltip :size="16" icon-color="rgba(255, 255, 255, 0.6)" text="Strategy net APY based on 30-day average, includes fees taken (fee-adjusted)"/>
-                                </div>
-                            </v-row>
-                        </v-col>
-
-                        <v-col class="bordered-col" :cols="$wu.isMobile() ? 6 : 3">
-                            <v-row justify="center" class="">
-                                <label class="info-value">
-                                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].diffApy) ? (etsStrategyData[etsData.name].diffApy > 0 ? '+' : '') + ($utils.formatMoneyComma(etsStrategyData[etsData.name].diffApy, 0)) + '%' : '—' }}
-                                </label>
-                            </v-row>
-                            <v-row justify="center" class="mt-5">
-                                <label class="info-title">Diff. to USD+</label>
+                                <label class="info-title">30 day return per 100$</label>
+<!--                                <div style="margin-top: -2px">-->
+<!--                                    <Tooltip :size="16" icon-color="rgba(255, 255, 255, 0.6)" text="Strategy net APY based on 30-day average, includes fees taken (fee-adjusted)"/>-->
+<!--                                </div>-->
                             </v-row>
                         </v-col>
 
                         <template v-if="etsData.maxSupply">
-                            <v-col :cols="$wu.isMobile() ? 12 : 7">
+                            <v-col :cols="$wu.isMobile() ? 12 : 8">
                                 <v-row :class="$wu.isMobile() ? 'mt-4' : ''" justify="end">
-                                    <v-col class="bordered-box" :class="$wu.isMobile() ? '' : 'mr-n3'">
+                                    <v-col :class="$wu.isMobile() ? '' : 'mr-n3'">
                                         <v-row class="mx-2 mt-1" align="end">
                                             <label class="info-value">
                                                 {{ (totalSupply && totalSupply[etsData.name]) ? ('$' + $utils.formatMoneyComma(totalSupply[etsData.name], 2)) : '—' }}
@@ -155,7 +148,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('marketData', ['etsStrategyData']),
+        ...mapGetters('marketData', ['etsStrategyData', 'compoundData']),
         ...mapGetters('supplyData', ['totalSupply']),
 
         icon: function (){
@@ -418,7 +411,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .bordered-col {
-    border-left: 1px solid rgba(255, 255, 255, 0.6) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
 }
 
 .icon-border {
@@ -456,5 +449,33 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     text-transform: uppercase;
     color: #FFFFFF;
     letter-spacing: 0.03em;
+}
+
+.info-value-per100 {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 36px;
+  color: #FFFFFF;
+}
+
+.info-value-compound-container {
+  border: 1px solid #F3BA2F;
+  border-radius: 5px;
+  margin-left: 8px;
+  padding: 4px 4px 4px;
+}
+
+.info-value-compound {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 26px;
+
+  text-align: center;
+
+  color: #F3BA2F;
 }
 </style>

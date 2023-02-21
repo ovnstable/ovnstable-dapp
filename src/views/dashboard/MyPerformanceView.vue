@@ -1,309 +1,309 @@
 <template>
-  <div>
-    <div class="mt-10">
-      <label class="title-label">My dashboard</label>
-
-      <v-row align="start" justify="start" class="ma-0">
-        <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
-          <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-
-            <label class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
-            <label class="tab-btn mx-4" @click="setTab(2)" v-bind:class="activeTabUsdPlus">USD+</label>
-            <label class="tab-btn mx-4" @click="setTab(4)" v-bind:class="activeTabETS" disabled>ETS</label>
-
-            <v-spacer></v-spacer>
-
-            <v-menu offset-y v-if="$wu.isFull()">
-              <template v-slot:activator="{ on, attrs }">
-                <div class="slice-select-main-container mb-1 mr-3"
-                     v-click-outside="clickMenuOutside"
-                     @click="openedSliceList = !openedSliceList"
-                     v-bind="attrs"
-                     v-on="on">
-                  <v-row justify="center" align="start" class="slice-select-container">
-                    <v-col cols="12" class="select-col">
-                      <label class="selected-slice-label">
-                        {{ sliceLabel }}
-                        <v-icon color="#1C95E7" class="mb-1">
-                          {{ openedSliceList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                        </v-icon>
-                      </label>
-                    </v-col>
-                  </v-row>
-                </div>
-              </template>
-
-              <v-list class="slice-select-list">
-                <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('week')">
-                  <v-list-item-title class="slice-select-list-item">
-                    Week
-                  </v-list-item-title>
-                </v-list-item>
-                <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('month')">
-                  <v-list-item-title class="slice-select-list-item">
-                    Month
-                  </v-list-item-title>
-                </v-list-item>
-                <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('all')">
-                  <v-list-item-title class="slice-select-list-item">
-                    All
-                  </v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-row>
-        </v-col>
-
-        <v-col cols="3" v-if="$wu.isFull()">
-        </v-col>
-      </v-row>
-
-      <v-row v-if="!$wu.isFull()" align="start" justify="start" class="ma-0 mt-3">
-        <v-col cols="12" class="ma-n3">
-          <v-menu offset-y>
-            <template v-slot:activator="{ on, attrs }">
-              <div class="slice-select-main-container"
-                   v-click-outside="clickMenuOutside"
-                   @click="openedSliceList = !openedSliceList"
-                   v-bind="attrs"
-                   v-on="on">
-                <v-row class="ma-0 slice-select-container">
-                  <v-spacer></v-spacer>
-                  <label class="selected-slice-label mt-2">
-                    {{ sliceLabel }}
-                    <v-icon color="#1C95E7" class="mb-1">
-                      {{ openedSliceList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                    </v-icon>
-                  </label>
-                  <v-spacer></v-spacer>
-                </v-row>
-              </div>
-            </template>
-
-            <v-list class="slice-select-list">
-              <v-list-item style="cursor: pointer">
-                <v-list-item-title class="slice-select-list-item"
-                                   @click="sliceDashboardByPeriod('week')">
-                  Week
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item style="cursor: pointer">
-                <v-list-item-title class="slice-select-list-item"
-                                   @click="sliceDashboardByPeriod('month')">
-                  Month
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('all')">
-                <v-list-item-title class="slice-select-list-item">
-                  All
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-col>
-      </v-row>
-    </div>
-
     <div>
-      <v-row align="start" justify="start" class="page-container ma-0">
+        <div class="mt-10" :class="$wu.isMobile() ? 'ml-5' : ''">
+            <label class="title-label">My dashboard</label>
 
-        <v-col v-if="tab === 4" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
-          <EtsTab></EtsTab>
-        </v-col>
+            <v-row align="start" justify="start" class="ma-0">
+                <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
+                    <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
 
-        <v-col v-if="tab === 2" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
+                        <label class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
+                        <label class="tab-btn mx-4" @click="setTab(2)" v-bind:class="activeTabUsdPlus">USD+</label>
+                        <label class="tab-btn mx-4" @click="setTab(3)" v-bind:class="activeTabETS" disabled>ETS</label>
 
-          <v-row v-if="isUsdPlusLoading">
-            <v-row align="center" justify="center" class="py-15">
-              <v-progress-circular
-                  width="2"
-                  size="24"
-                  color="#8FA2B7"
-                  indeterminate
-              ></v-progress-circular>
+                        <v-spacer></v-spacer>
+
+                        <v-menu offset-y v-if="$wu.isFull()">
+                            <template v-slot:activator="{ on, attrs }">
+                                <div class="slice-select-main-container mb-1 mr-3"
+                                     v-click-outside="clickMenuOutside"
+                                     @click="openedSliceList = !openedSliceList"
+                                     v-bind="attrs"
+                                     v-on="on">
+                                    <v-row justify="center" align="start" class="slice-select-container">
+                                        <v-col cols="12" class="select-col">
+                                            <label class="selected-slice-label">
+                                                {{ sliceLabel }}
+                                                <v-icon color="#1C95E7" class="mb-1">
+                                                    {{ openedSliceList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                                                </v-icon>
+                                            </label>
+                                        </v-col>
+                                    </v-row>
+                                </div>
+                            </template>
+
+                            <v-list class="slice-select-list">
+                                <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('week')">
+                                    <v-list-item-title class="slice-select-list-item">
+                                        Week
+                                    </v-list-item-title>
+                                </v-list-item>
+                                <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('month')">
+                                    <v-list-item-title class="slice-select-list-item">
+                                        Month
+                                    </v-list-item-title>
+                                </v-list-item>
+                                <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('all')">
+                                    <v-list-item-title class="slice-select-list-item">
+                                        All
+                                    </v-list-item-title>
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
+                    </v-row>
+                </v-col>
+
+                <v-col cols="3" v-if="$wu.isFull()">
+                </v-col>
             </v-row>
-          </v-row>
-          <v-row v-if="!isUsdPlusLoading" class="ma-0 info-card-container" :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
-            <v-col class="info-card-body-bottom">
-              <v-row align="center" justify="start" class="ma-0">
+
+            <v-row v-if="!$wu.isFull()" align="start" justify="start" class="ma-0 mt-3">
+                <v-col cols="12" class="ma-n3">
+                    <v-menu offset-y>
+                        <template v-slot:activator="{ on, attrs }">
+                            <div class="slice-select-main-container"
+                                 v-click-outside="clickMenuOutside"
+                                 @click="openedSliceList = !openedSliceList"
+                                 v-bind="attrs"
+                                 v-on="on">
+                                <v-row class="ma-0 slice-select-container">
+                                    <v-spacer></v-spacer>
+                                    <label class="selected-slice-label mt-2">
+                                        {{ sliceLabel }}
+                                        <v-icon color="#1C95E7" class="mb-1">
+                                            {{ openedSliceList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                                        </v-icon>
+                                    </label>
+                                    <v-spacer></v-spacer>
+                                </v-row>
+                            </div>
+                        </template>
+
+                        <v-list class="slice-select-list">
+                            <v-list-item style="cursor: pointer">
+                                <v-list-item-title class="slice-select-list-item"
+                                                   @click="sliceDashboardByPeriod('week')">
+                                    Week
+                                </v-list-item-title>
+                            </v-list-item>
+                            <v-list-item style="cursor: pointer">
+                                <v-list-item-title class="slice-select-list-item"
+                                                   @click="sliceDashboardByPeriod('month')">
+                                    Month
+                                </v-list-item-title>
+                            </v-list-item>
+                            <v-list-item style="cursor: pointer" @click="sliceDashboardByPeriod('all')">
+                                <v-list-item-title class="slice-select-list-item">
+                                    All
+                                </v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
+                </v-col>
+            </v-row>
+        </div>
+
+        <div :class="$wu.isMobile() ? 'ml-5' : ''">
+            <v-row align="start" justify="start" class="page-container ma-0">
+
+                <v-col v-if="tab === 3" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
+                  <EtsTab></EtsTab>
+                </v-col>
+
+                <v-col v-if="tab === 2" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
+
+                    <v-row v-if="isUsdPlusLoading">
+                      <v-row align="center" justify="center" class="py-15">
+                        <v-progress-circular
+                            width="2"
+                            size="24"
+                            color="#8FA2B7"
+                            indeterminate
+                        ></v-progress-circular>
+                      </v-row>
+                    </v-row>
+                    <v-row v-if="!isUsdPlusLoading" class="ma-0 info-card-container" :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
+                        <v-col class="info-card-body-bottom">
+                            <v-row align="center" justify="start" class="ma-0">
+                                <v-col :cols="$wu.isFull() ? 3 : 12">
+                                    <v-row class="container-body-title-row" justify="start" align="center"
+                                           :class="$wu.isFull() ? '' : 'mb-0'">
+                                        <div class="coin-img mr-2" :class="$wu.isFull() ? '' : 'mb-1'"
+                                             v-if="!$wu.isFull() && (!walletConnected || !isLoading)">
+                                            <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
+                                        </div>
+                                        <v-progress-circular
+                                            v-if="!$wu.isFull() && isLoading && walletConnected"
+                                            width="2"
+                                            size="24"
+                                            color="#8FA2B7"
+                                            indeterminate
+                                            class="mr-2"
+                                        ></v-progress-circular>
+                                        <label class="container-body-title"
+                                               :class="$wu.isFull() ? '' : 'mb-1'">USD+</label>
+                                        <label class="container-body-title container-body-title-slice"
+                                               :class="$wu.isFull() ? '' : 'mb-1'" v-if="$wu.isFull()">&nbsp;&nbsp;|&nbsp;</label>
+                                        <v-spacer v-if="!$wu.isFull()"></v-spacer>
+                                        <label class="container-body-title container-body-title-slice"
+                                               :class="$wu.isFull() ? '' : 'mb-1'">{{ sliceLabel }}</label>
+                                    </v-row>
+                                </v-col>
+
+                                <v-col :cols="$wu.isFull() ? 8 : 12">
+                                    <v-row justify="end" align="center">
+                                        <v-col>
+                                            <v-row justify="center" align="center">
+                                                <label class="container-info-sub-title">
+                                                    Balance
+                                                </label>
+                                            </v-row>
+                                            <v-row justify="center" align="center">
+                                                <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
+                                                    {{ dataHidden ? '' : '$' + $utils.formatMoney(balance.usdPlus, 2) }}
+                                                </label>
+                                            </v-row>
+                                        </v-col>
+
+                                        <v-col>
+                                            <v-row justify="center" align="center">
+                                                <label class="container-info-sub-title">
+                                                    Profit
+                                                </label>
+                                            </v-row>
+                                            <v-row justify="center" align="center">
+                                                <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
+                                                    {{ dataHidden ? '' : '$' + $utils.formatMoney(profitUsdPlus, isMobile ? 2 : 6) }}
+                                                </label>
+                                            </v-row>
+                                        </v-col>
+
+                                        <v-col>
+                                            <v-row justify="center" align="center">
+                                                <label class="container-info-sub-title">
+                                                    Return
+                                                </label>
+                                            </v-row>
+                                            <v-row justify="center" align="center">
+                                                <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
+                                                    {{ dataHidden ? '' : comp === 0 ? '—' : ($utils.formatMoney(comp, 2) + '%') }}
+                                                </label>
+                                            </v-row>
+                                        </v-col>
+                                    </v-row>
+                                </v-col>
+
+                                <v-col v-if="$wu.isFull()">
+                                    <v-row justify="end" align="center">
+                                        <div class="coin-img" v-if="!walletConnected || !isLoading">
+                                            <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
+                                        </div>
+                                        <v-progress-circular
+                                            v-if="walletConnected && isLoading"
+                                            width="2"
+                                            size="40"
+                                            color="#8FA2B7"
+                                            indeterminate
+                                        ></v-progress-circular>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+
+                    <v-row v-if="!isUsdPlusLoading && !anyActivities" align="center" justify="start" class="ma-0" :class="$wu.isFull() ? 'mt-8' : 'mt-5'">
+                        <v-btn class="dashboard-action-btn btn-filled" @click="mintAction" v-if="walletConnected">
+                            Mint USD+ to start
+                        </v-btn>
+                        <v-btn class="dashboard-action-btn btn-outlined" outlined @click="connectWallet" v-else>
+                            Connect wallet
+                        </v-btn>
+                    </v-row>
+
+                    <v-row v-if="!isUsdPlusLoading && anyActivities" align="center" justify="start" class="ma-0 info-card-container"
+                           :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
+                        <v-col class="info-card-body-bottom">
+                            <template v-if="portfolioValue">
+                                <LineChart :data="portfolioValue"/>
+                            </template>
+                        </v-col>
+                    </v-row>
+
+                    <v-row v-if="!isUsdPlusLoading && anyActivities" align="center" justify="start" class="ma-0 info-card-container"
+                           :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
+                        <v-col class="info-card-body-bottom">
+                            <v-row align="center" justify="start" class="ma-0">
+                                <label class="container-body-title" :class="$wu.isFull() ? '' : 'mb-1'">USD+
+                                    Transactions</label>
+                            </v-row>
+
+                            <v-row align="center" justify="start" class="ma-0 mt-2">
+                                <Table
+                                    v-if="$wu.isFull()"
+                                    :data="activities"/>
+
+                                <Table
+                                    v-else
+                                    minimized
+                                    :data="activities"/>
+
+                                <v-row justify="center" align="center" class="ma-0 scroll-container">
+                                    <label class="table-scroll-label">scroll to see more</label>
+                                </v-row>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+
+                    <v-row v-if="!isUsdPlusLoading && anyActivities" align="center" justify="start" class="ma-0 info-card-container"
+                           :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
+                        <v-col class="info-card-body-bottom">
+                            <v-row align="start" justify="start" class="ma-0">
+                                <v-col :cols="$wu.isFull() ? 3 : 12">
+                                    <v-row class="container-body-title-row" justify="start"
+                                           :align="$wu.isFull() ? 'start' : 'center'"
+                                           :class="$wu.isFull() ? '' : 'mb-0'">
+                                        <div class="coin-img mr-2" :class="$wu.isFull() ? '' : 'mb-1'"
+                                             v-if="!$wu.isFull()">
+                                            <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
+                                        </div>
+                                        <label class="container-body-title" :class="$wu.isFull() ? '' : 'mb-1'">Wrapped
+                                            USD+</label>
+                                    </v-row>
+                                </v-col>
+
+                                <v-col :cols="$wu.isFull() ? 8 : 12">
+                                    <v-row justify="start" align="start">
+                                        <label class="container-body-text text-wide">
+                                            wUSD+ is an index-adjusted wrapper for USD+. Some people may find this
+                                            useful for cross-blockchain purposes. Unlike your USD+ balance, your wUSD+
+                                            balance will not increase over time. When wUSD+ is unwrapped, you receive
+                                            USD+ based on the latest (ever-increasing) index, so the total yield is the
+                                            same.
+                                        </label>
+                                    </v-row>
+                                </v-col>
+
+                                <v-col v-if="$wu.isFull()">
+                                    <v-row justify="end" align="start">
+                                        <div class="coin-img">
+                                            <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
+                                        </div>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+                </v-col>
+
                 <v-col :cols="$wu.isFull() ? 3 : 12">
-                  <v-row class="container-body-title-row" justify="start" align="center"
-                         :class="$wu.isFull() ? '' : 'mb-0'">
-                    <div class="coin-img mr-2" :class="$wu.isFull() ? '' : 'mb-1'"
-                         v-if="!$wu.isFull() && (!walletConnected || !isLoading)">
-                      <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
-                    </div>
-                    <v-progress-circular
-                        v-if="!$wu.isFull() && isLoading && walletConnected"
-                        width="2"
-                        size="24"
-                        color="#8FA2B7"
-                        indeterminate
-                        class="mr-2"
-                    ></v-progress-circular>
-                    <label class="container-body-title"
-                           :class="$wu.isFull() ? '' : 'mb-1'">USD+</label>
-                    <label class="container-body-title container-body-title-slice"
-                           :class="$wu.isFull() ? '' : 'mb-1'" v-if="$wu.isFull()">&nbsp;&nbsp;|&nbsp;</label>
-                    <v-spacer v-if="!$wu.isFull()"></v-spacer>
-                    <label class="container-body-title container-body-title-slice"
-                           :class="$wu.isFull() ? '' : 'mb-1'">{{ sliceLabel }}</label>
-                  </v-row>
-                </v-col>
-
-                <v-col :cols="$wu.isFull() ? 8 : 12">
-                  <v-row justify="end" align="center">
-                    <v-col>
-                      <v-row justify="center" align="center">
-                        <label class="container-info-sub-title">
-                          Balance
-                        </label>
-                      </v-row>
-                      <v-row justify="center" align="center">
-                        <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                          {{ dataHidden ? '' : '$' + $utils.formatMoney(balance.usdPlus, 2) }}
-                        </label>
-                      </v-row>
-                    </v-col>
-
-                    <v-col>
-                      <v-row justify="center" align="center">
-                        <label class="container-info-sub-title">
-                          Profit
-                        </label>
-                      </v-row>
-                      <v-row justify="center" align="center">
-                        <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                          {{ dataHidden ? '' : '$' + $utils.formatMoney(profitUsdPlus, isMobile ? 2 : 6) }}
-                        </label>
-                      </v-row>
-                    </v-col>
-
-                    <v-col>
-                      <v-row justify="center" align="center">
-                        <label class="container-info-sub-title">
-                          Average APY
-                        </label>
-                      </v-row>
-                      <v-row justify="center" align="center">
-                        <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                          {{ dataHidden ? '' : apy === 0 ? '—' : ($utils.formatMoney(apy, 2) + '%') }}
-                        </label>
-                      </v-row>
-                    </v-col>
-                  </v-row>
-                </v-col>
-
-                <v-col v-if="$wu.isFull()">
-                  <v-row justify="end" align="center">
-                    <div class="coin-img" v-if="!walletConnected || !isLoading">
-                      <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
-                    </div>
-                    <v-progress-circular
-                        v-if="walletConnected && isLoading"
-                        width="2"
-                        size="40"
-                        color="#8FA2B7"
-                        indeterminate
-                    ></v-progress-circular>
-                  </v-row>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-
-          <v-row v-if="!isUsdPlusLoading && !anyActivities" align="center" justify="start" class="ma-0" :class="$wu.isFull() ? 'mt-8' : 'mt-5'">
-            <v-btn class="dashboard-action-btn btn-filled" @click="mintAction" v-if="walletConnected">
-              Mint USD+ to start
-            </v-btn>
-            <v-btn class="dashboard-action-btn btn-outlined" outlined @click="connectWallet" v-else>
-              Connect wallet
-            </v-btn>
-          </v-row>
-
-          <v-row v-if="!isUsdPlusLoading && anyActivities" align="center" justify="start" class="ma-0 info-card-container"
-                 :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
-            <v-col class="info-card-body-bottom">
-              <template v-if="portfolioValue">
-                <LineChart :data="portfolioValue"/>
-              </template>
-            </v-col>
-          </v-row>
-
-          <v-row v-if="!isUsdPlusLoading && anyActivities" align="center" justify="start" class="ma-0 info-card-container"
-                 :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
-            <v-col class="info-card-body-bottom">
-              <v-row align="center" justify="start" class="ma-0">
-                <label class="container-body-title" :class="$wu.isFull() ? '' : 'mb-1'">USD+
-                  Transactions</label>
-              </v-row>
-
-              <v-row align="center" justify="start" class="ma-0 mt-2">
-                <Table
-                    v-if="$wu.isFull()"
-                    :data="activities"/>
-
-                <Table
-                    v-else
-                    minimized
-                    :data="activities"/>
-
-                <v-row justify="center" align="center" class="ma-0 scroll-container">
-                  <label class="table-scroll-label">scroll to see more</label>
-                </v-row>
-              </v-row>
-            </v-col>
-          </v-row>
-
-          <v-row v-if="!isUsdPlusLoading && anyActivities" align="center" justify="start" class="ma-0 info-card-container"
-                 :class="$wu.isFull() ? 'mt-6' : 'mt-3'">
-            <v-col class="info-card-body-bottom">
-              <v-row align="start" justify="start" class="ma-0">
-                <v-col :cols="$wu.isFull() ? 3 : 12">
-                  <v-row class="container-body-title-row" justify="start"
-                         :align="$wu.isFull() ? 'start' : 'center'"
-                         :class="$wu.isFull() ? '' : 'mb-0'">
-                    <div class="coin-img mr-2" :class="$wu.isFull() ? '' : 'mb-1'"
-                         v-if="!$wu.isFull()">
-                      <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
-                    </div>
-                    <label class="container-body-title" :class="$wu.isFull() ? '' : 'mb-1'">Wrapped
-                      USD+</label>
-                  </v-row>
-                </v-col>
-
-                <v-col :cols="$wu.isFull() ? 8 : 12">
-                  <v-row justify="start" align="start">
-                    <label class="container-body-text text-wide">
-                      wUSD+ is an index-adjusted wrapper for USD+. Some people may find this
-                      useful for cross-blockchain purposes. Unlike your USD+ balance, your wUSD+
-                      balance will not increase over time. When wUSD+ is unwrapped, you receive
-                      USD+ based on the latest (ever-increasing) index, so the total yield is the
-                      same.
-                    </label>
-                  </v-row>
-                </v-col>
-
-                <v-col v-if="$wu.isFull()">
-                  <v-row justify="end" align="start">
-                    <div class="coin-img">
-                      <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
-                    </div>
-                  </v-row>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-col>
-
-        <v-col :cols="$wu.isFull() ? 3 : 12">
-          <div :class="$wu.isFull() ? 'sticky' : ''">
-            <v-row align="center" justify="start" class="ma-0 mt-3 info-card-container"
-                   :class="$wu.isFull() ? '' : 'mr-3 ml-n3'">
-              <v-col class="info-card-body-bottom">
-                <v-row align="start" justify="start" class="ma-0">
-                  <label class="useful-title">Useful articles</label>
-                </v-row>
+                    <div :class="$wu.isFull() ? 'sticky' : ''">
+                        <v-row align="center" justify="start" class="ma-0 mt-3 info-card-container"
+                               :class="$wu.isFull() ? '' : 'mr-3 ml-n3'">
+                            <v-col class="info-card-body-bottom">
+                                <v-row align="start" justify="start" class="ma-0">
+                                    <label class="useful-title">Useful articles</label>
+                                </v-row>
 
                 <v-row align="start" justify="start" class="ma-0 mt-7">
                   <label class="useful-link"
@@ -377,34 +377,34 @@ export default {
     Table,
   },
 
-  data: () => ({
-    tab: 2,
+    data: () => ({
+      tab: 2,
 
-    openedSliceList: false,
+      openedSliceList: false,
 
-    isUsdPlusLoading: true,
-    profitUsdPlus: null,
-    apy: null,
-    activities: null,
-    slice: null,
-    portfolioValue: {
-      labels: [],
-      datasets: [
-        {
-          fill: false,
-          borderColor: '#69a5fd',
-          data: [],
-        }
-      ]
-    }
-  }),
+      isUsdPlusLoading: true,
+      profitUsdPlus: null,
+      apy: null,
+      comp: null,
+      activities: null,
+      portfolioValue: {
+        labels: [],
+        datasets: [
+          {
+            fill: false,
+            borderColor: '#69a5fd',
+            data: [],
+          }
+        ]
+      }
+    }),
 
-  computed: {
-    ...mapGetters('network', ['appApiUrl']),
-    ...mapGetters('dashboardData', ['slice']),
-    ...mapGetters('accountData', ['balance', 'account']),
-    ...mapGetters('walletAction', ['walletConnected']),
-    ...mapGetters('magicEye', ['dataHidden']),
+    computed: {
+        ...mapGetters('network', ['appApiUrl']),
+        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('dashboardData', ['slice']),
+        ...mapGetters('walletAction', ['walletConnected']),
+        ...mapGetters('magicEye', ['dataHidden']),
 
     activeTabOverall: function () {
       return {
@@ -425,8 +425,8 @@ export default {
     activeTabETS: function () {
       this.trackClick({action: 'open-etstab-action-click', event_category: 'Dashboard ETS', event_label: 'Open ETS Tab', value: 1 });
       return {
-        'tab-button': this.tab === 4,
-        'tab-button-in-active': this.tab !== 4,
+        'tab-button': this.tab === 3,
+        'tab-button-in-active': this.tab !== 3,
       }
     },
 
@@ -449,45 +449,48 @@ export default {
       }
     },
 
-    isMobile() {
-      return window.innerWidth <= 1400;
-    }
-  },
-  watch: {
-    account: function () {
-      this.loadData();
+        isMobile() {
+            return window.innerWidth <= 1400;
+        }
     },
-    appApiUrl: function () {
-      this.loadData();
-    }
-  },
-  mounted() {
-    this.loadData();
-  },
-  methods: {
-    ...mapActions('walletAction', ['connectWallet']),
-    ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-    ...mapActions('track', ['trackClick']),
-    ...mapActions('magicEye', ['switchEye']),
-    ...mapMutations('dashboardData', ['setSlice']),
-
-    setTab(tab) {
-      this.tab = tab;
-
-      if (tab === 2) {
+    watch: {
+      account: function () {
+        this.loadData();
+      },
+      appApiUrl: function () {
         this.loadData();
       }
     },
-
-    loadData() {
-      this.isUsdPlusLoading = true;
-      this.resetDashboard();
-      this.refreshDashboard();
+    mounted() {
+     this.loadData();
     },
+    methods: {
+        ...mapActions('walletAction', ['connectWallet']),
+        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('track', ['trackClick']),
+        ...mapActions('magicEye', ['switchEye']),
 
-    openLink(url) {
-      window.open(url, '_blank').focus();
-    },
+      ...mapMutations('dashboardData', ['setSlice']),
+
+      setTab(tab) {
+          if (tab === 2) {
+            this.tab = tab;
+            this.loadData();
+            return
+          }
+
+          this.tab = tab;
+      },
+
+      loadData() {
+        this.isUsdPlusLoading = true;
+        this.resetDashboard();
+        this.refreshDashboard();
+      },
+
+        openLink(url) {
+            window.open(url, '_blank').focus();
+        },
 
     clickMenuOutside() {
       this.openedSliceList = false;
@@ -514,115 +517,117 @@ export default {
       this.sliceDashboard();
     },
 
-    mintAction() {
-      this.showMintView();
-      this.showSwapModal();
-    },
-    resetDashboard() {
-      this.profitUsdPlus = null;
-      this.portfolioValue = null;
-      this.apy = null;
-      this.activities = null;
-      this.slice = null;
-    },
-    async refreshDashboard() {
+        mintAction() {
+            this.showMintView();
+            this.showSwapModal();
+        },
+      resetDashboard() {
+          this.profitUsdPlus = null;
+          this.portfolioValue = null;
+          this.apy = null;
+          this.activities = null;
+          this.slice = null;
+      },
+      async refreshDashboard() {
 
-      console.log("Dashboard: refreshDashboard");
-      if (!this.account) {
-        this.isUsdPlusLoading = false;
-        return;
-      }
-
-      console.log("Dashboard: refreshDashboard after");
-
-      let account  = this.account.toLowerCase();
-
-      let appApiUrl = this.appApiUrl;
-      let response = (await axios.get(appApiUrl + `/dapp/clientBalanceChanges?address=${account}`)).data;
-
-      let clientData = response.map(item => {
-        return {
-          transactionHash: item.transaction_hash,
-          date: item.date,
-          type: item.type,
-          openingBalance: item.opening_balance,
-          balanceChange: item.change_balance,
-          closingBalance: item.closing_balance,
-          dailyProfit: item.type === 'PAYOUT' ? item.change_balance : null,
-          fee: item.fee,
-          apy: item.apy,
-          duration: item.elapsed_time,
+        console.log("Dashboard: refreshDashboard");
+        if (!this.account) {
+          this.isUsdPlusLoading = false;
+          return;
         }
-      });
 
-      this.activities = clientData;
+        console.log("Dashboard: refreshDashboard after");
 
+        let account  = this.account.toLowerCase();
 
-      let widgetDataDict = {};
-      let widgetData = {
-        labels: [],
-        datasets: [
-          {
-            fill: false,
-            borderColor: '#69a5fd',
-            data: [],
+        let appApiUrl = this.appApiUrl;
+        let response = (await axios.get(appApiUrl + `/dapp/clientBalanceChanges?address=${account}`)).data;
+
+        let clientData = response.map(item => {
+          return {
+            transactionHash: item.transaction_hash,
+            date: item.date,
+            type: item.type,
+            openingBalance: item.opening_balance,
+            balanceChange: item.change_balance,
+            closingBalance: item.closing_balance,
+            dailyProfit: item.type === 'PAYOUT' ? item.change_balance : null,
+            fee: item.fee,
+            apy: item.apy,
+            duration: item.elapsed_time,
           }
-        ]
-      };
+        });
 
-      [...clientData].reverse().forEach(item => {
-        widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = item.closingBalance;
-      });
+        this.activities = clientData;
 
-      for (let key in widgetDataDict) {
-        widgetData.labels.push(key);
-        widgetData.datasets[0].data.push(widgetDataDict[key]);
-      }
 
-      this.portfolioValue = widgetData;
+        let widgetDataDict = {};
+        let widgetData = {
+          labels: [],
+          datasets: [
+            {
+              fill: false,
+              borderColor: '#69a5fd',
+              data: [],
+            }
+          ]
+        };
 
-      this.isUsdPlusLoading = false;
-      this.sliceDashboard();
-    },
-    sliceDashboard() {
+        [...clientData].reverse().forEach(item => {
+          widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = item.closingBalance;
+        });
 
-      let clientData = this.activities.filter(value => value.type === 'PAYOUT');
-      clientData = this.slice ? clientData.slice(0, this.slice) : clientData;
+        for (let key in widgetDataDict) {
+          widgetData.labels.push(key);
+          widgetData.datasets[0].data.push(widgetDataDict[key]);
+        }
 
-      let apyDataList = [...clientData];
+        this.portfolioValue = widgetData;
 
-      let days = apyDataList.length;
+        this.isUsdPlusLoading = false;
+        this.sliceDashboard();
+      },
+      sliceDashboard() {
+          console.log("sliceDashboard this.slice: ", this.slice);
+          console.log("sliceDashboard this.activities: ", this.activities);
 
-      apyDataList.forEach(value => {
-        value.changePercent = value.balanceChange / value.openingBalance;
-      })
+        let clientData = this.activities.filter(value => value.type === 'PAYOUT');
+        clientData = this.slice ? clientData.slice(0, this.slice) : clientData;
 
-      let productResult = 1.0;
-      let durationSum = 0.0;
+        let apyDataList = [...clientData];
 
-      for (let i = 0; i < days; i++) {
-        productResult = productResult * (1.0 + apyDataList[i].changePercent);
-        durationSum = durationSum + apyDataList[i].duration;
-      }
+        let days = apyDataList.length;
 
-      let apy = Math.pow(productResult, 365.0 / (durationSum / 24.0)) - 1.0;
+        apyDataList.forEach(value => {
+          value.changePercent = value.balanceChange / value.openingBalance;
+        })
 
-      if (apy) {
-        this.apy = apy * 100.0;
-      } else {
-        this.apy = 0;
-      }
+        let productResult = 1.0;
+        let durationSum = 0.0;
 
-      let profitList = clientData.map(item => item.dailyProfit ? item.dailyProfit : 0).filter(item => item !== 0);
-      if (profitList && (profitList.length > 0)) {
-        const sum = profitList.reduce((a, b) => a + b, 0);
+        for (let i = 0; i < days; i++) {
+          productResult = productResult * (1.0 + apyDataList[i].changePercent);
+          durationSum = durationSum + apyDataList[i].duration;
+        }
 
-        this.profitUsdPlus = sum;
-      } else {
-        this.profitUsdPlus = 0;
+        let apy = Math.pow(productResult, 365.0 / (durationSum / 24.0)) - 1.0;
+
+        if (apy) {
+          this.apy = apy * 100.0;
+        } else {
+          this.apy = 0;
+        }
+
+        let profitList = clientData.map(item => item.dailyProfit ? item.dailyProfit : 0).filter(item => item !== 0);
+        if (profitList && (profitList.length > 0)) {
+          const sum = profitList.reduce((a, b) => a + b, 0);
+
+          this.profitUsdPlus = sum;
+        } else {
+          this.profitUsdPlus = 0;
+        }
       }
     }
-  }
 }
 </script>
 

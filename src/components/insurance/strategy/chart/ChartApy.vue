@@ -1,53 +1,93 @@
 <template>
     <div class="apy-chart-container">
         <v-row class="chart-header-row">
-            <v-col cols="8">
-                <v-row justify="start" align="center">
+            <v-col cols="6">
+                <v-row justify="start" align="left">
                     <label class="chart-title">
-                      {{ (avgApy && avgApy.value) ? ((isMobile ? 'Insurance' : 'Insurance daily net') + '&nbsp;') : ''}}
+                      USD+ Insurance
                     </label>
-                    <label class="chart-title" style="margin-left: 0 !important">
-                        <abbr title="Annual Percentage Yield">
-                          APY
-                        </abbr>
-                    </label>
-                    <div class="mt-7 ml-1">
-                        <Tooltip :size="16" text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."/>
-                    </div>
+                </v-row>
+                <v-row justify="start" align="left">
+                  <label class="chart-sub-title-apy">
+                   {{ (compoundData && compoundData.firstDate) ? compoundData.firstDate : '-'}}
+                  </label>
                 </v-row>
 
                 <v-row justify="start">
                     <label class="mobile-info-title">
-                        {{ (avgApy && avgApy.value) ? (avgApy.value > 500 ? '>500' : $utils.formatMoneyComma(avgApy.value, 1)) + '%' : '' }}
+                      {{ (compoundData && compoundData.day) ? ($utils.formatMoneyComma(compoundData.day, 2)) + '%' : '' }}
                     </label>
                 </v-row>
 
-                <v-row justify="start" v-if="!isMobile">
-                    <v-checkbox
-                        class="hold-checkbox"
-                        color="#22ABAC"
-                        @click="redraw"
-                        v-model="usdPlusDataEnabled"
-                    >
-                        <template v-slot:label>
-                            <label class="hold-checkbox-label">USD+ APY</label>
-                        </template>
-                    </v-checkbox>
-                </v-row>
+<!--                <v-row justify="start" v-if="!isMobile">-->
+<!--                    <v-checkbox-->
+<!--                        class="hold-checkbox"-->
+<!--                        color="#22ABAC"-->
+<!--                        @click="redraw"-->
+<!--                        v-model="usdPlusDataEnabled"-->
+<!--                    >-->
+<!--                        <template v-slot:label>-->
+<!--                            <label class="hold-checkbox-label">USD+ APY</label>-->
+<!--                        </template>-->
+<!--                    </v-checkbox>-->
+<!--                </v-row>-->
             </v-col>
 
-            <v-col class="add-chart-info-col">
-                <v-row justify="end">
-                    <label class="chart-title-apy">
-                        {{ (avgApy && avgApy.value) ? (avgApy.value > 500 ? '>500' : $utils.formatMoneyComma(avgApy.value, 1)) + '%' : '' }}
-                    </label>
+          <v-col class="add-chart-info-col pt-10">
+            <v-row>
+              <v-col cols="3">
+                <v-row justify="center">
+                  <label :class="compoundData.day >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
+                    {{ (compoundData && compoundData.day) ? ($utils.formatMoneyComma(compoundData.day, 2)) + '%' : '' }}
+                  </label>
                 </v-row>
-                <v-row justify="end">
-                    <label class="chart-sub-title-apy">
-                        {{ (avgApy && avgApy.date) ? 'from ' + avgApy.date : '' }}
-                    </label>
+                <v-row justify="center">
+                  <label class="chart-sub-title-apy">
+                    1 day
+                  </label>
                 </v-row>
-            </v-col>
+              </v-col>
+
+              <v-col cols="3">
+                <v-row justify="center" class="chart-title-compound-container">
+                  <label :class="compoundData.week >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
+                    {{ (compoundData && compoundData.week) ? ($utils.formatMoneyComma(compoundData.week, 2)) + '%' : '' }}
+                  </label>
+                </v-row>
+                <v-row justify="center">
+                  <label class="chart-sub-title-apy">
+                    1 week
+                  </label>
+                </v-row>
+              </v-col>
+
+              <v-col cols="3">
+                <v-row justify="center" class="chart-title-compound-container">
+                  <label :class="compoundData.month >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
+                    {{ (compoundData && compoundData.month) ? ($utils.formatMoneyComma(compoundData.month, 2)) + '%' : '' }}
+                  </label>
+                </v-row>
+                <v-row justify="center">
+                  <label class="chart-sub-title-apy">
+                    1 month
+                  </label>
+                </v-row>
+              </v-col>
+
+              <v-col cols="3">
+                <v-row justify="center" class="chart-title-compound-container">
+                  <label :class="compoundData.all >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
+                    {{ (compoundData && compoundData.all) ? ($utils.formatMoneyComma(compoundData.all, 2)) + '%' : '' }}
+                  </label>
+                </v-row>
+                <v-row justify="center">
+                  <label class="chart-sub-title-apy">
+                    All
+                  </label>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-col>
         </v-row>
 
         <div class="chart-row" id="line-chart-apy"></div>
@@ -114,6 +154,10 @@ export default {
         insuranceData: {
             type: Object,
         },
+
+        compoundData: {
+          type: Object,
+        },
     },
 
     watch: {
@@ -138,7 +182,7 @@ export default {
         chart: null,
 
         avgApy: null,
-        usdPlusDataEnabled: true,
+        usdPlusDataEnabled: false,
     }),
 
     computed: {
@@ -258,6 +302,7 @@ export default {
               if (maxValue > 5) {
                 maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
               }
+
             } catch (e) {
                 maxValue = 50;
             }
@@ -274,7 +319,9 @@ export default {
                     minValue = Math.min.apply(Math, values);
                 }
 
-                minValue = Math.min(Math.floor(Math.floor(minValue / 10)) * 10, 0);
+                if (minValue < -5) {
+                  minValue = Math.min(Math.floor(Math.floor(minValue / 10)) * 10, 0);
+                }
             } catch (e) {
                 minValue = 0;
             }
@@ -285,7 +332,7 @@ export default {
 
             seriesList.push(
                 {
-                    name: "Insurance APY",
+                    name: "Performance",
                     data: values
                 }
             );
@@ -624,7 +671,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .chart-title {
-    margin-left: 4%;
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text) !important;
@@ -635,6 +681,30 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text) !important;
+}
+
+.chart-title-compound-container {
+  border-left: 1px solid #CED2D8;
+}
+
+.chart-title-compound {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 36px;
+
+  color: #22ABAC;
+}
+
+.chart-title-compound-minus {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 36px;
+
+  color: #CF3F92 !important;
 }
 
 .chart-sub-title-apy {

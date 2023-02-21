@@ -15,7 +15,7 @@
               <v-row align="center" justify="start" class="ma-0">
                   <v-col class="ml-n3 mt-n3">
                       <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
-                          APY
+                          PERFORMANCE
                       </v-btn>
                   </v-col>
                   <v-col class="mr-n3 mt-n3">
@@ -25,7 +25,7 @@
                   </v-col>
               </v-row>
 
-              <ChartApy class="mx-n3" v-if="rateTab === 1" :data="insuranceApyData.polygon" :usdPlusData="usdPlusApyData.polygon" :insurance-data="insuranceData"/>
+              <ChartApy class="mx-n3" v-if="rateTab === 1" :data="insurancePerformanceData.polygon" :usdPlusData="usdPlusApyData.polygon" :insurance-data="insuranceData" :compound-data="compoundData"/>
               <ChartTvl class="mx-n3" v-if="rateTab === 3" :data="insuranceTvlData.polygon" :insurance-data="insuranceData"/>
           </v-col>
       </v-row>
@@ -94,10 +94,18 @@ export default {
         insuranceStrategyData: {},
         insuranceClientData: {},
         insuranceApyData: {},
+        insurancePerformanceData: {},
         insuranceTvlData: {},
         insuranceRedemptionData: {},
 
         usdPlusApyData: {},
+
+        compoundData: {
+          day: 0.00,
+          week: 0.00,
+          month: 0.00,
+          all: 0.00,
+        }
       }),
 
     props: {
@@ -188,9 +196,6 @@ export default {
         this.refreshUsdPlusPayoutsData("polygon");
         this.refreshUsdPlusPayoutsData("bsc");
         this.refreshUsdPlusPayoutsData("optimism");
-
-        // dispatch('accountData/refreshBalance', null, {root:true});
-        // dispatch('supplyData/refreshInsuranceSupply', null, {root:true});
       },
 
       async refreshStrategyData(refreshParams) {
@@ -271,20 +276,73 @@ export default {
                 ]
               };
 
-              [...clientData].forEach(item => {
+              let startValue = 1;
+              let accumulator = startValue;
+              let accumulatorDay = startValue;
+              let accumulatorWeek = startValue;
+              let accumulatorMonth = startValue;
+
+              // let i = 0;
+              let clientDataPreferment = [...clientData];
+              let clientDataLengthCounter = clientDataPreferment.length;
+              for (let i = 0; i < clientDataPreferment.length; i++){
+                const payout = clientDataPreferment[i];
                 try {
-                  widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
+
+                  // all
+                  accumulator = accumulator * (1 + payout.dailyProfit);
+                  payout.comp =  (accumulator * 100 / startValue - 100);
+                  payout.comp =  parseFloat(payout.comp ? payout.comp : 0.0).toFixed(3);
+                  widgetDataDict[moment(payout.payableDate).format('DD.MM.YYYY')] = payout.comp;
+
+                  // date
+                  if (i === 0) {
+                    this.compoundData.firstDate = moment(payout.payableDate).format('MMM D, YYYY');
+                  }
+
+
+                  // week
+                  if (clientDataLengthCounter === 7) {
+                    accumulatorWeek = accumulatorWeek * (1 + payout.dailyProfit);
+                  }
+
+                  // month
+                  if (clientDataLengthCounter === 30) {
+                    accumulatorMonth = accumulatorMonth * (1 + payout.dailyProfit);
+                  }
+
+                  // day
+                  if (clientDataLengthCounter === 1) {
+                    // day
+                    accumulatorDay = accumulatorDay * (1 + payout.dailyProfit);
+                    let dayComp = (accumulatorDay * 100 / startValue - 100);
+                    this.compoundData.day = parseFloat(dayComp ? dayComp : 0.0).toFixed(3)
+
+
+                    // week
+                    let weekComp = (accumulatorWeek * 100 / startValue - 100);
+                    this.compoundData.week = parseFloat(weekComp ? weekComp : 0.0).toFixed(3)
+
+                    // month
+                    let monthComp = (accumulatorMonth * 100 / startValue - 100);
+                    this.compoundData.month = parseFloat(monthComp ? monthComp : 0.0).toFixed(3)
+
+                    this.compoundData.all = payout.comp // last payout comp
+                  }
+
+                  clientDataLengthCounter--;
                 } catch (e) {
                   console.error("strategyData build Widget Data Dict insurance error:", e)
                 }
-              });
+              }
 
               for(let key in widgetDataDict) {
                 widgetData.labels.push(key);
                 widgetData.datasets[0].data.push(widgetDataDict[key] > 500 ? 500.00 : widgetDataDict[key]);
               }
 
-              this.addInsuranceApyData({name: refreshParams.chain.chainName, data: widgetData});
+              this.addInsurancePerformanceData({name: refreshParams.chain.chainName, data: widgetData});
+
 
               let widgetTvlDataDict = {};
               let widgetTvlData = {
@@ -497,6 +555,10 @@ export default {
 
       addInsuranceApyData(insuranceApyDataParams) {
         this.insuranceApyData[insuranceApyDataParams.name] = insuranceApyDataParams.data;
+      },
+
+      addInsurancePerformanceData(insurancePerformanceDataParams) {
+        this.insurancePerformanceData[insurancePerformanceDataParams.name] = insurancePerformanceDataParams.data;
       },
 
       addInsuranceTvlData(insuranceTvlDataParams) {

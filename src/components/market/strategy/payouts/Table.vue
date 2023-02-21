@@ -8,8 +8,18 @@
             <th class="table-header-payouts-strategy text-right" v-if="!minimized">
                 Daily profit{{ minimized ? '' : (profitLabel ? ', ' + profitLabel : '')}}
             </th>
-            <th v-if="(payoutData && payoutData[0]) ? payoutData[0].annualizedYield : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
-                Annualized yield{{ minimized ? '' : ', % per year'}}
+
+            <th v-if="(payoutData && payoutData[0]) ? payoutData[0].comp : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
+              <div>
+                <label>
+                  Return
+                </label>
+
+                <!--          TODO COMPOUND -->
+                <!--                <div style="margin-top: -2px">-->
+<!--                  <Tooltip :size="16" icon-color="rgba(255, 255, 255, 0.6)" text="Strategy net APY based on 30-day average, includes fees taken (fee-adjusted)"/>-->
+<!--                </div>-->
+              </div>
             </th>
             <th class="table-header-payouts-strategy text-right" width="180px" v-if="!minimized">
                 Explorer
@@ -30,9 +40,9 @@
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">
                 $ {{ $utils.formatMoney(item.dailyProfit, 6) }}
             </td>
-            <td v-if="item.annualizedYield" class="table-label-payouts-strategy text-right">
-                <label :class="item.annualizedYield > 0 ? 'yield-green' : 'yield-red'">
-                    {{ $utils.formatMoney(item.annualizedYield, 1) }}%
+            <td v-if="item.comp" class="table-label-payouts-strategy text-right">
+                <label :class="item.comp >= 0 ? 'yield-green' : 'yield-red'">
+                    {{ $utils.formatMoney(item.comp, 2) }}%
                 </label>
             </td>
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">
@@ -54,13 +64,14 @@
 <script>
 
 import {mapGetters} from "vuex";
+import Tooltip from "@/components/common/element/Tooltip";
 
 /* eslint-disable no-unused-vars,no-undef */
 
 export default {
     name: "Table",
 
-    components: {},
+    components: {Tooltip},
 
     data: () => ({}),
 
@@ -77,7 +88,7 @@ export default {
 
         payoutData: {
             type: Array,
-            default: [],
+            default: () => {},
         },
     },
 

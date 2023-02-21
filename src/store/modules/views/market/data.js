@@ -6,6 +6,7 @@ const state = {
     etsClientData: {},
     etsApyData: {},
     etsTvlData: {},
+    compoundData: {},
 
     usdPlusApyData: {},
 };
@@ -26,6 +27,10 @@ const getters = {
 
     etsTvlData(state) {
         return state.etsTvlData;
+    },
+
+    compoundData(state) {
+        return state.compoundData;
     },
 
     usdPlusApyData(state) {
@@ -119,6 +124,7 @@ const actions = {
                         );
 
                         let clientData = strategyData.timeData;
+                        let clientPayoutData = strategyData.payoutItems;
 
                         let widgetDataDict = {};
                         let widgetData = {
@@ -132,9 +138,69 @@ const actions = {
                             ]
                         };
 
-                        [...clientData].forEach(item => {
-                            widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
-                        });
+                        let startValue = 1;
+                        let accumulator = startValue;
+                        let accumulatorDay = startValue;
+                        let accumulatorWeek = startValue;
+                        let accumulatorMonth = startValue;
+
+                        let compoundData = {};
+
+                        let clientDataPreferment = [...clientPayoutData];
+                        let clientDataLengthCounter = clientDataPreferment.length;
+                        for (let i = 0; i < clientDataPreferment.length; i++){
+                            const payout = clientDataPreferment[i];
+                            try {
+
+                                // all
+                                accumulator = accumulator * (1 + payout.dailyProfit);
+                                payout.comp =  (accumulator * 100 / startValue - 100);
+                                payout.comp =  parseFloat(payout.comp ? payout.comp : 0.00).toFixed(3);
+                                widgetDataDict[moment(payout.payableDate).format('DD.MM.YYYY')] = payout.comp;
+
+                                // date
+                                if (i === 0) {
+                                    compoundData.firstDate = moment(payout.payableDate).format('MMM D, YYYY');
+                                }
+
+
+                                // week
+                                if (clientDataLengthCounter === 7) {
+                                    accumulatorWeek = accumulatorWeek * (1 + payout.dailyProfit);
+                                }
+
+                                // month
+                                if (clientDataLengthCounter === 30) {
+                                    accumulatorMonth = accumulatorMonth * (1 + payout.dailyProfit);
+                                }
+
+                                // day
+                                if (clientDataLengthCounter === 1) {
+                                    // day
+                                    accumulatorDay = accumulatorDay * (1 + payout.dailyProfit);
+                                    let dayComp = (accumulatorDay * 100 / startValue - 100);
+
+                                    compoundData.day = parseFloat(dayComp ? dayComp : 0.0).toFixed(3)
+
+
+                                    // week
+                                    let weekComp = (accumulatorWeek * 100 / startValue - 100);
+                                    compoundData.week = parseFloat(weekComp ? weekComp : 0.0).toFixed(3)
+
+                                    // month
+                                    let monthComp = (accumulatorMonth * 100 / startValue - 100);
+                                    compoundData.month = parseFloat(monthComp ? monthComp : 0.0).toFixed(3)
+
+                                    compoundData.all = payout.comp // last payout comp
+
+                                    dispatch('addCompoundData', { name: refreshParams.strategyName, data: compoundData});
+                                }
+
+                                clientDataLengthCounter--;
+                            } catch (e) {
+                                console.error("strategyData build Widget Data Dict insurance error:", e)
+                            }
+                        }
 
                         for(let key in widgetDataDict) {
                             widgetData.labels.push(key);
@@ -299,6 +365,13 @@ const actions = {
         commit('setEtsApyData', etsApyData);
     },
 
+    async addCompoundData({commit, dispatch, getters, rootState}, compoundParams) {
+        let compoundData = getters.compoundData;
+        compoundData[compoundParams.name] = compoundParams.data;
+
+        commit('setCompoundData', compoundData);
+    },
+
     async addEtsTvlData({commit, dispatch, getters, rootState}, etsTvlDataParams) {
         let etsTvlData = getters.etsTvlData;
         etsTvlData[etsTvlDataParams.name] = etsTvlDataParams.data;
@@ -330,6 +403,10 @@ const mutations = {
 
     setEtsTvlData(state, value) {
         state.etsTvlData = value;
+    },
+
+    setCompoundData(state, value) {
+        state.compoundData = value;
     },
 
     setUsdPlusApyData(state, value) {

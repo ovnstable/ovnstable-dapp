@@ -10,15 +10,16 @@
             </th>
 
             <th v-if="(payoutData && payoutData[0]) ? payoutData[0].comp : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
-              <div>
+              <div class="return-container">
                 <label>
-                  Return
+                  Cumulative return
                 </label>
 
-                <!--          TODO COMPOUND -->
-                <!--                <div style="margin-top: -2px">-->
-<!--                  <Tooltip :size="16" icon-color="rgba(255, 255, 255, 0.6)" text="Strategy net APY based on 30-day average, includes fees taken (fee-adjusted)"/>-->
-<!--                </div>-->
+                <div class="tooltip-compound">
+                  <v-row align="center" justify="end">
+                    <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'" text="Cumulative return since inception date"/>
+                  </v-row>
+                </div>
               </div>
             </th>
             <th class="table-header-payouts-strategy text-right" width="180px" v-if="!minimized">
@@ -94,6 +95,7 @@ export default {
 
     computed: {
         ...mapGetters('network', ['explorerUrl']),
+        ...mapGetters('theme', ['light']),
     },
 
     methods: {
@@ -122,7 +124,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 /* mobile */
 @media only screen and (max-width: 960px) {
@@ -300,5 +302,15 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .link-label {
     display: inline-flex !important;
+}
+
+.tooltip-compound {
+  position: relative;
+  right: -7px;
+  bottom: 4px
+}
+
+.return-container {
+  position: relative;
 }
 </style>

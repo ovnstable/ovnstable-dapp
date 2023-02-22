@@ -204,6 +204,8 @@ export default {
             switch (this.networkId) {
                 case 137:
                     return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #7E46E3 100%)';
+                case 42161:
+                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #95bfdc 0%, #545e71 27.05%, #2d374b 52.07%, #27a0ef 100%)';
                 case 10:
                     return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #FF0420 100%)';
                 case 56:

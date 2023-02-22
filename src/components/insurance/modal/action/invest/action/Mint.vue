@@ -267,7 +267,7 @@ export default {
                     return optimismIcon;
                 case 56:
                     return bscIcon;
-                case 46161:
+                case 42161:
                     return arbitrumIcon;
             }
         },

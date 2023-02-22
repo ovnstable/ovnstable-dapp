@@ -307,28 +307,28 @@
 
                 <v-row align="start" justify="start" class="ma-0 mt-7">
                   <label class="useful-link"
-                         @click="openLink('https://blog.overnight.fi/how-to-partake-in-liquidity-provisions-for-usd-5c8117e983b2')">
+                         @click="openLink('https://overnight.fi/blog/2022/05/20/how-to-partake-in-liquidity-provisions-for-usd-on-polygon/')">
                     How to Partake in Liquidity Provisions for USD+
                   </label>
                 </v-row>
 
                 <v-row align="start" justify="start" class="ma-0 mt-5">
                   <label class="useful-link"
-                         @click="openLink('https://blog.overnight.fi/tic-how-to-buy-usd-if-you-already-own-cryptocurrency-48c4455f7efd')">
+                         @click="openLink('https://overnight.fi/blog/2022/05/08/how-to-buy-usd-if-you-already-own-cryptocurrency/')">
                     How to buy USD+ if you already own cryptocurrency
                   </label>
                 </v-row>
 
                 <v-row align="start" justify="start" class="ma-0 mt-5">
                   <label class="useful-link"
-                         @click="openLink('https://blog.overnight.fi/how-to-buy-usd-via-fiat-e3ff7818b8cc')">
+                         @click="openLink('https://overnight.fi/blog/2022/05/07/how-to-buy-usd-with-fiat/')">
                     How to buy USD+ via Fiat
                   </label>
                 </v-row>
 
                 <v-row align="start" justify="start" class="ma-0 mt-5">
                   <label class="useful-link"
-                         @click="openLink('https://blog.overnight.fi/what-is-yield-farming-fc28736a7f2f')">
+                         @click="openLink('https://overnight.fi/blog/2023/02/19/overnight-passive-stablecoin-yield-through-usd/')">
                     What is Yield Farming?
                   </label>
                 </v-row>
@@ -344,10 +344,18 @@
 
                 <v-row align="start" justify="start" class="ma-0 mt-7">
                   <label class="useful-link"
-                         @click="openLink('https://www.youtube.com/watch?v=URHirNqiMiw')">
-                    Dystopia & Penrose: High-Yield Stablecoin LP Staking
+                         @click="openLink('https://www.youtube.com/watch?v=AqNqkQ9m_rI')">
+                    What is USD+
                   </label>
                 </v-row>
+
+                  <v-row align="start" justify="start" class="ma-0 mt-3">
+                      <label class="useful-link"
+                             @click="openLink('https://www.youtube.com/watch?v=wIVAiUMLmvA')">
+                          Exchange Trading Strategies explained
+                      </label>
+                  </v-row>
+
               </v-col>
             </v-row>
           </div>

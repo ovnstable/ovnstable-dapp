@@ -24,6 +24,11 @@ const actions = {
             case "10":
                 dispatch('wrapUI/showPage', null, {root: true});
                 break;
+            case "ar":
+            case "arbitrum":
+            case "42161":
+                dispatch('wrapUI/showPage', null, {root: true});
+                break;
             default:
                 break;
         }

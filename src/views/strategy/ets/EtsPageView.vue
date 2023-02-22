@@ -283,7 +283,7 @@ export default {
 
 
   computed: {
-    ...mapGetters('network', ['networkId', 'polygonConfig', 'opConfig', 'bscConfig']),
+    ...mapGetters('network', ['networkId', 'polygonConfig', 'opConfig', 'bscConfig', 'arConfig']),
     ...mapGetters('accountData', ['etsBalance', 'account']),
     ...mapGetters('supplyData', ['totalSupply']),
     ...mapGetters('etsAction', ['etsList']),
@@ -454,6 +454,9 @@ export default {
         case 56:
           appApiUrl = this.opConfig.appApiUrl;
           break;
+        case 42161:
+          appApiUrl = this.arConfig.appApiUrl;
+          break;
         default:
           appApiUrl = this.polygonConfig.appApiUrl;
           break;
@@ -570,7 +573,7 @@ export default {
       this.isUsdPlusApyDataLoading = true;
 
       await Promise.all(
-          ['polygon', 'bsc', 'optimism'].map(async network => {
+          ['polygon', 'bsc', 'optimism', 'arbitrum'].map(async network => {
 
             let appApiUrl;
 
@@ -579,10 +582,13 @@ export default {
                 appApiUrl = this.polygonConfig.appApiUrl;
                 break;
               case "bsc":
-                appApiUrl = this.opConfig.appApiUrl;
+                appApiUrl = this.bscConfig.appApiUrl;
                 break;
               case "optimism":
-                appApiUrl = this.polygonConfig.appApiUrl;
+                appApiUrl = this.opConfig.appApiUrl;
+                break;
+              case "arbitrum":
+                appApiUrl = this.arConfig.appApiUrl;
                 break;
             }
 
@@ -635,6 +641,9 @@ export default {
           break;
         case 56:
           appApiUrl = this.opConfig.appApiUrl;
+          break;
+        case 42161:
+          appApiUrl = this.arConfig.appApiUrl;
           break;
         default:
           appApiUrl = this.polygonConfig.appApiUrl;

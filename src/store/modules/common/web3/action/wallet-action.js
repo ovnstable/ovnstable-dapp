@@ -3,7 +3,7 @@ import UAuth from "@uauth/js";
 import Onboard from "bnc-onboard";
 
 
-const SUPPORTED_NETWORKS = [137, 31337, 56, 10];
+const SUPPORTED_NETWORKS = [137, 31337, 56, 10, 42161];
 
 const state = {
     onboard: null,
@@ -227,7 +227,8 @@ const actions = {
                 rpc: {
                     ['137']: "https://polygon-rpc.com/",
                     ['56']: "https://bsc-dataseed.binance.org",
-                    ['10']: "https://mainnet.optimism.io"
+                    ['10']: "https://mainnet.optimism.io",
+                    ['42161']: "https://arb1.arbitrum.io/rpc"
                 },
                 preferred: true
             },

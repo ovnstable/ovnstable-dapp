@@ -20,7 +20,7 @@ const actions = {
 
         let network = rootState.network.networkName;
 
-        if (network === 'polygon' || network === 'op') {
+        if (network === 'polygon' || network === 'op' || network === 'ar') {
             dispatch('wrapData/refreshWrap', null, {root:true});
         }
     },

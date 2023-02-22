@@ -208,6 +208,7 @@ import SuccessModal from "@/components/common/modal/action/SuccessModal";
 import BN from "bn.js";
 import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
+import arbitrumIcon from "@/assets/network/ar.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import {axios} from "@/plugins/http-axios";
 import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
@@ -265,6 +266,8 @@ export default {
                     return optimismIcon;
                 case 56:
                     return bscIcon;
+                case 42161:
+                    return arbitrumIcon;
             }
         },
 

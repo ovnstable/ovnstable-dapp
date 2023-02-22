@@ -120,7 +120,7 @@ export default {
     },
 
     computed: {
-      ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig']),
+      ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig']),
       ...mapGetters('accountData', ['account']),
       ...mapGetters('web3', ['contracts', 'web3']),
 
@@ -196,6 +196,7 @@ export default {
         this.refreshUsdPlusPayoutsData("polygon");
         this.refreshUsdPlusPayoutsData("bsc");
         this.refreshUsdPlusPayoutsData("optimism");
+        this.refreshUsdPlusPayoutsData("arbitrum");
       },
 
       async refreshStrategyData(refreshParams) {
@@ -212,6 +213,9 @@ export default {
             break;
           case 56:
             appApiUrl = this.bscConfig.appApiUrl;
+            break;
+          case 42161:
+            appApiUrl = this.arConfig.appApiUrl;
             break;
           default:
             appApiUrl = this.polygonConfig.appApiUrl;
@@ -393,6 +397,9 @@ export default {
           case 56:
             appApiUrl = this.bscConfig.appApiUrl;
             break;
+          case 42161:
+            appApiUrl = this.arConfig.appApiUrl;
+            break;
           default:
             appApiUrl = this.polygonConfig.appApiUrl;
             break;
@@ -442,6 +449,9 @@ export default {
             break;
           case "optimism":
             appApiUrl = this.opConfig.appApiUrl;
+            break;
+          case "arbitrum":
+            appApiUrl = this.arConfig.appApiUrl;
             break;
         }
 

@@ -34,6 +34,18 @@ const OPTIMISM_PARAMS = {
     bridgeLink: 'https://router.via.exchange/optimism/USD+/bsc/USD+',
 }
 
+const ARBITRUM_PARAMS = {
+    appApiUrl: 'https://arbitrum.overnight.fi/api',
+    networkName: 'arbitrum',
+    networkId: 42161,
+    rpcUrl: 'https://arb1.arbitrum.io/rpc',
+    explorerUrl: 'https://arbiscan.io/',
+    assetName: 'USDC',
+    assetDecimals: 6,
+    nativeAssetName: 'ETH',
+    bridgeLink: 'https://router.via.exchange/arbitrum/USD+/bsc/USD+',
+}
+
 const state = {
     appApiUrl: _getParams(null).appApiUrl,
     apiUrl: "https://api.overnight.fi",
@@ -49,10 +61,12 @@ const state = {
     polygonApi: POLYGON_PARAMS.appApiUrl,
     bscApi: BSC_PARAMS.appApiUrl,
     opApi: OPTIMISM_PARAMS.appApiUrl,
+    arApi: ARBITRUM_PARAMS.appApiUrl,
 
     polygonConfig: POLYGON_PARAMS,
     bscConfig: BSC_PARAMS,
     opConfig: OPTIMISM_PARAMS,
+    arConfig: ARBITRUM_PARAMS,
 
     switchToOtherNetwork: false,
 };
@@ -72,6 +86,10 @@ function _getParams(networkName) {
         case "optimism":
         case "10":
             return OPTIMISM_PARAMS;
+        case "ar":
+        case "arbitrum":
+        case "42161":
+            return ARBITRUM_PARAMS;
         default:
             return OPTIMISM_PARAMS;
     }
@@ -131,6 +149,10 @@ const getters = {
         return state.opApi;
     },
 
+    arApi(state) {
+        return state.arApi;
+    },
+
     switchToOtherNetwork(state) {
         return state.switchToOtherNetwork;
     },
@@ -144,6 +166,9 @@ const getters = {
     },
     opConfig(state) {
         return state.opConfig;
+    },
+    arConfig(state) {
+        return state.arConfig;
     },
 };
 
@@ -182,6 +207,11 @@ const actions = {
             case "optimism":
             case "10":
                 localStorage.setItem('selectedNetwork', 'op');
+                break;
+            case "ar":
+            case "arbitrum":
+            case "42161":
+                localStorage.setItem('selectedNetwork', 'ar');
                 break;
             default:
                 localStorage.setItem('selectedNetwork', 'op');
@@ -244,6 +274,21 @@ const actions = {
                                 rpcUrls: ['https://mainnet.optimism.io'],
                                 blockExplorerUrls: ['https://optimistic.etherscan.io/'],
                                 chainName: 'Optimism',
+                                nativeCurrency: {
+                                    symbol: 'ETH',
+                                    name: 'ETH',
+                                    decimals: 18,
+                                }
+                            };
+                            break;
+                        case "ar":
+                        case "arbitrum":
+                        case "42161":
+                            params = {
+                                chainId: rootState.web3.web3.utils.toHex(42161),
+                                rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+                                blockExplorerUrls: ['https://arbiscan.io/'],
+                                chainName: 'Arbitrum',
                                 nativeCurrency: {
                                     symbol: 'ETH',
                                     name: 'ETH',

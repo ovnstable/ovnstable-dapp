@@ -111,6 +111,7 @@ import Tooltip from "@/components/common/element/Tooltip";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
+import arbitrumIcon from "@/assets/network/ar.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import moment from "moment";
 import {axios} from "@/plugins/http-axios";
@@ -139,6 +140,8 @@ export default {
                     return optimismIcon;
                 case 56:
                     return bscIcon;
+                case 42161:
+                    return arbitrumIcon;
             }
         },
 

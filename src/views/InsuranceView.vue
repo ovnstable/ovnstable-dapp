@@ -58,7 +58,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig']),
+        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig']),
 
         activeTabAbout: function () {
             return {

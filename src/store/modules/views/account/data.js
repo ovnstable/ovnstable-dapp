@@ -89,7 +89,7 @@ const actions = {
             usdPlus = getters.usdPlus.asset;
         }
 
-        if (networkId === 137 || networkId === 10) {
+        if (networkId === 137 || networkId === 10 || networkId === 42161) {
             try {
                 wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
                 wUsdPlus = wUsdPlus ? web3.web3.utils.fromWei(wUsdPlus, 'mwei') : null;

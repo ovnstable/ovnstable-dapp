@@ -1,7 +1,7 @@
 import Web3 from "web3";
 
 
-const SUPPORTED_NETWORKS = [137, 31337, 56, 10];
+const SUPPORTED_NETWORKS = [137, 31337, 56, 10, 42161];
 
 const state = {
     contracts: null,

@@ -192,7 +192,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['polygonApi', 'bscApi', 'opApi']),
+        ...mapGetters('network', ['polygonApi', 'bscApi', 'opApi', 'arApi']),
         ...mapGetters('theme', ['light']),
 
         isMobile() {
@@ -222,6 +222,9 @@ export default {
                     break;
                 case 56:
                     apiUrl = this.bscApi;
+                    break;
+                case 42161:
+                    apiUrl = this.arApi;
                     break;
                 default:
                     apiUrl = this.polygonApi;

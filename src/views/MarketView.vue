@@ -112,7 +112,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig']),
+        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('web3', ['contracts', 'web3']),
         // ...mapGetters('supplyData', ['totalSupply', 'totalInsuranceSupply']),
@@ -357,6 +357,9 @@ export default {
                 case 56:
                   appApiUrl = this.bscConfig.appApiUrl;
                   break;
+                case 42161:
+                  appApiUrl = this.arConfig.appApiUrl;
+                  break;
                 default:
                   appApiUrl = this.polygonConfig.appApiUrl;
                   break;
@@ -499,6 +502,9 @@ export default {
                 case 56:
                   appApiUrl = this.bscConfig.appApiUrl;
                   break;
+                case 42161:
+                  appApiUrl = this.arConfig.appApiUrl;
+                  break;
                 default:
                   appApiUrl = this.polygonConfig.appApiUrl;
                   break;
@@ -532,7 +538,7 @@ export default {
         this.isUsdPlusPayoutsDataLoading = true;
 
         await Promise.all(
-            ['polygon', 'bsc', 'optimism'].map(async network => {
+            ['polygon', 'bsc', 'optimism', 'arbitrum'].map(async network => {
 
               let appApiUrl;
 
@@ -545,6 +551,9 @@ export default {
                   break;
                 case "optimism":
                   appApiUrl = this.opConfig.appApiUrl;
+                  break;
+                case "arbitrum":
+                  appApiUrl = this.arConfig.appApiUrl;
                   break;
               }
 

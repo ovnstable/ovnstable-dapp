@@ -279,7 +279,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig']),
+        ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig']),
         ...mapGetters('marketData', ['etsStrategyData']),
         ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
@@ -304,6 +304,8 @@ export default {
                     return this.opConfig;
                 case 56:
                     return this.bscConfig;
+                case 42161:
+                    return this.arConfig;
                 default:
                     return this.polygonConfig;
             }

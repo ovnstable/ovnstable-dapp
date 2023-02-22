@@ -18,6 +18,7 @@ const actions = {
             polygon: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
             polygon_dev: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
             optimism: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
+            arbitrum: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
             bsc: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
         };
 

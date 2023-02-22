@@ -182,6 +182,7 @@ import {mapActions, mapGetters} from "vuex";
 import polygonIcon from "@/assets/network/polygon.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import optimismIcon from "@/assets/network/op.svg";
+import arbitrumIcon from "@/assets/network/ar.svg";
 
 export default {
     name: "TxCard",
@@ -202,7 +203,7 @@ export default {
 
     computed: {
         ...mapGetters('transaction', ['transactions']),
-        ...mapGetters('network', ['opConfig', 'polygonConfig', 'bscConfig']),
+        ...mapGetters('network', ['opConfig', 'polygonConfig', 'bscConfig', 'arConfig']),
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('network', ['networkId']),
 
@@ -214,6 +215,8 @@ export default {
                     return bscIcon;
                 case 10:
                     return optimismIcon;
+                case 42161:
+                    return arbitrumIcon;
             }
         },
     },
@@ -249,6 +252,9 @@ export default {
                     break;
                 case 56:
                     explorerUrl = this.bscConfig.explorerUrl;
+                    break;
+                case 42161:
+                    explorerUrl = this.arConfig.explorerUrl;
                     break;
                 default:
                     explorerUrl = this.polygonConfig.explorerUrl;

@@ -75,7 +75,7 @@ export default {
 
     methods: {
         ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
-        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig']),
+        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig']),
 
         getSortedCardList() {
             this.sortedCardList = this.etsList.filter(ets => (!ets.archive && this.networkId === ets.chain))

@@ -3,6 +3,7 @@ import loadJSON from '@/utils/http-utils.js'
 const state = {
     etsNetworkNames: [
         'optimism',
+        'arbitrum',
         'polygon',
         'bsc'
     ],

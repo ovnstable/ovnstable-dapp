@@ -47,7 +47,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig']),
+        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig']),
 
         activeTabName: function() {
             return this.$route.query.tabName || 'usd-pools';
@@ -77,7 +77,7 @@ export default {
         this.isPoolsLoading = true;
 
         this.pools = [];
-        let networkConfigList = [this.opConfig, this.polygonConfig, this.bscConfig];
+        let networkConfigList = [this.opConfig, this.polygonConfig, this.bscConfig, this.arConfig];
 
         for (let networkConfig of networkConfigList) {
           await poolApiService.getAllPools(networkConfig.appApiUrl)

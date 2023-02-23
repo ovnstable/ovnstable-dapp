@@ -159,7 +159,7 @@
       <div v-else>
 
 
-        <v-row v-if="isShowGalxeInfo" class="mt-15" align="center" justify="center">
+        <v-row v-if="isShowGalxeInfo" class="mt-15 px-5 pb-5" align="center" justify="center">
           <v-col>
             <v-row class="galxe-container">
               <v-row class="galxe-info" align="center" justify="center">
@@ -331,7 +331,11 @@ export default {
         },
 
         isShowGalxeInfo() {
-          return this.galxeNetworkList.indexOf(this.networkId) >= 0 && (!this.account || !this.isClientExistNftForGalxe);
+          if (this.galxeNetworkList.indexOf(this.networkId) >= 0 && !this.account) {
+            return false;
+          }
+
+          return this.galxeNetworkList.indexOf(this.networkId) >= 0 && !this.isClientExistNftForGalxe;
         },
 
         stepLabels: function () {
@@ -386,7 +390,7 @@ export default {
             this.step = 0;
 
             if (!this.account) {
-                return 'Connect to a wallet';
+                return 'Connect wallet';
             } else if (!this.isOvercapAvailable && this.etsData.prototype) {
                 return "ETS is in prototype"
             } else if (this.etsData.disabled) {

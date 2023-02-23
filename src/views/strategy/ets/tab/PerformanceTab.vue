@@ -5,7 +5,7 @@
                 <v-row align="center" justify="start" class="ma-0">
                     <v-col class="ml-n3 mt-n3">
                         <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
-                          Performance
+                          CUMULATIVE RETURN
                         </v-btn>
                     </v-col>
                     <v-col class="mr-n3 mt-n3">

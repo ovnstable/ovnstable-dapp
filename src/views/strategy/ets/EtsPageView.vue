@@ -71,10 +71,10 @@
                     <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}. Please check status later.</label>
                   </v-row>
 
-                  <v-row v-if="isShowGalxeInfo" align="center" justify="center" class="mt-6">
+                  <v-row v-if="isShowGalxeInfo" align="center" justify="center" class="mt-6 px-5">
                     <v-row class="galxe-container">
                       <v-col>
-                        To mint this ETS, you need to have the “Overnight on Arbitrum” NFT in your wallet. Go to galxe.com to claim this NFT.
+                        To mint this ETS, you need to have NFT in your wallet.
                       </v-col>
                       <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="openGalaxeCompany">
                         GET NFT ON GALXE
@@ -187,7 +187,7 @@
                   <v-row v-if="isShowGalxeInfo" align="center" justify="center" class="mt-6">
                    <v-row class="galxe-container">
                      <v-col>
-                       To mint this ETS, you need to have the “Overnight on Arbitrum” NFT in your wallet. Go to galxe.com to claim this NFT.
+                       To mint this ETS, you need to have NFT in your wallet.
                      </v-col>
                      <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="openGalaxeCompany">
                        GET NFT ON GALXE
@@ -195,7 +195,7 @@
                    </v-row>
                   </v-row>
 
-                  <v-row align="center" justify="center" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)? 'mt-5' : 'mt-15'">
+                  <v-row align="center" justify="center" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)? 'mt-5' : 'mt-12'">
                     <v-btn class="header-btn btn-investor-invest" :class="(this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)) ? 'disabled-btn' : ''" :disabled="this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)" @click="mintAction">
                       MINT ETS {{ etsData.nameUp }}
                     </v-btn>
@@ -1300,6 +1300,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
   margin-top: 12px;
   padding: 10px;
+
+  color: var(--secondary-gray-text);
 }
 </style>
 

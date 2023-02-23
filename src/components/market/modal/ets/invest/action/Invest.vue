@@ -146,57 +146,103 @@
             </v-col>
         </v-row>
 
-        <v-row class="mt-15" align="center" justify="center">
-            <div class="action-btn-container" v-if="!this.account">
-                <v-btn class='buy enabled-buy'
-                       @click="connectWallet">
-                    {{ buttonLabel }}
-                </v-btn>
-            </div>
+      <div v-if="isGalxNftCheck">
+        <v-row align="center" justify="center" class="py-15">
+          <v-progress-circular
+              width="2"
+              size="24"
+              color="#8FA2B7"
+              indeterminate
+          ></v-progress-circular>
+        </v-row>
+      </div>
+      <div v-else>
 
-            <div class="action-btn-container" v-else>
-                <v-btn v-if="actionAssetApproved"
-                       height="56"
-                       class="buy"
-                       :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
-                       :disabled="!isBuy"
-                       @click="confirmSwapAction">
-                    <v-progress-circular
-                        v-if="transactionPending"
-                        class="mr-2"
-                        width="2"
-                        :size="18"
-                        indeterminate
-                    ></v-progress-circular>
-                    {{ buttonLabel }}
-                </v-btn>
-                <v-btn v-else
-                       height="56"
-                       class="buy"
-                       :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
-                       :disabled="!isBuy"
-                       @click="approveAction">
-                    {{ buttonLabel }}
-                </v-btn>
-            </div>
+
+        <v-row v-if="isShowGalxeInfo" class="mt-15" align="center" justify="center">
+          <v-col>
+            <v-row class="galxe-container">
+              <v-row class="galxe-info" align="center" justify="center">
+                To mint ETS claim “Overnight on Arbitrum” NFT
+              </v-row>
+              <v-row class="mt-5">
+                <div class="action-btn-container">
+                  <v-btn
+                      height="56"
+                      class="buy enabled-buy"
+                      @click="openGalaxeCompany">
+                    click here to claim NFT
+                  </v-btn>
+                </div>
+
+                <div class="action-btn-container mt-5">
+                  <v-btn
+                      height="56"
+                      class="buy disabled-buy"
+                      :disabled="true">
+                    MINT ETS
+                  </v-btn>
+                </div>
+
+              </v-row>
+            </v-row>
+          </v-col>
         </v-row>
 
-        <v-row class="mt-5" :class="$wu.isFull() ? '' : 'mb-4'">
-            <v-slider
-                readonly
-                class="step-slider"
-                color="#1C95E7"
-                track-color="var(--main-border)"
-                track-fill-color="#1C95E7"
-                tick-size="10"
-                min="0"
-                max="2"
-                v-model="step"
-                step="1"
-                ticks
-                :tick-labels="stepLabels"
-            ></v-slider>
+        <v-row v-if="!isShowGalxeInfo" class="mt-15" align="center" justify="center">
+          <div class="action-btn-container" v-if="!this.account">
+            <v-btn class='buy enabled-buy'
+                   @click="connectWallet">
+              {{ buttonLabel }}
+            </v-btn>
+          </div>
+
+          <div class="action-btn-container" v-else>
+            <v-btn v-if="actionAssetApproved"
+                   height="56"
+                   class="buy"
+                   :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                   :disabled="!isBuy"
+                   @click="confirmSwapAction">
+              <v-progress-circular
+                  v-if="transactionPending"
+                  class="mr-2"
+                  width="2"
+                  :size="18"
+                  indeterminate
+              ></v-progress-circular>
+              {{ buttonLabel }}
+            </v-btn>
+            <v-btn v-else
+                   height="56"
+                   class="buy"
+                   :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
+                   :disabled="!isBuy"
+                   @click="approveAction">
+              {{ buttonLabel }}
+            </v-btn>
+          </div>
         </v-row>
+
+        <v-row v-if="!isShowGalxeInfo" class="mt-5" :class="$wu.isFull() ? '' : 'mb-4'">
+          <v-slider
+              readonly
+              class="step-slider"
+              color="#1C95E7"
+              track-color="var(--main-border)"
+              track-fill-color="#1C95E7"
+              tick-size="10"
+              min="0"
+              max="2"
+              v-model="step"
+              step="1"
+              ticks
+              :tick-labels="stepLabels"
+          ></v-slider>
+        </v-row>
+
+      </div>
+
 
         <WaitingModal/>
         <SuccessModal/>
@@ -219,6 +265,7 @@ import bscIcon from "@/assets/network/bsc.svg";
 import {axios} from "@/plugins/http-axios";
 import Tooltip from "@/components/common/element/Tooltip";
 import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
+import loadJSON from "@/utils/http-utils";
 
 export default {
     name: "Invest",
@@ -244,7 +291,22 @@ export default {
 
         minMintFee: null,
         contractCapacity: null,
+
+        galxeNetworkList: [42161],
+        isClientExistNftForGalxe: false,
+        isGalxNftCheck: true,
     }),
+    watch: {
+      account: function (newVal, oldVal) {
+        if (newVal) {
+          this.checkGalxeNft();
+        }
+      },
+
+      networkId: function () {
+        this.checkGalxeNft();
+      },
+    },
 
     computed: {
         ...mapGetters('accountData', ['balance', 'etsBalance', 'actionAssetBalance', 'account']),
@@ -252,7 +314,7 @@ export default {
         ...mapGetters('investModal', ['etsData', 'actionAssetApproved']),
         ...mapGetters('marketData', ['etsStrategyData']),
         ...mapGetters('supplyData', ['totalSupply']),
-        ...mapGetters("network", ['networkId', 'polygonApi']),
+        ...mapGetters("network", ['networkId', 'networkName', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
         ...mapGetters('overcapData', ['isOvercapAvailable', 'walletOvercapLimit']),
@@ -268,6 +330,10 @@ export default {
                 case 42161:
                     return arbitrumIcon;
             }
+        },
+
+        isShowGalxeInfo() {
+          return this.galxeNetworkList.indexOf(this.networkId) >= 0 && (!this.account || !this.isClientExistNftForGalxe);
         },
 
         stepLabels: function () {
@@ -450,6 +516,10 @@ export default {
 
         this.getEntryMinFee();
         this.getContractCapacityValue();
+
+      if (this.account) {
+        this.checkGalxeNft();
+      }
     },
 
     methods: {
@@ -468,6 +538,37 @@ export default {
         ...mapActions("overcapData", ['useOvercap']),
 
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
+
+        openGalaxeCompany() {
+          window.open("https://galxe.com/overnight/campaign/GCnGLU4ywn", '_target')
+        },
+
+        async checkGalxeNft() {
+          this.isGalxNftCheck = true;
+          if (this.galxeNetworkList.indexOf(this.networkId) < 0) {
+            console.log('checkGalxeNft not needed', this.networkId);
+            this.isGalxNftCheck = false;
+            return;
+          }
+
+          this.isClientExistNftForGalxe = false;
+
+          try {
+            let account = this.account;
+
+            let abiFile = await loadJSON(`/contracts/${this.networkName}/Nft.json`);
+            let nftContract = new this.web3.eth.Contract(abiFile.abi, abiFile.address);
+
+            let isNftExist = await nftContract.methods.balanceOf(account).call() * 1;
+            console.log("Is nft exist response: ", isNftExist);
+            this.isClientExistNftForGalxe = !!isNftExist; // to boolean and a = b
+            this.isGalxNftCheck = false;
+          } catch (e) {
+            console.log("Is nft exist response error: ", this.networkId, this.networkName, e);
+            this.isClientExistNftForGalxe = false;
+            this.isGalxNftCheck = false;
+          }
+        },
 
         changeSliderPercent() {
             this.sum = (this.actionAssetBalance[this.etsData.actionAsset + '_' + this.etsData.actionTokenDecimals] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
@@ -1156,5 +1257,15 @@ export default {
 .balance-network-icon {
     width: 16px !important;
     height: 16px !important;
+}
+
+.galxe-info {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+
+  color: #CF3F92;
 }
 </style>

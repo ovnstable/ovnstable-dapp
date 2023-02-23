@@ -27,28 +27,6 @@ const actions = {
             optimism: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
         };
 
-        // let etsNames = [
-        //     { network: 'polygon', name: 'qs_alpha_wmatic_usdc' },
-        //     { network: 'polygon', name: 'qs_beta_wmatic_usdc' },
-        //     { network: 'polygon', name: 'qs_gamma_weth_usdc' },
-        //     { network: 'polygon', name: 'qs_delta_weth_usdc' },
-        //     { network: 'polygon', name: 'wmatic_usd_plus' },
-        //     { network: 'polygon', name: 'qs_zeta_wbtc_usdc' },
-        //     { network: 'polygon', name: 'qs_epsilon_weth_dai' },
-        //     { network: 'polygon', name: 'uni_eta_wmatic_usdc' },
-        //     { network: 'polygon', name: 'uni_theta_weth_usdc' },
-        //
-        //     { network: 'bsc', name: 'wbnb_busd' },
-        //     { network: 'bsc', name: 'qs_alpha_wbnb_busd' },
-        //
-        //     { network: 'optimism', name: 'uni_alpha_weth_usdc' },
-        //     { network: 'optimism', name: 'uni_beta_weth_dai' },
-        //     { network: 'optimism', name: 'uni_gamma_weth_dai' },
-        //     { network: 'optimism', name: 'ruby' },
-        //     { network: 'optimism', name: 'night_ov_ar' },
-        //     { network: 'optimism', name: 'ar_delta_weth_dai' },
-        // ];
-
         [
             contracts.exchange,
             contracts.govToken,

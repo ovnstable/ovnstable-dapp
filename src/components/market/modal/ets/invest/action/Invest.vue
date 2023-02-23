@@ -298,9 +298,7 @@ export default {
     }),
     watch: {
       account: function (newVal, oldVal) {
-        if (newVal) {
-          this.checkGalxeNft();
-        }
+        this.checkGalxeNft();
       },
 
       networkId: function () {
@@ -517,9 +515,7 @@ export default {
         this.getEntryMinFee();
         this.getContractCapacityValue();
 
-      if (this.account) {
         this.checkGalxeNft();
-      }
     },
 
     methods: {
@@ -545,7 +541,7 @@ export default {
 
         async checkGalxeNft() {
           this.isGalxNftCheck = true;
-          if (this.galxeNetworkList.indexOf(this.networkId) < 0) {
+          if (this.galxeNetworkList.indexOf(this.networkId) < 0 || !this.account) {
             console.log('checkGalxeNft not needed', this.networkId);
             this.isGalxNftCheck = false;
             return;

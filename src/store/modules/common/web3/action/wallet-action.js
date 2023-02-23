@@ -33,7 +33,6 @@ const actions = {
             darkMode: false,
             walletSelect: {
                 wallets: wallets,
-
                 agreement: {
                     version: "1.0.0",
                     termsUrl: "https://docs.overnight.fi/advanced/terms-of-service",
@@ -165,6 +164,7 @@ const actions = {
                 await getters.onboard.config({ networkId: netId });
             }
         } catch (e) {
+            console.log('Wallet not connected: ')
         }
     },
 

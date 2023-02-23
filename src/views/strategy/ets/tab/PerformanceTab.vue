@@ -310,7 +310,8 @@ export default {
 
         lastPayoutDate: function () {
             let data = this.etsStrategyData[this.etsData.name];
-            return data ? data.payoutItems[data.payoutItems.length - 1].payableDate : null;
+
+            return data && data.payoutItems && data.payoutItems.length ? data.payoutItems[data.payoutItems.length - 1].payableDate : null;
         },
     },
 

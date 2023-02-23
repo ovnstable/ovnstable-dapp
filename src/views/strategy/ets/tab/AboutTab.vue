@@ -91,6 +91,12 @@
                         <v-row class="mt-8">
                             <label class="list-sub-title-text">Deposit {{ etsData.actionTokenName }} into the vault. This triggers an automatic borrow of value of {{ etsData.token1 }} (from {{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}} markets), which is invested alongside your {{ etsData.actionTokenName }} deposit into {{ etsData.dex }}’s {{ etsData.poolName }} pool.</label>
                         </v-row>
+
+                        <v-row v-if="etsData.chainName === 'arbitrum'" class="mt-8">
+                            <label class="list-sub-title-text label-error">
+                              By making a deposit to this strategy, you accept the risk of {{ etsData.dex }} protocol.
+                            </label>
+                        </v-row>
                     </v-col>
                 </v-row>
                 <v-row justify="start" align="start" class="mt-15">

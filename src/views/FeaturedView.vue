@@ -17,7 +17,7 @@
           </v-row>
             <v-row v-else class="d-flex" justify="start">
                 <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
-                       v-for="card in sortedCardList.filter(value => (!value.isPrototype && !value.isArchive)).slice(0, 3)"
+                       v-for="card in sortedCardList.filter(value => (!value.isOpenPrototype && !value.isArchive)).slice(0, 3)"
                        :key="card.id">
                     <v-row class="fill-height">
                         <component

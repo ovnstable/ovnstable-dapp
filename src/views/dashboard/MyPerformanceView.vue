@@ -328,8 +328,8 @@
 
                 <v-row align="start" justify="start" class="ma-0 mt-5">
                   <label class="useful-link"
-                         @click="openLink('https://overnight.fi/blog/2023/02/19/overnight-passive-stablecoin-yield-through-usd/')">
-                    What is Yield Farming?
+                         @click="openLink('https://overnight.fi/blog/2022/10/28/what-to-do-if-your-transaction-is-still-stuck/')">
+                      What to do if your transaction is still stuck
                   </label>
                 </v-row>
               </v-col>

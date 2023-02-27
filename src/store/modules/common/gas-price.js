@@ -67,12 +67,14 @@ const actions = {
         else if (networkId === 10 || networkId === 42161){
             console.log('GAS STATION: fixed for op');
 
+            let gwei = networkId === 10 ? 0.001 : (networkId === 42161 ? 0.1 : 0.001)
+
             try {
                 let price = {
-                    low: 0.001,
-                    standard: 0.001,
-                    fast: 0.001,
-                    ultra: 0.001,
+                    low: gwei,
+                    standard: gwei,
+                    fast: gwei,
+                    ultra: gwei,
 
                     usdPrice: 0
                 }

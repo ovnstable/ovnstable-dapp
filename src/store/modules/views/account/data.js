@@ -79,22 +79,22 @@ const actions = {
             asset = await web3.contracts.asset.methods.balanceOf(getters.account).call();
             asset = asset ? web3.web3.utils.fromWei(asset, assetDecimals === 18 ? 'ether' : 'mwei') : null;
         } catch (e) {
-            asset = getters.balance.asset;
+            asset = getters.balance ? getters.balance.asset : null;
         }
 
         try {
             usdPlus = await web3.contracts.usdPlus.methods.balanceOf(getters.account).call();
             usdPlus = usdPlus ? web3.web3.utils.fromWei(usdPlus, 'mwei') : usdPlus;
         } catch (e) {
-            usdPlus = getters.usdPlus.asset;
+            usdPlus = getters.usdPlus ? getters.usdPlus.asset : null;
         }
 
-        if (networkId === 137 || networkId === 10 || networkId === 42161) {
+        if (networkId === 137 || networkId === 10) {
             try {
                 wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
                 wUsdPlus = wUsdPlus ? web3.web3.utils.fromWei(wUsdPlus, 'mwei') : null;
             } catch (e) {
-                wUsdPlus = getters.wUsdPlus.asset;
+                wUsdPlus = getters.wUsdPlus ? getters.wUsdPlus.asset : null;
             }
         }
 
@@ -189,6 +189,7 @@ const actions = {
                                 break;
                         }
                     } catch (e) {
+
                     }
 
                     const assetProperty = ets.actionAsset + '_' + ets.actionTokenDecimals; // asset may be with different decimals.

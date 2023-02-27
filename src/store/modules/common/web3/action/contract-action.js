@@ -18,7 +18,7 @@ const actions = {
             polygon: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
             polygon_dev: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
             optimism: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
-            arbitrum: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+            arbitrum: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
             bsc: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
         };
 
@@ -26,28 +26,6 @@ const actions = {
             polygon: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
             optimism: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
         };
-
-        // let etsNames = [
-        //     { network: 'polygon', name: 'qs_alpha_wmatic_usdc' },
-        //     { network: 'polygon', name: 'qs_beta_wmatic_usdc' },
-        //     { network: 'polygon', name: 'qs_gamma_weth_usdc' },
-        //     { network: 'polygon', name: 'qs_delta_weth_usdc' },
-        //     { network: 'polygon', name: 'wmatic_usd_plus' },
-        //     { network: 'polygon', name: 'qs_zeta_wbtc_usdc' },
-        //     { network: 'polygon', name: 'qs_epsilon_weth_dai' },
-        //     { network: 'polygon', name: 'uni_eta_wmatic_usdc' },
-        //     { network: 'polygon', name: 'uni_theta_weth_usdc' },
-        //
-        //     { network: 'bsc', name: 'wbnb_busd' },
-        //     { network: 'bsc', name: 'qs_alpha_wbnb_busd' },
-        //
-        //     { network: 'optimism', name: 'uni_alpha_weth_usdc' },
-        //     { network: 'optimism', name: 'uni_beta_weth_dai' },
-        //     { network: 'optimism', name: 'uni_gamma_weth_dai' },
-        //     { network: 'optimism', name: 'ruby' },
-        //     { network: 'optimism', name: 'night_ov_ar' },
-        //     { network: 'optimism', name: 'ar_delta_weth_dai' },
-        // ];
 
         [
             contracts.exchange,
@@ -69,8 +47,8 @@ const actions = {
             _load(await loadJSON(`/contracts/${network}/OvnTimelockController.json`), web3),
             _load(await loadJSON(`/contracts/${network}/UsdPlusToken.json`), web3),
             _load(await loadJSON(`/contracts/${network}/Mark2Market.json`), web3),
-            (network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/Market.json`), web3) : _load_empty(),
-            (network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
+            (network !== "arbitrum" && network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/Market.json`), web3) : _load_empty(),
+            (network !== "arbitrum" && network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
             networkAssetMap[network] ? _load(ERC20, web3, networkAssetMap[network]) : _load_empty(),
             networkDaiMap[network] ? _load(ERC20, web3, networkDaiMap[network]) : _load_empty(),
         ]);

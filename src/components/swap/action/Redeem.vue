@@ -300,7 +300,7 @@ export default {
             this.step = 0;
 
             if (!this.account) {
-                return 'Connect to a wallet';
+                return 'Connect wallet';
             } else if (this.transactionPending) {
                 return 'Transaction is pending';
             } else if (this.isBuy) {

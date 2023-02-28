@@ -418,7 +418,9 @@ export default {
         async buyAction() {
             try {
 
-                if (this.sliderPercent === 100) {
+              console.debug(`Swap Mint blockchain. Start buy action. Account: ${this.account}. estimatedGasValue: ${this.sliderPercent}`);
+
+              if (this.sliderPercent === 100) {
                   this.max();
                 }
 
@@ -430,6 +432,8 @@ export default {
                 } else {
                     sum = this.web3.utils.toWei(this.sum, 'mwei');
                 }
+
+                console.debug(`Swap Mint blockchain. Start buy action. Account: ${this.account}. assetDecimals: ${this.assetDecimals}, sum ${sum}`);
 
                 let contracts = this.contracts;
                 let from = this.account;
@@ -481,19 +485,22 @@ export default {
 
         async confirmSwapAction() {
             try {
-                let sum;
+              let sum;
+              console.debug(`Swap Mint blockchain. Start confirm process. Account: ${this.account}. assetDecimals: ${this.assetDecimals}`);
 
-                if (this.assetDecimals === 18) {
-                    sum = this.web3.utils.toWei(this.sum, 'ether');
-                } else {
-                    sum = this.web3.utils.toWei(this.sum, 'mwei');
-                }
+              if (this.assetDecimals === 18) {
+                  sum = this.web3.utils.toWei(this.sum, 'ether');
+              } else {
+                  sum = this.web3.utils.toWei(this.sum, 'mwei');
+              }
 
                 console.debug(`Swap Mint blockchain. Confirm swap action Sum: ${sum}. Account: ${this.account}.`);
 
                 this.trackClick({action: 'confirm-swap-click', event_category: 'Mint', event_label: 'Confirm Mint Action', value: 1 });
 
                 let estimatedGasValue = await this.estimateGas(sum);
+                console.debug(`Swap Mint blockchain. Start confirm process. Account: ${this.account}. estimatedGasValue: ${estimatedGasValue}`);
+
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
                     this.gas = null;
                     this.gasAmountInMatic = null;
@@ -518,19 +525,24 @@ export default {
 
         async approveAction() {
             try {
+                console.debug(`Swap Mint blockchain. Start approving process. ApproveSum: ${this.account}.`);
+
                 this.showWaitingModal('Approving in process');
 
                 let approveSum = "10000000";
                 let sum;
 
-                if (this.assetDecimals === 18) {
+              console.debug(`Swap Mint blockchain. Approve action AssetDecimals: ${this.assetDecimals}. ApproveSum: ${approveSum}.`);
+              if (this.assetDecimals === 18) {
                     sum = this.web3.utils.toWei(approveSum, 'ether');
                 } else {
                     sum = this.web3.utils.toWei(approveSum, 'mwei');
                 }
 
-              console.debug(`Swap Mint blockchain. Approve action Sum: ${sum}. Account: ${this.account}.`);
-              let allowApprove = await this.checkAllowance(sum);
+                console.debug(`Swap Mint blockchain. Approve action Sum: ${sum}. Account: ${this.account}.`);
+                let allowApprove = await this.checkAllowance(sum);
+                console.debug(`Swap Mint blockchain. Is allowApprove? ${allowApprove}. Account: ${this.account}.`);
+
                 if (!allowApprove) {
                     this.trackClick({action: 'approve-action-click', event_category: 'Mint', event_label: 'Approve Mint Action', value: 1 });
                     this.closeWaitingModal();
@@ -540,10 +552,9 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.error(`Swap Mint approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                console.debug(`Swap Mint approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('approve');
                 this.trackClick({action: 'mint-error-showed-click', event_category: 'Mint error', event_label: 'Mint Error Showed', value: 1 });
-
             }
         },
 
@@ -552,12 +563,17 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts.asset.methods.allowance(from, contracts.exchange.options.address).call();
+          console.debug(`Swap Mint blockchain. Check allowance action. Account: ${this.account}.`);
 
-            if (allowanceValue < sum) {
+          let allowanceValue = await contracts.asset.methods.allowance(from, contracts.exchange.options.address).call();
+
+          let allowApprove = await this.checkAllowance(sum);
+          console.debug(`Swap Mint blockchain. Check allowance action. Is allowApprove? ${allowApprove}. allowanceValue ${allowanceValue} sum: ${sum}  Account: ${this.account}.`);
+
+          if (allowanceValue < sum) {
                 try {
-                    await this.refreshGasPrice();
-                    let approveParams = {gasPrice: this.gasPriceGwei, from: from};
+                  await this.refreshGasPrice();
+                  let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
                   console.debug(`Swap Mint blockchain. Check allowance Sum: ${sum}. Account: ${this.account}.`);
                   let tx = await contracts.asset.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
@@ -569,14 +585,17 @@ export default {
                         this.trackClick({action: 'mint-tx-scan-click', event_category: 'Redeem tx scan', event_label: 'Mint Go to Scan', value: 1 });
 
                         if (receipt) {
-                            if (receipt.status)
-                                return true;
-                            else {
+                            if (receipt.status) {
+                              console.debug(`Swap Mint blockchain. Check allowance Sum. receipt.status ${receipt.status}. Account: ${this.account}.`);
+                              return true;
+                            } else {
+                                console.debug(`Swap Mint blockchain. Check allowance Sum. receipt.status is false. Account: ${this.account}.`);
                                 return false;
                             }
                         }
                     }
 
+                    console.debug(`Swap Mint blockchain. Check allowance Sum. receipt.status is true. Account: ${this.account}.`);
                     return true;
                 } catch (e) {
                     console.error(`Swap Mint allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);

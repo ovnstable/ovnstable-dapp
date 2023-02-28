@@ -567,8 +567,7 @@ export default {
 
           let allowanceValue = await contracts.asset.methods.allowance(from, contracts.exchange.options.address).call();
 
-          let allowApprove = await this.checkAllowance(sum);
-          console.debug(`Swap Mint blockchain. Check allowance action. Is allowApprove? ${allowApprove}. allowanceValue ${allowanceValue} sum: ${sum}  Account: ${this.account}.`);
+          console.debug(`Swap Mint blockchain. Check allowance action. Is allowApprove? allowanceValue ${allowanceValue} sum: ${sum}  Account: ${this.account}.`);
 
           if (allowanceValue < sum) {
                 try {

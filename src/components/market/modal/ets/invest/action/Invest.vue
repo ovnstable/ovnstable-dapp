@@ -292,7 +292,7 @@ export default {
         minMintFee: null,
         contractCapacity: null,
 
-        galxeNetworkList: [42161],
+        galxeNetworkList: [],
         isClientExistNftForGalxe: false,
         isGalxNftCheck: true,
     }),

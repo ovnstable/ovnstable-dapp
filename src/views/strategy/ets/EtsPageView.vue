@@ -304,7 +304,7 @@ export default {
     minMintFee: null,
     minRedeemFee: null,
 
-    galxeNetworkList: [42161],
+    galxeNetworkList: [],
     isClientExistNftForGalxe: false,
   }),
 

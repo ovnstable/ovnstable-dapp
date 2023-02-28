@@ -475,6 +475,8 @@ export default {
 
     updateEtsData() {
       if (this.etsList) {
+
+        // console.log("Ets loading eps page: ", )
         let resultList = this.etsList.filter(ets => ets.name === this.$route.params.name);
         this.etsData = (resultList && resultList.length > 0) ? resultList[0] : {};
       }

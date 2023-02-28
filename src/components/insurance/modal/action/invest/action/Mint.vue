@@ -417,9 +417,9 @@ export default {
         async buyAction() {
             try {
 
-              if (this.sliderPercent === 100) {
-                this.max();
-              }
+                if (this.sliderPercent === 100) {
+                  this.max();
+                }
 
                 let sumInUsd = this.sum;
                 let sum;

@@ -50,7 +50,7 @@
                     </v-row>
 
                     <v-row align="center" :justify="$wu.isMobile() ? 'center' : 'start'" class="ma-0 mt-8">
-                        <v-col class="bordered-col" :cols="$wu.isMobile() ? 12 : 2">
+                        <v-col class="bordered-col" :cols="$wu.isMobile() ? 6 : 2">
                             <v-row class="ml-n2 justify-center">
                                 <label class="info-value">
                                     {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].lastApy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].lastApy, 0)) + '%' : '—' }}
@@ -60,7 +60,7 @@
                                 <label class="info-title">Last day apy</label>
                             </v-row>
                         </v-col>
-                        <v-col class="bordered-col" :cols="$wu.isMobile() ? 12 : 2">
+                        <v-col class="bordered-col" :cols="$wu.isMobile() ? 6 : 2">
                             <v-row class="ml-n2 justify-center">
                                 <label class="info-value">
                                     {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '—' }}

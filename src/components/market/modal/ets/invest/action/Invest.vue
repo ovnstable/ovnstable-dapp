@@ -521,6 +521,7 @@ export default {
         this.getContractCapacityValue();
 
         this.checkGalxeNft();
+
     },
 
     methods: {
@@ -753,7 +754,8 @@ export default {
             }
         },
 
-        async approveAction() {
+
+      async approveAction() {
             try {
                 this.showWaitingModal('Approving in process');
 

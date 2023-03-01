@@ -17,7 +17,8 @@
                                   class="field-sum"
                                   hide-details
                                   background-color="transparent"
-                                  v-model="sum">
+                                  v-model="sum"
+                                  @change="checkApprove">
                     </v-text-field>
                 </v-row>
             </v-col>
@@ -592,7 +593,10 @@ export default {
         setSum(value) {
             this.sum = value;
         },
-
+        async checkApprove() {
+          console.log("checkApprove");
+          await this.approveAction();
+        },
         getMax() {
             let balanceElement = this.originalBalance[this.currency.id];
             return balanceElement ? balanceElement + '' : null;

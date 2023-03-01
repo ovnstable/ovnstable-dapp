@@ -70,9 +70,6 @@ const actions = {
 
 
     async refreshBalance({commit, dispatch, getters, rootState}) {
-
-        console.log('AccountData: refreshBalance');
-
         if (getters.account === null || getters.account === undefined){
             return;
         }

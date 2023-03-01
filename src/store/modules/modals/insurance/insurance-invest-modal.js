@@ -75,8 +75,16 @@ const actions = {
         commit('setInsuranceTokenApproved', true);
     },
 
+    disapproveInsuranceToken({commit, dispatch, getters}) {
+        commit('setInsuranceTokenApproved', false);
+    },
+
     approveActionAsset({commit, dispatch, getters}) {
         commit('setActionAssetApproved', true);
+    },
+
+    disapproveActionAsset({commit, dispatch, getters}) {
+        commit('setActionAssetApproved', false);
     },
 };
 

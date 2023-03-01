@@ -17,7 +17,8 @@
                                   class="field-sum"
                                   hide-details
                                   background-color="transparent"
-                                  v-model="sum">
+                                  v-model="sum"
+                                  @input="checkApproveCounter">
                     </v-text-field>
                 </v-row>
             </v-col>
@@ -263,7 +264,10 @@ export default {
 
         sliderPercent: 0,
         stepLabels: ['', 'Approve', 'Confirmation'],
-        step: 0
+        step: 0,
+
+        sumApproveCheckerId: null,
+        sumApproveCheckerSec: 0
     }),
 
     computed: {
@@ -393,7 +397,7 @@ export default {
     methods: {
 
         ...mapActions("insuranceData", ['refreshInsurance']),
-        ...mapActions("insuranceInvestModal", ['showMintView', 'approveInsuranceToken', 'showRedemptionRequestModal']),
+        ...mapActions("insuranceInvestModal", ['showMintView', 'approveInsuranceToken', 'disapproveInsuranceToken', 'showRedemptionRequestModal']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
@@ -427,6 +431,54 @@ export default {
             this.sum = value;
         },
 
+        async checkApproveCounter() {
+          this.sumApproveCheckerSec = 0;
+          let intervalId = setInterval(async () => {
+            this.sumApproveCheckerSec++;
+
+            if (this.sumApproveCheckerSec >= 2) {
+              if (this.sumApproveCheckerId === intervalId) {
+                this.sumApproveCheckerSec = 0;
+                try {
+                  await this.checkApprove();
+                } catch (e) {
+                  // ignore
+                } finally {
+                  clearInterval(intervalId)
+                }
+              } else {
+                clearInterval(intervalId)
+              }
+
+            }
+          }, 1000);
+
+          this.sumApproveCheckerId = intervalId;
+        },
+        async checkApprove() {
+          console.log("Check Approve action");
+
+          try {
+            if (!this.sum) {
+              return;
+            }
+
+            let sum = this.web3.utils.toWei(this.sum, 'mwei');
+            let allowApprove = await this.checkAllowance(sum);
+            if (!allowApprove) {
+              await this.approveAction();
+              return false;
+            } else {
+              this.approveInsuranceToken();
+              return true;
+            }
+          } catch (e) {
+            console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+            this.showErrorModal('approve');
+            return false;
+          }
+        },
+
         getMax() {
           let balanceElement = this.originalBalance[this.currency.id];
           return balanceElement ? balanceElement + '' : null;
@@ -453,6 +505,11 @@ export default {
                 } else {
                   sum = this.web3.utils.toWei(this.sum, 'mwei');
                 }
+
+              if (!(await this.checkApprove())) {
+                console.debug(`Redeem insurance. Buy action Approve not pass. Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
+                return;
+              }
 
                 let contracts = this.contracts;
                 let from = this.account;
@@ -548,6 +605,7 @@ export default {
                 if (!allowApprove) {
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
+                    this.disapproveInsuranceToken();
                 } else {
                     this.approveInsuranceToken();
                     this.closeWaitingModal();

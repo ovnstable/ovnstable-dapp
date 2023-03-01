@@ -26,7 +26,7 @@
     <div v-else class="mt-1">
       <v-row align="start" justify="start" class="main-container ma-0">
         <v-col :cols="$wu.isFull() ? 9 : 12" :class="$wu.isFull() ? 'ml-n3' : ''">
-          <StrategyBanner :ets-data="etsData"/>
+          <StrategyBanner :ets-data="etsData" :ets-strategy-data="etsStrategyData"/>
 
           <v-row align="center" justify="start" class="ma-0 mt-5" v-if="!$wu.isFull()">
             <v-btn class="header-btn btn-filled-red" @click="showRiskModal">

@@ -1,19 +1,19 @@
 <template>
     <div class="apy-chart-container">
         <v-row class="chart-header-row">
-            <v-col cols="6">
+            <v-col cols="6" :cols="$wu.isMobile() ? 12 : 6">
               <v-row justify="start" align="left">
-                <label class="chart-title">
+                <label class="chart-title ml-5">
                   ETS {{ etsData.nameUp }}
                 </label>
               </v-row>
               <v-row justify="start" align="left">
                 <div>
-                  <label class="mobile-info-title">
+                  <label class="mobile-info-title ml-5">
                     {{ (compoundData && compoundData.all) ? ($utils.formatMoneyComma(compoundData.all, 2)) + '%' : '' }}
                   </label>
                 </div>
-                <div class="chart-sub-title-apy">
+                <div class="chart-sub-title-apy ml-5 mb-5">
                   {{ (compoundData && compoundData.firstDate) ? compoundData.firstDate : '-'}}
                 </div>
               </v-row>
@@ -548,7 +548,7 @@ export default {
     .chart-sub-title-apy {
         font-style: normal;
         font-weight: 400;
-        font-size: 16px;
+        font-size: 15px;
         line-height: 20px;
     }
 

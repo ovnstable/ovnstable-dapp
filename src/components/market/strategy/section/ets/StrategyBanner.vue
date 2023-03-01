@@ -50,25 +50,29 @@
                     </v-row>
 
                     <v-row align="center" :justify="$wu.isMobile() ? 'center' : 'start'" class="ma-0 mt-8">
-                        <v-col class="bordered-col" :cols="$wu.isMobile() ? 12 : 4">
-                            <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2">
-                                <label class="info-value-per100">
-                                  {{ (compoundData[etsData.name] && compoundData[etsData.name].month) ?  '$' + (compoundData[etsData.name].month * 1 + 100) : ''}}
+                        <v-col class="bordered-col" :cols="$wu.isMobile() ? 12 : 2">
+                            <v-row class="ml-n2 justify-center">
+                                <label class="info-value">
+                                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].lastApy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].lastApy, 0)) + '%' : '—' }}
                                 </label>
-                              <label class="info-value-compound info-value-compound-container" v-bind:style="compoundStyle">
-                                {{ (compoundData[etsData.name] && compoundData[etsData.name].month) ? compoundData[etsData.name].month + '%' : '-' }}
-                              </label>
                             </v-row>
-                            <v-row :justify="$wu.isMobile() ? 'center' : 'start'" class="ml-n2 mt-5">
-                                <label class="info-title">30 day return per 100$</label>
-                                <div style="margin-top: -2px">
-                                    <Tooltip :size="16" icon-color="rgba(255, 255, 255, 0.6)" text="Cumulative earnings per each 100$ you minted in ETS during 30 days"/>
-                                </div>
+                            <v-row class="ml-n2 mt-5 justify-center">
+                                <label class="info-title">Last day apy</label>
+                            </v-row>
+                        </v-col>
+                        <v-col class="bordered-col" :cols="$wu.isMobile() ? 12 : 2">
+                            <v-row class="ml-n2 justify-center">
+                                <label class="info-value">
+                                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '—' }}
+                                </label>
+                            </v-row>
+                            <v-row class="ml-n2 mt-5 justify-center">
+                                <label class="info-title">30-day apy</label>
                             </v-row>
                         </v-col>
 
                         <template v-if="etsData.maxSupply">
-                            <v-col :cols="$wu.isMobile() ? 12 : 8">
+                            <v-col :cols="$wu.isMobile() ? 12 : 6">
                                 <v-row :class="$wu.isMobile() ? 'mt-4' : ''" justify="end">
                                     <v-col :class="$wu.isMobile() ? '' : 'mr-n3'">
                                         <v-row class="mx-2 mt-1" align="end">

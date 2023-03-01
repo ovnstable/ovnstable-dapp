@@ -4,7 +4,7 @@
             <v-col cols="8">
                 <v-row justify="start">
                     <label class="chart-title">{{ totalTvl ? ('ETS: ' + etsData.nameUp + '&nbsp;') : ''}}</label>
-                    <label class="chart-title" style="margin-left: 0 !important"><abbr title="Total Value Locked">TVL</abbr></label>
+                    <label class="chart-title ml-5"><abbr title="Total Value Locked">TVL</abbr></label>
                 </v-row>
 
                 <v-row justify="start">

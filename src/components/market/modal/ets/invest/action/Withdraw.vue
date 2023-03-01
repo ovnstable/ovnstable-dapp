@@ -432,32 +432,36 @@ export default {
             this.sum = value;
         },
 
-        max() {
-            let balanceElement = this.etsBalance[this.etsData.name];
-            this.sum = balanceElement + "";
+      getMax() {
+          let balanceElement = this.etsOriginalBalance[this.etsData.name];
+          return balanceElement ? balanceElement + '' : null;
         },
 
         async redeemAction() {
             try {
 
-              if (this.sliderPercent === 100) {
-                this.max();
-              }
+                let sumInUsd = this.sum;
+                let sum;
 
-              let sumInUsd = this.sum;
-              let sum;
-                switch (this.etsData.etsTokenDecimals) {
+                if (this.sliderPercent === 100) {
+                  let originalMax = this.getMax();
+                  this.sum = originalMax ? originalMax : this.sum;
+                  sum = this.sum;
+                } else {
+                  switch (this.etsData.etsTokenDecimals) {
                     case 6:
-                        sum = this.web3.utils.toWei(this.sum, 'mwei');
-                        break;
+                      sum = this.web3.utils.toWei(this.sum, 'mwei');
+                      break;
                     case 8:
-                        sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
-                        break;
+                      sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
+                      break;
                     case 18:
-                        sum = this.web3.utils.toWei(this.sum, 'ether');
-                        break;
+                      sum = this.web3.utils.toWei(this.sum, 'ether');
+                      break;
                     default:
-                        break;
+                      log.error("Decimals type not found for detect wei type in withdraw.", this.etsData.etsTokenDecimals);
+                      break;
+                  }
                 }
 
                 let contracts = this.contracts;

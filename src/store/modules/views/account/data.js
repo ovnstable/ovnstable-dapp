@@ -1,8 +1,10 @@
 const state = {
 
     balance: {},
+    originalBalance: {},
     actionAssetBalance: {},
     etsBalance: {},
+    etsOriginalBalance: {},
     insuranceBalance: {},
 
     account: null,
@@ -15,8 +17,16 @@ const getters = {
         return state.balance;
     },
 
+    originalBalance(state) {
+        return state.originalBalance;
+    },
+
     etsBalance(state) {
         return state.etsBalance;
+    },
+
+    etsOriginalBalance(state) {
+        return state.etsOriginalBalance;
     },
 
     insuranceBalance(state) {
@@ -44,7 +54,9 @@ const actions = {
         console.log('AccountData: resetBalance');
 
         commit('setBalance', {});
+        commit('setOriginalBalance', {});
         commit('setEtsBalance', {});
+        commit('setEtsOriginalBalance', {});
         commit('setInsuranceBalance', {});
         commit('setActionAssetBalance', {});
     },
@@ -72,29 +84,40 @@ const actions = {
         let assetDecimals = rootState.network.assetDecimals;
 
         let usdPlus;
+        let originUsdPlus;
+
         let asset;
+        let originAsset;
+
         let wUsdPlus;
+        let originWUsdPlus;
 
         try {
             asset = await web3.contracts.asset.methods.balanceOf(getters.account).call();
+            originAsset = asset;
             asset = asset ? web3.web3.utils.fromWei(asset, assetDecimals === 18 ? 'ether' : 'mwei') : null;
         } catch (e) {
-            asset = getters.balance ? getters.balance.asset : null;
+            asset = getters.balance.asset;
+            originAsset = getters.originalBalance.asset;
         }
 
         try {
             usdPlus = await web3.contracts.usdPlus.methods.balanceOf(getters.account).call();
+            originUsdPlus = usdPlus;
             usdPlus = usdPlus ? web3.web3.utils.fromWei(usdPlus, 'mwei') : usdPlus;
         } catch (e) {
-            usdPlus = getters.usdPlus ? getters.usdPlus.asset : null;
+            usdPlus = getters.balance.usdPlus;
+            originUsdPlus = getters.originalBalance.usdPlus
         }
 
         if (networkId === 137 || networkId === 10) {
             try {
                 wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
+                originWUsdPlus = wUsdPlus;
                 wUsdPlus = wUsdPlus ? web3.web3.utils.fromWei(wUsdPlus, 'mwei') : null;
             } catch (e) {
-                wUsdPlus = getters.wUsdPlus ? getters.wUsdPlus.asset : null;
+                wUsdPlus = getters.balance.wUsdPlus;
+                originWUsdPlus = getters.originalBalance.wUsdPlus;
             }
         }
 
@@ -102,34 +125,45 @@ const actions = {
             usdPlus: usdPlus,
             asset: asset,
             wUsdPlus: wUsdPlus,
-        })
+        });
 
+        commit('setOriginalBalance', {
+            usdPlus: originUsdPlus,
+            asset: originAsset,
+            wUsdPlus: originWUsdPlus,
+        });
 
         let resultEtsBalance = {};
+        let resultEtsOriginalBalance = {};
         let etsList = rootState.etsAction.etsList;
 
         if (etsList) {
             for (let i = 0; i < etsList.length; i++) {
                 let ets = etsList[i];
                 let etsBalance;
+                let etsOriginalBalance;
 
                 if (ets.chain === networkId) {
                     try {
                         etsBalance = await web3.contracts[ets.tokenContract].methods.balanceOf(getters.account).call();
+                        etsOriginalBalance = etsBalance;
                         etsBalance = web3.web3.utils.fromWei(etsBalance, ets.etsTokenDecimals === 18 ? 'ether' : 'mwei');
                     } catch (e) {
                         try {
                             etsBalance = getters.etsBalance[ets.name];
+                            etsOriginalBalance = getters.etsOriginalBalance[ets.name];
                         } catch (ex) {
                         }
                     }
 
                     resultEtsBalance[ets.name] = etsBalance;
+                    resultEtsOriginalBalance[ets.name] = etsOriginalBalance;
                 }
             }
         }
 
         commit('setEtsBalance', resultEtsBalance);
+        commit('setEtsOriginalBalance', resultEtsOriginalBalance);
 
 
         let resultInsuranceBalance = {};
@@ -210,8 +244,16 @@ const mutations = {
         state.balance = value;
     },
 
+    setOriginalBalance(state, value) {
+        state.originalBalance = value;
+    },
+
     setEtsBalance(state, value) {
         state.etsBalance = value;
+    },
+
+    setEtsOriginalBalance(state, value) {
+        state.etsOriginalBalance = value;
     },
 
     setInsuranceBalance(state, value) {

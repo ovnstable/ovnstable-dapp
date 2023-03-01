@@ -252,7 +252,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
         ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('swapModal', ['usdPlusApproved']),
@@ -412,58 +412,62 @@ export default {
             this.sum = value;
         },
 
-        max() {
-            let balanceElement = this.balance[this.currency.id];
-            this.sum = balanceElement + "";
+        getMax() {
+          let balanceElement = this.originalBalance[this.currency.id];
+          return balanceElement ? balanceElement + '' : null;
         },
 
         async redeemAction() {
             try {
 
+              let sumInUsd = this.sum;
+              let sum;
+
               if (this.sliderPercent === 100) {
-                this.max();
+                let originalMax = this.getMax();
+                this.sum = originalMax ? originalMax : this.sum;
+                sum = this.sum;
+              } else {
+                sum = this.web3.utils.toWei(this.sum, 'mwei');
               }
 
-                let sumInUsd = this.sum;
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+              let contracts = this.contracts;
+              let from = this.account;
+              let self = this;
 
-                let contracts = this.contracts;
-                let from = this.account;
-                let self = this;
+              try {
+                  await this.refreshGasPrice();
 
-                try {
-                    await this.refreshGasPrice();
+                  let buyParams;
 
-                    let buyParams;
+                  if (this.gas == null) {
+                      buyParams = {from: from, gasPrice: this.gasPriceGwei};
+                  } else {
+                      buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+                  }
 
-                    if (this.gas == null) {
-                        buyParams = {from: from, gasPrice: this.gasPriceGwei};
-                    } else {
-                        buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
-                    }
+                  console.debug(`Swap blockchain. Redeem action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
+                  let buyResult = await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).send(buyParams).on('transactionHash', function (hash) {
+                      let tx = {
+                          hash: hash,
+                          text: 'Redeem USD+',
+                          product: 'usdPlus',
+                          productName: 'USD+',
+                          action: 'redeem',
+                          amount: sumInUsd,
+                      };
 
-                    console.debug(`Swap blockchain. Redeem action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
-                    let buyResult = await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).send(buyParams).on('transactionHash', function (hash) {
-                        let tx = {
-                            hash: hash,
-                            text: 'Redeem USD+',
-                            product: 'usdPlus',
-                            productName: 'USD+',
-                            action: 'redeem',
-                            amount: sumInUsd,
-                        };
+                      self.putTransaction(tx);
+                      self.showSuccessModal({successTxHash: hash, successAction: 'redeemUsdPlus'});
+                      self.loadTransaction();
+                  });
+              } catch (e) {
+                console.error(`Swap Redeem blockchain redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                return;
+              }
 
-                        self.putTransaction(tx);
-                        self.showSuccessModal({successTxHash: hash, successAction: 'redeemUsdPlus'});
-                        self.loadTransaction();
-                    });
-                } catch (e) {
-                  console.error(`Swap Redeem blockchain redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                  return;
-                }
-
-                self.refreshSwap();
-                self.setSum(null);
+              self.refreshSwap();
+              self.setSum(null);
             } catch (e) {
               console.error(`Swap Redeem redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             }

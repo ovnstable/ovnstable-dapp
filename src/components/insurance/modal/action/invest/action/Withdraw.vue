@@ -267,7 +267,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'account', 'insuranceBalance']),
+        ...mapGetters('accountData', ['balance', 'account', 'insuranceBalance', 'originalBalance']),
         ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('insuranceInvestModal', ['insuranceTokenApproved']),
@@ -427,9 +427,9 @@ export default {
             this.sum = value;
         },
 
-        max() {
-            let balanceElement = this.insuranceBalance.polygon;
-            this.sum = balanceElement + "";
+        getMax() {
+          let balanceElement = this.originalBalance[this.currency.id];
+          return balanceElement ? balanceElement + '' : null;
         },
 
         redemptionRequestAction() {
@@ -438,13 +438,18 @@ export default {
 
         async redeemAction() {
             try {
-
-                if (this.sliderPercent === 100) {
-                  this.max();
-                }
+                console.debug(`Swap Withdraw blockchain. Start buy action. Account: ${this.account}. estimatedGasValue: ${this.sliderPercent}`);
 
                 let sumInUsd = this.sum;
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+                let sum;
+
+                if (this.sliderPercent === 100) {
+                  let originalMax = this.getMax();
+                  this.sum = originalMax ? originalMax : this.sum;
+                  sum = this.sum;
+                } else {
+                  sum = this.web3.utils.toWei(this.sum, 'mwei');
+                }
 
                 let contracts = this.contracts;
                 let from = this.account;

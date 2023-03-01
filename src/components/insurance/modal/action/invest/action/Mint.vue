@@ -249,7 +249,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'account', 'insuranceBalance']),
+        ...mapGetters('accountData', ['balance', 'originalBalance', 'account', 'insuranceBalance']),
         ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('insuranceInvestModal', ['actionAssetApproved']),
@@ -409,25 +409,23 @@ export default {
             this.sum = value;
         },
 
-        max() {
-            let balanceElement = this.insuranceBalance.polygon;
-            this.sum = balanceElement + "";
+        getMax() {
+          let balanceElement = this.originalBalance[this.currency.id];
+          return balanceElement ? balanceElement + '' : null;
         },
 
         async buyAction() {
             try {
 
-                if (this.sliderPercent === 100) {
-                  this.max();
-                }
-
                 let sumInUsd = this.sum;
                 let sum;
 
-                if (this.assetDecimals === 18) {
-                    sum = this.web3.utils.toWei(this.sum, 'ether');
+                if (this.sliderPercent === 100) {
+                  let originalMax = this.getMax();
+                  this.sum = originalMax ? originalMax : this.sum;
+                  sum = this.sum;
                 } else {
-                    sum = this.web3.utils.toWei(this.sum, 'mwei');
+                  sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
                 }
 
                 let contracts = this.contracts;

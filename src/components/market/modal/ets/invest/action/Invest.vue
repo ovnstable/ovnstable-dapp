@@ -595,8 +595,43 @@ export default {
             this.sum = value;
         },
         async checkApprove() {
-          console.log("checkApprove");
-          await this.approveAction();
+          // console.log("checkApprove");
+          // await this.approveAction();
+
+          try {
+            this.showWaitingModal('Approving in process');
+
+            let approveSum = this.sum;
+
+            let sum;
+
+            switch (this.etsData.actionTokenDecimals) {
+              case 6:
+                sum = this.web3.utils.toWei(approveSum, 'mwei');
+                break;
+              case 8:
+                sum = this.web3.utils.toWei(approveSum, 'mwei') * 100;
+                break;
+              case 18:
+                sum = this.web3.utils.toWei(approveSum, 'ether');
+                break;
+              default:
+                break;
+            }
+
+            let allowApprove = await this.checkAllowance(sum);
+            if (!allowApprove) {
+              this.closeWaitingModal();
+              this.showErrorModal('approve');
+              return;
+            } else {
+              this.approveActionAsset();
+              this.closeWaitingModal();
+            }
+          } catch (e) {
+            console.error(`Market Invest approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+            this.showErrorModal('approve');
+          }
         },
         getMax() {
             let balanceElement = this.originalBalance[this.currency.id];

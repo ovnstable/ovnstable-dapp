@@ -17,6 +17,7 @@
                                   class="field-sum"
                                   hide-details
                                   background-color="transparent"
+                                  @change="checkApprove"
                                   v-model="sum">
                     </v-text-field>
                 </v-row>
@@ -520,6 +521,8 @@ export default {
         this.getContractCapacityValue();
 
         this.checkGalxeNft();
+
+        this.checkApprove();
     },
 
     methods: {
@@ -749,7 +752,12 @@ export default {
             }
         },
 
-        async approveAction() {
+        async checkApprove(sum) {
+          console.log("checkApprove")
+          await this.approveAction();
+        },
+
+      async approveAction() {
             try {
                 this.showWaitingModal('Approving in process');
 

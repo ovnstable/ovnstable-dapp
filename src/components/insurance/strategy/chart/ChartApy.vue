@@ -3,18 +3,18 @@
         <v-row class="chart-header-row">
             <v-col cols="6">
                 <v-row justify="start" align="left">
-                    <label class="chart-title">
+                    <label class="chart-title ml-5">
                       USD+ Insurance
                     </label>
                 </v-row>
                 <v-row justify="start" align="left">
-                  <label class="chart-sub-title-apy">
+                  <label class="chart-sub-title-apy ml-5">
                    {{ (compoundData && compoundData.firstDate) ? compoundData.firstDate : '-'}}
                   </label>
                 </v-row>
 
                 <v-row justify="start">
-                    <label class="mobile-info-title">
+                    <label class="mobile-info-title ml-5">
                       {{ (compoundData && compoundData.day) ? ($utils.formatMoneyComma(compoundData.day, 2)) + '%' : '' }}
                     </label>
                 </v-row>

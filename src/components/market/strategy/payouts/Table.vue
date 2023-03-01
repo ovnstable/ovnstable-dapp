@@ -40,6 +40,7 @@
             </td>
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">
                 $ {{ $utils.formatMoney(item.dailyProfit, 6) }}
+
             </td>
             <td v-if="item.comp" class="table-label-payouts-strategy text-right">
                 <label :class="item.comp >= 0 ? 'yield-green' : 'yield-red'">

@@ -483,7 +483,7 @@ export default {
                     }
 
                     let etsActionData = this.etsData;
-                    console.debug(`Withdraw blockchain. Redeem action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
+                    console.debug(`Withdraw blockchain. Redeem action Sum: ${sum}, usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
 
                     let buyResult = await contracts[this.etsData.exchangeContract].methods.redeem(sum).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {
@@ -550,7 +550,7 @@ export default {
                 }
               }
 
-              console.debug(`Withdraw blockchain. Confirm swap action Sum: ${sum}. Account: ${this.account}.`);
+              console.debug(`Withdraw blockchain. Confirm swap action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
@@ -601,7 +601,7 @@ export default {
                         break;
                 }
 
-                console.debug(`Withdraw blockchain. Approve action Sum: ${sum}. Account: ${this.account}.`);
+                console.debug(`Withdraw blockchain. Approve action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
 
                 let allowApprove = await this.checkAllowance(sum);
                 if (!allowApprove) {
@@ -624,7 +624,7 @@ export default {
             let from = this.account;
 
             let allowanceValue = await contracts[this.etsData.tokenContract].methods.allowance(from, contracts[this.etsData.exchangeContract].options.address).call();
-             console.debug(`Withdraw blockchain. Check allowance action Allowance: ${allowanceValue} Sum: ${sum}. Account: ${this.account}.`);
+             console.debug(`Withdraw blockchain. Check allowance action Allowance: ${allowanceValue} Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
 
             if (allowanceValue < sum) {
                 try {
@@ -669,7 +669,7 @@ export default {
                 let blockNum = await this.web3.eth.getBlockNumber();
                 let errorApi = this.polygonApi;
 
-               console.debug(`Withdraw blockchain. Estimate gas action Sum: ${sum}. Account: ${this.account}.`);
+               console.debug(`Withdraw blockchain. Estimate gas action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
 
                 await contracts[this.etsData.exchangeContract].methods.redeem(sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {

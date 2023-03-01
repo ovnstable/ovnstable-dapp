@@ -469,7 +469,7 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    console.debug(`Insurance blockchain. Withdraw action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
+                    console.debug(`Insurance blockchain. Withdraw action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
 
                     let buyResult = await contracts.insurance.polygon_exchanger.methods.redeem({ amount: sum }).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {

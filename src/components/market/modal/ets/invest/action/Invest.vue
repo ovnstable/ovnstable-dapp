@@ -647,7 +647,7 @@ export default {
                   let referral = await this.getReferralCode();
                   let etsActionData = this.etsData;
 
-                console.debug(`Invest blockchain. Buy action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
+                console.debug(`Invest blockchain. Buy action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
                 let buyResult = await contracts[this.etsData.exchangeContract].methods.buy(sum, referral).send(buyParams).on('transactionHash', function (hash) {
                       let tx = {
                           hash: hash,

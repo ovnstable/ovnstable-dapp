@@ -422,8 +422,11 @@ export default {
 
                 if (this.sliderPercent === 100) {
                   let originalMax = this.getMax();
-                  this.sum = originalMax ? originalMax : this.sum;
-                  sum = this.sum;
+                  sum = originalMax;
+                  if (!originalMax) {
+                    console.error("Original max value not exist, when confirm buy action in insurance mint.")
+                    return;
+                  }
                 } else {
                   sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
                 }
@@ -478,10 +481,15 @@ export default {
             try {
                 let sum;
 
-                if (this.assetDecimals === 18) {
-                    sum = this.web3.utils.toWei(this.sum, 'ether');
+                if (this.sliderPercent === 100) {
+                  let originalMax = this.getMax();
+                  sum = originalMax;
+                  if (!originalMax) {
+                    console.error("Original max value not exist, when confirm swap action in insurance mint.")
+                    return;
+                  }
                 } else {
-                    sum = this.web3.utils.toWei(this.sum, 'mwei');
+                  sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
                 }
 
                 let estimatedGasValue = await this.estimateGas(sum);

@@ -424,8 +424,11 @@ export default {
 
               if (this.sliderPercent === 100) {
                 let originalMax = this.getMax();
-                this.sum = originalMax ? originalMax : this.sum;
-                sum = this.sum;
+                sum = originalMax;
+                if (!originalMax) {
+                  console.error("Original max value not exist, when confirm swap action in market invest.")
+                  return;
+                }
               } else {
                 sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
               }
@@ -485,10 +488,15 @@ export default {
               let sum;
               console.debug(`Swap Mint blockchain. Start confirm process. Account: ${this.account}. assetDecimals: ${this.assetDecimals}`);
 
-              if (this.assetDecimals === 18) {
-                  sum = this.web3.utils.toWei(this.sum, 'ether');
+              if (this.sliderPercent === 100) {
+                let originalMax = this.getMax();
+                sum = originalMax;
+                if (!originalMax) {
+                  console.error("Original max value not exist, when confirm swap action in market invest.")
+                  return;
+                }
               } else {
-                  sum = this.web3.utils.toWei(this.sum, 'mwei');
+                sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
               }
 
                 console.debug(`Swap Mint blockchain. Confirm swap action Sum: ${sum}. Account: ${this.account}.`);

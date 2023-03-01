@@ -246,7 +246,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'etsBalance', 'actionAssetBalance', 'account']),
+        ...mapGetters('accountData', ['balance', 'etsBalance', 'etsOriginalBalance', 'actionAssetBalance', 'account']),
         ...mapGetters('transaction', ['transactions']),
         ...mapGetters('investModal', ['etsData', 'etsTokenApproved']),
         ...mapGetters('marketData', ['etsStrategyData']),
@@ -445,8 +445,11 @@ export default {
 
                 if (this.sliderPercent === 100) {
                   let originalMax = this.getMax();
-                  this.sum = originalMax ? originalMax : this.sum;
-                  sum = this.sum;
+                  sum = originalMax;
+                  if (!originalMax) {
+                    console.error("Original max value not exist, when confirm swap action in market invest.")
+                    return;
+                  }
                 } else {
                   switch (this.etsData.etsTokenDecimals) {
                     case 6:
@@ -459,8 +462,8 @@ export default {
                       sum = this.web3.utils.toWei(this.sum, 'ether');
                       break;
                     default:
-                      log.error("Decimals type not found for detect wei type in withdraw.", this.etsData.etsTokenDecimals);
-                      break;
+                      console.error("Decimals type not found for detect wei type in withdraw.", this.etsData.etsTokenDecimals);
+                      return;
                   }
                 }
 
@@ -523,19 +526,29 @@ export default {
             try {
                 let sum;
 
-                switch (this.etsData.etsTokenDecimals) {
-                    case 6:
-                        sum = this.web3.utils.toWei(this.sum, 'mwei');
-                        break;
-                    case 8:
-                        sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
-                        break;
-                    case 18:
-                        sum = this.web3.utils.toWei(this.sum, 'ether');
-                        break;
-                    default:
-                        break;
+              if (this.sliderPercent === 100) {
+                let originalMax = this.getMax();
+                sum = originalMax;
+                if (!originalMax) {
+                  console.error("Original max value not exist, when confirm swap action in market invest.")
+                  return;
                 }
+              } else {
+                switch (this.etsData.etsTokenDecimals) {
+                  case 6:
+                    sum = this.web3.utils.toWei(this.sum, 'mwei');
+                    break;
+                  case 8:
+                    sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
+                    break;
+                  case 18:
+                    sum = this.web3.utils.toWei(this.sum, 'ether');
+                    break;
+                  default:
+                    console.error("Decimals type not found for detect wei type in withdraw.", this.etsData.etsTokenDecimals);
+                    return;
+                }
+              }
 
               console.debug(`Withdraw blockchain. Confirm swap action Sum: ${sum}. Account: ${this.account}.`);
 

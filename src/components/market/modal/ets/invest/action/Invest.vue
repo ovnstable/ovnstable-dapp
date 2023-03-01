@@ -606,8 +606,11 @@ export default {
 
               if (this.sliderPercent === 100) {
                 let originalMax = this.getMax();
-                this.sum = originalMax ? originalMax : this.sum;
-                sum = this.sum;
+                sum = originalMax;
+                if (!originalMax) {
+                  console.error("Original max value not exist, when buy action in market invest.")
+                  return;
+                }
               } else {
                 switch (this.etsData.actionTokenDecimals) {
                   case 6:
@@ -620,8 +623,8 @@ export default {
                     sum = this.web3.utils.toWei(this.sum, 'ether');
                     break;
                   default:
-                    log.error("Decimals type not found for detect wei type in invest.", this.etsData.actionTokenDecimals);
-                    break;
+                    console.error("Decimals type not found for detect wei type in invest.", this.etsData.actionTokenDecimals);
+                    return;
                 }
               }
 
@@ -693,21 +696,31 @@ export default {
 
         async confirmSwapAction() {
             try {
-                let sum;
+              let sum;
 
-                switch (this.etsData.actionTokenDecimals) {
-                    case 6:
-                        sum = this.web3.utils.toWei(this.sum, 'mwei');
-                        break;
-                    case 8:
-                        sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
-                        break;
-                    case 18:
-                        sum = this.web3.utils.toWei(this.sum, 'ether');
-                        break;
-                    default:
-                        break;
+              if (this.sliderPercent === 100) {
+                let originalMax = this.getMax();
+                sum = originalMax;
+                if (!originalMax) {
+                  console.error("Original max value not exist, when confirm swap action in market invest.")
+                  return;
                 }
+              } else {
+                switch (this.etsData.actionTokenDecimals) {
+                  case 6:
+                    sum = this.web3.utils.toWei(this.sum, 'mwei');
+                    break;
+                  case 8:
+                    sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
+                    break;
+                  case 18:
+                    sum = this.web3.utils.toWei(this.sum, 'ether');
+                    break;
+                  default:
+                    console.error("Decimals type not found for detect wei type in invest.", this.etsData.actionTokenDecimals);
+                    return;
+                }
+              }
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {

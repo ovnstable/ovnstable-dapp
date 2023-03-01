@@ -48,9 +48,8 @@ Vue.use(VueYandexMetrika, {
 
 Sentry.init({
   Vue,
-  // dsn: "https://3ba3e27bc8674321b5e4177080ca8bf9@o4504417259552768.ingest.sentry.io/4504417260863488", // ovn email
-  // dsn: "https://e237794d4a6d441f9f9e8b4b8cd62a96@o4504559540305920.ingest.sentry.io/4504559547121664", // dtim emal
-  dsn: "https://714da32931ab44a580e95801b1b93ec5@o4504757947400192.ingest.sentry.io/4504757948448768", // stim@mwf email
+  dsn: "https://3ba3e27bc8674321b5e4177080ca8bf9@o4504417259552768.ingest.sentry.io/4504417260863488",
+  // dsn: "https://e237794d4a6d441f9f9e8b4b8cd62a96@o4504559540305920.ingest.sentry.io/4504559547121664",
   logErrors: true,
   integrations: [
     new CaptureConsole({

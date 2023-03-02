@@ -48,8 +48,16 @@ const actions = {
         commit('setAssetApproved', true);
     },
 
+    disapproveAsset({commit, dispatch, getters}) {
+        commit('setAssetApproved', false);
+    },
+
     approveUsdPlus({commit, dispatch, getters}) {
         commit('setUsdPlusApproved', true);
+    },
+
+    disapproveUsdPlus({commit, dispatch, getters}) {
+        commit('setUsdPlusApproved', false);
     },
 };
 

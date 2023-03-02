@@ -17,7 +17,8 @@
                                   class="field-sum"
                                   hide-details
                                   background-color="transparent"
-                                  v-model="sum">
+                                  v-model="sum"
+                                  @input="checkApproveCounter">
                     </v-text-field>
                 </v-row>
             </v-col>
@@ -295,6 +296,8 @@ export default {
         galxeNetworkList: [],
         isClientExistNftForGalxe: false,
         isGalxNftCheck: true,
+        sumApproveCheckerId: null,
+        sumApproveCheckerSec: 0
     }),
     watch: {
       account: function (newVal, oldVal) {
@@ -526,7 +529,7 @@ export default {
     methods: {
 
         ...mapActions("marketData", ['refreshMarket']),
-        ...mapActions("investModal", ['showRedeemView', 'approveActionAsset']),
+        ...mapActions("investModal", ['showRedeemView', 'approveActionAsset', 'disapproveActionAsset']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
@@ -571,8 +574,9 @@ export default {
           }
         },
 
-        changeSliderPercent() {
+        async changeSliderPercent() {
             this.sum = (this.actionAssetBalance[this.etsData.actionAsset + '_' + this.etsData.actionTokenDecimals] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            await this.checkApprove();
         },
 
         isNumber: function (evt) {
@@ -593,7 +597,70 @@ export default {
         setSum(value) {
             this.sum = value;
         },
+        async checkApproveCounter() {
+          this.sumApproveCheckerSec = 0;
+          let intervalId = setInterval(async () => {
+            this.sumApproveCheckerSec++;
 
+            if (this.sumApproveCheckerSec >= 2) {
+              if (this.sumApproveCheckerId === intervalId) {
+                this.sumApproveCheckerSec = 0;
+                try {
+                  await this.checkApprove();
+                } catch (e) {
+                  // ignore
+                } finally {
+                  clearInterval(intervalId)
+                }
+              } else {
+                clearInterval(intervalId)
+              }
+
+            }
+          }, 1000);
+
+          this.sumApproveCheckerId = intervalId;
+        },
+        async checkApprove() {
+          console.log("Check Approve action");
+
+          try {
+            if (!this.sum || !isNaN(this.sum) || !this.account) {
+              return;
+            }
+
+            let approveSum = this.sum;
+
+            let sum;
+
+            switch (this.etsData.actionTokenDecimals) {
+              case 6:
+                sum = this.web3.utils.toWei(approveSum, 'mwei');
+                break;
+              case 8:
+                sum = this.web3.utils.toWei(approveSum, 'mwei') * 100;
+                break;
+              case 18:
+                sum = this.web3.utils.toWei(approveSum, 'ether');
+                break;
+              default:
+                break;
+            }
+
+            let allowApprove = await this.checkAllowance(sum);
+            if (!allowApprove) {
+              await this.approveAction();
+              return false;
+            } else {
+              this.approveActionAsset();
+              return true;
+            }
+          } catch (e) {
+            console.error(`Market Invest approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+            this.showErrorModal('approve');
+            return false;
+          }
+        },
         getMax() {
             let balanceElement = this.originalBalance[this.currency.id];
             return balanceElement ? balanceElement + '' : null;
@@ -629,6 +696,10 @@ export default {
                 }
               }
 
+              if (!(await this.checkApprove())) {
+                console.debug(`Invest blockchain. Buy action Approve not pass. Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
+                return;
+              }
 
               let contracts = this.contracts;
               let from = this.account;
@@ -777,6 +848,7 @@ export default {
                 if (!allowApprove) {
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
+                    this.disapproveActionAsset();
                     return;
                 } else {
                     this.approveActionAsset();

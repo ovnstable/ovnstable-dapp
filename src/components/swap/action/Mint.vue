@@ -17,7 +17,8 @@
                                   class="field-sum"
                                   hide-details
                                   background-color="transparent"
-                                  v-model="sum">
+                                  v-model="sum"
+                                  @input="checkApproveCounter">
                     </v-text-field>
                 </v-row>
             </v-col>
@@ -245,7 +246,10 @@ export default {
 
         sliderPercent: 0,
         stepLabels: ['', 'Approve', 'Confirmation'],
-        step: 0
+        step: 0,
+
+        sumApproveCheckerId: null,
+        sumApproveCheckerSec: 0
     }),
 
     computed: {
@@ -374,7 +378,7 @@ export default {
     methods: {
 
         ...mapActions("swapData", ['refreshSwap']),
-        ...mapActions("swapModal", ['showRedeemView', 'approveAsset']),
+        ...mapActions("swapModal", ['showRedeemView', 'approveAsset', 'disapproveAsset']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
@@ -409,7 +413,53 @@ export default {
         setSum(value) {
             this.sum = value;
         },
+        async checkApproveCounter() {
+          this.sumApproveCheckerSec = 0;
+          let intervalId = setInterval(async () => {
+            this.sumApproveCheckerSec++;
 
+            if (this.sumApproveCheckerSec >= 2) {
+              if (this.sumApproveCheckerId === intervalId) {
+                this.sumApproveCheckerSec = 0;
+                try {
+                  await this.checkApprove();
+                } catch (e) {
+                  // ignore
+                } finally {
+                  clearInterval(intervalId)
+                }
+              } else {
+                clearInterval(intervalId)
+              }
+
+            }
+          }, 1000);
+
+          this.sumApproveCheckerId = intervalId;
+        },
+        async checkApprove() {
+          console.log("Check Approve action");
+
+          try {
+            if (!this.sum || !isNaN(this.sum) || !this.account) {
+              return;
+            }
+
+            let sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
+            let allowApprove = await this.checkAllowance(sum);
+            if (!allowApprove) {
+              await this.approveAction();
+              return false;
+            } else {
+              this.approveAsset();
+              return true;
+            }
+          } catch (e) {
+            console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+            this.showErrorModal('approve');
+            return false;
+          }
+        },
         getMax() {
             let balanceElement = this.originalBalance[this.currency.id];
             return balanceElement ? balanceElement + '' : null;
@@ -499,6 +549,11 @@ export default {
                 sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
               }
 
+              if (!(await this.checkApprove())) {
+                console.debug(`Swap. Buy action Approve not pass. Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
+                return;
+              }
+
                 console.debug(`Swap Mint blockchain. Confirm swap action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
 
                 this.trackClick({action: 'confirm-swap-click', event_category: 'Mint', event_label: 'Confirm Mint Action', value: 1 });
@@ -552,6 +607,7 @@ export default {
                     this.trackClick({action: 'approve-action-click', event_category: 'Mint', event_label: 'Approve Mint Action', value: 1 });
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
+                    this.disapproveAsset();
                 } else {
                     this.approveAsset();
                     this.closeWaitingModal();

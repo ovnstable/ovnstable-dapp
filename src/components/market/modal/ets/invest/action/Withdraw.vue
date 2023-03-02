@@ -17,7 +17,8 @@
                                   class="field-sum"
                                   hide-details
                                   background-color="transparent"
-                                  v-model="sum">
+                                  v-model="sum"
+                                  @input="checkApproveCounter">
                     </v-text-field>
                 </v-row>
             </v-col>
@@ -243,6 +244,9 @@ export default {
         step: 0,
 
         minRedeemFee: null,
+
+        sumApproveCheckerId: null,
+        sumApproveCheckerSec: 0
     }),
 
     computed: {
@@ -396,7 +400,7 @@ export default {
     methods: {
 
         ...mapActions("marketData", ['refreshMarket']),
-        ...mapActions("investModal", ['showMintView', 'approveEtsToken']),
+        ...mapActions("investModal", ['showMintView', 'approveEtsToken', 'disapproveEtsToken']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
@@ -431,10 +435,73 @@ export default {
         setSum(value) {
             this.sum = value;
         },
+        async checkApproveCounter() {
+          this.sumApproveCheckerSec = 0;
+          let intervalId = setInterval(async () => {
+            this.sumApproveCheckerSec++;
 
-      getMax() {
-          let balanceElement = this.etsOriginalBalance[this.etsData.name];
-          return balanceElement ? balanceElement + '' : null;
+            if (this.sumApproveCheckerSec >= 2) {
+              if (this.sumApproveCheckerId === intervalId) {
+                this.sumApproveCheckerSec = 0;
+                try {
+                  await this.checkApprove();
+                } catch (e) {
+                  // ignore
+                } finally {
+                  clearInterval(intervalId)
+                }
+              } else {
+                clearInterval(intervalId)
+              }
+
+            }
+          }, 1000);
+
+          this.sumApproveCheckerId = intervalId;
+        },
+        async checkApprove() {
+          console.log("Check Approve action");
+
+          try {
+            if (!this.sum || !isNaN(this.sum) || !this.account) {
+              return;
+            }
+
+            let approveSum = this.sum;
+
+            let sum;
+
+            switch (this.etsData.actionTokenDecimals) {
+              case 6:
+                sum = this.web3.utils.toWei(approveSum, 'mwei');
+                break;
+              case 8:
+                sum = this.web3.utils.toWei(approveSum, 'mwei') * 100;
+                break;
+              case 18:
+                sum = this.web3.utils.toWei(approveSum, 'ether');
+                break;
+              default:
+                break;
+            }
+
+            let allowApprove = await this.checkAllowance(sum);
+            if (!allowApprove) {
+              await this.approveAction();
+              return false;
+            } else {
+              this.approveEtsToken();
+              return true;
+            }
+          } catch (e) {
+            console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+            this.showErrorModal('approve');
+            return false;
+          }
+        },
+        getMax() {
+            let balanceElement = this.etsOriginalBalance[this.etsData.name];
+            return balanceElement ? balanceElement + '' : null;
         },
 
         async redeemAction() {
@@ -465,6 +532,11 @@ export default {
                       console.error("Decimals type not found for detect wei type in withdraw.", this.etsData.etsTokenDecimals);
                       return;
                   }
+                }
+
+                if (!(await this.checkApprove())) {
+                  console.debug(`Invest ets. Buy action Approve not pass. Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
+                  return;
                 }
 
                 let contracts = this.contracts;
@@ -607,6 +679,7 @@ export default {
                 if (!allowApprove) {
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
+                    this.disapproveEtsToken();
                     return;
                 } else {
                     this.approveEtsToken();

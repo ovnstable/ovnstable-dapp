@@ -56,8 +56,16 @@ const actions = {
         commit('setEtsTokenApproved', true);
     },
 
+    disapproveEtsToken({commit, dispatch, getters}) {
+        commit('setEtsTokenApproved', false);
+    },
+
     approveActionAsset({commit, dispatch, getters}) {
         commit('setActionAssetApproved', true);
+    },
+
+    disapproveActionAsset({commit, dispatch, getters}) {
+        commit('setActionAssetApproved', false);
     },
 };
 

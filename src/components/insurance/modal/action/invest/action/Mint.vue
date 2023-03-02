@@ -390,8 +390,10 @@ export default {
 
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
-        changeSliderPercent() {
+        async changeSliderPercent() {
             this.sum = (this.balance.asset * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = isNaN(this.sum) ? 0 : this.sum
+            await this.checkApprove();
         },
 
         isNumber: function(evt) {

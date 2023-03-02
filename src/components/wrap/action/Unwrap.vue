@@ -404,6 +404,7 @@ export default {
 
         changeSliderPercent() {
             this.sum = (this.balance.wUsdPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = isNaN(this.sum) ? 0 : this.sum
         },
 
         isNumber: function(evt) {

@@ -576,6 +576,7 @@ export default {
 
         async changeSliderPercent() {
             this.sum = (this.actionAssetBalance[this.etsData.actionAsset + '_' + this.etsData.actionTokenDecimals] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = isNaN(this.sum) ? 0 : this.sum
             await this.checkApprove();
         },
 
@@ -625,7 +626,7 @@ export default {
           console.log("Check Approve action");
 
           try {
-            if (!this.sum || !isNaN(this.sum) || !this.account) {
+            if (!this.sum || isNaN(this.sum) || !this.account) {
               return;
             }
 

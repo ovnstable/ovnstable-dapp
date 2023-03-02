@@ -16,9 +16,6 @@
                 </v-toolbar>
 
                 <v-card-text class="pt-8 content-container">
-<!--                    <v-row class="invest-body-row mx-n2" align="center">
-                        <label class="modal-link-label" @click="mintAction">Mint USD+</label>
-                    </v-row>-->
                     <v-row class="invest-body-row mt-5 mx-n2" align="center">
                         <Mint v-if="isMintView"/>
                         <Withdraw v-else/>

@@ -8,7 +8,6 @@
             <th class="table-header-payouts-strategy text-right" v-if="!minimized">
                 Daily profit{{ minimized ? '' : (profitLabel ? ', ' + profitLabel : '')}}
             </th>
-
             <th v-if="(payoutData && payoutData[0]) ? payoutData[0].comp : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
               <div class="return-container">
                 <label>
@@ -21,6 +20,9 @@
                   </v-row>
                 </div>
               </div>
+            </th>
+            <th v-else-if="payoutData && payoutData[0] ? payoutData[0].annualizedYield : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
+                Annualized yield{{ minimized ? '' : ', % per year'}}
             </th>
             <th class="table-header-payouts-strategy text-right" width="180px" v-if="!minimized">
                 Explorer
@@ -45,6 +47,11 @@
             <td v-if="item.comp" class="table-label-payouts-strategy text-right">
                 <label :class="item.comp >= 0 ? 'yield-green' : 'yield-red'">
                     {{ $utils.formatMoney(item.comp, 2) }}%
+                </label>
+            </td>
+            <td v-else-if="item.annualizedYield" class="table-label-payouts-strategy text-right">
+                <label :class="item.annualizedYield > 0 ? 'yield-green' : 'yield-red'">
+                    {{ $utils.formatMoney(item.annualizedYield, 1) }}%
                 </label>
             </td>
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">

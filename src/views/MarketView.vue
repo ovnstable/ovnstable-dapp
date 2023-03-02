@@ -47,14 +47,14 @@
         </v-row>
         <v-divider class="prototypes-list-divider"></v-divider>
 
-          <template v-if="openCollateralList">
-              <EtsListHeader />
+        <template v-if="openCollateralList">
+          <EtsListHeader />
 
-              <EtsListCard class="mt-2"
-                           v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && !value.hasCap))"
-                           :key="component.id"
-                           :card-data="component"/>
-          </template>
+          <EtsListCard class="mt-2"
+                       v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && !value.hasCap))"
+                       :key="component.id"
+                       :card-data="component"/>
+        </template>
 
       </template>
 
@@ -72,19 +72,19 @@
         </v-row>
         <v-divider class="prototypes-list-divider"></v-divider>
 
-          <template v-if="openPrototypeList">
-              <EtsListHeader />
+        <template v-if="openPrototypeList">
+          <EtsListHeader />
 
-              <EtsListCard class="mt-2"
-                           v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && (value.prototype || value.openPrototype)))"
-                           :key="component.id"
-                           :card-data="component"/>
-          </template>
+          <EtsListCard class="mt-2"
+                       v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && (value.prototype || value.openPrototype)))"
+                       :key="component.id"
+                       :card-data="component"/>
+        </template>
 
       </template>
 
       <template v-if="sortedCardList.filter(value => value.data.archive).length > 0" >
-        <v-row class="ma-0 mb-1 mt-10" align="center">
+        <v-row class="ma-0 mb-1 mt-5" align="center">
           <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-archive-outline</v-icon>
           <label class="prototypes-label ml-2 archive-label" @click="openArchiveList = !openArchiveList">Archive</label>
           <div class="select-bar-main-container ml-7" @click="openArchiveList = !openArchiveList">

@@ -630,7 +630,7 @@ export default {
           this.sumApproveCheckerId = intervalId;
         },
         async checkApprove() {
-          console.log("Check Approve action");
+          console.log("Check Approve action", this.sum);
 
           try {
             if (!this.sum || isNaN(this.sum) || !this.account) {
@@ -656,8 +656,9 @@ export default {
             }
 
             let allowApprove = await this.checkAllowance(sum);
+            console.log("allowApprove : ", allowApprove, sum)
             if (!allowApprove) {
-              await this.approveAction();
+              this.disapproveActionAsset();
               return false;
             } else {
               this.approveActionAsset();
@@ -666,6 +667,7 @@ export default {
           } catch (e) {
             console.error(`Market Invest approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             this.showErrorModal('approve');
+            this.disapproveActionAsset();
             return false;
           }
         },
@@ -853,6 +855,7 @@ export default {
                 }
 
                 let allowApprove = await this.checkAllowance(sum);
+                allowApprove = !allowApprove ? (await this.approveBlockchainAction(sum)) : true;
                 if (!allowApprove) {
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
@@ -867,44 +870,44 @@ export default {
               this.showErrorModal('approve');
             }
         },
+        async approveBlockchainAction(sum) {
+            try {
+              await this.refreshGasPrice();
+              let contracts = this.contracts;
+              let from = this.account;
 
-        async checkAllowance(sum) {
+              let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-            let contracts = this.contracts;
-            let from = this.account;
+              let tx = await contracts[this.etsData.actionAsset].methods.approve(contracts[this.etsData.exchangeContract].options.address, sum).send(approveParams);
 
-            let allowanceValue = await contracts[this.etsData.actionAsset].methods.allowance(from, contracts[this.etsData.exchangeContract].options.address).call();
+              let minted = true;
+              while (minted) {
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
 
-            if (allowanceValue < sum) {
-                try {
-                    await this.refreshGasPrice();
-                    let approveParams = {gasPrice: this.gasPriceGwei, from: from};
-
-                    let tx = await contracts[this.etsData.actionAsset].methods.approve(contracts[this.etsData.exchangeContract].options.address, sum).send(approveParams);
-
-                    let minted = true;
-                    while (minted) {
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                        let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
-
-                        if (receipt) {
-                            if (receipt.status)
-                                return true;
-                            else {
-                                return false;
-                            }
-                        }
-                    }
-
+                if (receipt) {
+                  if (receipt.status)
                     return true;
-                } catch (e) {
-                  console.error(`Market Invest allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                  return false;
+                  else {
+                    return false;
+                  }
                 }
-            }
+              }
 
-            return true;
-        },
+              return true;
+            } catch (e) {
+              console.error(`Market Invest allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              return false;
+            }
+          },
+          async checkAllowance(sum) {
+              let contracts = this.contracts;
+              let from = this.account;
+
+              let allowanceValue = await contracts[this.etsData.actionAsset].methods.allowance(from, contracts[this.etsData.exchangeContract].options.address).call();
+              console.log('allowanceValue: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
+              return allowanceValue * 1 >= sum * 1;
+          },
 
         async estimateGas(sum) {
 

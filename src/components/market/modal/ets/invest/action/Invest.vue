@@ -292,7 +292,7 @@ export default {
         minMintFee: null,
         contractCapacity: null,
 
-        galxeNetworkList: [42161],
+        galxeNetworkList: [],
         isClientExistNftForGalxe: false,
         isGalxNftCheck: true,
     }),
@@ -307,7 +307,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'etsBalance', 'actionAssetBalance', 'account']),
+        ...mapGetters('accountData', ['balance', 'originalBalance', 'etsBalance', 'actionAssetBalance', 'account']),
         ...mapGetters('transaction', ['transactions']),
         ...mapGetters('investModal', ['etsData', 'actionAssetApproved']),
         ...mapGetters('marketData', ['etsStrategyData']),
@@ -520,6 +520,7 @@ export default {
         this.getContractCapacityValue();
 
         this.checkGalxeNft();
+
     },
 
     methods: {
@@ -593,95 +594,102 @@ export default {
             this.sum = value;
         },
 
-        max() {
-            let balanceElement = this.balance[this.currency.id];
-            this.sum = balanceElement + "";
-        },
+        getMax() {
+            let balanceElement = this.originalBalance[this.currency.id];
+            return balanceElement ? balanceElement + '' : null;
+          },
 
-        async buyAction() {
+          async buyAction() {
             try {
 
+              let sumInUsd = this.sum;
+              let sum;
+
               if (this.sliderPercent === 100) {
-                this.max();
-              }
-
-                let sumInUsd = this.sum;
-                let sum;
-
-                switch (this.etsData.actionTokenDecimals) {
-                    case 6:
-                        sum = this.web3.utils.toWei(this.sum, 'mwei');
-                        break;
-                    case 8:
-                        sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
-                        break;
-                    case 18:
-                        sum = this.web3.utils.toWei(this.sum, 'ether');
-                        break;
-                    default:
-                        break;
-                }
-
-                let contracts = this.contracts;
-                let from = this.account;
-                let self = this;
-
-                try {
-                    await this.refreshGasPrice();
-
-                    let buyParams;
-
-                    if (this.gas == null) {
-                        buyParams = {from: from, gasPrice: this.gasPriceGwei};
-                    } else {
-                        buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
-                    }
-
-                    let referral = await this.getReferralCode();
-                    let etsActionData = this.etsData;
-
-                  console.debug(`Invest blockchain. Buy action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
-                  let buyResult = await contracts[this.etsData.exchangeContract].methods.buy(sum, referral).send(buyParams).on('transactionHash', function (hash) {
-                        let tx = {
-                            hash: hash,
-                            text: 'Mint ETS ' + etsActionData.nameUp,
-                            product: 'ets_' + etsActionData.name,
-                            productName: 'ETS ' + etsActionData.nameToken,
-                            action: 'mint',
-                            amount: sumInUsd,
-                        };
-
-                        self.putTransaction(tx);
-                        self.showSuccessModal({
-                            successTxHash: hash,
-                            successAction: 'mintEts',
-                            etsData: etsActionData
-                        });
-                        self.loadTransaction();
-                    });
-
-                    if (this.isOvercapAvailable) {
-                        let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
-                        let useOvercapSum;
-
-                        if (noOvercapSum <= 0) {
-                            useOvercapSum = this.sum;
-                        } else {
-                            useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
-                        }
-
-                        await this.useOvercap({
-                            overcapLeft: this.overcapRemaining(),
-                            overcapVolume: useOvercapSum
-                        });
-                    }
-                } catch (e) {
-                  console.error(`Market Invest blockchain buy error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                let originalMax = this.getMax();
+                sum = originalMax;
+                if (!originalMax) {
+                  console.error("Original max value not exist, when buy action in market invest.")
                   return;
                 }
+              } else {
+                switch (this.etsData.actionTokenDecimals) {
+                  case 6:
+                    sum = this.web3.utils.toWei(this.sum, 'mwei');
+                    break;
+                  case 8:
+                    sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
+                    break;
+                  case 18:
+                    sum = this.web3.utils.toWei(this.sum, 'ether');
+                    break;
+                  default:
+                    console.error("Decimals type not found for detect wei type in invest.", this.etsData.actionTokenDecimals);
+                    return;
+                }
+              }
 
-                self.refreshMarket();
-                self.setSum(null);
+
+              let contracts = this.contracts;
+              let from = this.account;
+              let self = this;
+
+              try {
+                  await this.refreshGasPrice();
+
+                  let buyParams;
+
+                  if (this.gas == null) {
+                      buyParams = {from: from, gasPrice: this.gasPriceGwei};
+                  } else {
+                      buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+                  }
+
+                  let referral = await this.getReferralCode();
+                  let etsActionData = this.etsData;
+
+                console.debug(`Invest blockchain. Buy action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
+                let buyResult = await contracts[this.etsData.exchangeContract].methods.buy(sum, referral).send(buyParams).on('transactionHash', function (hash) {
+                      let tx = {
+                          hash: hash,
+                          text: 'Mint ETS ' + etsActionData.nameUp,
+                          product: 'ets_' + etsActionData.name,
+                          productName: 'ETS ' + etsActionData.nameToken,
+                          action: 'mint',
+                          amount: sumInUsd,
+                      };
+
+                      self.putTransaction(tx);
+                      self.showSuccessModal({
+                          successTxHash: hash,
+                          successAction: 'mintEts',
+                          etsData: etsActionData
+                      });
+                      self.loadTransaction();
+                  });
+
+                  if (this.isOvercapAvailable) {
+                      let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
+                      let useOvercapSum;
+
+                      if (noOvercapSum <= 0) {
+                          useOvercapSum = this.sum;
+                      } else {
+                          useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
+                      }
+
+                      await this.useOvercap({
+                          overcapLeft: this.overcapRemaining(),
+                          overcapVolume: useOvercapSum
+                      });
+                  }
+              } catch (e) {
+                console.error(`Market Invest blockchain buy error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                return;
+              }
+
+              self.refreshMarket();
+              self.setSum(null);
             } catch (e) {
               console.error(`Market Invest buy error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             }
@@ -689,21 +697,31 @@ export default {
 
         async confirmSwapAction() {
             try {
-                let sum;
+              let sum;
 
-                switch (this.etsData.actionTokenDecimals) {
-                    case 6:
-                        sum = this.web3.utils.toWei(this.sum, 'mwei');
-                        break;
-                    case 8:
-                        sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
-                        break;
-                    case 18:
-                        sum = this.web3.utils.toWei(this.sum, 'ether');
-                        break;
-                    default:
-                        break;
+              if (this.sliderPercent === 100) {
+                let originalMax = this.getMax();
+                sum = originalMax;
+                if (!originalMax) {
+                  console.error("Original max value not exist, when confirm swap action in market invest.")
+                  return;
                 }
+              } else {
+                switch (this.etsData.actionTokenDecimals) {
+                  case 6:
+                    sum = this.web3.utils.toWei(this.sum, 'mwei');
+                    break;
+                  case 8:
+                    sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
+                    break;
+                  case 18:
+                    sum = this.web3.utils.toWei(this.sum, 'ether');
+                    break;
+                  default:
+                    console.error("Decimals type not found for detect wei type in invest.", this.etsData.actionTokenDecimals);
+                    return;
+                }
+              }
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
@@ -732,7 +750,8 @@ export default {
             }
         },
 
-        async approveAction() {
+
+      async approveAction() {
             try {
                 this.showWaitingModal('Approving in process');
 

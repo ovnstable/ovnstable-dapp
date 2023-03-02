@@ -252,7 +252,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
         ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('swapModal', ['usdPlusApproved']),
@@ -412,58 +412,65 @@ export default {
             this.sum = value;
         },
 
-        max() {
-            let balanceElement = this.balance[this.currency.id];
-            this.sum = balanceElement + "";
+        getMax() {
+          let balanceElement = this.originalBalance[this.currency.id];
+          return balanceElement ? balanceElement + '' : null;
         },
 
         async redeemAction() {
             try {
 
+              let sumInUsd = this.sum;
+              let sum;
+
               if (this.sliderPercent === 100) {
-                this.max();
-              }
-
-                let sumInUsd = this.sum;
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
-
-                let contracts = this.contracts;
-                let from = this.account;
-                let self = this;
-
-                try {
-                    await this.refreshGasPrice();
-
-                    let buyParams;
-
-                    if (this.gas == null) {
-                        buyParams = {from: from, gasPrice: this.gasPriceGwei};
-                    } else {
-                        buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
-                    }
-
-                    console.debug(`Swap blockchain. Redeem action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
-                    let buyResult = await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).send(buyParams).on('transactionHash', function (hash) {
-                        let tx = {
-                            hash: hash,
-                            text: 'Redeem USD+',
-                            product: 'usdPlus',
-                            productName: 'USD+',
-                            action: 'redeem',
-                            amount: sumInUsd,
-                        };
-
-                        self.putTransaction(tx);
-                        self.showSuccessModal({successTxHash: hash, successAction: 'redeemUsdPlus'});
-                        self.loadTransaction();
-                    });
-                } catch (e) {
-                  console.error(`Swap Redeem blockchain redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                let originalMax = this.getMax();
+                sum = originalMax;
+                if (!originalMax) {
+                  console.error("Original max value not exist, when confirm swap action in market invest.")
                   return;
                 }
+              } else {
+                sum = this.web3.utils.toWei(this.sum, 'mwei');
+              }
 
-                self.refreshSwap();
-                self.setSum(null);
+              let contracts = this.contracts;
+              let from = this.account;
+              let self = this;
+
+              try {
+                  await this.refreshGasPrice();
+
+                  let buyParams;
+
+                  if (this.gas == null) {
+                      buyParams = {from: from, gasPrice: this.gasPriceGwei};
+                  } else {
+                      buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+                  }
+
+                  console.debug(`Swap blockchain. Redeem action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
+                  let buyResult = await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).send(buyParams).on('transactionHash', function (hash) {
+                      let tx = {
+                          hash: hash,
+                          text: 'Redeem USD+',
+                          product: 'usdPlus',
+                          productName: 'USD+',
+                          action: 'redeem',
+                          amount: sumInUsd,
+                      };
+
+                      self.putTransaction(tx);
+                      self.showSuccessModal({successTxHash: hash, successAction: 'redeemUsdPlus'});
+                      self.loadTransaction();
+                  });
+              } catch (e) {
+                console.error(`Swap Redeem blockchain redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                return;
+              }
+
+              self.refreshSwap();
+              self.setSum(null);
             } catch (e) {
               console.error(`Swap Redeem redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             }
@@ -471,7 +478,18 @@ export default {
 
         async confirmSwapAction() {
             try {
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+                let sum;
+
+                if (this.sliderPercent === 100) {
+                  let originalMax = this.getMax();
+                  sum = originalMax;
+                  if (!originalMax) {
+                    console.error("Original max value not exist, when confirm swap action in market invest.")
+                    return;
+                  }
+                } else {
+                  sum = this.web3.utils.toWei(this.sum, 'mwei');
+                }
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
@@ -507,7 +525,7 @@ export default {
 
                 let approveSum = "10000000";
                 let sum = this.web3.utils.toWei(approveSum, 'mwei');
-                console.debug(`Swap Mint blockchain. Approve action. Sum: ${sum}. Account: ${this.account}.`);
+                console.debug(`Swap Mint blockchain. Approve action. Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
 
               let allowApprove = await this.checkAllowance(sum);
                 if (!allowApprove) {
@@ -538,7 +556,7 @@ export default {
                     let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
                     let tx = await contracts.usdPlus.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
-                    console.debug(`Swap Mint blockchain. Allowance Sum: ${sum}. Account: ${this.account}.`);
+                    console.debug(`Swap Mint blockchain. Allowance Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
 
                     let minted = true;
                     while (minted) {
@@ -577,7 +595,7 @@ export default {
                 let blockNum = await this.web3.eth.getBlockNumber();
                 let errorApi = this.polygonApi;
 
-                console.debug(`Swap Mint blockchain. Estimate gas action Sum: ${sum}. Account: ${this.account}.`);
+                console.debug(`Swap Mint blockchain. Estimate gas action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
                 await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;

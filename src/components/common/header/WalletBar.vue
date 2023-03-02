@@ -82,8 +82,6 @@ export default {
     created() {
         window.setInterval(() => {
             this.refreshBalance();
-            this.refreshSupply();
-            this.refreshInsuranceSupply();
         }, 5000)
     },
 
@@ -96,7 +94,6 @@ export default {
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('accountUI', ['showAccountProfile', 'showTxHistory']),
         ...mapActions('accountData', ['refreshBalance']),
-        // ...mapActions('supplyData', ['refreshSupply', 'refreshInsuranceSupply']),
         ...mapActions('track', ['trackClick']),
         ...mapActions('magicEye', ['switchEye']),
 

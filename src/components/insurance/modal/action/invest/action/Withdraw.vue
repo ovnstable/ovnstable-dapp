@@ -267,7 +267,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'account', 'insuranceBalance']),
+        ...mapGetters('accountData', ['balance', 'account', 'insuranceBalance', 'originalBalance']),
         ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('insuranceInvestModal', ['insuranceTokenApproved']),
@@ -427,9 +427,9 @@ export default {
             this.sum = value;
         },
 
-        max() {
-            let balanceElement = this.insuranceBalance.polygon;
-            this.sum = balanceElement + "";
+        getMax() {
+          let balanceElement = this.originalBalance[this.currency.id];
+          return balanceElement ? balanceElement + '' : null;
         },
 
         redemptionRequestAction() {
@@ -438,13 +438,21 @@ export default {
 
         async redeemAction() {
             try {
-
-                if (this.sliderPercent === 100) {
-                  this.max();
-                }
+                console.debug(`Swap Withdraw blockchain. Start buy action. Account: ${this.account}. estimatedGasValue: ${this.sliderPercent}`);
 
                 let sumInUsd = this.sum;
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+                let sum;
+
+                if (this.sliderPercent === 100) {
+                  let originalMax = this.getMax();
+                  sum = originalMax;
+                  if (!originalMax) {
+                    console.error("Original max value not exist, when confirm redeem action in insurance redeem.")
+                    return;
+                  }
+                } else {
+                  sum = this.web3.utils.toWei(this.sum, 'mwei');
+                }
 
                 let contracts = this.contracts;
                 let from = this.account;
@@ -461,7 +469,7 @@ export default {
                         buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                     }
 
-                    console.debug(`Insurance blockchain. Withdraw action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
+                    console.debug(`Insurance blockchain. Withdraw action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
 
                     let buyResult = await contracts.insurance.polygon_exchanger.methods.redeem({ amount: sum }).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {
@@ -491,7 +499,18 @@ export default {
 
         async confirmSwapAction() {
             try {
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
+                let sum;
+
+                if (this.sliderPercent === 100) {
+                  let originalMax = this.getMax();
+                  sum = originalMax;
+                  if (!originalMax) {
+                    console.error("Original max value not exist, when confirm swap action in insurance redeem.")
+                    return;
+                  }
+                } else {
+                  sum = this.web3.utils.toWei(this.sum, 'mwei');
+                }
 
                 let estimatedGasValue = await this.estimateGas(sum);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {

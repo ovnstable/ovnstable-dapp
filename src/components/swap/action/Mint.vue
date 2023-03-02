@@ -249,7 +249,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
         ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('swapModal', ['assetApproved']),
@@ -410,70 +410,74 @@ export default {
             this.sum = value;
         },
 
-        max() {
-            let balanceElement = this.balance[this.currency.id];
-            this.sum = balanceElement + "";
+        getMax() {
+            let balanceElement = this.originalBalance[this.currency.id];
+            return balanceElement ? balanceElement + '' : null;
         },
 
         async buyAction() {
             try {
+              console.debug(`Swap Mint blockchain. Start buy action. Account: ${this.account}. estimatedGasValue: ${this.sliderPercent}`);
 
-                if (this.sliderPercent === 100) {
-                  this.max();
+              let sumInUsd = this.sum;
+              let sum;
+
+              if (this.sliderPercent === 100) {
+                let originalMax = this.getMax();
+                sum = originalMax;
+                if (!originalMax) {
+                  console.error("Original max value not exist, when confirm swap action in market invest.")
+                  return;
                 }
+              } else {
+                sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
+              }
 
-                let sumInUsd = this.sum;
-                let sum;
+              console.debug(`Swap Mint blockchain. Start buy action. Account: ${this.account}. assetDecimals: ${this.assetDecimals}, sum ${sum}`);
 
-                if (this.assetDecimals === 18) {
-                    sum = this.web3.utils.toWei(this.sum, 'ether');
-                } else {
-                    sum = this.web3.utils.toWei(this.sum, 'mwei');
-                }
+              let contracts = this.contracts;
+              let from = this.account;
+              let self = this;
 
-                let contracts = this.contracts;
-                let from = this.account;
-                let self = this;
+              try {
+                  await this.refreshGasPrice();
 
-                try {
-                    await this.refreshGasPrice();
+                  let buyParams;
 
-                    let buyParams;
+                  if (this.gas == null) {
+                      buyParams = {from: from, gasPrice: this.gasPriceGwei};
+                  } else {
+                      buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+                  }
 
-                    if (this.gas == null) {
-                        buyParams = {from: from, gasPrice: this.gasPriceGwei};
-                    } else {
-                        buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
-                    }
+                  let mintParams = {
+                      asset: contracts.asset.options.address,
+                      amount: sum,
+                      referral: await this.getReferralCode(),
+                  }
 
-                    let mintParams = {
-                        asset: contracts.asset.options.address,
-                        amount: sum,
-                        referral: await this.getReferralCode(),
-                    }
+                  console.debug(`Swap blockchain. Mint action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
+                  let buyResult = await contracts.exchange.methods.mint(mintParams).send(buyParams).on('transactionHash', function (hash) {
+                      let tx = {
+                          hash: hash,
+                          text: 'Mint USD+',
+                          product: 'usdPlus',
+                          productName: 'USD+',
+                          action: 'mint',
+                          amount: sumInUsd,
+                      };
 
-                    console.debug(`Swap blockchain. Mint action Sum: ${sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
-                    let buyResult = await contracts.exchange.methods.mint(mintParams).send(buyParams).on('transactionHash', function (hash) {
-                        let tx = {
-                            hash: hash,
-                            text: 'Mint USD+',
-                            product: 'usdPlus',
-                            productName: 'USD+',
-                            action: 'mint',
-                            amount: sumInUsd,
-                        };
+                      self.putTransaction(tx);
+                      self.showSuccessModal({successTxHash: hash, successAction: 'mintUsdPlus'});
+                      self.loadTransaction();
+                  });
+              } catch (e) {
+                  console.error(`Swap Mint contract buy action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                  return;
+              }
 
-                        self.putTransaction(tx);
-                        self.showSuccessModal({successTxHash: hash, successAction: 'mintUsdPlus'});
-                        self.loadTransaction();
-                    });
-                } catch (e) {
-                    console.error(`Swap Mint contract buy action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                    return;
-                }
-
-                self.refreshSwap();
-                self.setSum(null);
+              self.refreshSwap();
+              self.setSum(null);
             } catch (e) {
               console.error(`Swap Mint buy action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             }
@@ -481,19 +485,27 @@ export default {
 
         async confirmSwapAction() {
             try {
-                let sum;
+              let sum;
+              console.debug(`Swap Mint blockchain. Start confirm process. Account: ${this.account}. assetDecimals: ${this.assetDecimals}`);
 
-                if (this.assetDecimals === 18) {
-                    sum = this.web3.utils.toWei(this.sum, 'ether');
-                } else {
-                    sum = this.web3.utils.toWei(this.sum, 'mwei');
+              if (this.sliderPercent === 100) {
+                let originalMax = this.getMax();
+                sum = originalMax;
+                if (!originalMax) {
+                  console.error("Original max value not exist, when confirm swap action in market invest.")
+                  return;
                 }
+              } else {
+                sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
+              }
 
-                console.debug(`Swap Mint blockchain. Confirm swap action Sum: ${sum}. Account: ${this.account}.`);
+                console.debug(`Swap Mint blockchain. Confirm swap action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
 
                 this.trackClick({action: 'confirm-swap-click', event_category: 'Mint', event_label: 'Confirm Mint Action', value: 1 });
 
                 let estimatedGasValue = await this.estimateGas(sum);
+                console.debug(`Swap Mint blockchain. Start confirm process. Account: ${this.account}. estimatedGasValue: ${estimatedGasValue}`);
+
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
                     this.gas = null;
                     this.gasAmountInMatic = null;
@@ -518,19 +530,24 @@ export default {
 
         async approveAction() {
             try {
+                console.debug(`Swap Mint blockchain. Start approving process. ApproveSum: ${this.account}.`);
+
                 this.showWaitingModal('Approving in process');
 
                 let approveSum = "10000000";
                 let sum;
 
-                if (this.assetDecimals === 18) {
+              console.debug(`Swap Mint blockchain. Approve action AssetDecimals: ${this.assetDecimals}. ApproveSum: ${approveSum}.`);
+              if (this.assetDecimals === 18) {
                     sum = this.web3.utils.toWei(approveSum, 'ether');
                 } else {
                     sum = this.web3.utils.toWei(approveSum, 'mwei');
                 }
 
-              console.debug(`Swap Mint blockchain. Approve action Sum: ${sum}. Account: ${this.account}.`);
-              let allowApprove = await this.checkAllowance(sum);
+                console.debug(`Swap Mint blockchain. Approve action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
+                let allowApprove = await this.checkAllowance(sum);
+                console.debug(`Swap Mint blockchain. Is allowApprove? ${allowApprove}. Account: ${this.account}.`);
+
                 if (!allowApprove) {
                     this.trackClick({action: 'approve-action-click', event_category: 'Mint', event_label: 'Approve Mint Action', value: 1 });
                     this.closeWaitingModal();
@@ -540,10 +557,9 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.error(`Swap Mint approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                console.debug(`Swap Mint approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('approve');
                 this.trackClick({action: 'mint-error-showed-click', event_category: 'Mint error', event_label: 'Mint Error Showed', value: 1 });
-
             }
         },
 
@@ -552,14 +568,18 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts.asset.methods.allowance(from, contracts.exchange.options.address).call();
+          console.debug(`Swap Mint blockchain. Check allowance action. Account: ${this.account}.`);
 
-            if (allowanceValue < sum) {
+          let allowanceValue = await contracts.asset.methods.allowance(from, contracts.exchange.options.address).call();
+
+          console.debug(`Swap Mint blockchain. Check allowance action. Is allowApprove? allowanceValue ${allowanceValue} sum: ${sum}  Account: ${this.account}.`);
+
+          if (allowanceValue < sum) {
                 try {
-                    await this.refreshGasPrice();
-                    let approveParams = {gasPrice: this.gasPriceGwei, from: from};
+                  await this.refreshGasPrice();
+                  let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                  console.debug(`Swap Mint blockchain. Check allowance Sum: ${sum}. Account: ${this.account}.`);
+                  console.debug(`Swap Mint blockchain. Check allowance Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
                   let tx = await contracts.asset.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
 
                     let minted = true;
@@ -569,14 +589,17 @@ export default {
                         this.trackClick({action: 'mint-tx-scan-click', event_category: 'Redeem tx scan', event_label: 'Mint Go to Scan', value: 1 });
 
                         if (receipt) {
-                            if (receipt.status)
-                                return true;
-                            else {
+                            if (receipt.status) {
+                              console.debug(`Swap Mint blockchain. Check allowance Sum. receipt.status ${receipt.status}. Account: ${this.account}.`);
+                              return true;
+                            } else {
+                                console.debug(`Swap Mint blockchain. Check allowance Sum. receipt.status is false. Account: ${this.account}.`);
                                 return false;
                             }
                         }
                     }
 
+                    console.debug(`Swap Mint blockchain. Check allowance Sum. receipt.status is true. Account: ${this.account}.`);
                     return true;
                 } catch (e) {
                     console.error(`Swap Mint allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
@@ -605,7 +628,7 @@ export default {
                     referral: await this.getReferralCode(),
                 }
 
-                console.debug(`Swap Mint blockchain. Estimate gas Sum: ${sum}. Account: ${this.account}.`);
+                console.debug(`Swap Mint blockchain. Estimate gas Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
                 await contracts.exchange.methods.mint(mintParams).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;

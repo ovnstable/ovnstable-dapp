@@ -264,7 +264,6 @@ export default {
       this.totalSupply = resultSupply;
       this.isTotalSupplyLoading = false;
       console.log('Supply: refreshSupply end', this.totalSupply);
-
     },
 
     async refreshInsuranceSupply() {

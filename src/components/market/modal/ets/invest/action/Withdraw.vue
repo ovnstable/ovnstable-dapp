@@ -469,7 +469,7 @@ export default {
           this.sumApproveCheckerId = intervalId;
         },
         async checkApprove() {
-          console.log("Check Approve action");
+          console.log("Check Approve action", this.sum);
 
           try {
             if (!this.sum || isNaN(this.sum) || !this.account) {
@@ -495,8 +495,9 @@ export default {
             }
 
             let allowApprove = await this.checkAllowance(sum);
+            console.log("allowApprove : ", allowApprove, sum)
             if (!allowApprove) {
-              await this.approveAction();
+              this.disapproveEtsToken();
               return false;
             } else {
               this.approveEtsToken();
@@ -505,6 +506,7 @@ export default {
           } catch (e) {
             console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             this.showErrorModal('approve');
+            this.disapproveEtsToken();
             return false;
           }
         },
@@ -685,63 +687,64 @@ export default {
                 console.debug(`Withdraw blockchain. Approve action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
 
                 let allowApprove = await this.checkAllowance(sum);
+                allowApprove = !allowApprove ? (await this.approveBlockchainAction(sum)) : true;
                 if (!allowApprove) {
-                    this.closeWaitingModal();
-                    this.showErrorModal('approve');
-                    this.disapproveEtsToken();
-                    return;
-                } else {
-                    this.approveEtsToken();
-                    this.closeWaitingModal();
-                }
-            } catch (e) {
-                console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                this.showErrorModal('approve');
-            }
+                      this.closeWaitingModal();
+                      this.showErrorModal('approve');
+                      this.disapproveEtsToken();
+                      return;
+                  } else {
+                      this.approveEtsToken();
+                      this.closeWaitingModal();
+                  }
+              } catch (e) {
+                  console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                  this.showErrorModal('approve');
+              }
         },
-
-        async checkAllowance(sum) {
-
+        async approveBlockchainAction(sum) {
+          try {
+            await this.refreshGasPrice();
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts[this.etsData.tokenContract].methods.allowance(from, contracts[this.etsData.exchangeContract].options.address).call();
-             console.debug(`Withdraw blockchain. Check allowance action Allowance: ${allowanceValue} Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
+            let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-            if (allowanceValue < sum) {
-                try {
-                    await this.refreshGasPrice();
-                    let approveParams = {gasPrice: this.gasPriceGwei, from: from};
+            let tx = await contracts[this.etsData.tokenContract].methods.approve(contracts[this.etsData.exchangeContract].options.address, sum).send(approveParams);
 
-                    let tx = await contracts[this.etsData.tokenContract].methods.approve(contracts[this.etsData.exchangeContract].options.address, sum).send(approveParams);
+            let minted = true;
+            while (minted) {
+              await new Promise(resolve => setTimeout(resolve, 2000));
+              let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
 
-                    let minted = true;
-                    while (minted) {
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                        let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
-
-                        if (receipt) {
-                            if (receipt.status)
-                                return true;
-                            else {
-                                return false;
-                            }
-                        }
-                    }
-
-                    return true;
-                } catch (e) {
-                    console.error(`Market Withdraw allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                    return false;
+              if (receipt) {
+                if (receipt.status)
+                  return true;
+                else {
+                  return false;
                 }
+              }
             }
 
             return true;
+          } catch (e) {
+            console.error(`Market Withdraw allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+            return false;
+          }
+        },
+
+        async checkAllowance(sum) {
+          let contracts = this.contracts;
+          let from = this.account;
+
+          let allowanceValue = await contracts[this.etsData.tokenContract].methods.allowance(from, contracts[this.etsData.exchangeContract].options.address).call();
+          console.log('allowanceValue: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
+          return allowanceValue * 1 >= sum * 1;
         },
 
         async estimateGas(sum) {
 
-            let contracts = this.contracts;
+            let contracts = thontracts;
             let from = this.account;
 
             let result;

@@ -744,7 +744,7 @@ export default {
 
         async estimateGas(sum) {
 
-            let contracts = thontracts;
+            let contracts = this.contracts;
             let from = this.account;
 
             let result;

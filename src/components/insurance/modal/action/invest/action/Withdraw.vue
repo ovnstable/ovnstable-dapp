@@ -459,7 +459,7 @@ export default {
           console.log("Check Approve action");
 
           try {
-            if (!this.sum) {
+            if (!this.sum || !isNaN(this.sum) || !this.account) {
               return;
             }
 

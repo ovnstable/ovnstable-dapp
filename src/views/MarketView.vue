@@ -17,13 +17,37 @@
       </v-row>
     </div>
     <div v-else class="mt-7 cards-list-container">
-      <EtsListHeader/>
+      <template>
+        <v-row class="ma-0 mb-1 mt-10" align="center">
+            <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-check-bold</v-icon>
+            <label class="prototypes-label ml-2">AVAILABLE</label>
+        </v-row>
+        <v-divider class="prototypes-list-divider"></v-divider>
 
-      <EtsListCard class="mt-2"
-                   v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ETS' && !value.prototype && !value.openPrototype && !value.archive))"
-                   :featured="i < 3"
-                   :key="component.id"
-                   :card-data="component"/>
+        <EtsListHeader/>
+
+        <EtsListCard class="mt-2"
+                     v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ETS' && !value.prototype && !value.openPrototype && !value.archive && value.hasCap))"
+                     :featured="i < 3"
+                     :key="component.id"
+                     :card-data="component"/>
+      </template>
+
+      <template v-if="sortedCardList.filter(value => (value.prototype || value.openPrototype)).length > 0" >
+        <v-row class="ma-0 mb-1 mt-10" align="center">
+            <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-chart-box-plus-outline</v-icon>
+            <label class="prototypes-label ml-2">ETS IN USD+ Collateral</label>
+        </v-row>
+        <v-divider class="prototypes-list-divider"></v-divider>
+
+        <EtsListHeader class="mt-3"/>
+
+        <EtsListCard class="mt-2"
+                     v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && !value.hasCap))"
+                     :key="component.id"
+                     :card-data="component"/>
+      </template>
+
       <template v-if="sortedCardList.filter(value => (value.prototype || value.openPrototype)).length > 0" >
         <v-row class="ma-0 mb-1 mt-10" align="center">
           <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-test-tube</v-icon>

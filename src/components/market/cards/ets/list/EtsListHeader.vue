@@ -1,42 +1,42 @@
 <template>
-    <v-row class="ma-0" justify="start">
+    <v-row class="mt-0" justify="end">
         <v-col v-if="!$wu.isMobile()">
-            <v-row class="ma-0" justify="start" align="center">
+            <v-row class="ma-0 mt-1" justify="start" align="end">
                 <label class="list-header-label">Chain / Platform</label>
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 3 : ($wu.isMobile() ? 7 : 3)">
-            <v-row class="ma-0" :justify="$wu.isMobile() ? 'start' : 'center'" align="center">
+            <v-row class="ma-0 mt-1" :justify="$wu.isMobile() ? 'start' : 'center'" align="end">
                 <label class="list-header-label">ETS name</label>
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)">
-            <v-row class="ma-0" justify="end" align="center">
+            <v-row class="ma-0 mt-1" justify="end" align="end">
                 <label class="list-header-label">Last day APY</label>
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)">
-            <v-row class="ma-0" justify="end" align="center">
+            <v-row class="ma-0 mt-1" justify="end" align="end">
                 <label class="list-header-label">30-day APY</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()" cols="3">
-            <v-row class="ma-0" justify="center" align="center">
+            <v-row class="ma-0 mt-1" justify="center" align="end">
                 <label class="list-header-label">TVL</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()">
-            <v-row class="ma-0 mr-3" justify="center" align="center">
+            <v-row class="ma-0 mr-3 mt-1" justify="center" align="end">
                 <label class="list-header-label">Token pair</label>
             </v-row>
         </v-col>
         <v-col v-if="$wu.isFull()" cols="1">
-            <v-row class="ma-0" justify="start" align="center">
+            <v-row class="ma-0 mt-1" justify="start" align="end">
                 <label class="list-header-label">My investment</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()">
-            <v-row class="ma-0" justify="center" align="center">
+            <v-row class="ma-0 mt-1" justify="center" align="end">
                 <label class="list-header-label">About ETS</label>
             </v-row>
         </v-col>

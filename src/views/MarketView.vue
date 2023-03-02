@@ -20,7 +20,7 @@
       <template>
         <v-row class="ma-0 mb-1 mt-10" align="center">
             <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-check-bold</v-icon>
-            <label class="prototypes-label ml-2">AVAILABLE</label>
+            <label class="prototypes-label prototypes-label-available ml-2">AVAILABLE</label>
         </v-row>
         <v-divider class="prototypes-list-divider"></v-divider>
 
@@ -34,43 +34,63 @@
       </template>
 
       <template v-if="sortedCardList.filter(value => (value.prototype || value.openPrototype)).length > 0" >
-        <v-row class="ma-0 mb-1 mt-10" align="center">
+        <v-row class="ma-0 mb-1 mt-5" align="center">
             <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-chart-box-plus-outline</v-icon>
-            <label class="prototypes-label ml-2">ETS IN USD+ Collateral</label>
+            <label class="prototypes-label ml-2" @click="openCollateralList = !openCollateralList">ETS IN USD+ Collateral</label>
+            <div class="select-bar-main-container ml-7" @click="openCollateralList = !openCollateralList">
+                <v-row justify="end" align="center" class="select-bar-container">
+                    <v-icon color="var(--secondary-gray-text)" >
+                        {{ openCollateralList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                    </v-icon>
+                </v-row>
+            </div>
         </v-row>
         <v-divider class="prototypes-list-divider"></v-divider>
 
-        <EtsListHeader class="mt-3"/>
+          <template v-if="openCollateralList">
+              <EtsListHeader />
 
-        <EtsListCard class="mt-2"
-                     v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && !value.hasCap))"
-                     :key="component.id"
-                     :card-data="component"/>
+              <EtsListCard class="mt-2"
+                           v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && !value.hasCap))"
+                           :key="component.id"
+                           :card-data="component"/>
+          </template>
+
       </template>
 
       <template v-if="sortedCardList.filter(value => (value.prototype || value.openPrototype)).length > 0" >
-        <v-row class="ma-0 mb-1 mt-10" align="center">
+        <v-row class="ma-0 mb-1 mt-5" align="center">
           <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-test-tube</v-icon>
-          <label class="prototypes-label ml-2">Prototypes</label>
+          <label class="prototypes-label ml-2" @click="openPrototypeList = !openPrototypeList">Prototypes</label>
+          <div class="select-bar-main-container ml-7" @click="openPrototypeList = !openPrototypeList">
+            <v-row justify="end" align="center" class="select-bar-container">
+                <v-icon color="var(--secondary-gray-text)" >
+                    {{ openPrototypeList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                </v-icon>
+            </v-row>
+          </div>
         </v-row>
         <v-divider class="prototypes-list-divider"></v-divider>
 
-        <EtsListHeader class="mt-3"/>
+          <template v-if="openPrototypeList">
+              <EtsListHeader />
 
-        <EtsListCard class="mt-2"
-                     v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && (value.prototype || value.openPrototype)))"
-                     :key="component.id"
-                     :card-data="component"/>
+              <EtsListCard class="mt-2"
+                           v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && (value.prototype || value.openPrototype)))"
+                           :key="component.id"
+                           :card-data="component"/>
+          </template>
+
       </template>
 
       <template v-if="sortedCardList.filter(value => value.data.archive).length > 0" >
         <v-row class="ma-0 mb-1 mt-10" align="center">
           <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-archive-outline</v-icon>
-          <label class="prototypes-label ml-2 archive-label" @click="openedList = !openedList">Archive</label>
-          <div class="select-bar-main-container ml-7" @click="openedList = !openedList">
+          <label class="prototypes-label ml-2 archive-label" @click="openArchiveList = !openArchiveList">Archive</label>
+          <div class="select-bar-main-container ml-7" @click="openArchiveList = !openArchiveList">
             <v-row justify="end" align="center" class="select-bar-container">
               <v-icon color="var(--secondary-gray-text)" >
-                {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                {{ openArchiveList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
               </v-icon>
             </v-row>
           </div>
@@ -78,7 +98,7 @@
 
         <v-divider class="prototypes-list-divider"></v-divider>
 
-        <template v-if="openedList">
+        <template v-if="openArchiveList">
           <EtsListHeader class="mt-3"/>
           <EtsListCard class="mt-2"
                        v-for="component in sortedCardList.filter(value => (value.type === 'ets' && value.data.archive))"
@@ -110,7 +130,9 @@ export default {
   },
 
   data: () => ({
-    openedList: false,
+    openCollateralList: false,
+    openPrototypeList: false,
+    openArchiveList: false,
     tab: 1,
     sortedCardList: [],
 
@@ -509,6 +531,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
   text-transform: uppercase;
   font-feature-settings: 'pnum' on, 'lnum' on;
   color: var(--main-gray-text);
+  cursor: pointer;
+}
+
+.prototypes-label-available {
+    cursor: default;
 }
 
 .prototypes-icon {

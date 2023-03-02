@@ -33,7 +33,7 @@
                      :card-data="component"/>
       </template>
 
-      <template v-if="sortedCardList.filter(value => (value.prototype || value.openPrototype)).length > 0" >
+      <template>
         <v-row class="ma-0 mb-1 mt-5" align="center">
             <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-chart-box-plus-outline</v-icon>
             <label class="prototypes-label ml-2" @click="openCollateralList = !openCollateralList">ETS IN USD+ Collateral</label>
@@ -51,7 +51,7 @@
           <EtsListHeader />
 
           <EtsListCard class="mt-2"
-                       v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && !value.hasCap))"
+                       v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && !value.prototype && !value.openPrototype && !value.data.archive && !value.hasCap))"
                        :key="component.id"
                        :card-data="component"/>
         </template>
@@ -99,7 +99,7 @@
         <v-divider class="prototypes-list-divider"></v-divider>
 
         <template v-if="openArchiveList">
-          <EtsListHeader class="mt-3"/>
+          <EtsListHeader/>
           <EtsListCard class="mt-2"
                        v-for="component in sortedCardList.filter(value => (value.type === 'ets' && value.data.archive))"
                        :key="component.id"

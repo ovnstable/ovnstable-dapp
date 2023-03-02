@@ -101,7 +101,7 @@
         <template v-if="openArchiveList">
           <EtsListHeader/>
           <EtsListCard class="mt-2"
-                       v-for="component in sortedCardList.filter(value => (value.type === 'ets' && value.data.archive))"
+                       v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && value.data.archive))"
                        :key="component.id"
                        :card-data="component"/>
         </template>

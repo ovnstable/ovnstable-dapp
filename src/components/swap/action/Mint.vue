@@ -416,6 +416,13 @@ export default {
             this.sum = value;
         },
         async checkApproveCounter() {
+          if (!this.sumApproveCheckerId) {
+            // first call
+            this.sumApproveCheckerId = -1;
+            await this.checkApprove();
+            return;
+          }
+
           this.sumApproveCheckerSec = 0;
           let intervalId = setInterval(async () => {
             this.sumApproveCheckerSec++;

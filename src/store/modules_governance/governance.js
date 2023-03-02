@@ -361,7 +361,7 @@ const actions = {
             item.enabled = weight.enabled;
             item.enabledReward = weight.enabledReward;
 
-            if (networkId === 137) {
+            if (networkId === 137 || networkId === 42161) {
                 item.riskFactor = weight.riskFactor * 1000;
             }
 
@@ -404,7 +404,7 @@ const actions = {
                 item.enabled = weight.enabled;
                 item.enabledReward = weight.enabledReward;
 
-                if (networkId === 137) {
+                if (networkId === 137 || networkId === 42161) {
                     item.riskFactor = weight.riskFactor * 1000;
                 }
 
@@ -544,7 +544,7 @@ const actions = {
                 item.enabled = weight.enabled;
                 item.enabledReward = weight.enabledReward;
 
-                if (networkId === 137) {
+                if (networkId === 137 || networkId === 42161) {
                     item.riskFactor = weight.riskFactor / 1000;
                 } else {
                     item.riskFactor = 0;

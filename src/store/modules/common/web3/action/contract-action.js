@@ -47,8 +47,8 @@ const actions = {
             _load(await loadJSON(`/contracts/${network}/OvnTimelockController.json`), web3),
             _load(await loadJSON(`/contracts/${network}/UsdPlusToken.json`), web3),
             _load(await loadJSON(`/contracts/${network}/Mark2Market.json`), web3),
-            (network !== "arbitrum" && network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/Market.json`), web3) : _load_empty(),
-            (network !== "arbitrum" && network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
+            (network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/Market.json`), web3) : _load_empty(),
+            (network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
             networkAssetMap[network] ? _load(ERC20, web3, networkAssetMap[network]) : _load_empty(),
             networkDaiMap[network] ? _load(ERC20, web3, networkDaiMap[network]) : _load_empty(),
         ]);

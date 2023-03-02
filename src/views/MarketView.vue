@@ -27,7 +27,7 @@
         <EtsListHeader/>
 
         <EtsListCard class="mt-2"
-                     v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ETS' && !value.prototype && !value.openPrototype && !value.archive && value.hasCap))"
+                     v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ETS' && !value.prototype && !value.openPrototype && !value.data.archive && value.hasCap))"
                      :featured="i < 3"
                      :key="component.id"
                      :card-data="component"/>
@@ -63,7 +63,7 @@
                      :card-data="component"/>
       </template>
 
-      <template v-if="sortedCardList.filter(value => value.archive).length > 0" >
+      <template v-if="sortedCardList.filter(value => value.data.archive).length > 0" >
         <v-row class="ma-0 mb-1 mt-10" align="center">
           <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-archive-outline</v-icon>
           <label class="prototypes-label ml-2 archive-label" @click="openedList = !openedList">Archive</label>
@@ -81,7 +81,7 @@
         <template v-if="openedList">
           <EtsListHeader class="mt-3"/>
           <EtsListCard class="mt-2"
-                       v-for="component in sortedCardList.filter(value => (value.type === 'ets' && value.archive))"
+                       v-for="component in sortedCardList.filter(value => (value.type === 'ets' && value.data.archive))"
                        :key="component.id"
                        :card-data="component"/>
         </template>
@@ -386,8 +386,8 @@ export default {
         if (!a.prototype && b.prototype) return -1;
         if (a.prototype && !b.prototype) return 1;
 
-        if (!a.archive && b.archive) return -1;
-        if (a.archive && !b.archive) return 1;
+        if (!a.data.archive && b.data.archive) return -1;
+        if (a.data.archive && !b.data.archive) return 1;
 
         if (a.chain === networkId && b.chain !== networkId) return -1;
         if (a.chain !== networkId && b.chain === networkId) return 1;

@@ -75,7 +75,7 @@
                                 v-model="item.enabledReward"
                             ></v-switch>
                         </td>
-                        <td v-if="networkId === 137">
+                        <td v-if="networkId === 137 || networkId === 42161">
                             <v-row class="fill-height" align="center" justify="center">
                                 <v-text-field
                                     class="m2m-field"
@@ -171,6 +171,8 @@ export default {
             let result = 0.0;
 
             this.m2mItems.forEach(item => {
+              console.log("m2mItems: ", this.m2mItems, item);
+
                 if (item && item.liquidationValue) {
                     result += parseFloat(item.liquidationValue);
                 }
@@ -218,7 +220,7 @@ export default {
         },
 
         updateHeaders() {
-            if (this.networkId === 137) {
+            if (this.networkId === 137 || this.networkId === 42161) {
                 if (!this.headersM2M.find(value => value.text === 'Risk Factor')) {
                     this.headersM2M.push({text: 'Risk Factor', value: 'riskFactor'});
                 }

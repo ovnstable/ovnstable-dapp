@@ -20,7 +20,7 @@
       <template>
         <v-row class="ma-0 mb-1 mt-10" align="center">
             <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-check-bold</v-icon>
-            <label class="prototypes-label prototypes-label-available ml-2">AVAILABLE</label>
+            <label class="prototypes-label prototypes-label-available ml-2">AVAILABLE capacity</label>
         </v-row>
         <v-divider class="prototypes-list-divider"></v-divider>
 
@@ -35,8 +35,8 @@
 
       <template>
         <v-row class="ma-0 mb-1 mt-5" align="center">
-            <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-chart-box-plus-outline</v-icon>
-            <label class="prototypes-label ml-2" @click="openCollateralList = !openCollateralList">ETS IN USD+ Collateral</label>
+            <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-close-thick</v-icon>
+            <label class="prototypes-label ml-2" @click="openCollateralList = !openCollateralList">Full capacity</label>
             <div class="select-bar-main-container ml-7" @click="openCollateralList = !openCollateralList">
                 <v-row justify="end" align="center" class="select-bar-container">
                     <v-icon color="var(--secondary-gray-text)" >

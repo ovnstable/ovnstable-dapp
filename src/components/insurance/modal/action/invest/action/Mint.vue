@@ -446,7 +446,7 @@ export default {
           this.sumApproveCheckerId = intervalId;
         },
         async checkApprove() {
-          console.log("Check Approve action");
+          console.log("Check Approve action", this.sum);
 
           try {
             if (!this.sum || !isNaN(this.sum)  || !this.account) {
@@ -455,8 +455,9 @@ export default {
 
             let sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
             let allowApprove = await this.checkAllowance(sum);
+            console.log("allowApprove : ", allowApprove, sum)
             if (!allowApprove) {
-              await this.approveAction();
+              this.disapproveActionAsset();
               return false;
             } else {
               this.approveActionAsset();
@@ -465,6 +466,7 @@ export default {
           } catch (e) {
             console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             this.showErrorModal('approve');
+            this.disapproveActionAsset();
             return false;
           }
         },
@@ -593,59 +595,58 @@ export default {
                 }
 
                 let allowApprove = await this.checkAllowance(sum);
+                allowApprove = !allowApprove ? (await this.approveBlockchainAction(sum)) : true;
                 if (!allowApprove) {
-                    this.closeWaitingModal();
-                    this.showErrorModal('approve');
-                    this.disapproveActionAsset();
-                } else {
-                    this.approveActionAsset();
-                    this.closeWaitingModal();
-                }
+                      this.closeWaitingModal();
+                      this.showErrorModal('approve');
+                      this.disapproveActionAsset();
+                  } else {
+                      this.approveActionAsset();
+                      this.closeWaitingModal();
+                  }
             } catch (e) {
               console.error(`Mint Insurance approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
               this.showErrorModal('approve');
-
             }
         },
-
-        async checkAllowance(sum) {
-
+        async approveBlockchainAction(sum) {
+          try {
+            await this.refreshGasPrice();
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts.asset.methods.allowance(from, contracts.insurance.polygon_exchanger.options.address).call();
+            let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-            if (allowanceValue < sum) {
-                try {
-                    await this.refreshGasPrice();
-                    let approveParams = {gasPrice: this.gasPriceGwei, from: from};
+            let tx = await contracts.asset.methods.approve(contracts.insurance.polygon_exchanger.options.address, sum).send(approveParams);
 
-                    let tx = await contracts.asset.methods.approve(contracts.insurance.polygon_exchanger.options.address, sum).send(approveParams);
+            let minted = true;
+            while (minted) {
+              await new Promise(resolve => setTimeout(resolve, 2000));
+              let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
 
-                    let minted = true;
-                    while (minted) {
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                        let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
-
-                        if (receipt) {
-                            if (receipt.status)
-                                return true;
-                            else {
-                                return false;
-                            }
-                        }
-                    }
-
-                    return true;
-                } catch (e) {
-                    console.log(e)
-                    return false;
+              if (receipt) {
+                if (receipt.status)
+                  return true;
+                else {
+                  return false;
                 }
+              }
             }
 
             return true;
+          } catch (e) {
+            console.log(e)
+            return false;
+          }
         },
+        async checkAllowance(sum) {
+          let contracts = this.contracts;
+          let from = this.account;
 
+          let allowanceValue = await contracts.asset.methods.allowance(from, contracts.insurance.polygon_exchanger.options.address).call();
+          console.log('allowanceValue: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
+          return allowanceValue * 1 >= sum * 1;
+        },
         async estimateGas(sum) {
 
             let contracts = this.contracts;

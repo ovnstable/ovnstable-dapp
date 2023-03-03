@@ -29,9 +29,9 @@
                     <div class="coin-card mr-3">
                         <v-row class="ma-2" align="center">
                             <div class="coin-img" :class="$wu.isMobile() ? '' : 'mr-2'">
-                                <v-img :src="currency.image"/>
+                                <v-img :src="buyCurrency.image"/>
                             </div>
-                            <label class="coin-title" v-if="!$wu.isMobile()">{{ currency.title }}</label>
+                            <label class="coin-title" v-if="!$wu.isMobile()">{{ buyCurrency.title }}</label>
                         </v-row>
                     </div>
                 </v-row>
@@ -92,9 +92,9 @@
                     <div class="coin-card mr-3">
                         <v-row class="ma-2" align="center">
                             <div class="coin-img" :class="$wu.isMobile() ? '' : 'mr-2'">
-                                <v-img :src="buyCurrency.image"/>
+                                <v-img :src="currency.image"/>
                             </div>
-                            <label class="coin-title" v-if="!$wu.isMobile()">{{ buyCurrency.title }}</label>
+                            <label class="coin-title" v-if="!$wu.isMobile()">{{ currency.title }}</label>
                         </v-row>
                     </div>
                 </v-row>
@@ -276,19 +276,19 @@ export default {
             return this.$utils.formatMoney(this.etsBalance[this.etsData.name], 3);
         },
 
-        buyCurrency: function () {
+        currency: function () {
             return {
                 id: this.etsData.actionAsset,
                 title: this.etsData.actionTokenName,
-                image: '@/assets/currencies/' + this.etsData.actionTokenName + '.png'
+                image: '/assets/currencies/' + this.etsData.actionTokenName.toLowerCase() + '.png'
             }
         },
 
-        currency: function () {
+        buyCurrency: function () {
             return {
                 id: this.etsData.name,
                 title: 'ETS ' + this.etsData.nameToken,
-                image: '@/assets/currencies/market/ets_' + this.etsData.name + '.svg'
+                image: '/assets/currencies/market/ets_' + this.etsData.name + '.svg'
             }
         },
 

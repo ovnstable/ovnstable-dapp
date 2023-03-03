@@ -349,7 +349,7 @@ export default {
             return {
                 id: this.etsData.actionAsset,
                 title: this.etsData.actionTokenName,
-                image: '/assets/currencies/' + this.etsData.actionTokenName + '.png'
+                image: '/assets/currencies/' + this.etsData.actionTokenName.toLowerCase() + '.png'
             }
         },
 

@@ -365,7 +365,7 @@ export default {
         this.buyCurrencies.push({
             id: 'asset',
             title: this.assetName,
-            image: '@/assets/currencies/stablecoins/' + this.assetName + '.png'
+            image: require('@/assets/currencies/stablecoins/' + this.assetName + '.png')
         });
 
         this.buyCurrency = this.buyCurrencies[0];

@@ -248,7 +248,7 @@ export default {
             {
                 id: 'insurance',
                 title: 'USD+ INS',
-                image: require('@/assets/currencies/insurance/INSURANCE.svg')
+                image: '/assets/currencies/insurance/INSURANCE.svg'
             }
         ],
 
@@ -381,7 +381,7 @@ export default {
         this.buyCurrencies.push({
             id: 'asset',
             title: 'USDC',
-            image: require('@/assets/currencies/stablecoins/' + this.assetName + '.png')
+            image: '/assets/currencies/stablecoins/' + this.assetName + '.png'
         });
 
         this.buyCurrency = this.buyCurrencies[0];

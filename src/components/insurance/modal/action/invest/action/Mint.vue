@@ -234,7 +234,7 @@ export default {
         buyCurrencies: [{
             id: 'insurance',
             title: 'USD+ INS',
-            image: require('@/assets/currencies/insurance/INSURANCE.svg')
+            image: '/assets/currencies/insurance/INSURANCE.svg'
         }],
 
         sum: null,
@@ -363,7 +363,7 @@ export default {
         this.currencies.push({
             id: 'asset',
             title: this.assetName,
-            image: require('@/assets/currencies/stablecoins/' + this.assetName + '.png')
+            image: '/assets/currencies/stablecoins/' + this.assetName + '.png'
         });
 
         this.currency = this.currencies[0];

@@ -56,10 +56,8 @@
                 ${{ $utils.formatMoney(item.closingBalance, 6) }}
             </td>
             <td class="table-label-payouts-strategy text-right">
-
-<!--               TODO COMPOUND -->
                 <label :class="(item.comp == null || item.comp === 0) ? 'yield-default' : (item.comp > 0 ? 'yield-green' : 'yield-red')">
-                    {{ (item.comp == null || item.comp === 0) ? '—' : ($utils.formatMoney(item.comp, 1) + '%') }}
+                    {{ (item.comp == null || item.comp === 0) ? '—' : ($utils.formatMoney(item.comp, 3) + '%') }}
                 </label>
             </td>
             <td class="table-label-payouts-strategy text-right" @click="openOnScan(item)" v-if="!$wu.isMobile()">

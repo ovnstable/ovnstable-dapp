@@ -214,13 +214,23 @@
                         <Table
                                 v-if="!$wu.isMobile()"
                                 :profit-label="etsData.actionTokenName + ' per ETS'"
-                                :payout-data="etsStrategyData[etsData.name] ? [...etsStrategyData[etsData.name].payoutItems].reverse() : []"/>
+                                :payout-data="
+                                etsStrategyData[etsData.name]
+                                && etsStrategyData[etsData.name].payoutItems
+                                && etsStrategyData[etsData.name].payoutItems.length
+                                ? [...etsStrategyData[etsData.name].payoutItems].reverse()
+                                : []"/>
 
                         <Table
                                 v-else
                                 minimized
                                 :profit-label="etsData.actionTokenName + ' per ETS'"
-                                :payout-data="etsStrategyData[etsData.name] ? [...etsStrategyData[etsData.name].payoutItems].reverse() : []"/>
+                                :payout-data="
+                                etsStrategyData[etsData.name]
+                                && etsStrategyData[etsData.name].payoutItems
+                                && etsStrategyData[etsData.name].payoutItems.length
+                                ? [...etsStrategyData[etsData.name].payoutItems].reverse()
+                                : []"/>
 
                         <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
                             <label class="table-scroll-label">scroll to see more</label>

@@ -249,7 +249,8 @@ export default {
     getStatistic(ets, productData) {
       let balancesWidgetData = this.getWidgetData(productData, 'closingBalance', '#8247E5');
       let profitWidgetData = this.getWidgetData(productData, 'dailyProfit', '#8247E5');
-      let apyWidgetData = this.getWidgetData(productData, 'apy', '#8247E5');
+      // let apyWidgetData = this.getWidgetData(productData, 'apy', '#8247E5');
+      let compWidgetData = this.getWidgetData(productData, 'comp', '#8247E5', 'PAYOUT');
       return {
         isOpen: false,
         name: ets.nameUp,
@@ -258,12 +259,15 @@ export default {
         charts: {
           balance: balancesWidgetData,
           profit: profitWidgetData,
-          apy: apyWidgetData,
+          // apy: apyWidgetData,
+          comp: compWidgetData,
         },
         apy: 0,
+        comp: 0,
         totalValue: 0,
         profit: 0,
-        transactions: productData
+        transactions: productData,
+        compoundData: {},
       }
     },
     loadProductStatistic(product) {
@@ -282,6 +286,7 @@ export default {
                   dailyProfit: item.type === 'PAYOUT' ? item.change_balance : null,
                   fee: item.fee,
                   apy: item.apy,
+                  comp: item.comp,
                   duration: item.elapsed_time,
                 }
               });
@@ -290,7 +295,7 @@ export default {
         console.log("EtsTab loaded data statistic Error: ", e)
       })
     },
-    getWidgetData(productData, propertyName, chartColor) {
+    getWidgetData(productData, propertyName, chartColor, onlyType) {
       let widgetDataDict = {};
       let widgetData = {
         labels: [],
@@ -303,9 +308,20 @@ export default {
         ]
       };
 
-      [...productData].reverse().forEach(item => {
-        widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = item[propertyName];
-      });
+      console.log('productData ', productData, propertyName);
+      this.calculateCompound(productData);
+      if (onlyType) {
+        [...productData].reverse().forEach(item => {
+          if (item.type === onlyType) {
+            widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = item[propertyName];
+          }
+        });
+      } else {
+        [...productData].reverse().forEach(item => {
+          widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = item[propertyName];
+        });
+
+      }
 
       for (let key in widgetDataDict) {
         widgetData.labels.push(key);
@@ -314,40 +330,79 @@ export default {
 
       return widgetData;
     },
-    summaryData(strategyStatistic, slice) {
+    calculateCompound(productData, slice) {
+      let clientData = productData.filter(value => value.type === 'PAYOUT');
+      clientData = slice ? clientData.slice(0, slice) : clientData;
 
+      let startValue = 1;
+      let accumulator = startValue;
+      let accumulatorDay = startValue;
+      let accumulatorWeek = startValue;
+      let accumulatorMonth = startValue;
+
+      let compoundData = {};
+
+      // let clientDataPreferment = [...clientData];
+      let clientDataLengthCounter = clientData.length;
+      for (let i = 0; i < clientData.length; i++){
+        const payout = clientData[i];
+        try {
+
+          // all
+          accumulator = accumulator * (1 + payout.dailyProfit);
+          payout.comp =  (accumulator * 100 / startValue - 100);
+          payout.comp =  parseFloat(payout.comp ? payout.comp : 0.00).toFixed(3);
+          console.log("Comp accumulator", payout.comp);
+
+          // date
+          if (i === 0) {
+            compoundData.firstDate = moment(payout.date).format('MMM D, YYYY');
+          }
+
+
+          // week
+          if (clientDataLengthCounter === 7) {
+            accumulatorWeek = accumulatorWeek * (1 + payout.dailyProfit);
+          }
+
+          // month
+          if (clientDataLengthCounter === 30) {
+            accumulatorMonth = accumulatorMonth * (1 + payout.dailyProfit);
+          }
+
+          // day
+          if (clientDataLengthCounter === 1) {
+            // day
+            accumulatorDay = accumulatorDay * (1 + payout.dailyProfit);
+            let dayComp = (accumulatorDay * 100 / startValue - 100);
+
+            compoundData.day = parseFloat(dayComp ? dayComp : 0.0).toFixed(3)
+
+
+            // week
+            let weekComp = (accumulatorWeek * 100 / startValue - 100);
+            compoundData.week = parseFloat(weekComp ? weekComp : 0.0).toFixed(3)
+
+            // month
+            let monthComp = (accumulatorMonth * 100 / startValue - 100);
+            compoundData.month = parseFloat(monthComp ? monthComp : 0.0).toFixed(3)
+
+            compoundData.all = payout.comp // last payout comp
+
+            this.compoundData = compoundData;
+          }
+
+          clientDataLengthCounter--;
+        } catch (e) {
+          console.error("strategyData build Widget Data Dict insurance error:", e)
+        }
+
+        console.log('clientData: ', clientData);
+      }
+    },
+    summaryData(strategyStatistic, slice) {
       let clientData = strategyStatistic.transactions.filter(value => value.type === 'PAYOUT');
       clientData = slice ? clientData.slice(0, slice) : clientData;
-      let apyDataList = [...clientData];
-
-      let days = apyDataList.length;
-
-      apyDataList.forEach(value => {
-        value.changePercent = value.balanceChange / value.openingBalance;
-      })
-
-      let productResult = 1.0;
-      let durationSum = 0.0;
-
-      for (let i = 0; i < days; i++) {
-        productResult = productResult * (1.0 + apyDataList[i].changePercent);
-        durationSum = durationSum + (apyDataList[i].duration ? apyDataList[i].duration : 0);
-      }
-
-      let apy = 0;
-      if (durationSum) {
-        apy = Math.pow(productResult, 365.0 / (durationSum / 24.0)) - 1.0;
-      }
-
-      console.log('Ets tab apy productResult: ', apy);
-      console.log('Ets tab apy durationSum: ', durationSum);
-      console.log('Ets tab apy apyDataList: ', apyDataList);
-
-
-      if (apy) {
-        console.log('Ets tab apy: ', apy);
-        strategyStatistic.apy = apy * 100;
-      }
 
       let profitList = clientData.map(item => item.dailyProfit ? item.dailyProfit : 0).filter(item => item !== 0);
       if (profitList && (profitList.length > 0)) {
@@ -358,6 +413,7 @@ export default {
       let lastData = clientData[0]
       if (lastData) {
         strategyStatistic.totalValue = lastData.closingBalance;
+        strategyStatistic.comp = lastData.comp;
       }
     },
     clearPrevData() {

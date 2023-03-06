@@ -50,9 +50,7 @@
                 </v-row>
                 <v-row justify="center" align="center">
                   <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-<!--                       TODO COMPOUND -->
-                    -
-<!--                    {{ dataHidden ? '' : avgComp === 0 || !avgComp ? '—' : ($utils.formatMoney(avgComp, 2) + '%') }}-->
+                    {{ dataHidden ? '' : comp === 0 || !comp ? '—' : ($utils.formatMoney(comp, 3) + '%') }}
                   </label>
                 </v-row>
               </v-col>
@@ -95,8 +93,7 @@
                 <v-col>
                   <v-row justify="center" align="center">
                     <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-<!--                        TODO COMPOUND -->
-                      {{ dataHidden ? '' : statistic.comp === 0 ? '—' : ($utils.formatMoney(statistic.comp, 2) + '%') }}
+                      {{ dataHidden ? '' : statistic.comp === 0 ? '—' : ($utils.formatMoney(statistic.comp, 3) + '%') }}
                     </label>
                   </v-row>
                 </v-col>
@@ -116,15 +113,14 @@ import {mapGetters} from "vuex";
 export default {
   name: "EtsStrategyList",
   props: ["strategies", "statistics"],
+  data() {
+    return {
+      avgComp: 0,
+    }
+  },
   computed: {
     ...mapGetters('magicEye', ['dataHidden']),
     ...mapGetters('dashboardData', ['slice']),
-
-    data() {
-      return {
-        avgComp: 0,
-      }
-    },
 
     sliceLabel() {
       switch (this.slice) {
@@ -138,17 +134,16 @@ export default {
     },
 
     comp: function () {
-      return 0;  //   TODO COMPOUND
-      // let res = 0;
-      // if (!this.statistics || this.statistics.length === 0) {
-      //   return res;
-      // }
-      //
-      // for (let i = 0; i < this.statistics.length; i++) {
-      //   res += this.statistics[i].comp;
-      // }
-      //
-      // return res / this.statistics.length;
+      let res = 0;
+      if (!this.statistics || this.statistics.length === 0) {
+        return res;
+      }
+
+      for (let i = 0; i < this.statistics.length; i++) {
+        res += this.statistics[i].comp * 1;
+      }
+
+      return res / this.statistics.length;
     },
 
     totalValue: function () {

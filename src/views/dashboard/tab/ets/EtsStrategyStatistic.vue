@@ -38,10 +38,9 @@
                         :id="index"/>
 
 
-<!--               TODO COMPOUND -->
               <LineChart v-if="chartTab === 'PERFORMANCE'"
                          :data="charts.comp"
-                         :type="'APY'"
+                         :type="'PERFORMANCE'"
                          :id="index"/>
             </v-col>
           </v-row>

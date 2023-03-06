@@ -166,6 +166,7 @@ export default {
       this.productTransactionsMap = await this.loadProductTransactionToMap(strategies);
       console.log("productTransactionsMap loaded ", this.productTransactionsMap);
       let strategyStatisticsMap = this.mergeTransactionsWithDifferentAliases(this.productTransactionsMap);
+      console.log("Merged ets transactions: ", strategyStatisticsMap);
 
 
       this.strategyStatistics = [];
@@ -182,9 +183,11 @@ export default {
         this.summaryData(statistic);
         console.log("this.etsClientData statistic;", statistic);
 
-        // // open first
-        if (this.strategyStatistics.length === 0) {
-            this.strategyStatistics.push(statistic);
+        this.strategyStatistics.push(statistic);
+
+        // open first
+        if (this.strategyStatistics.length === 1) {
+          this.toggleStrategyStatistic(this.strategyStatistics[0]);
         }
       }
 
@@ -203,7 +206,7 @@ export default {
 
         let transactions = strategyStatisticsMap.get(etsName);
         if (!transactions) {
-          console.log('firs transactions init: ', etsName, value)
+          console.log('first transactions init: ', etsName, value)
           strategyStatisticsMap.set(etsName, value);
           continue;
         }
@@ -213,7 +216,7 @@ export default {
           return new Date(b.date) - new Date(a.date);
         });
 
-        console.log('mergeTransactionsWithDifferentAliases: ', etsName, mergedTransactions)
+        console.log('mergeTransactionsWithDifferentAliases: ', etsName, mergedTransactions, strategyStatisticsMap)
         strategyStatisticsMap.set(etsName, mergedTransactions);
       }
 
@@ -230,10 +233,11 @@ export default {
         }
 
         let transactions = await this.getProductTransactions(strategy.product); // strategy.product -> alias like "BetaOp DAI/WETH 5%,  10% --> 5%" not strategy name;
-        console.log("loadProductTransactionToMap: ", transactions);
+        console.log("loadProductTransactionToMap step#1: ", strategy.product, transactions, productTransactionsMap);
         productTransactionsMap.set(strategy.product, transactions); // map with key alias - [txs]
       }
 
+      console.log("loadProductTransactionToMap step#2:", productTransactionsMap, strategies);
       return productTransactionsMap;
     },
     async getProductTransactions(product) {
@@ -479,6 +483,19 @@ export default {
       etsAliasesMap.set('wmatic_usd_plus', [
         "WMATIC/USD+",
         "USD+/WMATIC"
+      ]);
+
+
+      etsAliasesMap.set('gamma_sl_weth_usdc', [
+        "GAMMA USDC/WETH, 10% --> 5%",
+      ]);
+
+      etsAliasesMap.set('alpha_zyb_weth_usdc', [
+        "ALPHA USDC/WETH, 10% --> 5%",
+      ]);
+
+      etsAliasesMap.set('beta_zyb_wbtc_usdc', [
+        "BETA USDC/WBTC, 10% --> 5%",
       ]);
 
       return etsAliasesMap;

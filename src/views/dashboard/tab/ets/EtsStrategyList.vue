@@ -51,7 +51,8 @@
                 <v-row justify="center" align="center">
                   <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
 <!--                       TODO COMPOUND -->
-                    {{ dataHidden ? '' : avgComp === 0 || !avgComp ? '—' : ($utils.formatMoney(avgComp, 2) + '%') }}
+                    -
+<!--                    {{ dataHidden ? '' : avgComp === 0 || !avgComp ? '—' : ($utils.formatMoney(avgComp, 2) + '%') }}-->
                   </label>
                 </v-row>
               </v-col>
@@ -118,6 +119,12 @@ export default {
   computed: {
     ...mapGetters('magicEye', ['dataHidden']),
     ...mapGetters('dashboardData', ['slice']),
+
+    data() {
+      return {
+        avgComp: 0,
+      }
+    },
 
     sliceLabel() {
       switch (this.slice) {

@@ -280,7 +280,10 @@ export default {
             return {
                 id: this.etsData.actionAsset,
                 title: this.etsData.actionTokenName,
-                image: '/assets/currencies/' + this.etsData.actionTokenName.toLowerCase() + '.png'
+                image: '/assets/currencies/' +
+                    (this.etsData.actionTokenName === 'USDC' ?
+                        this.etsData.actionTokenName.toLowerCase() : this.etsData.actionTokenName) +
+                    '.png'
             }
         },
 

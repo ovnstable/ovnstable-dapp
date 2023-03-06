@@ -376,7 +376,7 @@ export default {
         this.currencies.push({
             id: 'usdc',
             title: 'USDC',
-            image: require('@/assets/currencies/usdc.png')
+            image: require('@/assets/currencies/USDC.png')
         });
         this.currencies.push({
             id: 'usdPlus',

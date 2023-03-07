@@ -389,7 +389,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .banner-title {
     font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
+    text-transform: none;
     color: white;
 }
 

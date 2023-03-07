@@ -7,7 +7,7 @@
             <v-card class="container_body airdrop-body">
                 <v-toolbar class="container_header" flat>
                     <label class="title-modal mt-4">
-                        {{ isMintView ? 'Mint' : 'Redeem' }}
+                        {{ isMintView ? 'Mint DAI+' : 'Redeem DAI+' }}
                     </label>
                     <v-spacer></v-spacer>
                     <label @click="bridge" class="bridge-label mr-4 mt-4">Bridge</label>
@@ -31,10 +31,10 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import Mint from "@/components/swap/action/Mint";
-import Redeem from "@/components/swap/action/Redeem";
+import Mint from "@/components/swap/dai/action/Mint";
+import Redeem from "@/components/swap/dai/action/Redeem";
 
-export default  {
+export default {
     name: "SwapModal",
 
     components: {
@@ -45,15 +45,15 @@ export default  {
     props: {},
 
     computed: {
-        ...mapGetters('swapModal', ['show']),
-        ...mapGetters('swapModal', ['isMintView']),
+        ...mapGetters('swapDaiModal', ['show']),
+        ...mapGetters('swapDaiModal', ['isMintView']),
         ...mapGetters('network', ['bridgeLink']),
     },
 
     data: () => ({}),
 
     methods: {
-        ...mapActions('swapModal', ['showSwapModal', 'closeSwapModal']),
+        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'closeDaiSwapModal']),
         ...mapActions('track', ['trackClick']),
 
         openLink(link) {
@@ -61,7 +61,7 @@ export default  {
         },
 
         close() {
-            this.closeSwapModal();
+            this.closeDaiSwapModal();
         },
 
         bridge() {

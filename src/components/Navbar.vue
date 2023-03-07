@@ -109,7 +109,54 @@
                 </v-list-item>
             </v-list-group>
 
-            <v-list-item @click="etsClick()"
+          <v-list-group :append-icon="null"
+                        @click="toggleDaiPlus(!isShowDai)">
+            <template v-slot:activator>
+              <v-list-item-icon class="mx-n2">
+                <div class="navbar-page-link">
+                  <svg width="24" height="24" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path v-bind:fill="daiPlusIconColor" d="M4.68182 23.8182H2.5V17.2727H9.04545V19.4545H6.34C8.09636 22.0836 11.0964 23.8182 14.5 23.8182C17.1039 23.8182 19.6012 22.7838 21.4425 20.9425C23.2838 19.1012 24.3182 16.6039 24.3182 14H26.5C26.5 20.6327 21.1327 26 14.5 26C10.4418 26 6.85273 23.9818 4.68182 20.9055V23.8182ZM2.5 14C2.5 7.36727 7.86727 2 14.5 2C18.5582 2 22.1473 4.01818 24.3182 7.09455V4.18182H26.5V10.7273H19.9545V8.54545H22.66C20.9036 5.91636 17.9036 4.18182 14.5 4.18182C11.8961 4.18182 9.39876 5.21623 7.5575 7.0575C5.71623 8.89876 4.68182 11.3961 4.68182 14H2.5Z"/>
+                    <path v-bind:fill="daiPlusIconColor" d="M14.5664 20H10.5V8H14.6484C15.8398 8 16.8633 8.24023 17.7188 8.7207C18.5781 9.19727 19.2383 9.88281 19.6992 10.7773C20.1602 11.6719 20.3906 12.7422 20.3906 13.9883C20.3906 15.2383 20.1582 16.3125 19.6934 17.2109C19.2324 18.1094 18.5664 18.7988 17.6953 19.2793C16.8281 19.7598 15.7852 20 14.5664 20ZM12.6738 18.1191H14.4609C15.2969 18.1191 15.9941 17.9668 16.5527 17.6621C17.1113 17.3535 17.5313 16.8945 17.8125 16.2852C18.0938 15.6719 18.2344 14.9063 18.2344 13.9883C18.2344 13.0703 18.0938 12.3086 17.8125 11.7031C17.5313 11.0938 17.1152 10.6387 16.5645 10.3379C16.0176 10.0332 15.3379 9.88086 14.5254 9.88086H12.6738V18.1191Z"/>
+                  </svg>
+                </div>
+              </v-list-item-icon>
+              <v-list-item-title>
+                <label :class="selectedTab.startsWith('daiplus_') ? 'selected-page' : ''"
+                       class="navbar-page-label" >
+                  DAI+
+                </label>
+              </v-list-item-title>
+              <div class="select-bar-main-container mr-15" >
+                <v-row>
+                  <v-icon color="var(--secondary-gray-text)" >
+                    {{ isShowDai ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
+                  </v-icon>
+                </v-row>
+              </div>
+            </template>
+
+            <v-list-item :class="selectedTab === 'daiplus_collateral' ? 'selected-page-item' : ''"
+                         @click="daiCollateralClick"
+                         class="list-item-hover ">
+              <v-list-item-title>
+                <label :class="selectedTab === 'daiplus_collateral' ? 'selected-page' : ''"
+                       class="navbar-list-label mx-5">
+                  Collateral
+                </label>
+              </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item v-if="(networkId === 10 || networkId === 42161)"
+                         link @click="swapDaiClick"
+                         class="list-item-hover">
+              <v-list-item-title>
+                <label class="navbar-page-label-modal mx-5">Mint/redeem</label>
+              </v-list-item-title>
+            </v-list-item>
+          </v-list-group>
+
+
+          <v-list-item @click="etsClick()"
                          :class="selectedTab === 'ets' ? 'selected-page-item' : ''"
                          class="list-item-hover mx-n2 ma-1">
                 <v-list-item-icon>
@@ -265,6 +312,7 @@ export default {
 
     data: () => ({
         isShowUsd: false,
+        isShowDai: false,
         isShowInsurance: false,
         isColoredEts: false,
     }),
@@ -290,6 +338,14 @@ export default {
             return this.isShowUsd ? '#FFFFFF' : '#ADB3BD';
         },
 
+        daiPlusIconColor: function() {
+            if (this.light) {
+                return this.isShowDai ? '#000000' : '#ADB3BD';
+            }
+
+            return this.isShowDai ? '#FFFFFF' : '#ADB3BD';
+        },
+
         etsColored: function() {
             if (this.light) {
                 return this.isColoredEts ? '#000000' : '#ADB3BD';
@@ -302,6 +358,7 @@ export default {
     methods: {
         ...mapActions('menuUI', ['selectTab']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
         ...mapActions('theme', ['switchTheme']),
         ...mapActions('track', ['trackClick']),
@@ -333,6 +390,12 @@ export default {
             this.selectTab('usdplus_collateral');
             this.goToActionByPath('/collateral', {tabName: 'collateral'});
             this.trackClick({action: 'collateral-click', event_category: 'View Page', event_label: 'Open collateral page', value: 1 });
+        },
+
+        daiCollateralClick() {
+          this.selectTab('daiplus_collateral');
+          this.goToActionByPath('/collateral/dai', {tabName: 'collateralDai'});
+          this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
         },
 
         usdPlusPoolsClick() {
@@ -373,6 +436,12 @@ export default {
             this.trackClick({action: 'swap-click', event_category: 'Mint', event_label: 'Open mint modal', value: 1 });
         },
 
+        swapDaiClick() {
+          this.showDaiMintView();
+          this.showDaiSwapModal();
+          this.trackClick({action: 'swap-dai-click', event_category: 'Mint', event_label: 'Open dai mint modal', value: 1 });
+        },
+
         wrapClick() {
             this.showWrapView();
             this.showWrapModal();
@@ -403,14 +472,25 @@ export default {
         toggleUsdPlus(isShow) {
             if (isShow) {
                 this.toggleInsurance(false);
+                this.toggleDaiPlus(false);
             }
 
             this.isShowUsd = isShow;
         },
 
+      toggleDaiPlus(isShow) {
+            if (isShow) {
+                this.toggleInsurance(false);
+                this.toggleUsdPlus(false);
+            }
+
+            this.isShowDai = isShow;
+        },
+
         toggleInsurance(isShow) {
             if (isShow) {
                 this.toggleUsdPlus(false);
+                this.toggleDaiPlus(false);
             }
 
             this.isShowInsurance = isShow;

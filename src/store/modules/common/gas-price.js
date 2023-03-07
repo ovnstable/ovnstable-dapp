@@ -76,7 +76,7 @@ const actions = {
                     fast: gwei,
                     ultra: gwei,
 
-                    usdPrice: 0
+                    usdPrice: 0,
                 }
                 commit('setGasPriceStation', price);
 

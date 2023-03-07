@@ -24,6 +24,7 @@ const actions = {
 
         let networkDaiMap = {
             polygon: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+            arbitrum: '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8',
             optimism: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
         };
 

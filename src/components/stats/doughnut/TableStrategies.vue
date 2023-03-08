@@ -7,11 +7,11 @@
                 Strategy
             </th>
             <th class="table-header-don text-left">
-                Net Asset Value ({{ assetName }})
+                Net Asset Value ({{ assetType ? assetType : assetName }})
                 <!-- TODO: add info -->
             </th>
             <th class="table-header-don text-left" v-if="!minimized">
-                Liquidation value ({{ assetName }})
+                Liquidation value ({{ assetType ? assetType : assetName }})
                 <!-- TODO: add info -->
             </th>
             <th class="table-header-don text-left" :class="minimized ? 'text-right' : 'text-left'"
@@ -121,6 +121,10 @@ export default {
         totalTitle: {
           type: String,
           default: 'Total'
+        },
+        assetType: {
+          type: String,
+          default: null
         }
     },
 

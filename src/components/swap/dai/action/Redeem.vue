@@ -1,7 +1,7 @@
 <template>
     <v-col>
         <v-row class="mx-n3 main-card">
-            <v-col cols="7">
+            <v-col>
                 <v-row align="center" class="ma-0">
                     <label class="balance-label ml-3">Balance: {{ maxResult }}</label>
                     <div class="balance-network-icon ml-2">
@@ -57,7 +57,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <div class="swap-view-btn" @click="showRedeemView">
+            <div class="swap-view-btn" @click="showDaiMintView">
                 <v-img :src="require('@/assets/icon/arrowsSwap.svg')"/>
             </div>
             <v-spacer></v-spacer>
@@ -66,7 +66,7 @@
         <v-row class="mt-8 mx-n3 main-card">
             <v-col>
                 <v-row align="center" class="ma-0">
-                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.usdPlus, 3) }}</label>
+                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.dai, 3) }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>
@@ -104,7 +104,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 {{ assetName }} = 1 USD+</label>
+            <label class="exchange-label">1 DAI+ = 1 {{ assetName }}</label>
         </v-row>
 
         <v-row class="mt-10">
@@ -135,11 +135,12 @@
                 <v-row>
                     <label class="action-info-sub-label">{{ overnightFee ? $utils.formatMoneyComma(overnightFee, 2) + '%' : '—' }}</label>
                     <v-spacer></v-spacer>
-                    <label class="action-info-label">You mint:</label>
+                    <label class="action-info-label">You redeem:</label>
                     <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma(estimateResult, 2) : '0') }}</label>
                 </v-row>
             </v-col>
         </v-row>
+
 
         <v-row class="mt-15" align="center" justify="center">
             <div class="action-btn-container" v-if="!this.account">
@@ -150,7 +151,7 @@
             </div>
 
             <div class="action-btn-container" v-else>
-                <v-btn v-if="assetApproved"
+                <v-btn v-if="daiPlusApproved"
                        height="56"
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
@@ -212,30 +213,34 @@ import optimismIcon from "@/assets/network/op.svg";
 import arbitrumIcon from "@/assets/network/ar.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import {axios} from "@/plugins/http-axios";
-import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
 import Tooltip from "@/components/common/element/Tooltip";
+import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
 
 export default {
-    name: "Mint",
+    name: "Redeem",
 
     components: {
-        Tooltip,
         GasSettingsMenu,
+        Tooltip,
         ErrorModal,
         WaitingModal,
         SuccessModal,
     },
 
     data: () => ({
-        currency: {id: 'asset'},
-        currencies: [],
+        currency: null,
+        currencies: [
+            {
+                id: 'daiPlus',
+                title: 'DAI+',
+                image: require('@/assets/currencies/DAI+.svg')
+            }
+        ],
 
-        buyCurrency: null,
-        buyCurrencies: [{
-            id: 'usdPlus',
-            title: 'USD+',
-            image: require('@/assets/currencies/usdPlus.svg')
-        }],
+        assetName: 'DAI',
+
+        buyCurrency: {id: 'dai'},
+        buyCurrencies: [],
 
         sum: null,
 
@@ -256,9 +261,9 @@ export default {
         ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
         ...mapGetters('transaction', ['transactions']),
 
-        ...mapGetters('swapModal', ['assetApproved']),
+        ...mapGetters('swapDaiModal', ['daiPlusApproved']),
 
-        ...mapGetters("network", ['networkId', 'assetName', 'assetDecimals', 'polygonApi']),
+        ...mapGetters("network", ['networkId', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
@@ -276,11 +281,11 @@ export default {
         },
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.balance.asset, 3);
+            return this.$utils.formatMoney(this.balance.daiPlus, 3);
         },
 
         sumResult: function () {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.asset) * 100;
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.daiPlus) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -305,17 +310,17 @@ export default {
             } else if (this.transactionPending) {
                 return 'Transaction is pending';
             } else if (this.isBuy) {
-                if (this.assetApproved) {
+                if (this.daiPlusApproved) {
                     this.step = 2;
                     return 'Confirm transaction'
                 } else {
                     this.step = 1;
-                    return 'Approve ' + this.assetName;
+                    return 'Approve DAI+';
                 }
-            } else if (this.sum > parseFloat(this.balance.asset)) {
-                return 'Mint'
+            } else if (this.sum > parseFloat(this.balance.daiPlus)) {
+                return 'Redeem'
             } else {
-                return 'Mint';
+                return 'Redeem';
             }
         },
 
@@ -324,7 +329,7 @@ export default {
         },
 
         transactionPending: function () {
-            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === 'usdPlus') && (value.action === 'mint'))).length > 0;
+            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === 'daiPlus') && (value.action === 'redeem'))).length > 0;
         },
 
         numberRule: function () {
@@ -334,11 +339,11 @@ export default {
             if (!v)
                 return false;
 
-          if (!v.trim()) return false;
+            if (!v.trim()) return false;
 
-          v = parseFloat(v.trim().replace(/\s/g, ''));
+            v = parseFloat(v.trim().replace(/\s/g, ''));
 
-          if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.asset)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.daiPlus).toFixed(6)) return true;
 
             return false;
         },
@@ -359,14 +364,14 @@ export default {
     },
 
     created() {
-        this.currencies.push({
-            id: 'asset',
+        this.buyCurrencies.push({
+            id: 'dai',
             title: this.assetName,
             image: require('@/assets/currencies/stablecoins/' + this.assetName + '.png')
         });
 
-        this.currency = this.currencies[0];
         this.buyCurrency = this.buyCurrencies[0];
+        this.currency = this.currencies[0];
 
         this.estimatedGas = null;
 
@@ -377,12 +382,11 @@ export default {
 
     methods: {
 
-        ...mapActions("swapData", ['refreshSwap']),
-        ...mapActions("swapModal", ['showRedeemView', 'approveAsset', 'disapproveAsset']),
+        ...mapActions("swapDaiData", ['refreshSwap']),
+        ...mapActions("swapDaiModal", ['showDaiMintView', 'approveDaiPlus', 'disapproveDaiPlus']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
-        ...mapActions("referral", ['getReferralCode']),
 
         ...mapActions("errorModal", ['showErrorModal']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
@@ -392,7 +396,7 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
-            this.sum = (this.balance.asset * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.balance.daiPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
             await this.checkApprove();
         },
@@ -454,30 +458,31 @@ export default {
               return;
             }
 
-            let sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
+            let sum = this.web3.utils.toWei(this.sum, 'ether');
+
             let allowApprove = await this.checkAllowance(sum);
+            console.log("allowApprove : ", allowApprove, sum)
             if (!allowApprove) {
-              this.disapproveAsset();
+              this.disapproveDaiPlus();
               return false;
             } else {
-              this.approveAsset();
+              this.approveDaiPlus();
               return true;
             }
           } catch (e) {
             console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             this.showErrorModal('approve');
-            this.disapproveAsset();
+            this.disapproveDaiPlus();
             return false;
           }
         },
         getMax() {
-            let balanceElement = this.originalBalance[this.currency.id];
-            return balanceElement ? balanceElement + '' : null;
+          let balanceElement = this.originalBalance[this.currency.id];
+          return balanceElement ? balanceElement + '' : null;
         },
 
-        async buyAction() {
+        async redeemAction() {
             try {
-              console.debug(`Swap Mint blockchain. Start buy action. Account: ${this.account}. estimatedGasValue: ${this.sliderPercent}`);
 
               let sumInUsd = this.sum;
               let sum;
@@ -490,10 +495,13 @@ export default {
                   return;
                 }
               } else {
-                sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
+                sum = this.web3.utils.toWei(this.sum, 'ether');
               }
 
-              console.debug(`Swap Mint blockchain. Start buy action. Account: ${this.account}. assetDecimals: ${this.assetDecimals}, sum ${sum}`);
+              if (!(await this.checkApprove())) {
+                console.debug(`Redeem dai swap. Buy action Approve not pass. Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}.`);
+                return;
+              }
 
               let contracts = this.contracts;
               let from = this.account;
@@ -510,73 +518,57 @@ export default {
                       buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                   }
 
-                  let mintParams = {
-                      asset: contracts.asset.options.address,
-                      amount: sum,
-                      referral: await this.getReferralCode(),
-                  }
-
-                  console.debug(`Swap blockchain. Mint action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
-                  let buyResult = await contracts.exchange.methods.mint(mintParams).send(buyParams).on('transactionHash', function (hash) {
+                  console.debug(`Swap blockchain. Redeem action Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
+                  let buyResult = await contracts.daiExchange.methods.redeem(contracts.dai.options.address, sum).send(buyParams).on('transactionHash', function (hash) {
                       let tx = {
                           hash: hash,
-                          text: 'Mint USD+',
-                          product: 'usdPlus',
-                          productName: 'USD+',
-                          action: 'mint',
+                          text: 'Redeem DAI+',
+                          product: 'daiPlus',
+                          productName: 'DAI+',
+                          action: 'redeem',
                           amount: sumInUsd,
                       };
 
                       self.putTransaction(tx);
-                      self.showSuccessModal({successTxHash: hash, successAction: 'mintUsdPlus'});
+                      self.showSuccessModal({successTxHash: hash, successAction: 'redeemDaiPlus'});
                       self.loadTransaction();
                   });
               } catch (e) {
-                  console.error(`Swap Mint contract buy action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                  return;
+                console.error(`Swap Redeem blockchain redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                return;
               }
 
               self.refreshSwap();
               self.setSum(null);
             } catch (e) {
-              console.error(`Swap Mint buy action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+              console.error(`Swap Redeem redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             }
         },
 
         async confirmSwapAction() {
             try {
-              let sum;
-              console.debug(`Swap Mint blockchain. Start confirm process. Account: ${this.account}. assetDecimals: ${this.assetDecimals}`);
+                let sum;
 
-              if (this.sliderPercent === 100) {
-                let originalMax = this.getMax();
-                sum = originalMax;
-                if (!originalMax) {
-                  console.error("Original max value not exist, when confirm swap action in market invest.")
-                  return;
+                if (this.sliderPercent === 100) {
+                  let originalMax = this.getMax();
+                  sum = originalMax;
+                  if (!originalMax) {
+                    console.error("Original max value not exist, when confirm swap action in market invest.")
+                    return;
+                  }
+                } else {
+                  sum = this.web3.utils.toWei(this.sum, 'ether');
                 }
-              } else {
-                sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
-              }
-
-              if (!(await this.checkApprove())) {
-                console.debug(`Swap. Buy action Approve not pass. Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
-                return;
-              }
-
-                console.debug(`Swap Mint blockchain. Confirm swap action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
-
-                this.trackClick({action: 'confirm-swap-click', event_category: 'Mint', event_label: 'Confirm Mint Action', value: 1 });
 
                 let estimatedGasValue = await this.estimateGas(sum);
-                console.debug(`Swap Mint blockchain. Start confirm process. Account: ${this.account}. estimatedGasValue: ${estimatedGasValue}`);
-
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
                     this.gas = null;
                     this.gasAmountInMatic = null;
                     this.gasAmountInUsd = null;
 
-                    await this.buyAction();
+                    this.trackClick({action: 'confirm-redeem-click', event_category: 'Redeem confirm', event_label: 'Confirm Redeem Action', value: 1 });
+                    await this.redeemAction();
+                    this.closeWaitingModal();
                 } else {
                     this.estimatedGas = estimatedGasValue;
 
@@ -585,154 +577,133 @@ export default {
                     this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
                     this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
 
-                    await this.buyAction();
+                    await this.redeemAction();
+                    this.closeWaitingModal();
                 }
             } catch (e) {
-              console.error(`Swap Mint estimateGas action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-              this.showErrorModal('estimateGas');
+                console.error(`Swap dai Redeem swap action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                this.showErrorModal('estimateGas');
             }
         },
 
         async approveAction() {
             try {
-                console.debug(`Swap Mint blockchain. Start approving process. ApproveSum: ${this.account}.`);
-
                 this.showWaitingModal('Approving in process');
+                this.trackClick({action: 'approve-redeem-click', event_category: 'Redeem approve', event_label: 'Approve Redeem Action', value: 1 });
+
 
                 let approveSum = "10000000";
-                let sum;
+                let sum = this.web3.utils.toWei(approveSum, 'ether');
+                console.debug(`Swap dai Mint blockchain. Approve action. Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}.`);
 
-              console.debug(`Swap Mint blockchain. Approve action AssetDecimals: ${this.assetDecimals}. ApproveSum: ${approveSum}.`);
-              if (this.assetDecimals === 18) {
-                    sum = this.web3.utils.toWei(approveSum, 'ether');
-                } else {
-                    sum = this.web3.utils.toWei(approveSum, 'mwei');
-                }
-
-                console.debug(`Swap Mint blockchain. Approve action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
-                let allowApprove = await this.checkAllowance(sum);
-                console.debug(`Swap Mint blockchain. Is allowApprove? ${allowApprove}. Account: ${this.account}.`);
-                allowApprove = !allowApprove ? (await this.approveBlockchainAction(sum)) : true;
-
-                if (!allowApprove) {
-                    this.trackClick({action: 'approve-action-click', event_category: 'Mint', event_label: 'Approve Mint Action', value: 1 });
+              let allowApprove = await this.checkAllowance(sum);
+              allowApprove = !allowApprove ? (await this.approveBlockchainAction(sum)) : true;
+              if (!allowApprove) {
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
-                    this.disapproveAsset();
+                    this.disapproveDaiPlus();
                 } else {
-                    this.approveAsset();
+                    this.approveDaiPlus();
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.debug(`Swap Mint approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                console.error(`Swap Redeem approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('approve');
-                this.trackClick({action: 'mint-error-showed-click', event_category: 'Mint error', event_label: 'Mint Error Showed', value: 1 });
+                this.trackClick({action: 'redeem-error-click', event_category: 'Redeem error', event_label: 'Error Redeem Showed', value: 1 });
             }
         },
+        async approveBlockchainAction(sum) {
+          try {
+            await this.refreshGasPrice();
+            let contracts = this.contracts;
+            let from = this.account;
 
-      async approveBlockchainAction(sum) {
-        try {
-          await this.refreshGasPrice();
-          await this.refreshGasPrice();
-          let contracts = this.contracts;
-          let from = this.account;
+            let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-          let approveParams = {gasPrice: this.gasPriceGwei, from: from};
+            let tx = await contracts.daiPlus.methods.approve(contracts.daiExchange.options.address, sum).send(approveParams);
+            console.debug(`Swap dai Mint blockchain. Allowance Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}.`);
 
-          console.debug(`Swap Mint blockchain. Check allowance Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
-          let tx = await contracts.asset.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
+            let minted = true;
+            while (minted) {
+              await new Promise(resolve => setTimeout(resolve, 2000));
+              let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
+              this.trackClick({action: 'redeem-tx-show-click', event_category: 'Redeem tx scan', event_label: 'Redeem Go to Scan', value: 1 });
 
-          let minted = true;
-          while (minted) {
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
-            this.trackClick({action: 'mint-tx-scan-click', event_category: 'Redeem tx scan', event_label: 'Mint Go to Scan', value: 1 });
-
-            if (receipt) {
-              if (receipt.status) {
-                console.debug(`Swap Mint blockchain. Check allowance Sum. receipt.status ${receipt.status}. Account: ${this.account}.`);
-                return true;
-              } else {
-                console.debug(`Swap Mint blockchain. Check allowance Sum. receipt.status is false. Account: ${this.account}.`);
-                return false;
+              if (receipt) {
+                if (receipt.status)
+                  return true;
+                else {
+                  return false;
+                }
               }
             }
+
+            return true;
+          } catch (e) {
+            console.error(`Swap Redeem allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+            return false;
           }
-
-          console.debug(`Swap Mint blockchain. Check allowance Sum. receipt.status is true. Account: ${this.account}.`);
-          return true;
-        } catch (e) {
-          console.error(`Swap Mint allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-          return false;
-        }
-      },
-      async checkAllowance(sum) {
-        let contracts = this.contracts;
-        let from = this.account;
-
-        let allowanceValue = await contracts.asset.methods.allowance(from, contracts.exchange.options.address).call();
-        console.debug(`Swap Mint blockchain. Allowance value: ${allowanceValue}. Account: ${this.account}.`);
-        console.log('allowanceValue: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
-        return allowanceValue * 1 >= sum * 1;
-      },
-      async estimateGas(sum) {
-
+        },
+        async checkAllowance(sum) {
           let contracts = this.contracts;
           let from = this.account;
 
-          let result;
+          let allowanceValue = await contracts.daiPlus.methods.allowance(from, contracts.daiExchange.options.address).call()
+          console.debug(`Swap Mint blockchain. Allowance value: ${allowanceValue}. Account: ${this.account}.`);
+          console.log('allowanceValue: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
+          return allowanceValue * 1 >= sum * 1;
+        },
 
-          try {
-              let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
-              let blockNum = await this.web3.eth.getBlockNumber();
-              let errorApi = this.polygonApi;
+        async estimateGas(sum) {
 
-              let mintParams = {
-                  asset: contracts.asset.options.address,
-                  amount: sum,
-                  referral: await this.getReferralCode(),
-              }
+            let contracts = this.contracts;
+            let from = this.account;
 
-              console.debug(`Swap Mint blockchain. Estimate gas Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
-              await contracts.exchange.methods.mint(mintParams).estimateGas(estimateOptions)
-                  .then(function (gasAmount) {
-                      result = gasAmount;
-                  })
-                  .catch(function (error) {
-                      console.error(`Swap Mint blockchain estimate action error: ${error}. Sum: ${this.sum}. Account: ${this.account}. `);
+            let result;
 
-                      if (error && error.message) {
-                          let msg = error.message.replace(/(?:\r\n|\r|\n)/g, '');
+            try {
+                let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
+                let blockNum = await this.web3.eth.getBlockNumber();
+                let errorApi = this.polygonApi;
 
-                          let errorMsg = {
-                              product: 'USD+',
-                              data: {
-                                  from: from,
-                                  to: contracts.exchange.options.address,
-                                  gas: null,
-                                  gasPrice: parseInt(estimateOptions.gasPrice, 16),
-                                  method: contracts.exchange.methods.buy(contracts.asset.options.address, sum).encodeABI(),
-                                  message: msg,
-                                  block: blockNum
-                              }
-                          };
+                console.debug(`Swap dai Mint blockchain. Estimate gas action Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}.`);
+                await contracts.daiExchange.methods.redeem(contracts.dai.options.address, sum).estimateGas(estimateOptions)
+                    .then(function (gasAmount) {
+                        result = gasAmount;
+                    })
+                    .catch(function (error) {
+                        if (error && error.message) {
+                            let msg = error.message.replace(/(?:\r\n|\r|\n)/g, '');
 
-                          axios.post( errorApi + '/error/log', errorMsg);
+                            let errorMsg = {
+                                product: 'DAI+',
+                                data: {
+                                    from: from,
+                                    to: contracts.daiExchange.options.address,
+                                    gas: null,
+                                    gasPrice: parseInt(estimateOptions.gasPrice, 16),
+                                    method: contracts.daiExchange.methods.redeem(contracts.dai.options.address, sum).encodeABI(),
+                                    message: msg,
+                                    block: blockNum
+                                }
+                            };
 
-                          console.log(errorMsg);
-                      } else {
-                          console.log(error);
-                      }
+                            axios.post(errorApi + '/error/log', errorMsg);
 
-                      return -1;
-                  });
-          } catch (e) {
-            console.error(`Swap Mint estimate action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-            return -1;
-          }
+                            console.log(errorMsg);
+                        } else {
+                          console.error(`Swap Redeem blockchain estimate action error: ${error}. Sum: ${this.sum}. Account: ${this.account}. `);
+                        }
 
-          return result;
-      },
+                        return -1;
+                    });
+            } catch (e) {
+                console.error(`Swap Redeem estimate action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                return -1;
+            }
+
+            return result;
+        },
     }
 }
 </script>

@@ -10,7 +10,7 @@
                         {{ isMintView ? 'Mint' : 'Redeem' }}
                     </label>
                     <v-spacer></v-spacer>
-                    <label @click="bridge" class="bridge-label mr-4 mt-4">Bridge</label>
+                    <label @click="bridge" class="bridge-label mr-4 mt-4">Bridge (Via.Exchange)</label>
                     <v-btn icon @click="close" class="mt-4">
                         <v-icon class="close-icon">mdi-close</v-icon>
                     </v-btn>
@@ -31,10 +31,10 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import Mint from "@/components/swap/action/Mint";
-import Redeem from "@/components/swap/action/Redeem";
+import Mint from "@/components/swap/dai/action/Mint";
+import Redeem from "@/components/swap/dai/action/Redeem";
 
-export default  {
+export default {
     name: "SwapModal",
 
     components: {
@@ -45,15 +45,15 @@ export default  {
     props: {},
 
     computed: {
-        ...mapGetters('swapModal', ['show']),
-        ...mapGetters('swapModal', ['isMintView']),
+        ...mapGetters('swapDaiModal', ['show']),
+        ...mapGetters('swapDaiModal', ['isMintView']),
         ...mapGetters('network', ['bridgeLink']),
     },
 
     data: () => ({}),
 
     methods: {
-        ...mapActions('swapModal', ['showSwapModal', 'closeSwapModal']),
+        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'closeDaiSwapModal']),
         ...mapActions('track', ['trackClick']),
 
         openLink(link) {
@@ -61,12 +61,12 @@ export default  {
         },
 
         close() {
-            this.closeSwapModal();
+            this.closeDaiSwapModal();
         },
 
         bridge() {
             window.open(this.bridgeLink, '_blank').focus();
-            this.trackClick({action: 'bridge-click', event_category: 'Bridge', event_label: 'Open Bridge From Swap Modal', value: 1 });
+            this.trackClick({action: 'bridge-click', event_category: 'Bridge', event_label: 'Open Bridge From Swap dai Modal', value: 1 });
         },
     },
 }

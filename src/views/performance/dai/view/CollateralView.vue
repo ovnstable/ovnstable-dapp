@@ -4,7 +4,20 @@
             <label class="title-label">Collateral</label>
         </div>
 
-        <UsdPlusTab :class="networkId === 10 ? '' : 'mt-7'" v-if="tab === 1"/>
+       <DaiPlusTab v-if="networkId === 10 || networkId === 42161"/>
+        <div v-else class="ma-0 info-card-container d-flex mt-3">
+          <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
+            <v-img class="currency" :src="require('@/assets/currencies/DAI+.svg')" />
+          </div>
+          <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'" >
+            <label class="section-text">
+              DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoveen) on Optimism. It cannot be minted separately.
+            </label>
+            <div class="font-weight-bold">
+              Switch on Optimism or Arbitrum chain to see DAI+ collateral.
+            </div>
+          </div>
+        </div>
 
         <resize-observer @notify="$forceUpdate()"/>
     </div>
@@ -13,34 +26,27 @@
 <script>
 
 import {mapActions, mapGetters} from "vuex";
-import UsdPlusTab from "@/views/performance/view/tab/UsdPlusTab";
 import DaiPlusTab from "@/views/performance/dai/view/tab/DaiPlusTab.vue";
 
 
 export default {
-    name: "CollateralView",
+    name: "CollateralDaiView",
 
     components: {
-        UsdPlusTab,
+        DaiPlusTab,
     },
 
     data: () => ({
-        tab: 1,
     }),
 
     watch: {
-        networkId: function (newValue, oldValue) {
-            if (newValue !== 10) {
-                this.tab = 1;
-            }
-        },
+
     },
 
     computed: {
-        ...mapGetters("network", ['networkId']),
-        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
+      ...mapGetters("network", ['networkId']),
 
-        activeTabUsd: function () {
+      activeTabUsd: function () {
             return {
                 'tab-button': this.tab === 1,
                 'tab-button-inactive': this.tab !== 1,
@@ -56,15 +62,15 @@ export default {
     },
 
     methods: {
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView']),
 
         openLink(url) {
             window.open(url, '_blank').focus();
         },
 
         mintAction() {
-            this.showMintView();
-            this.showSwapModal();
+            this.showDaiMintView();
+            this.showDaiSwapModal();
         },
     }
 }
@@ -74,6 +80,15 @@ export default {
 
 /* mobile */
 @media only screen and (max-width: 960px) {
+    .section-title-label {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      letter-spacing: 0.02em;
+    }
+
+
     .title-label {
         font-style: normal;
         font-weight: 300;
@@ -85,6 +100,11 @@ export default {
         font-size: 14px;
         line-height: 18px;
     }
+
+  .section-text {
+    font-size: 14px;
+    line-height: 22px;
+  }
 }
 
 /* tablet */
@@ -96,15 +116,39 @@ export default {
         line-height: 60px;
     }
 
-    .wide-btn {
+    .section-title-label {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 24px;
+      letter-spacing: 0.04em;
+    }
+
+
+  .wide-btn {
         font-size: 16px;
         line-height: 20px;
     }
+
+    .section-text {
+      font-size: 16px;
+      line-height: 24px;
+    }
+
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .title-label {
+    .section-title-label {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 24px;
+      letter-spacing: 0.04em;
+    }
+
+
+  .title-label {
         font-style: normal;
         font-weight: 300;
         font-size: 54px;
@@ -115,6 +159,12 @@ export default {
         font-size: 16px;
         line-height: 20px;
     }
+
+  .section-text {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
 }
 
 @media
@@ -124,6 +174,19 @@ only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px)
 only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
 only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
 only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+
+    .label-about {
+      margin-top: 15px !important;
+    }
+
+    .section-title-label {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 24px;
+      letter-spacing: 0.04em;
+    }
+
     .title-label {
         font-style: normal;
         font-weight: 300;
@@ -134,6 +197,12 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .wide-btn {
         font-size: 14px;
         line-height: 20px;
+    }
+
+
+    .section-text {
+      font-size: 17px;
+      line-height: 28px;
     }
 }
 
@@ -179,4 +248,31 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     color: var(--links-blue) !important;
     cursor: pointer;
 }
+
+.info-card-container {
+  background: var(--secondary);
+  border-radius: 12px;
+}
+
+.info-card-container-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.section-title-label {
+  font-family: 'Roboto', sans-serif;
+  font-feature-settings: 'pnum' on, 'lnum' on;
+  text-transform: none;
+  color: var(--secondary-gray-text);
+}
+
+.section-text {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  color: var(--main-gray-text);
+}
+
+
 </style>

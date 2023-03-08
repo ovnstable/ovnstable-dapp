@@ -110,10 +110,10 @@
 <script>
 
 import {mapActions, mapGetters} from "vuex";
-import TableStablecoins from "@/components/stats/pie/TableStablecoins";
-import PieStablecoins from "@/components/stats/pie/PieStablecoins";
-import TableStrategies from "@/components/stats/doughnut/TableStrategies";
-import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies";
+import TableStablecoins from "@/components/stats/pie/TableStablecoins.vue";
+import PieStablecoins from "@/components/stats/pie/PieStablecoins.vue";
+import TableStrategies from "@/components/stats/doughnut/TableStrategies.vue";
+import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies.vue";
 
 import {collateralApiService} from "@/services/collateral-api-service";
 import {strategiesApiService} from "@/services/strategies-api-service";
@@ -138,7 +138,16 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("network", ['networkId', 'apiUrl']),
+        ...mapGetters("network", ['networkId', 'networkName', 'apiUrl']),
+    },
+
+    watch: {
+      networkId: function (newValue, oldValue) {
+        if (newValue) {
+          this.loadCurrentTotalData()
+          this.loadCollateralData()
+        }
+      }
     },
 
     created() {
@@ -166,7 +175,7 @@ export default {
       loadCurrentTotalData() {
         this.isCurrentTotalDataLoading = true;
 
-        strategiesApiService.getStrategies(this.apiUrl + '/optimism/dai+')
+        strategiesApiService.getStrategies(this.apiUrl + `/${this.networkName}/dai+`)
           .then(data => {
             let strategies = data;
             strategies.sort((a,b) => b.netAssetValue - a.netAssetValue);
@@ -215,7 +224,7 @@ export default {
       loadCollateralData() {
           this.isCollateralLoading = true;
 
-        collateralApiService.getCollateralData(this.apiUrl + '/optimism/dai+')
+        collateralApiService.getCollateralData(this.apiUrl + `/${this.networkName}/dai+`)
         .then(data => {
           let stablecoinList = data;
           stablecoinList.sort((a,b) => b.netAssetValue - a.netAssetValue);

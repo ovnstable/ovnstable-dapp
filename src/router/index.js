@@ -17,6 +17,7 @@ import Insurance from "./midleware/dapp/Insurance";
 import Reserves from "./midleware/dapp/Reserves";
 import Stats from "./midleware/dapp/Stats";
 import Collateral from "./midleware/dapp/Collateral";
+import CollateralDai from "./midleware/dapp/CollateralDai";
 import Dashboard from "./midleware/dapp/Dashboard";
 import Pools from "./midleware/dapp/Pools";
 
@@ -111,6 +112,16 @@ const routes = [
                 meta: {
                     middleware: [
                         Collateral,
+                    ]
+                }
+            },
+            {
+                path: '/collateral/dai',
+                name: 'CollateralDaiView',
+                component: () => import('../views/performance/dai/view/CollateralView.vue'),
+                meta: {
+                    middleware: [
+                        CollateralDai,
                     ]
                 }
             },

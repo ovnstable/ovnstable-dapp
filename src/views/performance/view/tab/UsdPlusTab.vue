@@ -132,7 +132,7 @@ import {strategiesApiService} from "@/services/strategies-api-service";
 import {collateralApiService} from "@/services/collateral-api-service";
 
 export default {
-    name: "CollateralView",
+    name: "CollateralViewTab",
 
     components: {
         DoughnutStrategies,

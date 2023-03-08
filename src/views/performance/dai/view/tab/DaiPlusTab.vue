@@ -60,6 +60,7 @@
                             v-if="!$wu.isMobile()"
                             :data="currentTotalData"
                             asset-type="DAI"
+                            total-title="Total DAI+ in circulation"
                             :total-supply="totalValue"/>
 
                         <TableStrategies
@@ -67,11 +68,12 @@
                             minimized
                             :data="currentTotalData"
                             asset-type="DAI"
+                            total-title="Total DAI+ in circulation"
                             :total-supply="totalValue"/>
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <DoughnutStrategies :data="currentTotalData" :total-value="totalValue" :size="!$wu.isFull() ? 200 : 300"/>
+                        <DoughnutStrategies :data="currentTotalData" asset-type="DAI+" :total-value="totalValue" :size="!$wu.isFull() ? 200 : 300"/>
                     </v-col>
                 </v-row>
             </v-col>

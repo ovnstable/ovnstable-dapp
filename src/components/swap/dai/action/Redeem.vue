@@ -3,7 +3,7 @@
         <v-row class="mx-n3 main-card">
             <v-col>
                 <v-row align="center" class="ma-0">
-                    <label class="balance-label ml-3">BalanceRedeem: {{ maxResult }}</label>
+                    <label class="balance-label ml-3">Balance: {{ maxResult }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>
@@ -57,7 +57,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <div class="swap-view-btn" @click="showMintView">
+            <div class="swap-view-btn" @click="showDaiMintView">
                 <v-img :src="require('@/assets/icon/arrowsSwap.svg')"/>
             </div>
             <v-spacer></v-spacer>
@@ -66,7 +66,7 @@
         <v-row class="mt-8 mx-n3 main-card">
             <v-col>
                 <v-row align="center" class="ma-0">
-                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.asset, 3) }}</label>
+                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.dai, 3) }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>
@@ -104,7 +104,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 USD+ = 1 {{ assetName }}</label>
+            <label class="exchange-label">1 DAI+ = 1 {{ assetName }}</label>
         </v-row>
 
         <v-row class="mt-10">
@@ -151,7 +151,7 @@
             </div>
 
             <div class="action-btn-container" v-else>
-                <v-btn v-if="usdPlusApproved"
+                <v-btn v-if="daiPlusApproved"
                        height="56"
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
@@ -231,13 +231,15 @@ export default {
         currency: null,
         currencies: [
             {
-                id: 'usdPlus',
-                title: 'USD+',
-                image: require('@/assets/currencies/usdPlus.svg')
+                id: 'daiPlus',
+                title: 'DAI+',
+                image: require('@/assets/currencies/DAI+.svg')
             }
         ],
 
-        buyCurrency: {id: 'asset'},
+        assetName: 'DAI',
+
+        buyCurrency: {id: 'dai'},
         buyCurrencies: [],
 
         sum: null,
@@ -261,7 +263,7 @@ export default {
 
         ...mapGetters('swapDaiModal', ['daiPlusApproved']),
 
-        ...mapGetters("network", ['networkId', 'assetName', 'polygonApi']),
+        ...mapGetters("network", ['networkId', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
@@ -279,11 +281,11 @@ export default {
         },
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.balance.usdPlus, 3);
+            return this.$utils.formatMoney(this.balance.daiPlus, 3);
         },
 
         sumResult: function () {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.usdPlus) * 100;
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.daiPlus) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -313,9 +315,9 @@ export default {
                     return 'Confirm transaction'
                 } else {
                     this.step = 1;
-                    return 'Approve USD+';
+                    return 'Approve DAI+';
                 }
-            } else if (this.sum > parseFloat(this.balance.usdPlus)) {
+            } else if (this.sum > parseFloat(this.balance.daiPlus)) {
                 return 'Redeem'
             } else {
                 return 'Redeem';
@@ -327,7 +329,7 @@ export default {
         },
 
         transactionPending: function () {
-            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === 'usdPlus') && (value.action === 'redeem'))).length > 0;
+            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === 'daiPlus') && (value.action === 'redeem'))).length > 0;
         },
 
         numberRule: function () {
@@ -341,7 +343,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlus)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.daiPlus).toFixed(6)) return true;
 
             return false;
         },
@@ -363,7 +365,7 @@ export default {
 
     created() {
         this.buyCurrencies.push({
-            id: 'asset',
+            id: 'dai',
             title: this.assetName,
             image: require('@/assets/currencies/stablecoins/' + this.assetName + '.png')
         });
@@ -380,8 +382,8 @@ export default {
 
     methods: {
 
-        ...mapActions("swapData", ['refreshSwap']),
-        ...mapActions("swapModal", ['showMintView', 'approveUsdPlus', 'disapproveUsdPlus']),
+        ...mapActions("swapDaiData", ['refreshSwap']),
+        ...mapActions("swapDaiModal", ['showDaiMintView', 'approveDaiPlus', 'disapproveDaiPlus']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
@@ -394,7 +396,7 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
-            this.sum = (this.balance.usdPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.balance.daiPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
             await this.checkApprove();
         },
@@ -456,21 +458,21 @@ export default {
               return;
             }
 
-            let sum = this.web3.utils.toWei(this.sum, 'mwei');
+            let sum = this.web3.utils.toWei(this.sum, 'ether');
 
             let allowApprove = await this.checkAllowance(sum);
             console.log("allowApprove : ", allowApprove, sum)
             if (!allowApprove) {
-              this.disapproveUsdPlus();
+              this.disapproveDaiPlus();
               return false;
             } else {
-              this.approveUsdPlus();
+              this.approveDaiPlus();
               return true;
             }
           } catch (e) {
             console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
             this.showErrorModal('approve');
-            this.disapproveUsdPlus();
+            this.disapproveDaiPlus();
             return false;
           }
         },
@@ -493,11 +495,11 @@ export default {
                   return;
                 }
               } else {
-                sum = this.web3.utils.toWei(this.sum, 'mwei');
+                sum = this.web3.utils.toWei(this.sum, 'ether');
               }
 
               if (!(await this.checkApprove())) {
-                console.debug(`Redeem swap. Buy action Approve not pass. Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
+                console.debug(`Redeem dai swap. Buy action Approve not pass. Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}.`);
                 return;
               }
 
@@ -516,19 +518,19 @@ export default {
                       buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                   }
 
-                  console.debug(`Swap blockchain. Redeem action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
-                  let buyResult = await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).send(buyParams).on('transactionHash', function (hash) {
+                  console.debug(`Swap blockchain. Redeem action Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
+                  let buyResult = await contracts.daiExchange.methods.redeem(contracts.dai.options.address, sum).send(buyParams).on('transactionHash', function (hash) {
                       let tx = {
                           hash: hash,
-                          text: 'Redeem USD+',
-                          product: 'usdPlus',
-                          productName: 'USD+',
+                          text: 'Redeem DAI+',
+                          product: 'daiPlus',
+                          productName: 'DAI+',
                           action: 'redeem',
                           amount: sumInUsd,
                       };
 
                       self.putTransaction(tx);
-                      self.showSuccessModal({successTxHash: hash, successAction: 'redeemUsdPlus'});
+                      self.showSuccessModal({successTxHash: hash, successAction: 'redeemDaiPlus'});
                       self.loadTransaction();
                   });
               } catch (e) {
@@ -555,7 +557,7 @@ export default {
                     return;
                   }
                 } else {
-                  sum = this.web3.utils.toWei(this.sum, 'mwei');
+                  sum = this.web3.utils.toWei(this.sum, 'ether');
                 }
 
                 let estimatedGasValue = await this.estimateGas(sum);
@@ -579,7 +581,7 @@ export default {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.error(`Swap Redeem swap action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                console.error(`Swap dai Redeem swap action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
                 this.showErrorModal('estimateGas');
             }
         },
@@ -591,17 +593,17 @@ export default {
 
 
                 let approveSum = "10000000";
-                let sum = this.web3.utils.toWei(approveSum, 'mwei');
-                console.debug(`Swap Mint blockchain. Approve action. Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
+                let sum = this.web3.utils.toWei(approveSum, 'ether');
+                console.debug(`Swap dai Mint blockchain. Approve action. Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}.`);
 
               let allowApprove = await this.checkAllowance(sum);
               allowApprove = !allowApprove ? (await this.approveBlockchainAction(sum)) : true;
               if (!allowApprove) {
                     this.closeWaitingModal();
                     this.showErrorModal('approve');
-                    this.disapproveUsdPlus();
+                    this.disapproveDaiPlus();
                 } else {
-                    this.approveUsdPlus();
+                    this.approveDaiPlus();
                     this.closeWaitingModal();
                 }
             } catch (e) {
@@ -618,8 +620,8 @@ export default {
 
             let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-            let tx = await contracts.usdPlus.methods.approve(contracts.exchange.options.address, sum).send(approveParams);
-            console.debug(`Swap Mint blockchain. Allowance Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
+            let tx = await contracts.daiPlus.methods.approve(contracts.daiExchange.options.address, sum).send(approveParams);
+            console.debug(`Swap dai Mint blockchain. Allowance Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}.`);
 
             let minted = true;
             while (minted) {
@@ -646,7 +648,7 @@ export default {
           let contracts = this.contracts;
           let from = this.account;
 
-          let allowanceValue = await contracts.usdPlus.methods.allowance(from, contracts.exchange.options.address).call()
+          let allowanceValue = await contracts.daiPlus.methods.allowance(from, contracts.daiExchange.options.address).call()
           console.debug(`Swap Mint blockchain. Allowance value: ${allowanceValue}. Account: ${this.account}.`);
           console.log('allowanceValue: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
           return allowanceValue * 1 >= sum * 1;
@@ -664,8 +666,8 @@ export default {
                 let blockNum = await this.web3.eth.getBlockNumber();
                 let errorApi = this.polygonApi;
 
-                console.debug(`Swap Mint blockchain. Estimate gas action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
-                await contracts.exchange.methods.redeem(contracts.asset.options.address, sum).estimateGas(estimateOptions)
+                console.debug(`Swap dai Mint blockchain. Estimate gas action Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}.`);
+                await contracts.daiExchange.methods.redeem(contracts.dai.options.address, sum).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })
@@ -674,13 +676,13 @@ export default {
                             let msg = error.message.replace(/(?:\r\n|\r|\n)/g, '');
 
                             let errorMsg = {
-                                product: 'USD+',
+                                product: 'DAI+',
                                 data: {
                                     from: from,
-                                    to: contracts.exchange.options.address,
+                                    to: contracts.daiExchange.options.address,
                                     gas: null,
                                     gasPrice: parseInt(estimateOptions.gasPrice, 16),
-                                    method: contracts.exchange.methods.redeem(contracts.asset.options.address, sum).encodeABI(),
+                                    method: contracts.daiExchange.methods.redeem(contracts.dai.options.address, sum).encodeABI(),
                                     message: msg,
                                     block: blockNum
                                 }

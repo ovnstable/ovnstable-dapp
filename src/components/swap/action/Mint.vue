@@ -334,11 +334,9 @@ export default {
             if (!v)
                 return false;
 
-            if (!v.trim()) return false;
+          if (!v.trim()) return false;
 
-            v = parseFloat(v.trim().replace(/\s/g, ''));
-
-          console.log("numberRule: ", v, parseFloat(this.balance.asset));
+          v = parseFloat(v.trim().replace(/\s/g, ''));
 
           if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.asset)) return true;
 

@@ -75,6 +75,10 @@ export default {
                     return 'USD+'
                 case 'redeemUsdPlus':
                     return 'USD+'
+                case 'mintDaiPlus':
+                    return 'DAI+'
+                case 'redeemDaiPlus':
+                    return 'DAI+'
                 case 'wrapUsdPlus':
                     return 'wUSD+'
                 case 'unwrapUsdPlus':
@@ -93,6 +97,10 @@ export default {
                 case 'mintUsdPlus':
                     return require('@/assets/icon/minted.svg');
                 case 'redeemUsdPlus':
+                    return require('@/assets/icon/redeemed.svg');
+                case 'mintDaiPlus':
+                    return require('@/assets/icon/minted.svg');
+                case 'redeemDaiPlus':
                     return require('@/assets/icon/redeemed.svg');
                 case 'wrapUsdPlus':
                     return require('@/assets/icon/wrap.svg');

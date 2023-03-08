@@ -24,17 +24,19 @@ const actions = {
 
         let networkDaiMap = {
             polygon: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
-            arbitrum: '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8',
+            arbitrum: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
             optimism: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
         };
 
         [
             contracts.exchange,
+            contracts.daiExchange,
             contracts.govToken,
             contracts.governor,
             contracts.pm,
             contracts.timelockController,
             contracts.usdPlus,
+            contracts.daiPlus,
             contracts.m2m,
             contracts.market,
             contracts.wUsdPlus,
@@ -42,11 +44,13 @@ const actions = {
             contracts.dai,
         ] = await Promise.all([
             _load(await loadJSON(`/contracts/${network}/Exchange.json`), web3),
+            (network === "optimism") || network === "arbitrum" ? _load(await loadJSON(`/contracts/${network}/DaiExchange.json`), web3) : _load_empty(),
             _load(await loadJSON(`/contracts/${network}/OvnToken.json`), web3),
             _load(await loadJSON(`/contracts/${network}/OvnGovernor.json`), web3),
             _load(await loadJSON(`/contracts/${network}/PortfolioManager.json`), web3),
             _load(await loadJSON(`/contracts/${network}/OvnTimelockController.json`), web3),
             _load(await loadJSON(`/contracts/${network}/UsdPlusToken.json`), web3),
+            (network === "optimism") || network === "arbitrum" ? _load(await loadJSON(`/contracts/${network}/DaiPlusToken.json`), web3) : _load_empty(),
             _load(await loadJSON(`/contracts/${network}/Mark2Market.json`), web3),
             (network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/Market.json`), web3) : _load_empty(),
             (network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),

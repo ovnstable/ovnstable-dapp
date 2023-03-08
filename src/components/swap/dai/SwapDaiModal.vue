@@ -7,10 +7,10 @@
             <v-card class="container_body airdrop-body">
                 <v-toolbar class="container_header" flat>
                     <label class="title-modal mt-4">
-                        {{ isMintView ? 'Mint DAI+' : 'Redeem DAI+' }}
+                        {{ isMintView ? 'Mint' : 'Redeem' }}
                     </label>
                     <v-spacer></v-spacer>
-                    <label @click="bridge" class="bridge-label mr-4 mt-4">Bridge</label>
+                    <label @click="bridge" class="bridge-label mr-4 mt-4">Bridge (Via.Exchange)</label>
                     <v-btn icon @click="close" class="mt-4">
                         <v-icon class="close-icon">mdi-close</v-icon>
                     </v-btn>
@@ -66,7 +66,7 @@ export default {
 
         bridge() {
             window.open(this.bridgeLink, '_blank').focus();
-            this.trackClick({action: 'bridge-click', event_category: 'Bridge', event_label: 'Open Bridge From Swap Modal', value: 1 });
+            this.trackClick({action: 'bridge-click', event_category: 'Bridge', event_label: 'Open Bridge From Swap dai Modal', value: 1 });
         },
     },
 }

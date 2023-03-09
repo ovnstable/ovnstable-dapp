@@ -313,9 +313,9 @@ export default {
                     return 'Approve ' + this.assetName;
                 }
             } else if (this.sum > parseFloat(this.balance.asset)) {
-                return 'Mint'
+                return 'Mint USD+'
             } else {
-                return 'Mint';
+                return 'Mint USD+';
             }
         },
 

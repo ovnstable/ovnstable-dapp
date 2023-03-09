@@ -429,19 +429,19 @@ export default {
                         }
 
                         if (useOvercapSum <= this.overcapRemaining()) {
-                            return 'Invest';
+                            return 'Mint ETS';
                         }
                     } else {
-                        return 'Invest';
+                        return 'Mint ETS';
                     }
                 }
 
                 if ((this.etsData.maxSupply && this.totalSupply[this.etsData.name] >= this.etsData.maxSupply) || (this.etsData.maxSupply && (parseFloat(this.totalSupply[this.etsData.name]) + parseFloat(this.sum)) >= parseFloat(this.etsData.maxSupply))) {
                     return 'Over ETS capacity'
                 } else if (this.sum > parseFloat(this.actionAssetBalance[this.etsData.actionAsset + '_' + this.etsData.actionTokenDecimals])) {
-                    return 'Invest'
+                    return 'Mint ETS'
                 } else {
-                    return 'Invest';
+                    return 'Mint ETS';
                 }
             }
         },

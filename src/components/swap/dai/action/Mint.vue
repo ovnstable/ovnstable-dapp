@@ -316,9 +316,9 @@ export default {
                     return 'Approve ' + this.assetName;
                 }
             } else if (this.sum > parseFloat(this.balance.dai)) {
-                return 'Mint'
+                return 'Mint DAI+'
             } else {
-                return 'Mint';
+                return 'Mint DAI+';
             }
         },
 

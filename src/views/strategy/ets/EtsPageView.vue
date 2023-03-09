@@ -84,13 +84,13 @@
 
                   <v-row align="center" justify="center" class="ma-0" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply) ? 'mt-2' : 'mt-12'">
                     <v-btn class="header-btn btn-investor-invest" :class="(this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)) ? 'disabled-btn' : ''" :disabled="this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)"  @click="mintAction">
-                      MINT ETS {{ etsData.nameUp }}
+                      MINT ETS
                     </v-btn>
                   </v-row>
 
                   <v-row align="center" justify="center" class="ma-0 mt-4">
                     <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                      REDEEM ETS {{ etsData.nameUp }}
+                      REDEEM ETS
                     </v-btn>
                   </v-row>
                 </template>
@@ -197,13 +197,13 @@
 
                   <v-row align="center" justify="center" :class="(!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)? 'mt-5' : 'mt-12'">
                     <v-btn class="header-btn btn-investor-invest" :class="(this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)) ? 'disabled-btn' : ''" :disabled="this.etsData.disabled || (!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply)" @click="mintAction">
-                      MINT ETS {{ etsData.nameUp }}
+                      MINT ETS
                     </v-btn>
                   </v-row>
 
                   <v-row align="center" justify="center" class="mt-6">
                     <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
-                      REDEEM ETS {{ etsData.nameUp }}
+                      REDEEM ETS
                     </v-btn>
                   </v-row>
                 </template>

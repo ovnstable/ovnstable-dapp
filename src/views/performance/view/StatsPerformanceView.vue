@@ -4,6 +4,15 @@
             <label class="title-label">usd+ Performance</label>
         </div>
 
+        <v-row v-if="!isCurrentTotalDataLoading" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 justify-end'">
+            <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
+                Mint USD+
+            </v-btn>
+            <v-btn class="header-btn btn-outlined" @click="redeemAction">
+                Redeem USD+
+            </v-btn>
+        </v-row>
+
       <v-row v-if="isPayoutsLoading">
         <v-row align="center" justify="center" class="py-15">
           <v-progress-circular
@@ -15,7 +24,7 @@
         </v-row>
       </v-row>
 
-      <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0 mt-7" justify="start" align="center">
+      <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0 mt-2" justify="start" align="center">
         <v-col class="info-card-container mr-2">
           <LineChartApy :data="payoutsApyData"/>
         </v-col>
@@ -24,7 +33,7 @@
         </v-col>
       </v-row>
 
-      <v-row v-else-if="!isPayoutsLoading && $wu.isMobile()" class="ma-0 mt-5 info-card-container" justify="start" align="center">
+      <v-row v-else-if="!isPayoutsLoading && $wu.isMobile()" class="ma-0 mt-2 info-card-container" justify="start" align="center">
         <v-col class="info-card-body-bottom">
           <v-row align="center" justify="start" class="ma-0">
             <v-col class="ml-n3 mt-n3">
@@ -73,18 +82,6 @@
             </v-col>
           </v-row>
         </v-col>
-      </v-row>
-
-      <div v-if="!isPayoutsLoading" class="mt-12">
-        <v-row align="center" justify="center" class="ma-0 mt-10">
-          <label class="ready-label">Ready to use?</label>
-        </v-row>
-      </div>
-
-      <v-row v-if="!isPayoutsLoading" align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-7 mb-10' : 'mt-7'">
-        <v-btn class="header-btn btn-filled" @click="mintAction">
-          Mint USD+
-        </v-btn>
       </v-row>
 
       <resize-observer v-if="!isPayoutsLoading" @notify="$forceUpdate()"/>
@@ -172,7 +169,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('swapModal', ['showSwapModal', 'showMintView', 'showRedeemView']),
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -252,6 +249,10 @@ export default {
                 this.isPayoutsLoading = false;
                 console.error("Payouts loading error: ", e)
               })
+        },
+        redeemAction() {
+            this.showRedeemView();
+            this.showSwapModal();
         }
     }
 }
@@ -300,9 +301,8 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
-    .btn-filled {
-        width: 100%;
-        height: 36px !important;
+    .btn-filled, .btn-outlined {
+        width: 40% !important;
     }
 }
 
@@ -346,11 +346,6 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
-
-    .btn-filled {
-        width: 20%;
-        height: 40px !important;
-    }
 }
 
 /* full */
@@ -392,11 +387,6 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
-    }
-
-    .btn-filled {
-        width: 20%;
-        height: 40px !important;
     }
 }
 
@@ -444,11 +434,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-size: 15px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
-    }
-
-    .btn-filled {
-        width: 20%;
-        height: 38px !important;
     }
 }
 
@@ -551,5 +536,15 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .btn-filled {
     background: var(--blue-gradient);
     color: #FFFFFF !important;
+    width: 140px;
+    height: 40px;
+}
+
+.btn-outlined {
+    background-color: var(--main-background) !important;
+    color: var(--links-blue);
+    border: 1px solid #1C95E7;
+    width: 140px;
+    height: 40px;
 }
 </style>

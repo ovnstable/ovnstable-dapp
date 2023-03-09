@@ -7,7 +7,7 @@
             <v-card class="container_body airdrop-body">
                 <v-toolbar class="container_header" flat>
                     <label class="title-modal mt-4">
-                        {{ isMintView ? 'Mint' : 'Redeem' }}
+                        {{ isMintView ? 'Mint ETS' : 'Redeem ETS' }}
                     </label>
                     <v-spacer></v-spacer>
                     <label @click="bridge" class="bridge-label mr-4 mt-4">Bridge</label>

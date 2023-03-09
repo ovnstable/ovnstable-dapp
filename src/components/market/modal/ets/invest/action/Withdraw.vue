@@ -341,9 +341,9 @@ export default {
                     return 'Approve ETS';
                 }
             } else if (this.sum > parseFloat(this.etsBalance[this.etsData.name])) {
-                return 'Withdraw'
+                return 'Redeem ETS'
             } else {
-                return 'Withdraw';
+                return 'Redeem ETS';
             }
         },
 

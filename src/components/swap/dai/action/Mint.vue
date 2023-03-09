@@ -531,7 +531,7 @@ export default {
                       };
 
                       self.putTransaction(tx);
-                      self.showSuccessModal({successTxHash: hash, successAction: 'mintUsdPlus'});
+                      self.showSuccessModal({successTxHash: hash, successAction: 'mintDaiPlus'});
                       self.loadTransaction();
                   });
               } catch (e) {

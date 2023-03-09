@@ -3,7 +3,7 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ totalTvl ? 'USD+&nbsp;' : '' }}</label>
+                    <label class="chart-title">{{ totalTvl ? `${assetType.toUpperCase()}&nbsp;` : '' }}</label>
                     <label class="chart-title" style="margin-left: 0 !important"><abbr title="Total Value Locked">TVL</abbr></label>
                 </v-row>
 
@@ -71,6 +71,7 @@
 import {mapActions, mapGetters} from "vuex";
 
 import ApexCharts from 'apexcharts'
+import {axios} from "@/plugins/http-axios";
 
 export default {
     name: "LineChartTvl",
@@ -80,6 +81,10 @@ export default {
             type: Object,
             default: null,
         },
+       assetType: {
+          type: String,
+          default: 'usd+'
+        }
     },
 
     watch: {
@@ -92,7 +97,9 @@ export default {
         },
 
         currentTotalData: function (newVal, oldVal) {
-            this.totalTvl = this.getTotalTvl();
+            if (newVal) {
+              this.totalTvl = this.getTotalTvl();
+            }
         },
     },
 
@@ -102,13 +109,14 @@ export default {
         zoom: "all",
         slice: null,
         chart: null,
+        currentTotalData: null,
 
         totalTvl: null,
     }),
 
     computed: {
-        ...mapGetters("statsData", ['currentTotalData']),
-        ...mapGetters('theme', ['light']),
+      ...mapGetters('network', ['networkId', 'appApiUrl', 'apiUrl', 'networkName']),
+      ...mapGetters('theme', ['light']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -116,7 +124,7 @@ export default {
     },
 
     mounted() {
-        this.redraw();
+        this.refreshCurrentTotalData();
     },
 
     created() {
@@ -306,6 +314,46 @@ export default {
             this.chart = new ApexCharts(document.querySelector("#line-chart-tvl"), options);
             this.chart.render();
         },
+
+        async refreshCurrentTotalData() {
+
+          let result = [];
+
+          let strategies = (await axios.get(this.apiUrl + `/${this.networkName}/${this.assetType}` + '/dapp/strategies')).data;
+          strategies.sort((a,b) => b.netAssetValue - a.netAssetValue);
+
+          let colors = [
+            "#FCCA46",
+            "#FE7F2D",
+            "#3D8DFF",
+            "#22ABAC",
+            "#B22174",
+            "#2775CA",
+            "#26A17B",
+            "#23DD00",
+            "#6E56C4",
+            "#002868"
+          ];
+
+          for (let i = 0; i < strategies.length; i++) {
+            let element = strategies[i];
+
+            result.push(
+                {
+                  label: element.name,
+                  fullName: element.fullName,
+                  value: element.netAssetValue,
+                  liquidationValue: element.liquidationValue,
+                  color: colors[i],
+                  link: (element.address || element.explorerAddress) ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + (element.explorerAddress ? element.explorerAddress : element.address)) : ''
+                }
+            );
+          }
+
+          this.currentTotalData = result;
+
+          this.redraw();
+        }
     }
 }
 </script>

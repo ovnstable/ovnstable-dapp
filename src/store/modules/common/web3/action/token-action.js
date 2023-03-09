@@ -1,4 +1,5 @@
 import UsdPlusImage from "@/assets/usdPlus.json";
+import DaiPlusImage from "@/assets/daiPlus.json";
 import WrappedUsdPlusImage from "@/assets/wUsdPlus.json";
 import PolygonInsurance from "@/assets/polygon_insurance.json";
 import OvnImage from "@/assets/ovn.json";
@@ -9,6 +10,14 @@ const getters = {};
 
 const actions = {
     async addUsdPlusToken({commit, dispatch, getters, rootState}) {
+        let option = {
+            address: rootState.web3.contracts.usdPlus.options.address,
+            symbol: process.env.VUE_APP_USD_TOKEN_NAME,
+            decimals: 6,
+            image: UsdPlusImage.image,
+        };
+
+        console.log('addUsdPlusToken: ', option)
 
         await rootState.web3.provider
             .request({
@@ -32,6 +41,35 @@ const actions = {
             })
             .catch(console.error)
     },
+
+    async addDaiPlusToken({commit, dispatch, getters, rootState}) {
+        let option = {
+            address: rootState.web3.contracts.daiPlus.options.address,
+            symbol: process.env.VUE_APP_DAI_TOKEN_NAME,
+            decimals: 18,
+            image: DaiPlusImage.image,
+        };
+
+        console.log('addDaiPlusToken: ', option)
+
+        await rootState.web3.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: option,
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('Dai+ successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
 
     async addwUsdPlusToken({commit, dispatch, getters, rootState}) {
 
@@ -85,19 +123,24 @@ const actions = {
 
     async addEtsToken({commit, dispatch, getters, rootState}, etsData) {
 
+
         let etsImage = require("@/assets/" + etsData.iconName + '.json');
+
+        let option = {
+            address: rootState.web3.contracts[etsData.tokenContract].options.address,
+            symbol: etsData.nameToken,
+            decimals: etsData.etsTokenDecimals,
+            image: etsImage.image,
+        };
+
+        console.log('addETSToken: ', option)
 
         await rootState.web3.provider
             .request({
                 method: 'wallet_watchAsset',
                 params: {
                     type: 'ERC20',
-                    options: {
-                        address: rootState.web3.contracts[etsData.tokenContract].options.address,
-                        symbol: etsData.nameToken,
-                        decimals: etsData.etsTokenDecimals,
-                        image: etsImage.image,
-                    },
+                    options: option,
                 },
             })
             .then((success) => {

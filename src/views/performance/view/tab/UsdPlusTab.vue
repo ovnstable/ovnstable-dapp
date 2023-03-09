@@ -53,7 +53,9 @@
       <v-row v-else class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-3'" justify="start" align="center">
           <v-col class="info-card-body-bottom">
               <v-row align="center" justify="start" class="ma-0">
-                  <label class="section-title-label">USD+ portfolio</label>
+                  <label class="section-title-label">
+                    USD+ portfolio
+                  </label>
               </v-row>
 
               <v-row align="center" justify="center">

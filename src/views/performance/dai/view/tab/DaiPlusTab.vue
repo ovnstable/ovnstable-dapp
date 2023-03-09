@@ -14,21 +14,21 @@
         <v-row v-else class="ma-0 info-card-container mt-5" justify="start" align="start">
             <v-col class="info-card-body-bottom">
                 <v-row align="start" justify="start" class="ma-0">
-                    <label class="section-title-label">DAI+ collateral assets</label>
+                    <label class="section-title-label">
+                      DAI+ collateral assets
+                    </label>
                 </v-row>
 
                 <v-row align="start" justify="center">
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
                         <TableStablecoins
-                            only-percents
                             v-if="!$wu.isMobile()"
                             :data="collateralData"/>
 
                         <TableStablecoins
                             v-else
-                            only-percents
                             minimized
-                            :data="stablecoinData"/>
+                            :data="collateralData"/>
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
@@ -51,7 +51,9 @@
         <v-row v-else class="ma-0 info-card-container mt-3" justify="start" align="start">
             <v-col class="info-card-body-bottom">
                 <v-row align="center" justify="start" class="ma-0">
-                    <label class="section-title-label">DAI+ portfolio</label>
+                    <label class="section-title-label">
+                      DAI+ portfolio
+                    </label>
                 </v-row>
 
                 <v-row align="center" justify="center">

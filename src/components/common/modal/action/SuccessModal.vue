@@ -125,7 +125,7 @@ export default {
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
         ...mapActions('swapModal', ['closeSwapModal']),
         ...mapActions('wrapModal', ['closeWrapModal']),
         ...mapActions('investModal', ['closeInvestModal']),
@@ -139,6 +139,12 @@ export default {
                 case 'redeemUsdPlus':
                     this.addUsdPlusToken();
                     this.trackClick({action: 'add-usdplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add usdplus token', value: 1 });
+                    break;
+
+                case 'mintDaiPlus':
+                case 'redeemDaiPlus':
+                    this.addDaiPlusToken();
+                    this.trackClick({action: 'add-daiplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add daiplus token', value: 1 });
                     break;
                 case 'wrapUsdPlus':
                 case 'unwrapUsdPlus':

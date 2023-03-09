@@ -2,7 +2,7 @@ const state = {
     show: false,
     successTxHash: null,
 
-    //mintUsdPlus, redeemUsdPlus, wrapUsdPlus, unwrapUsdPlus, mintEts, redeemEts
+    //mintUsdPlus, redeemUsdPlus, mintDaiPlus, redeemDaiPlus, wrapUsdPlus, unwrapUsdPlus, mintEts, redeemEts
     successAction: 'mint',
     etsData: null,
 };

@@ -11,13 +11,21 @@
                 </div>
                 <label class="ml-2 coin-btn-label">USD+</label>
             </v-btn>
-            <v-btn class="coin-btn ma-1" @click="addwUsdPlusToken" v-if="showWrap">
+
+            <v-btn v-if="showDai" class="coin-btn ma-1" @click="addDaiPlusToken">
+              <div class="coin-img">
+                <v-img :src="require('@/assets/currencies/daiPlus.svg')"/>
+              </div>
+              <label class="ml-2 coin-btn-label">DAI+</label>
+            </v-btn>
+
+            <v-btn v-if="showWrap"  class="coin-btn ma-1" @click="addwUsdPlusToken">
                 <div class="coin-img">
                     <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
                 </div>
                 <label class="ml-2 coin-btn-label">wUSD+</label>
             </v-btn>
-            <v-btn class="coin-btn ma-1" @click="addInsuranceToken" v-if="networkId === 137">
+            <v-btn v-if="networkId === 137" class="coin-btn ma-1" @click="addInsuranceToken">
                 <div class="coin-img">
                     <v-img :src="require('@/assets/currencies/insurance/INSURANCE.svg')"/>
                 </div>
@@ -61,6 +69,11 @@ export default {
         ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
         ...mapGetters('etsAction', ['etsList']),
+
+        showDai: function () {
+          return this.networkId === 10 || this.networkId === 42161;
+        }
+
     },
 
     watch: {
@@ -74,8 +87,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
-        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
 
         getSortedCardList() {
             this.sortedCardList = this.etsList.filter(ets => (!ets.archive && this.networkId === ets.chain))

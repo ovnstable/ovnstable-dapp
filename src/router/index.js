@@ -16,6 +16,7 @@ import Featured from "./midleware/dapp/Featured";
 import Insurance from "./midleware/dapp/Insurance";
 import Reserves from "./midleware/dapp/Reserves";
 import Stats from "./midleware/dapp/Stats";
+import DaiStats from "./midleware/dapp/DaiStats";
 import Collateral from "./midleware/dapp/Collateral";
 import CollateralDai from "./midleware/dapp/CollateralDai";
 import Dashboard from "./midleware/dapp/Dashboard";
@@ -132,6 +133,16 @@ const routes = [
                 meta: {
                     middleware: [
                         Stats,
+                    ]
+                }
+            },
+            {
+                path: '/stats/dai',
+                name: 'StatsDaiPerformanceView',
+                component: () => import('../views/performance/dai/view/StatsPerformanceView.vue'),
+                meta: {
+                    middleware: [
+                        DaiStats,
                     ]
                 }
             },

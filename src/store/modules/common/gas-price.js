@@ -65,29 +65,31 @@ const actions = {
         else if(networkId === 56)
             url = "https://gbsc.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
         else if (networkId === 10 || networkId === 42161){
-            console.log('GAS STATION: fixed for op');
 
-            let gwei = networkId === 10 ? 0.001 : (networkId === 42161 ? 0.1 : 0.001)
-
+            let gasPriceWei;
+            let gasPriceGwei;
             try {
-                let price = {
-                    low: gwei,
-                    standard: gwei,
-                    fast: gwei,
-                    ultra: gwei,
-
-                    usdPrice: 0,
-                }
-                commit('setGasPriceStation', price);
-
-                let element = price[getters.gasPriceType];
-
-                commit('setGasPrice', element)
-                commit('setGasPriceGwei', rootState.web3.web3.utils.toWei(element + "", 'gwei'))
-            } catch (reason) {
-                console.debug('Error get gas price: ' + reason);
+                gasPriceWei = await rootState.web3.web3.eth.getGasPrice();
+                gasPriceGwei = rootState.web3.web3.utils.fromWei(gasPriceWei, 'gwei');
+            } catch (e) {
+                console.error('Error getGasPrice from provider: ' + e + ' => use hardcode value gasPrice');
+                gasPriceGwei = networkId === 10 ? 0.001 : 0.1; // Support hardcode value only for Arbitrum and Optimism
+                gasPriceWei = rootState.web3.web3.utils.toWei(gasPriceGwei + "", 'gwei');
             }
 
+            console.log(`Refresh GasPriceGwei: ${gasPriceGwei}, GasPriceWei: ${gasPriceWei}`);
+
+            let priceStationValues = {
+                low: gasPriceGwei,
+                standard: gasPriceGwei,
+                fast: gasPriceGwei,
+                ultra: gasPriceGwei,
+
+                usdPrice: 0
+            }
+            commit('setGasPriceStation', priceStationValues);
+            commit('setGasPrice', gasPriceGwei);
+            commit('setGasPriceGwei', gasPriceWei);
             return;
         }
 

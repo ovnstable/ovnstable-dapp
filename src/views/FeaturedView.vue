@@ -5,19 +5,20 @@
         </div>
 
         <div class="mt-7 cards-list-container">
-          <v-row v-if="!isAllDataLoaded && isResorting">
-            <v-row align="center" justify="center" class="py-15">
-              <v-progress-circular
-                  width="2"
-                  size="24"
-                  color="#8FA2B7"
-                  indeterminate
-              ></v-progress-circular>
+            <v-row v-if="!isAllDataLoaded && isResorting">
+                <v-row align="center" justify="center" class="py-15">
+                      <v-progress-circular
+                          width="2"
+                          size="24"
+                          color="#8FA2B7"
+                          indeterminate
+                      ></v-progress-circular>
+                </v-row>
             </v-row>
-          </v-row>
+
             <v-row v-else class="d-flex" justify="start">
                 <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
-                       v-for="card in sortedCardList.filter(value => (!value.isOpenPrototype && !value.isArchive)).slice(0, 3)"
+                       v-for="card in sortedCardList.filter(value => (!value.isOpenPrototype && !value.isArchive && value.hasCap)).slice(0, 3)"
                        :key="card.id">
                     <v-row class="fill-height">
                         <component

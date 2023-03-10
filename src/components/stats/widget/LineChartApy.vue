@@ -3,7 +3,7 @@
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
-                    <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? '' : 'Average ') + 'USD+&nbsp;') : ''}}</label>
+                    <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? '' : 'Average ') + `${assetType.toUpperCase()}&nbsp;`) : ''}}</label>
                     <label class="chart-title" style="margin-left: 0 !important"><abbr title="Annual Percentage Yield">APY</abbr></label>
                 </v-row>
 
@@ -81,6 +81,10 @@ export default {
             type: Object,
             default: null,
         },
+        assetType: {
+          type: String,
+          default: 'usd+'
+        }
     },
 
     watch: {
@@ -108,7 +112,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['appApiUrl']),
+        ...mapGetters('network', ['networkId', 'appApiUrl', 'apiUrl', 'networkName']),
         ...mapGetters('theme', ['light']),
 
         isMobile() {
@@ -132,11 +136,12 @@ export default {
                 }
             };
 
-            await fetch(this.appApiUrl + '/widget/avg-apy-info/' + zoom, fetchOptions)
+            await fetch(this.apiUrl  + `/${this.networkName}/${this.assetType}` + '/widget/avg-apy-info/' + zoom, fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;
                     this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+                    this.redraw();
                 }).catch(reason => {
                     console.log('Error get data: ' + reason);
                 })
@@ -187,7 +192,7 @@ export default {
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(this.slice) : labels;
 
-            let averageValue = this.avgApy.value;
+            let averageValue = this.avgApy ? this.avgApy.value : 0;
 
             let maxValue;
             try {

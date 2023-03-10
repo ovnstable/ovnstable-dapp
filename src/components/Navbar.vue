@@ -135,6 +135,16 @@
               </div>
             </template>
 
+            <v-list-item @click="daiStatsClick" :class="selectedTab === 'daiplus_performance' ? 'selected-page-item' : ''"
+                         class="list-item-hover">
+              <v-list-item-title>
+                <label :class="selectedTab === 'daiplus_performance' ? 'selected-page' : ''"
+                       class="navbar-list-label mx-5">
+                  Performance
+                </label>
+              </v-list-item-title>
+            </v-list-item>
+
             <v-list-item :class="selectedTab === 'daiplus_collateral' ? 'selected-page-item' : ''"
                          @click="daiCollateralClick"
                          class="list-item-hover ">
@@ -407,6 +417,12 @@ export default {
             this.selectTab('usdplus_performance');
             this.goToActionByPath('/stats', {tabName: 'performance'});
             this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open stats page', value: 1 });
+        },
+
+        daiStatsClick() {
+            this.selectTab('daiplus_performance');
+            this.goToActionByPath('/stats/dai', {tabName: 'daiPerformance'});
+            this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
         },
 
         etsClick() {

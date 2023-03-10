@@ -1,92 +1,112 @@
 <template>
     <div class="page-container">
         <div class="mt-10">
-            <label class="title-label">usd+ Performance</label>
+            <label class="title-label">dai+ Performance</label>
         </div>
 
-        <v-row v-if="!isCurrentTotalDataLoading" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 justify-end'">
-            <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                Mint USD+
-            </v-btn>
-            <v-btn class="header-btn btn-outlined" @click="redeemAction">
-                Redeem USD+
-            </v-btn>
+      <div v-if="networkId === 10 || networkId === 42161">
+        <v-row v-if="isPayoutsLoading">
+          <v-row align="center" justify="center" class="py-15">
+            <v-progress-circular
+                width="2"
+                size="24"
+                color="#8FA2B7"
+                indeterminate
+            ></v-progress-circular>
+          </v-row>
         </v-row>
 
-      <v-row v-if="isPayoutsLoading">
-        <v-row align="center" justify="center" class="py-15">
-          <v-progress-circular
-              width="2"
-              size="24"
-              color="#8FA2B7"
-              indeterminate
-          ></v-progress-circular>
+        <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0 mt-7" justify="start" align="center">
+          <v-col cols="6">
+            <div class="info-card-container py-3">
+              <LineChartApy :data="payoutsApyData" asset-type="dai+"/>
+            </div>
+          </v-col>
+          <v-col cols="6">
+            <div class="info-card-container py-3">
+              <LineChartTvl :data="payoutsTvlData" asset-type="dai+"/>
+            </div>
+          </v-col>
         </v-row>
-      </v-row>
 
-      <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0 mt-2" justify="start" align="center">
-        <v-col cols="6">
-          <div class="info-card-container py-3">
-            <LineChartApy :data="payoutsApyData"/>
+        <v-row v-else-if="!isPayoutsLoading && $wu.isMobile()" class="ma-0 mt-5 info-card-container" justify="start" align="center">
+          <v-col class="info-card-body-bottom">
+            <v-row align="center" justify="start" class="ma-0">
+              <v-col class="ml-n3 mt-n3">
+                <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
+                  APY
+                </v-btn>
+              </v-col>
+              <v-col class="mr-n3 mt-n3">
+                <v-btn outlined class="rate-tab-btn" @click="rateTab=3" v-bind:class="activeRateTvl">
+                  TVL
+                </v-btn>
+              </v-col>
+            </v-row>
+
+            <LineChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData" asset-type="dai+"/>
+            <LineChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData" asset-type="dai+"/>
+          </v-col>
+        </v-row>
+
+        <v-row v-if="!isPayoutsLoading" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
+          <v-col class="info-card-body-bottom">
+            <v-row align="center" justify="start" class="ma-0">
+              <label class="section-title-label">USD+ payouts</label>
+            </v-row>
+
+            <v-row align="center" justify="center">
+              <v-col :cols="!$wu.isFull() ? 12 : 8">
+                <Table
+                    v-if="!$wu.isMobile()"
+                    :profit-label="assetName + ' per USD+'"
+                    :payout-data="payouts"/>
+
+                <Table
+                    v-else
+                    minimized
+                    :profit-label="assetName + ' per USD+'"
+                    :payout-data="payouts"/>
+
+                <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
+                  <label class="table-scroll-label">scroll to see more</label>
+                </v-row>
+              </v-col>
+
+              <v-col :cols="!$wu.isFull() ? 12 : 4">
+                <Doughnut :size="280" color="#3D8DFF" :last-date="lastPayoutDate"/>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+
+        <div v-if="!isPayoutsLoading" class="mt-12">
+          <v-row align="center" justify="center" class="ma-0 mt-10">
+            <label class="ready-label">Ready to use?</label>
+          </v-row>
+        </div>
+
+        <v-row v-if="!isPayoutsLoading" align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-7 mb-10' : 'mt-7'">
+          <v-btn class="header-btn btn-filled" @click="mintAction">
+            Mint DAI+
+          </v-btn>
+        </v-row>
+      </div>
+
+      <div v-else class="ma-0 info-card-container d-flex mt-3">
+        <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
+          <v-img class="currency" :src="require('@/assets/currencies/DAI+.svg')" />
+        </div>
+        <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'" >
+          <label class="section-text">
+            DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoveen) on Optimism. It cannot be minted separately.
+          </label>
+          <div class="font-weight-bold">
+            Switch on Optimism or Arbitrum chain to see DAI+ collateral.
           </div>
-        </v-col>
-        <v-col cols="6">
-          <div class="info-card-container py-3">
-            <LineChartTvl :data="payoutsTvlData"/>
-          </div>
-        </v-col>
-      </v-row>
+        </div>
+      </div>
 
-      <v-row v-else-if="!isPayoutsLoading && $wu.isMobile()" class="ma-0 mt-2 info-card-container" justify="start" align="center">
-        <v-col class="info-card-body-bottom">
-          <v-row align="center" justify="start" class="ma-0">
-            <v-col class="ml-n3 mt-n3">
-              <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
-                APY
-              </v-btn>
-            </v-col>
-            <v-col class="mr-n3 mt-n3">
-              <v-btn outlined class="rate-tab-btn" @click="rateTab=3" v-bind:class="activeRateTvl">
-                TVL
-              </v-btn>
-            </v-col>
-          </v-row>
-
-          <LineChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData"/>
-          <LineChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData"/>
-        </v-col>
-      </v-row>
-
-      <v-row v-if="!isPayoutsLoading" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
-        <v-col class="info-card-body-bottom">
-          <v-row align="center" justify="start" class="ma-0">
-            <label class="section-title-label">USD+ payouts</label>
-          </v-row>
-
-          <v-row align="center" justify="center">
-            <v-col :cols="!$wu.isFull() ? 12 : 8">
-              <Table
-                  v-if="!$wu.isMobile()"
-                  :profit-label="assetName + ' per USD+'"
-                  :payout-data="payouts"/>
-
-              <Table
-                  v-else
-                  minimized
-                  :profit-label="assetName + ' per USD+'"
-                  :payout-data="payouts"/>
-
-              <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
-                <label class="table-scroll-label">scroll to see more</label>
-              </v-row>
-            </v-col>
-
-            <v-col :cols="!$wu.isFull() ? 12 : 4">
-              <Doughnut :size="280" color="#3D8DFF" :last-date="lastPayoutDate"/>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
 
       <resize-observer v-if="!isPayoutsLoading" @notify="$forceUpdate()"/>
     </div>
@@ -99,12 +119,11 @@ import Doughnut from "@/components/market/strategy/payouts/Doughnut";
 import {mapActions, mapGetters} from "vuex";
 import LineChartApy from "@/components/stats/widget/LineChartApy";
 import LineChartTvl from "@/components/stats/widget/LineChartTvl";
-import {axios} from "@/plugins/http-axios";
 import moment from "moment/moment";
 import {payoutsApiService} from "@/services/payouts-api-service";
 
 export default {
-    name: "StatsPerformanceView",
+    name: "StatsDaiPerformanceView",
 
     components: {
         LineChartTvl,
@@ -114,7 +133,6 @@ export default {
     },
 
     data: () => ({
-      tab: 1,
       rateTab: 1,
 
       isPayoutsLoading: true,
@@ -126,9 +144,9 @@ export default {
     }),
 
     computed: {
-      ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl']),
+      ...mapGetters("network", ['networkId', 'networkName', 'assetName', 'appApiUrl', 'apiUrl']),
 
-        activeRateApy: function () {
+      activeRateApy: function () {
             return {
                 'rate-tab-button': this.rateTab === 1,
                 'rate-tab-button-in-active': this.rateTab !== 1,
@@ -159,13 +177,7 @@ export default {
       }
     },
     created() {
-        if (this.networkId === 137) {
-            this.tab = 1;
-        }
 
-        if (this.networkId === 56) {
-            this.tab = 2;
-        }
     },
 
     mounted() {
@@ -173,15 +185,15 @@ export default {
     },
 
     methods: {
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView', 'showRedeemView']),
+        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView']),
 
         openLink(url) {
             window.open(url, '_blank').focus();
         },
 
         mintAction() {
-            this.showMintView();
-            this.showSwapModal();
+            this.showDaiMintView();
+            this.showDaiSwapModal();
         },
         loadData() {
           this.payoutsApyData = null;
@@ -194,7 +206,7 @@ export default {
         loadPayouts() {
           this.isPayoutsLoading = true;
 
-          payoutsApiService.getPayouts(this.appApiUrl)
+          payoutsApiService.getPayouts(this.apiUrl + `/${this.networkName}/dai+`)
               .then(data => {
                 this.payouts = data
                 let clientData = data;
@@ -253,10 +265,6 @@ export default {
                 this.isPayoutsLoading = false;
                 console.error("Payouts loading error: ", e)
               })
-        },
-        redeemAction() {
-            this.showRedeemView();
-            this.showSwapModal();
         }
     }
 }
@@ -305,9 +313,15 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
-    .btn-filled, .btn-outlined {
-        width: 40% !important;
+    .btn-filled {
+        width: 100%;
+        height: 36px !important;
     }
+
+  .section-text {
+    font-size: 14px;
+    line-height: 22px;
+  }
 }
 
 /* tablet */
@@ -350,6 +364,17 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .btn-filled {
+        width: 20%;
+        height: 40px !important;
+    }
+
+
+  .section-text {
+    font-size: 16px;
+    line-height: 24px;
+  }
 }
 
 /* full */
@@ -392,6 +417,16 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .btn-filled {
+        width: 20%;
+        height: 40px !important;
+    }
+
+  .section-text {
+    font-size: 18px;
+    line-height: 28px;
+  }
 }
 
 @media
@@ -439,6 +474,16 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .btn-filled {
+        width: 20%;
+        height: 38px !important;
+    }
+
+    .section-text {
+      font-size: 17px;
+      line-height: 28px;
+    }
 }
 
 .page-container {
@@ -471,6 +516,14 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     background: var(--secondary);
     border-radius: 12px;
 }
+
+.info-card-container-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
 
 .info-card-body-bottom {
     margin: 2% 2% !important;
@@ -540,15 +593,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .btn-filled {
     background: var(--blue-gradient);
     color: #FFFFFF !important;
-    width: 140px;
-    height: 40px;
 }
 
-.btn-outlined {
-    background-color: var(--main-background) !important;
-    color: var(--links-blue);
-    border: 1px solid #1C95E7;
-    width: 140px;
-    height: 40px;
+.section-text {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  color: var(--main-gray-text);
 }
 </style>

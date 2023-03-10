@@ -226,7 +226,7 @@ export default {
 
     methods: {
         ...mapActions('transaction', ['loadTransaction', 'deleteTxFromHistory']),
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
 
         formatDate(date) {
             return this.$moment.utc(date).format('DD.MM.YYYY');
@@ -276,6 +276,9 @@ export default {
             switch (this.txData.product) {
                 case 'usdPlus':
                     this.addUsdPlusToken();
+                    break;
+                case 'daiPlus':
+                    this.addDaiPlusToken();
                     break;
                 case 'wUsdPlus':
                     this.addwUsdPlusToken();

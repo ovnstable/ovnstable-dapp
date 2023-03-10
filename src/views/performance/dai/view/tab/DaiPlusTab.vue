@@ -14,21 +14,21 @@
         <v-row v-else class="ma-0 info-card-container mt-5" justify="start" align="start">
             <v-col class="info-card-body-bottom">
                 <v-row align="start" justify="start" class="ma-0">
-                    <label class="section-title-label">DAI+ collateral assets</label>
+                    <label class="section-title-label">
+                      DAI+ collateral assets
+                    </label>
                 </v-row>
 
                 <v-row align="start" justify="center">
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
                         <TableStablecoins
-                            only-percents
                             v-if="!$wu.isMobile()"
                             :data="collateralData"/>
 
                         <TableStablecoins
                             v-else
-                            only-percents
                             minimized
-                            :data="stablecoinData"/>
+                            :data="collateralData"/>
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
@@ -51,7 +51,9 @@
         <v-row v-else class="ma-0 info-card-container mt-3" justify="start" align="start">
             <v-col class="info-card-body-bottom">
                 <v-row align="center" justify="start" class="ma-0">
-                    <label class="section-title-label">DAI+ portfolio</label>
+                    <label class="section-title-label">
+                      DAI+ portfolio
+                    </label>
                 </v-row>
 
                 <v-row align="center" justify="center">
@@ -59,12 +61,16 @@
                         <TableStrategies
                             v-if="!$wu.isMobile()"
                             :data="currentTotalData"
+                            asset-type="DAI"
+                            total-title="Total DAI+ in circulation"
                             :total-supply="totalValue"/>
 
                         <TableStrategies
                             v-else
                             minimized
                             :data="currentTotalData"
+                            asset-type="DAI"
+                            total-title="Total DAI+ in circulation"
                             :total-supply="totalValue"/>
                     </v-col>
 
@@ -87,7 +93,8 @@
 
         <v-row v-if="!isCurrentTotalDataLoading" class=" ma-0 mt-3">
             <v-col class="currency-box" :cols="$wu.isFull() ? 6 : 12">
-                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openLink('https://optimistic.etherscan.io/address/0x970d50d09f3a656b43e11b0d45241a84e3a6e011')">
+                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'"
+                       @click="openLink(explorerLink)">
                     <div>
                         <v-img class="currency-dai" :src="require('@/assets/currencies/DAI+.svg')" />
                     </div>
@@ -95,7 +102,7 @@
 
                     <v-spacer></v-spacer>
 
-                    <label class="address-text ml-auto">{{ shortAddress('0x970D50d09F3a656b43E11B0D45241a84e3a6e011') }}</label>
+                    <label class="address-text ml-auto">{{ shortAddress(contractAddress) }}</label>
                     <div class="ml-auto d-flex">
                         <v-img class="open-new mt-0 ml-1" :src="require('@/assets/icon/open-in-new.svg')"/>
                     </div>
@@ -139,6 +146,31 @@ export default {
 
     computed: {
         ...mapGetters("network", ['networkId', 'networkName', 'apiUrl']),
+        explorerLink: function () {
+          if (this.networkId === 10) {
+            return 'https://optimistic.etherscan.io/address/0x970d50d09f3a656b43e11b0d45241a84e3a6e011'
+          }
+
+          if (this.networkId === 42161) {
+            return 'https://arbiscan.io/token/0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
+          }
+
+          console.error("Not found networkId type when return dai explorer link")
+          return null;
+        },
+
+        contractAddress: function () {
+          if (this.networkId === 10) {
+            return '0x970D50d09F3a656b43E11B0D45241a84e3a6e011'
+          }
+
+          if (this.networkId === 42161) {
+            return '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
+          }
+
+          console.error("Not found networkId type when return dai contract address")
+          return null;
+        },
     },
 
     watch: {

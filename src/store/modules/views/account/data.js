@@ -6,6 +6,7 @@ const state = {
     etsBalance: {},
     etsOriginalBalance: {},
     insuranceBalance: {},
+    insuranceOriginalBalance: {},
 
     account: null,
     uns: null,
@@ -31,6 +32,10 @@ const getters = {
 
     insuranceBalance(state) {
         return state.insuranceBalance;
+    },
+
+    insuranceOriginalBalance(state) {
+        return state.insuranceOriginalBalance;
     },
 
     actionAssetBalance(state) {
@@ -192,6 +197,7 @@ const actions = {
 
 
         let resultInsuranceBalance = {};
+        let resultInsuranceOriginalBalance = {};
         let insuranceList = [
             {
                 chainName: 'polygon',
@@ -203,24 +209,29 @@ const actions = {
             for (let i = 0; i < insuranceList.length; i++) {
                 let insurance = insuranceList[i];
                 let insuranceBalance;
+                let insuranceOriginalBalance;
 
                 if (insurance.chainId === networkId) {
                     try {
                         insuranceBalance = await web3.contracts.insurance[insurance.chainName + '_token'].methods.balanceOf(getters.account).call();
+                        insuranceOriginalBalance = insuranceBalance;
                         insuranceBalance = web3.web3.utils.fromWei(insuranceBalance, 'mwei');
                     } catch (e) {
                         try {
                             insuranceBalance = getters.insuranceBalance[insurance.chainName];
+                            insuranceOriginalBalance = getters.insuranceOriginalBalance[insurance.chainName];
                         } catch (ex) {
                         }
                     }
 
                     resultInsuranceBalance[insurance.chainName] = insuranceBalance;
+                    resultInsuranceOriginalBalance[insurance.chainName] = insuranceOriginalBalance;
                 }
             }
         }
 
         commit('setInsuranceBalance', resultInsuranceBalance);
+        commit('setInsuranceOriginalBalance', resultInsuranceOriginalBalance);
 
 
         let resultActionAssetBalance = {};
@@ -283,6 +294,10 @@ const mutations = {
 
     setInsuranceBalance(state, value) {
         state.insuranceBalance = value;
+    },
+
+    setInsuranceOriginalBalance(state, value) {
+        state.insuranceOriginalBalance = value;
     },
 
     setAccount(state, value) {

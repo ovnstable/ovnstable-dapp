@@ -271,7 +271,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'account', 'insuranceBalance', 'originalBalance']),
+        ...mapGetters('accountData', ['balance', 'account', 'insuranceBalance', 'insuranceOriginalBalance', 'originalBalance']),
         ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('insuranceInvestModal', ['insuranceTokenApproved']),
@@ -491,7 +491,7 @@ export default {
         },
 
         getMax() {
-          let balanceElement = this.originalBalance[this.currency.id];
+          let balanceElement = this.insuranceOriginalBalance.polygon;
           return balanceElement ? balanceElement + '' : null;
         },
 
@@ -632,6 +632,7 @@ export default {
             await this.refreshGasPrice();
             let contracts = this.contracts;
             let from = this.account;
+            let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
             let tx = await contracts.insurance.polygon_token.methods.approve(contracts.insurance.polygon_exchanger.options.address, sum).send(approveParams);
 

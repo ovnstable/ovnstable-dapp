@@ -318,9 +318,9 @@ export default {
                     return 'Approve DAI+';
                 }
             } else if (this.sum > parseFloat(this.balance.daiPlus)) {
-                return 'Redeem DAI+'
+                return 'Enter Amount to Redeem'
             } else {
-                return 'Redeem DAI+';
+                return 'Enter Amount to Redeem';
             }
         },
 

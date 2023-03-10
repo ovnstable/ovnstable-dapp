@@ -11,7 +11,7 @@
             ></v-progress-circular>
           </v-row>
         </v-row>
-        <v-row v-else class="ma-0 info-card-container mt-5" justify="start" align="start">
+        <v-row v-else class="ma-0 info-card-container mt-3" justify="start" align="start">
             <v-col class="info-card-body-bottom">
                 <v-row align="start" justify="start" class="ma-0">
                     <label class="section-title-label">

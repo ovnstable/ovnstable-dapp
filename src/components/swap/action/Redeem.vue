@@ -316,9 +316,9 @@ export default {
                     return 'Approve USD+';
                 }
             } else if (this.sum > parseFloat(this.balance.usdPlus)) {
-                return 'Redeem USD+'
+                return 'Enter Amount to Redeem'
             } else {
-                return 'Redeem USD+';
+                return 'Enter Amount to Redeem';
             }
         },
 

@@ -1,11 +1,19 @@
 <template>
     <div class="page-container">
         <div class="mt-10">
-            <label class="title-label">Collateral</label>
+            <label class="title-label">DAI+ Collateral</label>
         </div>
+        <v-row v-if="networkId === 10 || networkId === 42161" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 justify-end'">
+            <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
+                Mint DAI+
+            </v-btn>
+            <v-btn class="header-btn btn-outlined" @click="redeemAction">
+                Redeem DAI+
+            </v-btn>
+        </v-row>
 
        <DaiPlusTab v-if="networkId === 10 || networkId === 42161"/>
-        <div v-else class="ma-0 info-card-container d-flex mt-3">
+        <div v-else class="ma-0 info-card-container d-flex">
           <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
             <v-img class="currency" :src="require('@/assets/currencies/DAI+.svg')" />
           </div>
@@ -17,6 +25,17 @@
               Switch on Optimism or Arbitrum chain to see DAI+ collateral.
             </div>
           </div>
+        </div>
+
+        <div v-if="networkId !== 10 && networkId !== 42161"
+             :class="$wu.isMobile() ? 'flex-column' : ''"
+             class="mt-3 buttons-div" >
+            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('42161')">
+                switch to arbitrum to mint
+            </v-btn>
+            <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('10')">
+                switch to optimism to mint
+            </v-btn>
         </div>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -62,7 +81,8 @@ export default {
     },
 
     methods: {
-        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView']),
+        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView', 'showDaiRedeemView']),
+        ...mapActions("network", ["setWalletNetwork"]),
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -72,6 +92,11 @@ export default {
             this.showDaiMintView();
             this.showDaiSwapModal();
         },
+
+        redeemAction() {
+            this.showDaiRedeemView();
+            this.showDaiSwapModal();
+        }
     }
 }
 </script>
@@ -101,10 +126,32 @@ export default {
         line-height: 18px;
     }
 
-  .section-text {
-    font-size: 14px;
-    line-height: 22px;
-  }
+    .section-text {
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-filled, .btn-outlined {
+        width: 40% !important;
+    }
+
+
+    .buttons-div {
+        display: flex;
+        gap: 10px;
+    }
+
+    .footer-btn {
+        width: 100% !important;
+    }
 }
 
 /* tablet */
@@ -125,14 +172,22 @@ export default {
     }
 
 
-  .wide-btn {
+    .wide-btn {
         font-size: 16px;
         line-height: 20px;
     }
 
     .section-text {
-      font-size: 16px;
-      line-height: 24px;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
     }
 
 }
@@ -160,11 +215,18 @@ export default {
         line-height: 20px;
     }
 
-  .section-text {
-    font-size: 18px;
-    line-height: 28px;
-  }
+    .section-text {
+        font-size: 18px;
+        line-height: 28px;
+    }
 
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
 }
 
 @media
@@ -203,6 +265,14 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .section-text {
       font-size: 17px;
       line-height: 28px;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 15px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
     }
 }
 
@@ -274,5 +344,37 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
   color: var(--main-gray-text);
 }
 
+.header-btn {
+    border-radius: 4px !important;
+    box-shadow: none !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+}
+
+.btn-filled {
+    background: var(--blue-gradient);
+    color: #FFFFFF !important;
+    width: 140px;
+    height: 40px;
+}
+
+.btn-outlined {
+    background-color: var(--main-background) !important;
+    color: var(--links-blue);
+    border: 1px solid #1C95E7;
+    width: 140px;
+    height: 40px;
+}
+
+.buttons-div {
+    display: flex;
+}
+
+.footer-btn {
+    width: 20%;
+}
 
 </style>

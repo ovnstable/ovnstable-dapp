@@ -3,6 +3,14 @@
         <div class="mt-10">
             <label class="title-label">dai+ Performance</label>
         </div>
+        <v-row v-if="networkId === 10 || networkId === 42161" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 justify-end'">
+            <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
+                Mint DAI+
+            </v-btn>
+            <v-btn class="header-btn btn-outlined" @click="redeemAction">
+                Redeem DAI+
+            </v-btn>
+        </v-row>
 
       <div v-if="networkId === 10 || networkId === 42161">
         <v-row v-if="isPayoutsLoading">
@@ -16,7 +24,7 @@
           </v-row>
         </v-row>
 
-        <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0 mt-7" justify="start" align="center">
+        <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0" justify="start" align="center">
           <v-col cols="6">
             <div class="info-card-container py-3">
               <LineChartApy :data="payoutsApyData" asset-type="dai+"/>
@@ -79,18 +87,6 @@
             </v-row>
           </v-col>
         </v-row>
-
-        <div v-if="!isPayoutsLoading" class="mt-12">
-          <v-row align="center" justify="center" class="ma-0 mt-10">
-            <label class="ready-label">Ready to use?</label>
-          </v-row>
-        </div>
-
-        <v-row v-if="!isPayoutsLoading" align="center" justify="center" class="ma-0" :class="$wu.isMobile() ? 'mt-7 mb-10' : 'mt-7'">
-          <v-btn class="header-btn btn-filled" @click="mintAction">
-            Mint DAI+
-          </v-btn>
-        </v-row>
       </div>
 
       <div v-else class="ma-0 info-card-container d-flex mt-3">
@@ -106,6 +102,17 @@
           </div>
         </div>
       </div>
+
+        <div v-if="networkId !== 10 && networkId !== 42161"
+             :class="$wu.isMobile() ? 'flex-column' : ''"
+             class="mt-3 buttons-div" >
+            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('42161')">
+                switch to arbitrum to mint
+            </v-btn>
+            <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('10')">
+                switch to optimism to mint
+            </v-btn>
+        </div>
 
 
       <resize-observer v-if="!isPayoutsLoading" @notify="$forceUpdate()"/>
@@ -185,7 +192,8 @@ export default {
     },
 
     methods: {
-        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView']),
+        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView', 'showDaiRedeemView']),
+        ...mapActions("network", ["setWalletNetwork"]),
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -265,6 +273,11 @@ export default {
                 this.isPayoutsLoading = false;
                 console.error("Payouts loading error: ", e)
               })
+        },
+
+        redeemAction() {
+            this.showDaiRedeemView();
+            this.showDaiSwapModal();
         }
     }
 }
@@ -313,15 +326,32 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
-    .btn-filled {
-        width: 100%;
-        height: 36px !important;
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
     }
 
-  .section-text {
-    font-size: 14px;
-    line-height: 22px;
-  }
+    .btn-filled, .btn-outlined {
+        width: 40% !important;
+    }
+
+
+    .buttons-div {
+        display: flex;
+        gap: 10px;
+    }
+
+    .footer-btn {
+        width: 100% !important;
+    }
+
+    .section-text {
+        font-size: 14px;
+        line-height: 22px;
+    }
 }
 
 /* tablet */
@@ -365,15 +395,17 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
-    .btn-filled {
-        width: 20%;
-        height: 40px !important;
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
     }
 
-
-  .section-text {
-    font-size: 16px;
-    line-height: 24px;
+    .section-text {
+        font-size: 16px;
+        line-height: 24px;
   }
 }
 
@@ -418,15 +450,18 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
-    .btn-filled {
-        width: 20%;
-        height: 40px !important;
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
     }
 
-  .section-text {
-    font-size: 18px;
-    line-height: 28px;
-  }
+    .section-text {
+        font-size: 18px;
+        line-height: 28px;
+    }
 }
 
 @media
@@ -475,9 +510,12 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         letter-spacing: 0.02em !important;
     }
 
-    .btn-filled {
-        width: 20%;
-        height: 38px !important;
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 15px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
     }
 
     .section-text {
@@ -593,6 +631,24 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .btn-filled {
     background: var(--blue-gradient);
     color: #FFFFFF !important;
+    width: 140px;
+    height: 40px;
+}
+
+.btn-outlined {
+    background-color: var(--main-background) !important;
+    color: var(--links-blue);
+    border: 1px solid #1C95E7;
+    width: 140px;
+    height: 40px;
+}
+
+.buttons-div {
+    display: flex;
+}
+
+.footer-btn {
+    width: 20%;
 }
 
 .section-text {
@@ -600,4 +656,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
   font-weight: 300;
   color: var(--main-gray-text);
 }
+
+
 </style>

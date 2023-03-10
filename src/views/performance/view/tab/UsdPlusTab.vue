@@ -116,7 +116,7 @@
 
         <v-row v-if="!isCurrentTotalDataLoading" align="start" justify="start" class="ma-0" :class="$wu.isMobile() ? 'mt-5 mb-10' : 'mt-8'">
             <v-btn class="header-btn btn-filled" @click="mintAction">
-                Mint USD+
+                Enter amount to mint
             </v-btn>
         </v-row>
         <resize-observer @notify="$forceUpdate()"/>

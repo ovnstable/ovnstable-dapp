@@ -4,7 +4,7 @@
             <label class="title-label">usd+ Performance</label>
         </div>
 
-        <v-row v-if="!isCurrentTotalDataLoading" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 justify-end'">
+        <v-row v-if="!isPayoutsLoading" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 justify-end'">
             <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
                 Mint USD+
             </v-btn>
@@ -254,6 +254,7 @@ export default {
                 console.error("Payouts loading error: ", e)
               })
         },
+
         redeemAction() {
             this.showRedeemView();
             this.showSwapModal();

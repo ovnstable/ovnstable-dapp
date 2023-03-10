@@ -75,7 +75,7 @@
         </template>
         <template v-else>
             <v-row align="start" justify="start" class=" ma-0 mt-5">
-                <v-btn class="header-btn btn-investor-invest btn-filled" @click="setWalletNetwork('polygon')">
+                <v-btn class="header-btn btn-investor-invest btn-filled" @click.stop="setWalletNetwork('137')">
                     SWITCH TO POLYGON TO MINT
                 </v-btn>
             </v-row>
@@ -109,7 +109,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("network", ['networkId', 'setWalletNetwork', 'polygonConfig']),
+        ...mapGetters("network", ['networkId', 'polygonConfig']),
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData', 'insuranceTotalData', 'insuranceAssetData', 'insuranceTotalSupplyData']),
         ...mapGetters("web3", ['contracts']),
         ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData', 'insuranceRedemptionData']),
@@ -126,6 +126,7 @@ export default {
 
     methods: {
         ...mapActions('insuranceInvestModal', ['showInvestModal', 'showMintView', 'showRedeemView', 'showRedemptionRequestModal']),
+        ...mapActions("network", ["setWalletNetwork"]),
 
         openLink(url) {
             window.open(url, '_blank').focus();

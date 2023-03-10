@@ -66,6 +66,42 @@
                 </v-list-item>
             </v-list-group>
 
+          <v-list-group :append-icon="null" @click="toggleDaiPlus(!isShowDai)">
+            <template v-slot:activator>
+              <v-list-item-icon class="mx-n2">
+                <img class="navbar-page-link" :src="require('@/assets/icon/menu/daiplus.svg')">
+              </v-list-item-icon>
+              <v-list-item-title>
+                <label class="navbar-page-label ml-6" :class="selectedTab.startsWith('daiplus_') ? 'selected-page' : ''">DAI+</label>
+              </v-list-item-title>
+              <div class="select-bar-main-container" >
+                <v-row>
+                  <v-icon color="var(--secondary-gray-text)" >
+                    {{ isShowUsd ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
+                  </v-icon>
+                </v-row>
+              </div>
+            </template>
+            <v-list-item @click="daiStatsClick" :class="selectedTab === 'daiplus_performance' ? 'selected-page-item' : ''">
+              <v-list-item-title>
+                <label class="navbar-list-label mx-5" :class="selectedTab === 'daiplus_performance' ? 'selected-page' : ''">Performance</label>
+              </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item @click="daiCollateralClick" :class="selectedTab === 'daiplus_performance' ? 'selected-page-item' : ''">
+              <v-list-item-title>
+                <label class="navbar-list-label mx-5" :class="selectedTab === 'daiplus_performance' ? 'selected-page' : ''">Collateral</label>
+              </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item v-if="(networkId === 10 || networkId === 42161)"
+                         @click="swapDaiClick">
+              <v-list-item-title>
+                <label class="navbar-page-label-modal mx-5">Mint/redeem</label>
+              </v-list-item-title>
+            </v-list-item>
+          </v-list-group>
+
 
             <v-list-item class="mx-n2" @click="etsClick"  :class="selectedTab === 'ets' ? 'selected-page-item' : ''">
                 <v-list-item-icon>
@@ -158,6 +194,7 @@ export default {
 
     data: () => ({
         isShowUsd: false,
+        isShowDai: false,
         isShowInsurance: false,
         closeOnContentClick: false,
     }),
@@ -173,6 +210,7 @@ export default {
     methods: {
         ...mapActions('menuUI', ['selectTab']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
         ...mapActions('theme', ['switchTheme']),
         ...mapActions('track', ['trackClick']),
@@ -220,6 +258,12 @@ export default {
             });
         },
 
+        daiCollateralClick() {
+          this.selectTab('daiplus_collateral');
+          this.goToActionByPath('/collateral/dai', {tabName: 'collateralDai'});
+          this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
+        },
+
         usdPlusPoolsClick() {
             this.selectTab('usdplus_pools');
             this.goToActionByPath('/pools', { tabName: 'usdPlusPools' });
@@ -234,6 +278,12 @@ export default {
                 event_label: 'Open stats page',
                 value: 1
             });
+        },
+
+        daiStatsClick() {
+          this.selectTab('daiplus_performance');
+          this.goToActionByPath('/stats/dai', {tabName: 'daiPerformance'});
+          this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
         },
 
         etsClick() {
@@ -268,6 +318,12 @@ export default {
             this.trackClick({ action: 'swap-click', event_category: 'Mint', event_label: 'Open mint modal', value: 1 });
         },
 
+        swapDaiClick() {
+          this.showDaiMintView();
+          this.showDaiSwapModal();
+          this.trackClick({action: 'swap-dai-click', event_category: 'Mint', event_label: 'Open dai mint modal', value: 1 });
+        },
+
         wrapClick() {
             this.showWrapView();
             this.showWrapModal();
@@ -298,6 +354,15 @@ export default {
 
         redemptionRequestAction() {
             this.showRedemptionRequestModal();
+        },
+
+        toggleDaiPlus(isShow) {
+          if (isShow) {
+            this.toggleInsurance(false);
+            this.toggleUsdPlus(false);
+          }
+
+          this.isShowDai = isShow;
         },
     }
 }

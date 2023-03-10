@@ -17,11 +17,15 @@
         </v-row>
 
         <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0 mt-7" justify="start" align="center">
-          <v-col class="info-card-container mr-2">
-            <LineChartApy :data="payoutsApyData" asset-type="dai+"/>
+          <v-col cols="6">
+            <div class="info-card-container py-3">
+              <LineChartApy :data="payoutsApyData" asset-type="dai+"/>
+            </div>
           </v-col>
-          <v-col class="info-card-container ml-2">
-            <LineChartTvl :data="payoutsTvlData" asset-type="dai+"/>
+          <v-col cols="6">
+            <div class="info-card-container py-3">
+              <LineChartTvl :data="payoutsTvlData" asset-type="dai+"/>
+            </div>
           </v-col>
         </v-row>
 
@@ -40,8 +44,8 @@
               </v-col>
             </v-row>
 
-            <LineChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData" asset-type-url-path="dai+"/>
-            <LineChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData" asset-type-url-path="dai+"/>
+            <LineChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData" asset-type="dai+"/>
+            <LineChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData" asset-type="dai+"/>
           </v-col>
         </v-row>
 

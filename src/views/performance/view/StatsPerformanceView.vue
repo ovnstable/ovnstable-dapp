@@ -25,11 +25,15 @@
       </v-row>
 
       <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0 mt-2" justify="start" align="center">
-        <v-col class="info-card-container mr-2">
-          <LineChartApy :data="payoutsApyData"/>
+        <v-col cols="6">
+          <div class="info-card-container py-3">
+            <LineChartApy :data="payoutsApyData"/>
+          </div>
         </v-col>
-        <v-col class="info-card-container ml-2">
-          <LineChartTvl :data="payoutsTvlData"/>
+        <v-col cols="6">
+          <div class="info-card-container py-3">
+            <LineChartTvl :data="payoutsTvlData"/>
+          </div>
         </v-col>
       </v-row>
 

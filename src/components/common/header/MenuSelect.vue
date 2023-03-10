@@ -88,9 +88,9 @@
               </v-list-item-title>
             </v-list-item>
 
-            <v-list-item @click="daiCollateralClick" :class="selectedTab === 'usdplus_collateral' ? 'selected-page-item' : ''">
+            <v-list-item @click="daiCollateralClick" :class="selectedTab === 'daiplus_collateral' ? 'selected-page-item' : ''">
               <v-list-item-title>
-                <label class="navbar-list-label mx-5" :class="selectedTab === 'usdplus_collateral' ? 'selected-page' : ''">Collateral</label>
+                <label class="navbar-list-label mx-5" :class="selectedTab === 'daiplus_collateral' ? 'selected-page' : ''">Collateral</label>
               </v-list-item-title>
             </v-list-item>
 

@@ -34,12 +34,12 @@
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)" class="my-1">
             <v-row class="ma-0" justify="start" align="center">
-                <label class="card-label">{{ (!cardData.lastApy || !isNaN(cardData.lastApy)) ? ($utils.formatMoneyComma(cardData.lastApy, 0) + '%') : '0%' }}</label>
+                <label class="card-label">{{ (cardData.lastApy && !isNaN(cardData.lastApy)) ? ($utils.formatMoneyComma(cardData.lastApy, 0) + '%') : '0%' }}</label>
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)" class="my-1">
             <v-row class="ma-0" justify="start" align="center">
-                <label class="card-label">{{ (!cardData.monthApy || !isNaN(cardData.monthApy)) ? ($utils.formatMoneyComma(cardData.monthApy, 0) + '%') : '0%' }}</label>
+                <label class="card-label">{{ (cardData.monthApy && !isNaN(cardData.monthApy)) ? ($utils.formatMoneyComma(cardData.monthApy, 0) + '%') : '0%' }}</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()" cols="3" class="my-1" style="max-width: 269px">

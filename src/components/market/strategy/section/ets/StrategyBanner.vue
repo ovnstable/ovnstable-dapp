@@ -53,7 +53,7 @@
                         <v-col class="bordered-col" :cols="$wu.isMobile() ? 6 : 2">
                             <v-row class="ml-n2 justify-center">
                                 <label class="info-value">
-                                    {{ (etsStrategyData[etsData.name] && !etsStrategyData[etsData.name].lastApy || !isNaN(etsStrategyData[etsData.name].lastApy))  ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].lastApy, 0)) + '%' : '0%' }}
+                                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].lastApy && !isNaN(etsStrategyData[etsData.name].lastApy))  ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].lastApy, 0)) + '%' : '0%' }}
                                 </label>
                             </v-row>
                             <v-row class="ml-n2 mt-5 justify-center">
@@ -63,7 +63,7 @@
                         <v-col class="bordered-col" :cols="$wu.isMobile() ? 6 : 2">
                             <v-row class="ml-n2 justify-center">
                                 <label class="info-value">
-                                    {{ (etsStrategyData[etsData.name] && !etsStrategyData[etsData.name].apy || !isNaN(etsStrategyData[etsData.name].apy)) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '0%' }}
+                                    {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].apy && !isNaN(etsStrategyData[etsData.name].apy)) ? ($utils.formatMoneyComma(etsStrategyData[etsData.name].apy, 0)) + '%' : '0%' }}
                                 </label>
                             </v-row>
                             <v-row class="ml-n2 mt-5 justify-center">

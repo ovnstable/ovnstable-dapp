@@ -19,7 +19,7 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-group :append-icon="null"  @click="isShowUsd = !isShowUsd">
+            <v-list-group :append-icon="null"  @click="toggleUsdPlus(!isShowUsd)">
                 <template v-slot:activator>
                     <v-list-item-icon class="mx-n2">
                         <img class="navbar-page-link" :src="require('@/assets/icon/menu/usdplus.svg')">
@@ -356,9 +356,17 @@ export default {
             this.showRedemptionRequestModal();
         },
 
-        toggleDaiPlus(isShow) {
+        toggleUsdPlus(isShow) {
           if (isShow) {
             this.toggleInsurance(false);
+            this.toggleDaiPlus(false);
+          }
+
+          this.isShowUsd = isShow;
+        },
+
+        toggleDaiPlus(isShow) {
+          if (isShow) {
             this.toggleUsdPlus(false);
           }
 

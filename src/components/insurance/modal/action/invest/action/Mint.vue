@@ -448,12 +448,14 @@ export default {
         async checkApprove() {
           console.log("Check Approve action", this.sum);
 
+          let sum;
           try {
-            if (!this.sum || !isNaN(this.sum)  || !this.account) {
+            if (!this.sum || isNaN(this.sum) || !this.account)  {
+              console.log("Check Approve action failed: ", this.sum, isNaN(this.sum), this.account);
               return;
             }
 
-            let sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
+            sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
             let allowApprove = await this.checkAllowance(sum);
             console.log("allowApprove : ", allowApprove, sum)
             if (!allowApprove) {
@@ -464,7 +466,7 @@ export default {
               return true;
             }
           } catch (e) {
-            console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+            console.error(`Market Withdraw approve action error: ${e}. usdSum: ${this.sum} sum:${sum} Account: ${this.account}. `);
             this.showErrorModal('approve');
             this.disapproveActionAsset();
             return false;

@@ -1,6 +1,17 @@
 <template>
     <div class="page-container">
 
+        <div v-if="!isCollateralLoading">
+            <v-row v-if="networkId === 10 || networkId === 42161" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 justify-end'">
+                <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
+                    Mint DAI+
+                </v-btn>
+                <v-btn class="header-btn btn-outlined" @click="redeemAction">
+                    Redeem DAI+
+                </v-btn>
+            </v-row>
+        </div>
+
         <v-row v-if="isCollateralLoading">
           <v-row align="center" justify="center" class="py-15">
             <v-progress-circular
@@ -192,6 +203,17 @@ export default {
 
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView', 'showDaiRedeemView']),
+
+        mintAction() {
+            this.showDaiMintView();
+            this.showDaiSwapModal();
+        },
+
+        redeemAction() {
+            this.showDaiRedeemView();
+            this.showDaiSwapModal();
+        },
 
       openLink(url) {
           window.open(url, '_blank').focus();
@@ -347,6 +369,19 @@ export default {
         width: 20px;
         height: 20px;
     }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-filled, .btn-outlined {
+        width: 40% !important;
+    }
+
 }
 
 /* tablet */
@@ -388,6 +423,15 @@ export default {
         width: 24px;
         height: 24px;
     }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
 }
 
 /* full */
@@ -428,6 +472,14 @@ export default {
     .open-new {
         width: 24px;
         height: 24px;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
     }
 }
 
@@ -478,6 +530,14 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .open-new {
         width: 22px;
         height: 22px;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 15px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
     }
 }
 
@@ -535,6 +595,31 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-style: normal;
     font-weight: 400;
     color: var(--secondary-gray-text);
+}
+
+.header-btn {
+    border-radius: 4px !important;
+    box-shadow: none !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+}
+
+.btn-filled {
+    background: var(--blue-gradient);
+    color: #FFFFFF !important;
+    width: 140px;
+    height: 40px;
+}
+
+.btn-outlined {
+    background-color: var(--main-background) !important;
+    color: var(--links-blue);
+    border: 1px solid #1C95E7;
+    width: 140px;
+    height: 40px;
 }
 
 </style>

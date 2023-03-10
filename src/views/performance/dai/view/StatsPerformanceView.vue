@@ -3,14 +3,18 @@
         <div class="mt-10">
             <label class="title-label">dai+ Performance</label>
         </div>
-        <v-row v-if="networkId === 10 || networkId === 42161" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 justify-end'">
-            <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                Mint DAI+
-            </v-btn>
-            <v-btn class="header-btn btn-outlined" @click="redeemAction">
-                Redeem DAI+
-            </v-btn>
-        </v-row>
+
+        <div v-if="networkId === 10 || networkId === 42161">
+            <v-row v-if="!isPayoutsLoading" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 mr-4 justify-end'">
+                <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
+                    Mint DAI+
+                </v-btn>
+                <v-btn class="header-btn btn-outlined" @click="redeemAction">
+                    Redeem DAI+
+                </v-btn>
+            </v-row>
+        </div>
+
 
       <div v-if="networkId === 10 || networkId === 42161">
         <v-row v-if="isPayoutsLoading">

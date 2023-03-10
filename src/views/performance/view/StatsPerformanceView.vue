@@ -4,7 +4,7 @@
             <label class="title-label">usd+ Performance</label>
         </div>
 
-        <v-row v-if="!isPayoutsLoading" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 justify-end'">
+        <v-row v-if="!isPayoutsLoading" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 mr-4 justify-end'">
             <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
                 Mint USD+
             </v-btn>
@@ -24,7 +24,7 @@
         </v-row>
       </v-row>
 
-      <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0 mt-2" justify="start" align="center">
+      <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0" justify="start" align="center">
         <v-col cols="6">
           <div class="info-card-container py-3">
             <LineChartApy :data="payoutsApyData"/>

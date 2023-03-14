@@ -95,7 +95,7 @@
             </v-col>
         </v-row>
 
-        <div class="chart-row" id="line-chart-apy"></div>
+        <div class="chart-row mb-10" id="line-chart-apy"></div>
 
         <v-row class="zoom-row" style="margin-top: -40px !important;">
             <v-spacer></v-spacer>
@@ -386,16 +386,28 @@ export default {
 
                 annotations: {
                     position: 'front',
-                    yaxis: [{
-                        y: averageValue,
-                        strokeDashArray: 5,
-                        borderColor: this.etsData.mainColor,
-                        fillColor: this.etsData.mainColor,
-                        label: {
-                            show: false,
-                        },
-                        width: this.isMobile ? '0%' : (averageValue ? '100%' : '0%'),
-                    }]
+                    yaxis: [
+                        {
+                            y: 0,
+                            strokeDashArray: 5,
+                            offsetX: 10,
+                            offsetY: -5,
+                            width: '97%',
+                            label: {
+                                borderColor: null,
+                                position: 'left',
+                                offsetX: 1,
+                                offsetY: 0,
+                                style: {
+                                    color: "#707A8B",
+                                    background: "#FFFFFF",
+                                    fontSize: '14px',
+                                    fontFamily: "Roboto",
+                                },
+                                text: "0"
+                            },
+                        }
+                    ],
                 },
 
                 grid: {

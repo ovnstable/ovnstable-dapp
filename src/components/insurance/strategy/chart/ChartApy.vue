@@ -381,16 +381,28 @@ export default {
 
                 annotations: {
                     position: 'front',
-                    yaxis: [{
-                        y: averageValue,
-                        strokeDashArray: 5,
-                        borderColor: '#7944DA',
-                        fillColor: '#7944DA',
-                        label: {
-                            show: false,
-                        },
-                        width: this.isMobile ? '0%' : (averageValue ? '100%' : '0%'),
-                    }]
+                    yaxis: [
+                        {
+                            y: 0,
+                            strokeDashArray: 5,
+                            offsetX: 10,
+                            offsetY: -5,
+                            width: '98%',
+                            label: {
+                                borderColor: null,
+                                position: 'left',
+                                offsetX: 1,
+                                offsetY: 0,
+                                style: {
+                                    color: "#707A8B",
+                                    background: "#FFFFFF",
+                                    fontSize: '14px',
+                                    fontFamily: "Roboto",
+                                },
+                                text: "0"
+                            },
+                        }
+                    ],
                 },
 
                 grid: {

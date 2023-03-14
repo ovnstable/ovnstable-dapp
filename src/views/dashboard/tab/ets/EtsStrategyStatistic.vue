@@ -20,7 +20,7 @@
                 </v-col>
                 <v-col class="mr-n3 mt-n3">
                   <v-btn outlined class="rate-tab-btn" @click="setTab('PERFORMANCE')" v-bind:class="activeChartApy">
-                    PERFORMANCE
+                    CUMULATIVE RETURN
                   </v-btn>
                 </v-col>
               </v-row>
@@ -34,12 +34,13 @@
               <BarChart v-if="chartTab === 'PROFIT'"
                         :data="charts.profit"
                         :name="name"
-                        :type="'profit & loss'"
+                        :type="'Profit & loss'"
                         :id="index"/>
 
 
               <LineChart v-if="chartTab === 'PERFORMANCE'"
                          :data="charts.comp"
+                         :name="name"
                          :type="'PERFORMANCE'"
                          :id="index"/>
             </v-col>

@@ -90,7 +90,7 @@ export default {
     BarChart,
     Table
   },
-  props: ['name', 'charts', 'transactions', 'index'],
+  props: ['name', 'charts', 'transactions', 'index', 'type'],
   data() {
     return {
       chartTab: 'BALANCE'

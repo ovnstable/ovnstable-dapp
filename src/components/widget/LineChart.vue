@@ -108,6 +108,34 @@ export default {
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(-this.slice) : labels;
 
+            let maxValue;
+            try {
+                maxValue = Math.max.apply(Math, values);
+                if (maxValue > 5) {
+                    maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
+                }
+            } catch (e) {
+                maxValue = 50;
+            }
+
+            let minValue;
+            try {
+
+                if (this.usdPlusDataEnabled) {
+                    let minValueEts = Math.min.apply(Math, values);
+
+                    minValue = Math.min(minValueEts);
+                } else {
+                    minValue = Math.min.apply(Math, values);
+                }
+
+                if (minValue < -5) {
+                    minValue = Math.min(Math.floor(Math.floor(minValue / 10)) * 10, 0);
+                }
+            } catch (e) {
+                minValue = 0;
+            }
+
             let options = {
                 series: [{
                     name: "Portfolio value",
@@ -170,6 +198,8 @@ export default {
 
                 yaxis: {
                     opposite: false,
+                    min: minValue,
+                    max: maxValue,
 
                     labels: {
                         show: false,
@@ -181,10 +211,10 @@ export default {
 
                     y: {
                         formatter: function (val, opts) {
-                            if (this.type === 'PERFORMANCE') {
-                                return '%' + val
+                            if (this.type === 'Balance') {
+                                return '$' + val
                             }
-                            return '$' + val
+                            return '%' + val
                         },
                     },
                 },

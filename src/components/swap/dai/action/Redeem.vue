@@ -18,7 +18,17 @@
                                   hide-details
                                   background-color="transparent"
                                   v-model="sum"
-                                  @input="checkApproveCounter">
+                                  @input="checkApproveCounter(
+                                        'dai-swap-redeem',
+                                         account,
+                                         sum,
+                                         assetDecimals,
+                                         contracts.daiExchange,
+                                         'redeem',
+                                         contracts.dai,
+                                          disapproveDaiPlus,
+                                          approveDaiPlus
+                                       )">
                     </v-text-field>
                 </v-row>
             </v-col>
@@ -156,8 +166,22 @@
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
-                       @click="confirmSwapAction">
-                    <v-progress-circular
+                       @click="confirmSwapAction(
+                            'dai-swap-redeem',
+                             sliderPercent,
+                             originalBalance[currency.id],
+                             account,
+                             sum,
+                             assetDecimals,
+                             contracts.daiExchange,
+                             'redeem',
+                             contracts.dai,
+                             {successAction: 'redeemDaiPlus'},
+                             finalizeFunc,
+                             disapproveDaiPlus,
+                             approveDaiPlus
+                       )">
+                  <v-progress-circular
                         v-if="transactionPending"
                         class="mr-2"
                         width="2"
@@ -171,8 +195,17 @@
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
-                       @click="approveAction">
-                    {{ buttonLabel }}
+                       @click="approveAction(
+                           'dai-swap-redeem',
+                           account,
+                           assetDecimals,
+                           contracts.daiExchange,
+                           'redeem',
+                           contracts.dai,
+                            disapproveDaiPlus,
+                            approveDaiPlus
+                       )">
+                  {{ buttonLabel }}
                 </v-btn>
             </div>
         </v-row>
@@ -215,6 +248,7 @@ import bscIcon from "@/assets/network/bsc.svg";
 import {axios} from "@/plugins/http-axios";
 import Tooltip from "@/components/common/element/Tooltip";
 import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
+import {swap} from "@/components/mixins/swap";
 
 export default {
     name: "Redeem",
@@ -227,6 +261,8 @@ export default {
         SuccessModal,
     },
 
+    mixins: [swap],
+
     data: () => ({
         currency: null,
         currencies: [
@@ -236,6 +272,7 @@ export default {
                 image: require('@/assets/currencies/DAI+.svg')
             }
         ],
+        assetDecimals: 18,
 
         assetName: 'DAI',
 
@@ -398,7 +435,17 @@ export default {
         async changeSliderPercent() {
             this.sum = (this.balance.daiPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
-            await this.checkApprove();
+            await this.checkApprove(
+                'dai-swap-redeem',
+                this.account,
+                this.sum,
+                this.assetDecimals,
+                this.contracts.daiExchange,
+                'redeem',
+                this.contracts.dai,
+                this.disapproveDaiPlus,
+                this.approveDaiPlus
+            );
         },
 
         isNumber: function(evt) {
@@ -419,290 +466,10 @@ export default {
         setSum(value) {
             this.sum = value;
         },
-        async checkApproveCounter() {
-          if (!this.sumApproveCheckerId) {
-            // first call
-            this.sumApproveCheckerId = -1;
-            await this.checkApprove();
-            return;
-          }
 
-          this.sumApproveCheckerSec = 0;
-          let intervalId = setInterval(async () => {
-            this.sumApproveCheckerSec++;
-
-            if (this.sumApproveCheckerSec >= 2) {
-              if (this.sumApproveCheckerId === intervalId) {
-                this.sumApproveCheckerSec = 0;
-                try {
-                  await this.checkApprove();
-                } catch (e) {
-                  // ignore
-                } finally {
-                  clearInterval(intervalId)
-                }
-              } else {
-                clearInterval(intervalId)
-              }
-
-            }
-          }, 1000);
-
-          this.sumApproveCheckerId = intervalId;
-        },
-        async checkApprove() {
-          console.log("Check Approve action", this.sum);
-
-          try {
-            if (!this.sum || isNaN(this.sum) || !this.account) {
-              return;
-            }
-
-            let sum = this.web3.utils.toWei(this.sum, 'ether');
-
-            let allowApprove = await this.checkAllowance(sum);
-            console.log("allowApprove : ", allowApprove, sum)
-            if (!allowApprove) {
-              this.disapproveDaiPlus();
-              return false;
-            } else {
-              this.approveDaiPlus();
-              return true;
-            }
-          } catch (e) {
-            console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-            this.showErrorModal('approve');
-            this.disapproveDaiPlus();
-            return false;
-          }
-        },
-        getMax() {
-          let balanceElement = this.originalBalance[this.currency.id];
-          return balanceElement ? balanceElement + '' : null;
-        },
-
-        async redeemAction() {
-            try {
-
-              let sumInUsd = this.sum;
-              let sum;
-
-              if (this.sliderPercent === 100) {
-                let originalMax = this.getMax();
-                sum = originalMax;
-                if (!originalMax) {
-                  console.error("Original max value not exist, when confirm swap action in market invest.")
-                  return;
-                }
-              } else {
-                sum = this.web3.utils.toWei(this.sum, 'ether');
-              }
-
-              if (!(await this.checkApprove())) {
-                console.debug(`Redeem dai swap. Buy action Approve not pass. Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}.`);
-                return;
-              }
-
-              let contracts = this.contracts;
-              let from = this.account;
-              let self = this;
-
-              try {
-                  await this.refreshGasPrice();
-
-                  let buyParams;
-
-                  if (this.gas == null) {
-                      buyParams = {from: from, gasPrice: this.gasPriceGwei};
-                  } else {
-                      buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
-                  }
-
-                  console.debug(`Swap blockchain. Redeem action Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
-                  let buyResult = await contracts.daiExchange.methods.redeem(contracts.dai.options.address, sum).send(buyParams).on('transactionHash', function (hash) {
-                      let tx = {
-                          hash: hash,
-                          text: 'Redeem DAI+',
-                          product: 'daiPlus',
-                          productName: 'DAI+',
-                          action: 'redeem',
-                          amount: sumInUsd,
-                      };
-
-                      self.putTransaction(tx);
-                      self.showSuccessModal({successTxHash: hash, successAction: 'redeemDaiPlus'});
-                      self.loadTransaction();
-                  });
-              } catch (e) {
-                console.error(`Swap Redeem blockchain redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                return;
-              }
-
-              self.refreshSwap();
-              self.setSum(null);
-            } catch (e) {
-              console.error(`Swap Redeem redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-            }
-        },
-
-        async confirmSwapAction() {
-            try {
-                let sum;
-
-                if (this.sliderPercent === 100) {
-                  let originalMax = this.getMax();
-                  sum = originalMax;
-                  if (!originalMax) {
-                    console.error("Original max value not exist, when confirm swap action in market invest.")
-                    return;
-                  }
-                } else {
-                  sum = this.web3.utils.toWei(this.sum, 'ether');
-                }
-
-                let estimatedGasValue = await this.estimateGas(sum);
-                if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
-                    this.gas = null;
-                    this.gasAmountInMatic = null;
-                    this.gasAmountInUsd = null;
-
-                    this.trackClick({action: 'confirm-redeem-click', event_category: 'Redeem confirm', event_label: 'Confirm Redeem Action', value: 1 });
-                    await this.redeemAction();
-                    this.closeWaitingModal();
-                } else {
-                    this.estimatedGas = estimatedGasValue;
-
-                    /* adding 10% to estimated gas */
-                    this.gas = new BN(Number.parseFloat(this.estimatedGas) * 1.1);
-                    this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
-                    this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
-
-                    await this.redeemAction();
-                    this.closeWaitingModal();
-                }
-            } catch (e) {
-                console.error(`Swap dai Redeem swap action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                this.showErrorModal('estimateGas');
-            }
-        },
-
-        async approveAction() {
-            try {
-                this.showWaitingModal('Approving in process');
-                this.trackClick({action: 'approve-redeem-click', event_category: 'Redeem approve', event_label: 'Approve Redeem Action', value: 1 });
-
-
-                let approveSum = "10000000";
-                let sum = this.web3.utils.toWei(approveSum, 'ether');
-                console.debug(`Swap dai Mint blockchain. Approve action. Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}.`);
-
-              let allowApprove = await this.checkAllowance(sum);
-              allowApprove = !allowApprove ? (await this.approveBlockchainAction(sum)) : true;
-              if (!allowApprove) {
-                    this.closeWaitingModal();
-                    this.showErrorModal('approve');
-                    this.disapproveDaiPlus();
-                } else {
-                    this.approveDaiPlus();
-                    this.closeWaitingModal();
-                }
-            } catch (e) {
-                console.error(`Swap Redeem approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                this.showErrorModal('approve');
-                this.trackClick({action: 'redeem-error-click', event_category: 'Redeem error', event_label: 'Error Redeem Showed', value: 1 });
-            }
-        },
-        async approveBlockchainAction(sum) {
-          try {
-            await this.refreshGasPrice();
-            let contracts = this.contracts;
-            let from = this.account;
-
-            let approveParams = {gasPrice: this.gasPriceGwei, from: from};
-
-            let tx = await contracts.daiPlus.methods.approve(contracts.daiExchange.options.address, sum).send(approveParams);
-            console.debug(`Swap dai Mint blockchain. Allowance Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}.`);
-
-            let minted = true;
-            while (minted) {
-              await new Promise(resolve => setTimeout(resolve, 2000));
-              let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
-              this.trackClick({action: 'redeem-tx-show-click', event_category: 'Redeem tx scan', event_label: 'Redeem Go to Scan', value: 1 });
-
-              if (receipt) {
-                if (receipt.status)
-                  return true;
-                else {
-                  return false;
-                }
-              }
-            }
-
-            return true;
-          } catch (e) {
-            console.error(`Swap Redeem allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-            return false;
-          }
-        },
-        async checkAllowance(sum) {
-          let contracts = this.contracts;
-          let from = this.account;
-
-          let allowanceValue = await contracts.daiPlus.methods.allowance(from, contracts.daiExchange.options.address).call()
-          console.debug(`Swap Mint blockchain. Allowance value: ${allowanceValue}. Account: ${this.account}.`);
-          console.log('allowanceValue: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
-          return allowanceValue * 1 >= sum * 1;
-        },
-
-        async estimateGas(sum) {
-
-            let contracts = this.contracts;
-            let from = this.account;
-
-            let result;
-
-            try {
-                let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
-                let blockNum = await this.web3.eth.getBlockNumber();
-                let errorApi = this.polygonApi;
-
-                console.debug(`Swap dai Mint blockchain. Estimate gas action Sum: ${sum} daiSum: ${this.sum}. Account: ${this.account}.`);
-                await contracts.daiExchange.methods.redeem(contracts.dai.options.address, sum).estimateGas(estimateOptions)
-                    .then(function (gasAmount) {
-                        result = gasAmount;
-                    })
-                    .catch(function (error) {
-                        if (error && error.message) {
-                            let msg = error.message.replace(/(?:\r\n|\r|\n)/g, '');
-
-                            let errorMsg = {
-                                product: 'DAI+',
-                                data: {
-                                    from: from,
-                                    to: contracts.daiExchange.options.address,
-                                    gas: null,
-                                    gasPrice: parseInt(estimateOptions.gasPrice, 16),
-                                    method: contracts.daiExchange.methods.redeem(contracts.dai.options.address, sum).encodeABI(),
-                                    message: msg,
-                                    block: blockNum
-                                }
-                            };
-
-                            axios.post(errorApi + '/error/log', errorMsg);
-
-                            console.log(errorMsg);
-                        } else {
-                          console.error(`Swap Redeem blockchain estimate action error: ${error}. Sum: ${this.sum}. Account: ${this.account}. `);
-                        }
-
-                        return -1;
-                    });
-            } catch (e) {
-                console.error(`Swap Redeem estimate action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                return -1;
-            }
-
-            return result;
+        finalizeFunc() {
+          this.refreshSwap();
+          this.setSum(null);
         },
     }
 }

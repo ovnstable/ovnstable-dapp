@@ -3,9 +3,12 @@ const state = {
 
     show: false,
 
+    usdcDisapproved: false,
     usdcApproved: false,
     usdPlusApproved: false,
+    usdPlusDisapproved: false,
     wUsdPlusApproved: false,
+    wUsdPlusDisapproved: false,
 };
 
 const getters = {
@@ -26,8 +29,20 @@ const getters = {
         return state.usdPlusApproved;
     },
 
+    usdcDisapproved(state) {
+        return state.usdcDisapproved;
+    },
+
+    usdPlusDisapproved(state) {
+        return state.usdPlusDisapproved;
+    },
+
     wUsdPlusApproved(state) {
         return state.wUsdPlusApproved;
+    },
+
+    wUsdPlusDisapproved(state) {
+        return state.wUsdPlusDisapproved;
     },
 };
 
@@ -53,12 +68,24 @@ const actions = {
         commit('setUsdcApproved', true);
     },
 
+    disapproveUsdc({commit, dispatch, getters}) {
+        commit('setUsdcDisapproved', false);
+    },
+
     approveUsdPlus({commit, dispatch, getters}) {
         commit('setUsdPlusApproved', true);
     },
 
+    disapproveUsdPlus({commit, dispatch, getters}) {
+        commit('setUsdPlusDisapproved', false);
+    },
+
     approveWUsdPlus({commit, dispatch, getters}) {
         commit('setWUsdPlusApproved', true);
+    },
+
+    disapproveWUsdPlus({commit, dispatch, getters}) {
+        commit('setWUsdPlusDisapproved', true);
     },
 };
 
@@ -80,8 +107,21 @@ const mutations = {
         state.usdPlusApproved = usdPlusApproved;
     },
 
+
+    setUsdcDisapproved(state, usdcApproved) {
+        state.usdcApproved = usdcApproved;
+    },
+
+    setUsdPlusDisapproved(state, usdPlusDisapproved) {
+        state.usdPlusDisapproved = usdPlusDisapproved;
+    },
+
     setWUsdPlusApproved(state, wUsdPlusApproved) {
         state.wUsdPlusApproved = wUsdPlusApproved;
+    },
+
+    setWUsdPlusDisapproved(state, wUsdPlusDisapproved) {
+        state.wUsdPlusDisapproved = wUsdPlusDisapproved;
     },
 };
 

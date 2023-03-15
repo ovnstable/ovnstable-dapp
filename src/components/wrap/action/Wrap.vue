@@ -17,7 +17,18 @@
                                   class="field-sum"
                                   hide-details
                                   background-color="transparent"
-                                  v-model="sum">
+                                  v-model="sum"
+                                  @input="checkApproveCounter(
+                                        'wrap-invest',
+                                         account,
+                                         sum,
+                                         assetDecimals,
+                                         contracts.market,
+                                         'wrap',
+                                         tokenContract,
+                                         disapproveActionFunc,
+                                         approveActionFunc
+                                       )">
                     </v-text-field>
                 </v-row>
             </v-col>
@@ -155,7 +166,22 @@
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
-                       @click="confirmSwapAction">
+                       @click="confirmSwapAction(
+                            'wrap-invest',
+                             sliderPercent,
+                             balance[currency.id],
+                             account,
+                             sum,
+                             assetDecimals,
+                             contracts.market,
+                             'wrap',
+                             tokenContract,
+                             {successAction: 'wrapUsdPlus'},
+                             finalizeFunc,
+                             disapproveActionFunc,
+                             approveActionFunc
+                       )">
+
                     <v-progress-circular
                         v-if="transactionPending"
                         class="mr-2"
@@ -170,7 +196,16 @@
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
-                       @click="approveAction">
+                       @click="approveAction(
+                           'wrap-invest',
+                           account,
+                           assetDecimals,
+                           contracts.market,
+                           'wrap',
+                           tokenContract,
+                           disapproveActionFunc,
+                           approveActionFunc
+                       )">
                     {{ buttonLabel }}
                 </v-btn>
             </div>
@@ -213,6 +248,7 @@ import arbitrumIcon from "@/assets/network/ar.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import Tooltip from "@/components/common/element/Tooltip";
 import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
+import {swap} from "@/components/mixins/swap";
 
 export default {
     name: "Wrap",
@@ -225,9 +261,13 @@ export default {
         SuccessModal,
     },
 
+     mixins: [swap],
+
     data: () => ({
         currency: {id: 'usdc'},
         currencies: [],
+        assetDecimals: 6,
+
 
         buyCurrency: null,
         buyCurrencies: [{
@@ -253,7 +293,7 @@ export default {
         ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('wrapData', ['index', 'amountPerUsdPlus']),
-        ...mapGetters('wrapModal', ['usdcApproved', 'usdPlusApproved']),
+        ...mapGetters('wrapModal', ['usdcApproved', 'usdPlusApproved', 'usdPlusDisapproved', 'usdcDisapproved']),
 
         ...mapGetters("network", ['networkId']),
         ...mapGetters("web3", ["web3", 'contracts']),
@@ -363,7 +403,24 @@ export default {
             }
 
             return labelList;
-        }
+        },
+      approveActionFunc: function() {
+        if (this.currency.id === 'usdc')
+          return this.approveUsdc;
+        else if (this.currency.id === 'usdPlus')
+         return this.approveUsdPlus;
+        else
+          throw new Error('Unknown currency');
+      },
+
+      disapproveActionFunc: function() {
+        if (this.currency.id === 'usdc')
+          return this.disapproveUsdc;
+        else if (this.currency.id === 'usdPlus')
+         return this.disapproveUsdPlus;
+        else
+          throw new Error('Unknown currency');
+      }
     },
 
     created() {
@@ -403,7 +460,7 @@ export default {
     methods: {
 
         ...mapActions("wrapData", ['refreshWrap']),
-        ...mapActions("wrapModal", ['showUnwrapView', 'approveUsdc', 'approveUsdPlus']),
+        ...mapActions("wrapModal", ['showUnwrapView', 'approveUsdc', 'approveUsdPlus', 'disapproveUsdc', 'disapproveUsdPlus']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
@@ -414,9 +471,21 @@ export default {
 
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
-        changeSliderPercent() {
+        async changeSliderPercent() {
             this.sum = (this.balance[this.currency.id] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
+
+            await this.checkApprove(
+                'wrap-invest',
+                this.account,
+                this.sum,
+                this.assetDecimals,
+                this.contracts.market,
+                'wrap',
+                this.tokenContract,
+                this.disapproveActionFunc,
+                this.approveActionFunc
+            );
         },
 
         async previewWrap() {
@@ -455,177 +524,9 @@ export default {
             this.sum = value;
         },
 
-        max() {
-            let balanceElement = this.balance[this.currency.id];
-            this.sum = balanceElement + "";
-        },
-
-        async buyAction() {
-            try {
-                let sumInUsd = this.sum;
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
-
-                let contracts = this.contracts;
-                let from = this.account;
-                let self = this;
-
-                try {
-                    await this.refreshGasPrice();
-
-                    let buyParams;
-
-                    if (this.gas == null) {
-                        buyParams = {from: from, gasPrice: this.gasPriceGwei};
-                    } else {
-                        buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
-                    }
-
-                    let buyResult = await this.contracts.market.methods.wrap(this.tokenContract.options.address, sum, this.account).send(buyParams).on('transactionHash', function (hash) {
-                        let tx = {
-                            hash: hash,
-                            text: 'Wrap USD+',
-                            product: 'wUsdPlus',
-                            productName: 'wUSD+',
-                            action: 'wrap',
-                            amount: sumInUsd,
-                        };
-
-                        self.putTransaction(tx);
-                        self.showSuccessModal({successTxHash: hash, successAction: 'wrapUsdPlus'});
-                        self.loadTransaction();
-                    });
-                } catch (e) {
-                    console.error(`Wrap Wrap blockchain buy action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                    return;
-                }
-
-                self.refreshWrap();
-                self.setSum(null);
-            } catch (e) {
-              console.error(`Wrap Wrap buy action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-            }
-        },
-
-        async confirmSwapAction() {
-            try {
-                let sum = this.web3.utils.toWei(this.sum, 'mwei');
-
-                let estimatedGasValue = await this.estimateGas(sum);
-                if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
-                    this.gas = null;
-                    this.gasAmountInMatic = null;
-                    this.gasAmountInUsd = null;
-
-                    await this.buyAction();
-                    this.closeWaitingModal();
-                } else {
-                    this.estimatedGas = estimatedGasValue;
-
-                    /* adding 10% to estimated gas */
-                    this.gas = new BN(Number.parseFloat(this.estimatedGas) * 1.1);
-                    this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
-                    this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
-
-                    await this.buyAction();
-                    this.closeWaitingModal();
-                }
-            } catch (e) {
-                console.error(`Wrap Wrap estimate action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                this.showErrorModal('estimateGas');
-            }
-        },
-
-        async approveAction() {
-            try {
-                this.showWaitingModal('Approving in process');
-
-                let approveSum = "10000000";
-
-                let sum = this.web3.utils.toWei(approveSum, 'mwei');
-
-                let allowApprove = await this.checkAllowance(sum);
-                if (!allowApprove) {
-                    this.closeWaitingModal();
-                    this.showErrorModal('approve');
-                    return;
-                } else {
-                    if (this.currency.id === 'usdc')
-                        this.approveUsdc();
-                    else if (this.currency.id === 'usdPlus')
-                        this.approveUsdPlus();
-                    else
-                        throw new Error('Unknown currency');
-
-                    this.closeWaitingModal();
-                }
-            } catch (e) {
-                console.error(`Wrap Wrap approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                this.showErrorModal('approve');
-            }
-        },
-
-        async checkAllowance(sum) {
-
-            let contracts = this.contracts;
-            let from = this.account;
-
-            let allowanceValue = await this.tokenContract.methods.allowance(from, contracts.market.options.address).call();
-
-            if (allowanceValue < sum) {
-                try {
-                    await this.refreshGasPrice();
-                    let approveParams = {gasPrice: this.gasPriceGwei, from: from};
-
-                    let tx = await this.tokenContract.methods.approve(contracts.market.options.address, sum).send(approveParams);
-
-                    let minted = true;
-                    while (minted) {
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                        let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
-
-                        if (receipt) {
-                            if (receipt.status)
-                                return true;
-                            else {
-                                return false;
-                            }
-                        }
-                    }
-
-                    return true;
-                } catch (e) {
-                  console.error(`Wrap Wrap allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                  return false;
-                }
-            }
-
-            return true;
-        },
-
-        async estimateGas(sum) {
-
-            let contracts = this.contracts;
-            let from = this.account;
-
-            let result;
-
-            try {
-                let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
-
-                await contracts.market.methods.wrap(this.tokenContract.options.address, sum, this.account).estimateGas(estimateOptions)
-                    .then(function (gasAmount) {
-                        result = gasAmount;
-                    })
-                    .catch(function (error) {
-                      console.error(`Wrap Wrap  blockchain estimate action error: ${error}. Sum: ${this.sum}. Account: ${this.account}. `);
-                      return -1;
-                    });
-            } catch (e) {
-                console.error(`Wrap Wrap estimate action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                return -1;
-            }
-
-            return result;
+        finalizeFunc() {
+          this.refreshWrap();
+          this.setSum(null);
         },
     }
 }

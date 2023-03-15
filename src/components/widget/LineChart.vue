@@ -210,11 +210,11 @@ export default {
                     enabled: true,
 
                     y: {
-                        formatter: function (val, opts) {
-                            if (this.type === 'Balance') {
-                                return '$' + val
+                        formatter: (val) => {
+                            if (this.type === 'Cumulative return') {
+                                return '%' + val
                             }
-                            return '%' + val
+                            return '$' + val
                         },
                     },
                 },
@@ -223,7 +223,7 @@ export default {
                     position: 'back',
                     yaxis: [
                         {
-                            y: 0,
+                            y: minValue = 0,
                             strokeDashArray: 5,
                             offsetX: 10,
                             offsetY: -5,

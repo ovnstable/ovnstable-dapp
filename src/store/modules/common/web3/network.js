@@ -1,6 +1,3 @@
-
-const BASE_PARAMS = {}
-
 const POLYGON_PARAMS = {
     appApiUrl: 'https://app.overnight.fi/api',
     networkName: 'polygon',
@@ -95,7 +92,7 @@ function _getParams(networkName) {
         case "42161":
             return ARBITRUM_PARAMS;
         default:
-            return BASE_PARAMS;
+            return OPTIMISM_PARAMS; //BASE_PARAMS;
     }
 }
 

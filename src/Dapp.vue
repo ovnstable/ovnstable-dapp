@@ -63,7 +63,13 @@ export default {
         console.error("Load wallet error from init dapp ", e);
       } finally {
         let dbNetworkName = localStorage.getItem('selectedNetwork');
-        this.changeDappNetwork(dbNetworkName);
+        if (dbNetworkName && dbNetworkName !== '') {
+          try {
+            this.changeDappNetwork(dbNetworkName);
+          } catch (e) {
+            // ignore
+          }
+        }
       }
 
         await this.initTheme();

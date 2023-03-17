@@ -161,38 +161,6 @@ export default {
     isAllDataLoaded: function () {
       return !this.isProductsInfoLoading && !this.isClientDataLoading;
     },
-
-    activeTabName: function() {
-      return this.$route.query.tabName || 'featured';
-    },
-
-    activeTabFeatured: function () {
-      return {
-        'tab-button': this.tab === 1,
-        'tab-button-in-active': this.tab !== 1,
-      }
-    },
-
-    activeTabHedged: function () {
-      return {
-        'tab-button': this.tab === 2,
-        'tab-button-in-active': this.tab !== 2,
-      }
-    },
-
-    activeTabUsd: function () {
-      return {
-        'tab-button': this.tab === 3,
-        'tab-button-in-active': this.tab !== 3,
-      }
-    },
-
-    activeTabPools: function () {
-      return {
-        'tab-button': this.tab === 4,
-        'tab-button-in-active': this.tab !== 4,
-      }
-    },
   },
   watch: {
     etsList: function (newVal, oldVal) {
@@ -205,10 +173,6 @@ export default {
       if (newVal) {
         this.getSortedCardList();
       }
-    },
-
-    activeTabName() {
-      this.initTab();
     },
   },
 

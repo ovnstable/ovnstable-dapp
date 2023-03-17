@@ -48,10 +48,6 @@ export default {
 
     computed: {
         ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig']),
-
-        activeTabName: function() {
-            return this.$route.query.tabName || 'usd-pools';
-        },
     },
 
     created() {

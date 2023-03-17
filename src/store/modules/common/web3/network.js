@@ -164,12 +164,18 @@ const getters = {
     bscConfig(state) {
         return state.bscConfig;
     },
+
     opConfig(state) {
         return state.opConfig;
     },
+
     arConfig(state) {
         return state.arConfig;
     },
+
+    getParams: (state) => (networkName) => {
+        return _getParams(networkName);
+    }
 };
 
 const actions = {

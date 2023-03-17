@@ -346,7 +346,7 @@ export default {
 
             seriesList.push(
                 {
-                    name: "ETS " + this.etsData.nameUp + " Performance",
+                    name: "ETS " + this.etsData.nameUp + " Cumulative return",
                     data: values
                 }
             );
@@ -388,7 +388,7 @@ export default {
                     position: 'front',
                     yaxis: [
                         {
-                            y: 0,
+                            y: minValue = 0,
                             strokeDashArray: 5,
                             offsetX: 10,
                             offsetY: -5,

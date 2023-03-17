@@ -20,7 +20,7 @@
                 </v-col>
                 <v-col class="mr-n3 mt-n3">
                   <v-btn outlined class="rate-tab-btn" @click="setTab('PERFORMANCE')" v-bind:class="activeChartApy">
-                    CUMULATIVE RETURN
+                    Cumulative Return
                   </v-btn>
                 </v-col>
               </v-row>
@@ -41,7 +41,7 @@
               <LineChart v-if="chartTab === 'PERFORMANCE'"
                          :data="charts.comp"
                          :name="name"
-                         :type="'PERFORMANCE'"
+                         :type="'Cumulative return'"
                          :id="index"/>
             </v-col>
           </v-row>
@@ -90,7 +90,7 @@ export default {
     BarChart,
     Table
   },
-  props: ['name', 'charts', 'transactions', 'index', 'type'],
+  props: ['name', 'charts', 'transactions', 'index'],
   data() {
     return {
       chartTab: 'BALANCE'

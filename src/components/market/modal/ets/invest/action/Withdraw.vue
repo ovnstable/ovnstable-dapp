@@ -18,7 +18,17 @@
                                   hide-details
                                   background-color="transparent"
                                   v-model="sum"
-                                  @input="checkApproveCounter">
+                                  @input="checkApproveCounter(
+                                        'market-redeem',
+                                         account,
+                                         sum,
+                                         etsData.actionTokenDecimals,
+                                         contracts[etsData.exchangeContract],
+                                         'redeem',
+                                         contracts[etsData.actionAsset],
+                                         disapproveEtsToken,
+                                         approveEtsToken
+                                       )">
                     </v-text-field>
                 </v-row>
             </v-col>
@@ -161,8 +171,22 @@
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
-                       @click="confirmSwapAction">
-                    <v-progress-circular
+                       @click="confirmSwapAction(
+                       'market-redeem',
+                         sliderPercent,
+                         etsOriginalBalance[etsData.name],
+                         account,
+                         sum,
+                         etsData.actionTokenDecimals,
+                         contracts[etsData.exchangeContract],
+                         'redeem',
+                         contracts[etsData.actionAsset],
+                         {successAction: 'redeemEts'},
+                         finalizeFunc,
+                         disapproveEtsToken,
+                         approveEtsToken
+                    )">
+                  <v-progress-circular
                         v-if="transactionPending"
                         class="mr-2"
                         width="2"
@@ -176,8 +200,17 @@
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
-                       @click="approveAction">
-                    {{ buttonLabel }}
+                       @click="approveAction(
+                        'market-redeem',
+                         account,
+                         etsData.actionTokenDecimals,
+                         contracts[etsData.exchangeContract],
+                         'redeem',
+                         contracts[etsData.actionAsset],
+                         disapproveEtsToken,
+                         approveEtsToken
+                    )">
+                  {{ buttonLabel }}
                 </v-btn>
             </div>
         </v-row>
@@ -220,6 +253,7 @@ import bscIcon from "@/assets/network/bsc.svg";
 import {axios} from "@/plugins/http-axios";
 import Tooltip from "@/components/common/element/Tooltip";
 import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
+import {swap} from "@/components/mixins/swap";
 
 export default {
     name: "Withdraw",
@@ -231,6 +265,7 @@ export default {
         WaitingModal,
         SuccessModal,
     },
+    mixins: [swap],
 
     data: () => ({
         sum: null,
@@ -419,7 +454,18 @@ export default {
         async changeSliderPercent() {
             this.sum = (this.etsBalance[this.etsData.name] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
-            await this.checkApprove();
+            await this.checkApprove(
+              'market-redeem',
+              this.account,
+              this.sum,
+              this.etsData.actionTokenDecimals,
+              this.contracts[this.etsData.exchangeContract],
+              'redeem',
+              this.contracts[this.etsData.actionAsset],
+              this.disapproveEtsToken,
+              this.approveEtsToken
+            );
+
         },
 
         isNumber: function (evt) {
@@ -440,361 +486,9 @@ export default {
         setSum(value) {
             this.sum = value;
         },
-        async checkApproveCounter() {
-          if (!this.sumApproveCheckerId) {
-            // first call
-            this.sumApproveCheckerId = -1;
-            await this.checkApprove();
-            return;
-          }
-
-          this.sumApproveCheckerSec = 0;
-          let intervalId = setInterval(async () => {
-            this.sumApproveCheckerSec++;
-
-            if (this.sumApproveCheckerSec >= 2) {
-              if (this.sumApproveCheckerId === intervalId) {
-                this.sumApproveCheckerSec = 0;
-                try {
-                  await this.checkApprove();
-                } catch (e) {
-                  // ignore
-                } finally {
-                  clearInterval(intervalId)
-                }
-              } else {
-                clearInterval(intervalId)
-              }
-
-            }
-          }, 1000);
-
-          this.sumApproveCheckerId = intervalId;
-        },
-        async checkApprove() {
-          console.log("Check Approve action", this.sum);
-
-          try {
-            if (!this.sum || isNaN(this.sum) || !this.account) {
-              return;
-            }
-
-            let approveSum = this.sum;
-
-            let sum;
-
-            switch (this.etsData.actionTokenDecimals) {
-              case 6:
-                sum = this.web3.utils.toWei(approveSum, 'mwei');
-                break;
-              case 8:
-                sum = this.web3.utils.toWei(approveSum, 'mwei') * 100;
-                break;
-              case 18:
-                sum = this.web3.utils.toWei(approveSum, 'ether');
-                break;
-              default:
-                break;
-            }
-
-            let allowApprove = await this.checkAllowance(sum);
-            console.log("allowApprove : ", allowApprove, sum)
-            if (!allowApprove) {
-              this.disapproveEtsToken();
-              return false;
-            } else {
-              this.approveEtsToken();
-              return true;
-            }
-          } catch (e) {
-            console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-            this.showErrorModal('approve');
-            this.disapproveEtsToken();
-            return false;
-          }
-        },
-        getMax() {
-            let balanceElement = this.etsOriginalBalance[this.etsData.name];
-            return balanceElement ? balanceElement + '' : null;
-        },
-
-        async redeemAction() {
-            try {
-
-                let sumInUsd = this.sum;
-                let sum;
-
-                if (this.sliderPercent === 100) {
-                  let originalMax = this.getMax();
-                  sum = originalMax;
-                  if (!originalMax) {
-                    console.error("Original max value not exist, when confirm swap action in market invest.")
-                    return;
-                  }
-                } else {
-                  switch (this.etsData.etsTokenDecimals) {
-                    case 6:
-                      sum = this.web3.utils.toWei(this.sum, 'mwei');
-                      break;
-                    case 8:
-                      sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
-                      break;
-                    case 18:
-                      sum = this.web3.utils.toWei(this.sum, 'ether');
-                      break;
-                    default:
-                      console.error("Decimals type not found for detect wei type in withdraw.", this.etsData.etsTokenDecimals);
-                      return;
-                  }
-                }
-
-                if (!(await this.checkApprove())) {
-                  console.debug(`Invest ets. Buy action Approve not pass. Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
-                  return;
-                }
-
-                let contracts = this.contracts;
-                let from = this.account;
-                let self = this;
-
-                try {
-                    await this.refreshGasPrice();
-
-                    let buyParams;
-
-                    if (this.gas == null) {
-                        buyParams = {from: from, gasPrice: this.gasPriceGwei};
-                    } else {
-                        buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
-                    }
-
-                    let etsActionData = this.etsData;
-                    console.debug(`Withdraw blockchain. Redeem action Sum: ${sum}, usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
-
-                    let buyResult = await contracts[this.etsData.exchangeContract].methods.redeem(sum).send(buyParams).on('transactionHash', function (hash) {
-                        let tx = {
-                            hash: hash,
-                            text: 'Redeem ETS ' + etsActionData.nameUp,
-                            product: 'ets_' + etsActionData.name,
-                            productName: 'ETS ' + etsActionData.nameToken,
-                            action: 'redeem',
-                            amount: sumInUsd,
-                        };
-
-                        self.putTransaction(tx);
-                        self.showSuccessModal({
-                            successTxHash: hash,
-                            successAction: 'redeemEts',
-                            etsData: etsActionData
-                        });
-                        self.loadTransaction();
-                    });
-
-                    if (this.isOvercapAvailable) {
-                        await this.returnOvercap({
-                            overcapLeft: this.overcapRemaining(),
-                            overcapVolume: this.sum
-                        });
-                    }
-                } catch (e) {
-                    console.log(e);
-                    return;
-                }
-
-                self.refreshMarket();
-                self.setSum(null);
-            } catch (e) {
-              console.error(`Market Withdraw redeem action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-            }
-        },
-
-        async confirmSwapAction() {
-            try {
-                let sum;
-
-              if (this.sliderPercent === 100) {
-                let originalMax = this.getMax();
-                sum = originalMax;
-                if (!originalMax) {
-                  console.error("Original max value not exist, when confirm swap action in market invest.")
-                  return;
-                }
-              } else {
-                switch (this.etsData.etsTokenDecimals) {
-                  case 6:
-                    sum = this.web3.utils.toWei(this.sum, 'mwei');
-                    break;
-                  case 8:
-                    sum = this.web3.utils.toWei(this.sum, 'mwei') * 100;
-                    break;
-                  case 18:
-                    sum = this.web3.utils.toWei(this.sum, 'ether');
-                    break;
-                  default:
-                    console.error("Decimals type not found for detect wei type in withdraw.", this.etsData.etsTokenDecimals);
-                    return;
-                }
-              }
-
-              console.debug(`Withdraw blockchain. Confirm swap action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
-
-                let estimatedGasValue = await this.estimateGas(sum);
-                if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
-                    this.gas = null;
-                    this.gasAmountInMatic = null;
-                    this.gasAmountInUsd = null;
-
-                    await this.redeemAction();
-
-                    this.closeWaitingModal();
-                } else {
-                    this.estimatedGas = estimatedGasValue;
-
-                    /* adding 10% to estimated gas */
-                    this.gas = new BN(Number.parseFloat(this.estimatedGas) * 1.1);
-                    this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
-                    this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
-
-                    await this.redeemAction();
-
-                    this.closeWaitingModal();
-                }
-            } catch (e) {
-                console.error(`Market Withdraw swap action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                this.showErrorModal('estimateGas');
-            }
-        },
-
-        async approveAction() {
-            try {
-                this.showWaitingModal('Approving in process');
-
-                let approveSum = "10000000";
-
-                let sum;
-
-                switch (this.etsData.etsTokenDecimals) {
-                    case 6:
-                        sum = this.web3.utils.toWei(approveSum, 'mwei');
-                        break;
-                    case 8:
-                        sum = this.web3.utils.toWei(approveSum, 'mwei') * 100;
-                        break;
-                    case 18:
-                        sum = this.web3.utils.toWei(approveSum, 'ether');
-                        break;
-                    default:
-                        break;
-                }
-
-                console.debug(`Withdraw blockchain. Approve action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
-
-                let allowApprove = await this.checkAllowance(sum);
-                allowApprove = !allowApprove ? (await this.approveBlockchainAction(sum)) : true;
-                if (!allowApprove) {
-                      this.closeWaitingModal();
-                      this.showErrorModal('approve');
-                      this.disapproveEtsToken();
-                      return;
-                  } else {
-                      this.approveEtsToken();
-                      this.closeWaitingModal();
-                  }
-              } catch (e) {
-                  console.error(`Market Withdraw approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                  this.showErrorModal('approve');
-              }
-        },
-        async approveBlockchainAction(sum) {
-          try {
-            await this.refreshGasPrice();
-            let contracts = this.contracts;
-            let from = this.account;
-
-            let approveParams = {gasPrice: this.gasPriceGwei, from: from};
-
-            let tx = await contracts[this.etsData.tokenContract].methods.approve(contracts[this.etsData.exchangeContract].options.address, sum).send(approveParams);
-
-            let minted = true;
-            while (minted) {
-              await new Promise(resolve => setTimeout(resolve, 2000));
-              let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
-
-              if (receipt) {
-                if (receipt.status)
-                  return true;
-                else {
-                  return false;
-                }
-              }
-            }
-
-            return true;
-          } catch (e) {
-            console.error(`Market Withdraw allow action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-            return false;
-          }
-        },
-
-        async checkAllowance(sum) {
-          let contracts = this.contracts;
-          let from = this.account;
-
-          let allowanceValue = await contracts[this.etsData.tokenContract].methods.allowance(from, contracts[this.etsData.exchangeContract].options.address).call();
-          console.log('allowanceValue: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
-          return allowanceValue * 1 >= sum * 1;
-        },
-
-        async estimateGas(sum) {
-
-            let contracts = this.contracts;
-            let from = this.account;
-
-            let result;
-
-            try {
-                let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
-                let blockNum = await this.web3.eth.getBlockNumber();
-                let errorApi = this.polygonApi;
-
-               console.debug(`Withdraw blockchain. Estimate gas action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`);
-
-                await contracts[this.etsData.exchangeContract].methods.redeem(sum).estimateGas(estimateOptions)
-                    .then(function (gasAmount) {
-                        result = gasAmount;
-                    })
-                    .catch(function (error) {
-                        if (error && error.message) {
-                            let msg = error.message.replace(/(?:\r\n|\r|\n)/g, '');
-
-                            let errorMsg = {
-                                product: 'ETS',
-                                data: {
-                                    from: from,
-                                    to: contracts[this.etsData.exchangeContract].options.address,
-                                    gas: null,
-                                    gasPrice: parseInt(estimateOptions.gasPrice, 16),
-                                    method: contracts[this.etsData.exchangeContract].methods.redeem(sum).encodeABI(),
-                                    message: msg,
-                                    block: blockNum
-                                }
-                            };
-
-                            axios.post(errorApi + '/error/log', errorMsg);
-
-                            console.log(errorMsg);
-                        } else {
-                          console.error(`Market Withdraw blockchain estimate action error: ${error}. Sum: ${this.sum}. Account: ${this.account}. `);
-                        }
-
-                        return -1;
-                    });
-            } catch (e) {
-                console.error(`Market Withdraw action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                return -1;
-            }
-
-            return result;
+        finalizeFunc() {
+          this.refreshMarket();
+          this.setSum(null);
         },
 
         overcapRemaining() {

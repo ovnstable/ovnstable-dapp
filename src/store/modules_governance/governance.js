@@ -543,12 +543,7 @@ const actions = {
                 item.maxWeight = weight.maxWeight / 1000;
                 item.enabled = weight.enabled;
                 item.enabledReward = weight.enabledReward;
-
-                if (networkId === 137 || networkId === 42161) {
-                    item.riskFactor = weight.riskFactor / 1000;
-                } else {
-                    item.riskFactor = 0;
-                }
+                item.riskFactor = weight.riskFactor / 1000;
             } else {
                 item.minWeight = 0;
                 item.targetWeight = 0;

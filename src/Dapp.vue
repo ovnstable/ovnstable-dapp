@@ -23,6 +23,7 @@ import AccountProfile from "./components/common/modal/account/AccountProfile";
 import GasSettings from "@/components/common/modal/gas/GasSettings";
 import {mapActions, mapGetters} from "vuex";
 import Navbar from "@/components/Navbar";
+import Web3 from "web3";
 
 export default {
     name: "Dapp",
@@ -48,7 +49,22 @@ export default {
     }),
 
     async created() {
-        console.log('Dapp created')
+      console.log('Dapp created')
+
+      try {
+        let web3 = await new Web3(Web3.givenProvider);
+        console.log('InitWeb3: Provider custom');
+        let networkID = await web3.eth.net.getId();
+        networkID = networkID + '';
+        console.log("Load wallet from init dapp ", networkID);
+        this.saveNetworkToLocalStore(networkID);
+
+      } catch (e) {
+        console.error("Load wallet error from init dapp ", e);
+      } finally {
+        let dbNetworkName = localStorage.getItem('selectedNetwork');
+        this.changeDappNetwork(dbNetworkName);
+      }
 
         await this.initTheme();
 
@@ -78,6 +94,7 @@ export default {
     methods:{
         ...mapActions('web3', ['initWeb3']),
         ...mapActions('walletAction', ['dappInitWalletConnect']),
+        ...mapActions('network', ['changeDappNetwork', 'saveNetworkToLocalStore']),
         ...mapActions('referral', ['initReferralCode']),
         ...mapActions('etsAction', ['initEtsList']),
         ...mapActions('theme', ['initTheme']),

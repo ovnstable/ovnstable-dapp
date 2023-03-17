@@ -75,7 +75,7 @@
                                 v-model="item.enabledReward"
                             ></v-switch>
                         </td>
-                        <td v-if="networkId === 137 || networkId === 42161">
+                        <td>
                             <v-row class="fill-height" align="center" justify="center">
                                 <v-text-field
                                     class="m2m-field"

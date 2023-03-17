@@ -56,6 +56,9 @@ const actions = {
         let web3 = await new Web3(provider);
         console.log('InitWeb3: Provider custom');
 
+        console.log("initWeb3 Provider: ", rootState.network.networkName, getters.provider);
+        dispatch('network/saveNetworkToLocalStore', rootState.network.networkName, {root: true});
+
         commit('setIsProviderDefault', false);
         commit('setProvider', provider);
         commit('setWeb3', web3);

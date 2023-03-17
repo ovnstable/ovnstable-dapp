@@ -139,7 +139,7 @@
                          class="list-item-hover">
               <v-list-item-title>
                 <label :class="selectedTab === 'daiplus_performance' ? 'selected-page' : ''"
-                       class="navbar  -list-label mx-5">
+                       class="navbar-list-label mx-5">
                   Performance
                 </label>
               </v-list-item-title>

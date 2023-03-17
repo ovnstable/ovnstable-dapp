@@ -115,6 +115,7 @@ import arbitrumIcon from "@/assets/network/ar.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import moment from "moment";
 import {axios} from "@/plugins/http-axios";
+import network from "@/store/modules/common/web3/network";
 
 export default {
     name: "UsdPlus",
@@ -123,17 +124,27 @@ export default {
         Tooltip
     },
 
-    props: {},
+    props: {
+        networkName: {
+            type: String,
+            default: 'optimism',
+        }
+    },
 
     computed: {
         ...mapGetters("dashboardData", ["profitUsdPlus", "apy", "slice"]),
         ...mapGetters("accountData", ["balance"]),
         ...mapGetters("wrapUI", ["showWrap"]),
-        ...mapGetters("network", ["appApiUrl", "networkId", "networkName"]),
+        ...mapGetters("network", ['getParams']),
         ...mapGetters('magicEye', ['dataHidden']),
 
+
+        networkParams: function() {
+            return this.getParams(this.networkName);
+        },
+
         icon: function () {
-            switch (this.networkId) {
+            switch (this.networkParams.networkId) {
                 case 137:
                     return polygonIcon;
                 case 10:
@@ -163,7 +174,7 @@ export default {
     }),
 
     watch: {
-        appApiUrl: function (newVal, oldVal) {
+        networkName: function (newVal, oldVal) {
           this.loadData();
         }
     },
@@ -201,7 +212,7 @@ export default {
         },
 
         getBgColor() {
-            switch (this.networkId) {
+            switch (this.networkParams.networkId) {
                 case 137:
                     return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, #7E46E3 100%)';
                 case 42161:
@@ -214,18 +225,18 @@ export default {
         },
 
       async loadTotalUsdPlus() {
-        let usdPlusValue = (await axios.get(this.appApiUrl + '/dapp/getTotalUsdPlusValue')).data;
+        let usdPlusValue = (await axios.get(this.networkParams.appApiUrl + '/dapp/getTotalUsdPlusValue')).data;
         this.totalUsdPlusValue = usdPlusValue
       },
 
         async getUsdPlusAvgMonthApy() {
             let fetchOptions = {
                 headers: {
-                    "Access-Control-Allow-Origin": this.appApiUrl
+                    "Access-Control-Allow-Origin": this.networkParams.appApiUrl
                 }
             };
 
-            await fetch(this.appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
+            await fetch(this.networkParams.appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;

@@ -3,6 +3,12 @@
         <div class="mt-10">
             <label class="title-label">featured</label>
         </div>
+        <v-row v-if="isAllDataLoaded && !isResorting" align="center" justify="start" class="ma-0 toggle-row mt-10">
+            <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
+            <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+            <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
+            <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
+        </v-row>
 
         <div class="mt-7 cards-list-container">
             <v-row v-if="!isAllDataLoaded && isResorting">
@@ -24,8 +30,9 @@
                         <component
                             class="ma-3"
                             v-bind:key="card.id"
-                            :card-data="card"
                             v-bind:is="card.name"
+                            :card-data="card"
+                            :network-name="tab"
                         ></component>
                     </v-row>
                 </v-col>
@@ -35,16 +42,11 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import moment from "moment";
 import Ets from "@/components/market/cards/ets/Ets";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
-
-import {widgetApiService} from "@/services/widget-api-service";
-import {usdPlusApiService} from "@/services/usd-plus-api-service";
-
-import {insuranceApiService} from "@/services/insurance-api-service";
 import {axios} from "@/plugins/http-axios";
 
 
@@ -59,7 +61,7 @@ export default {
 
     data: () => ({
       openedList: false,
-      tab: null,
+      tab: 'optimism',
       avgApy: null,
       sortedCardList: [],
 
@@ -86,7 +88,7 @@ export default {
     }),
 
   computed: {
-    ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig']),
+    ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'switchToOtherNetwork', 'getParams']),
     ...mapGetters('accountData', ['account']),
     ...mapGetters('web3', ['contracts', 'web3']),
     // ...mapGetters('supplyData', ['totalSupply', 'totalInsuranceSupply']),
@@ -100,43 +102,42 @@ export default {
           !this.isTotalSupplyLoading;
     },
 
-    activeTabName: function() {
-      return this.$route.query.tabName || 'featured';
+    tabNetworkId: function() {
+      let params;
+      params = this.getParams(this.tab);
+
+      return params.networkId;
     },
 
-    activeTabFeatured: function () {
+    activeTabOptimism: function() {
+        return {
+            'tab-button': this.tab === 'optimism',
+            'tab-button-in-active': this.tab !== 'optimism',
+        }
+    },
+
+    activeTabArbitrum: function() {
       return {
-        'tab-button': this.tab === 1,
-        'tab-button-in-active': this.tab !== 1,
+          'tab-button': this.tab === 'arbitrum',
+          'tab-button-in-active': this.tab !== 'arbitrum',
       }
     },
 
-    activeTabHedged: function () {
-      return {
-        'tab-button': this.tab === 2,
-        'tab-button-in-active': this.tab !== 2,
-      }
+    activeTabBsc: function() {
+        return {
+            'tab-button': this.tab === 'bsc',
+            'tab-button-in-active': this.tab !== 'bsc',
+        }
     },
 
-    activeTabUsd: function () {
-      return {
-        'tab-button': this.tab === 3,
-        'tab-button-in-active': this.tab !== 3,
-      }
-    },
-
-    activeTabPools: function () {
-      return {
-        'tab-button': this.tab === 4,
-        'tab-button-in-active': this.tab !== 4,
-      }
+    activeTabPolygon: function() {
+        return {
+            'tab-button': this.tab === 'polygon',
+            'tab-button-in-active': this.tab !== 'polygon',
+        }
     },
   },
   watch: {
-    networkId: function (newVal, oldVal) {
-      this.getUsdPlusAvgMonthApy();
-      this.getSortedCardList();
-    },
 
     etsList: function (newVal, oldVal) {
       if (newVal) {
@@ -147,12 +148,8 @@ export default {
     isAllDataLoaded: function (newVal, oldVal) {
       if (newVal) {
         this.getUsdPlusAvgMonthApy();
-        this.getSortedCardList();
+        this.getSortedCardList(this.tabNetworkId);
       }
-    },
-
-    activeTabName() {
-      this.initTab();
     },
   },
 
@@ -166,26 +163,34 @@ export default {
   },
 
   methods: {
+    // ...mapGetters('network', ['getParams']),
 
-    setTab(tabId) {
-      this.tab = tabId;
+    setTab(tabName) {
+      this.tab = tabName;
+      this.getUsdPlusAvgMonthApy();
+      this.getSortedCardList(this.tabNetworkId);
+      console.log("NetworkParams : ", this.getParams(this.tab));
     },
 
     initTab() {
-      if(this.$route.query.tabName === 'featured') {
-        this.setTab(1);
+      if (this.$route.query.tabName === 'optimism') {
+        this.setTab('optimism');
+        return
       }
 
-      if(this.$route.query.tabName === 'ets') {
-        this.setTab(2);
+      if (this.$route.query.tabName === 'arbitrum') {
+        this.setTab('arbitrum');
+        return
       }
 
-      if(this.$route.query.tabName === 'usdPlus') {
-        this.setTab(3);
+      if (this.$route.query.tabName === 'bsc') {
+        this.setTab('bsc');
+        return
       }
 
-      if(this.$route.query.tabName === 'usdPlusPools') {
-        this.setTab(4);
+      if (this.$route.query.tabName === 'polygon') {
+        this.setTab('polygon');
+        return
       }
     },
 
@@ -564,8 +569,7 @@ export default {
           })
       );
     },
-    getSortedCardList() {
-      let networkId = this.networkId;
+    getSortedCardList(networkId) {
       this.isResorting = true;
 
       let cardList = [
@@ -643,6 +647,7 @@ export default {
 
         return 0;
       });
+        console.log("CardList: ", cardList);
 
       cardList[0].cardOpened = true;
       this.sortedCardList = cardList;

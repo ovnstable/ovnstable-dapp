@@ -16,7 +16,7 @@ const BSC_PARAMS = {
     networkId: 56,
     rpcUrl: 'https://bsc-dataseed.binance.org',
     explorerUrl: 'https://bscscan.com/',
-    assetName: 'BUSD',
+    assetName: 'USDC',
     assetDecimals: 18,
     nativeAssetName: 'BNB',
     bridgeLink: 'https://router.via.exchange/bsc/USD+/optimism/USD+',

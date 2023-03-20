@@ -46,7 +46,7 @@ export const swap = {
                         return ;
                 }
 
-                let allowApprove = await this.checkAllowance(action, account, sum, exchangeContract, exchangeMethodName, actionContract);
+                let allowApprove = await this.checkAllowance(action, account, contractSum, exchangeContract, exchangeMethodName, actionContract);
                 console.log("Allow to approve : ", allowApprove, sum)
                 if (!allowApprove) {
                     disapproveActionFunc();

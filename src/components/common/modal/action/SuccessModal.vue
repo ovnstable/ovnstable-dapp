@@ -107,9 +107,17 @@ export default {
                 case 'unwrapUsdPlus':
                     return require('@/assets/icon/unwrap.svg');
                 case 'mintEts':
-                    return require('@/assets/currencies/market/ets_' + this.etsData.name + '.svg');
+                    if (this.etsData) {
+                      return require('@/assets/currencies/market/ets_' + this.etsData.name + '.svg');
+                    } else {
+                      return require('@/assets/icon/minted.svg');
+                    }
                 case 'redeemEts':
-                    return require('@/assets/currencies/market/ets_' + this.etsData.name + '.svg');
+                    if (this.etsData) {
+                      return require('@/assets/currencies/market/ets_' + this.etsData.name + '.svg');
+                    } else {
+                      return require('@/assets/icon/redeemed.svg');
+                    }
                 case 'mintInsurance':
                     return require('@/assets/currencies/insurance/INSURANCE.svg');
                 case 'withdrawInsurance':

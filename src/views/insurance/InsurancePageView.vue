@@ -270,23 +270,12 @@ export default {
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
         ...mapGetters('magicEye', ['dataHidden']),
 
-        activeTabName: function() {
-            return this.$route.query.tabName || 'performance';
-        },
-
         activeTabPolygon: function () {
             return {
                 'tab-button': this.tab === 1,
                 'tab-button-in-active': this.tab !== 1,
             }
         },
-        //
-        // activeTabAbout: function () {
-        //     return {
-        //         'tab-button': this.tab === 2,
-        //         'tab-button-in-active': this.tab !== 2,
-        //     }
-        // },
 
         networkSupport: function () {
             return this.networkId === this.insuranceStrategyData.polygon.chainId ? this.insuranceStrategyData.polygon.chainId : null;
@@ -294,9 +283,6 @@ export default {
     },
 
     watch: {
-        activeTabName() {
-            this.initTab();
-        }
     },
 
     created() {

@@ -112,10 +112,28 @@ export default {
             try {
                 maxValue = Math.max.apply(Math, values);
                 if (maxValue > 5) {
-                  maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
+                    maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
                 }
             } catch (e) {
                 maxValue = 50;
+            }
+
+            let minValue;
+            try {
+
+                if (this.usdPlusDataEnabled) {
+                    let minValueEts = Math.min.apply(Math, values);
+
+                    minValue = Math.min(minValueEts);
+                } else {
+                    minValue = Math.min.apply(Math, values);
+                }
+
+                if (minValue < -5) {
+                    minValue = Math.min(Math.floor(Math.floor(minValue / 10)) * 10, 0);
+                }
+            } catch (e) {
+                minValue = 0;
             }
 
             let options = {
@@ -180,25 +198,11 @@ export default {
 
                 yaxis: {
                     opposite: false,
-
-                    tickAmount: 5,
-                    min: 0,
+                    min: minValue,
                     max: maxValue,
 
                     labels: {
-                        show: true,
-
-                        style: {
-                            colors: ['#707A8B'],
-                            fontSize: '14px',
-                            fontFamily: 'Roboto, sans-serif',
-                            fontWeight: 400,
-                            cssClass: 'apexcharts-yaxis-label',
-                        },
-
-                        formatter: function (val, opts) {
-                            return '$' + Math.round(parseFloat(val));
-                        },
+                        show: false,
                     },
                 },
 
@@ -206,7 +210,10 @@ export default {
                     enabled: true,
 
                     y: {
-                        formatter: function (val, opts) {
+                        formatter: (val) => {
+                            if (this.type === 'Cumulative return') {
+                                return '%' + val
+                            }
                             return '$' + val
                         },
                     },
@@ -216,40 +223,25 @@ export default {
                     position: 'back',
                     yaxis: [
                         {
-                            y: maxValue / 5,
-                            strokeDashArray: 2,
-                            borderColor: 'var(--input-placeholder)',
-                            offsetY: -3,
-                            width: '100%',
-                        },
-                        {
-                            y: 2 * maxValue / 5,
-                            strokeDashArray: 2,
-                            borderColor: 'var(--input-placeholder)',
-                            offsetY: -3,
-                            width: '100%',
-                        },
-                        {
-                            y: 3 * maxValue / 5,
-                            strokeDashArray: 2,
-                            borderColor: 'var(--input-placeholder)',
-                            offsetY: -3,
-                            width: '100%',
-                        },
-                        {
-                            y: 4 * maxValue / 5,
-                            strokeDashArray: 2,
-                            borderColor: 'var(--input-placeholder)',
-                            offsetY: -3,
-                            width: '100%',
-                        },
-                        {
-                            y: maxValue,
-                            strokeDashArray: 2,
-                            borderColor: 'var(--input-placeholder)',
-                            offsetY: -3,
-                            width: '100%',
-                        },
+                            y: minValue = 0,
+                            strokeDashArray: 5,
+                            offsetX: 10,
+                            offsetY: -5,
+                            width: '97%',
+                            label: {
+                                borderColor: null,
+                                position: 'left',
+                                offsetX: 1,
+                                offsetY: 0,
+                                style: {
+                                    color: "#707A8B",
+                                    background: "#FFFFFF",
+                                    fontSize: '14px',
+                                    fontFamily: "Roboto",
+                                },
+                                text: "0"
+                            },
+                        }
                     ],
                 },
 

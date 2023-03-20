@@ -46,17 +46,18 @@ const ARBITRUM_PARAMS = {
     bridgeLink: 'https://router.via.exchange/arbitrum/USD+/bsc/USD+',
 }
 
+let dbNetworkName = localStorage.getItem('selectedNetwork');
 const state = {
-    appApiUrl: _getParams(null).appApiUrl,
+    appApiUrl: _getParams(dbNetworkName).appApiUrl,
     apiUrl: "https://api.overnight.fi",
-    networkName: _getParams(null).networkName,
-    networkId: _getParams(null).networkId,
-    rpcUrl: _getParams(null).rpcUrl,
-    explorerUrl: _getParams(null).explorerUrl,
-    assetName: _getParams(null).assetName,
-    assetDecimals: _getParams(null).assetDecimals,
-    nativeAssetName: _getParams(null).nativeAssetName,
-    bridgeLink: _getParams(null).bridgeLink,
+    networkName: _getParams(dbNetworkName).networkName,
+    networkId: _getParams(dbNetworkName).networkId,
+    rpcUrl: _getParams(dbNetworkName).rpcUrl,
+    explorerUrl: _getParams(dbNetworkName).explorerUrl,
+    assetName: _getParams(dbNetworkName).assetName,
+    assetDecimals: _getParams(dbNetworkName).assetDecimals,
+    nativeAssetName: _getParams(dbNetworkName).nativeAssetName,
+    bridgeLink: _getParams(dbNetworkName).bridgeLink,
 
     polygonApi: POLYGON_PARAMS.appApiUrl,
     bscApi: BSC_PARAMS.appApiUrl,
@@ -91,7 +92,7 @@ function _getParams(networkName) {
         case "42161":
             return ARBITRUM_PARAMS;
         default:
-            return OPTIMISM_PARAMS;
+            return OPTIMISM_PARAMS; //BASE_PARAMS;
     }
 }
 
@@ -164,12 +165,18 @@ const getters = {
     bscConfig(state) {
         return state.bscConfig;
     },
+
     opConfig(state) {
         return state.opConfig;
     },
+
     arConfig(state) {
         return state.arConfig;
     },
+
+    getParams: (state) => (networkName) => {
+        return _getParams(networkName);
+    }
 };
 
 const actions = {

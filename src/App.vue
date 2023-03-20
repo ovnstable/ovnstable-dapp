@@ -16,6 +16,7 @@ export default {
     },
 
     created() {
+      console.log('App created');
     },
 
     methods: {

@@ -21,6 +21,8 @@ import * as Sentry from "@sentry/vue";
 import { CaptureConsole } from '@sentry/integrations';
 import { BrowserTracing } from "@sentry/tracing";
 
+import Web3 from "web3";
+
 Vue.use(Vuex)
 
 Vue.prototype.$moment = moment;
@@ -70,14 +72,32 @@ Sentry.configureScope(function(scope) {
   scope.setLevel("debug");
 });
 
+async function initNetwork() {
+  try {
+    let web3 = await new Web3(Web3.givenProvider);
+    let networkID = await web3.eth.net.getId();
+    networkID = networkID + "";
+    store.dispatch('network/saveNetworkToLocalStore', networkID, {root: true});
+    console.log('main created networkId: ', networkID);
+  } catch (e) {
+    console.log("Error when init network:", e)
+    //ignore
+  }
+}
 
 Vue.use(Donut);
 
 Vue.component('resize-observer', ResizeObserver)
 
-new Vue({
-  store,
-  vuetify,
-  router,
-  render: h => h(App)
-}).$mount('#app')
+
+initNetwork().then(() => {
+
+  store.dispatch('network/changeDappNetwork', localStorage.getItem('selectedNetwork'), {root: true});
+
+  new Vue({
+    store,
+    vuetify,
+    router,
+    render: h => h(App)
+  }).$mount('#app')
+})

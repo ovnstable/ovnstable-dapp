@@ -25,7 +25,7 @@
                                          assetDecimals,
                                          contracts.exchange,
                                          'redeem',
-                                         contracts.asset,
+                                         assetContract,
                                         disapproveUsdPlus,
                                         approveUsdPlus
                                        )">
@@ -76,7 +76,7 @@
         <v-row class="mt-8 mx-n3 main-card">
             <v-col>
                 <v-row align="center" class="ma-0">
-                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.asset, 3) }}</label>
+                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(assetBalance, 3) }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>
@@ -175,7 +175,7 @@
                              assetDecimals,
                              contracts.exchange,
                              'redeem',
-                             contracts.asset,
+                             assetContract,
                              {successAction: 'redeemUsdPlus'},
                              finalizeFunc,
                              disapproveUsdPlus,
@@ -201,7 +201,7 @@
                            assetDecimals,
                            contracts.exchange,
                            'redeem',
-                           contracts.asset,
+                           assetContract,
                            disapproveUsdPlus,
                            approveUsdPlus
                        )">
@@ -301,6 +301,10 @@ export default {
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
+      assetContract: function () {
+        return this.networkId === 56 ? this.contracts.asset_two : this.contracts.asset;
+      },
+
         icon: function () {
             switch (this.networkId){
                 case 137:
@@ -313,6 +317,10 @@ export default {
                     return arbitrumIcon;
             }
         },
+
+      assetBalance: function () {
+        return this.networkId === 56 ? this.balance.asset_two : this.balance.asset;
+      },
 
         maxResult: function () {
             return this.$utils.formatMoney(this.balance.usdPlus, 3);
@@ -439,7 +447,7 @@ export default {
                 this.assetDecimals,
                 this.contracts.exchange,
                 'redeem',
-                this.contracts.asset,
+                this.assetContract,
                 this.disapproveUsdPlus,
                 this.approveUsdPlus
             );

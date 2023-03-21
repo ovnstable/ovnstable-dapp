@@ -25,7 +25,7 @@
                                          assetDecimals,
                                          contracts.exchange,
                                          'mint',
-                                         contracts.asset,
+                                         assetContract,
                                          disapproveAsset,
                                          approveAsset
                                        )">
@@ -168,13 +168,13 @@
                        @click="confirmSwapAction(
                             'swap-invest',
                              sliderPercent,
-                             originalBalance[currency.id],
+                             assetOriginalBalance,
                              account,
                              sum,
                              assetDecimals,
                              contracts.exchange,
                              'mint',
-                             contracts.asset,
+                             assetContract,
                              {successAction: 'mintUsdPlus'},
                              finalizeFunc,
                              disapproveAsset,
@@ -201,7 +201,7 @@
                            assetDecimals,
                            contracts.exchange,
                            'mint',
-                           contracts.asset,
+                           assetContract,
                            disapproveAsset,
                            approveAsset
                        )">
@@ -299,6 +299,11 @@ export default {
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
+
+      assetContract: function () {
+        return this.networkId === 56 ? this.contracts.asset_two : this.contracts.asset;
+      },
+
         icon: function () {
             switch (this.networkId){
                 case 137:
@@ -312,12 +317,20 @@ export default {
             }
         },
 
+        assetBalance: function () {
+          return this.networkId === 56 ? this.balance.asset_two : this.balance.asset;
+        },
+
+        assetOriginalBalance: function () {
+          return this.networkId === 56 ? this.originalBalance.asset_two : this.originalBalance.asset;
+        },
+
         maxResult: function () {
-            return this.$utils.formatMoney(this.balance.asset, 3);
+            return this.$utils.formatMoney(this.assetBalance);
         },
 
         sumResult: function () {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.asset) * 100;
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.assetBalance) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -349,7 +362,7 @@ export default {
                     this.step = 1;
                     return 'Approve ' + this.assetName;
                 }
-            } else if (this.sum > parseFloat(this.balance.asset)) {
+            } else if (this.sum > parseFloat(this.assetBalance)) {
                 return 'Enter Amount to Mint'
             } else {
                 return 'Enter Amount to Mint';
@@ -375,7 +388,7 @@ export default {
 
           v = parseFloat(v.trim().replace(/\s/g, ''));
 
-          if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.asset)) return true;
+          if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.assetBalance)) return true;
 
             return false;
         },
@@ -428,7 +441,7 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
-            this.sum = (this.balance.asset * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.assetBalance * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
             await this.checkApprove(
                 'swap-invest',
@@ -437,7 +450,7 @@ export default {
                 this.assetDecimals,
                 this.contracts.exchange,
                 'mint',
-                this.contracts.asset,
+                this.assetContract,
                 this.disapproveAsset,
                 this.approveAsset
             );

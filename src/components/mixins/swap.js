@@ -240,7 +240,8 @@ export const swap = {
                         return;
                     }
 
-                    console.debug(`Invest blockchain. Buy action Sum: ${contractSum} usdSum: ${sum}. Account: ${account}. SlidersPercent: ${sliderPercent}`);
+
+                    console.debug(`Invest blockchain. Buy action Sum: ${contractSum}. decimals: ${actionDecimals}. usdSum: ${sum}. Account: ${account}. SlidersPercent: ${sliderPercent}`);
                     let buyResult = await method.send(buyParams).on('transactionHash', function (hash) {
                     let tx = {
                         hash: hash,

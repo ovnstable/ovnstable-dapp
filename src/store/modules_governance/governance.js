@@ -345,7 +345,6 @@ const actions = {
         let pm = rootState.web3.contracts.pm;
         let account = rootState.accountData.account;
         let params = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
-        let networkId = rootState.network.networkId;
 
         let items = [];
         for (let i = 0; i < weights.length; i++) {
@@ -360,10 +359,7 @@ const actions = {
             item.maxWeight = weight.maxWeight * 1000;
             item.enabled = weight.enabled;
             item.enabledReward = weight.enabledReward;
-
-            if (networkId === 137 || networkId === 42161) {
-                item.riskFactor = weight.riskFactor * 1000;
-            }
+            item.riskFactor = weight.riskFactor * 1000;
 
             items.push(item);
         }
@@ -403,10 +399,7 @@ const actions = {
                 item.maxWeight = weight.maxWeight * 1000;
                 item.enabled = weight.enabled;
                 item.enabledReward = weight.enabledReward;
-
-                if (networkId === 137 || networkId === 42161) {
-                    item.riskFactor = weight.riskFactor * 1000;
-                }
+                item.riskFactor = weight.riskFactor * 1000;
 
                 items.push(item);
             }

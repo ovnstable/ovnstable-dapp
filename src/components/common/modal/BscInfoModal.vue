@@ -44,9 +44,9 @@
                         <br/><br/>
                         <b>How will this affect ETS Holders?</b>
                         <br/><br/>
-                        a) WBNB/BUSD ETS: The minting/redeeming token will be changed to BUSD as the strategy has no direct exposure to USD+; in accordance, it remains unaffected. No action is required on behalf of users.
+                        a) WBNB/USDC ETS: The minting/redeeming token will be changed to USDC as the strategy has no direct exposure to USD+; in accordance, it remains unaffected. No action is required on behalf of users.
                         <br/><br/>
-                        b) WBNB/USD+ ETS: The strategy will be liquidated. The LP will be withdrawn to repay the BNB loan, and the BUSD obtained from this will compensate for 50% of the users funds. The other 50% will be repaid in USD+. Refer to the repayment for USD+ above for more information on this.
+                        b) WBNB/USD+ ETS: The strategy will be liquidated. The LP will be withdrawn to repay the BNB loan, and the USDC obtained from this will compensate for 50% of the users funds. The other 50% will be repaid in USD+. Refer to the repayment for USD+ above for more information on this.
                         <br/><br/>
                         <b>This situation is only limited to USD+ mints/redeems on BNB Chain - other chains remain unaffected.</b>
                     </label>

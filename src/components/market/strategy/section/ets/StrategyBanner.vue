@@ -15,7 +15,7 @@
 
                 <div class="icon-border">
                     <div :class="$wu.isMobile() ? 'currency-icon' : 'icon'" class="mx-3">
-                        <v-img :src="require('@/assets/cards/platform/' + etsData.dex + '.svg')"/>
+                        <v-img class="platform" :src="require('@/assets/cards/platform/' + etsData.dex + '.svg')"/>
                     </div>
                 </div>
                 <div class="icon ml-3">
@@ -483,5 +483,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
   line-height: 26px;
 
   text-align: center;
+}
+
+.platform {
+    width: 34px !important;
+    height: 34px !important;
 }
 </style>

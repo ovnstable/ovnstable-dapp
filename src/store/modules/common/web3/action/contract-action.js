@@ -19,6 +19,10 @@ const actions = {
             polygon_dev: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
             optimism: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
             arbitrum: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+            bsc: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
+        };
+
+        let networkAssetTwoMap = {
             bsc: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',
         };
 
@@ -41,6 +45,7 @@ const actions = {
             contracts.market,
             contracts.wUsdPlus,
             contracts.asset,
+            contracts.asset_two,
             contracts.dai,
         ] = await Promise.all([
             _load(await loadJSON(`/contracts/${network}/Exchange.json`), web3),
@@ -55,6 +60,7 @@ const actions = {
             (network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/Market.json`), web3) : _load_empty(),
             (network !== "bsc") ? _load(await loadJSON(`/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
             networkAssetMap[network] ? _load(ERC20, web3, networkAssetMap[network]) : _load_empty(),
+            networkAssetTwoMap[network] ? _load(ERC20, web3, networkAssetTwoMap[network]) : _load_empty(),
             networkDaiMap[network] ? _load(ERC20, web3, networkDaiMap[network]) : _load_empty(),
         ]);
 

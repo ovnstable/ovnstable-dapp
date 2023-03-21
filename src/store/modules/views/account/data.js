@@ -97,6 +97,9 @@ const actions = {
         let asset;
         let originAsset;
 
+        let asset_two;
+        let originAsset_two;
+
         let wUsdPlus;
         let originWUsdPlus;
 
@@ -108,6 +111,18 @@ const actions = {
             asset = getters.balance.asset;
             originAsset = getters.originalBalance.asset;
         }
+
+        if (web3.contracts.asset_two) {
+            try {
+                asset_two = await web3.contracts.asset_two.methods.balanceOf(getters.account).call();
+                originAsset_two = asset;
+                asset_two = asset_two ? web3.web3.utils.fromWei(asset_two, assetDecimals === 18 ? 'ether' : 'mwei') : null;
+            } catch (e) {
+                asset_two = getters.balance.asset_two;
+                originAsset_two = getters.originalBalance.asset_two;
+            }
+        }
+
 
         try {
             usdPlus = await web3.contracts.usdPlus.methods.balanceOf(getters.account).call();
@@ -152,6 +167,7 @@ const actions = {
             daiPlus: daiPlus,
             dai: dai,
             asset: asset,
+            asset_two: asset_two,
             wUsdPlus: wUsdPlus,
         });
 
@@ -160,6 +176,7 @@ const actions = {
             daiPlus: originDaiPlus,
             dai: originDai,
             asset: originAsset,
+            asset_two: originAsset_two,
             wUsdPlus: originWUsdPlus,
         });
 

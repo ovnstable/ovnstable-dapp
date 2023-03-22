@@ -201,6 +201,13 @@
         </v-row>
 
         <v-row v-if="!isShowGalxeInfo" class="mt-15" align="center" justify="center">
+
+          <v-row v-if="etsData.name === 'epsilon_ram_weth_usdc'" class="mb-3">
+            <label class="list-sub-title-text label-error">
+              By making a deposit to this strategy, you accept the risk of {{ etsData.dex }} protocol.
+            </label>
+          </v-row>
+
           <div class="action-btn-container" v-if="!this.account">
             <v-btn class='buy enabled-buy'
                    @click="connectWallet">
@@ -1049,5 +1056,17 @@ export default {
   line-height: 24px;
 
   color: #CF3F92;
+}
+
+.label-error {
+  color: #CF3F92 !important;
+}
+
+.list-sub-title-text {
+  text-align: center;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 24px;
 }
 </style>

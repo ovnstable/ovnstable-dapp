@@ -1065,7 +1065,7 @@ export default {
 .list-sub-title-text {
   text-align: center;
   font-style: normal;
-  font-weight: 300;
+  font-weight: bold;
   font-size: 16px;
   line-height: 24px;
 }

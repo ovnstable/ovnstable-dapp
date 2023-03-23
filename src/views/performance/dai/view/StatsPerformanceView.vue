@@ -64,20 +64,20 @@
         <v-row v-if="!isPayoutsLoading" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
           <v-col class="info-card-body-bottom">
             <v-row align="center" justify="start" class="ma-0">
-              <label class="section-title-label">USD+ payouts</label>
+              <label class="section-title-label">DAI+ payouts</label>
             </v-row>
 
             <v-row align="center" justify="center">
               <v-col :cols="!$wu.isFull() ? 12 : 8">
                 <Table
                     v-if="!$wu.isMobile()"
-                    :profit-label="assetName + ' per USD+'"
+                    :profit-label="assetName + ' per DAI+'"
                     :payout-data="payouts"/>
 
                 <Table
                     v-else
                     minimized
-                    :profit-label="assetName + ' per USD+'"
+                    :profit-label="assetName + ' per DAI+'"
                     :payout-data="payouts"/>
 
                 <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">

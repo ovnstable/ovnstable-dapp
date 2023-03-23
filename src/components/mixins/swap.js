@@ -14,7 +14,7 @@ export const swap = {
         ...mapActions("referral", ['getReferralCode']),
 
 
-        ...mapActions("errorModal", ['showErrorModal']),
+        ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
 
@@ -57,7 +57,8 @@ export const swap = {
                 }
             } catch (e) {
                 console.error(`Approve action error. Type: ${action}. Account: ${account}, Sum: ${sum}. Error: ${e}`);
-                this.showErrorModal('approve');
+                // this.showErrorModal('approve');
+                this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
                 disapproveActionFunc();
                 return false;
             }
@@ -93,7 +94,8 @@ export const swap = {
                 allowApprove = !allowApprove ? (await this.approveBlockchainAction(action, account, sum, exchangeContract, exchangeMethodName, actionContract)) : true;
                 if (!allowApprove) {
                     this.closeWaitingModal();
-                    this.showErrorModal('approve');
+                    // this.showErrorModal('approve');
+                    this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
                     disapproveActionFunc();
                     return;
                 } else {
@@ -103,7 +105,8 @@ export const swap = {
             } catch (e) {
                 console.error(`Approve action error: ${e}. Type: ${action}. Account: ${account}. Error: ${e}`);
                 disapproveActionFunc();
-                this.showErrorModal('approve');
+                // this.showErrorModal('approve');
+                this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
             }
         },
 
@@ -211,6 +214,7 @@ export const swap = {
 
                 if (!(await this.checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc))) {
                     console.debug(`Buy-Action in ${action}. Approve not pass. Sum: ${contractSum} SumInUsd: ${sumInUsd}. Account: ${account}.`);
+                    this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
                     return;
                 }
 
@@ -279,10 +283,12 @@ export const swap = {
                 }
                 } catch (e) {
                     console.error(`[Contract part method]. Action buy in ${action}. Sum: ${sum}. ContractSum: ${contractSum}, Account: ${account}. Error: ${e}`);
+                    this.showErrorModalWithMsg({errorType: 'rpc', errorMsg: e}, );
                 }
 
             } catch (e) {
                 console.error(`[All method]. Action buy in ${action}. Sum: ${sum}. Account: ${account}. Error: ${e}`);
+                this.showErrorModalWithMsg({errorType: 'rpc', errorMsg: e}, );
             } finally {
                 finalizeFunc();
             }

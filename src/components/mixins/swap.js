@@ -214,7 +214,7 @@ export const swap = {
 
                 if (!(await this.checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc))) {
                     console.debug(`Buy-Action in ${action}. Approve not pass. Sum: ${contractSum} SumInUsd: ${sumInUsd}. Account: ${account}.`);
-                    this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
+                    this.showErrorModalWithMsg({errorType: 'approve'}, );
                     return;
                 }
 
@@ -283,12 +283,12 @@ export const swap = {
                 }
                 } catch (e) {
                     console.error(`[Contract part method]. Action buy in ${action}. Sum: ${sum}. ContractSum: ${contractSum}, Account: ${account}. Error: ${e}`);
-                    this.showErrorModalWithMsg({errorType: 'rpc', errorMsg: e}, );
+                    this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
                 }
 
             } catch (e) {
                 console.error(`[All method]. Action buy in ${action}. Sum: ${sum}. Account: ${account}. Error: ${e}`);
-                this.showErrorModalWithMsg({errorType: 'rpc', errorMsg: e}, );
+                this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
             } finally {
                 finalizeFunc();
             }

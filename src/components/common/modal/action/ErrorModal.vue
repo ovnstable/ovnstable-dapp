@@ -48,24 +48,35 @@ export default {
         showCopyTooltip: false,
         showCopyTooltipContainer: false,
         errorMsgText: '',
-      errorTypeLocal: '',
+        errorTypeLocal: '',
     }),
 
     created() {
-      if (this.errorMsg.code === 40001) {
-        this.errorMsgText = this.errorMsg.message;
-        this.errorTypeLocal  = 'rpc'
-      }
+      this.handleError()
+    },
 
-      if (this.errorMsg.message.includes('Gas')) {
-        this.errorMsgText = this.errorMsg.message;
-        this.errorTypeLocal  = 'gas'
-      }
-      },
-
-  methods: {
+    methods: {
         ...mapActions('errorModal', ['showErrorModal', 'closeErrorModal']),
 
+        handleError() {
+          if (this.errorMsg.code === 4001) {
+            // user cancel transaction
+            console.log("User cancel transaction");
+            this.closeErrorModal();
+            return
+          }
+
+          if (this.errorMsg.code === 4001) {
+            this.errorMsgText = this.errorMsg.message;
+            this.errorTypeLocal  = 'rpc'
+            return
+          }
+
+          if (this.errorMsg.message.includes('Gas')) {
+            this.errorMsgText = this.errorMsg.message;
+            this.errorTypeLocal  = 'gas'
+          }
+        },
 
         async copyErrorToClipboard(copyTooltip) {
             if (copyTooltip === 'container') {

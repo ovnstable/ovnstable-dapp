@@ -96,14 +96,32 @@ export default {
                 return
             }
 
-            if (this.errorMsg.code === -32016 || this.errorMsg.code === -32603) {
+            if (this.isRpcError(this.errorMsg)) {
                 this.errorViewType  = 'rpc'
                 return
             }
 
-            if (this.errorMsg.message.includes('Gas')) {
+            if (this.errorMsg.message.includes('Out of Gas')) {
                 this.errorViewType  = 'gas'
             }
+
+            console.log('Error type not found.')
+        },
+
+        isRpcError(errorMsg) {
+            if (errorMsg.code === -32016 || errorMsg.code === -32603 ) {
+                return true;
+            }
+
+            if (!errorMsg.message) {
+                return false;
+            }
+
+            if (errorMsg.message.includes("-32016") || errorMsg.message.includes("-32603")) {
+                return true;
+            }
+
+            return false;
         },
 
         async copyErrorToClipboard(copyTooltip) {

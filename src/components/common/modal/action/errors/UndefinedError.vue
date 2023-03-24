@@ -126,11 +126,11 @@ export default {
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
-    color: #29323E;
+    color: var(--secondary-gray-text);
 }
 
 .info-container {
-    background: #F5F5F5;
+    background: var(--card-info-background);
     border-radius: 4px;
     text-align: center;
 }
@@ -142,7 +142,7 @@ export default {
     font-size: 16px;
     line-height: 24px;
 
-    color: #29323E;
+    color: var(--secondary-gray-text);
 
 }
 
@@ -180,6 +180,10 @@ export default {
     font-weight: normal;
     font-size: 14px;
     line-height: 18px;
+}
+
+.error-label {
+    color: var(--secondary-gray-text);
 }
 
 </style>

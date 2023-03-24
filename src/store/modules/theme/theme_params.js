@@ -16,6 +16,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--card-info-background',
+        enabled: true,
+        theme: {
+            light: '#F5F5F5',
+            dark: '#29323E'
+        }
+    },
+    {
         name: '--secondary',
         enabled: true,
         theme: {

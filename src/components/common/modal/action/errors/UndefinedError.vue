@@ -14,8 +14,10 @@
           </v-row>
 
           <div v-if="errorMsg">
-              <v-row justify="center" class="error-message pb-5">
-                  {{errorMsg.message ? errorMsg.message : errorMsg}}
+              <v-row class="error-message-container">
+                  <v-row justify="center" class="error-message">
+                      {{errorMsg.message ? errorMsg.message : errorMsg}}
+                  </v-row>
               </v-row>
           </div>
 
@@ -118,6 +120,17 @@ export default {
     .info-container {
         min-width: 550px;
     }
+}
+
+.error-message-container {
+    max-width: 534px;
+    max-height: 200px;
+    white-space: unset;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px dashed #c9c9c9;
 }
 
 .error-message {

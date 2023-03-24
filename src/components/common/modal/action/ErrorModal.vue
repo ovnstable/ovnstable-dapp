@@ -86,6 +86,8 @@ export default {
             this.errorCode = this.errorMsg.code;
             this.errorText = this.errorMsg.message;
 
+            console.log('this.errorCode', this.errorCode);
+            console.log('this.errorText', this.errorText);
 
             if (this.errorMsg.code === 4001) {
                 // user cancel transaction
@@ -94,11 +96,10 @@ export default {
                 return
             }
 
-            if (this.errorMsg.code === 32016) {
+            if (this.errorMsg.code === -32016 || this.errorMsg.code === -32603) {
                 this.errorViewType  = 'rpc'
                 return
             }
-
 
             if (this.errorMsg.message.includes('Gas')) {
                 this.errorViewType  = 'gas'

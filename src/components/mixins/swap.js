@@ -1,5 +1,4 @@
 import BN from "bn.js";
-import {axios} from "@/plugins/http-axios";
 import {mapActions} from "vuex";
 
 export const swap = {
@@ -21,8 +20,8 @@ export const swap = {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
 
-        async checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc) {
-            console.log("Check Approve action", sum);
+        async checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract) {
+            console.log("Check Approve action. Sum: " + sum + ' ActionDecimals: ' + actionDecimals);
 
             try {
                 if (!sum || isNaN(sum) || !account) {
@@ -31,7 +30,7 @@ export const swap = {
 
                 let contractSum;
 
-                switch (actionDecimals) {
+                switch (action === 'swap-redeem' || action === 'dai-swap-redeem' ? 6 : actionDecimals) {
                     case 6:
                         contractSum = this.web3.utils.toWei(sum, 'mwei');
                         break;
@@ -46,7 +45,7 @@ export const swap = {
                         return ;
                 }
 
-                let allowApprove = await this.checkAllowance(action, account, contractSum, exchangeContract, exchangeMethodName, actionContract);
+                let allowApprove = await this.checkAllowance(action, account, contractSum, exchangeContract, exchangeMethodName, actionContract, ovnStableContract);
                 console.log("Allow to approve : ", allowApprove, sum)
                 if (!allowApprove) {
                     disapproveActionFunc();
@@ -67,14 +66,14 @@ export const swap = {
             return originalBalance ? originalBalance + '' : null;
         },
 
-        async approveAction(action, account, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc) {
+        async approveAction(action, account, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract) {
             try {
                 this.showWaitingModal('Approving in process');
 
                 let approveSum = "10000000";
 
                 let sum;
-                switch (actionDecimals) {
+                switch (action === 'swap-redeem' || action === 'dai-swap-redeem' ? 6 : actionDecimals) {
                     case 6:
                         sum = this.web3.utils.toWei(approveSum, 'mwei');
                         break;
@@ -89,8 +88,8 @@ export const swap = {
                         return;
                 }
 
-                let allowApprove = await this.checkAllowance(action, account, sum, exchangeContract, exchangeMethodName, actionContract);
-                allowApprove = !allowApprove ? (await this.approveBlockchainAction(action, account, sum, exchangeContract, exchangeMethodName, actionContract)) : true;
+                let allowApprove = await this.checkAllowance(action, account, sum, exchangeContract, exchangeMethodName, actionContract, ovnStableContract);
+                allowApprove = !allowApprove ? (await this.approveBlockchainAction(action, account, sum, exchangeContract, exchangeMethodName, actionContract, ovnStableContract)) : true;
                 if (!allowApprove) {
                     this.closeWaitingModal();
                     disapproveActionFunc();
@@ -106,11 +105,11 @@ export const swap = {
             }
         },
 
-        async checkApproveCounter(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc) {
+        async checkApproveCounter(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract) {
             if (!this.sumApproveCheckerId) {
                 // first call
                 this.sumApproveCheckerId = -1;
-                await this.checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc);
+                await this.checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract);
                 return;
             }
 
@@ -122,7 +121,7 @@ export const swap = {
                     if (this.sumApproveCheckerId === intervalId) {
                         this.sumApproveCheckerSec = 0;
                         try {
-                            await this.checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc);
+                            await this.checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract);
                         } catch (e) {
                             // ignore
                         } finally {
@@ -138,14 +137,22 @@ export const swap = {
             this.sumApproveCheckerId = intervalId;
         },
 
-        async approveBlockchainAction(action, account, sum, exchangeContract, exchangeMethodName, actionContract) {
+        async approveBlockchainAction(action, account, sum, exchangeContract, exchangeMethodName, actionContract, ovnStableContract) {
             try {
                 await this.refreshGasPrice();
                 let from = account;
 
                 let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-                let tx = await actionContract.methods.approve(exchangeContract.options.address, sum).send(approveParams);
+                let tx;
+                if (action === 'swap-redeem' || action === 'dai-swap-redeem') {
+                    console.log("Redeem approve with ovnStableContract", ovnStableContract)
+                    tx = await ovnStableContract.methods.approve(exchangeContract.options.address, sum).send(approveParams);
+                } else {
+                    console.log("Redeem approve with action contract", actionContract)
+                    tx = await actionContract.methods.approve(exchangeContract.options.address, sum).send(approveParams);
+                }
+
 
                 let minted = true;
                 while (minted) {
@@ -168,15 +175,24 @@ export const swap = {
                 return false;
             }
         },
-        async checkAllowance(action, account, sum, exchangeContract, exchangeMethodName, actionContract) {
+        async checkAllowance(action, account, sum, exchangeContract, exchangeMethodName, actionContract, ovnStableContract) {
             let from = account;
 
-            let allowanceValue = await actionContract.methods.allowance(from, exchangeContract.options.address).call();
-            console.log('allowanceValue: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
+            let allowanceValue;
+            if (action === 'swap-redeem' || action === 'dai-swap-redeem') {
+                console.log("Redeem allowance with ovnStableContract", ovnStableContract)
+                allowanceValue = await ovnStableContract.methods.allowance(from, exchangeContract.options.address).call();
+                console.log('allowanceValue with ovnStable in redeem: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
+            } else {
+                console.log("Action contract allowance", actionContract)
+                allowanceValue = await actionContract.methods.allowance(from, exchangeContract.options.address).call();
+                console.log('allowanceValue: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
+            }
+
             return allowanceValue * 1 >= sum * 1;
         },
 
-        async buyAction(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, resultTxInfo, finalizeFunc, disapproveActionFunc, approveActionFunc) {
+        async buyAction(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, resultTxInfo, finalizeFunc, disapproveActionFunc, approveActionFunc, ovnStableContract) {
             try {
 
                 let sumInUsd = sum + '';
@@ -210,7 +226,7 @@ export const swap = {
                     }
                 }
 
-                if (!(await this.checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc))) {
+                if (!(await this.checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract))) {
                     console.debug(`Buy-Action in ${action}. Approve not pass. Sum: ${contractSum} SumInUsd: ${sumInUsd}. Account: ${account}.`);
                     return;
                 }
@@ -232,7 +248,7 @@ export const swap = {
                     let referral = await this.getReferralCode();
                     referral = referral ? referral : '';
 
-                    let method = await this.getContractMethodWithParams(action, account, contractSum, exchangeContract, exchangeMethodName, actionContract);
+                    let method = await this.getContractMethodWithParams(action, account, contractSum, exchangeContract, exchangeMethodName, actionContract, ovnStableContract);
                     if (!method){
                         let errorMessage = "Exchange Method type not found when create method params in buy action. MethodType: " + exchangeMethodName;
                         console.error(errorMessage);
@@ -291,7 +307,7 @@ export const swap = {
         },
 
 
-        async confirmSwapAction(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, resultTxInfo, finalizeFunc, disapproveActionFunc, approveActionFunc) {
+        async confirmSwapAction(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, resultTxInfo, finalizeFunc, disapproveActionFunc, approveActionFunc, ovnStableContract) {
             try {
                 let contractSum;
 
@@ -323,7 +339,7 @@ export const swap = {
                 }
 
                 // todo 5: 'test-product' remove
-                let estimatedGasValue = await this.estimateGas(action, account, contractSum, 'test-product', exchangeContract, exchangeMethodName, actionContract);
+                let estimatedGasValue = await this.estimateGas(action, account, contractSum, 'test-product', exchangeContract, exchangeMethodName, actionContract, ovnStableContract);
                 if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
                     this.gas = null;
 
@@ -331,7 +347,7 @@ export const swap = {
                     // this.gasAmountInMatic = null;
                     // this.gasAmountInUsd = null;
 
-                    await this.buyAction(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, resultTxInfo, finalizeFunc, disapproveActionFunc, approveActionFunc);
+                    await this.buyAction(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, resultTxInfo, finalizeFunc, disapproveActionFunc, approveActionFunc, ovnStableContract);
 
                     this.closeWaitingModal();
                 } else {
@@ -344,7 +360,7 @@ export const swap = {
                     // this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
                     // this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
 
-                    await this.buyAction(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, resultTxInfo, finalizeFunc, disapproveActionFunc, approveActionFunc);
+                    await this.buyAction(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, resultTxInfo, finalizeFunc, disapproveActionFunc, approveActionFunc, ovnStableContract);
                     this.closeWaitingModal();
                 }
             } catch (e) {
@@ -353,7 +369,7 @@ export const swap = {
             }
         },
 
-        async estimateGas(action, account, sum, productName, exchangeContract, exchangeMethodName, actionContract) {
+        async estimateGas(action, account, sum, productName, exchangeContract, exchangeMethodName, actionContract, ovnStableContract) {
 
             console.log("actionContract: ", actionContract);
 
@@ -364,7 +380,7 @@ export const swap = {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
                 let blockNum = await this.web3.eth.getBlockNumber();
 
-                let method = await this.getContractMethodWithParams(action, account, sum, exchangeContract, exchangeMethodName, actionContract);
+                let method = await this.getContractMethodWithParams(action, account, sum, exchangeContract, exchangeMethodName, actionContract, ovnStableContract);
                  if (!method){
                      let errorMessage = "Exchange Method type not found when create method params in estimate gas. MethodType: " + exchangeMethodName;
                      console.error(errorMessage);
@@ -409,7 +425,7 @@ export const swap = {
             return result;
         },
 
-        async getContractMethodWithParams(action, account, contractSum, exchangeContract, exchangeMethodName, actionContract) {
+        async getContractMethodWithParams(action, account, contractSum, exchangeContract, exchangeMethodName, actionContract, ovnStableContract) {
 
             // ets mint: (sum, referral)
             // usd+ mint  let mintParams = {

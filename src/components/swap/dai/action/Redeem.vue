@@ -27,7 +27,8 @@
                                          'redeem',
                                          contracts.dai,
                                           disapproveDaiPlus,
-                                          approveDaiPlus
+                                          approveDaiPlus,
+                                          contracts.daiPlus
                                        )">
                     </v-text-field>
                 </v-row>
@@ -179,7 +180,8 @@
                              {successAction: 'redeemDaiPlus'},
                              finalizeFunc,
                              disapproveDaiPlus,
-                             approveDaiPlus
+                             approveDaiPlus,
+                             contracts.daiPlus
                        )">
                   <v-progress-circular
                         v-if="transactionPending"
@@ -203,7 +205,8 @@
                            'redeem',
                            contracts.dai,
                             disapproveDaiPlus,
-                            approveDaiPlus
+                            approveDaiPlus,
+                            contracts.daiPlus
                        )">
                   {{ buttonLabel }}
                 </v-btn>
@@ -444,7 +447,8 @@ export default {
                 'redeem',
                 this.contracts.dai,
                 this.disapproveDaiPlus,
-                this.approveDaiPlus
+                this.approveDaiPlus,
+                this.contracts.daiPlus
             );
         },
 

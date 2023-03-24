@@ -27,7 +27,8 @@
                                          'redeem',
                                          assetContract,
                                         disapproveUsdPlus,
-                                        approveUsdPlus
+                                        approveUsdPlus,
+                                        contracts.usdPlus
                                        )">
                     </v-text-field>
                 </v-row>
@@ -179,7 +180,8 @@
                              {successAction: 'redeemUsdPlus'},
                              finalizeFunc,
                              disapproveUsdPlus,
-                             approveUsdPlus
+                             approveUsdPlus,
+                             contracts.usdPlus
                        )">
                   <v-progress-circular
                         v-if="transactionPending"
@@ -203,7 +205,8 @@
                            'redeem',
                            assetContract,
                            disapproveUsdPlus,
-                           approveUsdPlus
+                           approveUsdPlus,
+                           contracts.usdPlus
                        )">
                   {{ buttonLabel }}
                 </v-btn>
@@ -449,7 +452,8 @@ export default {
                 'redeem',
                 this.assetContract,
                 this.disapproveUsdPlus,
-                this.approveUsdPlus
+                this.approveUsdPlus,
+                this.contracts.usdPlus
             );
         },
 

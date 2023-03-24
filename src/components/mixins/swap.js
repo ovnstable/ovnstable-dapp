@@ -30,7 +30,7 @@ export const swap = {
 
                 let contractSum;
 
-                switch (action === 'swap-redeem' || action === 'dai-swap-redeem' ? 6 : actionDecimals) {
+                switch (action === 'swap-redeem' ? 6 : actionDecimals) {
                     case 6:
                         contractSum = this.web3.utils.toWei(sum, 'mwei');
                         break;
@@ -73,7 +73,7 @@ export const swap = {
                 let approveSum = "10000000";
 
                 let sum;
-                switch (action === 'swap-redeem' || action === 'dai-swap-redeem' ? 6 : actionDecimals) {
+                switch (action === 'swap-redeem' ? 6 : actionDecimals) {
                     case 6:
                         sum = this.web3.utils.toWei(approveSum, 'mwei');
                         break;

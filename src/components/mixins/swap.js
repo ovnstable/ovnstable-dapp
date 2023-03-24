@@ -57,8 +57,7 @@ export const swap = {
                 }
             } catch (e) {
                 console.error(`Approve action error. Type: ${action}. Account: ${account}, Sum: ${sum}. Error: ${e}`);
-                // this.showErrorModal('approve');
-                this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
+                this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e});
                 disapproveActionFunc();
                 return false;
             }
@@ -94,8 +93,6 @@ export const swap = {
                 allowApprove = !allowApprove ? (await this.approveBlockchainAction(action, account, sum, exchangeContract, exchangeMethodName, actionContract)) : true;
                 if (!allowApprove) {
                     this.closeWaitingModal();
-                    // this.showErrorModal('approve');
-                    this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
                     disapproveActionFunc();
                     return;
                 } else {
@@ -105,7 +102,6 @@ export const swap = {
             } catch (e) {
                 console.error(`Approve action error: ${e}. Type: ${action}. Account: ${account}. Error: ${e}`);
                 disapproveActionFunc();
-                // this.showErrorModal('approve');
                 this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
             }
         },
@@ -168,6 +164,7 @@ export const swap = {
                 return true;
             } catch (e) {
                 console.error(`Approve blockchain action error. Type: ${action}. Sum: ${sum}. Account: ${account}. Error: ${e}`);
+                this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e});
                 return false;
             }
         },
@@ -189,12 +186,13 @@ export const swap = {
                     let originalMax = this.getMax(originalBalance);
                     contractSum = originalMax;
                     if (!originalMax) {
-                        console.error("Original max value not exist, when buy action in market invest.")
+                        let errorMessage = "Original max value not exist, when buy action. type: " + action ;
+                        console.error(errorMessage)
+                        this.showErrorModalWithMsg({errorType: 'buy', errorMsg: {code: 1, message: errorMessage}});
                         return;
                     }
                 } else {
                     sum = sum + '';
-
 
                     switch (actionDecimals) {
                         case 6:
@@ -214,11 +212,9 @@ export const swap = {
 
                 if (!(await this.checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc))) {
                     console.debug(`Buy-Action in ${action}. Approve not pass. Sum: ${contractSum} SumInUsd: ${sumInUsd}. Account: ${account}.`);
-                    this.showErrorModalWithMsg({errorType: 'approve'}, );
                     return;
                 }
 
-                let contracts = this.contracts;
                 let from = account;
                 let self = this;
 
@@ -236,11 +232,11 @@ export const swap = {
                     let referral = await this.getReferralCode();
                     referral = referral ? referral : '';
 
-                    let etsActionData = this.etsData;
-
                     let method = await this.getContractMethodWithParams(action, account, contractSum, exchangeContract, exchangeMethodName, actionContract);
                     if (!method){
-                        console.error("Exchange Method type not found when create method params in estimate gas. type: " + exchangeMethodName);
+                        let errorMessage = "Exchange Method type not found when create method params in buy action. MethodType: " + exchangeMethodName;
+                        console.error(errorMessage);
+                        this.showErrorModalWithMsg({errorType: 'approve', errorMsg: {code: 1, message: errorMessage}});
                         return;
                     }
 
@@ -303,7 +299,9 @@ export const swap = {
                     let originalMax = this.getMax(originalBalance);
                     contractSum = originalMax;
                     if (!originalMax) {
-                        console.error("Original max value not exist, when confirm swap action in market invest.")
+                        let errorMessage = "Original max value not exist, when swap action. type: " + action ;
+                        console.error(errorMessage)
+                        this.showErrorModalWithMsg({errorType: 'approve', errorMsg: {code: 1, message: errorMessage}});
                         return;
                     }
                 } else {
@@ -351,11 +349,13 @@ export const swap = {
                 }
             } catch (e) {
                 console.error(`Market swap action in ${action}. Sum: ${sum}. Account: ${account}. Error: ${e}`);
-                this.showErrorModal('estimateGas');
+                this.showErrorModalWithMsg({errorType: 'estimateGas', errorMsg: e});
             }
         },
 
-        async estimateGas(action, account, sum, productName, exchangeContract, exchangeMethodName, exchangeParams, actionContract) {
+        async estimateGas(action, account, sum, productName, exchangeContract, exchangeMethodName, actionContract) {
+
+            console.log("actionContract: ", actionContract);
 
             let from = account;
             let result;
@@ -366,11 +366,11 @@ export const swap = {
 
                 let method = await this.getContractMethodWithParams(action, account, sum, exchangeContract, exchangeMethodName, actionContract);
                  if (!method){
-                    console.error("Exchange Method type not found when create method params in estimate gas. type: " + exchangeMethodName);
+                     let errorMessage = "Exchange Method type not found when create method params in estimate gas. MethodType: " + exchangeMethodName;
+                     console.error(errorMessage);
+                     this.showErrorModalWithMsg({errorType: 'approve', errorMsg: {code: 1, message: errorMessage}});
                     return;
                  }
-
-                debugger
 
                 await method.estimateGas(estimateOptions)
                     .then(function (gasAmount) {
@@ -402,6 +402,7 @@ export const swap = {
                     });
             } catch (e) {
                 console.error(`Estimate action in ${action}. Account: ${account} Sum: ${sum}.error: ${e} `);
+                this.showErrorModalWithMsg({errorType: 'estimateGas', errorMsg: e});
                 return -1;
             }
 

@@ -384,7 +384,7 @@ export default {
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
 
-        ...mapActions("errorModal", ['showErrorModal']),
+        ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
 
@@ -466,10 +466,10 @@ export default {
               return true;
             }
           } catch (e) {
-            console.error(`Market Withdraw approve action error: ${e}. usdSum: ${this.sum} sum:${sum} Account: ${this.account}. `);
-            this.showErrorModal('approve');
-            this.disapproveActionAsset();
-            return false;
+              console.error(`Market Withdraw approve action error: ${e}. usdSum: ${this.sum} sum:${sum} Account: ${this.account}. `);
+              this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e});
+              this.disapproveActionAsset();
+              return false;
           }
         },
         getMax() {
@@ -487,8 +487,10 @@ export default {
                   let originalMax = this.getMax();
                   sum = originalMax;
                   if (!originalMax) {
-                    console.error("Original max value not exist, when confirm buy action in insurance mint.")
-                    return;
+                      let errorMessage = "Original max value not exist, when buy action." ;
+                      console.error(errorMessage)
+                      this.showErrorModalWithMsg({errorType: 'approve', errorMsg: {code: 1, message: errorMessage}});
+                      return;
                   }
                 } else {
                   sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
@@ -535,13 +537,15 @@ export default {
                     });
                 } catch (e) {
                   console.error(`Mint Insurance error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-                  return;
+                    this.showErrorModalWithMsg({errorType: 'buy', errorMsg: e});
+                    return;
                 }
 
                 self.refreshInsurance();
                 self.setSum(null);
             } catch (e) {
                 console.error(`Mint Insurance by action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                this.showErrorModalWithMsg({errorType: 'mint', errorMsg: e});
             }
         },
 
@@ -553,8 +557,10 @@ export default {
                   let originalMax = this.getMax();
                   sum = originalMax;
                   if (!originalMax) {
-                    console.error("Original max value not exist, when confirm swap action in insurance mint.")
-                    return;
+                      let errorMessage = "Original max value not exist, when insurance mint." ;
+                      console.error(errorMessage)
+                      this.showErrorModalWithMsg({errorType: 'approve', errorMsg: {code: 1, message: errorMessage}});
+                      return;
                   }
                 } else {
                   sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
@@ -578,8 +584,8 @@ export default {
                     await this.buyAction();
                 }
             } catch (e) {
-              console.error(`Mint Insurance Confirm swap error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-              this.showErrorModal('estimateGas');
+                console.error(`Mint Insurance Confirm swap error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e});
             }
         },
 
@@ -600,15 +606,14 @@ export default {
                 allowApprove = !allowApprove ? (await this.approveBlockchainAction(sum)) : true;
                 if (!allowApprove) {
                       this.closeWaitingModal();
-                      this.showErrorModal('approve');
                       this.disapproveActionAsset();
                   } else {
                       this.approveActionAsset();
                       this.closeWaitingModal();
                   }
             } catch (e) {
-              console.error(`Mint Insurance approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-              this.showErrorModal('approve');
+                console.error(`Mint Insurance approve action error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e});
             }
         },
         async approveBlockchainAction(sum) {
@@ -696,8 +701,9 @@ export default {
                         return -1;
                     });
             } catch (e) {
-              console.error(`Mint Insurance estimateGas error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
-              return -1;
+                console.error(`Mint Insurance estimateGas error: ${e}. Sum: ${this.sum}. Account: ${this.account}. `);
+                this.showErrorModalWithMsg({errorType: 'estimateGas', errorMsg: e});
+                return -1;
             }
 
             return result;

@@ -1,74 +1,30 @@
 <template>
   <div>
-    <v-card-text class="px-5 pt-5">
-      <v-row justify="center" class="mb-10">
-        <div class="loading-img">
-          <v-img :src="require('@/assets/icon/error-circle.svg')"/>
-        </div>
-      </v-row>
+      <v-card-text :class="$wu.isMobile() ? 'px-2 pt-2' : 'px-5 pt-5'">
+          <v-row justify="center">
+              <div class="loading-img">
+                  <v-img :src="require('@/assets/icon/error-circle.svg')"/>
+              </div>
+          </v-row>
 
-      <v-row justify="center">
-        <label class="error-label mb-5">Transaction execution error</label>
-      </v-row>
+          <v-row justify="center">
+              <label class="error-label pt-5 pb-5">
+                  Undefined error
+              </label>
+          </v-row>
 
-      <template v-if="errorMsg">
-        <v-tooltip
-            v-model="showCopyTooltipContainer"
-            color="#202832"
-            bottom
-        >
-          <template v-slot:activator="{on}">
-            <v-container class="error-container" @click="copyErrorToClipboard('container')">
-              <v-row class="mt-8 error-container-row" justify="center">
-                <label class="error-msg-title">Error message</label>
+          <div v-if="errorMsg">
+              <v-row justify="center" class="error-message pb-5">
+                  {{errorMsg.message ? errorMsg.message : errorMsg}}
               </v-row>
-              <v-row class="mt-4 error-container-row" justify="center">
-                <v-col class="ma-n3">
-                  <label class="error-msg-value">{{ errorMsg.message }}</label>
-                </v-col>
-              </v-row>
+          </div>
 
-              <v-row class="mt-8 error-container-row">
-                <v-spacer></v-spacer>
-                <label class="error-msg-title">From</label>
-                <v-spacer></v-spacer>
-                <label class="error-msg-title">To</label>
-                <v-spacer></v-spacer>
-              </v-row>
-              <v-row class="mt-4 mb-8 error-container-row">
-                <v-spacer></v-spacer>
-                <label class="error-msg-value">{{ shortAddress(errorMsg.from) }}</label>
-                <v-spacer></v-spacer>
-                <label class="error-msg-value">{{ shortAddress(errorMsg.to) }}</label>
-                <v-spacer></v-spacer>
-              </v-row>
-            </v-container>
-          </template>
-          <p class="my-0">Copied!</p>
-        </v-tooltip>
-      </template>
-
-      <v-row justify="center">
-        <label class="discord-label">Error report has been automatically logged.</label>
-      </v-row>
-
-      <v-row justify="center" class="mb-5">
-        <label class="discord-label">Please,&nbsp;</label>
-        <v-tooltip
-            v-if="errorMsg"
-            v-model="showCopyTooltip"
-            color="#202832"
-            bottom
-        >
-          <template v-slot:activator="{on}">
-            <label class="discord-link" @click="copyErrorToClipboard('link')">copy the full error</label>
-          </template>
-          <p class="my-0">Copied!</p>
-        </v-tooltip>
-        <label class="discord-label" v-if="errorMsg">&nbsp;and&nbsp;</label>
-        <label class="discord-label">contact our&nbsp;</label>
-        <label class="discord-link" @click="openDiscord">Discord Support</label>
-      </v-row>
+          <v-row justify="center">
+              <div class="info-container py-3 px-3">
+                  <label class="discord-label">Please, make a ticket in our Discord&nbsp;&nbsp;</label>
+                  <label class="discord-link" @click="openDiscord"># | submit-ticket</label>
+              </div>
+          </v-row>
     </v-card-text>
   </div>
 </template>
@@ -120,5 +76,110 @@ export default {
 </script>
 
 <style scoped>
+
+
+/* mobile */
+@media only screen and (max-width: 960px) {
+
+    .error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 22px;
+        line-height: 30px;
+    }
+
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+
+    .error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 34px;
+    }
+
+    .info-container {
+        min-width: 550px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+
+    .error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 26px;
+        line-height: 36px;
+    }
+
+    .info-container {
+        min-width: 550px;
+    }
+}
+
+.error-message {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #29323E;
+}
+
+.info-container {
+    background: #F5F5F5;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.info-item {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+
+    color: #29323E;
+
+}
+
+.info-item-link {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    cursor: pointer;
+    text-decoration: none;
+
+    color: #1C95E7;
+
+}
+
+
+.discord-link {
+    cursor: pointer;
+    color: var(--links-blue);
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.discord-link:hover {
+    text-decoration: underline;
+}
+
+
+.discord-label {
+    color: var(--secondary-gray-text);
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+}
 
 </style>

@@ -1,61 +1,144 @@
 <template>
   <div>
-    <v-card-text class="px-5 pt-5">
-      <v-row justify="center" class="mb-10">
-        <div class="loading-img">
-          <v-img :src="require('@/assets/icon/error-circle.svg')"/>
-        </div>
-      </v-row>
-
-      <v-row justify="center">
-        <label class="error-label mb-5">
-          Error in estimating gas
-        </label>
-
-        <v-row>
-          <label>
-            Issue with settings of gas fees or gas limits in your wallet.
-          </label>
+    <v-card-text :class="$wu.isMobile() ? 'px-2 pt-2' : 'px-5 pt-5'">
+        <v-row justify="center">
+            <div class="loading-img">
+                <v-img :src="require('@/assets/icon/error-circle.svg')"/>
+            </div>
         </v-row>
-      </v-row>
 
-      <template v-if="errorMsg">
-        {{errorMsg && errorMsg.message ? errorMsg.message : ''}}
-      </template>
+        <v-row justify="center">
+            <label class="error-label pt-5 pb-5">
+                Error in estimating gas
+            </label>
+        </v-row>
 
-      <v-row justify="center">
-        <v-col>
-          <v-row>
-            Change gas settings in your wallet manually  or
-          </v-row>
-          <v-row>
-            1. Change the input amount slightly
-          </v-row>
-          <v-row>
-            2. Delete your cookies for the last several hours
-          </v-row>
 
-          <v-row>
-            Useful article:
-          </v-row>
-          <v-row>
-            What to do if your transaction is still stuck
-          </v-row>
-        </v-col>
-      </v-row>
+        <v-row justify="center" class="error-message pb-5">
+            Issue with settings of gas fees or gas limits in your wallet.
+        </v-row>
 
+        <v-row justify="center">
+            <div class="info-container py-6 px-6">
+                <v-row class="info-item">
+                    1. Change gas settings in your wallet manually
+                </v-row>
+                <v-row class="info-item">
+                    or
+                </v-row>
+                <v-row class="info-item">
+                    2. Change the input amount slightly
+                </v-row>
+                <v-row class="info-item">
+                    3. Delete your cookies for the last several hours
+                </v-row>
+
+                <v-row class="info-item pt-4">
+                    Useful article:
+                </v-row>
+                <v-row>
+                    <a href="https://overnight.fi/blog/2022/10/28/what-to-do-if-your-transaction-is-still-stuck/"
+                       class="info-item-link pl-2"
+                       target="_blank">
+                        • What to do if your transaction is still stuck
+                    </a>
+                </v-row>
+            </div>
+        </v-row>
     </v-card-text>
   </div>
 </template>
 
 <script>
 export default {
-  name: "GasError",
-  props: ["errorMsg"],
+    name: "GasError",
+    props: ["errorMsg", 'errorCode'],
 
 }
 </script>
 
 <style scoped>
 
+
+/* mobile */
+@media only screen and (max-width: 960px) {
+
+    .error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 22px;
+        line-height: 30px;
+    }
+
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+
+    .error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 34px;
+    }
+
+    .info-container {
+        min-width: 550px;
+        min-height: 164px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+
+    .error-label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 26px;
+        line-height: 36px;
+    }
+
+    .info-container {
+        min-width: 550px;
+        min-height: 164px;
+    }
+}
+
+.error-message {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #29323E;
+}
+
+.info-container {
+    background: #F5F5F5;
+    border-radius: 4px;
+}
+
+.info-item {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+
+    color: #29323E;
+
+}
+
+.info-item-link {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    cursor: pointer;
+    text-decoration: none;
+
+    color: #1C95E7;
+
+}
 </style>

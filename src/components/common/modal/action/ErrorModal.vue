@@ -1,24 +1,29 @@
 <template>
     <v-dialog
             v-model="show"
-            width="450"
+            width="630"
             persistent>
-        <v-card class="container_body">
+        <v-card class="container_body py-10 px-10">
             <v-toolbar class="container_header" flat>
-                <v-btn icon class="ml-auto mr-5 mt-10" @click="close">
+                <v-btn icon class="ml-auto" @click="close">
                     <v-icon class="close-icon">mdi-close</v-icon>
                 </v-btn>
             </v-toolbar>
 
-            <v-row v-if="errorTypeLocal === 'gas'">
-              <GasError :error-msg="errorMsgText"></GasError>
-            </v-row>
-            <v-row v-else-if="errorTypeLocal === 'rpc'">
-              <RpcError :error-msg="errorMsgerrorMsgText"></RpcError>
-            </v-row>
-            <v-row v-else>
-              <UndefinedError :error-msg="errorMsg"></UndefinedError>
-            </v-row>
+            <div v-if="errorViewType === 'gas'">
+              <GasError :error-msg="errorText"
+                        :error-code="errorCode">
+              </GasError>
+            </div>
+            <div v-else-if="errorViewType === 'rpc'">
+              <RpcError :error-msg="errorText"
+                        :error-code="errorCode">
+              </RpcError>
+            </div>
+            <div v-else>
+              <UndefinedError :error-msg="errorMsg">
+              </UndefinedError>
+            </div>
 
         </v-card>
     </v-dialog>
@@ -40,42 +45,64 @@ export default {
     props: {
     },
 
+    data: () => ({
+        showCopyTooltip: false,
+        showCopyTooltipContainer: false,
+
+        errorText: null,
+        errorCode: null,
+        errorViewType: null,
+    }),
+
     computed: {
         ...mapGetters('errorModal', ['show', 'errorType', 'errorMsg']),
     },
 
-    data: () => ({
-        showCopyTooltip: false,
-        showCopyTooltipContainer: false,
-        errorMsgText: '',
-        errorTypeLocal: '',
-    }),
-
     created() {
-      this.handleError()
+    },
+
+    watch: {
+        show: function (val, oldVal) {
+            if (val) {
+                this.initError();
+            }
+        },
+        errorType: function (val, oldVal) {
+            this.initError();
+        },
+        errorMsg: function (val, oldVal) {
+            this.initError();
+        },
     },
 
     methods: {
         ...mapActions('errorModal', ['showErrorModal', 'closeErrorModal']),
 
-        handleError() {
-          if (this.errorMsg.code === 4001) {
-            // user cancel transaction
-            console.log("User cancel transaction");
-            this.closeErrorModal();
-            return
-          }
+        initError() {
+            if (!this.errorMsg) {
+                return;
+            }
 
-          if (this.errorMsg.code === 4001) {
-            this.errorMsgText = this.errorMsg.message;
-            this.errorTypeLocal  = 'rpc'
-            return
-          }
+            this.errorCode = this.errorMsg.code;
+            this.errorText = this.errorMsg.message;
 
-          if (this.errorMsg.message.includes('Gas')) {
-            this.errorMsgText = this.errorMsg.message;
-            this.errorTypeLocal  = 'gas'
-          }
+
+            if (this.errorMsg.code === 4001) {
+                // user cancel transaction
+                console.log("User cancel transaction");
+                this.closeErrorModal();
+                return
+            }
+
+            if (this.errorMsg.code === 32016) {
+                this.errorViewType  = 'rpc'
+                return
+            }
+
+
+            if (this.errorMsg.message.includes('Gas')) {
+                this.errorViewType  = 'gas'
+            }
         },
 
         async copyErrorToClipboard(copyTooltip) {
@@ -110,38 +137,6 @@ export default {
 
 <style scoped>
 
-/* mobile */
-@media only screen and (max-width: 960px) {
-
-    .error-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 22px;
-        line-height: 30px;
-    }
-}
-
-/* tablet */
-@media only screen and (min-width: 960px) and (max-width: 1400px) {
-
-    .error-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 24px;
-        line-height: 34px;
-    }
-}
-
-/* full */
-@media only screen and (min-width: 1400px) {
-
-    .error-label {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 26px;
-        line-height: 36px;
-    }
-}
 
 .container_body {
     border-radius: 24px !important;
@@ -150,55 +145,6 @@ export default {
 
 .container_header {
     background-color: var(--secondary) !important;
-}
-
-.error-label {
-    color: var(--secondary-gray-text);
-    font-family: 'Roboto', sans-serif;
-}
-
-.discord-label {
-    color: var(--secondary-gray-text);
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 18px;
-}
-
-.discord-link {
-    cursor: pointer;
-    color: var(--links-blue);
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 18px;
-}
-
-.discord-link:hover {
-    text-decoration: underline;
-}
-
-.error-msg-title {
-    color: #333333;
-    font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 24px;
-}
-
-.error-msg-value {
-    text-align: center;
-    color: #707A8B;
-    font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-}
-
-.error-container, .error-container-row, .error-container-row > label {
-    cursor: pointer !important;
 }
 
 .error-container:hover label {

@@ -168,12 +168,12 @@ const actions = {
 
 
                                 // week
-                                if (clientDataLengthCounter === 7) {
+                                if (clientDataLengthCounter <= 7) {
                                     accumulatorWeek = accumulatorWeek * (1 + payout.dailyProfit);
                                 }
 
                                 // month
-                                if (clientDataLengthCounter === 30) {
+                                if (clientDataLengthCounter <= 30) {
                                     accumulatorMonth = accumulatorMonth * (1 + payout.dailyProfit);
                                 }
 

@@ -109,11 +109,20 @@
             </v-col>
 
             <v-col class="currency-box" :cols="$wu.isFull() ? '' : 12" :class="$wu.isFull() ? 'ml-1' : 'mt-3'">
-                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openLink('https://hacken.io/audits/#overnight')">
+                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openLink('https://docs.overnight.fi/advanced/audits')">
+                    <label class="currency-text ml-2">Audit</label>
+                    <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
                     <div>
                         <v-img class="currency" :src="require('@/assets/currencies/Hacken.svg')" />
                     </div>
-                    <label class="currency-text ml-2">Audit</label>
+                    <v-spacer></v-spacer>
+                    <div>
+                        <v-img class="currency-ackee" :src="require('@/assets/currencies/Ackee-Blockchain.svg')" />
+                    </div>
+
 
                     <v-spacer></v-spacer>
 
@@ -607,6 +616,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .currency-box, .currency-box >>> * {
     cursor: pointer;
+}
+
+.currency-ackee {
+    width: auto;
 }
 
 </style>

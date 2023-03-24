@@ -64,20 +64,20 @@
         <v-row v-if="!isPayoutsLoading" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
           <v-col class="info-card-body-bottom">
             <v-row align="center" justify="start" class="ma-0">
-              <label class="section-title-label">USD+ payouts</label>
+              <label class="section-title-label">DAI+ payouts</label>
             </v-row>
 
             <v-row align="center" justify="center">
               <v-col :cols="!$wu.isFull() ? 12 : 8">
                 <Table
                     v-if="!$wu.isMobile()"
-                    :profit-label="assetName + ' per USD+'"
+                    :profit-label="assetName + ' per DAI+'"
                     :payout-data="payouts"/>
 
                 <Table
                     v-else
                     minimized
-                    :profit-label="assetName + ' per USD+'"
+                    :profit-label="assetName + ' per DAI+'"
                     :payout-data="payouts"/>
 
                 <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
@@ -99,7 +99,7 @@
         </div>
         <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'" >
           <label class="section-text">
-            DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoveen) on Optimism. It cannot be minted separately.
+            DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on Optimism. It cannot be minted separately.
           </label>
           <div class="section-text font-weight-bold">
             Switch on Optimism or Arbitrum chain to see DAI+ collateral.

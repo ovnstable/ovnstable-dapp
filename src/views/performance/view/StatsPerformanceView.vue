@@ -4,6 +4,13 @@
             <label class="title-label">usd+ Performance</label>
         </div>
 
+        <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
+            <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
+            <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+            <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
+            <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
+        </v-row>
+
         <v-row v-if="!isPayoutsLoading" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 mr-4 justify-end'">
             <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
                 Mint USD+
@@ -27,12 +34,12 @@
       <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0" justify="start" align="center">
         <v-col cols="6">
           <div class="info-card-container py-3">
-            <LineChartApy :data="payoutsApyData"/>
+            <LineChartApy :data="payoutsApyData" :network-name="tab"/>
           </div>
         </v-col>
         <v-col cols="6">
           <div class="info-card-container py-3">
-            <LineChartTvl :data="payoutsTvlData"/>
+            <LineChartTvl :data="payoutsTvlData" :network-name="tab"/>
           </div>
         </v-col>
       </v-row>
@@ -52,8 +59,8 @@
             </v-col>
           </v-row>
 
-          <LineChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData"/>
-          <LineChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData"/>
+          <LineChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData" :network-name="tab"/>
+          <LineChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData" :network-name="tab"/>
         </v-col>
       </v-row>
 
@@ -82,7 +89,7 @@
             </v-col>
 
             <v-col :cols="!$wu.isFull() ? 12 : 4">
-              <Doughnut :size="280" color="#3D8DFF" :last-date="lastPayoutDate"/>
+              <Doughnut :size="280" color="#3D8DFF" :last-date="lastPayoutDate" :network-name="tab"/>
             </v-col>
           </v-row>
         </v-col>
@@ -114,7 +121,7 @@ export default {
     },
 
     data: () => ({
-      tab: 1,
+      tab: 'optimism',
       rateTab: 1,
 
       isPayoutsLoading: true,
@@ -126,19 +133,12 @@ export default {
     }),
 
     computed: {
-      ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl']),
+      ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl', 'switchToOtherNetwork', 'getParams']),
 
         activeRateApy: function () {
             return {
                 'rate-tab-button': this.rateTab === 1,
                 'rate-tab-button-in-active': this.rateTab !== 1,
-            }
-        },
-
-        activeRateDist: function () {
-            return {
-                'rate-tab-button': this.rateTab === 2,
-                'rate-tab-button-in-active': this.rateTab !== 2,
             }
         },
 
@@ -152,28 +152,82 @@ export default {
         lastPayoutDate: function () {
             return this.payouts && this.payouts.length ? this.payouts[0].payableDate : '';
         },
-    },
-    watch: {
-      networkId: function () {
-        this.loadData();
-      }
-    },
-    created() {
-        if (this.networkId === 137) {
-            this.tab = 1;
-        }
 
-        if (this.networkId === 56) {
-            this.tab = 2;
-        }
+        activeTabOptimism: function() {
+            return {
+                'tab-button': this.tab === 'optimism',
+                'tab-button-in-active': this.tab !== 'optimism',
+            }
+        },
+
+        activeTabArbitrum: function() {
+            return {
+                'tab-button': this.tab === 'arbitrum',
+                'tab-button-in-active': this.tab !== 'arbitrum',
+            }
+        },
+
+        activeTabBsc: function() {
+            return {
+                'tab-button': this.tab === 'bsc',
+                'tab-button-in-active': this.tab !== 'bsc',
+            }
+        },
+
+        activeTabPolygon: function() {
+            return {
+                'tab-button': this.tab === 'polygon',
+                'tab-button-in-active': this.tab !== 'polygon',
+            }
+        },
+    },
+
+    watch: {
+        activeTabName() {
+            this.initTab();
+        },
+    },
+
+    created() {
+
     },
 
     mounted() {
-      this.loadData();
+        console.log(this.$route.query.tabName);
+        this.initTab();
+        this.loadData();
     },
 
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView', 'showRedeemView']),
+
+        setTab(tabName) {
+            this.tab = tabName;
+
+            console.log("NetworkParams : ", this.getParams(this.tab));
+        },
+
+        initTab() {
+            if (this.$route.query.tabName === 'optimism') {
+                this.setTab('optimism');
+                return
+            }
+
+            if (this.$route.query.tabName === 'arbitrum') {
+                this.setTab('arbitrum');
+                return
+            }
+
+            if (this.$route.query.tabName === 'bsc') {
+                this.setTab('bsc');
+                return
+            }
+
+            if (this.$route.query.tabName === 'polygon') {
+                this.setTab('polygon');
+                return
+            }
+        },
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -183,6 +237,7 @@ export default {
             this.showMintView();
             this.showSwapModal();
         },
+
         loadData() {
           this.payoutsApyData = null;
           this.payoutsTvlData = null;
@@ -191,6 +246,7 @@ export default {
 
           this.loadPayouts();
         },
+
         loadPayouts() {
           this.isPayoutsLoading = true;
 

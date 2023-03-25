@@ -81,11 +81,38 @@ export default {
             type: Object,
             default: null,
         },
+
         assetType: {
           type: String,
           default: 'usd+'
+        },
+
+        networkName: {
+            type: String,
+            default: 'optimism',
         }
     },
+
+    computed: {
+        ...mapGetters('network', ['networkId', 'appApiUrl', 'apiUrl', 'networkName', 'getParams']),
+        ...mapGetters('theme', ['light']),
+
+        isMobile() {
+            return window.innerWidth < 650;
+        },
+
+        networkParams: function() {
+            return this.getParams(this.networkName);
+        },
+    },
+
+    data: () => ({
+        zoom: "all",
+        slice: null,
+        chart: null,
+
+        avgApy: null,
+    }),
 
     watch: {
         data: function (newVal, oldVal) {
@@ -96,27 +123,8 @@ export default {
             this.redraw();
         },
 
-        appApiUrl: function (newVal, oldVal) {
+        networkName: function (newVal, oldVal) {
             this.zoomChart(this.zoom);
-        },
-    },
-
-    components: {},
-
-    data: () => ({
-        zoom: "all",
-        slice: null,
-        chart: null,
-
-        avgApy: null,
-    }),
-
-    computed: {
-        ...mapGetters('network', ['networkId', 'appApiUrl', 'apiUrl', 'networkName']),
-        ...mapGetters('theme', ['light']),
-
-        isMobile() {
-            return window.innerWidth < 650;
         }
     },
 
@@ -132,7 +140,7 @@ export default {
         async zoomChart(zoom) {
             let fetchOptions = {
                 headers: {
-                    "Access-Control-Allow-Origin": this.appApiUrl
+                    "Access-Control-Allow-Origin": this.networkParams.appApiUrl
                 }
             };
 

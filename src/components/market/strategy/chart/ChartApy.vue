@@ -95,7 +95,7 @@
             </v-col>
         </v-row>
 
-        <div class="chart-row mb-10" id="line-chart-apy"></div>
+        <div class="chart-row" id="line-chart-apy"></div>
 
         <v-row class="zoom-row" style="margin-top: -40px !important;">
             <v-spacer></v-spacer>

@@ -4,7 +4,7 @@
             <v-col>
                 <v-row justify="start">
                     <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? '' : 'Average ') + `${assetType.toUpperCase()}&nbsp;`) : ''}}</label>
-                    <label class="chart-title" style="margin-left: 0 !important"><abbr title="Annual Percentage Yield">APY {{networkName}}</abbr></label>
+                    <label class="chart-title" style="margin-left: 0 !important"><abbr title="Annual Percentage Yield">APY</abbr></label>
                 </v-row>
 
                 <v-row justify="start">
@@ -33,29 +33,29 @@
         <v-row class="zoom-row" style="margin-top: -40px !important;">
             <v-spacer></v-spacer>
             <v-btn
-                    text
-                    id="week-zoom-btn"
-                    class="zoom-btn"
-                    dark
-                    @click="zoomChart('week')"
+                text
+                id="week-zoom-btn"
+                class="zoom-btn"
+                dark
+                @click="zoomChart('week')"
             >
                 <label>Week</label>
             </v-btn>
             <v-btn
-                    text
-                    id="month-zoom-btn"
-                    class="zoom-btn"
-                    dark
-                    @click="zoomChart('month')"
+                text
+                id="month-zoom-btn"
+                class="zoom-btn"
+                dark
+                @click="zoomChart('month')"
             >
                 Month
             </v-btn>
             <v-btn
-                    text
-                    id="all-zoom-btn"
-                    class="zoom-btn mr-3"
-                    dark
-                    @click="zoomChart('all')"
+                text
+                id="all-zoom-btn"
+                class="zoom-btn mr-3"
+                dark
+                @click="zoomChart('all')"
             >
                 All
             </v-btn>
@@ -72,7 +72,6 @@ import {mapGetters} from "vuex";
 import moment from "moment";
 
 import ApexCharts from 'apexcharts'
-import network from "@/store/modules/common/web3/network";
 
 export default {
     name: "LineChartApy",
@@ -84,28 +83,31 @@ export default {
         },
 
         assetType: {
-          type: String,
-          default: 'usd+'
+            type: String,
+            default: 'usd+'
         },
 
         networkName: {
             type: String,
-            default: 'optimism',
+            default: 'optimism'
         }
     },
 
-    computed: {
-        ...mapGetters('network', ['getParams']),
-        ...mapGetters('theme', ['light']),
-
-        isMobile() {
-            return window.innerWidth < 650;
+    watch: {
+        data: function (newVal, oldVal) {
+            this.redraw();
         },
 
-        networkParams: function() {
-            return this.getParams(this.networkName);
+        light: function (newVal, oldVal) {
+            this.redraw();
+        },
+
+        appApiUrl: function (newVal, oldVal) {
+            this.zoomChart(this.zoom);
         },
     },
+
+    components: {},
 
     data: () => ({
         zoom: "all",
@@ -115,15 +117,13 @@ export default {
         avgApy: null,
     }),
 
-    watch: {
-        networkName: function (newVal, oldVal) {
-            this.redraw();
-            this.zoomChart(this.zoom);
-        },
+    computed: {
+        ...mapGetters('network', ['networkId', 'appApiUrl', 'apiUrl']),
+        ...mapGetters('theme', ['light']),
 
-        light: function (newVal, oldVal) {
-            this.redraw();
-        },
+        isMobile() {
+            return window.innerWidth < 650;
+        }
     },
 
     mounted() {
@@ -138,11 +138,11 @@ export default {
         async zoomChart(zoom) {
             let fetchOptions = {
                 headers: {
-                    "Access-Control-Allow-Origin": this.networkParams.appApiUrl
+                    "Access-Control-Allow-Origin": this.appApiUrl
                 }
             };
 
-            await fetch(this.networkParams.apiUrl  + `/${this.networkParams.networkName}/${this.networkParams.assetType}` + '/widget/avg-apy-info/' + zoom, fetchOptions)
+            await fetch(this.apiUrl  + `/${this.networkName}/${this.assetType}` + '/widget/avg-apy-info/' + zoom, fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;
@@ -183,7 +183,7 @@ export default {
             document.getElementById(this.zoom + "-zoom-btn").classList.add("selected");
         },
 
-        redraw(networkName) {
+        redraw() {
             if (this.chart) {
                 this.chart.destroy();
             }
@@ -204,7 +204,7 @@ export default {
             try {
                 maxValue = Math.max.apply(Math, values);
                 if (maxValue > 5) {
-                  maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
+                    maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
                 }
             } catch (e) {
                 maxValue = 50;

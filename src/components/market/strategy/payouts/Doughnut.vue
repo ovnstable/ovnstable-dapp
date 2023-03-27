@@ -45,6 +45,11 @@ export default {
         archived: {
             type: Boolean,
             default: false,
+        },
+
+        networkName: {
+            type: String,
+            default: 'optimism'
         }
     },
 

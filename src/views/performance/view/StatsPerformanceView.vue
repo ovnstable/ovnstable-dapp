@@ -75,7 +75,9 @@
               <Table
                   v-if="!$wu.isMobile()"
                   :profit-label="assetName + ' per USD+'"
-                  :payout-data="payouts"/>
+                  :payout-data="payouts"
+                  :network-name="tab"
+              />
 
               <Table
                   v-else
@@ -137,13 +139,6 @@ export default {
 
         isDataLoaded: function() {
             return !this.isPayoutsLoading;
-        },
-
-        tabNetworkId: function() {
-            let params;
-            params = this.getParams(this.tab);
-
-            return params.networkId;
         },
 
         tabApiUrl: function() {
@@ -365,6 +360,13 @@ export default {
         letter-spacing: 0.03em !important;
     }
 
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
     .ready-label {
         font-style: normal;
         font-weight: 400;
@@ -400,6 +402,13 @@ export default {
         font-size: 20px;
         line-height: 24px;
         letter-spacing: 0.04em;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .rate-tab-btn {
@@ -442,6 +451,13 @@ export default {
         font-size: 20px;
         line-height: 24px;
         letter-spacing: 0.04em;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .rate-tab-btn {
@@ -489,6 +505,13 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-size: 18px;
         line-height: 24px;
         letter-spacing: 0.04em;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
     }
 
     .rate-tab-btn {
@@ -600,6 +623,18 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--main-gray-text);
+}
+
+.tab-btn {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: var(--secondary-gray-text);
+    margin-bottom: -2px;
+    cursor: pointer;
+}
+
+.tab-btn-disabled {
+    cursor: default;
 }
 
 .header-btn {

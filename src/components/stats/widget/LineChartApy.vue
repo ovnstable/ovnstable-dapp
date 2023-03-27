@@ -4,7 +4,7 @@
             <v-col>
                 <v-row justify="start">
                     <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? '' : 'Average ') + `${assetType.toUpperCase()}&nbsp;`) : ''}}</label>
-                    <label class="chart-title" style="margin-left: 0 !important"><abbr title="Annual Percentage Yield">APY</abbr></label>
+                    <label class="chart-title" style="margin-left: 0 !important"><abbr title="Annual Percentage Yield">APY {{networkName}}</abbr></label>
                 </v-row>
 
                 <v-row justify="start">
@@ -72,6 +72,7 @@ import {mapGetters} from "vuex";
 import moment from "moment";
 
 import ApexCharts from 'apexcharts'
+import network from "@/store/modules/common/web3/network";
 
 export default {
     name: "LineChartApy",
@@ -94,7 +95,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('network', ['networkId', 'appApiUrl', 'apiUrl', 'networkName', 'getParams']),
+        ...mapGetters('network', ['getParams']),
         ...mapGetters('theme', ['light']),
 
         isMobile() {
@@ -115,17 +116,14 @@ export default {
     }),
 
     watch: {
-        data: function (newVal, oldVal) {
+        networkName: function (newVal, oldVal) {
             this.redraw();
+            this.zoomChart(this.zoom);
         },
 
         light: function (newVal, oldVal) {
             this.redraw();
         },
-
-        networkName: function (newVal, oldVal) {
-            this.zoomChart(this.zoom);
-        }
     },
 
     mounted() {
@@ -144,7 +142,7 @@ export default {
                 }
             };
 
-            await fetch(this.apiUrl  + `/${this.networkName}/${this.assetType}` + '/widget/avg-apy-info/' + zoom, fetchOptions)
+            await fetch(this.networkParams.apiUrl  + `/${this.networkParams.networkName}/${this.networkParams.assetType}` + '/widget/avg-apy-info/' + zoom, fetchOptions)
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;
@@ -185,7 +183,7 @@ export default {
             document.getElementById(this.zoom + "-zoom-btn").classList.add("selected");
         },
 
-        redraw() {
+        redraw(networkName) {
             if (this.chart) {
                 this.chart.destroy();
             }

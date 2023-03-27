@@ -4,14 +4,14 @@
             <label class="title-label">usd+ Performance</label>
         </div>
 
-        <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
+        <v-row v-if="isDataLoaded" align="center" justify="start" class="ma-0 toggle-row mt-10">
             <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
             <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
             <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
             <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
         </v-row>
 
-        <v-row v-if="!isPayoutsLoading" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 mr-4 justify-end'">
+        <v-row v-if="isDataLoaded" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 mr-4 justify-end'">
             <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
                 Mint USD+
             </v-btn>
@@ -20,7 +20,7 @@
             </v-btn>
         </v-row>
 
-      <v-row v-if="isPayoutsLoading">
+      <v-row v-if="!isDataLoaded">
         <v-row align="center" justify="center" class="py-15">
           <v-progress-circular
               width="2"
@@ -31,7 +31,7 @@
         </v-row>
       </v-row>
 
-      <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0" justify="start" align="center">
+      <v-row v-if="isDataLoaded && !$wu.isMobile()" class="ma-0" justify="start" align="center">
         <v-col cols="6">
           <div class="info-card-container py-3">
             <LineChartApy :data="payoutsApyData" :network-name="tab"/>
@@ -44,7 +44,7 @@
         </v-col>
       </v-row>
 
-      <v-row v-else-if="!isPayoutsLoading && $wu.isMobile()" class="ma-0 mt-2 info-card-container" justify="start" align="center">
+      <v-row v-else-if="isDataLoaded && $wu.isMobile()" class="ma-0 mt-2 info-card-container" justify="start" align="center">
         <v-col class="info-card-body-bottom">
           <v-row align="center" justify="start" class="ma-0">
             <v-col class="ml-n3 mt-n3">
@@ -64,7 +64,7 @@
         </v-col>
       </v-row>
 
-      <v-row v-if="!isPayoutsLoading" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
+      <v-row v-if="isDataLoaded" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
         <v-col class="info-card-body-bottom">
           <v-row align="center" justify="start" class="ma-0">
             <label class="section-title-label">USD+ payouts</label>
@@ -95,7 +95,7 @@
         </v-col>
       </v-row>
 
-      <resize-observer v-if="!isPayoutsLoading" @notify="$forceUpdate()"/>
+      <resize-observer v-if="isDataLoaded" @notify="$forceUpdate()"/>
     </div>
 </template>
 
@@ -134,6 +134,24 @@ export default {
 
     computed: {
       ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl', 'switchToOtherNetwork', 'getParams']),
+
+        isDataLoaded: function() {
+            return !this.isPayoutsLoading;
+        },
+
+        tabNetworkId: function() {
+            let params;
+            params = this.getParams(this.tab);
+
+            return params.networkId;
+        },
+
+        tabApiUrl: function() {
+            let params;
+            params = this.getParams(this.tab)
+
+            return params.appApiUrl;
+        },
 
         activeRateApy: function () {
             return {
@@ -203,7 +221,7 @@ export default {
 
         setTab(tabName) {
             this.tab = tabName;
-
+            this.loadData();
             console.log("NetworkParams : ", this.getParams(this.tab));
         },
 
@@ -244,13 +262,13 @@ export default {
           this.payoutsApyDataDict = null;
           this.payouts = null;
 
-          this.loadPayouts();
+          this.loadPayouts(this.tabApiUrl);
         },
 
-        loadPayouts() {
+        loadPayouts(_appApiUrl) {
           this.isPayoutsLoading = true;
 
-          payoutsApiService.getPayouts(this.appApiUrl)
+          payoutsApiService.getPayouts(_appApiUrl)
               .then(data => {
                 this.payouts = data
                 let clientData = data;

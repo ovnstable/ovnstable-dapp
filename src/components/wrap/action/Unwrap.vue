@@ -27,7 +27,8 @@
                                          'unwrap',
                                          tokenContract,
                                          disapproveWUsdPlus,
-                                         approveWUsdPlus
+                                         approveWUsdPlus,
+                                         contracts.wUsdPlus
                                        )">
                     </v-text-field>
                 </v-row>
@@ -154,6 +155,26 @@
 
 
         <v-row class="mt-15" align="center" justify="center">
+
+            <v-row v-if="isShowDecreaseAllowance" class="mb-2">
+                <v-col>
+                    <label
+                        @click="clearApprove(
+                            'unwrap-redeem',
+                               account,
+                               contracts.market,
+                               'unwrap',
+                               tokenContract,
+                               disapproveWUsdPlus,
+                               approveWUsdPlus,
+                               contracts.wUsdPlus
+                           )"
+                        style="cursor: pointer;">
+                        Decrease Allowance
+                    </label>
+                </v-col>
+            </v-row>
+
             <div class="action-btn-container" v-if="!this.account">
                 <v-btn class='buy enabled-buy'
                        @click="connectWallet">
@@ -180,7 +201,8 @@
                              {successAction: 'unwrapUsdPlus'},
                              finalizeFunc,
                              disapproveWUsdPlus,
-                             approveWUsdPlus
+                             approveWUsdPlus,
+                             contracts.wUsdPlus
                        )">
                     <v-progress-circular
                         v-if="transactionPending"
@@ -204,7 +226,8 @@
                            'unwrap',
                            tokenContract,
                            disapproveWUsdPlus,
-                           approveWUsdPlus
+                           approveWUsdPlus,
+                           contracts.wUsdPlus
                        )">
                   {{ buttonLabel }}
                 </v-btn>
@@ -453,7 +476,8 @@ export default {
               'unwrap',
               this.tokenContract,
               this.disapproveWUsdPlus,
-              this.approveWUsdPlus
+              this.approveWUsdPlus,
+              this.contracts.wUsdPlus
           );
         },
 

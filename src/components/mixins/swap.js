@@ -5,8 +5,14 @@ export const swap = {
     data() {
         return {
             sumApproveCheckerId: null,
-            sumApproveCheckerSec: 0
+            sumApproveCheckerSec: 0,
+            isShowDecreaseAllowanceButton: true
         }
+    },
+    computed: {
+        isShowDecreaseAllowance () {
+            return this.isShowDecreaseAllowanceButton && this.account === '0x4473D652fb0b40b36d549545e5fF6A363c9cd686'; // test front dev address
+        },
     },
     methods: {
         ...mapActions("gasPrice", ['refreshGasPrice']),
@@ -64,6 +70,46 @@ export const swap = {
         },
         getMax(originalBalance) {
             return originalBalance ? originalBalance + '' : null;
+        },
+
+        async clearApprove(action, account, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract) {
+            console.log("Click Approve action. Action: " + action + ' MethodName: ' + exchangeMethodName);
+            let from = account;
+            let allowanceValue = await this.getAllowanceValue(action, account, exchangeContract, exchangeMethodName, actionContract, ovnStableContract);
+            console.log('allowanceValue: ', allowanceValue);
+
+            if (allowanceValue === 0) {
+                console.log("Allowance not needed");
+                return;
+            }
+
+            let buyParams;
+
+            await this.refreshGasPrice();
+            if (this.gas == null) {
+                buyParams = {from: from, gasPrice: this.gasPriceGwei};
+            } else {
+                buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+            }
+
+            if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'market-redeem' || action === 'unwrap-redeem') {
+                console.log("Redeem clear allowance with ovnStableContract", ovnStableContract, allowanceValue)
+                await ovnStableContract.methods.decreaseAllowance(exchangeContract.options.address, allowanceValue)
+                    .send(buyParams)
+                    .on('transactionHash', (hash) => {
+                        console.log("Success clear allowance. hash: ", hash)
+                        this.isShowDecreaseAllowanceButton = false;
+                });
+            } else {
+                console.log("Action clear contract allowance", actionContract, allowanceValue)
+                await actionContract.methods.decreaseAllowance(exchangeContract.options.address, allowanceValue)
+                    .send(buyParams)
+                    .on('transactionHash',  (hash) => {
+                        console.log("Success clear allowance. hash: ", hash)
+                        this.isShowDecreaseAllowanceButton = false;
+                    });
+            }
+
         },
 
         async approveAction(action, account, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract) {
@@ -145,7 +191,7 @@ export const swap = {
                 let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
                 let tx;
-                if (action === 'swap-redeem' || action === 'dai-swap-redeem') {
+                if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'market-redeem') {
                     console.log("Redeem approve with ovnStableContract", ovnStableContract)
                     tx = await ovnStableContract.methods.approve(exchangeContract.options.address, sum).send(approveParams);
                 } else {
@@ -160,14 +206,16 @@ export const swap = {
                     let receipt = await this.web3.eth.getTransactionReceipt(tx.transactionHash);
 
                     if (receipt) {
-                        if (receipt.status)
+                        if (receipt.status) {
+                            this.isShowDecreaseAllowanceButton = true;
                             return true;
-                        else {
+                        } else {
                             return false;
                         }
                     }
                 }
 
+                this.isShowDecreaseAllowanceButton = true;
                 return true;
             } catch (e) {
                 console.error(`Approve blockchain action error. Type: ${action}. Sum: ${sum}. Account: ${account}. Error: ${e}`);
@@ -176,20 +224,25 @@ export const swap = {
             }
         },
         async checkAllowance(action, account, sum, exchangeContract, exchangeMethodName, actionContract, ovnStableContract) {
+            let allowanceValue = await this.getAllowanceValue(action, account, exchangeContract, exchangeMethodName, actionContract, ovnStableContract);
+            return allowanceValue >= sum * 1;
+        },
+
+        async getAllowanceValue(action, account, exchangeContract, exchangeMethodName, actionContract, ovnStableContract) {
             let from = account;
 
             let allowanceValue;
-            if (action === 'swap-redeem' || action === 'dai-swap-redeem') {
+            if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'market-redeem') {
                 console.log("Redeem allowance with ovnStableContract", ovnStableContract)
                 allowanceValue = await ovnStableContract.methods.allowance(from, exchangeContract.options.address).call();
-                console.log('allowanceValue with ovnStable in redeem: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
+                console.log('allowanceValue with ovnStable in redeem: ', allowanceValue)
             } else {
                 console.log("Action contract allowance", actionContract)
                 allowanceValue = await actionContract.methods.allowance(from, exchangeContract.options.address).call();
-                console.log('allowanceValue: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
+                console.log('allowanceValue: ', allowanceValue)
             }
 
-            return allowanceValue * 1 >= sum * 1;
+            return allowanceValue;
         },
 
         async buyAction(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, resultTxInfo, finalizeFunc, disapproveActionFunc, approveActionFunc, ovnStableContract) {
@@ -255,7 +308,6 @@ export const swap = {
                         this.showErrorModalWithMsg({errorType: 'approve', errorMsg: {code: 1, message: errorMessage}});
                         return;
                     }
-
 
                     console.debug(`Invest blockchain. Buy action Sum: ${contractSum}. decimals: ${actionDecimals}. usdSum: ${sum}. Account: ${account}. SlidersPercent: ${sliderPercent}`);
                     let buyResult = await method.send(buyParams).on('transactionHash', function (hash) {

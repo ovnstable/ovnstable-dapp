@@ -152,6 +152,25 @@
         </v-row>
 
         <v-row class="mt-15" align="center" justify="center">
+
+            <v-row v-if="isShowDecreaseAllowance" class="mb-2">
+                <v-col>
+                    <label
+                        @click="clearApprove(
+                            'swap-invest',
+                               account,
+                               contracts.exchange,
+                               'mint',
+                               assetContract,
+                               disapproveAsset,
+                               approveAsset
+                           )"
+                        style="cursor: pointer;">
+                        Decrease Allowance
+                    </label>
+                </v-col>
+            </v-row>
+
             <div class="action-btn-container" v-if="!this.account">
                 <v-btn class='buy enabled-buy'
                        @click="connectWallet">

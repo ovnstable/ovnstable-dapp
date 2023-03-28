@@ -17,7 +17,7 @@
 
        <div v-else>
          <PoolListHeader/>
-         <PoolListCard class="mt-2" v-for="component in sortedCardList" :card-data="component" :key="component.id"/>
+         <PoolListCard class="mt-2" v-for="component in sortedCardList.filter(value => (value.tvl > 100000))" :card-data="component" :key="component.id"/>
          <resize-observer @notify="$forceUpdate()"/>
        </div>
     </div>

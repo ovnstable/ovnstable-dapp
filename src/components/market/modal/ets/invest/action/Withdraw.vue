@@ -27,7 +27,8 @@
                                          'redeem',
                                          contracts[etsData.actionAsset],
                                          disapproveEtsToken,
-                                         approveEtsToken
+                                         approveEtsToken,
+                                         contracts[etsData.tokenContract]
                                        )">
                     </v-text-field>
                 </v-row>
@@ -158,6 +159,26 @@
 
 
         <v-row class="mt-15" align="center" justify="center">
+
+            <v-row v-if="isShowDecreaseAllowance" class="mb-2">
+                <v-col>
+                    <label
+                        @click="clearApprove(
+                            'market-redeem',
+                               account,
+                               contracts[etsData.exchangeContract],
+                               'redeem',
+                               contracts[etsData.actionAsset],
+                               disapproveEtsToken,
+                               approveEtsToken,
+                               contracts[etsData.tokenContract]
+                           )"
+                        style="cursor: pointer;">
+                        Decrease Allowance
+                    </label>
+                </v-col>
+            </v-row>
+
             <div class="action-btn-container" v-if="!this.account">
                 <v-btn class='buy enabled-buy'
                        @click="connectWallet">
@@ -184,7 +205,8 @@
                          {successAction: 'redeemEts'},
                          finalizeFunc,
                          disapproveEtsToken,
-                         approveEtsToken
+                         approveEtsToken,
+                         contracts[etsData.tokenContract]
                     )">
                   <v-progress-circular
                         v-if="transactionPending"
@@ -208,7 +230,8 @@
                          'redeem',
                          contracts[etsData.actionAsset],
                          disapproveEtsToken,
-                         approveEtsToken
+                         approveEtsToken,
+                         contracts[etsData.tokenContract]
                     )">
                   {{ buttonLabel }}
                 </v-btn>
@@ -463,7 +486,8 @@ export default {
               'redeem',
               this.contracts[this.etsData.actionAsset],
               this.disapproveEtsToken,
-              this.approveEtsToken
+              this.approveEtsToken,
+              this.contracts[this.etsData.tokenContract]
             );
 
         },

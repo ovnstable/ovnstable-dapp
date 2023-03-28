@@ -142,6 +142,19 @@
         </v-row>
 
         <v-row class="mt-15" align="center" justify="center">
+
+            <v-row v-if="isShowDecreaseAllowance" class="mb-2">
+                <v-col>
+                    <label
+                        @click="clearApprove(
+                            'insurance-invest',
+                           )"
+                        style="cursor: pointer;">
+                        Decrease Allowance
+                    </label>
+                </v-col>
+            </v-row>
+
             <div class="action-btn-container" v-if="!this.account">
                 <v-btn class='buy enabled-buy'
                        @click="connectWallet">
@@ -249,7 +262,8 @@ export default {
         step: 0,
 
         sumApproveCheckerId: null,
-        sumApproveCheckerSec: 0
+        sumApproveCheckerSec: 0,
+        isShowDecreaseAllowanceButton: true
     }),
 
     computed: {
@@ -262,6 +276,10 @@ export default {
         ...mapGetters("network", ['networkId', 'assetName', 'assetDecimals', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
+
+        isShowDecreaseAllowance () {
+            return this.isShowDecreaseAllowanceButton && this.account === '0x4473D652fb0b40b36d549545e5fF6A363c9cd686'; // test front dev address
+        },
 
         icon: function () {
             switch (this.networkId){
@@ -477,6 +495,40 @@ export default {
           return balanceElement ? balanceElement + '' : null;
         },
 
+        async clearApprove(action) {
+            try {
+
+                console.log("Click Approve action. Action: " + action);
+                let contracts = this.contracts;
+                let from = this.account;
+
+                let allowanceValue = await this.getAllowanceValue();
+                if (allowanceValue === 0) {
+                    console.log("Allowance not needed");
+                    return;
+                }
+
+                let buyParams;
+
+                await this.refreshGasPrice();
+                if (this.gas == null) {
+                    buyParams = {from: from, gasPrice: this.gasPriceGwei};
+                } else {
+                    buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+                }
+
+                console.log("Action clear contract allowance")
+                await contracts.asset.methods.decreaseAllowance( contracts.insurance.polygon_exchanger.options.address, allowanceValue)
+                    .send(buyParams)
+                    .on('transactionHash',  (hash) => {
+                        console.log("Success clear allowance. hash: ", hash)
+                        this.isShowDecreaseAllowanceButton = false;
+                    });
+            } catch (e) {
+                this.showErrorModalWithMsg({errorType: 'clear_approve', errorMsg: e});
+            }
+        },
+
         async buyAction() {
             try {
 
@@ -647,12 +699,16 @@ export default {
           }
         },
         async checkAllowance(sum) {
-          let contracts = this.contracts;
-          let from = this.account;
+            let allowanceValue = await this.getAllowanceValue()
+            return allowanceValue >= sum * 1;
+        },
+        async getAllowanceValue() {
+            let contracts = this.contracts;
+            let from = this.account;
 
-          let allowanceValue = await contracts.asset.methods.allowance(from, contracts.insurance.polygon_exchanger.options.address).call();
-          console.log('allowanceValue: ', allowanceValue, sum, allowanceValue * 1 >= sum * 1)
-          return allowanceValue * 1 >= sum * 1;
+            let allowanceValue = await contracts.asset.methods.allowance(from, contracts.insurance.polygon_exchanger.options.address).call();
+            console.log('allowanceValue: ', allowanceValue)
+            return allowanceValue;
         },
         async estimateGas(sum) {
 

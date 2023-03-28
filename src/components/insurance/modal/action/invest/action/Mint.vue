@@ -496,33 +496,37 @@ export default {
         },
 
         async clearApprove(action) {
-            console.log("Click Approve action. Action: " + action);
-            let contracts = this.contracts;
-            let from = this.account;
+            try {
 
-            let allowanceValue = await this.getAllowanceValue();
-            if (allowanceValue === 0) {
-                console.log("Allowance not needed");
-                return;
+                console.log("Click Approve action. Action: " + action);
+                let contracts = this.contracts;
+                let from = this.account;
+
+                let allowanceValue = await this.getAllowanceValue();
+                if (allowanceValue === 0) {
+                    console.log("Allowance not needed");
+                    return;
+                }
+
+                let buyParams;
+
+                await this.refreshGasPrice();
+                if (this.gas == null) {
+                    buyParams = {from: from, gasPrice: this.gasPriceGwei};
+                } else {
+                    buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+                }
+
+                console.log("Action clear contract allowance")
+                await contracts.asset.methods.decreaseAllowance( contracts.insurance.polygon_exchanger.options.address, allowanceValue)
+                    .send(buyParams)
+                    .on('transactionHash',  (hash) => {
+                        console.log("Success clear allowance. hash: ", hash)
+                        this.isShowDecreaseAllowanceButton = false;
+                    });
+            } catch (e) {
+                this.showErrorModalWithMsg({errorType: 'clear_approve', errorMsg: e});
             }
-
-            let buyParams;
-
-            await this.refreshGasPrice();
-            if (this.gas == null) {
-                buyParams = {from: from, gasPrice: this.gasPriceGwei};
-            } else {
-                buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
-            }
-
-            console.log("Action clear contract allowance")
-            await contracts.asset.methods.decreaseAllowance( contracts.insurance.polygon_exchanger.options.address, allowanceValue)
-                .send(buyParams)
-                .on('transactionHash',  (hash) => {
-                    console.log("Success clear allowance. hash: ", hash)
-                    this.isShowDecreaseAllowanceButton = false;
-                });
-
         },
 
         async buyAction() {

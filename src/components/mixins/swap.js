@@ -73,43 +73,47 @@ export const swap = {
         },
 
         async clearApprove(action, account, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract) {
-            console.log("Click Approve action. Action: " + action + ' MethodName: ' + exchangeMethodName);
-            let from = account;
-            let allowanceValue = await this.getAllowanceValue(action, account, exchangeContract, exchangeMethodName, actionContract, ovnStableContract);
-            console.log('allowanceValue: ', allowanceValue);
+            try {
+                console.log("Click Approve action. Action: " + action + ' MethodName: ' + exchangeMethodName);
+                let from = account;
+                let allowanceValue = await this.getAllowanceValue(action, account, exchangeContract, exchangeMethodName, actionContract, ovnStableContract);
+                console.log('allowanceValue: ', allowanceValue);
 
-            if (allowanceValue === 0) {
-                console.log("Allowance not needed");
-                return;
+                if (allowanceValue === 0) {
+                    console.log("Allowance not needed");
+                    return;
+                }
+
+                let buyParams;
+
+                await this.refreshGasPrice();
+                if (this.gas == null) {
+                    buyParams = {from: from, gasPrice: this.gasPriceGwei};
+                } else {
+                    buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
+                }
+
+                if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'market-redeem' || action === 'unwrap-redeem') {
+                    console.log("Redeem clear allowance with ovnStableContract", ovnStableContract, allowanceValue)
+                    await ovnStableContract.methods.decreaseAllowance(exchangeContract.options.address, allowanceValue)
+                        .send(buyParams)
+                        .on('transactionHash', (hash) => {
+                            console.log("Success clear allowance. hash: ", hash)
+                            this.isShowDecreaseAllowanceButton = false;
+                        });
+                } else {
+                    console.log("Action clear contract allowance", actionContract, allowanceValue)
+                    await actionContract.methods.decreaseAllowance(exchangeContract.options.address, allowanceValue)
+                        .send(buyParams)
+                        .on('transactionHash',  (hash) => {
+                            console.log("Success clear allowance. hash: ", hash)
+                            this.isShowDecreaseAllowanceButton = false;
+                        });
+                }
+            } catch (e) {
+                this.showErrorModalWithMsg({errorType: 'clear_approve', errorMsg: e});
+
             }
-
-            let buyParams;
-
-            await this.refreshGasPrice();
-            if (this.gas == null) {
-                buyParams = {from: from, gasPrice: this.gasPriceGwei};
-            } else {
-                buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
-            }
-
-            if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'market-redeem' || action === 'unwrap-redeem') {
-                console.log("Redeem clear allowance with ovnStableContract", ovnStableContract, allowanceValue)
-                await ovnStableContract.methods.decreaseAllowance(exchangeContract.options.address, allowanceValue)
-                    .send(buyParams)
-                    .on('transactionHash', (hash) => {
-                        console.log("Success clear allowance. hash: ", hash)
-                        this.isShowDecreaseAllowanceButton = false;
-                });
-            } else {
-                console.log("Action clear contract allowance", actionContract, allowanceValue)
-                await actionContract.methods.decreaseAllowance(exchangeContract.options.address, allowanceValue)
-                    .send(buyParams)
-                    .on('transactionHash',  (hash) => {
-                        console.log("Success clear allowance. hash: ", hash)
-                        this.isShowDecreaseAllowanceButton = false;
-                    });
-            }
-
         },
 
         async approveAction(action, account, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract) {

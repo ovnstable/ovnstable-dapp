@@ -9,6 +9,12 @@
 
             <v-spacer></v-spacer>
 
+            <v-btn class="pr-10">
+                <label @click="connectToArgent">
+                    argent
+                </label>
+            </v-btn>
+
             <template v-if="!loadingWeb3">
                 <template v-if="walletConnected">
                     <v-btn v-if="switchToOtherNetwork" :class="$wu.isMobile() ? 'mr-2' : ''" class="header-btn btn-filled mt-1" v-on:click="switchToNetwork">
@@ -71,6 +77,8 @@ import RedemptionRequestSuccessModal
     from "@/components/insurance/modal/action/redemption-request/RedemptionRequestSuccessModal";
 import InsuranceInvestModal from "@/components/insurance/modal/action/invest/InsuranceInvestModal";
 
+// import { getEthereumProvider } from "@argent/login";
+
 export default {
     name: 'Header',
 
@@ -110,6 +118,23 @@ export default {
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('transaction', ['loadTransaction']),
+
+        // async connectToArgent() {
+        //
+        //     const ethereumProvider = await getEthereumProvider({
+        //         chainId: 280,
+        //         rpcUrl: "https://zksync2-testnet.zksync.dev",
+        //         walletConnect: {
+        //             metadata: {
+        //                 name: "Cool dapp",
+        //                 description: "Description of a cool dapp",
+        //                 url: "https://example.com",
+        //                 icons: ["https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon.png?v=c78bd457575a"]
+        //             }
+        //         }
+        //     });
+        //     await ethereumProvider.enable();
+        // },
 
         switchToNetwork() {
             this.setWalletNetwork(this.networkId.toString());

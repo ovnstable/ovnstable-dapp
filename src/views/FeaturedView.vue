@@ -6,6 +6,7 @@
         <v-row v-if="isAllDataLoaded && !isResorting" align="center" justify="start" class="ma-0 toggle-row mt-10">
             <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
             <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+            <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
             <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
             <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
         </v-row>
@@ -88,7 +89,7 @@ export default {
     }),
 
   computed: {
-    ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'switchToOtherNetwork', 'getParams']),
+    ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig', 'switchToOtherNetwork', 'getParams']),
     ...mapGetters('accountData', ['account']),
     ...mapGetters('web3', ['contracts', 'web3']),
     // ...mapGetters('supplyData', ['totalSupply', 'totalInsuranceSupply']),
@@ -120,6 +121,13 @@ export default {
       return {
           'tab-button': this.tab === 'arbitrum',
           'tab-button-in-active': this.tab !== 'arbitrum',
+      }
+    },
+
+    activeTabZkSync: function() {
+      return {
+          'tab-button': this.tab === 'zksync',
+          'tab-button-in-active': this.tab !== 'zksync',
       }
     },
 
@@ -190,6 +198,11 @@ export default {
 
       if (this.$route.query.tabName === 'polygon') {
         this.setTab('polygon');
+        return
+      }
+
+      if (this.$route.query.tabName === 'zksync') {
+        this.setTab('zksync');
         return
       }
     },
@@ -347,6 +360,9 @@ export default {
               case 42161:
                 appApiUrl = this.arConfig.appApiUrl;
                 break;
+              case 324:
+                appApiUrl = this.zkConfig.appApiUrl;
+                break;
               default:
                 appApiUrl = this.polygonConfig.appApiUrl;
                 break;
@@ -491,6 +507,9 @@ export default {
               case 42161:
                 appApiUrl = this.arConfig.appApiUrl;
                 break;
+              case 324:
+                appApiUrl = this.zkConfig.appApiUrl;
+                break;
               default:
                 appApiUrl = this.polygonConfig.appApiUrl;
                 break;
@@ -524,7 +543,7 @@ export default {
       this.isUsdPlusPayoutsDataLoading = true;
 
       await Promise.all(
-          ['polygon', 'bsc', 'optimism', 'arbitrum'].map(async network => {
+          ['polygon', 'bsc', 'optimism', 'arbitrum', 'zksync'].map(async network => {
 
             let appApiUrl;
 
@@ -540,6 +559,9 @@ export default {
                 break;
               case "arbitrum":
                 appApiUrl = this.arConfig.appApiUrl;
+                break;
+              case "zksync":
+                appApiUrl = this.zkConfig.appApiUrl;
                 break;
             }
 

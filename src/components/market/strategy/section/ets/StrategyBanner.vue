@@ -135,6 +135,7 @@ import Tooltip from "@/components/common/element/Tooltip";
 import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import arbitrumIcon from "@/assets/network/ar.svg";
+import zksyncIcon from "@/assets/network/zk.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 
 export default {
@@ -165,6 +166,8 @@ export default {
                     return bscIcon;
                 case 42161:
                     return arbitrumIcon;
+                case 324:
+                    return zksyncIcon;
             }
         },
 

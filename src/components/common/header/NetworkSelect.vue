@@ -42,6 +42,16 @@
                     Arbitrum
                 </v-list-item-title>
             </v-list-item>
+            <v-list-item style="cursor: pointer" @click="setWalletNetwork('324')">
+                <v-list-item-avatar>
+                    <div class="list-item-icon">
+                        <v-img :src="require('@/assets/network/zk.svg')"/>
+                    </div>
+                </v-list-item-avatar>
+                <v-list-item-title class="network-select-list-item">
+                    ZkSync
+                </v-list-item-title>
+            </v-list-item>
             <v-list-item style="cursor: pointer" @click="setWalletNetwork('137')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
@@ -86,6 +96,7 @@ let polygonIcon = require('@/assets/network/polygon.svg');
 let bscIcon = require('@/assets/network/bsc.svg');
 let optimismIcon = require('@/assets/network/op.svg');
 let arbitrumIcon = require('@/assets/network/ar.svg');
+let zksyncIcon = require('@/assets/network/zk.svg');
 
 export default {
     name: "NetworkSelect",
@@ -111,6 +122,8 @@ export default {
                     return optimismIcon;
                 case 42161:
                     return arbitrumIcon;
+                case 324:
+                    return zksyncIcon;
             }
         },
 

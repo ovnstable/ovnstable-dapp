@@ -153,7 +153,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig']),
+    ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig']),
     ...mapGetters('accountData', ['account']),
     ...mapGetters('web3', ['contracts', 'web3']),
     ...mapGetters('etsAction', ['etsList']),
@@ -336,6 +336,9 @@ export default {
                 break;
               case 42161:
                 appApiUrl = this.arConfig.appApiUrl;
+                break;
+              case 324:
+                appApiUrl = this.zkConfig.appApiUrl;
                 break;
               default:
                 appApiUrl = this.polygonConfig.appApiUrl;

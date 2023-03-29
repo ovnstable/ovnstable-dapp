@@ -70,6 +70,9 @@ const actions = {
                     case 42161:
                         appApiUrl = rootState.network.arApi;
                         break;
+                    case 324:
+                        appApiUrl = rootState.network.zkApi;
+                        break;
                     default:
                         appApiUrl = rootState.network.polygonApi;
                         break;
@@ -269,6 +272,9 @@ const actions = {
                     case 42161:
                         appApiUrl = rootState.network.arApi;
                         break;
+                    case 324:
+                        appApiUrl = rootState.network.zkApi;
+                        break;
                     default:
                         appApiUrl = rootState.network.polygonApi;
                         break;
@@ -300,7 +306,7 @@ const actions = {
         console.log('MarketData: refreshUsdPlusPayoutsData');
 
         await Promise.all(
-            ['polygon', 'bsc', 'optimism', 'arbitrum'].map(async network => {
+            ['polygon', 'bsc', 'optimism', 'arbitrum', 'zksync'].map(async network => {
 
                 let appApiUrl;
 
@@ -316,6 +322,9 @@ const actions = {
                         break;
                     case "arbitrum":
                         appApiUrl = rootState.network.arApi;
+                        break;
+                    case "zksync":
+                        appApiUrl = rootState.network.zkApi;
                         break;
                 }
 

@@ -47,7 +47,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig']),
+        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig']),
     },
 
     created() {
@@ -73,7 +73,7 @@ export default {
         this.isPoolsLoading = true;
 
         this.pools = [];
-        let networkConfigList = [this.opConfig, this.polygonConfig, this.bscConfig, this.arConfig];
+        let networkConfigList = [this.opConfig, this.polygonConfig, this.bscConfig, this.arConfig, this.zkConfig];
 
         for (let networkConfig of networkConfigList) {
           await poolApiService.getAllPools(networkConfig.appApiUrl)

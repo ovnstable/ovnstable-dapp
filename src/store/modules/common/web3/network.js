@@ -46,6 +46,19 @@ const ARBITRUM_PARAMS = {
     bridgeLink: 'https://router.via.exchange/arbitrum/USD+/bsc/USD+',
 }
 
+const ZKSYNC_PARAMS = {
+    // appApiUrl: 'https://zksync.overnight.fi/api',
+    appApiUrl: 'https://arbitrum.overnight.fi/api',
+    networkName: 'zksync',
+    networkId: 324,
+    rpcUrl: 'https://mainnet.era.zksync.io',
+    explorerUrl: 'https://explorer.zksync.io',
+    assetName: 'USDC',
+    assetDecimals: 6,
+    nativeAssetName: 'ETH',
+    bridgeLink: 'https://router.via.exchange/zksync/USD+/bsc/USD+',
+}
+
 let dbNetworkName = localStorage.getItem('selectedNetwork');
 const state = {
     appApiUrl: _getParams(dbNetworkName).appApiUrl,
@@ -63,11 +76,13 @@ const state = {
     bscApi: BSC_PARAMS.appApiUrl,
     opApi: OPTIMISM_PARAMS.appApiUrl,
     arApi: ARBITRUM_PARAMS.appApiUrl,
+    zkApi: ZKSYNC_PARAMS.appApiUrl,
 
     polygonConfig: POLYGON_PARAMS,
     bscConfig: BSC_PARAMS,
     opConfig: OPTIMISM_PARAMS,
     arConfig: ARBITRUM_PARAMS,
+    zkConfig: ZKSYNC_PARAMS,
 
     switchToOtherNetwork: false,
 };
@@ -91,6 +106,10 @@ function _getParams(networkName) {
         case "arbitrum":
         case "42161":
             return ARBITRUM_PARAMS;
+        case "zk":
+        case "zksync":
+        case "324":
+            return ZKSYNC_PARAMS;
         default:
             return OPTIMISM_PARAMS; //BASE_PARAMS;
     }
@@ -174,6 +193,10 @@ const getters = {
         return state.arConfig;
     },
 
+    zkConfig(state) {
+        return state.zkConfig;
+    },
+
     getParams: (state) => (networkName) => {
         return _getParams(networkName);
     }
@@ -219,6 +242,11 @@ const actions = {
             case "arbitrum":
             case "42161":
                 localStorage.setItem('selectedNetwork', 'ar');
+                break;
+            case "zk":
+            case "zksync":
+            case "324":
+                localStorage.setItem('selectedNetwork', 'zk');
                 break;
             default:
                 localStorage.setItem('selectedNetwork', 'op');
@@ -296,6 +324,21 @@ const actions = {
                                 rpcUrls: ['https://arb1.arbitrum.io/rpc'],
                                 blockExplorerUrls: ['https://arbiscan.io/'],
                                 chainName: 'Arbitrum',
+                                nativeCurrency: {
+                                    symbol: 'ETH',
+                                    name: 'ETH',
+                                    decimals: 18,
+                                }
+                            };
+                            break;
+                        case "zk":
+                        case "zksync":
+                        case "324":
+                            params = {
+                                chainId: rootState.web3.web3.utils.toHex(324),
+                                rpcUrls: ['https://mainnet.era.zksync.io'],
+                                blockExplorerUrls: ['https://explorer.zksync.io'],
+                                chainName: 'ZkSync',
                                 nativeCurrency: {
                                     symbol: 'ETH',
                                     name: 'ETH',

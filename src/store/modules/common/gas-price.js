@@ -64,7 +64,7 @@ const actions = {
             url = "https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
         else if(networkId === 56)
             url = "https://gbsc.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
-        else if (networkId === 10 || networkId === 42161){
+        else if (networkId === 10 || networkId === 42161 || networkId === 324){
 
             let gasPriceWei;
             let gasPriceGwei;

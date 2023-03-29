@@ -120,7 +120,7 @@ export default {
     },
 
     computed: {
-      ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig']),
+      ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig']),
       ...mapGetters('accountData', ['account']),
       ...mapGetters('web3', ['contracts', 'web3']),
 
@@ -197,6 +197,7 @@ export default {
         this.refreshUsdPlusPayoutsData("bsc");
         this.refreshUsdPlusPayoutsData("optimism");
         this.refreshUsdPlusPayoutsData("arbitrum");
+        this.refreshUsdPlusPayoutsData("zksync");
       },
 
       async refreshStrategyData(refreshParams) {
@@ -216,6 +217,9 @@ export default {
             break;
           case 42161:
             appApiUrl = this.arConfig.appApiUrl;
+            break;
+          case 324:
+            appApiUrl = this.zkConfig.appApiUrl;
             break;
           default:
             appApiUrl = this.polygonConfig.appApiUrl;
@@ -400,6 +404,9 @@ export default {
           case 42161:
             appApiUrl = this.arConfig.appApiUrl;
             break;
+          case 324:
+            appApiUrl = this.zkConfig.appApiUrl;
+            break;
           default:
             appApiUrl = this.polygonConfig.appApiUrl;
             break;
@@ -452,6 +459,9 @@ export default {
             break;
           case "arbitrum":
             appApiUrl = this.arConfig.appApiUrl;
+            break;
+          case "zksync":
+            appApiUrl = this.zkConfig.appApiUrl;
             break;
         }
 

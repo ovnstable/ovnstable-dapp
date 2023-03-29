@@ -62,6 +62,7 @@ const actions = {
         dispatch('refreshUsdPlusPayoutsData', "bsc");
         dispatch('refreshUsdPlusPayoutsData', "optimism");
         dispatch('refreshUsdPlusPayoutsData', "arbitrum");
+        dispatch('refreshUsdPlusPayoutsData', "zksync");
 
         dispatch('accountData/refreshBalance', null, {root:true});
         dispatch('supplyData/refreshInsuranceSupply', null, {root:true});
@@ -82,6 +83,9 @@ const actions = {
                 break;
             case 42161:
                 appApiUrl = rootState.network.arApi;
+                break;
+            case 324:
+                appApiUrl = rootState.network.zkApi;
                 break;
             default:
                 appApiUrl = rootState.network.polygonApi;
@@ -210,6 +214,9 @@ const actions = {
             case 42161:
                 appApiUrl = rootState.network.arApi;
                 break;
+            case 324:
+                appApiUrl = rootState.network.zkApi;
+                break;
             default:
                 appApiUrl = rootState.network.polygonApi;
                 break;
@@ -257,6 +264,9 @@ const actions = {
                 break;
             case "arbitrum":
                 appApiUrl = rootState.network.arApi;
+                break;
+            case "zksync":
+                appApiUrl = rootState.network.zkApi;
                 break;
         }
 

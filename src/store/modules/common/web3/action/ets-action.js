@@ -4,6 +4,7 @@ const state = {
     etsNetworkNames: [
         'optimism',
         'arbitrum',
+        'zksync',
         'polygon',
         'bsc'
     ],

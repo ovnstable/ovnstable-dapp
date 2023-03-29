@@ -4,21 +4,38 @@
             <label class="title-label">usd+ Performance</label>
         </div>
 
-        <v-row v-if="isDataLoaded" align="center" justify="start" class="ma-0 toggle-row mt-10">
-            <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
-            <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
-            <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
-            <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
+        <v-row v-if="isDataLoaded" align="center" justify="start">
+            <template v-if="$wu.isMobile()">
+                <v-col cols="12" align="center" class="mt-10">
+                    <v-btn  class="header-btn btn-filled mr-5" @click="mintAction">
+                        Mint USD+
+                    </v-btn>
+                    <v-btn class="header-btn btn-outlined mr-5" @click="redeemAction">
+                        Redeem USD+
+                    </v-btn>
+                </v-col>
+            </template>
+            <v-col cols="6">
+                <v-row class="ma-0 mt-10 ml-3 toggle-row">
+                    <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
+                    <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+                    <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
+                    <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
+                </v-row>
+            </v-col>
+            <template v-if="!$wu.isMobile()">
+                <v-col align="end" cols="6" class="mt-5">
+                    <v-btn  class="header-btn btn-filled mr-5 mx-15" @click="mintAction">
+                        Mint USD+
+                    </v-btn>
+                    <v-btn class="header-btn btn-outlined mr-5" @click="redeemAction">
+                        Redeem USD+
+                    </v-btn>
+                </v-col>
+            </template>
         </v-row>
 
-        <v-row v-if="isDataLoaded" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 mr-4 justify-end'">
-            <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                Mint USD+
-            </v-btn>
-            <v-btn class="header-btn btn-outlined" @click="redeemAction">
-                Redeem USD+
-            </v-btn>
-        </v-row>
+
 
       <v-row v-if="!isDataLoaded">
         <v-row align="center" justify="center" class="py-15">
@@ -196,9 +213,7 @@ export default {
     },
 
     watch: {
-        activeTabName() {
-            this.initTab();
-        },
+
     },
 
     created() {
@@ -206,8 +221,8 @@ export default {
     },
 
     mounted() {
-        console.log(this.$route.query.tabName);
-        this.initTab();
+        console.log('Tab Name: ', this.$route.query.tabName);
+        this.setTab('optimism');
         this.loadData();
     },
 
@@ -216,30 +231,27 @@ export default {
 
         setTab(tabName) {
             this.tab = tabName;
+            if (this.tab === 'optimism') {
+                this.initTabName('/stats', {tabName: 'optimism'});
+            }
+            if (this.tab === 'arbitrum') {
+                this.initTabName('/stats', {tabName: 'arbitrum'});
+            }
+            if (this.tab === 'bsc') {
+                this.initTabName('/stats', {tabName: 'bsc'});
+            }
+            if (this.tab === 'polygon') {
+                this.initTabName('/stats', {tabName: 'polygon'});
+            }
             this.loadData();
             console.log("NetworkParams : ", this.getParams(this.tab));
         },
 
-        initTab() {
-            if (this.$route.query.tabName === 'optimism') {
-                this.setTab('optimism');
-                return
-            }
-
-            if (this.$route.query.tabName === 'arbitrum') {
-                this.setTab('arbitrum');
-                return
-            }
-
-            if (this.$route.query.tabName === 'bsc') {
-                this.setTab('bsc');
-                return
-            }
-
-            if (this.$route.query.tabName === 'polygon') {
-                this.setTab('polygon');
-                return
-            }
+        initTabName(path, queryParams) {
+            this.$router.push({
+                path: path,
+                query: queryParams ? queryParams : {}
+            });
         },
 
         openLink(url) {
@@ -377,13 +389,17 @@ export default {
     .header-btn {
         font-style: normal !important;
         font-weight: 400 !important;
-        font-size: 16px !important;
+        font-size: 15px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
 
     .btn-filled, .btn-outlined {
         width: 40% !important;
+    }
+
+    .toggle-row {
+        width: 100% !important;
     }
 }
 
@@ -556,6 +572,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .toggle-row {
     border-bottom: 2px solid var(--main-border);
+    width: 200% !important;
 }
 
 .title-label {

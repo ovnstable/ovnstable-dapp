@@ -10,7 +10,7 @@ module.exports = {
             brotli: {
                 filename: '[file].br[query]',
                 algorithm: 'brotliCompress',
-                include: /\.(js|css|html|svg|json)(\?.*)?$/i,
+                include: /\.(js|css|html|svg|json|map)(\?.*)?$/i,
                 compressionOptions: {
                     params: {
                         [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
@@ -21,7 +21,7 @@ module.exports = {
             gzip: {
                 filename: '[file].gz[query]',
                 algorithm: 'gzip',
-                include: /\.(js|css|html|svg|json)(\?.*)?$/i,
+                include: /\.(js|css|html|svg|json|map)(\?.*)?$/i,
                 minRatio: 0.8,
             }
         }
@@ -34,6 +34,23 @@ module.exports = {
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
             }
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    exclude: /node_modules/,
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                },
+                {
+                    test: /\.js\.map$/,
+                    loader: 'source-map-loader',
+                    enforce: 'pre',
+                },
+            ]
         }
     },
 

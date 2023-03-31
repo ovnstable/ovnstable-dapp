@@ -133,34 +133,6 @@ export default {
 
             }
             window.open(url + `tx/${item.transactionHash}`, '_blank').focus();
-
-
-            /*switch (this.opConfig.explorerUrl) {
-                case this.opConfig.explorerUrl === this.networkId:
-                case this.opConfig.explorerUrl !== this.networkId:
-                    window.open(url + `tx/${item.transactionHash}`, '_blank').focus();
-                    break
-            }
-
-            switch (this.arConfig.explorerUrl) {
-                case this.opConfig.explorerUrl === this.networkId:
-                case this.opConfig.explorerUrl !== this.networkId:
-                    window.open(url + `tx/${item.transactionHash}`, '_blank').focus();
-                    break
-            }
-
-            switch (this.bscConfig.explorerUrl) {
-                case this.bscConfig.explorerUrl === this.networkId:
-                case this.bscConfig.explorerUrl !== this.networkId:
-                    window.open(url + `tx/${item.transactionHash}`, '_blank').focus();
-            }
-
-            switch (this.polygonConfig.explorerUrl) {
-                case this.polygonConfig.explorerUrl === this.networkId:
-                case this.polygonConfig.explorerUrl !== this.networkId:
-                    window.open(url + `tx/${item.transactionHash}`, '_blank').focus();
-                break
-            }*/
         },
 
         formatDate(date) {

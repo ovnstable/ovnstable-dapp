@@ -210,13 +210,6 @@ export default {
         ...mapGetters("network", ['appApiUrl', 'getParams']),
         ...mapGetters("web3", ['contracts']),
 
-        tabNetworkId: function() {
-            let params;
-            params = this.getParams(this.tab)
-
-            return params.networkId;
-        },
-
         tabApiUrl: function() {
             let params;
             params = this.getParams(this.tab)
@@ -254,11 +247,7 @@ export default {
     },
 
     watch: {
-/*        tabNetworkId: function (newValue, oldValue) {
-            if (newValue !== 10) {
-                this.tab = 'optimism';
-            }
-        },*/
+
     },
 
     mounted() {
@@ -279,15 +268,19 @@ export default {
             if (this.tab === 'optimism') {
                 this.initTabName('/collateral', {tabName: 'optimism'});
             }
+
             if (this.tab === 'arbitrum') {
                 this.initTabName('/collateral', {tabName: 'arbitrum'});
             }
+
             if (this.tab === 'bsc') {
                 this.initTabName('/collateral', {tabName: 'bsc'});
             }
+
             if (this.tab === 'polygon') {
                 this.initTabName('/collateral', {tabName: 'polygon'});
             }
+
             this.loadData();
             console.log("NetworkParams : ", this.getParams(this.tab));
         },

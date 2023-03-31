@@ -279,18 +279,6 @@ export default {
       etsData: {
           type: Object,
       },
-      // etsStrategyData: {
-      //     type: Object
-      // },
-      // etsApyData: {
-      //     type: Object
-      // },
-      // etsTvlData: {
-      //     type: Object
-      // },
-      // usdPlusApyData: {
-      //     type: Object
-      // },
     },
 
     watch: {

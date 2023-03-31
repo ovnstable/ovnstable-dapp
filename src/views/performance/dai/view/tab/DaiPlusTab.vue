@@ -266,9 +266,11 @@ export default {
             if (this.tab === 'optimism') {
                 this.initTabName('/collateral/dai', {tabName: 'optimism'});
             }
+
             if (this.tab === 'arbitrum') {
                 this.initTabName('/collateral/dai', {tabName: 'arbitrum'});
             }
+
             this.loadCurrentTotalData()
             this.loadCollateralData()
             console.log("NetworkParams : ", this.getParams(this.tab));

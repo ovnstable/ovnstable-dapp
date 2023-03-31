@@ -283,9 +283,11 @@ export default {
             if (this.tab === 'optimism') {
                 this.initTabName('/stats/dai', {tabName: 'optimism'});
             }
+
             if (this.tab === 'arbitrum') {
                 this.initTabName('/stats/dai', {tabName: 'arbitrum'});
             }
+
             this.loadData();
             console.log("NetworkParams : ", this.getParams(this.tab));
         },

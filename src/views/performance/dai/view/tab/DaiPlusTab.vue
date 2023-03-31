@@ -2,15 +2,36 @@
     <div class="page-container">
 
         <div v-if="!isCollateralLoading">
-            <v-row v-if="networkId === 10 || networkId === 42161" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 justify-end'">
-                <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                    Mint DAI+
-                </v-btn>
-                <v-btn class="header-btn btn-outlined" @click="redeemAction">
-                    Redeem DAI+
-                </v-btn>
+            <v-row v-if="networkId === 10 || networkId === 42161">
+                <template v-if="$wu.isMobile()">
+                    <v-col cols="12" align="center" class="mt-5">
+                        <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
+                            Mint DAI+
+                        </v-btn>
+                        <v-btn class="header-btn btn-outlined" @click="redeemAction">
+                            Redeem DAI+
+                        </v-btn>
+                    </v-col>
+                </template>
+                <v-col cols="6">
+                    <v-row class="ma-0 mt-10 toggle-row">
+                        <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
+                        <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+                    </v-row>
+                </v-col>
+                <template v-if="!$wu.isMobile()">
+                    <v-col align="end" cols="6" class="mt-6">
+                        <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
+                            Mint DAI+
+                        </v-btn>
+                        <v-btn class="header-btn btn-outlined mr-3" @click="redeemAction">
+                            Redeem DAI+
+                        </v-btn>
+                    </v-col>
+                </template>
             </v-row>
         </div>
+
 
         <v-row v-if="isCollateralLoading">
           <v-row align="center" justify="center" class="py-15">
@@ -34,16 +55,24 @@
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
                         <TableStablecoins
                             v-if="!$wu.isMobile()"
-                            :data="collateralData"/>
+                            :data="collateralData"
+                            :network-name="tab"
+                        />
 
                         <TableStablecoins
                             v-else
                             minimized
-                            :data="collateralData"/>
+                            :data="collateralData"
+                            :network-name="tab"
+                        />
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <PieStablecoins :data="collateralData" :size="!$wu.isFull() ? 200 : 300"/>
+                        <PieStablecoins
+                            :data="collateralData"
+                            :size="!$wu.isFull() ? 200 : 300"
+                            :network-name="tab"
+                        />
                     </v-col>
                 </v-row>
             </v-col>
@@ -74,7 +103,9 @@
                             :data="currentTotalData"
                             asset-type="DAI"
                             total-title="Total DAI+ in circulation"
-                            :total-supply="totalValue"/>
+                            :total-supply="totalValue"
+                            :network-name="tab"
+                        />
 
                         <TableStrategies
                             v-else
@@ -82,11 +113,18 @@
                             :data="currentTotalData"
                             asset-type="DAI"
                             total-title="Total DAI+ in circulation"
-                            :total-supply="totalValue"/>
+                            :total-supply="totalValue"
+                            :network-name="tab"
+                        />
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <DoughnutStrategies :data="currentTotalData" :total-value="totalValue" :size="!$wu.isFull() ? 200 : 300"/>
+                        <DoughnutStrategies
+                            :data="currentTotalData"
+                            :total-value="totalValue"
+                            :size="!$wu.isFull() ? 200 : 300"
+                            :network-name="tab"
+                        />
                     </v-col>
                 </v-row>
             </v-col>
@@ -146,7 +184,9 @@ export default {
         PieStablecoins,
         TableStablecoins
     },
+
     data: () => ({
+      tab: 'optimism',
       isCurrentTotalDataLoading: true,
       isCollateralLoading: true,
 
@@ -156,13 +196,35 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("network", ['networkId', 'networkName', 'apiUrl']),
+        ...mapGetters("network", ['networkId', 'networkName', 'apiUrl', 'getParams']),
+
+        tabNetworkName: function() {
+            let params;
+            params = this.getParams(this.tab)
+
+            return params.networkName;
+        },
+
+        activeTabOptimism: function() {
+            return {
+                'tab-button': this.tab === 'optimism',
+                'tab-button-in-active': this.tab !== 'optimism',
+            }
+        },
+
+        activeTabArbitrum: function() {
+            return {
+                'tab-button': this.tab === 'arbitrum',
+                'tab-button-in-active': this.tab !== 'arbitrum',
+            }
+        },
+
         explorerLink: function () {
-          if (this.networkId === 10) {
+          if (this.tabNetworkName === 'optimism') {
             return 'https://optimistic.etherscan.io/address/0x970d50d09f3a656b43e11b0d45241a84e3a6e011'
           }
 
-          if (this.networkId === 42161) {
+          if (this.tabNetworkName === 'arbitrum') {
             return 'https://arbiscan.io/token/0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
           }
 
@@ -171,11 +233,11 @@ export default {
         },
 
         contractAddress: function () {
-          if (this.networkId === 10) {
+          if (this.tabNetworkName === 'optimism') {
             return '0x970D50d09F3a656b43E11B0D45241a84e3a6e011'
           }
 
-          if (this.networkId === 42161) {
+          if (this.tabNetworkName === 'arbitrum') {
             return '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
           }
 
@@ -185,25 +247,39 @@ export default {
     },
 
     watch: {
-      networkId: function (newValue, oldValue) {
-        if (newValue) {
-          this.loadCurrentTotalData()
-          this.loadCollateralData()
-        }
-      }
     },
 
     created() {
     },
 
     mounted() {
-      this.loadCurrentTotalData()
-      this.loadCollateralData()
+      console.log('Tab Name: ', this.$route.query.tabName);
+      this.setTab('optimism');
     },
 
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView', 'showDaiRedeemView']),
+
+        setTab(tabName) {
+            this.tab = tabName;
+            if (this.tab === 'optimism') {
+                this.initTabName('/collateral/dai', {tabName: 'optimism'});
+            }
+            if (this.tab === 'arbitrum') {
+                this.initTabName('/collateral/dai', {tabName: 'arbitrum'});
+            }
+            this.loadCurrentTotalData()
+            this.loadCollateralData()
+            console.log("NetworkParams : ", this.getParams(this.tab));
+        },
+
+        initTabName(path, queryParams) {
+            this.$router.push({
+                path: path,
+                query: queryParams ? queryParams : {}
+            });
+        },
 
         mintAction() {
             this.showDaiMintView();
@@ -226,10 +302,11 @@ export default {
               return null;
           }
       },
+
       loadCurrentTotalData() {
         this.isCurrentTotalDataLoading = true;
 
-        strategiesApiService.getStrategies(this.apiUrl + `/${this.networkName}/dai+`)
+        strategiesApiService.getStrategies(this.apiUrl + `/${this.tabNetworkName}/dai+`)
           .then(data => {
             let strategies = data;
             strategies.sort((a,b) => b.netAssetValue - a.netAssetValue);
@@ -278,7 +355,7 @@ export default {
       loadCollateralData() {
           this.isCollateralLoading = true;
 
-        collateralApiService.getCollateralData(this.apiUrl + `/${this.networkName}/dai+`)
+        collateralApiService.getCollateralData(this.apiUrl + `/${this.tabNetworkName}/dai+`)
         .then(data => {
           let stablecoinList = data;
           stablecoinList.sort((a,b) => b.netAssetValue - a.netAssetValue);
@@ -382,6 +459,16 @@ export default {
         width: 40% !important;
     }
 
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .toggle-row {
+        width: 100% !important;
+    }
 }
 
 /* tablet */
@@ -432,6 +519,12 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+    }
 }
 
 /* full */
@@ -480,6 +573,13 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
     }
 }
 
@@ -538,6 +638,13 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-size: 15px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
     }
 }
 
@@ -622,4 +729,31 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     height: 40px;
 }
 
+.tab-btn {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: var(--secondary-gray-text);
+    margin-bottom: -2px;
+    cursor: pointer;
+}
+
+.tab-btn-disabled {
+    cursor: default;
+}
+
+.tab-button {
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
+    cursor: pointer !important;
+}
+
+.tab-button-in-active {
+    color: var(--secondary-gray-text) !important;
+    cursor: pointer !important;
+}
+
+.toggle-row {
+    border-bottom: 2px solid var(--main-border);
+    width: 203% !important;
+}
 </style>

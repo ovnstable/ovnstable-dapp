@@ -28,7 +28,7 @@
                     <v-btn  class="header-btn btn-filled mr-5 mx-15" @click="mintAction">
                         Mint USD+
                     </v-btn>
-                    <v-btn class="header-btn btn-outlined mr-5" @click="redeemAction">
+                    <v-btn class="header-btn btn-outlined mr-3" @click="redeemAction">
                         Redeem USD+
                     </v-btn>
                 </v-col>

@@ -42,17 +42,6 @@
                     Arbitrum
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item style="cursor: pointer" @click="setWalletNetwork('137')">
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img :src="require('@/assets/network/polygon.svg')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item">
-                    Polygon
-                    <v-icon class="mb-5" small color="var(--secondary-gray-text)"></v-icon>
-                </v-list-item-title>
-            </v-list-item>
             <v-list-item style="cursor: pointer" @click="setWalletNetwork('56')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
@@ -61,6 +50,17 @@
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item">
                     BSC
+                    <v-icon class="mb-5" small color="var(--secondary-gray-text)"></v-icon>
+                </v-list-item-title>
+            </v-list-item>
+            <v-list-item style="cursor: pointer" @click="setWalletNetwork('137')">
+                <v-list-item-avatar>
+                    <div class="list-item-icon">
+                        <v-img :src="require('@/assets/network/polygon.svg')"/>
+                    </div>
+                </v-list-item-avatar>
+                <v-list-item-title class="network-select-list-item">
+                    Polygon
                     <v-icon class="mb-5" small color="var(--secondary-gray-text)"></v-icon>
                 </v-list-item-title>
             </v-list-item>

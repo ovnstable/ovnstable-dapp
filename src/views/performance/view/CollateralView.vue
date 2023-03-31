@@ -132,7 +132,7 @@
 
         <v-row v-if="!isCurrentTotalDataLoading" class=" ma-0 mt-3">
             <v-col class="currency-box" :cols="$wu.isFull() ? 6 : 12" :class="$wu.isFull() ? 'mr-1' : ''">
-                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openLink('https://optimistic.etherscan.io/address/' + contracts.usdPlus.options.address)">
+                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openUsdPlusAddress()">
                     <div>
                         <v-img class="currency" :src="require('@/assets/currencies/USD+.png')" />
                     </div>
@@ -207,8 +207,15 @@ export default {
 
     computed: {
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
-        ...mapGetters("network", ['appApiUrl', 'getParams']),
+        ...mapGetters("network", ['appApiUrl', 'getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig']),
         ...mapGetters("web3", ['contracts']),
+
+        tabNetworkName: function() {
+            let params;
+            params = this.getParams(this.tab)
+
+            return params.networkName;
+        },
 
         tabApiUrl: function() {
             let params;
@@ -263,24 +270,39 @@ export default {
             window.open(url, '_blank').focus();
         },
 
+        openUsdPlusAddress() {
+            let url;
+            switch (this.tabNetworkName) {
+                case 'optimism':
+                    url = this.opConfig.explorerUrl;
+                    break;
+                case 'arbitrum':
+                    url = this.arConfig.explorerUrl;
+                    break;
+                case 'bsc':
+                    url = this.bscConfig.explorerUrl;
+                    break;
+                case 'polygon':
+                    url = this.polygonConfig.explorerUrl;
+                    break;
+            }
+            window.open(url + `address/${this.contracts.usdPlus.options.address}`, '_blank').focus();
+        },
+
         setTab(tabName) {
             this.tab = tabName;
             if (this.tab === 'optimism') {
                 this.initTabName('/collateral', {tabName: 'optimism'});
             }
-
             if (this.tab === 'arbitrum') {
                 this.initTabName('/collateral', {tabName: 'arbitrum'});
             }
-
             if (this.tab === 'bsc') {
                 this.initTabName('/collateral', {tabName: 'bsc'});
             }
-
             if (this.tab === 'polygon') {
                 this.initTabName('/collateral', {tabName: 'polygon'});
             }
-
             this.loadData();
             console.log("NetworkParams : ", this.getParams(this.tab));
         },

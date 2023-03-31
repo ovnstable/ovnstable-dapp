@@ -36,20 +36,12 @@ module.exports = {
             }
         },
         module: {
-            rules: [
+            rules:  [
                 {
                     test: /\.js$/,
-                    exclude: /node_modules/,
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env']
-                    }
-                },
-                {
-                    test: /\.js\.map$/,
-                    loader: 'source-map-loader',
-                    enforce: 'pre',
-                },
+                    exclude: (_) => !/node_modules\/(@web3auth|@ethereumjs|@walletconnect|@web3modal)/.test(_),
+                    loader: 'babel-loader'
+                }
             ]
         }
     },

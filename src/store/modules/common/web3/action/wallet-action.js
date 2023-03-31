@@ -1,12 +1,14 @@
 // import UAuthBncOnboard from "@uauth/bnc-onboard";
 // import UAuth from "@uauth/js";
 
-import injectedModule from '@web3-onboard/injected-wallets'
+import injectedModule, {ProviderLabel} from '@web3-onboard/injected-wallets'
 
 // import Onboard from "bnc-onboard";
 
 import Onboard from "@web3-onboard/core";
 import walletConnectModule from '@web3-onboard/walletconnect'
+import argentModule from "@web3-onboard/argent";
+import { getEthereumProvider } from "@argent/login";
 
 // import argentModule from "@web3-onboard/argent";
 
@@ -32,6 +34,31 @@ const getters = {
 const actions = {
 
     async initOnboard({commit, dispatch, getters, rootState}) {
+        // console.log("Argent start ")
+        // const ethereumProvider = await getEthereumProvider({
+        //     chainId: 280,
+        //     rpcUrl: "https://zksync2-testnet.zksync.dev",
+        //     walletConnect: {
+        //         metadata: {
+        //             name: "Cool dapp",
+        //             description: "Description of a cool dapp",
+        //             url: "https://example.com",
+        //             icons: ["https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon.png?v=c78bd457575a"]
+        //         }
+        //     }
+        // });
+        // console.log("Argent eth provider: ", ethereumProvider)
+        //
+        // try {
+        //     await ethereumProvider.enable();
+        //     console.log("Argent eth provider enabled")
+        // } catch (e) {
+        //     console.log("Argent eth provider error:", e)
+        // }
+        // var a = true;
+        // if (a) {
+        //     return;
+        // }
 
         // let wallets = await dispatch('getMainWalletsConfig');
         // clientID: process.env.VUE_APP_UD_CLIENT_ID,
@@ -46,35 +73,79 @@ const actions = {
         //     connectFirstChainId: true
         // }
 
-        const walletConnect = walletConnectModule(wcV2InitOptions || wcV1InitOptions)
+        const injected = injectedModule({
+            // display all wallets even if they are unavailable
+            displayUnavailable: false,
+            // but only show Binance and Bitski wallet if they are available
+            filter: {
+                [ProviderLabel.Binance]: 'unavailable',
+                [ProviderLabel.Bitski]: 'unavailable'
+            },
+            // do a manual sort of injected wallets so that MetaMask and Coinbase are ordered first
+            sort: (wallets) => {
+                const metaMask = wallets.find(({ label }) => label === ProviderLabel.MetaMask)
+                const coinbase = wallets.find(({ label }) => label === ProviderLabel.Coinbase)
+
+                return (
+                    [
+                        metaMask,
+                        coinbase,
+                        ...wallets.filter(
+                            ({ label }) => label !== ProviderLabel.MetaMask && label !== ProviderLabel.Coinbase
+                        )
+                    ]
+                        // remove undefined values
+                        .filter((wallet) => wallet)
+                )
+            },
+            walletUnavailableMessage: (wallet) => `Oops ${wallet.label} is unavailable!`
+
+        })
 
         const wcV2InitOptions = {
             version: 2,
             /**
              * Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
              */
-            projectId: process.env.VUE_APP_UD_CLIENT_ID
+            projectId: "699fb1306e95ed8b837fd8962c633422"
         }
+        const walletConnect = walletConnectModule(wcV2InitOptions)
+        //
 
+
+        const argent = argentModule();
         // const argent = argentModule();
-        const injected = injectedModule();
+        // const injected = injectedModule();
         let rpcUrl = rootState.network.rpcUrl;
 
         let onboard =   Onboard({
             // ... other Onboard options
             wallets: [
-                walletConnect
-                // injected,
-                // argent,
+                walletConnect,
+                injected,
+                argent,
                 // ... other wallets
             ],
             chains: [
                 {
-                    id: '0x1',
-                    token: 'ETH',
-                    label: 'Ethereum Mainnet',
-                    rpcUrl: rpcUrl
-                }
+                    id: "0x144",  // = 324
+                    token: "ETH",
+                    label: "zkSync Mainnet",
+                    rpcUrl: "https://mainnet.era.zksync.io",
+                },
+                {
+                    id: "0x118",  // = 280
+                    token: "ETH",
+                    label: "zkSync Goerli",
+                    rpcUrl: "https://zksync2-testnet.zksync.dev",
+                },
+
+                // {
+                //     id: '0x1',
+                //     token: 'ETH',
+                //     label: 'Ethereum Mainnet',
+                //     rpcUrl: rpcUrl
+                // }
                 // {
                 //     id: "0x144",  // = 280
                 //     token: "ETH",

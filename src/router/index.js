@@ -17,8 +17,10 @@ import Insurance from "./midleware/dapp/Insurance";
 import Reserves from "./midleware/dapp/Reserves";
 import Stats from "./midleware/dapp/Stats";
 import DaiStats from "./midleware/dapp/DaiStats";
+import UsdtStats from "./midleware/dapp/UsdtStats";
 import Collateral from "./midleware/dapp/Collateral";
 import CollateralDai from "./midleware/dapp/CollateralDai";
+import CollateralUsdt from "./midleware/dapp/CollateralUsdt";
 import Dashboard from "./midleware/dapp/Dashboard";
 import Pools from "./midleware/dapp/Pools";
 
@@ -127,6 +129,16 @@ const routes = [
                 }
             },
             {
+                path: '/collateral/usdt',
+                name: 'CollateralUsdtView',
+                component: () => import('../views/performance/usdt/view/CollateralView.vue'),
+                meta: {
+                    middleware: [
+                        CollateralUsdt,
+                    ]
+                }
+            },
+            {
                 path: '/stats',
                 name: 'StatsPerformanceView',
                 component: () => import('../views/performance/view/StatsPerformanceView.vue'),
@@ -143,6 +155,16 @@ const routes = [
                 meta: {
                     middleware: [
                         DaiStats,
+                    ]
+                }
+            },
+            {
+                path: '/stats/usdt',
+                name: 'StatsUsdtPerformanceView',
+                component: () => import('../views/performance/usdt/view/StatsPerformanceView.vue'),
+                meta: {
+                    middleware: [
+                        UsdtStats,
                     ]
                 }
             },

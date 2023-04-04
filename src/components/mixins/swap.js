@@ -93,7 +93,7 @@ export const swap = {
                     buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                 }
 
-                if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'market-redeem' || action === 'unwrap-redeem') {
+                if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'usdt-swap-redeem' || action === 'market-redeem' || action === 'unwrap-redeem') {
                     console.log("Redeem clear allowance with ovnStableContract", ovnStableContract, allowanceValue)
                     await ovnStableContract.methods.decreaseAllowance(exchangeContract.options.address, allowanceValue)
                         .send(buyParams)
@@ -195,7 +195,7 @@ export const swap = {
                 let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
                 let tx;
-                if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'market-redeem') {
+                if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'usdt-swap-redeem' || action === 'market-redeem') {
                     console.log("Redeem approve with ovnStableContract", ovnStableContract)
                     tx = await ovnStableContract.methods.approve(exchangeContract.options.address, sum).send(approveParams);
                 } else {
@@ -236,7 +236,7 @@ export const swap = {
             let from = account;
 
             let allowanceValue;
-            if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'market-redeem') {
+            if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'usdt-swap-redeem' || action === 'market-redeem') {
                 console.log("Redeem allowance with ovnStableContract", ovnStableContract)
                 allowanceValue = await ovnStableContract.methods.allowance(from, exchangeContract.options.address).call();
                 console.log('allowanceValue with ovnStable in redeem: ', allowanceValue)
@@ -541,7 +541,7 @@ export const swap = {
                     methodParam = {
                         sum: contractSum,
                     }
-                } else if (action === 'swap-redeem' || action === 'dai-swap-redeem') {
+                } else if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'usdt-swap-redeem') {
                     methodParam = {
                         asset: actionContract.options.address,
                         sum: contractSum,

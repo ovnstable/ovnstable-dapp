@@ -49,6 +49,7 @@
         <InsuranceInvestModal/>
         <SwapModal/>
         <SwapDaiModal/>
+        <SwapUsdtModal/>
         <WrapModal/>
         <RedemptionRequestModal/>
         <RedemptionRequestSuccessModal/>
@@ -64,6 +65,7 @@ import NetworkSelect from "@/components/common/header/NetworkSelect";
 import MenuSelect from "@/components/common/header/MenuSelect";
 import SwapModal from "@/components/swap/SwapModal";
 import SwapDaiModal from "@/components/swap/dai/SwapDaiModal";
+import SwapUsdtModal from "@/components/swap/usdt/SwapUsdtModal";
 import InvestModal from "@/components/market/modal/ets/invest/InvestModal";
 import WrapModal from "@/components/wrap/WrapModal";
 import RedemptionRequestModal from "@/components/insurance/modal/action/redemption-request/RedemptionRequestModal";
@@ -82,6 +84,7 @@ export default {
         InvestModal,
         SwapModal,
         SwapDaiModal,
+        SwapUsdtModal,
         MenuSelect,
         NetworkSelect,
         WalletBar,

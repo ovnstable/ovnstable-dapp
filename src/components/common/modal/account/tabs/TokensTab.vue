@@ -19,6 +19,13 @@
               <label class="ml-2 coin-btn-label">DAI+</label>
             </v-btn>
 
+            <v-btn v-if="showUsdt" class="coin-btn ma-1" @click="addUsdtPlusToken">
+                <div class="coin-img">
+                    <v-img :src="require('@/assets/currencies/usdtPlus.svg')"/>
+                </div>
+                <label class="ml-2 coin-btn-label">DAI+</label>
+            </v-btn>
+
             <v-btn v-if="showWrap"  class="coin-btn ma-1" @click="addwUsdPlusToken">
                 <div class="coin-img">
                     <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
@@ -72,7 +79,10 @@ export default {
 
         showDai: function () {
           return this.networkId === 10 || this.networkId === 42161;
-        }
+        },
+        showUsdt: function () {
+          return this.networkId === 56;
+        },
 
     },
 
@@ -87,7 +97,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
 
         getSortedCardList() {
             this.sortedCardList = this.etsList.filter(ets => (!ets.archive && this.networkId === ets.chain))

@@ -33,36 +33,46 @@ const actions = {
             optimism: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
         };
 
+        let networkUsdtMap = {
+            bsc: '0x55d398326f99059fF775485246999027B3197955',
+        };
+
         [
             contracts.exchange,
             contracts.daiExchange,
+            contracts.usdtExchange,
             contracts.govToken,
             contracts.governor,
             contracts.pm,
             contracts.timelockController,
             contracts.usdPlus,
             contracts.daiPlus,
+            contracts.usdtPlus,
             contracts.m2m,
             contracts.market,
             contracts.wUsdPlus,
             contracts.asset,
             contracts.asset_two,
             contracts.dai,
+            contracts.usdt,
         ] = await Promise.all([
             _load(await loadJSON(`/contracts/${network}/Exchange.json`), web3),
             (network === "optimism") || network === "arbitrum" ? _load(await loadJSON(`/contracts/${network}/DaiExchange.json`), web3) : _load_empty(),
+            (network === "bsc") ? _load(await loadJSON(`/contracts/${network}/UsdtExchange.json`), web3) : _load_empty(),
             (network !== 'zksync') ? _load(await loadJSON(`/contracts/${network}/OvnToken.json`), web3) : _load_empty(),
             (network !== 'zksync') ?_load(await loadJSON(`/contracts/${network}/OvnGovernor.json`), web3) : _load_empty(),
             _load(await loadJSON(`/contracts/${network}/PortfolioManager.json`), web3),
             (network !== 'zksync') ?_load(await loadJSON(`/contracts/${network}/OvnTimelockController.json`), web3) : _load_empty(),
             _load(await loadJSON(`/contracts/${network}/UsdPlusToken.json`), web3),
             (network === "optimism") || network === "arbitrum" ? _load(await loadJSON(`/contracts/${network}/DaiPlusToken.json`), web3) : _load_empty(),
+            (network === "bsc") ? _load(await loadJSON(`/contracts/${network}/UsdtPlusToken.json`), web3) : _load_empty(),
             _load(await loadJSON(`/contracts/${network}/Mark2Market.json`), web3),
             (network !== "bsc" && network !== 'zksync') ? _load(await loadJSON(`/contracts/${network}/Market.json`), web3) : _load_empty(),
             (network !== "bsc" && network !== 'zksync') ? _load(await loadJSON(`/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
             networkAssetMap[network] ? _load(ERC20, web3, networkAssetMap[network]) : _load_empty(),
             networkAssetTwoMap[network] ? _load(ERC20, web3, networkAssetTwoMap[network]) : _load_empty(),
             networkDaiMap[network] ? _load(ERC20, web3, networkDaiMap[network]) : _load_empty(),
+            networkUsdtMap[network] ? _load(ERC20, web3, networkUsdtMap[network]) : _load_empty(),
         ]);
 
         let etsesByNetwork = await loadJSON(`https://api.overnight.fi/${network}/usd+/design_ets/list`);

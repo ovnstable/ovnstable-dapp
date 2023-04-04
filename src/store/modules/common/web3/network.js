@@ -47,8 +47,7 @@ const ARBITRUM_PARAMS = {
 }
 
 const ZKSYNC_PARAMS = {
-    // appApiUrl: 'https://zksync.overnight.fi/api',
-    appApiUrl: 'https://arbitrum.overnight.fi/api',
+    appApiUrl: 'https://zksync.overnight.fi/api',
     networkName: 'zksync',
     networkId: 324,
     rpcUrl: 'https://mainnet.era.zksync.io',

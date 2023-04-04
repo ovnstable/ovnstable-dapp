@@ -176,12 +176,15 @@ export default {
         if (this.tab === 'optimism') {
             this.initTabName('/featured', {tabName: 'optimism'});
         }
+
         if (this.tab === 'arbitrum') {
             this.initTabName('/featured', {tabName: 'arbitrum'});
         }
+
         if (this.tab === 'bsc') {
             this.initTabName('/featured', {tabName: 'bsc'});
         }
+
         if (this.tab === 'polygon') {
             this.initTabName('/featured', {tabName: 'polygon'});
         }
@@ -190,6 +193,7 @@ export default {
             this.initTabName('/featured', {tabName: 'zksync'});
             return
         }
+
       this.getUsdPlusAvgMonthApy();
       this.getSortedCardList(this.tabNetworkId);
       console.log("NetworkParams : ", this.getParams(this.tab));

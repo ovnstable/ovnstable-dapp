@@ -19,7 +19,7 @@ const actions = {
             polygon_dev: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
             optimism: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
             arbitrum: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
-            zksync: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+            zksync: '0x3355df6d4c9c3035724fd0e3914de96a5a83aaf4',
             bsc: '0x55d398326f99059ff775485246999027b3197955',
         };
 

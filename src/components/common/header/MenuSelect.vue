@@ -59,7 +59,7 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item @click="wrapClick" v-if="(networkId !== 56)">
+                <v-list-item @click="wrapClick" v-if="(networkId !== 56 && networkId !== 324)">
                     <v-list-item-title>
                         <label class="navbar-page-label-modal mx-5">Wrap/Unwrap</label>
                     </v-list-item-title>

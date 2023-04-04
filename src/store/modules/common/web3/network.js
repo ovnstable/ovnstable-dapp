@@ -51,7 +51,7 @@ const ZKSYNC_PARAMS = {
     networkName: 'zksync',
     networkId: 324,
     rpcUrl: 'https://mainnet.era.zksync.io',
-    explorerUrl: 'https://explorer.zksync.io',
+    explorerUrl: 'https://explorer.zksync.io/',
     assetName: 'USDC',
     assetDecimals: 6,
     nativeAssetName: 'ETH',

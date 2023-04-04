@@ -19,6 +19,7 @@
                 <v-row class="ma-0 mt-10 ml-3 toggle-row">
                     <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
                     <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+                    <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
                     <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
                     <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
                 </v-row>
@@ -196,6 +197,12 @@ export default {
                 'tab-button-in-active': this.tab !== 'arbitrum',
             }
         },
+        activeTabZkSync: function() {
+            return {
+                'tab-button': this.tab === 'zksync',
+                'tab-button-in-active': this.tab !== 'zksync',
+            }
+        },
 
         activeTabBsc: function() {
             return {
@@ -231,18 +238,7 @@ export default {
 
         setTab(tabName) {
             this.tab = tabName;
-            if (this.tab === 'optimism') {
-                this.initTabName('/stats', {tabName: 'optimism'});
-            }
-            if (this.tab === 'arbitrum') {
-                this.initTabName('/stats', {tabName: 'arbitrum'});
-            }
-            if (this.tab === 'bsc') {
-                this.initTabName('/stats', {tabName: 'bsc'});
-            }
-            if (this.tab === 'polygon') {
-                this.initTabName('/stats', {tabName: 'polygon'});
-            }
+            this.initTabName('/stats', {tabName: this.tab});
             this.loadData();
             console.log("NetworkParams : ", this.getParams(this.tab));
         },

@@ -9,12 +9,6 @@
 
             <v-spacer></v-spacer>
 
-            <v-btn class="pr-10">
-                <label @click="connectToArgent">
-                    argent
-                </label>
-            </v-btn>
-
             <template v-if="!loadingWeb3">
                 <template v-if="walletConnected">
                     <v-btn v-if="switchToOtherNetwork" :class="$wu.isMobile() ? 'mr-2' : ''" class="header-btn btn-filled mt-1" v-on:click="switchToNetwork">

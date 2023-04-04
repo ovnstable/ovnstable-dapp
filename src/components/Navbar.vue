@@ -100,7 +100,7 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item v-if="(networkId !== 56)"
+                <v-list-item v-if="(networkId !== 56 && networkId !== 324)"
                              @click="wrapClick"
                              class="list-item-hover">
                     <v-list-item-title>

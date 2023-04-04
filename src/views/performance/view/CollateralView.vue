@@ -19,6 +19,7 @@
                 <v-row class="ma-0 mt-10 mb-1 toggle-row">
                     <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
                     <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+                    <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
                     <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
                     <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
                 </v-row>
@@ -207,7 +208,7 @@ export default {
 
     computed: {
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
-        ...mapGetters("network", ['appApiUrl', 'getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig']),
+        ...mapGetters("network", ['appApiUrl', 'getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'zkConfig']),
         ...mapGetters("web3", ['contracts']),
 
         tabNetworkName: function() {
@@ -235,6 +236,13 @@ export default {
             return {
                 'tab-button': this.tab === 'arbitrum',
                 'tab-button-in-active': this.tab !== 'arbitrum',
+            }
+        },
+
+        activeTabZkSync: function() {
+            return {
+                'tab-button': this.tab === 'zksync',
+                'tab-button-in-active': this.tab !== 'zksync',
             }
         },
 
@@ -285,24 +293,16 @@ export default {
                 case 'polygon':
                     url = this.polygonConfig.explorerUrl;
                     break;
+                case 'zksync':
+                    url = this.zkConfig.explorerUrl;
+                    break;
             }
             window.open(url + `address/${this.contracts.usdPlus.options.address}`, '_blank').focus();
         },
 
         setTab(tabName) {
             this.tab = tabName;
-            if (this.tab === 'optimism') {
-                this.initTabName('/collateral', {tabName: 'optimism'});
-            }
-            if (this.tab === 'arbitrum') {
-                this.initTabName('/collateral', {tabName: 'arbitrum'});
-            }
-            if (this.tab === 'bsc') {
-                this.initTabName('/collateral', {tabName: 'bsc'});
-            }
-            if (this.tab === 'polygon') {
-                this.initTabName('/collateral', {tabName: 'polygon'});
-            }
+            this.initTabName('/collateral', {tabName: this.tab});
             this.loadData();
             console.log("NetworkParams : ", this.getParams(this.tab));
         },

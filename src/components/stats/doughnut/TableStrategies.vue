@@ -125,6 +125,10 @@ export default {
         assetType: {
           type: String,
           default: null
+        },
+        networkName: {
+            type: String,
+            default: 'optimism',
         }
     },
 

@@ -9,17 +9,17 @@
                 Daily profit{{ minimized ? '' : (profitLabel ? ', ' + profitLabel : '')}}
             </th>
             <th v-if="(payoutData && payoutData[0]) ? payoutData[0].comp : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
-              <div class="return-container">
-                <label>
-                  Cumulative return
-                </label>
+                <div class="return-container">
+                    <label>
+                        Cumulative return
+                    </label>
 
-                <div class="tooltip-compound">
-                  <v-row align="center" justify="end">
-                    <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'" text="Cumulative return since inception date"/>
-                  </v-row>
+                    <div class="tooltip-compound">
+                        <v-row align="center" justify="end">
+                            <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'" text="Cumulative return since inception date"/>
+                        </v-row>
+                    </div>
                 </div>
-              </div>
             </th>
             <th v-else-if="payoutData && payoutData[0] ? payoutData[0].annualizedYield : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
                 Annualized yield{{ minimized ? '' : ', % per year'}}
@@ -74,14 +74,15 @@
 
 import {mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
+import network from "@/store/modules/common/web3/network";
 
 
 /* eslint-disable no-unused-vars,no-undef */
 
 export default {
-    name: "Table",
+    name: "EtsTable",
 
-    components: {Tooltip},
+    components: { Tooltip },
 
     data: () => ({}),
 
@@ -98,36 +99,38 @@ export default {
 
         payoutData: {
             type: Array,
-            default: () => {},
+            default: () => {
+            },
         },
 
-        networkName: {
-            type: String,
-            default: 'optimism'
+        etsChain: {
+            type: Number,
+            default: null,
         }
     },
 
     computed: {
-        ...mapGetters('network', ['getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig']),
+        ...mapGetters('network', ['opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'networkId']),
         ...mapGetters('theme', ['light']),
     },
 
     methods: {
         openOnScan(item) {
             let url;
-            switch (this.networkName) {
-                case 'polygon':
-                    url = this.polygonConfig.explorerUrl;
-                    break;
-                case 'optimism':
+            switch (this.etsChain) {
+                case 10:
                     url = this.opConfig.explorerUrl;
                     break;
-                case 'bsc':
-                    url = this.bscConfig.explorerUrl;
-                    break;
-                case 'arbitrum':
+                case 42161:
                     url = this.arConfig.explorerUrl;
                     break;
+                case 56:
+                    url = this.bscConfig.explorerUrl;
+                    break;
+                case 137:
+                    url = this.polygonConfig.explorerUrl;
+                    break;
+
             }
             window.open(url + `tx/${item.transactionHash}`, '_blank').focus();
         },
@@ -332,12 +335,12 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .tooltip-compound {
-  position: relative;
-  right: -7px;
-  bottom: 4px
+    position: relative;
+    right: -7px;
+    bottom: 4px
 }
 
 .return-container {
-  position: relative;
+    position: relative;
 }
 </style>

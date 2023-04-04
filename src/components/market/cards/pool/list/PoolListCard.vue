@@ -172,6 +172,15 @@ export default {
                 case 'Sushiswap':
                     url = 'https://www.sushi.com/earn/matic:';
                     break;
+                case 'Solidlizard':
+                    url = 'https://info.solidlizard.finance/pair/';
+                    break;
+                case 'Arbidex':
+                    url = 'https://arbidex.fi/add/';
+                    break;
+                case 'Sterling':
+                    url = 'https://www.sterling.finance/liquidity/';
+                    break;
                 default:
                     url = this.cardData.data.explorerUrl + '/address/';
                     break;

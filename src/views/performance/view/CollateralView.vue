@@ -4,16 +4,38 @@
             <label class="title-label">USD+ Collateral</label>
         </div>
 
-        <v-row v-if="!isCurrentTotalDataLoading" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 justify-end'">
-            <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                Mint USD+
-            </v-btn>
-            <v-btn class="header-btn btn-outlined" @click="redeemAction">
-                Redeem USD+
-            </v-btn>
+        <v-row v-if="!isCollateralLoading" align="center" justify="start">
+            <template v-if="$wu.isMobile()">
+                <v-col cols="12" align="center" class="mt-10">
+                    <v-btn  class="header-btn btn-filled mr-5" @click="mintAction">
+                        Mint USD+
+                    </v-btn>
+                    <v-btn class="header-btn btn-outlined mr-5" @click="redeemAction">
+                        Redeem USD+
+                    </v-btn>
+                </v-col>
+            </template>
+            <v-col cols="6">
+                <v-row class="ma-0 mt-10 mb-1 toggle-row">
+                    <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
+                    <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+                    <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
+                    <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
+                </v-row>
+            </v-col>
+            <template v-if="!$wu.isMobile()">
+                <v-col align="end" cols="6" class="mt-5">
+                    <v-btn  class="header-btn btn-filled mr-5 mx-15" @click="mintAction">
+                        Mint USD+
+                    </v-btn>
+                    <v-btn class="header-btn btn-outlined" @click="redeemAction">
+                        Redeem USD+
+                    </v-btn>
+                </v-col>
+            </template>
         </v-row>
 
-        <v-row v-if="isCollateralLoading">
+        <v-row v-if="isCollateralLoading && isCurrentTotalDataLoading">
             <v-row align="center" justify="center" class="py-15">
                 <v-progress-circular
                     width="2"
@@ -36,16 +58,24 @@
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
                         <TableStablecoins
                             v-if="!$wu.isMobile()"
-                            :data="collateralData"/>
+                            :data="collateralData"
+                            :network-name="tab"
+                        />
 
                         <TableStablecoins
                             v-else
                             minimized
-                            :data="collateralData"/>
+                            :data="collateralData"
+                            :network-name="tab"
+                        />
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <PieStablecoins :data="collateralData" :size="!$wu.isFull() ? 200 : 300"/>
+                        <PieStablecoins
+                            :data="collateralData"
+                            :size="!$wu.isFull() ? 200 : 300"
+                            :network-name="tab"
+                        />
                     </v-col>
                 </v-row>
             </v-col>
@@ -74,18 +104,27 @@
                             v-if="!$wu.isMobile()"
                             :data="currentTotalData"
                             :total-supply="totalValue"
-                            :total-title="'Total USD+ in circulation'"/>
+                            :total-title="'Total USD+ in circulation'"
+                            :network-name="tab"
+                        />
 
                         <TableStrategies
                             v-else
                             minimized
                             :data="currentTotalData"
                             :total-supply="totalValue"
-                            :total-title="'Total USD+ in circulation'"/>
+                            :total-title="'Total USD+ in circulation'"
+                            :network-name="tab"
+                        />
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <DoughnutStrategies :data="currentTotalData" :total-value="totalValue" :size="!$wu.isFull() ? 200 : 300"/>
+                        <DoughnutStrategies
+                            :data="currentTotalData"
+                            :total-value="totalValue"
+                            :size="!$wu.isFull() ? 200 : 300"
+                            :network-name="tab"
+                        />
                     </v-col>
                 </v-row>
             </v-col>
@@ -93,7 +132,7 @@
 
         <v-row v-if="!isCurrentTotalDataLoading" class=" ma-0 mt-3">
             <v-col class="currency-box" :cols="$wu.isFull() ? 6 : 12" :class="$wu.isFull() ? 'mr-1' : ''">
-                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openLink('https://optimistic.etherscan.io/address/' + contracts.usdPlus.options.address)">
+                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openUsdPlusAddress()">
                     <div>
                         <v-img class="currency" :src="require('@/assets/currencies/USD+.png')" />
                     </div>
@@ -157,6 +196,7 @@ export default {
     },
 
     data: () => ({
+        tab: 'optimism',
         isCurrentTotalDataLoading: true,
         isCollateralLoading: true,
 
@@ -165,42 +205,124 @@ export default {
         totalValue: 0
     }),
 
+    computed: {
+        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
+        ...mapGetters("network", ['appApiUrl', 'getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig']),
+        ...mapGetters("web3", ['contracts']),
 
-    watch: {
-        networkId: function (newValue, oldValue) {
-            if (newValue !== 10) {
-                this.tab = 1;
+        tabNetworkName: function() {
+            let params;
+            params = this.getParams(this.tab)
+
+            return params.networkName;
+        },
+
+        tabApiUrl: function() {
+            let params;
+            params = this.getParams(this.tab)
+
+            return params.appApiUrl;
+        },
+
+        activeTabOptimism: function() {
+            return {
+                'tab-button': this.tab === 'optimism',
+                'tab-button-in-active': this.tab !== 'optimism',
             }
         },
-        appApiUrl: function () {
-            this.loadData();
-        }
+
+        activeTabArbitrum: function() {
+            return {
+                'tab-button': this.tab === 'arbitrum',
+                'tab-button-in-active': this.tab !== 'arbitrum',
+            }
+        },
+
+        activeTabBsc: function() {
+            return {
+                'tab-button': this.tab === 'bsc',
+                'tab-button-in-active': this.tab !== 'bsc',
+            }
+        },
+
+        activeTabPolygon: function() {
+            return {
+                'tab-button': this.tab === 'polygon',
+                'tab-button-in-active': this.tab !== 'polygon',
+            }
+        },
+    },
+
+    watch: {
+
     },
 
     mounted() {
+        console.log('Tab Name: ', this.$route.query.tabName);
+        this.setTab('optimism');
         this.loadData();
-    },
-
-    computed: {
-        ...mapGetters("network", ['networkId']),
-        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
-        ...mapGetters("network", ['appApiUrl']),
-        ...mapGetters("web3", ['contracts']),
-
     },
 
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView', 'showRedeemView']),
 
-        loadData() {
-            this.loadCurrentTotalData()
-            this.loadCollateralData()
+        openLink(url) {
+            window.open(url, '_blank').focus();
         },
 
-        loadCurrentTotalData() {
+        openUsdPlusAddress() {
+            let url;
+            switch (this.tabNetworkName) {
+                case 'optimism':
+                    url = this.opConfig.explorerUrl;
+                    break;
+                case 'arbitrum':
+                    url = this.arConfig.explorerUrl;
+                    break;
+                case 'bsc':
+                    url = this.bscConfig.explorerUrl;
+                    break;
+                case 'polygon':
+                    url = this.polygonConfig.explorerUrl;
+                    break;
+            }
+            window.open(url + `address/${this.contracts.usdPlus.options.address}`, '_blank').focus();
+        },
+
+        setTab(tabName) {
+            this.tab = tabName;
+            if (this.tab === 'optimism') {
+                this.initTabName('/collateral', {tabName: 'optimism'});
+            }
+            if (this.tab === 'arbitrum') {
+                this.initTabName('/collateral', {tabName: 'arbitrum'});
+            }
+            if (this.tab === 'bsc') {
+                this.initTabName('/collateral', {tabName: 'bsc'});
+            }
+            if (this.tab === 'polygon') {
+                this.initTabName('/collateral', {tabName: 'polygon'});
+            }
+            this.loadData();
+            console.log("NetworkParams : ", this.getParams(this.tab));
+        },
+
+        initTabName(path, queryParams) {
+            this.$router.push({
+                path: path,
+                query: queryParams ? queryParams : {}
+            });
+        },
+
+        loadData() {
+            this.loadCurrentTotalData(this.tabApiUrl)
+            this.loadCollateralData(this.tabApiUrl)
+        },
+
+        loadCurrentTotalData(_apiUrl) {
             this.isCurrentTotalDataLoading = true;
 
-            strategiesApiService.getStrategies(this.appApiUrl)
+            strategiesApiService.getStrategies(_apiUrl)
                 .then(data => {
                     let strategies = data;
                     strategies.sort((a,b) => b.netAssetValue - a.netAssetValue);
@@ -247,10 +369,10 @@ export default {
 
         },
 
-        loadCollateralData() {
+        loadCollateralData(_apiUrl) {
             this.isCollateralLoading = true;
 
-            collateralApiService.getCollateralData(this.appApiUrl)
+            collateralApiService.getCollateralData(_apiUrl)
                 .then(data => {
                     let stablecoinList = data;
                     stablecoinList.sort((a,b) => b.netAssetValue - a.netAssetValue);
@@ -303,10 +425,6 @@ export default {
             } else {
                 return null;
             }
-        },
-
-        openLink(url) {
-            window.open(url, '_blank').focus();
         },
 
         mintAction() {
@@ -372,6 +490,17 @@ export default {
     .btn-filled, .btn-outlined {
         width: 40% !important;
     }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .toggle-row {
+        width: 100% !important;
+    }
 }
 
 /* tablet */
@@ -418,6 +547,13 @@ export default {
         width: 24px;
         height: 24px;
     }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+    }
 }
 
 /* full */
@@ -463,6 +599,13 @@ export default {
     .open-new {
         width: 24px;
         height: 24px;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
     }
 }
 
@@ -515,6 +658,18 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         width: 22px;
         height: 22px;
     }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
+    }
+}
+
+.toggle-row {
+    border-bottom: 2px solid var(--main-border);
+    width: 203% !important;
 }
 
 .page-container {
@@ -622,4 +777,26 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     width: auto;
 }
 
+.tab-btn {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: var(--secondary-gray-text);
+    margin-bottom: -2px;
+    cursor: pointer;
+}
+
+.tab-btn-disabled {
+    cursor: default;
+}
+
+.tab-button {
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
+    cursor: pointer !important;
+}
+
+.tab-button-in-active {
+    color: var(--secondary-gray-text) !important;
+    cursor: pointer !important;
+}
 </style>

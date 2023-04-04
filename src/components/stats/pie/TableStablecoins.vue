@@ -87,6 +87,11 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        networkName: {
+            type: String,
+            default: 'optimism',
+        }
     },
 
     components: {},
@@ -95,7 +100,11 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['explorerUrl']),
+        ...mapGetters('network', ['getParams']),
+
+        networkParams: function() {
+            return this.getParams(this.networkName);
+        },
     },
 
     mounted() {
@@ -131,7 +140,7 @@ export default {
 
         openTokenOnScan(hash) {
             if (hash && hash !== '') {
-                window.open(this.explorerUrl + "token/" + hash, '_blank').focus();
+                window.open(this.networkParams.explorerUrl + "token/" + hash, '_blank').focus();
             }
         }
     }

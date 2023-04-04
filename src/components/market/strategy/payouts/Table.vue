@@ -108,7 +108,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('network', ['getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig']),
+        ...mapGetters('network', ['getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'zkConfig']),
         ...mapGetters('theme', ['light']),
     },
 
@@ -127,6 +127,9 @@ export default {
                     break;
                 case 'arbitrum':
                     url = this.arConfig.explorerUrl;
+                    break;
+                case 'zksync':
+                    url = this.zkConfig.explorerUrl;
                     break;
             }
             window.open(url + `tx/${item.transactionHash}`, '_blank').focus();

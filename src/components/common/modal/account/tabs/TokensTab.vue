@@ -23,7 +23,7 @@
                 <div class="coin-img">
                     <v-img :src="require('@/assets/currencies/usdtPlus.svg')"/>
                 </div>
-                <label class="ml-2 coin-btn-label">DAI+</label>
+                <label class="ml-2 coin-btn-label">USDT+</label>
             </v-btn>
 
             <v-btn v-if="showWrap"  class="coin-btn ma-1" @click="addwUsdPlusToken">

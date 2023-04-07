@@ -1,5 +1,6 @@
 import UsdPlusImage from "@/assets/usdPlus.json";
 import DaiPlusImage from "@/assets/daiPlus.json";
+import UsdtPlusImage from "@/assets/usdtPlus.json";
 import WrappedUsdPlusImage from "@/assets/wUsdPlus.json";
 import PolygonInsurance from "@/assets/polygon_insurance.json";
 import OvnImage from "@/assets/ovn.json";
@@ -63,6 +64,34 @@ const actions = {
             .then((success) => {
                 if (success) {
                     console.log('Dai+ successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
+    async addUsdtPlusToken({commit, dispatch, getters, rootState}) {
+        let option = {
+            address: rootState.web3.contracts.usdtPlus.options.address,
+            symbol: process.env.VUE_APP_USDT_TOKEN_NAME,
+            decimals: 18,
+            image: UsdtPlusImage.image,
+        };
+
+        console.log('addUsdtPlusToken: ', option)
+
+        await rootState.web3.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: option,
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('Usdt+ successfully added to wallet!')
                 } else {
                     throw new Error('Something went wrong.')
                 }

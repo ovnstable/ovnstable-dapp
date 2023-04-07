@@ -146,7 +146,6 @@ export default {
     },
   },
   watch: {
-
     etsList: function (newVal, oldVal) {
       if (newVal) {
         this.loadData();
@@ -166,7 +165,6 @@ export default {
 
   mounted() {
     console.log(this.$route.query.tabName);
-    this.initTab();
     this.loadData();
   },
 
@@ -175,37 +173,38 @@ export default {
 
     setTab(tabName) {
       this.tab = tabName;
+        if (this.tab === 'optimism') {
+            this.initTabName('/featured', {tabName: 'optimism'});
+        }
+
+        if (this.tab === 'arbitrum') {
+            this.initTabName('/featured', {tabName: 'arbitrum'});
+        }
+
+        if (this.tab === 'bsc') {
+            this.initTabName('/featured', {tabName: 'bsc'});
+        }
+
+        if (this.tab === 'polygon') {
+            this.initTabName('/featured', {tabName: 'polygon'});
+        }
+
+        if (this.tab === 'zksync') {
+            this.initTabName('/featured', {tabName: 'zksync'});
+            return
+        }
+
       this.getUsdPlusAvgMonthApy();
       this.getSortedCardList(this.tabNetworkId);
       console.log("NetworkParams : ", this.getParams(this.tab));
     },
 
-    initTab() {
-      if (this.$route.query.tabName === 'optimism') {
-        this.setTab('optimism');
-        return
-      }
-
-      if (this.$route.query.tabName === 'arbitrum') {
-        this.setTab('arbitrum');
-        return
-      }
-
-      if (this.$route.query.tabName === 'bsc') {
-        this.setTab('bsc');
-        return
-      }
-
-      if (this.$route.query.tabName === 'polygon') {
-        this.setTab('polygon');
-        return
-      }
-
-      if (this.$route.query.tabName === 'zksync') {
-        this.setTab('zksync');
-        return
-      }
-    },
+      initTabName(path, queryParams) {
+          this.$router.push({
+              path: path,
+              query: queryParams ? queryParams : {}
+          });
+      },
 
     loadData() {
       this.isStrategyDataLoading = true;

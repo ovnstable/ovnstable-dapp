@@ -35,6 +35,11 @@ export default {
             type: Number,
             default: 320,
         },
+
+        networkName: {
+            type: String,
+            default: 'optimism'
+        }
     },
 
     watch: {

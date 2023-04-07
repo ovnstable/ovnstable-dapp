@@ -33,29 +33,29 @@
         <v-row class="zoom-row" style="margin-top: -40px !important;">
             <v-spacer></v-spacer>
             <v-btn
-                    text
-                    id="week-zoom-btn"
-                    class="zoom-btn"
-                    dark
-                    @click="zoomChart('week')"
+                text
+                id="week-zoom-btn"
+                class="zoom-btn"
+                dark
+                @click="zoomChart('week')"
             >
                 <label>Week</label>
             </v-btn>
             <v-btn
-                    text
-                    id="month-zoom-btn"
-                    class="zoom-btn"
-                    dark
-                    @click="zoomChart('month')"
+                text
+                id="month-zoom-btn"
+                class="zoom-btn"
+                dark
+                @click="zoomChart('month')"
             >
                 Month
             </v-btn>
             <v-btn
-                    text
-                    id="all-zoom-btn"
-                    class="zoom-btn mr-3"
-                    dark
-                    @click="zoomChart('all')"
+                text
+                id="all-zoom-btn"
+                class="zoom-btn mr-3"
+                dark
+                @click="zoomChart('all')"
             >
                 All
             </v-btn>
@@ -81,9 +81,15 @@ export default {
             type: Object,
             default: null,
         },
+
         assetType: {
-          type: String,
-          default: 'usd+'
+            type: String,
+            default: 'usd+'
+        },
+
+        networkName: {
+            type: String,
+            default: 'optimism'
         }
     },
 
@@ -112,7 +118,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['networkId', 'appApiUrl', 'apiUrl', 'networkName']),
+        ...mapGetters('network', ['networkId', 'appApiUrl', 'apiUrl']),
         ...mapGetters('theme', ['light']),
 
         isMobile() {
@@ -198,7 +204,7 @@ export default {
             try {
                 maxValue = Math.max.apply(Math, values);
                 if (maxValue > 5) {
-                  maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
+                    maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
                 }
             } catch (e) {
                 maxValue = 50;

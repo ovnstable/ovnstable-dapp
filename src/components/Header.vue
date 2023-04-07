@@ -49,6 +49,7 @@
         <InsuranceInvestModal/>
         <SwapModal/>
         <SwapDaiModal/>
+        <SwapUsdtModal/>
         <WrapModal/>
         <RedemptionRequestModal/>
         <RedemptionRequestSuccessModal/>
@@ -64,14 +65,13 @@ import NetworkSelect from "@/components/common/header/NetworkSelect";
 import MenuSelect from "@/components/common/header/MenuSelect";
 import SwapModal from "@/components/swap/SwapModal";
 import SwapDaiModal from "@/components/swap/dai/SwapDaiModal";
+import SwapUsdtModal from "@/components/swap/usdt/SwapUsdtModal";
 import InvestModal from "@/components/market/modal/ets/invest/InvestModal";
 import WrapModal from "@/components/wrap/WrapModal";
 import RedemptionRequestModal from "@/components/insurance/modal/action/redemption-request/RedemptionRequestModal";
 import RedemptionRequestSuccessModal
     from "@/components/insurance/modal/action/redemption-request/RedemptionRequestSuccessModal";
 import InsuranceInvestModal from "@/components/insurance/modal/action/invest/InsuranceInvestModal";
-
-// import { getEthereumProvider } from "@argent/login";
 
 export default {
     name: 'Header',
@@ -84,6 +84,7 @@ export default {
         InvestModal,
         SwapModal,
         SwapDaiModal,
+        SwapUsdtModal,
         MenuSelect,
         NetworkSelect,
         WalletBar,
@@ -112,23 +113,6 @@ export default {
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('transaction', ['loadTransaction']),
-
-        // async connectToArgent() {
-        //
-        //     const ethereumProvider = await getEthereumProvider({
-        //         chainId: 280,
-        //         rpcUrl: "https://zksync2-testnet.zksync.dev",
-        //         walletConnect: {
-        //             metadata: {
-        //                 name: "Cool dapp",
-        //                 description: "Description of a cool dapp",
-        //                 url: "https://example.com",
-        //                 icons: ["https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon.png?v=c78bd457575a"]
-        //             }
-        //         }
-        //     });
-        //     await ethereumProvider.enable();
-        // },
 
         switchToNetwork() {
             this.setWalletNetwork(this.networkId.toString());

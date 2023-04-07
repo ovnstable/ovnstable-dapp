@@ -59,7 +59,7 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item @click="wrapClick" v-if="(networkId !== 56)">
+                <v-list-item @click="wrapClick" v-if="(networkId !== 56 && networkId !== 324)">
                     <v-list-item-title>
                         <label class="navbar-page-label-modal mx-5">Wrap/Unwrap</label>
                     </v-list-item-title>
@@ -101,6 +101,42 @@
               </v-list-item-title>
             </v-list-item>
           </v-list-group>
+
+            <v-list-group :append-icon="null" @click="toggleUsdtPlus(!isShowUsdt)">
+                <template v-slot:activator>
+                    <v-list-item-icon class="mx-n2">
+                        <img class="navbar-page-link" :src="require('@/assets/icon/menu/usdtplus.svg')">
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <label class="navbar-page-label ml-6" :class="selectedTab.startsWith('usdtplus_') ? 'selected-page' : ''">USDT+</label>
+                    </v-list-item-title>
+                    <div class="select-bar-main-container" >
+                        <v-row>
+                            <v-icon color="var(--secondary-gray-text)" >
+                                {{ isShowUsdt ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
+                            </v-icon>
+                        </v-row>
+                    </div>
+                </template>
+                <v-list-item @click="usdtStatsClick" :class="selectedTab === 'usdtplus_performance' ? 'selected-page-item' : ''">
+                    <v-list-item-title>
+                        <label class="navbar-list-label mx-5" :class="selectedTab === 'usdtplus_performance' ? 'selected-page' : ''">Performance</label>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item @click="usdtCollateralClick" :class="selectedTab === 'usdtplus_collateral' ? 'selected-page-item' : ''">
+                    <v-list-item-title>
+                        <label class="navbar-list-label mx-5" :class="selectedTab === 'usdtplus_collateral' ? 'selected-page' : ''">Collateral</label>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item v-if="(networkId === 56)"
+                             @click="swapUsdtClick">
+                    <v-list-item-title>
+                        <label class="navbar-page-label-modal mx-5">Mint/redeem</label>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
 
 
             <v-list-item class="mx-n2" @click="etsClick"  :class="selectedTab === 'ets' ? 'selected-page-item' : ''">
@@ -194,6 +230,7 @@ export default {
 
     data: () => ({
         isShowUsd: false,
+        isShowUsdt: false,
         isShowDai: false,
         isShowInsurance: false,
         closeOnContentClick: false,
@@ -211,6 +248,7 @@ export default {
         ...mapActions('menuUI', ['selectTab']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView']),
+        ...mapActions('swapUsdtModal', ['showUsdtSwapModal', 'showUsdtMintView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
         ...mapActions('theme', ['switchTheme']),
         ...mapActions('track', ['trackClick']),
@@ -264,6 +302,12 @@ export default {
           this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
         },
 
+        usdtCollateralClick() {
+          this.selectTab('usdtplus_collateral');
+          this.goToActionByPath('/collateral/usdt', {tabName: 'collateralUsdt'});
+          this.trackClick({action: 'usdt-collateral-click', event_category: 'View Page', event_label: 'Open usdt collateral page', value: 1 });
+        },
+
         usdPlusPoolsClick() {
             this.selectTab('usdplus_pools');
             this.goToActionByPath('/pools', { tabName: 'usdPlusPools' });
@@ -284,6 +328,12 @@ export default {
           this.selectTab('daiplus_performance');
           this.goToActionByPath('/stats/dai', {tabName: 'daiPerformance'});
           this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
+        },
+
+        usdtStatsClick() {
+          this.selectTab('usdtplus_performance');
+          this.goToActionByPath('/stats/usdt', {tabName: 'usdtPerformance'});
+          this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
         },
 
         etsClick() {
@@ -324,6 +374,12 @@ export default {
           this.trackClick({action: 'swap-dai-click', event_category: 'Mint', event_label: 'Open dai mint modal', value: 1 });
         },
 
+        swapUsdtClick() {
+          this.showUsdtMintView();
+          this.showUsdtSwapModal();
+          this.trackClick({action: 'swap-usdt-click', event_category: 'Mint', event_label: 'Open usdt mint modal', value: 1 });
+        },
+
         wrapClick() {
             this.showWrapView();
             this.showWrapModal();
@@ -360,6 +416,7 @@ export default {
           if (isShow) {
             this.toggleInsurance(false);
             this.toggleDaiPlus(false);
+            this.toggleUsdtPlus(false);
           }
 
           this.isShowUsd = isShow;
@@ -368,9 +425,19 @@ export default {
         toggleDaiPlus(isShow) {
           if (isShow) {
             this.toggleUsdPlus(false);
+            this.toggleUsdtPlus(false);
           }
 
           this.isShowDai = isShow;
+        },
+
+        toggleUsdtPlus(isShow) {
+          if (isShow) {
+            this.toggleUsdPlus(false);
+            this.toggleDaiPlus(false);
+          }
+
+          this.isShowUsdt = isShow;
         },
     }
 }

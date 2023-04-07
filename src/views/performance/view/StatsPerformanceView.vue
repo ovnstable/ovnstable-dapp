@@ -4,16 +4,41 @@
             <label class="title-label">usd+ Performance</label>
         </div>
 
-        <v-row v-if="!isPayoutsLoading" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 mr-4 justify-end'">
-            <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                Mint USD+
-            </v-btn>
-            <v-btn class="header-btn btn-outlined" @click="redeemAction">
-                Redeem USD+
-            </v-btn>
+        <v-row v-if="isDataLoaded" align="center" justify="start">
+            <template v-if="$wu.isMobile()">
+                <v-col cols="12" align="center" class="mt-10">
+                    <v-btn  class="header-btn btn-filled mr-5" @click="mintAction">
+                        Mint USD+
+                    </v-btn>
+                    <v-btn class="header-btn btn-outlined mr-5" @click="redeemAction">
+                        Redeem USD+
+                    </v-btn>
+                </v-col>
+            </template>
+            <v-col cols="6">
+                <v-row class="ma-0 mt-10 ml-3 toggle-row">
+                    <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
+                    <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+                    <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
+                    <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
+                    <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
+                </v-row>
+            </v-col>
+            <template v-if="!$wu.isMobile()">
+                <v-col align="end" cols="6" class="mt-5">
+                    <v-btn  class="header-btn btn-filled mr-5 mx-15" @click="mintAction">
+                        Mint USD+
+                    </v-btn>
+                    <v-btn class="header-btn btn-outlined mr-3" @click="redeemAction">
+                        Redeem USD+
+                    </v-btn>
+                </v-col>
+            </template>
         </v-row>
 
-      <v-row v-if="isPayoutsLoading">
+
+
+      <v-row v-if="!isDataLoaded">
         <v-row align="center" justify="center" class="py-15">
           <v-progress-circular
               width="2"
@@ -24,20 +49,20 @@
         </v-row>
       </v-row>
 
-      <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0" justify="start" align="center">
+      <v-row v-if="isDataLoaded && !$wu.isMobile()" class="ma-0" justify="start" align="center">
         <v-col cols="6">
           <div class="info-card-container py-3">
-            <LineChartApy :data="payoutsApyData"/>
+            <LineChartApy :data="payoutsApyData" :network-name="tab"/>
           </div>
         </v-col>
         <v-col cols="6">
           <div class="info-card-container py-3">
-            <LineChartTvl :data="payoutsTvlData"/>
+            <LineChartTvl :data="payoutsTvlData" :network-name="tab"/>
           </div>
         </v-col>
       </v-row>
 
-      <v-row v-else-if="!isPayoutsLoading && $wu.isMobile()" class="ma-0 mt-2 info-card-container" justify="start" align="center">
+      <v-row v-else-if="isDataLoaded && $wu.isMobile()" class="ma-0 mt-2 info-card-container" justify="start" align="center">
         <v-col class="info-card-body-bottom">
           <v-row align="center" justify="start" class="ma-0">
             <v-col class="ml-n3 mt-n3">
@@ -52,12 +77,12 @@
             </v-col>
           </v-row>
 
-          <LineChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData"/>
-          <LineChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData"/>
+          <LineChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData" :network-name="tab"/>
+          <LineChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData" :network-name="tab"/>
         </v-col>
       </v-row>
 
-      <v-row v-if="!isPayoutsLoading" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
+      <v-row v-if="isDataLoaded" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
         <v-col class="info-card-body-bottom">
           <v-row align="center" justify="start" class="ma-0">
             <label class="section-title-label">USD+ payouts</label>
@@ -68,7 +93,9 @@
               <Table
                   v-if="!$wu.isMobile()"
                   :profit-label="assetName + ' per USD+'"
-                  :payout-data="payouts"/>
+                  :payout-data="payouts"
+                  :network-name="tab"
+              />
 
               <Table
                   v-else
@@ -82,13 +109,13 @@
             </v-col>
 
             <v-col :cols="!$wu.isFull() ? 12 : 4">
-              <Doughnut :size="280" color="#3D8DFF" :last-date="lastPayoutDate"/>
+              <Doughnut :size="280" color="#3D8DFF" :last-date="lastPayoutDate" :network-name="tab"/>
             </v-col>
           </v-row>
         </v-col>
       </v-row>
 
-      <resize-observer v-if="!isPayoutsLoading" @notify="$forceUpdate()"/>
+      <resize-observer v-if="isDataLoaded" @notify="$forceUpdate()"/>
     </div>
 </template>
 
@@ -114,7 +141,7 @@ export default {
     },
 
     data: () => ({
-      tab: 1,
+      tab: 'optimism',
       rateTab: 1,
 
       isPayoutsLoading: true,
@@ -126,19 +153,23 @@ export default {
     }),
 
     computed: {
-      ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl']),
+      ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl', 'switchToOtherNetwork', 'getParams']),
+
+        isDataLoaded: function() {
+            return !this.isPayoutsLoading;
+        },
+
+        tabApiUrl: function() {
+            let params;
+            params = this.getParams(this.tab)
+
+            return params.appApiUrl;
+        },
 
         activeRateApy: function () {
             return {
                 'rate-tab-button': this.rateTab === 1,
                 'rate-tab-button-in-active': this.rateTab !== 1,
-            }
-        },
-
-        activeRateDist: function () {
-            return {
-                'rate-tab-button': this.rateTab === 2,
-                'rate-tab-button-in-active': this.rateTab !== 2,
             }
         },
 
@@ -152,28 +183,72 @@ export default {
         lastPayoutDate: function () {
             return this.payouts && this.payouts.length ? this.payouts[0].payableDate : '';
         },
-    },
-    watch: {
-      networkId: function () {
-        this.loadData();
-      }
-    },
-    created() {
-        if (this.networkId === 137) {
-            this.tab = 1;
-        }
 
-        if (this.networkId === 56) {
-            this.tab = 2;
-        }
+        activeTabOptimism: function() {
+            return {
+                'tab-button': this.tab === 'optimism',
+                'tab-button-in-active': this.tab !== 'optimism',
+            }
+        },
+
+        activeTabArbitrum: function() {
+            return {
+                'tab-button': this.tab === 'arbitrum',
+                'tab-button-in-active': this.tab !== 'arbitrum',
+            }
+        },
+        activeTabZkSync: function() {
+            return {
+                'tab-button': this.tab === 'zksync',
+                'tab-button-in-active': this.tab !== 'zksync',
+            }
+        },
+
+        activeTabBsc: function() {
+            return {
+                'tab-button': this.tab === 'bsc',
+                'tab-button-in-active': this.tab !== 'bsc',
+            }
+        },
+
+        activeTabPolygon: function() {
+            return {
+                'tab-button': this.tab === 'polygon',
+                'tab-button-in-active': this.tab !== 'polygon',
+            }
+        },
+    },
+
+    watch: {
+
+    },
+
+    created() {
+
     },
 
     mounted() {
-      this.loadData();
+        console.log('Tab Name: ', this.$route.query.tabName);
+        this.setTab('optimism');
+        this.loadData();
     },
 
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView', 'showRedeemView']),
+
+        setTab(tabName) {
+            this.tab = tabName;
+            this.initTabName('/stats', {tabName: this.tab});
+            this.loadData();
+            console.log("NetworkParams : ", this.getParams(this.tab));
+        },
+
+        initTabName(path, queryParams) {
+            this.$router.push({
+                path: path,
+                query: queryParams ? queryParams : {}
+            });
+        },
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -183,18 +258,20 @@ export default {
             this.showMintView();
             this.showSwapModal();
         },
+
         loadData() {
           this.payoutsApyData = null;
           this.payoutsTvlData = null;
           this.payoutsApyDataDict = null;
           this.payouts = null;
 
-          this.loadPayouts();
+          this.loadPayouts(this.tabApiUrl);
         },
-        loadPayouts() {
+
+        loadPayouts(_appApiUrl) {
           this.isPayoutsLoading = true;
 
-          payoutsApiService.getPayouts(this.appApiUrl)
+          payoutsApiService.getPayouts(_appApiUrl)
               .then(data => {
                 this.payouts = data
                 let clientData = data;
@@ -291,6 +368,13 @@ export default {
         letter-spacing: 0.03em !important;
     }
 
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
     .ready-label {
         font-style: normal;
         font-weight: 400;
@@ -301,13 +385,17 @@ export default {
     .header-btn {
         font-style: normal !important;
         font-weight: 400 !important;
-        font-size: 16px !important;
+        font-size: 15px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
 
     .btn-filled, .btn-outlined {
         width: 40% !important;
+    }
+
+    .toggle-row {
+        width: 100% !important;
     }
 }
 
@@ -326,6 +414,13 @@ export default {
         font-size: 20px;
         line-height: 24px;
         letter-spacing: 0.04em;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .rate-tab-btn {
@@ -368,6 +463,13 @@ export default {
         font-size: 20px;
         line-height: 24px;
         letter-spacing: 0.04em;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .rate-tab-btn {
@@ -417,6 +519,13 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         letter-spacing: 0.04em;
     }
 
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
+    }
+
     .rate-tab-btn {
         height: 40px !important;
         font-style: normal !important;
@@ -459,6 +568,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .toggle-row {
     border-bottom: 2px solid var(--main-border);
+    width: 200% !important;
 }
 
 .title-label {
@@ -526,6 +636,18 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--main-gray-text);
+}
+
+.tab-btn {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: var(--secondary-gray-text);
+    margin-bottom: -2px;
+    cursor: pointer;
+}
+
+.tab-btn-disabled {
+    cursor: default;
 }
 
 .header-btn {

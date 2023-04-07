@@ -22,11 +22,11 @@
         <div v-if="networkId !== 10 && networkId !== 42161"
              :class="$wu.isMobile() ? 'flex-column' : ''"
              class="mt-3 buttons-div" >
-            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('42161')">
-                switch to arbitrum to mint
-            </v-btn>
-            <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('10')">
+            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('10')">
                 switch to optimism to mint
+            </v-btn>
+            <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('42161')">
+                switch to arbitrum to mint
             </v-btn>
         </div>
 

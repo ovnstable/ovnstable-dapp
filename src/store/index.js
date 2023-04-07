@@ -12,6 +12,7 @@ import insuranceInvestModal from '@/store/modules/modals/insurance/insurance-inv
 import investModal from '@/store/modules/modals/market/invest-modal';
 import swapModal from '@/store/modules/modals/swap/swap-modal';
 import swapDaiModal from '@/store/modules/modals/swap/swap-dai-modal';
+import swapUsdtModal from '@/store/modules/modals/swap/swap-usdt-modal';
 import wrapModal from '@/store/modules/modals/wrap/wrap-modal';
 import bscInfoModal from '@/store/modules/modals/bsc-info-modal';
 
@@ -28,6 +29,9 @@ import swapUI from "@/store/modules/views/swap/ui";
 
 import swapDaiData from "@/store/modules/views/swap/dai/data";
 import swapDaiUI from "@/store/modules/views/swap/dai/ui";
+
+import swapUsdtData from "@/store/modules/views/swap/usdt/data";
+import swapUsdtUI from "@/store/modules/views/swap/usdt/ui";
 
 import overcapData from "@/store/modules/views/market/overcap";
 import marketData from "@/store/modules/views/market/data";
@@ -86,6 +90,7 @@ export default new Vuex.Store({
         investModal,
         swapModal,
         swapDaiModal,
+        swapUsdtModal,
         wrapModal,
         riskModal,
         insuranceRiskModal,
@@ -103,6 +108,9 @@ export default new Vuex.Store({
 
         swapDaiData,
         swapDaiUI,
+
+        swapUsdtData,
+        swapUsdtUI,
 
         wrapData,
         wrapUI,

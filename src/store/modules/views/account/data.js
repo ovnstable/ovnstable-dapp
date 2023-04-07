@@ -94,6 +94,12 @@ const actions = {
         let dai;
         let originDai;
 
+        let usdtPlus;
+        let originUsdtPlus;
+
+        let usdt;
+        let originUsdt;
+
         let asset;
         let originAsset;
 
@@ -151,6 +157,26 @@ const actions = {
             originDai = getters.originalBalance.dai
         }
 
+        if (networkId === 56) {
+            try {
+                usdtPlus = await web3.contracts.usdtPlus.methods.balanceOf(getters.account).call();
+                originUsdtPlus = usdtPlus;
+                usdtPlus = usdtPlus ? web3.web3.utils.fromWei(usdtPlus, 'ether') : usdtPlus;
+            } catch (e) {
+                usdtPlus = getters.balance.usdtPlus;
+                originUsdtPlus = getters.originalBalance.usdtPlus
+            }
+
+            try {
+                usdt = await web3.contracts.usdt.methods.balanceOf(getters.account).call();
+                originUsdt = usdt;
+                usdt = usdt ? web3.web3.utils.fromWei(usdt, 'ether') : usdt;
+            } catch (e) {
+                usdt = getters.balance.usdt;
+                originUsdt = getters.originalBalance.usdt
+            }
+        }
+
         if (networkId === 137 || networkId === 10) {
             try {
                 wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
@@ -165,7 +191,9 @@ const actions = {
         commit('setBalance', {
             usdPlus: usdPlus,
             daiPlus: daiPlus,
+            usdtPlus: usdtPlus,
             dai: dai,
+            usdt: usdt,
             asset: asset,
             asset_two: asset_two,
             wUsdPlus: wUsdPlus,
@@ -174,7 +202,9 @@ const actions = {
         commit('setOriginalBalance', {
             usdPlus: originUsdPlus,
             daiPlus: originDaiPlus,
+            usdtPlus: originUsdtPlus,
             dai: originDai,
+            usdt: originUsdt,
             asset: originAsset,
             asset_two: originAsset_two,
             wUsdPlus: originWUsdPlus,

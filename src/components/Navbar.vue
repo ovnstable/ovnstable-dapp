@@ -100,7 +100,7 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item v-if="(networkId !== 56)"
+                <v-list-item v-if="(networkId !== 56 && networkId !== 324)"
                              @click="wrapClick"
                              class="list-item-hover">
                     <v-list-item-title>
@@ -164,6 +164,63 @@
               </v-list-item-title>
             </v-list-item>
           </v-list-group>
+
+            <v-list-group :append-icon="null"
+                          @click="toggleUsdtPlus(!isShowUsdt)">
+                <template v-slot:activator>
+                    <v-list-item-icon class="mx-n2">
+                        <div class="navbar-page-link">
+                            <svg width="24" height="24" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!--                                <path v-bind:fill="usdtPlusIconColor" d="M4.68182 23.8182H2.5V17.2727H9.04545V19.4545H6.34C8.09636 22.0836 11.0964 23.8182 14.5 23.8182C17.1039 23.8182 19.6012 22.7838 21.4425 20.9425C23.2838 19.1012 24.3182 16.6039 24.3182 14H26.5C26.5 20.6327 21.1327 26 14.5 26C10.4418 26 6.85273 23.9818 4.68182 20.9055V23.8182ZM2.5 14C2.5 7.36727 7.86727 2 14.5 2C18.5582 2 22.1473 4.01818 24.3182 7.09455V4.18182H26.5V10.7273H19.9545V8.54545H22.66C20.9036 5.91636 17.9036 4.18182 14.5 4.18182C11.8961 4.18182 9.39876 5.21623 7.5575 7.0575C5.71623 8.89876 4.68182 11.3961 4.68182 14H2.5Z"/>-->
+<!--                                <path v-bind:fill="usdtPlusIconColor" d="M14.5664 20H10.5V8H14.6484C15.8398 8 16.8633 8.24023 17.7188 8.7207C18.5781 9.19727 19.2383 9.88281 19.6992 10.7773C20.1602 11.6719 20.3906 12.7422 20.3906 13.9883C20.3906 15.2383 20.1582 16.3125 19.6934 17.2109C19.2324 18.1094 18.5664 18.7988 17.6953 19.2793C16.8281 19.7598 15.7852 20 14.5664 20ZM12.6738 18.1191H14.4609C15.2969 18.1191 15.9941 17.9668 16.5527 17.6621C17.1113 17.3535 17.5313 16.8945 17.8125 16.2852C18.0938 15.6719 18.2344 14.9063 18.2344 13.9883C18.2344 13.0703 18.0938 12.3086 17.8125 11.7031C17.5313 11.0938 17.1152 10.6387 16.5645 10.3379C16.0176 10.0332 15.3379 9.88086 14.5254 9.88086H12.6738V18.1191Z"/>-->
+                                <path v-bind:fill="usdtPlusIconColor" d="M15.4709 13.0182C13.5291 12.3745 12.5909 11.9709 12.5909 10.9455C12.5909 9.83273 13.8018 9.42909 14.5655 9.42909C15.9945 9.42909 16.5182 10.5091 16.6382 10.8909L18.3618 10.16C18.1982 9.66909 17.4673 8.06545 15.5909 7.71636V6.36364H13.4091V7.73818C10.7036 8.34909 10.6927 10.8582 10.6927 10.9673C10.6927 13.4436 13.1473 14.1418 14.3473 14.5782C16.0709 15.1891 16.8345 15.7455 16.8345 16.7927C16.8345 18.0255 15.6891 18.5491 14.6745 18.5491C12.6891 18.5491 12.1218 16.5091 12.0564 16.2691L10.2455 17C10.9327 19.3891 12.7327 20.0327 13.4091 20.2291V21.6364H15.5909V20.2836C16.0273 20.1855 18.7545 19.64 18.7545 16.7709C18.7545 15.2545 18.0891 13.9236 15.4709 13.0182ZM4.68182 23.8182H2.5V17.2727H9.04545V19.4545H6.34C8.09636 22.0836 11.0964 23.8182 14.5 23.8182C17.1039 23.8182 19.6012 22.7838 21.4425 20.9425C23.2838 19.1012 24.3182 16.6039 24.3182 14H26.5C26.5 20.6327 21.1327 26 14.5 26C10.4418 26 6.85273 23.9818 4.68182 20.9055V23.8182ZM2.5 14C2.5 7.36727 7.86727 2 14.5 2C18.5582 2 22.1473 4.01818 24.3182 7.09455V4.18182H26.5V10.7273H19.9545V8.54545H22.66C20.9036 5.91636 17.9036 4.18182 14.5 4.18182C11.8961 4.18182 9.39876 5.21623 7.5575 7.0575C5.71623 8.89876 4.68182 11.3961 4.68182 14H2.5Z" />
+                            </svg>
+                        </div>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <label :class="selectedTab.startsWith('usdtplus_') ? 'selected-page' : ''"
+                               class="navbar-page-label" >
+                            USDT+
+                        </label>
+                    </v-list-item-title>
+                    <div class="select-bar-main-container mr-15" >
+                        <v-row>
+                            <v-icon color="var(--secondary-gray-text)" >
+                                {{ isShowUsdt ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
+                            </v-icon>
+                        </v-row>
+                    </div>
+                </template>
+
+                <v-list-item @click="usdtStatsClick" :class="selectedTab === 'usdtplus_performance' ? 'selected-page-item' : ''"
+                             class="list-item-hover">
+                    <v-list-item-title>
+                        <label :class="selectedTab === 'usdtplus_performance' ? 'selected-page' : ''"
+                               class="navbar-list-label mx-5">
+                            Performance
+                        </label>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item :class="selectedTab === 'usdtplus_collateral' ? 'selected-page-item' : ''"
+                             @click="usdtCollateralClick"
+                             class="list-item-hover ">
+                    <v-list-item-title>
+                        <label :class="selectedTab === 'usdtplus_collateral' ? 'selected-page' : ''"
+                               class="navbar-list-label mx-5">
+                            Collateral
+                        </label>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item v-if="(networkId === 56)"
+                             link @click="swapUsdtClick"
+                             class="list-item-hover">
+                    <v-list-item-title>
+                        <label class="navbar-page-label-modal mx-5">Mint/redeem</label>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
 
 
           <v-list-item @click="etsClick()"
@@ -323,6 +380,7 @@ export default {
     data: () => ({
         isShowUsd: false,
         isShowDai: false,
+        isShowUsdt: false,
         isShowInsurance: false,
         isColoredEts: false,
     }),
@@ -356,6 +414,14 @@ export default {
             return this.isShowDai ? '#FFFFFF' : '#ADB3BD';
         },
 
+        usdtPlusIconColor: function() {
+            if (this.light) {
+                return this.isShowUsdt ? '#000000' : '#ADB3BD';
+            }
+
+            return this.isShowUsdt ? '#FFFFFF' : '#ADB3BD';
+        },
+
         etsColored: function() {
             if (this.light) {
                 return this.isColoredEts ? '#000000' : '#ADB3BD';
@@ -369,6 +435,7 @@ export default {
         ...mapActions('menuUI', ['selectTab']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
         ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView']),
+        ...mapActions('swapUsdtModal', ['showUsdtSwapModal', 'showUsdtMintView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
         ...mapActions('theme', ['switchTheme']),
         ...mapActions('track', ['trackClick']),
@@ -408,6 +475,12 @@ export default {
           this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
         },
 
+        usdtCollateralClick() {
+          this.selectTab('usdtplus_collateral');
+          this.goToActionByPath('/collateral/usdt', {tabName: 'collateralUsdt'});
+          this.trackClick({action: 'usdt-collateral-click', event_category: 'View Page', event_label: 'Open usdt collateral page', value: 1 });
+        },
+
         usdPlusPoolsClick() {
             this.selectTab('usdplus_pools');
             this.goToActionByPath('/pools', {tabName: 'usdPlusPools'});
@@ -423,6 +496,12 @@ export default {
             this.selectTab('daiplus_performance');
             this.goToActionByPath('/stats/dai', {tabName: 'daiPerformance'});
             this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
+        },
+
+        usdtStatsClick() {
+            this.selectTab('usdtplus_performance');
+            this.goToActionByPath('/stats/usdt', {tabName: 'usdtPerformance'});
+            this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
         },
 
         etsClick() {
@@ -458,6 +537,12 @@ export default {
           this.trackClick({action: 'swap-dai-click', event_category: 'Mint', event_label: 'Open dai mint modal', value: 1 });
         },
 
+        swapUsdtClick() {
+            this.showUsdtMintView();
+            this.showUsdtSwapModal();
+            this.trackClick({action: 'swap-usdt-click', event_category: 'Mint', event_label: 'Open usdt mint modal', value: 1 });
+        },
+
         wrapClick() {
             this.showWrapView();
             this.showWrapModal();
@@ -489,6 +574,7 @@ export default {
             if (isShow) {
                 this.toggleInsurance(false);
                 this.toggleDaiPlus(false);
+                this.toggleUsdtPlus(false);
             }
 
             this.isShowUsd = isShow;
@@ -498,15 +584,27 @@ export default {
             if (isShow) {
                 this.toggleInsurance(false);
                 this.toggleUsdPlus(false);
+                this.toggleUsdtPlus(false);
             }
 
             this.isShowDai = isShow;
+        },
+
+      toggleUsdtPlus(isShow) {
+            if (isShow) {
+                this.toggleInsurance(false);
+                this.toggleUsdPlus(false);
+                this.toggleDaiPlus(false);
+            }
+
+            this.isShowUsdt = isShow;
         },
 
         toggleInsurance(isShow) {
             if (isShow) {
                 this.toggleUsdPlus(false);
                 this.toggleDaiPlus(false);
+                this.toggleUsdtPlus(false);
             }
 
             this.isShowInsurance = isShow;

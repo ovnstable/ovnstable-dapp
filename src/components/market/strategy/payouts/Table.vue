@@ -75,6 +75,7 @@
 import {mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 
+
 /* eslint-disable no-unused-vars,no-undef */
 
 export default {
@@ -99,18 +100,39 @@ export default {
             type: Array,
             default: () => {},
         },
+
+        networkName: {
+            type: String,
+            default: 'optimism'
+        }
     },
 
     computed: {
-        ...mapGetters('network', ['explorerUrl']),
+        ...mapGetters('network', ['getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'zkConfig']),
         ...mapGetters('theme', ['light']),
     },
 
     methods: {
         openOnScan(item) {
-            let url = this.explorerUrl + "tx/" + item.transactionHash;
-            window.open(url, '_blank').focus();
-
+            let url;
+            switch (this.networkName) {
+                case 'polygon':
+                    url = this.polygonConfig.explorerUrl;
+                    break;
+                case 'optimism':
+                    url = this.opConfig.explorerUrl;
+                    break;
+                case 'bsc':
+                    url = this.bscConfig.explorerUrl;
+                    break;
+                case 'arbitrum':
+                    url = this.arConfig.explorerUrl;
+                    break;
+                case 'zksync':
+                    url = this.zkConfig.explorerUrl;
+                    break;
+            }
+            window.open(url + `tx/${item.transactionHash}`, '_blank').focus();
         },
 
         formatDate(date) {

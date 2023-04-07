@@ -211,9 +211,10 @@
 
                 <v-row align="center" justify="center">
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
-                        <Table
+                        <EtsTable
                                 v-if="!$wu.isMobile()"
                                 :profit-label="etsData.actionTokenName + ' per ETS'"
+                                :ets-chain="etsData.chain"
                                 :payout-data="
                                 etsStrategyData[etsData.name]
                                 && etsStrategyData[etsData.name].payoutItems
@@ -221,10 +222,11 @@
                                 ? [...etsStrategyData[etsData.name].payoutItems].reverse()
                                 : []"/>
 
-                        <Table
+                        <EtsTable
                                 v-else
                                 minimized
                                 :profit-label="etsData.actionTokenName + ' per ETS'"
+                                :ets-chain="etsData.chain"
                                 :payout-data="
                                 etsStrategyData[etsData.name]
                                 && etsStrategyData[etsData.name].payoutItems
@@ -252,7 +254,7 @@
 
 import {mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
-import Table from "@/components/market/strategy/payouts/Table";
+import EtsTable from "@/components/market/strategy/etsPayouts/EtsTable";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut";
 import ChartApy from "@/components/market/strategy/chart/ChartApy";
 import ChartTvl from "@/components/market/strategy/chart/ChartTvl";
@@ -264,7 +266,7 @@ export default {
         ChartTvl,
         ChartApy,
         Doughnut,
-        Table,
+        EtsTable,
         Tooltip,
     },
 
@@ -277,18 +279,6 @@ export default {
       etsData: {
           type: Object,
       },
-      // etsStrategyData: {
-      //     type: Object
-      // },
-      // etsApyData: {
-      //     type: Object
-      // },
-      // etsTvlData: {
-      //     type: Object
-      // },
-      // usdPlusApyData: {
-      //     type: Object
-      // },
     },
 
     watch: {

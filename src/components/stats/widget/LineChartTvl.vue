@@ -81,9 +81,15 @@ export default {
             type: Object,
             default: null,
         },
+
        assetType: {
           type: String,
           default: 'usd+'
+        },
+
+        networkName: {
+            type: String,
+            default: 'optimism'
         }
     },
 
@@ -115,7 +121,7 @@ export default {
     }),
 
     computed: {
-      ...mapGetters('network', ['networkId', 'appApiUrl', 'apiUrl', 'networkName']),
+      ...mapGetters('network', ['networkId', 'appApiUrl', 'apiUrl']),
       ...mapGetters('theme', ['light']),
 
         isMobile() {

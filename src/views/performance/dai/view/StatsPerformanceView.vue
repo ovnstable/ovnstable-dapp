@@ -4,16 +4,38 @@
             <label class="title-label">dai+ Performance</label>
         </div>
 
-        <div v-if="networkId === 10 || networkId === 42161">
-            <v-row v-if="!isPayoutsLoading" class="ma-0" :class="$wu.isMobile() ? 'mt-5 justify-center' : 'mt-5 mr-4 justify-end'">
-                <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                    Mint DAI+
-                </v-btn>
-                <v-btn class="header-btn btn-outlined" @click="redeemAction">
-                    Redeem DAI+
-                </v-btn>
+        <div v-if="!isPayoutsLoading">
+            <v-row v-if="networkId === 10 || networkId === 42161">
+                <template v-if="$wu.isMobile()">
+                    <v-col cols="12" align="center" class="mt-10">
+                        <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
+                            Mint DAI+
+                        </v-btn>
+                        <v-btn class="header-btn btn-outlined" @click="redeemAction">
+                            Redeem DAI+
+                        </v-btn>
+                    </v-col>
+                </template>
+                <v-col cols="6">
+                    <v-row class="ma-0 mt-10 toggle-row ml-3">
+                        <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
+                        <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+                    </v-row>
+                </v-col>
+                <template v-if="!$wu.isMobile()">
+                    <v-col align="end" cols="6" class="mt-6">
+                        <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
+                            Mint DAI+
+                        </v-btn>
+                        <v-btn class="header-btn btn-outlined mr-3" @click="redeemAction">
+                            Redeem DAI+
+                        </v-btn>
+                    </v-col>
+                </template>
             </v-row>
         </div>
+
+
 
 
       <div v-if="networkId === 10 || networkId === 42161">
@@ -28,15 +50,28 @@
           </v-row>
         </v-row>
 
-        <v-row v-if="!isPayoutsLoading && !$wu.isMobile()" class="ma-0" justify="start" align="center">
+        <v-row
+            v-if="!isPayoutsLoading && !$wu.isMobile()"
+            class="ma-0"
+            justify="start"
+            align="center"
+        >
           <v-col cols="6">
             <div class="info-card-container py-3">
-              <LineChartApy :data="payoutsApyData" asset-type="dai+"/>
+              <LineChartApy
+                  :data="payoutsApyData"
+                  asset-type="dai+"
+                  :network-name="tab"
+              />
             </div>
           </v-col>
           <v-col cols="6">
             <div class="info-card-container py-3">
-              <LineChartTvl :data="payoutsTvlData" asset-type="dai+"/>
+              <LineChartTvl
+                  :data="payoutsTvlData"
+                  asset-type="dai+"
+                  :network-name="tab"
+              />
             </div>
           </v-col>
         </v-row>
@@ -56,8 +91,20 @@
               </v-col>
             </v-row>
 
-            <LineChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData" asset-type="dai+"/>
-            <LineChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData" asset-type="dai+"/>
+            <LineChartApy
+                  v-if="rateTab === 1"
+                  :data="payoutsApyData"
+                  class="mx-n3"
+                  asset-type="dai+"
+                  :network-name="tab"
+            />
+            <LineChartTvl
+                v-if="rateTab === 3"
+                :data="payoutsTvlData"
+                class="mx-n3"
+                asset-type="dai+"
+                :network-name="tab"
+            />
           </v-col>
         </v-row>
 
@@ -72,13 +119,17 @@
                 <Table
                     v-if="!$wu.isMobile()"
                     :profit-label="assetName + ' per DAI+'"
-                    :payout-data="payouts"/>
+                    :payout-data="payouts"
+                    :network-name="tab"
+                />
 
                 <Table
                     v-else
                     minimized
                     :profit-label="assetName + ' per DAI+'"
-                    :payout-data="payouts"/>
+                    :payout-data="payouts"
+                    :network-name="tab"
+                />
 
                 <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
                   <label class="table-scroll-label">scroll to see more</label>
@@ -86,7 +137,12 @@
               </v-col>
 
               <v-col :cols="!$wu.isFull() ? 12 : 4">
-                <Doughnut :size="280" color="#3D8DFF" :last-date="lastPayoutDate"/>
+                <Doughnut
+                      :last-date="lastPayoutDate"
+                      :size="280"
+                      color="#3D8DFF"
+                      :network-name="tab"
+                />
               </v-col>
             </v-row>
           </v-col>
@@ -110,11 +166,11 @@
         <div v-if="networkId !== 10 && networkId !== 42161"
              :class="$wu.isMobile() ? 'flex-column' : ''"
              class="mt-3 buttons-div" >
-            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('42161')">
-                switch to arbitrum to mint
-            </v-btn>
-            <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('10')">
+            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('10')">
                 switch to optimism to mint
+            </v-btn>
+            <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('42161')">
+                switch to arbitrum to mint
             </v-btn>
         </div>
 
@@ -144,6 +200,7 @@ export default {
     },
 
     data: () => ({
+      tab: 'optimism',
       rateTab: 1,
 
       isPayoutsLoading: true,
@@ -155,7 +212,28 @@ export default {
     }),
 
     computed: {
-      ...mapGetters("network", ['networkId', 'networkName', 'assetName', 'appApiUrl', 'apiUrl']),
+      ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl', 'apiUrl', 'getParams', 'networkName']),
+
+        tabNetworkName: function() {
+            let params;
+            params = this.getParams(this.tab)
+
+            return params.networkName;
+        },
+
+        activeTabOptimism: function() {
+            return {
+                'tab-button': this.tab === 'optimism',
+                'tab-button-in-active': this.tab !== 'optimism',
+            }
+        },
+
+        activeTabArbitrum: function() {
+            return {
+                'tab-button': this.tab === 'arbitrum',
+                'tab-button-in-active': this.tab !== 'arbitrum',
+            }
+        },
 
       activeRateApy: function () {
             return {
@@ -182,22 +260,44 @@ export default {
             return this.payouts && this.payouts.length ? this.payouts[0].payableDate : '';
         },
     },
+
     watch: {
-      networkId: function () {
-        this.loadData();
-      }
     },
+
     created() {
 
     },
 
     mounted() {
-      this.loadData();
+        console.log('Tab Name: ', this.$route.query.tabName);
+        this.setTab('optimism');
+        this.loadData();
     },
 
     methods: {
         ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView', 'showDaiRedeemView']),
         ...mapActions("network", ["setWalletNetwork"]),
+
+        setTab(tabName) {
+            this.tab = tabName;
+            if (this.tab === 'optimism') {
+                this.initTabName('/stats/dai', {tabName: 'optimism'});
+            }
+
+            if (this.tab === 'arbitrum') {
+                this.initTabName('/stats/dai', {tabName: 'arbitrum'});
+            }
+
+            this.loadData();
+            console.log("NetworkParams : ", this.getParams(this.tab));
+        },
+
+        initTabName(path, queryParams) {
+            this.$router.push({
+                path: path,
+                query: queryParams ? queryParams : {}
+            });
+        },
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -207,6 +307,7 @@ export default {
             this.showDaiMintView();
             this.showDaiSwapModal();
         },
+
         loadData() {
           this.payoutsApyData = null;
           this.payoutsTvlData = null;
@@ -215,10 +316,11 @@ export default {
 
           this.loadPayouts();
         },
+
         loadPayouts() {
           this.isPayoutsLoading = true;
 
-          payoutsApiService.getPayouts(this.apiUrl + `/${this.networkName}/dai+`)
+          payoutsApiService.getPayouts(this.apiUrl + `/${this.tabNetworkName}/dai+`)
               .then(data => {
                 this.payouts = data
                 let clientData = data;
@@ -315,6 +417,13 @@ export default {
         letter-spacing: 0.03em !important;
     }
 
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
     .ready-label {
         font-style: normal;
         font-weight: 400;
@@ -356,6 +465,10 @@ export default {
         font-size: 14px;
         line-height: 22px;
     }
+
+    .toggle-row {
+        width: 100% !important;
+    }
 }
 
 /* tablet */
@@ -382,6 +495,13 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .ready-label {
@@ -437,6 +557,13 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .ready-label {
@@ -499,6 +626,13 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         letter-spacing: 0.02em !important;
     }
 
+    .tab-btn {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
+    }
+
     .ready-label {
         font-style: normal;
         font-weight: 400;
@@ -545,6 +679,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .toggle-row {
     border-bottom: 2px solid var(--main-border);
+    width: 200% !important;
 }
 
 .title-label {
@@ -601,6 +736,18 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     text-align: center !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
+}
+
+.tab-btn {
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    color: var(--secondary-gray-text);
+    margin-bottom: -2px;
+    cursor: pointer;
+}
+
+.tab-btn-disabled {
+    cursor: default;
 }
 
 .rate-tab-button {
@@ -661,5 +808,15 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
   color: var(--main-gray-text);
 }
 
+.tab-button {
+    border-bottom: 2px solid var(--links-blue) !important;
+    color: var(--links-blue) !important;
+    cursor: pointer !important;
+}
+
+.tab-button-in-active {
+    color: var(--secondary-gray-text) !important;
+    cursor: pointer !important;
+}
 
 </style>

@@ -48,11 +48,13 @@ import ErrorModal from "@/components/common/modal/action/ErrorModal";
 export default {
     name: "WeightActionsPanel",
     components: {ErrorModal, Tooltip},
+    props: [
+        'm2mItems', 'financeLoading', 'hasChangeAccount', 'contractType'
+    ],
     data: () => ({
     }),
 
     computed: {
-        ...mapGetters('governance', ['m2mItems', 'financeLoading', 'hasChangeAccount']),
 
         weightsIsBtnEnabled: function () {
             let targetWeightSum = 0.000;
@@ -97,6 +99,10 @@ export default {
         },
     },
 
+    watch: {
+
+    },
+
     methods: {
         ...mapActions('governance', ['setStrategiesM2MWeights', 'estimateSetStrategiesM2MWeights', 'rebalancePortfolio', 'estimateRebalancePortfolio', 'getFinance']),
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
@@ -111,7 +117,7 @@ export default {
                 }
 
                 await this.setStrategiesM2MWeights(this.m2mItems);
-                await this.getFinance();
+                await this.getFinance(this.contractType);
             } else {
                 this.showErrorModal('governanceChangeWeights');
             }
@@ -127,14 +133,14 @@ export default {
                 }
 
                 await this.rebalancePortfolio();
-                await this.getFinance();
+                await this.getFinance(this.contractType);
             } else {
                 this.showErrorModal('governanceRebalance');
             }
         },
 
         updateM2MItems() {
-            this.getFinance();
+            this.getFinance(this.contractType);
         },
     }
 }

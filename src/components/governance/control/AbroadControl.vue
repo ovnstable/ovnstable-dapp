@@ -37,7 +37,7 @@
             <v-row>
                 <v-col>
                     <v-btn @click="action">
-                        Update
+                        Update {{contractType}}
                     </v-btn>
                 </v-col>
             </v-row>
@@ -50,10 +50,14 @@ import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "AbroadControl",
+    props: [
+        'contractType'
+    ],
 
     data: () => ({
 
         newAbroad: {
+            contractType: null,
             min: 0,
             max: 0,
         },
@@ -68,6 +72,7 @@ export default {
         ...mapActions('governance', ['updateAbroad']),
 
         action() {
+            this.newAbroad.contractType = this.contractType;
             this.updateAbroad(this.newAbroad);
         },
     }

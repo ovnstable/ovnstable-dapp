@@ -27,6 +27,9 @@ const actions = {
 
         await commit('setLight', isLight);
         await dispatch('applyColorVariables');
+        if (getters.onboard) {
+            getters.onboard.state.actions.updateTheme(isLight ? 'light' : 'dark')
+        }
     },
 
     async initTheme({commit, dispatch, getters}) {
@@ -38,8 +41,13 @@ const actions = {
             isLight = (isLight === 'true');
         }
 
+
         await commit('setLight', isLight);
         await dispatch('applyColorVariables');
+
+        if (getters.onboard) {
+            getters.onboard.state.actions.updateTheme(isLight ? 'light' : 'dark')
+        }
     },
 
     async applyColorVariables({commit, dispatch, getters}) {

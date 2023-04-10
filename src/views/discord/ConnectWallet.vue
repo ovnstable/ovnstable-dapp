@@ -97,7 +97,6 @@ export default {
         const injected = injectedModule();
         let rpcUrl = this.rpcUrl;
 
-        // this.onboard = {}
         let onboard =   Onboard({
             // ... other Onboard options
             wallets: [

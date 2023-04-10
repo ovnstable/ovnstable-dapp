@@ -50,7 +50,7 @@ const ZKSYNC_PARAMS = {
     appApiUrl: 'https://zksync.overnight.fi/api',
     networkName: 'zksync',
     networkId: 324,
-    rpcUrl: 'https://mainnet.era.zksync.io',
+    rpcUrl: 'https://mainnet.era.zksync.io',//'https://zksync2-testnet.zksync.dev', //https://mainnet.era.zksync.io',
     explorerUrl: 'https://explorer.zksync.io/',
     assetName: 'USDC',
     assetDecimals: 6,
@@ -335,6 +335,7 @@ const actions = {
                         case "324":
                             params = {
                                 chainId: rootState.web3.web3.utils.toHex(324),
+                                // rpcUrls: ['https://zksync2-testnet.zksync.dev'],
                                 rpcUrls: ['https://mainnet.era.zksync.io'],
                                 blockExplorerUrls: ['https://explorer.zksync.io'],
                                 chainName: 'ZkSync',

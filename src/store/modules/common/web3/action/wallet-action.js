@@ -141,9 +141,14 @@ const actions = {
             });
         }
 
+        console.log("Wallet, wallet label: ", wallet.label, wallet.label === 'WalletConnect');
+
         if (wallet.label === 'WalletConnect') {
             try {
-                let isWalletOk = await getters.onboard.walletCheck();
+                console.log("Wallet, wallet label isWalletOk start: ");
+                // let isWalletOk = await getters.onboard.walletCheck();
+                let isWalletOk = true;
+                console.log("Wallet, wallet label isWalletOk: ", isWalletOk);
 
                 if (!isWalletOk) {
                     try {
@@ -211,6 +216,29 @@ const actions = {
     },
 
     async connectWallet({commit, dispatch, getters, rootState}) {
+        console.log("connectWallet")
+
+        if (!getters.onboard) {
+            await dispatch('initOnboard');
+        }
+
+        let walletName = localStorage.getItem('walletName');
+        console.log('WalletName:', walletName);
+        // await getters.onboard.walletSelect(walletName ? walletName : '');
+        // await getters.onboard.connectWallet()
+
+        try {
+            let netId = await rootState.web3.web3.eth.net.getId();
+
+            if (netId) {
+                await getters.onboard.setChain({ chainId: netId });
+            }
+        } catch (e) {
+            console.log('Wallet not connected: ', e)
+        }
+    },
+
+    async connectWalletTwo({commit, dispatch, getters, rootState}) {
 
         if (!getters.onboard) {
             await dispatch('initOnboard');
@@ -272,6 +300,7 @@ const actions = {
             }
 
             if (wallet.label === 'WalletConnect') {
+                console.log("WalletConnect callback")
                 try {
                     let isWalletOk = await getters.onboard.walletCheck();
 
@@ -454,17 +483,25 @@ const actions = {
 
         })
 
-        const wcV2InitOptions = {
-            version: 2,
-            /**
-             * Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
-             */
-            projectId: "699fb1306e95ed8b837fd8962c633422",
-
+        const wcInitOptions = {
+            qrcodeModalOptions: {
+                mobileLinks: ['metamask', 'argent', 'trust']
+            },
+            connectFirstChainId: true
         }
 
+/*
+        const wcInitOptions = {
+            version: 2,
+            /!**
+             * Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
+             *!/
+            projectId: "699fb1306e95ed8b837fd8962c633422",
+        }
+*/
+
         const coinbaseWalletSdk = coinbaseWalletModule({ darkMode: true });
-        const walletConnect = await walletConnectModule(wcV2InitOptions);
+        const walletConnect = await walletConnectModule(wcInitOptions);
         const ledger = ledgerModule();
         const gnosis = gnosisModule();
         const trezor = trezorModule({

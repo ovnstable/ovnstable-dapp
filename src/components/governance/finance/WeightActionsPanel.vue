@@ -109,14 +109,14 @@ export default {
 
         async changeWeightsAction() {
 
-            let estimatedGasValue = await this.estimateSetStrategiesM2MWeights(this.m2mItems);
+            let estimatedGasValue = await this.estimateSetStrategiesM2MWeights({weights: this.m2mItems, contractType: this.contractType});
 
             if (estimatedGasValue) {
                 if (estimatedGasValue.haveError) {
                     this.showErrorModalWithMsg({errorType: 'governanceChangeWeights', errorMsg: estimatedGasValue});
                 }
 
-                await this.setStrategiesM2MWeights(this.m2mItems);
+                await this.setStrategiesM2MWeights({weights: this.m2mItems, contractType: this.contractType});
                 await this.getFinance(this.contractType);
             } else {
                 this.showErrorModal('governanceChangeWeights');
@@ -125,14 +125,14 @@ export default {
 
         async rebalanceAction() {
 
-            let estimatedGasValue = await this.estimateRebalancePortfolio();
+            let estimatedGasValue = await this.estimateRebalancePortfolio(this.contractType);
 
             if (estimatedGasValue) {
                 if (estimatedGasValue.haveError) {
                     this.showErrorModalWithMsg({errorType: 'governanceRebalance', errorMsg: estimatedGasValue});
                 }
 
-                await this.rebalancePortfolio();
+                await this.rebalancePortfolio(this.contractType);
                 await this.getFinance(this.contractType);
             } else {
                 this.showErrorModal('governanceRebalance');

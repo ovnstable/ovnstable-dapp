@@ -329,8 +329,19 @@ const actions = {
         dispatch('getSettings')
     },
 
-    async checkAccount({commit, dispatch, getters, rootState}) {
-        let pm = rootState.web3.contracts.pm;
+    async checkAccount({commit, dispatch, getters, rootState}, contractType) {
+        let pm;
+        if (!contractType || contractType === 'USD+') {
+            pm = rootState.web3.contracts.pm;
+        } else if (contractType === 'DAI+') {
+            pm = rootState.web3.contracts.daiPm;
+        } else if (contractType === 'USDT+') {
+            pm = rootState.web3.contracts.usdtPm;
+        } else {
+            console.log("Error when checkAccount. Contract type not found: ", contractType)
+            return;
+        }
+
         let account = rootState.accountData.account;
         let roleId = await pm.methods.PORTFOLIO_AGENT_ROLE().call();
         let hasRole = await pm.methods.hasRole(roleId, account).call();
@@ -338,11 +349,24 @@ const actions = {
         commit('setHasChangeAccount', hasRole);
     },
 
-    async setStrategiesM2MWeights({commit, dispatch, getters, rootState}, weights) {
-
+    async setStrategiesM2MWeights({commit, dispatch, getters, rootState}, data) {
         commit('setFinanceLoading', true);
 
-        let pm = rootState.web3.contracts.pm;
+        let weights = data.weights
+        let contractType = data.contractType
+
+        let pm;
+        if (!contractType || contractType === 'USD+') {
+            pm = rootState.web3.contracts.pm;
+        } else if (contractType === 'DAI+') {
+            pm = rootState.web3.contracts.daiPm;
+        } else if (contractType === 'USDT+') {
+            pm = rootState.web3.contracts.usdtPm;
+        } else {
+            console.log("Error when checkAccount. Contract type not found: ", contractType)
+            return;
+        }
+
         let account = rootState.accountData.account;
         let params = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
 
@@ -373,16 +397,29 @@ const actions = {
         commit('setFinanceLoading', false);
     },
 
-    async estimateSetStrategiesM2MWeights({commit, dispatch, getters, rootState}, weights) {
-
+    async estimateSetStrategiesM2MWeights({commit, dispatch, getters, rootState}, data) {
         commit('setFinanceLoading', true);
+
+        let weights = data.weights
+        let contractType = data.contractType
+
+        let pm;
+        if (!contractType || contractType === 'USD+') {
+            pm = rootState.web3.contracts.pm;
+        } else if (contractType === 'DAI+') {
+            pm = rootState.web3.contracts.daiPm;
+        } else if (contractType === 'USDT+') {
+            pm = rootState.web3.contracts.usdtPm;
+        } else {
+            console.log("Error when checkAccount. Contract type not found: ", contractType)
+            return;
+        }
 
         let result;
         let networkId = rootState.network.networkId;
 
         try {
             let blockNum = await rootState.web3.web3.eth.getBlockNumber();
-            let pm = rootState.web3.contracts.pm;
             let account = rootState.accountData.account;
             let estimateOptions = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
 
@@ -442,11 +479,22 @@ const actions = {
         return result;
     },
 
-    async rebalancePortfolio({commit, dispatch, getters, rootState}) {
+    async rebalancePortfolio({commit, dispatch, getters, rootState}, contractType) {
 
         commit('setFinanceLoading', true);
 
-        let pm = rootState.web3.contracts.pm;
+        let pm;
+        if (!contractType || contractType === 'USD+') {
+            pm = rootState.web3.contracts.pm;
+        } else if (contractType === 'DAI+') {
+            pm = rootState.web3.contracts.daiPm;
+        } else if (contractType === 'USDT+') {
+            pm = rootState.web3.contracts.usdtPm;
+        } else {
+            console.log("Error when checkAccount. Contract type not found: ", contractType)
+            return;
+        }
+
         let account = rootState.accountData.account;
         let params = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
 
@@ -459,7 +507,7 @@ const actions = {
         commit('setFinanceLoading', false);
     },
 
-    async estimateRebalancePortfolio({commit, dispatch, getters, rootState}) {
+    async estimateRebalancePortfolio({commit, dispatch, getters, rootState}, contractType) {
 
         commit('setFinanceLoading', true);
 
@@ -467,7 +515,19 @@ const actions = {
 
         try {
             let blockNum = await rootState.web3.web3.eth.getBlockNumber();
-            let pm = rootState.web3.contracts.pm;
+
+            let pm;
+            if (!contractType || contractType === 'USD+') {
+                pm = rootState.web3.contracts.pm;
+            } else if (contractType === 'DAI+') {
+                pm = rootState.web3.contracts.daiPm;
+            } else if (contractType === 'USDT+') {
+                pm = rootState.web3.contracts.usdtPm;
+            } else {
+                console.log("Error when checkAccount. Contract type not found: ", contractType)
+                return;
+            }
+
             let account = rootState.accountData.account;
             let estimateOptions = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
 
@@ -511,7 +571,18 @@ const actions = {
 
     async getStrategyWeights({commit, dispatch, getters, rootState}, contractType) {
 
-        let pm = rootState.web3.contracts.pm;
+        let pm;
+        if (!contractType || contractType === 'USD+') {
+            pm = rootState.web3.contracts.pm;
+        } else if (contractType === 'DAI+') {
+            pm = rootState.web3.contracts.daiPm;
+        } else if (contractType === 'USDT+') {
+            pm = rootState.web3.contracts.usdtPm;
+        } else {
+            console.log("Error when checkAccount. Contract type not found: ", contractType)
+            return;
+        }
+
         let weights = await pm.methods.getAllStrategyWeights().call();
 
         let items = [];
@@ -559,25 +630,30 @@ const actions = {
 
     async getM2M({commit, dispatch, getters, rootState}, contractType) {
 
-        let m2m = rootState.web3.contracts.m2m;
+        let m2m;
         let tokenPlusContract;
+        let pm;
         if (contractType === 'USD+') {
             tokenPlusContract = rootState.web3.contracts.usdPlus;
+            pm = rootState.web3.contracts.pm;
+            m2m = rootState.web3.contracts.m2m;
         } else if (contractType === 'DAI+') {
             tokenPlusContract = rootState.web3.contracts.daiPlus;
+            pm = rootState.web3.contracts.daiPm;
+            m2m = rootState.web3.contracts.daiM2m;
         } else if (contractType === 'USDT+') {
             tokenPlusContract = rootState.web3.contracts.usdtPlus;
+            pm = rootState.web3.contracts.usdtPm;
+            m2m = rootState.web3.contracts.usdtM2m;
         } else {
             console.log("Error when get m2m. Contract type not found: ", contractType)
             return;
         }
 
-        if (!tokenPlusContract) {
-            console.log("Error when get m2m. Contract not found: ", contractType)
+        if (!tokenPlusContract || !pm) {
+            console.log("Error when get m2m. Contract not found: ", contractType, tokenPlusContract, pm)
             return;
         }
-
-        let pm = rootState.web3.contracts.pm;
 
         let strategyAssets = await m2m.methods.strategyAssets().call();
         let totalNetAssets = await m2m.methods.totalNetAssets().call();
@@ -605,6 +681,12 @@ const actions = {
             let weight = strategyWeights[i];
 
             let mapping = strategiesMapping.find(value => value.address === asset.strategy);
+
+            console.log('fromAsset6: ', fromAsset6)
+            if (fromAsset6 && contractType === 'DAI+') {
+                fromAsset6 = false;
+            }
+            console.log('rootState.network.assetDecimals: ', rootState.network.assetDecimals)
 
             items.push(
                 {
@@ -749,7 +831,7 @@ const actions = {
         commit('setFinanceLoading', true);
 
         dispatch('getAbroad', contractType);
-        dispatch('checkAccount');
+        dispatch('checkAccount', contractType);
         await dispatch('getStrategyWeights', contractType);
         await dispatch('getM2M', contractType);
 

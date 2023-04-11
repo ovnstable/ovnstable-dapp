@@ -10,4 +10,4 @@ export default async function getFinance({ context, nextMiddleware }){
         return context.next(false);
     }
     return nextMiddleware()
-};
+}

@@ -20,7 +20,7 @@
                     :m2m-items="m2mItems"
                     :m2m-total="m2mTotal"
                     :finance-loading="financeLoading"
-                    :has-change-account:="hasChangeAccount"
+                    :has-change-account="hasChangeAccount"
                     :usd-plus-liquidity-index="usdPlusLiquidityIndex"
                     :contracts="contracts"
                     :account="account"

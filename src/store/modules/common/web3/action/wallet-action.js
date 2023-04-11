@@ -97,7 +97,6 @@ const actions = {
         const connectedWallets = await onboard.connectWallet()
         console.log("walletConnect onboard after connect wallet ", connectedWallets)
 
-
         let wallet = connectedWallets[0];
         console.log('initOnboard: wallet: ', wallet);
 
@@ -107,71 +106,28 @@ const actions = {
         if (rootState.web3.provider) {
 
             console.log("====== Init inboard Provider callbacks ======")
-            rootState.web3.provider.on('accountsChanged', function (accounts) {
-                console.log("====== initOnboard Provider callback accountsChanged ======",  accounts[0])
-                dispatch('checkAccount', accounts[0])
+            rootState.web3.provider.on('accountsChanged', async function (accounts) {
+                console.log("====== initOnboard Provider callback accountsChanged ======", accounts[0], parseInt(await rootState.web3.web3.eth.net.getId()))
+                try {
+                    dispatch('checkAccount', accounts[0]);
+                    dispatch('setNetwork', parseInt(await rootState.web3.web3.eth.net.getId()));
+                } catch (e) {
+                    console.error("Error when on accountsChanged")
+                }
+
             });
 
             rootState.web3.provider.on('networkChanged', async function (newNetworkId) {
                 console.log("====== initOnboard Provider callback networkChanged ======")
-
-                if (newNetworkId !== undefined && newNetworkId && newNetworkId !== '') {
-                    newNetworkId = parseInt(newNetworkId)
-                } else {
-                    let netId = await rootState.web3.web3.eth.net.getId();
-                    newNetworkId = parseInt(netId);
-                }
-
-                if (SUPPORTED_NETWORKS.includes(newNetworkId)) {
-                    console.log("======  Provider callback networkChanged SUPPORTED_NETWORKS ======")
-
-                    dispatch('network/saveNetworkToLocalStore', newNetworkId.toString(), {root: true});
-
-                    if (rootState.network.networkId !== newNetworkId) {
-                        dispatch('network/changeDappNetwork', newNetworkId.toString(), {root: true});
-                    } else {
-                        commit('network/setSwitchToOtherNetwork', false, {root: true});
-                    }
-
-                    dispatch('dappDataAction/updateUserData', null, {root: true});
-                } else {
-                    dispatch('dappDataAction/resetUserData', null, {root: true});
-                    commit('network/setSwitchToOtherNetwork', true, {root: true});
+                try {
+                    dispatch('setNetwork', newNetworkId);
+                } catch (e) {
+                    console.error("Error when on networkChanged")
                 }
             });
         }
 
         console.log("Wallet, wallet label: ", wallet.label, wallet.label === 'WalletConnect');
-
-        if (wallet.label === 'WalletConnect') {
-            try {
-                console.log("Wallet, wallet label isWalletOk start: ");
-                // let isWalletOk = await getters.onboard.walletCheck();
-                let isWalletOk = true;
-                console.log("Wallet, wallet label isWalletOk: ", isWalletOk);
-
-                if (!isWalletOk) {
-                    try {
-                        await dispatch('web3/initCustomProvider', wallet.provider, {root: true});
-
-                        let netId = await rootState.web3.web3.eth.net.getId();
-                        if (netId) {
-                            await getters.onboard.config({networkId: netId});
-                        }
-
-                        isWalletOk = await getters.onboard.walletCheck();
-                    } catch (e) {
-                        await commit('web3/setProvider', null, {root: true});
-                    }
-                }
-
-                if (!isWalletOk) {
-                    await commit('web3/setProvider', null, {root: true});
-                }
-            } catch (e) {
-                await commit('web3/setProvider', null, {root: true});
-            }
-        }
 
         await dispatch('web3/initWeb3', null, {root: true}).then(async value => {
             console.log("====== initOnboard Provider callback initWeb3 initWeb3 ======", wallet)
@@ -223,9 +179,14 @@ const actions = {
         }
 
         let walletName = localStorage.getItem('walletName');
-        console.log('WalletName:', walletName);
+        console.log('Old WalletName:', walletName);
         // await getters.onboard.walletSelect(walletName ? walletName : '');
-        // await getters.onboard.connectWallet()
+        let connectedWallets = await getters.onboard.connectWallet()
+        let wallet = connectedWallets[0];
+        if (wallet.label !== undefined && wallet.label && wallet.label !== 'undefined') {
+            localStorage.setItem('walletName', wallet.label);
+            console.log('New WalletName:', wallet.label);
+        }
 
         try {
             let netId = await rootState.web3.web3.eth.net.getId();
@@ -235,137 +196,6 @@ const actions = {
             }
         } catch (e) {
             console.log('Wallet not connected: ', e)
-        }
-    },
-
-    async connectWalletTwo({commit, dispatch, getters, rootState}) {
-
-        if (!getters.onboard) {
-            await dispatch('initOnboard');
-        }
-
-        let walletName = localStorage.getItem('walletName');
-        console.log('WalletName:', walletName, getters.onboard);
-        const [primaryWallet] = getters.onboard.state.get().wallets
-        console.log('primaryWallet:', primaryWallet);
-
-        if (!primaryWallet) {
-            console.log('connectWallet:', primaryWallet);
-            // await getters.onboard.connectWallet()
-            const connectedWallets = await getters.onboard.connectWallet()
-            console.log("walletConnect onboard: 3: ", connectedWallets)
-
-
-            let wallet = connectedWallets[0];
-            console.log('OnBoard: wallet: ', wallet);
-
-            await commit('web3/setProvider', wallet.provider, {root: true});
-            await commit('web3/setIsProviderDefault', false, {root: true});
-
-            if (rootState.web3.provider) {
-
-                console.log("====== Init Provider callbacks ======")
-                rootState.web3.provider.on('accountsChanged', function (accounts) {
-                    console.log("======  Provider callback accountsChanged ======",  accounts[0])
-                    dispatch('checkAccount', accounts[0])
-                });
-
-                rootState.web3.provider.on('networkChanged', async function (newNetworkId) {
-                    console.log("======  Provider callback networkChanged ======")
-
-                    if (newNetworkId !== undefined && newNetworkId && newNetworkId !== '') {
-                        newNetworkId = parseInt(newNetworkId)
-                    } else {
-                        let netId = await rootState.web3.web3.eth.net.getId();
-                        newNetworkId = parseInt(netId);
-                    }
-
-                    if (SUPPORTED_NETWORKS.includes(newNetworkId)) {
-                        console.log("======  Provider callback networkChanged SUPPORTED_NETWORKS ======")
-
-                        dispatch('network/saveNetworkToLocalStore', newNetworkId.toString(), {root: true});
-
-                        if (rootState.network.networkId !== newNetworkId) {
-                            dispatch('network/changeDappNetwork', newNetworkId.toString(), {root: true});
-                        } else {
-                            commit('network/setSwitchToOtherNetwork', false, {root: true});
-                        }
-
-                        dispatch('dappDataAction/updateUserData', null, {root: true});
-                    } else {
-                        dispatch('dappDataAction/resetUserData', null, {root: true});
-                        commit('network/setSwitchToOtherNetwork', true, {root: true});
-                    }
-                });
-            }
-
-            if (wallet.label === 'WalletConnect') {
-                console.log("WalletConnect callback")
-                try {
-                    let isWalletOk = await getters.onboard.walletCheck();
-
-                    if (!isWalletOk) {
-                        try {
-                            await dispatch('web3/initCustomProvider', wallet.provider, {root: true});
-
-                            let netId = await rootState.web3.web3.eth.net.getId();
-                            if (netId) {
-                                await getters.onboard.config({networkId: netId});
-                            }
-
-                            isWalletOk = await getters.onboard.walletCheck();
-                        } catch (e) {
-                            await commit('web3/setProvider', null, {root: true});
-                        }
-                    }
-
-                    if (!isWalletOk) {
-                        await commit('web3/setProvider', null, {root: true});
-                    }
-                } catch (e) {
-                    await commit('web3/setProvider', null, {root: true});
-                }
-            }
-
-            await dispatch('web3/initWeb3', null, {root: true}).then(async value => {
-                console.log("======  Provider callback initWeb3 initWeb3 ======", wallet)
-                console.log("======  Provider callback initWeb3 initWeb3 provider ======", rootState.web3, rootState.web3.isProviderDefault)
-
-                if (!rootState.web3.isProviderDefault) {
-
-                    let accounts = await rootState.web3.web3.eth.getAccounts();
-                    if (!accounts || accounts.length === 0) {
-                        dispatch('checkWallet');
-                    }
-
-                    commit('setWalletConnected', true);
-
-                    if (wallet.label !== undefined && wallet.label && wallet.label !== 'undefined') {
-                        localStorage.setItem('walletName', wallet.label);
-                    }
-
-                    if (wallet.label === 'Unstoppable') {
-                        commit('accountData/setUns', wallet.instance.cacheOptions.getDefaultUsername(), {root: true})
-                    }
-
-                    console.log("======  Provider callback initWeb3 setAccount ======", wallet.address)
-                    commit('accountData/setAccount', wallet.address, {root: true});
-                }
-
-                dispatch('checkAccount');
-            });
-        }
-        // await getters.onboard.connectWallet()
-        // const connectedWallets = await getters.onboard.connectWallet()
-
-        try {
-            let netId = await rootState.web3.web3.eth.net.getId();
-
-            if (netId) {
-                await getters.onboard.config({ networkId: netId });
-            }
-        } catch (e) {
-            console.log('Wallet not connected: ')
         }
     },
 
@@ -392,7 +222,7 @@ const actions = {
             const [primaryWallet] = getters.onboard.state.get().wallets
             await getters.onboard.disconnectWallet({ label: primaryWallet.label });
 
-            localStorage.setItem('walletName', null);
+            localStorage.removeItem('walletName');
 
             await dispatch('web3/initWeb3', null, {root: true}).then(value => {
                 commit('setWalletConnected', false);
@@ -525,6 +355,36 @@ const actions = {
         ];
     },
 
+    async setNetwork({commit, dispatch, getters, rootState}, newNetworkId){
+        {
+            console.log("======  Provider setNetwork  ======")
+
+            if (newNetworkId !== undefined && newNetworkId && newNetworkId !== '') {
+                newNetworkId = parseInt(newNetworkId)
+            } else {
+                let netId = await rootState.web3.web3.eth.net.getId();
+                newNetworkId = parseInt(netId);
+            }
+
+            if (SUPPORTED_NETWORKS.includes(newNetworkId)) {
+                console.log("======  Provider callback networkChanged SUPPORTED_NETWORKS ======")
+
+                dispatch('network/saveNetworkToLocalStore', newNetworkId.toString(), {root: true});
+
+                if (rootState.network.networkId !== newNetworkId) {
+                    dispatch('network/changeDappNetwork', newNetworkId.toString(), {root: true});
+                } else {
+                    commit('network/setSwitchToOtherNetwork', false, {root: true});
+                }
+
+                dispatch('dappDataAction/updateUserData', null, {root: true});
+            } else {
+                dispatch('dappDataAction/resetUserData', null, {root: true});
+                commit('network/setSwitchToOtherNetwork', true, {root: true});
+            }
+        }
+    },
+
     async checkAccount({commit, dispatch, getters, rootState}, account) {
         console.log("checkAccount: ", account, getters.walletConnected)
 
@@ -532,8 +392,17 @@ const actions = {
             if (!account) {
                 console.log("Account not exist: ", rootState.web3)
                 console.log("Account not exist: ", rootState.web3.web3)
-                let accounts = await rootState.web3.web3.eth.getAccounts();
-                account = accounts[0];
+                try {
+                    let accounts = await rootState.web3.web3.eth.getAccounts();
+                    account = accounts[0];
+                } catch (e) {
+                    console.error('CheckAccount Error: ', e)
+                    if (e && e.message && e.message.indexOf('disconnected') !== -1) {
+                        commit('setWalletConnected', false);
+                    }
+
+                    return;
+                }
             }
 
             console.log("Account: ", account)
@@ -554,7 +423,7 @@ const actions = {
 
     async checkWallet({commit, dispatch, getters, rootState}) {
         if (getters.onboard) {
-            await getters.onboard.walletCheck();
+            // await getters.onboard.walletCheck();
         }
     },
 };

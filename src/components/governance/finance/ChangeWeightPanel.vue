@@ -123,7 +123,6 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
 
 import { usdPlusApiService } from "@/services/usd-plus-api-service";
 import * as numberUtils from '@/utils/number-utils'

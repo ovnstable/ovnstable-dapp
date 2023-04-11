@@ -48,11 +48,13 @@ import ErrorModal from "@/components/common/modal/action/ErrorModal";
 export default {
     name: "WeightActionsPanel",
     components: {ErrorModal, Tooltip},
+    props: [
+        'm2mItems', 'financeLoading', 'hasChangeAccount', 'contractType'
+    ],
     data: () => ({
     }),
 
     computed: {
-        ...mapGetters('governance', ['m2mItems', 'financeLoading', 'hasChangeAccount']),
 
         weightsIsBtnEnabled: function () {
             let targetWeightSum = 0.000;
@@ -97,21 +99,25 @@ export default {
         },
     },
 
+    watch: {
+
+    },
+
     methods: {
         ...mapActions('governance', ['setStrategiesM2MWeights', 'estimateSetStrategiesM2MWeights', 'rebalancePortfolio', 'estimateRebalancePortfolio', 'getFinance']),
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
 
         async changeWeightsAction() {
 
-            let estimatedGasValue = await this.estimateSetStrategiesM2MWeights(this.m2mItems);
+            let estimatedGasValue = await this.estimateSetStrategiesM2MWeights({weights: this.m2mItems, contractType: this.contractType});
 
             if (estimatedGasValue) {
                 if (estimatedGasValue.haveError) {
                     this.showErrorModalWithMsg({errorType: 'governanceChangeWeights', errorMsg: estimatedGasValue});
                 }
 
-                await this.setStrategiesM2MWeights(this.m2mItems);
-                await this.getFinance();
+                await this.setStrategiesM2MWeights({weights: this.m2mItems, contractType: this.contractType});
+                await this.getFinance(this.contractType);
             } else {
                 this.showErrorModal('governanceChangeWeights');
             }
@@ -119,22 +125,22 @@ export default {
 
         async rebalanceAction() {
 
-            let estimatedGasValue = await this.estimateRebalancePortfolio();
+            let estimatedGasValue = await this.estimateRebalancePortfolio(this.contractType);
 
             if (estimatedGasValue) {
                 if (estimatedGasValue.haveError) {
                     this.showErrorModalWithMsg({errorType: 'governanceRebalance', errorMsg: estimatedGasValue});
                 }
 
-                await this.rebalancePortfolio();
-                await this.getFinance();
+                await this.rebalancePortfolio(this.contractType);
+                await this.getFinance(this.contractType);
             } else {
                 this.showErrorModal('governanceRebalance');
             }
         },
 
         updateM2MItems() {
-            this.getFinance();
+            this.getFinance(this.contractType);
         },
     }
 }

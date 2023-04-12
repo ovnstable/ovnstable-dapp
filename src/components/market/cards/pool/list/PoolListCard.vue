@@ -20,6 +20,12 @@
                 <div class="icon ml-n2 mr-2">
                     <v-img :src="cardData.data.token1Icon"/>
                 </div>
+                <div class="icon ml-n2 mr-2">
+                    <v-img :src="cardData.data.token2Icon"/>
+                </div>
+                <div class="icon ml-n2 mr-2">
+                    <v-img :src="cardData.data.token3Icon"/>
+                </div>
                 <label class="card-label">
                     {{ cardData.data.name }}
                 </label>
@@ -93,6 +99,12 @@
                         </div>
                         <div class="icon ml-n2 mr-2">
                             <v-img :src="cardData.data.token1Icon"/>
+                        </div>
+                        <div class="icon ml-n2 mr-2">
+                            <v-img :src="cardData.data.token2Icon"/>
+                        </div>
+                        <div class="icon ml-n2 mr-2">
+                            <v-img :src="cardData.data.token3Icon"/>
                         </div>
                     </v-row>
                 </v-col>
@@ -180,6 +192,9 @@ export default {
                     break;
                 case 'Sterling':
                     url = 'https://www.sterling.finance/liquidity/';
+                    break;
+                case 'Wombat':
+                    url = 'https://app.wombat.exchange/pool';
                     break;
                 default:
                     url = this.cardData.data.explorerUrl + '/address/';

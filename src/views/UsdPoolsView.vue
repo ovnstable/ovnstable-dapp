@@ -83,6 +83,8 @@ export default {
 
                     let token0Icon;
                     let token1Icon;
+                    let token2Icon;
+                    let token3Icon;
 
                     let tokenNames = pool.id.name.split('/');
 
@@ -106,11 +108,33 @@ export default {
                       }
                     }
 
+                    if (tokenNames[2]) try {
+                          token2Icon = require('@/assets/currencies/farm/' + tokenNames[2] + '.svg');
+                      } catch (e) {
+                          try {
+                              token2Icon = require('@/assets/currencies/farm/' + tokenNames[2] + '.png');
+                          } catch (ex) {
+                              token2Icon = require('@/assets/currencies/undefined.svg');
+                          }
+                      }
+
+                      if (tokenNames[3]) try {
+                          token3Icon = require('@/assets/currencies/farm/' + tokenNames[3] + '.svg');
+                      } catch (e) {
+                          try {
+                              token3Icon = require('@/assets/currencies/farm/' + tokenNames[3] + '.png');
+                          } catch (ex) {
+                              token3Icon = require('@/assets/currencies/undefined.svg');
+                          }
+                      }
+
                     if (pool && pool.tvl && pool.tvl >= 10000.00) {
                       this.pools.push({
                         name: pool.id.name,
                         token0Icon: token0Icon,
                         token1Icon: token1Icon,
+                        token2Icon: token2Icon,
+                        token3Icon: token3Icon,
                         chain: networkConfig.networkId,
                         chainName: networkConfig.networkName,
                         address: pool.id.address,

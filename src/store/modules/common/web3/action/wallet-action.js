@@ -68,6 +68,7 @@ const actions = {
             connect: {
                 showSidebar: false,
                 // autoConnectLastWallet: true,
+                // autoConnectAllPreviousWallet: true
             },
             accountCenter: {
                 desktop: {
@@ -89,7 +90,16 @@ const actions = {
         });
 
         console.log("walletConnect onboard before connect wallet: ")
-        const connectedWallets = await onboard.connectWallet()
+        let walletName = localStorage.getItem('walletName');
+        let connectedWallets;
+        if (walletName !== undefined && walletName && walletName !== 'undefined' && walletName !== 'null') {
+            console.log("onboard with preview wallet: ", walletName)
+            connectedWallets = await onboard.connectWallet({ autoSelect: { label: walletName, disableModals: true }});
+        } else {
+            console.log("onboard with new select wallet: ")
+            connectedWallets = await onboard.connectWallet();
+        }
+
         console.log("walletConnect onboard after connect wallet ", connectedWallets)
 
         let wallet = connectedWallets[0];
@@ -173,16 +183,6 @@ const actions = {
             await dispatch('initOnboard');
         }
 
-        let walletName = localStorage.getItem('walletName');
-        console.log('Old WalletName:', walletName);
-        // await getters.onboard.walletSelect(walletName ? walletName : '');
-        let connectedWallets = await getters.onboard.connectWallet()
-        let wallet = connectedWallets[0];
-        if (wallet.label !== undefined && wallet.label && wallet.label !== 'undefined') {
-            localStorage.setItem('walletName', wallet.label);
-            console.log('New WalletName:', wallet.label);
-        }
-
         try {
             let netId = await rootState.web3.web3.eth.net.getId();
 
@@ -191,6 +191,7 @@ const actions = {
             }
         } catch (e) {
             console.log('Wallet not connected: ', e)
+            await dispatch('initOnboard');
         }
     },
 
@@ -201,10 +202,9 @@ const actions = {
         }
 
         let walletName = localStorage.getItem('walletName');
-
         if (walletName !== undefined && walletName && walletName !== 'undefined') {
-            console.log("dappInitWalletConnect", getters.onboard)
-            // await getters.onboard.connectWallet()
+            console.log("dappInitWalletConnect", getters.onboard, walletName)
+            await getters.onboard.connectWallet({ autoSelect: { label: walletName, disableModals: true }});
         }
     },
 
@@ -335,8 +335,6 @@ const actions = {
         })
 
         // const argent = argentModule();
-
-        console.log("walletConnect onboard get all active wallets: ", walletConnect);
 
         return [
             injected,

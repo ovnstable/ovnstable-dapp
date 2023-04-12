@@ -20,6 +20,8 @@
                         v-model="sum"
                         @input="checkApproveCounter(
                                         'market-invest',
+                                         sliderPercent,
+                                         originalBalance,
                                          account,
                                          sum,
                                          etsData.actionTokenDecimals,
@@ -536,7 +538,7 @@ export default {
 
       v = parseFloat(v.trim().replace(/\s/g, ''));
 
-      if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.actionAssetBalance[this.etsData.actionAsset + '_' + this.etsData.actionTokenDecimals])) return true;
+      if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.actionAssetBalance[this.etsData.actionAsset + '_' + this.etsData.actionTokenDecimals]).toFixed(6)) return true;
 
       return false;
     },
@@ -615,6 +617,8 @@ export default {
       this.sum = isNaN(this.sum) ? 0 : this.sum
       await this.checkApprove(
           'market-invest',
+          this.sliderPercent,
+          this.originalBalance,
           this.account,
           this.sum,
           this.etsData.actionTokenDecimals,

@@ -20,6 +20,8 @@
                                   v-model="sum"
                                   @input="checkApproveCounter(
                                         'unwrap-redeem',
+                                         sliderPercent,
+                                         balance.wUsdPlus,
                                          account,
                                          sum,
                                          assetDecimals,
@@ -399,7 +401,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.wUsdPlus)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.wUsdPlus).toFixed(6)) return true;
 
             return false;
         },
@@ -472,6 +474,8 @@ export default {
 
           await this.checkApprove(
               'unwrap-redeem',
+              this.sliderPercent,
+              this.balance.wUsdPlus,
               this.account,
               this.sum,
               this.assetDecimals,

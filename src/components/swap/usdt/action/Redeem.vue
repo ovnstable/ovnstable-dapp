@@ -20,6 +20,8 @@
                                   v-model="sum"
                                   @input="checkApproveCounter(
                                         'usdt-swap-redeem',
+                                         sliderPercent,
+                                         originalBalance[currency.id],
                                          account,
                                          sum,
                                          assetDecimals,
@@ -463,6 +465,8 @@ export default {
             this.sum = isNaN(this.sum) ? 0 : this.sum
             await this.checkApprove(
                 'usdt-swap-redeem',
+                this.sliderPercent,
+                this.originalBalance[this.currency.id],
                 this.account,
                 this.sum,
                 this.assetDecimals,

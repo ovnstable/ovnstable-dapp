@@ -208,7 +208,7 @@ export default {
 
     computed: {
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
-        ...mapGetters("network", ['appApiUrl', 'getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'zkConfig']),
+        ...mapGetters("network", ['appApiUrl', 'getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'zkConfig', 'networkName']),
         ...mapGetters("web3", ['contracts']),
 
         tabNetworkName: function() {
@@ -262,12 +262,15 @@ export default {
     },
 
     watch: {
-
+        networkName: function (newVal, oldVal) {
+            this.setTab(newVal);
+            this.loadData(newVal);
+        }
     },
 
     mounted() {
         console.log('Tab Name: ', this.$route.query.tabName);
-        this.setTab('optimism');
+        this.setTab(this.networkName);
         this.loadData();
     },
 

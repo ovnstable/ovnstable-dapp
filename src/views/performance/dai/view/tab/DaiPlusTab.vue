@@ -247,14 +247,18 @@ export default {
     },
 
     watch: {
+        networkName: function (newVal, oldVal) {
+            this.setTab(newVal);
+            this.loadData(newVal);
+        }
     },
 
     created() {
     },
 
     mounted() {
-      console.log('Tab Name: ', this.$route.query.tabName);
-      this.setTab('optimism');
+        console.log('Tab Name: ', this.$route.query.tabName);
+        this.setTab(this.networkName);
     },
 
     methods: {

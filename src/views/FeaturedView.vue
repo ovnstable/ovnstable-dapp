@@ -89,7 +89,7 @@ export default {
     }),
 
   computed: {
-    ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig', 'switchToOtherNetwork', 'getParams']),
+    ...mapGetters('network', ['networkName', 'appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig', 'switchToOtherNetwork', 'getParams']),
     ...mapGetters('accountData', ['account']),
     ...mapGetters('web3', ['contracts', 'web3']),
     // ...mapGetters('supplyData', ['totalSupply', 'totalInsuranceSupply']),
@@ -146,18 +146,23 @@ export default {
     },
   },
   watch: {
-    etsList: function (newVal, oldVal) {
-      if (newVal) {
-        this.loadData();
-      }
-    },
+      networkName: function (newVal, oldVal) {
+          this.setTab(newVal);
+          this.loadData(newVal);
+      },
 
-    isAllDataLoaded: function (newVal, oldVal) {
-      if (newVal) {
-        this.getUsdPlusAvgMonthApy();
-        this.getSortedCardList(this.tabNetworkId);
-      }
-    },
+      etsList: function (newVal, oldVal) {
+        if (newVal) {
+            this.loadData();
+        }
+      },
+
+      isAllDataLoaded: function (newVal, oldVal) {
+        if (newVal) {
+          this.getUsdPlusAvgMonthApy();
+          this.getSortedCardList(this.tabNetworkId);
+        }
+      },
   },
 
   created() {
@@ -165,6 +170,7 @@ export default {
 
   mounted() {
     console.log(this.$route.query.tabName);
+    this.setTab(this.networkName);
     this.loadData();
   },
 

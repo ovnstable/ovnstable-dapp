@@ -153,7 +153,7 @@ export default {
     }),
 
     computed: {
-      ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl', 'switchToOtherNetwork', 'getParams']),
+      ...mapGetters("network", ['networkId', 'networkName', 'assetName', 'appApiUrl', 'switchToOtherNetwork', 'getParams']),
 
         isDataLoaded: function() {
             return !this.isPayoutsLoading;
@@ -220,7 +220,10 @@ export default {
     },
 
     watch: {
-
+        networkName: function (newVal, oldVal) {
+            this.setTab(newVal);
+            this.loadData(newVal);
+        }
     },
 
     created() {
@@ -229,7 +232,7 @@ export default {
 
     mounted() {
         console.log('Tab Name: ', this.$route.query.tabName);
-        this.setTab('optimism');
+        this.setTab(this.networkName);
         this.loadData();
     },
 

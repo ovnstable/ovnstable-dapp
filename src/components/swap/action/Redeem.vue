@@ -20,6 +20,8 @@
                                   v-model="sum"
                                   @input="checkApproveCounter(
                                         'swap-redeem',
+                                         sliderPercent,
+                                         originalBalance[currency.id],
                                          account,
                                          sum,
                                          assetDecimals,
@@ -411,7 +413,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlus)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.usdPlus).toFixed(6)) return true;
 
             return false;
         },
@@ -468,6 +470,8 @@ export default {
             this.sum = isNaN(this.sum) ? 0 : this.sum
             await this.checkApprove(
                 'swap-redeem',
+                this.sliderPercent,
+                this.originalBalance[this.currency.id],
                 this.account,
                 this.sum,
                 this.assetDecimals,

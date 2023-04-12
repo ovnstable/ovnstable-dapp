@@ -20,6 +20,8 @@
                                   v-model="sum"
                                   @input="checkApproveCounter(
                                         'swap-invest',
+                                         sliderPercent,
+                                         assetOriginalBalance,
                                          account,
                                          sum,
                                          assetDecimals,
@@ -410,9 +412,9 @@ export default {
 
           v = parseFloat(v.trim().replace(/\s/g, ''));
 
-          if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.assetBalance)) return true;
+          if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.assetBalance).toFixed(6)) return true;
 
-            return false;
+          return false;
         },
 
         percentLabels: function () {
@@ -463,10 +465,14 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
+            console.log("Swap mint changeSliderPercent: ", this.assetBalance, this.assetOriginalBalance);
+
             this.sum = (this.assetBalance * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
             await this.checkApprove(
                 'swap-invest',
+                this.sliderPercent,
+                this.assetOriginalBalance,
                 this.account,
                 this.sum,
                 this.assetDecimals,

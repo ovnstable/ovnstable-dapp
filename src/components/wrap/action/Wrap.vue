@@ -20,6 +20,8 @@
                                   v-model="sum"
                                   @input="checkApproveCounter(
                                         'wrap-invest',
+                                         sliderPercent,
+                                         balance[currency.id],
                                          account,
                                          sum,
                                          assetDecimals,
@@ -408,7 +410,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance[this.currency.id])) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance[this.currency.id]).toFixed(6)) return true;
 
             return false;
         },
@@ -499,6 +501,8 @@ export default {
 
             await this.checkApprove(
                 'wrap-invest',
+                this.sliderPercent,
+                this.balance[this.currency.id],
                 this.account,
                 this.sum,
                 this.assetDecimals,

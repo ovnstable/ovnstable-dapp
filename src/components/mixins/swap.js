@@ -26,8 +26,8 @@ export const swap = {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
 
-        async checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract) {
-            console.log("Check Approve action. Sum: " + sum + ' ActionDecimals: ' + actionDecimals);
+        async checkApprove(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract) {
+            console.log("Check Approve action. Sum: " + sum + ' sliderPercent: ' + sliderPercent + ' ActionDecimals: ' + actionDecimals);
 
             try {
                 if (!sum || isNaN(sum) || !account) {
@@ -35,24 +35,35 @@ export const swap = {
                 }
 
                 let contractSum;
-
-                switch (action === 'swap-redeem' ? 6 : actionDecimals) {
-                    case 6:
-                        contractSum = this.web3.utils.toWei(sum, 'mwei');
-                        break;
-                    case 8:
-                        contractSum = this.web3.utils.toWei(sum, 'mwei') * 100;
-                        break;
-                    case 18:
-                        contractSum = this.web3.utils.toWei(sum, 'ether');
-                        break;
-                    default:
-                        console.error(`Decimals not found when check approve. account: ${account} sum: ${sum} actionDecimals: ${actionDecimals}`);
-                        return ;
+                if (sliderPercent === 100) {
+                    let originalMax = this.getMax(originalBalance);
+                    contractSum = originalMax;
+                    if (!originalMax) {
+                        let errorMessage = "Original max value not exist, when buy action. type: " + action ;
+                        console.error(errorMessage)
+                        this.showErrorModalWithMsg({errorType: 'buy', errorMsg: {code: 1, message: errorMessage}});
+                        return;
+                    }
+                } else {
+                    sum = sum + '';
+                    switch (action === 'swap-redeem' ? 6 : actionDecimals) {
+                        case 6:
+                            contractSum = this.web3.utils.toWei(sum, 'mwei');
+                            break;
+                        case 8:
+                            contractSum = this.web3.utils.toWei(sum, 'mwei') * 100;
+                            break;
+                        case 18:
+                            contractSum = this.web3.utils.toWei(sum, 'ether');
+                            break;
+                        default:
+                            console.error(`Decimals not found when check approve. account: ${account} sum: ${sum} actionDecimals: ${actionDecimals}`);
+                            return ;
+                    }
                 }
 
                 let allowApprove = await this.checkAllowance(action, account, contractSum, exchangeContract, exchangeMethodName, actionContract, ovnStableContract);
-                console.log("Allow to approve : ", allowApprove, sum)
+                console.log(`Allow to approve. allowApprove: ${allowApprove}, sum: ${sum}, contractSum: ${contractSum}, contractSumNum: ${contractSum * 1}, originalBalance: ${originalBalance}`);
                 if (!allowApprove) {
                     disapproveActionFunc();
                     return false;
@@ -155,11 +166,11 @@ export const swap = {
             }
         },
 
-        async checkApproveCounter(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract) {
+        async checkApproveCounter(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract) {
             if (!this.sumApproveCheckerId) {
                 // first call
                 this.sumApproveCheckerId = -1;
-                await this.checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract);
+                await this.checkApprove(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract);
                 return;
             }
 
@@ -171,7 +182,7 @@ export const swap = {
                     if (this.sumApproveCheckerId === intervalId) {
                         this.sumApproveCheckerSec = 0;
                         try {
-                            await this.checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract);
+                            await this.checkApprove(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract);
                         } catch (e) {
                             // ignore
                         } finally {
@@ -283,7 +294,7 @@ export const swap = {
                     }
                 }
 
-                if (!(await this.checkApprove(action, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract))) {
+                if (!(await this.checkApprove(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract))) {
                     console.debug(`Buy-Action in ${action}. Approve not pass. Sum: ${contractSum} SumInUsd: ${sumInUsd}. Account: ${account}.`);
                     return;
                 }

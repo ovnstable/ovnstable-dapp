@@ -121,7 +121,7 @@ const actions = {
         if (web3.contracts.asset_two) {
             try {
                 asset_two = await web3.contracts.asset_two.methods.balanceOf(getters.account).call();
-                originAsset_two = asset;
+                originAsset_two = asset_two;
                 asset_two = asset_two ? web3.web3.utils.fromWei(asset_two, assetDecimals === 18 ? 'ether' : 'mwei') : null;
             } catch (e) {
                 asset_two = getters.balance.asset_two;

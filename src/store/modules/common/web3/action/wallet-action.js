@@ -6,6 +6,8 @@ import coinbaseWalletModule from '@web3-onboard/coinbase'
 import ledgerModule from '@web3-onboard/ledger'
 import trezorModule from '@web3-onboard/trezor'
 import gnosisModule from '@web3-onboard/gnosis'
+import trustModule from '@web3-onboard/trust'
+
 // import argentModule from "@web3-onboard/argent";
 
 
@@ -231,22 +233,22 @@ const actions = {
     async getMainWalletsChains({commit, dispatch, getters, rootState}) {
         return [
             {
-                id: 10,  // = 10
-                // id: "0xA",  // = 10
+                // id: 10,  // = 10
+                id: "0xA",  // = 10
                 token: "ETH",
                 label: "Optimism",
                 rpcUrl: "https://mainnet.optimism.io",
             },
             {
-                id: 42161,  // = 42161
-                // id: "0xA4B1",  // = 42161
+                // id: 42161,  // = 42161
+                id: "0xA4B1",  // = 42161
                 token: "ETH",
                 label: "Arbitrum",
                 rpcUrl: "https://arb1.arbitrum.io/rpc",
             },
             {
-                id: 324,  // = 324
-                // id: "0x144",  // = 324
+                // id: 324,  // = 324
+                id: "0x144",  // = 324
                 token: "ETH",
                 label: "ZkSync",
                 rpcUrl: "https://mainnet.era.zksync.io",
@@ -259,15 +261,15 @@ const actions = {
             //     rpcUrl: 'https://zksync2-testnet.zksync.dev'
             // },
             {
-                id: 56,  // = 56
-                // id: "0x38",  // = 56
+                // id: 56,  // = 56
+                id: "0x38",  // = 56
                 token: "BNB",
                 label: "BSC",
                 rpcUrl: "https://bsc-dataseed.binance.org",
             },
             {
-                id: 137,  // = 137
-                // id: "0x89",  // = 137
+                // id: 137,  // = 137
+                id: "0x89",  // = 137
                 token: "MATIC",
                 label: "Polygon",
                 rpcUrl: "https://polygon-rpc.com/",
@@ -315,20 +317,19 @@ const actions = {
             connectFirstChainId: true
         }
 
-/*
-        const wcInitOptions = {
+/*        const wcInit2Options = {
             version: 2,
-            /!**
-             * Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
-             *!/
+            // /!**
+            //  * Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
+            //  *!/
             projectId: "699fb1306e95ed8b837fd8962c633422",
-        }
-*/
+        }*/
 
         const coinbaseWalletSdk = coinbaseWalletModule({ darkMode: true });
         const walletConnect = await walletConnectModule(wcInitOptions);
         const ledger = ledgerModule();
         const gnosis = gnosisModule();
+        const trust = trustModule();
         const trezor = trezorModule({
             appUrl: appApiUrl.replaceAll('/api', ''),
             email: 'ovnstable@gmail.com',
@@ -340,6 +341,7 @@ const actions = {
             injected,
             walletConnect,
             coinbaseWalletSdk,
+            trust,
             // argent,
             ledger,
             trezor,

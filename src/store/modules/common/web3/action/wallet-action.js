@@ -312,9 +312,11 @@ const actions = {
 
         const wcInitOptions = {
             qrcodeModalOptions: {
-                mobileLinks: ['metamask', 'trust', 'rainbow', 'zerion'] // 'argent'
+                mobileLinks: ['metamask', 'trust', 'rainbow', 'zerion'] // 'argent',
+
             },
-            connectFirstChainId: true
+            connectFirstChainId: true,
+            requiredChains: SUPPORTED_NETWORKS
         }
 
 /*        const wcInit2Options = {

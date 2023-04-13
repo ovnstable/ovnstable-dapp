@@ -233,18 +233,18 @@ const actions = {
     async getMainWalletsChains({commit, dispatch, getters, rootState}) {
         return [
             {
-                // id: 10,  // = 10
-                id: "0xA",  // = 10
-                token: "ETH",
-                label: "Optimism",
-                rpcUrl: "https://mainnet.optimism.io",
-            },
-            {
                 // id: 42161,  // = 42161
                 id: "0xA4B1",  // = 42161
                 token: "ETH",
                 label: "Arbitrum",
                 rpcUrl: "https://arb1.arbitrum.io/rpc",
+            },
+            {
+                // id: 10,  // = 10
+                id: "0xA",  // = 10
+                token: "ETH",
+                label: "Optimism",
+                rpcUrl: "https://mainnet.optimism.io",
             },
             {
                 // id: 324,  // = 324
@@ -312,7 +312,7 @@ const actions = {
 
         const wcInitOptions = {
             qrcodeModalOptions: {
-                mobileLinks: ['metamask', 'argent', 'trust']
+                mobileLinks: ['metamask', 'trust', 'rainbow', 'zerion'] // 'argent'
             },
             connectFirstChainId: true
         }

@@ -206,7 +206,7 @@ export const swap = {
                 let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
                 let tx;
-                if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'usdt-swap-redeem' || action === 'market-redeem') {
+                if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'usdt-swap-redeem' || action === 'market-redeem' || action === 'unwrap-redeem') {
                     console.log("Redeem approve with ovnStableContract", ovnStableContract)
                     tx = await ovnStableContract.methods.approve(exchangeContract.options.address, sum).send(approveParams);
                 } else {
@@ -247,7 +247,7 @@ export const swap = {
             let from = account;
 
             let allowanceValue;
-            if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'usdt-swap-redeem' || action === 'market-redeem') {
+            if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'usdt-swap-redeem' || action === 'market-redeem' || action === 'unwrap-redeem') {
                 console.log("Redeem allowance with ovnStableContract", ovnStableContract)
                 allowanceValue = await ovnStableContract.methods.allowance(from, exchangeContract.options.address).call();
                 console.log('allowanceValue with ovnStable in redeem: ', allowanceValue)

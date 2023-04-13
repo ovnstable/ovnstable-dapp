@@ -21,7 +21,7 @@
                                   @input="checkApproveCounter(
                                         'unwrap-redeem',
                                          sliderPercent,
-                                         balance.wUsdPlus,
+                                         originalBalance.wUsdPlus,
                                          account,
                                          sum,
                                          assetDecimals,
@@ -193,7 +193,7 @@
                        @click="confirmSwapAction(
                             'unwrap-redeem',
                              sliderPercent,
-                             balance.wUsdPlus,
+                             originalBalance.wUsdPlus,
                              account,
                              sum,
                              assetDecimals,
@@ -316,7 +316,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
         ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('wrapData', ['index', 'amountPerUsdPlus']),
@@ -469,13 +469,15 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
+            console.log("Swap mint changeSliderPercent: ", this.currency.id, this.balance.wUsdPlus, this.originalBalance.wUsdPlus);
+
             this.sum = (this.balance.wUsdPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
 
           await this.checkApprove(
               'unwrap-redeem',
               this.sliderPercent,
-              this.balance.wUsdPlus,
+              this.originalBalance.wUsdPlus,
               this.account,
               this.sum,
               this.assetDecimals,

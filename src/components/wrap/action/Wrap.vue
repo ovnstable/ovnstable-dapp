@@ -21,7 +21,7 @@
                                   @input="checkApproveCounter(
                                         'wrap-invest',
                                          sliderPercent,
-                                         balance[currency.id],
+                                         originalBalance[currency.id],
                                          account,
                                          sum,
                                          assetDecimals,
@@ -190,7 +190,7 @@
                        @click="confirmSwapAction(
                             'wrap-invest',
                              sliderPercent,
-                             balance[currency.id],
+                             originalBalance[currency.id],
                              account,
                              sum,
                              assetDecimals,
@@ -311,7 +311,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
         ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('wrapData', ['index', 'amountPerUsdPlus']),
@@ -496,13 +496,15 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
+            console.log("Swap mint changeSliderPercent: ", this.currency.id, this.balance[this.currency.id], this.originalBalance[this.currency.id]);
+
             this.sum = (this.balance[this.currency.id] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
 
             await this.checkApprove(
                 'wrap-invest',
                 this.sliderPercent,
-                this.balance[this.currency.id],
+                this.originalBalance[this.currency.id],
                 this.account,
                 this.sum,
                 this.assetDecimals,

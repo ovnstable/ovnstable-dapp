@@ -177,12 +177,14 @@ const actions = {
             }
         }
 
-        if (networkId === 137 || networkId === 10) {
+        // wrapped contracts
+        if (networkId === 137 || networkId === 10 || networkId === 42161) {
             try {
                 wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
                 originWUsdPlus = wUsdPlus;
                 wUsdPlus = wUsdPlus ? web3.web3.utils.fromWei(wUsdPlus, 'mwei') : null;
             } catch (e) {
+                console.log("e:", e)
                 wUsdPlus = getters.balance.wUsdPlus;
                 originWUsdPlus = getters.originalBalance.wUsdPlus;
             }

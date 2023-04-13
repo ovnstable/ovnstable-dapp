@@ -315,7 +315,7 @@ export default {
         ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('wrapData', ['index', 'amountPerUsdPlus']),
-        ...mapGetters('wrapModal', ['usdcApproved', 'usdPlusApproved', 'usdPlusDisapproved', 'usdcDisapproved']),
+        ...mapGetters('wrapModal', ['usdcApproved', 'usdPlusApproved']),
 
         ...mapGetters("network", ['networkId']),
         ...mapGetters("web3", ["web3", 'contracts']),
@@ -437,7 +437,7 @@ export default {
           throw new Error('Unknown currency');
       },
 
-      disapproveActionFunc: function() {
+      disapproveActionFunc() {
         if (this.currency.id === 'usdc')
           return this.disapproveUsdc;
         else if (this.currency.id === 'usdPlus')
@@ -496,7 +496,7 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
-            console.log("Swap mint changeSliderPercent: ", this.currency.id, this.balance[this.currency.id], this.originalBalance[this.currency.id]);
+            console.log("Swap wrap changeSliderPercent: ", this.currency.id, this.balance[this.currency.id], this.originalBalance[this.currency.id]);
 
             this.sum = (this.balance[this.currency.id] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
@@ -525,7 +525,9 @@ export default {
                 this.sumResult = this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
             }
 
-            let sum = this.web3.utils.toWei(this.sum, 'mwei');
+            let stringSum = this.sum ? this.sum + "" : '0'
+
+            let sum = this.web3.utils.toWei(stringSum, 'mwei');
             let address = this.tokenContract.options.address;
 
             let value = await this.contracts.market.methods.previewWrap(address, sum).call();

@@ -469,7 +469,7 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
-            console.log("Swap mint changeSliderPercent: ", this.currency.id, this.balance.wUsdPlus, this.originalBalance.wUsdPlus);
+            console.log("Swap unwrap changeSliderPercent: ", this.currency.id, this.balance.wUsdPlus, this.originalBalance.wUsdPlus);
 
             this.sum = (this.balance.wUsdPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
@@ -523,7 +523,9 @@ export default {
                 this.sumResult = this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
             }
 
-            let sum = this.web3.utils.toWei(this.sum, 'mwei');
+            let stringSum = this.sum ? this.sum + "" : '0'
+
+            let sum = this.web3.utils.toWei(stringSum, 'mwei');
             let address = this.tokenContract.options.address;
 
             let value = await this.contracts.market.methods.previewUnwrap(address, sum).call();

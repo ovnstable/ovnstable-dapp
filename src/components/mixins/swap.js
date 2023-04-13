@@ -63,7 +63,7 @@ export const swap = {
                 }
 
                 let allowApprove = await this.checkAllowance(action, account, contractSum, exchangeContract, exchangeMethodName, actionContract, ovnStableContract);
-                console.log(`Allow to approve. allowApprove: ${allowApprove}, sum: ${sum}, contractSum: ${contractSum}, contractSumNum: ${contractSum * 1}, originalBalance: ${originalBalance}`);
+                console.log(`Allow to approve. allowApprove: ${allowApprove}, sum: ${sum}, contractSum: ${contractSum}, contractSumNum: ${contractSum * 1}, originalBalance: ${originalBalance}`, allowApprove);
                 if (!allowApprove) {
                     disapproveActionFunc();
                     return false;
@@ -502,6 +502,7 @@ export const swap = {
             //       }
             // wrap/unwrap (this.tokenContract.options.address, sum, this.account)
 
+            // contractSum = contractSum + "";
 
             let methodParam;
 

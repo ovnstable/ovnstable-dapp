@@ -160,6 +160,8 @@ export default {
     --onboard-wallet-button-border-radius: 0px;
     --onboard-wallet-button-border-color: #f5f5f5;
     --onboard-wallet-button-background: #f5f5f5;
+    /*--account-center-z-index: 999 !important;*/
+    --onboard-modal-z-index: 999 !important;
 }
 
 html {

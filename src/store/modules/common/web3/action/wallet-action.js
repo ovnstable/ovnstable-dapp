@@ -106,6 +106,12 @@ const actions = {
         let wallet = connectedWallets[0];
         console.log('initOnboard: wallet: ', wallet);
 
+        if (!wallet) {
+            localStorage.removeItem('walletName');
+            console.error("Wallet not connected when init onboard.")
+            return;
+        }
+
         await commit('web3/setProvider', wallet.provider, {root: true});
         await commit('web3/setIsProviderDefault', false, {root: true});
 
@@ -188,7 +194,9 @@ const actions = {
             let netId = await rootState.web3.web3.eth.net.getId();
 
             if (netId) {
-                await getters.onboard.setChain({ chainId: netId });
+                if (getters.onboard) {
+                    await getters.onboard.setChain({ chainId: netId });
+                }
             }
         } catch (e) {
             console.log('Wallet not connected: ', e)
@@ -204,7 +212,7 @@ const actions = {
 
         let walletName = localStorage.getItem('walletName');
         if (walletName !== undefined && walletName && walletName !== 'undefined') {
-            console.log("dappInitWalletConnect", getters.onboard, walletName)
+            console.log("dappInitWalletConnect", getters.onboard, walletName);
             await getters.onboard.connectWallet({ autoSelect: { label: walletName, disableModals: true }});
         }
     },

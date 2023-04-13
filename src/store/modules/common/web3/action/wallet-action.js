@@ -3,7 +3,6 @@ import injectedModule, {ProviderLabel} from '@web3-onboard/injected-wallets'
 import Onboard from "@web3-onboard/core";
 import walletConnectModule from '@web3-onboard/walletconnect'
 import coinbaseWalletModule from '@web3-onboard/coinbase'
-import ledgerModule from '@web3-onboard/ledger'
 import trezorModule from '@web3-onboard/trezor'
 import gnosisModule from '@web3-onboard/gnosis'
 import trustModule from '@web3-onboard/trust'
@@ -232,16 +231,17 @@ const actions = {
 
     async getMainWalletsChains({commit, dispatch, getters, rootState}) {
         return [
+
             {
-                // id: 42161,  // = 42161
-                id: "0xA4B1",  // = 42161
+                id: 42161,  // = 42161
+                // id: "0xA4B1",  // = 42161
                 token: "ETH",
                 label: "Arbitrum",
                 rpcUrl: "https://arb1.arbitrum.io/rpc",
             },
             {
-                // id: 10,  // = 10
-                id: "0xA",  // = 10
+                id: 10,  // = 10
+                // id: "0xA",  // = 10
                 token: "ETH",
                 label: "Optimism",
                 rpcUrl: "https://mainnet.optimism.io",
@@ -261,15 +261,15 @@ const actions = {
             //     rpcUrl: 'https://zksync2-testnet.zksync.dev'
             // },
             {
-                // id: 56,  // = 56
-                id: "0x38",  // = 56
+                id: 56,  // = 56
+                // id: "0x38",  // = 56
                 token: "BNB",
                 label: "BSC",
                 rpcUrl: "https://bsc-dataseed.binance.org",
             },
             {
-                // id: 137,  // = 137
-                id: "0x89",  // = 137
+                id: 137,  // = 137
+                // id: "0x89",  // = 137
                 token: "MATIC",
                 label: "Polygon",
                 rpcUrl: "https://polygon-rpc.com/",
@@ -312,8 +312,7 @@ const actions = {
 
         const wcInitOptions = {
             qrcodeModalOptions: {
-                mobileLinks: ['metamask', 'trust', 'rainbow', 'zerion'] // 'argent',
-
+                mobileLinks: ['metamask', 'trust', 'rainbow', 'zerion', "argent", "trust", "imtoken", "pillar"] // 'argent',
             },
             connectFirstChainId: true,
             requiredChains: SUPPORTED_NETWORKS
@@ -329,15 +328,16 @@ const actions = {
 
         const coinbaseWalletSdk = coinbaseWalletModule({ darkMode: true });
         const walletConnect = await walletConnectModule(wcInitOptions);
-        const ledger = ledgerModule();
-        const gnosis = gnosisModule();
+        const gnosis = gnosisModule({
+            whitelistedDomains: ['app.safe.global']
+        });
         const trust = trustModule();
         const trezor = trezorModule({
             appUrl: appApiUrl.replaceAll('/api', ''),
             email: 'ovnstable@gmail.com',
         })
 
-        // const argent = argentModule();
+        // const argent = argentModule(walletConnect);
 
         return [
             injected,
@@ -345,7 +345,6 @@ const actions = {
             coinbaseWalletSdk,
             trust,
             // argent,
-            ledger,
             trezor,
             gnosis,
             // ... other wallets

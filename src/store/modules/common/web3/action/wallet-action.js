@@ -247,8 +247,8 @@ const actions = {
                 rpcUrl: "https://mainnet.optimism.io",
             },
             {
-                // id: 324,  // = 324
-                id: "0x144",  // = 324
+                id: 324,  // = 324
+                // id: "0x144",  // = 324
                 token: "ETH",
                 label: "ZkSync",
                 rpcUrl: "https://mainnet.era.zksync.io",

@@ -31,7 +31,9 @@
             </v-list-item>
 
             <div class="navbar-list-divider mt-2 mb-1"></div>
-            <label class="navbar-list-header">Money Markets</label>
+            <label class="navbar-list-header">
+                Money Markets
+            </label>
 
             <v-list-group :append-icon="null"
                           @click="toggleUsdPlus(!isShowUsd)">
@@ -157,7 +159,9 @@
                              link @click="swapDaiClick"
                              class="list-item-hover">
                      <v-list-item-title>
-                            <label class="navbar-page-label-modal mx-5">Mint/redeem</label>
+                            <label class="navbar-page-label-modal mx-5">
+                                Mint/redeem
+                            </label>
                      </v-list-item-title>
                 </v-list-item>
             </v-list-group>
@@ -219,7 +223,9 @@
                 </v-list-item>
             </v-list-group>
             <div class="navbar-list-divider mt-3 mb-1"></div>
-            <label class="navbar-list-header">Delta-Neutrals</label>
+            <label class="navbar-list-header">
+                Delta-Neutrals
+            </label>
 
             <v-list-item @click="etsClick()"
                          :class="selectedTab === 'ets' ? 'selected-page-item' : ''"

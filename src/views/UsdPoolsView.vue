@@ -108,23 +108,27 @@ export default {
                       }
                     }
 
-                    if (tokenNames[2]) try {
-                          token2Icon = require('@/assets/currencies/farm/' + tokenNames[2] + '.svg');
-                      } catch (e) {
-                          try {
-                              token2Icon = require('@/assets/currencies/farm/' + tokenNames[2] + '.png');
-                          } catch (ex) {
-                              token2Icon = require('@/assets/currencies/undefined.svg');
-                          }
-                      }
+                    if (tokenNames[2]) {
+                        try {
+                            token2Icon = require('@/assets/currencies/farm/' + tokenNames[2] + '.svg');
+                        } catch (e) {
+                            try {
+                                token2Icon = require('@/assets/currencies/farm/' + tokenNames[2] + '.png');
+                            } catch (ex) {
+                                token2Icon = require('@/assets/currencies/undefined.svg');
+                            }
+                        }
+                    }
 
-                      if (tokenNames[3]) try {
-                          token3Icon = require('@/assets/currencies/farm/' + tokenNames[3] + '.svg');
-                      } catch (e) {
+                      if (tokenNames[3]) {
                           try {
-                              token3Icon = require('@/assets/currencies/farm/' + tokenNames[3] + '.png');
-                          } catch (ex) {
-                              token3Icon = require('@/assets/currencies/undefined.svg');
+                              token3Icon = require('@/assets/currencies/farm/' + tokenNames[3] + '.svg');
+                          } catch (e) {
+                              try {
+                                  token3Icon = require('@/assets/currencies/farm/' + tokenNames[3] + '.png');
+                              } catch (ex) {
+                                  token3Icon = require('@/assets/currencies/undefined.svg');
+                              }
                           }
                       }
 

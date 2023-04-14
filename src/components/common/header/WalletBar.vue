@@ -2,7 +2,7 @@
     <div class="wallet-bar-main-container mt-1">
         <v-row align="center" class="wallet-bar-container" @click="walletClickAction()">
             <v-col cols="1" class="wallet-col mr-4">
-                <div class="wallet-icon">
+                <div v-if="walletName" class="wallet-icon">
                     <v-img :src="require('@/assets/wallet/' + walletName.toLowerCase() + '.svg')"/>
                 </div>
             </v-col>
@@ -64,7 +64,7 @@ export default {
         ...mapGetters('transaction', ['transactions']),
         ...mapGetters('magicEye', ['dataHidden']),
 
-        accountDisplay: function () {
+        accountDisplay() {
             if (this.uns) {
                 return this.uns;
             } else if (this.account) {

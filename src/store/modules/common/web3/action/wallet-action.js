@@ -6,6 +6,7 @@ import coinbaseWalletModule from '@web3-onboard/coinbase'
 import trezorModule from '@web3-onboard/trezor'
 import gnosisModule from '@web3-onboard/gnosis'
 import trustModule from '@web3-onboard/trust'
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 // import argentModule from "@web3-onboard/argent";
 
@@ -290,7 +291,102 @@ const actions = {
         let rpcUrl = rootState.network.rpcUrl;
         let appApiUrl = rootState.network.appApiUrl;
 
+        //  Create WalletConnect Provider for argent
+        const wcprovider = new WalletConnectProvider({
+            // infuraId: "ee707251f43f41ae98103e051eed7580",
+            // rpc: 'https://mainnet.era.zksync.io'
+            rpc: {
+                ['324']: "https://mainnet.era.zksync.io",
+                ['42161']: "https://arb1.arbitrum.io/rpc",
+                ['10']: "https://mainnet.optimism.io",
+                ['56']: "https://bsc-dataseed.binance.org",
+                ['137']: "https://polygon-rpc.com/"
+            },
+            chainId: 324
+        });
+
+
+        const customArgent = {
+            // The label that will be displayed in the wallet selection modal
+            label: 'Argent',
+            // The property on the window where the injected provider is defined
+            // Example: window.ethereum
+            injectedNamespace: 'ethereum',
+            // A function that returns a bool indicating whether or not the provider is
+            // of a certain identity. In this case, a unique property on the provider
+            // is used to identify the provider.
+            // In most cases this is in the format: is<provider-name>.
+            // You may also include custom logic here if checking for the property
+            // isn't sufficient.
+            checkProviderIdentity: ({ provider }) => true, //!!provider && !!provider[ProviderIdentityFlag.MetaMask],
+
+            // A method that returns a string of the wallet icon which will be displayed
+            getIcon: async () => "https://images.prismic.io/argentwebsite/313db37e-055d-42ee-9476-a92bda64e61d_logo.svg?auto=format%2Ccompress&amp;fit=max&amp;q=50",
+            // Returns a valid EIP1193 provider. In some cases the provider will need to be patched to satisfy the EIP1193 Provider interface
+            getInterface: async ({ chains }) => {
+                // wcprovider.enable();
+                const [chain] = chains;
+                console.log("Argent provider chains: ", chains, chain)
+                const { getEthereumProvider } = await import('@argent/login');
+                const { createEIP1193Provider } = await import('@web3-onboard/common');
+                // const ethereumProvider = await getEthereumProvider({
+                //     chainId: parseInt(chain.id),
+                //     rpcUrl: chain.rpcUrl,
+                //     wcprovider,
+                // });
+
+                wcprovider.onConnect(data => {
+                    console.log("CONECTED!", data);
+                    commit('setWalletConnected', true);
+                })
+
+                console.log("====== Init Onboard ARGENT Provider callbacks ======")
+                wcprovider.on('accountsChanged', async function (accounts) {
+                    console.log("====== initOnboard ARGENT Provider callback accountsChanged ======", accounts[0], parseInt(await rootState.web3.web3.eth.net.getId()))
+
+                    try {
+                        dispatch('setNetwork', parseInt(await rootState.web3.web3.eth.net.getId()));
+                        commit('accountData/setAccount', accounts[0], {root: true});
+                        console.log("Argent: account set to:", accounts[0]);
+                    } catch (e) {
+                        console.error("Error when on accountsChanged")
+                    }
+
+                });
+
+                wcprovider.on('networkChanged', async function (newNetworkId) {
+                    console.log("====== initOnboard ARGENT Provider callback networkChanged ======")
+                    try {
+                        dispatch('setNetwork', newNetworkId);
+                    } catch (e) {
+                        console.error("Error when on networkChanged")
+                    }
+                });
+
+                await wcprovider.enable();
+                // await ethereumProvider.enable();
+                // const provider = createEIP1193Provider(ethereumProvider, {
+                const provider = createEIP1193Provider(wcprovider, {
+                    eth_chainId: async ({ baseRequest }) => {
+                        const chainId = await baseRequest({ method: 'eth_chainId' });
+                        console.log("Chain it from provider: ", chainId)
+                        return `0x${parseInt(324).toString(16)}`;
+                    }
+                });
+                console.log("Argent provider: ", provider)
+                console.log("Argent  wcprovider provider: ", wcprovider)
+                return { provider };
+                // return { wcprovider };
+            },
+            // A list of platforms that this wallet supports
+            platforms: ['desktop']
+        }
+
         const injected = injectedModule({
+            custom: [
+                customArgent
+                // include custom (not natively supported) injected wallet modules here
+            ],
             // display all wallets even if they are unavailable
             displayUnavailable: false,
             // but only show Binance and Bitski wallet if they are available

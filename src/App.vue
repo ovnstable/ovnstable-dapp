@@ -139,13 +139,29 @@ export default {
 }
 
 /* main variables */
+/*:root {*/
+
+/*}*/
+
 :root {
+    /*--w3o-background-color: "unset";*/
+    /*--w3o-foreground-color: "unset";*/
+    /*--w3o-text-color: "unset";*/
+    /*--w3o-border-color: "unset";*/
+    /*--w3o-action-color: "unset";*/
+    --w3o-border-radius: 0px;
+    --w3o-font-family: 'Roboto', sans-serif;
     --orange-gradient: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
     --blue-gradient: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
 
     --onboard-checkbox-background: red;
     --onboard-font-family-normal: monospace;
-    --onboard-wallet-columns: 5;
+    --onboard-wallet-columns: 2;
+    --onboard-wallet-button-border-radius: 0px;
+    --onboard-wallet-button-border-color: #f5f5f5;
+    --onboard-wallet-button-background: #f5f5f5;
+    /*--account-center-z-index: 999 !important;*/
+    --onboard-modal-z-index: 999 !important;
 }
 
 html {

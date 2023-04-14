@@ -20,6 +20,8 @@
                                   v-model="sum"
                                   @input="checkApproveCounter(
                                         'unwrap-redeem',
+                                         sliderPercent,
+                                         originalBalance.wUsdPlus,
                                          account,
                                          sum,
                                          assetDecimals,
@@ -191,7 +193,7 @@
                        @click="confirmSwapAction(
                             'unwrap-redeem',
                              sliderPercent,
-                             balance.wUsdPlus,
+                             originalBalance.wUsdPlus,
                              account,
                              sum,
                              assetDecimals,
@@ -314,7 +316,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('accountData', ['balance', 'account']),
+        ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
         ...mapGetters('transaction', ['transactions']),
 
         ...mapGetters('wrapData', ['index', 'amountPerUsdPlus']),
@@ -399,7 +401,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.wUsdPlus)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.wUsdPlus).toFixed(6)) return true;
 
             return false;
         },
@@ -467,11 +469,15 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
+            console.log("Swap unwrap changeSliderPercent: ", this.currency.id, this.balance.wUsdPlus, this.originalBalance.wUsdPlus);
+
             this.sum = (this.balance.wUsdPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
 
           await this.checkApprove(
               'unwrap-redeem',
+              this.sliderPercent,
+              this.originalBalance.wUsdPlus,
               this.account,
               this.sum,
               this.assetDecimals,
@@ -517,7 +523,9 @@ export default {
                 this.sumResult = this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
             }
 
-            let sum = this.web3.utils.toWei(this.sum, 'mwei');
+            let stringSum = this.sum ? this.sum + "" : '0'
+
+            let sum = this.web3.utils.toWei(stringSum, 'mwei');
             let address = this.tokenContract.options.address;
 
             let value = await this.contracts.market.methods.previewUnwrap(address, sum).call();

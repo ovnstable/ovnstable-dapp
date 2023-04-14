@@ -1,7 +1,7 @@
 export default async function getAbroad({ context, nextMiddleware }){
     try {
         context.store.dispatch('web3/initWeb3').then(value => {
-            context.store.dispatch('governance/getAbroad');
+            context.store.dispatch('governance/getAbroad', 'USD+');
             context.store.dispatch('ethers/initProvider');
         });
     }
@@ -10,4 +10,4 @@ export default async function getAbroad({ context, nextMiddleware }){
         return context.next(false);
     }
     return nextMiddleware()
-};
+}

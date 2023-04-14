@@ -123,13 +123,19 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
 
 import { usdPlusApiService } from "@/services/usd-plus-api-service";
 import * as numberUtils from '@/utils/number-utils'
 
 export default {
     name: "ChangeWeightPanel",
+    props: [
+        'm2mItems', 'm2mTotal', 'financeLoading', 'hasChangeAccount', 'usdPlusLiquidityIndex',
+        'contracts',
+        'account',
+        'explorerUrl', 'networkId', 'apiUrl', 'networkName',
+        'contractType'
+    ],
 
     data: () => ({
         headersM2M: [
@@ -155,16 +161,17 @@ export default {
             this.updateHeaders();
             this.loadData();
         },
+
         account: function (newValue, oldValue) {
             this.loadData();
         },
+
+        contractType: function (val, oldVal) {
+            this.loadData();
+        }
     },
 
     computed: {
-        ...mapGetters('governance', ['m2mItems', 'm2mTotal', 'financeLoading', 'hasChangeAccount', 'usdPlusLiquidityIndex']),
-        ...mapGetters('web3', ['contracts']),
-        ...mapGetters('accountData', ['account']),
-        ...mapGetters('network', ['explorerUrl', 'networkId', 'appApiUrl']),
 
         totalLiquidationSum: function () {
 
@@ -240,23 +247,48 @@ export default {
           this.loadBlockchainTotalUsdPlusValue();
         },
         loadApiTotalUsdPlusValue() {
-          usdPlusApiService.getTotalUsdPlus(this.appApiUrl)
+           let url = this.apiUrl + `/${this.networkName}/${this.contractType.toLowerCase()}`
+
+          usdPlusApiService.getTotalUsdPlus(url)
               .then(data => {
                 this.totalUsdPlusValue = data;
               })
               .catch(e => {
-                console.error("Error when load usd+ total in governance", e);
+                console.error("Error when load " + this.contractType + " total in governance", e);
               });
 
         },
         async loadBlockchainTotalUsdPlusValue() {
           setTimeout(async () => {
-            let assetDecimals = (await this.contracts.usdPlus.methods.decimals().call()) * 1;
-            let blockchainValue = await this.contracts.usdPlus.methods.totalSupply().call();
-            let fromAsset6 = assetDecimals === 6;
-            this.totalUsdPlusValue = (fromAsset6 ? numberUtils._fromE6(blockchainValue.toString()) : numberUtils._fromE18(blockchainValue.toString()))
+                let contractTokenPlus = this.getTokenPlusContract();
+                if (!contractTokenPlus) {
+                    console.log("loadBlockchainTotalUsdPlusValue error, contractTokenPlus not found")
+                    return
+                }
+
+                let assetDecimals = (await contractTokenPlus.methods.decimals().call()) * 1;
+                let blockchainValue = await contractTokenPlus.methods.totalSupply().call();
+                let fromAsset6 = assetDecimals === 6;
+                this.totalUsdPlusValue = (fromAsset6 ? numberUtils._fromE6(blockchainValue.toString()) : numberUtils._fromE18(blockchainValue.toString()))
           }, 3000)
         },
+
+        getTokenPlusContract() {
+            if (this.contractType === 'USD+') {
+                return this.contracts.usdPlus;
+            }
+
+            if (this.contractType === 'DAI+') {
+                return  this.contracts.daiPlus;
+            }
+
+            if (this.contractType === 'USDT+') {
+                return this.contracts.usdtPlus;
+            }
+
+            console.log("Error when load blockchain total values contract type not found: ", this.contractType)
+            return null;
+        }
     }
 }
 </script>

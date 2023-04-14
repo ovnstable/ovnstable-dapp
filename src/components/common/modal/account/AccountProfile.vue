@@ -20,7 +20,7 @@
                 <v-row class="account-info-row" align="center">
 
                     <div class="wallet-img">
-                        <v-img :src="require('@/assets/wallet/' + walletName.toLowerCase() + '.svg')"/>
+                        <v-img v-if="walletName" :src="require('@/assets/wallet/' + walletName.toLowerCase() + '.svg')"/>
                     </div>
 
                     <v-row class="account-display-container ml-4" align="center" justify="center"
@@ -147,7 +147,10 @@ export default {
     },
 
     mounted() {
-        this.walletName = localStorage.getItem('walletName');
+        let walletName = localStorage.getItem('walletName');
+        if (walletName && walletName !== null && walletName !== 'null') {
+            this.walletName = walletName;
+        }
     },
 
     methods: {

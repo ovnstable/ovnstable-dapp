@@ -65,7 +65,6 @@ const actions = {
     },
 
     async initWeb3({commit, dispatch, getters, rootState}) {
-
         commit('setLoadingWeb3', true);
 
         if (getters.provider === undefined || getters.provider === null || getters.isProviderDefault) {

@@ -1,7 +1,7 @@
 export default async function getFinance({ context, nextMiddleware }){
     try {
         context.store.dispatch('web3/initWeb3').then(value => {
-            context.store.dispatch('governance/getFinance');
+            context.store.dispatch('governance/getFinance', 'USD+');
             context.store.dispatch('ethers/initProvider');
         });
     }
@@ -10,4 +10,4 @@ export default async function getFinance({ context, nextMiddleware }){
         return context.next(false);
     }
     return nextMiddleware()
-};
+}

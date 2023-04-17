@@ -70,6 +70,13 @@ const actions = {
             let gasPriceGwei;
             try {
                 gasPriceWei = await rootState.web3.web3.eth.getGasPrice();
+
+                if (networkId === 324) {
+                    console.log("Gas price on ZkSync: ", gasPriceWei)
+                    gasPriceWei = (gasPriceWei * 1.05) + "" // added 5% to up
+                    console.log("Gas price on ZkSync + 5%: ", gasPriceWei)
+                }
+
                 gasPriceGwei = rootState.web3.web3.utils.fromWei(gasPriceWei, 'gwei');
             } catch (e) {
                 console.error('Error getGasPrice from provider: ' + e + ' => use hardcode value gasPrice');

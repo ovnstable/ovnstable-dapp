@@ -287,9 +287,8 @@ const actions = {
         ]
     },
 
-    async getMainWalletsConfig({commit, dispatch, getters, rootState}) {
-        let rpcUrl = rootState.network.rpcUrl;
-        let appApiUrl = rootState.network.appApiUrl;
+    async getCustomWallets({commit, dispatch, getters, rootState}) {
+        let customWallets = []; // include custom (not natively supported) injected wallet modules here
 
         //  Create WalletConnect Provider for argent
         const wcprovider = new WalletConnectProvider({
@@ -382,11 +381,23 @@ const actions = {
             platforms: ['desktop']
         }
 
+        let networkId = rootState.network.networkId;
+        if (networkId === 324) {
+            // argent only on ZkSync Network
+            customWallets.push(customArgent);
+        }
+
+        return customWallets;
+    },
+
+    async getMainWalletsConfig({commit, dispatch, getters, rootState}) {
+        let rpcUrl = rootState.network.rpcUrl;
+        let appApiUrl = rootState.network.appApiUrl;
+
+        let customWallets = await dispatch('getCustomWallets');
+
         const injected = injectedModule({
-            custom: [
-                customArgent
-                // include custom (not natively supported) injected wallet modules here
-            ],
+            custom: customWallets,
             // display all wallets even if they are unavailable
             displayUnavailable: false,
             // but only show Binance and Bitski wallet if they are available

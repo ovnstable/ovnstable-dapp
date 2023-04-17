@@ -11,7 +11,7 @@
                     </v-row>
                     <v-row class="d-flex mt-5">
                         <label class="percentage">
-                            {{ $utils.formatMoneyComma(avgApy.value, 0) + '%' }}
+                            {{ $utils.formatMoneyComma((avgApy ? avgApy.value : 0), 0) + '%' }}
                         </label>
                         <label class="apy ml-3">APY</label>
                         <div class="tooltip">

@@ -45,7 +45,7 @@
         <v-col v-if="!$wu.isMobile()" cols="3" class="my-1" style="max-width: 269px">
             <v-row class="ma-0 mr-10" justify="center" align="center">
                 <label class="card-label"
-                       :class="(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
+                       :class="(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
                     ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
                 </label>
                 <label class="card-label list-header-label-gray" v-if="$wu.isFull() && cardData.overcapEnabled">&nbsp;/&nbsp;${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
@@ -84,7 +84,7 @@
                     <v-btn x-small
                            width="105px"
                            max-width="105px"
-                           v-if="!cardData.data.disabled && (isOvercapAvailable || (!cardData.prototype &&  !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)))"
+                           v-if="!cardData.data.disabled && (isOvercapAvailable || (!cardData.prototype &&  !(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply)))"
                            class="button btn-outlined"
                            @click.stop="mintAction" outlined>
                         MINT/REDEEM
@@ -174,7 +174,7 @@
                 <v-col>
                     <v-row justify="start" align="center">
                         <label class="card-label"
-                               :class="(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
+                               :class="(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
                             ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
                         </label>
                         <label class="card-label list-header-label-gray" v-if="cardData.overcapEnabled">&nbsp;/&nbsp;${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
@@ -188,7 +188,7 @@
                 <v-col v-if="networkSupport">
                     <v-row justify="start" align="center">
                         <v-btn x-small
-                               v-if="!cardData.data.disabled && (isOvercapAvailable || (!cardData.prototype && !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)))"
+                               v-if="!cardData.data.disabled && (isOvercapAvailable || (!cardData.prototype && !(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply)))"
                                class="button btn-filled"
                                @click.stop="mintAction" outlined>
                             MINT/REDEEM
@@ -243,7 +243,6 @@ export default {
     computed: {
         ...mapGetters('network', ['networkId', 'networkName']),
         ...mapGetters("marketData", ["etsStrategyData"]),
-        ...mapGetters("supplyData", ["totalSupply"]),
         ...mapGetters('accountData', ['etsBalance']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
 

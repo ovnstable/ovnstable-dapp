@@ -105,6 +105,7 @@ import EtsListCard from "@/components/market/cards/ets/list/EtsListCard";
 import EtsListHeader from "@/components/market/cards/ets/list/EtsListHeader";
 import moment from "moment";
 import {productInfoApiService} from "@/services/product-info-api-service";
+import loadJSON from "@/utils/http-utils";
 
 export default {
   name: "MarketView",
@@ -115,33 +116,35 @@ export default {
   },
 
   data: () => ({
-    openCollateralList: false,
-    openPrototypeList: false,
-    openArchiveList: false,
-    tab: 1,
-    sortedCardList: [],
+        openCollateralList: false,
+        openPrototypeList: false,
+        openArchiveList: false,
+        tab: 1,
+        sortedCardList: [],
 
-    isStartLoading: false,
-    isProductsInfoLoading: true,
-    isClientDataLoading: true,
+        isStartLoading: false,
+        isProductsInfoLoading: true,
+        isClientDataLoading: true,
 
-    etsTvlData: {},
-    etsApyData: {},
-    etsClientData: {},
-    etsStrategyData: {},
+        etsList: [],
 
-    currentTotalData: {},
-    totalUsdPlusValue: null,
+        etsTvlData: {},
+        etsApyData: {},
+        etsClientData: {},
+        etsStrategyData: {},
 
-    totalSupply: {},
+        currentTotalData: {},
+        totalUsdPlusValue: null,
+
+        totalSupply: {},
 
   }),
 
   computed: {
     ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig']),
     ...mapGetters('accountData', ['account']),
+    ...mapGetters('etsAction', ['etsNetworkNames']),
     ...mapGetters('web3', ['contracts', 'web3']),
-    ...mapGetters('etsAction', ['etsList']),
 
     isAllDataLoaded: function () {
       return !this.isProductsInfoLoading && !this.isClientDataLoading;
@@ -156,7 +159,7 @@ export default {
 
     isAllDataLoaded: function (newVal, oldVal) {
       if (newVal) {
-        this.getSortedCardList();
+        //this.getSortedCardList();
       }
     },
   },
@@ -165,9 +168,11 @@ export default {
   },
 
   mounted() {
-    console.log(this.$route.query.tabName);
-    this.initTab();
-    this.loadData();
+        console.log(this.$route.query.tabName);
+        this.initTab();
+
+        this.loadEtsList();
+        this.loadData();
   },
 
   methods: {
@@ -195,31 +200,42 @@ export default {
     },
 
     loadData() {
-      this.refreshMarket();
+        this.refreshMarket();
     },
 
-    addEtsStrategyData(etsDataParams) {
-      let data = etsDataParams.data;
+    async loadEtsList() {
+        let list = [];
 
-      if (!data.tvl || data.tvl < 0.0001) {
-        if (data.timeData && data.timeData.length > 0) {
-          data.tvl = data.timeData[data.timeData.length - 1].tvl;
+        for (let i = 0; i < this.etsNetworkNames.length; i++) {
+            let etses = await loadJSON(`https://api.overnight.fi/${this.etsNetworkNames[i]}/usd+/design_ets/list`);
+            // May add some fields
+            list.push(...etses);
         }
-      }
 
-      this.etsStrategyData[etsDataParams.name] = data;
-    },
-    addEtsClientData(etsClientDataParams) {
-      this.etsClientData[etsClientDataParams.name] = etsClientDataParams.data;
+        this.etsList = list;
+        console.log("ETSs be loaded", this.etsList );
     },
 
-    addEtsApyData(etsApyDataParams) {
-      this.etsApyData[etsApyDataParams.name] = etsApyDataParams.data;
-    },
+      addEtsStrategyData(etsDataParams) {
+          let data = etsDataParams.data;
 
-    addEtsTvlData(etsTvlDataParams) {
-      this.etsTvlData[etsTvlDataParams.name] = etsTvlDataParams.data;
-    },
+          if (!data.tvl || data.tvl < 0.0001) {
+              if (data.timeData && data.timeData.length > 0) {
+                  data.tvl = data.timeData[data.timeData.length - 1].tvl;
+              }
+          }
+
+          this.etsStrategyData[etsDataParams.name] = data;
+      },
+      addEtsClientData(etsClientDataParams) {
+          this.etsClientData[etsClientDataParams.name] = etsClientDataParams.data;
+      },
+      addEtsApyData(etsApyDataParams) {
+          this.etsApyData[etsApyDataParams.name] = etsApyDataParams.data;
+      },
+      addEtsTvlData(etsTvlDataParams) {
+          this.etsTvlData[etsTvlDataParams.name] = etsTvlDataParams.data;
+      },
 
     async refreshInsuranceSupply() {
 

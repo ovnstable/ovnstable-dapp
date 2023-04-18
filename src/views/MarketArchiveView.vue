@@ -38,7 +38,8 @@
           <EtsListCard class="mt-2"
                        v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && value.data.archive))"
                        :key="component.id"
-                       :card-data="component"/>
+                       :card-data="component"
+                       :archived="true"/>
         </template>
 
       </template>

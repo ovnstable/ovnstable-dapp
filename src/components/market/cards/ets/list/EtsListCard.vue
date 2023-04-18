@@ -66,7 +66,7 @@
         </v-col>
         <v-col v-if="!$wu.isMobile()" class="my-1 button-width" style="max-width: 90px">
             <template v-if="!networkSupport">
-                <div >
+                <div v-if="!archived">
                     <v-row class="ma-0" justify="end" align="center">
                         <v-btn x-small
                                width="120px"
@@ -203,7 +203,9 @@
                 </v-col>
                 <v-col>
                     <v-row :justify="networkSupport ? 'end' : 'center'" align="center">
-                        <v-btn x-small
+                        <v-btn
+                                v-if="!archived"
+                                x-small
                                class="button btn-outlined"
                                @click.stop="openStrategyCard" outlined>
                             ABOUT
@@ -235,6 +237,10 @@ export default {
         },
 
         featured: {
+            type: Boolean,
+            default: false
+        },
+        archived: {
             type: Boolean,
             default: false
         }
@@ -281,6 +287,10 @@ export default {
         },
 
         openStrategyCard() {
+            if (this.archived) {
+                return;
+            }
+
             this.$router.push("/ets/" + this.cardData.data.name);
             window.scrollTo({top: 0, behavior: "smooth"});
         },

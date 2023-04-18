@@ -12,7 +12,7 @@
         </v-row>
 
         <div class="mt-7 cards-list-container">
-            <v-row v-if="!isAllDataLoaded && isResorting">
+            <v-row v-if="!isAllDataLoaded || isResorting">
                 <v-row align="center" justify="center" class="py-15">
                       <v-progress-circular
                           width="2"
@@ -67,6 +67,7 @@ export default {
         tab: 'optimism',
         avgApy: null,
         sortedCardList: [],
+        cardEtsList: [],
 
         isResorting: true,
 
@@ -171,32 +172,17 @@ export default {
   methods: {
     // ...mapGetters('network', ['getParams']),
 
-    setTab(tabName) {
-      this.tab = tabName;
-        if (this.tab === 'optimism') {
-            this.initTabName('/featured', {tabName: 'optimism'});
-        }
+        async setTab(tabName) {
+            this.isResorting = true;
+            this.tab = tabName;
+            this.initTabName('/featured', {tabName: this.tab});
 
-        if (this.tab === 'arbitrum') {
-            this.initTabName('/featured', {tabName: 'arbitrum'});
-        }
-
-        if (this.tab === 'bsc') {
-            this.initTabName('/featured', {tabName: 'bsc'});
-        }
-
-        if (this.tab === 'polygon') {
-            this.initTabName('/featured', {tabName: 'polygon'});
-        }
-
-        if (this.tab === 'zksync') {
-            this.initTabName('/featured', {tabName: 'zksync'});
-            return
-        }
-
-      this.getUsdPlusAvgMonthApy();
-      console.log("NetworkParams : ", this.getParams(this.tab));
-    },
+            console.log('this.cardEtsList ', this.cardEtsList)
+            this.sortedCardList = this.getSortedCardList(this.cardEtsList, false)
+            await this.getUsdPlusAvgMonthApy();
+            this.isResorting = false;
+            console.log("NetworkParams : ", this.getParams(this.tab));
+        },
 
       initTabName(path, queryParams) {
           this.$router.push({
@@ -320,11 +306,15 @@ export default {
           productInfoApiService.getAllProducts(this.appApiUrl)
               .then(data => {
                   console.log("Future Products loaded: ", data);
-                  this.sortedCardList = this.getSortedCardList(data);
+                  this.cardEtsList = data;
+                  this.isResorting = true;
+                  this.sortedCardList = this.getSortedCardList(this.cardEtsList, true);
                   this.isProductsInfoLoading = false;
+                  this.isResorting = false;
               }).catch(e => {
               console.error("Error when load products. ", e);
               this.isProductsInfoLoading = false;
+              this.isResorting = false;
           });
       },
 
@@ -386,49 +376,60 @@ export default {
           );
       },
 
-    getSortedCardList(cardList) {
-        this.isResorting = true;
-
+    getSortedCardList(_cardList, isFirst) {
         let networkId = this.networkId;
+        let cardList = _cardList;
 
         cardList.forEach(ets => {
-            ets.type = 'ets',
-            ets.name = 'Ets',
-            ets.id = 'ets' + ets.chain + ets.name
+            console.log("Ets type: ", ets.id)
+            if (!ets.type || ets.type === 'ETS') {
+                ets.type = 'ETS';
+                ets.name = 'Ets';
+
+                if (ets.id) {
+                    ets.id = 'ets' + ets.chain + ets.name
+                }
+            }
+        });
+
+
+        if (isFirst) {
+
+            cardList.push({
+                id: 'usdPlus' + networkId,
+                type: 'usdPlus',
+                name: 'UsdPlus',
+                prototype: false,
+                data: {archive: false},
+                chain: networkId,
+                hasUsdPlus: true,
+                overcapEnabled: false,
+                hasCap: true,
+                tvl: null, //this.usdPlusValue,
+                monthApy: this.avgApy ? this.avgApy.value : 0,
+            });
+
+            //
+            // if (networkId === 137) {
             //   cardList.push(
             //       {
-            //         id: 'ets' + ets.chain + ets.name,
-            //         type: 'ets',
-            //         name: 'Ets',
-            //         isPrototype: ets.prototype,
-            //         isOpenPrototype: ets.openPrototype,
-            //         isArchive: ets.archive,
-            //         data: ets,
-            //         chain: ets.chain,
-            //         hasUsdPlus: ets.hasUsdPlus,
-            //         overcapEnabled: (!!(ets.maxSupply && ets.maxSupply > 0)),
-            //         hasCap: ets.maxSupply ? (this.totalSupply[ets.name] < ets.maxSupply) : true,
-            //         tvl: this.totalSupply[ets.name],
-            //         monthApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
+            //         id: 'insurance' + networkId,
+            //         type: 'insurance',
+            //         name: 'InsuranceCard',
+            //         isPrototype: false,
+            //         isArchive: false,
+            //         chain: networkId,
+            //         hasUsdPlus: true,
+            //         overcapEnabled: false,
+            //         hasCap: this.totalInsuranceSupply,
+            //         tvl: this.insuranceData.strategyData.lastApy,
+            //         monthApy: this.insuranceData.strategyData.apy ? this.insuranceData.strategyData.apy : 0,
             //         cardOpened: false,
             //       },
             //   );
-        });
+            // }
 
-        cardList.push({
-            id: 'usdPlus' + networkId,
-            type: 'usdPlus',
-            name: 'UsdPlus',
-            prototype: false,
-            data: {archive: false},
-            chain: networkId,
-            hasUsdPlus: true,
-            overcapEnabled: false,
-            hasCap: true,
-            tvl: null, //this.usdPlusValue,
-            monthApy: this.avgApy ? this.avgApy.value : 0,
-        });
-
+        }
       // this.etsList.forEach(ets => {
       //   cardList.push(
       //       {
@@ -449,25 +450,6 @@ export default {
       //       },
       //   );
       // });
-      //
-      // if (networkId === 137) {
-      //   cardList.push(
-      //       {
-      //         id: 'insurance' + networkId,
-      //         type: 'insurance',
-      //         name: 'InsuranceCard',
-      //         isPrototype: false,
-      //         isArchive: false,
-      //         chain: networkId,
-      //         hasUsdPlus: true,
-      //         overcapEnabled: false,
-      //         hasCap: this.totalInsuranceSupply,
-      //         tvl: this.insuranceData.strategyData.lastApy,
-      //         monthApy: this.insuranceData.strategyData.apy ? this.insuranceData.strategyData.apy : 0,
-      //         cardOpened: false,
-      //       },
-      //   );
-      // }
 
 
       cardList.sort(function (a, b) {
@@ -491,7 +473,6 @@ export default {
         console.log("CardList: ", cardList);
 
       cardList[0].cardOpened = true;
-      this.isResorting = false;
       return cardList;
     },
 

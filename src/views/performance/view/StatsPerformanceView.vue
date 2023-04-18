@@ -86,6 +86,9 @@
         <v-col class="info-card-body-bottom">
           <v-row align="center" justify="start" class="ma-0">
             <label class="section-title-label">USD+ payouts</label>
+              <div class="balance-network-icon ml-3">
+                  <v-img :src="icon"/>
+              </div>
           </v-row>
 
           <v-row align="center" justify="center">
@@ -130,6 +133,13 @@ import {axios} from "@/plugins/http-axios";
 import moment from "moment/moment";
 import {payoutsApiService} from "@/services/payouts-api-service";
 
+import polygonIcon from "@/assets/network/polygon.svg";
+import optimismIcon from "@/assets/network/op.svg";
+import bscIcon from "@/assets/network/bsc.svg";
+import arbitrumIcon from "@/assets/network/ar.svg";
+import zksyncIcon from "@/assets/network/zk.svg";
+
+
 export default {
     name: "StatsPerformanceView",
 
@@ -157,6 +167,13 @@ export default {
 
         isDataLoaded: function() {
             return !this.isPayoutsLoading;
+        },
+
+        tabNetworkName: function() {
+            let params;
+            params = this.getParams(this.tab)
+
+            return params.networkName;
         },
 
         tabApiUrl: function() {
@@ -215,6 +232,21 @@ export default {
             return {
                 'tab-button': this.tab === 'polygon',
                 'tab-button-in-active': this.tab !== 'polygon',
+            }
+        },
+
+        icon: function () {
+            switch (this.tabNetworkName){
+                case 'polygon':
+                    return polygonIcon;
+                case 'optimism':
+                    return optimismIcon;
+                case 'bsc':
+                    return bscIcon;
+                case 'arbitrum':
+                    return arbitrumIcon;
+                case 'zksync':
+                    return zksyncIcon;
             }
         },
     },
@@ -676,5 +708,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     border: 1px solid #1C95E7;
     width: 140px;
     height: 40px;
+}
+
+.balance-network-icon {
+    width: 2% !important;
+    height: auto !important;
 }
 </style>

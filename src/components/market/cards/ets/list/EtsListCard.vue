@@ -1,5 +1,7 @@
 <template>
-    <v-row class="list-card-container ma-0" @click="$wu.isMobile() ? switchCard() : openStrategyCard()">
+    <v-row v-bind:class="archived ? 'list-card-container-archived ' : ''"
+           @click="$wu.isMobile() ? switchCard() : openStrategyCard()"
+           class="list-card-container ma-0">
         <v-col v-if="!$wu.isMobile()" class="my-1">
             <v-row class="ma-0" justify="start" align="center">
                 <div class="icon mr-2">
@@ -461,12 +463,17 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 * {
-    cursor: pointer;
 }
 
 .list-card-container:hover {
     filter: none !important;
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.05), 0 4px 4px 0 rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+}
+
+.list-card-container-archived {
+    box-shadow: none !important;
+    cursor: default !important;
 }
 
 .button {

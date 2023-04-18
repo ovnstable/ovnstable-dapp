@@ -31,7 +31,7 @@
 
             <v-container class="mt-3">
                 <v-row align="center" justify="center" class="ma-0">
-                    <label class="full-status-error-label" v-if="cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply" :style="{color: cardData.data.mainColor}">
+                    <label class="full-status-error-label" v-if="cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply" :style="{color: cardData.data.mainColor}">
                         ETS capacity is full. Check status later
                     </label>
                     <label class="full-status-error-label" v-else>&nbsp;</label>
@@ -45,9 +45,9 @@
                     </v-row>
                     <v-row class="ma-0" align="center">
                         <label class="progress-label-value mt-2"
-                               v-if="totalSupply && cardData.data && totalSupply[cardData.data.name]"
-                               :style="(cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? {color: cardData.data.mainColor} : {}">
-                            ${{ $utils.formatMoneyComma(totalSupply[cardData.data.name], 2) }}
+                               v-if="cardData.data"
+                               :style="(cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply) ? {color: cardData.data.mainColor} : {}">
+                            ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
                         </label>
                         <v-progress-circular
                             v-else
@@ -70,7 +70,7 @@
                             height="7"
                             class="progress-info"
                             background-opacity="0"
-                            :value="(totalSupply[cardData.data.name] / cardData.data.maxSupply) * 100"
+                            :value="(cardData.tvl / cardData.data.maxSupply) * 100"
                             :color="cardData.data.mainColor"
                         ></v-progress-linear>
                     </v-row>
@@ -78,6 +78,8 @@
                 <template v-else>
                     <v-row class="d-flex justify-space-between ma-0 mt-3">
                         <label class="progress-label-value">CURRENT TVL</label>
+                        cardData.tvl:
+                        {{cardData.tvl}}
                         <label class="progress-label-value mb-5" v-if="cardData.tvl">
                             ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
                         </label>
@@ -169,7 +171,7 @@
                     </template>
 
                     <template v-else>
-                        <v-col v-if="!cardData.data.disabled && (isOvercapAvailable || !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply))" :class="accountEtsBalance ? 'mr-1' : ''">
+                        <v-col v-if="!cardData.data.disabled && (isOvercapAvailable || !(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply))" :class="accountEtsBalance ? 'mr-1' : ''">
                             <v-row>
                                 <v-btn class="button btn-filled" @click.stop="mintAction">Mint ETS</v-btn>
                             </v-row>
@@ -215,7 +217,6 @@ export default {
     computed: {
         ...mapGetters('network', ['networkId']),
         ...mapGetters("marketData", ["etsStrategyData"]),
-        ...mapGetters("supplyData", ["totalSupply"]),
         ...mapGetters('accountData', ['etsBalance']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
         ...mapGetters('magicEye', ['dataHidden']),
@@ -228,9 +229,6 @@ export default {
             return this.networkId === this.cardData.chain;
         },
 
-        dataLoaded: function () {
-            return (this.cardData && this.cardData.data && this.totalSupply && this.totalSupply[this.cardData.data.name]);
-        },
     },
 
     data: () => ({}),
@@ -238,7 +236,6 @@ export default {
     watch: {},
 
     mounted() {
-      this.refreshSupply();
     },
 
     methods: {
@@ -246,7 +243,6 @@ export default {
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
         ...mapActions('track', ['trackClick']),
         ...mapActions('magicEye', ['switchEye']),
-        ...mapActions('supplyData', ['refreshSupply']),
 
         mintAction() {
             this.showMintView();

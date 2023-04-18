@@ -39,8 +39,7 @@ module.exports = {
             rules:  [
                 {
                     test: /\.js$/,
-                    exclude: (_) => !/node_modules\/(@web3auth|@ethereumjs|@walletconnect|@web3modal)/.test(_),
-                    loader: 'babel-loader'
+                    exclude: (_) => !/node_modules\/(@web3auth|@ethereumjs|@walletconnect|@web3-onboard|@web3modal)/.test(_),                    loader: 'babel-loader'
                 }
             ]
         }

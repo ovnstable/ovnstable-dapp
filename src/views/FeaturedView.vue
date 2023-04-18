@@ -12,7 +12,7 @@
         </v-row>
 
         <div class="mt-7 cards-list-container">
-            <v-row v-if="!isAllDataLoaded && isResorting">
+            <v-row v-if="!isAllDataLoaded || isResorting">
                 <v-row align="center" justify="center" class="py-15">
                       <v-progress-circular
                           width="2"
@@ -25,7 +25,7 @@
 
             <v-row v-else class="d-flex" justify="start">
                 <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
-                       v-for="card in sortedCardList.filter(value => (!value.isOpenPrototype && !value.isArchive && value.hasCap)).slice(0, 3)"
+                       v-for="card in sortedCardList.filter(value => (!value.openPrototype && !value.data.archive && value.hasCap)).slice(0, 3)"
                        :key="card.id">
                     <v-row class="fill-height">
                         <component
@@ -49,6 +49,8 @@ import Ets from "@/components/market/cards/ets/Ets";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
 import {axios} from "@/plugins/http-axios";
+import loadJSON from "@/utils/http-utils";
+import {productInfoApiService} from "@/services/product-info-api-service";
 
 
 export default {
@@ -61,46 +63,43 @@ export default {
     },
 
     data: () => ({
-      openedList: false,
-      tab: 'optimism',
-      avgApy: null,
-      sortedCardList: [],
+        openedList: false,
+        tab: 'optimism',
+        avgApy: null,
+        sortedCardList: [],
+        cardEtsList: [],
 
-      isResorting: true,
+        isResorting: true,
 
-      isStrategyDataLoading: true,
-      isClientDataLoading: true,
-      isTotalSupplyLoading: true,
-      isUsdPlusPayoutsDataLoading: true,
+        isClientDataLoading: true,
+        isProductsInfoLoading: true,
 
-      etsTvlData: {},
-      etsApyData: {},
-      etsClientData: {},
-      etsStrategyData: {},
-      usdPlusApyData: {},
+        etsList: [],
 
-      currentTotalData: {},
-      totalUsdPlusValue: null,
-      // insuranceStrategyData: {},
+        etsTvlData: {},
+        etsApyData: {},
+        etsClientData: {},
+        etsStrategyData: {},
+        usdPlusApyData: {},
 
-      totalSupply: {},
-      // totalInsuranceSupply: 0,
+        currentTotalData: {},
+        totalUsdPlusValue: null,
+        // insuranceStrategyData: {},
+
+        totalSupply: {},
+        // totalInsuranceSupply: 0,
 
     }),
 
   computed: {
-    ...mapGetters('network', ['networkName', 'appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig', 'switchToOtherNetwork', 'getParams']),
+    ...mapGetters('network', ['appApiUrl', 'networkName', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig', 'switchToOtherNetwork', 'getParams']),
     ...mapGetters('accountData', ['account']),
-    ...mapGetters('web3', ['contracts', 'web3']),
-    // ...mapGetters('supplyData', ['totalSupply', 'totalInsuranceSupply']),
-    // ...mapGetters('insuranceData', ['insuranceStrategyData']),
-    ...mapGetters('etsAction', ['etsList']),
+      ...mapGetters('etsAction', ['etsNetworkNames']),
+      ...mapGetters('web3', ['contracts', 'web3']),
 
     isAllDataLoaded: function () {
-      return !this.isStrategyDataLoading &&
-          !this.isClientDataLoading &&
-          !this.isUsdPlusPayoutsDataLoading &&
-          !this.isTotalSupplyLoading;
+      return !this.isClientDataLoading &&
+          !this.isProductsInfoLoading;
     },
 
     tabNetworkId: function() {
@@ -148,62 +147,47 @@ export default {
   watch: {
       networkName: function (newVal, oldVal) {
           this.setTab(newVal);
-          this.loadData(newVal);
+          this.loadData();
       },
 
-      etsList: function (newVal, oldVal) {
-        if (newVal) {
+        etsList: function (newVal, oldVal) {
+          if (newVal) {
             this.loadData();
-        }
-      },
+          }
+        },
 
-      isAllDataLoaded: function (newVal, oldVal) {
-        if (newVal) {
-          this.getUsdPlusAvgMonthApy();
-          this.getSortedCardList(this.tabNetworkId);
-        }
-      },
+    isAllDataLoaded: function (newVal, oldVal) {
+      if (newVal) {
+        this.getUsdPlusAvgMonthApy();
+        //this.getSortedCardList();
+      }
+    },
   },
 
   created() {
   },
 
   mounted() {
-    console.log(this.$route.query.tabName);
-    this.setTab(this.networkName);
-    this.loadData();
+      console.log(this.$route.query.tabName);
+      this.loadEtsList();
+      this.setTab(this.networkName);
+      this.loadData();
   },
 
   methods: {
     // ...mapGetters('network', ['getParams']),
 
-    setTab(tabName) {
-      this.tab = tabName;
-        if (this.tab === 'optimism') {
-            this.initTabName('/featured', {tabName: 'optimism'});
-        }
+        async setTab(tabName) {
+            this.isResorting = true;
+            this.tab = tabName;
+            this.initTabName('/featured', {tabName: this.tab});
 
-        if (this.tab === 'arbitrum') {
-            this.initTabName('/featured', {tabName: 'arbitrum'});
-        }
-
-        if (this.tab === 'bsc') {
-            this.initTabName('/featured', {tabName: 'bsc'});
-        }
-
-        if (this.tab === 'polygon') {
-            this.initTabName('/featured', {tabName: 'polygon'});
-        }
-
-        if (this.tab === 'zksync') {
-            this.initTabName('/featured', {tabName: 'zksync'});
-            return
-        }
-
-      this.getUsdPlusAvgMonthApy();
-      this.getSortedCardList(this.tabNetworkId);
-      console.log("NetworkParams : ", this.getParams(this.tab));
-    },
+            console.log('this.cardEtsList ', this.cardEtsList)
+            this.sortedCardList = this.getSortedCardList(this.cardEtsList, false)
+            await this.getUsdPlusAvgMonthApy();
+            this.isResorting = false;
+            console.log("NetworkParams : ", this.getParams(this.tab));
+        },
 
       initTabName(path, queryParams) {
           this.$router.push({
@@ -212,13 +196,24 @@ export default {
           });
       },
 
-    loadData() {
-      this.isStrategyDataLoading = true;
-      this.isClientDataLoading = true;
-      this.isUsdPlusPayoutsDataLoading = true;
-      this.isTotalSupplyLoading = true;
-      this.refreshMarket();
-    },
+        loadData() {
+          this.isClientDataLoading = true;
+          this.isProductsInfoLoading = true;
+          this.refreshMarket();
+        },
+
+        async loadEtsList() {
+          let list = [];
+
+          for (let i = 0; i < this.etsNetworkNames.length; i++) {
+              let etses = await loadJSON(`https://api.overnight.fi/${this.etsNetworkNames[i]}/usd+/design_ets/list`);
+              // May add some fields
+              list.push(...etses);
+          }
+
+          this.etsList = list;
+          console.log("ETSs be loaded", this.etsList );
+        },
 
     addEtsStrategyData(etsDataParams) {
       let data = etsDataParams.data;
@@ -246,48 +241,6 @@ export default {
     addUsdPlusApyData(usdPlusApyDataParams) {
       this.usdPlusApyData[usdPlusApyDataParams.name] = usdPlusApyDataParams.data;
       console.log('MarketData: refreshUsdPlusPayoutsData this.usdPlusApyData', this.usdPlusApyData);
-    },
-
-    async refreshSupply() {
-
-      console.log('Supply: refreshSupply start');
-      this.isTotalSupplyLoading = true;
-
-      let networkId = this.networkId;
-
-      let resultSupply = {};
-
-      let etsList = this.etsList;
-
-      for (let i = 0; i < etsList.length; i++) {
-        let ets = etsList[i];
-        let etsSupply = null;
-
-        if (ets.chain === networkId) {
-          try {
-            etsSupply = await this.contracts[ets.tokenContract].methods.totalSupply().call();
-            etsSupply = this.web3.utils.fromWei(etsSupply, ets.etsTokenDecimals === 18 ? 'ether' : 'mwei');
-          } catch (e) {
-            try {
-              etsSupply = this.etsStrategyData[ets.name].tvl;
-            } catch (ex) {
-              //console.error('Equal chain supply error. Name:' + ets.name + ' chain: ' + ets.chain, ex)
-            }
-          }
-        } else {
-          try {
-            etsSupply = this.etsStrategyData[ets.name].tvl;
-          } catch (ex) {
-            //console.error('Supply error. Name:' + ets.name + ' chain: ' + ets.chain, ex)
-          }
-        }
-
-        resultSupply[ets.name] = etsSupply;
-      }
-
-      this.totalSupply = resultSupply;
-      this.isTotalSupplyLoading = false;
-      console.log('Supply: refreshSupply end', this.totalSupply);
     },
 
     async refreshInsuranceSupply() {
@@ -330,357 +283,202 @@ export default {
       this.totalInsuranceSupply = resultSupply;
     },
 
-    async refreshMarket() {
-      console.log('MarketData: refreshMarket this.etsList', this.etsList);
-      if (this.etsList) {
-        await this.refreshStrategyData();
-        await this.refreshClientData();
-        await this.refreshUsdPlusPayoutsData();
-        await this.refreshSupply();
-        // await this.refreshInsuranceSupply();
-      }
-    },
+      async refreshMarket() {
+          console.log('Futured View: refreshMarket this.etsList', this.etsList);
+          if (this.etsList && !this.isStartLoading) {
+              try {
+                  this.isStartLoading = true;
 
-    async refreshStrategyData() {
-      console.log('MarketData: refreshStrategyData', this.etsList);
+                  this.isProductsInfoLoading = true;
+                  this.isClientDataLoading = true;
 
-      this.isStrategyDataLoading = true;
+                  await this.refreshStrategyData();
+                  await this.refreshClientData();
 
-      await Promise.all(
-          this.etsList.map(async ets => {
-
-            let refreshParams = {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain};
-            let appApiUrl;
-
-            switch (refreshParams.chain) {
-              case 137:
-                appApiUrl = this.polygonConfig.appApiUrl;
-                break;
-              case 10:
-                appApiUrl = this.opConfig.appApiUrl;
-                break;
-              case 56:
-                appApiUrl = this.bscConfig.appApiUrl;
-                break;
-              case 42161:
-                appApiUrl = this.arConfig.appApiUrl;
-                break;
-              case 324:
-                appApiUrl = this.zkConfig.appApiUrl;
-                break;
-              default:
-                appApiUrl = this.polygonConfig.appApiUrl;
-                break;
-            }
-
-            let fetchOptions = {
-              headers: {
-                "Access-Control-Allow-Origin": appApiUrl
+                  this.isStartLoading = false
+              } catch (e) {
+                  console.error("Error when refresh market data:", e)
               }
-            };
+          }
+      },
 
-            let avgApy;
-            let avgApyStrategyMonth;
-            let strategyData;
 
-            console.log('MarketData: refreshStrategyData ', appApiUrl);
+      async refreshStrategyData() {
+          console.log('MarketData: refreshStrategyData', this.etsList);
 
-            await fetch(appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
-                .then(value => value.json())
-                .then(value => {
-                  avgApy = value;
-                  avgApy.date = moment(avgApy.date).format("DD MMM. ‘YY");
-                }).catch(reason => {
-                  console.log('Error get data: ' + reason);
-                })
+          this.isProductsInfoLoading = true;
 
-            await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress + '/avg-apy-info/month', fetchOptions)
-                .then(value => value.json())
-                .then(value => {
-                  avgApyStrategyMonth = value;
-                  avgApyStrategyMonth.date = moment(avgApyStrategyMonth.date).format("DD MMM. ‘YY");
-                }).catch(reason => {
-                  console.log('Error get data: ' + reason);
-                })
+          productInfoApiService.getAllProducts(this.appApiUrl)
+              .then(data => {
+                  console.log("Future Products loaded: ", data);
+                  this.cardEtsList = data;
+                  this.isResorting = true;
+                  this.sortedCardList = this.getSortedCardList(this.cardEtsList, true);
+                  this.isProductsInfoLoading = false;
+                  this.isResorting = false;
+              }).catch(e => {
+              console.error("Error when load products. ", e);
+              this.isProductsInfoLoading = false;
+              this.isResorting = false;
+          });
+      },
 
-            await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress, fetchOptions)
-                .then(value => value.json())
-                .then(value => {
-                  strategyData = value;
-                  strategyData.lastApy = strategyData.apy;
-                  strategyData.apy = (avgApyStrategyMonth && avgApyStrategyMonth.value) ? (avgApyStrategyMonth.value) : strategyData.apy;
-                  strategyData.diffApy = (avgApy && avgApy.value && strategyData.apy) ? (strategyData.apy - avgApy.value) : null;
+      async refreshClientData() {
+          console.log('MarketData: refreshClientData', this.etsList);
+          this.isClientDataLoading = true;
+          if (!this.account){
+              this.isClientDataLoading = false;
+              return;
+          }
 
-                  /* TODO: get onChain */
-                  strategyData.targetHealthFactor = 1.2;
+          await Promise.all(
+              this.etsList.map(async ets => {
+                  let refreshParams = {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain};
+                  let appApiUrl;
 
-                  strategyData.payoutItems.sort(
-                      function(o1,o2){
-                        return moment(o1.payableDate).isBefore(moment(o2.payableDate)) ? -1 : moment(o1.payableDate).isAfter(moment(o2.payableDate)) ? 1 : 0;
-                      }
-                  );
-
-                  strategyData.timeData.sort(
-                      function(o1,o2){
-                        return moment(o1.date).isBefore(moment(o2.date)) ? -1 : moment(o1.date).isAfter(moment(o2.date)) ? 1 : 0;
-                      }
-                  );
-
-                  let clientData = strategyData.timeData;
-
-                  let widgetDataDict = {};
-                  let widgetData = {
-                    labels: [],
-                    datasets: [
-                      {
-                        fill: false,
-                        borderColor: '#1C95E7',
-                        data: [],
-                      }
-                    ]
-                  };
-
-                  [...clientData].forEach(item => {
-                    widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
-                  });
-
-                  for(let key in widgetDataDict) {
-                    widgetData.labels.push(key);
-                    widgetData.datasets[0].data.push(widgetDataDict[key]);
+                  switch (refreshParams.chain) {
+                      case 137:
+                          appApiUrl = this.polygonConfig.appApiUrl;
+                          break;
+                      case 10:
+                          appApiUrl = this.opConfig.appApiUrl;
+                          break;
+                      case 56:
+                          appApiUrl = this.bscConfig.appApiUrl;
+                          break;
+                      case 42161:
+                          appApiUrl = this.arConfig.appApiUrl;
+                          break;
+                      case 324:
+                          appApiUrl = this.zkConfig.appApiUrl;
+                          break;
+                      default:
+                          appApiUrl = this.polygonConfig.appApiUrl;
+                          break;
                   }
 
-                  this.addEtsApyData({ name: refreshParams.strategyName, data: widgetData});
+                  let account = this.account.toLowerCase();
+                  let profitDay = null;
 
-                  let widgetTvlDataDict = {};
-                  let widgetTvlData = {
-                    labels: [],
-                    datasets: [
-                      {
-                        fill: false,
-                        borderColor: '#1C95E7',
-                        data: [],
+                  let fetchOptions = {
+                      headers: {
+                          "Access-Control-Allow-Origin": appApiUrl
                       }
-                    ]
                   };
 
-                  [...clientData].forEach(item => {
-                    widgetTvlDataDict[moment(item.date).format('DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
-                  });
+                  await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress + '/account/' + account, fetchOptions)
+                      .then(value => value.json())
+                      .then(value => {
+                          console.log('MarketData: refreshClientData5', this.etsList);
+                          profitDay = value.profit;
+                      }).catch(reason => {
+                          console.log('Error get data: ' + reason);
+                      })
 
-                  for(let key in widgetTvlDataDict) {
-                    widgetTvlData.labels.push(key);
-                    widgetTvlData.datasets[0].data.push(widgetTvlDataDict[key]);
-                  }
+                  this.addEtsClientData({ name: refreshParams.strategyName, data: profitDay});
+                  this.isClientDataLoading = false;
+              })
+          );
+      },
 
-                  console.log('MarketData: refreshStrategyData 3', widgetTvlData);
-                  this.addEtsTvlData({ name: refreshParams.strategyName, data: widgetTvlData});
-                }).catch(reason => {
-                  console.error('Error load market data get data: ' + reason);
-                })
+    getSortedCardList(_cardList, isFirst) {
+        let networkId = this.networkId;
+        let cardList = _cardList;
 
-            this.addEtsStrategyData({ name: refreshParams.strategyName, data: strategyData});
-            this.isStrategyDataLoading = false;
-          })
-      );
-    },
+        cardList.forEach(ets => {
+            console.log("Ets type: ", ets.id)
+            if (!ets.type || ets.type === 'ETS') {
+                ets.type = 'ETS';
+                ets.name = 'Ets';
 
-    async refreshClientData() {
-      console.log('MarketData: refreshClientData', this.etsList);
-      this.isClientDataLoading = true;
-
-      if (!this.account){
-        this.isClientDataLoading = false;
-        return;
-      }
-
-      await Promise.all(
-          this.etsList.map(async ets => {
-
-            let refreshParams = {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain};
-            let appApiUrl;
-
-            switch (refreshParams.chain) {
-              case 137:
-                appApiUrl = this.polygonConfig.appApiUrl;
-                break;
-              case 10:
-                appApiUrl = this.opConfig.appApiUrl;
-                break;
-              case 56:
-                appApiUrl = this.bscConfig.appApiUrl;
-                break;
-              case 42161:
-                appApiUrl = this.arConfig.appApiUrl;
-                break;
-              case 324:
-                appApiUrl = this.zkConfig.appApiUrl;
-                break;
-              default:
-                appApiUrl = this.polygonConfig.appApiUrl;
-                break;
+                if (ets.id) {
+                    ets.id = 'ets' + ets.chain + ets.name
+                }
             }
+        });
 
-            let account = this.account.toLowerCase();
-            let profitDay = null;
 
-            let fetchOptions = {
-              headers: {
-                "Access-Control-Allow-Origin": appApiUrl
-              }
-            };
+        if (isFirst) {
 
-            await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress + '/account/' + account, fetchOptions)
-                .then(value => value.json())
-                .then(value => {
-                  profitDay = value.profit;
-                }).catch(reason => {
-                  console.log('Error get data: ' + reason);
-                })
+            cardList.push({
+                id: 'usdPlus' + networkId,
+                type: 'usdPlus',
+                name: 'UsdPlus',
+                prototype: false,
+                data: {archive: false},
+                chain: networkId,
+                hasUsdPlus: true,
+                overcapEnabled: false,
+                hasCap: true,
+                tvl: null, //this.usdPlusValue,
+                monthApy: this.avgApy ? this.avgApy.value : 0,
+            });
 
-            this.addEtsClientData({ name: refreshParams.strategyName, data: profitDay});
-            this.isClientDataLoading = false;
-          })
-      );
-    },
+            //
+            // if (networkId === 137) {
+            //   cardList.push(
+            //       {
+            //         id: 'insurance' + networkId,
+            //         type: 'insurance',
+            //         name: 'InsuranceCard',
+            //         isPrototype: false,
+            //         isArchive: false,
+            //         chain: networkId,
+            //         hasUsdPlus: true,
+            //         overcapEnabled: false,
+            //         hasCap: this.totalInsuranceSupply,
+            //         tvl: this.insuranceData.strategyData.lastApy,
+            //         monthApy: this.insuranceData.strategyData.apy ? this.insuranceData.strategyData.apy : 0,
+            //         cardOpened: false,
+            //       },
+            //   );
+            // }
 
-    async refreshUsdPlusPayoutsData() {
-      console.log('MarketData: refreshUsdPlusPayoutsData');
-      this.isUsdPlusPayoutsDataLoading = true;
-
-      await Promise.all(
-          ['polygon', 'bsc', 'optimism', 'arbitrum', 'zksync'].map(async network => {
-
-            let appApiUrl;
-
-            switch (network) {
-              case "polygon":
-                appApiUrl = this.polygonConfig.appApiUrl;
-                break;
-              case "bsc":
-                appApiUrl =  this.bscConfig.appApiUrl;
-                break;
-              case "optimism":
-                appApiUrl = this.opConfig.appApiUrl;
-                break;
-              case "arbitrum":
-                appApiUrl = this.arConfig.appApiUrl;
-                break;
-              case "zksync":
-                appApiUrl = this.zkConfig.appApiUrl;
-                break;
-            }
-
-            let fetchOptions = {
-              headers: {
-                "Access-Control-Allow-Origin": appApiUrl
-              }
-            };
-
-            let resultDataList;
-
-            axios.get(appApiUrl + `/dapp/payouts`, fetchOptions)
-                .then(value => {
-                  let clientData = value.data;
-                  let widgetDataDict = {};
-
-                  [...clientData].reverse().forEach(item => {
-                    widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
-                  });
-
-                  resultDataList = widgetDataDict;
-
-                  console.log('MarketData: refreshUsdPlusPayoutsData addapy', resultDataList);
-                  this.addUsdPlusApyData({ name: network, data: resultDataList});
-                  this.isUsdPlusPayoutsDataLoading = false;
-                })
-          })
-      );
-    },
-    getSortedCardList(networkId) {
-      this.isResorting = true;
-
-      let cardList = [
-        {
-          id: 'usdPlus' + networkId,
-          type: 'usdPlus',
-          name: 'UsdPlus',
-          isPrototype: false,
-          isArchive: false,
-          chain: networkId,
-          hasUsdPlus: true,
-          overcapEnabled: false,
-          hasCap: true,
-          tvl: this.usdPlusValue,
-          monthApy: this.avgApy ? this.avgApy.value : 0,
-        },
-      ];
-
-      this.etsList.forEach(ets => {
-        cardList.push(
-            {
-              id: 'ets' + ets.chain + ets.name,
-              type: 'ets',
-              name: 'Ets',
-              isPrototype: ets.prototype,
-              isOpenPrototype: ets.openPrototype,
-              isArchive: ets.archive,
-              data: ets,
-              chain: ets.chain,
-              hasUsdPlus: ets.hasUsdPlus,
-              overcapEnabled: (!!(ets.maxSupply && ets.maxSupply > 0)),
-              hasCap: ets.maxSupply ? (this.totalSupply[ets.name] < ets.maxSupply) : true,
-              tvl: this.totalSupply[ets.name],
-              monthApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
-              cardOpened: false,
-            },
-        );
-      });
-      //
-      // if (networkId === 137) {
+        }
+      // this.etsList.forEach(ets => {
       //   cardList.push(
       //       {
-      //         id: 'insurance' + networkId,
-      //         type: 'insurance',
-      //         name: 'InsuranceCard',
-      //         isPrototype: false,
-      //         isArchive: false,
-      //         chain: networkId,
-      //         hasUsdPlus: true,
-      //         overcapEnabled: false,
-      //         hasCap: this.totalInsuranceSupply,
-      //         tvl: this.insuranceData.strategyData.lastApy,
-      //         monthApy: this.insuranceData.strategyData.apy ? this.insuranceData.strategyData.apy : 0,
+      //         id: 'ets' + ets.chain + ets.name,
+      //         type: 'ets',
+      //         name: 'Ets',
+      //         isPrototype: ets.prototype,
+      //         isOpenPrototype: ets.openPrototype,
+      //         isArchive: ets.archive,
+      //         data: ets,
+      //         chain: ets.chain,
+      //         hasUsdPlus: ets.hasUsdPlus,
+      //         overcapEnabled: (!!(ets.maxSupply && ets.maxSupply > 0)),
+      //         hasCap: ets.maxSupply ? (this.totalSupply[ets.name] < ets.maxSupply) : true,
+      //         tvl: this.totalSupply[ets.name],
+      //         monthApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
       //         cardOpened: false,
       //       },
       //   );
-      // }
+      // });
 
 
       cardList.sort(function (a, b) {
-        if (!a.isPrototype && b.isPrototype) return -1;
-        if (a.isPrototype && !b.isPrototype) return 1;
+          if (!a.prototype && b.prototype) return -1;
+          if (a.prototype && !b.prototype) return 1;
 
-        if (!a.isArchive && b.isArchive) return -1;
-        if (a.isArchive && !b.isArchive) return 1;
+          if (!a.data.archive && b.data.archive) return -1;
+          if (a.data.archive && !b.data.archive) return 1;
 
-        if (a.chain === networkId && b.chain !== networkId) return -1;
-        if (a.chain !== networkId && b.chain === networkId) return 1;
+          if (a.chain === networkId && b.chain !== networkId) return -1;
+          if (a.chain !== networkId && b.chain === networkId) return 1;
 
-        if (a.monthApy > b.monthApy) return -1;
-        if (a.monthApy < b.monthApy) return 1;
+          if (a.monthApy > b.monthApy) return -1;
+          if (a.monthApy < b.monthApy) return 1;
 
-        if (a.hasCap && !b.hasCap) return -1;
-        if (!a.hasCap && b.hasCap) return 1;
+          if (a.hasCap && !b.hasCap) return -1;
+          if (!a.hasCap && b.hasCap) return 1;
 
         return 0;
       });
         console.log("CardList: ", cardList);
 
       cardList[0].cardOpened = true;
-      this.sortedCardList = cardList;
-      console.log("Cards be sorted: 1", this.isResorting)
-      this.isResorting = false;
-      console.log("Cards be sorted: 2", this.isResorting)
+      return cardList;
     },
 
     async getUsdPlusAvgMonthApy() {

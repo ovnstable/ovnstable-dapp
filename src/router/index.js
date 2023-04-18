@@ -45,6 +45,16 @@ const routes = [
                 }
             },
             {
+                path: '/market/archive',
+                name: 'MarketArchiveView',
+                component: () => import('../views/MarketArchiveView.vue'),
+                meta: {
+                    middleware: [
+                        Market
+                    ]
+                }
+            },
+            {
                 path: '/featured',
                 name: 'FeaturedView',
                 component: () => import('../views/FeaturedView.vue'),

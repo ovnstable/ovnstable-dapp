@@ -27,7 +27,8 @@ export const swap = {
 
 
         async checkApprove(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, disapproveActionFunc, approveActionFunc, ovnStableContract) {
-            console.log("Check Approve action. Sum: " + sum + ' sliderPercent: ' + sliderPercent + ' ActionDecimals: ' + actionDecimals);
+            console.log(`Check Approve action. Sum: ${sum} sliderPercent: ${sliderPercent} ActionDecimals: ${actionDecimals}`);
+            console.log(`Check Approve action. Contracts: `, exchangeContract, actionContract);
 
             try {
                 if (!sum || isNaN(sum) || !account) {
@@ -248,11 +249,11 @@ export const swap = {
 
             let allowanceValue;
             if (action === 'swap-redeem' || action === 'dai-swap-redeem' || action === 'usdt-swap-redeem' || action === 'market-redeem' || action === 'unwrap-redeem') {
-                console.log("Redeem allowance with ovnStableContract", ovnStableContract)
+                console.log("Redeem allowance with ovnStableContract", ovnStableContract, exchangeContract)
                 allowanceValue = await ovnStableContract.methods.allowance(from, exchangeContract.options.address).call();
                 console.log('allowanceValue with ovnStable in redeem: ', allowanceValue)
             } else {
-                console.log("Action contract allowance", actionContract)
+                console.log("Action contract allowance", actionContract, exchangeContract)
                 allowanceValue = await actionContract.methods.allowance(from, exchangeContract.options.address).call();
                 console.log('allowanceValue: ', allowanceValue)
             }

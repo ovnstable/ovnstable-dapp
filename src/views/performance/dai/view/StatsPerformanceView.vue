@@ -109,6 +109,9 @@
           <v-col class="info-card-body-bottom">
             <v-row align="center" justify="start" class="ma-0">
               <label class="section-title-label">DAI+ payouts</label>
+                <div class="balance-network-icon ml-3">
+                    <v-img :src="icon"/>
+                </div>
             </v-row>
 
             <v-row align="center" justify="center">
@@ -185,6 +188,11 @@ import LineChartApy from "@/components/stats/widget/LineChartApy";
 import LineChartTvl from "@/components/stats/widget/LineChartTvl";
 import moment from "moment/moment";
 import {payoutsApiService} from "@/services/payouts-api-service";
+import polygonIcon from "@/assets/network/polygon.svg";
+import optimismIcon from "@/assets/network/op.svg";
+import bscIcon from "@/assets/network/bsc.svg";
+import arbitrumIcon from "@/assets/network/ar.svg";
+import zksyncIcon from "@/assets/network/zk.svg";
 
 export default {
     name: "StatsDaiPerformanceView",
@@ -255,6 +263,21 @@ export default {
 
         lastPayoutDate: function () {
             return this.payouts && this.payouts.length ? this.payouts[0].payableDate : '';
+        },
+
+        icon: function () {
+            switch (this.tabNetworkName){
+                case 'polygon':
+                    return polygonIcon;
+                case 'optimism':
+                    return optimismIcon;
+                case 'bsc':
+                    return bscIcon;
+                case 'arbitrum':
+                    return arbitrumIcon;
+                case 'zksync':
+                    return zksyncIcon;
+            }
         },
     },
 
@@ -820,4 +843,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     cursor: pointer !important;
 }
 
+.balance-network-icon {
+    width: 2% !important;
+    height: auto !important;
+}
 </style>

@@ -5,6 +5,9 @@
                 <v-row justify="start">
                     <label class="chart-title">{{ totalTvl ? `${assetType.toUpperCase()}&nbsp;` : '' }}</label>
                     <label class="chart-title" style="margin-left: 0 !important"><abbr title="Total Value Locked">TVL</abbr></label>
+                    <div class="balance-network-icon ml-3 mt-7">
+                        <v-img :src="icon"/>
+                    </div>
                 </v-row>
 
                 <v-row justify="start">
@@ -72,6 +75,11 @@ import {mapActions, mapGetters} from "vuex";
 
 import ApexCharts from 'apexcharts'
 import {axios} from "@/plugins/http-axios";
+import polygonIcon from "@/assets/network/polygon.svg";
+import optimismIcon from "@/assets/network/op.svg";
+import bscIcon from "@/assets/network/bsc.svg";
+import arbitrumIcon from "@/assets/network/ar.svg";
+import zksyncIcon from "@/assets/network/zk.svg";
 
 export default {
     name: "LineChartTvl",
@@ -141,6 +149,21 @@ export default {
                 return '#8B8DFC';
             }
             /* TODO: add widget stub */
+        },
+
+        icon: function () {
+            switch (this.networkName){
+                case 'polygon':
+                    return polygonIcon;
+                case 'optimism':
+                    return optimismIcon;
+                case 'bsc':
+                    return bscIcon;
+                case 'arbitrum':
+                    return arbitrumIcon;
+                case 'zksync':
+                    return zksyncIcon;
+            }
         },
     },
 
@@ -612,4 +635,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     color: var(--secondary-gray-text) !important;
 }
 
+.balance-network-icon {
+    width: 8% !important;
+    height: auto !important;
+}
 </style>

@@ -1,5 +1,7 @@
 <template>
-    <v-row class="list-card-container ma-0" @click="$wu.isMobile() ? switchCard() : openStrategyCard()">
+    <v-row v-bind:class="archived ? 'list-card-container-archived ' : ''"
+           @click="$wu.isMobile() ? switchCard() : openStrategyCard()"
+           class="list-card-container ma-0">
         <v-col v-if="!$wu.isMobile()" class="my-1">
             <v-row class="ma-0" justify="start" align="center">
                 <div class="icon mr-2">
@@ -45,7 +47,7 @@
         <v-col v-if="!$wu.isMobile()" cols="3" class="my-1" style="max-width: 269px">
             <v-row class="ma-0 mr-10" justify="center" align="center">
                 <label class="card-label"
-                       :class="(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
+                       :class="(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
                     ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
                 </label>
                 <label class="card-label list-header-label-gray" v-if="$wu.isFull() && cardData.overcapEnabled">&nbsp;/&nbsp;${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
@@ -66,7 +68,7 @@
         </v-col>
         <v-col v-if="!$wu.isMobile()" class="my-1 button-width" style="max-width: 90px">
             <template v-if="!networkSupport">
-                <div >
+                <div v-if="!archived">
                     <v-row class="ma-0" justify="end" align="center">
                         <v-btn x-small
                                width="120px"
@@ -84,7 +86,7 @@
                     <v-btn x-small
                            width="105px"
                            max-width="105px"
-                           v-if="!cardData.data.disabled && (isOvercapAvailable || (!cardData.prototype &&  !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)))"
+                           v-if="!cardData.data.disabled && (isOvercapAvailable || (!cardData.prototype &&  !(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply)))"
                            class="button btn-outlined"
                            @click.stop="mintAction" outlined>
                         MINT/REDEEM
@@ -174,7 +176,7 @@
                 <v-col>
                     <v-row justify="start" align="center">
                         <label class="card-label"
-                               :class="(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
+                               :class="(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
                             ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
                         </label>
                         <label class="card-label list-header-label-gray" v-if="cardData.overcapEnabled">&nbsp;/&nbsp;${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
@@ -188,7 +190,7 @@
                 <v-col v-if="networkSupport">
                     <v-row justify="start" align="center">
                         <v-btn x-small
-                               v-if="!cardData.data.disabled && (isOvercapAvailable || (!cardData.prototype && !(cardData.overcapEnabled && cardData.data.maxSupply && totalSupply[cardData.data.name] >= cardData.data.maxSupply)))"
+                               v-if="!cardData.data.disabled && (isOvercapAvailable || (!cardData.prototype && !(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply)))"
                                class="button btn-filled"
                                @click.stop="mintAction" outlined>
                             MINT/REDEEM
@@ -203,7 +205,9 @@
                 </v-col>
                 <v-col>
                     <v-row :justify="networkSupport ? 'end' : 'center'" align="center">
-                        <v-btn x-small
+                        <v-btn
+                                v-if="!archived"
+                                x-small
                                class="button btn-outlined"
                                @click.stop="openStrategyCard" outlined>
                             ABOUT
@@ -237,13 +241,16 @@ export default {
         featured: {
             type: Boolean,
             default: false
+        },
+        archived: {
+            type: Boolean,
+            default: false
         }
     },
 
     computed: {
         ...mapGetters('network', ['networkId', 'networkName']),
         ...mapGetters("marketData", ["etsStrategyData"]),
-        ...mapGetters("supplyData", ["totalSupply"]),
         ...mapGetters('accountData', ['etsBalance']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
 
@@ -282,6 +289,10 @@ export default {
         },
 
         openStrategyCard() {
+            if (this.archived) {
+                return;
+            }
+
             this.$router.push("/ets/" + this.cardData.data.name);
             window.scrollTo({top: 0, behavior: "smooth"});
         },
@@ -452,12 +463,17 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 * {
-    cursor: pointer;
 }
 
 .list-card-container:hover {
     filter: none !important;
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.05), 0 4px 4px 0 rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+}
+
+.list-card-container-archived {
+    box-shadow: none !important;
+    cursor: default !important;
 }
 
 .button {

@@ -123,7 +123,22 @@ export default {
 
         isMobile() {
             return window.innerWidth < 650;
-        }
+        },
+
+        chainColor() {
+            if (this.networkName === null || this.networkName === 'polygon') {
+                return '#7B3FE4';
+            } else if (this.networkName === 'arbitrum') {
+                return '#29A0F0';
+            } else if (this.networkName === 'bsc') {
+                return '#F0B90B';
+            } else if (this.networkName === 'optimism') {
+                return '#FF0420';
+            } else if (this.networkName === 'zksync') {
+                return '#8B8DFC';
+            }
+            /* TODO: add widget stub */
+        },
     },
 
     mounted() {
@@ -175,6 +190,18 @@ export default {
             this.redraw();
         },
 
+        hexToRGB(hex, alpha) {
+            let r = parseInt(hex.slice(1, 3), 16),
+                g = parseInt(hex.slice(3, 5), 16),
+                b = parseInt(hex.slice(5, 7), 16);
+
+            if (alpha) {
+                return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
+            } else {
+                return "rgb(" + r + ", " + g + ", " + b + ")";
+            }
+        },
+
         changeZoomBtnStyle() {
             document.getElementById("week-zoom-btn").classList.remove("selected");
             document.getElementById("month-zoom-btn").classList.remove("selected");
@@ -213,6 +240,7 @@ export default {
             let options = {
                 series: [{
                     name: "APY",
+                    color: this.hexToRGB(this.chainColor, 0.1),
                     data: values
                 }],
 
@@ -242,8 +270,8 @@ export default {
                     yaxis: [{
                         y: averageValue,
                         strokeDashArray: 5,
-                        borderColor: 'rgba(28, 149, 231, 1)',
-                        fillColor: 'rgba(28, 149, 231, 1)',
+                        borderColor: this.chainColor,
+                        fillColor: this.chainColor,
                         label: {
                             show: false,
                         },
@@ -262,7 +290,7 @@ export default {
                 stroke: {
                     curve: 'straight',
                     width: this.isMobile ? 1 : 2,
-                    colors: ["rgba(28, 149, 231, 1)"],
+                    colors: [this.chainColor],
                 },
 
                 xaxis: {
@@ -310,21 +338,24 @@ export default {
                     horizontalAlign: 'left'
                 },
 
-                colors: [this.light ? '#E6F1FF' : '#093b5d'],
+                colors: [this.light ? this.chainColor : '#29323E'],
 
                 theme: {
                     mode: this.light ? 'light' : 'dark',
                 },
 
                 fill: {
-                    type: ['gradient'],
+                    colors: [this.hexToRGB(this.chainColor, 0.1)],
+                    opacity: 1,
+                    type: 'gradient',
 
                     gradient: {
-                        shade: 'rgba(230, 241, 255, 1)',
+                        shade: 'light',
                         type: "vertical",
-                        shadeIntensity: 0.2,
+                        shadeIntensity: 10,
                         opacityFrom: 1,
-                        opacityTo: 0,
+                        opacityTo: 1,
+                        gradientToColors: [this.light ? 'rgb(255, 255, 255)' : 'rgba(29, 32, 41, 1)'],
                         stops: [0, 100],
                     },
                 }

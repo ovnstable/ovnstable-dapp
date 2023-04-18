@@ -35,9 +35,6 @@
             </v-row>
         </div>
 
-
-
-
       <div v-if="networkId === 10 || networkId === 42161">
         <v-row v-if="isPayoutsLoading">
           <v-row align="center" justify="center" class="py-15">

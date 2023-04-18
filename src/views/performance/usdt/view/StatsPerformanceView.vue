@@ -18,7 +18,7 @@
                 </template>
                 <v-col cols="6">
                     <v-row class="ma-0 mt-10 toggle-row ml-3">
-                        <label class="tab-btn mr-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">Bsc</label>
+                        <label class="tab-btn mr-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
                     </v-row>
                 </v-col>
                 <template v-if="!$wu.isMobile()">
@@ -644,17 +644,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .page-container {
     margin-bottom: 5% !important;
-}
-
-.tab-button {
-    border-bottom: 2px solid var(--links-blue) !important;
-    color: var(--links-blue) !important;
-    cursor: pointer !important;
-}
-
-.tab-button-in-active {
-    color: var(--secondary-gray-text) !important;
-    cursor: pointer !important;
 }
 
 .toggle-row {

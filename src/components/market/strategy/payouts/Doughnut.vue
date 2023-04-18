@@ -49,7 +49,7 @@ export default {
 
         networkName: {
             type: String,
-            default: 'optimism'
+            default: 'arbitrum'
         }
     },
 
@@ -84,6 +84,21 @@ export default {
 
             return hours + " : " + minutes;
         },
+
+        chainColor() {
+            if (this.networkName === null || this.networkName === 'polygon') {
+                return '#7B3FE4';
+            } else if (this.networkName === 'arbitrum') {
+                return '#29A0F0';
+            } else if (this.networkName === 'bsc') {
+                return '#F0B90B';
+            } else if (this.networkName === 'optimism') {
+                return '#FF0420';
+            } else if (this.networkName === 'zksync') {
+                return '#8B8DFC';
+            }
+            /* TODO: add widget stub */
+        },
     },
 
     mounted() {
@@ -95,6 +110,17 @@ export default {
     },
 
     methods: {
+        hexToRGB(hex, alpha) {
+            let r = parseInt(hex.slice(1, 3), 16),
+                g = parseInt(hex.slice(3, 5), 16),
+                b = parseInt(hex.slice(5, 7), 16);
+
+            if (alpha) {
+                return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
+            } else {
+                return "rgb(" + r + ", " + g + ", " + b + ")";
+            }
+        },
 
         formatDate(date) {
             return this.$moment.utc(date).format('DD.MM.YY');
@@ -121,7 +147,7 @@ export default {
 
             this.sections.push(
                 {
-                    color: this.color,
+                    color: this.chainColor,
                     label: "Time",
                     value: this.getPercent(),
                 }

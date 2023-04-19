@@ -133,7 +133,7 @@
 
         <v-row v-if="!isCurrentTotalDataLoading" class=" ma-0 mt-3">
             <v-col class="currency-box" :cols="$wu.isFull() ? 6 : 12" :class="$wu.isFull() ? 'mr-1' : ''">
-                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openUsdPlusAddress()">
+                <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'" @click="openLink(explorerLink)">
                     <div>
                         <v-img class="currency" :src="require('@/assets/currencies/USD+.png')" />
                     </div>
@@ -141,7 +141,7 @@
 
                     <v-spacer></v-spacer>
 
-                    <label class="address-text ml-auto">{{ shortAddress(contracts.usdPlus.options.address) }}</label>
+                    <label class="address-text ml-auto">{{ shortAddress(contractAddress) }}</label>
                     <div class="ml-auto d-flex">
                         <v-img class="open-new mt-0 ml-1" :src="require('@/assets/icon/open-in-new.svg')"/>
                     </div>
@@ -259,6 +259,56 @@ export default {
                 'tab-button-in-active': this.tab !== 'polygon',
             }
         },
+
+        explorerLink: function () {
+            if (this.tabNetworkName === 'optimism') {
+                return 'https://optimistic.etherscan.io/address/0x73cb180bf0521828d8849bc8CF2B920918e23032'
+            }
+
+            if (this.tabNetworkName === 'arbitrum') {
+                return 'https://arbiscan.io/address/0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
+            }
+
+            if (this.tabNetworkName === 'zksync') {
+                return 'https://explorer.zksync.io/address/0x8E86e46278518EFc1C5CEd245cBA2C7e3ef11557'
+            }
+
+            if (this.tabNetworkName === 'bsc') {
+                return 'https://bscscan.com/address/0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
+            }
+
+            if (this.tabNetworkName === 'polygon') {
+                return 'https://polygonscan.com/address/0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
+            }
+
+            console.error("Not found networkId type when return usd+ explorer link")
+            return null;
+        },
+
+        contractAddress: function () {
+            if (this.tabNetworkName === 'optimism') {
+                return '0x73cb180bf0521828d8849bc8CF2B920918e23032'
+            }
+
+            if (this.tabNetworkName === 'arbitrum') {
+                return '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
+            }
+
+            if (this.tabNetworkName === 'zksync') {
+                return '0x8E86e46278518EFc1C5CEd245cBA2C7e3ef11557'
+            }
+
+            if (this.tabNetworkName === 'bsc') {
+                return '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
+            }
+
+            if (this.tabNetworkName === 'polygon') {
+                return '0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
+            }
+
+            console.error("Not found networkId type when return usd+ contract address")
+            return null;
+        },
     },
 
     watch: {
@@ -279,28 +329,6 @@ export default {
 
         openLink(url) {
             window.open(url, '_blank').focus();
-        },
-
-        openUsdPlusAddress() {
-            let url;
-            switch (this.tabNetworkName) {
-                case 'optimism':
-                    url = this.opConfig.explorerUrl;
-                    break;
-                case 'arbitrum':
-                    url = this.arConfig.explorerUrl;
-                    break;
-                case 'bsc':
-                    url = this.bscConfig.explorerUrl;
-                    break;
-                case 'polygon':
-                    url = this.polygonConfig.explorerUrl;
-                    break;
-                case 'zksync':
-                    url = this.zkConfig.explorerUrl;
-                    break;
-            }
-            window.open(url + `address/${this.contracts.usdPlus.options.address}`, '_blank').focus();
         },
 
         setTab(tabName) {

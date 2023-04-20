@@ -91,8 +91,8 @@ const actions = {
             chains: chains,
         });
 
-        console.log("walletConnect onboard before connect wallet: ")
         let walletName = localStorage.getItem('walletName');
+        console.log("walletConnect onboard before connect wallet: ", walletName)
         let connectedWallets;
         if (walletName !== undefined && walletName && walletName !== 'undefined' && walletName !== 'null') {
             console.log("onboard with preview wallet: ", walletName)
@@ -120,23 +120,11 @@ const actions = {
 
             console.log("====== Init inboard Provider callbacks ======")
             rootState.web3.provider.on('accountsChanged', async function (accounts) {
-                console.log("====== initOnboard Provider callback accountsChanged ======", accounts[0], parseInt(await rootState.web3.web3.eth.net.getId()))
-                try {
-                    dispatch('checkAccount', accounts[0]);
-                    dispatch('setNetwork', parseInt(await rootState.web3.web3.eth.net.getId()));
-                } catch (e) {
-                    console.error("Error when on accountsChanged")
-                }
-
+                dispatch('accountChanged', accounts);
             });
 
             rootState.web3.provider.on('networkChanged', async function (newNetworkId) {
-                console.log("====== initOnboard Provider callback networkChanged ======")
-                try {
-                    dispatch('setNetwork', newNetworkId);
-                } catch (e) {
-                    console.error("Error when on networkChanged")
-                }
+                dispatch('networkChanged', newNetworkId);
             });
         }
 
@@ -223,18 +211,22 @@ const actions = {
         await commit('web3/setProvider', null, {root: true});
 
         if (getters.onboard) {
+            try {
 
-            const [primaryWallet] = getters.onboard.state.get().wallets
-            await getters.onboard.disconnectWallet({ label: primaryWallet.label });
+                const [primaryWallet] = getters.onboard.state.get().wallets
+                console.log('Disconnect wallet onboard: ', getters.onboard);
+                await getters.onboard.disconnectWallet({ label: primaryWallet.label });
+                localStorage.removeItem('walletName');
 
-            localStorage.removeItem('walletName');
+                await dispatch('web3/initWeb3', null, {root: true}).then(value => {
+                    commit('setWalletConnected', false);
+                    console.log('Wallet was disconnected');
 
-            await dispatch('web3/initWeb3', null, {root: true}).then(value => {
-                commit('setWalletConnected', false);
-                console.log('Wallet was disconnected');
-
-                dispatch('checkAccount');
-            });
+                    dispatch('checkAccount');
+                });
+            } catch (e) {
+                console.log("Disconnect wallet error", e);
+            }
         }
     },
 
@@ -334,37 +326,34 @@ const actions = {
                 //     wcprovider,
                 // });
 
-                wcprovider.onConnect(data => {
-                    console.log("CONECTED!", data);
-                    commit('setWalletConnected', true);
+                wcprovider.onConnect(async data => {
+                    console.log("WalletConnect for Argent CONNECTED!", data);
+                    localStorage.setItem('walletName', 'WalletConnect');
+                    window.location.reload();
                 })
 
                 console.log("====== Init Onboard ARGENT Provider callbacks ======")
                 wcprovider.on('accountsChanged', async function (accounts) {
-                    console.log("====== initOnboard ARGENT Provider callback accountsChanged ======", accounts[0], parseInt(await rootState.web3.web3.eth.net.getId()))
+                    dispatch('accountChanged', accounts);
 
-                    try {
-                        dispatch('setNetwork', parseInt(await rootState.web3.web3.eth.net.getId()));
-                        commit('accountData/setAccount', accounts[0], {root: true});
-                        console.log("Argent: account set to:", accounts[0]);
-                    } catch (e) {
-                        console.error("Error when on accountsChanged")
-                    }
+                    // console.log("====== initOnboard ARGENT Provider callback accountsChanged ======", accounts[0], parseInt(await rootState.web3.web3.eth.net.getId()))
+                    //
+                    // try {
+                    //     dispatch('setNetwork', parseInt(await rootState.web3.web3.eth.net.getId()));
+                    //     commit('accountData/setAccount', accounts[0], {root: true});
+                    //     console.log("Argent: account set to:", accounts[0]);
+                    // } catch (e) {
+                    //     console.error("Error when on accountsChanged")
+                    // }
 
                 });
 
                 wcprovider.on('networkChanged', async function (newNetworkId) {
-                    console.log("====== initOnboard ARGENT Provider callback networkChanged ======")
-                    try {
-                        dispatch('setNetwork', newNetworkId);
-                    } catch (e) {
-                        console.error("Error when on networkChanged")
-                    }
+                    dispatch('networkChanged', newNetworkId);
                 });
 
                 await wcprovider.enable();
-                // await ethereumProvider.enable();
-                // const provider = createEIP1193Provider(ethereumProvider, {
+
                 const provider = createEIP1193Provider(wcprovider, {
                     eth_chainId: async ({ baseRequest }) => {
                         const chainId = await baseRequest({ method: 'eth_chainId' });
@@ -375,7 +364,6 @@ const actions = {
                 console.log("Argent provider: ", provider)
                 console.log("Argent  wcprovider provider: ", wcprovider)
                 return { provider };
-                // return { wcprovider };
             },
             // A list of platforms that this wallet supports
             platforms: ['desktop']
@@ -493,6 +481,25 @@ const actions = {
                 dispatch('dappDataAction/resetUserData', null, {root: true});
                 commit('network/setSwitchToOtherNetwork', true, {root: true});
             }
+        }
+    },
+
+    async networkChanged({commit, dispatch, getters, rootState}, newNetworkId) {
+        console.log("====== initOnboard Provider callback networkChanged ======")
+        try {
+            dispatch('setNetwork', newNetworkId);
+        } catch (e) {
+            console.error("Error when on networkChanged")
+        }
+    },
+
+    async accountChanged({commit, dispatch, getters, rootState}, accounts) {
+        console.log("====== initOnboard Provider callback accountsChanged ======", accounts[0], parseInt(await rootState.web3.web3.eth.net.getId()))
+        try {
+            dispatch('checkAccount', accounts[0]);
+            dispatch('setNetwork', parseInt(await rootState.web3.web3.eth.net.getId()));
+        } catch (e) {
+            console.error("Error when on accountsChanged")
         }
     },
 

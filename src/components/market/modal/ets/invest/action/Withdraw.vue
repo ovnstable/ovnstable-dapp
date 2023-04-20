@@ -21,16 +21,16 @@
                                   @input="checkApproveCounter(
                                         'market-redeem',
                                          sliderPercent,
-                                         etsOriginalBalance[etsData.name],
+                                         componentOriginalBalance,
                                          account,
                                          sum,
                                          etsData.actionTokenDecimals,
-                                         contracts[etsData.exchangeContract],
+                                         exchangerContract,
                                          'redeem',
                                          contracts[etsData.actionAsset],
                                          disapproveEtsToken,
                                          approveEtsToken,
-                                         contracts[etsData.tokenContract]
+                                         tokenContract
                                        )">
                     </v-text-field>
                 </v-row>
@@ -168,12 +168,12 @@
                         @click="clearApprove(
                             'market-redeem',
                                account,
-                               contracts[etsData.exchangeContract],
+                               exchangerContract,
                                'redeem',
                                contracts[etsData.actionAsset],
                                disapproveEtsToken,
                                approveEtsToken,
-                               contracts[etsData.tokenContract]
+                               tokenContract
                            )"
                         style="cursor: pointer;">
                         Decrease Allowance
@@ -197,18 +197,18 @@
                        @click="confirmSwapAction(
                        'market-redeem',
                          sliderPercent,
-                         etsOriginalBalance[etsData.name],
+                         componentOriginalBalance,
                          account,
                          sum,
                          etsData.actionTokenDecimals,
-                         contracts[etsData.exchangeContract],
+                         exchangerContract,
                          'redeem',
                          contracts[etsData.actionAsset],
                          {successAction: 'redeemEts'},
                          finalizeFunc,
                          disapproveEtsToken,
                          approveEtsToken,
-                         contracts[etsData.tokenContract]
+                         tokenContract
                     )">
                   <v-progress-circular
                         v-if="transactionPending"
@@ -228,12 +228,12 @@
                         'market-redeem',
                          account,
                          etsData.actionTokenDecimals,
-                         contracts[etsData.exchangeContract],
+                         exchangerContract,
                          'redeem',
                          contracts[etsData.actionAsset],
                          disapproveEtsToken,
                          approveEtsToken,
-                         contracts[etsData.tokenContract]
+                         tokenContract
                     )">
                   {{ buttonLabel }}
                 </v-btn>
@@ -280,6 +280,7 @@ import {axios} from "@/plugins/http-axios";
 import Tooltip from "@/components/common/element/Tooltip";
 import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
 import {swap} from "@/components/mixins/swap";
+import loadJSON from "@/utils/http-utils";
 
 export default {
     name: "Withdraw",
@@ -307,7 +308,12 @@ export default {
         minRedeemFee: null,
 
         sumApproveCheckerId: null,
-        sumApproveCheckerSec: 0
+        sumApproveCheckerSec: 0,
+
+        componentExchangerContract: null,
+        componentTokenContract: null,
+        componentTokenBalance: null,
+        componentTokenOriginalBalance: null
     }),
 
     computed: {
@@ -319,6 +325,38 @@ export default {
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
         ...mapGetters('overcapData', ['isOvercapAvailable', 'walletOvercapLimit']),
+
+        exchangerContract: function () {
+            if (this.componentExchangerContract) {
+                return this.componentExchangerContract;
+            }
+
+            return this.contracts[this.etsData.exchangeContract]
+        },
+
+        tokenContract: function () {
+            if (this.componentTokenContract) {
+                return this.componentTokenContract;
+            }
+
+            return this.contracts[this.etsData.tokenContract]
+        },
+
+        componentOriginalBalance() {
+            if (this.componentExchangerContract && this.componentTokenOriginalBalance) {
+                return this.componentTokenOriginalBalance;
+            }
+
+            return this.etsOriginalBalance[this.etsData.name];
+        },
+
+        componentBalance() {
+            if (this.componentExchangerContract && this.componentTokenBalance) {
+                return this.componentTokenBalance;
+            }
+
+            return this.etsBalance[this.etsData.name];
+        },
 
         icon: function () {
             switch (this.networkId) {
@@ -336,7 +374,7 @@ export default {
         },
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.etsBalance[this.etsData.name], 3);
+            return this.$utils.formatMoney(this.componentBalance, 3);
         },
 
         currency: function () {
@@ -363,7 +401,7 @@ export default {
         },
 
         sumResult: function () {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.etsBalance[this.etsData.name]) * 100;
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.componentBalance) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -403,7 +441,7 @@ export default {
                     this.step = 1;
                     return 'Approve ETS';
                 }
-            } else if (this.sum > parseFloat(this.etsBalance[this.etsData.name])) {
+            } else if (this.sum > parseFloat(this.componentBalance)) {
                 return 'Redeem ETS'
             } else {
                 return 'Redeem ETS';
@@ -433,7 +471,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.etsBalance[this.etsData.name]).toFixed(6)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.componentBalance).toFixed(6)) return true;
 
             return false;
         },
@@ -461,6 +499,8 @@ export default {
         this.gasAmountInUsd = null;
 
         this.getExitMinFee();
+
+        this.loadContract();
     },
 
     methods: {
@@ -479,22 +519,48 @@ export default {
 
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
+        async loadContract() {
+            if (this.contracts[this.etsData.exchangeContract]) {
+                return
+            }
+
+            console.log("Load contract ex 1:", this.componentExchangerContract, this.etsData);
+            this.componentExchangerContract = this._load(await loadJSON('/contracts/abi/ets/exchanger.json'), this.web3, this.etsData.address);
+            console.log("Load contract ex 2:", this.componentExchangerContract, this.etsData);
+            console.log("Load contract ex 3 from contracts:", this.contracts[this.etsData.exchangeContract], this.etsData);
+
+            this.componentTokenContract = this._load(await loadJSON('/contracts/abi/ets/token.json'), this.web3, this.etsData.tokenAddress);
+            console.log("Load contract tokenContract 4:", this.componentTokenContract);
+            this.componentTokenBalance = await this.componentTokenContract.methods.balanceOf(this.account).call();
+            this.componentTokenOriginalBalance = this.componentTokenBalance;
+            this.componentTokenBalance = this.web3.utils.fromWei(this.componentTokenBalance, this.etsData.etsTokenDecimals === 18 ? 'ether' : 'mwei');
+            console.log("Load contract componentTokenBalance 5:", this.componentTokenBalance, this.componentTokenOriginalBalance);
+        },
+
+        _load(file, web3, address) {
+            if (!address) {
+                address = file.address;
+            }
+
+            return new web3.eth.Contract(file.abi, address);
+        },
+
         async changeSliderPercent() {
-            this.sum = (this.etsBalance[this.etsData.name] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.componentBalance * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
             await this.checkApprove(
               'market-redeem',
               this.sliderPercent,
-              this.etsOriginalBalance[this.etsData.name],
+              this.componentOriginalBalance,
               this.account,
               this.sum,
               this.etsData.actionTokenDecimals,
-              this.contracts[this.etsData.exchangeContract],
+              this.exchangerContract,
               'redeem',
               this.contracts[this.etsData.actionAsset],
               this.disapproveEtsToken,
               this.approveEtsToken,
-              this.contracts[this.etsData.tokenContract]
+              this.tokenContract
             );
 
         },
@@ -547,7 +613,7 @@ export default {
             let result = 0;
 
             try {
-                result = await this.contracts[this.etsData.exchangeContract].methods.redeemMinFee().call();
+                result = await this.exchangerContract.methods.redeemMinFee().call();
                 result = this.web3.utils.fromWei(result, this.etsData.etsTokenDecimals === 18 ? 'ether' : 'mwei');
 
                 this.minRedeemFee = result;

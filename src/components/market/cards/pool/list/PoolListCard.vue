@@ -206,7 +206,7 @@ export default {
               return;
             }
 
-            if (this.cardData.data().dex === 'Beethoven') {
+            if (this.cardData.data.dex === 'Beethoven') {
                 url += this.cardData.data.address + '0000000000000000000000ae';
                 window.open(url, '_blank').focus();
                 return;

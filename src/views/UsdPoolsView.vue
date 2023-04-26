@@ -144,6 +144,7 @@ export default {
                         address: pool.id.address,
                         dex: pool.platform,
                         tvl: pool.tvl,
+                        apr: pool.apr,
                         explorerUrl: networkConfig.explorerUrl,
                       });
                     }
@@ -165,7 +166,7 @@ export default {
           let pool = this.pools[i];
           sortedPoolList.push(
               {
-                id: pool.name,
+                id: (pool.name + pool.tvl + pool.chain),
                 type: 'pool',
                 name: 'Pool',
                 data: pool,
@@ -174,6 +175,7 @@ export default {
                 overcapEnabled: false,
                 hasCap: true,
                 tvl: pool.tvl,
+                apr: pool.apr,
                 monthApy: 0,
                 cardOpened: false,
               },

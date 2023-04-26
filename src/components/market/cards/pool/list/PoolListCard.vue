@@ -12,7 +12,7 @@
                 </div>
             </v-row>
         </v-col>
-        <v-col :cols="$wu.isFull() ? 4 : ($wu.isMobile() ? 6 : 4)" class="my-1">
+        <v-col :cols="$wu.isFull() ? 3 : ($wu.isMobile() ? 6 : 3)" class="my-1">
             <v-row class="ma-0" justify="start" align="center">
                 <div class="icon">
                     <v-img :src="cardData.data.token0Icon"/>
@@ -31,10 +31,17 @@
                 </label>
             </v-row>
         </v-col>
-        <v-col cols="4" class="my-1">
+        <v-col cols="3" class="my-1">
             <v-row class="ma-0" justify="end" align="center">
                 <label class="card-label">
                     ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
+                </label>
+            </v-row>
+        </v-col>
+        <v-col cols="3" class="my-1">
+            <v-row class="ma-0" justify="end" align="center">
+                <label class="card-label">
+                    {{ cardData.apr ? ($utils.formatMoneyComma(cardData.apr, 2) + '%') : '-' }}
                 </label>
             </v-row>
         </v-col>

@@ -5,14 +5,19 @@
                 <label class="list-header-label">Chain / Platform</label>
             </v-row>
         </v-col>
-        <v-col :cols="$wu.isFull() ? 4 : ($wu.isMobile() ? 6 : 4)">
+        <v-col :cols="$wu.isFull() ? 3 : ($wu.isMobile() ? 6 : 3)">
             <v-row :justify="$wu.isMobile() ? 'start' : 'start'" align="center">
                 <label class="list-header-label">Pool name</label>
             </v-row>
         </v-col>
-        <v-col cols="4">
+        <v-col cols="3">
             <v-row :justify="$wu.isMobile() ? 'center' : 'end'" align="center">
                 <label class="list-header-label">TVL</label>
+            </v-row>
+        </v-col>
+        <v-col cols="3">
+            <v-row :justify="$wu.isMobile() ? 'center' : 'end'" align="center">
+                <label class="list-header-label">APR</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()">

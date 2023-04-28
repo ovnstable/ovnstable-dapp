@@ -40,8 +40,8 @@
         </v-col>
         <v-col cols="3" class="my-1">
             <v-row class="ma-0" justify="end" align="center">
-                <label class="card-label">
-                    {{ cardData.apr ? ($utils.formatMoneyComma(cardData.apr, 2) + '%') : '-' }}
+                <label class="card-label see-on-dex-label">
+                    {{ cardData.apr ? ($utils.formatMoneyComma(cardData.apr, 2) + '%') : 'see on dex' }}
                 </label>
             </v-row>
         </v-col>
@@ -202,6 +202,12 @@ export default {
                     break;
                 case 'Wombat':
                     url = 'https://app.wombat.exchange/pool';
+                    break;
+                case 'Solunea':
+                    url = 'https://www.solunea.xyz/liquidity/';
+                    break;
+                case 'Ramses':
+                    url = 'https://app.ramses.exchange/liquidity/';
                     break;
                 default:
                     url = this.cardData.data.explorerUrl + '/address/';
@@ -415,5 +421,9 @@ export default {
 .icon > .v-image {
     border-radius: 9999px !important;
 
+}
+
+.see-on-dex-label {
+    color: #b2b2b2
 }
 </style>

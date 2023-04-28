@@ -40,9 +40,12 @@
         </v-col>
         <v-col cols="3" class="my-1">
             <v-row class="ma-0" justify="end" align="center">
-                <label class="card-label see-on-dex-label">
-                    {{ cardData.apr ? ($utils.formatMoneyComma(cardData.apr, 2) + '%') : 'see on dex' }}
-                </label>
+            <label v-if="cardData.apr" class="card-label">
+                {{ $utils.formatMoneyComma(cardData.apr, 2) + '%' }}
+            </label>
+            <label v-else class="card-label see-on-dex-label">
+                {{ 'see on dex' }}
+            </label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()" class="my-1">
@@ -208,6 +211,9 @@ export default {
                     break;
                 case 'Ramses':
                     url = 'https://app.ramses.exchange/liquidity/';
+                    break;
+                case 'Velocore':
+                    url = 'https://app.velocore.xyz/liquidity/';
                     break;
                 default:
                     url = this.cardData.data.explorerUrl + '/address/';

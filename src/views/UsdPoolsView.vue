@@ -94,7 +94,8 @@ export default {
                       try {
                         token0Icon = require('@/assets/currencies/farm/' + tokenNames[0] + '.png');
                       } catch (ex) {
-                        token0Icon = require('@/assets/currencies/undefined.svg');
+                        // token0Icon = require('@/assets/currencies/undefined.svg');
+                        token0Icon = null;
                       }
                     }
 
@@ -104,7 +105,8 @@ export default {
                       try {
                         token1Icon = require('@/assets/currencies/farm/' + tokenNames[1] + '.png');
                       } catch (ex) {
-                        token1Icon = require('@/assets/currencies/undefined.svg');
+                        // token1Icon = require('@/assets/currencies/undefined.svg');
+                        token1Icon = null;
                       }
                     }
 
@@ -115,7 +117,8 @@ export default {
                             try {
                                 token2Icon = require('@/assets/currencies/farm/' + tokenNames[2] + '.png');
                             } catch (ex) {
-                                token2Icon = require('@/assets/currencies/undefined.svg');
+                                // token2Icon = require('@/assets/currencies/undefined.svg');
+                                token2Icon = null;
                             }
                         }
                     }
@@ -127,7 +130,8 @@ export default {
                               try {
                                   token3Icon = require('@/assets/currencies/farm/' + tokenNames[3] + '.png');
                               } catch (ex) {
-                                  token3Icon = require('@/assets/currencies/undefined.svg');
+                                  // token3Icon = require('@/assets/currencies/undefined.svg');
+                                  token3Icon = null;
                               }
                           }
                       }

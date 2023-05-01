@@ -15,16 +15,16 @@
         <v-col :cols="$wu.isFull() ? 3 : ($wu.isMobile() ? 6 : 3)" class="my-1">
             <v-row class="ma-0" justify="start" align="center">
                 <div class="icon">
-                    <v-img :src="cardData.data.token0Icon"/>
+                    <v-img v-if="cardData.data.token0Icon" :src="cardData.data.token0Icon"/>
+                </div>
+                <div  class="icon ml-n2 mr-2">
+                    <v-img v-if="cardData.data.token1Icon" :src="cardData.data.token1Icon"/>
                 </div>
                 <div class="icon ml-n2 mr-2">
-                    <v-img :src="cardData.data.token1Icon"/>
+                    <v-img v-if="cardData.data.token2Icon" :src="cardData.data.token2Icon"/>
                 </div>
                 <div class="icon ml-n2 mr-2">
-                    <v-img :src="cardData.data.token2Icon"/>
-                </div>
-                <div class="icon ml-n2 mr-2">
-                    <v-img :src="cardData.data.token3Icon"/>
+                    <v-img v-if="cardData.data.token3Icon" :src="cardData.data.token3Icon"/>
                 </div>
                 <label class="card-label">
                     {{ cardData.data.name }}
@@ -165,6 +165,8 @@ export default {
 
         openPoolLink() {
             let url;
+
+            console.log(this.cardData.data.address);
 
             switch (this.cardData.data.dex) {
                 case 'Dystopia':

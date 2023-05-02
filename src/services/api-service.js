@@ -31,7 +31,7 @@ let onError = function (errorCallback) {
     };
 
     return function (data) {
-        data = data.response.data;
+        data = data.response ? data.response.data : data;
 
         if (!errorCallback) {
             defaultErrorHandler(data);

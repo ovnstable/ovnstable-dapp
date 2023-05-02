@@ -23,6 +23,7 @@ import CollateralDai from "./midleware/dapp/CollateralDai";
 import CollateralUsdt from "./midleware/dapp/CollateralUsdt";
 import Dashboard from "./midleware/dapp/Dashboard";
 import Pools from "./midleware/dapp/Pools";
+import Swap from "./midleware/dapp/Swap";
 
 Vue.use(VueRouter)
 
@@ -71,6 +72,16 @@ const routes = [
                 meta: {
                     middleware: [
                         Pools
+                    ]
+                }
+            },
+            {
+                path: '/swap',
+                name: 'SwapView',
+                component: () => import('../views/SwapView.vue'),
+                meta: {
+                    middleware: [
+                        Swap
                     ]
                 }
             },

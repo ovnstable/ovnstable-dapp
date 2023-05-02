@@ -147,21 +147,51 @@ export default {
     /*--w3o-background-color: "unset";*/
     /*--w3o-foreground-color: "unset";*/
     /*--w3o-text-color: "unset";*/
-    /*--w3o-border-color: "unset";*/
+    --w3o-border-color: transparent;
     /*--w3o-action-color: "unset";*/
-    --w3o-border-radius: 0px;
     --w3o-font-family: 'Roboto', sans-serif;
     --orange-gradient: linear-gradient(91.26deg, #FE7F2D 0%, #FCCA46 100%);
     --blue-gradient: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
 
-    --onboard-checkbox-background: red;
-    --onboard-font-family-normal: monospace;
-    --onboard-wallet-columns: 2;
-    --onboard-wallet-button-border-radius: 0px;
-    --onboard-wallet-button-border-color: #f5f5f5;
-    --onboard-wallet-button-background: #f5f5f5;
+    --onboard-checkbox-background: var(--links-blue);
     /*--account-center-z-index: 999 !important;*/
     --onboard-modal-z-index: 999 !important;
+
+    /* CUSTOMIZE SECTIONS OF THE CONNECT MODAL */
+    --onboard-connect-content-width: 500px;
+    --onboard-wallet-columns: 2;
+    --onboard-connect-sidebar-background: var(--main-background);
+    --onboard-connect-sidebar-color: var(--main-gray-text);
+    --onboard-connect-sidebar-progress-background: var(--links-blue);
+    --onboard-connect-sidebar-progress-color: #FFFFFF;
+    --onboard-connect-header-background: var(--main-background);
+    --onboard-connect-header-color: var(--main-gray-text);
+    --onboard-main-scroll-container-background: var(--secondary);
+    --onboard-link-color: var(--links-blue);
+    --onboard-close-button-background: #FFFFFF;
+    --onboard-close-button-color:  var(--main-gray-text);
+    --onboard-wallet-button-background: var(--card-info-background);
+    --onboard-wallet-button-background-hover: var(--hover);
+    --onboard-wallet-button-color: var(--main-gray-text);
+    --onboard-wallet-button-color-hover: var(--main-gray-text);
+    --onboard-wallet-button-border-color: transparent;
+    --onboard-wallet-button-border-radius: 8px;
+
+    /* CUSTOMIZE THE SHARED MODAL */
+    --onboard-modal-color: var(--main-gray-text);
+
+    /* CUSTOMIZE THE CONNECT MODAL */
+    --onboard-modal-border-radius: 18px;
+
+    /* FONTS */
+    --onboard-font-family-normal: 'Roboto', sans-serif;
+
+    --onboard-font-size-5: 20px;
+    --onboard-font-size-6: 16px;
+    --onboard-font-size-7: 14px;
+
+    /* SPACING */
+    --onboard-spacing-4: 1.2rem 1rem 0 2rem;
 }
 
 html {

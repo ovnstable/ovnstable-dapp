@@ -1,7 +1,7 @@
 import injectedModule, {ProviderLabel} from '@web3-onboard/injected-wallets'
 
 import Onboard from "@web3-onboard/core";
-// import walletConnectModule from '@web3-onboard/walletconnect'
+import walletConnectModule from '@web3-onboard/walletconnect'
 import coinbaseWalletModule from '@web3-onboard/coinbase'
 import trezorModule from '@web3-onboard/trezor'
 import gnosisModule from '@web3-onboard/gnosis'
@@ -46,7 +46,6 @@ const actions = {
                 '</linearGradient>/n' +
             '</defs>/n' +
         '</svg>'
-
 
         console.log("Init new Onboard")
 
@@ -301,9 +300,8 @@ const actions = {
         ]
     },
 
-    async getMainWalletsConfig({commit, dispatch, getters, rootState}) {
-        let rpcUrl = rootState.network.rpcUrl;
-        let appApiUrl = rootState.network.appApiUrl;
+    async getCustomWallets({commit, dispatch, getters, rootState}) {
+        let customWallets = []; // include custom (not natively supported) injected wallet modules here
 
         //  Create WalletConnect Provider for argent
         const wcprovider = new WalletConnectProvider({
@@ -392,11 +390,23 @@ const actions = {
             platforms: ['desktop']
         }
 
+        let networkId = rootState.network.networkId;
+        if (networkId === 324) {
+            // argent only on ZkSync Network
+            customWallets.push(customArgent);
+        }
+
+        return customWallets;
+    },
+
+    async getMainWalletsConfig({commit, dispatch, getters, rootState}) {
+        let rpcUrl = rootState.network.rpcUrl;
+        let appApiUrl = rootState.network.appApiUrl;
+
+        let customWallets = await dispatch('getCustomWallets');
+
         const injected = injectedModule({
-            custom: [
-                customArgent
-                // include custom (not natively supported) injected wallet modules here
-            ],
+            custom: customWallets,
             // display all wallets even if they are unavailable
             displayUnavailable: true,
             // but only show Binance and Bitski wallet if they are available
@@ -479,7 +489,7 @@ const actions = {
         }*/
 
         const coinbaseWalletSdk = coinbaseWalletModule({ darkMode: true });
-        // const walletConnect = await walletConnectModule(wcInitOptions);
+        const walletConnect = await walletConnectModule(wcInitOptions);
         const gnosis = gnosisModule({
             whitelistedDomains: ['app.safe.global']
         });
@@ -493,7 +503,7 @@ const actions = {
 
         return [
             injected,
-            // walletConnect,
+            walletConnect,
             coinbaseWalletSdk,
             trust,
             // argent,

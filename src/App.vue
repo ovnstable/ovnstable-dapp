@@ -186,12 +186,9 @@ export default {
     /* FONTS */
     --onboard-font-family-normal: 'Roboto', sans-serif;
 
-    --onboard-font-size-5: 20px;
+    --onboard-font-size-5: 18px;
     --onboard-font-size-6: 16px;
     --onboard-font-size-7: 14px;
-
-    /* SPACING */
-    --onboard-spacing-4: 1.2rem 1rem 0 2rem;
 }
 
 html {

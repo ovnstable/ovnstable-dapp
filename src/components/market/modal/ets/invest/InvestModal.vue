@@ -10,7 +10,6 @@
                         {{ isMintView ? 'Mint ETS' : 'Redeem ETS' }}
                     </label>
                     <v-spacer></v-spacer>
-                    <label @click="bridge" class="bridge-label mr-4 mt-4">Bridge</label>
                     <v-btn icon @click="close" class="mt-4">
                         <v-icon class="close-icon">mdi-close</v-icon>
                     </v-btn>
@@ -47,7 +46,6 @@ export default {
     computed: {
         ...mapGetters('investModal', ['show', 'etsData']),
         ...mapGetters('investModal', ['isMintView']),
-        ...mapGetters('network', ['bridgeLink']),
     },
 
     data: () => ({}),
@@ -68,11 +66,6 @@ export default {
         mintAction() {
             this.showMintView();
             this.showSwapModal();
-        },
-
-        bridge() {
-            window.open(this.bridgeLink, '_blank').focus();
-            this.trackClick({action: 'open-bridge-click', event_category: 'Bridge', event_label: 'Open Bridge From Invest Modal', value: 1 });
         },
     },
 }
@@ -164,13 +157,6 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--links-blue);
-    cursor: pointer;
-}
-
-.bridge-label {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'liga' off;
-    color: #1C95E7;
     cursor: pointer;
 }
 

@@ -213,7 +213,7 @@ export default {
 
         explorerLink: function () {
           if (this.tabNetworkName === 'bsc') {
-            return 'https://bscscan.com/address/0xd3F827C0b1D224aeBCD69c449602bBCb427Cb708'
+            return 'https://bscscan.com/token/0x5335E87930b410b8C5BB4D43c3360ACa15ec0C8C'
           }
 
           console.error("Not found networkId type when return usdt explorer link")
@@ -222,7 +222,7 @@ export default {
 
         contractAddress: function () {
           if (this.tabNetworkName === 'bsc') {
-            return '0xd3F827C0b1D224aeBCD69c449602bBCb427Cb708'
+            return '0x5335E87930b410b8C5BB4D43c3360ACa15ec0C8C'
           }
 
           console.error("Not found networkId type when return usdt contract address")

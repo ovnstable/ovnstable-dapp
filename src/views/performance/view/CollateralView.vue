@@ -262,11 +262,11 @@ export default {
 
         explorerLink: function () {
             if (this.tabNetworkName === 'optimism') {
-                return 'https://optimistic.etherscan.io/address/0x73cb180bf0521828d8849bc8CF2B920918e23032'
+                return 'https://optimistic.etherscan.io/token/0x73cb180bf0521828d8849bc8CF2B920918e23032'
             }
 
             if (this.tabNetworkName === 'arbitrum') {
-                return 'https://arbiscan.io/address/0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
+                return 'https://arbiscan.io/token/0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
             }
 
             if (this.tabNetworkName === 'zksync') {
@@ -274,11 +274,11 @@ export default {
             }
 
             if (this.tabNetworkName === 'bsc') {
-                return 'https://bscscan.com/address/0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
+                return 'https://bscscan.com/token/0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
             }
 
             if (this.tabNetworkName === 'polygon') {
-                return 'https://polygonscan.com/address/0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
+                return 'https://polygonscan.com/token/0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
             }
 
             console.error("Not found networkId type when return usd+ explorer link")

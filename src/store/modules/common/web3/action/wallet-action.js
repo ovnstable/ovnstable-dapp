@@ -5,7 +5,6 @@ import walletConnectModule from '@web3-onboard/walletconnect'
 import coinbaseWalletModule from '@web3-onboard/coinbase'
 import trezorModule from '@web3-onboard/trezor'
 import gnosisModule from '@web3-onboard/gnosis'
-import trustModule from '@web3-onboard/trust'
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
 // import argentModule from "@web3-onboard/argent";
@@ -413,44 +412,48 @@ const actions = {
             filter: {
                 [ProviderLabel.Binance]: 'unavailable',
                 [ProviderLabel.Bitski]: 'unavailable',
-                [ProviderLabel.Zerion]: false,
-                [ProviderLabel.AlphaWallet]: false,
-                [ProviderLabel.ApexWallet]: false,
-                [ProviderLabel.AToken]: false,
-                [ProviderLabel.BifrostWallet]: false,
-                [ProviderLabel.Brave]: false,
-                [ProviderLabel.BitKeep]: false,
-                [ProviderLabel.Core]: false,
-                [ProviderLabel.Dcent]: false,
-                [ProviderLabel.Zeal]: false,
-                [ProviderLabel.XDEFI]: false,
-                [ProviderLabel.WalletIo]: false,
-                [ProviderLabel.TP]: false,
-                [ProviderLabel.TokenPocket]: false,
-                [ProviderLabel.Tokenary]: false,
-                [ProviderLabel.Tally]: false,
-                [ProviderLabel.Status]: false,
-                [ProviderLabel.Sequence]: false,
-                [ProviderLabel.Rainbow]: false,
-                [ProviderLabel.Phantom]: false,
-                [ProviderLabel.OwnBit]: false,
-                [ProviderLabel.Opera]: false,
-                [ProviderLabel.OneInch]: false,
-                [ProviderLabel.OKXWallet]: false,
-                [ProviderLabel.MyKey]: false,
-                [ProviderLabel.MeetOne]: false,
-                [ProviderLabel.MathWallet]: false,
-                [ProviderLabel.Liquality]: false,
-                [ProviderLabel.InfinityWallet]: false,
-                [ProviderLabel.ImToken]: false,
-                [ProviderLabel.HyperPay]: false,
-                [ProviderLabel.HuobiWallet]: false,
-                [ProviderLabel.GameStop]: false,
-                [ProviderLabel.Frontier]: false,
-                [ProviderLabel.Frame]: false,
-                [ProviderLabel.Exodus]: false,
-                [ProviderLabel.Enkrypt]: false,
-                [ProviderLabel.DeFiWallet]: false,
+                [ProviderLabel.Zerion]: 'unavailable',
+                [ProviderLabel.AlphaWallet]: 'unavailable',
+                [ProviderLabel.ApexWallet]: 'unavailable',
+                [ProviderLabel.AToken]: 'unavailable',
+                [ProviderLabel.BifrostWallet]: 'unavailable',
+                [ProviderLabel.Brave]: 'unavailable',
+                [ProviderLabel.BitKeep]: 'unavailable',
+                [ProviderLabel.Core]: 'unavailable',
+                [ProviderLabel.Dcent]: 'unavailable',
+                [ProviderLabel.Zeal]: 'unavailable',
+                [ProviderLabel.XDEFI]: 'unavailable',
+                [ProviderLabel.WalletIo]: 'unavailable',
+                [ProviderLabel.TP]: 'unavailable',
+                [ProviderLabel.TokenPocket]: 'unavailable',
+                [ProviderLabel.Tokenary]: 'unavailable',
+                [ProviderLabel.Tally]: 'unavailable',
+                [ProviderLabel.Status]: 'unavailable',
+                [ProviderLabel.Sequence]: 'unavailable',
+                [ProviderLabel.Rainbow]: 'unavailable',
+                [ProviderLabel.Phantom]: 'unavailable',
+                [ProviderLabel.OwnBit]: 'unavailable',
+                [ProviderLabel.Opera]: 'unavailable',
+                [ProviderLabel.OneInch]: 'unavailable',
+                [ProviderLabel.OKXWallet]: 'unavailable',
+                [ProviderLabel.MyKey]: 'unavailable',
+                [ProviderLabel.MeetOne]: 'unavailable',
+                [ProviderLabel.MathWallet]: 'unavailable',
+                [ProviderLabel.Liquality]: 'unavailable',
+                [ProviderLabel.InfinityWallet]: 'unavailable',
+                [ProviderLabel.ImToken]: 'unavailable',
+                [ProviderLabel.HyperPay]: 'unavailable',
+                [ProviderLabel.HuobiWallet]: 'unavailable',
+                [ProviderLabel.GameStop]: 'unavailable',
+                [ProviderLabel.Frontier]: 'unavailable',
+                [ProviderLabel.Frame]: 'unavailable',
+                [ProviderLabel.Exodus]: 'unavailable',
+                [ProviderLabel.Enkrypt]: 'unavailable',
+                [ProviderLabel.DeFiWallet]: 'unavailable',
+                [ProviderLabel.Rabby]: 'unavailable',
+                [ProviderLabel.BlockWallet]: 'unavailable',
+                [ProviderLabel.SafePal]: 'unavailable',
+                [ProviderLabel.Trust]: 'unavailable',
             },
             sort: (wallets) => {
                 const metaMask = wallets.find(({ label }) => label === ProviderLabel.MetaMask)
@@ -474,7 +477,7 @@ const actions = {
 
         const wcInitOptions = {
             qrcodeModalOptions: {
-                mobileLinks: ['metamask', 'trust', 'rainbow', 'zerion', "argent", "trust", "imtoken", "pillar"] // 'argent',
+                mobileLinks: ['metamask', 'rainbow', 'zerion', "argent", "imtoken", "pillar"] // 'argent',
             },
             connectFirstChainId: true,
             requiredChains: SUPPORTED_NETWORKS
@@ -490,14 +493,13 @@ const actions = {
 
         const coinbaseWalletSdk = coinbaseWalletModule({ darkMode: true });
         const walletConnect = await walletConnectModule(wcInitOptions);
-        const gnosis = gnosisModule({
+        /*const gnosis = gnosisModule({
             whitelistedDomains: ['app.safe.global']
         });
-        const trust = trustModule();
         const trezor = trezorModule({
             appUrl: appApiUrl.replaceAll('/api', ''),
             email: 'ovnstable@gmail.com',
-        })
+        })*/
 
         // const argent = argentModule(walletConnect);
 
@@ -505,10 +507,9 @@ const actions = {
             injected,
             walletConnect,
             coinbaseWalletSdk,
-            trust,
             // argent,
-            trezor,
-            gnosis,
+            // trezor,
+            // gnosis,
             // ... other wallets
         ];
     },

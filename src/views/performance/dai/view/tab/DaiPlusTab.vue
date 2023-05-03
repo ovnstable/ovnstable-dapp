@@ -221,11 +221,11 @@ export default {
 
         explorerLink: function () {
           if (this.tabNetworkName === 'optimism') {
-            return 'https://optimistic.etherscan.io/address/0x7c7938b6a1ef49470aa53da53be9a0baa8ce0b10'
+            return 'https://optimistic.etherscan.io/token/0x970D50d09F3a656b43E11B0D45241a84e3a6e011'
           }
 
           if (this.tabNetworkName === 'arbitrum') {
-            return 'https://arbiscan.io/address/0xc8261DC93428F0D2dC04D675b7852CdCdC19d4fd'
+            return 'https://arbiscan.io/token/0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
           }
 
           console.error("Not found networkId type when return dai explorer link")
@@ -234,11 +234,11 @@ export default {
 
         contractAddress: function () {
           if (this.tabNetworkName === 'optimism') {
-            return '0x7C7938B6a1eF49470aa53Da53bE9A0baa8CE0b10'
+            return '0x970D50d09F3a656b43E11B0D45241a84e3a6e011'
           }
 
           if (this.tabNetworkName === 'arbitrum') {
-            return '0xc8261DC93428F0D2dC04D675b7852CdCdC19d4fd'
+            return '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
           }
 
           console.error("Not found networkId type when return dai contract address")

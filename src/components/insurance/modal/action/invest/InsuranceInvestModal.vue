@@ -45,7 +45,6 @@ export default {
 
     computed: {
         ...mapGetters('insuranceInvestModal', ['show', 'isMintView']),
-        ...mapGetters('network', ['bridgeLink']),
     },
 
     data: () => ({}),
@@ -65,10 +64,6 @@ export default {
         mintAction() {
             this.showMintView();
             this.showSwapModal();
-        },
-
-        bridge() {
-            window.open(this.bridgeLink, '_blank').focus();
         },
     },
 }
@@ -160,13 +155,6 @@ export default {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--links-blue);
-    cursor: pointer;
-}
-
-.bridge-label {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'liga' off;
-    color: #1C95E7;
     cursor: pointer;
 }
 

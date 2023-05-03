@@ -12,13 +12,66 @@ class OdosApiService {
         };
 
         return new Promise((resolve, reject) => {
-            apiService.get(API_URL + '', fetchOptions)
+            apiService.get(API_URL + '/info/chains', fetchOptions)
             .then(data => {
                 resolve(data)
             })
             .catch(e => {
                 reject(getErrorObject(e))
             })
+        })
+    }
+
+    loadTokens() {
+        let fetchOptions = {
+            headers: {
+                "Access-Control-Allow-Origin": API_URL
+            }
+        };
+
+        return new Promise((resolve, reject) => {
+            apiService.get(API_URL + '/info/tokens', fetchOptions)
+                .then(data => {
+                    resolve(data)
+                })
+                .catch(e => {
+                    reject(getErrorObject(e))
+                })
+        })
+    }
+
+    loadContractData(chainId) {
+        let fetchOptions = {
+            headers: {
+                "Access-Control-Allow-Origin": API_URL
+            }
+        }
+        return new Promise((resolve, reject) => {
+            apiService.get(API_URL + '/info/contract-info/' + chainId, fetchOptions)
+                .then(data => {
+                    resolve(data)
+                })
+                .catch(e => {
+                    reject(getErrorObject(e))
+                })
+        })
+    }
+
+    swapRequest(requestData) {
+        let fetchOptions = {
+            headers: {
+                "Access-Control-Allow-Origin": API_URL
+            }
+        };
+
+        return new Promise((resolve, reject) => {
+            apiService.postJson(API_URL + '/sor/swap', requestData, fetchOptions)
+                .then(data => {
+                    resolve(data)
+                })
+                .catch(e => {
+                    reject(getErrorObject(e))
+                })
         })
     }
 }

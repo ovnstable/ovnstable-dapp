@@ -12,13 +12,19 @@ export const odosSwap = {
             chains: null,
             tokensMap: null,
             swapResponseInfo: null,
-            contractData: null
+
+            contractData: null,
+            routerContract: null,
+            executorContract: null
         }
     },
-    mounted() {
+    async mounted() {
         console.log("Odos swap init")
         this.loadChains();
         this.loadTokens();
+
+        // todo: set chain to networkId after test
+        this.loadContract(1);
     },
     computed: {
         isAllDataLoaded: function() {
@@ -77,6 +83,9 @@ export const odosSwap = {
             return odosApiService.loadContractData(chainId).then(data => {
                 console.log("Contract: ", data)
                 this.contractData = data
+                this.routerContract = this._loadContract(this.contractData.routerAbi, this.web3, this.contractData.routerAddress)
+                this.executorContract = this._loadContract(this.contractData.erc20Abi, this.web3, this.contractData.executorAddress)
+
                 this.isContractLoading = false;
             }).catch(e => {
                 console.log("Error load contract", e)

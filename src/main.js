@@ -23,6 +23,10 @@ import { BrowserTracing } from "@sentry/tracing";
 
 import Web3 from "web3";
 
+// global emit
+export const bus = new Vue();
+Vue.prototype.$bus = bus;
+
 Vue.use(Vuex)
 
 Vue.prototype.$moment = moment;

@@ -221,7 +221,7 @@ export default {
 
         explorerLink: function () {
           if (this.tabNetworkName === 'optimism') {
-            return 'https://optimistic.etherscan.io/address/0x970d50d09f3a656b43e11b0d45241a84e3a6e011'
+            return 'https://optimistic.etherscan.io/token/0x970D50d09F3a656b43E11B0D45241a84e3a6e011'
           }
 
           if (this.tabNetworkName === 'arbitrum') {

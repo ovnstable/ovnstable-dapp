@@ -232,6 +232,22 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--sidemenu_onboard-main',
+        enabled: true,
+        theme: {
+            light: '#ADB3BD',
+            dark: '#1D2029'
+        }
+    },
+    {
+        name: '--sidemenu_onboard-secondary',
+        enabled: true,
+        theme: {
+            light: '#b8c0c7',
+            dark: '#20232c'
+        }
+    },
+    {
         name: '--scrollbar-track-color',
         enabled: true,
         theme: {

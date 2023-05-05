@@ -5,7 +5,6 @@ import walletConnectModule from '@web3-onboard/walletconnect'
 import coinbaseWalletModule from '@web3-onboard/coinbase'
 import trezorModule from '@web3-onboard/trezor'
 import gnosisModule from '@web3-onboard/gnosis'
-import trustModule from '@web3-onboard/trust'
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
 // import argentModule from "@web3-onboard/argent";
@@ -32,20 +31,20 @@ const getters = {
 const actions = {
 
     async initOnboard({commit, dispatch, getters, rootState}) {
-        let logo = '<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
-            '<path fill-rule="evenodd" clip-rule="evenodd" d="M37.8983 10.1017H12.8136V4H37.8983C41.2682 4 44 6.73182 44 10.1017H37.8983ZM37.8983 12.8136L37.8983 37.8983V44C41.2682 44 44 41.2682 44 37.8983V12.8136H37.8983ZM10.1017 37.8983L35.1864 37.8983V44H10.1017C6.73182 44 4 41.2682 4 37.8983H10.1017ZM10.1017 4V10.1017V35.1864H4V10.1017C4 6.73182 6.73182 4 10.1017 4Z" fill="url(#paint0_linear_1709_151660)"/>\n' +
-            '<path fill-rule="evenodd" clip-rule="evenodd" d="M23.0046 16.2031C22.618 16.2031 22.3046 16.5165 22.3046 16.9031V21.6269H17.5809C17.1943 21.6269 16.8809 21.9403 16.8809 22.3269L16.8809 24.9947C16.8809 25.3812 17.1943 25.6947 17.5809 25.6947H22.3046V30.4184C22.3046 30.805 22.618 31.1184 23.0046 31.1184H25.6724C26.059 31.1184 26.3724 30.805 26.3724 30.4184V25.6947H31.0961C31.4827 25.6947 31.7961 25.3812 31.7961 24.9947V22.3269C31.7961 21.9403 31.4827 21.6269 31.0961 21.6269H26.3724V16.9031C26.3724 16.5165 26.059 16.2031 25.6724 16.2031H23.0046Z" fill="url(#paint1_linear_1709_151660)"/>\n' +
-            '<defs>\n' +
-            '<linearGradient id="paint0_linear_1709_151660" x1="4" y1="4" x2="44.8582" y2="4.89675" gradientUnits="userSpaceOnUse">\n' +
-            '<stop stop-color="#28A0F0"/>\n' +
-            '<stop offset="1" stop-color="#0678C4" stop-opacity="0.9917"/>\n' +
-            '</linearGradient>\n' +
-            '<linearGradient id="paint1_linear_1709_151660" x1="16.8809" y1="16.2031" x2="32.1161" y2="16.5375" gradientUnits="userSpaceOnUse">\n' +
-            '<stop stop-color="#28A0F0"/>\n' +
-            '<stop offset="1" stop-color="#0678C4" stop-opacity="0.9917"/>\n' +
-            '</linearGradient>\n' +
-            '</defs>\n' +
-            '</svg>'
+        let logo = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">/n' +
+            '<path fill-rule="evenodd" clip-rule="evenodd" d="M24.339 7.66102H9.28814V4H24.339C26.3608 4 27.9998 5.63889 28 7.66064H24.339L24.339 7.66102ZM24.339 8.88136V24.339L24.339 24.3394L24.339 28C26.3609 28 28 26.3609 28 24.339L28 9.28776H24.339L24.339 8.88136ZM23.1186 24.339V24.3394H22.7119V28H7.66102C5.63909 28 4 26.3609 4 24.339H7.66102H23.1186ZM7.66102 4V7.66102V22.7119H4V7.66102C4 5.63909 5.63909 4 7.66102 4Z" fill="url(#paint0_linear_8985_99599)"/>/n' +
+            '<path fill-rule="evenodd" clip-rule="evenodd" d="M15.6827 11.3223C15.2961 11.3223 14.9827 11.6357 14.9827 12.0223V14.5764L12.4285 14.5764C12.0419 14.5764 11.7285 14.8898 11.7285 15.2764V16.3171C11.7285 16.7037 12.0419 17.0171 12.4285 17.0171H14.9827V19.5714C14.9827 19.958 15.2961 20.2714 15.6827 20.2714H16.7234C17.11 20.2714 17.4234 19.958 17.4234 19.5714V17.0171H19.9777C20.3643 17.0171 20.6777 16.7037 20.6777 16.3171V15.2764C20.6777 14.8898 20.3643 14.5764 19.9777 14.5764L17.4234 14.5764V12.0223C17.4234 11.6357 17.11 11.3223 16.7234 11.3223H15.6827Z" fill="url(#paint1_linear_8985_99599)"/>/n' +
+            '<defs>/n' +
+                '<linearGradient id="paint0_linear_8985_99599" x1="4" y1="4" x2="28.5149" y2="4.53805" gradientUnits="userSpaceOnUse">/n' +
+                    '<stop stop-color="#28A0F0"/>/n' +
+                    '<stop offset="1" stop-color="#0678C4" stop-opacity="0.9917"/>/n' +
+                '</linearGradient>/n' +
+                '<linearGradient id="paint1_linear_8985_99599" x1="11.7285" y1="11.3223" x2="20.8697" y2="11.5229" gradientUnits="userSpaceOnUse">/n' +
+                    '<stop stop-color="#28A0F0"/>/n' +
+                    '<stop offset="1" stop-color="#0678C4" stop-opacity="0.9917"/>/n' +
+                '</linearGradient>/n' +
+            '</defs>/n' +
+        '</svg>'
 
         console.log("Init new Onboard")
 
@@ -66,11 +65,32 @@ const actions = {
                     privacyUrl: "https://docs.overnight.fi/advanced/privacy-policy",
                 },
             },
+            i18n: {
+                en: {
+                    connect: {
+                        selectingWallet: {
+                            header: "Available wallets",
+                            installWallet: "You do not have any wallets installed that {app}",
+
+                            agreement: {
+                                agree: "I have read and accept",
+                                terms: "Overnight's Terms of Service",
+                                and: "and",
+                                privacy: "Privacy Policy"
+                            },
+                        },
+                    },
+                }
+            },
             disableFontDownload: true,
             connect: {
-                showSidebar: false,
+                showSidebar: true,
+                disableClose: false,
                 // autoConnectLastWallet: true,
-                // autoConnectAllPreviousWallet: true
+                // autoConnectAllPreviousWallet: true,
+                // iDontHaveAWalletLink: '',
+                // wheresMyWalletLink: '',
+                // disableUDResolution: false,
             },
             accountCenter: {
                 desktop: {
@@ -387,11 +407,53 @@ const actions = {
         const injected = injectedModule({
             custom: customWallets,
             // display all wallets even if they are unavailable
-            displayUnavailable: false,
+            displayUnavailable: true,
             // but only show Binance and Bitski wallet if they are available
             filter: {
                 [ProviderLabel.Binance]: 'unavailable',
-                [ProviderLabel.Bitski]: 'unavailable'
+                [ProviderLabel.Bitski]: 'unavailable',
+                [ProviderLabel.Zerion]: 'unavailable',
+                [ProviderLabel.AlphaWallet]: 'unavailable',
+                [ProviderLabel.ApexWallet]: 'unavailable',
+                [ProviderLabel.AToken]: 'unavailable',
+                [ProviderLabel.BifrostWallet]: 'unavailable',
+                [ProviderLabel.Brave]: 'unavailable',
+                [ProviderLabel.BitKeep]: 'unavailable',
+                [ProviderLabel.Core]: 'unavailable',
+                [ProviderLabel.Dcent]: 'unavailable',
+                [ProviderLabel.Zeal]: 'unavailable',
+                [ProviderLabel.XDEFI]: 'unavailable',
+                [ProviderLabel.WalletIo]: 'unavailable',
+                [ProviderLabel.TP]: 'unavailable',
+                [ProviderLabel.TokenPocket]: 'unavailable',
+                [ProviderLabel.Tokenary]: 'unavailable',
+                [ProviderLabel.Tally]: 'unavailable',
+                [ProviderLabel.Status]: 'unavailable',
+                [ProviderLabel.Sequence]: 'unavailable',
+                [ProviderLabel.Rainbow]: 'unavailable',
+                [ProviderLabel.Phantom]: 'unavailable',
+                [ProviderLabel.OwnBit]: 'unavailable',
+                [ProviderLabel.Opera]: 'unavailable',
+                [ProviderLabel.OneInch]: 'unavailable',
+                [ProviderLabel.OKXWallet]: 'unavailable',
+                [ProviderLabel.MyKey]: 'unavailable',
+                [ProviderLabel.MeetOne]: 'unavailable',
+                [ProviderLabel.MathWallet]: 'unavailable',
+                [ProviderLabel.Liquality]: 'unavailable',
+                [ProviderLabel.InfinityWallet]: 'unavailable',
+                [ProviderLabel.ImToken]: 'unavailable',
+                [ProviderLabel.HyperPay]: 'unavailable',
+                [ProviderLabel.HuobiWallet]: 'unavailable',
+                [ProviderLabel.GameStop]: 'unavailable',
+                [ProviderLabel.Frontier]: 'unavailable',
+                [ProviderLabel.Frame]: 'unavailable',
+                [ProviderLabel.Exodus]: 'unavailable',
+                [ProviderLabel.Enkrypt]: 'unavailable',
+                [ProviderLabel.DeFiWallet]: 'unavailable',
+                [ProviderLabel.Rabby]: 'unavailable',
+                [ProviderLabel.BlockWallet]: 'unavailable',
+                [ProviderLabel.SafePal]: 'unavailable',
+                [ProviderLabel.Trust]: 'unavailable',
             },
             sort: (wallets) => {
                 const metaMask = wallets.find(({ label }) => label === ProviderLabel.MetaMask)
@@ -415,7 +477,7 @@ const actions = {
 
         const wcInitOptions = {
             qrcodeModalOptions: {
-                mobileLinks: ['metamask', 'trust', 'rainbow', 'zerion', "argent", "trust", "imtoken", "pillar"] // 'argent',
+                mobileLinks: ['metamask', 'rainbow', 'zerion', "argent", "imtoken", "pillar"] // 'argent',
             },
             connectFirstChainId: true,
             requiredChains: SUPPORTED_NETWORKS
@@ -431,14 +493,13 @@ const actions = {
 
         const coinbaseWalletSdk = coinbaseWalletModule({ darkMode: true });
         const walletConnect = await walletConnectModule(wcInitOptions);
-        const gnosis = gnosisModule({
+        /*const gnosis = gnosisModule({
             whitelistedDomains: ['app.safe.global']
         });
-        const trust = trustModule();
         const trezor = trezorModule({
             appUrl: appApiUrl.replaceAll('/api', ''),
             email: 'ovnstable@gmail.com',
-        })
+        })*/
 
         // const argent = argentModule(walletConnect);
 
@@ -446,10 +507,9 @@ const actions = {
             injected,
             walletConnect,
             coinbaseWalletSdk,
-            trust,
             // argent,
-            trezor,
-            gnosis,
+            // trezor,
+            // gnosis,
             // ... other wallets
         ];
     },

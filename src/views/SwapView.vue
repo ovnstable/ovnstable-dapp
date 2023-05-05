@@ -321,7 +321,6 @@
 
             </div>
         </div>
-    </div>
 </template>
 
 <script>
@@ -341,6 +340,8 @@ export default defineComponent({
 
             sum: null,
             sumMap: {},
+
+
             selectedTokensFromAddresses: [],
             selectedTokensToAddresses: [],
             allTokens: [], // without ovn

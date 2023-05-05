@@ -11,7 +11,9 @@
                                class="input-style"/>
                     </div>
                     <div class="col-5">
-                        <div v-if="token.selectedToken" class="select-token-container">
+                        <div v-if="token.selectedToken"
+                             @click="selectTokenFunc(token)"
+                             class="select-token-container">
                             <div class="selected-token-item-img">
                                 <img :src="token.selectedToken.logo" alt="select-token">
                             </div>
@@ -19,7 +21,9 @@
                                 {{token.selectedToken.symbol}}
                             </div>
                         </div>
-                        <div v-else class="select-token-container">
+                        <div v-else
+                             @click="selectTokenFunc(token)"
+                             class="select-token-container">
                             <div class="select-token-item-text">
                                 Select token
                             </div>
@@ -69,7 +73,12 @@ import {defineComponent} from 'vue'
 
 export default defineComponent({
     name: "InputToken",
-    props: ['tokenInfo', 'removeItemFunc', 'isTokenRemovable'],
+    props: [
+        'tokenInfo',
+        'removeItemFunc',
+        'isTokenRemovable',
+        'selectTokenFunc',
+    ],
     data() {
         return {
             token: {

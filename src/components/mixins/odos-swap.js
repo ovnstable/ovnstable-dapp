@@ -20,11 +20,11 @@ export const odosSwap = {
     },
     async mounted() {
         console.log("Odos swap init")
-        this.loadChains();
-        this.loadTokens();
+        // this.loadChains();
+        // this.loadTokens();
 
         // todo: set chain to networkId after test
-        this.loadContract(1);
+        // this.loadContract(1);
     },
     computed: {
         isAllDataLoaded: function() {
@@ -64,7 +64,7 @@ export const odosSwap = {
                 return
             }
 
-            this.isChainsLoading = true;
+            this.isTokensLoading = true;
             odosApiService.loadTokens().then(data => {
                 console.log("Tokens: ", data)
                 this.tokensMap = data

@@ -12,7 +12,9 @@
                                 class="input-style"/>
                     </div>
                     <div class="col-5">
-                        <div v-if="token.selectedToken" class="select-token-container">
+                        <div v-if="token.selectedToken"
+                             @click="selectTokenFunc(token)"
+                             class="select-token-container">
                             <div class="selected-token-item-img">
                                 <img :src="token.selectedToken.logo" alt="select-token">
                             </div>
@@ -20,7 +22,9 @@
                                 {{token.selectedToken.symbol}}
                             </div>
                         </div>
-                        <div v-else class="select-token-container">
+                        <div v-else
+                             @click="selectTokenFunc(token)"
+                             class="select-token-container">
                             <div class="select-token-item-text">
                                 Select token
                             </div>
@@ -84,12 +88,14 @@
               </div>
             </div>
         </div>
+
     </div>
 </template>
 
 <script>
 import {defineComponent} from 'vue'
 import Slider from "@/components/odos/Slider.vue";
+import SelectTokensModal from "@/components/odos/modals/SelectTokensModal.vue";
 
 export default defineComponent({
     name: "OutputToken",
@@ -100,6 +106,7 @@ export default defineComponent({
         'isTokenRemovable',
         'lockProportionFunc',
         'updateSliderValueFunc',
+        'selectTokenFunc',
     ],
     data() {
         return {

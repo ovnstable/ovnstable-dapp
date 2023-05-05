@@ -18,6 +18,8 @@
                                     :token-info="token"
                                     :remove-item-func="removeInputToken"
                                     :is-token-removable="isInputTokensRemovable"
+
+                                    :select-token-func="selectInputToken"
                             />
                         </div>
                         <div class="row">
@@ -55,6 +57,8 @@
                                     :is-token-removable="isOutputTokensRemovable"
                                     :lock-proportion-func="lockProportion"
                                     :update-slider-value-func="updateSliderValue"
+
+                                    :select-token-func="selectOutputToken"
                             />
                         </div>
 
@@ -101,6 +105,12 @@
                 </div>
             </div>
         </div>
+
+
+        <SelectTokensModal :is-show="isShowSelectTokensModal"
+                           :close-func="showSelectTokensModals"
+                           :swap-method="swapMethod"
+                           :select-token-type="selectTokenType"/>
     </div>
 </template>
 
@@ -108,10 +118,12 @@
 import {defineComponent} from 'vue'
 import InputToken from "@/components/odos/InputToken.vue";
 import OutputToken from "@/components/odos/OutputToken.vue";
+import SelectTokensModal from "@/components/odos/modals/SelectTokensModal.vue";
 
 export default defineComponent({
     name: "SwapForm",
     components: {
+        SelectTokensModal,
         InputToken,
         OutputToken
     },
@@ -125,6 +137,10 @@ export default defineComponent({
             outputTokens: [],
             maxInputTokens: 6,
             maxOutputTokens: 6,
+
+            isShowSelectTokensModal: false,
+            swapMethod: 'BUY', // BUY (ovnTokens) / SELL (ovnTokens)
+            selectTokenType: 'OVERNIGHT', // OVERNIGHT / ALL
         }
     },
     computed: {
@@ -184,6 +200,17 @@ export default defineComponent({
         },
         changeSwap() {
             console.log("Change swap");
+            if (this.swapMethod === 'BUY') {
+                this.setSwapMethod('SELL');
+                return;
+            }
+
+            if (this.swapMethod === 'SELL') {
+                this.setSwapMethod('BUY');
+                return;
+            }
+
+            console.error('Change swap method not found.', this.swapMethod);
         },
         resetOutputs() {
             console.log("Reset outputs");
@@ -192,8 +219,6 @@ export default defineComponent({
             console.log("Swap");
         },
 
-
-
         lockProportion(isLock, token) {
             console.log("lockProportionFunc", isLock, token);
             token.locked = isLock
@@ -201,14 +226,15 @@ export default defineComponent({
         updateSliderValue(token, value) {
             console.log("Swap form", token.id, value, !this.isSlidersOutOfLimit());
             let oldTokenValue = token.value;
-            token.value = value;
 
             if(!this.isSlidersOutOfLimit()) {
-                if (oldTokenValue > value) {
-                    this.subTokensProportions(token, 100 - value)
-                } else {
-                    this.addTokensProportions(token, 100 - value)
-                }
+                token.value = value;
+                this.subtraction(token, 100 - value);
+                // if (oldTokenValue > value) {
+                //     this.subTokensProportions(token, 100 - value)
+                // } else {
+                //     this.addTokensProportions(token, 100 - value)
+                // }
             }
         },
         subTokensProportions(currentToken, difference) {
@@ -240,33 +266,6 @@ export default defineComponent({
             } else {
                 lastToken.value = lastTokenValue;
             }
-
-           /* while (lostPercents > 0) {
-                if (countOfNull === tokens.length) {
-                    console.log("All tokens is nullable")
-                    break
-                }
-
-                countOfNull = 0;
-                for (let i = 0; i < tokens.length; i++) {
-                    let token = tokens[i];
-                    if (token.value <= 0) {
-                        token.value = 0;
-                        countOfNull++
-                        continue
-                    }
-
-                    token.value--
-                    lostPercents--;
-                    console.log('token: ', token, token.id, token.value)
-                    console.log('lostPercents: ', lostPercents)
-                    if (lostPercents <= 0) break;
-                }
-            }*/
-            // for (let i = lostPercents; i > 0; i--) {
-
-            // }
-
         },
         addTokensProportions(currentToken, difference) {
             let tokens = this.getActiveTokens(currentToken);
@@ -338,10 +337,12 @@ export default defineComponent({
             // }
         },
         calculateProportions(tokens, proportion) {
+            tokens.value = proportion;
             for (let i = 0; i < proportion; i++) {
                 for (let i = 0; i < tokens.length; i++) {
                     let token = tokens[i];
-                    token.value++
+                    // token.value++
+                    token.value = proportion;
                 }
             }
         },
@@ -374,6 +375,46 @@ export default defineComponent({
             }
             return sliders
         },
+
+        showSelectTokensModals(isShow) {
+            this.isShowSelectTokensModal = isShow;
+        },
+        selectInputToken(token) {
+            if (this.swapMethod === "BUY") {
+                this.openModalWithSelectTokenAndBySwapMethod('ALL');
+                return;
+            }
+
+            if (this.swapMethod === "SELL") {
+                this.openModalWithSelectTokenAndBySwapMethod('OVERNIGHT');
+                return
+            }
+
+            console.error("Swap method type not found when select input tokens. ", this.swapMethod);
+        },
+        selectOutputToken(token) {
+            if (this.swapMethod === "BUY") {
+                this.openModalWithSelectTokenAndBySwapMethod('OVERNIGHT');
+                return;
+            }
+
+            if (this.swapMethod === "SELL") {
+                this.openModalWithSelectTokenAndBySwapMethod('ALL');
+                return
+            }
+
+            console.error("Swap method type not found when select output tokens. ", this.swapMethod);
+        },
+        openModalWithSelectTokenAndBySwapMethod(tokenType) {
+            this.setSelectTokenType(tokenType);
+            this.showSelectTokensModals(true)
+        },
+        setSwapMethod(method) {
+            this.swapMethod = method;
+        },
+        setSelectTokenType(type) {
+            this.selectTokenType = type;
+        },
     }
 })
 </script>
@@ -389,6 +430,7 @@ div {
     background: #FFFFFF;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
     border-radius: 28px;
+    max-width: 600px;
 }
 
 .swap-header {

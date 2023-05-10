@@ -11,15 +11,19 @@
                                 placeholder="0"
                                 class="input-style"/>
                     </div>
-                    <div class="col-5">
+                    <div class="col-5 selected-image-right">
                         <div v-if="token.selectedToken"
                              @click="selectTokenFunc(token)"
-                             class="select-token-container">
-                            <div class="selected-token-item-img">
-                                <img :src="token.selectedToken.logo" alt="select-token">
-                            </div>
-                            <div class="select-token-item-text">
-                                {{token.selectedToken.symbol}}
+                             class="selected-token-container">
+                            <div>
+                                <div class="selected-token-item-img">
+                                    <img :src="token.selectedToken.logoUrl"
+                                         class="selected-token"
+                                         alt="select-token">
+                                </div>
+                                <div class="selected-token-item-text">
+                                    {{token.selectedToken.symbol}}
+                                </div>
                             </div>
                         </div>
                         <div v-else
@@ -45,8 +49,8 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="usd-equal-text">
-                            <div v-if="token.selectedToken">
-                                {{token.selectedToken.price}}
+                            <div v-if="token.selectedToken && token.selectedToken.balanceData.balance">
+                                ~ ${{$utils.formatMoney(token.selectedToken.price, 2)}}
                             </div>
                             <div v-else>
                                 $00.<span class="numeric-change">00</span>
@@ -59,7 +63,12 @@
                                 <img src="/assets/icon/swap/wallet.svg" alt="select-token">
                             </div>
                             <div class="select-token-balance-text">
-                                00.<span class="numeric-change">00</span>
+                                <div v-if="token.selectedToken && token.selectedToken.balanceData.balance">
+                                    {{$utils.formatMoney(token.selectedToken.balanceData.balance, 2)}}
+                                </div>
+                                <div v-else>
+                                    00.<span class="numeric-change">00</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -117,7 +126,7 @@ export default defineComponent({
         }
     },
     mounted() {
-
+        this.token.selectedToken = this.tokenInfo.selectedToken;
     },
     methods: {
         updateSliderValue(tokenInfo, value) {
@@ -155,6 +164,14 @@ div {
 
     cursor: pointer;
 }
+.selected-token-container {
+    position: absolute;
+    padding: 12px;
+    background: #E5E7EA;
+    border-radius: 40px;
+    cursor: pointer;
+}
+
 
 .select-token-item-text {
     display: inline-block;
@@ -165,6 +182,18 @@ div {
     margin-right: 15px;
 }
 
+.selected-token-item-text {
+    display: inline-block;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #29323E;
+    margin-right: 15px;
+    padding-left: 30px;
+}
+
+
 .select-token-item-img {
     position: absolute;
     right: 0;
@@ -172,9 +201,10 @@ div {
 }
 
 .selected-token-item-img {
+    display: inline-block;
     position: absolute;
-    left: 0;
-    top: 10px;
+    top: 8px;
+    left: 8px;
 }
 
 .select-token-balance-container {
@@ -250,4 +280,14 @@ div {
     width: 5%;
 }
 
+.selected-token {
+    height: 32px;
+    width: 32px;
+}
+
+.selected-image-right {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 25px;
+}
 </style>

@@ -8,17 +8,22 @@
                                v-model="token.value"
                                type="text"
                                placeholder="0"
+                               @input="inputUpdate(token.value)"
                                class="input-style"/>
                     </div>
-                    <div class="col-5">
+                    <div class="col-5 selected-image-right">
                         <div v-if="token.selectedToken"
                              @click="selectTokenFunc(token)"
-                             class="select-token-container">
-                            <div class="selected-token-item-img">
-                                <img :src="token.selectedToken.logo" alt="select-token">
-                            </div>
-                            <div class="select-token-item-text">
-                                {{token.selectedToken.symbol}}
+                             class="selected-token-container">
+                            <div>
+                                <div class="selected-token-item-img">
+                                    <img :src="token.selectedToken.logoUrl"
+                                         class="selected-token"
+                                         alt="select-token">
+                                </div>
+                                <div class="selected-token-item-text">
+                                    {{token.selectedToken.symbol}}
+                                </div>
                             </div>
                         </div>
                         <div v-else
@@ -44,8 +49,8 @@
                 <div class="row">
                     <div class="col-6">
                        <div class="usd-equal-text">
-                           <div v-if="token.selectedToken">
-                               {{token.selectedToken.price}}
+                           <div v-if="token.value && token.selectedToken && token.selectedToken.balanceData.balance">
+                              ~ ${{$utils.formatMoney(token.value * token.selectedToken.price, 2)}}
                            </div>
                            <div v-else>
                                $00.<span class="numeric-change">00</span>
@@ -53,12 +58,23 @@
                        </div>
                     </div>
                     <div class="col-6">
-                        <div class="select-token-balance-container">
-                            <div class="select-token-balance-img">
+                        <div @click="clickOnBalance()" class="select-token-balance-container">
+                            <div v-if="token.selectedToken && token.selectedToken.balanceData.balance"
+                                 class="select-token-balance-img">
+                                <img src="/assets/icon/swap/wallet-active.svg" alt="select-token">
+                            </div>
+                            <div v-else class="select-token-balance-img">
                                 <img src="/assets/icon/swap/wallet.svg" alt="select-token">
                             </div>
                             <div class="select-token-balance-text">
-                                00.<span class="numeric-change">00</span>
+                                <div v-if="token.selectedToken && token.selectedToken.balanceData.balance">
+                                    <span class="select-token-balance-text-enabled">
+                                        {{$utils.formatMoney(token.selectedToken.balanceData.balance, 2)}}
+                                    </span>
+                                </div>
+                                <div v-else>
+                                    00.<span class="numeric-change">00</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -78,12 +94,34 @@ export default defineComponent({
         'removeItemFunc',
         'isTokenRemovable',
         'selectTokenFunc',
+        'updateTokenValueFunc',
     ],
+    mounted() {
+        this.token.selectedToken = this.tokenInfo.selectedToken;
+    },
     data() {
         return {
             token: {
                 value: null,
                 selectedToken: null,
+            }
+        }
+    },
+    watch: {
+        'tokenInfo.value'(val, oldVal) {
+            if (val) {
+                this.token.value = val
+            }
+        }
+    },
+    methods: {
+        inputUpdate(value) {
+            this.updateTokenValueFunc(this.tokenInfo, value)
+        },
+        clickOnBalance() {
+            if (this.token.selectedToken && this.token.selectedToken.balanceData.balance) {
+                this.token.value = this.token.selectedToken.balanceData.balance
+                this.inputUpdate(this.token.value);
             }
         }
     }
@@ -115,7 +153,15 @@ div {
 
 .select-token-container {
     position: absolute;
-    padding: 8px;
+    padding: 12px;
+    background: #E5E7EA;
+    border-radius: 40px;
+    cursor: pointer;
+}
+
+.selected-token-container {
+    position: absolute;
+    padding: 12px;
     background: #E5E7EA;
     border-radius: 40px;
     cursor: pointer;
@@ -131,6 +177,17 @@ div {
     margin-right: 15px;
 }
 
+.selected-token-item-text {
+    display: inline-block;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #29323E;
+    margin-right: 15px;
+    padding-left: 30px;
+}
+
 .select-token-item-img {
     position: absolute;
     right: 0;
@@ -138,9 +195,10 @@ div {
 }
 
 .selected-token-item-img {
+    display: inline-block;
     position: absolute;
-    left: 0;
-    top: 10px;
+    top: 8px;
+    left: 8px;
 }
 
 .select-token-balance-container {
@@ -155,6 +213,10 @@ div {
     font-size: 18px;
     line-height: 28px;
     color: #707A8B;
+}
+
+.select-token-balance-text-enabled {
+    color: #1C95E7;
 }
 
 .select-token-balance-img {
@@ -198,5 +260,16 @@ div {
     top: 10px;
     right: -10px;
     cursor: pointer;
+}
+
+.selected-token {
+    height: 32px;
+    width: 32px;
+}
+
+.selected-image-right {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 25px;
 }
 </style>

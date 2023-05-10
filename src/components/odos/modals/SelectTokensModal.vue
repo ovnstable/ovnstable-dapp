@@ -5,7 +5,7 @@
                     v-model="isShow"
                     width="600"
                     persistent>
-                <v-card class="container_body airdrop-body"
+                <v-card class="container_body airdrop-body pt-4 px-4"
                         style="border-radius: 28px!important;">
                     <v-toolbar class="container_header" flat>
                         <label v-if="selectTokenType === 'OVERNIGHT'" class="title-container">
@@ -15,7 +15,7 @@
                             Select token
                         </label>
                         <v-spacer></v-spacer>
-                        <v-btn icon @click="closeFunc(false)" class="mt-4">
+                        <v-btn icon @click="setShowFunc(false)">
                             <v-icon class="close-icon">mdi-close</v-icon>
                         </v-btn>
                     </v-toolbar>
@@ -69,7 +69,6 @@ import {defineComponent} from 'vue'
 import {odosSwap} from "@/components/mixins/odos-swap";
 import {mapGetters} from "vuex";
 import SelectTokenShort from "@/components/odos/SelectTokenShort.vue";
-import loadJSON from "@/utils/http-utils";
 import SelectTokenWithSearch from "@/components/odos/SelectTokenWithSearch.vue";
 
 export default defineComponent({
@@ -77,7 +76,6 @@ export default defineComponent({
     components: {
         SelectTokenWithSearch,
         SelectTokenShort
-
     },
     mixins: [odosSwap],
     props: {
@@ -85,10 +83,11 @@ export default defineComponent({
             type: Boolean,
             default: false
         },
-        closeFunc: {
+        setShowFunc: {
             type: Function,
             required: true
         },
+
         swapMethod: {
             type: String,
             required: true
@@ -98,16 +97,21 @@ export default defineComponent({
             required: true
         },
 
+
+        removeSelectedTokenFromListFunc: {
+            type: Function,
+            required: true
+        },
+
+        addSelectedTokenToListFunc: {
+            type: Function,
+            required: true
+        },
     },
     data() {
       return {
           selectedTokensFromAddresses: [],
           selectedTokensToAddresses: [],
-          allTokens: [], // without ovn
-          ovnTokens: [],
-          tokens: [],
-
-          availableNetworksList: ['polygon', 'bsc', 'optimism', 'arbitrum'],
       }
     },
     mounted() {
@@ -116,10 +120,9 @@ export default defineComponent({
     },
     computed: {
         ...mapGetters('network', ['networkId', "networkName", 'getParams']),
+        ...mapGetters('web3', ['web3']),
 
-        isAllDataLoaded: function() {
-            return !this.isChainsLoading && !this.isTokensLoading;
-        },
+
         selectedFromTokens() {
             return this.fromTokens && this.selectedTokensFromAddresses ?
                 this.fromTokens.filter(item => this.selectedTokensFromAddresses.includes(item.address)) : [];
@@ -149,112 +152,29 @@ export default defineComponent({
         }
     },
     watch: {
-        isAllDataLoaded: function (newValue, oldValue) {
-            if (newValue) {
-                this.initData();
-            }
 
-        }
     },
     methods: {
-        async initData() {
-            console.log('initData');
-            if (this.availableNetworksList.includes(this.networkName)) {
-                console.log('initData1');
-                let networkId = this.getParams(this.networkName).networkId;
-                console.log('initData2');
-                this.tokens = await this.getFilteredTokens(networkId, false);
-                console.log('initData3');
-                console.log("TOKENS_ ", this.tokens)
-                this.ovnTokens = await this.getFilteredTokens(networkId, true);
-                console.log("OVN TOKENS_ ", this.ovnTokens)
-            } else {
-                this.clearInputData();
-            }
-        },
-        clearInputData() {
-            this.tokens = [];
-            this.ovnTokens = [];
-        },
-        async getFilteredTokens(chainId, isOvnToken) {
-            let tokens = [];
-            let tokenMap = this.tokensMap.chainTokenMap[chainId + ''].tokenMap;
-            let keys = Object.keys(tokenMap);
-            for (let i = 0; i < keys.length; i++) {
-                let key = keys[i];
-                let item = tokenMap[key];
 
-                if (isOvnToken) {
-                    if (item.protocolId === 'overnight') {
-                        let logoUrl = await this.loadOvernightTokenImage(item);
-
-                        tokens.push({
-                            id: item.assetId + key,
-                            address: key,
-                            decimals: item.decimals,
-                            name: item.name,
-                            symbol: item.symbol,
-                            logoUrl: logoUrl,
-                            selected: false,
-                        });
-                    }
-                    continue;
-                }
-
-                if (item.protocolId !== 'overnight') {
-                    tokens.push({
-                        id: item.assetId + key,
-                        address: key,
-                        decimals: item.decimals,
-                        name: item.name,
-                        symbol: item.symbol,
-                        logoUrl: 'https://assets.odos.xyz/tokens/' + item.symbol + '.webp',
-                        selected: false,
-                    });
-                }
-            }
-
-            return tokens;
-        },
-        async loadOvernightTokenImage(token) {
-            let tokenUrl = await this.loadCoingeckoOvernightTokenImage(token.symbol);
-            if (tokenUrl) {
-                return tokenUrl;
-            }
-
-            return '/assets/currencies/stablecoins/' + token.symbol + '.png';
-        },
-        async loadCoingeckoOvernightTokenImage(symbol) {
-            // example
-            // https://api.coingecko.com/api/v3/coins/overnight-dai?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false
-
-            let coinGeckoUrl = 'https://api.coingecko.com/api'
-            let coinGeckoApiVersion = 'v3'
-            let coinGeckoApiMethod = 'coins'
-            let coinGeckoApiParams = 'localization=false&tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false'
-
-            let symbolInfo = 'overnight-' + symbol.replace("+", "").toLowerCase();
-            let url = `${coinGeckoUrl}/${coinGeckoApiVersion}/${coinGeckoApiMethod}/${symbolInfo}?${coinGeckoApiParams}`;
-            let coinInfo = await loadJSON(url);
-            if (coinInfo.error) {
-                console.log("Coingecko image not found", coinInfo)
-                return null;
-            }
-
-            console.log('Coingeko info: ', coinInfo)
-            return coinInfo.image.large
-        },
         selectToken(token) {
             token.selected = true
+            console.log("Token select: ", token, this.swapMethod, this.selectTokenType)
+            this.addSelectedTokenToListFunc(token, this.swapMethod, this.selectTokenType);
         },
         removeToken(token) {
             token.selected = false
+            console.log("Token remove: ", token, this.swapMethod, this.selectTokenType)
+            this.removeSelectedTokenFromListFunc(token, this.swapMethod, this.selectTokenType);
         }
     }
 })
 </script>
 
 <style scoped>
+
+div {
+    font-family: 'Roboto',serif;
+}
 
 .tokens-container {
     padding-top: 15px;

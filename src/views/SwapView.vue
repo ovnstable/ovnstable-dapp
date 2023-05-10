@@ -7,20 +7,16 @@
                 </label>
             </div>
 
-
             <div class="pt-20">
                 <div class="row">
-                    <div class="col-6">
-                        <SwapForm></SwapForm>
+                    <div class="col-lg-5 col-md-6 col-sm-12">
+                        <SwapForm/>
                     </div>
-                    <div class="col-6">
-                        <SwapInformation>
-                        </SwapInformation>
+                    <div class="col-lg-7 col-md-7 col-sm-12">
+                        <SwapInformation/>
                     </div>
                 </div>
             </div>
-
-
 
 <!--            <div v-if="!isAllDataLoaded" class="mt-7 cards-list-container">
                 <v-row>
@@ -333,7 +329,7 @@ import SwapInformation from "@/components/odos/SwapInformation.vue";
 export default defineComponent({
     name: "SwapView",
     components: {SwapInformation, SwapForm},
-    mixins: [odosSwap],
+    // mixins: [odosSwap],
     data() {
         return {
             proportionMap: {},
@@ -393,17 +389,17 @@ export default defineComponent({
     },
     watch: {
         networkName: function (newVal, oldVal) {
-            this.initData();
+            // this.initData();
         },
 
         tokensMap: function (newVal, oldVal) {
             if (newVal) {
-                this.initData();
+                // this.initData();
             }
         },
         swapResponseInfo: function (newVal, oldVal) {
             if (newVal) {
-                this.initWalletTransaction(newVal.transaction)
+                // this.initWalletTransaction(newVal.transaction)
             }
 
         }

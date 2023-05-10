@@ -70,8 +70,6 @@ div {
     height: 56px;
     padding-top: 6px;
 
-    padding-right: 16px;
-
     background: #F5F5F5;
     border-radius: 12px;
 

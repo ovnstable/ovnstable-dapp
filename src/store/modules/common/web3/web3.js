@@ -22,20 +22,20 @@ const getters = {
         return state.web3;
     },
 
-    getWeiMarker: (state) => function(decemals) {
-        if (decemals === 6) {
+    getWeiMarker: (state) => function(decimals) {
+        if (decimals === 6) {
             return 'mwei';
         }
 
-        if (decemals === 8) {
+        if (decimals === 8) {
             return 'mwei';
         }
 
-        if (decemals === 18) {
+        if (decimals === 18) {
             return 'ether';
         }
 
-        console.error(`Decimals type not found for detect wei type. Decimals: ${decemals}`);
+        console.error(`Decimals type not found for detect wei type. Decimals: ${decimals}`);
     },
 
     contracts(state) {

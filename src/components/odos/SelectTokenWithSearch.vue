@@ -62,14 +62,12 @@
                                    <div class="balance-container">
                                        <div>
                                           <div class="token-balance">
-<!--                                              14.225-->
-                                              00.00
+                                              {{token.balanceData.balance ? $utils.formatMoney(token.balanceData.balance, 2) : '00.00'}}
                                           </div>
                                        </div>
                                        <div>
                                            <div class="token-usd-balance">
-<!--                                               14.98-->
-                                               00.00
+                                               ${{token.balanceData.balance ? $utils.formatMoney(token.balanceData.balance * token.price, 2) : '00.00'}}
                                            </div>
                                        </div>
                                    </div>
@@ -111,13 +109,42 @@ export default defineComponent({
     computed: {
       queryTokens: function () {
           if (!this.searchQuery) {
-              return this.tokens;
+              return this.tokens
+                  .sort((a, b) => {
+                  if (b.price * b.balanceData.balance < a.price * a.balanceData.balance) {
+                      return -1;
+                  } else if (b.price * b.balanceData.balance > a.price * a.balanceData.balance) {
+                      return 1;
+                  } else {
+                      if (b.balanceData.balance < a.balanceData.balance) {
+                          return -1;
+                      } else if (b.balanceData.balance > a.balanceData.balance) {
+                          return 1;
+                      } else {
+                          return 0;
+                      }
+                  }
+              });
           }
 
           return this.tokens.filter(token =>
               token.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
               token.symbol.toLowerCase().includes(this.searchQuery.toLowerCase())
-          );
+          ).sort((a, b) => {
+              if (b.price * b.balanceData.balance < a.price * a.balanceData.balance) {
+                  return -1;
+              } else if (b.price * b.balanceData.balance > a.price * a.balanceData.balance) {
+                  return 1;
+              } else {
+                  if (b.balanceData.balance < a.balanceData.balance) {
+                      return -1;
+                  } else if (b.balanceData.balance > a.balanceData.balance) {
+                      return 1;
+                  } else {
+                      return 0;
+                  }
+              }
+          });
       },
       isAvailableCountForSelect: function () {
           return this.selectedCount < this.maxTokenSelectCount;
@@ -152,8 +179,6 @@ div {
 .token-container {
     height: 56px;
     padding-top: 6px;
-
-    padding-right: 16px;
 
     background: #F5F5F5;
     border-radius: 12px;

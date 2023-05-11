@@ -171,7 +171,7 @@ div {
     display: inline-block;
     font-style: normal;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
     color: #29323E;
     margin-right: 15px;
@@ -181,7 +181,7 @@ div {
     display: inline-block;
     font-style: normal;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
     color: #29323E;
     margin-right: 15px;

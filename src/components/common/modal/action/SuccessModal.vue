@@ -17,7 +17,14 @@
                     </div>
                 </v-row>
                 <v-row justify="center" class="mb-8" :class="$wu.isMobile() ? '' : 'mx-8'">
-                    <label class="success-label">Transaction successfully submitted</label>
+                    <label v-if="successAction === 'swapOdosUsdPlus'"
+                           class="success-label">
+                        You successfully swapped USD+
+                    </label>
+                    <label v-else
+                           class="success-label">
+                        Transaction successfully submitted
+                    </label>
                 </v-row>
                 <v-row justify="center" class="mb-5">
                     <v-btn dark
@@ -91,6 +98,8 @@ export default {
                     return 'ETS ' + (this.etsData ? this.etsData.nameToken : '');
                 case 'redeemEts':
                     return 'ETS ' + (this.etsData ? this.etsData.nameToken : '');
+                case 'swapOdosUsdPlus':
+                    return 'USD+'
                 default:
                     return ''
             }
@@ -130,6 +139,8 @@ export default {
                     return require('@/assets/currencies/insurance/INSURANCE.svg');
                 case 'withdrawInsurance':
                     return require('@/assets/currencies/insurance/INSURANCE.svg');
+                case 'swapOdosUsdPlus':
+                    return require('@/assets/icon/minted.svg');
                 default:
                     return ''
             }
@@ -161,6 +172,11 @@ export default {
                 case 'redeemDaiPlus':
                     this.addDaiPlusToken();
                     this.trackClick({action: 'add-daiplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add daiplus token', value: 1 });
+                    break;
+
+                case 'swapOdosUsdPlus':
+                    this.addUsdPlusToken();
+                    this.trackClick({action: 'add-daiplus-token-click', event_category: 'Add Token And Swap', event_label: 'Minted and add daiplus token', value: 1 });
                     break;
 
                 case 'mintUsdtPlus':

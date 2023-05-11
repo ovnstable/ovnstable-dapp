@@ -19,6 +19,13 @@
                             </span>
                         </div>
                         <div v-for="token in inputTokens" :key="token.id" class="input-component-container">
+
+                            <div v-if="isShowDecreaseAllowance && token.selectedToken"
+                                 @click="disapproveToken(token)"
+                                 class="decrease-allowance">
+                                Decrease Allowance
+                            </div>
+
                             <InputToken
                                     :token-info="token"
                                     :remove-item-func="removeInputToken"
@@ -91,21 +98,42 @@
 
             <div class="swap-footer pt-5">
                 <div class="swap-button-container">
-                    <div @click="swap()" class="swap-button">
+                    <div v-if="isDisableButton"
+                         class="disable-button">
+                        <div class="disable-button-title">
+                            <div>
+                                {{disableButtonMessage}}
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else-if="isAnyInputsNeedApprove"
+                         @click="approve(firstInputInQueueForToApprove)"
+                         class="swap-button">
                         <div class="swap-button-title">
-                            SWAP
+                            <div>
+                                APPROVE {{firstInputInQueueForToApprove.selectedToken.symbol}}
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else
+                         @click="swap()"
+                         class="swap-button">
+                        <div class="swap-button-title">
+                            <div>
+                                SWAP
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="label-container pt-3">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-6 pr-1" style="padding-top:15px">
                             <div class="powered-text">
                                 Powered by
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6 pl-0">
                             <div class="powered-image">
                                 <img src="/assets/icon/swap/powered-by-odos.svg" alt="powered by odos">
                             </div>
@@ -115,12 +143,83 @@
             </div>
         </div>
 
-        swapResponseInfo:
+<!--        swapResponseInfo:-->
 <!--        {{swapResponseInfo}}-->
 
-        <div v-if="swapResponseInfo">
-            {{swapResponseInfo}}
-        </div>
+<!--        <div v-if="swapResponseInfo">-->
+<!--            {{swapResponseInfo}}-->
+<!--        </div>-->
+<!--        <div v-if="false && swapResponseInfo">
+            <div class="transaction-info-container">
+                <div class="transaction-info-body">
+                    <div class="row py-2">
+                        <div class="col-6 py-0">
+                            <div class="transaction-info-title">
+                                Output Value
+                            </div>
+                        </div>
+                        <div class="col-6 py-0">
+                            <div class="transaction-info">
+                                ~1.09 <span class="transaction-info-additional">(+116.76%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row py-2">
+                        <div class="col-6 py-0">
+                            <div class="transaction-info-title">
+                                Gas estimate
+                            </div>
+                        </div>
+                        <div class="col-6 py-0">
+                            <div class="transaction-info">
+                                ~124 Gwei <span class="transaction-info-additional">(~0.67$)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row py-2">
+                        <div class="col-6 py-0">
+                            <div class="transaction-info-title">
+                                Slippage
+                            </div>
+                        </div>
+                        <div class="col-6 py-0">
+                            <div class="transaction-info">
+                                0.05% <span class="transaction-info-additional">(~0.67$)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row py-2">
+                        <div class="col-6 py-0">
+                            <div class="transaction-info-title">
+                                Minimum received
+                            </div>
+                        </div>
+                        <div class="col-6 py-0">
+                            <div class="transaction-info">
+                                1.098$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="transaction-info-footer">
+                    <div class="row py-2">
+                        <div class="col-6 py-0">
+                            <div class="transaction-info-title">
+                                Recipient
+                            </div>
+                        </div>
+                        <div class="col-6 py-0">
+                            <div class="transaction-info-address">
+                                {{account.substring(0, 5) + '...' + account.substring(account.length - 4)}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
 
 
         <SelectTokensModal :is-show="isShowSelectTokensModal"
@@ -130,10 +229,18 @@
                            :add-selected-token-to-list-func="addSelectedTokenToList"
                            :remove-selected-token-from-list-func="removeSelectedTokenFromList"
 
+                           :ovn-tokens="ovnTokens"
+                           :tokens="tokens"
+                           :is-all-data-loaded="isAllDataLoaded"
+
         />
 
         <AdvancedSettingsModal :is-show="isShowSettingsModal"
                                :set-show-func="showSettingsModals"/>
+
+        <WaitingModal/>
+        <SuccessModal/>
+        <ErrorModal/>
     </div>
 </template>
 
@@ -143,12 +250,19 @@ import InputToken from "@/components/odos/InputToken.vue";
 import OutputToken from "@/components/odos/OutputToken.vue";
 import SelectTokensModal from "@/components/odos/modals/SelectTokensModal.vue";
 import {odosApiService} from "@/services/external/odos-api-service";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import AdvancedSettingsModal from "@/components/odos/modals/AdvancedSettingsModal.vue";
+import {odosSwap} from "@/components/mixins/odos-swap";
+import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
+import SuccessModal from "@/components/common/modal/action/SuccessModal.vue";
+import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
 
 export default defineComponent({
     name: "SwapForm",
+    mixins: [odosSwap],
     components: {
+        ErrorModal, SuccessModal,
+        WaitingModal,
         AdvancedSettingsModal,
         SelectTokensModal,
         InputToken,
@@ -157,7 +271,9 @@ export default defineComponent({
     mounted() {
         this.addNewInputToken();
         this.addNewOutputToken();
-        this.initData()
+        this.loadChains();
+        this.loadTokens();
+        this.initContractData();
     },
     data() {
         return {
@@ -170,14 +286,8 @@ export default defineComponent({
             swapMethod: 'BUY', // BUY (ovnTokens) / SELL (ovnTokens)
             selectTokenType: 'OVERNIGHT', // OVERNIGHT / ALL
 
-            swapResponseInfo: null,
-
-            isContractLoading: false,
-            contractData: null,
-            routerContract: null,
-            executorContract: null,
-
             isShowSettingsModal: false,
+            isSwapLoading: false,
 
         }
     },
@@ -225,22 +335,54 @@ export default defineComponent({
             //todo: add check proportion values
             return this.outputTokens.filter(item => item.selectedToken)
         },
-    },
-    watch: {
-        networkId: function (newVal, oldVal) {
-            if (newVal) {
-                this.initData()
-            }
-        }
-    },
-    methods: {
-        async initData() {
-            let networkId = this.getParams(this.networkName).networkId;
-            await this.loadContract(networkId).then(() => {
-                console.log("Contracts loaded", this.routerContract, this.executorContract);
-            })
 
+        isAnyInputsNeedApprove() {
+            return this.allInputsWithNotApproved.length > 0
         },
+        allInputsWithNotApproved() {
+            return this.selectedFromTokens.filter(token => !token.selectedToken.approveData.approved);
+        },
+        firstInputInQueueForToApprove() {
+            return this.isAnyInputsNeedApprove ? this.allInputsWithNotApproved[0] : null
+        },
+
+        isDisableButton() {
+            return this.inputTokensWithSelectedTokensCount === 0 ||
+                this.outputTokensWithSelectedTokensCount === 0 ||
+                this.swapResponseConfirmInfo.waitingConformation;
+        },
+
+        disableButtonMessage() {
+            if (this.inputTokensWithSelectedTokensCount === 0 ||
+                this.outputTokensWithSelectedTokensCount === 0) {
+                return 'SELECT TOKENS';
+            }
+
+            if (this.swapResponseConfirmInfo.waitingConformation) {
+                return "Confirm in your wallet (" + this.swapResponseConfirmInfo.duration + " sec)"
+            }
+
+            return null;
+        },
+        sumOfAllSelectedTokensInUsd() {
+            let sum = 0
+            for (let i = 0; i < this.selectedFromTokens.length; i++) {
+                let token = this.selectedFromTokens[i];
+                let selectedTokenUsdValue = token.value * token.selectedToken.price;
+                sum += selectedTokenUsdValue;
+            }
+
+            return sum;
+        }
+
+    },
+
+    methods: {
+        ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
+        ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
+        ...mapActions("successModal", ['showSuccessModal']),
+
+
         addNewOutputToken() {
             this.outputTokens.push(this.getNewOutputToken());
         },
@@ -270,6 +412,7 @@ export default defineComponent({
             return {
                 id: randomId,
                 value: null,
+                contractValue: null,
                 selectedToken: null
             }
         },
@@ -278,6 +421,7 @@ export default defineComponent({
             return {
                 id: randomId,
                 value: 0,
+                sum: 0,
                 locked: false,
                 selectedToken: null
             }
@@ -312,10 +456,17 @@ export default defineComponent({
             console.log("Reset outputs");
         },
         swap() {
+            if (this.isSwapLoading) {
+                console.log('Swap method not available, rev sap in process');
+                return;
+            }
+
             console.log("Swap", this.inputTokensWithSelectedTokensCount, this.outputTokensWithSelectedTokensCount);
             if (this.inputTokensWithSelectedTokensCount < 1 || this.outputTokensWithSelectedTokensCount < 1) {
                 return;
             }
+
+            this.isSwapLoading = true;
 
             // slippage
             let slippageInfo = localStorage.getItem('odos_slippage_value');
@@ -330,18 +481,95 @@ export default defineComponent({
                 // chainId: 1,
                 inputTokens: this.getRequestInputTokens(),
                 outputTokens: this.getRequestOutputTokens(),
-                gasPrice: 1000000,
+                gasPrice: 0.001048154,
                 userAddr: this.account,
                 slippageLimitPercent: slippagePercent,
                 sourceBlacklist: [],
                 sourceWhitelist: [],
                 simulate: false,
                 pathViz: false,
-                disableRFQs: false
+                // disableRFQs: false
             }
 
             console.log("Odos request data", requestData);
-            this.swapRequest(requestData);
+            this.swapRequest(requestData)
+                .then(data => {
+                    console.log("Odos swap request success", data)
+                    this.isSwapLoading = false;
+                }).catch(e => {
+                    console.error("Odos swap request failed", e)
+                    this.isSwapLoading = false;
+                })
+        },
+
+        async disapproveToken(token) {
+            let selectedToken = token.selectedToken;
+            if (!selectedToken || !selectedToken.approveData.approved) {
+                return
+            }
+
+            let tokenContract = this.tokensContractMap[selectedToken.address];
+            this.clearApproveToken(tokenContract, this.routerContract.options.address)
+                .then(data => {
+                    console.log("Clear approve success. ", token, data);
+                    this.checkApproveForToken(token);
+                    this.isShowDecreaseAllowanceButton = false;
+                }).catch(e => {
+                    this.isShowDecreaseAllowanceButton = true;
+                    console.error("Clear approve failed. ", e)
+                })
+        },
+        async checkApproveForToken(token, checkedAllowanceValue) { // checkedAllowanceValue in wei
+            let selectedToken = token.selectedToken;
+            if (selectedToken.address === '0x0000000000000000000000000000000000000000') {
+                console.log("Check approve not available. its a root token: ", token);
+                selectedToken.approveData.approved = true
+                return;
+            }
+
+            let tokenContract = this.tokensContractMap[selectedToken.address];
+            console.log('Check Approve contract: ', token, tokenContract, this.account, this.routerContract.options.address);
+            let allowanceValue = await this.getAllowanceValue(tokenContract, this.account, this.routerContract.options.address);
+            console.log('Approve value: ', allowanceValue);
+
+            selectedToken.approveData.allowanceValue = allowanceValue * 1;
+            if (!selectedToken.approveData.allowanceValue) {
+                selectedToken.approveData.approved = false
+                return;
+            }
+
+            if (!checkedAllowanceValue) {
+                selectedToken.approveData.approved = true
+                return;
+            }
+
+            selectedToken.approveData.approved = selectedToken.approveData.allowanceValue >= checkedAllowanceValue;
+        },
+
+        async approve(token) {
+            this.showWaitingModal('Approving in process');
+
+            await this.checkApproveForToken(token, token.contractValue);
+            let selectedToken = token.selectedToken;
+            if (selectedToken.approveData.approved) {
+                console.log("Approve not needed for token: ", token);
+                this.closeWaitingModal();
+                return;
+            }
+
+            let tokenContract = this.tokensContractMap[selectedToken.address];
+            console.log('Approve contract: ', token, tokenContract, this.account, this.routerContract.options.address);
+            this.approveToken(tokenContract, this.routerContract.options.address, token.contractValue ? token.contractValue : selectedToken.balanceData.originalBalance)
+                .then(data => {
+                    console.log("Success approving", data);
+                    this.checkApproveForToken(token, token.contractValue);
+                    this.closeWaitingModal();
+                })
+                .catch(e => {
+                    console.error("Error when approve token.", e);
+                    this.closeWaitingModal();
+                    this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
+                });
         },
 
         getRequestInputTokens() {
@@ -351,11 +579,9 @@ export default defineComponent({
                 let selectedToken = token.selectedToken;
                 console.log("token: ", token)
 
-                let weiMarker = this.getWeiMarker(selectedToken.decimals);
-                let sum = token.decimals === 6 ? token.value * 100 + '' : token.value + '';
                 inputTokens.push({
                     tokenAddress: selectedToken.address,
-                    amount: this.web3.utils.toWei(sum, weiMarker)
+                    amount: token.contractValue
                 })
             }
             return inputTokens;
@@ -373,137 +599,29 @@ export default defineComponent({
             return outputTokens;
         },
 
-        swapRequest(requestData) {
-            return odosApiService.quoteRequest(requestData)
-                .then((data) => {
-                    console.log("Response data for odos request: ", data)
-                    this.swapResponseInfo = data;
-                    // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
-                    this.initWalletTransaction(this.swapResponseInfo);
-                }).catch(e => {
-                    console.log("Swap request error: ", e)
-                })
-        },
-        initWalletTransaction(txData) {
-            console.log("Odos transaction data", txData, this.routerContract, this.executorContract);
+        updateTokenValue(token, value) {
+            console.log('updateTokenValue: ', token, value)
+            token.value = value;
 
-            if (!this.routerContract || !this.executorContract) {
-                console.error("Init wallet transactions failed, odos contracts not found. txData: ", txData)
-                return;
-            }
-
-            // this.routerContract.methods.swa(txData.data).send({
-            //     to: txData.to,
-            //     gas: txData.gas,
-            //     gasPrice: txData.gasPrice,
-            //     nonce: txData.nonce,
-            // }, function(error, transactionHash) {
-            //     if (error) {
-            //         console.log(error);
-            //     } else {
-            //         console.log(transactionHash);
-            //     }
-            // });
-            // {
-            //     "inTokens": [
-            //     "0x0000000000000000000000000000000000000000",
-            //     "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a"
-            // ],
-            //     "outTokens": [
-            //     "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8",
-            //     "0xb86fb1047a955c0186c77ff6263819b37b32440d"
-            // ],
-            //     "inAmounts": [
-            //     "1000000000000000000",
-            //     "1000000000000000000"
-            // ],
-            //     "outAmounts": [
-            //     "868854660994279538688",
-            //     "940862774"
-            // ],
-            //     "gasEstimate": 979112,
-            //     "dataGasEstimate": 0,
-            //     "gweiPerGas": 1000000,
-            //     "gasEstimateValue": 1802324.3488295842,
-            //     "inValues": [
-            //     1840.773482115335,
-            //     1.000072979038449
-            // ],
-            //     "outValues": [
-            //     868.8546327431228,
-            //     971.935412755341
-            // ],
-            //     "netOutValue": -1800483.5587840858,
-            //     "priceImpact": -0.0009847657784032592,
-            //     "percentDiff": -0.05340013668831034,
-            //     "pathId": "b96a780d08a387f966d7e55c3c8cc729",
-            //     "pathViz": null,
-            //     "blockNumber": 89181266
-            // }
-            let transactionData = [
-                {
-                    inputs: {
-                        tokenAddress: txData.inTokens,
-                        amountIn: txData.inAmounts,
-                    },
-                    outputs: {
-                        tokenAddress: txData.outTokens,
-                        amountIn: txData.outAmounts,
-                    },
-                }
-            ]
-
-            this.routerContract.methods.swap(transactionData).on('transactionHash', function (hash) {
-                console.log("Router contract response: ", hash);
-            });
-
-            // (bool success, bytes memory result) = this.routerContract.call{value: 0}(txData.data)
-
-            // const result = this.web3.eth.call({
-            //     to: this.routerContract.options.address,
-            //     data: txData.data
-            // }).then(data => {
-            //     console.log("Call result: ", data);
-            // }).catch(e => {
-            //     console.log("Call error: ", e);
-            // })
-
-
-            // this.routerContract.methods.router(txData).on('transactionHash', function (hash) {
-            //     console.log("Router contract response: ", hash);
-            // });
-
-            // this.routerContract.call({value: 0})(txData.data);
-
-            // this.routerContract.eth.sendTransaction({from: …, to: …, data: TransactionData, …}).on(…);
-            // web3.eth.call({from: …, to: …, data: TransactionData, …}).on(…);
-
-        },
-
-        async loadContract(chainId) {
-            if (this.isContractLoading) {
+            if (!value) {
                 return
             }
-            this.isContractLoading = true;
-            return odosApiService.loadContractData(chainId).then(data => {
-                console.log("Swap form Contract: ", data)
-                this.contractData = data
-                this.routerContract = this._loadContract(this.contractData.routerAbi, this.web3, this.contractData.routerAddress)
-                this.executorContract = this._loadContract(this.contractData.erc20Abi, this.web3, this.contractData.executorAddress)
 
-                console.log("Swap form routerContract: ", this.routerContract)
-                console.log("Swap form routerContract: ", this.executorContract)
-                this.isContractLoading = false;
-            }).catch(e => {
-                console.log("Error load contract", e)
-                this.isContractLoading = false;
-            })
-        },
+            let selectedToken = token.selectedToken;
+            if (selectedToken) {
+                let sum = token.decimals === 6 ? token.value * 100 + '' : token.value + '';
+                token.contractValue = this.web3.utils.toWei(sum, token.selectedToken.weiMarker);
 
-        updateTokenValue(token, value) {
-            console.log('updateTokenValue1: ', token, value)
-            token.value = value;
-            console.log('updateTokenValue2: ', token, value)
+                console.log('updateTokenValue with selected token: ', token, value, token.contractValue);
+
+                if (selectedToken.address === '0x0000000000000000000000000000000000000000') {
+                    console.log("Check approve in update value not available. its a root token: ", token);
+                    selectedToken.approveData.approved = true
+                    return;
+                }
+
+                this.checkApproveForToken(token, token.contractValue);
+            }
         },
 
         lockProportion(isLock, token) {
@@ -514,15 +632,20 @@ export default defineComponent({
             console.log("Swap form", token.id, value, !this.isSlidersOutOfLimit());
             let oldTokenValue = token.value;
 
-            if(!this.isSlidersOutOfLimit()) {
+            token.value = value;
+
+            // if(!this.isSlidersOutOfLimit()) {
                 token.value = value;
+
+                let sum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
+                token.sum = this.$utils.formatMoney(sum, 4)
                 this.subtraction(token, 100 - value);
                 // if (oldTokenValue > value) {
                 //     this.subTokensProportions(token, 100 - value)
                 // } else {
                 //     this.addTokensProportions(token, 100 - value)
                 // }
-            }
+            // }
         },
         subTokensProportions(currentToken, difference) {
             let tokens = this.getActiveTokens(currentToken);
@@ -589,6 +712,9 @@ export default defineComponent({
             let tokens = this.getActiveTokens(token)
             // tokens.sort((a, b) => a.percentage - b.percentage)
             console.log('tokens', tokens, difference)
+            if (tokens.length === 0) {
+                return;
+            }
 
             let proportion = Math.floor(difference / tokens.length)
             let remains = difference % tokens.length
@@ -630,6 +756,8 @@ export default defineComponent({
                     let token = tokens[i];
                     // token.value++
                     token.value = proportion;
+                    let sum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
+                    token.sum = this.$utils.formatMoney(sum, 4)
                 }
             }
         },
@@ -650,6 +778,8 @@ export default defineComponent({
                 newInputToken.selectedToken = selectedToken;
                 this.inputTokens.push(newInputToken);
                 this.removeAllWithoutSelectedTokens(this.inputTokens);
+
+                this.checkApproveForToken(newInputToken);
                 return;
             }
 
@@ -735,8 +865,11 @@ export default defineComponent({
             return !this.isInputToken(swapMethod, selectTokenType);
         },
 
-        isSlidersOutOfLimit() {
-            return this.getOutputsTokensPercentage() > 100;
+        isSlidersOutOfLimit(additionalPercent) {
+            if (!additionalPercent) {
+                additionalPercent = 0;
+            }
+            return this.getOutputsTokensPercentage() + additionalPercent > 100;
         },
         getActiveTokens(currentToken) {
             let sliders = []
@@ -798,17 +931,6 @@ export default defineComponent({
         setSelectTokenType(type) {
             this.selectTokenType = type;
         },
-        _loadContract(file, web3, address) {
-            if (!address) {
-                address = file.address;
-            }
-
-            return new web3.eth.Contract(file.abi, address);
-        },
-
-        checkApproves() {
-
-        },
     }
 })
 </script>
@@ -819,7 +941,7 @@ div {
 }
 
 .swap-container {
-    padding: 40px;
+    padding: 40px 30px;
     gap: 8px;
     background: #FFFFFF;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
@@ -941,4 +1063,88 @@ div {
     color: #FFFFFF;
 }
 
+.disable-button {
+    justify-content: center;
+    align-items: center;
+    padding: 8px 12px;
+
+    height: 48px;
+
+    background: #E5E7EA;
+    border-radius: 2px;
+}
+
+.disable-button-title {
+    text-align: center;
+    align-items: center;
+    gap: 8px;
+
+    width: 100%;
+
+    padding-top: 7px;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+
+    color: #BABFC8;
+}
+
+.decrease-allowance {
+    font-family: Lato, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    height: auto;
+    letter-spacing: 0.1px;
+    line-height: 22px;
+    cursor: pointer;
+}
+
+.transaction-info-container {
+    padding: 20px;
+}
+
+.transaction-info-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+
+    color: #707A8B;
+}
+
+.transaction-info {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: end;
+
+    color: #29323E;
+}
+
+.transaction-info-additional {
+    font-style: normal;
+    font-weight: 200;
+    font-size: 16px;
+    line-height: 24px;
+
+    color: #29323E;
+}
+
+.transaction-info-address {
+    text-decoration: underline;
+    font-weight: bold;
+    text-align: end;
+}
+
+.transaction-info-footer {
+    border-top: 1px solid #DEE1E5;
+    padding-top: 22px;
+}
+
+.transaction-info-body {
+    padding-bottom: 20px;
+}
 </style>

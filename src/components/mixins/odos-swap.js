@@ -1,6 +1,8 @@
 import {odosApiService} from "@/services/external/odos-api-service";
 import loadJSON from "@/utils/http-utils";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
+
+const ODOS_DURATION_CONFIRM_REQUEST = 60
 
 export const odosSwap = {
     data() {
@@ -9,6 +11,7 @@ export const odosSwap = {
             isTokensLoading: false,
             isPricesLoading: false,
             isBalancesLoading: false,
+            isContractLoading: false,
             isTokenExternalDataLoading: false,
 
             chains: null,
@@ -17,14 +20,24 @@ export const odosSwap = {
             ovnTokens: [],
             tokens: [],
 
-            // contractData: null,
-            // routerContract: null,
-            // executorContract: null,
+            contractData: null,
+            routerContract: null,
+            executorContract: null,
+
             tokensContractMap: {}, // { 'contractAddress': {ABI} }
             tokenPricesMap: {},
 
             availableNetworksList: ['polygon', 'bsc', 'optimism', 'arbitrum'],
-            dataBeInited: false
+            dataBeInited: false,
+
+            swapResponseInfo: null,
+            swapResponseConfirmInfo: {
+                duration: 0,
+                counterId: null,
+                waitingConformation: false
+            },
+
+            isShowDecreaseAllowanceButton: true
         }
     },
     async mounted() {
@@ -32,13 +45,16 @@ export const odosSwap = {
     },
     computed: {
         ...mapGetters('web3', ['web3', 'getWeiMarker']),
-        ...mapGetters('network', ['getParams']),
+        ...mapGetters('gasPrice', ['show', 'gasPrice', 'gasPriceGwei', 'gasPriceStation']),
+        ...mapGetters('network', ['getParams', 'networkName', 'networkId']),
         ...mapGetters('accountData', ['account']),
 
         isAllDataLoaded() {
             return !this.isChainsLoading && !this.isTokensLoading;
         },
-
+        isShowDecreaseAllowance () {
+            return this.isShowDecreaseAllowanceButton && this.account === '0x4473D652fb0b40b36d549545e5fF6A363c9cd686'; // test front dev address
+        },
     },
     watch: {
         isAllDataLoaded: async function (newVal, oldValue) {
@@ -53,9 +69,20 @@ export const odosSwap = {
             if (newVal) {
                 this.initAccountData();
             }
-        }
+        },
+        watch: {
+            networkId: function (newVal, oldVal) {
+                if (newVal) {
+                    this.initContractData()
+                }
+            }
+        },
     },
     methods: {
+        ...mapActions("gasPrice", ['refreshGasPrice']),
+        ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
+        ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
+        ...mapActions("successModal", ['showSuccessModal']),
 
         async loadChains() {
             if (this.isChainsLoading) {
@@ -78,19 +105,20 @@ export const odosSwap = {
             }
 
             this.isTokensLoading = true;
-            odosApiService.loadTokens().then(data => {
-                console.log("Tokens: ", data)
-                this.tokensMap = data
-                this.isTokensLoading = false;
-            }).catch(e => {
-                console.log("Error load tokens", e)
-                this.isTokensLoading = false;
-            })
+            odosApiService.loadTokens()
+                .then(data => {
+                    console.log("Tokens: ", data)
+                    this.tokensMap = data
+                    this.isTokensLoading = false;
+                }).catch(e => {
+                    console.log("Error load tokens", e)
+                    this.isTokensLoading = false;
+                })
         },
 
 
         async initData() {
-            console.log('initData');
+            console.log('initData for network: ', this.networkName);
             if (this.availableNetworksList.includes(this.networkName)) {
                 console.log('initData1');
                 let networkId = this.getParams(this.networkName).networkId;
@@ -197,23 +225,33 @@ export const odosSwap = {
             }
 
         },
-        // async loadContract(chainId) {
-        //     if (this.isContractLoading) {
-        //         return
-        //     }
-        //     this.isContractLoading = true;
-        //     return odosApiService.loadContractData(chainId).then(data => {
-        //         console.log("Contract: ", data)
-        //         this.contractData = data
-        //         this.routerContract = this._loadContract(this.contractData.routerAbi, this.web3, this.contractData.routerAddress)
-        //         this.executorContract = this._loadContract(this.contractData.erc20Abi, this.web3, this.contractData.executorAddress)
-        //
-        //         this.isContractLoading = false;
-        //     }).catch(e => {
-        //         console.log("Error load contract", e)
-        //         this.isContractLoading = false;
-        //     })
-        // },
+
+        async initContractData() {
+            let networkId = this.getParams(this.networkName).networkId;
+            await this.loadContract(networkId).then(() => {
+                console.log("Contracts loaded", this.routerContract, this.executorContract);
+            })
+
+        },
+        async loadContract(chainId) {
+            if (this.isContractLoading) {
+                return
+            }
+            this.isContractLoading = true;
+            return odosApiService.loadContractData(chainId).then(data => {
+                console.log("Swap form Contract: ", data)
+                this.contractData = data
+                this.routerContract = this._loadContract(this.contractData.routerAbi, this.web3, this.contractData.routerAddress)
+                this.executorContract = this._loadContract(this.contractData.erc20Abi, this.web3, this.contractData.executorAddress)
+
+                console.log("Swap form routerContract: ", this.routerContract)
+                console.log("Swap form routerContract: ", this.executorContract)
+                this.isContractLoading = false;
+            }).catch(e => {
+                console.log("Error load contract", e)
+                this.isContractLoading = false;
+            })
+        },
         loadPricesInfo(chainId) {
             if (this.isPricesLoading) {
                 return
@@ -263,9 +301,14 @@ export const odosSwap = {
                             name: item.name,
                             symbol: item.symbol,
                             logoUrl: logoUrl,
+                            weiMarker: this.getWeiMarker(item.decimals),
                             selected: false,
                             balanceData: {},
-                            price: 0
+                            approveData: {
+                                allowanceValue: 0,
+                                approved: false
+                            },
+                            price: 0,
                         });
                     }
                     continue;
@@ -279,8 +322,13 @@ export const odosSwap = {
                         name: item.name,
                         symbol: item.symbol,
                         logoUrl: 'https://assets.odos.xyz/tokens/' + item.symbol + '.webp',
+                        weiMarker: this.getWeiMarker(item.decimals),
                         selected: false,
                         balanceData: {},
+                        approveData: {
+                            value: 0,
+                            approved: false
+                        },
                         price: 0
                     });
                 }
@@ -328,6 +376,153 @@ export const odosSwap = {
             this.ovnTokens = [];
         },
 
+
+        swapRequest(requestData) {
+            return odosApiService.swapRequest(requestData)
+                .then((data) => {
+                    console.log("Response data for odos request: ", data)
+                    this.swapResponseInfo = data;
+                    // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
+                    this.initWalletTransaction(this.swapResponseInfo);
+                }).catch(e => {
+                    console.log("Swap request error: ", e)
+                })
+        },
+        startSwapConfirmTimer() {
+            this.swapResponseConfirmInfo.duration = ODOS_DURATION_CONFIRM_REQUEST;
+            this.swapResponseConfirmInfo.waitingConformation = true;
+            this.swapResponseConfirmInfo.counterId = setInterval(() => {
+                this.swapResponseConfirmInfo.duration--;
+                if (this.swapResponseConfirmInfo.duration <= 0) {
+                    this.swapResponseConfirmInfo.waitingConformation = false;
+                    clearInterval(this.swapResponseConfirmInfo.counterId);
+                    this.closeWaitingModal();
+                }
+            }, 1000);
+        },
+        initWalletTransaction(txData) {
+            console.log("Odos transaction data", txData, this.routerContract, this.executorContract);
+
+            if (!this.routerContract || !this.executorContract) {
+                console.error("Init wallet transactions failed, odos contracts not found. txData: ", txData)
+                return;
+            }
+
+            this.startSwapConfirmTimer();
+
+            // this.routerContract.methods.swa(txData.data).send({
+            //     to: txData.to,
+            //     gas: txData.gas,
+            //     gasPrice: txData.gasPrice,
+            //     nonce: txData.nonce,
+            // }, function(error, transactionHash) {
+            //     if (error) {
+            //         console.log(error);
+            //     } else {
+            //         console.log(transactionHash);
+            //     }
+            // });
+            // {
+            //     "inTokens": [
+            //     "0x0000000000000000000000000000000000000000",
+            //     "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a"
+            // ],
+            //     "outTokens": [
+            //     "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8",
+            //     "0xb86fb1047a955c0186c77ff6263819b37b32440d"
+            // ],
+            //     "inAmounts": [
+            //     "1000000000000000000",
+            //     "1000000000000000000"
+            // ],
+            //     "outAmounts": [
+            //     "868854660994279538688",
+            //     "940862774"
+            // ],
+            //     "gasEstimate": 979112,
+            //     "dataGasEstimate": 0,
+            //     "gweiPerGas": 1000000,
+            //     "gasEstimateValue": 1802324.3488295842,
+            //     "inValues": [
+            //     1840.773482115335,
+            //     1.000072979038449
+            // ],
+            //     "outValues": [
+            //     868.8546327431228,
+            //     971.935412755341
+            // ],
+            //     "netOutValue": -1800483.5587840858,
+            //     "priceImpact": -0.0009847657784032592,
+            //     "percentDiff": -0.05340013668831034,
+            //     "pathId": "b96a780d08a387f966d7e55c3c8cc729",
+            //     "pathViz": null,
+            //     "blockNumber": 89181266
+            // }
+            let transactionData = [
+                {
+                    inputs: {
+                        tokenAddress: txData.inTokens,
+                        amountIn: txData.inAmounts,
+                    },
+                    outputs: {
+                        tokenAddress: txData.outTokens,
+                        amountIn: txData.outAmounts,
+                    },
+                }
+            ]
+
+            this.showWaitingModal('Swapping in process');
+            const result = this.web3.eth.sendTransaction(
+                {
+                    ...txData.transaction,
+                    from: this.account}
+            ).then(data => {
+                console.log("Call result: ", data);
+                this.closeWaitingModal();
+
+                this.showSuccessModal({
+                    successTxHash: data.transactionHash,
+                    successAction: 'swapOdosUsdPlus',
+                });
+
+                this.loadBalances();
+            }).catch(e => {
+                console.log("Call error: ", e);
+                this.closeWaitingModal();
+                this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e}, );
+            })
+
+
+            // this.routerContract.methods.router(txData).on('transactionHash', function (hash) {
+            //     console.log("Router contract response: ", hash);
+            // });
+
+            // this.routerContract.call({value: 0})(txData.data);
+
+            // this.routerContract.eth.sendTransaction({from: …, to: …, data: TransactionData, …}).on(…);
+            // web3.eth.call({from: …, to: …, data: TransactionData, …}).on(…);
+
+        },
+        async getAllowanceValue(contract, from, checkContractAddress) {
+            return await contract.methods.allowance(from, checkContractAddress).call();
+        },
+        async approveToken(contract, contractAddressForApprove, value) {
+            console.log('approveToken: ', contract, contractAddressForApprove, value);
+            let from = this.account;
+            await this.refreshGasPrice();
+            let approveParams = {gasPrice: this.gasPriceGwei, from: from};
+            console.log('approveToken: ', contract, contractAddressForApprove, value, approveParams);
+            return contract.methods.approve(contractAddressForApprove, value).send(approveParams)
+        },
+        async clearApproveToken(contract, contractAddressForDisapprove) {
+            console.log('clearApproveToken: ', contract, contractAddressForDisapprove);
+            let from = this.account;
+            let allowanceValue = await this.getAllowanceValue(contract, from, contractAddressForDisapprove);
+            await this.refreshGasPrice();
+            let approveParams = {gasPrice: this.gasPriceGwei, from: from};
+            console.log('clearApproveToken: ', contract, contractAddressForDisapprove, allowanceValue, approveParams);
+            return contract.methods.decreaseAllowance(contractAddressForDisapprove, allowanceValue).send(approveParams)
+        },
         _loadContract(file, web3, address) {
             if (!address) {
                 address = file.address;

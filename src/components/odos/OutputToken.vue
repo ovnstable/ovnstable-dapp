@@ -6,7 +6,7 @@
                     <div class="col-7">
                         <input
                                 disabled
-                                v-model="token.value"
+                                v-model="tokenInfo.sum"
                                 type="text"
                                 placeholder="0"
                                 class="input-style"/>
@@ -50,7 +50,7 @@
                     <div class="col-6">
                         <div class="usd-equal-text">
                             <div v-if="token.selectedToken && token.selectedToken.balanceData.balance">
-                                ~ ${{$utils.formatMoney(token.selectedToken.price, 2)}}
+                                ~ ${{$utils.formatMoney(tokenInfo.sum * token.selectedToken.price, 2)}}
                             </div>
                             <div v-else>
                                 $00.<span class="numeric-change">00</span>
@@ -176,7 +176,7 @@ div {
 .select-token-item-text {
     display: inline-block;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
     color: #29323E;
     margin-right: 15px;
@@ -186,7 +186,7 @@ div {
     display: inline-block;
     font-style: normal;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
     color: #29323E;
     margin-right: 15px;

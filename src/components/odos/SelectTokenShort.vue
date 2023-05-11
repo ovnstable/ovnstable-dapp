@@ -92,7 +92,7 @@ div {
 .token-symbol {
     font-style: normal;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
     /* identical to box height, or 120% */
 

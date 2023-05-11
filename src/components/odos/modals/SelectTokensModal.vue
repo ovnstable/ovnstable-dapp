@@ -77,7 +77,6 @@ export default defineComponent({
         SelectTokenWithSearch,
         SelectTokenShort
     },
-    mixins: [odosSwap],
     props: {
         isShow: {
             type: Boolean,
@@ -107,6 +106,21 @@ export default defineComponent({
             type: Function,
             required: true
         },
+
+        ovnTokens: {
+            type: Array,
+            required: true
+        },
+
+        tokens: {
+            type: Array,
+            required: true
+        },
+
+        isAllDataLoaded: {
+            type: Boolean,
+            required: true
+        },
     },
     data() {
       return {
@@ -115,13 +129,9 @@ export default defineComponent({
       }
     },
     mounted() {
-        this.loadChains();
-        this.loadTokens();
+
     },
     computed: {
-        ...mapGetters('network', ['networkId', "networkName", 'getParams']),
-        ...mapGetters('web3', ['web3']),
-
 
         selectedFromTokens() {
             return this.fromTokens && this.selectedTokensFromAddresses ?

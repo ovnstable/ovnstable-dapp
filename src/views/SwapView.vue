@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <div class="pt-10">
+            <div class="pt-10 pb-5">
                 <label class="title-label">
                     Swap
                 </label>
@@ -576,5 +576,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.title-label {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 54px;
+    line-height: 60px;
 
+    color: #29323E;
+
+    padding-bottom: 28px;
+}
 </style>

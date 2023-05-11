@@ -221,6 +221,23 @@
                     </v-list-item-title>
                 </v-list-item>
             </v-list-group>
+
+            <v-list-item :class="selectedTab === 'swap-odos' ? 'selected-page-item' : ''"
+                         @click="swapOdosClick"
+                         class="list-item-hover mx-n2">
+                <v-list-item-icon>
+                    <img :src="require('@/assets/icon/menu/swap.svg')"
+                         class="navbar-page-link">
+                </v-list-item-icon>
+                <v-list-item-title class="mx-n1">
+                    <label :class="selectedTab === 'swap-odos' ? 'selected-page' : ''"
+                           class="navbar-page-label">
+                        SWAP
+                    </label>
+                </v-list-item-title>
+            </v-list-item>
+
+
             <div class="navbar-list-divider mt-3 mb-1"></div>
             <label class="navbar-list-header">
                 Delta-Neutrals
@@ -460,6 +477,11 @@ export default {
         featuredClick() {
             this.selectTab('featured');
             this.goToActionByPath('/featured', {tabName: 'featured'});
+        },
+
+        swapOdosClick() {
+            this.selectTab('swap-odos');
+            this.goToActionByPath('/swap', {tabName: 'swap-odos'});
         },
 
         dashBoardClick() {

@@ -202,7 +202,7 @@ div {
 .token-symbol {
     font-style: normal;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
     /* identical to box height, or 120% */
 
@@ -287,7 +287,7 @@ div {
 .search-token-symbol {
     font-style: normal;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
 
     color: #29323E;
@@ -296,7 +296,7 @@ div {
 .search-token-symbol-base {
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 24px;
     color: #707A8B;
 }

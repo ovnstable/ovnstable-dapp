@@ -100,7 +100,7 @@ class OdosApiService {
         };
 
         return new Promise((resolve, reject) => {
-            apiService.postJson(API_URL + '/sor/quote', requestData, fetchOptions)
+            apiService.postJson(API_URL + '/sor/swap', requestData, fetchOptions)
                 .then(data => {
                     resolve(data)
                 })

@@ -1,0 +1,52 @@
+{
+  "name": "delta_chro_weth_usdc",
+  "nameUp": "DELTA CHRO ARB/USDC",
+  "nameToken": "DELTA CHRO",
+  "prototype": false,
+  "openPrototype": true,
+  "archive": false,
+  "disabled": true,
+  "highRisk": true,
+
+  "exchangeContract": "ets_delta_chro_weth_usdc_exchanger",
+
+  "tokenContract": "ets_delta_chro_weth_usdc_token",
+  "etsTokenDecimals": 6,
+
+  "actionAsset": "asset",
+  "actionTokenName": "USDC",
+  "actionTokenDecimals": 6,
+
+  "address": "0xfE4e921C2ba617740E643c8CD2a62317e930F703",
+  "tokenAddress": "0xbAD6d76F841cfCA539bF2b585d3694640394F2F4",
+
+  "chain": 42161,
+  "chainName": "arbitrum",
+  "borrowFrom": "AAVE",
+  "dex": "Chronos",
+  "gauge": "",
+  "poolName": "WETH/USDC",
+  "range" : "WIDE",
+
+  "token1": "WETH",
+  "token2": "USDC",
+  "hedgeToken": "WETH",
+  "hasUsdPlus": false,
+  "tokenPair": "weth_usdc",
+
+  "maxSupply": 10000.00,
+  "overcapEnabled": true,
+  "inceptionDate": "11 May 2023",
+
+  "iconName": "delta_chro_weth_usdc",
+
+  "mainColor": "#29A0F0",
+  "cardBgColor": "radial-gradient(108.67% 595.92% at 100% -3.25%, #F4F4F4 0%, #9CC2DF 31.55%, #2C374B 54.47%, #29A0F0 100%)",
+
+  "cardTitle": "Generate yield on ARB-USDC pool by hedging your risks and simplify process.",
+  "aboutText": "The exchange-traded strategy “BETA” is an ERC-20 structured product built on Arbitrum Chain that lets you leverage a collateralized debt position (USDC lent on Silo) to borrow a volatile asset (ARB), pair it with USDС stablecoin, and provide ARB/USDC liquidity on Ramses Exchange all in one action. This allows earning high APY and hedging against ARB volatility. ETS “BETA” keeps track of ARB/USDC price changes. There are 3 types of price ranges: wide, narrow, very narrow. ETS “BETA” has wide price range. It can be changed depending on the market and conditions on it.<br/><br/>The unique feature of ETS “BETA” is that it automatically administers a health factor on Silo and rebalances your Lent/Borrowed amounts to maintain a stringent Health Factor meaning. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.<br/><br/>Users also benefit from minimal gas costs associated with minting, redeeming, and all other DeFi activities because this product is deployed on Arbitrum – a highly scalable L2 chain.",
+  "riskText": "By depositing USDC into this strategy, you are automatically borrowing an equal value of ARB from SILO at a rate roughly equal to the current price of ARB denoted above. <br/><br/>The strategy's smart contract is designed to automatically invest these equal values of ARB & USDC into Ramses Exchange ARB/USDC Liquidity Pool, after which these LP Tokens are staked into the Gauge Pool.",
+  "impermanentText": "While the Ramses Exchange pools will accrue transaction fees that generate yields, the pool may become imbalanced; when the user withdraws their investment, the strategy's smart contract may need to use the user's funds to buy additional ARB to repay the lent amount (plus interest), which can result in a net loss from the initial deposit.",
+  "ammText": "The strategy's smart contract automatically moves your deposit into the said Automated Market Maker (i.e., Ramses Exchange) and, in doing so, may incur an AMM’s smart contract risk.<br/><br/>By depositing funds into this smart contract, a user understands and agrees to the strategies to which it will invest underlying assets.",
+  "importantText": "Yield/APY is not guaranteed and can be highly variable depending on the volume and rewards from the underlying AMM as well as the price of a volatile asset (ARB). Farmers may incur net losses if the impermanent loss is more significant than the yield earned."
+}

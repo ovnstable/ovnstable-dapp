@@ -477,7 +477,7 @@ const actions = {
 
         const wcInitOptions = {
             qrcodeModalOptions: {
-                mobileLinks: ['metamask', 'rainbow', 'zerion', "argent", "imtoken", "pillar"] // 'argent',
+                mobileLinks: ['metamask', 'trust', 'rainbow', 'zerion', "argent", "imtoken", "pillar"] // 'argent',
             },
             connectFirstChainId: true,
             requiredChains: SUPPORTED_NETWORKS

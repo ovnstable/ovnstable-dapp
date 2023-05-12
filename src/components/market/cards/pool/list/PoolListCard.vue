@@ -217,6 +217,12 @@ export default {
                 case 'Velocore':
                     url = 'https://app.velocore.xyz/liquidity/';
                     break;
+                case 'Chronos':
+                    url = 'https://app.chronos.exchange/liquidity/';
+                    break;
+                case 'Gnd':
+                    url = 'https://farm.gndprotocol.com/farms';
+                    break;
                 default:
                     url = this.cardData.data.explorerUrl + '/address/';
                     break;

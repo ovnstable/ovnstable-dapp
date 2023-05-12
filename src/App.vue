@@ -189,6 +189,11 @@ export default {
     --onboard-font-size-5: 18px;
     --onboard-font-size-6: 16px;
     --onboard-font-size-7: 14px;
+
+    /* WARNINGS */
+    --onboard-warning-100:  var(--secondary);
+    --onboard-warning-400:  var(--card-info-background);
+    --onboard-warning-700:  var(--main-gray-text);
 }
 
 html {

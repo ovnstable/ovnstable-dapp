@@ -24,6 +24,9 @@
                                 <div class="selected-token-item-text">
                                     {{token.selectedToken.symbol}}
                                 </div>
+                                <div class="select-token-with-token-item-img">
+                                    <img src="/assets/icon/swap/token-select-closed.svg" alt="select-token">
+                                </div>
                             </div>
                         </div>
                         <div v-else
@@ -87,12 +90,12 @@
                   <div v-if="tokenInfo.locked"
                        @click="lockProportionFunc(false, tokenInfo)"
                        class="lock-container">
-                      <img src="/assets/icon/swap/proportion-lock-open.svg" alt="select-token">
+                      <img src="/assets/icon/swap/proportion-lock-close.svg" alt="select-token">
                   </div>
                   <div v-else
                        @click="lockProportionFunc(true, tokenInfo)"
                        class="lock-container">
-                      <img src="/assets/icon/swap/proportion-lock-close.svg" alt="select-token">
+                      <img src="/assets/icon/swap/proportion-lock-open.svg" alt="select-token">
                   </div>
               </div>
             </div>
@@ -144,7 +147,7 @@ div {
 
 .input-container {
     padding: 12px 20px;
-    border: 2px solid #F5F5F5;
+    border: 2px solid var(--swap-output-border);
     border-radius: 20px;
 }
 
@@ -159,15 +162,16 @@ div {
     position: absolute;
 
     padding: 8px;
-    border: 2px solid #F5F5F5;
+    border: 2px solid var(--swap-output-border);
     border-radius: 40px;
 
     cursor: pointer;
 }
+
 .selected-token-container {
     position: absolute;
     padding: 12px;
-    background: #E5E7EA;
+    background: var(--swap-select-token);
     border-radius: 40px;
     cursor: pointer;
 }
@@ -178,7 +182,7 @@ div {
     font-weight: 700;
     font-size: 18px;
     line-height: 24px;
-    color: #29323E;
+    color: var(--main-gray-text);
     margin-right: 15px;
 }
 
@@ -188,7 +192,7 @@ div {
     font-weight: 600;
     font-size: 18px;
     line-height: 24px;
-    color: #29323E;
+    color: var(--main-gray-text);
     margin-right: 15px;
     padding-left: 30px;
 }
@@ -197,7 +201,13 @@ div {
 .select-token-item-img {
     position: absolute;
     right: 0;
-    top: 10px;
+    top: 8px;
+}
+
+.select-token-with-token-item-img {
+    position: absolute;
+    right: 0;
+    top: 12px;
 }
 
 .selected-token-item-img {
@@ -233,6 +243,7 @@ div {
     outline: 0;
 
     max-width: 100%;
+    color: var(--main-gray-text);
 
     font-style: normal;
     font-weight: 400;

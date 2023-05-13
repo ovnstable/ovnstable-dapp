@@ -40,6 +40,22 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--main-slider-background',
+        enabled: true,
+        theme: {
+            light: '#E5E7EA',
+            dark: '#29323E'
+        }
+    },
+    {
+        name: '--swap-main-banner-background',
+        enabled: true,
+        theme: {
+            light: '#FFFFFF',
+            dark: '#1D2029'
+        }
+    },
+    {
         name: '--card-banner-status-container',
         enabled: true,
         theme: {
@@ -344,6 +360,22 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--swap-input-placeholder',
+        enabled: true,
+        theme: {
+            light: '#F5F5F5',
+            dark: '#29323E'
+        }
+    },
+    {
+        name: '--swap-select-token',
+        enabled: true,
+        theme: {
+            light: '#E5E7EA',
+            dark: '#3D4657'
+        }
+    },
+    {
         name: '--theme-icon-color',
         enabled: true,
         theme: {
@@ -372,6 +404,22 @@ export const THEME_MODE_PARAMS = [
         enabled: true,
         theme: {
             light: '#E5E7EA',
+            dark: '#4C586D'
+        }
+    },
+    {
+        name: '--swap-output-border',
+        enabled: true,
+        theme: {
+            light: '#F5F5F5',
+            dark: '#29323E'
+        }
+    },
+    {
+        name: '--swap-toggle-border',
+        enabled: true,
+        theme: {
+            light: '#29323E',
             dark: '#29323E'
         }
     },

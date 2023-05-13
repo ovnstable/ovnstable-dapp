@@ -1,141 +1,162 @@
 <template>
     <div>
         <div class="swap-container">
-            <div class="swap-header">
-                <div @click="showSettingsModals(true)" class="swap-settings">
-                    <img src="/assets/icon/swap/settings.svg" alt="settings">
+            <div v-if="!isTokensLoadedAndFiltered"
+                 class="loader-container">
+                <div class="row">
+                    <v-row align="center" justify="center">
+                        <v-progress-circular
+                                width="2"
+                                size="24"
+                                color="#8FA2B7"
+                                indeterminate
+                        ></v-progress-circular>
+                    </v-row>
                 </div>
             </div>
 
-            <div class="swap-body">
-                <div>
-                    <div class="input-swap-container">
-                        <div class="swap-title pb-2">
-                            <span v-if="swapMethod === 'SELL'">
-                                 Swap from Overnight
-                            </span>
-                            <span v-else>
-                                Swap from
-                            </span>
-                        </div>
-                        <div v-for="token in inputTokens" :key="token.id" class="input-component-container">
-
-                            <div v-if="isShowDecreaseAllowance && token.selectedToken"
-                                 @click="disapproveToken(token)"
-                                 class="decrease-allowance">
-                                Decrease Allowance
-                            </div>
-
-                            <InputToken
-                                    :token-info="token"
-                                    :remove-item-func="removeInputToken"
-                                    :is-token-removable="isInputTokensRemovable"
-                                    :select-token-func="selectInputToken"
-                                    :update-token-value-func="updateTokenValue"
-                            />
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div v-if="isInputTokensAddAvailable"
-                                        @click="addNewInputToken"
-                                        class="add-token-text">
-                                    + Select token
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div @click="maxAll" class="add-token-text max-all">
-                                    Max all
-                                </div>
-                            </div>
-                        </div>
+            <div v-else>
+                <div class="swap-header">
+                    <div @click="showSettingsModals(true)" class="swap-settings">
+                        <img v-if="light" src="/assets/icon/swap/settings.svg" alt="settings">
+                        <img v-else src="/assets/icon/swap/settings-dark.svg" alt="settings">
                     </div>
+                </div>
 
-                   <div class="pt-5">
-                       <div @click="changeSwap()" class="change-swap-container">
-                           <div class="change-swap-image">
-                               <img src="/assets/icon/swap/change-swap-vector.svg" alt="change-swap">
+                <div class="swap-body">
+                    <div>
+                        <div class="input-swap-container">
+                            <div class="swap-title pb-2">
+                                <span v-if="swapMethod === 'SELL'">
+                                     Swap from Overnight
+                                </span>
+                                <span v-else>
+                                    Swap from
+                                </span>
+                            </div>
+                            <div v-for="token in inputTokens" :key="token.id" class="input-component-container">
+
+                                <div v-if="isShowDecreaseAllowance && token.selectedToken"
+                                     @click="disapproveToken(token)"
+                                     class="decrease-allowance">
+                                    Decrease Allowance
+                                </div>
+
+                                <InputToken
+                                        :token-info="token"
+                                        :remove-item-func="removeInputToken"
+                                        :is-token-removable="isInputTokensRemovable"
+                                        :select-token-func="selectInputToken"
+                                        :update-token-value-func="updateTokenValue"
+                                />
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div v-if="isInputTokensAddAvailable"
+                                            @click="addNewInputToken"
+                                            class="add-token-text">
+                                        + Select token
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div @click="maxAll"
+                                         :class="inputTokensWithSelectedTokensCount === 0 ? 'add-token-text-disabled' : ''"
+                                         class="add-token-text max-all">
+                                        Max all
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                       <div class="pt-5">
+                           <div @click="changeSwap()" class="change-swap-container">
+                               <div class="change-swap-image rotate" >
+                                   <img src="/assets/icon/swap/change-swap-vector.svg" alt="change-swap">
+                               </div>
                            </div>
                        </div>
-                   </div>
 
-                    <div class="out-swap-container">
-                        <div class="swap-title pb-2">
-                            <span v-if="swapMethod === 'BUY'">
-                                Swap to Overnight
-                            </span>
-                            <span v-else>
-                                Swap to
-                            </span>
-                        </div>
-                        <div v-for="token in outputTokens" :key="token.id" class="input-component-container">
-                            <OutputToken
-                                    :token-info="token"
-                                    :remove-item-func="removeOutputToken"
-                                    :is-token-removable="isOutputTokensRemovable"
-                                    :lock-proportion-func="lockProportion"
-                                    :update-slider-value-func="updateSliderValue"
-                                    :select-token-func="selectOutputToken"
-                            />
-                        </div>
+                        <div class="out-swap-container">
+                            <div class="swap-title pb-2">
+                                <span v-if="swapMethod === 'BUY'">
+                                    Swap to Overnight
+                                </span>
+                                <span v-else>
+                                    Swap to
+                                </span>
+                            </div>
+                            <div v-for="token in outputTokens" :key="token.id" class="input-component-container">
+                                <OutputToken
+                                        :token-info="token"
+                                        :remove-item-func="removeOutputToken"
+                                        :is-token-removable="isOutputTokensRemovable"
+                                        :lock-proportion-func="lockProportion"
+                                        :update-slider-value-func="updateSliderValue"
+                                        :select-token-func="selectOutputToken"
+                                />
+                            </div>
 
+                            <div class="row">
+                                <div class="col-6">
+                                    <div v-if="isOutputTokensAddAvailable"
+                                         @click="addNewOutputToken"
+                                         class="add-token-text">
+                                        + Select token
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div @click="resetOutputs"
+                                         :class="outputTokensWithSelectedTokensCount === 0 ? 'add-token-text-disabled' : ''"
+                                         class="add-token-text max-all">
+                                        Reset output %
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="swap-footer pt-5">
+                    <div class="swap-button-container">
+                        <div v-if="isDisableButton"
+                             class="disable-button">
+                            <div class="disable-button-title">
+                                <div>
+                                    {{disableButtonMessage}}
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else-if="isAnyInputsNeedApprove"
+                             @click="approve(firstInputInQueueForToApprove)"
+                             class="swap-button">
+                            <div class="swap-button-title">
+                                <div>
+                                    APPROVE {{firstInputInQueueForToApprove.selectedToken.symbol}}
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else
+                             @click="swap()"
+                             class="swap-button">
+                            <div class="swap-button-title">
+                                <div>
+                                    SWAP
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="label-container pt-3">
                         <div class="row">
-                            <div class="col-6">
-                                <div v-if="isOutputTokensAddAvailable"
-                                     @click="addNewOutputToken"
-                                     class="add-token-text">
-                                    + Select token
+                            <div class="col-6 pr-1" style="padding-top:15px">
+                                <div class="powered-text">
+                                    Powered by
                                 </div>
                             </div>
-                            <div class="col-6">
-                                <div @click="resetOutputs" class="add-token-text max-all">
-                                    Reset output %
+                            <div class="col-6 pl-0">
+                                <div class="powered-image">
+                                    <img src="/assets/icon/swap/powered-by-odos.svg" alt="powered by odos">
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="swap-footer pt-5">
-                <div class="swap-button-container">
-                    <div v-if="isDisableButton"
-                         class="disable-button">
-                        <div class="disable-button-title">
-                            <div>
-                                {{disableButtonMessage}}
-                            </div>
-                        </div>
-                    </div>
-                    <div v-else-if="isAnyInputsNeedApprove"
-                         @click="approve(firstInputInQueueForToApprove)"
-                         class="swap-button">
-                        <div class="swap-button-title">
-                            <div>
-                                APPROVE {{firstInputInQueueForToApprove.selectedToken.symbol}}
-                            </div>
-                        </div>
-                    </div>
-                    <div v-else
-                         @click="swap()"
-                         class="swap-button">
-                        <div class="swap-button-title">
-                            <div>
-                                SWAP
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="label-container pt-3">
-                    <div class="row">
-                        <div class="col-6 pr-1" style="padding-top:15px">
-                            <div class="powered-text">
-                                Powered by
-                            </div>
-                        </div>
-                        <div class="col-6 pl-0">
-                            <div class="powered-image">
-                                <img src="/assets/icon/swap/powered-by-odos.svg" alt="powered by odos">
                             </div>
                         </div>
                     </div>
@@ -269,11 +290,7 @@ export default defineComponent({
         OutputToken
     },
     mounted() {
-        this.addNewInputToken();
-        this.addNewOutputToken();
-        this.loadChains();
-        this.loadTokens();
-        this.initContractData();
+        this.init();
     },
     data() {
         return {
@@ -293,6 +310,7 @@ export default defineComponent({
     },
     computed: {
         ...mapGetters('network', ['getParams', 'networkId']),
+        ...mapGetters('theme', ['light']),
         ...mapGetters('web3', ['web3', 'getWeiMarker']),
 
         isInputTokensRemovable() {
@@ -327,11 +345,11 @@ export default defineComponent({
             return this.outputTokens.filter(item => item.selectedToken).length;
         },
 
-        selectedFromTokens() {
+        selectedInputTokens() {
             //todo: add check balance
             return this.inputTokens.filter(item => item.selectedToken)
         },
-        selectedToTokens() {
+        selectedOutputTokens() {
             //todo: add check proportion values
             return this.outputTokens.filter(item => item.selectedToken)
         },
@@ -340,7 +358,7 @@ export default defineComponent({
             return this.allInputsWithNotApproved.length > 0
         },
         allInputsWithNotApproved() {
-            return this.selectedFromTokens.filter(token => !token.selectedToken.approveData.approved);
+            return this.selectedInputTokens.filter(token => !token.selectedToken.approveData.approved);
         },
         firstInputInQueueForToApprove() {
             return this.isAnyInputsNeedApprove ? this.allInputsWithNotApproved[0] : null
@@ -366,8 +384,8 @@ export default defineComponent({
         },
         sumOfAllSelectedTokensInUsd() {
             let sum = 0
-            for (let i = 0; i < this.selectedFromTokens.length; i++) {
-                let token = this.selectedFromTokens[i];
+            for (let i = 0; i < this.selectedInputTokens.length; i++) {
+                let token = this.selectedInputTokens[i];
                 let selectedTokenUsdValue = token.value * token.selectedToken.price;
                 sum += selectedTokenUsdValue;
             }
@@ -376,18 +394,86 @@ export default defineComponent({
         }
 
     },
+    watch: {
+        outputTokensWithSelectedTokensCount: function (val, oldVal) {
+
+            // lock first
+            if (val === 1) {
+                let token = this.selectedOutputTokens[0];
+                token.value = 100;
+                this.lockProportion(true, token);
+                this.recalculateOutputTokensSum();
+                return;
+            }
+
+            // unlock first
+            if (val === 2 && oldVal === 1) {
+                let token = this.selectedOutputTokens[0];
+                this.lockProportion(false, token);
+                this.recalculateOutputTokensSum();
+                return;
+            }
+        },
+        sumOfAllSelectedTokensInUsd: function (val, oldVal) {
+            this.recalculateOutputTokensSum();
+        },
+
+        isTokensLoadedAndFiltered: function (val, oldVal) {
+            if (val) {
+                this.addDefaultOvnToken();
+            }
+        },
+        networkId: function (newVal, oldVal) {
+            if (newVal) {
+                this.clearForm();
+            }
+        }
+    },
 
     methods: {
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("successModal", ['showSuccessModal']),
 
+        init() {
+            this.loadChains();
+            this.loadTokens();
+            this.initContractData();
 
+            this.$bus.$on('odos-transaction-finished', (data) => {
+                this.finishTransaction();
+            })
+        },
+        addDefaultOvnToken() {
+            let ovnSelectedToken = this.getDefaultOvnToken();
+            if (!ovnSelectedToken) {
+                this.addNewInputToken();
+                this.addNewOutputToken();
+                return;
+            }
+
+            ovnSelectedToken.selected = true;
+
+            if (this.swapMethod === 'BUY') {
+                this.addSelectedTokenToOutputList(ovnSelectedToken);
+                this.addNewInputToken();
+                return;
+            }
+
+            if (this.swapMethod === 'SELL') {
+                this.addSelectedTokenToInputList(ovnSelectedToken);
+                this.addNewOutputToken();
+                return;
+            }
+
+            console.error("Error when add default ovn token. Method not found: ", this.swapMethod);
+        },
         addNewOutputToken() {
             this.outputTokens.push(this.getNewOutputToken());
         },
         removeOutputToken(id) {
-            this.removeToken(this.outputTokens, id)
+            this.removeToken(this.outputTokens, id);
+            this.resetOutputs();
         },
         addNewInputToken() {
             this.inputTokens.push(this.getNewInputToken());
@@ -429,31 +515,62 @@ export default defineComponent({
 
         maxAll() {
             console.log("Max all");
-            for (let i = 0; i < this.selectedFromTokens.length; i++) {
-                let token = this.selectedFromTokens[i];
+            for (let i = 0; i < this.selectedInputTokens.length; i++) {
+                let token = this.selectedInputTokens[i];
                 console.log(token.selectedToken.balanceData.balance);
                 this.updateTokenValue(token, token.selectedToken.balanceData.balance);
             }
         },
         changeSwap() {
             console.log("Change swap");
-            this.clearAllSelectedTokens();
-
             if (this.swapMethod === 'BUY') {
                 this.setSwapMethod('SELL');
+                this.clearForm();
                 return;
             }
 
             if (this.swapMethod === 'SELL') {
                 this.setSwapMethod('BUY');
-
+                this.clearForm();
                 return;
             }
 
             console.error('Change swap method not found.', this.swapMethod);
         },
+        finishTransaction() {
+            console.log("Finish transaction");
+            this.clearForm()
+        },
+
+        clearForm() {
+            this.clearAllSelectedTokens();
+
+            if (this.swapMethod === 'BUY') {
+                this.addDefaultOvnToken();
+                return;
+            }
+
+            if (this.swapMethod === 'SELL') {
+                this.addDefaultOvnToken();
+                return;
+            }
+
+            console.error('Clear form, swap method not found.', this.swapMethod);
+        },
         resetOutputs() {
             console.log("Reset outputs");
+            if (!this.selectedOutputTokens.length) {
+                return
+            }
+
+            for (let i = 0; i < this.selectedOutputTokens.length; i++) {
+                let token = this.selectedOutputTokens[i];
+                token.value = 0;
+            }
+
+            // init first token value
+            this.selectedOutputTokens[0].value = 100;
+            console.log("this.selectedOutputTokens: ", this.selectedOutputTokens)
         },
         swap() {
             if (this.isSwapLoading) {
@@ -486,20 +603,21 @@ export default defineComponent({
                 slippageLimitPercent: slippagePercent,
                 sourceBlacklist: [],
                 sourceWhitelist: [],
-                simulate: false,
-                pathViz: false,
+                simulate: true,
+                pathViz: true,
                 // disableRFQs: false
             }
 
             console.log("Odos request data", requestData);
-            this.swapRequest(requestData)
-                .then(data => {
-                    console.log("Odos swap request success", data)
-                    this.isSwapLoading = false;
-                }).catch(e => {
-                    console.error("Odos swap request failed", e)
-                    this.isSwapLoading = false;
-                })
+            this.quoteRequest(requestData);
+            // this.swapRequest(requestData)
+            //     .then(data => {
+            //         console.log("Odos swap request success", data)
+            //         this.isSwapLoading = false;
+            //     }).catch(e => {
+            //         console.error("Odos swap request failed", e)
+            //         this.isSwapLoading = false;
+            //     })
         },
 
         async disapproveToken(token) {
@@ -574,8 +692,8 @@ export default defineComponent({
 
         getRequestInputTokens() {
             let inputTokens = [];
-            for (let i = 0; i < this.selectedFromTokens.length; i++) {
-                let token = this.selectedFromTokens[i];
+            for (let i = 0; i < this.selectedInputTokens.length; i++) {
+                let token = this.selectedInputTokens[i];
                 let selectedToken = token.selectedToken;
                 console.log("token: ", token)
 
@@ -588,8 +706,8 @@ export default defineComponent({
         },
         getRequestOutputTokens() {
             let outputTokens = [];
-            for (let i = 0; i < this.selectedToTokens.length; i++) {
-                let token = this.selectedToTokens[i];
+            for (let i = 0; i < this.selectedOutputTokens.length; i++) {
+                let token = this.selectedOutputTokens[i];
                 let selectedToken = token.selectedToken;
                 outputTokens.push({
                     tokenAddress: selectedToken.address,
@@ -626,6 +744,11 @@ export default defineComponent({
 
         lockProportion(isLock, token) {
             console.log("lockProportionFunc", isLock, token);
+            if (this.outputTokensWithSelectedTokensCount <= 1 && !isLock) {
+                console.log("Its first token, unlock is disable");
+                return
+            }
+
             token.locked = isLock
         },
         updateSliderValue(token, value) {
@@ -636,16 +759,22 @@ export default defineComponent({
 
             // if(!this.isSlidersOutOfLimit()) {
                 token.value = value;
-
-                let sum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
-                token.sum = this.$utils.formatMoney(sum, 4)
                 this.subtraction(token, 100 - value);
+                this.recalculateOutputTokensSum();
                 // if (oldTokenValue > value) {
                 //     this.subTokensProportions(token, 100 - value)
                 // } else {
                 //     this.addTokensProportions(token, 100 - value)
                 // }
             // }
+        },
+        recalculateOutputTokensSum() {
+            console.log('recalculateOutputTokensSum')
+            for (let i = 0; i < this.selectedOutputTokens.length; i++) {
+                let token = this.selectedOutputTokens[i];
+                let sum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
+                token.sum = this.$utils.formatMoney(sum, 4)
+            }
         },
         subTokensProportions(currentToken, difference) {
             let tokens = this.getActiveTokens(currentToken);
@@ -756,10 +885,10 @@ export default defineComponent({
                     let token = tokens[i];
                     // token.value++
                     token.value = proportion;
-                    let sum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
-                    token.sum = this.$utils.formatMoney(sum, 4)
                 }
             }
+
+            this.recalculateOutputTokensSum();
         },
         getOutputsTokensPercentage() {
             let tokensPercentage = 0;
@@ -774,19 +903,27 @@ export default defineComponent({
         addSelectedTokenToList(selectedToken, swapMethod, selectTokenType) {
             console.log(this.isInputToken(swapMethod, selectTokenType) ? 'INPUT TOKEN' :  'OUTPUT TOKEN');
             if (this.isInputToken(swapMethod, selectTokenType)) {
-                let newInputToken = this.getNewInputToken()
-                newInputToken.selectedToken = selectedToken;
-                this.inputTokens.push(newInputToken);
-                this.removeAllWithoutSelectedTokens(this.inputTokens);
-
-                this.checkApproveForToken(newInputToken);
+                this.addSelectedTokenToInputList(selectedToken);
                 return;
             }
 
+            this.addSelectedTokenToOutputList(selectedToken);
+        },
+        addSelectedTokenToInputList(selectedToken) {
+            let newInputToken = this.getNewInputToken()
+            newInputToken.selectedToken = selectedToken;
+            this.inputTokens.push(newInputToken);
+            this.removeAllWithoutSelectedTokens(this.inputTokens);
+
+            this.checkApproveForToken(newInputToken);
+        },
+        addSelectedTokenToOutputList(selectedToken) {
             let newOutputToken = this.getNewOutputToken()
             newOutputToken.selectedToken = selectedToken;
             this.outputTokens.push(newOutputToken);
             this.removeAllWithoutSelectedTokens(this.outputTokens);
+            this.recalculateOutputTokensSum();
+            this.resetOutputs();
         },
         removeSelectedTokenFromList(selectedToken, swapMethod, selectTokenType) {
             console.log(this.isInputToken(swapMethod, selectTokenType) ? 'INPUT TOKEN' :  'OUTPUT TOKEN');
@@ -825,7 +962,6 @@ export default defineComponent({
                 }
             }
 
-
             for (let i = 0; i < this.outputTokens.length; i++) {
                 if (this.outputTokens[i].selectedToken) {
                     this.outputTokens[i].selectedToken.selected = false;
@@ -833,14 +969,11 @@ export default defineComponent({
             }
 
             this.clearAllTokens();
-            this.addNewInputToken();
-            this.addNewOutputToken();
         },
         clearAllTokens() {
             this.inputTokens = [];
             this.outputTokens = [];
         },
-
         isInputToken(swapMethod, selectTokenType) {
             if (swapMethod === 'BUY' && selectTokenType === 'ALL') {
                 return true;
@@ -864,7 +997,6 @@ export default defineComponent({
         isOutputToken(swapMethod, selectTokenType) {
             return !this.isInputToken(swapMethod, selectTokenType);
         },
-
         isSlidersOutOfLimit(additionalPercent) {
             if (!additionalPercent) {
                 additionalPercent = 0;
@@ -943,7 +1075,7 @@ div {
 .swap-container {
     padding: 40px 30px;
     gap: 8px;
-    background: #FFFFFF;
+    background: var(--swap-main-banner-background);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
     border-radius: 28px;
     max-width: 600px;
@@ -973,6 +1105,12 @@ div {
     cursor: pointer;
 }
 
+.add-token-text-disabled {
+    cursor: default!important;
+    color: #707A8B;
+}
+
+
 .input-swap-container {
 }
 
@@ -987,7 +1125,7 @@ div {
     font-size: 18px;
     line-height: 28px;
 
-    color: #29323E;
+    color: var(--main-gray-text);
 
 }
 
@@ -998,12 +1136,11 @@ div {
 .max-all {
     text-align: end;
 }
-
 .change-swap-container {
     width: 44px;
     height: 44px;
 
-    background: #FFFFFF;
+    background: var(--main-banner-background);
     box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);
     border-radius: 12px;
     cursor: pointer;
@@ -1070,7 +1207,7 @@ div {
 
     height: 48px;
 
-    background: #E5E7EA;
+    background: var(--action-btn-bg);
     border-radius: 2px;
 }
 
@@ -1096,6 +1233,7 @@ div {
     font-size: 14px;
     font-weight: 400;
     height: auto;
+    color: var(--main-gray-text);
     letter-spacing: 0.1px;
     line-height: 22px;
     cursor: pointer;
@@ -1121,7 +1259,7 @@ div {
     line-height: 24px;
     text-align: end;
 
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .transaction-info-additional {
@@ -1130,7 +1268,7 @@ div {
     font-size: 16px;
     line-height: 24px;
 
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .transaction-info-address {
@@ -1146,5 +1284,19 @@ div {
 
 .transaction-info-body {
     padding-bottom: 20px;
+}
+
+.loader-container {
+    padding-top: 50px;
+    min-height: 80px;
+}
+
+.rotate {
+    transform-origin: center;
+    transition: transform 0.7s ease;
+}
+
+.rotate:hover {
+    transform: rotate(180deg);
 }
 </style>

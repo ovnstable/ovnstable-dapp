@@ -3,16 +3,16 @@
         <div v-if="isShow">
             <v-dialog
                     v-model="isShow"
-                    width="600"
+                    width="570"
                     persistent>
-                <v-card class="container_body airdrop-body pt-4 px-4"
+                <v-card class="container_body container-body airdrop-body pt-4 px-4"
                         style="border-radius: 28px!important;">
-                    <v-toolbar class="container_header" flat>
+                    <v-toolbar class="container_header container-header" flat>
                         <label v-if="selectTokenType === 'OVERNIGHT'" class="title-container">
-                            Select Overnight token
+                            Select Overnight tokens
                         </label>
                         <label v-else class="title-container">
-                            Select token
+                            Select non-Overnight tokens
                         </label>
                         <v-spacer></v-spacer>
                         <v-btn icon @click="setShowFunc(false)">
@@ -66,8 +66,6 @@
 
 <script>
 import {defineComponent} from 'vue'
-import {odosSwap} from "@/components/mixins/odos-swap";
-import {mapGetters} from "vuex";
 import SelectTokenShort from "@/components/odos/SelectTokenShort.vue";
 import SelectTokenWithSearch from "@/components/odos/SelectTokenWithSearch.vue";
 
@@ -196,6 +194,14 @@ div {
     font-weight: 400;
     font-size: 30px;
     line-height: 40px;
-    color: #29323E;
+    color: var(--main-gray-text);
+}
+
+.container-body {
+    background: var(--secondary)!important;
+}
+
+.container-header {
+    background: var(--secondary)!important;
 }
 </style>

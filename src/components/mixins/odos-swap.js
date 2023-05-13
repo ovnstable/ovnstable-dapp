@@ -3,16 +3,19 @@ import loadJSON from "@/utils/http-utils";
 import {mapActions, mapGetters} from "vuex";
 
 const ODOS_DURATION_CONFIRM_REQUEST = 60
+const OVN_TOKEN_DEFAULT_SYMBOL= 'USD+';
 
 export const odosSwap = {
     data() {
         return {
             isChainsLoading: false,
-            isTokensLoading: false,
             isPricesLoading: false,
             isBalancesLoading: false,
             isContractLoading: false,
             isTokenExternalDataLoading: false,
+
+            isTokensLoading: false,
+            isTokensLoadedAndFiltered: false,
 
             chains: null,
             tokensMap: null,
@@ -37,7 +40,7 @@ export const odosSwap = {
                 waitingConformation: false
             },
 
-            isShowDecreaseAllowanceButton: true
+            isShowDecreaseAllowanceButton: true,
         }
     },
     async mounted() {
@@ -70,13 +73,12 @@ export const odosSwap = {
                 this.initAccountData();
             }
         },
-        watch: {
-            networkId: function (newVal, oldVal) {
-                if (newVal) {
-                    this.initContractData()
-                }
+        networkId: function (newVal, oldVal) {
+            if (newVal) {
+                this.initContractData()
+                this.initData();
             }
-        },
+        }
     },
     methods: {
         ...mapActions("gasPrice", ['refreshGasPrice']),
@@ -120,6 +122,7 @@ export const odosSwap = {
         async initData() {
             console.log('initData for network: ', this.networkName);
             if (this.availableNetworksList.includes(this.networkName)) {
+                this.clearInputData();
                 console.log('initData1');
                 let networkId = this.getParams(this.networkName).networkId;
                 console.log('initData2');
@@ -128,6 +131,7 @@ export const odosSwap = {
                 console.log("TOKENS_ ", this.tokens)
                 this.ovnTokens = await this.getFilteredTokens(networkId, true);
                 console.log("OVN TOKENS_ ", this.ovnTokens);
+                this.isTokensLoadedAndFiltered = true;
 
                 this.loadPricesInfo(networkId);
 
@@ -315,13 +319,15 @@ export const odosSwap = {
                 }
 
                 if (item.protocolId !== 'overnight') {
+                    let logoUrl = this.loadTokenImage(item);
+
                     tokens.push({
                         id: item.assetId + key,
                         address: key,
                         decimals: item.decimals,
                         name: item.name,
                         symbol: item.symbol,
-                        logoUrl: 'https://assets.odos.xyz/tokens/' + item.symbol + '.webp',
+                        logoUrl: logoUrl,
                         weiMarker: this.getWeiMarker(item.decimals),
                         selected: false,
                         balanceData: {},
@@ -335,6 +341,26 @@ export const odosSwap = {
             }
 
             return tokens;
+        },
+
+        loadTokenImage(item) {
+            if (item.symbol.includes(' (OLD)')) {
+                return 'https://assets.odos.xyz/tokens/' + item.symbol.replace(' (OLD)', '') + '.webp';
+            }
+
+            if (item.symbol === 'GND') {
+                return '/assets/currencies/external/' + item.symbol + '.png';
+            }
+
+            if (item.symbol === 'LEX') {
+                return '/assets/currencies/external/' + item.symbol + '.jpg';
+            }
+
+            if (item.symbol === 'PREMIA') {
+                return '/assets/currencies/external/' + item.symbol + '.svg';
+            }
+
+            return 'https://assets.odos.xyz/tokens/' + item.symbol + '.webp';
         },
 
         async loadOvernightTokenImage(token) {
@@ -380,12 +406,24 @@ export const odosSwap = {
         swapRequest(requestData) {
             return odosApiService.swapRequest(requestData)
                 .then((data) => {
-                    console.log("Response data for odos request: ", data)
+                    console.log("Response data for odos swap request: ", data)
                     this.swapResponseInfo = data;
                     // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
                     this.initWalletTransaction(this.swapResponseInfo);
                 }).catch(e => {
                     console.log("Swap request error: ", e)
+                })
+        },
+
+        quoteRequest(requestData) {
+            return odosApiService.quoteRequest(requestData)
+                .then((data) => {
+                    console.log("Response data for odos quota request: ", data)
+                    // this.swapResponseInfo = data;
+                    // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
+                    // this.initWalletTransaction(this.swapResponseInfo);
+                }).catch(e => {
+                    console.log("Quota request error: ", e)
                 })
         },
         startSwapConfirmTimer() {
@@ -458,18 +496,7 @@ export const odosSwap = {
             //     "pathViz": null,
             //     "blockNumber": 89181266
             // }
-            let transactionData = [
-                {
-                    inputs: {
-                        tokenAddress: txData.inTokens,
-                        amountIn: txData.inAmounts,
-                    },
-                    outputs: {
-                        tokenAddress: txData.outTokens,
-                        amountIn: txData.outAmounts,
-                    },
-                }
-            ]
+
 
             this.showWaitingModal('Swapping in process');
             const result = this.web3.eth.sendTransaction(
@@ -484,6 +511,9 @@ export const odosSwap = {
                     successTxHash: data.transactionHash,
                     successAction: 'swapOdosUsdPlus',
                 });
+
+                // event
+                this.$bus.$emit('odos-transaction-finished', true);
 
                 this.loadBalances();
             }).catch(e => {
@@ -522,6 +552,21 @@ export const odosSwap = {
             let approveParams = {gasPrice: this.gasPriceGwei, from: from};
             console.log('clearApproveToken: ', contract, contractAddressForDisapprove, allowanceValue, approveParams);
             return contract.methods.decreaseAllowance(contractAddressForDisapprove, allowanceValue).send(approveParams)
+        },
+        getDefaultOvnToken() {
+          if (!this.ovnTokens.length) {
+              return null;
+          }
+
+            for (let i = 0; i < this.ovnTokens.length; i++) {
+                let token = this.ovnTokens[i];
+                if (token.symbol === OVN_TOKEN_DEFAULT_SYMBOL) {
+                    return token;
+                }
+            }
+
+            // return first if usd+ not found
+            return this.ovnTokens[0];
         },
         _loadContract(file, web3, address) {
             if (!address) {

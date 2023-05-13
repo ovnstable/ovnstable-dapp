@@ -7,6 +7,7 @@
                         <input
                                v-model="token.value"
                                type="text"
+                               @keypress="isNumber($event)"
                                placeholder="0"
                                @input="inputUpdate(token.value)"
                                class="input-style"/>
@@ -23,6 +24,9 @@
                                 </div>
                                 <div class="selected-token-item-text">
                                     {{token.selectedToken.symbol}}
+                                </div>
+                                <div class="select-token-with-token-item-img">
+                                    <img src="/assets/icon/swap/token-select-closed.svg" alt="select-token">
                                 </div>
                             </div>
                         </div>
@@ -115,7 +119,28 @@ export default defineComponent({
         }
     },
     methods: {
+        isNumber: function(evt) {
+            evt = (evt) ? evt : window.event;
+            let charCode = (evt.which) ? evt.which : evt.keyCode;
+
+            if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+                evt.preventDefault();
+            } else {
+                if (charCode === 46 && (!this.token.value || this.token.value.includes('.'))) {
+                    evt.preventDefault();
+                } else {
+                    return true;
+                }
+            }
+        },
         inputUpdate(value) {
+            if (this.token.selectedToken) {
+                if (value*1 > this.token.selectedToken.balanceData.balance*1) {
+                    value = this.$utils.formatMoney(this.token.selectedToken.balanceData.balance*1, 6);
+                    this.token.value = value;
+                }
+            }
+
             this.updateTokenValueFunc(this.tokenInfo, value)
         },
         clickOnBalance() {
@@ -140,7 +165,7 @@ div {
     align-items: center;
     padding: 12px 20px;
 
-    background: #F5F5F5;
+    background: var(--swap-input-placeholder);
     border-radius: 20px;
 }
 
@@ -154,7 +179,7 @@ div {
 .select-token-container {
     position: absolute;
     padding: 12px;
-    background: #E5E7EA;
+    background: var(--swap-select-token);
     border-radius: 40px;
     cursor: pointer;
 }
@@ -162,7 +187,7 @@ div {
 .selected-token-container {
     position: absolute;
     padding: 12px;
-    background: #E5E7EA;
+    background: var(--swap-select-token);
     border-radius: 40px;
     cursor: pointer;
 }
@@ -173,7 +198,7 @@ div {
     font-weight: 600;
     font-size: 18px;
     line-height: 24px;
-    color: #29323E;
+    color: var(--main-gray-text);
     margin-right: 15px;
 }
 
@@ -183,7 +208,7 @@ div {
     font-weight: 600;
     font-size: 18px;
     line-height: 24px;
-    color: #29323E;
+    color: var(--main-gray-text);
     margin-right: 15px;
     padding-left: 30px;
 }
@@ -191,9 +216,14 @@ div {
 .select-token-item-img {
     position: absolute;
     right: 0;
-    top: 10px;
+    top: 12px;
 }
 
+.select-token-with-token-item-img {
+    position: absolute;
+    right: 0;
+    top: 12px;
+}
 .selected-token-item-img {
     display: inline-block;
     position: absolute;
@@ -231,6 +261,8 @@ div {
     outline: 0;
 
     max-width: 100%;
+
+    color: var(--main-gray-text);
 
     font-style: normal;
     font-weight: 400;

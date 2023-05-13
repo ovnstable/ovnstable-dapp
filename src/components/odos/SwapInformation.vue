@@ -72,7 +72,7 @@ div {
 }
 
 .info-container {
-    background: #FFFFFF;
+    background: var(--secondary);
     border-radius: 28px;
     padding: 40px;
 }
@@ -82,7 +82,7 @@ div {
     font-weight: 400;
     font-size: 30px;
     line-height: 40px;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .info-body {
@@ -103,7 +103,7 @@ div {
     font-weight: 400;
     font-size: 18px;
     line-height: 28px;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .info-warn {
@@ -112,6 +112,11 @@ div {
 
 .info-image {
     height: 60px;
+}
+
+
+.info-image-container {
+    text-align: center;
 }
 
 /* mobile */
@@ -127,7 +132,4 @@ div {
     }
 }
 
-.info-image-container {
-    text-align: center;
-}
 </style>

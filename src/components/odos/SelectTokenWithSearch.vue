@@ -37,7 +37,7 @@
                            <div class="row">
                                <div class="col-2">
                                    <div class="search-image-container">
-                                       <div class="token-image-container">
+                                       <div class="search-token-image-container">
                                            <img :src="token.logoUrl"
                                                 :alt="token.symbol"
                                                 class="search-token-image">
@@ -129,7 +129,8 @@ export default defineComponent({
 
           return this.tokens.filter(token =>
               token.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-              token.symbol.toLowerCase().includes(this.searchQuery.toLowerCase())
+              token.symbol.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+              token.address.toLowerCase().includes(this.searchQuery.toLowerCase())
           ).sort((a, b) => {
               if (b.price * b.balanceData.balance < a.price * a.balanceData.balance) {
                   return -1;
@@ -180,7 +181,7 @@ div {
     height: 56px;
     padding-top: 6px;
 
-    background: #F5F5F5;
+    background: var(--card-coin-background);
     border-radius: 12px;
 
     display: flex;
@@ -209,9 +210,9 @@ div {
     display: inline-block;
     padding-left: 35px;
 
-    color: #29323E;
+    color: var(--main-gray-text);
 
-    width: 95px;
+    width: 80px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -230,12 +231,20 @@ div {
     left: 0;
 }
 
+.search-token-image-container {
+    display: inline-block;
+    position: absolute;
+    top: 4px;
+    left: 14px;
+}
+
+
 .search-items-container {
     padding: 8px;
 
-    height: 258px;
+    height: 370px;
 
-    border: 2px solid #E5E7EA;
+    border: 2px solid var(--theme-toggle-border);
     border-radius: 20px;
 
     overflow: auto;
@@ -248,7 +257,7 @@ div {
 
     height: 52px;
 
-    background: #F5F5F5;
+    background: var(--card-info-background);
     border-radius: 12px;
     margin-bottom: 16px;
 }
@@ -259,6 +268,9 @@ div {
     outline: 0;
 
     width: 100%;
+
+    color: var(--third-gray-text);
+
 
     font-weight: 400;
     font-size: 18px;
@@ -274,7 +286,7 @@ div {
 
     margin-bottom: 4px;
 
-    background: #FFFFFF;
+    background: var(--swap-main-banner-background);;
     border-radius: 12px;
 
     cursor: pointer;
@@ -290,7 +302,7 @@ div {
     font-size: 18px;
     line-height: 24px;
 
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .search-token-symbol-base {
@@ -306,7 +318,7 @@ div {
     font-weight: 600;
     font-size: 20px;
     line-height: 24px;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .token-usd-balance {
@@ -327,7 +339,38 @@ div {
 
 
 .search-token-image {
-    height: 54px;
-    width: 54px;
+    height: 40px;
+    width: 40px;
 }
+
+
+.search-token-image-container {
+    display: inline-block;
+    position: absolute;
+    top: 4px;
+    left: 14px;
+}
+
+
+/* mobile */
+@media all and (min-width:0px) and (max-width: 650px) {
+    .search-token-image-container {
+        display: inline-block;
+        position: absolute;
+        top: 4px;
+        left: -6px;
+    }
+}
+
+
+/* tablet */
+@media only screen and (min-width:650px) and (max-width: 1400px) {
+    .search-token-image-container {
+        display: inline-block;
+        position: absolute;
+        top: 4px;
+        left: 14px;
+    }
+}
+
 </style>

@@ -6,9 +6,9 @@
                     v-model="isShow"
                     width="600"
                     persistent>
-                <v-card class="container_body airdrop-body pt-4 px-4"
+                <v-card class="container_body container-body airdrop-body pt-4 px-4"
                         style="border-radius: 28px!important;">
-                    <v-toolbar class="container_header" flat>
+                    <v-toolbar class="container_header container-header" flat>
                         <label class="title-container">
                             Advanced Settings
                         </label>
@@ -28,7 +28,7 @@
                                 <div class="row">
                                     <div v-for="setting in slippageSettings" :key="setting.id"
                                          @click="newSlippageSetting(setting)"
-                                         class="col-3">
+                                         class="col-lg-3 col-md-3 col-sm-12">
                                         <div :class="currentSlippage && currentSlippage.type === setting.type  ? 'slippage-item-selected' : ''"
                                              class="slippage-item">
                                             <div class="slippage-name">
@@ -87,7 +87,7 @@ export default defineComponent({
         initSlippageSettings() {
             let value = localStorage.getItem(this.odosSlippageKey);
             if (!value) {
-                this.newSlippageSetting(this.slippageSettings[2]); // default
+                this.newSlippageSetting(this.slippageSettings[3]); // default
                 return
             }
 
@@ -106,12 +106,20 @@ div {
     font-family: 'Roboto',serif;
 }
 
+.container-body {
+    background: var(--secondary);
+}
+
+.container-header {
+    background: var(--secondary)!important;
+}
+
 .title-container {
     font-style: normal;
     font-weight: 400;
     font-size: 30px;
     line-height: 40px;
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .sub-title {
@@ -119,7 +127,8 @@ div {
     font-weight: 400;
     font-size: 24px;
     line-height: 36px;
-    color: #29323E;
+    color: var(--main-gray-text);
+
 
     padding-bottom: 8px;
 }
@@ -133,8 +142,6 @@ div {
     padding: 12px 20px;
 
     height: 78px;
-
-    background: #FFFFFF;
 
     border: 1px solid #D7DADF;
     border-radius: 12px;
@@ -153,7 +160,7 @@ div {
     font-size: 16px;
     line-height: 24px;
 
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 
 .slippage-value {
@@ -162,6 +169,6 @@ div {
     font-size: 16px;
     line-height: 24px;
 
-    color: #29323E;
+    color: var(--main-gray-text);
 }
 </style>

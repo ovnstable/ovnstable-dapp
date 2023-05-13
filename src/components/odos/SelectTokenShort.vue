@@ -70,7 +70,7 @@ div {
     height: 56px;
     padding-top: 6px;
 
-    background: #F5F5F5;
+    background: var(--card-coin-background);
     border-radius: 12px;
 
     display: flex;
@@ -99,7 +99,7 @@ div {
     display: inline-block;
     padding-left: 35px;
 
-    color: #29323E;
+    color: var(--main-gray-text);
 
     width: 95px;
     white-space: nowrap;

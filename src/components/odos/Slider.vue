@@ -139,7 +139,7 @@ watchEffect(() => {
 /* `::-webkit-slider-runnable-track` targets the track (background) of a range slider in chrome and safari browsers. */
 .custom-slider input[type="range"]::-webkit-slider-runnable-track {
     appearance: none;
-    background: #E5E7EA;
+    background: var(--main-slider-background);
     height: var(--trackHeight);
     border-radius: 999px;
 }
@@ -147,7 +147,7 @@ watchEffect(() => {
 /* `::-moz-range-track` targets the track (background) of a range slider in Mozilla Firefox. */
 .custom-slider input[type="range"]::-moz-range-track {
     appearance: none;
-    background: #E5E7EA;
+    background: var(--main-slider-background);
     height: var(--trackHeight);
     border-radius: 999px;
 }
@@ -169,12 +169,12 @@ watchEffect(() => {
 
 
 .slider-locked input[type="range"]::-webkit-slider-thumb {
-    background: #c9c9c9;
+    background: var(--secondary-border);
     cursor: not-allowed;
 }
 
 .slider-locked input[type="range"]::before {
-    background: #c9c9c9;
+    background: var(--secondary-border);
     cursor: not-allowed;
 }
 
@@ -198,5 +198,6 @@ watchEffect(() => {
 
 .value-percent {
     padding-left: 5px;
+    color: var(--main-gray-text);
 }
 </style>

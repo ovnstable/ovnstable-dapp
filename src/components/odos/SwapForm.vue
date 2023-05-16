@@ -35,7 +35,6 @@
                                 </span>
                             </div>
                             <div v-for="token in inputTokens" :key="token.id" class="input-component-container">
-
                                 <div v-if="isShowDecreaseAllowance && token.selectedToken"
                                      @click="disapproveToken(token)"
                                      class="decrease-allowance">
@@ -58,9 +57,8 @@
                                         + Select token
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div v-if="inputTokensWithSelectedTokensCount" class="col-6">
                                     <div @click="maxAll"
-                                         :class="inputTokensWithSelectedTokensCount === 0 ? 'add-token-text-disabled' : ''"
                                          class="add-token-text max-all">
                                         Max all
                                     </div>
@@ -88,8 +86,10 @@
                             <div v-for="token in outputTokens" :key="token.id" class="input-component-container">
                                 <OutputToken
                                         :token-info="token"
+                                        :swap-method="swapMethod"
                                         :remove-item-func="removeOutputToken"
                                         :is-token-removable="isOutputTokensRemovable"
+                                        :is-token-without-slider="isTokenWithoutSlider"
                                         :lock-proportion-func="lockProportion"
                                         :update-slider-value-func="updateSliderValue"
                                         :select-token-func="selectOutputToken"
@@ -104,9 +104,8 @@
                                         + Select token
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div v-if="outputTokensWithSelectedTokensCount" class="col-6">
                                     <div @click="resetOutputs"
-                                         :class="outputTokensWithSelectedTokensCount === 0 ? 'add-token-text-disabled' : ''"
                                          class="add-token-text max-all">
                                         Reset output %
                                     </div>
@@ -117,7 +116,17 @@
                 </div>
 
                 <div class="swap-footer pt-5">
-                    <div class="swap-button-container">
+                    <div v-if="!account" class="swap-button-container">
+                        <div @click="connectWallet"
+                             class="swap-button">
+                            <div class="swap-button-title">
+                                <div>
+                                    CONNECT WALLET
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="swap-button-container">
                         <div v-if="isDisableButton"
                              class="disable-button">
                             <div class="disable-button-title">
@@ -146,6 +155,12 @@
                         </div>
                     </div>
 
+                    <div v-if="!isAvailableOnNetwork" class="dont-work-on-network-container pt-3">
+                        <div class="dont-work-on-network">
+                            Swap isn’t available on ZkSynk chain.
+                        </div>
+                    </div>
+
                     <div class="label-container pt-3">
                         <div class="row">
                             <div class="col-6 pr-1" style="padding-top:15px">
@@ -164,16 +179,10 @@
             </div>
         </div>
 
-<!--        swapResponseInfo:-->
-<!--        {{swapResponseInfo}}-->
-
-<!--        <div v-if="swapResponseInfo">-->
-<!--            {{swapResponseInfo}}-->
-<!--        </div>-->
-<!--        <div v-if="false && swapResponseInfo">
+        <div v-if="quotaResponseInfo">
             <div class="transaction-info-container">
                 <div class="transaction-info-body">
-                    <div class="row py-2">
+<!--                    <div class="row py-2">
                         <div class="col-6 py-0">
                             <div class="transaction-info-title">
                                 Output Value
@@ -184,9 +193,9 @@
                                 ~1.09 <span class="transaction-info-additional">(+116.76%)</span>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
 
-                    <div class="row py-2">
+<!--                    <div v-if="getTokenByAddress('0x0000000000000000000000000000000000000000')" class="row py-2">
                         <div class="col-6 py-0">
                             <div class="transaction-info-title">
                                 Gas estimate
@@ -194,10 +203,13 @@
                         </div>
                         <div class="col-6 py-0">
                             <div class="transaction-info">
-                                ~124 Gwei <span class="transaction-info-additional">(~0.67$)</span>
+                                ~{{quotaResponseInfo.gasEstimate}} Gwei
+                                <span class="transaction-info-additional">
+                                    (~{{$utils.formatMoney(quotaResponseInfo.gasEstimate *  getTokenByAddress('0x0000000000000000000000000000000000000000').estimatePerOne, 2) }}$)
+                                </span>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
 
                     <div class="row py-2">
                         <div class="col-6 py-0">
@@ -207,7 +219,9 @@
                         </div>
                         <div class="col-6 py-0">
                             <div class="transaction-info">
-                                0.05% <span class="transaction-info-additional">(~0.67$)</span>
+                                {{slippagePercent*1}}% <span class="transaction-info-additional">
+                                ({{$utils.formatMoney(sumOfAllSelectedTokensInUsd * slippagePercent / 100, 3)}})$
+                            </span>
                             </div>
                         </div>
                     </div>
@@ -220,7 +234,7 @@
                         </div>
                         <div class="col-6 py-0">
                             <div class="transaction-info">
-                                1.098$
+                                {{$utils.formatMoney(sumOfAllSelectedTokensInUsd, 3)}}$
                             </div>
                         </div>
                     </div>
@@ -240,7 +254,7 @@
                     </div>
                 </div>
             </div>
-        </div>-->
+        </div>
 
 
         <SelectTokensModal :is-show="isShowSelectTokensModal"
@@ -249,7 +263,6 @@
                            :select-token-type="selectTokenType"
                            :add-selected-token-to-list-func="addSelectedTokenToList"
                            :remove-selected-token-from-list-func="removeSelectedTokenFromList"
-
                            :ovn-tokens="ovnTokens"
                            :tokens="tokens"
                            :is-all-data-loaded="isAllDataLoaded"
@@ -259,8 +272,11 @@
         <AdvancedSettingsModal :is-show="isShowSettingsModal"
                                :set-show-func="showSettingsModals"/>
 
+        <SuccessOdosModal :is-show="isShowSuccessModal"
+                          :set-show-func="showSuccessModal"
+                          :success-data="successData"/>
+
         <WaitingModal/>
-        <SuccessModal/>
         <ErrorModal/>
     </div>
 </template>
@@ -270,24 +286,39 @@ import {defineComponent} from 'vue'
 import InputToken from "@/components/odos/InputToken.vue";
 import OutputToken from "@/components/odos/OutputToken.vue";
 import SelectTokensModal from "@/components/odos/modals/SelectTokensModal.vue";
-import {odosApiService} from "@/services/external/odos-api-service";
 import {mapActions, mapGetters} from "vuex";
 import AdvancedSettingsModal from "@/components/odos/modals/AdvancedSettingsModal.vue";
 import {odosSwap} from "@/components/mixins/odos-swap";
 import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
 import SuccessModal from "@/components/common/modal/action/SuccessModal.vue";
 import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
+import SuccessOdosModal from "@/components/odos/modals/SuccessOdosModal.vue";
 
 export default defineComponent({
     name: "SwapForm",
     mixins: [odosSwap],
     components: {
+        SuccessOdosModal,
         ErrorModal, SuccessModal,
         WaitingModal,
         AdvancedSettingsModal,
         SelectTokensModal,
         InputToken,
         OutputToken
+    },
+    props: {
+        updatePathViewFunc: {
+            type: Function,
+            required: true
+        },
+        updateButtonDisabledFunc: {
+            type: Function,
+            required: true
+        },
+        updateIsLoadingDataFunc: {
+            type: Function,
+            required: true
+        },
     },
     mounted() {
         this.init();
@@ -305,7 +336,12 @@ export default defineComponent({
 
             isShowSettingsModal: false,
             isSwapLoading: false,
+            isSumulateSwapLoading: false,
+            pathViz: null,
+            slippagePercent: 0.05,
 
+            tokensQuotaCounterId: null,
+            tokensQuotaCheckerSec: 0
         }
     },
     computed: {
@@ -319,6 +355,10 @@ export default defineComponent({
 
         isOutputTokensRemovable() {
           return this.outputTokens.length > 1;
+        },
+
+        isTokenWithoutSlider() {
+          return this.outputTokens.length <= 1;
         },
 
         isInputTokensAddAvailable() {
@@ -367,13 +407,18 @@ export default defineComponent({
         isDisableButton() {
             return this.inputTokensWithSelectedTokensCount === 0 ||
                 this.outputTokensWithSelectedTokensCount === 0 ||
-                this.swapResponseConfirmInfo.waitingConformation;
+                this.swapResponseConfirmInfo.waitingConformation ||
+                !this.isAvailableOnNetwork;
         },
 
         disableButtonMessage() {
             if (this.inputTokensWithSelectedTokensCount === 0 ||
                 this.outputTokensWithSelectedTokensCount === 0) {
-                return 'SELECT TOKENS';
+                if (this.isAvailableOnNetwork) {
+                    return 'SELECT TOKENS';
+                }
+
+                return "SWITCH CHAIN"
             }
 
             if (this.swapResponseConfirmInfo.waitingConformation) {
@@ -420,20 +465,28 @@ export default defineComponent({
 
         isTokensLoadedAndFiltered: function (val, oldVal) {
             if (val) {
-                this.addDefaultOvnToken();
+                this.clearForm();
             }
         },
         networkId: function (newVal, oldVal) {
             if (newVal) {
-                this.clearForm();
+                // hide swap form and clear all(watch function) data,
+                // after new token loaded collection
+                this.isTokensLoadedAndFiltered = false;
             }
+        },
+        isDisableButton: function (val, oldVal) {
+            if (val) {
+                this.clearQuotaInfo();
+            }
+            this.updateButtonDisabledFunc(val);
         }
     },
 
     methods: {
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
-        ...mapActions("successModal", ['showSuccessModal']),
+        ...mapActions('walletAction', ['connectWallet']),
 
         init() {
             this.loadChains();
@@ -572,9 +625,9 @@ export default defineComponent({
             this.selectedOutputTokens[0].value = 100;
             console.log("this.selectedOutputTokens: ", this.selectedOutputTokens)
         },
-        swap() {
+        async swap() {
             if (this.isSwapLoading) {
-                console.log('Swap method not available, rev sap in process');
+                console.log('Swap method not available, prev sap in process');
                 return;
             }
 
@@ -585,12 +638,13 @@ export default defineComponent({
 
             this.isSwapLoading = true;
 
-            // slippage
-            let slippageInfo = localStorage.getItem('odos_slippage_value');
-            let slippagePercent = 0.05; // default
-            if (slippageInfo) {
-                let slippageInfoObject = JSON.parse(slippageInfo);
-                slippagePercent = slippageInfoObject.value;
+
+            let actualGasPriceObject = await this.getActualGasPrice(this.networkId);
+            console.log("Actual price for gas. network: ", this.networkId, actualGasPriceObject)
+            let actualGas = actualGasPriceObject.baseFee;
+            if (!actualGas && actualGasPriceObject.prices && actualGasPriceObject.prices.length) {
+                actualGas = actualGasPriceObject.prices[0].fee;
+                console.log("Actual price for gas when not found base fee. network: ", this.networkId, actualGasPriceObject)
             }
 
             let requestData = {
@@ -598,10 +652,10 @@ export default defineComponent({
                 // chainId: 1,
                 inputTokens: this.getRequestInputTokens(),
                 outputTokens: this.getRequestOutputTokens(),
-                gasPrice: 0.001048154,
+                gasPrice: actualGas,
                 userAddr: this.account,
-                slippageLimitPercent: slippagePercent,
-                sourceBlacklist: [],
+                slippageLimitPercent: this.getSlippagePercent(),
+                sourceBlacklist: ['Hashflow'],
                 sourceWhitelist: [],
                 simulate: true,
                 pathViz: true,
@@ -609,15 +663,106 @@ export default defineComponent({
             }
 
             console.log("Odos request data", requestData);
-            this.quoteRequest(requestData);
-            // this.swapRequest(requestData)
-            //     .then(data => {
-            //         console.log("Odos swap request success", data)
-            //         this.isSwapLoading = false;
-            //     }).catch(e => {
-            //         console.error("Odos swap request failed", e)
-            //         this.isSwapLoading = false;
-            //     })
+            this.swapRequest(requestData, this.selectedInputTokens, this.selectedOutputTokens)
+                .then(data => {
+                    console.log("Odos swap request success", data)
+                    this.isSwapLoading = false;
+                }).catch(e => {
+                console.error("Odos swap request failed", e)
+                this.isSwapLoading = false;
+            })
+        },
+        clearQuotaInfo() {
+            this.pathViz = null
+            this.quotaResponseInfo = null;
+            this.swapResponseInfo = null;
+            // this.updatePathViewFunc(this.pathViz, [], []);
+        },
+        async simulateSwap() {
+            if (this.isSumulateSwapLoading) {
+                console.log('Simulate Swap method not available, prev sap in process');
+                return;
+            }
+
+            console.log("Simulate Swap", this.inputTokensWithSelectedTokensCount, this.outputTokensWithSelectedTokensCount);
+            if (this.inputTokensWithSelectedTokensCount < 1 || this.outputTokensWithSelectedTokensCount < 1) {
+                return;
+            }
+
+            this.updateIsLoadingDataFunc(true);
+            this.isSumulateSwapLoading = true;
+
+            let actualGasPriceObject = await this.getActualGasPrice(this.networkId);
+            console.log("Actual price for gas. network: ", this.networkId, actualGasPriceObject)
+            let actualGas = actualGasPriceObject.baseFee;
+            if (!actualGas && actualGasPriceObject.prices && actualGasPriceObject.prices.length) {
+                actualGas = actualGasPriceObject.prices[0].fee;
+                console.log("Actual price for gas when not found base fee. network: ", this.networkId, actualGasPriceObject)
+            }
+
+            let input = this.getRequestInputTokens(false);
+            let output = this.getRequestOutputTokens(false);
+            if (!input.length || !output.length) {
+                this.isSumulateSwapLoading = false;
+                console.log('simulate Swap not allowed', input, output);
+                return;
+            }
+
+            let requestData = {
+                chainId: this.networkId,
+                // chainId: 1,
+                inputTokens: input,
+                outputTokens: output,
+                gasPrice: actualGas,
+                userAddr: this.account,
+                slippageLimitPercent: this.getSlippagePercent(),
+                sourceBlacklist: ['Hashflow'],
+                sourceWhitelist: [],
+                simulate: true,
+                pathViz: true,
+                // disableRFQs: false
+            }
+
+           this.clearQuotaInfo();
+
+            console.log("Odos simulate swap request data", requestData);
+            this.quoteRequest(requestData)
+                .then(data => {
+                    console.log("Odos simulate swap request success", data)
+                    this.isSumulateSwapLoading = false;
+                    this.updateIsLoadingDataFunc(false);
+
+                    // todo 5 filter by value > 0 this.selectedInputTokens.filer(item => item.selectedToken.value > 0);
+                    // .filter(item => item.selectedToken.value && item.selectedToken.value > 0)
+                    // .filter(item => item.selectedToken.value && item.selectedToken.value > 0)
+                    // .filter(item => item.selectedToken.value && item.selectedToken.value > 0)
+                    this.updatePathViewFunc(data.pathViz,
+                        this.selectedInputTokens,
+                        this.selectedOutputTokens)
+                    this.pathViz = data.pathViz;
+                }).catch(e => {
+                console.error("Odos simulate swap request failed", e)
+                this.isSumulateSwapLoading = false;
+                this.updateIsLoadingDataFunc(false);
+            })
+        },
+
+        getSlippagePercent() {
+            // slippage
+            let slippageInfo = localStorage.getItem('odos_slippage_value');
+            let slippagePercent = 0.05; // default
+            if (!slippageInfo || slippageInfo === 'undefined' || slippageInfo === 'null') {
+                slippageInfo = null;
+            }
+
+            if (slippageInfo) {
+                console.log('slippageInfo: ', slippageInfo)
+                let slippageInfoObject = JSON.parse(slippageInfo);
+                slippagePercent = slippageInfoObject.value;
+            }
+
+            this.slippagePercent = slippagePercent;
+            return slippagePercent;
         },
 
         async disapproveToken(token) {
@@ -677,7 +822,8 @@ export default defineComponent({
 
             let tokenContract = this.tokensContractMap[selectedToken.address];
             console.log('Approve contract: ', token, tokenContract, this.account, this.routerContract.options.address);
-            this.approveToken(tokenContract, this.routerContract.options.address, token.contractValue ? token.contractValue : selectedToken.balanceData.originalBalance)
+            let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
+            this.approveToken(tokenContract, this.routerContract.options.address, approveValue)
                 .then(data => {
                     console.log("Success approving", data);
                     this.checkApproveForToken(token, token.contractValue);
@@ -690,12 +836,16 @@ export default defineComponent({
                 });
         },
 
-        getRequestInputTokens() {
+        getRequestInputTokens(ignoreNullable) {
             let inputTokens = [];
             for (let i = 0; i < this.selectedInputTokens.length; i++) {
                 let token = this.selectedInputTokens[i];
                 let selectedToken = token.selectedToken;
-                console.log("token: ", token)
+                console.log("input token: ", token);
+                if (!ignoreNullable && !token.value) {
+                    console.log("token value is 0: ", token);
+                    continue;
+                }
 
                 inputTokens.push({
                     tokenAddress: selectedToken.address,
@@ -704,11 +854,16 @@ export default defineComponent({
             }
             return inputTokens;
         },
-        getRequestOutputTokens() {
+        getRequestOutputTokens(ignoreNullable) {
             let outputTokens = [];
             for (let i = 0; i < this.selectedOutputTokens.length; i++) {
                 let token = this.selectedOutputTokens[i];
                 let selectedToken = token.selectedToken;
+                if (!ignoreNullable && !token.value) {
+                    console.log("output token value is 0: ", token);
+                    continue;
+                }
+
                 outputTokens.push({
                     tokenAddress: selectedToken.address,
                     proportion: token.value
@@ -720,6 +875,7 @@ export default defineComponent({
         updateTokenValue(token, value) {
             console.log('updateTokenValue: ', token, value)
             token.value = value;
+            this.updateQuotaInfo();
 
             if (!value) {
                 return
@@ -761,6 +917,9 @@ export default defineComponent({
                 token.value = value;
                 this.subtraction(token, 100 - value);
                 this.recalculateOutputTokensSum();
+
+                this.updateQuotaInfo();
+
                 // if (oldTokenValue > value) {
                 //     this.subTokensProportions(token, 100 - value)
                 // } else {
@@ -773,6 +932,8 @@ export default defineComponent({
             for (let i = 0; i < this.selectedOutputTokens.length; i++) {
                 let token = this.selectedOutputTokens[i];
                 let sum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
+                sum = this.swapMethod === 'BUY' ? sum * token.selectedToken.price : sum / token.selectedToken.price
+
                 token.sum = this.$utils.formatMoney(sum, 4)
             }
         },
@@ -1063,6 +1224,42 @@ export default defineComponent({
         setSelectTokenType(type) {
             this.selectTokenType = type;
         },
+
+        updateQuotaInfo() {
+            if (!this.tokensQuotaCounterId) {
+                // first call
+                this.tokensQuotaCounterId = -1;
+                // update
+                console.log("UPDATE QUOTA FIRST DATA")
+                this.simulateSwap()
+                return;
+            }
+
+            this.tokensQuotaCheckerSec = 0;
+            let intervalId = setInterval(async () => {
+                this.tokensQuotaCheckerSec++;
+
+                if (this.tokensQuotaCheckerSec >= 3) {
+                    if (this.tokensQuotaCounterId === intervalId) {
+                        this.tokensQuotaCheckerSec = 0;
+                        try {
+                            // update
+                            console.log("UPDATE QUOTA SECOND DATA")
+                            this.simulateSwap()
+                        } catch (e) {
+                            // ignore
+                        } finally {
+                            clearInterval(intervalId)
+                        }
+                    } else {
+                        clearInterval(intervalId)
+                    }
+
+                }
+            }, 1000);
+
+            this.tokensQuotaCounterId = intervalId;
+        }
     }
 })
 </script>
@@ -1225,7 +1422,7 @@ div {
     font-size: 18px;
     line-height: 22px;
 
-    color: #BABFC8;
+    color: var(--progress-text);
 }
 
 .decrease-allowance {
@@ -1241,6 +1438,7 @@ div {
 
 .transaction-info-container {
     padding: 20px;
+    max-width: 600px;
 }
 
 .transaction-info-title {
@@ -1275,6 +1473,7 @@ div {
     text-decoration: underline;
     font-weight: bold;
     text-align: end;
+    color: var(--main-gray-text);
 }
 
 .transaction-info-footer {
@@ -1298,5 +1497,18 @@ div {
 
 .rotate:hover {
     transform: rotate(180deg);
+}
+
+.dont-work-on-network {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+
+    color: #CF3F92;
+}
+
+.dont-work-on-network-container {
+    text-align: center;
 }
 </style>

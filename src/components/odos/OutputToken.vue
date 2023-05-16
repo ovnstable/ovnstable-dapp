@@ -78,7 +78,7 @@
                 </div>
             </div>
 
-            <div class="slider-container">
+            <div v-if="!isTokenWithoutSlider" class="slider-container">
               <div>
                   <div class="slider-item-container">
                       <Slider
@@ -114,8 +114,10 @@ export default defineComponent({
     components: {Slider},
     props: [
         'tokenInfo',
+        'swapMethod',
         'removeItemFunc',
         'isTokenRemovable',
+        'isTokenWithoutSlider',
         'lockProportionFunc',
         'updateSliderValueFunc',
         'selectTokenFunc',
@@ -220,7 +222,6 @@ div {
 .select-token-balance-container {
     text-align: end;
     position: relative;
-    cursor: pointer;
 }
 
 .select-token-balance-text {

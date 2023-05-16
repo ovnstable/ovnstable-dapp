@@ -92,22 +92,28 @@ function _getParams(networkName) {
         case "polygon":
         case "polygon_dev":
         case "137":
+        case 137:
         case "31337":
+        case 31337:
             return POLYGON_PARAMS;
         case "bsc":
         case "56":
+        case 56:
             return BSC_PARAMS;
         case "op":
         case "optimism":
         case "10":
+        case 10:
             return OPTIMISM_PARAMS;
         case "ar":
         case "arbitrum":
         case "42161":
+        case 42161:
             return ARBITRUM_PARAMS;
         case "zk":
         case "zksync":
         case "324":
+        case 324:
             return ZKSYNC_PARAMS;
         default:
             return OPTIMISM_PARAMS; //BASE_PARAMS;

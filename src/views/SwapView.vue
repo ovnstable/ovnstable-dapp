@@ -17,10 +17,18 @@
             <div class="pt-20">
                 <div class="row">
                     <div class="col-lg-5 col-md-6 col-sm-12">
-                        <SwapForm/>
+                        <SwapForm :update-path-view-func="updatePathView"
+                                :update-button-disabled-func="updateButtonDisabled"
+                                :update-is-loading-data-func="updateIsLoadingData"/>
                     </div>
-                    <div class="col-lg-7 col-md-7 col-sm-12">
+                    <div v-if="!isFirstInitialisationForPath" class="col-lg-7 col-md-7 col-sm-12">
                         <SwapInformation/>
+                    </div>
+                    <div v-else class="col-lg-7 col-md-7 col-sm-12">
+                        <PathView :path-object="pathViz"
+                                    :input-tokens="inputTokens"
+                                    :output-tokens="outputTokens"
+                                    :is-loading-data="isLoadingData"/>
                     </div>
                 </div>
             </div>
@@ -33,12 +41,20 @@ import {defineComponent} from 'vue'
 import SwapForm from "@/components/odos/SwapForm.vue";
 import SwapInformation from "@/components/odos/SwapInformation.vue";
 import {mapActions} from "vuex";
+import PathView from "@/components/odos/PathView.vue";
+import {tokenLogo} from "@/components/mixins/token-logo";
 
 export default defineComponent({
     name: "SwapView",
-    components: {SwapInformation, SwapForm},
+    components: {PathView, SwapInformation, SwapForm},
     data() {
         return {
+            pathViz: null,
+            inputTokens: [],
+            outputTokens: [],
+            buttonDisabled: true,
+            isLoadingData: true,
+            isFirstInitialisationForPath: false
         }
     },
     mounted() {
@@ -53,6 +69,20 @@ export default defineComponent({
             this.showMintView();
             this.showSwapModal();
         },
+        updatePathView(path, inputTokens, outputTokens) {
+            if (!this.pathViz) {
+                this.isFirstInitialisationForPath = true
+            }
+            this.pathViz = path;
+            this.inputTokens = inputTokens;
+            this.outputTokens = outputTokens;
+        },
+        updateButtonDisabled(value) {
+            this.buttonDisabled = value
+        },
+        updateIsLoadingData(value) {
+            this.isLoadingData = value
+        }
     }
 })
 </script>
@@ -93,5 +123,24 @@ export default defineComponent({
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
+}
+
+
+/* mobile */
+@media only screen and (max-width: 960px) {
+    .toggle-row {
+        border-bottom: 2px solid var(--main-border);
+        width: 100% !important;
+        color: var(--main-gray-text);
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .toggle-row {
+        border-bottom: 2px solid var(--main-border);
+        width: 100% !important;
+        color: var(--main-gray-text);
+    }
 }
 </style>

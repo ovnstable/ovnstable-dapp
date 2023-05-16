@@ -75,6 +75,23 @@ class OdosApiService {
         })
     }
 
+    getActualGasPrice(chainId) {
+        let fetchOptions = {
+            headers: {
+                "Access-Control-Allow-Origin": API_URL
+            }
+        };
+        return new Promise((resolve, reject) => {
+            apiService.get(API_URL + '/gas/price/' + chainId, fetchOptions)
+                .then(data => {
+                    resolve(data)
+                })
+                .catch(e => {
+                    reject(getErrorObject(e))
+                })
+        })
+    }
+
     quoteRequest(requestData) {
         let fetchOptions = {
             headers: {

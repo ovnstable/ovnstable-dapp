@@ -28,6 +28,11 @@
                             type="text"
                             placeholder="Search by name or paste address"
                             class="input-style"/>
+                    <div @click="clearSearchQuery()" class="search-input-close-container">
+                        <img src="/assets/icon/swap/search-close.svg"
+                             alt="close"
+                             class="search-image-close-image">
+                    </div>
                 </div>
                 <div class="search-items-container">
                     <div v-for="token in queryTokens" :key="token.id"
@@ -162,8 +167,11 @@ export default defineComponent({
             }
 
             this.removeTokenFunc(token);
+        },
+        clearSearchQuery() {
+            this.searchQuery = null;
         }
-    }
+    },
 })
 </script>
 
@@ -252,6 +260,7 @@ div {
 }
 
 .search-input-container {
+    position: relative;
     align-items: center;
     padding: 12px 20px;
 
@@ -373,4 +382,12 @@ div {
     }
 }
 
+.search-input-close-container {
+    position: absolute;
+    right: 15px;
+    top: 16px;
+    cursor: pointer;
+    width: 30px;
+    text-align: center
+}
 </style>

@@ -60,7 +60,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 text-right">
                         <div class="select-token-balance-container">
                             <div class="select-token-balance-img">
                                 <img src="/assets/icon/swap/wallet.svg" alt="select-token">
@@ -222,6 +222,7 @@ div {
 .select-token-balance-container {
     text-align: end;
     position: relative;
+    display: inline-flex;
 }
 
 .select-token-balance-text {
@@ -230,12 +231,10 @@ div {
     font-size: 18px;
     line-height: 28px;
     color: #707A8B;
+    padding-left: 2px;
 }
 
 .select-token-balance-img {
-    position: absolute;
-    right: 45px;
-    top: 2px;
 }
 
 .input-style {

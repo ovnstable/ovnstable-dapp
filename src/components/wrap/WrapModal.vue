@@ -15,7 +15,14 @@
                     </v-btn>
                 </v-toolbar>
 
-                <v-card-text class="pt-8 content-container">
+                <v-card-text class="pt-2 content-container">
+                    <CoinButtons
+                            :modal-type="'WUSD+'"
+                            :close-func="close"
+                            :modal-action-type="isWrapView ? 'MINT' : 'REDEEM'"
+                            class="pl-lg-10 pr-lg-10 pl-md-5 pr-md-5 pb-7">
+                    </CoinButtons>
+
                     <v-row class="invest-body-row mx-n2" align="center">
                         <Wrap v-if="isWrapView"/>
                         <Unwrap v-else/>
@@ -32,11 +39,13 @@
 import {mapActions, mapGetters} from "vuex";
 import Wrap from "@/components/wrap/action/Wrap";
 import Unwrap from "@/components/wrap/action/Unwrap";
+import CoinButtons from "@/components/common/element/CoinButtons.vue";
 
 export default {
     name: "WrapModal",
 
     components: {
+        CoinButtons,
         Wrap,
         Unwrap,
     },

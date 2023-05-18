@@ -157,8 +157,7 @@ export default {
         ...mapGetters('accountData', ['account']),
 
         isShowSkimMarker: function () {
-            return
-            this.cardData.skimEnabled &&
+            return this.cardData.skimEnabled &&
             (this.account === '0x4473D652fb0b40b36d549545e5fF6A363c9cd686' ||
                 this.account === '0x5CB01385d3097b6a189d1ac8BA3364D900666445' ||
                 this.account === '0x9030d5c596d636eefc8f0ad7b2788ae7e9ef3d46' ||

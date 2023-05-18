@@ -61,7 +61,7 @@
                            </div>
                        </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 text-right">
                         <div @click="clickOnBalance()" class="select-token-balance-container">
                             <div v-if="token.selectedToken && token.selectedToken.balanceData.balance"
                                  class="select-token-balance-img">
@@ -235,6 +235,7 @@ div {
     text-align: end;
     position: relative;
     cursor: pointer;
+    display: inline-flex
 }
 
 .select-token-balance-text {
@@ -243,6 +244,7 @@ div {
     font-size: 18px;
     line-height: 28px;
     color: #707A8B;
+    padding-left: 2px;
 }
 
 .select-token-balance-text-enabled {
@@ -250,9 +252,6 @@ div {
 }
 
 .select-token-balance-img {
-    position: absolute;
-    right: 45px;
-    top: 2px;
 }
 
 .input-style {

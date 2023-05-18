@@ -467,16 +467,15 @@ export default {
             window.open(url, isNotBlank ? '_self' : '_blank').focus();
         },
 
-        goToActionByPath(path, queryParams) {
+        goToActionByPath(path) {
               this.$router.push({
-                  path: path,
-                  query: queryParams ? queryParams : {}
+                  path: path
               });
         },
 
         featuredClick() {
             this.selectTab('featured');
-            this.goToActionByPath('/featured', {tabName: 'featured'});
+            this.goToActionByPath('/featured');
         },
 
         swapOdosClick() {
@@ -486,70 +485,70 @@ export default {
 
         dashBoardClick() {
             this.selectTab('dashboard');
-            this.goToActionByPath('/', {tabName: 'dashboard'});
+            this.goToActionByPath('/');
             this.trackClick({action: 'dashboard-click', event_category: 'View Page', event_label: 'Open dashboard page', value: 1 });
         },
 
         collateralClick() {
             this.selectTab('usdplus_collateral');
-            this.goToActionByPath('/collateral', {tabName: 'collateral'});
+            this.goToActionByPath('/collateral');
             this.trackClick({action: 'collateral-click', event_category: 'View Page', event_label: 'Open collateral page', value: 1 });
         },
 
         daiCollateralClick() {
           this.selectTab('daiplus_collateral');
-          this.goToActionByPath('/collateral/dai', {tabName: 'collateralDai'});
+          this.goToActionByPath('/collateral/dai');
           this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
         },
 
         usdtCollateralClick() {
           this.selectTab('usdtplus_collateral');
-          this.goToActionByPath('/collateral/usdt', {tabName: 'collateralUsdt'});
+          this.goToActionByPath('/collateral/usdt');
           this.trackClick({action: 'usdt-collateral-click', event_category: 'View Page', event_label: 'Open usdt collateral page', value: 1 });
         },
 
         usdPlusPoolsClick() {
             this.selectTab('usdplus_pools');
-            this.goToActionByPath('/pools', {tabName: 'usdPlusPools'});
+            this.goToActionByPath('/pools');
         },
 
         statsClick() {
             this.selectTab('usdplus_performance');
-            this.goToActionByPath('/stats', {tabName: 'performance'});
+            this.goToActionByPath('/stats');
             this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open stats page', value: 1 });
         },
 
         daiStatsClick() {
             this.selectTab('daiplus_performance');
-            this.goToActionByPath('/stats/dai', {tabName: 'daiPerformance'});
+            this.goToActionByPath('/stats/dai');
             this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
         },
 
         usdtStatsClick() {
             this.selectTab('usdtplus_performance');
-            this.goToActionByPath('/stats/usdt', {tabName: 'usdtPerformance'});
+            this.goToActionByPath('/stats/usdt');
             this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
         },
 
         etsClick() {
             this.selectTab('market');
-            this.goToActionByPath('/market', {tabName: 'ets'});
+            this.goToActionByPath('/market');
         },
 
         insuranceClick() {
             this.selectTab('insurance_about');
-            this.goToActionByPath('/insurance', {tabName: 'about'});
+            this.goToActionByPath('/insurance');
             this.trackClick({action: 'insurance-click', event_category: 'View Page', event_label: 'Open insurance page', value: 1 });
         },
 
         insurancePerformanceClick() {
             this.selectTab('insurance_performance');
-            this.goToActionByPath('/insurance/polygon', {tabName: 'performance'});
+            this.goToActionByPath('/insurance/polygon');
         },
 
         insuranceReservesClick() {
             this.selectTab('insurance_reserves');
-            this.goToActionByPath('/reserves', {tabName: 'reserves'});
+            this.goToActionByPath('/reserves');
         },
 
         swapClick() {

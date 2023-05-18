@@ -192,8 +192,8 @@ export default {
 
     /* WARNINGS */
     --onboard-warning-100:  var(--secondary);
-    --onboard-warning-400:  var(--card-info-background);
-    --onboard-warning-700:  var(--main-gray-text);
+    --onboard-warning-400:  var(--blocknative-warnings);
+    --onboard-warning-700:  #707A8B;
 }
 
 html {

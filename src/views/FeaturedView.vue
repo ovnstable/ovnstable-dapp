@@ -170,8 +170,13 @@ export default {
   mounted() {
       console.log(this.$route.query.tabName);
       this.loadEtsList();
-      this.setTab(this.networkName);
-      this.loadData();
+      if (!this.$route.query.tabName) {
+          this.setTab(this.networkName);
+          this.loadData();
+      } if (this.$route.query.tabName) {
+          this.setTab(this.$route.query.tabName);
+          this.loadData();
+      }
   },
 
   methods: {

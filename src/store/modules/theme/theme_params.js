@@ -64,6 +64,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--blocknative-warnings',
+        enabled: true,
+        theme: {
+            light: '#DEE1E5',
+            dark: '#4C586D'
+        }
+    },
+    {
         name: '--action-btn-bg',
         enabled: true,
         theme: {

@@ -26,9 +26,12 @@
                 <div class="icon ml-n2 mr-2">
                     <v-img v-if="cardData.data.token3Icon" :src="cardData.data.token3Icon"/>
                 </div>
-                <label class="card-label">
+                <div class="card-label">
                     {{ cardData.data.name }}
-                </label>
+                    <span class="skim-marker">
+                        {{isShowSkimMarker ? '(skim)' : ''}}
+                    </span>
+                </div>
             </v-row>
         </v-col>
         <v-col cols="3" class="my-1">
@@ -135,6 +138,8 @@
 
 <script>
 
+import {mapGetters} from "vuex";
+
 export default {
     name: "PoolListCard",
 
@@ -149,6 +154,16 @@ export default {
     },
 
     computed: {
+        ...mapGetters('accountData', ['account']),
+
+        isShowSkimMarker: function () {
+            return
+            this.cardData.skimEnabled &&
+            (this.account === '0x4473D652fb0b40b36d549545e5fF6A363c9cd686' ||
+                this.account === '0x5CB01385d3097b6a189d1ac8BA3364D900666445' ||
+                this.account === '0x9030d5c596d636eefc8f0ad7b2788ae7e9ef3d46' ||
+                this.account === '0x12a79e67ed7f4fd0a0318d331941800898dab30d') // test dev team addresses
+        },
     },
 
     data: () => ({
@@ -222,6 +237,9 @@ export default {
                     break;
                 case 'Gnd':
                     url = 'https://farm.gndprotocol.com/farms';
+                    break;
+                case 'Vesync':
+                    url = 'https://app.vesync.finance/liquidity/';
                     break;
                 default:
                     url = this.cardData.data.explorerUrl + '/address/';
@@ -439,5 +457,11 @@ export default {
 
 .see-on-dex-label {
     color: #b2b2b2
+}
+
+.skim-marker {
+    font-size: 14px;
+    font-weight: bold;
+    color: #44c2a8;
 }
 </style>

@@ -149,6 +149,7 @@ export default {
                         dex: pool.platform,
                         tvl: pool.tvl,
                         apr: pool.apr,
+                        skimEnabled: pool.skimEnabled,
                         explorerUrl: networkConfig.explorerUrl,
                       });
                     }
@@ -180,6 +181,7 @@ export default {
                 hasCap: true,
                 tvl: pool.tvl,
                 apr: pool.apr,
+                skimEnabled: pool.skimEnabled,
                 monthApy: 0,
                 cardOpened: false,
               },

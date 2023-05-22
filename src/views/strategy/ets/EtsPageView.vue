@@ -134,18 +134,12 @@
             </v-col>
           </v-row>
 
-          <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
-            <label class="tab-btn mr-4" @click="tab=1" v-bind:class="activeTabPerformance">Performance</label>
-            <label class="tab-btn ml-4" @click="tab=2" v-bind:class="activeTabAbout">About ETS</label>
-          </v-row>
-
-          <PerformanceTab v-if="tab === 1"
+          <PerformanceTab
                           :ets-data="etsData"
                           :ets-strategy-data="etsStrategyData"
                           :ets-apy-data="etsApyData"
                           :ets-tvl-data="etsTvlData"
                           :usd-plus-apy-data="usdPlusApyData"/>
-          <AboutTab v-if="tab === 2" :ets-data="etsData"/>
         </v-col>
 
         <v-col cols="3" v-if="$wu.isFull()">
@@ -270,7 +264,6 @@ import StrategyBanner from "@/components/market/strategy/section/ets/StrategyBan
 import RiskDisclosureModal from "@/components/market/modal/ets/RiskDisclosureModal";
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
-import AboutTab from "@/views/strategy/ets/tab/AboutTab";
 import PerformanceTab from "@/views/strategy/ets/tab/PerformanceTab";
 import moment from "moment/moment";
 import {axios} from "@/plugins/http-axios";
@@ -282,7 +275,6 @@ export default {
 
   components: {
     PerformanceTab,
-    AboutTab,
     Tooltip,
     RiskDisclosureModal,
     StrategyBanner

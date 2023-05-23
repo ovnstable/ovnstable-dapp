@@ -86,11 +86,13 @@
                         </div>
                         <div class="col-4">
                             <div class="pool-info-container">
-                                <div v-if="branch.length > 2" class="swap-name-container">
-                                    SWAP
+                                <div v-if="getUniquePools(branch).length <= 1 &&
+                                (getUniquePools(branch).includes('Overnight Wrapper') || getUniquePools(branch).includes('Overnight Exchange'))"
+                                     class="swap-name-container">
+                                    MINT
                                 </div>
                                 <div v-else class="swap-name-container">
-                                    MINT
+                                    SWAP
                                 </div>
                                 <div class="arrow-container">
                                     <img v-if="isPoolOpenMap[index]" src="/assets/icon/swap/path/pools-close.svg" alt="close">
@@ -113,8 +115,6 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -199,11 +199,8 @@ export default defineComponent({
         async initLogos(pathViz) {
             for (let i = 0; i < pathViz.nodes.length; i++) {
                 let node = pathViz.nodes[i];
-                console.log("this.ovnMarkers: ", this.ovnMarkers, node.symbol, node);
-                console.log("this.ovnMarkers2: ", this.ovnMarkers.includes(node.symbol));
                 if (this.ovnMarkers.includes(node.symbol)) {
                     node.logoUrl = await this.loadOvernightTokenImage(node);
-                    console.log("this.ovnMarkers3: ", node.logoUrl);
                     continue
                 }
 
@@ -254,10 +251,59 @@ export default defineComponent({
                 // console.log("Root: ", root);
             }
 
-            console.log("Inited root: ", root);
+            // console.log("Inited root: ", root);
+            // return root;
             let mergedRoot = this.getMergedBranches(root);
             // return mergedRoot;
-            return this.getFilteredRoot(mergedRoot, inputTokens, outputTokens);
+            return this.getDuplicateClearedRoot(mergedRoot);
+            // return this.getFilteredRoot(mergedRoot, inputTokens, outputTokens);
+        },
+
+        getDuplicateClearedRoot(root) {
+            if (!root) {
+                return root;
+            }
+
+            let existsPathMap = new Map(); // write full path by queue of symbol
+
+            console.log("For clear duplicate data: ", root);
+            let newRoot = new Map();
+            let branches = Array.from(root.values());
+            let keys = Array.from(root.keys());
+            for (let i = 0; i < branches.length; i++) {
+                let branch = branches[i];
+                let key = keys[i];
+
+                let branchWithoutDuplicate = [];
+                let setBranchWithoutDuplicate = new Set();
+
+                let pathName = "";
+                branch.forEach(item => {
+                    const fieldValue = item.symbol; // Replace 'name' with the field you want to filter by
+
+                    if (!setBranchWithoutDuplicate.has(fieldValue)) {
+                        setBranchWithoutDuplicate.add(fieldValue);
+                        branchWithoutDuplicate.push(item);
+                        pathName = pathName + "_" + fieldValue;
+                    }
+                });
+
+                // remove single
+                if (!branchWithoutDuplicate || branchWithoutDuplicate.length <= 1) {
+                    continue;
+                }
+
+
+                // duplicate path
+                if (existsPathMap.get(pathName)) {
+                    continue;
+                }
+
+                existsPathMap.set(pathName, true);
+                newRoot.set(key, branchWithoutDuplicate);
+            }
+
+            return newRoot;
         },
         getFilteredRoot(root, inputTokens, outputTokens) {
             if (!root) {
@@ -286,6 +332,10 @@ export default defineComponent({
             return newRoot;
         },
         getMergedBranches(root) {
+            if (!root) {
+                return root;
+            }
+
             let keysToDeleteList = []
             let processConnect = true;
             for (let i = 0; i < 5; i++) {

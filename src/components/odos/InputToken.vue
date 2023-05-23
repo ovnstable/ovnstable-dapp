@@ -134,12 +134,12 @@ export default defineComponent({
             }
         },
         inputUpdate(value) {
-            if (this.token.selectedToken) {
+           /* if (this.token.selectedToken) {
                 if (value*1 > this.token.selectedToken.balanceData.balance*1) {
                     value = this.$utils.formatMoney(this.token.selectedToken.balanceData.balance*1, 6);
                     this.token.value = value;
                 }
-            }
+            }*/
 
             this.updateTokenValueFunc(this.tokenInfo, value)
         },

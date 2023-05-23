@@ -283,7 +283,7 @@
                 <v-row class="info-row footer-row mt-6" justify="start" align="center">
                     <label class="card-info footer-label mt-2">Inception date</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value mt-2">{{ etsData.inceptionDate }}</label>
+                    <label class="card-info-value date mt-2">{{ etsData.inceptionDate }}</label>
                 </v-row>
             </v-col>
         </v-row>
@@ -722,6 +722,14 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .card-info-value {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
+    color: var(--secondary-gray-text);
+}
+
+.info-value-address {
+    color: white
+}
+
+.date {
     color: white;
 }
 

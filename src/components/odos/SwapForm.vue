@@ -282,17 +282,17 @@
 
 <script>
 import {defineComponent} from 'vue'
-import InputToken from "@/components/odos/InputToken.vue";
-import OutputToken from "@/components/odos/OutputToken.vue";
-import SelectTokensModal from "@/components/odos/modals/SelectTokensModal.vue";
+import InputToken from "@/components/swap-module/InputToken.vue";
+import OutputToken from "@/components/swap-module/OutputToken.vue";
+import SelectTokensModal from "@/components/swap-module/modals/SelectTokensModal.vue";
 import {mapActions, mapGetters} from "vuex";
-import AdvancedSettingsModal from "@/components/odos/modals/AdvancedSettingsModal.vue";
+import AdvancedSettingsModal from "@/components/swap-module/modals/AdvancedSettingsModal.vue";
 import {odosSwap} from "@/components/mixins/odos-swap";
 import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
 import SuccessModal from "@/components/common/modal/action/SuccessModal.vue";
 import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
 import SuccessOdosModal from "@/components/odos/modals/SuccessOdosModal.vue";
-import NetworkNotAvailable from "@/components/odos/network-not-available.vue";
+import NetworkNotAvailable from "@/components/swap-module/network-not-available.vue";
 
 export default defineComponent({
     name: "SwapForm",

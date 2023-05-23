@@ -39,9 +39,9 @@
 <script>
 import {defineComponent} from 'vue'
 import SwapForm from "@/components/odos/SwapForm.vue";
-import SwapInformation from "@/components/odos/SwapInformation.vue";
+import SwapInformation from "@/components/swap-module/SwapInformation.vue";
 import {mapActions} from "vuex";
-import PathView from "@/components/odos/PathView.vue";
+import PathView from "@/components/swap-module/PathView.vue";
 import {tokenLogo} from "@/components/mixins/token-logo";
 
 export default defineComponent({

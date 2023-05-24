@@ -8,7 +8,7 @@
         <v-list class="mt-2">
             <v-list-item>
                 <v-list-item-title>
-                    <img :src="require('@/assets/logo.svg')" @click="openLink('https://overnight.fi/')"
+                    <img :src="require('@/assets/logo.svg')" @click="openLinkToLanding('https://overnight.fi/')"
                          class="logo-img">
                 </v-list-item-title>
             </v-list-item>
@@ -363,8 +363,8 @@
                 </v-list-item>
 
                 <v-list-item link class="mb-0">
-                    <v-list-item-title @click="openLink('https://overnight.canny.io/')">
-                        <label class="footer-item-label">Vote for new features</label>
+                    <v-list-item-title @click="openLink('https://discord.com/channels/933003627444969552/967813123149033542/967813482684760135/')">
+                        <label class="footer-item-label">Help center in Discord</label>
                     </v-list-item-title>
                 </v-list-item>
 
@@ -456,6 +456,10 @@ export default {
             window.open(url, isNotBlank ? '_self' : '_blank').focus();
         },
 
+        openLinkToLanding(url) {
+            window.open(url, '_self').focus();
+        },
+
         goToActionByPath(path) {
               this.$router.push({
                   path: path
@@ -474,7 +478,7 @@ export default {
 
         dashBoardClick() {
             this.selectTab('dashboard');
-            this.goToActionByPath('/');
+            this.goToActionByPath('/dashboard');
             this.trackClick({action: 'dashboard-click', event_category: 'View Page', event_label: 'Open dashboard page', value: 1 });
         },
 

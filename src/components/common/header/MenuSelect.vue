@@ -380,7 +380,7 @@ export default {
 
         dashBoardClick() {
             this.selectTab('dashboard');
-            this.goToActionByPath('/', { tabName: 'dashboard' });
+            this.goToActionByPath('/dashboard', { tabName: 'dashboard' });
             this.trackClick({
                 action: 'dashboard-click',
                 event_category: 'View Page',

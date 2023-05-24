@@ -87,6 +87,10 @@ const routes = [
                 }
             },
             {
+                path: '/',
+                redirect: '/swap',
+            },
+            {
                 path: '/swap',
                 name: 'SwapView',
                 component: () => import('../views/SwapView.vue'),
@@ -201,7 +205,7 @@ const routes = [
                 }
             },
             {
-                path: '/',
+                path: '/dashboard',
                 name: 'MyPerformanceView',
                 component: () => import('../views/dashboard/MyPerformanceView'),
                 meta: {

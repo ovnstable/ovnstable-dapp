@@ -1,6 +1,11 @@
 <template>
     <div>
-        <div class="swap-container">
+        <div v-if="!isAvailableOnNetwork">
+            <NetworkNotAvailable :network-name="'ZkSync'">
+            </NetworkNotAvailable>
+        </div>
+
+        <div v-else class="swap-container">
             <div v-if="!isTokensLoadedAndFiltered"
                  class="loader-container">
                 <div class="row">
@@ -155,12 +160,6 @@
                         </div>
                     </div>
 
-                    <div v-if="!isAvailableOnNetwork" class="dont-work-on-network-container pt-3">
-                        <div class="dont-work-on-network">
-                            Swap isn’t available on ZkSynk chain.
-                        </div>
-                    </div>
-
                     <div class="label-container pt-3">
                         <div class="row">
                             <div class="col-6 pr-1" style="padding-top:15px">
@@ -283,23 +282,26 @@
 
 <script>
 import {defineComponent} from 'vue'
-import InputToken from "@/components/odos/InputToken.vue";
-import OutputToken from "@/components/odos/OutputToken.vue";
-import SelectTokensModal from "@/components/odos/modals/SelectTokensModal.vue";
+import InputToken from "@/components/swap-module/InputToken.vue";
+import OutputToken from "@/components/swap-module/OutputToken.vue";
+import SelectTokensModal from "@/components/swap-module/modals/SelectTokensModal.vue";
 import {mapActions, mapGetters} from "vuex";
-import AdvancedSettingsModal from "@/components/odos/modals/AdvancedSettingsModal.vue";
+import AdvancedSettingsModal from "@/components/swap-module/modals/AdvancedSettingsModal.vue";
 import {odosSwap} from "@/components/mixins/odos-swap";
 import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
 import SuccessModal from "@/components/common/modal/action/SuccessModal.vue";
 import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
 import SuccessOdosModal from "@/components/odos/modals/SuccessOdosModal.vue";
+import NetworkNotAvailable from "@/components/swap-module/network-not-available.vue";
 
 export default defineComponent({
     name: "SwapForm",
     mixins: [odosSwap],
     components: {
+        NetworkNotAvailable,
         SuccessOdosModal,
-        ErrorModal, SuccessModal,
+        ErrorModal,
+        SuccessModal,
         WaitingModal,
         AdvancedSettingsModal,
         SelectTokensModal,
@@ -322,6 +324,10 @@ export default defineComponent({
     },
     mounted() {
         this.init();
+
+        if (!this.isAvailableOnNetwork) {
+            this.mintAction();
+        }
     },
     data() {
         return {
@@ -408,7 +414,8 @@ export default defineComponent({
             return this.inputTokensWithSelectedTokensCount === 0 ||
                 this.outputTokensWithSelectedTokensCount === 0 ||
                 this.swapResponseConfirmInfo.waitingConformation ||
-                !this.isAvailableOnNetwork;
+                !this.isAvailableOnNetwork ||
+                !this.isAnyTokensBalanceIsInsufficient
         },
 
         disableButtonMessage() {
@@ -419,6 +426,10 @@ export default defineComponent({
                 }
 
                 return "SWITCH CHAIN"
+            }
+
+            if (!this.isAnyTokensBalanceIsInsufficient) {
+                return 'BALANCE IS INSUFFICIENT';
             }
 
             if (this.swapResponseConfirmInfo.waitingConformation) {
@@ -436,6 +447,18 @@ export default defineComponent({
             }
 
             return sum;
+        },
+
+        isAnyTokensBalanceIsInsufficient () {
+            let tokens = this.selectedInputTokens;
+            for (let i = 0; i < tokens.length; i++) {
+                let token = tokens[i];
+                if (token.value*1 > token.selectedToken.balanceData.balance*1) {
+                    return false; // any with value > balance
+                }
+            }
+
+            return true;
         }
 
     },
@@ -473,6 +496,10 @@ export default defineComponent({
                 // hide swap form and clear all(watch function) data,
                 // after new token loaded collection
                 this.isTokensLoadedAndFiltered = false;
+
+                if (!this.isAvailableOnNetwork) {
+                    this.mintAction();
+                }
             }
         },
         isDisableButton: function (val, oldVal) {
@@ -484,9 +511,16 @@ export default defineComponent({
     },
 
     methods: {
+        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions('walletAction', ['connectWallet']),
+
+        mintAction() {
+            this.showMintView();
+            this.showSwapModal();
+        },
 
         init() {
             this.loadChains();
@@ -1511,4 +1545,5 @@ div {
 .dont-work-on-network-container {
     text-align: center;
 }
+
 </style>

@@ -66,8 +66,8 @@
 
 <script>
 import {defineComponent} from 'vue'
-import SelectTokenShort from "@/components/odos/SelectTokenShort.vue";
-import SelectTokenWithSearch from "@/components/odos/SelectTokenWithSearch.vue";
+import SelectTokenShort from "@/components/swap-module/SelectTokenShort.vue";
+import SelectTokenWithSearch from "@/components/swap-module/SelectTokenWithSearch.vue";
 
 export default defineComponent({
     name: "SelectTokensModal",

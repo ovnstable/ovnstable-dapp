@@ -142,6 +142,102 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@media only screen and (max-width: 960px) {
+    .select-token-item-text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .selected-token-item-text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .select-token-balance-text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .usd-equal-text {
+        font-size: 16px;
+        line-height: 28px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .select-token-item-text {
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .selected-token-item-text {
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .select-token-balance-text {
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .usd-equal-text {
+        font-size: 18px;
+        line-height: 28px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .select-token-item-text {
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .selected-token-item-text {
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .select-token-balance-text {
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .usd-equal-text {
+        font-size: 18px;
+        line-height: 28px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .select-token-item-text {
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .selected-token-item-text {
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .select-token-balance-text {
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+
+    .usd-equal-text {
+        font-size: 18px;
+        line-height: 28px;
+    }
+}
 
 div {
     font-family: 'Roboto',serif;
@@ -182,8 +278,6 @@ div {
 .select-token-item-text {
     display: inline-block;
     font-weight: 700;
-    font-size: 18px;
-    line-height: 24px;
     color: var(--main-gray-text);
     margin-right: 15px;
 }
@@ -192,8 +286,6 @@ div {
     display: inline-block;
     font-style: normal;
     font-weight: 600;
-    font-size: 18px;
-    line-height: 24px;
     color: var(--main-gray-text);
     margin-right: 15px;
     padding-left: 30px;
@@ -228,9 +320,7 @@ div {
 .select-token-balance-text {
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 28px;
-    color: #707A8B;
+    color: var(--links-blue);
     padding-left: 2px;
 }
 
@@ -259,13 +349,12 @@ div {
 .usd-equal-text {
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 28px;
     color: #707A8B;
 }
 
 .numeric-change {
     font-size: 14px;
+    color: var(--links-blue);
 }
 
 .remove-container {

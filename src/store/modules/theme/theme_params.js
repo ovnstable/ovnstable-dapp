@@ -16,6 +16,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--swap-arrow-bg',
+        enabled: true,
+        theme: {
+            light: '#FFFFFF',
+            dark: '#29323E'
+        }
+    },
+    {
         name: '--card-info-background',
         enabled: true,
         theme: {

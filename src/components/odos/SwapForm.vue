@@ -21,23 +21,22 @@
             </div>
 
             <div v-else>
-                <div class="swap-header">
-                    <div @click="showSettingsModals(true)" class="swap-settings">
-                        <img v-if="light" src="/assets/icon/swap/settings.svg" alt="settings">
-                        <img v-else src="/assets/icon/swap/settings-dark.svg" alt="settings">
-                    </div>
-                </div>
-
                 <div class="swap-body">
                     <div>
                         <div class="input-swap-container">
-                            <div class="swap-title pb-2">
-                                <span v-if="swapMethod === 'SELL'">
+                            <div class="swap-title pb-lg-2 mt-2">
+                                <div>
+                                    <span v-if="swapMethod === 'SELL'">
                                      Swap from Overnight
                                 </span>
-                                <span v-else>
+                                    <span v-else>
                                     Swap from
                                 </span>
+                                </div>
+                                <div @click="showSettingsModals(true)" class="swap-settings">
+                                    <img v-if="light" src="/assets/icon/swap/settings.svg" alt="settings">
+                                    <img v-else src="/assets/icon/swap/settings-dark.svg" alt="settings">
+                                </div>
                             </div>
                             <div v-for="token in inputTokens" :key="token.id" class="input-component-container">
                                 <div v-if="isShowDecreaseAllowance && token.selectedToken"
@@ -107,9 +106,10 @@
                                          @click="addNewOutputToken"
                                          class="add-token-text">
                                         + Select token
+                                        {{outputTokensWithSelectedTokensCount}}
                                     </div>
                                 </div>
-                                <div v-if="outputTokensWithSelectedTokensCount" class="col-6">
+                                <div v-if="outputTokensWithSelectedTokensCount >= 2" class="col-6">
                                     <div @click="resetOutputs"
                                          class="add-token-text max-all">
                                         Reset output %
@@ -1165,6 +1165,7 @@ export default defineComponent({
 
             this.clearAllTokens();
         },
+        // написать функцию которая поменяет местами инпут и аутпут токены, сбрасывал их значения до дефолта, вместо clearAllSelectedTokens при вызове changeSwap,
         clearAllTokens() {
             this.inputTokens = [];
             this.outputTokens = [];
@@ -1299,18 +1300,141 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@media only screen and (max-width: 960px) {
+    .swap-container {
+        padding: 10px 20px;
+        gap: 8px;
+        background: var(--swap-main-banner-background);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+        border-radius: 28px;
+        max-width: 600px;
+    }
+
+    .add-token-text {
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    .swap-title {
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .swap-button-title {
+        font-size: 16px;
+        line-height: 22px;
+    }
+
+    .disable-button-title {
+        font-size: 16px;
+        line-height: 22px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .swap-container {
+        padding: 40px 30px;
+        gap: 8px;
+        background: var(--swap-main-banner-background);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+        border-radius: 28px;
+        max-width: 600px;
+    }
+    .add-token-text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .swap-title {
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .swap-button-title {
+        font-size: 18px;
+        line-height: 22px;
+    }
+
+    .disable-button-title {
+        font-size: 18px;
+        line-height: 22px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .swap-container {
+        padding: 40px 30px;
+        gap: 8px;
+        background: var(--swap-main-banner-background);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+        border-radius: 28px;
+        max-width: 600px;
+    }
+
+    .add-token-text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .swap-title {
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .swap-button-title {
+        font-size: 18px;
+        line-height: 22px;
+    }
+
+    .disable-button-title {
+        font-size: 18px;
+        line-height: 22px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .swap-container {
+        padding: 30px 20px;
+        gap: 8px;
+        background: var(--swap-main-banner-background);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+        border-radius: 28px;
+        max-width: 600px;
+    }
+
+    .add-token-text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .swap-title {
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .swap-button-title {
+        font-size: 18px;
+        line-height: 22px;
+    }
+
+    .disable-button-title {
+        font-size: 18px;
+        line-height: 22px;
+    }
+}
+
 div {
     font-family: 'Roboto',serif;
 }
 
-.swap-container {
-    padding: 40px 30px;
-    gap: 8px;
-    background: var(--swap-main-banner-background);
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
-    border-radius: 28px;
-    max-width: 600px;
-}
 
 .swap-header {
 }
@@ -1329,8 +1453,6 @@ div {
 .add-token-text {
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
 
     color: #1C95E7;
     cursor: pointer;
@@ -1349,12 +1471,11 @@ div {
 }
 
 .swap-title {
-
+    display: flex;
+    justify-content: space-between;
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
-    line-height: 28px;
 
     color: var(--main-gray-text);
 
@@ -1371,7 +1492,7 @@ div {
     width: 44px;
     height: 44px;
 
-    background: var(--main-banner-background);
+    background: var(--swap-arrow-bg);
     box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);
     border-radius: 12px;
     cursor: pointer;
@@ -1425,8 +1546,6 @@ div {
 .swap-button-title {
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
-    line-height: 22px;
 
     color: #FFFFFF;
 }
@@ -1453,8 +1572,6 @@ div {
 
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
-    line-height: 22px;
 
     color: var(--progress-text);
 }

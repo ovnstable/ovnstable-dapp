@@ -177,6 +177,95 @@ export default defineComponent({
 
 
 <style scoped>
+@media only screen and (max-width: 960px) {
+    .token-symbol {
+        font-size: 16px;
+        line-height: 22px;
+
+        padding-left: 30px;
+        width: 80px;
+    }
+
+    .input-style {
+        font-size: 16px;
+        line-height: 28px;
+    }
+
+    .search-token-symbol {
+        font-size: 16px;
+        line-height: 24px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .token-symbol {
+        font-size: 18px;
+        line-height: 24px;
+
+        padding-left: 35px;
+        width: 80px;
+    }
+
+    .input-style {
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .search-token-symbol {
+        font-size: 18px;
+        line-height: 24px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .token-symbol {
+        font-size: 18px;
+        line-height: 24px;
+
+        padding-left: 35px;
+        width: 80px;
+    }
+
+    .input-style {
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .search-token-symbol {
+        font-size: 18px;
+        line-height: 24px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .token-symbol {
+        font-size: 18px;
+        line-height: 24px;
+
+        padding-left: 35px;
+        width: 80px;
+    }
+
+
+    .input-style {
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .search-token-symbol {
+        font-size: 18px;
+        line-height: 24px;
+    }
+}
+
 div {
     font-family: 'Roboto',serif;
 }
@@ -211,16 +300,12 @@ div {
 .token-symbol {
     font-style: normal;
     font-weight: 600;
-    font-size: 18px;
-    line-height: 24px;
     /* identical to box height, or 120% */
 
     display: inline-block;
-    padding-left: 35px;
 
     color: var(--main-gray-text);
 
-    width: 80px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -282,8 +367,6 @@ div {
 
 
     font-weight: 400;
-    font-size: 18px;
-    line-height: 28px;
 }
 
 .search-token-container {
@@ -308,8 +391,6 @@ div {
 .search-token-symbol {
     font-style: normal;
     font-weight: 600;
-    font-size: 18px;
-    line-height: 24px;
 
     color: var(--main-gray-text);
 }

@@ -66,7 +66,6 @@
 
                 <div v-if="root"
                      v-for="(branch, index) in Array.from(root.values())" :key="index"
-                     @click="openPools(index, !isPoolOpenMap[index])"
                      class="branch-container">
 
                     <div class="row">
@@ -93,10 +92,6 @@
                                 </div>
                                 <div v-else class="swap-name-container">
                                     SWAP
-                                </div>
-                                <div class="arrow-container">
-                                    <img v-if="isPoolOpenMap[index]" src="/assets/icon/swap/path/pools-close.svg" alt="close">
-                                    <img v-else src="/assets/icon/swap/path/pools-open.svg" alt="open">
                                 </div>
                             </div>
                         </div>
@@ -356,7 +351,7 @@ export default defineComponent({
                         additionalTokens = additionalTokens.slice(1);
                     }
 
-                    this.isPoolOpenMap[i] = false;
+                    this.isPoolOpenMap[i] = true;
 
                     tokens.push(...additionalTokens);
                 }
@@ -448,12 +443,6 @@ export default defineComponent({
             // // Convert the set back to an array
             return Array.from(uniqueSet);
         },
-
-        openPools(index, isOpen) {
-            console.log("Open pool: ", index, isOpen, this.isPoolOpenMap[index]);
-            this.isPoolOpenMap[index] = isOpen;
-            this.$forceUpdate();
-        }
     }
 })
 
@@ -473,8 +462,6 @@ export default defineComponent({
     background: var(--swap-main-banner-background);
     border-radius: 8px;
     margin-bottom: 8px;
-
-    cursor: pointer;
 }
 
 .token-container {

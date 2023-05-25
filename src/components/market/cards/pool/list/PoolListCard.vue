@@ -41,7 +41,7 @@
                 </label>
             </v-row>
         </v-col>
-        <v-col cols="3" class="my-1">
+        <v-col cols="2" class="my-1">
             <v-row class="ma-0" justify="end" align="center">
             <label v-if="cardData.apr" class="card-label">
                 {{ $utils.formatMoneyComma(cardData.apr, 2) + '%' }}
@@ -53,11 +53,19 @@
         </v-col>
         <v-col v-if="!$wu.isMobile()" class="my-1">
             <v-row class="ma-0" justify="end" align="center">
+                <v-btn v-if="this.cardData.data.dex === 'Chronos' && networkName === 'arbitrum'"
+                       x-small
+                       class="button btn-outlined mr-3"
+                       @click.stop="openZapIn(cardData)" outlined>
+                    ZAP IN
+                </v-btn>
+
                 <v-btn x-small
                        class="button btn-outlined"
                        @click.stop="openPoolLink" outlined>
                     VIEW
                 </v-btn>
+
             </v-row>
         </v-col>
         <v-col v-if="$wu.isMobile()" class="my-1">
@@ -124,11 +132,19 @@
             </v-row>
 
             <v-row class="ma-0 mt-3" align="center">
+                <v-btn v-if="this.cardData.data.dex === 'Chronos' && networkName === 'arbitrum'"
+                       x-small
+                       class="button button-full-width btn-outlined mb-3"
+                       @click.stop="openZapIn(cardData)" outlined>
+                    ZAP IN
+                </v-btn>
+
                 <v-btn x-small
                        class="button button-full-width btn-outlined"
                        @click.stop="openPoolLink" outlined>
                     VIEW
                 </v-btn>
+
             </v-row>
         </v-col>
 
@@ -139,6 +155,7 @@
 <script>
 
 import {mapGetters} from "vuex";
+import pool from "@/components/market/cards/pool/Pool.vue";
 
 export default {
     name: "PoolListCard",
@@ -149,12 +166,21 @@ export default {
     props: {
 
         cardData: {
-            type: Object
+            type: Object,
+            required: true
+        },
+        openZapInFunc: {
+            type: Function,
+            required: true
         },
     },
 
     computed: {
+        pool() {
+            return pool
+        },
         ...mapGetters('accountData', ['account']),
+        ...mapGetters('network', ['networkName']),
 
         isShowSkimMarker: function () {
             return this.cardData.skimEnabled &&
@@ -176,6 +202,10 @@ export default {
     },
 
     methods: {
+
+        openZapIn(pool) {
+            this.openZapInFunc(pool);
+        },
 
         openPoolLink() {
             let url;

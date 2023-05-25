@@ -5,6 +5,7 @@ import {tokenLogo} from "@/components/mixins/token-logo";
 
 const ODOS_DURATION_CONFIRM_REQUEST = 60
 const OVN_TOKEN_DEFAULT_SYMBOL= 'USD+';
+const OVN_TOKEN_SECOND_DEFAULT_SYMBOL= 'DAI+';
 
 export const odosSwap = {
     mixins: [tokenLogo],
@@ -48,10 +49,12 @@ export const odosSwap = {
             updateBalancesIntervalId: null,
 
             isShowSuccessModal: false,
+            isShowSuccessPoolModal: false,
             successData: {
                 inputTokens: [],
                 outputTokens: []
             },
+
 
         }
     },
@@ -389,15 +392,16 @@ export const odosSwap = {
         },
 
 
-        swapRequest(requestData, selectedInputTokens, selectedOutputTokens) {
+        swapRequest(requestData) {
             return odosApiService.swapRequest(requestData)
                 .then((data) => {
                     console.log("Response data for odos swap request: ", data)
                     this.swapResponseInfo = data;
-                    // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
-                    this.initWalletTransaction(this.swapResponseInfo, selectedInputTokens, selectedOutputTokens);
+                   return data;
                 }).catch(e => {
                     console.log("Swap request error: ", e)
+                    this.closeWaitingModal();
+                    this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e}, );
                 })
         },
 
@@ -423,7 +427,7 @@ export const odosSwap = {
                     // this.initWalletTransaction(this.swapResponseInfo);
                     return data;
                 }).catch(e => {
-                    console.log("Quota request error: ", e)
+                    console.log("Quota request error: ", e);
                 })
         },
         startSwapConfirmTimer() {
@@ -561,13 +565,19 @@ export const odosSwap = {
             return contract.methods.decreaseAllowance(contractAddressForDisapprove, allowanceValue).send(approveParams)
         },
         getDefaultOvnToken() {
+          return this.innerGetDefaultOvnToken(OVN_TOKEN_DEFAULT_SYMBOL)
+        },
+        getSecondDefaultOvnToken() {
+            return this.innerGetDefaultOvnToken(OVN_TOKEN_SECOND_DEFAULT_SYMBOL)
+        },
+        innerGetDefaultOvnToken(symbolName) {
           if (!this.ovnTokens.length) {
               return null;
           }
 
             for (let i = 0; i < this.ovnTokens.length; i++) {
                 let token = this.ovnTokens[i];
-                if (token.symbol === OVN_TOKEN_DEFAULT_SYMBOL) {
+                if (token.symbol === symbolName) {
                     return token;
                 }
             }
@@ -587,14 +597,40 @@ export const odosSwap = {
             return new web3.eth.Contract(file.abi, address);
         },
 
-        showSuccessModal(isShow, inputTokens, outputTokens, hash) {
-            this.isShowSuccessModal = isShow;
+        showSuccessModal(isShow,
+                         inputTokens,
+                         outputTokens,
+                         hash) {
             this.successData = {
                 inputTokens: inputTokens,
                 outputTokens: outputTokens,
                 hash: hash,
-                chain: this.networkId
+                chain: this.networkId,
             }
+
+            this.isShowSuccessModal = isShow;
+        },
+
+
+        showSuccessPoolModal(isShow,
+                         inputTokens,
+                         outputTokens,
+                         hash,
+                         putIntoPoolEvent,
+                         returnedToUserEvent,
+                         pool) {
+            this.successData = {
+                inputTokens: inputTokens,
+                outputTokens: outputTokens,
+                hash: hash,
+                chain: this.networkId,
+                putIntoPoolEvent: putIntoPoolEvent,
+                returnedToUserEvent: returnedToUserEvent,
+                pool: pool
+            }
+
+            this.isShowSuccessPoolModal = isShow;
+
         },
 
     }

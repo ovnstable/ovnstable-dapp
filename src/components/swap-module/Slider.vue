@@ -17,7 +17,7 @@
                 class="slider"
         />
        <span class="value-percent">
-           {{tokenInfo.value}}%
+           {{$utils.formatMoney(tokenInfo.value, 2)}}%
        </span>
     </div>
 </template>

@@ -236,8 +236,8 @@ export const odosSwap = {
                 this.updateBalancesIntervalId = setInterval(() => {
                     console.log("odos balances update")
                     this.loadBalances();
-                }, 15000)
-            }, 15000)
+                }, 40000)
+            }, 40000)
 
         },
 

@@ -65,7 +65,7 @@
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6 col-sm-12">
                                             <div class="success-token-title">
-                                                DEX
+                                                Staking platform
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-12">

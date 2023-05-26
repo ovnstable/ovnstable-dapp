@@ -3,12 +3,12 @@
         <div v-if="isShow">
             <v-dialog
                 v-model="isShow"
-                width="570"
+                width="630"
                 persistent>
                 <v-card class="container_body container-body airdrop-body pt-4 px-4"
                         style="border-radius: 28px!important;">
                     <v-toolbar class="container_header container-header" flat>
-                        <label class="title-container">
+                        <label class="title-modal">
                             Zap in
                         </label>
                         <v-spacer></v-spacer>
@@ -82,13 +82,13 @@ div {
     font-family: 'Roboto',serif;
 }
 
-.title-container {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 30px;
-    line-height: 40px;
-    color: #29323E;
+.container_body {
+    border-radius: 24px !important;
+    background-color: var(--secondary) !important;
+}
+
+.container_header {
+    background-color: var(--secondary) !important;
 }
 
 </style>

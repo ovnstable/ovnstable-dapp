@@ -186,7 +186,7 @@ div {
 .selected-token-container-disable-select {
     position: absolute;
     padding: 12px;
-    border: 2px solid #F5F5F5;
+    border: 2px solid var(--card-coin-background);
     background: transparent !important;
     border-radius: 40px;
     cursor: default!important;

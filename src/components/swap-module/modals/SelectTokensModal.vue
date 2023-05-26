@@ -8,12 +8,20 @@
                 <v-card class="container_body container-body airdrop-body pt-4 px-4"
                         style="border-radius: 28px!important;">
                     <v-toolbar class="container_header container-header" flat>
-                        <label v-if="selectTokenType === 'OVERNIGHT'" class="title-container">
-                            Select Overnight tokens
-                        </label>
-                        <label v-else class="title-container">
-                            Select non-Overnight tokens
-                        </label>
+                        <div v-if="isOvnSwap">
+                            <label v-if="selectTokenType === 'OVERNIGHT'" class="title-container">
+                                Select Overnight tokens
+                            </label>
+                            <label v-else class="title-container">
+                                Select non-Overnight tokens
+                            </label>
+                        </div>
+                        <div v-else>
+                            <label class="title-container">
+                                Select tokens
+                            </label>
+                        </div>
+
                         <v-spacer></v-spacer>
                         <v-btn icon @click="setShowFunc(false)">
                             <v-icon class="close-icon">mdi-close</v-icon>
@@ -38,7 +46,7 @@
                             <div v-else>
                                 <div v-if="selectTokenType === 'OVERNIGHT'">
                                     <SelectTokenShort
-                                            :tokens="ovnTokens"
+                                            :tokens="secondTokens"
                                             :select-token-func="selectToken"
                                             :remove-token-func="removeToken"
                                     />
@@ -105,7 +113,7 @@ export default defineComponent({
             required: true
         },
 
-        ovnTokens: {
+        secondTokens: {
             type: Array,
             required: true
         },
@@ -119,6 +127,11 @@ export default defineComponent({
             type: Boolean,
             required: true
         },
+
+        isOvnSwap: {
+            type: Boolean,
+            required: true,
+        }
     },
     data() {
       return {
@@ -142,7 +155,7 @@ export default defineComponent({
 
         toTokens() {
             if (this.swapMethod === 'BUY') {
-                return this.ovnTokens;
+                return this.secondTokens;
             } else if (this.swapMethod === 'SELL') {
                 return this.tokens;
             } else {
@@ -153,7 +166,7 @@ export default defineComponent({
             if (this.swapMethod === 'BUY') {
                 return this.tokens;
             } else if (this.swapMethod === 'SELL') {
-                return this.ovnTokens;
+                return this.secondTokens;
             } else {
                 console.error("Odos Swap method not found.", this.swapMethod)
             }

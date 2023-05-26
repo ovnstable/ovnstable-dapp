@@ -4,8 +4,8 @@ import {mapActions, mapGetters} from "vuex";
 import {tokenLogo} from "@/components/mixins/token-logo";
 
 const ODOS_DURATION_CONFIRM_REQUEST = 60
-const OVN_TOKEN_DEFAULT_SYMBOL= 'USD+';
-const OVN_TOKEN_SECOND_DEFAULT_SYMBOL= 'DAI+';
+const SECONDTOKEN_DEFAULT_SYMBOL= 'USD+';
+const SECONDTOKEN_SECOND_DEFAULT_SYMBOL= 'DAI+';
 
 export const odosSwap = {
     mixins: [tokenLogo],
@@ -23,7 +23,7 @@ export const odosSwap = {
             chains: null,
             tokensMap: null,
 
-            ovnTokens: [],
+            secondTokens: [],
             tokens: [],
 
             contractData: null,
@@ -55,11 +55,12 @@ export const odosSwap = {
                 outputTokens: []
             },
 
-
+            tokenSeparationScheme: null, // OVERNIGHT_SWAP, POOL_SWAP,
+            listOfBuyTokensAddresses: null // for POOL_SWAP scheme
         }
     },
     async mounted() {
-        console.log("Odos swap init")
+        console.log("Odos swap init by scheme: ", this.tokenSeparationScheme)
 
        this.initUpdateBalancesInterval();
     },
@@ -74,7 +75,7 @@ export const odosSwap = {
         ...mapGetters('network', ['getParams', 'networkName', 'networkId']),
         ...mapGetters('accountData', ['account']),
 
-        isAllDataLoaded() {
+        isAllDataLoaded: function() {
             return !this.isChainsLoading && !this.isTokensLoading;
         },
         isShowDecreaseAllowance () {
@@ -86,9 +87,9 @@ export const odosSwap = {
     },
     watch: {
         isAllDataLoaded: async function (newVal, oldValue) {
-            console.log("newVal", newVal)
+            console.log("all data loaded for odos: ", newVal, this.tokenSeparationScheme, this.listOfBuyTokensAddresses)
             if (newVal && !this.dataBeInited) {
-                await this.initData();
+                await this.initData(this.tokenSeparationScheme, this.listOfBuyTokensAddresses);
                 this.dataBeInited = true
             }
         },
@@ -100,8 +101,9 @@ export const odosSwap = {
         },
         networkId: async function (newVal, oldVal) {
             if (newVal) {
+                console.log("set network for odos: ", newVal, this.tokenSeparationScheme, this.listOfBuyTokensAddresses)
                 await this.initContractData()
-                await this.initData();
+                await this.initData(this.tokenSeparationScheme, this.listOfBuyTokensAddresses);
             }
         }
     },
@@ -143,27 +145,65 @@ export const odosSwap = {
         },
 
 
-        async initData() {
-            console.log('initData for network: ', this.networkName);
-            if (this.isAvailableOnNetwork) {
-                this.clearInputData();
-                console.log('initData1');
-                let networkId = this.getParams(this.networkName).networkId;
-                console.log('initData2');
-                this.tokens = await this.getFilteredTokens(networkId, false);
-                console.log('initData3');
-                console.log("TOKENS_ ", this.tokens)
-                this.ovnTokens = await this.getFilteredTokens(networkId, true);
-                console.log("OVN TOKENS_ ", this.ovnTokens);
-                this.isTokensLoadedAndFiltered = true;
+        async initData(tokenSeparationScheme, listOfBuyTokensAddresses) {
+            this.clearInputData();
+            this.isTokensLoadedAndFiltered = false;
 
-                this.loadPricesInfo(networkId);
-
-                await this.initAccountData(networkId);
-            } else {
-                this.clearInputData();
+            if (!tokenSeparationScheme) {
+                console.error("Not found separation scheme, when init data.")
                 this.isTokensLoadedAndFiltered = true;
+                return;
             }
+
+            if (!this.isAvailableOnNetwork) {
+                console.info("Swap init not available on this network.", this.networkName)
+                this.isTokensLoadedAndFiltered = true;
+                return
+            }
+
+            if (tokenSeparationScheme === 'OVERNIGHT_SWAP') {
+                await this.initOvernightSwap();
+                return;
+            }
+
+            if (tokenSeparationScheme === 'POOL_SWAP') {
+                await this.initPoolSwap(listOfBuyTokensAddresses);
+                return;
+            }
+
+            console.error('TOKEN SEPARATION SCHEME NOT FOUND', tokenSeparationScheme);
+        },
+        async initPoolSwap(listOfBuyTokensAddresses) {
+            if (!listOfBuyTokensAddresses || !listOfBuyTokensAddresses.length) {
+                console.error("List of buy token addresses must be included in initialisation POOL_SWAP scheme.")
+                return;
+            }
+
+            console.log('init pool swap data for network: ', this.networkName);
+            let networkId = this.getParams(this.networkName).networkId;
+            this.tokens = await this.getFilteredPoolTokens(networkId, false, listOfBuyTokensAddresses);
+            console.log("TOKENS_ ", this.tokens)
+            this.secondTokens = (await this.getFilteredPoolTokens(networkId, true, listOfBuyTokensAddresses));
+            console.log("SECOND TOKENS_ ", this.secondTokens);
+            this.isTokensLoadedAndFiltered = true;
+
+            this.loadPricesInfo(networkId);
+
+            await this.initAccountData(networkId);
+        },
+        async initOvernightSwap() {
+            console.log('init overnight swap data for network: ', this.networkName);
+            let networkId = this.getParams(this.networkName).networkId;
+            this.tokens = await this.getFilteredOvernightTokens(networkId, false);
+            console.log("TOKENS_ ", this.tokens)
+            this.secondTokens = await this.getFilteredOvernightTokens(networkId, true);
+            console.log("SECOND TOKENS_ ", this.secondTokens);
+            this.isTokensLoadedAndFiltered = true;
+
+            this.loadPricesInfo(networkId);
+
+            await this.initAccountData(networkId);
+
         },
         async initAccountData(networkId) {
             console.log('Load User data')
@@ -178,9 +218,9 @@ export const odosSwap = {
         },
         loadContractsForTokens(contractFile) {
             console.log("Load contracts for tokens")
-            for (let i = 0; i < this.ovnTokens.length; i++) {
-                let ovnToken = this.ovnTokens[i];
-                this.tokensContractMap[ovnToken.address] = this._loadContract(contractFile, this.web3, ovnToken.address);
+            for (let i = 0; i < this.secondTokens.length; i++) {
+                let secondtoken = this.secondTokens[i];
+                this.tokensContractMap[secondtoken.address] = this._loadContract(contractFile, this.web3, secondtoken.address);
             }
 
             for (let i = 0; i < this.tokens.length; i++) {
@@ -208,14 +248,14 @@ export const odosSwap = {
             }
 
             this.isBalancesLoading = true;
-            console.log("Load tokens balances.", this.ovnTokens, this.tokens)
+            console.log("Load tokens balances.", this.secondTokens, this.tokens)
             if (!this.account) {
                 console.log("Balance not loaded, wallet not login", this.account);
                 this.isBalancesLoading = false;
                 return;
             }
 
-            let tokens = [...this.ovnTokens, ...this.tokens]
+            let tokens = [...this.secondTokens, ...this.tokens]
             for (let i = 0; i < tokens.length; i++) {
                 let token = tokens[i];
                 this.loadBalance(this.tokensContractMap[token.address], token)
@@ -300,7 +340,7 @@ export const odosSwap = {
             console.log("Tokens prices loading start.", this.tokenPricesMap)
             this.isPricesLoading = true;
             this.loadPrices(chainId).then(() => {
-                let tokens = [...this.ovnTokens, ...this.tokens]
+                let tokens = [...this.secondTokens, ...this.tokens]
                 for (let i = 0; i < tokens.length; i++) {
                     let token = tokens[i];
                     token.price = this.tokenPricesMap[token.address];
@@ -327,7 +367,51 @@ export const odosSwap = {
                 console.log("Error load contract", e)
             });
         },
-        async getFilteredTokens(chainId, isOvnToken) {
+        async getFilteredPoolTokens(chainId, isIncludeInListAddresses, listTokensAddresses) {
+            let tokens = [];
+            let tokenMap = this.tokensMap.chainTokenMap[chainId + ''].tokenMap;
+            let leftListTokensAddresses = listTokensAddresses;
+            let keys = Object.keys(tokenMap);
+            for (let i = 0; i < keys.length; i++) {
+                let key = keys[i];
+                let item = tokenMap[key];
+
+                const isKeyIncludeList = leftListTokensAddresses.some(
+                    address => address.toLowerCase() === key.toLowerCase()
+                );
+
+                // add only included in list
+                if (isIncludeInListAddresses && isKeyIncludeList) {
+                    await this.addItemToFilteredTokens(tokens, key, item);
+                    leftListTokensAddresses = leftListTokensAddresses.filter(address =>
+                            address.toLowerCase() !== key.toLowerCase()
+                    );
+                    console.log('Item of secondtoken: ',  key.toLowerCase(), leftListTokensAddresses.length, item)
+                    continue;
+                }
+
+                // add only non-list
+                if (!isIncludeInListAddresses && !isKeyIncludeList) {
+                    await this.addItemToFilteredTokens(tokens, key, item);
+                }
+            }
+
+            // order tokens like as list addresses.
+            if (isIncludeInListAddresses) {
+                if (listTokensAddresses.length === tokens.length) {
+                    tokens = tokens.sort((a, b) => {
+                        const indexA = listTokensAddresses.findIndex(item => item.toLowerCase() === a.address.toLowerCase());
+                        const indexB = listTokensAddresses.findIndex(item => item.toLowerCase() === b.address.toLowerCase());
+                        return indexA - indexB;
+                    });
+                } else {
+                    console.error("Error when order token by list of addresses.", listTokensAddresses, tokens);
+                }
+            }
+
+            return tokens;
+        },
+        async getFilteredOvernightTokens(chainId, isOvnToken) {
             let tokens = [];
             let tokenMap = this.tokensMap.chainTokenMap[chainId + ''].tokenMap;
             let keys = Object.keys(tokenMap);
@@ -335,60 +419,51 @@ export const odosSwap = {
                 let key = keys[i];
                 let item = tokenMap[key];
 
-                if (isOvnToken) {
-                    if (item.protocolId === 'overnight') {
-                        let logoUrl = await this.loadOvernightTokenImage(item);
-
-                        tokens.push({
-                            id: item.assetId + key,
-                            address: key,
-                            decimals: item.decimals,
-                            name: item.name,
-                            symbol: item.symbol,
-                            logoUrl: logoUrl,
-                            weiMarker: this.getWeiMarker(item.decimals),
-                            selected: false,
-                            balanceData: {},
-                            approveData: {
-                                allowanceValue: 0,
-                                approved: false
-                            },
-                            price: 0,
-                            estimatePerOne: 0,
-                        });
-                    }
+                // add only overnight
+                if (isOvnToken && item.protocolId === 'overnight') {
+                    await this.addItemToFilteredTokens(tokens, key, item);
                     continue;
                 }
 
-                if (item.protocolId !== 'overnight') {
-                    let logoUrl = this.loadTokenImage(item);
-
-                    tokens.push({
-                        id: item.assetId + key,
-                        address: key,
-                        decimals: item.decimals,
-                        name: item.name,
-                        symbol: item.symbol,
-                        logoUrl: logoUrl,
-                        weiMarker: this.getWeiMarker(item.decimals),
-                        selected: false,
-                        balanceData: {},
-                        approveData: {
-                            value: 0,
-                            approved: false
-                        },
-                        price: 0,
-                        estimatePerOne: 0,
-                    });
+                // add only non-overnight
+                if (!isOvnToken && item.protocolId !== 'overnight') {
+                    await this.addItemToFilteredTokens(tokens, key, item);
+                    continue;
                 }
             }
 
             return tokens;
         },
+        async addItemToFilteredTokens(tokens, key, item) {
+            let logoUrl;
+            if (item.protocolId === 'overnight') {
+                logoUrl = await this.loadOvernightTokenImage(item);
+            } else {
+                logoUrl = this.loadTokenImage(item);
+            }
+
+            tokens.push({
+                id: item.assetId + key,
+                address: key,
+                decimals: item.decimals,
+                name: item.name,
+                symbol: item.symbol,
+                logoUrl: logoUrl,
+                weiMarker: this.getWeiMarker(item.decimals),
+                selected: false,
+                balanceData: {},
+                approveData: {
+                    allowanceValue: 0,
+                    approved: false
+                },
+                price: 0,
+                estimatePerOne: 0,
+            });
+        },
 
         clearInputData() {
             this.tokens = [];
-            this.ovnTokens = [];
+            this.secondTokens = [];
         },
 
 
@@ -406,7 +481,7 @@ export const odosSwap = {
         },
 
         getTokenByAddress(address) {
-            let tokens = [...this.ovnTokens, ...this.tokens]
+            let tokens = [...this.secondTokens, ...this.tokens]
             for (let i = 0; i < tokens.length; i++) {
                 let token = tokens[i];
                 console.log("Find tokens: ",token)
@@ -564,26 +639,52 @@ export const odosSwap = {
             console.log('clearApproveToken: ', contract, contractAddressForDisapprove, allowanceValue, approveParams);
             return contract.methods.decreaseAllowance(contractAddressForDisapprove, allowanceValue).send(approveParams)
         },
-        getDefaultOvnToken() {
-          return this.innerGetDefaultOvnToken(OVN_TOKEN_DEFAULT_SYMBOL)
+        getDefaultSecondtoken() {
+            if (this.tokenSeparationScheme === 'OVERNIGHT_SWAP') {
+                return this.innerGetDefaultSecondtokenBySymobl(SECONDTOKEN_DEFAULT_SYMBOL)
+            }
+
+            if (this.tokenSeparationScheme === 'POOL_SWAP') {
+                return this.innerGetDefaultSecondtokenByIndex(0);
+            }
+
+            console.error('TOKEN SEPARATION SCHEME NOT FOUND FOR GET DEFAULT', this.tokenSeparationScheme);
         },
-        getSecondDefaultOvnToken() {
-            return this.innerGetDefaultOvnToken(OVN_TOKEN_SECOND_DEFAULT_SYMBOL)
+        getSecondDefaultSecondtoken() {
+            if (this.tokenSeparationScheme === 'OVERNIGHT_SWAP') {
+                return this.innerGetDefaultSecondtokenBySymobl(SECONDTOKEN_SECOND_DEFAULT_SYMBOL)
+            }
+
+            if (this.tokenSeparationScheme === 'POOL_SWAP') {
+                return this.innerGetDefaultSecondtokenByIndex(1);
+            }
+
+            console.error('TOKEN SEPARATION SCHEME NOT FOUND FOR GET SECOND DEFAULT', this.tokenSeparationScheme);
         },
-        innerGetDefaultOvnToken(symbolName) {
-          if (!this.ovnTokens.length) {
+        innerGetDefaultSecondtokenByIndex(index) {
+            if (!this.secondTokens.length || this.secondTokens.length < index + 1) {
+                console.log("Inner get default token by index fail, secondTokens is empty or index not exist", this.secondTokens);
+                return null;
+            }
+
+            return this.secondTokens[index];
+        },
+        innerGetDefaultSecondtokenBySymobl(symbolName) {
+          if (!this.secondTokens.length) {
+              console.log("Inner get default token by symbol fail, secondTokens is empty.", this.secondTokens);
               return null;
           }
 
-            for (let i = 0; i < this.ovnTokens.length; i++) {
-                let token = this.ovnTokens[i];
+            for (let i = 0; i < this.secondTokens.length; i++) {
+                let token = this.secondTokens[i];
                 if (token.symbol === symbolName) {
                     return token;
                 }
             }
 
             // return first if usd+ not found
-            return this.ovnTokens[0];
+            console.log('return first if usd+ not found')
+            return this.secondTokens[0];
         },
 
         getActualGasPrice(networkId) {

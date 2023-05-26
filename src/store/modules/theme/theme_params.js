@@ -40,6 +40,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--card-pool-label-shadow',
+        enabled: true,
+        theme: {
+            light: '#F5F5F5',
+            dark: '#000000'
+        }
+    },
+    {
         name: '--main-slider-background',
         enabled: true,
         theme: {

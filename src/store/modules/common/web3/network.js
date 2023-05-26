@@ -8,6 +8,7 @@ const POLYGON_PARAMS = {
     assetDecimals: 6,
     nativeAssetName: 'MATIC',
     bridgeLink: 'https://router.via.exchange/polygon/USD+/bsc/USD+',
+    networkColor: '#7B3FE4'
 }
 
 const BSC_PARAMS = {
@@ -20,6 +21,7 @@ const BSC_PARAMS = {
     assetDecimals: 18,
     nativeAssetName: 'BNB',
     bridgeLink: 'https://router.via.exchange/bsc/USD+/optimism/USD+',
+    networkColor: '#F3BA2F'
 }
 
 const OPTIMISM_PARAMS = {
@@ -32,6 +34,7 @@ const OPTIMISM_PARAMS = {
     assetDecimals: 6,
     nativeAssetName: 'ETH',
     bridgeLink: 'https://router.via.exchange/optimism/USD+/bsc/USD+',
+    networkColor: '#FF0420'
 }
 
 const ARBITRUM_PARAMS = {
@@ -44,6 +47,7 @@ const ARBITRUM_PARAMS = {
     assetDecimals: 6,
     nativeAssetName: 'ETH',
     bridgeLink: 'https://router.via.exchange/arbitrum/USD+/bsc/USD+',
+    networkColor: '#29A0F0'
 }
 
 const ZKSYNC_PARAMS = {
@@ -56,6 +60,7 @@ const ZKSYNC_PARAMS = {
     assetDecimals: 6,
     nativeAssetName: 'ETH',
     bridgeLink: 'https://router.via.exchange/zksync/USD+/bsc/USD+',
+    networkColor: '#8B8DFC'
 }
 
 let dbNetworkName = localStorage.getItem('selectedNetwork');
@@ -70,6 +75,7 @@ const state = {
     assetDecimals: _getParams(dbNetworkName).assetDecimals,
     nativeAssetName: _getParams(dbNetworkName).nativeAssetName,
     bridgeLink: _getParams(dbNetworkName).bridgeLink,
+    networkColor: _getParams(dbNetworkName).networkColor,
 
     polygonApi: POLYGON_PARAMS.appApiUrl,
     bscApi: BSC_PARAMS.appApiUrl,
@@ -154,6 +160,10 @@ const getters = {
         return state.nativeAssetName;
     },
 
+    networkColor(state) {
+        return state.networkColor;
+    },
+
     bridgeLink(state) {
         return state.bridgeLink;
     },
@@ -220,6 +230,7 @@ const actions = {
         commit('setAssetDecimals', _getParams(networkName).assetDecimals);
         commit('setNativeAssetName', _getParams(networkName).nativeAssetName);
         commit('setBridgeLink', _getParams(networkName).bridgeLink);
+        commit('setNetworkColor', _getParams(networkName).networkColor);
 
         dispatch('walletAction/updateOnboardNetwork', null, {root: true});
         dispatch('web3/initWeb3', null, {root: true});
@@ -401,6 +412,10 @@ const mutations = {
 
     setNativeAssetName(state, value) {
         state.nativeAssetName = value;
+    },
+
+    setNetworkColor(state, value) {
+        state.networkColor = value;
     },
 
     setBridgeLink(state, value) {

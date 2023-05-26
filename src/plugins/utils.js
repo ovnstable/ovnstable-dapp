@@ -71,6 +71,15 @@ let accountingZeroConfigComma = {
 
 export default {
 
+    formatNumberToMln(num,  count = 2) {
+        let res = num / 1000000;
+        if (res < 1) {
+            count = 2;
+        }
+
+        return (res).toFixed(count);
+    },
+
     formatMoney(number = 0, count = 6) {
 
         if (!number) {

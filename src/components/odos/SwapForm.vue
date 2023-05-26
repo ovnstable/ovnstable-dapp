@@ -46,6 +46,7 @@
                                     Decrease Allowance
                                 </div>
 
+<!--                                {{token && token.selectedToken ? token.selectedToken.address : '-'}}-->
                                 <InputToken
                                         :token-info="token"
                                         :remove-item-func="removeInputToken"
@@ -262,9 +263,10 @@
                            :select-token-type="selectTokenType"
                            :add-selected-token-to-list-func="addSelectedTokenToList"
                            :remove-selected-token-from-list-func="removeSelectedTokenFromList"
-                           :ovn-tokens="ovnTokens"
+                           :second-tokens="secondTokens"
                            :tokens="tokens"
                            :is-all-data-loaded="isAllDataLoaded"
+                           :is-ovn-swap="true"
 
         />
 
@@ -323,6 +325,9 @@ export default defineComponent({
         },
     },
     mounted() {
+        this.tokenSeparationScheme = 'OVERNIGHT_SWAP'
+        console.log("Swap form odos init by scheme: ", this.tokenSeparationScheme)
+
         this.init();
 
         if (!this.isAvailableOnNetwork) {
@@ -337,7 +342,7 @@ export default defineComponent({
             maxOutputTokens: 6,
 
             isShowSelectTokensModal: false,
-            swapMethod: 'BUY', // BUY (ovnTokens) / SELL (ovnTokens)
+            swapMethod: 'BUY', // BUY (secondTokens) / SELL (secondTokens)
             selectTokenType: 'OVERNIGHT', // OVERNIGHT / ALL
 
             isShowSettingsModal: false,
@@ -532,7 +537,7 @@ export default defineComponent({
             })
         },
         addDefaultOvnToken() {
-            let ovnSelectedToken = this.getDefaultOvnToken();
+            let ovnSelectedToken = this.getDefaultSecondtoken();
             if (!ovnSelectedToken) {
                 this.addNewInputToken();
                 this.addNewOutputToken();

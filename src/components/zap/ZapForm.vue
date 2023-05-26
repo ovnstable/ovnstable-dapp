@@ -597,7 +597,7 @@ export default defineComponent({
 
 
             if (this.isSwapLoading) {
-                console.log('Swap method not available, prev sap in process');
+                console.log('Swap method not available, prev swap in process');
                 return;
             }
 
@@ -690,7 +690,7 @@ export default defineComponent({
         getSourceLiquidityBlackList() {
             let sourceBlacklist = [...this.sourceLiquidityBlacklist];
             console.log("this.zapPool for exclude liquidity: ", this.zapPool);
-            let excludeLiquidityByPlatform = this.mapExcludeLiquidityPlatform[this.zapPool.dex];
+            let excludeLiquidityByPlatform = this.mapExcludeLiquidityPlatform[this.zapPool.platform];
             if (excludeLiquidityByPlatform && excludeLiquidityByPlatform.length) {
                 sourceBlacklist = [...sourceBlacklist, ...excludeLiquidityByPlatform];
             }
@@ -814,7 +814,7 @@ export default defineComponent({
         },
         async simulateSwap() {
             if (this.isSumulateSwapLoading) {
-                console.log('Simulate Swap method not available, prev sap in process');
+                console.log('Simulate Swap method not available, prev swap in process');
                 return;
             }
 

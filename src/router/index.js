@@ -78,8 +78,8 @@ const routes = [
             },
             {
                 path: '/pools',
-                name: 'UsdPoolsView',
-                component: () => import('../views/UsdPoolsView.vue'),
+                name: 'PoolsView',
+                component: () => import('../views/PoolsView.vue'),
                 meta: {
                     middleware: [
                         Pools

@@ -1,7 +1,7 @@
 <template>
     <div class="mb-15">
         <div class="mt-10 mb-10">
-            <label class="title-label">usd+ pools</label>
+            <label class="title-label">ALL POOLS</label>
         </div>
 
         <v-row v-if="isPoolsLoading">
@@ -16,13 +16,34 @@
         </v-row>
 
        <div v-else>
-         <PoolListHeader/>
+           <div class="pools-header-container">
+               <div class="row">
+                   <div class="col-12 col-lg-9 col-md-9 col-sm-12">
+                       <PoolFilter
+                           :set-selected-tab-func="setSelectedTab"
+                           :selected-tab="selectedTab"
+                           :zap-filter-func="zapFilter"
+                           :is-show-only-zap="isShowOnlyZap"
+                           :apr-limit-filter-func="aprLimitFilter"
+                           :is-show-apr-limit="isShowAprLimit"
+                       ></PoolFilter>
+                   </div>
+                   <div class="col-12 col-lg-3 col-md-3 col-sm-12">
+<!--                       Search-->
+                   </div>
+               </div>
+           </div>
+           <div class="pools-container">
+               <PoolTable :pools="filteredPools"
+                          :open-zap-in-func="openZapIn"></PoolTable>
+           </div>
+<!--         <PoolListHeader/>
          <PoolListCard class="mt-2"
-                       v-for="component in sortedCardList.filter(value => (value.tvl > 100000))"
+                       v-for="component in sortedPoolList.filter(value => (value.tvl > 100000))"
                        :key="component.id"
                        :card-data="component"
                         :open-zap-in-func="openZapIn"/>
-         <resize-observer @notify="$forceUpdate()"/>
+         <resize-observer @notify="$forceUpdate()"/>-->
        </div>
 
         <ZapModal :set-show-func='setIsZapModalShow'
@@ -39,35 +60,73 @@ import PoolListCard from "@/components/market/cards/pool/list/PoolListCard";
 
 import {poolApiService} from "@/services/pool-api-service";
 import ZapModal from "@/components/zap/modals/ZapModal.vue";
+import PoolFilter from "@/components/pool/PoolFilter.vue";
+import PoolTable from "@/components/pool/PoolTable.vue";
 
 export default {
-    name: "UsdPools",
+    name: "PoolsView",
 
     components: {
+        PoolTable,
+        PoolFilter,
         ZapModal,
-        PoolListCard,
-        PoolListHeader,
     },
 
     data: () => ({
         avgApy: null,
-        sortedCardList: [],
+        sortedPoolList: [],
         pools: [],
         isPoolsLoading: true,
         isZapModalShow: false,
-        currentZapPool: null
+        currentZapPool: null,
+
+        selectedTab: 'ALL', // ALL or networkName,
+        isShowOnlyZap: false,
+        isShowAprLimit: false,
+        aprLimitForFilter: 100,
+
+        featuredPoolsAddresses: [
+            '0x88beb144352bd3109c79076202fac2bceab87117',
+            '0x69c28d5bbe392ef48c0dc347c575023daf0cd243',
+            '0xb260163158311596ea88a700c5a30f101d072326'
+        ]
     }),
 
     computed: {
-        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig']),
+        ...mapGetters('network', ['appApiUrl', 'networkId', 'networkName', 'allNetworkConfigs', 'getParams']),
+
+        filteredPools: function () {
+            if (!this.isShowAprLimit) {
+                return this.filteredZappablePools;
+            }
+
+            return this.filteredZappablePools.filter(pool =>
+                pool.apr && this.aprLimitForFilter <= pool.apr*1
+            )
+        },
+        filteredZappablePools: function () {
+            if (!this.isShowOnlyZap) {
+                return this.filteredByTabPools;
+            }
+
+            return this.filteredByTabPools.filter(pool =>
+                this.isShowOnlyZap && pool.zappable
+            )
+        },
+        filteredByTabPools: function () {
+            if (this.selectedTab === 'ALL') {
+                return this.sortedPoolList
+            }
+
+            return this.sortedPoolList.filter(pool => this.getParams(pool.chain).networkName === this.selectedTab)
+        }
     },
 
     created() {
     },
 
-    mounted() {
-        this.initTab();
-        this.loadPools();
+    async mounted() {
+        await this.loadPools();
     },
 
     methods: {
@@ -77,25 +136,28 @@ export default {
 
         openZapIn(pool) {
             console.log("Zap open for pool: ", pool);
-            this.currentZapPool = pool.data;
+            this.currentZapPool = pool;
             this.setIsZapModalShow(true);
         },
 
-      setTab(tabId) {
-          this.tab = tabId;
-      },
-
-      initTab() {
-          if (this.$route.query.tabName === 'usd-pools') {
-              this.setTab(1);
-          }
-      },
+        zapFilter(isShow) {
+            this.isShowOnlyZap = isShow;
+            console.log("Is show zap? ", this.isShowOnlyZap);
+        },
+        aprLimitFilter(isShow, limit) {
+            this.isShowAprLimit = isShow;
+            this.aprLimitForFilter = limit;
+            console.log("Apr limit ", isShow, limit);
+        },
+        setSelectedTab(tab) {
+            this.selectedTab = tab;
+        },
 
       async loadPools() {
         this.isPoolsLoading = true;
 
         this.pools = [];
-        let networkConfigList = [this.opConfig, this.polygonConfig, this.bscConfig, this.arConfig, this.zkConfig];
+        let networkConfigList = [...this.allNetworkConfigs];
 
         for (let networkConfig of networkConfigList) {
           await poolApiService.getAllPools(networkConfig.appApiUrl)
@@ -159,7 +221,25 @@ export default {
                       }
 
                     if (pool && pool.tvl && pool.tvl >= 10000.00) {
+
+                        // todo move to backend
+                        if (pool.platform === 'Chronos' && this.networkName === 'arbitrum') {
+                            pool.zappable = true;
+                        }
+
+                        // todo move to backend
+                        if (this.featuredPoolsAddresses.find(
+                            item => item.toLowerCase() === pool.id.address.toLowerCase())
+                        ) {
+                            pool.feature = true;
+                        }
+
+                        // todo move to backend
+                        // if ()
+
+
                       this.pools.push({
+                        id: (pool.id.name + pool.tvl + pool.platform),
                         name: pool.id.name,
                         token0Icon: token0Icon,
                         token1Icon: token1Icon,
@@ -168,11 +248,15 @@ export default {
                         chain: networkConfig.networkId,
                         chainName: networkConfig.networkName,
                         address: pool.id.address,
-                        dex: pool.platform,
+                        platform: pool.platform,
                         tvl: pool.tvl,
                         apr: pool.apr,
                         skimEnabled: pool.skimEnabled,
                         explorerUrl: networkConfig.explorerUrl,
+                        feature: pool.feature,
+                        zappable: pool.zappable,
+                        cardOpened: false,
+                        aggregators: pool.aggregators
                       });
                     }
                   })
@@ -182,42 +266,20 @@ export default {
               })
         }
 
-        this.sortedCardList = this.getSortedPoolList();
-        this.isPoolsLoading = false;
-      },
-      getSortedPoolList() {
-        let networkId = this.networkId;
-        let sortedPoolList = [];
 
-        for (let i = 0; i < this.pools.length; i++) {
-          let pool = this.pools[i];
-          sortedPoolList.push(
-              {
-                id: (pool.name + pool.tvl + pool.chain),
-                type: 'pool',
-                name: 'Pool',
-                data: pool,
-                chain: pool.chain,
-                hasUsdPlus: true,
-                overcapEnabled: false,
-                hasCap: true,
-                tvl: pool.tvl,
-                apr: pool.apr,
-                skimEnabled: pool.skimEnabled,
-                monthApy: 0,
-                cardOpened: false,
-              },
-          );
-        }
+          this.sortedPoolList = this.pools.sort((a, b) => {
+              if (a.feature && !b.feature) {
+                  return -1; // a comes first when a is featured and b is not
+              } else if (!a.feature && b.feature) {
+                  return 1; // b comes first when b is featured and a is not
+              } else if (a.apr !== b.apr) {
+                  return b.apr- a.apr; // sort by APR number
+              } else {
+                  return b.tvl - a.tvl; // sort by TVL number
+              }
+          });
 
-        sortedPoolList.sort(function (a, b) {
-          if (a.chain === networkId && b.chain !== networkId) return -1;
-          if (a.chain !== networkId && b.chain === networkId) return 1;
-
-          return (a.tvl > b.tvl) ? -1 : (a.tvl < b.tvl ? 1 : 0);
-        });
-
-        return sortedPoolList;
+          this.isPoolsLoading = false;
       },
     }
 }

@@ -48,6 +48,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--card-pool-label-shadow',
+        enabled: true,
+        theme: {
+            light: '#F5F5F5',
+            dark: '#000000'
+        }
+    },
+    {
         name: '--main-slider-background',
         enabled: true,
         theme: {
@@ -211,8 +219,8 @@ export const THEME_MODE_PARAMS = [
         name: '--red-container',
         enabled: true,
         theme: {
-            light: 'linear-gradient(0deg, rgba(207, 63, 146, 0.08), rgba(207, 63, 146, 0.08)), #FFFFFF',
-            dark: 'rgba(207, 63, 146, 0.08)'
+            light: 'rgba(207, 63, 146, 0.08)',
+            dark: 'rgba(207, 63, 146, 0.20)'
         }
     },
     {

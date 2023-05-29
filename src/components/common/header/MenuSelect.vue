@@ -10,21 +10,24 @@
             </div>
         </template>
         <v-list class="main-container">
-            <v-list-item @click="featuredClick" :class="selectedTab === 'featured' ? 'selected-page-item' : ''">
-                <div class="navbar-page-link">
-                    <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.99984 12.8251L6.8665 14.7167L7.6915 11.1501L4.92484 8.75008L8.57484 8.44175L9.99984 5.07508L11.4248 8.44175L15.0748 8.75008L12.3082 11.1501L13.1332 14.7167M18.3332 7.70008L12.3415 7.19175L9.99984 1.66675L7.65817 7.19175L1.6665 7.70008L6.20817 11.6417L4.84984 17.5001L9.99984 14.3917L15.1498 17.5001L13.7832 11.6417L18.3332 7.70008Z" fill="#ADB3BD"/>
-                    </svg>
-                </div>
-                <v-list-item-title class="mx-3">
-                    <label class="navbar-page-label" :class="selectedTab === 'featured' ? 'selected-page' : ''">FEATURED</label>
-                </v-list-item-title>
-            </v-list-item>
-
             <div class="navbar-list-divider mt-1 mb-1"></div>
             <label class="navbar-list-header mx-3">
                 Money Markets
             </label>
+
+            <v-list-item @click="swapOdosClick" :class="selectedTab === 'swap-odos' ? 'selected-page-item' : ''">
+                <div class="navbar-page-link mt-1">
+                    <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.0002 14.9999C8.67408 14.9999 7.40231 14.4731 6.46463 13.5355C5.52695 12.5978 5.00016 11.326 5.00016 9.99992C5.00016 9.16659 5.2085 8.35825 5.5835 7.66659L4.36683 6.44992C3.69162 7.51083 3.33315 8.74237 3.3335 9.99992C3.3335 11.768 4.03588 13.4637 5.28612 14.714C6.53636 15.9642 8.23205 16.6666 10.0002 16.6666V19.1666L13.3335 15.8333L10.0002 12.4999M10.0002 3.33325V0.833252L6.66683 4.16659L10.0002 7.49992V4.99992C11.3262 4.99992 12.598 5.5267 13.5357 6.46439C14.4734 7.40207 15.0002 8.67384 15.0002 9.99992C15.0002 10.8333 14.7918 11.6416 14.4168 12.3333L15.6335 13.5499C16.3087 12.489 16.6672 11.2575 16.6668 9.99992C16.6668 8.23181 15.9645 6.53612 14.7142 5.28587C13.464 4.03563 11.7683 3.33325 10.0002 3.33325Z" fill="#ADB3BD"/>
+                    </svg>
+                </div>
+                <v-list-item-title class="mx-3">
+                    <label :class="selectedTab === 'swap-odos' ? 'selected-page' : ''"
+                           class="navbar-page-label">
+                        SWAP
+                    </label>
+                </v-list-item-title>
+            </v-list-item>
 
             <v-list-group :append-icon="null"  @click="toggleUsdPlus(!isShowUsd)">
                 <template v-slot:activator>
@@ -153,15 +156,34 @@
                 </v-list-item>
             </v-list-group>
 
-            <v-list-item @click="swapOdosClick" :class="selectedTab === 'swap-odos' ? 'selected-page-item' : ''">
+
+
+            <div class="navbar-list-divider mt-1 mb-1"></div>
+            <label class="navbar-list-header mx-3">
+                Yield Farming
+            </label>
+
+            <v-list-item @click="featuredClick" :class="selectedTab === 'featured' ? 'selected-page-item' : ''">
                 <div class="navbar-page-link">
-                    <svg width="27" height="20" viewBox="0 0 27 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17.0013 0.666504C19.4767 0.666504 21.8506 1.64983 23.601 3.40017C25.3513 5.15051 26.3346 7.52448 26.3346 9.99984C26.3346 12.4752 25.3513 14.8492 23.601 16.5995C21.8506 18.3498 19.4767 19.3332 17.0013 19.3332C14.5259 19.3332 12.152 18.3498 10.4016 16.5995C8.6513 14.8492 7.66797 12.4752 7.66797 9.99984C7.66797 7.52448 8.6513 5.15051 10.4016 3.40017C12.152 1.64983 14.5259 0.666504 17.0013 0.666504ZM17.0013 16.9998C18.8578 16.9998 20.6383 16.2623 21.9511 14.9496C23.2638 13.6368 24.0013 11.8564 24.0013 9.99984C24.0013 8.14332 23.2638 6.36284 21.9511 5.05009C20.6383 3.73734 18.8578 2.99984 17.0013 2.99984C15.1448 2.99984 13.3643 3.73734 12.0516 5.05009C10.7388 6.36284 10.0013 8.14332 10.0013 9.99984C10.0013 11.8564 10.7388 13.6368 12.0516 14.9496C13.3643 16.2623 15.1448 16.9998 17.0013 16.9998ZM3.0013 9.99984C3.00125 11.4464 3.45012 12.8574 4.28599 14.0381C5.12186 15.2187 6.30353 16.1109 7.66797 16.5915V19.0298C3.64297 17.9915 0.667969 14.3515 0.667969 9.99984C0.667969 5.64817 3.64297 2.00817 7.66797 0.969838V3.40817C4.94964 4.36484 3.0013 6.95484 3.0013 9.99984Z" fill="#ADB3BD"/>
+                    <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.99984 12.8251L6.8665 14.7167L7.6915 11.1501L4.92484 8.75008L8.57484 8.44175L9.99984 5.07508L11.4248 8.44175L15.0748 8.75008L12.3082 11.1501L13.1332 14.7167M18.3332 7.70008L12.3415 7.19175L9.99984 1.66675L7.65817 7.19175L1.6665 7.70008L6.20817 11.6417L4.84984 17.5001L9.99984 14.3917L15.1498 17.5001L13.7832 11.6417L18.3332 7.70008Z" fill="#ADB3BD"/>
                     </svg>
                 </div>
                 <v-list-item-title class="mx-3">
-                    <label class="navbar-page-label" :class="selectedTab === 'swap-odos' ? 'selected-page' : ''">
-                        SWAP
+                    <label class="navbar-page-label" :class="selectedTab === 'featured' ? 'selected-page' : ''">FEATURED</label>
+                </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item @click="usdPlusPoolsClick" :class="selectedTab === 'pools' ? 'selected-page-item' : ''">
+                <div class="navbar-page-link mt-1">
+                    <svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.5002 3.33325C14.2683 3.33325 15.964 4.03563 17.2142 5.28587C18.4645 6.53612 19.1668 8.23181 19.1668 9.99992C19.1668 11.768 18.4645 13.4637 17.2142 14.714C15.964 15.9642 14.2683 16.6666 12.5002 16.6666C10.7321 16.6666 9.03636 15.9642 7.78612 14.714C6.53587 13.4637 5.8335 11.768 5.8335 9.99992C5.8335 8.23181 6.53587 6.53612 7.78612 5.28587C9.03636 4.03563 10.7321 3.33325 12.5002 3.33325ZM12.5002 14.9999C13.8262 14.9999 15.098 14.4731 16.0357 13.5355C16.9734 12.5978 17.5002 11.326 17.5002 9.99992C17.5002 8.67384 16.9734 7.40207 16.0357 6.46439C15.098 5.5267 13.8262 4.99992 12.5002 4.99992C11.1741 4.99992 9.90231 5.5267 8.96463 6.46439C8.02695 7.40207 7.50016 8.67384 7.50016 9.99992C7.50016 11.326 8.02695 12.5978 8.96463 13.5355C9.90231 14.4731 11.1741 14.9999 12.5002 14.9999ZM2.50016 9.99992C2.50012 11.0332 2.82075 12.041 3.4178 12.8844C4.01485 13.7277 4.8589 14.365 5.8335 14.7083V16.4499C2.9585 15.7083 0.833496 13.1083 0.833496 9.99992C0.833496 6.89159 2.9585 4.29159 5.8335 3.54992V5.29159C3.89183 5.97492 2.50016 7.82492 2.50016 9.99992Z" fill="#ADB3BD"/>
+                    </svg>
+                </div>
+                <v-list-item-title class="mx-3">
+                    <label :class="selectedTab === 'pools' ? 'selected-page' : ''"
+                           class="navbar-page-label">
+                        ALL POOLS
                     </label>
                 </v-list-item-title>
             </v-list-item>
@@ -171,60 +193,60 @@
                 Delta-Neutrals
             </label>
 
-            <v-list-item @click="etsClick()"  :class="selectedTab === 'ets' ? 'selected-page-item' : ''">
-                <div class="navbar-page-link">
-                    <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2.1018 9.07853L3.42447 7.70458L4.8655 7.77316L6.14168 9.0017L7.13245 7.97253L4.04492 5.00024L1.07263 8.08777L2.1018 9.07853Z" fill="#ADB3BD"/>
-                        <path d="M19.0089 12.6048L17.2702 13.3884L15.958 12.789L15.2301 11.174L13.9277 11.761L15.6887 15.6682L19.5959 13.9072L19.0089 12.6048Z" fill="#ADB3BD"/>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.4288 17.2552C13.3484 18.1615 12.0875 18.8308 10.7144 19.1661C6.41436 18.1161 3.21436 13.7911 3.21436 9.1661V6.12215L4.88102 7.74475V9.34943C4.88102 12.9494 7.58936 16.6661 10.7144 17.4994C11.7973 17.2106 12.8302 16.5756 13.7177 15.7192L14.4288 17.2552ZM16.8547 14.3073C17.7184 12.7611 18.2144 10.9868 18.2144 9.1661V4.1661L10.7144 0.832764L5.19017 3.28796L6.47511 4.53892L10.7144 2.64943L16.5477 5.24943V9.34943C16.5477 10.5862 16.2281 11.8367 15.6817 12.9793L16.1413 12.7665L16.8547 14.3073Z" fill="#ADB3BD"/>
-                    </svg>
-                </div>
-                <v-list-item-title>
-                    <label class="navbar-page-label ml-3" :class="selectedTab === 'ets' ? 'selected-page' : ''" >ETS</label>
-                </v-list-item-title>
-            </v-list-item>
-
-            <div class="navbar-list-divider mt-1 mb-1"></div>
-
-            <v-list-group :append-icon="null"  @click="toggleInsurance(!isShowInsurance)">
+            <v-list-group :append-icon="null" @click="toggleEts(!isShowEts)">
                 <template v-slot:activator>
-                    <div class="navbar-page-link">
-                        <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16.8829 9.22067C16.8829 13.5454 13.8907 17.5895 9.86992 18.5713C5.84914 17.5895 2.85693 13.5454 2.85693 9.22067V4.54535L9.86992 1.42847L16.8829 4.54535V9.22067ZM9.86992 17.0129C12.792 16.2337 15.3245 12.7583 15.3245 9.3921V5.55834L9.86992 3.12717V17.0129Z" fill="#ADB3BD"/>
+                    <div class="navbar-page-link mt-1">
+                        <svg width="20" height="20" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path v-bind:fill="etsIconColor" d="M3.44252 12.7102L5.29426 10.7867L7.3117 10.8827L9.09836 12.6027L10.4854 11.1618L6.16288 7.00063L2.00168 11.3232L3.44252 12.7102Z"/>
+                            <path v-bind:fill="etsIconColor" d="M27.1123 17.6467L24.6781 18.7438L22.841 17.9045L21.822 15.6436L19.9986 16.4653L22.464 21.9355L27.9341 19.4701L27.1123 17.6467Z"/>
+                            <path v-bind:fill="etsIconColor" fill-rule="evenodd" clip-rule="evenodd" d="M20.7003 24.1574C19.1877 25.4263 17.4224 26.3633 15.5 26.8327C9.48 25.3627 5 19.3077 5 12.8327V8.57115L7.33333 10.8428V13.0893C7.33333 18.1294 11.125 23.3327 15.5 24.4994C17.0161 24.0951 18.4622 23.206 19.7046 22.007L20.7003 24.1574ZM24.0965 20.0304C25.3057 17.8657 26 15.3817 26 12.8327V5.83268L15.5 1.16602L7.76615 4.60328L9.56506 6.35464L15.5 3.70935L23.6667 7.34935V13.0893C23.6667 14.8208 23.2192 16.5715 22.4543 18.1712L23.0977 17.8733L24.0965 20.0304Z"/>
                         </svg>
                     </div>
-                    <v-list-item-title >
-                        <label class="navbar-page-label ml-3" :class="selectedTab.startsWith('insurance_') ? 'selected-page' : ''">INSURANCE</label>
+                    <v-list-item-title class="mx-3">
+                        <label :class="selectedTab.startsWith('ets_') ? 'selected-page' : ''"
+                               class="navbar-page-label">
+                            ETS
+                        </label>
                     </v-list-item-title>
-                    <div class="select-bar-main-container ml-5" >
+                    <div class="select-bar-main-container ml-5">
                         <v-row>
                             <v-icon color="var(--secondary-gray-text)" >
-                                {{ isShowInsurance ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
+                                {{ isShowEts ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
                             </v-icon>
                         </v-row>
                     </div>
                 </template>
-                <v-list-item @click="insuranceClick" :class="selectedTab === 'insurance_about' ? 'selected-page-item' : ''">
-                    <label class="navbar-list-label mx-7" :class="selectedTab === 'insurance_about' ? 'selected-page' : ''" >About</label>
-                </v-list-item>
+                <div>
+                    <v-list-item @click="etsClick"
+                                 :class="selectedTab === 'ets_about' ? 'selected-page-item' : ''"
+                                 class="list-item-hover">
+                        <label :class="selectedTab === 'ets_about' ? 'selected-page' : ''"
+                               class="navbar-list-label mx-7">
+                            About ETS
+                        </label>
+                    </v-list-item>
 
-                <v-list-item @click="insurancePerformanceClick" :class="selectedTab === 'insurance-performance' ? 'selected-page-item' : ''">
-                    <label class="navbar-list-label mx-7" :class="selectedTab === 'insurance-performance' ? 'selected-page' : ''">Performance</label>
-                </v-list-item>
+                    <v-list-item @click="etsClick"
+                                 :class="selectedTab === 'ets_active' ? 'selected-page-item' : ''"
+                                 class="list-item-hover">
+                        <label :class="selectedTab === 'ets_active' ? 'selected-page' : ''"
+                               class="navbar-list-label mx-7">
+                            Active ETS
+                        </label>
+                    </v-list-item>
 
-                <v-list-item @click="insuranceReservesClick" :class="selectedTab === 'insurance-reserves' ? 'selected-page-item' : ''">
-                    <label class="navbar-list-label mx-7" :class="selectedTab === 'insurance-reserves' ? 'selected-page' : ''">Reserves</label>
-                </v-list-item>
-
-                <v-list-item @click="mintAction">
-                    <v-list-item-title>
-                        <label class="navbar-page-label-modal mx-7">Mint/redeem</label>
-                    </v-list-item-title>
-                </v-list-item>
+                    <v-list-item @click="etsClick"
+                                 :class="selectedTab === 'ets_archive' ? 'selected-page-item' : ''"
+                                 class="list-item-hover">
+                        <label :class="selectedTab === 'ets_archive' ? 'selected-page' : ''"
+                               class="navbar-list-label mx-7">
+                            ETS Archive
+                        </label>
+                    </v-list-item>
+                </div>
             </v-list-group>
 
-
-            <v-divider class="navbar-list-divider"></v-divider>
+            <div class="navbar-list-divider mt-1 mb-1"></div>
 
             <v-list-item @click="dashBoardClick" :class="selectedTab === 'dashboard' ? 'selected-page-item' : ''">
                 <div class="navbar-page-link">
@@ -276,10 +298,10 @@ export default {
     components: {},
 
     data: () => ({
+        isShowEts: false,
         isShowUsd: false,
         isShowUsdt: false,
         isShowDai: false,
-        isShowInsurance: false,
         closeOnContentClick: false,
     }),
 
@@ -313,6 +335,14 @@ export default {
 
             return this.isShowUsdt ? '#FFFFFF' : '#ADB3BD';
         },
+
+        etsIconColor: function() {
+            if (this.light) {
+                return this.isShowEts ? '#000000' : '#ADB3BD';
+            }
+
+            return this.isShowEts ? '#FFFFFF' : '#ADB3BD';
+        },
     },
 
     methods: {
@@ -323,7 +353,6 @@ export default {
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
         ...mapActions('theme', ['switchTheme']),
         ...mapActions('track', ['trackClick']),
-        ...mapActions('insuranceInvestModal', ['showInvestModal', 'showMintView', 'showRedeemView', 'showRedemptionRequestModal']),
 
         openLink(url, isNotBlank) {
             window.open(url, isNotBlank ? '_self' : '_blank').focus();
@@ -351,7 +380,7 @@ export default {
 
         dashBoardClick() {
             this.selectTab('dashboard');
-            this.goToActionByPath('/', { tabName: 'dashboard' });
+            this.goToActionByPath('/dashboard', { tabName: 'dashboard' });
             this.trackClick({
                 action: 'dashboard-click',
                 event_category: 'View Page',
@@ -416,27 +445,6 @@ export default {
             this.goToActionByPath('/market', { tabName: 'ets' });
         },
 
-        insuranceClick() {
-            this.selectTab('insurance_about');
-            this.goToActionByPath('/insurance', {tabName: 'about'});
-            this.trackClick({
-                action: 'insurance-click',
-                event_category: 'View Page',
-                event_label: 'Open insurance page',
-                value: 1
-            });
-        },
-
-        insurancePerformanceClick() {
-            this.selectTab('insurance-performance');
-            this.goToActionByPath('/insurance/polygon', { tabName: 'performance' });
-        },
-
-        insuranceReservesClick() {
-            this.selectTab('insurance-reserves');
-            this.goToActionByPath('/insurance/polygon', { tabName: 'reserves' });
-        },
-
         swapClick() {
             this.showMintView();
             this.showSwapModal();
@@ -489,7 +497,7 @@ export default {
 
         toggleUsdPlus(isShow) {
             if (isShow) {
-                this.toggleInsurance(false);
+                this.toggleEts(false);
                 this.toggleDaiPlus(false);
                 this.toggleUsdtPlus(false);
             }
@@ -499,7 +507,7 @@ export default {
 
         toggleDaiPlus(isShow) {
             if (isShow) {
-                this.toggleInsurance(false);
+                this.toggleEts(false);
                 this.toggleUsdPlus(false);
                 this.toggleUsdtPlus(false);
             }
@@ -509,7 +517,7 @@ export default {
 
         toggleUsdtPlus(isShow) {
             if (isShow) {
-                this.toggleInsurance(false);
+                this.toggleEts(false);
                 this.toggleUsdPlus(false);
                 this.toggleDaiPlus(false);
             }
@@ -517,14 +525,14 @@ export default {
             this.isShowUsdt = isShow;
         },
 
-        toggleInsurance(isShow) {
+        toggleEts(isShow) {
             if (isShow) {
                 this.toggleUsdPlus(false);
                 this.toggleDaiPlus(false);
                 this.toggleUsdtPlus(false);
             }
 
-            this.isShowInsurance = isShow;
+            this.isShowEts = isShow;
         },
     }
 }

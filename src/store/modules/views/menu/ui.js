@@ -1,5 +1,5 @@
 const state = {
-    selectedTab: '',
+    selectedTab: '/',
 };
 
 const getters = {

@@ -240,12 +240,53 @@
                     </v-col>
 
                     <v-col :cols="!$wu.isFull() ? 12 : 4">
-                        <Doughnut :size="260" :color="etsData.mainColor" :last-date="lastPayoutDate" :archived="etsData.archive"/>
+                        <Doughnut :size="260" :ets-data="etsData.cardBgColor" :last-date="lastPayoutDate" :archived="etsData.archive"/>
                     </v-col>
                 </v-row>
             </v-col>
         </v-row>
-
+        <v-row class="ma-0 mt-7 info-card-container-bottom" justify="start" align="start" :style="{'background': etsData.cardBgColor}">
+            <v-col class="info-card-body-bottom" :cols="$wu.isMobile() ? 0 : 5">
+                <v-row class="info-row footer-row" justify="start" align="center">
+                    <label class="card-info footer-label mt-2">Token address</label>
+                    <v-spacer></v-spacer>
+                    <label class="card-info-value info-value-address mt-2" @click="openTokenOnScan(etsStrategyData[etsData.name].rebaseAddress)">
+                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].rebaseAddress) ? shortAddress(etsStrategyData[etsData.name].rebaseAddress) : '—' }}
+                    </label>
+                    <div class="icon-img ml-2 mt-1" :class="!$wu.isFull() ? 'mr-2' : ''" @click="openTokenOnScan(etsStrategyData[etsData.name].rebaseAddress)">
+                        <v-icon size="20" style="margin-top: -2px" color="rgba(255, 255, 255, 0.5)">mdi-open-in-new</v-icon>
+                    </div>
+                </v-row>
+                <v-row class="info-row footer-row mt-6" justify="start" align="center">
+                    <label class="card-info footer-label mt-2">Pool address</label>
+                    <v-spacer></v-spacer>
+                    <label class="card-info-value info-value-address mt-1" @click="openStrategyOnScan(etsStrategyData[etsData.name].exchangerAddress)">
+                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].exchangerAddress) ? shortAddress(etsStrategyData[etsData.name].exchangerAddress) : '—' }}
+                    </label>
+                    <div class="icon-img ml-2" :class="!$wu.isFull() ? 'mr-2' : ''" @click="openStrategyOnScan(etsStrategyData[etsData.name].exchangerAddress)">
+                        <v-icon size="20" style="margin-top: -2px" color="rgba(255, 255, 255, 0.5)">mdi-open-in-new</v-icon>
+                    </div>
+                </v-row>
+            </v-col>
+            <v-col></v-col>
+            <v-col  class="info-card-body-bottom" :cols="$wu.isMobile() ? 0 : 5">
+                <v-row class="info-row footer-row" justify="start" align="center">
+                    <label class="card-info footer-label mt-2">Vault address</label>
+                    <v-spacer></v-spacer>
+                    <label class="card-info-value mt-2 info-value-address" @click="openStrategyOnScan(etsStrategyData[etsData.name].strategyAddress)">
+                        {{ (etsStrategyData[etsData.name] && etsStrategyData[etsData.name].strategyAddress) ? shortAddress(etsStrategyData[etsData.name].strategyAddress) : '—' }}
+                    </label>
+                    <div class="icon-img ml-2 mt-1" :class="!$wu.isFull() ? 'mr-2' : ''" @click="openStrategyOnScan(etsStrategyData[etsData.name].strategyAddress)">
+                        <v-icon size="20" style="margin-top: -2px" color="rgba(255, 255, 255, 0.5)">mdi-open-in-new</v-icon>
+                    </div>
+                </v-row>
+                <v-row class="info-row footer-row mt-6" justify="start" align="center">
+                    <label class="card-info footer-label mt-2">Inception date</label>
+                    <v-spacer></v-spacer>
+                    <label class="card-info-value date mt-2">{{ etsData.inceptionDate }}</label>
+                </v-row>
+            </v-col>
+        </v-row>
         <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
@@ -285,6 +326,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig']),
         ...mapGetters('marketData', ['etsStrategyData', 'etsApyData', 'etsTvlData', 'usdPlusApyData', 'compoundData']),
 
         activeRateApy: function () {
@@ -313,11 +355,56 @@ export default {
 
             return data && data.payoutItems && data.payoutItems.length ? data.payoutItems[data.payoutItems.length - 1].payableDate : null;
         },
+
+        strategyData: function () {
+            if (this.etsStrategyData && this.etsData.name) {
+                return this.etsStrategyData[this.etsData.name];
+            } else {
+                return null;
+            }
+        },
+
+        etsChainConfig: function () {
+            switch (this.etsData.chain) {
+                case 137:
+                    return this.polygonConfig;
+                case 10:
+                    return this.opConfig;
+                case 56:
+                    return this.bscConfig;
+                case 42161:
+                    return this.arConfig;
+                case 324:
+                    return this.zkConfig;
+                default:
+                    return this.polygonConfig;
+            }
+        }
     },
 
     methods: {
         openLink(url) {
             window.open(url, '_blank').focus();
+        },
+
+        shortAddress(address) {
+            if (address) {
+                return address.substring(0, 5) + '...' + address.substring(address.length - 4);
+            } else {
+                return null;
+            }
+        },
+
+        openTokenOnScan(hash) {
+            if (hash && hash !== '') {
+                window.open(this.etsChainConfig.explorerUrl + "token/" + hash, '_blank').focus();
+            }
+        },
+
+        openStrategyOnScan(hash) {
+            if (hash && hash !== '') {
+                window.open(this.etsChainConfig.explorerUrl + "address/" + hash, '_blank').focus();
+            }
         },
     }
 }
@@ -635,7 +722,15 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .card-info-value {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: var(--main-gray-text);
+    color: var(--secondary-gray-text);
+}
+
+.info-value-address {
+    color: white
+}
+
+.date {
+    color: white;
 }
 
 .title-card-text-bottom {
@@ -696,5 +791,13 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .debank-icon {
     margin-top: -2px !important;
+}
+
+.footer-row {
+    border-top: 1px solid white;
+}
+
+.footer-label {
+    color: white;
 }
 </style>

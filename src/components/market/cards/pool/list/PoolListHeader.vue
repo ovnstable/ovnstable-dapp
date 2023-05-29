@@ -15,7 +15,7 @@
                 <label class="list-header-label">TVL</label>
             </v-row>
         </v-col>
-        <v-col cols="3">
+        <v-col cols="2">
             <v-row :justify="$wu.isMobile() ? 'center' : 'end'" align="center">
                 <label class="list-header-label">APR</label>
             </v-row>

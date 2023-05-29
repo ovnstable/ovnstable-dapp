@@ -17,9 +17,17 @@
 
        <div v-else>
          <PoolListHeader/>
-         <PoolListCard class="mt-2" v-for="component in sortedCardList.filter(value => (value.tvl > 100000))" :card-data="component" :key="component.id"/>
+         <PoolListCard class="mt-2"
+                       v-for="component in sortedCardList.filter(value => (value.tvl > 100000))"
+                       :key="component.id"
+                       :card-data="component"
+                        :open-zap-in-func="openZapIn"/>
          <resize-observer @notify="$forceUpdate()"/>
        </div>
+
+        <ZapModal :set-show-func='setIsZapModalShow'
+                  :zap-pool="currentZapPool"
+                  :is-show="isZapModalShow"></ZapModal>
     </div>
 </template>
 
@@ -30,11 +38,13 @@ import PoolListHeader from "@/components/market/cards/pool/list/PoolListHeader";
 import PoolListCard from "@/components/market/cards/pool/list/PoolListCard";
 
 import {poolApiService} from "@/services/pool-api-service";
+import ZapModal from "@/components/zap/modals/ZapModal.vue";
 
 export default {
     name: "UsdPools",
 
     components: {
+        ZapModal,
         PoolListCard,
         PoolListHeader,
     },
@@ -44,6 +54,8 @@ export default {
         sortedCardList: [],
         pools: [],
         isPoolsLoading: true,
+        isZapModalShow: false,
+        currentZapPool: null
     }),
 
     computed: {
@@ -59,6 +71,16 @@ export default {
     },
 
     methods: {
+        setIsZapModalShow(isShow) {
+            this.isZapModalShow = isShow;
+        },
+
+        openZapIn(pool) {
+            console.log("Zap open for pool: ", pool);
+            this.currentZapPool = pool.data;
+            this.setIsZapModalShow(true);
+        },
+
       setTab(tabId) {
           this.tab = tabId;
       },

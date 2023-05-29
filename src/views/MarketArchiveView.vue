@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mt-10">
-      <label class="title-label">exchange-traded archived strategies (ETS)</label>
+      <label class="title-label">ETS archive</label>
     </div>
 
     <div v-if="!isAllDataLoaded" class="mt-7 cards-list-container">
@@ -19,17 +19,6 @@
     <div v-else class="mt-7 cards-list-container">
 
       <template v-if="sortedCardList.filter(value => value.data.archive).length > 0" >
-        <v-row class="ma-0 mb-1 mt-5" align="center">
-          <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-archive-outline</v-icon>
-          <label class="prototypes-label ml-2 archive-label" @click="openArchiveList = !openArchiveList">Archive</label>
-          <div class="select-bar-main-container ml-7" @click="openArchiveList = !openArchiveList">
-            <v-row justify="end" align="center" class="select-bar-container">
-              <v-icon color="var(--secondary-gray-text)" >
-                {{ openArchiveList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-              </v-icon>
-            </v-row>
-          </div>
-        </v-row>
 
         <v-divider class="prototypes-list-divider"></v-divider>
 

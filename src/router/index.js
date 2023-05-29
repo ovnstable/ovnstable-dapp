@@ -24,6 +24,7 @@ import CollateralUsdt from "./midleware/dapp/CollateralUsdt";
 import Dashboard from "./midleware/dapp/Dashboard";
 import Pools from "./midleware/dapp/Pools";
 import Swap from "./midleware/dapp/Swap";
+import EtsAbout from "./midleware/dapp/EtsAbout"
 
 Vue.use(VueRouter)
 
@@ -42,6 +43,16 @@ const routes = [
                 meta: {
                     middleware: [
                         Market
+                    ]
+                }
+            },
+            {
+                path: '/ets_about',
+                name: 'EtsAboutView',
+                component: () => import('../views/EtsAboutView.vue'),
+                meta: {
+                    middleware: [
+                        EtsAbout
                     ]
                 }
             },
@@ -74,6 +85,10 @@ const routes = [
                         Pools
                     ]
                 }
+            },
+            {
+                path: '/',
+                redirect: '/swap',
             },
             {
                 path: '/swap',
@@ -190,7 +205,7 @@ const routes = [
                 }
             },
             {
-                path: '/',
+                path: '/dashboard',
                 name: 'MyPerformanceView',
                 component: () => import('../views/dashboard/MyPerformanceView'),
                 meta: {

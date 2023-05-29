@@ -13,7 +13,8 @@
                     </div>
                     <div class="col-5 selected-image-right">
                         <div v-if="token.selectedToken"
-                             @click="selectTokenFunc(token)"
+                             @click="() => isDisableSelect ? () => {} : selectTokenFunc(token)"
+                             :class="isDisableSelect ? 'selected-token-container-disable-select' : ''"
                              class="selected-token-container">
                             <div>
                                 <div class="selected-token-item-img">
@@ -21,10 +22,11 @@
                                          class="selected-token"
                                          alt="select-token">
                                 </div>
-                                <div class="selected-token-item-text">
+                                <div :class="isDisableSelect ? 'selected-token-item-text-disable-select' : ''"
+                                     class="selected-token-item-text">
                                     {{token.selectedToken.symbol}}
                                 </div>
-                                <div class="select-token-with-token-item-img">
+                                <div v-if="!isDisableSelect" class="select-token-with-token-item-img">
                                     <img src="/assets/icon/swap/token-select-closed.svg" alt="select-token">
                                 </div>
                             </div>
@@ -87,16 +89,17 @@
                               :value="40"
                               :model-value="tokenInfo.value"/>
                   </div>
-                  <div v-if="tokenInfo.locked"
-                       @click="lockProportionFunc(false, tokenInfo)"
-                       class="lock-container">
-                      <img src="/assets/icon/swap/proportion-lock-close.svg" alt="select-token">
+                  <div v-if="!isHideLockIcon" class="lock-container">
+                      <div v-if="tokenInfo.locked"
+                           @click="lockProportionFunc(false, tokenInfo)">
+                          <img src="/assets/icon/swap/proportion-lock-close.svg" alt="select-token">
+                      </div>
+                      <div v-else
+                           @click="lockProportionFunc(true, tokenInfo)">
+                          <img src="/assets/icon/swap/proportion-lock-open.svg" alt="select-token">
+                      </div>
                   </div>
-                  <div v-else
-                       @click="lockProportionFunc(true, tokenInfo)"
-                       class="lock-container">
-                      <img src="/assets/icon/swap/proportion-lock-open.svg" alt="select-token">
-                  </div>
+
               </div>
             </div>
         </div>
@@ -121,6 +124,8 @@ export default defineComponent({
         'lockProportionFunc',
         'updateSliderValueFunc',
         'selectTokenFunc',
+        'isHideLockIcon',
+        'isDisableSelect',
     ],
     data() {
         return {
@@ -274,6 +279,16 @@ div {
     cursor: pointer;
 }
 
+.selected-token-container-disable-select {
+    position: absolute;
+    padding: 12px;
+    border: 2px solid var(--card-coin-background);
+    background: transparent !important;
+    border-radius: 40px;
+    cursor: default!important;
+}
+
+
 
 .select-token-item-text {
     display: inline-block;
@@ -289,6 +304,10 @@ div {
     color: var(--main-gray-text);
     margin-right: 15px;
     padding-left: 30px;
+}
+
+.selected-token-item-text-disable-select {
+    margin-right: 0 !important;
 }
 
 

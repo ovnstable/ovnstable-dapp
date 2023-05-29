@@ -1,43 +1,37 @@
 <template>
     <div>
-        <div v-if="!isAvailableOnNetwork">
-            <NetworkNotAvailable :network-name="'ZkSync'">
-            </NetworkNotAvailable>
-        </div>
-
-        <div v-else class="swap-container">
+        <div class="swap-container">
             <div v-if="!isTokensLoadedAndFiltered"
-                 class="loader-container">
+                 class="loader-container pb-15">
                 <div class="row">
                     <v-row align="center" justify="center">
                         <v-progress-circular
-                                width="2"
-                                size="24"
-                                color="#8FA2B7"
-                                indeterminate
+                            width="2"
+                            size="24"
+                            color="#8FA2B7"
+                            indeterminate
                         ></v-progress-circular>
                     </v-row>
                 </div>
             </div>
 
             <div v-else>
+<!--                <div class="swap-header">
+                    <div @click="showSettingsModals(true)" class="swap-settings">
+                        <img v-if="light" src="/assets/icon/swap/settings.svg" alt="settings">
+                        <img v-else src="/assets/icon/swap/settings-dark.svg" alt="settings">
+                    </div>
+                </div>-->
+
                 <div class="swap-body">
                     <div>
+                        <div class="mb-4 mt-1">
+                            <PoolLabel :pool="zapPool">
+                            </PoolLabel>
+                        </div>
+
                         <div class="input-swap-container">
-                            <div class="swap-title pb-lg-2 mt-2">
-                                <div>
-                                    <span v-if="swapMethod === 'SELL'">
-                                     Swap from Overnight
-                                </span>
-                                    <span v-else>
-                                    Swap from
-                                </span>
-                                </div>
-                                <div @click="showSettingsModals(true)" class="swap-settings">
-                                    <img v-if="light" src="/assets/icon/swap/settings.svg" alt="settings">
-                                    <img v-else src="/assets/icon/swap/settings-dark.svg" alt="settings">
-                                </div>
-                            </div>
+
                             <div v-for="token in inputTokens" :key="token.id" class="input-component-container">
                                 <div v-if="isShowDecreaseAllowance && token.selectedToken"
                                      @click="disapproveToken(token)"
@@ -45,20 +39,19 @@
                                     Decrease Allowance
                                 </div>
 
-<!--                                {{token && token.selectedToken ? token.selectedToken.address : '-'}}-->
                                 <InputToken
-                                        :token-info="token"
-                                        :remove-item-func="removeInputToken"
-                                        :is-token-removable="isInputTokensRemovable"
-                                        :select-token-func="selectInputToken"
-                                        :update-token-value-func="updateTokenValue"
+                                    :token-info="token"
+                                    :remove-item-func="removeInputToken"
+                                    :is-token-removable="isInputTokensRemovable"
+                                    :select-token-func="selectInputToken"
+                                    :update-token-value-func="updateTokenValue"
                                 />
                             </div>
                             <div class="row">
                                 <div class="col-6">
                                     <div v-if="isInputTokensAddAvailable"
-                                            @click="addNewInputToken"
-                                            class="add-token-text">
+                                         @click="addNewInputToken"
+                                         class="add-token-text">
                                         + Select token
                                     </div>
                                 </div>
@@ -71,51 +64,29 @@
                             </div>
                         </div>
 
-                       <div class="pt-5">
-                           <div @click="changeSwap()" class="change-swap-container">
-                               <div class="change-swap-image rotate" >
-                                   <img src="/assets/icon/swap/change-swap-vector.svg" alt="change-swap">
-                               </div>
-                           </div>
-                       </div>
-
-                        <div class="out-swap-container">
-                            <div class="swap-title pb-2">
-                                <span v-if="swapMethod === 'BUY'">
-                                    Swap to Overnight
-                                </span>
-                                <span v-else>
-                                    Swap to
-                                </span>
+                        <div class="pt-5">
+                            <div class="change-swap-container">
+                                <div class="change-swap-image" >
+                                    <img src="/assets/icon/swap/change-swap-vector.svg" alt="change-swap">
+                                </div>
                             </div>
-                            <div v-for="token in outputTokens" :key="token.id" class="input-component-container">
+                        </div>
+
+                        <div class="out-swap-container pt-5">
+                            <div v-for="token in outputTokens" :key="token.id"
+                                 class="input-component-container">
                                 <OutputToken
-                                        :token-info="token"
-                                        :swap-method="swapMethod"
-                                        :remove-item-func="removeOutputToken"
-                                        :is-token-removable="isOutputTokensRemovable"
-                                        :is-token-without-slider="isTokenWithoutSlider"
-                                        :lock-proportion-func="lockProportion"
-                                        :update-slider-value-func="updateSliderValue"
-                                        :select-token-func="selectOutputToken"
+                                    :token-info="token"
+                                    :swap-method="swapMethod"
+                                    :remove-item-func="removeOutputToken"
+                                    :is-token-removable="isOutputTokensRemovable"
+                                    :is-token-without-slider="isTokenWithoutSlider"
+                                    :lock-proportion-func="lockProportion"
+                                    :update-slider-value-func="updateSliderValue"
+                                    :select-token-func="selectOutputToken"
+                                    :is-hide-lock-icon="true"
+                                    :is-disable-select="true"
                                 />
-                            </div>
-
-                            <div class="row">
-                                <div class="col-6">
-                                    <div v-if="isOutputTokensAddAvailable"
-                                         @click="addNewOutputToken"
-                                         class="add-token-text">
-                                        + Select token
-                                        {{outputTokensWithSelectedTokensCount}}
-                                    </div>
-                                </div>
-                                <div v-if="outputTokensWithSelectedTokensCount >= 2" class="col-6">
-                                    <div @click="resetOutputs"
-                                         class="add-token-text max-all">
-                                        Reset output %
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -151,111 +122,28 @@
                             </div>
                         </div>
                         <div v-else
-                             @click="swap()"
+                             @click="stake()"
                              class="swap-button">
                             <div class="swap-button-title">
                                 <div>
-                                    SWAP
+                                    STAKE
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="label-container pt-3">
-                        <div class="row">
-                            <div class="col-6 pr-1" style="padding-top:15px">
-                                <div class="powered-text">
-                                    Powered by
-                                </div>
-                            </div>
-                            <div class="col-6 pl-0">
-                                <div class="powered-image">
-                                    <img src="/assets/icon/swap/powered-by-odos.svg" alt="powered by odos">
-                                </div>
+                        <div v-if="selectedInputTokens.length > 0" class="row">
+                            <div class="col-12">
+                               <ZapSteps :selected-input-tokens="selectedInputTokens"
+                               :click-on-stake="clickOnStake">
+                               </ZapSteps>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div v-if="quotaResponseInfo">
-            <div class="transaction-info-container">
-                <div class="transaction-info-body">
-<!--                    <div class="row py-2">
-                        <div class="col-6 py-0">
-                            <div class="transaction-info-title">
-                                Output Value
-                            </div>
-                        </div>
-                        <div class="col-6 py-0">
-                            <div class="transaction-info">
-                                ~1.09 <span class="transaction-info-additional">(+116.76%)</span>
-                            </div>
-                        </div>
-                    </div>-->
-
-<!--                    <div v-if="getTokenByAddress('0x0000000000000000000000000000000000000000')" class="row py-2">
-                        <div class="col-6 py-0">
-                            <div class="transaction-info-title">
-                                Gas estimate
-                            </div>
-                        </div>
-                        <div class="col-6 py-0">
-                            <div class="transaction-info">
-                                ~{{quotaResponseInfo.gasEstimate}} Gwei
-                                <span class="transaction-info-additional">
-                                    (~{{$utils.formatMoney(quotaResponseInfo.gasEstimate *  getTokenByAddress('0x0000000000000000000000000000000000000000').estimatePerOne, 2) }}$)
-                                </span>
-                            </div>
-                        </div>
-                    </div>-->
-
-                    <div class="row py-2">
-                        <div class="col-6 py-0">
-                            <div class="transaction-info-title">
-                                Slippage
-                            </div>
-                        </div>
-                        <div class="col-6 py-0">
-                            <div class="transaction-info">
-                                {{slippagePercent*1}}% <span class="transaction-info-additional">
-                                ({{$utils.formatMoney(sumOfAllSelectedTokensInUsd * slippagePercent / 100, 3)}})$
-                            </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row py-2">
-                        <div class="col-6 py-0">
-                            <div class="transaction-info-title">
-                                Minimum received
-                            </div>
-                        </div>
-                        <div class="col-6 py-0">
-                            <div class="transaction-info">
-                                {{$utils.formatMoney(sumOfAllSelectedTokensInUsd, 3)}}$
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="transaction-info-footer">
-                    <div class="row py-2">
-                        <div class="col-6 py-0">
-                            <div class="transaction-info-title">
-                                Recipient
-                            </div>
-                        </div>
-                        <div class="col-6 py-0">
-                            <div class="transaction-info-address">
-                                {{account.substring(0, 5) + '...' + account.substring(account.length - 4)}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
 
         <SelectTokensModal :is-show="isShowSelectTokensModal"
                            :set-show-func="showSelectTokensModals"
@@ -266,15 +154,15 @@
                            :second-tokens="secondTokens"
                            :tokens="tokens"
                            :is-all-data-loaded="isAllDataLoaded"
-                           :is-ovn-swap="true"
+                           :is-ovn-swap="false"
 
         />
 
         <AdvancedSettingsModal :is-show="isShowSettingsModal"
                                :set-show-func="showSettingsModals"/>
 
-        <SuccessOdosModal :is-show="isShowSuccessModal"
-                          :set-show-func="showSuccessModal"
+        <SuccessZapModal :is-show="isShowSuccessPoolModal"
+                          :set-show-func="showSuccessPoolModal"
                           :success-data="successData"/>
 
         <WaitingModal/>
@@ -286,53 +174,38 @@
 import {defineComponent} from 'vue'
 import InputToken from "@/components/swap-module/InputToken.vue";
 import OutputToken from "@/components/swap-module/OutputToken.vue";
-import SelectTokensModal from "@/components/swap-module/modals/SelectTokensModal.vue";
-import {mapActions, mapGetters} from "vuex";
-import AdvancedSettingsModal from "@/components/swap-module/modals/AdvancedSettingsModal.vue";
 import {odosSwap} from "@/components/mixins/odos-swap";
+import {mapActions, mapGetters} from "vuex";
+import SelectTokensModal from "@/components/swap-module/modals/SelectTokensModal.vue";
 import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
-import SuccessModal from "@/components/common/modal/action/SuccessModal.vue";
 import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
-import SuccessOdosModal from "@/components/odos/modals/SuccessOdosModal.vue";
-import NetworkNotAvailable from "@/components/swap-module/network-not-available.vue";
+import AdvancedSettingsModal from "@/components/swap-module/modals/AdvancedSettingsModal.vue";
+import SuccessZapModal from "@/components/zap/modals/SuccessZapModal.vue";
+import ZapSteps from "@/components/zap/ZapSteps.vue";
+import {zap} from "@/components/mixins/zap";
+import PoolLabel from "@/components/zap/PoolLabel.vue";
 
 export default defineComponent({
-    name: "SwapForm",
-    mixins: [odosSwap],
+    name: "ZapForm",
+    mixins: [odosSwap, zap],
     components: {
-        NetworkNotAvailable,
-        SuccessOdosModal,
-        ErrorModal,
-        SuccessModal,
-        WaitingModal,
+        PoolLabel,
+        ZapSteps,
+        SuccessZapModal,
         AdvancedSettingsModal,
+        ErrorModal,
+        WaitingModal,
         SelectTokensModal,
+        OutputToken,
         InputToken,
-        OutputToken
     },
     props: {
-        updatePathViewFunc: {
-            type: Function,
-            required: true
+        zapPool: {
+            type: Object,
+            required: false,
+            default: null
         },
-        updateButtonDisabledFunc: {
-            type: Function,
-            required: true
-        },
-        updateIsLoadingDataFunc: {
-            type: Function,
-            required: true
-        },
-    },
-    mounted() {
-        this.tokenSeparationScheme = 'OVERNIGHT_SWAP'
-        console.log("Swap form odos init by scheme: ", this.tokenSeparationScheme)
 
-        this.init();
-
-        if (!this.isAvailableOnNetwork) {
-            this.mintAction();
-        }
     },
     data() {
         return {
@@ -352,36 +225,87 @@ export default defineComponent({
             slippagePercent: 0.05,
 
             tokensQuotaCounterId: null,
-            tokensQuotaCheckerSec: 0
+            tokensQuotaCheckerSec: 0,
+
+            clickOnStake: false,
+
+            sourceLiquidityBlacklist: ["Hashflow"],
+            mapExcludeLiquidityPlatform: { // Schema for hot exclude: {'Ovn pool platform name from db': ['odos', 'api/info/liquidity-sources', 'related', 'with', 'platform'] }
+                'Chronos': ["Chronos Volatile"] //"Chronos Stable"
+            },
+
+            poolTokensMap: {
+                // pool address
+                '0xb260163158311596ea88a700c5a30f101d072326': [
+                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+                    {name: 'DAI+', address: '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'},
+                ],
+                '0xbbd7ff1728963a5eb582d26ea90290f84e89bd66': [
+                    {name: 'DOLA', address: '0x6a7661795c374c0bfc635934efaddff3a7ee23b6'},
+                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+                ],
+
+                '0x0d20ef7033b73ea0c9c320304b05da82e2c14e33': [
+                    {name: 'FRAX', address: '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F'},
+                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+                ],
+
+                '0xcd78e225e36e724c9fb4bd8287296557d728cda7': [
+                    {name: 'LUSD', address: '0x93b346b6BC2548dA6A1E7d98E9a421B42541425b'},
+                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+                ],
+
+            }
+        }
+    },
+    mounted() {
+        this.tokenSeparationScheme = 'POOL_SWAP';
+        console.log("Zap form odos init by scheme: ", this.tokenSeparationScheme)
+        console.log("Zap pool: ", this.zapPool)
+        // todo: move to backend
+        let poolTokens = this.poolTokensMap[this.zapPool.address];
+        if (!poolTokens) {
+            console.log("Pool address not found:");
+            return;
+        }
+
+        console.log("poolTokens: ", poolTokens, this.zapPool.address);
+        this.listOfBuyTokensAddresses = [];
+        this.listOfBuyTokensAddresses.push(poolTokens[0].address);
+        this.listOfBuyTokensAddresses.push(poolTokens[1].address);
+
+        this.init();
+
+        if (!this.isAvailableOnNetwork) {
+            this.mintAction();
         }
     },
     computed: {
         ...mapGetters('network', ['getParams', 'networkId']),
         ...mapGetters('theme', ['light']),
-        ...mapGetters('web3', ['web3', 'getWeiMarker']),
 
         isInputTokensRemovable() {
-          return this.inputTokens.length > 1;
+            return this.inputTokens.length > 1;
         },
 
         isOutputTokensRemovable() {
-          return this.outputTokens.length > 1;
+            return false;//this.outputTokens.length > 1;
         },
 
         isTokenWithoutSlider() {
-          return this.outputTokens.length <= 1;
+            return this.outputTokens.length <= 1;
         },
 
         isInputTokensAddAvailable() {
-          return this.inputTokens.length < this.maxInputTokens && this.inputTokensWithoutSelectedTokensCount === 0;
+            return this.inputTokens.length < this.maxInputTokens && this.inputTokensWithoutSelectedTokensCount === 0;
         },
 
         isOutputTokensAddAvailable() {
-          return this.outputTokens.length < this.maxOutputTokens && this.outputTokensWithoutSelectedTokensCount === 0;
+            return this.outputTokens.length < this.maxOutputTokens && this.outputTokensWithoutSelectedTokensCount === 0;
         },
 
         inputTokensWithoutSelectedTokensCount() {
-         return this.inputTokens.filter(item => !item.selectedToken).length;
+            return this.inputTokens.filter(item => !item.selectedToken).length;
         },
 
         outputTokensWithoutSelectedTokensCount() {
@@ -389,7 +313,7 @@ export default defineComponent({
         },
 
         inputTokensWithSelectedTokensCount() {
-         return this.inputTokens.filter(item => item.selectedToken).length;
+            return this.inputTokens.filter(item => item.selectedToken).length;
         },
 
         outputTokensWithSelectedTokensCount() {
@@ -468,25 +392,6 @@ export default defineComponent({
 
     },
     watch: {
-        outputTokensWithSelectedTokensCount: function (val, oldVal) {
-
-            // lock first
-            if (val === 1) {
-                let token = this.selectedOutputTokens[0];
-                token.value = 100;
-                this.lockProportion(true, token);
-                this.recalculateOutputTokensSum();
-                return;
-            }
-
-            // unlock first
-            if (val === 2 && oldVal === 1) {
-                let token = this.selectedOutputTokens[0];
-                this.lockProportion(false, token);
-                this.recalculateOutputTokensSum();
-                return;
-            }
-        },
         sumOfAllSelectedTokensInUsd: function (val, oldVal) {
             this.recalculateOutputTokensSum();
         },
@@ -511,10 +416,9 @@ export default defineComponent({
             if (val) {
                 this.clearQuotaInfo();
             }
-            this.updateButtonDisabledFunc(val);
+            // this.updateButtonDisabledFunc(val);
         }
     },
-
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
 
@@ -532,28 +436,33 @@ export default defineComponent({
             this.loadTokens();
             this.initContractData();
 
-            this.$bus.$on('odos-transaction-finished', (data) => {
+            this.$bus.$on('zap-transaction-finished', (data) => {
                 this.finishTransaction();
             })
         },
-        addDefaultOvnToken() {
-            let ovnSelectedToken = this.getDefaultSecondtoken();
-            if (!ovnSelectedToken) {
+        addDefaultPoolToken() {
+            let poolSelectedToken = this.getDefaultSecondtoken();
+            let ovnSelectSelectedToken = this.getSecondDefaultSecondtoken();
+            if (!poolSelectedToken || !ovnSelectSelectedToken) {
                 this.addNewInputToken();
                 this.addNewOutputToken();
                 return;
             }
 
-            ovnSelectedToken.selected = true;
+            poolSelectedToken.selected = true;
+            ovnSelectSelectedToken.selected = true;
+            console.log("poolSelectedToken: ", poolSelectedToken, ovnSelectSelectedToken);
 
             if (this.swapMethod === 'BUY') {
-                this.addSelectedTokenToOutputList(ovnSelectedToken);
+                this.addSelectedTokenToOutputList(poolSelectedToken, true, 50);
+                this.addSelectedTokenToOutputList(ovnSelectSelectedToken, true, 50);
                 this.addNewInputToken();
                 return;
             }
 
             if (this.swapMethod === 'SELL') {
-                this.addSelectedTokenToInputList(ovnSelectedToken);
+                this.addSelectedTokenToInputList(poolSelectedToken);
+                this.addSelectedTokenToInputList(ovnSelectSelectedToken);
                 this.addNewOutputToken();
                 return;
             }
@@ -638,12 +547,12 @@ export default defineComponent({
             this.clearAllSelectedTokens();
 
             if (this.swapMethod === 'BUY') {
-                this.addDefaultOvnToken();
+                this.addDefaultPoolToken();
                 return;
             }
 
             if (this.swapMethod === 'SELL') {
-                this.addDefaultOvnToken();
+                this.addDefaultPoolToken();
                 return;
             }
 
@@ -655,16 +564,38 @@ export default defineComponent({
                 return
             }
 
+            if (this.selectedOutputTokens.length === 2) {
+                for (let i = 0; i < this.selectedOutputTokens.length; i++) {
+                    let token = this.selectedOutputTokens[i];
+                    token.value = 50;
+                }
+                return;
+            }
+
             for (let i = 0; i < this.selectedOutputTokens.length; i++) {
                 let token = this.selectedOutputTokens[i];
                 token.value = 0;
             }
 
+
             // init first token value
             this.selectedOutputTokens[0].value = 100;
-            console.log("this.selectedOutputTokens: ", this.selectedOutputTokens)
+
+            console.log("selectedOutputTokens after reset: ", this.selectedOutputTokens)
         },
-        async swap() {
+        async stake() {
+            if (!this.zapPool) {
+                console.log("Error when stake. Zap pool not found.")
+                return;
+            }
+
+            let gaugeAddress = this.pollsMap[this.zapPool.address];
+            if (!gaugeAddress) {
+                console.log("Error when stake. Gauge pool not found by pool address: ", this.zapPool.address)
+                return;
+            }
+
+
             if (this.isSwapLoading) {
                 console.log('Swap method not available, prev sap in process');
                 return;
@@ -675,49 +606,211 @@ export default defineComponent({
                 return;
             }
 
+            this.clickOnStake = true;
             this.isSwapLoading = true;
-
 
             let actualGasPriceObject = await this.getActualGasPrice(this.networkId);
             console.log("Actual price for gas. network: ", this.networkId, actualGasPriceObject)
+            console.log("Actual price for gas from us calculation. ", this.gasPriceGwei, this.gasPrice, this.gasPriceStation)
             let actualGas = actualGasPriceObject.baseFee;
             if (!actualGas && actualGasPriceObject.prices && actualGasPriceObject.prices.length) {
                 actualGas = actualGasPriceObject.prices[0].fee;
                 console.log("Actual price for gas when not found base fee. network: ", this.networkId, actualGasPriceObject)
             }
 
+
+            let reserves = await this.getProportion(this.zapPool.address);
+            console.log("reserves 1: ", reserves.token0Amount);
+            console.log("reserves 2: ", reserves.token1Amount);
+            let sumReserves = reserves.token0Amount*1 + reserves.token1Amount*1;
+            console.log("sumReserves: ", sumReserves);
+
+            let requestOutputTokens = this.getRequestOutputTokens();
+            let requestInputTokens = this.getRequestInputTokens();
+            // requestOutputTokens[0].proportion = reserves.token0Amount*1 / sumReserves;
+            // requestOutputTokens[1].proportion = reserves.token1Amount*1 / sumReserves;
+            let request = {
+                "chainId": this.networkId,
+                "inputTokens": requestInputTokens,
+                "outputTokens": [
+                    {
+                        "tokenAddress": requestOutputTokens[0].tokenAddress,
+                        "proportion": reserves[0] / sumReserves
+                    },
+                    {
+                        "tokenAddress": requestOutputTokens[1].tokenAddress,
+                        "proportion": reserves[1] / sumReserves
+                    },
+
+                ],
+                "gasPrice": actualGas,
+                "userAddr": this.chronosContract.options.address,
+                "slippageLimitPercent": this.getSlippagePercent(),
+            }
+
             let requestData = {
-                chainId: this.networkId,
-                // chainId: 1,
-                inputTokens: this.getRequestInputTokens(),
-                outputTokens: this.getRequestOutputTokens(),
-                gasPrice: actualGas,
-                userAddr: this.account,
-                slippageLimitPercent: this.getSlippagePercent(),
-                sourceBlacklist: ['Hashflow'],
+                chainId: request.chainId,
+                inputTokens: request.inputTokens,
+                outputTokens: request.outputTokens,
+                gasPrice: request.gasPrice,
+                userAddr: request.userAddr,
+                slippageLimitPercent: request.slippageLimitPercent,
+                sourceBlacklist: this.getSourceLiquidityBlackList(),
                 sourceWhitelist: [],
-                simulate: true,
-                pathViz: true,
-                // disableRFQs: false
+                simulate: false,
+                pathViz: false,
+                disableRFQs: false
+                // chainId: this.networkId,
+                // // chainId: 1,
+                // inputTokens: requestInputTokens,
+                // outputTokens: requestTokens,
+                // gasPrice: actualGas,
+                // userAddr: this.chronosContract.options.address,
+                // slippageLimitPercent: this.getSlippagePercent(),
+                // sourceBlacklist: ['Hashflow'],
+                // sourceWhitelist: [],
+                // simulate: true,
+                // pathViz: true,
+                // // disableRFQs: false
             }
 
             console.log("Odos request data", requestData);
-            this.swapRequest(requestData)
+            // this.testZapIn(requestOutputTokens, requestInputTokens, gaugeAddress);
+            this.swapRequest(requestData, this.selectedInputTokens, this.selectedOutputTokens)
                 .then(data => {
                     console.log("Odos swap request success", data)
-                    // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
-                    this.initWalletTransaction(data, this.selectedInputTokens, this.selectedOutputTokens);
+                    this.initZapInTransaction(data, requestInputTokens, requestOutputTokens, gaugeAddress, request.gasPrice);
                     this.isSwapLoading = false;
                 }).catch(e => {
                 console.error("Odos swap request failed", e)
                 this.isSwapLoading = false;
+                this.clickOnStake = false;
             })
+        },
+        getSourceLiquidityBlackList() {
+            let sourceBlacklist = [...this.sourceLiquidityBlacklist];
+            console.log("this.zapPool for exclude liquidity: ", this.zapPool);
+            let excludeLiquidityByPlatform = this.mapExcludeLiquidityPlatform[this.zapPool.dex];
+            if (excludeLiquidityByPlatform && excludeLiquidityByPlatform.length) {
+                sourceBlacklist = [...sourceBlacklist, ...excludeLiquidityByPlatform];
+            }
+
+            return sourceBlacklist;
+        },
+        async initZapInTransaction(responseData, requestInputTokens, requestOutputTokens, gaugeAddress, gasPrice) {
+            console.log("Chronos-odos transaction data", responseData, this.chronosContract);
+
+            if (!this.chronosContract) {
+                console.error("Init zap transactions failed, chronos contract not found. responseData: ", responseData)
+                return;
+            }
+
+            this.startSwapConfirmTimer();
+
+            console.log("Odos swap request success", responseData, this.chronosContract, requestInputTokens, requestOutputTokens, gaugeAddress)
+            // console.log("Odos swap request success", data)
+            let requestInput = [];
+            for (let i = 0; i < requestInputTokens.length; i++) {
+                requestInput.push({
+                    tokenAddress: requestInputTokens[i].tokenAddress,
+                    amountIn: requestInputTokens[i].amount,
+                })
+            }
+
+            let requestOutput = [
+                {
+                    tokenAddress: requestOutputTokens[0].tokenAddress,
+                    receiver: this.chronosContract.options.address,
+                },
+                {
+                    tokenAddress: requestOutputTokens[1].tokenAddress,
+                    receiver: this.chronosContract.options.address,
+                },
+            ]
+
+            let txData = {
+                inputs: requestInput,
+                outputs: requestOutput,
+                data: responseData.transaction.data
+            };
+
+            console.log("Odos zap request data:", txData, this.chronosContract);
+
+            this.showWaitingModal('Staking in process');
+
+            let params = {from: this.account, gasPrice: this.gasPriceGwei};
+            this.chronosContract.methods.zapIn(
+                txData,
+                gaugeAddress).send(params)
+                .then(data => {
+                                // let data = this.getZapMocInfo();  // Retrieve event logs
+            let putIntoPoolEvent;
+            let returnedToUserEvent;
+            for (const key of Object.keys(data.events)) {
+                const value = data.events[key];
+
+                console.log(`Key: ${key}`);
+                console.log(`Value:`, value);
+
+                if (key === 'PutIntoPool') {
+                    putIntoPoolEvent = value;
+                    console.log(`Tokens put into pool: ${putIntoPoolEvent.returnValues.amountsPut} ${putIntoPoolEvent.returnValues.tokensPut}`);
+                }
+
+                if (key === 'ReturnedToUser') {
+                    returnedToUserEvent = value;
+                    console.log(`Tokens returned to user: ${returnedToUserEvent.returnValues.amountsReturned} ${returnedToUserEvent.returnValues.tokensReturned}`);
+                }
+
+            }
+
+                const inputTokens = [...this.selectedInputTokens]
+                const outputTokens = [...this.selectedOutputTokens]
+                this.showSuccessPoolModal(
+                    true,
+                    inputTokens,
+                    outputTokens,
+                    data.transactionHash,
+                    putIntoPoolEvent,
+                    returnedToUserEvent,
+                    this.zapPool
+                );
+
+                // event
+                this.$bus.$emit('zap-transaction-finished', true);
+
+                this.loadBalances();
+                }).catch(e => {
+                    console.log("Zap odos call error: ", e);
+                    if (e && e.code === 4001) {
+                        if (e.message === 'User rejected the request.') {
+                            this.stopSwapConfirmTimer();
+                            this.clickOnStake = false;
+                        }
+                    }
+                    this.closeWaitingModal();
+                    this.showErrorModalWithMsg({errorType: 'zap', errorMsg: e}, );
+                })
+
+            this.isSwapLoading = false;
         },
         clearQuotaInfo() {
             this.pathViz = null
             this.quotaResponseInfo = null;
             this.swapResponseInfo = null;
             // this.updatePathViewFunc(this.pathViz, [], []);
+        },
+        async recalculateProportion() {
+            let reserves = await this.getProportion(this.zapPool.address);
+            console.log("reserves 1: ", reserves.token0Amount);
+            console.log("reserves 2: ", reserves.token1Amount);
+            let sumReserves = reserves.token0Amount*1 + reserves.token1Amount*1;
+            console.log("sumReserves: ", sumReserves);
+            // "proportion": reserves[0] / sumReserves
+            this.selectedOutputTokens[0].value = reserves[0] / sumReserves;
+            this.selectedOutputTokens[1].value = reserves[1] / sumReserves;
+
+            this.recalculateOutputTokensSum();
         },
         async simulateSwap() {
             if (this.isSumulateSwapLoading) {
@@ -764,7 +857,7 @@ export default defineComponent({
                 // disableRFQs: false
             }
 
-           this.clearQuotaInfo();
+            this.clearQuotaInfo();
 
             console.log("Odos simulate swap request data", requestData);
             this.quoteRequest(requestData)
@@ -813,15 +906,16 @@ export default defineComponent({
             }
 
             let tokenContract = this.tokensContractMap[selectedToken.address];
-            this.clearApproveToken(tokenContract, this.routerContract.options.address)
+            // this.clearApproveToken(tokenContract, this.routerContract.options.address)
+            this.clearApproveToken(tokenContract, this.chronosContract.options.address)
                 .then(data => {
                     console.log("Clear approve success. ", token, data);
                     this.checkApproveForToken(token);
                     this.isShowDecreaseAllowanceButton = false;
                 }).catch(e => {
-                    this.isShowDecreaseAllowanceButton = true;
-                    console.error("Clear approve failed. ", e)
-                })
+                this.isShowDecreaseAllowanceButton = true;
+                console.error("Clear approve failed. ", e)
+            })
         },
         async checkApproveForToken(token, checkedAllowanceValue) { // checkedAllowanceValue in wei
             let selectedToken = token.selectedToken;
@@ -832,8 +926,9 @@ export default defineComponent({
             }
 
             let tokenContract = this.tokensContractMap[selectedToken.address];
-            console.log('Check Approve contract: ', token, tokenContract, this.account, this.routerContract.options.address);
-            let allowanceValue = await this.getAllowanceValue(tokenContract, this.account, this.routerContract.options.address);
+            console.log('Check Approve contract: ', token, tokenContract, this.account, this.chronosContract.options.address);
+            // let allowanceValue = await this.getAllowanceValue(tokenContract, this.account, this.routerContract.options.address);
+            let allowanceValue = await this.getAllowanceValue(tokenContract, this.account, this.chronosContract.options.address);
             console.log('Approve value: ', allowanceValue);
 
             selectedToken.approveData.allowanceValue = allowanceValue * 1;
@@ -862,9 +957,11 @@ export default defineComponent({
             }
 
             let tokenContract = this.tokensContractMap[selectedToken.address];
-            console.log('Approve contract: ', token, tokenContract, this.account, this.routerContract.options.address);
+            // console.log('Approve contract: ', token, tokenContract, this.account, this.routerContract.options.address);
+            console.log('Approve contract: ', token, tokenContract, this.account, this.chronosContract.options.address);
             let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
-            this.approveToken(tokenContract, this.routerContract.options.address, approveValue)
+            // this.approveToken(tokenContract, this.routerContract.options.address, approveValue)
+            this.approveToken(tokenContract, this.chronosContract.options.address, approveValue)
                 .then(data => {
                     console.log("Success approving", data);
                     this.checkApproveForToken(token, token.contractValue);
@@ -955,25 +1052,26 @@ export default defineComponent({
             token.value = value;
 
             // if(!this.isSlidersOutOfLimit()) {
-                token.value = value;
-                this.subtraction(token, 100 - value);
-                this.recalculateOutputTokensSum();
+            token.value = value;
+            this.subtraction(token, 100 - value);
+            this.recalculateOutputTokensSum();
 
-                this.updateQuotaInfo();
+            // this.updateQuotaInfo();
 
-                // if (oldTokenValue > value) {
-                //     this.subTokensProportions(token, 100 - value)
-                // } else {
-                //     this.addTokensProportions(token, 100 - value)
-                // }
+            // if (oldTokenValue > value) {
+            //     this.subTokensProportions(token, 100 - value)
+            // } else {
+            //     this.addTokensProportions(token, 100 - value)
+            // }
             // }
         },
         recalculateOutputTokensSum() {
             console.log('recalculateOutputTokensSum')
             for (let i = 0; i < this.selectedOutputTokens.length; i++) {
                 let token = this.selectedOutputTokens[i];
-                let sum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
+                let sum = this.sumOfAllSelectedTokensInUsd * token.value;
                 sum = this.swapMethod === 'BUY' ? sum * token.selectedToken.price : sum / token.selectedToken.price
+                // console.log('recalculateOutputTokensSum', this.sumOfAllSelectedTokensInUsd, token.value, sum);
 
                 token.sum = this.$utils.formatMoney(sum, 4)
             }
@@ -1109,7 +1207,7 @@ export default defineComponent({
                 return;
             }
 
-            this.addSelectedTokenToOutputList(selectedToken);
+            this.addSelectedTokenToOutputList(selectedToken, true, 50);
         },
         addSelectedTokenToInputList(selectedToken) {
             let newInputToken = this.getNewInputToken()
@@ -1119,8 +1217,10 @@ export default defineComponent({
 
             this.checkApproveForToken(newInputToken);
         },
-        addSelectedTokenToOutputList(selectedToken) {
+        addSelectedTokenToOutputList(selectedToken, isLocked, startPercent) {
             let newOutputToken = this.getNewOutputToken()
+            newOutputToken.locked = isLocked;
+            newOutputToken.value = startPercent;
             newOutputToken.selectedToken = selectedToken;
             this.outputTokens.push(newOutputToken);
             this.removeAllWithoutSelectedTokens(this.outputTokens);
@@ -1172,7 +1272,6 @@ export default defineComponent({
 
             this.clearAllTokens();
         },
-        // написать функцию которая поменяет местами инпут и аутпут токены, сбрасывал их значения до дефолта, вместо clearAllSelectedTokens при вызове changeSwap,
         clearAllTokens() {
             this.inputTokens = [];
             this.outputTokens = [];
@@ -1272,8 +1371,8 @@ export default defineComponent({
                 // first call
                 this.tokensQuotaCounterId = -1;
                 // update
-                console.log("UPDATE QUOTA FIRST DATA")
-                this.simulateSwap()
+                console.log("UPDATE Proportion FIRST DATA")
+                this.recalculateProportion()
                 return;
             }
 
@@ -1281,13 +1380,13 @@ export default defineComponent({
             let intervalId = setInterval(async () => {
                 this.tokensQuotaCheckerSec++;
 
-                if (this.tokensQuotaCheckerSec >= 3) {
+                if (this.tokensQuotaCheckerSec >= 1) {
                     if (this.tokensQuotaCounterId === intervalId) {
                         this.tokensQuotaCheckerSec = 0;
                         try {
                             // update
-                            console.log("UPDATE QUOTA SECOND DATA")
-                            this.simulateSwap()
+                            console.log("UPDATE Proportion SECOND DATA")
+                            this.recalculateProportion()
                         } catch (e) {
                             // ignore
                         } finally {
@@ -1307,141 +1406,18 @@ export default defineComponent({
 </script>
 
 <style scoped>
-@media only screen and (max-width: 960px) {
-    .swap-container {
-        padding: 10px 20px;
-        gap: 8px;
-        background: var(--swap-main-banner-background);
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
-        border-radius: 28px;
-        max-width: 600px;
-    }
-
-    .add-token-text {
-        font-size: 14px;
-        line-height: 24px;
-    }
-
-    .swap-title {
-        font-size: 18px;
-        line-height: 28px;
-    }
-
-    .swap-button-title {
-        font-size: 16px;
-        line-height: 22px;
-    }
-
-    .disable-button-title {
-        font-size: 16px;
-        line-height: 22px;
-    }
-}
-
-/* tablet */
-@media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .swap-container {
-        padding: 40px 30px;
-        gap: 8px;
-        background: var(--swap-main-banner-background);
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
-        border-radius: 28px;
-        max-width: 600px;
-    }
-    .add-token-text {
-        font-size: 16px;
-        line-height: 24px;
-    }
-
-    .swap-title {
-        font-size: 18px;
-        line-height: 28px;
-    }
-
-    .swap-button-title {
-        font-size: 18px;
-        line-height: 22px;
-    }
-
-    .disable-button-title {
-        font-size: 18px;
-        line-height: 22px;
-    }
-}
-
-/* full */
-@media only screen and (min-width: 1400px) {
-    .swap-container {
-        padding: 40px 30px;
-        gap: 8px;
-        background: var(--swap-main-banner-background);
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
-        border-radius: 28px;
-        max-width: 600px;
-    }
-
-    .add-token-text {
-        font-size: 16px;
-        line-height: 24px;
-    }
-
-    .swap-title {
-        font-size: 18px;
-        line-height: 28px;
-    }
-
-    .swap-button-title {
-        font-size: 18px;
-        line-height: 22px;
-    }
-
-    .disable-button-title {
-        font-size: 18px;
-        line-height: 22px;
-    }
-}
-
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
-    .swap-container {
-        padding: 30px 20px;
-        gap: 8px;
-        background: var(--swap-main-banner-background);
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
-        border-radius: 28px;
-        max-width: 600px;
-    }
-
-    .add-token-text {
-        font-size: 16px;
-        line-height: 24px;
-    }
-
-    .swap-title {
-        font-size: 18px;
-        line-height: 28px;
-    }
-
-    .swap-button-title {
-        font-size: 18px;
-        line-height: 22px;
-    }
-
-    .disable-button-title {
-        font-size: 18px;
-        line-height: 22px;
-    }
-}
-
 div {
     font-family: 'Roboto',serif;
 }
 
+.swap-container {
+    //padding: 40px 30px;
+    //gap: 8px;
+    //background: var(--swap-main-banner-background);
+    //box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+    //border-radius: 28px;
+    //max-width: 600px;
+}
 
 .swap-header {
 }
@@ -1460,6 +1436,8 @@ div {
 .add-token-text {
     font-style: normal;
     font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
 
     color: #1C95E7;
     cursor: pointer;
@@ -1478,11 +1456,12 @@ div {
 }
 
 .swap-title {
-    display: flex;
-    justify-content: space-between;
+
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
 
     color: var(--main-gray-text);
 
@@ -1499,10 +1478,8 @@ div {
     width: 44px;
     height: 44px;
 
-    background: var(--swap-arrow-bg);
     box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);
     border-radius: 12px;
-    cursor: pointer;
 
 
     display: flex;
@@ -1519,17 +1496,6 @@ div {
 }
 
 .powered-image {
-}
-
-.powered-text {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
-
-    color: #ADB3BD;
-
-    text-align: end;
 }
 
 .swap-button {
@@ -1553,6 +1519,8 @@ div {
 .swap-button-title {
     font-style: normal;
     font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
 
     color: #FFFFFF;
 }
@@ -1579,6 +1547,8 @@ div {
 
     font-style: normal;
     font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
 
     color: var(--progress-text);
 }
@@ -1669,5 +1639,4 @@ div {
 .dont-work-on-network-container {
     text-align: center;
 }
-
 </style>

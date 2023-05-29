@@ -2,13 +2,6 @@
     <v-row class="banner-container ma-0" :style="{'background': etsData.cardBgColor}">
         <v-col class="main-col">
             <v-row align="start" :justify="$wu.isMobile() ? 'start' : 'end'" class="ma-0">
-                <template v-if="$wu.isMobile()">
-                    <div class="currency-icon">
-                        <v-img :src="require('@/assets/currencies/market/ets_' + etsData.name + '.svg')"/>
-                    </div>
-                    <v-spacer></v-spacer>
-                </template>
-
                 <div :class="$wu.isMobile() ? 'currency-icon' : 'icon'" class="mr-3">
                     <v-img :src="require('@/assets/network/' + etsData.chainName + '.svg')"/>
                 </div>
@@ -24,17 +17,9 @@
             </v-row>
 
             <v-row align="start" class="ma-0 mt-5">
-                <v-col cols="2" v-if="!$wu.isMobile()">
-                    <v-row align="center">
-                        <div class="currency-icon">
-                            <v-img :src="require('@/assets/currencies/market/ets_' + etsData.name + '.svg')"/>
-                        </div>
-                    </v-row>
-                </v-col>
-
                 <v-col>
                     <v-row align="center" :justify="$wu.isMobile() ? 'center' : 'start'">
-                        <label class="banner-title" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">ETS {{ etsData.nameUp }}</label>
+                        <label class="banner-title ml-10" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">ETS {{ etsData.nameUp }}</label>
 
                         <v-spacer v-if="etsData.range"></v-spacer>
                         <div class="range-container" v-if="etsData.range" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">

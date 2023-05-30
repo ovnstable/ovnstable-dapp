@@ -59,12 +59,6 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item @click="usdPlusPoolsClick" :class="selectedTab === 'usdplus_pools' ? 'selected-page-item' : ''">
-                    <v-list-item-title>
-                        <label class="navbar-list-label mx-5" :class="selectedTab === 'usdplus_pools' ? 'selected-page' : ''">USD+ pools</label>
-                    </v-list-item-title>
-                </v-list-item>
-
                 <v-list-item @click="swapClick">
                     <v-list-item-title>
                         <label class="navbar-page-label-modal mx-5">Mint/redeem</label>

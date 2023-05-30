@@ -4,7 +4,7 @@
             app>
         <v-row class="ma-0 header-container fill-height" align="center">
             <div class="">
-                <img v-if="!$wu.isFull()" class="ml-n3 logo-img" :src="require('@/assets/logo.svg')" @click="openLink('https://market.overnight.fi/')">
+                <img v-if="!$wu.isFull()" class="ml-n3 logo-img" :src="require('@/assets/logo.svg')"  @click="openLinkToLanding('https://overnight.fi/')">
             </div>
 
             <v-spacer></v-spacer>
@@ -121,6 +121,10 @@ export default {
 
         openLink(url) {
             window.open(url, '_blank').focus();
+        },
+
+        openLinkToLanding(url) {
+            window.open(url, '_self').focus();
         },
     }
 }

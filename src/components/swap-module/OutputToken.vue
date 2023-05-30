@@ -373,7 +373,6 @@ div {
 
 .numeric-change {
     font-size: 14px;
-    color: var(--links-blue);
 }
 
 .remove-container {

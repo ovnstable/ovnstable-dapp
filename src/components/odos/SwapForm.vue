@@ -107,7 +107,6 @@
                                          @click="addNewOutputToken"
                                          class="add-token-text">
                                         + Select token
-                                        {{outputTokensWithSelectedTokensCount}}
                                     </div>
                                 </div>
                                 <div v-if="outputTokensWithSelectedTokensCount >= 2" class="col-6">
@@ -420,7 +419,8 @@ export default defineComponent({
                 this.outputTokensWithSelectedTokensCount === 0 ||
                 this.swapResponseConfirmInfo.waitingConformation ||
                 !this.isAvailableOnNetwork ||
-                !this.isAnyTokensBalanceIsInsufficient
+                !this.isAnyTokensBalanceIsInsufficient ||
+                !this.isAmountEntered
         },
 
         disableButtonMessage() {
@@ -433,6 +433,10 @@ export default defineComponent({
                 return "SWITCH CHAIN"
             }
 
+            if (!this.isAmountEntered) {
+                return 'ENTER AMOUNT';
+            }
+
             if (!this.isAnyTokensBalanceIsInsufficient) {
                 return 'BALANCE IS INSUFFICIENT';
             }
@@ -443,6 +447,19 @@ export default defineComponent({
 
             return null;
         },
+
+        isAmountEntered() {
+            let tokens = this.selectedInputTokens;
+            for (let i = 0; i < tokens.length; i++) {
+                let token = tokens[i];
+                if (token.value < 1) {
+                    return false;
+                }
+            }
+
+            return true;
+        },
+
         sumOfAllSelectedTokensInUsd() {
             let sum = 0
             for (let i = 0; i < this.selectedInputTokens.length; i++) {
@@ -464,8 +481,7 @@ export default defineComponent({
             }
 
             return true;
-        }
-
+        },
     },
     watch: {
         outputTokensWithSelectedTokensCount: function (val, oldVal) {
@@ -584,6 +600,7 @@ export default defineComponent({
 
                 tokens.splice(index, 1);
             }
+            this.updateQuotaInfo();
         },
         getNewInputToken() {
             let randomId = (Math.random() + 1).toString(36).substring(2);
@@ -615,6 +632,20 @@ export default defineComponent({
         },
         changeSwap() {
             console.log("Change swap");
+/*
+            if (this.swapMethod === 'BUY') {
+                this.setSwapMethod('SELL');
+                this.addOutputSelectedTokens()
+                return;
+            }
+
+            if (this.swapMethod === 'SELL') {
+                this.setSwapMethod('BUY');
+                this.addInputSelectedTokens()
+                return;
+            }
+*/
+
             if (this.swapMethod === 'BUY') {
                 this.setSwapMethod('SELL');
                 this.clearForm();
@@ -659,9 +690,21 @@ export default defineComponent({
                 let token = this.selectedOutputTokens[i];
                 token.value = 0;
             }
-
             // init first token value
             this.selectedOutputTokens[0].value = 100;
+           /* if (this.selectedOutputTokens[0] && this.selectedOutputTokens[1]) {
+                this.selectedOutputTokens[0].value = 50;
+                this.selectedOutputTokens[1].value = 50;
+            } if (this.selectedOutputTokens[0] && this.selectedOutputTokens[1] && this.selectedOutputTokens[2]) {
+                this.selectedOutputTokens[0].value = 34;
+                this.selectedOutputTokens[1].value = 33;
+                this.selectedOutputTokens[2].value = 33;
+            } if (this.selectedOutputTokens[0] && this.selectedOutputTokens[1] && this.selectedOutputTokens[2] && this.selectedOutputTokens[3]) {
+                this.selectedOutputTokens[0].value = 25;
+                this.selectedOutputTokens[1].value = 25;
+                this.selectedOutputTokens[2].value = 25;
+                this.selectedOutputTokens[3].value = 25;
+            }*/
             console.log("this.selectedOutputTokens: ", this.selectedOutputTokens)
         },
         async swap() {
@@ -1157,6 +1200,22 @@ export default defineComponent({
                 this.removeToken(tokens, tokensToRemove[i].id);
             }
         },
+       /* addInputSelectedTokens() {
+            for (let i = 0; i < this.inputTokens.length; i++) {
+                let inputSelected;
+                if (this.inputTokens[i].selectedToken) {
+                    return inputSelected = this.inputTokens[i].selectedToken
+                }
+            }
+        },
+        addOutputSelectedTokens() {
+            for (let i = 0; i < this.outputTokens.length; i++) {
+                let outputSelected;
+                if (this.outputTokens[i].selectedToken) {
+                    return outputSelected = this.inputTokens[i].selectedToken
+                }
+            }
+        },*/
         clearAllSelectedTokens() {
             for (let i = 0; i < this.inputTokens.length; i++) {
                 if (this.inputTokens[i].selectedToken) {

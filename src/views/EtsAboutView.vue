@@ -87,9 +87,7 @@
                             src="/assets/icon/youtube-outlined.svg"
                             class="youtube-outlined-icon"
                             alt="Youtube Link">
-                        <div>
-                            <label class="youtube-link"><a href="https://www.youtube.com/watch?v=wIVAiUMLmvA">Learn more about ETS</a></label>
-                        </div>
+                        <label class="youtube-link" @click="openLink('https://www.youtube.com/watch?v=wIVAiUMLmvA')">Learn more about ETS</label>
                     </div>
                 </div>
                 <div class="second-how-container">
@@ -126,6 +124,9 @@ export default {
     },
 
     methods: {
+        openLink(url) {
+            window.open(url, '_blank').focus();
+        },
     }
 };
 </script>
@@ -361,8 +362,9 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     gap: 10px;
 }
 
-a {
-    text-decoration: none;
+.youtube-link {
+    color: var(--links-blue);
+    cursor: pointer;
 }
 
 .scheme {}

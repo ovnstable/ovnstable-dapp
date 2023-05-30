@@ -28,9 +28,6 @@
                            :is-show-apr-limit="isShowAprLimit"
                        ></PoolFilter>
                    </div>
-                   <div class="col-12 col-lg-3 col-md-3 col-sm-12">
-<!--                       Search-->
-                   </div>
                </div>
            </div>
            <div class="pools-container">

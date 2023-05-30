@@ -4,7 +4,7 @@
              v-bind:style="'background: linear-gradient(57.78deg, ' + getParams(pool.chain).networkColor + ' -94.19%, transparent 57.68%);'"
              class="pool-label-container">
             <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="col-12 col-lg-6 col-md-6 col-sm-12">
                     <div class="row">
                         <div class="col-2 col-lg-2 col-md-2 col-sm-2">
                             <div class="icon mr-3 pt-3">
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-6 col-md-6 col-sm-12">
+                <div class="col-12 col-lg-6 col-md-6 col-sm-12">
                     <div class="row">
                         <div class="col-4 col-lg-4 col-md-4 col-sm-4">
                             <div class="pool-detail-title">
@@ -161,6 +161,15 @@ div {
     .icon-token-pair {
         width: 38px !important;
     }
+
+
+    .pool-detail-item {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 28px;
+        color: var(--main-gray-text);
+    }
 }
 
 /* tablet */
@@ -173,6 +182,14 @@ div {
 
     .icon-token-pair {
         width: 46px !important;
+    }
+
+    .pool-detail-item {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 30px;
+        color: var(--main-gray-text);
     }
 }
 

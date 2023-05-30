@@ -173,4 +173,20 @@ export default defineComponent({
 #filter-title {
     color: var(--main-gray-text);
 }
+
+/* mobile */
+@media only screen and (max-width: 960px) {
+    .networks-item {
+        padding: 4px 8px;
+        width: 47px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .networks-item {
+        padding: 6px 12px;
+        width: 56px;
+    }
+}
 </style>

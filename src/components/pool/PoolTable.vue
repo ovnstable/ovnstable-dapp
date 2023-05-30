@@ -5,22 +5,22 @@
                 <div class="row">
                    <div class="col-12 col-xl-6 col-lg-6 col-md-6 col-sm-12">
                        <div class="row">
-                           <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3">
+                           <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
                                <div class="pool-table-header-item">
 
                                </div>
                            </div>
-                           <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3">
+                           <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
                                <div class="pool-table-header-item">
                                    Chain
                                </div>
                            </div>
-                           <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3">
+                           <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
                                <div class="pool-table-header-item">
                                    Tokens
                                </div>
                            </div>
-                           <div class="col-xl-6 col-lg-6 col-md-6 col-sm-3">
+                           <div class="col-3 col-xl-6 col-lg-6 col-md-6 col-sm-3">
                                <div class="pool-table-header-item">
                                    Pool name
                                </div>
@@ -29,7 +29,7 @@
                    </div>
 
                     <!--          Hide on mobile          -->
-                    <div class="col-12 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                    <div v-if="!$wu.isMobile()" class="col-12 col-xl-6 col-lg-6 col-md-6 col-sm-12">
                         <div class="row">
                             <div class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
                                 <div class="pool-table-header-item">
@@ -64,7 +64,7 @@
                     <div class="row">
                         <div class="col-12 col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <div class="row">
-                                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3">
+                                <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
                                     <div class="pool-table-body-item text-center">
                                         <div v-if="pool.feature">
                                             <v-tooltip
@@ -92,7 +92,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3">
+                                <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
                                     <div class="pool-table-body-item">
                                         <div class="icon mr-3">
                                             <v-img :src="require('@/assets/network/' + pool.chainName + '.svg')"
@@ -100,7 +100,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3">
+                                <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
                                     <div class="pool-table-body-item pt-3">
                                         <v-row justify="start" align="center">
                                             <div v-if="pool.token0Icon"
@@ -122,7 +122,7 @@
                                         </v-row>
                                     </div>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-3">
+                                <div class="col-3 col-xl-6 col-lg-6 col-md-6 col-sm-3">
                                     <div class="pool-table-body-item d-inline-block mr-2">
 <!--                                        {{pool.name}} LP {{pool.address}}-->
                                         {{pool.name}} LP
@@ -148,7 +148,8 @@
                     </div>
 
                     <div v-if="pool.aggregators && pool.aggregators.length"
-                         class="toggle-icon-container">
+                         class="toggle-icon-container"
+                         v-bind:style="$wu.isMobile() ? 'top: 122px;' : ''">
                         <img src="/assets/icon/pool/toggle-open-pool.svg"
                              v-bind:style="pool.isOpened ? 'transform: rotate(180deg);': '' "
                              alt="toggle-open-pool">
@@ -156,6 +157,7 @@
                 </div>
             </div>
         </div>
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 
@@ -318,4 +320,31 @@ div {
     right: 23px;
     top: 17px;
 }
+
+
+/* mobile */
+@media only screen and (max-width: 960px) {
+    .pool-table-body-item {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 28px;
+        color:var(--main-gray-text);
+    //background: linear-gradient(76.21deg, #29A0F0 -77.16%, transparent 36.33%);
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+
+    .pool-table-body-item {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
+        color:var(--main-gray-text);
+    //background: linear-gradient(76.21deg, #29A0F0 -77.16%, transparent 36.33%);
+    }
+}
+
 </style>

@@ -15,7 +15,8 @@
                            {{pool.platform}}
                        </div>
 
-                       <div class="pool-platform-link">
+                       <div v-bind:style="$wu.isMobile() ? 'right: -17px;' : ''"
+                            class="pool-platform-link">
                            <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
                        </div>
                    </div>
@@ -89,7 +90,8 @@
                                 {{aggregator.platform}}
                             </div>
 
-                            <div class="pool-platform-link">
+                            <div v-bind:style="$wu.isMobile() ? 'right: -14px;' : ''"
+                                class="pool-platform-link">
                                 <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
                             </div>
                         </div>
@@ -127,7 +129,7 @@
                 </div>
             </div>
         </div>
-
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 
@@ -357,6 +359,11 @@ div {
 /* mobile */
 @media only screen and (max-width: 960px) {
 
+    .pool-platform-name {
+        padding-left: 25px;
+        font-size: 14px;
+    }
+
     .button {
         width: 95%;
         font-family: 'Roboto', sans-serif;
@@ -387,6 +394,11 @@ div {
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .pool-platform-name {
+        padding-left: 25px;
+        font-size: 14px;
+    }
+
     .button {
         font-family: 'Roboto', sans-serif;
         font-style: normal;

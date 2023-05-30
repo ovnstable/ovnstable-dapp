@@ -666,7 +666,7 @@ export default defineComponent({
         },
         async swap() {
             if (this.isSwapLoading) {
-                console.log('Swap method not available, prev sap in process');
+                console.log('Swap method not available, prev swap in process');
                 return;
             }
 
@@ -721,7 +721,7 @@ export default defineComponent({
         },
         async simulateSwap() {
             if (this.isSumulateSwapLoading) {
-                console.log('Simulate Swap method not available, prev sap in process');
+                console.log('Simulate Swap method not available, prev swap in process');
                 return;
             }
 

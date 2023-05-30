@@ -28,7 +28,7 @@
                             </div>
                             <div class="platform-label-container">
                                 <div class="platform-label">
-                                    {{pool.dex ? pool.dex.toUpperCase() : '-'}}
+                                    {{pool.platform ? pool.platform.toUpperCase() : '-'}}
                                 </div>
                             </div>
                         </div>
@@ -58,8 +58,8 @@
                             </div>
                             <div>
                                 <div class="icon mr-2">
-                                    <v-img :src="require('@/assets/cards/platform/' + pool.dex + '.svg')"
-                                           :title="pool.dex"/>
+                                    <v-img :src="require('@/assets/cards/platform/' + pool.platform + '.svg')"
+                                           :title="pool.platform"/>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +110,7 @@ div {
     padding: 2px 4px;
     background: var(--card-info-background);
     border-radius: 4px;
-    max-width: 70px;
+    max-width: 90px;
 }
 
 .platform-label {

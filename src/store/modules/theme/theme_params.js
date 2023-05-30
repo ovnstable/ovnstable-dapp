@@ -200,6 +200,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--network-tab',
+        enabled: true,
+        theme: {
+            light: '#BABFC8',
+            dark: '#4C586D'
+        }
+    },
+    {
         name: '--disabled-value',
         enabled: true,
         theme: {

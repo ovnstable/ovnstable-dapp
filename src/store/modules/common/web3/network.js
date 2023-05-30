@@ -88,6 +88,13 @@ const state = {
     opConfig: OPTIMISM_PARAMS,
     arConfig: ARBITRUM_PARAMS,
     zkConfig: ZKSYNC_PARAMS,
+    allNetworkConfigs: [
+        OPTIMISM_PARAMS,
+        ARBITRUM_PARAMS,
+        ZKSYNC_PARAMS,
+        BSC_PARAMS,
+        POLYGON_PARAMS
+    ],
 
     switchToOtherNetwork: false,
 };
@@ -210,6 +217,10 @@ const getters = {
 
     zkConfig(state) {
         return state.zkConfig;
+    },
+
+    allNetworkConfigs(state) {
+        return state.allNetworkConfigs;
     },
 
     getParams: (state) => (networkName) => {

@@ -71,7 +71,7 @@
                                         <div class="col-lg-6 col-md-6 col-sm-12">
                                             <div class="success-data-list">
                                                 <span class="success-data-item">
-                                                    {{successData.pool.dex}}
+                                                    {{successData.pool.platform}}
                                                 </span>
                                             </div>
                                         </div>
@@ -294,12 +294,12 @@ export default defineComponent({
         },
         openPositionOnPool() {
             console.log('openPositionOnPool')
-            if (this.successData.pool.dex === 'Chronos') {
+            if (this.successData.pool.platform === 'Chronos') {
                 window.open(`https://app.chronos.exchange/liquidity/${this.successData.pool.address}`, '_blank').focus();
                 return
             }
 
-            console.error("Open Position failed, dex not found.", this.successData.pool.dex)
+            console.error("Open Position failed, dex not found.", this.successData.pool.platform)
         },
         openOnExplorer() {
             let explorerUrl = this.getParams(this.successData.chain).explorerUrl;

@@ -47,7 +47,7 @@
                 {{ $utils.formatMoneyComma(cardData.apr, 2) + '%' }}
             </label>
             <label v-else class="card-label see-on-dex-label">
-                {{ 'see on dex' }}
+                {{'see on dex' }}
             </label>
             </v-row>
         </v-col>

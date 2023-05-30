@@ -6,14 +6,14 @@
                     <div class="networks-container">
                         <div
                             @click="setSelectedTabFunc('ALL')"
-                            :class="selectedTab === 'ALL' ? 'networks-item-selected' : ''"
+                            :class="selectedTabs.includes('ALL') ? 'networks-item-selected' : ''"
                             class="networks-item">
                             ALL
                         </div>
                         <div
                             v-for="networkConfig in allNetworkConfigs" :key="networkConfig.networkName"
                             @click="setSelectedTabFunc(networkConfig.networkName)"
-                            :class="selectedTab === networkConfig.networkName ? 'networks-item-selected' : ''"
+                            :class="selectedTabs.includes(networkConfig.networkName) ? 'networks-item-selected' : ''"
                             class="networks-item">
                             <img :src="`/assets/network/${networkConfig.networkName}.svg`"
                                  :alt="networkConfig.networkName"
@@ -30,8 +30,13 @@
                                  class="filter-container text-center">
                                 <v-checkbox
                                     @click="showWithZap(!isShowOnlyZap)"
-                                    class="filter-item"
-                                    label="Zappable"></v-checkbox>
+                                    class="filter-item">
+                                    <template v-slot:label>
+                                        <span id="filter-title">
+                                            Zappable
+                                        </span>
+                                    </template>
+                                </v-checkbox>
                             </div>
                         </div>
                         <div class="col-4 col-lg-4 col-md-4 col-sm-4">
@@ -39,8 +44,13 @@
                                 <v-checkbox
                                     @click="showAprLimit(!isShowAprLimit)"
                                     class="filter-item"
-                                    label="Over 15% APR"
-                                ></v-checkbox>
+                                >
+                                    <template v-slot:label>
+                                        <span id="filter-title">
+                                            Over 15% APR
+                                        </span>
+                                    </template>
+                                </v-checkbox>
                             </div>
                         </div>
                     </div>
@@ -57,8 +67,8 @@ import {mapGetters} from "vuex";
 export default defineComponent({
     name: "PoolFilter",
     props: {
-        selectedTab: {
-            type: String,
+        selectedTabs: {
+            type: Array,
             required: true
         },
         setSelectedTabFunc: {
@@ -158,5 +168,9 @@ export default defineComponent({
     line-height: 28px;
     color: var(--main-gray-text)!important;
     cursor: pointer;
+}
+
+#filter-title {
+    color: var(--main-gray-text);
 }
 </style>

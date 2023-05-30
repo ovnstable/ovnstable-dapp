@@ -92,6 +92,27 @@
                     </div>
                 </div>
 
+                <div v-if="sumOfAllSelectedTokensInUsd">
+                    <div class="transaction-info-container">
+                        <div class="transaction-info-body">
+                            <div class="row">
+                                <div class="col-6 py-0">
+                                    <div class="transaction-info-title">
+                                        Slippage
+                                    </div>
+                                </div>
+                                <div class="col-6 py-0">
+                                    <div class="transaction-info">
+                                        {{slippagePercent*1}}% <span class="transaction-info-additional">
+                                            ({{$utils.formatMoney(sumOfAllSelectedTokensInUsd * slippagePercent / 100, 3)}})$
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="swap-footer pt-5">
                     <div v-if="!account" class="swap-button-container">
                         <div @click="connectWallet"

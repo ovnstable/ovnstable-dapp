@@ -21,7 +21,7 @@
                    <div class="col-12 col-lg-9 col-md-9 col-sm-12">
                        <PoolFilter
                            :set-selected-tab-func="setSelectedTab"
-                           :selected-tab="selectedTab"
+                           :selected-tabs="selectedTabs"
                            :zap-filter-func="zapFilter"
                            :is-show-only-zap="isShowOnlyZap"
                            :apr-limit-filter-func="aprLimitFilter"
@@ -35,6 +35,8 @@
            </div>
            <div class="pools-container">
                <PoolTable :pools="filteredPools"
+                          :is-show-only-zap="isShowOnlyZap"
+                          :is-show-apr-limit="isShowAprLimit"
                           :open-zap-in-func="openZapIn"></PoolTable>
            </div>
 <!--         <PoolListHeader/>
@@ -80,16 +82,16 @@ export default {
         isZapModalShow: false,
         currentZapPool: null,
 
-        selectedTab: 'ALL', // ALL or networkName,
+        selectedTabs: ['ALL'], // ALL or networkName,
         isShowOnlyZap: false,
         isShowAprLimit: false,
         aprLimitForFilter: 100,
 
-        featuredPoolsAddresses: [
-            '0x88beb144352bd3109c79076202fac2bceab87117',
-            '0x69c28d5bbe392ef48c0dc347c575023daf0cd243',
-            '0xb260163158311596ea88a700c5a30f101d072326'
-        ]
+        // featuredPoolsAddresses: [
+        //     '0x88beb144352bd3109c79076202fac2bceab87117',
+        //     '0x69c28d5bbe392ef48c0dc347c575023daf0cd243',
+        //     '0xb260163158311596ea88a700c5a30f101d072326'
+        // ]
     }),
 
     computed: {
@@ -114,11 +116,11 @@ export default {
             )
         },
         filteredByTabPools: function () {
-            if (this.selectedTab === 'ALL') {
+            if (this.selectedTabs.length === 1 && this.selectedTabs.includes('ALL')) {
                 return this.sortedPoolList
             }
 
-            return this.sortedPoolList.filter(pool => this.getParams(pool.chain).networkName === this.selectedTab)
+            return this.sortedPoolList.filter(pool => this.selectedTabs.includes(this.getParams(pool.chain).networkName));
         }
     },
 
@@ -150,7 +152,35 @@ export default {
             console.log("Apr limit ", isShow, limit);
         },
         setSelectedTab(tab) {
-            this.selectedTab = tab;
+            if (tab === 'ALL' && !this.tabExistInTabs(this.selectedTabs, tab)) {
+                this.selectedTabs = [tab];
+                return;
+            }
+
+            // remove all if click other
+            if (tab !== 'ALL' && !this.tabExistInTabs(this.selectedTabs, tab)) {
+                this.selectedTabs = this.selectedTabs.filter(selectedTab => selectedTab !== 'ALL')
+            }
+
+            if (this.tabExistInTabs(this.selectedTabs, tab)) {
+                this.selectedTabs = this.selectedTabs.filter(selectedTab => selectedTab !== tab)
+                if (this.selectedTabs.length === 0) {
+                    this.selectedTabs = ['ALL'];
+                }
+
+                return;
+            }
+
+            this.selectedTabs.push(tab);
+        },
+        tabExistInTabs(tabs, tab) {
+            for (let i = 0; i < tabs.length; i++) {
+                if (tab === tabs[i]) {
+                    return true;
+                }
+            }
+
+            return false;
         },
 
       async loadPools() {
@@ -162,7 +192,8 @@ export default {
         for (let networkConfig of networkConfigList) {
           await poolApiService.getAllPools(networkConfig.appApiUrl)
               .then(data => {
-                if (data) {
+                  if (data) {
+
                   data.forEach(pool => {
 
                     let token0Icon;
@@ -228,19 +259,20 @@ export default {
                         }
 
                         // todo move to backend
-                        if (this.featuredPoolsAddresses.find(
-                            item => item.toLowerCase() === pool.id.address.toLowerCase())
-                        ) {
-                            pool.feature = true;
-                        }
+                        // if (this.featuredPoolsAddresses.find(
+                        //     item => item.toLowerCase() === pool.id.address.toLowerCase())
+                        // ) {
+                        //     pool.feature = true;
+                        // }
+
 
                         // todo move to backend
-                        // if ()
+                        pool = this.initAggregators(pool);
 
 
                       this.pools.push({
                         id: (pool.id.name + pool.tvl + pool.platform),
-                        name: pool.id.name,
+                        name: pool.id.name,// + ' ' + pool.id.address,
                         token0Icon: token0Icon,
                         token1Icon: token1Icon,
                         token2Icon: token2Icon,
@@ -256,7 +288,9 @@ export default {
                         feature: pool.feature,
                         zappable: pool.zappable,
                         cardOpened: false,
-                        aggregators: pool.aggregators
+                        aggregators: pool.aggregators,
+                        isOpened: pool.aggregators && pool.aggregators.length ? false : true, // pools without aggregators always is opened
+
                       });
                     }
                   })
@@ -266,6 +300,8 @@ export default {
               })
         }
 
+          // todo move to backend
+          this.pools = this.initFeature(this.pools);
 
           this.sortedPoolList = this.pools.sort((a, b) => {
               if (a.feature && !b.feature) {
@@ -281,6 +317,139 @@ export default {
 
           this.isPoolsLoading = false;
       },
+
+        initFeature(pools) {
+            const topValuesByType = {};
+
+            pools.forEach(entry => {
+                const { chain, apr } = entry;
+                if (!topValuesByType[chain] || apr > topValuesByType[chain].apr) {
+                    topValuesByType[chain] = entry;
+                }
+            });
+
+            const topTvlArray = Object.values(topValuesByType);
+            topTvlArray.forEach(pool => {
+                if (pool.apr) {
+                    pool.feature = true;
+                }
+            })
+
+            return pools;
+        },
+        initAggregators(pool) {
+            pool.aggregators = [];
+            // usd+ dola arb
+            let poolAddress = pool.id.address;
+
+            // dola usd+ chronos
+          /*  if (poolAddress === '0xbbd7ff1728963a5eb582d26ea90290f84e89bd66')  {
+                pool.aggregators.push({
+                    id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Beefy',
+                    zappable: false,
+                })
+            }*/
+
+            if (poolAddress === '0x1F3cA66c98d682fA1BeC31264692daD4f17340BC')  {
+                pool.aggregators.push({
+                    id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Beefy',
+                    zappable: false,
+                    link: 'https://app.beefy.com/vault/thena-hay-usd+'
+                })
+            }
+
+            if (poolAddress === '0xa99817d2d286c894f8f3888096a5616d06f20d46')  {
+                pool.aggregators.push({
+                    id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Beefy',
+                    zappable: false,
+                    link: 'https://app.beefy.com/vault/velodrome-usd+-dola'
+                })
+            }
+
+            if (poolAddress === '0x219fbc3ed20152a9501ddaa47f2a8c193e32d0c6')  {
+                pool.aggregators.push({
+                    id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Beefy',
+                    zappable: false,
+                    link: 'https://app.beefy.com/vault/solidlizard-usd+-usdc'
+                })
+            }
+
+            if (poolAddress === '0x69c28d5bbe392ef48c0dc347c575023daf0cd243')  {
+                pool.aggregators.push({
+                    id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Beefy',
+                    zappable: false,
+                    link: 'https://app.beefy.com/vault/velodrome-usd+-dai+',
+                })
+            }
+
+            if (poolAddress === '0x8a9cd3dce710e90177b4332c108e159a15736a0f')  {
+                pool.aggregators.push({
+                    id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Beefy',
+                    zappable: false,
+                    link: 'https://app.beefy.com/vault/velodrome-usd+-lusd',
+                })
+            }
+
+            if (poolAddress === '0x67124355cce2ad7a8ea283e990612ebe12730175')  {
+                pool.aggregators.push({
+                    id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Beefy',
+                    zappable: false,
+                    link: 'https://app.beefy.com/vault/velodrome-usdp-usdc',
+                })
+            }
+
+
+            if (poolAddress === '0xeb9153afbaa3a6cfbd4fce39988cea786d3f62bb') {
+                pool.aggregators.push({
+                    id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Ennead',
+                    zappable: false,
+                })
+            }
+
+/*            if (pool.id.address === '0x88beb144352bd3109c79076202fac2bceab87117') {
+                pool.aggregators.push({
+                    id: ('Aggregator' + 'Magpie' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Magpie',
+                    zappable: false,
+                })
+
+                pool.aggregators.push({
+                    id: ('Aggregator'+ 'Wombax' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Wombax',
+                    zappable: false,
+                })
+            }*/
+
+            return pool;
+        }
     }
 }
 </script>

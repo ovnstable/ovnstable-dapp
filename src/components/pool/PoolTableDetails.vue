@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="row">
-            <div @click="openPoolLink" class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-4" style="cursor: pointer">
+            <div @click="openPoolLink(pool)" class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-4" style="cursor: pointer">
                 <div class="pool-table-header-item">
-                   <div class="pool-table-platform-container">
+                   <div v-if="pool.isOpened" class="pool-table-platform-container">
                        <div class="pool-platform-icon">
                            <div class="icon mr-2">
                                <v-img :src="require('@/assets/cards/platform/' + pool.platform + '.svg')"
@@ -19,6 +19,24 @@
                            <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
                        </div>
                    </div>
+                    <div v-else>
+                        <div class="pool-table-platform-container">
+                            <div class="pool-platform-icon">
+                                <div class="icon mr-2">
+                                    <v-img :src="require('@/assets/cards/platform/' + pool.platform + '.svg')"
+                                           :title="pool.platform"/>
+                                </div>
+                            </div>
+                            <div v-for="(aggregator, index) in pool.aggregators" :key="aggregator.id" class="pool-platform-icon"
+                                v-bind:style="'left:' + (index + 1) * 35 + 'px;'">
+<!--                                {{index}}-->
+                                <div class="icon mr-2">
+                                    <v-img :src="require('@/assets/cards/platform/' + aggregator.platform + '.svg')"
+                                           :title="aggregator.platform"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
@@ -27,7 +45,7 @@
                         {{ $utils.formatMoneyComma(pool.apr, 2) }}%
                     </label>
                     <label v-else class="card-label see-on-dex-label">
-                        {{ 'see on dex' }}
+                        {{ pool.platform !== 'Gnd' ? 'see on dex' : 'see on protocol UI'}}
                     </label>
                 </div>
             </div>
@@ -52,6 +70,64 @@
                 </div>
             </div>
         </div>
+
+        <div v-if="pool.isOpened && !isShowOnlyZap && !isShowAprLimit && pool.aggregators && pool.aggregators.length">
+            <div class="aggregator-hr mt-4 mb-4"></div>
+
+            <div v-for="aggregator in pool.aggregators" :key="aggregator.id" class="row">
+                <div @click="openAggregatorLink(aggregator)" class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-4" style="cursor: pointer">
+                    <div class="pool-table-header-item">
+                        <div class="pool-table-platform-container">
+                            <div class="pool-platform-icon">
+                                <div class="icon mr-2">
+                                    <v-img :src="require('@/assets/cards/platform/' + aggregator.platform + '.svg')"
+                                           :title="aggregator.platform"/>
+                                </div>
+                            </div>
+
+                            <div class="pool-platform-name">
+                                {{aggregator.platform}}
+                            </div>
+
+                            <div class="pool-platform-link">
+                                <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
+                    <div class="pool-table-header-item">
+                        <label v-if="aggregator.apr" class="card-label">
+                            {{ $utils.formatMoneyComma(aggregator.apr, 2) }}%
+                        </label>
+                        <label v-else class="card-label see-on-dex-label">
+                            {{ 'see on protocol UI' }}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-3 col-xl-3 col-lg-3 col-md-3 col-sm-4">
+                    <div class="pool-table-header-item">
+                        <label v-if="aggregator.tvl" class="card-label">
+                            ${{ $utils.formatNumberToMln(aggregator.tvl, 0) }}M
+                        </label>
+                        <label v-else class="card-label see-on-dex-label">
+                            {{ 'see on protocol UI' }}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-3 col-xl-3 col-lg-3 col-md-3 col-sm-12">
+                    <!--                <div class="pool-table-header-item">-->
+                    <!--                    <v-btn v-if="aggregator.zappable"-->
+                    <!--                           x-small-->
+                    <!--                           class="button button-full-width btn-outlined mb-3"-->
+                    <!--                           @click.stop="openAggregatorZapInFunc(aggregator)" outlined>-->
+                    <!--                        ZAP IN-->
+                    <!--                    </v-btn>-->
+                    <!--                </div>-->
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -70,15 +146,41 @@ export default defineComponent({
             type: Function,
             required: true
         },
+        isShowOnlyZap: {
+            type: Boolean,
+            required: true
+        },
+        isShowAprLimit: {
+            type: Boolean,
+            required: true
+        },
     },
     computed: {
         ...mapGetters('network', ['networkName']),
     },
     methods: {
-        openPoolLink() {
+        openPoolLink(pool) {
+            if (!pool.isOpened) {
+                console.log("Pool not move to link, pool is not opened");
+                return;
+            }
+
+            this.openLink(pool);
+        },
+        openAggregatorLink(aggregator) {
+            if (aggregator.link) {
+                window.open(aggregator.link, '_blank').focus();
+                return
+            }
+
+            this.openLink(aggregator)
+        },
+
+        openLink(pool) {
+
             let url;
 
-            switch (this.pool.platform) {
+            switch (pool.platform) {
                 case 'Dystopia':
                     url = 'https://www.dystopia.exchange/liquidity/';
                     break;
@@ -136,23 +238,32 @@ export default defineComponent({
                 case 'Vesync':
                     url = 'https://app.vesync.finance/liquidity/';
                     break;
+                case 'Beefy':
+                    url = 'https://app.beefy.com';
+                    break;
+                case 'Ennead':
+                    url = 'https://beta.ennead.farm/pools';
+                    break;
                 default:
-                    url = this.pool.explorerUrl + '/address/';
+                    url = pool.explorerUrl + '/address/';
                     break;
             }
 
-            if (this.pool.platform === 'Thena' || this.pool.platform === 'Wombat') {
+            if (pool.platform === 'Thena' ||
+                pool.platform === 'Wombat' ||
+                pool.platform === 'Beefy' ||
+                pool.platform === 'Ennead') {
                 window.open(url, '_blank').focus();
                 return;
             }
 
-            if (this.pool.platform === 'Beethoven') {
-                url += this.pool.address + '0000000000000000000000ae';
+            if (pool.platform === 'Beethoven') {
+                url += pool.address + '0000000000000000000000ae';
                 window.open(url, '_blank').focus();
                 return;
             }
 
-            url += this.pool.address;
+            url += pool.address;
             window.open(url, '_blank').focus();
         }
     }
@@ -167,6 +278,8 @@ div {
 
 .button-full-width {
     width: 100% !important;
+    max-width: 100px;
+
 }
 
 .btn-outlined {
@@ -201,7 +314,8 @@ div {
 }
 
 .see-on-dex-label {
-    color: #b2b2b2
+    color: #b2b2b2;
+    font-size: 12px!important;
 }
 
 
@@ -234,6 +348,10 @@ div {
 .pool-table-platform-container {
     position: relative;
     cursor: pointer;
+}
+
+.aggregator-hr {
+    border-bottom: 1px solid var(--main-border);
 }
 
 /* mobile */

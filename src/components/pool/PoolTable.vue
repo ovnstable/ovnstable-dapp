@@ -58,8 +58,8 @@
 
             <div class="pool-table-body">
                 <div v-for="pool in pools" :key="pool.id"
-                     v-bind:style="pool.feature ?
-                      'background: linear-gradient(76.21deg, ' + getParams(pool.chain).networkColor + ' -77%, var(--swap-main-banner-background) 36%);' : ''"
+                     @click="toggleDetails(pool)"
+                     v-bind:style="poolTableBodyStyle(pool)"
                      class="pool-table-body-item-container">
                     <div class="row">
                         <div class="col-12 col-xl-6 col-lg-6 col-md-6 col-sm-12">
@@ -67,7 +67,28 @@
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3">
                                     <div class="pool-table-body-item text-center">
                                         <div v-if="pool.feature">
-                                            <img src="/assets/icon/pool/featured.svg" alt="featured">
+                                            <v-tooltip
+                                                v-if="pool.feature"
+                                                color="var(--tooltip-bg)"
+                                                min-width="50px"
+                                                min-height="50px"
+                                                right
+                                            >
+                                                <template v-slot:activator="{on, attrs}">
+                                                    <div class="info-icon ml-1"
+                                                         :style="{width: 20 + 'px', height: 30 + 'px'}"
+                                                         v-bind="attrs"
+                                                         v-on="on">
+
+                                                        <img src="/assets/icon/pool/featured.svg" alt="featured">
+                                                    </div>
+                                                </template>
+
+                                                <label style="color: var(--main-gray-text);">
+                                                    Featured
+                                                </label>
+                                            </v-tooltip>
+
                                         </div>
                                     </div>
                                 </div>
@@ -103,6 +124,7 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-3">
                                     <div class="pool-table-body-item d-inline-block mr-2">
+<!--                                        {{pool.name}} LP {{pool.address}}-->
                                         {{pool.name}} LP
                                     </div>
                                     <div class="platform-label-container d-inline-block">
@@ -117,9 +139,19 @@
                         <!--          Hide on mobile          -->
                         <div class="col-12 col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <PoolTableDetails :pool="pool"
-                            :open-zap-in-func="openZapInFunc">
+                            :open-zap-in-func="openZapInFunc"
+                              :is-show-only-zap="isShowOnlyZap"
+                              :is-show-apr-limit="isShowAprLimit"
+                            >
                             </PoolTableDetails>
                         </div>
+                    </div>
+
+                    <div v-if="pool.aggregators && pool.aggregators.length"
+                         class="toggle-icon-container">
+                        <img src="/assets/icon/pool/toggle-open-pool.svg"
+                             v-bind:style="pool.isOpened ? 'transform: rotate(180deg);': '' "
+                             alt="toggle-open-pool">
                     </div>
                 </div>
             </div>
@@ -131,10 +163,11 @@
 import {defineComponent} from 'vue'
 import PoolTableDetails from "@/components/pool/PoolTableDetails.vue";
 import {mapGetters} from "vuex";
+import Tooltip from "@/components/common/element/Tooltip.vue";
 
 export default defineComponent({
     name: "PoolTable",
-    components: {PoolTableDetails},
+    components: {Tooltip, PoolTableDetails},
     props: {
         pools: {
             type: Array,
@@ -143,11 +176,44 @@ export default defineComponent({
         openZapInFunc: {
             type: Function,
             required: true
-        }
+        },
+        isShowOnlyZap: {
+            type: Boolean,
+            required: true
+        },
+        isShowAprLimit: {
+            type: Boolean,
+            required: true
+        },
     },
     computed: {
         ...mapGetters('network', ['getParams']),
 
+        poolTableBodyStyle: function () {
+              return pool => {
+                  if (!pool) {
+                      return '';
+                  }
+
+                  let style = pool.feature ?
+                      'background: linear-gradient(76.21deg, ' + this.getParams(pool.chain).networkColor + ' -77%, var(--swap-main-banner-background) 36%);' : ''
+
+                  style += pool.aggregators && pool.aggregators.length ? 'cursor:pointer;' : '';
+                  return style;
+              }
+        }
+
+    },
+    methods: {
+        toggleDetails(pool) {
+            if (pool.aggregators && pool.aggregators.length) {
+                pool.isOpened = !pool.isOpened
+                return;
+            }
+
+            // pools without aggregators always is opened
+            pool.isOpened = true;
+        }
     }
 })
 </script>
@@ -229,6 +295,7 @@ div {
     background: var(--swap-main-banner-background);
     border-radius: 8px;
     margin-bottom: 8px;
+    position: relative;
 }
 
 .platform-label-container {
@@ -244,5 +311,11 @@ div {
     font-size: 12px;
     line-height: 16px;
     color: var(--action-label-text);
+}
+
+.toggle-icon-container {
+    position: absolute;
+    right: 23px;
+    top: 17px;
 }
 </style>

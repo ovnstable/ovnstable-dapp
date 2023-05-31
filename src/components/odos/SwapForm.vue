@@ -451,12 +451,12 @@ export default defineComponent({
             let tokens = this.selectedInputTokens;
             for (let i = 0; i < tokens.length; i++) {
                 let token = tokens[i];
-                if (token.value < 1) {
-                    return false;
+                if (token.value > 0) {
+                    return true;
                 }
             }
 
-            return true;
+            return false;
         },
 
         sumOfAllSelectedTokensInUsd() {

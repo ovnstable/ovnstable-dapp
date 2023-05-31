@@ -45,7 +45,6 @@
                                     Decrease Allowance
                                 </div>
 
-<!--                                {{token && token.selectedToken ? token.selectedToken.address : '-'}}-->
                                 <InputToken
                                         :token-info="token"
                                         :remove-item-func="removeInputToken"

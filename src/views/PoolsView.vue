@@ -112,7 +112,11 @@ export default {
             return this.sortedPoolList.filter(pool => this.selectedTabs.includes(this.getParams(pool.chain).networkName));
         }
     },
-
+    watch: {
+        networkId: function () {
+            this.loadPools();
+        }
+    },
     created() {
     },
 
@@ -174,6 +178,7 @@ export default {
 
       async loadPools() {
         this.isPoolsLoading = true;
+        this.clearAllFilters();
 
         this.pools = [];
         let networkConfigList = [...this.allNetworkConfigs];
@@ -243,7 +248,7 @@ export default {
                     if (pool && pool.tvl && pool.tvl >= 10000.00) {
 
                         // todo move to backend
-                        if (pool.platform === 'Chronos' && this.networkName === 'arbitrum') {
+                        if (pool.platform === 'Chronos') {
                             pool.zappable = true;
                         }
 
@@ -438,7 +443,12 @@ export default {
             }*/
 
             return pool;
-        }
+        },
+        clearAllFilters() {
+                this.isShowOnlyZap = false;
+                this.isShowAprLimit = false;
+                this.selectedTabs = ['ALL'];
+        },
     }
 }
 </script>

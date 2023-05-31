@@ -1,6 +1,17 @@
 <template>
     <div>
-        <div class="swap-container">
+        <div v-if="zapPool.chain !== networkId" class="swap-container">
+            <div class="swap-body">
+                <div>
+                    <div class="mb-4 mt-1">
+                        <PoolLabel :pool="zapPool">
+                        </PoolLabel>
+                    </div>
+                </div>
+                <ZapChangeNetwork :zap-pool="zapPool" ></ZapChangeNetwork>
+            </div>
+        </div>
+        <div v-else class="swap-container">
             <div v-if="!isTokensLoadedAndFiltered"
                  class="loader-container pb-15">
                 <div class="row">
@@ -205,11 +216,13 @@ import SuccessZapModal from "@/components/zap/modals/SuccessZapModal.vue";
 import ZapSteps from "@/components/zap/ZapSteps.vue";
 import {zap} from "@/components/mixins/zap";
 import PoolLabel from "@/components/zap/PoolLabel.vue";
+import ZapChangeNetwork from "@/components/zap/ZapChangeNetwork.vue";
 
 export default defineComponent({
     name: "ZapForm",
     mixins: [odosSwap, zap],
     components: {
+        ZapChangeNetwork,
         PoolLabel,
         ZapSteps,
         SuccessZapModal,
@@ -280,26 +293,11 @@ export default defineComponent({
         }
     },
     mounted() {
-        this.tokenSeparationScheme = 'POOL_SWAP';
-        console.log("Zap form odos init by scheme: ", this.tokenSeparationScheme)
-        console.log("Zap pool: ", this.zapPool)
-        // todo: move to backend
-        let poolTokens = this.poolTokensMap[this.zapPool.address];
-        if (!poolTokens) {
-            console.log("Pool address not found:");
+        if (this.zapPool.chain !== this.networkId) {
             return;
         }
 
-        console.log("poolTokens: ", poolTokens, this.zapPool.address);
-        this.listOfBuyTokensAddresses = [];
-        this.listOfBuyTokensAddresses.push(poolTokens[0].address);
-        this.listOfBuyTokensAddresses.push(poolTokens[1].address);
-
-        this.init();
-
-        if (!this.isAvailableOnNetwork) {
-            this.mintAction();
-        }
+        this.firstInit();
     },
     computed: {
         ...mapGetters('network', ['getParams', 'networkId']),
@@ -413,6 +411,7 @@ export default defineComponent({
 
     },
     watch: {
+
         sumOfAllSelectedTokensInUsd: function (val, oldVal) {
             this.recalculateOutputTokensSum();
         },
@@ -431,6 +430,12 @@ export default defineComponent({
                 if (!this.isAvailableOnNetwork) {
                     this.mintAction();
                 }
+
+                if (this.zapPool.chain === this.networkId) {
+                    this.firstInit();
+                    return
+                }
+
             }
         },
         isDisableButton: function (val, oldVal) {
@@ -450,6 +455,30 @@ export default defineComponent({
         mintAction() {
             this.showMintView();
             this.showSwapModal();
+        },
+
+        firstInit() {
+
+            this.tokenSeparationScheme = 'POOL_SWAP';
+            console.log("Zap form odos init by scheme: ", this.tokenSeparationScheme)
+            console.log("Zap pool: ", this.zapPool)
+            // todo: move to backend
+            let poolTokens = this.poolTokensMap[this.zapPool.address];
+            if (!poolTokens) {
+                console.log("Pool address not found:");
+                return;
+            }
+
+            console.log("poolTokens: ", poolTokens, this.zapPool.address);
+            this.listOfBuyTokensAddresses = [];
+            this.listOfBuyTokensAddresses.push(poolTokens[0].address);
+            this.listOfBuyTokensAddresses.push(poolTokens[1].address);
+
+            this.init();
+
+            if (!this.isAvailableOnNetwork) {
+                this.mintAction();
+            }
         },
 
         init() {

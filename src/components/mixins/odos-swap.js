@@ -64,6 +64,11 @@ export const odosSwap = {
 
        this.initUpdateBalancesInterval();
     },
+    beforeMount() {
+        if (this.updateBalancesIntervalId) {
+            clearInterval(this.updateBalancesIntervalId);
+        }
+    },
     beforeDestroy() {
         if (this.updateBalancesIntervalId) {
             clearInterval(this.updateBalancesIntervalId);

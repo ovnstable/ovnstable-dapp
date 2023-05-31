@@ -50,7 +50,7 @@
                         {{ $utils.formatMoneyComma(pool.apr, 2) }}%
                     </label>
                     <label v-else class="card-label see-on-dex-label">
-                        {{ pool.platform !== 'Gnd' ? 'see on dex' : 'see on protocol UI'}}
+                        see on platform
                     </label>
                 </div>
             </div>
@@ -109,7 +109,7 @@
                             {{ $utils.formatMoneyComma(aggregator.apr, 2) }}%
                         </label>
                         <label v-else class="card-label see-on-dex-label">
-                            {{ 'see on protocol UI' }}
+                            see on platform
                         </label>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
                             ${{ $utils.formatNumberToMln(aggregator.tvl, 0) }}M
                         </label>
                         <label v-else class="card-label see-on-dex-label">
-                            {{ 'see on protocol UI' }}
+                            see on platform
                         </label>
                     </div>
                 </div>
@@ -327,7 +327,7 @@ div {
 
 .see-on-dex-label {
     color: #b2b2b2;
-    font-size: 12px!important;
+    font-size: 14px!important;
 }
 
 

@@ -36,13 +36,7 @@
                           :is-show-apr-limit="isShowAprLimit"
                           :open-zap-in-func="openZapIn"></PoolTable>
            </div>
-<!--         <PoolListHeader/>
-         <PoolListCard class="mt-2"
-                       v-for="component in sortedPoolList.filter(value => (value.tvl > 100000))"
-                       :key="component.id"
-                       :card-data="component"
-                        :open-zap-in-func="openZapIn"/>
-         <resize-observer @notify="$forceUpdate()"/>-->
+
        </div>
 
         <ZapModal :set-show-func='setIsZapModalShow'
@@ -54,8 +48,6 @@
 <script>
 
 import {mapGetters} from "vuex";
-import PoolListHeader from "@/components/market/cards/pool/list/PoolListHeader";
-import PoolListCard from "@/components/market/cards/pool/list/PoolListCard";
 
 import {poolApiService} from "@/services/pool-api-service";
 import ZapModal from "@/components/zap/modals/ZapModal.vue";

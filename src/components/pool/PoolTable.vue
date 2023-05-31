@@ -58,11 +58,10 @@
 
             <div class="pool-table-body">
                 <div v-for="pool in pools" :key="pool.id"
-                     @click="toggleDetails(pool)"
                      v-bind:style="poolTableBodyStyle(pool)"
                      class="pool-table-body-item-container">
                     <div class="row">
-                        <div class="col-12 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                        <div @click="toggleDetails(pool)" class="col-12 col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <div class="row">
                                 <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
                                     <div class="pool-table-body-item text-center">
@@ -142,16 +141,18 @@
                             :open-zap-in-func="openZapInFunc"
                               :is-show-only-zap="isShowOnlyZap"
                               :is-show-apr-limit="isShowAprLimit"
+                              :toggle-details-func="toggleDetails"
                             >
                             </PoolTableDetails>
                         </div>
                     </div>
 
                     <div v-if="pool.aggregators && pool.aggregators.length"
+                         @click="toggleDetails(pool)"
                          class="toggle-icon-container"
                          v-bind:style="$wu.isMobile() ? 'top: 122px;' : ''">
                         <img src="/assets/icon/pool/toggle-open-pool.svg"
-                             v-bind:style="pool.isOpened ? 'transform: rotate(180deg);': '' "
+                             v-bind:style="pool.isOpened ? '': 'transform: rotate(180deg);' "
                              alt="toggle-open-pool">
                     </div>
                 </div>

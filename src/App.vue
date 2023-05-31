@@ -348,4 +348,6 @@ html {
 .close-icon {
     color: var(--main-gray-text) !important;
 }
+
+
 </style>

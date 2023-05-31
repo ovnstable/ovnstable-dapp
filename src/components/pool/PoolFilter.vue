@@ -32,21 +32,22 @@
                                     @click="showWithZap(!isShowOnlyZap)"
                                     class="filter-item">
                                     <template v-slot:label>
-                                        <span id="filter-title">
+                                        <span id="filter-title-zap">
                                             Zappable
                                         </span>
                                     </template>
                                 </v-checkbox>
                             </div>
                         </div>
-                        <div class="col-4 col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-6 col-lg-6 col-md-6 col-sm-6">
                             <div class="filter-container text-center">
                                 <v-checkbox
                                     @click="showAprLimit(!isShowAprLimit)"
                                     class="filter-item"
+                                    false-value="red"
                                 >
                                     <template v-slot:label>
-                                        <span id="filter-title">
+                                        <span id="filter-title-apr">
                                             Over 15% APR
                                         </span>
                                     </template>
@@ -127,13 +128,14 @@ export default defineComponent({
     color: var(--main-gray-text);
     border-radius: 8px;
 
-    width: 68px;
+    width: 100%;
     height: 44px;
-    display: inline-block;
-
     margin-right: 11px;
     cursor: pointer;
-    position: relative;
+
+    display: flex;
+    justify-content: center; /* horizontally center */
+    align-items: center; /* vertically center */
 }
 
 .networks-item-selected {
@@ -143,8 +145,6 @@ export default defineComponent({
 
 .network-logo {
     max-height: 27px;
-    position: absolute;
-    top: 7px;
 }
 
 .filter-container {
@@ -170,9 +170,14 @@ export default defineComponent({
     cursor: pointer;
 }
 
-#filter-title {
+#filter-title-zap {
     color: var(--main-gray-text);
 }
+
+#filter-title-apr {
+    color: var(--main-gray-text);
+}
+
 
 /* mobile */
 @media only screen and (max-width: 960px) {
@@ -188,5 +193,13 @@ export default defineComponent({
         padding: 6px 12px;
         width: 56px;
     }
+}
+</style>
+
+
+<style>
+
+.theme--light.v-icon {
+    color: var(--scrollbar-slider-color)!important;
 }
 </style>

@@ -21,15 +21,18 @@
                        </div>
                    </div>
                     <div v-else>
-                        <div class="pool-table-platform-container">
-                            <div class="pool-platform-icon">
+                        <div  class="pool-table-platform-container">
+                            <div @click="openPoolLink(pool, true)"
+                                 class="pool-platform-icon">
                                 <div class="icon mr-2">
                                     <v-img :src="require('@/assets/cards/platform/' + pool.platform + '.svg')"
                                            :title="pool.platform"/>
                                 </div>
                             </div>
-                            <div v-for="(aggregator, index) in pool.aggregators" :key="aggregator.id" class="pool-platform-icon"
-                                v-bind:style="'left:' + (index + 1) * 35 + 'px;'">
+                            <div v-for="(aggregator, index) in pool.aggregators" :key="aggregator.id"
+                                 @click="openAggregatorLink(aggregator)"
+                                 v-bind:style="'left:' + (index + 1) * 35 + 'px;'"
+                                 class="pool-platform-icon">
 <!--                                {{index}}-->
                                 <div class="icon mr-2">
                                     <v-img :src="require('@/assets/cards/platform/' + aggregator.platform + '.svg')"
@@ -40,7 +43,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
+            <div @click="toggleDetailsFunc(pool)"
+                 class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
                 <div class="pool-table-header-item">
                     <label v-if="pool.apr" class="card-label">
                         {{ $utils.formatMoneyComma(pool.apr, 2) }}%
@@ -50,7 +54,8 @@
                     </label>
                 </div>
             </div>
-            <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
+            <div @click="toggleDetailsFunc(pool)"
+                 class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
                 <div class="pool-table-header-item">
                     <label v-if="pool.tvl" class="card-label">
                         ${{ $utils.formatNumberToMln(pool.tvl, 0) }}M
@@ -60,7 +65,8 @@
                     </label>
                 </div>
             </div>
-            <div class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
+            <div @click="toggleDetailsFunc(pool)"
+                 class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                 <div class="pool-table-header-item">
                     <v-btn v-if="pool.zappable"
                            x-small
@@ -148,6 +154,10 @@ export default defineComponent({
             type: Function,
             required: true
         },
+        toggleDetailsFunc: {
+            type: Function,
+            required: true
+        },
         isShowOnlyZap: {
             type: Boolean,
             required: true
@@ -161,8 +171,8 @@ export default defineComponent({
         ...mapGetters('network', ['networkName']),
     },
     methods: {
-        openPoolLink(pool) {
-            if (!pool.isOpened) {
+        openPoolLink(pool, isForce) {
+            if (!isForce && !pool.isOpened) {
                 console.log("Pool not move to link, pool is not opened");
                 return;
             }

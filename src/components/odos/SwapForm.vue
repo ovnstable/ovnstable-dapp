@@ -630,30 +630,53 @@ export default defineComponent({
             }
         },
         changeSwap() {
-            console.log("Change swap");
-/*
+            console.log('INPUT SELECTED TOKENS: ', this.inputTokens)
+            console.log('OUTPUT SELECTED TOKENS: ', this.outputTokens)
+
+            // Transform Input Tokens into Output format by adding temporary variable "tempOutputArray"
+            let tempOutputArray = [];
+            for (let i = 0; i < this.inputTokens.length; i++) {
+                let tokenIn = this.inputTokens[i];
+                if (!tokenIn.selectedToken) {
+                   continue
+                }
+
+                let transformInputToOutputToken = this.getNewOutputToken()
+                transformInputToOutputToken.id = tokenIn.id
+                transformInputToOutputToken.selectedToken = tokenIn.selectedToken
+                tempOutputArray.push(transformInputToOutputToken)
+            }
+
+            // Transform Output Tokens into Input format by adding temporary variable "tempInputArray"
+            let tempInputArray = [];
+            for (let i = 0; i < this.outputTokens.length; i++) {
+                let tokenOut = this.outputTokens[i];
+                if (!tokenOut.selectedToken) {
+                    continue
+                }
+
+                let transformOutputToInputToken = this.getNewInputToken()
+                transformOutputToInputToken.id = tokenOut.id
+                transformOutputToInputToken.selectedToken = tokenOut.selectedToken
+                tempInputArray.push(transformOutputToInputToken)
+            }
+
+            this.inputTokens = tempInputArray;
+            console.log("Tokens Transformed from Output to Input: ", this.inputTokens)
+            this.outputTokens = tempOutputArray;
+            console.log("Tokens Transformed from Input to Output: ", this.outputTokens)
+
+            this.resetOutputs()
+
             if (this.swapMethod === 'BUY') {
                 this.setSwapMethod('SELL');
-                this.addOutputSelectedTokens()
+                this.$forceUpdate()
                 return;
             }
 
             if (this.swapMethod === 'SELL') {
                 this.setSwapMethod('BUY');
-                this.addInputSelectedTokens()
-                return;
-            }
-*/
-
-            if (this.swapMethod === 'BUY') {
-                this.setSwapMethod('SELL');
-                this.clearForm();
-                return;
-            }
-
-            if (this.swapMethod === 'SELL') {
-                this.setSwapMethod('BUY');
-                this.clearForm();
+                this.$forceUpdate()
                 return;
             }
 
@@ -691,19 +714,6 @@ export default defineComponent({
             }
             // init first token value
             this.selectedOutputTokens[0].value = 100;
-           /* if (this.selectedOutputTokens[0] && this.selectedOutputTokens[1]) {
-                this.selectedOutputTokens[0].value = 50;
-                this.selectedOutputTokens[1].value = 50;
-            } if (this.selectedOutputTokens[0] && this.selectedOutputTokens[1] && this.selectedOutputTokens[2]) {
-                this.selectedOutputTokens[0].value = 34;
-                this.selectedOutputTokens[1].value = 33;
-                this.selectedOutputTokens[2].value = 33;
-            } if (this.selectedOutputTokens[0] && this.selectedOutputTokens[1] && this.selectedOutputTokens[2] && this.selectedOutputTokens[3]) {
-                this.selectedOutputTokens[0].value = 25;
-                this.selectedOutputTokens[1].value = 25;
-                this.selectedOutputTokens[2].value = 25;
-                this.selectedOutputTokens[3].value = 25;
-            }*/
             console.log("this.selectedOutputTokens: ", this.selectedOutputTokens)
         },
         async swap() {
@@ -1199,22 +1209,6 @@ export default defineComponent({
                 this.removeToken(tokens, tokensToRemove[i].id);
             }
         },
-       /* addInputSelectedTokens() {
-            for (let i = 0; i < this.inputTokens.length; i++) {
-                let inputSelected;
-                if (this.inputTokens[i].selectedToken) {
-                    return inputSelected = this.inputTokens[i].selectedToken
-                }
-            }
-        },
-        addOutputSelectedTokens() {
-            for (let i = 0; i < this.outputTokens.length; i++) {
-                let outputSelected;
-                if (this.outputTokens[i].selectedToken) {
-                    return outputSelected = this.inputTokens[i].selectedToken
-                }
-            }
-        },*/
         clearAllSelectedTokens() {
             for (let i = 0; i < this.inputTokens.length; i++) {
                 if (this.inputTokens[i].selectedToken) {
@@ -1230,7 +1224,6 @@ export default defineComponent({
 
             this.clearAllTokens();
         },
-        // написать функцию которая поменяет местами инпут и аутпут токены, сбрасывал их значения до дефолта, вместо clearAllSelectedTokens при вызове changeSwap,
         clearAllTokens() {
             this.inputTokens = [];
             this.outputTokens = [];

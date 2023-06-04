@@ -407,7 +407,7 @@ export default defineComponent({
             return this.allInputsWithNotApproved.length > 0
         },
         allInputsWithNotApproved() {
-            return this.selectedInputTokens.filter(token => !token.selectedToken.approveData.approved);
+            return this.selectedInputTokens.filter(token => !token.selectedToken.approveData.approved && token.selectedToken.value > 0);
         },
         firstInputInQueueForToApprove() {
             return this.isAnyInputsNeedApprove ? this.allInputsWithNotApproved[0] : null
@@ -711,9 +711,11 @@ export default defineComponent({
             for (let i = 0; i < this.selectedOutputTokens.length; i++) {
                 let token = this.selectedOutputTokens[i];
                 token.value = 0;
+                if (this.selectedOutputTokens.length > 1) {
+                    token.value = Math.floor(100 / this.selectedOutputTokens.length);
+                }
             }
-            // init first token value
-            this.selectedOutputTokens[0].value = 100;
+
             console.log("this.selectedOutputTokens: ", this.selectedOutputTokens)
         },
         async swap() {

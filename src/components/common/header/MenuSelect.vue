@@ -211,7 +211,7 @@
                     </div>
                 </template>
                 <div>
-                    <v-list-item @click="etsClick"
+                    <v-list-item @click="aboutEtsClick"
                                  :class="selectedTab === 'ets_about' ? 'selected-page-item' : ''"
                                  class="list-item-hover">
                         <label :class="selectedTab === 'ets_about' ? 'selected-page' : ''"
@@ -229,7 +229,7 @@
                         </label>
                     </v-list-item>
 
-                    <v-list-item @click="etsClick"
+                    <v-list-item @click="etsArchiveClick"
                                  :class="selectedTab === 'ets_archive' ? 'selected-page-item' : ''"
                                  class="list-item-hover">
                         <label :class="selectedTab === 'ets_archive' ? 'selected-page' : ''"
@@ -261,6 +261,11 @@
             <v-list-item link class="mb-0">
                 <v-list-item-title @click="openLink('https://docs.overnight.fi/advanced/terms-of-service')">
                     <label class="network-select-list-item">Terms of Service</label>
+                </v-list-item-title>
+            </v-list-item>
+            <v-list-item  link class="mb-0">
+                <v-list-item-title @click="openLink('https://discord.com/channels/933003627444969552/967813123149033542/967813482684760135/')">
+                    <label class="network-select-list-item">Help center in Discord</label>
                 </v-list-item-title>
             </v-list-item>
             <v-list-item class="menu-item theme-switch-btn" @click="switchTheme">
@@ -434,9 +439,19 @@ export default {
           this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
         },
 
+        aboutEtsClick() {
+            this.selectTab('about');
+            this.goToActionByPath('/ets_about');
+        },
+
         etsClick() {
             this.selectTab('market');
-            this.goToActionByPath('/market', { tabName: 'ets' });
+            this.goToActionByPath('/market');
+        },
+
+        etsArchiveClick() {
+            this.selectTab('market/archive');
+            this.goToActionByPath('/market/archive');
         },
 
         swapClick() {

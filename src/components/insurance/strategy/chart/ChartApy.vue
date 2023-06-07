@@ -2,12 +2,12 @@
     <div class="apy-chart-container">
         <v-row class="chart-header-row">
             <v-col cols="6">
-                <v-row justify="start" align="left">
+                <v-row justify="start" align="start">
                     <label class="chart-title ml-5">
                       USD+ Insurance
                     </label>
                 </v-row>
-                <v-row justify="start" align="left">
+                <v-row justify="start" align="start">
                   <label class="chart-sub-title-apy ml-5">
                    {{ (compoundData && compoundData.firstDate) ? compoundData.firstDate : '-'}}
                   </label>
@@ -86,7 +86,7 @@
                   </label>
 
                   <div class="tooltip-compound">
-                    <v-row align="center" justify="end">
+                    <v-row justify="end" align="center">
                       <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'" text="Cumulative return for the period"/>
                     </v-row>
                   </div>

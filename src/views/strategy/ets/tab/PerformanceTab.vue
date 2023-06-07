@@ -30,7 +30,7 @@
             <div v-if="!$wu.isMobile()" class="info-card-container-debank" @click="openLink('https://debank.com/profile/' + etsStrategyData[etsData.name].strategyAddress)">
                 <v-row class="ma-0" justify="start" align="center">
                     <div class="info-card-icon ml-2 my-2">
-                        <v-img class="debank-icon" :src="require('@/assets/currencies/market/debank.svg')"/>
+                        <v-img class="debank-icon" src="/assets/currencies/market/debank.svg"/>
                     </div>
                     <label class="title-card-debank ma-2">View on DeBank</label>
                 </v-row>
@@ -41,7 +41,7 @@
             <div class="info-card-container-debank" style="width: 100% !important;" @click="openLink('https://debank.com/profile/' + etsStrategyData[etsData.name].strategyAddress)">
                 <v-row class="ma-0" justify="center" align="center">
                     <div class="info-card-icon ml-2 my-2">
-                        <v-img class="debank-icon" :src="require('@/assets/currencies/market/debank.svg')"/>
+                        <v-img class="debank-icon" src='/assets/currencies/market/debank.svg'/>
                     </div>
                     <label class="title-card-debank ma-2">View on DeBank</label>
                 </v-row>
@@ -62,7 +62,7 @@
                             <div class="info-card-icon ml-2">
                                 <v-img
                                     v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].ownedAsset.token"
-                                    :src="require('@/assets/currencies/stablecoins/' + etsStrategyData[etsData.name].ownedAsset.token + '.png')"/>
+                                    :src="'/assets/currencies/stablecoins/' + etsStrategyData[etsData.name].ownedAsset.token + '.png'"/>
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
@@ -98,7 +98,7 @@
                             <div class="info-card-icon ml-2">
                                 <v-img
                                     v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].depositAsset.token"
-                                    :src="require('@/assets/currencies/stablecoins/' + etsStrategyData[etsData.name].depositAsset.token + '.png')"/>
+                                    :src="'/assets/currencies/stablecoins/' + etsStrategyData[etsData.name].depositAsset.token + '.png'"/>
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
@@ -134,7 +134,7 @@
                             <div class="info-card-icon ml-2">
                                 <v-img
                                     v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].borrowedAsset.token"
-                                    :src="require('@/assets/currencies/' + etsData.hedgeToken + '.svg')"/>
+                                    :src="'/assets/currencies/' + etsData.hedgeToken + '.svg'"/>
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
@@ -160,11 +160,11 @@
 
         <v-row align="start" justify="start" class="ma-0 mt-6">
             <v-col cols="12" v-if="!$wu.isMobile()">
-                <v-row class="info-card-container-bottom" :style="{'background': etsData.cardBgColor}" justify="start" align="center">
+                <v-row class="info-card-container-bottom" :style="{'background': 'radial-gradient(117.22% 424.06% at 96.59% -5.17%, #F4F4F4 0%, #787E82 23.74%, #232324 52%, ' + getParams(etsData.chain).networkColor + ' 100%)'}" justify="start" align="center">
                     <v-col class="info-card-body-bottom">
                         <v-row align="center">
                             <div class="info-card-icon">
-                                <v-img :src="require('@/assets/currencies/market/' + etsData.borrowFrom + '.png')"/>
+                                <v-img :src="'/assets/currencies/market/' + etsData.borrowFrom + '.png'"/>
                             </div>
                             <label class="title-card-text-bottom label-light ml-2">{{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}}</label>
                             <v-spacer></v-spacer>
@@ -181,11 +181,11 @@
             </v-col>
 
             <v-col cols="12" v-else>
-                <v-row class="info-card-container-bottom" :style="{'background': etsData.cardBgColor}">
+                <v-row class="info-card-container-bottom" :style="{'background': 'radial-gradient(117.22% 424.06% at 96.59% -5.17%, #F4F4F4 0%, #787E82 23.74%, #232324 52%, ' + getParams(etsData.chain).networkColor + ' 100%)'}">
                     <v-col class="info-card-body-bottom">
                         <v-row align="center" justify="center">
                             <div class="info-card-icon">
-                                <v-img :src="require('@/assets/currencies/market/' + etsData.borrowFrom + '.png')"/>
+                                <v-img :src="'/assets/currencies/market/' + etsData.borrowFrom + '.png'"/>
                             </div>
                             <label class="title-card-text-bottom label-light ml-2">{{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}}</label>
                         </v-row>
@@ -245,7 +245,7 @@
                 </v-row>
             </v-col>
         </v-row>
-        <v-row class="ma-0 mt-7 info-card-container-bottom" justify="start" align="start" :style="{'background': etsData.cardBgColor}">
+        <v-row class="ma-0 mt-7 info-card-container-bottom" justify="start" align="start" :style="{'background': 'radial-gradient(117.22% 424.06% at 96.59% -5.17%, #F4F4F4 0%, #787E82 23.74%, #232324 52%, ' + getParams(etsData.chain).networkColor + ' 100%)'}">
             <v-col class="info-card-body-bottom" :cols="$wu.isMobile() ? 0 : 5">
                 <v-row class="info-row footer-row" justify="start" align="center">
                     <label class="card-info footer-label mt-2">Token address</label>
@@ -325,8 +325,9 @@ export default {
     watch: {
     },
 
+
     computed: {
-        ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig']),
+        ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig', 'getParams']),
         ...mapGetters('marketData', ['etsStrategyData', 'etsApyData', 'etsTvlData', 'usdPlusApyData', 'compoundData']),
 
         activeRateApy: function () {

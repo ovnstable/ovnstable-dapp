@@ -5,30 +5,20 @@
         <v-col v-if="!$wu.isMobile()" class="my-1">
             <v-row class="ma-0" justify="start" align="center">
                 <div class="icon mr-2">
-                    <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
+                    <v-img :src="'/assets/network/' + cardData.data.chainName + '.svg'"
                            :title="cardData.data.chainName.toUpperCase()"/>
                 </div>
                 <div class="icon mr-2">
-                    <v-img :src="require('@/assets/cards/platform/' + cardData.data.dex + '.svg')"
-                           :title="cardData.data.dex"/>
+                    <v-img :src="'/assets/cards/platform/' + dexLogo + '.svg'"
+                           :title="dexLogo"/>
                 </div>
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 3 : ($wu.isMobile() ? 7 : 3)" class="my-1">
-            <v-row class="ma-0" justify="start ml-5" align="center">
-                <v-badge icon="mdi-star-circle"
-                         v-if="featured"
-                         :color="featured ? 'var(--secondary)' : ''"
-                         class="featured-badge"
-                         offset-x="14"
-                         offset-y="4">
-                    <div class="icon mr-2">
-                        <v-img :src="require('@/assets/currencies/market/ets_' + cardData.data.name + '.svg')"/>
-                    </div>
-                </v-badge>
-                <div class="icon mr-2" v-else>
-                    <v-img :src="require('@/assets/currencies/market/ets_' + cardData.data.name + '.svg')"/>
-                </div>
+            <v-row class="ma-0 ml-5" justify="start" align="center">
+<!--                <div class="icon mr-2">
+                    <v-img :src="'/assets/currencies/market/ets_' + cardData.data.name + '.svg'"/>
+                </div>-->
                 <label class="card-label ml-2">
                     {{ cardData.data.nameUp }}
                 </label>
@@ -46,18 +36,19 @@
         </v-col>
         <v-col v-if="!$wu.isMobile()" cols="3" class="my-1" style="max-width: 269px">
             <v-row class="ma-0 mr-10" justify="center" align="center">
-                <label class="card-label"
-                       :class="(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
+<!--                <label class="card-label"-->
+                <label class="card-label list-header-label-gray">
+<!--                       :class="(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">-->
                     ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
                 </label>
-                <label class="card-label list-header-label-gray" v-if="$wu.isFull() && cardData.overcapEnabled">&nbsp;/&nbsp;${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
+<!--                <label class="card-label list-header-label-gray" v-if="$wu.isFull() && cardData.overcapEnabled">&nbsp;/&nbsp;${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>-->
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()" class="my-1">
             <v-row class="ma-0" justify="center" align="center">
                 <div class="icon-token-pair">
-                    <v-img :src="require('@/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg')"
-                           :title="cardData.data.poolName"/>
+                    <v-img :src="'/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg'"
+                           :title="cardData.data.tokenPair"/>
                 </div>
             </v-row>
         </v-col>
@@ -86,7 +77,7 @@
                     <v-btn x-small
                            width="105px"
                            max-width="105px"
-                           v-if="!cardData.data.disabled && (isOvercapAvailable || (!cardData.prototype &&  !(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply)))"
+                           v-if="false"
                            class="button btn-outlined"
                            @click.stop="mintAction" outlined>
                         MINT/REDEEM
@@ -134,7 +125,7 @@
                 <v-col>
                     <v-row justify="start" align="center">
                         <div class="icon mr-3">
-                            <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
+                            <v-img :src="'/assets/network/' + cardData.data.chainName + '.svg'"
                                    :title="cardData.data.chainName.toUpperCase()"/>
                         </div>
                     </v-row>
@@ -142,16 +133,16 @@
                 <v-col>
                     <v-row justify="center" align="center">
                         <div class="icon mr-2">
-                            <v-img :src="require('@/assets/cards/platform/' + cardData.data.dex + '.svg')"
-                                   :title="cardData.data.dex"/>
+                            <v-img :src="'/assets/cards/platform/' + dexLogo + '.svg'"
+                                   :title="dexLogo"/>
                         </div>
                     </v-row>
                 </v-col>
                 <v-col>
                     <v-row justify="end" align="center">
                         <div class="icon-token-pair">
-                            <v-img :src="require('@/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg')"
-                                   :title="cardData.data.poolName"/>
+                            <v-img :src="'/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg'"
+                                   :title="cardData.data.tokenPair"/>
                         </div>
                     </v-row>
                 </v-col>
@@ -175,13 +166,14 @@
             <v-row class="ma-0 mt-1" align="center">
                 <v-col>
                     <v-row justify="start" align="center">
-                        <label class="card-label"
-                               :class="(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">
+<!--                        <label class="card-label"-->
+                        <label class="card-label list-header-label-gray">
+<!--                               :class="(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply) ? 'list-header-label-gray' : ''">-->
                             ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
                         </label>
                         <label class="card-label list-header-label-gray" v-if="cardData.overcapEnabled">&nbsp;/&nbsp;${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
-                        <v-spacer></v-spacer>
-                        <label class="card-label" :class="accountEtsBalance ? '' : 'list-header-label-gray'">{{ accountEtsBalance ? ('$' + $utils.formatMoneyComma(accountEtsBalance, 2)) : '—' }}</label>
+<!--                        <v-spacer></v-spacer>-->
+<!--                        <label class="card-label" :class="accountEtsBalance ? '' : 'list-header-label-gray'">{{ accountEtsBalance ? ('$' + $utils.formatMoneyComma(accountEtsBalance, 2)) : '—' }}</label>-->
                     </v-row>
                 </v-col>
             </v-row>
@@ -190,7 +182,7 @@
                 <v-col v-if="networkSupport">
                     <v-row justify="start" align="center">
                         <v-btn x-small
-                               v-if="!cardData.data.disabled && (isOvercapAvailable || (!cardData.prototype && !(cardData.overcapEnabled && cardData.data.maxSupply && cardData.tvl >= cardData.data.maxSupply)))"
+                               v-if="false"
                                class="button btn-filled"
                                @click.stop="mintAction" outlined>
                             MINT/REDEEM
@@ -222,25 +214,18 @@
 </template>
 
 <script>
-import Tooltip from "@/components/common/element/Tooltip";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "EtsListCard",
 
     components: {
-        Tooltip
     },
 
     props: {
 
         cardData: {
             type: Object
-        },
-
-        featured: {
-            type: Boolean,
-            default: false
         },
         archived: {
             type: Boolean,
@@ -253,6 +238,23 @@ export default {
         ...mapGetters("marketData", ["etsStrategyData"]),
         ...mapGetters('accountData', ['etsBalance']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
+
+        dexLogo: function () {
+            let dexName = this.cardData.data.dex;
+            if (dexName === 'Ramsess' || dexName === 'Ramses/Ennead') {
+                return 'Ramses';
+            }
+
+            if (dexName === 'Gamma XYZ') {
+                return 'GammaXYZ'
+            }
+
+            if (dexName === 'Thena/Gamma') {
+                return 'Thena'
+            }
+
+            return dexName;
+        },
 
         accountEtsBalance: function () {
             return this.etsBalance[this.cardData.data.name];

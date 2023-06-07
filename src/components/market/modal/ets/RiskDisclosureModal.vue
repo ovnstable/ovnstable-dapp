@@ -50,17 +50,20 @@ export default {
         ...mapGetters('riskModal', ['show']),
 
         fullRiskText: function () {
-            return this.etsData.riskText +
+            return"By depositing stablecoin into ETS, you are automatically borrowing an equal value of volatile asset from lending protocol at a rate roughly equal to the current price of volatile asset denoted above. " +
+                '<br/><br/>' +
+                "The strategy's smart contract is designed to automatically invest these equal values of volatile asset & stablecoin into DEX Liquidity Pool, after which these LP Tokens are staked into the Gauge Pool." +
                 '<br/><br/>' +
                 '<b>Impermanent loss risk</b>' +
                 '<br/>' +
-                this.etsData.impermanentText +
+                "While the pools of DEX will accrue transaction fees that generate yields, the pool may become imbalanced; when the user withdraws their investment, the strategy's smart contract may need to use the user's funds to buy additional volatile asset to repay the lent amount (plus interest), which can result in a net loss from the initial deposit." +
                 '<br/><br/>' +
                 '<b>AMM contract hack risk</b>' +
-                this.etsData.ammText +
+                '<br/>'+
+                "The strategy's smart contract automatically moves your deposit into the said Automated Market Maker (AMM) and, in doing so, may incur an AMM’s smart contract risk. By depositing funds into ETS, a user understands and agrees to the strategies to which it will invest underlying assets." +
                 '<br/><br/>' +
                 '<b style="color: #CF3F92">IMPORTANT: </b>' +
-                this.etsData.importantText;
+                "Yield/APY is not guaranteed and can be highly variable depending on the volume and rewards from the underlying AMM as well as the price of a volatile asset. Farmers may incur net losses if the impermanent loss is more significant than the yield earned. ";
         },
     },
 
@@ -140,8 +143,8 @@ export default {
     .modal-info-text {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .understand-btn {
@@ -176,8 +179,8 @@ export default {
     .modal-info-text {
         font-style: normal;
         font-weight: 300;
-        font-size: 20px;
-        line-height: 32px;
+        font-size: 18px;
+        line-height: 28px;
     }
 
     .understand-btn {

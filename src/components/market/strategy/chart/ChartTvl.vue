@@ -109,6 +109,8 @@ export default {
     computed: {
         ...mapGetters('marketData', ['etsStrategyData']),
         ...mapGetters('theme', ['light']),
+        ...mapGetters('network', ['getParams']),
+
 
         isMobile() {
             return window.innerWidth < 650;
@@ -189,7 +191,7 @@ export default {
 
             this.totalTvl = this.etsStrategyData[this.etsData.name].tvl;
 
-            let chartColor = this.$colorUtils.hexToRgb(this.etsData.mainColor);
+            let chartColor = this.$colorUtils.hexToRgb(this.getParams(this.etsData.chain).networkColor);
 
             let options = {
                 series: [{
@@ -229,7 +231,7 @@ export default {
                 stroke: {
                     curve: 'straight',
                     width: this.isMobile ? 1 : 2,
-                    colors: [this.etsData.mainColor],
+                    colors: [this.getParams(this.etsData.chain).networkColor],
                 },
 
                 xaxis: {
@@ -277,7 +279,7 @@ export default {
                     horizontalAlign: 'left'
                 },
 
-                colors: [this.light ? `rgba(${chartColor.r}, ${chartColor.g}, ${chartColor.b}, 0.3)` : this.etsData.mainColor],
+                colors: [this.light ? `rgba(${chartColor.r}, ${chartColor.g}, ${chartColor.b}, 0.3)` : this.getParams(this.etsData.chain).networkColor],
 
                 theme: {
                     mode: this.light ? 'light' : 'dark',

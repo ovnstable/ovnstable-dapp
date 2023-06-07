@@ -299,7 +299,8 @@ export const odosSwap = {
 
                     // console.log("Balance data: ", token.balanceData);
                 }).catch(e => {
-                    console.error('Error balance for: ', token, e);
+                    // todo 5 return after load balance optimization
+                    // console.error('Error balance for: ', token, e);
                 });
                 // originAsset = asset;
                 // asset = asset ? web3.web3.utils.fromWei(asset, assetDecimals === 18 ? 'ether' : 'mwei') : null;

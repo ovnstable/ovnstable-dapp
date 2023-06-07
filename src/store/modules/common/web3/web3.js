@@ -35,7 +35,8 @@ const getters = {
             return 'ether';
         }
 
-        console.error(`Decimals type not found for detect wei type. Decimals: ${decimals}`);
+        // todo 5 return after load balance optimization
+        // console.error(`Decimals type not found for detect wei type. Decimals: ${decimals}`);
     },
 
     contracts(state) {

@@ -27,10 +27,10 @@
         <EtsListHeader/>
 
         <EtsListCard class="mt-2"
-                     v-for="(component, i) in sortedCardList.filter(value => (value.type === 'ETS' && !value.prototype && !value.openPrototype && !value.data.archive))"
-                     :featured="i < 3"
+                     v-for="(component) in sortedCardList.filter(value => (value.type === 'ETS' && !value.prototype && !value.openPrototype && !value.data.archive))"
                      :key="component.id"
-                     :card-data="component"/>
+                     :card-data="component"
+                     :archived="false"/>
       </template>
 
       <template v-if="sortedCardList.filter(value => (value.prototype || value.openPrototype)).length > 0" >
@@ -53,7 +53,8 @@
           <EtsListCard class="mt-2"
                        v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && (value.prototype || value.openPrototype)))"
                        :key="component.id"
-                       :card-data="component"/>
+                       :card-data="component"
+                       :archived="false"/>
         </template>
 
       </template>
@@ -266,7 +267,8 @@ export default {
 
       this.isProductsInfoLoading = true;
 
-      productInfoApiService.getAllProducts(this.appApiUrl)
+      // productInfoApiService.getAllProducts(this.appApiUrl)
+      productInfoApiService.getAllProducts('http://localhost:9999/api')
           .then(data => {
             console.log("Products loaded: ", data);
             this.sortedCardList = this.getSortedCardList(data);
@@ -336,6 +338,12 @@ export default {
     getSortedCardList(cardList) {
 
       let networkId = this.networkId;
+
+        cardList.forEach(item => {
+            if (item.tvl <= 10000) {
+                item.prototype = true;
+            }
+        })
 
       cardList.sort(function (a, b) {
         if (!a.prototype && b.prototype) return -1;

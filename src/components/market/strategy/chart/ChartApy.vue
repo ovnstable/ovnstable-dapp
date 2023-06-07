@@ -1,7 +1,7 @@
 <template>
     <div class="apy-chart-container">
         <v-row class="chart-header-row">
-            <v-col cols="6" :cols="$wu.isMobile() ? 12 : 6">
+            <v-col :cols="$wu.isMobile() ? 12 : 6">
               <v-row justify="start" align="left">
                 <label class="chart-title ml-5">
                   ETS {{ etsData.nameUp }}
@@ -190,7 +190,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['polygonApi', 'bscApi', 'opApi', 'arApi', 'zkApi']),
+        ...mapGetters('network', ['polygonApi', 'bscApi', 'opApi', 'arApi', 'zkApi', 'getParams']),
         ...mapGetters('theme', ['light']),
 
         isMobile() {
@@ -304,7 +304,7 @@ export default {
             let valuesUsdPlus = [];
             labels.forEach(v => valuesUsdPlus.push(this.usdPlusData[v] ? this.usdPlusData[v] : null));
 
-            let averageValue = this.avgApy.value;
+            // let averageValue = this.avgApy.value;
 
             let maxValue;
             try {
@@ -343,7 +343,7 @@ export default {
                 minValue = 0;
             }
 
-            let chartColor = this.$colorUtils.hexToRgb(this.etsData.mainColor);
+            let chartColor = this.$colorUtils.hexToRgb(this.getParams(this.etsData.chain).networkColor);
 
             let seriesList = [];
 
@@ -424,7 +424,7 @@ export default {
                 stroke: {
                     curve: 'straight',
                     width: this.isMobile ? 1 : 2,
-                    colors: [this.etsData.mainColor, "#22ABAC"],
+                    colors: [this.getParams(this.etsData.chain).networkColor, "#22ABAC"],
                 },
 
                 xaxis: {
@@ -472,7 +472,7 @@ export default {
                     show: false,
                 },
 
-                colors: this.light ? [`rgba(${chartColor.r}, ${chartColor.g}, ${chartColor.b}, 0.3)`, 'rgba(34, 171, 172, 0.3)'] : [this.etsData.mainColor, '#0d4444'],
+                colors: this.light ? [`rgba(${chartColor.r}, ${chartColor.g}, ${chartColor.b}, 0.3)`, 'rgba(34, 171, 172, 0.3)'] : [this.getParams(this.etsData.chain).networkColor, '#0d4444'],
 
                 theme: {
                     mode: this.light ? 'light' : 'dark',

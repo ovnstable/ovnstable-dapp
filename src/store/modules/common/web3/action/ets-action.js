@@ -31,11 +31,14 @@ const actions = {
 
         let list = [];
 
-        for (let i = 0; i < getters.etsNetworkNames.length; i++) {
-            let etses = await loadJSON(`https://api.overnight.fi/${getters.etsNetworkNames[i]}/usd+/design_ets/list`);
+        let etses = await loadJSON(`http://localhost:9999/api/product/ets/all`);
+        list.push(...etses);
+      /*  for (let i = 0; i < getters.etsNetworkNames.length; i++) {
+            // let etses = await loadJSON(`http://localhost:9999/api/${getters.etsNetworkNames[i]}/usd+/design_ets/list`);
+            // let etses = await loadJSON(`https://api.overnight.fi/${getters.etsNetworkNames[i]}/usd+/design_ets/list`);
             // May add some fields
             list.push(...etses);
-        }
+        }*/
 
         await commit('setEtsList', list);
     },

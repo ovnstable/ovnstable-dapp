@@ -267,8 +267,8 @@ export default {
 
       this.isProductsInfoLoading = true;
 
-      // productInfoApiService.getAllProducts(this.appApiUrl)
-      productInfoApiService.getAllProducts('http://localhost:9999/api')
+      productInfoApiService.getAllProducts(this.appApiUrl)
+      // productInfoApiService.getAllProducts('http://localhost:9999/api')
           .then(data => {
             console.log("Products loaded: ", data);
             this.sortedCardList = this.getSortedCardList(data);

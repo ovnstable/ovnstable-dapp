@@ -55,6 +55,7 @@ const actions = {
             rootState.etsAction.etsList.map(async ets => {
 
                 let refreshParams = {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain};
+                console.log("REFRESH refreshParams: ", refreshParams, ets)
                 let appApiUrl;
 
                 switch (refreshParams.chain) {

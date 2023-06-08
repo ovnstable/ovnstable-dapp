@@ -41,9 +41,9 @@
                     <v-spacer></v-spacer>
                     <div class="coin-card mr-3">
                         <v-row class="ma-2" align="center">
-                            <div class="coin-img" :class="$wu.isMobile() ? '' : 'mr-2'">
-                                <v-img :src="buyCurrency.image"/>
-                            </div>
+<!--                            <div class="coin-img" :class="$wu.isMobile() ? '' : 'mr-2'">-->
+<!--                                <v-img :src="buyCurrency.image"/>-->
+<!--                            </div>-->
                             <label class="coin-title" v-if="!$wu.isMobile()">{{ buyCurrency.title }}</label>
                         </v-row>
                     </div>

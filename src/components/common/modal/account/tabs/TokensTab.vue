@@ -38,18 +38,6 @@
                 </div>
                 <label class="ml-2 coin-btn-label">USD+ INS</label>
             </v-btn>
-
-            <v-btn
-                v-for="ets in sortedCardList"
-                :key="ets.name"
-                class="coin-btn ma-1"
-                @click="addEtsToken(ets)"
-            >
-                <div class="coin-img">
-                    <v-img :src="require('@/assets/currencies/market/ets_' + ets.name + '.svg')"/>
-                </div>
-                <label class="ml-2 coin-btn-label">ETS {{ ets.nameToken }}</label>
-            </v-btn>
         </v-row>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -87,21 +75,13 @@ export default {
     },
 
     watch: {
-        networkId: function (newVal, oldVal) {
-            this.getSortedCardList();
-        }
     },
 
     mounted() {
-        this.getSortedCardList()
     },
 
     methods: {
         ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
-
-        getSortedCardList() {
-            this.sortedCardList = this.etsList.filter(ets => (!ets.archive && this.networkId === ets.chain))
-        },
     },
 }
 </script>

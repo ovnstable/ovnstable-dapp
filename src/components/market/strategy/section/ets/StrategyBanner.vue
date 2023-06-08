@@ -1,18 +1,18 @@
 <template>
-    <v-row class="banner-container ma-0" :style="{'background': etsData.cardBgColor}">
+    <v-row class="banner-container ma-0" :style="{'background': 'radial-gradient(117.22% 424.06% at 96.59% -5.17%, #F4F4F4 0%, #787E82 23.74%, #232324 52%, ' + getParams(etsData.chain).networkColor + ' 100%)'}">
         <v-col class="main-col">
             <v-row align="start" :justify="$wu.isMobile() ? 'start' : 'end'" class="ma-0">
                 <div :class="$wu.isMobile() ? 'currency-icon' : 'icon'" class="mr-3">
-                    <v-img :src="require('@/assets/network/' + etsData.chainName + '.svg')"/>
+                    <v-img :src="'/assets/network/' + etsData.chainName + '.svg'"/>
                 </div>
 
                 <div class="icon-border">
                     <div :class="$wu.isMobile() ? 'currency-icon' : 'icon'" class="mx-3">
-                        <v-img class="platform" :src="require('@/assets/cards/platform/' + etsData.dex + '.svg')"/>
+                        <v-img class="platform" :src="'/assets/cards/platform/' + etsData.dex + '.svg'"/>
                     </div>
                 </div>
                 <div class="icon ml-3">
-                    <v-img class="token-pair" :src="require('@/assets/cards/token_pair/' + etsData.tokenPair + '.svg')"/>
+                    <v-img class="token-pair" :src="'/assets/cards/token_pair/' + etsData.tokenPair + '.svg'"/>
                 </div>
             </v-row>
 
@@ -140,6 +140,8 @@ export default {
     computed: {
         ...mapGetters('marketData', ['etsStrategyData', 'compoundData']),
         ...mapGetters('supplyData', ['totalSupply']),
+        ...mapGetters("network", ['getParams']),
+
 
         icon: function (){
             switch (this.etsData.chain){

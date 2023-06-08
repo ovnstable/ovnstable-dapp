@@ -1,5 +1,7 @@
 import loadJSON from '@/utils/http-utils.js'
 
+const ROOT_API = 'https://api.overnight.fi/root'
+
 const state = {
     etsNetworkNames: [
         'optimism',
@@ -31,10 +33,10 @@ const actions = {
 
         let list = [];
 
-        for (let i = 0; i < getters.etsNetworkNames.length; i++) {
-            let etses = await loadJSON(`https://api.overnight.fi/${getters.etsNetworkNames[i]}/usd+/design_ets/list`);
-            // May add some fields
-            list.push(...etses);
+        let etsesFullData = await loadJSON(`${ROOT_API}/product/ets/all`);
+        for (let i = 0; i < etsesFullData.length; i++) {
+            let ets = etsesFullData[i].data
+            list.push(ets);
         }
 
         await commit('setEtsList', list);

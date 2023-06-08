@@ -1,9 +1,9 @@
 <template>
     <v-row class="card-container" @click="openStrategyCard">
         <v-col cols="12" align-self="start">
-            <v-row class="d-flex flex-row align-center header-row" justify="center" :style="{'--card-background': cardData.data.cardBgColor}">
+            <v-row class="d-flex flex-row align-center header-row" justify="center" :style="{'--card-background': 'radial-gradient(117.22% 424.06% at 96.59% -5.17%, #F4F4F4 0%, #787E82 23.74%, #232324 52%, ' + getParams(etsData.chain).networkColor + ' 100%)'}">
                 <span class="currency ml-5">
-                    <v-img :src="require('@/assets/currencies/market/ets_' + cardData.data.name + '.svg')"/>
+                    <v-img :src="'/assets/currencies/market/ets_' + cardData.data.name + '.svg'"/>
                 </span>
                 <v-row class="d-flex flex-column align-start mr-3 ml-8">
                     <v-row class="d-flex" align="center" style="width: 100% !important;">
@@ -109,7 +109,7 @@
                             <div class="box">
                                 <label class="box-name mt-2">Chain</label>
                                 <div class="icon">
-                                    <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
+                                    <v-img :src="'/assets/network/' + cardData.data.chainName + '.svg'"
                                            class="mt-1"
                                            alt="chain icon"/>
                                 </div>
@@ -122,7 +122,7 @@
                         <div class="box">
                             <label class="box-name mt-2">Platform</label>
                             <div class="icon platform-logo">
-                                <v-img :src="require('@/assets/cards/platform/' + cardData.data.dex + '.svg')"
+                                <v-img :src="'/assets/cards/platform/' + dexLogo + '.svg'"
                                        class="mt-1"
                                        alt="platform icon"/>
                             </div>
@@ -135,7 +135,7 @@
                         <div class="box">
                             <label class="box-name mt-2">Token Pair</label>
                             <div class="icon">
-                                <v-img :src="require('@/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg')"
+                                <v-img :src="'/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg'"
                                        class="mt-1"
                                        alt="token pair icons"/>
                             </div>
@@ -215,11 +215,12 @@ export default {
     },
 
     computed: {
-        ...mapGetters('network', ['networkId']),
+        ...mapGetters('network', ['networkId', 'getParams']),
         ...mapGetters("marketData", ["etsStrategyData"]),
         ...mapGetters('accountData', ['etsBalance']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
         ...mapGetters('magicEye', ['dataHidden']),
+
 
         accountEtsBalance: function () {
             return this.etsBalance[this.cardData.data.name];
@@ -227,6 +228,23 @@ export default {
 
         networkSupport: function () {
             return this.networkId === this.cardData.chain;
+        },
+
+        dexLogo: function () {
+            let dexName = this.cardData.data.dex;
+            if (dexName === 'Ramsess' || dexName === 'Ramses/Ennead') {
+                return 'Ramses';
+            }
+
+            if (dexName === 'Gamma XYZ') {
+                return 'GammaXYZ'
+            }
+
+            if (dexName === 'Thena/Gamma') {
+                return 'Thena'
+            }
+
+            return dexName;
         },
 
     },

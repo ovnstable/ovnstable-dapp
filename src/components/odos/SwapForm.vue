@@ -670,13 +670,13 @@ export default defineComponent({
 
             if (this.swapMethod === 'BUY') {
                 this.setSwapMethod('SELL');
-                this.$forceUpdate()
+                this.addTokensEmptyIsNeeded();
                 return;
             }
 
             if (this.swapMethod === 'SELL') {
                 this.setSwapMethod('BUY');
-                this.$forceUpdate()
+                this.addTokensEmptyIsNeeded();
                 return;
             }
 
@@ -1158,10 +1158,28 @@ export default defineComponent({
             console.log(this.isInputToken(swapMethod, selectTokenType) ? 'INPUT TOKEN' :  'OUTPUT TOKEN');
             if (this.isInputToken(swapMethod, selectTokenType)) {
                 this.addSelectedTokenToInputList(selectedToken);
+                this.removeOutputToken(selectedToken.id);
+                this.addTokensEmptyIsNeeded();
                 return;
             }
 
             this.addSelectedTokenToOutputList(selectedToken);
+            this.removeInputToken(selectedToken.id);
+            this.addTokensEmptyIsNeeded();
+        },
+        addTokensEmptyIsNeeded() {
+            this.addInputTokenEmptyIsNeeded()
+            this.addOutputTokenEmptyIsNeeded()
+        },
+        addInputTokenEmptyIsNeeded() {
+            if (this.inputTokens.length === 0) {
+                this.addNewInputToken();
+            }
+        },
+        addOutputTokenEmptyIsNeeded() {
+            if (this.outputTokens.length === 0) {
+                this.addNewOutputToken();
+            }
         },
         addSelectedTokenToInputList(selectedToken) {
             let newInputToken = this.getNewInputToken()

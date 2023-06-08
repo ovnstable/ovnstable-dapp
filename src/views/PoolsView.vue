@@ -317,7 +317,11 @@ export default {
 
             pools.forEach(entry => {
                 const { chain, apr } = entry;
-                if (!topValuesByType[chain] || apr > topValuesByType[chain].apr) {
+                if (entry.tvl < 500000) {
+                    return;
+                }
+
+                if (!topValuesByType[chain] || (apr > topValuesByType[chain].apr)) {
                     topValuesByType[chain] = entry;
                 }
             });

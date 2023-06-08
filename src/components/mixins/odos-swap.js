@@ -417,7 +417,7 @@ export const odosSwap = {
 
             return tokens;
         },
-        async getFilteredOvernightTokens(chainId, isOvnToken) {
+        async getFilteredOvernightTokens(chainId, isOnlyOvnToken) {
             let tokens = [];
             let tokenMap = this.tokensMap.chainTokenMap[chainId + ''].tokenMap;
             let keys = Object.keys(tokenMap);
@@ -426,13 +426,13 @@ export const odosSwap = {
                 let item = tokenMap[key];
 
                 // add only overnight
-                if (isOvnToken && item.protocolId === 'overnight') {
+                if (isOnlyOvnToken && item.protocolId === 'overnight') {
                     await this.addItemToFilteredTokens(tokens, key, item);
                     continue;
                 }
 
-                // add only non-overnight
-                if (!isOvnToken && item.protocolId !== 'overnight') {
+                // add only overnight
+                if (!isOnlyOvnToken) {
                     await this.addItemToFilteredTokens(tokens, key, item);
                     continue;
                 }

@@ -13,7 +13,7 @@
                                 Select Overnight tokens
                             </label>
                             <label v-else class="title-container">
-                                Select non-Overnight tokens
+                                Select tokens
                             </label>
                         </div>
                         <div v-else>

@@ -14,7 +14,7 @@ const actions = {
             console.log(`Referral code found in cookie = [${referralCode}]`)
             return referralCode;
         } else {
-            console.log('Referral code not found in cookies');
+            // console.log('Referral code not found in cookies');
             return '';
         }
     },

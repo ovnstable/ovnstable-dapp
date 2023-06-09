@@ -9,7 +9,7 @@
           <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
             <v-img class="currency" :src="require('@/assets/currencies/DAI+.svg')" />
           </div>
-          <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'" >
+          <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5 ml-5' : 'mt-0'" >
             <label class="section-text">
               DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on Optimism. It cannot be minted separately.
             </label>
@@ -143,6 +143,17 @@ export default {
 
     .footer-btn {
         width: 100% !important;
+    }
+
+    .info-card-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .currency {
+        width: 100px !important;
+        height: 100px !important;
+
     }
 }
 

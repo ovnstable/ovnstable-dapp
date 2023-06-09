@@ -148,11 +148,11 @@
         </v-row>
       </div>
 
-      <div v-else class="ma-0 info-card-container d-flex mt-3">
+      <div v-else class="ma-0 info-card-container d-flex flex-column mt-3">
         <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
           <v-img class="currency" :src="require('@/assets/currencies/USDT+.svg')" />
         </div>
-        <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'" >
+        <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 ml-5 mb-5 mr-5' : 'mt-0'" >
           <label class="section-text">
             USDT+ is the equivalent of USD+, pegged to USDT 1:1. USDT+ consist of aUSDT (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on BSC. It cannot be minted separately.
           </label>
@@ -477,6 +477,16 @@ export default {
     .toggle-row {
         width: 100% !important;
     }
+
+    .balance-network-icon {
+        width: 25px !important;
+        height: auto !important;
+    }
+
+    .currency {
+        width: 100px !important;
+        height: 100px !important;
+    }
 }
 
 /* tablet */
@@ -538,7 +548,12 @@ export default {
     .section-text {
         font-size: 16px;
         line-height: 24px;
-  }
+    }
+
+    .balance-network-icon {
+        width: 8% !important;
+        height: auto !important;
+    }
 }
 
 /* full */
@@ -600,6 +615,11 @@ export default {
     .section-text {
         font-size: 18px;
         line-height: 28px;
+    }
+
+    .balance-network-icon {
+        width: 8% !important;
+        height: auto !important;
     }
 }
 
@@ -667,6 +687,12 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .section-text {
       font-size: 17px;
       line-height: 28px;
+    }
+
+
+    .balance-network-icon {
+        width: 8% !important;
+        height: auto !important;
     }
 }
 
@@ -814,10 +840,5 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .tab-button-in-active {
     color: var(--secondary-gray-text) !important;
     cursor: pointer !important;
-}
-
-.balance-network-icon {
-    width: 2% !important;
-    height: auto !important;
 }
 </style>

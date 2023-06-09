@@ -58,6 +58,84 @@ export default defineComponent({
 
 
 <style scoped>
+@media only screen and (max-width: 960px) {
+    .token-symbol {
+        font-size: 16px;
+        line-height: 24px;
+        /* identical to box height, or 120% */
+
+        padding-left: 35px;
+
+        color: var(--main-gray-text);
+
+        width: 95px;
+    }
+
+    .token-image {
+        height: 28px;
+        width: 28px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .token-symbol {
+        font-size: 18px;
+        line-height: 24px;
+        /* identical to box height, or 120% */
+
+        padding-left: 35px;
+
+        width: 95px;
+    }
+
+    .token-image {
+        height: 32px;
+        width: 32px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .token-symbol {
+        font-size: 18px;
+        line-height: 24px;
+        /* identical to box height, or 120% */
+
+        padding-left: 35px;
+
+        width: 95px;
+    }
+
+    .token-image {
+        height: 32px;
+        width: 32px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .token-symbol {
+        font-size: 18px;
+        line-height: 24px;
+        /* identical to box height, or 120% */
+
+        padding-left: 35px;
+
+        width: 95px;
+    }
+
+    .token-image {
+        height: 32px;
+        width: 32px;
+    }
+}
+
 div {
     font-family: 'Roboto',serif;
 }
@@ -92,24 +170,15 @@ div {
 .token-symbol {
     font-style: normal;
     font-weight: 600;
-    font-size: 18px;
-    line-height: 24px;
     /* identical to box height, or 120% */
 
     display: inline-block;
-    padding-left: 35px;
 
     color: var(--main-gray-text);
 
-    width: 95px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.token-image {
-    height: 32px;
-    width: 32px;
 }
 
 .token-image-container {

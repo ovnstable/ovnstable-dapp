@@ -49,13 +49,13 @@
                     </div>
                     <div class="pools-hr mt-3"></div>
 
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="row path-tokens">
+                        <div class="">
                             <div class="table-info table-tokens">
                                 Tokens
                             </div>
                         </div>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                        <div class="">
                             <div class="table-info table-transaction">
                                 Transaction type
                             </div>
@@ -449,6 +449,47 @@ export default defineComponent({
 </script>
 
 <style scoped>
+/*Mobile*/
+@media only screen and (max-width: 960px) {
+    .path-tokens {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .path-tokens {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .path-tokens {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .path-tokens {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+    }
+}
+
 
 .div {
     font-family: 'Roboto',serif;

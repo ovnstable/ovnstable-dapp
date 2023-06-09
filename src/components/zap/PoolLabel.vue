@@ -59,7 +59,9 @@
                             <div>
                                 <div class="icon mr-2">
                                     <v-img :src="require('@/assets/cards/platform/' + pool.platform + '.svg')"
-                                           :title="pool.platform"/>
+                                           :title="pool.platform"
+                                            class="platform-icon"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -94,6 +96,29 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@media only screen and (max-width: 960px) {
+
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+
+}
 
 div {
     font-family: 'Roboto',serif;
@@ -124,7 +149,7 @@ div {
 .platform-name {
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 24px;
     color: var(--main-gray-text);
 }

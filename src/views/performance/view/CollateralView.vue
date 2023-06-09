@@ -15,11 +15,22 @@
                     </v-btn>
                 </v-col>
             </template>
-            <v-col cols="6">
-                <v-row class="ma-0 mt-10 mb-1 toggle-row">
+            <v-col v-if="!$wu.isMobile()" cols="6">
+                <v-row class="ma-0 mt-10 ml-3 toggle-row">
                     <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
                     <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
                     <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
+                    <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
+                    <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
+                </v-row>
+            </v-col>
+            <v-col v-else>
+                <v-row class="ma-0 mt-5 ml-3 toggle-row">
+                    <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
+                    <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+                    <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
+                </v-row>
+                <v-row class="ma-0 mt-5 ml-3 toggle-row toggle-row-second">
                     <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
                     <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
                 </v-row>

@@ -67,6 +67,102 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@media only screen and (max-width: 960px) {
+    .info-container {
+        padding: 20px 20px 10px;
+        text-align: center;
+    }
+
+    .info-header {
+        font-size: 24px;
+        line-height: 36px;
+    }
+
+    .info-item {
+        padding-top: 28px;
+        padding-bottom: 28px;
+    }
+
+    .info-text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .info-container {
+        padding: 40px;
+        text-align: left;
+    }
+
+    .info-header {
+        font-size: 30px;
+        line-height: 40px;
+    }
+
+    .info-item {
+        padding-top: 28px;
+        padding-bottom: 28px;
+    }
+
+    .info-text {
+        font-size: 18px;
+        line-height: 28px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .info-container {
+        padding: 40px;
+        text-align: left;
+    }
+
+    .info-header {
+        font-size: 30px;
+        line-height: 40px;
+    }
+
+    .info-item {
+        padding-top: 28px;
+        padding-bottom: 28px;
+    }
+
+    .info-text {
+        font-size: 18px;
+        line-height: 28px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .info-container {
+        padding: 40px;
+        text-align: left;
+
+    }
+
+    .info-header {
+        font-size: 30px;
+        line-height: 40px;
+    }
+
+    .info-item {
+        padding-top: 28px;
+        padding-bottom: 28px;
+    }
+
+    .info-text {
+        font-size: 18px;
+        line-height: 28px;
+    }
+}
 div {
     font-family: 'Roboto',serif;
 }
@@ -74,14 +170,11 @@ div {
 .info-container {
     background: var(--secondary);
     border-radius: 28px;
-    padding: 40px;
 }
 
 .info-header {
     font-style: normal;
     font-weight: 400;
-    font-size: 30px;
-    line-height: 40px;
     color: var(--main-gray-text);
 }
 
@@ -90,8 +183,7 @@ div {
 }
 
 .info-item {
-    padding-top: 28px;
-    padding-bottom: 28px;
+
 }
 
 .info-item-bordered {
@@ -101,8 +193,6 @@ div {
 .info-text {
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
-    line-height: 28px;
     color: var(--main-gray-text);
 }
 
@@ -118,18 +208,4 @@ div {
 .info-image-container {
     text-align: center;
 }
-
-/* mobile */
-@media all and (min-width:0px) and (max-width: 650px) {
-    .info-image {
-        height: 60px;
-    }
-}
-/* tablet */
-@media only screen and (min-width:650px) and (max-width: 1400px) {
-    .info-image {
-        height: 60px;
-    }
-}
-
 </style>

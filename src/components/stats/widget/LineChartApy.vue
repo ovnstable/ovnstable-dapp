@@ -1,5 +1,5 @@
 <template>
-    <div class="apy-chart-container">
+    <div v-if="!$wu.isMobile()" class="apy-chart-container">
         <v-row class="chart-header-row">
             <v-col>
                 <v-row justify="start">
@@ -30,6 +30,61 @@
                 </v-row>
             </v-col>
         </v-row>
+
+        <div class="chart-row" id="line-chart-apy"></div>
+
+        <v-row class="zoom-row" style="margin-top: -40px !important;">
+            <v-spacer></v-spacer>
+            <v-btn
+                text
+                id="week-zoom-btn"
+                class="zoom-btn"
+                dark
+                @click="zoomChart('week')"
+            >
+                <label>Week</label>
+            </v-btn>
+            <v-btn
+                text
+                id="month-zoom-btn"
+                class="zoom-btn"
+                dark
+                @click="zoomChart('month')"
+            >
+                Month
+            </v-btn>
+            <v-btn
+                text
+                id="all-zoom-btn"
+                class="zoom-btn mr-3"
+                dark
+                @click="zoomChart('all')"
+            >
+                All
+            </v-btn>
+        </v-row>
+
+        <resize-observer @notify="$forceUpdate()"/>
+    </div>
+    <div v-else>
+        <div class="chart-header-row">
+            <div class="charts-info">
+                <div class="title-and-icon">
+                    <div>
+                        <label class="chart-title">{{ (avgApy && avgApy.value) ? ((isMobile ? '' : 'Average ') + `${assetType.toUpperCase()}&nbsp;`) : ''}}</label>
+                        <label class="chart-title" style="margin-left: 0 !important"><abbr title="Annual Percentage Yield">APY</abbr></label>
+                    </div>
+                    <div class="balance-network-icon">
+                        <v-img :src="icon"/>
+                    </div>
+                </div>
+                <div class="percentage-label">
+                    <label class="mobile-info-title">
+                        {{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '' }}
+                    </label>
+                </div>
+            </div>
+        </div>
 
         <div class="chart-row" id="line-chart-apy"></div>
 
@@ -394,20 +449,13 @@ export default {
 <style scoped>
 /* mobile */
 @media only screen and (max-width: 1400px) {
-
     .chart-title {
         margin-top: 30px !important;
-        font-style: normal;
-        font-weight: 400;
         font-size: 16px;
         line-height: 24px;
     }
 
     .mobile-info-title {
-        margin-top: 5px !important;
-        z-index: 2 !important;
-        font-style: normal;
-        font-weight: 400;
         font-size: 24px;
         line-height: 28px;
     }
@@ -423,6 +471,32 @@ export default {
     .zoom-btn {
         font-size: 16px !important;
         line-height: 20px !important;
+    }
+
+    .title-and-icon {
+        display: flex;
+        gap: 10px;
+    }
+
+    .charts-info {
+        display: flex;
+        margin-top: 30px;
+        justify-content: space-between;
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+    .balance-network-icon {
+        width: 25px !important;
+        height: auto !important;
+    }
+
+    .chart-header-row {
+        height: 100px !important;
+    }
+
+    .percentage-label {
+
     }
 }
 
@@ -474,6 +548,11 @@ export default {
     .zoom-btn {
         font-size: 16px !important;
         line-height: 20px !important;
+    }
+
+    .balance-network-icon {
+        width: 8% !important;
+        height: auto !important;
     }
 }
 
@@ -530,6 +609,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .zoom-btn {
         font-size: 15px !important;
         line-height: 20px !important;
+    }
+
+    .balance-network-icon {
+        width: 8% !important;
+        height: auto !important;
     }
 }
 
@@ -605,10 +689,5 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text) !important;
-}
-
-.balance-network-icon {
-    width: 8% !important;
-    height: auto !important;
 }
 </style>

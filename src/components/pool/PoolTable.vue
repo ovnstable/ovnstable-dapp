@@ -74,12 +74,11 @@
                                                 right
                                             >
                                                 <template v-slot:activator="{on, attrs}">
-                                                    <div class="info-icon ml-1"
-                                                         :style="{width: 20 + 'px', height: 30 + 'px'}"
+                                                    <div :style="{width: 50 + 'px', height: 30 + 'px'}"
                                                          v-bind="attrs"
                                                          v-on="on">
 
-                                                        <img src="/assets/icon/pool/featured.svg" alt="featured">
+                                                        <img src="/assets/icon/pool/featured.svg" alt="featured" class="info-icon">
                                                     </div>
                                                 </template>
 
@@ -95,7 +94,9 @@
                                     <div class="pool-table-body-item">
                                         <div class="icon mr-3">
                                             <v-img :src="require('@/assets/network/' + pool.chainName + '.svg')"
-                                                   :title="pool.chainName.toUpperCase()"/>
+                                                   :title="pool.chainName.toUpperCase()"
+                                                    class="chain-icon"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -205,7 +206,6 @@ export default defineComponent({
                   return style;
               }
         }
-
     },
     methods: {
         toggleDetails(pool) {
@@ -223,6 +223,62 @@ export default defineComponent({
 
 
 <style scoped>
+@media only screen and (max-width: 960px) {
+    .info-icon {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .chain-icon {
+        width: 50px !important;
+        height: auto !important;
+    }
+
+    .icon-token-pair {
+        width: 38px;
+    }
+
+    .pool-table-body-item {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px !important;
+        line-height: 28px;
+        color:var(--main-gray-text);
+    //background: linear-gradient(76.21deg, #29A0F0 -77.16%, transparent 36.33%);
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+
+    .icon-token-pair {
+        width: 46px;
+    }
+
+    .pool-table-body-item {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
+        color:var(--main-gray-text);
+    //background: linear-gradient(76.21deg, #29A0F0 -77.16%, transparent 36.33%);
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+
+}
 
 div {
     font-family: 'Roboto',serif;
@@ -265,32 +321,6 @@ div {
 }
 
 
-/* mobile */
-@media only screen and (max-width: 960px) {
-
-    .icon {
-        height: 20px;
-        width: 20px;
-    }
-
-    .icon-token-pair {
-        width: 38px;
-    }
-}
-
-/* tablet */
-@media only screen and (min-width: 960px) and (max-width: 1400px) {
-
-    .icon {
-        height: 24px;
-        width: 24px;
-    }
-
-    .icon-token-pair {
-        width: 46px;
-    }
-}
-
 .pool-table-body-item-container {
     padding: 20px;
     gap: 16px;
@@ -320,32 +350,6 @@ div {
     position: absolute;
     right: 23px;
     top: 17px;
-}
-
-
-/* mobile */
-@media only screen and (max-width: 960px) {
-    .pool-table-body-item {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 28px;
-        color:var(--main-gray-text);
-    //background: linear-gradient(76.21deg, #29A0F0 -77.16%, transparent 36.33%);
-    }
-}
-
-/* tablet */
-@media only screen and (min-width: 960px) and (max-width: 1400px) {
-
-    .pool-table-body-item {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 28px;
-        color:var(--main-gray-text);
-    //background: linear-gradient(76.21deg, #29A0F0 -77.16%, transparent 36.33%);
-    }
 }
 
 </style>

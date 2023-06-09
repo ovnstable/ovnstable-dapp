@@ -5,7 +5,7 @@
                 <div class="not-available-logo-container text-center">
                     <img src="/assets/icon/swap/zksync-wait.svg" class="not-available-logo" alt="zksync-wait">
                 </div>
-                <div class="not-available-info text-center pt-10">
+                <div class="not-available-info text-center">
                     <div>
                         Swap will be available on {{networkName}} chain soon.
                     </div>
@@ -13,23 +13,20 @@
                         Now you can mint or redeem Overnight tokens.
                     </div>
                 </div>
-                <div class="not-available-button-container pt-10">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="text-right">
-                                <v-btn  @click="mintAction"
-                                        class="header-btn btn-filled mr-5">
-                                    MINT
-                                </v-btn>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <v-btn @click="redeemAction"
-                                   class="header-btn btn-outlined mr-5">
-                                REDEEM
+                <div class="not-available-button-container">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="text-right">
+                            <v-btn  @click="mintAction"
+                                    class="header-btn btn-filled">
+                                MINT
                             </v-btn>
                         </div>
-
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <v-btn @click="redeemAction"
+                               class="header-btn btn-outlined">
+                            REDEEM
+                        </v-btn>
                     </div>
                 </div>
 
@@ -63,9 +60,161 @@ export default defineComponent({
 
 
 <style scoped>
+/*Mobile*/
+@media only screen and (max-width: 960px) {
+    .swap-container {
+        padding: 20px 20px 10px;
+    }
+
+    .not-available-container {
+        min-height: 250px;
+        padding-top: 10px;
+    }
+
+    .not-available-logo {
+        width: 103px;
+        height: 70px;
+    }
+
+    .not-available-info {
+        font-size: 16px;
+        line-height: 24px;
+        padding-top: 15px;
+    }
+
+    .header-btn {
+        font-size: 16px !important;
+        line-height: 20px !important;
+    }
+
+    .btn-filled {
+        width: 140px;
+        height: 40px;
+    }
+
+    .btn-outlined {
+        width: 140px;
+        height: 40px;
+    }
+
+    .not-available-button-container {
+        padding-top: 15px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .swap-container {
+        padding: 40px 30px;
+    }
+
+    .not-available-container {
+        min-height: 500px;
+        padding-top: 100px;
+    }
+
+    .not-available-info {
+        font-size: 20px;
+        line-height: 28px;
+        padding-top: 30px;
+    }
+
+    .header-btn {
+        font-size: 16px !important;
+        line-height: 20px !important;
+    }
+
+    .btn-filled {
+        width: 140px;
+        height: 40px;
+    }
+
+    .btn-outlined {
+        width: 140px;
+        height: 40px;
+    }
+
+    .not-available-button-container {
+        padding-top: 30px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .swap-container {
+        padding: 40px 30px;
+    }
+
+    .not-available-container {
+        min-height: 500px;
+        padding-top: 100px;
+    }
+
+    .not-available-info {
+        font-size: 20px;
+        line-height: 28px;
+        padding-top: 40px;
+    }
+
+    .header-btn {
+        font-size: 16px !important;
+        line-height: 20px !important;
+    }
+
+    .btn-filled {
+        width: 140px;
+        height: 40px;
+    }
+
+    .btn-outlined {
+        width: 140px;
+        height: 40px;
+    }
+
+    .not-available-button-container {
+        padding-top: 30px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .swap-container {
+        padding: 40px 30px;
+    }
+
+    .not-available-container {
+        min-height: 500px;
+        padding-top: 100px;
+    }
+
+    .not-available-info {
+        font-size: 20px;
+        line-height: 28px;
+        padding-top: 40px;
+    }
+
+    .header-btn {
+        font-size: 16px !important;
+        line-height: 20px !important;
+    }
+
+    .btn-filled {
+        width: 140px;
+        height: 40px;
+    }
+
+    .btn-outlined {
+        width: 140px;
+        height: 40px;
+    }
+}
 
 .swap-container {
-    padding: 40px 30px;
     gap: 8px;
     background: var(--swap-main-banner-background);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
@@ -73,41 +222,38 @@ export default defineComponent({
     max-width: 600px;
 }
 
+.not-available-container {
+    display: flex;
+    flex-direction: column;
+}
 
 .not-available-info {
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
-    line-height: 28px;
     color: var(--main-gray-text);
 }
 
-.not-available-container {
-    min-height: 500px;
-    padding-top: 100px;
+.not-available-button-container {
+    display: flex;
+    flex-direction: row;
 }
 
 .btn-filled {
     background: var(--blue-gradient);
     color: #FFFFFF !important;
-    width: 140px;
-    height: 40px;
 }
 
 .btn-outlined {
     background-color:var(--swap-main-banner-background) !important;
     color: var(--links-blue);
     border: 1px solid #1C95E7;
-    width: 140px;
-    height: 40px;
 }
 
 .header-btn {
     font-style: normal !important;
     font-weight: 400 !important;
-    font-size: 16px !important;
-    line-height: 20px !important;
     letter-spacing: 0.02em !important;
+    border-radius: 2px;
 }
 
 </style>

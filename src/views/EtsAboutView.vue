@@ -159,14 +159,46 @@ export default {
     .how-container {
         border-radius: 12px;
         background-color: var(--secondary);
-        padding: 30px;
+        padding: 20px;
 
         display: flex;
         flex-direction: column;
+        align-items: center;
+    }
+
+    .info-container {
+        padding: 20px;
+        margin-bottom: 10px;
     }
 
     .scheme {
-        width: 380px;
+        width: 300px;
+        max-width: 1000px;
+    }
+
+    .number-border {
+        width: 160px;
+        height: 30px;
+        border: 1px solid #D7DADF;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .second-number {
+        width: 230px;
+        height: 30px;
+    }
+
+    .third-number {
+        width: 80px;
+        height: 30px;
+    }
+
+    .info-text {
+        margin-bottom: 5px;
+        margin-top: 0;
     }
 }
 
@@ -178,7 +210,6 @@ export default {
         font-size: 54px;
         line-height: 60px;
     }
-
 
     .number-border {
         width: 100px;
@@ -199,6 +230,15 @@ export default {
         width: 30px;
         height: 30px;
     }
+
+    .how-container {
+        padding: 40px;
+    }
+
+    .info-container {
+        padding: 40px;
+        margin-bottom: 20px;
+    }
 }
 
 /* full */
@@ -215,15 +255,13 @@ export default {
         height: 130px;
     }
 
-
-
     .how-container {
-        border-radius: 12px;
-        background-color: var(--secondary);
         padding: 40px;
+    }
 
-        display: flex;
-        gap: 50px;
+    .info-container {
+        padding: 40px;
+        margin-bottom: 20px;
     }
 }
 
@@ -245,12 +283,20 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-size: 16px;
         line-height: 24px;
     }
+
+    .how-container {
+        padding: 40px;
+    }
+
+    .info-container {
+        padding: 40px;
+        margin-bottom: 20px;
+    }
 }
 
 .info-container {
     border-radius: 12px;
     background-color: var(--secondary);
-    padding: 40px;
 
     display: flex;
     gap: 50px;
@@ -287,7 +333,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .how-container {
     border-radius: 12px;
     background-color: var(--secondary);
-    padding: 40px;
 
     display: flex;
     gap: 50px;

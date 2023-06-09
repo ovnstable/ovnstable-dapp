@@ -204,33 +204,24 @@ export default defineComponent({
 <style scoped>
 @media only screen and (max-width: 960px) {
     .title-container {
-        font-style: normal;
-        font-weight: 400;
         font-size: 20px;
         line-height: 40px;
-        color: var(--main-gray-text);
     }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
     .title-container {
-        font-style: normal;
-        font-weight: 400;
         font-size: 30px;
         line-height: 40px;
-        color: var(--main-gray-text);
     }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
     .title-container {
-        font-style: normal;
-        font-weight: 400;
         font-size: 30px;
         line-height: 40px;
-        color: var(--main-gray-text);
     }
 }
 
@@ -242,11 +233,8 @@ only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px)
 only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
 only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
     .title-container {
-        font-style: normal;
-        font-weight: 400;
         font-size: 30px;
         line-height: 40px;
-        color: var(--main-gray-text);
     }
 }
 

@@ -8,7 +8,7 @@
 
                 <div class="icon-border">
                     <div :class="$wu.isMobile() ? 'currency-icon' : 'icon'" class="mx-3">
-                        <v-img class="platform" :src="'/assets/cards/platform/' + etsData.dex + '.svg'"/>
+                        <v-img class="platform" :src="'/assets/cards/platform/' + dexLogo + '.svg'"/>
                     </div>
                 </div>
                 <div class="icon ml-3">

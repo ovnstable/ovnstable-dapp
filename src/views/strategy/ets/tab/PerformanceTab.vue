@@ -215,24 +215,14 @@
                                 v-if="!$wu.isMobile()"
                                 :profit-label="etsData.actionTokenName + ' per ETS'"
                                 :ets-chain="etsData.chain"
-                                :payout-data="
-                                etsStrategyData[etsData.name]
-                                && etsStrategyData[etsData.name].payoutItems
-                                && etsStrategyData[etsData.name].payoutItems.length
-                                ? [...etsStrategyData[etsData.name].payoutItems].reverse()
-                                : []"/>
+                                :payout-data="payoutsData"/>
 
                         <EtsTable
                                 v-else
                                 minimized
                                 :profit-label="etsData.actionTokenName + ' per ETS'"
                                 :ets-chain="etsData.chain"
-                                :payout-data="
-                                etsStrategyData[etsData.name]
-                                && etsStrategyData[etsData.name].payoutItems
-                                && etsStrategyData[etsData.name].payoutItems.length
-                                ? [...etsStrategyData[etsData.name].payoutItems].reverse()
-                                : []"/>
+                                :payout-data="payoutsData"/>
 
                         <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
                             <label class="table-scroll-label">scroll to see more</label>
@@ -283,7 +273,7 @@
                 <v-row class="info-row footer-row mt-6" justify="start" align="center">
                     <label class="card-info footer-label mt-2">Inception date</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value date mt-2">{{ etsData.inceptionDate }}</label>
+                    <label class="card-info-value date mt-2">{{ lastPayoutData ? moment(lastPayoutData.payableDate).format('DD MMM YYYY') : null }}</label>
                 </v-row>
             </v-col>
         </v-row>
@@ -299,6 +289,7 @@ import EtsTable from "@/components/market/strategy/etsPayouts/EtsTable";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut";
 import ChartApy from "@/components/market/strategy/chart/ChartApy";
 import ChartTvl from "@/components/market/strategy/chart/ChartTvl";
+import moment from "moment/moment";
 
 export default {
     name: "PerformanceTab",
@@ -327,6 +318,9 @@ export default {
 
 
     computed: {
+        moment() {
+            return moment
+        },
         ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig', 'getParams']),
         ...mapGetters('marketData', ['etsStrategyData', 'etsApyData', 'etsTvlData', 'usdPlusApyData', 'compoundData']),
 
@@ -335,6 +329,17 @@ export default {
                 'rate-tab-button': this.rateTab === 1,
                 'rate-tab-button-in-active': this.rateTab !== 1,
             }
+        },
+
+        payoutsData: function () {
+            return this.etsStrategyData[this.etsData.name]
+            && this.etsStrategyData[this.etsData.name].payoutItems
+            && this.etsStrategyData[this.etsData.name].payoutItems.length
+                ? [...this.etsStrategyData[this.etsData.name].payoutItems].reverse()
+                : []
+        },
+        lastPayoutData: function () {
+          return this.payoutsData && this.payoutsData.length ? this.payoutsData[this.payoutsData.length - 1] : null
         },
 
         activeRateDist: function () {

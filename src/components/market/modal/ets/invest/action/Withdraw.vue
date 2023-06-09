@@ -70,9 +70,6 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <div class="swap-view-btn" @click="showMintView">
-                <v-img :src="require('@/assets/icon/arrowsSwap.svg')"/>
-            </div>
             <v-spacer></v-spacer>
         </v-row>
 

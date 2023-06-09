@@ -244,6 +244,14 @@ export default {
                 return 'Thena'
             }
 
+            if (dexName === 'SushiSwap') {
+                return 'Sushiswap'
+            }
+
+            if (dexName === 'SolidLizard') {
+                return 'Solidlizard'
+            }
+
             return dexName;
         },
 

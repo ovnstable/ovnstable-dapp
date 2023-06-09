@@ -55,56 +55,17 @@
                                 <label class="info-title">30-day apy</label>
                             </v-row>
                         </v-col>
+                        <v-col class="bordered-col" :cols="$wu.isMobile() ? 12 : 3">
+                            <v-row class="ml-n2 justify-center">
+                                <label class="info-value">
+                                    {{ (totalSupply && totalSupply[etsData.name]) ? ('$' + $utils.formatMoneyComma(totalSupply[etsData.name], 2)) : '—' }}
+                                </label>
+                            </v-row>
+                            <v-row class="ml-n2 mt-5 justify-center">
+                                <label class="info-title">Current TVL</label>
+                            </v-row>
+                        </v-col>
 
-                        <template v-if="etsData.maxSupply">
-                            <v-col :cols="$wu.isMobile() ? 12 : 6">
-                                <v-row :class="$wu.isMobile() ? 'mt-4' : ''" justify="end">
-                                    <v-col :class="$wu.isMobile() ? '' : 'mr-n3'">
-                                        <v-row class="mx-2 mt-1" align="end">
-                                            <label class="info-value">
-                                                {{ (totalSupply && totalSupply[etsData.name]) ? ('$' + $utils.formatMoneyComma(totalSupply[etsData.name], 2)) : '—' }}
-                                            </label>
-                                            <v-spacer></v-spacer>
-                                            <label class="info-value-max">
-                                                {{ ('$' + $utils.formatMoneyComma(etsData.maxSupply, 2)) }}
-                                            </label>
-                                        </v-row>
-                                        <v-row class="mx-2 mb-1" align="center">
-                                            <label class="info-title">Current TVL</label>
-                                            <v-spacer></v-spacer>
-                                            <label class="info-title ml-auto">Max TVL</label>
-                                        </v-row>
-                                        <v-row class="mx-2 mb-1">
-                                            <v-progress-linear
-                                                rounded
-                                                height="7"
-                                                class="progress-info"
-                                                background-opacity="0"
-                                                :value="(totalSupply[etsData.name] / etsData.maxSupply) * 100"
-                                                :color="etsData.mainColor"
-                                            ></v-progress-linear>
-                                        </v-row>
-                                    </v-col>
-                                </v-row>
-                            </v-col>
-                        </template>
-
-                        <template v-else>
-                            <v-col :cols="$wu.isMobile() ? 12 : 7">
-                                <v-row :class="$wu.isMobile() ? 'mt-4' : ''" justify="end">
-                                    <v-col :class="$wu.isMobile() ? '' : 'mr-n3'">
-                                        <v-row :justify="!$wu.isMobile() ? 'end' : 'center'">
-                                            <label class="info-value">
-                                                {{ (totalSupply && totalSupply[etsData.name]) ? ('$' + $utils.formatMoneyComma(totalSupply[etsData.name], 2)) : '—' }}
-                                            </label>
-                                        </v-row>
-                                        <v-row :justify="!$wu.isMobile() ? 'end' : 'center'" class="mt-5">
-                                            <label class="info-title">Current TVL</label>
-                                        </v-row>
-                                    </v-col>
-                                </v-row>
-                            </v-col>
-                        </template>
                     </v-row>
                 </v-col>
             </v-row>
@@ -141,6 +102,31 @@ export default {
         ...mapGetters('marketData', ['etsStrategyData', 'compoundData']),
         ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters("network", ['getParams']),
+
+        dexLogo: function () {
+            let dexName = this.etsData.dex;
+            if (dexName === 'Ramsess' || dexName === 'Ramses/Ennead') {
+                return 'Ramses';
+            }
+
+            if (dexName === 'Gamma XYZ') {
+                return 'GammaXYZ'
+            }
+
+            if (dexName === 'Thena/Gamma') {
+                return 'Thena'
+            }
+
+            if (dexName === 'SushiSwap') {
+                return 'Sushiswap'
+            }
+
+            if (dexName === 'SolidLizard') {
+                return 'Solidlizard'
+            }
+
+            return dexName;
+        },
 
 
         icon: function (){

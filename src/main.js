@@ -52,29 +52,33 @@ Vue.use(VueYandexMetrika, {
   options: {clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true}
 })
 
-Sentry.init({
-  Vue,
-  dsn: "https://3ba3e27bc8674321b5e4177080ca8bf9@o4504417259552768.ingest.sentry.io/4504417260863488",
-  // dsn: "https://e237794d4a6d441f9f9e8b4b8cd62a96@o4504559540305920.ingest.sentry.io/4504559547121664",
-  logErrors: true,
-  integrations: [
-    new CaptureConsole({
-      levels: ['debug', 'error']
-    }),
-    new BrowserTracing({
-      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-      tracePropagationTargets: ["app.overnight.fi", /^\//],
-    }),
-  ],
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-});
+if (process.env.NODE_ENV === 'production') {
+  console.log("Production app, init sentry.");
+  Sentry.init({
+    Vue,
+    dsn: "https://3ba3e27bc8674321b5e4177080ca8bf9@o4504417259552768.ingest.sentry.io/4504417260863488",
+    // dsn: "https://e237794d4a6d441f9f9e8b4b8cd62a96@o4504559540305920.ingest.sentry.io/4504559547121664",
+    logErrors: true,
+    integrations: [
+      new CaptureConsole({
+        levels: ['debug', 'error']
+      }),
+      new BrowserTracing({
+        routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+        tracePropagationTargets: ["app.overnight.fi", /^\//],
+      }),
+    ],
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+  });
 
-Sentry.configureScope(function(scope) {
-  scope.setLevel("debug");
-});
+  Sentry.configureScope(function(scope) {
+    scope.setLevel("debug");
+  });
+}
+
 
 async function initNetwork() {
   try {

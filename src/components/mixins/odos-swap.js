@@ -88,7 +88,13 @@ export const odosSwap = {
         },
         isAvailableOnNetwork() {
             return this.availableNetworksList.includes(this.networkName)
-        }
+        },
+        secondTokensSelectedCount() {
+            return this.secondTokens.filter(item => item.selected).length;
+        },
+        tokensSelectedCount() {
+            return this.tokens.filter(item => item.selected).length;
+        },
     },
     watch: {
         isAllDataLoaded: async function (newVal, oldValue) {

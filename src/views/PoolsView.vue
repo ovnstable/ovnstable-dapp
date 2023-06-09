@@ -53,10 +53,11 @@ import {poolApiService} from "@/services/pool-api-service";
 import ZapModal from "@/components/zap/modals/ZapModal.vue";
 import PoolFilter from "@/components/pool/PoolFilter.vue";
 import PoolTable from "@/components/pool/PoolTable.vue";
+import {pool} from "@/components/mixins/pool";
 
 export default {
     name: "PoolsView",
-
+    mixins: [pool],
     components: {
         PoolTable,
         PoolFilter,
@@ -68,8 +69,6 @@ export default {
         sortedPoolList: [],
         pools: [],
         isPoolsLoading: true,
-        isZapModalShow: false,
-        currentZapPool: null,
 
         selectedTabs: ['ALL'], // ALL or networkName,
         isShowOnlyZap: false,
@@ -125,15 +124,6 @@ export default {
     },
 
     methods: {
-        setIsZapModalShow(isShow) {
-            this.isZapModalShow = isShow;
-        },
-
-        openZapIn(pool) {
-            console.log("Zap open for pool: ", pool);
-            this.currentZapPool = pool;
-            this.setIsZapModalShow(true);
-        },
 
         zapFilter(isShow) {
             this.isShowOnlyZap = isShow;

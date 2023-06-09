@@ -25,7 +25,7 @@
 
             <v-row v-else class="d-flex" justify="start">
                 <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
-                       v-for="card in sortedCardList.filter(value => (!value.openPrototype && !value.data.archive && value.hasCap)).slice(0, 3)"
+                       v-for="card in sortedCardList"
                        :key="card.id">
                     <v-row class="fill-height">
                         <component
@@ -34,18 +34,20 @@
                             v-bind:is="card.name"
                             :card-data="card"
                             :network-name="tab"
+                            :pool="card.name === 'Pool' ? getPoolById(card.originalId) : null"
                         ></component>
                     </v-row>
                 </v-col>
             </v-row>
         </div>
+
+        <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import moment from "moment";
-import Ets from "@/components/market/cards/ets/Ets";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
 import {poolApiService} from "@/services/pool-api-service";
@@ -56,7 +58,6 @@ export default {
     name: "FeaturedView",
 
     components: {
-        Ets,
         Pool,
         UsdPlus,
         InsuranceCard,
@@ -67,19 +68,12 @@ export default {
         tab: 'optimism',
         avgApy: null,
         sortedCardList: [],
-        cardEtsList: [],
 
         isResorting: true,
 
         isClientDataLoading: true,
         isProductsInfoLoading: true,
 
-        etsList: [],
-
-        etsTvlData: {},
-        etsApyData: {},
-        etsClientData: {},
-        etsStrategyData: {},
         usdPlusApyData: {},
 
         currentTotalData: {},
@@ -97,10 +91,9 @@ export default {
 
     }),
 
-  computed: {
+    computed: {
     ...mapGetters('network', ['allNetworkConfigs', 'appApiUrl', 'networkName', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig', 'switchToOtherNetwork', 'getParams']),
     ...mapGetters('accountData', ['account']),
-      ...mapGetters('etsAction', ['etsNetworkNames']),
       ...mapGetters('web3', ['contracts', 'web3']),
 
     isAllDataLoaded: function () {
@@ -149,52 +142,42 @@ export default {
             'tab-button-in-active': this.tab !== 'polygon',
         }
     },
-  },
-  watch: {
+    },
+    watch: {
       networkName: function (newVal, oldVal) {
           this.setTab(newVal);
-          this.loadData();
       },
-
-        etsList: function (newVal, oldVal) {
-          if (newVal) {
-            this.loadData();
-          }
-        },
 
     isAllDataLoaded: function (newVal, oldVal) {
       if (newVal) {
         this.getUsdPlusAvgMonthApy();
-        //this.getSortedCardList();
       }
     },
-  },
+    },
 
-  created() {
-  },
+    created() {
+    },
 
-  async mounted() {
+    async mounted() {
       console.log(this.$route.query.tabName);
       await this.loadPools();
       if (!this.$route.query.tabName) {
           this.setTab(this.networkName);
-          this.loadData();
       }
       if (this.$route.query.tabName) {
           this.setTab(this.$route.query.tabName);
-          this.loadData();
       }
-  },
+    },
 
-  methods: {
-    // ...mapGetters('network', ['getParams']),
+    methods: {
 
         async setTab(tabName) {
             this.isResorting = true;
             this.tab = tabName;
             this.initTabName('/featured', {tabName: this.tab});
 
-            this.sortedCardList = this.getSortedCardList()
+            this.initCards();
+            console.log("sortedCardList: ", this.sortedCardList);
             await this.getUsdPlusAvgMonthApy();
             this.isClientDataLoading = false;
             this.isProductsInfoLoading = false;
@@ -213,36 +196,49 @@ export default {
             this.isClientDataLoading = true;
             this.isProductsInfoLoading = true;
         },
+        initCards() {
+            this.sortedCardList = [];
+            this.sortedCardList.push(this.getTabNetworkUsdCard(this.tab));
 
-    addUsdPlusApyData(usdPlusApyDataParams) {
-      this.usdPlusApyData[usdPlusApyDataParams.name] = usdPlusApyDataParams.data;
-      console.log('MarketData: refreshUsdPlusPayoutsData this.usdPlusApyData', this.usdPlusApyData);
-    },
+            let networkPool = this.getTabNetworkPoolCard(this.tab);
+            if (networkPool) {
+                this.sortedCardList.push(networkPool);
+            }
 
+            let notNetworkPool = this.getTopAnotherNetworkPoolCard(this.tab);
+            if (notNetworkPool) {
+                this.sortedCardList.push(notNetworkPool);
+            }
+        },
+        getTabNetworkUsdCard(networkName) {
+            return {
+                id: 'usdPlus' + networkName,
+                type: 'usdPlus',
+                name: 'UsdPlus',
+                prototype: false,
+                data: {archive: false},
+                chain: this.getParams(networkName).networkId,
+                hasUsdPlus: true,
+                overcapEnabled: false,
+                hasCap: true,
+                tvl: null, //this.usdPlusValue,
+                monthApy: this.avgApy ? this.avgApy.value : 0,
+            }
+        },
+        getTabNetworkPoolCard(networkName) {
+            let pool = this.findTopPoolWithZapByNetwork(this.sortedPoolList, networkName);
+            if (!pool) {
+                pool = this.findTopPoolWithoutZapByNetwork(this.sortedPoolList, networkName);
+            }
 
-    getSortedCardList() {
-        let networkId = this.networkId;
-        let cardList = [];
+            if (!pool) {
+                console.log("Pool not found when load tab network.");
+                return null
+            }
 
-
-        cardList.push({
-            id: 'usdPlus' + networkId,
-            type: 'usdPlus',
-            name: 'UsdPlus',
-            prototype: false,
-            data: {archive: false},
-            chain: networkId,
-            hasUsdPlus: true,
-            overcapEnabled: false,
-            hasCap: true,
-            tvl: null, //this.usdPlusValue,
-            monthApy: this.avgApy ? this.avgApy.value : 0,
-        });
-
-        for (let i = 0; i < this.sortedPoolList.length; i++) {
-            let pool = this.sortedPoolList[i];
-            cardList.push({
+            return {
                 id: 'pool' + pool.id,
+                originalId: pool.id,
                 type: 'Pool',
                 name: "Pool",
                 prototype: false,
@@ -250,6 +246,7 @@ export default {
                 hasUsdPlus: true,
                 overcapEnabled: false,
                 title: pool.name,
+                address: pool.address,
                 hasCap: true,
                 platform: pool.platform,
                 chain: pool.chain,
@@ -258,49 +255,134 @@ export default {
                 tvl: pool.tvl,
                 zappable: pool.zappable,
                 aggregators: pool.aggregators,
-            });
-        }
+            }
+        },
+        getTopAnotherNetworkPoolCard(networkName) {
+            let pool = this.findTopPoolWithZapByNetwork(this.sortedPoolList, networkName, true);
+            if (!pool) {
+                pool = this.findTopPoolWithoutZapByNetwork(this.sortedPoolList, networkName, true);
+            }
 
+            if (!pool) {
+                console.log("Pool not found when load another tab network.");
+                return null
+            }
 
+            return {
+                id: 'pool' + pool.id,
+                originalId: pool.id,
+                type: 'Pool',
+                name: "Pool",
+                prototype: false,
+                data: pool.data,
+                hasUsdPlus: true,
+                overcapEnabled: false,
+                title: pool.name,
+                address: pool.address,
+                hasCap: true,
+                platform: pool.platform,
+                chain: pool.chain,
+                chainName: pool.chainName,
+                apr: pool.apr,
+                tvl: pool.tvl,
+                zappable: pool.zappable,
+                aggregators: pool.aggregators,
+            }
+        },
+        findTopPoolWithZapByNetwork(pools, networkName, isExcludeNetwork) {
+            for (let i = 0; i < pools.length; i++) {
+                let pool = pools[i];
 
-      cardList.sort(function (a, b) {
-          if (a.chain === networkId && b.chain !== networkId) return -1;
-          if (a.chain !== networkId && b.chain === networkId) return 1;
-          //
-          // if (a.monthApy > b.monthApy) return -1;
-          // if (a.monthApy < b.monthApy) return 1;
-          //
-          // if (a.hasCap && !b.hasCap) return -1;
-          // if (!a.hasCap && b.hasCap) return 1;
+                // exclude network
+                if (isExcludeNetwork && pool.chainName === networkName) {
+                    continue;
+                }
 
-        return 0;
-      });
+                // exclude network and check zappable
+                if (isExcludeNetwork && pool.chainName !== networkName) {
+                    if (!pool.zappable) {
+                        continue;
+                    }
 
-        console.log("CardList: ", cardList);
+                    // find first zappable in another network
+                    return pool;
+                }
 
-      cardList[0].cardOpened = true;
-      return cardList;
-    },
+                // continue with another network or not zappable
+                if (pool.chainName !== networkName || !pool.zappable) {
+                    continue;
+                }
 
-    async getUsdPlusAvgMonthApy() {
-      let fetchOptions = {
-        headers: {
-          "Access-Control-Allow-Origin": this.appApiUrl
-        }
-      };
+                // find first zappable in network
+                return pool;
+            }
 
-      await fetch(this.appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
-          .then(value => value.json())
-          .then(value => {
-            this.avgApy = value;
-            this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
-          }).catch(reason => {
-            console.log('Error get data: ' + reason);
-          })
-    },
+            return null;
+        },
+        findTopPoolWithoutZapByNetwork(pools, networkName, isExcludeNetwork) {
+            for (let i = 0; i < pools.length; i++) {
+                let pool = pools[i];
 
+                // exclude network
+                if (isExcludeNetwork && pool.chainName === networkName) {
+                    continue;
+                }
 
-      async loadPools() {
+                // exclude network and check zappable
+                if (isExcludeNetwork && pool.chainName !== networkName) {
+                    if (pool.zappable) {
+                        continue;
+                    }
+
+                    // find first without zappable in another network
+                    return pool;
+                }
+
+                // continue with another network or zappable
+                if (pool.chainName !== networkName || pool.zappable) {
+                    continue;
+                }
+
+                // find first without zappable in network
+                return pool;
+            }
+
+            return null;
+        },
+
+        addUsdPlusApyData(usdPlusApyDataParams) {
+            this.usdPlusApyData[usdPlusApyDataParams.name] = usdPlusApyDataParams.data;
+            console.log('MarketData: refreshUsdPlusPayoutsData this.usdPlusApyData', this.usdPlusApyData);
+        },
+
+        async getUsdPlusAvgMonthApy() {
+          let fetchOptions = {
+            headers: {
+              "Access-Control-Allow-Origin": this.appApiUrl
+            }
+          };
+
+          await fetch(this.appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
+              .then(value => value.json())
+              .then(value => {
+                this.avgApy = value;
+                this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+              }).catch(reason => {
+                console.log('Error get data: ' + reason);
+              })
+        },
+
+        getPoolById(id) {
+            for (let i = 0; i < this.pools.length; i++) {
+                if (this.pools[i].id === id) {
+                    return this.pools[i];
+                }
+            }
+
+            return null;
+        },
+
+        async loadPools() {
           this.isPoolsLoading = true;
 
           this.pools = [];
@@ -434,9 +516,9 @@ export default {
           });
 
           this.isPoolsLoading = false;
-      },
+        },
 
-      initFeature(pools) {
+        initFeature(pools) {
           const topValuesByType = {};
 
           pools.forEach(entry => {
@@ -458,7 +540,7 @@ export default {
           })
 
           return pools;
-      }
+        }
   }
 }
 

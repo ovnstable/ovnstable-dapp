@@ -187,7 +187,8 @@
                            :tokens="tokens"
                            :is-all-data-loaded="isAllDataLoaded"
                            :is-ovn-swap="false"
-
+                           :selected-token-count="selectTokenType === 'OVERNIGHT' ? secondTokensSelectedCount : tokensSelectedCount"
+                           :max-token-count="selectTokenType === 'OVERNIGHT' ? secondTokens.length : 6"
         />
 
         <AdvancedSettingsModal :is-show="isShowSettingsModal"

@@ -1,26 +1,37 @@
 <template>
-    <v-row class="card-container" v-on:click.prevent @click="openPerformance">
+    <v-row class="card-container" v-on:click.prevent @click="openPool()">
         <v-col cols="12" align-self="start">
-            <v-row class="d-flex flex-row align-center header-row"
+            <v-row class="d-flex flex-row align-center header-row pl-4"
                    justify="center"
                    :style="{'--card-background': 'radial-gradient(108.67% 595.92% at 100% -3.25%, #001845 0%, #001845 27.05%, #0C255B 52.07%, ' + getParams(cardData.chain).networkColor + ' 100%)'}">
-                <span class="currency ml-5">
-                    <v-img :src="require('@/assets/currencies/usdPlus.svg')"/>
-                </span>
+                    <div class="pool-logo-container">
+                        <img :src="pool.token0Icon"
+                             class="currency-logo currency-logo-first"
+                             :alt="pool.token0Icon"/>
+                        <img :src="pool.token1Icon"
+                             class="currency-logo currency-logo-second"
+                             :alt="pool.token1Icon"/>
+                    </div>
                 <v-row class="d-flex flex-column align-start mr-3 ml-8">
                     <v-row class="d-flex" align="center">
-                        <label class="card-title">Pool {{ "USD+/USDC" }} LP</label>
+                        <label class="card-title">
+                            {{ cardData.data.id.name }} LP
+                        </label>
+                    </v-row>
+                    <v-row class="d-flex" align="center">
+                        <div class="platform-label">
+                            {{ cardData.platform.toUpperCase() }}
+                        </div>
                     </v-row>
                     <v-row class="d-flex mt-5">
                         <label class="percentage">
                             {{ $utils.formatMoneyComma((cardData.apr ? cardData.apr : 0), 0) + '%' }}
                         </label>
-                        <label class="apy ml-3">APR</label>
-                        <div class="tooltip">
-                            <Tooltip icon-color="#FFFFFF"
-                                     :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
-                                     text="Strategy net APR based on 30-day average, includes fees taken (fee-adjusted)"/>
+                        <div>
+                            <div class="apy ml-3">CURRENT</div>
+                            <div class="apy ml-3">APR</div>
                         </div>
+
                     </v-row>
                 </v-row>
             </v-row>
@@ -39,7 +50,9 @@
                 <v-divider class="card-divider"></v-divider>
 
                 <v-row class="ma-0 mt-8">
-                    <label class="card-info">Stake your LP tokens of USD+ pools on the platform with the highest yield. Use our “Zap in” feature or go directly to the staking platform. There you can also check your position in the pool.</label>
+                    <label class="card-info">
+                        Stake your LP tokens of Overnight pools with the highest yield. You can check your staked LP on the staking platform.
+                    </label>
                 </v-row>
 
                 <v-row class="mt-3">
@@ -59,7 +72,7 @@
                     <v-col cols="6">
                         <v-row class="ma-0 ml-n2">
                             <div class="box">
-                                <label class="box-name mt-2">Platform</label>
+                                <label class="box-name mt-2">Staking Platform</label>
                                 <div class="icon platform-logo">
                                     <v-img :src="'/assets/cards/platform/' + dexLogo + '.svg'"
                                            class="mt-1"
@@ -69,19 +82,6 @@
                             </div>
                         </v-row>
                     </v-col>
-<!--                    <v-col cols="12">
-                        <v-row class="ma-0">
-                            <div class="box">
-                                <label class="box-name mt-2">Chain</label>
-                                <div class="icon">
-                                    <v-img :src="icon"
-                                           class="mt-1"
-                                           alt="chain icon"/>
-                                </div>
-                                <label class="chain-name mb-2 mt-1">{{ networkName }}</label>
-                            </div>
-                        </v-row>
-                    </v-col>-->
                 </v-row>
             </v-container>
         </v-col>
@@ -96,30 +96,33 @@
                     <template>
                         <v-col class="mr-1">
                             <v-row>
-                                <v-btn v-if="cardData.zappable" class="button btn-filled" @click.stop="mintAction">
+                                <v-btn v-if="cardData.zappable"
+                                       class="button btn-filled"
+                                       @click.stop="openZapIn(pool)">
                                     ZAP IN
                                 </v-btn>
-                                <v-btn v-else class="button " @click.stop="mintAction">
-                                    View Pool
+                                <v-btn v-else
+                                       class="button btn-outlined"
+                                       outlined
+                                       @click.stop="openExternalPool()">
+                                    <label>STAKE</label>
+                                    <img class="open-icon ml-1" src="@/assets/icon/open_in_new_blue.svg">
                                 </v-btn>
                             </v-row>
                         </v-col>
-<!--                        <v-col class="ml-1">
-                            <v-row>
-                                <v-btn class="button btn-outlined" @click.stop="redeemAction" outlined>
-                                    REDEEM USD+
-                                </v-btn>
-                            </v-row>
-                        </v-col>-->
                     </template>
                 </v-row>
             </v-container>
 
-            <v-row class="footer-row d-flex align-center justify-center" @click.stop="openPerformance">
+            <v-row class="footer-row d-flex align-center justify-center" @click.stop="openExternalPool()">
                 <label class="footer-link">View Pool on {{cardData.platform}}</label>
                 <img class="open-icon ml-1" src="@/assets/icon/open-in-new.svg">
             </v-row>
         </v-col>
+
+        <ZapModal :set-show-func='setIsZapModalShow'
+                  :zap-pool="currentZapPool"
+                  :is-show="isZapModalShow"></ZapModal>
 
         <resize-observer @notify="$forceUpdate()"/>
     </v-row>
@@ -127,20 +130,21 @@
 
 <script>
 import Tooltip from "@/components/common/element/Tooltip";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import arbitrumIcon from "@/assets/network/ar.svg";
 import zksyncIcon from "@/assets/network/zk.svg";
 import bscIcon from "@/assets/network/bsc.svg";
-import moment from "moment";
-import {axios} from "@/plugins/http-axios";
-import network from "@/store/modules/common/web3/network";
+import { pool } from "@/components/mixins/pool";
+import ZapModal from "@/components/zap/modals/ZapModal.vue";
 
 export default {
     name: "UsdPlus",
+    mixins: [pool],
 
     components: {
+        ZapModal,
         Tooltip
     },
 
@@ -151,7 +155,12 @@ export default {
         },
 
         cardData: {
-            type: Object
+            type: Object,
+            required: true
+        },
+        pool: {
+            type: Object,
+            required: true
         }
     },
 
@@ -206,6 +215,8 @@ export default {
                 case 324:
                     return zksyncIcon;
             }
+
+            return null
         },
 
         sliceLabel() {
@@ -222,7 +233,7 @@ export default {
 
     data: () => ({
         avgApy: null,
-        totalUsdPlusValue: null
+        totalUsdPlusValue: null,
     }),
 
     watch: {
@@ -255,8 +266,17 @@ export default {
             this.showSwapModal();
         },
 
-        openPerformance() {
-            this.goToAction('/stats');
+        openPool() {
+            if (this.cardData.zappable) {
+                this.openZapIn(this.pool);
+                return
+            }
+
+
+            this.openExternalPool();
+        },
+        openExternalPool() {
+            this.openLink(this.cardData);
         },
 
         goToAction(id) {
@@ -377,7 +397,7 @@ export default {
         font-style: normal;
         font-weight: 600;
         font-size: 14px;
-        line-height: 16px;
+        line-height: 14px;
     }
 
     .tooltip {
@@ -389,6 +409,25 @@ export default {
         font-weight: 400;
         font-size: 12px;
         line-height: 16px;
+    }
+
+
+    .currency-logo {
+        height: 40px!important;
+    }
+
+    .currency-logo-first {
+        left: 44px!important;;
+    }
+
+    .currency-logo-second {
+        top: 30px!important;;
+        left: 3px!important;;
+    }
+
+    .pool-logo-container {
+        height: 75px!important;;
+        width: 85px!important;;
     }
 }
 
@@ -465,8 +504,8 @@ export default {
     .apy {
         font-style: normal;
         font-weight: 600;
-        font-size: 16px;
-        line-height: 22px;
+        font-size: 14px;
+        line-height: 20px;
     }
 
     .tooltip {
@@ -484,6 +523,25 @@ export default {
         width: 130px;
         height: 28px;
         background: var(--hide-account);
+    }
+
+
+    .currency-logo {
+        height: 40px!important;
+    }
+
+    .currency-logo-first {
+        left: 44px!important;;
+    }
+
+    .currency-logo-second {
+        top: 30px!important;;
+        left: 3px!important;;
+    }
+
+    .pool-logo-container {
+        height: 75px!important;;
+        width: 85px!important;;
     }
 }
 
@@ -561,8 +619,8 @@ export default {
     .apy {
         font-style: normal;
         font-weight: 600;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 16px;
+        line-height: 22px;
     }
 
     .tooltip {
@@ -619,7 +677,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-style: normal;
         font-weight: 600;
         font-size: 18px;
-        line-height: 24px;
+        line-height: 22px;
     }
 }
 
@@ -649,9 +707,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .apy {
-    font-family: 'Roboto', sans-serif;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #FFFFFF;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .card-info {
@@ -769,4 +828,48 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
 }
+
+
+.platform-label {
+    display: flex;
+    padding: 4px 6px;
+    height: 26px;
+
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    /* Title 3 */
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+
+    color: #FFFFFF;
+}
+
+
+.currency-logo {
+    height: 60px;
+    position: absolute;
+}
+
+.currency-logo-first {
+    left: 64px;
+}
+
+.currency-logo-second {
+    top: 50px;
+    left: 3px;
+}
+
+.pool-logo-container {
+   background-image: url("/assets/icon/pool/feature/circulation.svg");
+   background-size: cover;
+   background-position: center;
+   height: 120px;
+   width: 120px;
+   position: relative;
+}
+
 </style>

@@ -1,5 +1,13 @@
 <template>
     <div>
+        <div v-if="$wu.isMobile()" class="d-block zap-btn">
+            <v-btn v-if="pool.zappable"
+                   x-small
+                   class="button button-full-width btn-special btn-outlined mb-3"
+                   @click.stop="openZapInFunc(pool)" outlined>
+                ZAP IN
+            </v-btn>
+        </div>
         <div class="row">
             <div @click="openPoolLink(pool)" class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-4" style="cursor: pointer">
                 <div class="pool-table-header-item">
@@ -7,7 +15,9 @@
                        <div class="pool-platform-icon">
                            <div class="icon mr-2">
                                <v-img :src="require('@/assets/cards/platform/' + pool.platform + '.svg')"
-                                      :title="pool.platform"/>
+                                      :title="pool.platform"
+                                        class="pool-platform-icon-one"
+                               />
                            </div>
                        </div>
 
@@ -26,7 +36,9 @@
                                  class="pool-platform-icon">
                                 <div class="icon mr-2">
                                     <v-img :src="require('@/assets/cards/platform/' + pool.platform + '.svg')"
-                                           :title="pool.platform"/>
+                                           :title="pool.platform"
+                                           class="platform-icon "
+                                    />
                                 </div>
                             </div>
                             <div v-for="(aggregator, index) in pool.aggregators" :key="aggregator.id"
@@ -36,7 +48,9 @@
 <!--                                {{index}}-->
                                 <div class="icon mr-2">
                                     <v-img :src="require('@/assets/cards/platform/' + aggregator.platform + '.svg')"
-                                           :title="aggregator.platform"/>
+                                           :title="aggregator.platform"
+                                            class="platform-icon"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -67,7 +81,7 @@
             </div>
             <div @click="toggleDetailsFunc(pool)"
                  class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
-                <div class="pool-table-header-item">
+                <div v-if="!$wu.isMobile()" class="pool-table-header-item">
 
 <!--                    todo: return after zap upgrade -->
 <!--                    <v-btn v-if="pool.zappable"
@@ -94,7 +108,7 @@
                                 </div>
                             </div>
 
-                            <div class="pool-platform-name">
+                            <div class="pool-platform-name aggregator-name">
                                 {{aggregator.platform}}
                             </div>
 
@@ -110,7 +124,7 @@
                         <label v-if="aggregator.apr" class="card-label">
                             {{ $utils.formatMoneyComma(aggregator.apr, 2) }}%
                         </label>
-                        <label v-else class="card-label see-on-dex-label">
+                        <label v-else class="card-label see-on-dex-label see-on-dex-another">
                             see on platform
                         </label>
                     </div>
@@ -120,7 +134,7 @@
                         <label v-if="aggregator.tvl" class="card-label">
                             ${{ $utils.formatNumberToMln(aggregator.tvl, 0) }}M
                         </label>
-                        <label v-else class="card-label see-on-dex-label">
+                        <label v-else class="card-label see-on-dex-label see-on-dex-another">
                             see on platform
                         </label>
                     </div>
@@ -286,90 +300,10 @@ export default defineComponent({
 
 
 <style scoped>
-div {
-    font-family: 'Roboto', sans-serif;
-}
-
-.button-full-width {
-    width: 100% !important;
-    max-width: 100px;
-
-}
-
-.btn-outlined {
-    color: var(--links-blue) !important;
-}
-
-.card-label {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    font-feature-settings: 'liga' off;
-    color: var(--main-gray-text);
-}
-
-.button {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 18px ;
-    letter-spacing: 0.03em;
-    font-family: 'Roboto', sans-serif;
-    height: 28px!important;
-    border-radius: 2px;
-    box-shadow: none ;
-
-    text-align: center;
-    text-transform: uppercase;
-    font-feature-settings: 'pnum' on, 'lnum' on;
-}
-
-.see-on-dex-label {
-    color: #b2b2b2;
-    font-size: 14px!important;
-}
-
-
-.icon {
-    height: 28px;
-    width: 28px;
-}
-
-.icon-token-pair {
-    width: 54px;
-}
-
-
-.pool-platform-name {
-    padding-left: 32px;
-    color: var(--main-gray-text)
-}
-
-.pool-platform-icon {
-    position: absolute;;
-    top: -2px;
-}
-
-.pool-platform-link {
-    position: absolute;
-    right: 45px;
-    top: 3px
-}
-
-.pool-table-platform-container {
-    position: relative;
-    cursor: pointer;
-}
-
-.aggregator-hr {
-    border-bottom: 1px solid var(--main-border);
-}
-
-/* mobile */
 @media only screen and (max-width: 960px) {
+    .zap-btn {
+        max-width: 100%;
+    }
 
     .pool-platform-name {
         padding-left: 25px;
@@ -391,8 +325,8 @@ div {
         font-weight: 400;
         font-size: 14px;
         line-height: 22px;
+        margin-left: 40px;
     }
-
 
     .icon {
         height: 20px;
@@ -401,6 +335,32 @@ div {
 
     .icon-token-pair {
         width: 38px;
+    }
+
+    .btn-special {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .see-on-dex-label {
+        font-size: 12px!important;
+    }
+
+    .pool-platform-link {
+        right: 45px;
+        top: 3px;
+        left: 120px;
+    }
+
+    .pool-platform-icon-one {
+        position: absolute;
+        width: 25px;
+        top: 0px !important;
+    }
+
+    .see-on-dex-another {
+        display: flex;
+        margin-left: 40px;
     }
 }
 
@@ -435,6 +395,135 @@ div {
     .icon-token-pair {
         width: 46px;
     }
+
+    .see-on-dex-label {
+        font-size: 14px!important;
+    }
+
+    .pool-platform-link {
+        right: 45px;
+        top: 3px
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .card-label {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .see-on-dex-label {
+        font-size: 14px!important;
+    }
+
+    .pool-platform-link {
+        right: 45px;
+        top: 3px
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .card-label {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .see-on-dex-label {
+        font-size: 14px!important;
+    }
+
+    .pool-platform-link {
+        right: 45px;
+        top: 3px
+    }
+}
+
+div {
+    font-family: 'Roboto', sans-serif;
+}
+
+.button-full-width {
+    width: 100% !important;
+    max-width: 100px;
+
+}
+
+.btn-outlined {
+    color: var(--links-blue) !important;
+}
+
+.card-label {
+    font-style: normal;
+    font-weight: 400;
+    font-feature-settings: 'liga' off;
+    color: var(--main-gray-text);
+}
+
+.button {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px ;
+    letter-spacing: 0.03em;
+    font-family: 'Roboto', sans-serif;
+    height: 28px!important;
+    border-radius: 2px;
+    box-shadow: none ;
+
+    text-align: center;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+}
+
+.see-on-dex-label {
+    color: #b2b2b2;
+}
+
+
+.icon {
+    height: 28px;
+    width: 28px;
+}
+
+.icon-token-pair {
+    width: 54px;
+}
+
+
+.pool-platform-name {
+    padding-left: 32px;
+    color: var(--main-gray-text)
+}
+
+.aggregator-name {
+    padding-top: 0;
+}
+
+.pool-platform-icon {
+    position: absolute;;
+    top: -2px;
+}
+
+.pool-platform-link {
+    position: absolute;
+}
+
+.pool-table-platform-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.aggregator-hr {
+    border-bottom: 1px solid var(--main-border);
 }
 
 </style>

@@ -88,12 +88,46 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@media only screen and (max-width: 960px) {
+    .title-label {
+        font-size: 32px;
+        line-height: 40px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .title-label {
+        font-size: 54px;
+        line-height: 60px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .title-label {
+        font-size: 54px;
+        line-height: 60px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .title-label {
+        font-size: 54px;
+        line-height: 60px;
+    }
+}
+
 .title-label {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;
-    font-size: 54px;
-    line-height: 60px;
 
     color: var(--main-gray-text);
 
@@ -123,24 +157,5 @@ export default defineComponent({
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
-}
-
-
-/* mobile */
-@media only screen and (max-width: 960px) {
-    .toggle-row {
-        border-bottom: 2px solid var(--main-border);
-        width: 100% !important;
-        color: var(--main-gray-text);
-    }
-}
-
-/* tablet */
-@media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .toggle-row {
-        border-bottom: 2px solid var(--main-border);
-        width: 100% !important;
-        color: var(--main-gray-text);
-    }
 }
 </style>

@@ -636,7 +636,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .balance-network-icon {
-    width: 8% !important;
+    width: 7% !important;
     height: auto !important;
 }
 </style>

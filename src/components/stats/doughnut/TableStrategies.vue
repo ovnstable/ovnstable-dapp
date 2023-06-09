@@ -29,7 +29,7 @@
             </td>
             <td class="table-label-don text-left">
                 <v-row>
-                    <label class="link-label align-center" :title="item.fullName">
+                    <label class="link-label link-name align-center" :title="item.fullName">
                         {{ item.label }}
                     </label>
                     <v-spacer></v-spacer>
@@ -216,6 +216,10 @@ export default {
     .color-rectangle {
         width: 20px;
         height: 20px;
+    }
+
+    .link-name {
+        height: 100px;
     }
 }
 

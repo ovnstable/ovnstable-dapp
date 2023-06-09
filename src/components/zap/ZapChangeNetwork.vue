@@ -8,7 +8,7 @@
                          class="change-network-icon">
                 </div>
 
-                <div class="change-network-text-container mb-5">
+                <div class="change-network-text-container mb-5 ml-5 mr-5">
                     Please, switch to the chain the pool is on.
                 </div>
 
@@ -50,6 +50,61 @@ export default defineComponent({
 
 
 <style scoped>
+@media only screen and (max-width: 960px) {
+    .change-network-text-container {
+        font-size: 13px;
+    }
+
+    .header-btn {
+        width: unset;
+        max-width: 200px;
+    }
+
+    .change-network-container {
+        min-height: 300px;
+    }
+
+    .change-network-icon {
+        width: 100px;
+        height: 50px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .change-network-text-container {
+        font-size: 14px;
+    }
+
+    .header-btn {
+        width: 300px;
+        height: 48px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+
+    .header-btn {
+        width: 300px;
+        height: 48px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+
+    .header-btn {
+        width: 300px;
+        height: 48px;
+    }
+}
+
 div {
     font-family: 'Roboto',serif;
 }
@@ -61,9 +116,6 @@ div {
 }
 
 .header-btn {
-    width: 300px;
-    height: 48px;
-
     background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
     border-radius: 2px;
 }
@@ -99,36 +151,7 @@ div {
     color: var(--main-gray-text);
 }
 
-
 .change-network-text-container {
     font-size: 13px;
 }
-
-
-/* mobile */
-@media only screen and (max-width: 960px) {
-    .change-network-text-container {
-        font-size: 13px;
-    }
-
-    .header-btn {
-        width: unset;
-        max-width: 300px;
-    }
-
-    .change-network-container {
-        min-height: 300px;
-    }
-
-
-}
-
-/* tablet */
-@media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .change-network-text-container {
-        font-size: 14px;
-    }
-
-}
-
 </style>

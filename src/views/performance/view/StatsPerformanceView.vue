@@ -15,11 +15,22 @@
                     </v-btn>
                 </v-col>
             </template>
-            <v-col cols="6">
+            <v-col v-if="!$wu.isMobile()" cols="6">
                 <v-row class="ma-0 mt-10 ml-3 toggle-row">
                     <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
                     <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
                     <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
+                    <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
+                    <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
+                </v-row>
+            </v-col>
+            <v-col v-else>
+                <v-row class="ma-0 mt-5 ml-3 toggle-row">
+                    <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
+                    <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+                    <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
+                </v-row>
+                <v-row class="ma-0 mt-5 ml-3 toggle-row toggle-row-second">
                     <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
                     <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
                 </v-row>
@@ -435,7 +446,16 @@ export default {
     }
 
     .toggle-row {
-        width: 100% !important;
+        width: 95% !important;
+    }
+
+    .toggle-row-second {
+        width: 50% !important;
+    }
+
+    .balance-network-icon {
+        width: 25px !important;
+        height: auto !important;
     }
 }
 
@@ -486,6 +506,16 @@ export default {
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .toggle-row {
+        border-bottom: 2px solid var(--main-border);
+        width: 200% !important;
+    }
+
+    .balance-network-icon {
+        width: 8% !important;
+        height: auto !important;
+    }
 }
 
 /* full */
@@ -534,6 +564,16 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .toggle-row {
+        border-bottom: 2px solid var(--main-border);
+        width: 200% !important;
+    }
+
+    .balance-network-icon {
+        width: 8% !important;
+        height: auto !important;
     }
 }
 
@@ -589,6 +629,16 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
     }
+
+    .toggle-row {
+        border-bottom: 2px solid var(--main-border);
+        width: 200% !important;
+    }
+
+    .balance-network-icon {
+        width: 8% !important;
+        height: auto !important;
+    }
 }
 
 .page-container {
@@ -608,7 +658,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .toggle-row {
     border-bottom: 2px solid var(--main-border);
-    width: 200% !important;
 }
 
 .title-label {
@@ -713,10 +762,5 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     border: 1px solid #1C95E7;
     width: 140px;
     height: 40px;
-}
-
-.balance-network-icon {
-    width: 2% !important;
-    height: auto !important;
 }
 </style>

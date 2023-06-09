@@ -1456,6 +1456,62 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@media only screen and (max-width: 960px) {
+    .add-token-text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .swap-button-title {
+        font-size: 16px;
+        line-height: 22px;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 960px) and (max-width: 1400px) {
+    .add-token-text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .swap-button-title {
+        font-size: 18px;
+        line-height: 22px;
+    }
+}
+
+/* full */
+@media only screen and (min-width: 1400px) {
+    .add-token-text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .swap-button-title {
+        font-size: 18px;
+        line-height: 22px;
+    }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
+only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+    .add-token-text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .swap-button-title {
+        font-size: 18px;
+        line-height: 22px;
+    }
+}
+
 div {
     font-family: 'Roboto',serif;
 }
@@ -1486,8 +1542,6 @@ div {
 .add-token-text {
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
 
     color: #1C95E7;
     cursor: pointer;
@@ -1569,8 +1623,6 @@ div {
 .swap-button-title {
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
-    line-height: 22px;
 
     color: #FFFFFF;
 }

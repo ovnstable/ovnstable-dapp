@@ -1583,6 +1583,7 @@ div {
 
     display: table;
     margin: 0 auto;
+    margin-bottom: 10px;
 }
 
 .change-swap-image {

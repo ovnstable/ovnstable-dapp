@@ -390,7 +390,7 @@ export default {
 
         collateralClick() {
             this.selectTab('usdplus_collateral');
-            this.goToActionByPath('/collateral', { tabName: 'collateral' });
+            this.goToActionByPath('/collateral', { tabName: 'optimism' });
             this.trackClick({
                 action: 'collateral-click',
                 event_category: 'View Page',
@@ -401,7 +401,7 @@ export default {
 
         daiCollateralClick() {
           this.selectTab('daiplus_collateral');
-          this.goToActionByPath('/collateral/dai', {tabName: 'collateralDai'});
+          this.goToActionByPath('/collateral/dai', {tabName: 'optimism'});
           this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
         },
 
@@ -418,7 +418,7 @@ export default {
 
         statsClick() {
             this.selectTab('usdplus_performance');
-            this.goToActionByPath('/stats', { tabName: 'performance' });
+            this.goToActionByPath('/stats', { tabName: 'optimism' });
             this.trackClick({
                 action: 'stats-click',
                 event_category: 'View Page',
@@ -429,13 +429,13 @@ export default {
 
         daiStatsClick() {
           this.selectTab('daiplus_performance');
-          this.goToActionByPath('/stats/dai', {tabName: 'daiPerformance'});
+          this.goToActionByPath('/stats/dai', {tabName: 'optimism'});
           this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
         },
 
         usdtStatsClick() {
           this.selectTab('usdtplus_performance');
-          this.goToActionByPath('/stats/usdt', {tabName: 'usdtPerformance'});
+          this.goToActionByPath('/stats/usdt', {tabName: 'bsc'});
           this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
         },
 

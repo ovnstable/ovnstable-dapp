@@ -498,6 +498,11 @@ export default {
     .toggle-row {
         width: 100% !important;
     }
+
+    .balance-network-icon {
+        width: 25px !important;
+        height: auto !important;
+    }
 }
 
 /* tablet */
@@ -559,7 +564,12 @@ export default {
     .section-text {
         font-size: 16px;
         line-height: 24px;
-  }
+    }
+
+    .balance-network-icon {
+        width: 8% !important;
+        height: auto !important;
+    }
 }
 
 /* full */
@@ -621,6 +631,11 @@ export default {
     .section-text {
         font-size: 18px;
         line-height: 28px;
+    }
+
+    .balance-network-icon {
+        width: 8% !important;
+        height: auto !important;
     }
 }
 
@@ -688,6 +703,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .section-text {
       font-size: 17px;
       line-height: 28px;
+    }
+
+    .balance-network-icon {
+        width: 8% !important;
+        height: auto !important;
     }
 }
 
@@ -848,8 +868,5 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     cursor: pointer !important;
 }
 
-.balance-network-icon {
-    width: 2% !important;
-    height: auto !important;
-}
+
 </style>

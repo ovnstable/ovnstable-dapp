@@ -195,6 +195,26 @@ export default defineComponent({
         font-size: 16px;
         line-height: 24px;
     }
+
+    .token-image {
+        height: 28px;
+        width: 28px;
+    }
+
+    .search-token-image {
+        height: 32px;
+        width: 32px;
+    }
+
+    .token-balance {
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .token-usd-balance {
+        font-size: 15px;
+        line-height: 24px;
+    }
 }
 
 /* tablet */
@@ -216,6 +236,26 @@ export default defineComponent({
         font-size: 18px;
         line-height: 24px;
     }
+
+    .token-image {
+        height: 32px;
+        width: 32px;
+    }
+
+    .search-token-image {
+        height: 40px;
+        width: 40px;
+    }
+
+    .token-balance {
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+    .token-usd-balance {
+        font-size: 16px;
+        line-height: 24px;
+    }
 }
 
 /* full */
@@ -235,6 +275,27 @@ export default defineComponent({
 
     .search-token-symbol {
         font-size: 18px;
+        line-height: 24px;
+    }
+
+    .token-image {
+        height: 32px;
+        width: 32px;
+    }
+
+
+    .search-token-image {
+        height: 40px;
+        width: 40px;
+    }
+
+    .token-balance {
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+    .token-usd-balance {
+        font-size: 16px;
         line-height: 24px;
     }
 }
@@ -262,6 +323,27 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
     .search-token-symbol {
         font-size: 18px;
+        line-height: 24px;
+    }
+
+    .token-image {
+        height: 32px;
+        width: 32px;
+    }
+
+
+    .search-token-image {
+        height: 40px;
+        width: 40px;
+    }
+
+    .token-balance {
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+    .token-usd-balance {
+        font-size: 16px;
         line-height: 24px;
     }
 }
@@ -310,12 +392,6 @@ div {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-.token-image {
-    height: 32px;
-    width: 32px;
-}
-
 
 .token-image-container {
     display: inline-block;
@@ -406,16 +482,12 @@ div {
 .token-balance {
     font-style: normal;
     font-weight: 600;
-    font-size: 20px;
-    line-height: 24px;
     color: var(--main-gray-text);
 }
 
 .token-usd-balance {
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
     color: #707A8B;
 }
 
@@ -426,13 +498,6 @@ div {
 .search-image-container {
     position: relative;
 }
-
-
-.search-token-image {
-    height: 40px;
-    width: 40px;
-}
-
 
 .search-token-image-container {
     display: inline-block;

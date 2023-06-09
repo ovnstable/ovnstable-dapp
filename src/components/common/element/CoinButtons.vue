@@ -166,7 +166,7 @@ export default defineComponent({
     background-color: transparent;
     width: 110px;
     max-height: 40px;
-    border: 1px solid #DEE1E5;
+    border: 1px solid var(--links-blue);
     border-radius: 4px;
     color: var(--zoom-btn-color);
 }

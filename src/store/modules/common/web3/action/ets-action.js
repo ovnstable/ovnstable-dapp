@@ -34,6 +34,7 @@ const actions = {
         let list = [];
 
         let etsesFullData = await loadJSON(`${ROOT_API}/product/ets/all`);
+        // let etsesFullData = await loadJSON(`http://localhost:9999/api/product/ets/all`);
         for (let i = 0; i < etsesFullData.length; i++) {
             let ets = etsesFullData[i].data
             list.push(ets);

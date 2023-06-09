@@ -14,6 +14,7 @@ class ProductInfoApiService {
 
         return new Promise((resolve, reject) => {
             apiService.get(ROOT_API + '/product/ets/all', fetchOptions)
+            // apiService.get("http://localhost:9999/api/product/ets/all", fetchOptions)
                 .then(data => {
                     resolve(data)
                 })

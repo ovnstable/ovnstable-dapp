@@ -282,6 +282,7 @@ export default {
                         feature: pool.feature,
                         zappable: pool.zappable,
                         cardOpened: false,
+                        data: pool,
                         aggregators: pool.aggregators,
                         isOpened: pool.aggregators && pool.aggregators.length ? false : true, // pools without aggregators always is opened
 

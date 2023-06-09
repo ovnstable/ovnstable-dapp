@@ -43,14 +43,13 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import moment from "moment";
 import Ets from "@/components/market/cards/ets/Ets";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
-import {axios} from "@/plugins/http-axios";
-import loadJSON from "@/utils/http-utils";
-import {productInfoApiService} from "@/services/product-info-api-service";
+import {poolApiService} from "@/services/pool-api-service";
+import Pool from "@/components/market/cards/pool/Pool.vue";
 
 
 export default {
@@ -58,6 +57,7 @@ export default {
 
     components: {
         Ets,
+        Pool,
         UsdPlus,
         InsuranceCard,
     },
@@ -89,17 +89,23 @@ export default {
         totalSupply: {},
         // totalInsuranceSupply: 0,
 
+        sortedPoolList: [],
+        pools: [],
+        isPoolsLoading: true,
+        isZapModalShow: false,
+        currentZapPool: null,
+
     }),
 
   computed: {
-    ...mapGetters('network', ['appApiUrl', 'networkName', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig', 'switchToOtherNetwork', 'getParams']),
+    ...mapGetters('network', ['allNetworkConfigs', 'appApiUrl', 'networkName', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'zkConfig', 'switchToOtherNetwork', 'getParams']),
     ...mapGetters('accountData', ['account']),
       ...mapGetters('etsAction', ['etsNetworkNames']),
       ...mapGetters('web3', ['contracts', 'web3']),
 
     isAllDataLoaded: function () {
       return !this.isClientDataLoading &&
-          !this.isProductsInfoLoading;
+          !this.isProductsInfoLoading && !this.isPoolsLoading;
     },
 
     tabNetworkId: function() {
@@ -167,13 +173,14 @@ export default {
   created() {
   },
 
-  mounted() {
+  async mounted() {
       console.log(this.$route.query.tabName);
-      this.loadEtsList();
+      await this.loadPools();
       if (!this.$route.query.tabName) {
           this.setTab(this.networkName);
           this.loadData();
-      } if (this.$route.query.tabName) {
+      }
+      if (this.$route.query.tabName) {
           this.setTab(this.$route.query.tabName);
           this.loadData();
       }
@@ -187,9 +194,10 @@ export default {
             this.tab = tabName;
             this.initTabName('/featured', {tabName: this.tab});
 
-            console.log('this.cardEtsList ', this.cardEtsList)
-            this.sortedCardList = this.getSortedCardList(this.cardEtsList, false)
+            this.sortedCardList = this.getSortedCardList()
             await this.getUsdPlusAvgMonthApy();
+            this.isClientDataLoading = false;
+            this.isProductsInfoLoading = false;
             this.isResorting = false;
             console.log("NetworkParams : ", this.getParams(this.tab));
         },
@@ -201,285 +209,73 @@ export default {
           });
       },
 
-        loadData() {
-          this.isClientDataLoading = true;
-          this.isProductsInfoLoading = true;
-          this.refreshMarket();
+        async loadData() {
+            this.isClientDataLoading = true;
+            this.isProductsInfoLoading = true;
         },
-
-        async loadEtsList() {
-          let list = [];
-
-          for (let i = 0; i < this.etsNetworkNames.length; i++) {
-              let etses = await loadJSON(`https://api.overnight.fi/${this.etsNetworkNames[i]}/usd+/design_ets/list`);
-              // May add some fields
-              list.push(...etses);
-          }
-
-          this.etsList = list;
-          console.log("ETSs be loaded", this.etsList );
-        },
-
-    addEtsStrategyData(etsDataParams) {
-      let data = etsDataParams.data;
-
-      if (!data.tvl || data.tvl < 0.0001) {
-        if (data.timeData && data.timeData.length > 0) {
-          data.tvl = data.timeData[data.timeData.length - 1].tvl;
-        }
-      }
-
-      this.etsStrategyData[etsDataParams.name] = data;
-    },
-    addEtsClientData(etsClientDataParams) {
-      this.etsClientData[etsClientDataParams.name] = etsClientDataParams.data;
-    },
-
-    addEtsApyData(etsApyDataParams) {
-      this.etsApyData[etsApyDataParams.name] = etsApyDataParams.data;
-    },
-
-    addEtsTvlData(etsTvlDataParams) {
-      this.etsTvlData[etsTvlDataParams.name] = etsTvlDataParams.data;
-    },
 
     addUsdPlusApyData(usdPlusApyDataParams) {
       this.usdPlusApyData[usdPlusApyDataParams.name] = usdPlusApyDataParams.data;
       console.log('MarketData: refreshUsdPlusPayoutsData this.usdPlusApyData', this.usdPlusApyData);
     },
 
-    async refreshInsuranceSupply() {
 
-      console.log('Supply: refreshInsuranceSupply');
-
-      let networkId = this.networkId;
-
-      let resultSupply = {};
-
-      let insuranceList = [
-        {
-          chainName: 'polygon',
-          chainId: 137,
-        },
-      ];
-
-      for (let i = 0; i < insuranceList.length; i++) {
-        let insurance = insuranceList[i];
-        let supply;
-
-        if (insurance.chainId === networkId) {
-          try {
-            supply = await this.contracts.insurance[insurance.chainName + '_m2m'].methods.totalNetAssets().call()
-            supply = this.web3.utils.fromWei(supply, 'mwei');
-          } catch (e) {
-            supply = this.insuranceStrategyData[insurance.chainName].lastTvl;
-          }
-        } else {
-          try {
-            supply = this.insuranceStrategyData[insurance.chainName].lastTvl;
-          } catch (e) {
-            console.log("Error: ", e)
-          }
-        }
-
-        resultSupply[insurance.chainName] = supply;
-      }
-
-      this.totalInsuranceSupply = resultSupply;
-    },
-
-      async refreshMarket() {
-          console.log('Futured View: refreshMarket this.etsList', this.etsList);
-          if (this.etsList && !this.isStartLoading) {
-              try {
-                  this.isStartLoading = true;
-
-                  this.isProductsInfoLoading = true;
-                  this.isClientDataLoading = true;
-
-                  await this.refreshStrategyData();
-                  await this.refreshClientData();
-
-                  this.isStartLoading = false
-              } catch (e) {
-                  console.error("Error when refresh market data:", e)
-              }
-          }
-      },
-
-
-      async refreshStrategyData() {
-          console.log('MarketData: refreshStrategyData', this.etsList);
-
-          this.isProductsInfoLoading = true;
-
-          productInfoApiService.getAllProducts(this.appApiUrl)
-              .then(data => {
-                  console.log("Future Products loaded: ", data);
-                  this.cardEtsList = data;
-                  this.isResorting = true;
-                  this.sortedCardList = this.getSortedCardList(this.cardEtsList, true);
-                  this.isProductsInfoLoading = false;
-                  this.isResorting = false;
-              }).catch(e => {
-              console.error("Error when load products. ", e);
-              this.isProductsInfoLoading = false;
-              this.isResorting = false;
-          });
-      },
-
-      async refreshClientData() {
-          console.log('MarketData: refreshClientData', this.etsList);
-          this.isClientDataLoading = true;
-          if (!this.account){
-              this.isClientDataLoading = false;
-              return;
-          }
-
-          await Promise.all(
-              this.etsList.map(async ets => {
-                  let refreshParams = {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain};
-                  let appApiUrl;
-
-                  switch (refreshParams.chain) {
-                      case 137:
-                          appApiUrl = this.polygonConfig.appApiUrl;
-                          break;
-                      case 10:
-                          appApiUrl = this.opConfig.appApiUrl;
-                          break;
-                      case 56:
-                          appApiUrl = this.bscConfig.appApiUrl;
-                          break;
-                      case 42161:
-                          appApiUrl = this.arConfig.appApiUrl;
-                          break;
-                      case 324:
-                          appApiUrl = this.zkConfig.appApiUrl;
-                          break;
-                      default:
-                          appApiUrl = this.polygonConfig.appApiUrl;
-                          break;
-                  }
-
-                  let account = this.account.toLowerCase();
-                  let profitDay = null;
-
-                  let fetchOptions = {
-                      headers: {
-                          "Access-Control-Allow-Origin": appApiUrl
-                      }
-                  };
-
-                  await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress + '/account/' + account, fetchOptions)
-                      .then(value => value.json())
-                      .then(value => {
-                          console.log('MarketData: refreshClientData5', this.etsList);
-                          profitDay = value.profit;
-                      }).catch(reason => {
-                          console.log('Error get data: ' + reason);
-                      })
-
-                  this.addEtsClientData({ name: refreshParams.strategyName, data: profitDay});
-                  this.isClientDataLoading = false;
-              })
-          );
-      },
-
-    getSortedCardList(_cardList, isFirst) {
+    getSortedCardList() {
         let networkId = this.networkId;
-        let cardList = _cardList;
+        let cardList = [];
 
-        cardList.forEach(ets => {
-            console.log("Ets type: ", ets.id)
-            if (!ets.type || ets.type === 'ETS') {
-                ets.type = 'ETS';
-                ets.name = 'Ets';
 
-                if (ets.id) {
-                    ets.id = 'ets' + ets.chain + ets.name
-                }
-            }
+        cardList.push({
+            id: 'usdPlus' + networkId,
+            type: 'usdPlus',
+            name: 'UsdPlus',
+            prototype: false,
+            data: {archive: false},
+            chain: networkId,
+            hasUsdPlus: true,
+            overcapEnabled: false,
+            hasCap: true,
+            tvl: null, //this.usdPlusValue,
+            monthApy: this.avgApy ? this.avgApy.value : 0,
         });
 
-
-        if (isFirst) {
-
+        for (let i = 0; i < this.sortedPoolList.length; i++) {
+            let pool = this.sortedPoolList[i];
             cardList.push({
-                id: 'usdPlus' + networkId,
-                type: 'usdPlus',
-                name: 'UsdPlus',
+                id: 'pool' + pool.id,
+                type: 'Pool',
+                name: "Pool",
                 prototype: false,
-                data: {archive: false},
-                chain: networkId,
+                data: pool.data,
                 hasUsdPlus: true,
                 overcapEnabled: false,
+                title: pool.name,
                 hasCap: true,
-                tvl: null, //this.usdPlusValue,
-                monthApy: this.avgApy ? this.avgApy.value : 0,
+                platform: pool.platform,
+                chain: pool.chain,
+                chainName: pool.chainName,
+                apr: pool.apr,
+                tvl: pool.tvl,
+                zappable: pool.zappable,
+                aggregators: pool.aggregators,
             });
-
-            //
-            // if (networkId === 137) {
-            //   cardList.push(
-            //       {
-            //         id: 'insurance' + networkId,
-            //         type: 'insurance',
-            //         name: 'InsuranceCard',
-            //         isPrototype: false,
-            //         isArchive: false,
-            //         chain: networkId,
-            //         hasUsdPlus: true,
-            //         overcapEnabled: false,
-            //         hasCap: this.totalInsuranceSupply,
-            //         tvl: this.insuranceData.strategyData.lastApy,
-            //         monthApy: this.insuranceData.strategyData.apy ? this.insuranceData.strategyData.apy : 0,
-            //         cardOpened: false,
-            //       },
-            //   );
-            // }
-
         }
-      // this.etsList.forEach(ets => {
-      //   cardList.push(
-      //       {
-      //         id: 'ets' + ets.chain + ets.name,
-      //         type: 'ets',
-      //         name: 'Ets',
-      //         isPrototype: ets.prototype,
-      //         isOpenPrototype: ets.openPrototype,
-      //         isArchive: ets.archive,
-      //         data: ets,
-      //         chain: ets.chain,
-      //         hasUsdPlus: ets.hasUsdPlus,
-      //         overcapEnabled: (!!(ets.maxSupply && ets.maxSupply > 0)),
-      //         hasCap: ets.maxSupply ? (this.totalSupply[ets.name] < ets.maxSupply) : true,
-      //         tvl: this.totalSupply[ets.name],
-      //         monthApy: (this.etsStrategyData[ets.name] && this.etsStrategyData[ets.name].apy) ? this.etsStrategyData[ets.name].apy : 0,
-      //         cardOpened: false,
-      //       },
-      //   );
-      // });
+
 
 
       cardList.sort(function (a, b) {
-          if (!a.prototype && b.prototype) return -1;
-          if (a.prototype && !b.prototype) return 1;
-
-          if (!a.data.archive && b.data.archive) return -1;
-          if (a.data.archive && !b.data.archive) return 1;
-
           if (a.chain === networkId && b.chain !== networkId) return -1;
           if (a.chain !== networkId && b.chain === networkId) return 1;
-
-          if (a.monthApy > b.monthApy) return -1;
-          if (a.monthApy < b.monthApy) return 1;
-
-          if (a.hasCap && !b.hasCap) return -1;
-          if (!a.hasCap && b.hasCap) return 1;
+          //
+          // if (a.monthApy > b.monthApy) return -1;
+          // if (a.monthApy < b.monthApy) return 1;
+          //
+          // if (a.hasCap && !b.hasCap) return -1;
+          // if (!a.hasCap && b.hasCap) return 1;
 
         return 0;
       });
+
         console.log("CardList: ", cardList);
 
       cardList[0].cardOpened = true;
@@ -502,6 +298,167 @@ export default {
             console.log('Error get data: ' + reason);
           })
     },
+
+
+      async loadPools() {
+          this.isPoolsLoading = true;
+
+          this.pools = [];
+          let networkConfigList = [...this.allNetworkConfigs];
+
+          for (let networkConfig of networkConfigList) {
+              await poolApiService.getAllPools(networkConfig.appApiUrl)
+                  .then(data => {
+                      if (data) {
+
+                          data.forEach(pool => {
+
+                              let token0Icon;
+                              let token1Icon;
+                              let token2Icon;
+                              let token3Icon;
+
+                              let tokenNames = pool.id.name.split('/');
+
+                              try {
+                                  token0Icon = require('@/assets/currencies/farm/' + tokenNames[0] + '.svg');
+                              } catch (e) {
+                                  try {
+                                      token0Icon = require('@/assets/currencies/farm/' + tokenNames[0] + '.png');
+                                  } catch (ex) {
+                                      // token0Icon = require('@/assets/currencies/undefined.svg');
+                                      token0Icon = null;
+                                  }
+                              }
+
+                              try {
+                                  token1Icon = require('@/assets/currencies/farm/' + tokenNames[1] + '.svg');
+                              } catch (e) {
+                                  try {
+                                      token1Icon = require('@/assets/currencies/farm/' + tokenNames[1] + '.png');
+                                  } catch (ex) {
+                                      // token1Icon = require('@/assets/currencies/undefined.svg');
+                                      token1Icon = null;
+                                  }
+                              }
+
+                              if (tokenNames[2]) {
+                                  try {
+                                      token2Icon = require('@/assets/currencies/farm/' + tokenNames[2] + '.svg');
+                                  } catch (e) {
+                                      try {
+                                          token2Icon = require('@/assets/currencies/farm/' + tokenNames[2] + '.png');
+                                      } catch (ex) {
+                                          // token2Icon = require('@/assets/currencies/undefined.svg');
+                                          token2Icon = null;
+                                      }
+                                  }
+                              }
+
+                              if (tokenNames[3]) {
+                                  try {
+                                      token3Icon = require('@/assets/currencies/farm/' + tokenNames[3] + '.svg');
+                                  } catch (e) {
+                                      try {
+                                          token3Icon = require('@/assets/currencies/farm/' + tokenNames[3] + '.png');
+                                      } catch (ex) {
+                                          // token3Icon = require('@/assets/currencies/undefined.svg');
+                                          token3Icon = null;
+                                      }
+                                  }
+                              }
+
+                              if (pool && pool.tvl && pool.tvl >= 10000.00) {
+
+                                  // todo move to backend
+                                  if (pool.platform === 'Chronos') {
+                                      pool.zappable = true;
+                                  }
+
+                                  // todo move to backend
+                                  // if (this.featuredPoolsAddresses.find(
+                                  //     item => item.toLowerCase() === pool.id.address.toLowerCase())
+                                  // ) {
+                                  //     pool.feature = true;
+                                  // }
+
+
+                                  // todo move to backend
+                                  // pool = this.initAggregators(pool);
+
+
+                                  this.pools.push({
+                                      id: (pool.id.name + pool.tvl + pool.platform),
+                                      name: pool.id.name,// + ' ' + pool.id.address,
+                                      token0Icon: token0Icon,
+                                      token1Icon: token1Icon,
+                                      token2Icon: token2Icon,
+                                      token3Icon: token3Icon,
+                                      chain: networkConfig.networkId,
+                                      chainName: networkConfig.networkName,
+                                      address: pool.id.address,
+                                      platform: pool.platform,
+                                      tvl: pool.tvl,
+                                      apr: pool.apr,
+                                      skimEnabled: pool.skimEnabled,
+                                      explorerUrl: networkConfig.explorerUrl,
+                                      feature: pool.feature,
+                                      zappable: pool.zappable,
+                                      data: pool,
+                                      cardOpened: false,
+                                      aggregators: pool.aggregators,
+                                      isOpened: pool.aggregators && pool.aggregators.length ? false : true, // pools without aggregators always is opened
+
+                                  });
+                              }
+                          })
+                      }
+                  }).catch(reason => {
+                      console.log('Error get pools data: ' + reason);
+                  })
+          }
+
+          // todo move to backend
+          this.pools = this.initFeature(this.pools);
+
+          this.sortedPoolList = this.pools.sort((a, b) => {
+              if (a.feature && !b.feature) {
+                  return -1; // a comes first when a is featured and b is not
+              } else if (!a.feature && b.feature) {
+                  return 1; // b comes first when b is featured and a is not
+              } else if (a.apr !== b.apr) {
+                  return b.apr- a.apr; // sort by APR number
+              } else {
+                  return b.tvl - a.tvl; // sort by TVL number
+              }
+          });
+
+          this.isPoolsLoading = false;
+      },
+
+      initFeature(pools) {
+          const topValuesByType = {};
+
+          pools.forEach(entry => {
+              const { chain, apr } = entry;
+              if (entry.tvl < 500000) {
+                  return;
+              }
+
+              if (!topValuesByType[chain] || (apr > topValuesByType[chain].apr)) {
+                  topValuesByType[chain] = entry;
+              }
+          });
+
+          const topTvlArray = Object.values(topValuesByType);
+          topTvlArray.forEach(pool => {
+              if (pool.apr) {
+                  pool.feature = true;
+              }
+          })
+
+          return pools;
+      }
   }
 }
 

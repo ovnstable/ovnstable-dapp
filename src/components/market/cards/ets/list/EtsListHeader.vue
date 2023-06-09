@@ -12,12 +12,12 @@
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)">
             <v-row class="ma-0 mt-1" justify="end" align="end">
-                <label class="list-header-label">Last day APY</label>
+                <label v-if="!archived" class="list-header-label">Last day APY</label>
             </v-row>
         </v-col>
         <v-col :cols="$wu.isFull() ? 1 : ($wu.isMobile() ? 3 : 1)">
             <v-row class="ma-0 mt-1" justify="end" align="end">
-                <label class="list-header-label">30-day APY</label>
+                <label v-if="!archived" class="list-header-label">30-day APY</label>
             </v-row>
         </v-col>
         <v-col v-if="!$wu.isMobile()" cols="3">
@@ -57,6 +57,10 @@ export default {
     },
 
     props: {
+        archived: {
+            type: Boolean,
+            default: false
+        }
     },
 
     computed: {

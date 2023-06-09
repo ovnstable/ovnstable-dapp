@@ -23,7 +23,7 @@
         <v-divider class="prototypes-list-divider"></v-divider>
 
         <template v-if="openArchiveList">
-          <EtsListHeader/>
+          <EtsListHeader :archived="true"/>
           <EtsListCard class="mt-2"
                        v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && value.data.archive))"
                        :key="component.id"

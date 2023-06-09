@@ -266,7 +266,7 @@
                            :is-all-data-loaded="isAllDataLoaded"
                            :is-ovn-swap="true"
                            :selected-token-count="selectTokenType === 'OVERNIGHT' ? secondTokensSelectedCount : tokensSelectedCount"
-                           :max-token-count="selectTokenType === 'OVERNIGHT' ? 3 : 6"
+                           :max-token-count="selectTokenType === 'OVERNIGHT' ? secondTokens.length : 6"
 
         />
 

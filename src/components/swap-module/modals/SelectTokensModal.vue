@@ -10,15 +10,15 @@
                     <v-toolbar class="container_header container-header" flat>
                         <div v-if="isOvnSwap">
                             <label v-if="selectTokenType === 'OVERNIGHT'" class="title-container">
-                                Select Overnight tokens
+                                Select Overnight tokens <span v-if="selectedTokenCount">({{selectedTokenCount}}/{{maxTokenCount}})</span>
                             </label>
                             <label v-else class="title-container">
-                                Select tokens
+                                All tokens <span v-if="selectedTokenCount">({{selectedTokenCount}}/{{maxTokenCount}})</span>
                             </label>
                         </div>
                         <div v-else>
                             <label class="title-container">
-                                Select tokens
+                                All tokens
                             </label>
                         </div>
 
@@ -131,7 +131,17 @@ export default defineComponent({
         isOvnSwap: {
             type: Boolean,
             required: true,
-        }
+        },
+
+        selectedTokenCount: {
+            type: Number,
+            required: true,
+        },
+
+        maxTokenCount: {
+            type: Number,
+            required: true,
+        },
     },
     data() {
       return {

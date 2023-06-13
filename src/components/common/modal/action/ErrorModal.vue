@@ -75,10 +75,6 @@ export default {
         },
     },
 
-    mounted() {
-        this.showErrorModalWithMsg({errorType: 'swap', errorMsg: {code: -1, message: "asdnasjndjasndjnasjdnjasndjasndjnasjdasjndsa jasndjasndjansjd ajsndjasndjnasjdnasj ajsdnjasndjasndjasnd"}});
-    },
-
     methods: {
         ...mapActions('errorModal', ['showErrorModal', 'closeErrorModal', 'showErrorModalWithMsg']),
 

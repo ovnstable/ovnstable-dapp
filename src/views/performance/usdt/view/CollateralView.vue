@@ -9,7 +9,7 @@
           <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
             <v-img class="currency" :src="require('@/assets/currencies/USDT+.svg')" />
           </div>
-          <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'" >
+          <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 ml-5 mr-5' : 'mt-0'" >
             <label class="section-text">
               USDT+ is the equivalent of USD+, pegged to USDT 1:1. USDT+ consist of aUSDT (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on Optimism. It cannot be minted separately.
             </label>
@@ -140,6 +140,16 @@ export default {
 
     .footer-btn {
         width: 100% !important;
+    }
+
+    .currency {
+        width: 100px !important;
+        height: 100px !important;
+    }
+
+    .info-card-container {
+        display: flex;
+        flex-direction: column;
     }
 }
 

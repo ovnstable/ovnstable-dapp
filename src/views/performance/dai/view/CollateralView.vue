@@ -153,7 +153,11 @@ export default {
     .currency {
         width: 100px !important;
         height: 100px !important;
+    }
 
+    .info-card-container {
+        display: flex;
+        flex-direction: column;
     }
 }
 

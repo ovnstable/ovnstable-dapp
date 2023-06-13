@@ -446,11 +446,11 @@ export default {
     }
 
     .toggle-row {
-        width: 95% !important;
+        max-width: 95% !important;
     }
 
     .toggle-row-second {
-        width: 50% !important;
+        max-width: 50% !important;
     }
 
     .balance-network-icon {
@@ -509,7 +509,7 @@ export default {
 
     .toggle-row {
         border-bottom: 2px solid var(--main-border);
-        width: 200% !important;
+        max-width: 200% !important;
     }
 
     .balance-network-icon {
@@ -568,7 +568,7 @@ export default {
 
     .toggle-row {
         border-bottom: 2px solid var(--main-border);
-        width: 200% !important;
+        max-width: 200% !important;
     }
 
     .balance-network-icon {
@@ -632,7 +632,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
     .toggle-row {
         border-bottom: 2px solid var(--main-border);
-        width: 200% !important;
+        max-width: 200% !important;
     }
 
     .balance-network-icon {

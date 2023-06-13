@@ -192,7 +192,7 @@ export default defineComponent({
     }
 
     .search-token-symbol {
-        font-size: 16px;
+        font-size: 15px;
         line-height: 24px;
     }
 
@@ -207,7 +207,7 @@ export default defineComponent({
     }
 
     .token-balance {
-        font-size: 18px;
+        font-size: 16px;
         line-height: 24px;
     }
 
@@ -474,8 +474,8 @@ div {
 .search-token-symbol-base {
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 24px;
+    font-size: 12px;
+    line-height: 16px;
     color: #707A8B;
 }
 

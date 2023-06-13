@@ -25,39 +25,27 @@
                             </div>
                             <div class="success-table-info-container">
                                 <div class="input-token-container">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6 col-sm-12">
-                                            <div class="success-token-title">
-                                                Swapped from
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-12">
-                                            <div class="success-data-list">
-                                                    <span v-for="(token, index) in successData.inputTokens" :key="token.symbol"
-                                                          class="success-data-item">
-                                                     {{index === 0 && token.selectedToken ?
-                                                      token.selectedToken.symbol : ', ' + token.selectedToken.symbol}}
-                                                    </span>
-                                            </div>
-                                        </div>
+                                    <div class="success-token-title">
+                                        Swapped from
+                                    </div>
+                                    <div class="success-data-list">
+                                            <span v-for="(token, index) in successData.inputTokens" :key="token.symbol"
+                                                  class="success-data-item">
+                                             {{index === 0 && token.selectedToken ?
+                                              token.selectedToken.symbol : ', ' + token.selectedToken.symbol}}
+                                            </span>
                                     </div>
                                 </div>
                                 <div class="output-token-container">
-                                  <div class="row">
-                                      <div class="col-lg-6 col-md-6 col-sm-12">
-                                          <div class="success-token-title">
-                                              Swapped to
-                                          </div>
-                                      </div>
-                                      <div class="col-lg-6 col-md-6 col-sm-12">
-                                          <div class="success-data-list">
-                                            <span v-for="(token, index) in successData.outputTokens" :key="token.symbol"
-                                                    class="success-data-item">
-                                                {{index === 0 && token.selectedToken ?
-                                                token.selectedToken.symbol : ', ' + token.selectedToken.symbol}}
-                                            </span>
-                                          </div>
-                                      </div>
+                                  <div class="success-token-title">
+                                      Swapped to
+                                  </div>
+                                  <div class="success-data-list">
+                                    <span v-for="(token, index) in successData.outputTokens" :key="token.symbol"
+                                            class="success-data-item">
+                                        {{index === 0 && token.selectedToken ?
+                                        token.selectedToken.symbol : ', ' + token.selectedToken.symbol}}
+                                    </span>
                                   </div>
                                 </div>
                             </div>
@@ -133,8 +121,26 @@ export default defineComponent({
 <style scoped>
 @media only screen and (max-width: 960px) {
     .success-text-container {
-        font-size: 24px;
+        font-size: 20px;
         line-height: 40px;
+    }
+
+    .success-table-info-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .input-token-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .output-token-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
 }
 
@@ -144,6 +150,24 @@ export default defineComponent({
         font-size: 30px;
         line-height: 40px;
     }
+
+    .success-table-info-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .input-token-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .output-token-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
 }
 
 /* full */
@@ -151,6 +175,24 @@ export default defineComponent({
     .success-text-container {
         font-size: 30px;
         line-height: 40px;
+    }
+
+    .success-table-info-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .input-token-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .output-token-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
 }
 
@@ -164,6 +206,24 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .success-text-container {
         font-size: 30px;
         line-height: 40px;
+    }
+
+    .success-table-info-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .input-token-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .output-token-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
 }
 
@@ -182,10 +242,6 @@ div {
 
 .container-header {
     background: var(--secondary)!important;
-}
-
-.success-data-list {
-    text-align: end;
 }
 
 .success-logo-container {

@@ -148,7 +148,7 @@
         </v-row>
       </div>
 
-      <div v-else class="ma-0 info-card-container d-flex flex-column mt-3">
+      <div v-else class="ma-0 info-card-container d-flex mt-3">
         <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
           <v-img class="currency" :src="require('@/assets/currencies/USDT+.svg')" />
         </div>
@@ -487,6 +487,11 @@ export default {
         width: 100px !important;
         height: 100px !important;
     }
+
+    .info-card-container {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 /* tablet */
@@ -554,6 +559,11 @@ export default {
         width: 8% !important;
         height: auto !important;
     }
+
+    .info-card-container {
+        display: flex;
+        flex-direction: row;
+    }
 }
 
 /* full */
@@ -620,6 +630,11 @@ export default {
     .balance-network-icon {
         width: 8% !important;
         height: auto !important;
+    }
+
+    .info-card-container {
+        display: flex;
+        flex-direction: row;
     }
 }
 
@@ -693,6 +708,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .balance-network-icon {
         width: 8% !important;
         height: auto !important;
+    }
+
+    .info-card-container {
+        display: flex;
+        flex-direction: row;
     }
 }
 

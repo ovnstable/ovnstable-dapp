@@ -546,7 +546,7 @@ export default {
     }
 
     .toggle-row {
-        width: 100% !important;
+        max-width: 100% !important;
     }
 }
 
@@ -601,6 +601,10 @@ export default {
         font-size: 18px;
         line-height: 28px;
     }
+
+    .toggle-row {
+        max-width: 200% !important;
+    }
 }
 
 /* full */
@@ -653,6 +657,10 @@ export default {
         font-weight: 400;
         font-size: 18px;
         line-height: 28px;
+    }
+
+    .toggle-row {
+        max-width: 200% !important;
     }
 }
 
@@ -712,11 +720,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-size: 16px;
         line-height: 28px;
     }
-}
 
-.toggle-row {
-    border-bottom: 2px solid var(--main-border);
-    width: 203% !important;
+    .toggle-row {
+        max-width: 200% !important;
+    }
 }
 
 .page-container {

@@ -86,8 +86,13 @@ export default {
     .error-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 22px;
+        font-size: 20px;
         line-height: 30px;
+    }
+
+    .error-message {
+        font-size: 14px;
+        line-height: 24px;
     }
 
 }
@@ -105,6 +110,11 @@ export default {
     .info-container {
         min-width: 550px;
     }
+
+    .error-message {
+        font-size: 16px;
+        line-height: 24px;
+    }
 }
 
 /* full */
@@ -119,6 +129,11 @@ export default {
 
     .info-container {
         min-width: 550px;
+    }
+
+    .error-message {
+        font-size: 16px;
+        line-height: 24px;
     }
 }
 
@@ -137,8 +152,6 @@ export default {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
     color: var(--secondary-gray-text);
 }
 

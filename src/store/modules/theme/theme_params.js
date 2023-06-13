@@ -160,6 +160,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--dividers',
+        enabled: true,
+        theme: {
+            light: '#DEE1E5',
+            dark: '#4C586D'
+        }
+    },
+    {
         name: '--secondary-border',
         enabled: true,
         theme: {

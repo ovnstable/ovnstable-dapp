@@ -527,7 +527,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .pools-hr {
-    border: 1px solid #DEE1E5;
+    border: 1px solid var(--dividers);
     margin-bottom: 5px;
 }
 
@@ -605,7 +605,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-weight: 400;
     font-size: 24px;
     line-height: 36px;
-    color: #29323E;
+    color: var(--main-gray-text);
     display: inline-block;
 
 }

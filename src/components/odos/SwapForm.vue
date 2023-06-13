@@ -409,7 +409,7 @@ export default defineComponent({
             return this.allInputsWithNotApproved.length > 0
         },
         allInputsWithNotApproved() {
-            return this.selectedInputTokens.filter(token => !token.selectedToken.approveData.approved && !token.selectedToken.value > 0);
+            return this.selectedInputTokens.filter(token => !token.selectedToken.approveData.approved);
         },
         firstInputInQueueForToApprove() {
             return this.isAnyInputsNeedApprove ? this.allInputsWithNotApproved[0] : null
@@ -1708,7 +1708,7 @@ div {
 }
 
 .transaction-info-footer {
-    border-top: 1px solid #DEE1E5;
+    border-top: 1px solid var(--dividers);
     padding-top: 22px;
 }
 

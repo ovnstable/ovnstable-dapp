@@ -577,7 +577,7 @@ export default {
     }
 
     .balance-network-icon {
-        width: 8% !important;
+        width: 25px !important;
         height: auto !important;
     }
 }
@@ -644,7 +644,7 @@ export default {
     }
 
     .balance-network-icon {
-        width: 8% !important;
+        width: 25px !important;
         height: auto !important;
     }
 }
@@ -716,7 +716,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     }
 
     .balance-network-icon {
-        width: 8% !important;
+        width: 25px !important;
         height: auto !important;
     }
 }

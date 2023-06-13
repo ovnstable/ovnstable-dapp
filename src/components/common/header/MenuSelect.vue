@@ -370,7 +370,7 @@ export default {
 
         featuredClick() {
             this.selectTab('featured');
-            this.goToActionByPath('/featured', { tabName: 'featured' });
+            this.goToActionByPath('/featured');
         },
         swapOdosClick() {
             this.selectTab('swap-odos');

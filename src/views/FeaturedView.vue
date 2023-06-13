@@ -562,6 +562,15 @@ export default {
         font-size: 32px;
         line-height: 40px;
     }
+
+
+    .toggle-row {
+        max-width: 95% !important;
+    }
+
+    .toggle-row-second {
+        max-width: 50% !important;
+    }
 }
 
 /* tablet */
@@ -579,6 +588,11 @@ export default {
         font-size: 54px;
         line-height: 60px;
     }
+
+    .toggle-row {
+        border-bottom: 2px solid var(--main-border);
+        max-width: 200% !important;
+    }
 }
 
 /* full */
@@ -595,6 +609,11 @@ export default {
         font-weight: 300;
         font-size: 54px;
         line-height: 60px;
+    }
+
+    .toggle-row {
+        border-bottom: 2px solid var(--main-border);
+        max-width: 200% !important;
     }
 }
 
@@ -617,6 +636,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-weight: 300;
         font-size: 48px;
         line-height: 60px;
+    }
+
+    .toggle-row {
+        border-bottom: 2px solid var(--main-border);
+        max-width: 200% !important;
     }
 }
 

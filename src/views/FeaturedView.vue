@@ -468,30 +468,32 @@ export default {
                                   // todo move to backend
                                   // pool = this.initAggregators(pool);
 
+                                  // if (pool.apr && pool.tvl > 500000) {
+                                  if (pool.apr) {
+                                      this.pools.push({
+                                          id: (pool.id.name + pool.tvl + pool.platform),
+                                          name: pool.id.name,// + ' ' + pool.id.address,
+                                          token0Icon: token0Icon,
+                                          token1Icon: token1Icon,
+                                          token2Icon: token2Icon,
+                                          token3Icon: token3Icon,
+                                          chain: networkConfig.networkId,
+                                          chainName: networkConfig.networkName,
+                                          address: pool.id.address,
+                                          platform: pool.platform,
+                                          tvl: pool.tvl,
+                                          apr: pool.apr,
+                                          skimEnabled: pool.skimEnabled,
+                                          explorerUrl: networkConfig.explorerUrl,
+                                          feature: pool.feature,
+                                          zappable: pool.zappable,
+                                          data: pool,
+                                          cardOpened: false,
+                                          aggregators: pool.aggregators,
+                                          isOpened: pool.aggregators && pool.aggregators.length ? false : true, // pools without aggregators always is opened
 
-                                  this.pools.push({
-                                      id: (pool.id.name + pool.tvl + pool.platform),
-                                      name: pool.id.name,// + ' ' + pool.id.address,
-                                      token0Icon: token0Icon,
-                                      token1Icon: token1Icon,
-                                      token2Icon: token2Icon,
-                                      token3Icon: token3Icon,
-                                      chain: networkConfig.networkId,
-                                      chainName: networkConfig.networkName,
-                                      address: pool.id.address,
-                                      platform: pool.platform,
-                                      tvl: pool.tvl,
-                                      apr: pool.apr,
-                                      skimEnabled: pool.skimEnabled,
-                                      explorerUrl: networkConfig.explorerUrl,
-                                      feature: pool.feature,
-                                      zappable: pool.zappable,
-                                      data: pool,
-                                      cardOpened: false,
-                                      aggregators: pool.aggregators,
-                                      isOpened: pool.aggregators && pool.aggregators.length ? false : true, // pools without aggregators always is opened
-
-                                  });
+                                      });
+                                  }
                               }
                           })
                       }

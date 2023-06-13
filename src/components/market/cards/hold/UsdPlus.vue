@@ -13,7 +13,7 @@
                         <label class="percentage">
                             {{ $utils.formatMoneyComma((avgApy ? avgApy.value : 0), 0) + '%' }}
                         </label>
-                        <label class="apy ml-3">APY</label>
+                        <label class="apy ml-3">30-day APY</label>
                         <div class="tooltip">
                             <Tooltip icon-color="#FFFFFF"
                                      :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"

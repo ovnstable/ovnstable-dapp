@@ -226,10 +226,10 @@ export default {
             }
         },
         getTabNetworkPoolCard(networkName) {
-            let pool = this.findTopPoolWithZapByNetwork(this.sortedPoolList, networkName);
-            if (!pool) {
-                pool = this.findTopPoolWithoutZapByNetwork(this.sortedPoolList, networkName);
-            }
+            let pool = this.findTopPoolByNetwork(this.sortedPoolList, networkName);
+            // if (!pool) {
+            //     pool = this.findTopPoolExcludeNetwork(this.sortedPoolList, networkName);
+            // }
 
             if (!pool) {
                 console.log("Pool not found when load tab network.");
@@ -258,11 +258,7 @@ export default {
             }
         },
         getTopAnotherNetworkPoolCard(networkName) {
-            let pool = this.findTopPoolWithZapByNetwork(this.sortedPoolList, networkName, true);
-            if (!pool) {
-                pool = this.findTopPoolWithoutZapByNetwork(this.sortedPoolList, networkName, true);
-            }
-
+            let pool = this.findTopPoolExcludeNetwork(this.sortedPoolList, networkName);
             if (!pool) {
                 console.log("Pool not found when load another tab network.");
                 return null
@@ -289,62 +285,26 @@ export default {
                 aggregators: pool.aggregators,
             }
         },
-        findTopPoolWithZapByNetwork(pools, networkName, isExcludeNetwork) {
+        findTopPoolByNetwork(pools, networkName) {
             for (let i = 0; i < pools.length; i++) {
                 let pool = pools[i];
 
-                // exclude network
-                if (isExcludeNetwork && pool.chainName === networkName) {
-                    continue;
-                }
-
-                // exclude network and check zappable
-                if (isExcludeNetwork && pool.chainName !== networkName) {
-                    if (!pool.zappable) {
-                        continue;
-                    }
-
-                    // find first zappable in another network
+                if (pool.feature && pool.chainName === networkName) {
+                    // find first in network
                     return pool;
                 }
-
-                // continue with another network or not zappable
-                if (pool.chainName !== networkName || !pool.zappable) {
-                    continue;
-                }
-
-                // find first zappable in network
-                return pool;
             }
 
             return null;
         },
-        findTopPoolWithoutZapByNetwork(pools, networkName, isExcludeNetwork) {
+        findTopPoolExcludeNetwork(pools, networkName) {
             for (let i = 0; i < pools.length; i++) {
                 let pool = pools[i];
 
-                // exclude network
-                if (isExcludeNetwork && pool.chainName === networkName) {
-                    continue;
-                }
-
-                // exclude network and check zappable
-                if (isExcludeNetwork && pool.chainName !== networkName) {
-                    if (pool.zappable) {
-                        continue;
-                    }
-
-                    // find first without zappable in another network
+                if (pool.feature && pool.chainName !== networkName) {
+                    // find first in network
                     return pool;
                 }
-
-                // continue with another network or zappable
-                if (pool.chainName !== networkName || pool.zappable) {
-                    continue;
-                }
-
-                // find first without zappable in network
-                return pool;
             }
 
             return null;
@@ -505,17 +465,26 @@ export default {
           // todo move to backend
           this.pools = this.initFeature(this.pools);
 
-          this.sortedPoolList = this.pools.sort((a, b) => {
-              if (a.feature && !b.feature) {
-                  return -1; // a comes first when a is featured and b is not
-              } else if (!a.feature && b.feature) {
-                  return 1; // b comes first when b is featured and a is not
-              } else if (a.apr !== b.apr) {
-                  return b.apr- a.apr; // sort by APR number
-              } else {
-                  return b.tvl - a.tvl; // sort by TVL number
-              }
-          });
+            // todo move to backend
+            this.pools = this.initFeature(this.pools);
+
+            let topPools = this.pools.filter(pool => pool.tvl >= 500000);
+            topPools = topPools.sort((a, b) => {
+                if (a.feature && !b.feature) {
+                    return -1; // a comes first when a is featured and b is not
+                } else if (!a.feature && b.feature) {
+                    return 1; // b comes first when b is featured and a is not
+                } else if (a.apr !== b.apr) {
+                    return b.apr - a.apr; // sort by APR number
+                } else {
+                    return b.tvl - a.tvl; // sort by TVL number
+                }
+            });
+
+            let secondPools = this.pools.filter(pool => pool.tvl < 500000);
+            secondPools = secondPools.sort((a, b) => b.tvl - a.tvl);
+
+            this.sortedPoolList = [...topPools, ...secondPools];
 
           this.isPoolsLoading = false;
         },

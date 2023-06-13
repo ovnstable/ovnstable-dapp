@@ -288,17 +288,23 @@ export default {
           // todo move to backend
           this.pools = this.initFeature(this.pools);
 
-          this.sortedPoolList = this.pools.sort((a, b) => {
+          let topPools = this.pools.filter(pool => pool.tvl >= 500000);
+          topPools = topPools.sort((a, b) => {
               if (a.feature && !b.feature) {
                   return -1; // a comes first when a is featured and b is not
               } else if (!a.feature && b.feature) {
                   return 1; // b comes first when b is featured and a is not
               } else if (a.apr !== b.apr) {
-                  return b.apr- a.apr; // sort by APR number
+                  return b.apr - a.apr; // sort by APR number
               } else {
                   return b.tvl - a.tvl; // sort by TVL number
               }
           });
+
+          let secondPools = this.pools.filter(pool => pool.tvl < 500000);
+          secondPools = secondPools.sort((a, b) => b.tvl - a.tvl);
+
+          this.sortedPoolList = [...topPools, ...secondPools];
 
           this.isPoolsLoading = false;
       },

@@ -409,7 +409,7 @@ export default defineComponent({
             return this.allInputsWithNotApproved.length > 0
         },
         allInputsWithNotApproved() {
-            return this.selectedInputTokens.filter(token => !token.selectedToken.approveData.approved);
+            return this.selectedInputTokens.filter(token => !token.selectedToken.approveData.approved && token.value > 0);
         },
         firstInputInQueueForToApprove() {
             return this.isAnyInputsNeedApprove ? this.allInputsWithNotApproved[0] : null

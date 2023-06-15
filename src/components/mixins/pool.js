@@ -96,6 +96,9 @@ export const pool = {
                 case 'Ennead':
                     url = 'https://beta.ennead.farm/pools';
                     break;
+                case 'Pearl':
+                    url = 'https://www.pearl.exchange/liquidity/manage/';
+                    break;
                 default:
                     url = pool.explorerUrl + '/address/';
                     break;

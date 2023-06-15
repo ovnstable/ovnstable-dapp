@@ -47,7 +47,7 @@
 
 <script>
 
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 import {poolApiService} from "@/services/pool-api-service";
 import ZapModal from "@/components/zap/modals/ZapModal.vue";
@@ -121,9 +121,17 @@ export default {
 
     async mounted() {
         await this.loadPools();
+
+        try {
+            this.trackClick({action: 'all_pool_view', event_category: 'Page view', event_label: 'View pool page' });
+        } catch (e) {
+            console.error("Track error:", e);
+        }
     },
 
     methods: {
+        ...mapActions('track', ['trackClick']),
+
 
         zapFilter(isShow) {
             this.isShowOnlyZap = isShow;

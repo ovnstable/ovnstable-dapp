@@ -738,6 +738,199 @@ export default defineComponent({
                 this.clickOnStake = false;
             })
         },
+
+      /*  async initRequest() {
+            // await showBalances();
+            const amountToken0In = toE6(100);
+            const amountToken1In = toE18(100);
+            const amountToken0Out = toE6(100);
+            const amountToken1Out = toE18(800);
+
+            let account = await setUp();
+            let chronosZap = await ethers.getContract("ChronosZap");
+
+            let token0Out = (await getContract('UsdPlusToken', 'arbitrum')).connect(account);
+            let token1Out = (await getContract('UsdPlusToken', 'arbitrum_dai')).connect(account);
+
+            let token0In = (await getERC20("usdc")).connect(account);
+            let token1In = (await getERC20("dai")).connect(account);
+
+            // await (await token0In.approve(chronosZap.address, amountToken0In)).wait();
+            // await (await token1In.approve(chronosZap.address, amountToken1In)).wait();
+            // await (await token0Out.approve(chronosZap.address, amountToken0Out)).wait();
+            // await (await token1Out.approve(chronosZap.address, amountToken1Out)).wait();
+
+            const reserves = await chronosZap.getProportion(gauge);
+            const sumReserves = reserves[0].add(reserves[1])
+
+            const proportions = calculateProportionForChronosSwapModif({
+                inputTokensDecimals: [6, 18],
+                inputTokensAddresses: [token0In.address, token1In.address],
+                inputTokensAmounts: [amountToken0In, amountToken1In],
+                inputTokensPrices: [1, 1],
+                outputTokensDecimals: [6, 18],
+                outputTokensAddresses: [token0Out.address, token1Out.address],
+                outputTokensAmounts: [amountToken0Out, amountToken1Out],
+                outputTokensPrices: [1, 1],
+                proportion0: reserves[0] / sumReserves
+            });
+
+            const request = await this.getOdosRequest({
+                "chainId": 42161,
+                "inputTokens": proportions.inputTokens,
+                "outputTokens": proportions.outputTokens,
+                "gasPrice": 0.1,
+                "userAddr": chronosZap.address,
+                "slippageLimitPercent": 0.4,
+            });
+
+            const inputTokens = proportions.inputTokens.map(({ tokenAddress, amount }) => {
+                return { "tokenAddress": tokenAddress, "amountIn": amount };
+            });
+            const outputTokens = proportions.outputTokens.map(({ tokenAddress }) => {
+                return { "tokenAddress": tokenAddress, "receiver": chronosZap.address };
+            });
+
+            const receipt = await (await chronosZap.connect(account).zapIn({
+                inputs: inputTokens,
+                outputs: outputTokens,
+                data: request.data
+            }, { gauge, amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out] })).wait();
+
+            console.log(`Transaction was mined in block ${receipt.blockNumber}`);
+
+
+            const inputTokensEvent = receipt.events.find((event) => event.event === "InputTokens");
+            const outputTokensEvent = receipt.events.find((event) => event.event === "OutputTokens");
+            const putIntoPoolEvent = receipt.events.find((event) => event.event === "PutIntoPool");
+            const returnedToUserEvent = receipt.events.find((event) => event.event === "ReturnedToUser");
+
+
+            console.log(`Input tokens: ${inputTokensEvent.args.amountsIn} ${inputTokensEvent.args.tokensIn}`);
+            console.log(`Output tokens: ${outputTokensEvent.args.amountsOut} ${outputTokensEvent.args.tokensOut}`);
+            console.log(`Tokens put into pool: ${putIntoPoolEvent.args.amountsPut} ${putIntoPoolEvent.args.tokensPut}`);
+            console.log(`Tokens returned to user: ${returnedToUserEvent.args.amountsReturned} ${returnedToUserEvent.args.tokensReturned}`);
+
+
+
+        },
+        async getOdosRequest(request) {
+            let swapParams = {
+                "chainId": request.chainId,
+                "inputTokens": request.inputTokens,
+                "outputTokens": request.outputTokens,
+                "gasPrice": request.gasPrice,
+                "userAddr": request.userAddr,
+                "slippageLimitPercent": request.slippageLimitPercent,
+                "sourceBlacklist": ["Hashflow"],
+                "sourceWhitelist": [],
+                "simulate": false,
+                "pathViz": false,
+                "disableRFQs": false
+            }
+
+            // @ts-ignore
+            const url = 'https://api.overnight.fi/root/odos/sor/swap';
+            let transaction;
+            try {
+                transaction = (await axios.post(url, swapParams, { headers: { "Accept-Encoding": "br" } }));
+            } catch (e) {
+                console.log("[chronosZap] getSwapTransaction: " + e);
+                return 0;
+            }
+
+            if (transaction.statusCode === 400) {
+                console.log(`[chronosZap]  ${transaction.description}`);
+                return 0;
+            }
+
+            if (transaction.data.transaction === undefined) {
+                console.log("[chronosZap] transaction.tx is undefined");
+                return 0;
+            }
+
+            console.log('Success get data from Odos!');
+            return transaction.data.transaction;
+        },
+        calculateProportionForChronosSwapModif({
+                inputTokensDecimals,
+                inputTokensAddresses,
+                inputTokensAmounts,
+                inputTokensPrices,
+                outputTokensDecimals,
+                outputTokensAddresses,
+                outputTokensAmounts,
+                outputTokensPrices,
+                proportion0,
+            }
+        ) {
+            const tokenOut0 = Number.parseFloat(new BigNumber(outputTokensAmounts[0].toString()).div(new BigNumber(10).pow(outputTokensDecimals[0])).toFixed(3).toString()) * outputTokensPrices[0];
+            const tokenOut1 = Number.parseFloat(new BigNumber(outputTokensAmounts[1].toString()).div(new BigNumber(10).pow(outputTokensDecimals[1])).toFixed(3).toString()) * outputTokensPrices[1];
+            const sumInitialOut = tokenOut0 + tokenOut1;
+            let sumInputs = 0;
+            for (let i = 0; i < inputTokensAmounts.length; i++) {
+                sumInputs += Number.parseFloat(new BigNumber(inputTokensAmounts[i].toString()).div(new BigNumber(10).pow(inputTokensDecimals[i])).toFixed(3).toString()) * inputTokensPrices[i];
+            }
+            sumInputs += sumInitialOut;
+
+            const output0InMoneyWithProportion = sumInputs * proportion0;
+            const output1InMoneyWithProportion = sumInputs * (1 - proportion0);
+            const inputTokens = inputTokensAddresses.map((address, index) => {
+                return { "tokenAddress": address, "amount": inputTokensAmounts[index].toString() };
+            });
+            if (output0InMoneyWithProportion < tokenOut0) {
+                const dif = tokenOut0 - output0InMoneyWithProportion;
+                const token0AmountForSwap = new BigNumber((dif / outputTokensPrices[0]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[0])).toFixed(0);
+                inputTokens.push({ "tokenAddress": outputTokensAddresses[0], "amount": token0AmountForSwap.toString() })
+                return {
+                    "outputTokens": [
+                        {
+                            "tokenAddress": outputTokensAddresses[1],
+                            "proportion": 1
+                        }
+                    ],
+                    "inputTokens": inputTokens,
+                    "amountToken0Out": (new BigNumber(outputTokensAmounts[0]).minus(token0AmountForSwap)).toFixed(0),
+                    "amountToken1Out": outputTokensAmounts[1].toString(),
+                }
+            } else if (output1InMoneyWithProportion < tokenOut1) {
+                const dif = tokenOut1 - output1InMoneyWithProportion;
+                const token1AmountForSwap = new BigNumber((dif / outputTokensPrices[1]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[1])).toFixed(0);
+                // console.log(new BigNumber((output1InMoneyWithProportion / outputTokensPrices[1]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[1])).toFixed(0), outputTokensAmounts[1].toString());
+                inputTokens.push({ "tokenAddress": outputTokensAddresses[1], "amount": token1AmountForSwap.toString() })
+                // console.log(inputTokens)
+                return {
+                    "outputTokens": [
+                        {
+                            "tokenAddress": outputTokensAddresses[0],
+                            "proportion": 1
+                        },
+                    ],
+                    "inputTokens": inputTokens,
+                    "amountToken0Out": outputTokensAmounts[0].toString(),
+                    "amountToken1Out": (new BigNumber(outputTokensAmounts[1]).minus(token1AmountForSwap)).toFixed(0),
+                }
+            }
+
+            const difToGetFromOdos0 = output0InMoneyWithProportion - tokenOut0;
+            const difToGetFromOdos1 = output1InMoneyWithProportion - tokenOut1;
+            return {
+                "inputTokens": inputTokens,
+                "outputTokens": [
+                    {
+                        "tokenAddress": outputTokensAddresses[0],
+                        "proportion": Number.parseFloat((difToGetFromOdos0 / (difToGetFromOdos0 + difToGetFromOdos1)).toFixed(2))
+                    },
+                    {
+                        "tokenAddress": outputTokensAddresses[1],
+                        "proportion": Number.parseFloat((difToGetFromOdos1 / (difToGetFromOdos0 + difToGetFromOdos1)).toFixed(2))
+                    },
+                ],
+                "amountToken0Out": new BigNumber((tokenOut0 / outputTokensPrices[0]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[0])).toFixed(0),
+                "amountToken1Out": new BigNumber((tokenOut1 / outputTokensPrices[1]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[1])).toFixed(0),
+            }
+
+        },*/
         getSourceLiquidityBlackList() {
             let sourceBlacklist = [...this.sourceLiquidityBlacklist];
             console.log("this.zapPool for exclude liquidity: ", this.zapPool);

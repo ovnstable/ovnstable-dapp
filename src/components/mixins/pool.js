@@ -1,3 +1,5 @@
+import {mapActions} from "vuex";
+
 export const pool = {
     computed: {
 
@@ -9,6 +11,8 @@ export const pool = {
         }
     },
     methods: {
+        ...mapActions('track', ['trackClick']),
+
         setIsZapModalShow(isShow) {
             this.isZapModalShow = isShow;
         },
@@ -16,6 +20,12 @@ export const pool = {
             console.log("Zap open for pool: ", pool);
             this.currentZapPool = pool;
             this.setIsZapModalShow(true);
+
+            try {
+                this.trackClick({action: 'click_zap_in', event_category: 'Page view', event_label: 'View zap page' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
         },
 
         openLink(pool) {

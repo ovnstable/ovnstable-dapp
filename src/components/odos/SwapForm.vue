@@ -333,6 +333,12 @@ export default defineComponent({
         if (!this.isAvailableOnNetwork) {
             this.mintAction();
         }
+
+        try {
+            this.trackClick({action: 'swap_view', event_category: 'Page view', event_label: 'View swap page' });
+        } catch (e) {
+            console.error("Track error:", e);
+        }
     },
     data() {
         return {
@@ -538,6 +544,7 @@ export default defineComponent({
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions('walletAction', ['connectWallet']),
+        ...mapActions('track', ['trackClick']),
 
         mintAction() {
             this.showMintView();
@@ -755,12 +762,19 @@ export default defineComponent({
                 // disableRFQs: false
             }
 
+            try {
+                this.trackClick({action: 'click_swap', event_category: 'Click Button', event_label: 'Click on swap', value: this.sumOfAllSelectedTokensInUsd });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
+
             console.log("Odos request data", requestData);
             this.swapRequest(requestData)
                 .then(data => {
                     console.log("Odos swap request success", data)
                     // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
                     this.initWalletTransaction(data, this.selectedInputTokens, this.selectedOutputTokens);
+
                     this.isSwapLoading = false;
                 }).catch(e => {
                 console.error("Odos swap request failed", e)

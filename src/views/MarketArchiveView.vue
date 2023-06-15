@@ -18,14 +18,14 @@
     </div>
     <div v-else class="mt-7 cards-list-container">
 
-      <template v-if="sortedCardList.filter(value => value.data.archive).length > 0" >
+      <template v-if="sortedCardList.length > 0" >
 
         <v-divider class="prototypes-list-divider"></v-divider>
 
         <template v-if="openArchiveList">
           <EtsListHeader :archived="true"/>
           <EtsListCard class="mt-2"
-                       v-for="component in sortedCardList.filter(value => (value.type === 'ETS' && value.data.archive))"
+                       v-for="component in sortedCardList"
                        :key="component.id"
                        :card-data="component"
                        :archived="true"/>
@@ -244,6 +244,7 @@ export default {
 
       await Promise.all(
           this.etsList.map(async ets => {
+              console.log("ets.name: ", ets.name)
             let refreshParams = {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain};
             let appApiUrl;
 
@@ -293,6 +294,11 @@ export default {
     getSortedCardList(cardList) {
 
       let networkId = this.networkId;
+
+      if (!cardList) {
+          console.log("Error SortedCard:", cardList);
+          return;
+      }
 
       cardList.sort(function (a, b) {
         if (!a.prototype && b.prototype) return -1;

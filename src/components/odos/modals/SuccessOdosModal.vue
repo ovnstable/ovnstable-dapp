@@ -73,7 +73,7 @@
 import {defineComponent} from 'vue'
 import SelectTokenShort from "@/components/swap-module/SelectTokenShort.vue";
 import SelectTokenWithSearch from "@/components/swap-module/SelectTokenWithSearch.vue";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default defineComponent({
     name: "SuccessOdosModal",
@@ -101,15 +101,25 @@ export default defineComponent({
       }
     },
     mounted() {
-
     },
     computed: {
         ...mapGetters('network', ['getParams']),
     },
     watch: {
+        isShow: function (val, oldVal) {
+            if (val) {
+                try {
+                    this.trackClick({action: 'success_swap', event_category: 'Page view', event_label: 'View success swap page' });
+                } catch (e) {
+                    console.error("Track error:", e);
+                }
+            }
+        }
 
     },
     methods: {
+        ...mapActions('track', ['trackClick']),
+
         openOnExplorer() {
             let explorerUrl = this.getParams(this.successData.chain).explorerUrl;
             window.open(explorerUrl + `tx/${this.successData.hash}`, '_blank').focus();

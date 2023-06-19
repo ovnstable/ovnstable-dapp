@@ -70,6 +70,10 @@ export default defineComponent({
         currentZapPlatformContractType: {
             type: Object,
             required: true
+        },
+        clickOnApproveGauge: {
+            type: Object,
+            required: true
         }
     },
     data() {
@@ -78,38 +82,26 @@ export default defineComponent({
         }
     },
     computed: {
-        /*  stepLabels: function () {
-      let approvesLabel = `Approve tokens (${this.approvedTokensCount}/${this.selectedInputTokens.length})`;
-
-      if (this.currentZapPlatformContractType.type === 'LP_WITH_STAKE_IN_ONE_STEP') {
-          return ['', approvesLabel, 'Stake LP'];
-      }
-
-      if (this.currentZapPlatformContractType.type === 'LP_WITH_STAKE_IN_ONE_STEP') {
-          return ['', approvesLabel, 'Approve Gauge', 'Stake LP'];
-      }
-
-      console.error("Type zap not found for steps labels", this.currentZapPlatformContractType);
-      return []
-  },
-  step: function () {
-      if (this.clickOnStake) {
-          return 3;
-      }
-
-      if (this.approvedTokensCount === this.selectedInputTokens.length) {
-          return 1;
-      }
-
-
-      return 1;
-  },*/
         stepLabels: function () {
             let approvesLabel = `Approve tokens (${this.approvedTokensCount}/${this.selectedInputTokens.length})`;
-            return ['', approvesLabel, 'Stake LP']
+
+            if (this.currentZapPlatformContractType.type === 'LP_WITH_STAKE_IN_ONE_STEP') {
+                return ['', approvesLabel, 'Stake LP'];
+            }
+
+            if (this.currentZapPlatformContractType.type === 'LP_WITH_STAKE_IN_ONE_STEP') {
+                return ['', approvesLabel, 'Approve Gauge', 'Stake LP'];
+            }
+
+            console.error("Type zap not found for steps labels", this.currentZapPlatformContractType);
+            return [];
         },
         step: function () {
             if (this.clickOnStake) {
+                return 3;
+            }
+
+            if (this.clickOnApproveGauge) {
                 return 2;
             }
 

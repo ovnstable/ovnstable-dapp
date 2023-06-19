@@ -168,8 +168,9 @@
                         <div v-if="selectedInputTokens.length > 0" class="row">
                             <div class="col-12">
                                <ZapSteps :selected-input-tokens="selectedInputTokens"
-                               :click-on-stake="clickOnStake"
-                               :current-zap-platform-contract-type="currentZapPlatformContractType">
+                                         :click-on-stake="clickOnStake"
+                                         :click-on-approve-gauge="clickOnApproveGauge"
+                                         :current-zap-platform-contract-type="currentZapPlatformContractType">
                                </ZapSteps>
                             </div>
                         </div>
@@ -266,6 +267,7 @@ export default defineComponent({
             tokensQuotaCheckerSec: 0,
 
             clickOnStake: false,
+            clickOnApproveGauge: false,
 
             sourceLiquidityBlacklist: ["Hashflow"],
             mapExcludeLiquidityPlatform: { // Schema for hot exclude: {'Ovn pool platform name from db': ['odos', 'api/info/liquidity-sources', 'related', 'with', 'platform'] }

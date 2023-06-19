@@ -13,81 +13,84 @@
             >
                 <template v-slot:body="{items}">
                     <tbody>
-                    <tr v-for="item in items" v-bind:key="item.name">
-                        <td class="strategy-name-col" @click="openOnScan(item.address)">
-                            {{ item.name }}
-                        </td>
-                        <td class="text-right">
-                            ${{ $utils.formatMoney(item.netAssetValue, 2) }}
-                        </td>
-                        <td class="text-right">
-                            ${{ $utils.formatMoney(item.liquidationValue, 2) }}
-                        </td>
-                        <td class="text-right">
-                            <b>{{ item.currentWeight }}</b>
-                        </td>
-                        <td>
-                            <v-row class="fill-height" align="center" justify="center">
-                                <v-text-field
-                                    class="m2m-field"
-                                    :rules="[rules.required, checkNumber]"
-                                    dense
-                                    outlined
-                                    v-model="item.minWeight"
-                                    :disabled="financeLoading || !hasChangeAccount">
-                                </v-text-field>
-                            </v-row>
-                        </td>
-                        <td>
-                            <v-row class="fill-height" align="center" justify="center">
-                                <v-text-field
-                                    class="m2m-field"
-                                    :rules="[rules.required, checkNumber]"
-                                    dense
-                                    outlined
-                                    v-model="item.targetWeight"
-                                    :disabled="financeLoading || !hasChangeAccount">
-                                </v-text-field>
-                            </v-row>
-                        </td>
-                        <td>
-                            <v-row class="fill-height" align="center" justify="center">
-                                <v-text-field
-                                    class="m2m-field"
-                                    :rules="[rules.required, checkNumber]"
-                                    dense
-                                    outlined
-                                    v-model="item.maxWeight"
-                                    :disabled="financeLoading || !hasChangeAccount"
-                                >
-                                </v-text-field>
-                            </v-row>
-                        </td>
-                        <td>
-                            <v-switch
-                                :disabled="financeLoading || !hasChangeAccount"
-                                v-model="item.enabled"
-                            ></v-switch>
-                        </td>
-                        <td>
-                            <v-switch
-                                :disabled="financeLoading || !hasChangeAccount"
-                                v-model="item.enabledReward"
-                            ></v-switch>
-                        </td>
-                        <td>
-                            <v-row class="fill-height" align="center" justify="center">
-                                <v-text-field
-                                    class="m2m-field"
-                                    :rules="[rules.required, checkNumber]"
-                                    dense
-                                    outlined
-                                    v-model="item.riskFactor"
-                                    :disabled="financeLoading || !hasChangeAccount">
-                                </v-text-field>
-                            </v-row>
-                        </td>
-                    </tr>
+                        <tr v-for="item in items" v-bind:key="item.name" >
+                            <template v-if="!item.isHidden">
+                                <td @click="openOnScan(item.address)" class="strategy-name-col">
+                                    {{ item.name }} {{item.isHidden}}
+                                </td>
+                                <td class="text-right">
+                                    ${{ $utils.formatMoney(item.netAssetValue, 2) }}
+                                </td>
+                                <td class="text-right">
+                                    ${{ $utils.formatMoney(item.liquidationValue, 2) }}
+                                </td>
+                                <td class="text-right">
+                                    <b>{{ item.currentWeight }}</b>
+                                </td>
+                                <td>
+                                    <v-row class="fill-height" align="center" justify="center">
+                                        <v-text-field
+                                            class="m2m-field"
+                                            :rules="[rules.required, checkNumber]"
+                                            dense
+                                            outlined
+                                            v-model="item.minWeight"
+                                            :disabled="financeLoading || !hasChangeAccount">
+                                        </v-text-field>
+                                    </v-row>
+                                </td>
+                                <td>
+                                    <v-row class="fill-height" align="center" justify="center">
+                                        <v-text-field
+                                            class="m2m-field"
+                                            :rules="[rules.required, checkNumber]"
+                                            dense
+                                            outlined
+                                            v-model="item.targetWeight"
+                                            :disabled="financeLoading || !hasChangeAccount">
+                                        </v-text-field>
+                                    </v-row>
+                                </td>
+                                <td>
+                                    <v-row class="fill-height" align="center" justify="center">
+                                        <v-text-field
+                                            class="m2m-field"
+                                            :rules="[rules.required, checkNumber]"
+                                            dense
+                                            outlined
+                                            v-model="item.maxWeight"
+                                            :disabled="financeLoading || !hasChangeAccount"
+                                        >
+                                        </v-text-field>
+                                    </v-row>
+                                </td>
+                                <td>
+                                    <v-switch
+                                        :disabled="financeLoading || !hasChangeAccount"
+                                        v-model="item.enabled"
+                                    ></v-switch>
+                                </td>
+                                <td>
+                                    <v-switch
+                                        :disabled="financeLoading || !hasChangeAccount"
+                                        v-model="item.enabledReward"
+                                    ></v-switch>
+                                </td>
+                                <td>
+                                    <v-row class="fill-height" align="center" justify="center">
+                                        <v-text-field
+                                            class="m2m-field"
+                                            :rules="[rules.required, checkNumber]"
+                                            dense
+                                            outlined
+                                            v-model="item.riskFactor"
+                                            :disabled="financeLoading || !hasChangeAccount">
+                                        </v-text-field>
+                                    </v-row>
+                                </td>
+                            </template>
+
+                        </tr>
 
                     <tr>
                         <td :colspan="networkId === 137 ? 10 : 9"></td>

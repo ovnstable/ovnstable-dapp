@@ -28,14 +28,17 @@
                     :network-id="networkId"
                     :api-url="apiUrl"
                     :network-name="networkName"
-                    :contract-type="tab"/>
+                    :contract-type="tab"
+                    :hide-zero-strategies-action="hideZeroStrategiesAction"/>
             </v-col>
             <v-col cols="2">
                 <WeightActionsPanel
                     :m2m-items="m2mItems"
                     :finance-loading="financeLoading"
                     :has-change-account="hasChangeAccount"
-                    :contract-type="tab"/>
+                    :contract-type="tab"
+                    :hide-zero-strategies-action="hideZeroStrategiesAction"
+                    :show-zero-strategies-action="showZeroStrategiesAction"/>
             </v-col>
         </v-row>
     </v-container>
@@ -73,6 +76,25 @@ export default {
         setTab(tab) {
             this.tab = tab;
             this.getFinance(this.tab);
+        },
+
+        hideZeroStrategiesAction: function() {
+            for (let i = 0; i < this.m2mItems.length; i++) {
+                let item = this.m2mItems[i];
+                if (item.netAssetValue > 0) {
+                    item.isHidden = false;
+                    continue;
+                }
+
+                item.isHidden = true;
+            }
+        },
+
+        showZeroStrategiesAction: function() {
+            for (let i = 0; i < this.m2mItems.length; i++) {
+                let item = this.m2mItems[i];
+                item.isHidden = false;
+            }
         }
     },
 }
@@ -81,6 +103,10 @@ export default {
 <style scoped>
 
 .governance-page-container {
-    min-width: 96% !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    background: #FFFFFF !important;
+
 }
+
 </style>

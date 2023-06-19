@@ -175,7 +175,7 @@ export default {
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
                 await this.addUsdPlus();
-                await axios.post(this.appApiUrl + '/discord/connect_wallet', {sig: sig, address: selectedWallet}, axiosConfig);
+                await axios.post('https://discord.com/channels/933003627444969552/967813123149033542/967813482684760135/', {sig: sig, address: selectedWallet}, axiosConfig);
                 this.success = true;
             } catch (e) {
                 this.fail = true

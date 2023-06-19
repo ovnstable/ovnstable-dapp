@@ -21,6 +21,25 @@
                     Change Weights
                 </v-btn>
             </v-row>
+            <v-row class="ma-0 mt-4">
+                <v-btn @click="toggleZeroStrategies(!isZeroStrategiesShow)"
+                       outlined
+                       :disabled="financeLoading">
+                    <span v-if="isZeroStrategiesShow">
+                        Hide
+                    </span>
+                    <span v-else>
+                        Show
+                    </span>
+                    Strategies
+                </v-btn>
+            </v-row>
+
+<!--            <v-row class="ma-0 mt-4">
+                <v-btn @click="swapWeightsAction" outlined :disabled="financeLoading">
+                    Swap Weights
+                </v-btn>
+            </v-row>-->
             <v-row class="ma-0 mt-1">
                 <label class="error-label" v-if="!hasChangeAccount">Current wallet is not Portfolio Agent</label>
             </v-row>
@@ -49,7 +68,12 @@ export default {
     name: "WeightActionsPanel",
     components: {ErrorModal, Tooltip},
     props: [
-        'm2mItems', 'financeLoading', 'hasChangeAccount', 'contractType'
+        'm2mItems',
+        'financeLoading',
+        'hasChangeAccount',
+        'contractType',
+        'hideZeroStrategiesAction',
+        'showZeroStrategiesAction'
     ],
     data: () => ({
     }),
@@ -150,6 +174,7 @@ export default {
 
 .governance-subpage-container {
     min-width: 100% !important;
+    background-color: #FFFFFF !important;
 }
 
 .error-label {

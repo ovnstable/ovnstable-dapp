@@ -841,10 +841,6 @@ export default defineComponent({
                     this.isSumulateSwapLoading = false;
                     this.updateIsLoadingDataFunc(false);
 
-                    // todo 5 filter by value > 0 this.selectedInputTokens.filer(item => item.selectedToken.value > 0);
-                    // .filter(item => item.selectedToken.value && item.selectedToken.value > 0)
-                    // .filter(item => item.selectedToken.value && item.selectedToken.value > 0)
-                    // .filter(item => item.selectedToken.value && item.selectedToken.value > 0)
                     this.updatePathViewFunc(data.pathViz,
                         this.selectedInputTokens,
                         this.selectedOutputTokens)
@@ -956,10 +952,12 @@ export default defineComponent({
                     continue;
                 }
 
-                inputTokens.push({
-                    tokenAddress: selectedToken.address,
-                    amount: token.contractValue
-                })
+                if (token.value > 0) {
+                    inputTokens.push({
+                        tokenAddress: selectedToken.address,
+                        amount: token.contractValue
+                    })
+                }
             }
             return inputTokens;
         },
@@ -1035,6 +1033,9 @@ export default defineComponent({
                 //     this.addTokensProportions(token, 100 - value)
                 // }
             // }
+            if (token.value === 0 || !token.value) {
+                this.updateQuotaInfo();
+            }
         },
         recalculateOutputTokensSum() {
             console.log(`recalculateOutputTokensSum. recalculate token count ${this.selectedOutputTokens.length} usdSum: ${this.sumOfAllSelectedTokensInUsd}`);

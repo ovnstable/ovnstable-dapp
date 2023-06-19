@@ -1,20 +1,22 @@
 <template>
-    <v-container>
-        <v-row justify="center">
-            <h1>Proposals Overview</h1>
-        </v-row>
-        <v-row class="mb-5" justify="center">
-            <h2>Total count: {{proposals.length}}</h2>
-        </v-row>
+    <div class="main-container">
+        <v-container >
+            <v-row justify="center">
+                <h1>Proposals Overview</h1>
+            </v-row>
+            <v-row class="mb-5" justify="center">
+                <h2>Total count: {{proposals.length}}</h2>
+            </v-row>
 
-        <template v-if="proposalsLoading">
-            Loading...
-        </template>
-        <template v-else>
-            <ProposalList/>
-        </template>
+            <template v-if="proposalsLoading">
+                Loading...
+            </template>
+            <template v-else>
+                <ProposalList/>
+            </template>
 
-    </v-container>
+        </v-container>
+    </div>
 </template>
 
 <script>
@@ -47,5 +49,9 @@ export default {
 </script>
 
 <style scoped>
-
+.main-container {
+    min-width: 100% !important;
+    min-height: 100% !important;
+    background-color: #FFFFFF !important;
+}
 </style>

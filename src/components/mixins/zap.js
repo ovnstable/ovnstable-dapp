@@ -1,11 +1,31 @@
 import loadJSON from "@/utils/http-utils";
-import {mapGetters} from "vuex";
+const { default: BigNumber } = require("bignumber.js");
 
 export const zap = {
 
     data() {
         return {
-            chronosContract: null,
+            zapPlatformName: null,
+            currentZapPlatformContractType: null,
+            zapPlatformContractTypeMap: { // PlatformName: { name, type } name: ContractName, type: LP_WITH_STAKE_IN_ONE_STEP, LP_STAKE_DIFF_STEPS.
+                'Chronos': {
+                    name: 'ChronosZap',
+                    type: 'LP_WITH_STAKE_IN_ONE_STEP'
+                },
+                'Thena': {
+                    name: 'ThenaZap',
+                    type: 'LP_STAKE_DIFF_STEPS'
+                },
+                'Velodrome': {
+                    name: 'VelodromeZap',
+                    type: 'LP_STAKE_DIFF_STEPS'
+                },
+                'Ramses': {
+                    name: 'RamsesZap',
+                    type: 'LP_STAKE_DIFF_STEPS'
+                },
+            },
+            zapContract: null,
             pollsMap: {
                 "0xb260163158311596ea88a700c5a30f101d072326": '0xcd4a56221175b88d4fb28ca2138d670cc1197ca9',
                 "0x0d20ef7033b73ea0c9c320304b05da82e2c14e33": '0xaF618E6F5EF781e3aCFe00708BD005E0cc9A2e6F',
@@ -19,14 +39,20 @@ export const zap = {
         }
     },
     mounted() {
-        this.loadChronosZapContract();
+        this.loadZapContract();
     },
     methods: {
 
-        async loadChronosZapContract() {
-            let abiFile = await loadJSON(`/contracts/arbitrum/ChronosZap.json`);
-            this.chronosContract = this._loadContract(abiFile, this.web3, abiFile.address);
-            console.log("Chronos loaded: ", this.chronosContract);
+        async loadZapContract() {
+            thiis.currentZapPlatformContractType = this.zapPlatformContractTypeMap[this.zapPlatformName];
+            if (!this.currentZapPlatformContractType) {
+                console.log("Error when load zap contract name. Contract not found.", zapContractName, this.zapPlatformName);
+                return;
+            }
+
+            let abiFile = await loadJSON(`/contracts/arbitrum/${this.currentZapPlatformContractType.name}.json`);
+            this.zapContract = this._loadContract(abiFile, this.web3, abiFile.address);
+            console.log("Zap contract loaded: ", this.zapContract);
         },
         _loadContract(file, web3, address) {
             if (!address) {
@@ -42,13 +68,95 @@ export const zap = {
                 return
             }
 
-            return this.chronosContract.methods.getProportion(gauge).call().then(data => {
+            return this.zapContract.methods.getProportion(gauge).call().then(data => {
                 console.log('Get proportion: ', poolAddress, gauge, data);
                 return data;
             }).catch(e => {
                 console.error('Error get proportion for: ', poolAddress, gauge, e);
             });
-        }
+        },
+        calculateProportionForChronosSwapModif({
+                                                   inputTokensDecimals,
+                                                   inputTokensAddresses,
+                                                   inputTokensAmounts,
+                                                   inputTokensPrices,
+                                                   outputTokensDecimals,
+                                                   outputTokensAddresses,
+                                                   outputTokensAmounts,
+                                                   outputTokensPrices,
+                                                   proportion0,
+                                               }
+        ) {
+            const tokenOut0 = Number.parseFloat(new BigNumber(outputTokensAmounts[0].toString()).div(new BigNumber(10).pow(outputTokensDecimals[0])).toFixed(3).toString()) * outputTokensPrices[0];
+            const tokenOut1 = Number.parseFloat(new BigNumber(outputTokensAmounts[1].toString()).div(new BigNumber(10).pow(outputTokensDecimals[1])).toFixed(3).toString()) * outputTokensPrices[1];
+            const sumInitialOut = tokenOut0 + tokenOut1;
+            let sumInputs = 0;
+            for (let i = 0; i < inputTokensAmounts.length; i++) {
+                sumInputs += Number.parseFloat(new BigNumber(inputTokensAmounts[i].toString()).div(new BigNumber(10).pow(inputTokensDecimals[i])).toFixed(3).toString()) * inputTokensPrices[i];
+            }
+            sumInputs += sumInitialOut;
+
+            const output0InMoneyWithProportion = sumInputs * proportion0;
+            const output1InMoneyWithProportion = sumInputs * (1 - proportion0);
+            const inputTokens = inputTokensAddresses.map((address, index) => {
+                return { "tokenAddress": address, "amount": inputTokensAmounts[index].toString() };
+            });
+            if (output0InMoneyWithProportion < tokenOut0) {
+                const dif = tokenOut0 - output0InMoneyWithProportion;
+                const token0AmountForSwap = new BigNumber((dif / outputTokensPrices[0]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[0])).toFixed(0);
+                inputTokens.push({ "tokenAddress": outputTokensAddresses[0], "amount": token0AmountForSwap.toString() })
+                return {
+                    "outputTokens": [
+                        {
+                            "tokenAddress": outputTokensAddresses[1],
+                            "proportion": 1
+                        }
+                    ],
+                    "inputTokens": inputTokens,
+                    "amountToken0Out": (new BigNumber(outputTokensAmounts[0]).minus(token0AmountForSwap)).toFixed(0),
+                    "amountToken1Out": outputTokensAmounts[1].toString(),
+                }
+            } else if (output1InMoneyWithProportion < tokenOut1) {
+                const dif = tokenOut1 - output1InMoneyWithProportion;
+                const token1AmountForSwap = new BigNumber((dif / outputTokensPrices[1]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[1])).toFixed(0);
+                // console.log(new BigNumber((output1InMoneyWithProportion / outputTokensPrices[1]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[1])).toFixed(0), outputTokensAmounts[1].toString());
+                inputTokens.push({ "tokenAddress": outputTokensAddresses[1], "amount": token1AmountForSwap.toString() })
+                // console.log(inputTokens)
+                return {
+                    "outputTokens": [
+                        {
+                            "tokenAddress": outputTokensAddresses[0],
+                            "proportion": 1
+                        },
+                    ],
+                    "inputTokens": inputTokens,
+                    "amountToken0Out": outputTokensAmounts[0].toString(),
+                    "amountToken1Out": (new BigNumber(outputTokensAmounts[1]).minus(token1AmountForSwap)).toFixed(0),
+                }
+            }
+
+            const difToGetFromOdos0 = output0InMoneyWithProportion - tokenOut0;
+            const difToGetFromOdos1 = output1InMoneyWithProportion - tokenOut1;
+            return {
+                "inputTokens": inputTokens,
+                "outputTokens": [
+                    {
+                        "tokenAddress": outputTokensAddresses[0],
+                        "proportion": Number.parseFloat((difToGetFromOdos0 / (difToGetFromOdos0 + difToGetFromOdos1)).toFixed(2))
+                    },
+                    {
+                        "tokenAddress": outputTokensAddresses[1],
+                        "proportion": Number.parseFloat((difToGetFromOdos1 / (difToGetFromOdos0 + difToGetFromOdos1)).toFixed(2))
+                    },
+                ],
+                "amountToken0Out": new BigNumber((tokenOut0 / outputTokensPrices[0]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[0])).toFixed(0),
+                "amountToken1Out": new BigNumber((tokenOut1 / outputTokensPrices[1]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[1])).toFixed(0),
+            }
+
+        },
+        approveGaugeForStake() {
+
+        },
     }
 
 }

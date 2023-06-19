@@ -60,7 +60,7 @@ export const odosSwap = {
         }
     },
     async mounted() {
-        console.log("Odos swap init by scheme: ", this.tokenSeparationScheme)
+       console.log("Odos swap init by scheme: ", this.tokenSeparationScheme)
 
        this.initUpdateBalancesInterval();
     },
@@ -119,7 +119,6 @@ export const odosSwap = {
         }
     },
     methods: {
-        ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
 
@@ -192,7 +191,8 @@ export const odosSwap = {
 
             console.log('init pool swap data for network: ', this.networkName);
             let networkId = this.getParams(this.networkName).networkId;
-            this.tokens = await this.getFilteredPoolTokens(networkId, false, listOfBuyTokensAddresses);
+            // this.tokens = await this.getFilteredPoolTokens(networkId, false, listOfBuyTokensAddresses);
+            this.tokens = await this.getFilteredPoolTokens(networkId, false, []); // [] - none execute
             console.log("TOKENS_ ", this.tokens)
             this.secondTokens = (await this.getFilteredPoolTokens(networkId, true, listOfBuyTokensAddresses));
             console.log("SECOND TOKENS_ ", this.secondTokens);
@@ -630,26 +630,6 @@ export const odosSwap = {
             // this.routerContract.eth.sendTransaction({from: …, to: …, data: TransactionData, …}).on(…);
             // web3.eth.call({from: …, to: …, data: TransactionData, …}).on(…);
 
-        },
-        async getAllowanceValue(contract, from, checkContractAddress) {
-            return await contract.methods.allowance(from, checkContractAddress).call();
-        },
-        async approveToken(contract, contractAddressForApprove, value) {
-            console.log('approveToken: ', contract, contractAddressForApprove, value);
-            let from = this.account;
-            await this.refreshGasPrice();
-            let approveParams = {gasPrice: this.gasPriceGwei, from: from};
-            console.log('approveToken: ', contract, contractAddressForApprove, value, approveParams);
-            return contract.methods.approve(contractAddressForApprove, value).send(approveParams)
-        },
-        async clearApproveToken(contract, contractAddressForDisapprove) {
-            console.log('clearApproveToken: ', contract, contractAddressForDisapprove);
-            let from = this.account;
-            let allowanceValue = await this.getAllowanceValue(contract, from, contractAddressForDisapprove);
-            await this.refreshGasPrice();
-            let approveParams = {gasPrice: this.gasPriceGwei, from: from};
-            console.log('clearApproveToken: ', contract, contractAddressForDisapprove, allowanceValue, approveParams);
-            return contract.methods.decreaseAllowance(contractAddressForDisapprove, allowanceValue).send(approveParams)
         },
         getDefaultSecondtoken() {
             if (this.tokenSeparationScheme === 'OVERNIGHT_SWAP') {

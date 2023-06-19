@@ -83,13 +83,12 @@
                  class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                 <div v-if="!$wu.isMobile()" class="pool-table-header-item">
 
-<!--                    todo: return after zap upgrade -->
-<!--                    <v-btn v-if="pool.zappable"
+                    <v-btn v-if="pool.zappable"
                            x-small
                            class="button button-full-width btn-outlined mb-3"
                            @click.stop="openZapInFunc(pool)" outlined>
                         ZAP IN
-                    </v-btn>-->
+                    </v-btn>
                 </div>
             </div>
         </div>

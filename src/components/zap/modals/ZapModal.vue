@@ -20,6 +20,7 @@
                     <v-card-text>
                         <ZapForm
                             :zap-pool="zapPool"
+                            :pool-tokens-for-zap-map="poolTokensForZapMap"
                         ></ZapForm>
                     </v-card-text>
                 </v-card>
@@ -52,6 +53,10 @@ export default defineComponent({
             type: Object,
             required: false,
             default: null
+        },
+        poolTokensForZapMap: {
+            type: Object,
+            required: true,
         },
 
     },

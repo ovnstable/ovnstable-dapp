@@ -153,11 +153,32 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-else-if="additionalSwapStepType === 'APPROVE'"
+                             @click="toApproveAndDepositSteps(lastZapResponseData)"
+                             class="swap-button">
+                            <div class="swap-button-title">
+                                <div>
+                                    APPROVE GAUGE
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else-if="additionalSwapStepType === 'DEPOSIT'"
+                             @click="depositGauge(lastPutIntoPoolEvent, lastReturnedToUserEvent)"
+                             class="swap-button">
+                            <div class="swap-button-title">
+                                <div>
+                                    STAKE LP
+                                </div>
+                            </div>
+                        </div>
                         <div v-else
                              @click="stake()"
                              class="swap-button">
                             <div class="swap-button-title">
-                                <div>
+                                <div v-if="currentZapPlatformContractType && currentZapPlatformContractType.type === 'LP_STAKE_DIFF_STEPS'">
+                                    DEPOSIT
+                                </div>
+                                <div v-else>
                                     STAKE
                                 </div>
                             </div>
@@ -168,7 +189,9 @@
                         <div v-if="selectedInputTokens.length > 0" class="row">
                             <div class="col-12">
                                <ZapSteps :selected-input-tokens="selectedInputTokens"
-                               :click-on-stake="clickOnStake">
+                                         :click-on-stake="clickOnStake"
+                                         :additional-swap-step-type="additionalSwapStepType"
+                                         :current-zap-platform-contract-type="currentZapPlatformContractType">
                                </ZapSteps>
                             </div>
                         </div>
@@ -218,10 +241,12 @@ import ZapSteps from "@/components/zap/ZapSteps.vue";
 import {zap} from "@/components/mixins/zap";
 import PoolLabel from "@/components/zap/PoolLabel.vue";
 import ZapChangeNetwork from "@/components/zap/ZapChangeNetwork.vue";
+import axios from "axios";
+import {contractApprove} from "@/components/mixins/contract-approve";
 
 export default defineComponent({
     name: "ZapForm",
-    mixins: [odosSwap, zap],
+    mixins: [odosSwap, zap, contractApprove],
     components: {
         ZapChangeNetwork,
         PoolLabel,
@@ -239,6 +264,11 @@ export default defineComponent({
             type: Object,
             required: false,
             default: null
+        },
+
+        poolTokensForZapMap: {
+            type: Object,
+            required: true,
         },
 
     },
@@ -268,29 +298,6 @@ export default defineComponent({
             mapExcludeLiquidityPlatform: { // Schema for hot exclude: {'Ovn pool platform name from db': ['odos', 'api/info/liquidity-sources', 'related', 'with', 'platform'] }
                 'Chronos': ["Chronos Volatile"] //"Chronos Stable"
             },
-
-            poolTokensMap: {
-                // pool address
-                '0xb260163158311596ea88a700c5a30f101d072326': [
-                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
-                    {name: 'DAI+', address: '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'},
-                ],
-                '0xbbd7ff1728963a5eb582d26ea90290f84e89bd66': [
-                    {name: 'DOLA', address: '0x6a7661795c374c0bfc635934efaddff3a7ee23b6'},
-                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
-                ],
-
-                '0x0d20ef7033b73ea0c9c320304b05da82e2c14e33': [
-                    {name: 'FRAX', address: '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F'},
-                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
-                ],
-
-                '0xcd78e225e36e724c9fb4bd8287296557d728cda7': [
-                    {name: 'LUSD', address: '0x93b346b6BC2548dA6A1E7d98E9a421B42541425b'},
-                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
-                ],
-
-            }
         }
     },
     mounted() {
@@ -434,6 +441,10 @@ export default defineComponent({
 
                 if (this.zapPool.chain === this.networkId) {
                     this.firstInit();
+
+                    setTimeout(() => {
+                        this.loadZapContract();
+                    }, 300)
                     return
                 }
 
@@ -459,12 +470,13 @@ export default defineComponent({
         },
 
         firstInit() {
+            this.zapPoolRoot = this.zapPool;
 
             this.tokenSeparationScheme = 'POOL_SWAP';
             console.log("Zap form odos init by scheme: ", this.tokenSeparationScheme)
             console.log("Zap pool: ", this.zapPool)
             // todo: move to backend
-            let poolTokens = this.poolTokensMap[this.zapPool.address];
+            let poolTokens = this.poolTokensForZapMap[this.zapPool.address];
             if (!poolTokens) {
                 console.log("Pool address not found:");
                 return;
@@ -676,26 +688,114 @@ export default defineComponent({
             let sumReserves = reserves.token0Amount*1 + reserves.token1Amount*1;
             console.log("sumReserves: ", sumReserves);
 
+            let userInputTokens = this.selectedInputTokens;
+            console.log("User input tokens: ", userInputTokens);
+            let poolOutputTokens = this.selectedOutputTokens;
+            console.log("Pool output tokens: ", poolOutputTokens);
+            let formulaInputTokens = [];
+            let formulaOutputTokens = [];
+            for (let i = 0; i < userInputTokens.length; i++) {
+                let inputToken = userInputTokens[i];
+                let userInputToken = inputToken.selectedToken;
+
+                let isFindUserInputTokenInPoolTokens = poolOutputTokens.find((poolToken) => poolToken.selectedToken.address === userInputToken.address);
+                console.log("User token find in pool: ", isFindUserInputTokenInPoolTokens, userInputToken);
+                if (isFindUserInputTokenInPoolTokens) {
+                    // if user token exist in pool pair, move to output for proportion formula
+                    formulaOutputTokens.push({
+                        decimals: userInputToken.decimals,
+                        address: userInputToken.address,
+                        contractValue: inputToken.contractValue,
+                        price: userInputToken.price
+                    });
+                    continue;
+                }
+
+                // if user token don't exist in pool pair, move to input for proportion formula
+                formulaInputTokens.push({
+                    decimals: userInputToken.decimals,
+                    address: userInputToken.address,
+                    contractValue: inputToken.contractValue,
+                    price: userInputToken.price
+                });
+            }
+
+            console.log("formulaInputTokens: ", formulaInputTokens);
+            console.log("formulaOutputTokens: ", formulaOutputTokens);
+
+            // sort output formula and fill amount by 0;
+            let formulaResultOutputWithZero = [];
+            for (let i = 0; i < poolOutputTokens.length; i++) {
+                let outputToken = poolOutputTokens[i];
+                let poolOutputToken = outputToken.selectedToken;
+                let userInputTokenInFormulaOutputTokens = formulaOutputTokens.find((formulaToken) => formulaToken.address === poolOutputToken.address);
+                console.log("Pool token find in formula output token: ", userInputTokenInFormulaOutputTokens, poolOutputToken);
+                if (userInputTokenInFormulaOutputTokens) {
+                    // if user token exist in pool pair, move to output for proportion formula
+                    formulaResultOutputWithZero.push(userInputTokenInFormulaOutputTokens);
+                    continue;
+                }
+
+                // fill amount with 0
+                formulaResultOutputWithZero.push(
+                    {
+                        decimals: poolOutputToken.decimals,
+                        address: poolOutputToken.address,
+                        contractValue: 0,
+                        price: poolOutputToken.price
+                    }
+                );
+            }
+
+            // formulaOutputTokens sorted by pool pair and with zero for not exist in output formula.
+            formulaOutputTokens = formulaResultOutputWithZero;
+            console.log('formulaOutputTokens after sort and fill zero', formulaOutputTokens);
+
+            let inputDecimals = formulaInputTokens.map(token => token.decimals);
+            console.log('inputDecimals', inputDecimals);
+            let inputAddresses = formulaInputTokens.map(token => token.address);
+            console.log('inputAddresses', inputAddresses);
+            let inputAmounts = formulaInputTokens.map(token => token.contractValue);
+            console.log('inputAmounts', inputAmounts);
+            let inputPrices = formulaInputTokens.map(token => token.price);
+            console.log('inputPrices', inputPrices);
+
+            // (!) List - formulaOutputTokens with 0 amount and sort like in pool pair.
+            let outputDecimals = formulaOutputTokens.map(token => token.decimals);
+            console.log('outputDecimals', outputDecimals);
+            let outputAddresses = formulaOutputTokens.map(token => token.address);
+            console.log('outputAddresses', outputAddresses);
+            let outputAmounts = formulaOutputTokens.map(token => token.contractValue);
+            console.log('outputAmounts', outputAmounts);
+            let outputPrices = formulaOutputTokens.map(token => token.price);
+            console.log('outputPrices', outputPrices);
+
+            // todo 5: may by call another function (from test for thena ... )
+            // todo: if don't call, rename  calculateProportionForChronosSwapModif to calculateProportionForPool
+            const proportions = this.calculateProportionForChronosSwapModif({
+                inputTokensDecimals: [...inputDecimals],
+                inputTokensAddresses: [...inputAddresses],
+                inputTokensAmounts: [...inputAmounts],
+                inputTokensPrices: [...inputPrices], // todo: 5 get actual price
+                outputTokensDecimals: [...outputDecimals],
+                outputTokensAddresses: [...outputAddresses],
+                outputTokensAmounts: [...outputAmounts],
+                outputTokensPrices: [...outputPrices],  // todo: 5 get actual price
+                proportion0: reserves[0] / sumReserves
+            });
+
+
+            console.log("Proportion for odos: ", proportions);
+
             let requestOutputTokens = this.getRequestOutputTokens();
             let requestInputTokens = this.getRequestInputTokens();
-            // requestOutputTokens[0].proportion = reserves.token0Amount*1 / sumReserves;
-            // requestOutputTokens[1].proportion = reserves.token1Amount*1 / sumReserves;
+
             let request = {
                 "chainId": this.networkId,
-                "inputTokens": requestInputTokens,
-                "outputTokens": [
-                    {
-                        "tokenAddress": requestOutputTokens[0].tokenAddress,
-                        "proportion": reserves[0] / sumReserves
-                    },
-                    {
-                        "tokenAddress": requestOutputTokens[1].tokenAddress,
-                        "proportion": reserves[1] / sumReserves
-                    },
-
-                ],
+                "inputTokens": proportions.inputTokens,
+                "outputTokens": proportions.outputTokens,
                 "gasPrice": actualGas,
-                "userAddr": this.chronosContract.options.address,
+                "userAddr": this.zapContract.options.address,
                 "slippageLimitPercent": this.getSlippagePercent(),
             }
 
@@ -711,109 +811,24 @@ export default defineComponent({
                 simulate: false,
                 pathViz: false,
                 disableRFQs: false
-                // chainId: this.networkId,
-                // // chainId: 1,
-                // inputTokens: requestInputTokens,
-                // outputTokens: requestTokens,
-                // gasPrice: actualGas,
-                // userAddr: this.chronosContract.options.address,
-                // slippageLimitPercent: this.getSlippagePercent(),
-                // sourceBlacklist: ['Hashflow'],
-                // sourceWhitelist: [],
-                // simulate: true,
-                // pathViz: true,
-                // // disableRFQs: false
             }
 
             console.log("Odos request data", requestData);
-            // this.testZapIn(requestOutputTokens, requestInputTokens, gaugeAddress);
-            this.swapRequest(requestData, this.selectedInputTokens, this.selectedOutputTokens)
+            this.swapRequest(requestData)
                 .then(data => {
-                    console.log("Odos swap request success", data)
-                    this.initZapInTransaction(data, requestInputTokens, requestOutputTokens, gaugeAddress, request.gasPrice);
+                    console.log("Odos swap request success from zap", data)
+                    console.log("Odos swap request success from zap proportions", proportions)
+
+                    this.initZapInTransaction(data, proportions.inputTokens, proportions.outputTokens, proportions, gaugeAddress, request.gasPrice);
+
                     this.isSwapLoading = false;
                 }).catch(e => {
-                console.error("Odos swap request failed", e)
+                console.error("Odos swap request failed from zap", e)
                 this.isSwapLoading = false;
                 this.clickOnStake = false;
             })
         },
 
-      /*  async initRequest() {
-            // await showBalances();
-            const amountToken0In = toE6(100);
-            const amountToken1In = toE18(100);
-            const amountToken0Out = toE6(100);
-            const amountToken1Out = toE18(800);
-
-            let account = await setUp();
-            let chronosZap = await ethers.getContract("ChronosZap");
-
-            let token0Out = (await getContract('UsdPlusToken', 'arbitrum')).connect(account);
-            let token1Out = (await getContract('UsdPlusToken', 'arbitrum_dai')).connect(account);
-
-            let token0In = (await getERC20("usdc")).connect(account);
-            let token1In = (await getERC20("dai")).connect(account);
-
-            // await (await token0In.approve(chronosZap.address, amountToken0In)).wait();
-            // await (await token1In.approve(chronosZap.address, amountToken1In)).wait();
-            // await (await token0Out.approve(chronosZap.address, amountToken0Out)).wait();
-            // await (await token1Out.approve(chronosZap.address, amountToken1Out)).wait();
-
-            const reserves = await chronosZap.getProportion(gauge);
-            const sumReserves = reserves[0].add(reserves[1])
-
-            const proportions = calculateProportionForChronosSwapModif({
-                inputTokensDecimals: [6, 18],
-                inputTokensAddresses: [token0In.address, token1In.address],
-                inputTokensAmounts: [amountToken0In, amountToken1In],
-                inputTokensPrices: [1, 1],
-                outputTokensDecimals: [6, 18],
-                outputTokensAddresses: [token0Out.address, token1Out.address],
-                outputTokensAmounts: [amountToken0Out, amountToken1Out],
-                outputTokensPrices: [1, 1],
-                proportion0: reserves[0] / sumReserves
-            });
-
-            const request = await this.getOdosRequest({
-                "chainId": 42161,
-                "inputTokens": proportions.inputTokens,
-                "outputTokens": proportions.outputTokens,
-                "gasPrice": 0.1,
-                "userAddr": chronosZap.address,
-                "slippageLimitPercent": 0.4,
-            });
-
-            const inputTokens = proportions.inputTokens.map(({ tokenAddress, amount }) => {
-                return { "tokenAddress": tokenAddress, "amountIn": amount };
-            });
-            const outputTokens = proportions.outputTokens.map(({ tokenAddress }) => {
-                return { "tokenAddress": tokenAddress, "receiver": chronosZap.address };
-            });
-
-            const receipt = await (await chronosZap.connect(account).zapIn({
-                inputs: inputTokens,
-                outputs: outputTokens,
-                data: request.data
-            }, { gauge, amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out] })).wait();
-
-            console.log(`Transaction was mined in block ${receipt.blockNumber}`);
-
-
-            const inputTokensEvent = receipt.events.find((event) => event.event === "InputTokens");
-            const outputTokensEvent = receipt.events.find((event) => event.event === "OutputTokens");
-            const putIntoPoolEvent = receipt.events.find((event) => event.event === "PutIntoPool");
-            const returnedToUserEvent = receipt.events.find((event) => event.event === "ReturnedToUser");
-
-
-            console.log(`Input tokens: ${inputTokensEvent.args.amountsIn} ${inputTokensEvent.args.tokensIn}`);
-            console.log(`Output tokens: ${outputTokensEvent.args.amountsOut} ${outputTokensEvent.args.tokensOut}`);
-            console.log(`Tokens put into pool: ${putIntoPoolEvent.args.amountsPut} ${putIntoPoolEvent.args.tokensPut}`);
-            console.log(`Tokens returned to user: ${returnedToUserEvent.args.amountsReturned} ${returnedToUserEvent.args.tokensReturned}`);
-
-
-
-        },
         async getOdosRequest(request) {
             let swapParams = {
                 "chainId": request.chainId,
@@ -822,115 +837,41 @@ export default defineComponent({
                 "gasPrice": request.gasPrice,
                 "userAddr": request.userAddr,
                 "slippageLimitPercent": request.slippageLimitPercent,
-                "sourceBlacklist": ["Hashflow"],
+                "sourceBlacklist": this.getSourceLiquidityBlackList(),
                 "sourceWhitelist": [],
                 "simulate": false,
                 "pathViz": false,
                 "disableRFQs": false
             }
 
+            console.log("Odos request function: ", swapParams)
+
             // @ts-ignore
             const url = 'https://api.overnight.fi/root/odos/sor/swap';
             let transaction;
             try {
-                transaction = (await axios.post(url, swapParams, { headers: { "Accept-Encoding": "br" } }));
+                // transaction = (await axios.post(url, swapParams, { headers: { "Accept-Encoding": "br" } }));
+                transaction = (await axios.post(url, swapParams));
+                console.log("Odos success response function: ", transaction)
             } catch (e) {
-                console.log("[chronosZap] getSwapTransaction: " + e);
+                console.error("[chronosZap] getSwapTransaction: " + e);
                 return 0;
             }
 
             if (transaction.statusCode === 400) {
-                console.log(`[chronosZap]  ${transaction.description}`);
+                console.error(`[chronosZap]  ${transaction.description}`);
                 return 0;
             }
 
             if (transaction.data.transaction === undefined) {
-                console.log("[chronosZap] transaction.tx is undefined");
+                console.error("[chronosZap] transaction.tx is undefined");
                 return 0;
             }
 
-            console.log('Success get data from Odos!');
+            console.log('Success get data from Odos!', transaction);
             return transaction.data.transaction;
         },
-        calculateProportionForChronosSwapModif({
-                inputTokensDecimals,
-                inputTokensAddresses,
-                inputTokensAmounts,
-                inputTokensPrices,
-                outputTokensDecimals,
-                outputTokensAddresses,
-                outputTokensAmounts,
-                outputTokensPrices,
-                proportion0,
-            }
-        ) {
-            const tokenOut0 = Number.parseFloat(new BigNumber(outputTokensAmounts[0].toString()).div(new BigNumber(10).pow(outputTokensDecimals[0])).toFixed(3).toString()) * outputTokensPrices[0];
-            const tokenOut1 = Number.parseFloat(new BigNumber(outputTokensAmounts[1].toString()).div(new BigNumber(10).pow(outputTokensDecimals[1])).toFixed(3).toString()) * outputTokensPrices[1];
-            const sumInitialOut = tokenOut0 + tokenOut1;
-            let sumInputs = 0;
-            for (let i = 0; i < inputTokensAmounts.length; i++) {
-                sumInputs += Number.parseFloat(new BigNumber(inputTokensAmounts[i].toString()).div(new BigNumber(10).pow(inputTokensDecimals[i])).toFixed(3).toString()) * inputTokensPrices[i];
-            }
-            sumInputs += sumInitialOut;
 
-            const output0InMoneyWithProportion = sumInputs * proportion0;
-            const output1InMoneyWithProportion = sumInputs * (1 - proportion0);
-            const inputTokens = inputTokensAddresses.map((address, index) => {
-                return { "tokenAddress": address, "amount": inputTokensAmounts[index].toString() };
-            });
-            if (output0InMoneyWithProportion < tokenOut0) {
-                const dif = tokenOut0 - output0InMoneyWithProportion;
-                const token0AmountForSwap = new BigNumber((dif / outputTokensPrices[0]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[0])).toFixed(0);
-                inputTokens.push({ "tokenAddress": outputTokensAddresses[0], "amount": token0AmountForSwap.toString() })
-                return {
-                    "outputTokens": [
-                        {
-                            "tokenAddress": outputTokensAddresses[1],
-                            "proportion": 1
-                        }
-                    ],
-                    "inputTokens": inputTokens,
-                    "amountToken0Out": (new BigNumber(outputTokensAmounts[0]).minus(token0AmountForSwap)).toFixed(0),
-                    "amountToken1Out": outputTokensAmounts[1].toString(),
-                }
-            } else if (output1InMoneyWithProportion < tokenOut1) {
-                const dif = tokenOut1 - output1InMoneyWithProportion;
-                const token1AmountForSwap = new BigNumber((dif / outputTokensPrices[1]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[1])).toFixed(0);
-                // console.log(new BigNumber((output1InMoneyWithProportion / outputTokensPrices[1]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[1])).toFixed(0), outputTokensAmounts[1].toString());
-                inputTokens.push({ "tokenAddress": outputTokensAddresses[1], "amount": token1AmountForSwap.toString() })
-                // console.log(inputTokens)
-                return {
-                    "outputTokens": [
-                        {
-                            "tokenAddress": outputTokensAddresses[0],
-                            "proportion": 1
-                        },
-                    ],
-                    "inputTokens": inputTokens,
-                    "amountToken0Out": outputTokensAmounts[0].toString(),
-                    "amountToken1Out": (new BigNumber(outputTokensAmounts[1]).minus(token1AmountForSwap)).toFixed(0),
-                }
-            }
-
-            const difToGetFromOdos0 = output0InMoneyWithProportion - tokenOut0;
-            const difToGetFromOdos1 = output1InMoneyWithProportion - tokenOut1;
-            return {
-                "inputTokens": inputTokens,
-                "outputTokens": [
-                    {
-                        "tokenAddress": outputTokensAddresses[0],
-                        "proportion": Number.parseFloat((difToGetFromOdos0 / (difToGetFromOdos0 + difToGetFromOdos1)).toFixed(2))
-                    },
-                    {
-                        "tokenAddress": outputTokensAddresses[1],
-                        "proportion": Number.parseFloat((difToGetFromOdos1 / (difToGetFromOdos0 + difToGetFromOdos1)).toFixed(2))
-                    },
-                ],
-                "amountToken0Out": new BigNumber((tokenOut0 / outputTokensPrices[0]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[0])).toFixed(0),
-                "amountToken1Out": new BigNumber((tokenOut1 / outputTokensPrices[1]).toString()).times(new BigNumber(10).pow(outputTokensDecimals[1])).toFixed(0),
-            }
-
-        },*/
         getSourceLiquidityBlackList() {
             let sourceBlacklist = [...this.sourceLiquidityBlacklist];
             console.log("this.zapPool for exclude liquidity: ", this.zapPool);
@@ -941,53 +882,8 @@ export default defineComponent({
 
             return sourceBlacklist;
         },
-        async initZapInTransaction(responseData, requestInputTokens, requestOutputTokens, gaugeAddress, gasPrice) {
-            console.log("Chronos-odos transaction data", responseData, this.chronosContract);
-
-            if (!this.chronosContract) {
-                console.error("Init zap transactions failed, chronos contract not found. responseData: ", responseData)
-                return;
-            }
-
-            this.startSwapConfirmTimer();
-
-            console.log("Odos swap request success", responseData, this.chronosContract, requestInputTokens, requestOutputTokens, gaugeAddress)
-            // console.log("Odos swap request success", data)
-            let requestInput = [];
-            for (let i = 0; i < requestInputTokens.length; i++) {
-                requestInput.push({
-                    tokenAddress: requestInputTokens[i].tokenAddress,
-                    amountIn: requestInputTokens[i].amount,
-                })
-            }
-
-            let requestOutput = [
-                {
-                    tokenAddress: requestOutputTokens[0].tokenAddress,
-                    receiver: this.chronosContract.options.address,
-                },
-                {
-                    tokenAddress: requestOutputTokens[1].tokenAddress,
-                    receiver: this.chronosContract.options.address,
-                },
-            ]
-
-            let txData = {
-                inputs: requestInput,
-                outputs: requestOutput,
-                data: responseData.transaction.data
-            };
-
-            console.log("Odos zap request data:", txData, this.chronosContract);
-
-            this.showWaitingModal('Staking in process');
-
-            let params = {from: this.account, gasPrice: this.gasPriceGwei};
-            this.chronosContract.methods.zapIn(
-                txData,
-                gaugeAddress).send(params)
-                .then(data => {
-                                // let data = this.getZapMocInfo();  // Retrieve event logs
+        toApproveAndDepositSteps: async function (data) {
+            console.log("Approve and deposit tx steps.", data, this.poolTokenContract, this.gaugeContract)
             let putIntoPoolEvent;
             let returnedToUserEvent;
             for (const key of Object.keys(data.events)) {
@@ -998,15 +894,56 @@ export default defineComponent({
 
                 if (key === 'PutIntoPool') {
                     putIntoPoolEvent = value;
+                    this.lastPutIntoPoolEvent = putIntoPoolEvent;
                     console.log(`Tokens put into pool: ${putIntoPoolEvent.returnValues.amountsPut} ${putIntoPoolEvent.returnValues.tokensPut}`);
                 }
 
                 if (key === 'ReturnedToUser') {
                     returnedToUserEvent = value;
+                    this.lastReturnedToUserEvent = returnedToUserEvent;
                     console.log(`Tokens returned to user: ${returnedToUserEvent.returnValues.amountsReturned} ${returnedToUserEvent.returnValues.tokensReturned}`);
                 }
 
             }
+
+            this.stopSwapConfirmTimer();
+            this.additionalSwapStepType = 'APPROVE';
+
+            this.approveGauge(putIntoPoolEvent, returnedToUserEvent);
+
+        },
+        async approveGauge(putIntoPoolEvent, returnedToUserEvent) {
+            let isGaugeApproved = await this.checkApproveForGauge(this.poolTokenContract, this.gaugeContract.options.address, 1000000000000000);
+            console.log("Approving gauge", isGaugeApproved);
+            if (!isGaugeApproved) {
+                this.showWaitingModal('Approving gauge in process');
+                this.approveGaugeForStake().then(data => {
+                    console.log("Success gauge approve: ", data);
+                    this.additionalSwapStepType = 'DEPOSIT';
+                    this.closeWaitingModal();
+                    this.depositGauge(putIntoPoolEvent, returnedToUserEvent);
+                }).catch(e => {
+                    console.error("Error when gauge approve: ", e);
+                    this.closeWaitingModal();
+                });
+            } else {
+                this.additionalSwapStepType = 'DEPOSIT';
+                this.depositGauge(putIntoPoolEvent, returnedToUserEvent);
+            }
+        },
+        depositGauge(putIntoPoolEvent, returnedToUserEvent) {
+            this.showWaitingModal('Stake LP in process');
+
+            this.depositAllAtGauge().then(data => {
+                this.closeWaitingModal();
+
+                // todo:
+                // 1. approve by decimal + 10mln. +
+                // 2. stop timer make button info. +
+                // 3. add steps to view by enums. +
+                // success modal. +
+                // add other contracts.
+                console.log("Deposit success!", data);
 
                 const inputTokens = [...this.selectedInputTokens]
                 const outputTokens = [...this.selectedOutputTokens]
@@ -1022,19 +959,136 @@ export default defineComponent({
 
                 // event
                 this.$bus.$emit('zap-transaction-finished', true);
+                this.additionalSwapStepType = null;
+                this.clearZapData();
 
                 this.loadBalances();
-                }).catch(e => {
-                    console.log("Zap odos call error: ", e);
-                    if (e && e.code === 4001) {
-                        if (e.message === 'User rejected the request.') {
-                            this.stopSwapConfirmTimer();
-                            this.clickOnStake = false;
-                        }
-                    }
-                    this.closeWaitingModal();
-                    this.showErrorModalWithMsg({errorType: 'zap', errorMsg: e}, );
+            }).catch(e => {
+                console.log("Deposit error!", e);
+                this.closeWaitingModal();
+                this.additionalSwapStepType = null;
+            });
+        },
+        clearZapData() {
+            this.lastPutIntoPoolEvent = null;
+            this.lastReturnedToUserEvent = null;
+            this.lastZapResponseData = null;
+        },
+        finishSingleStepTransaction: function (data) {
+            console.log("Finish single tx step.", data)
+            let putIntoPoolEvent;
+            let returnedToUserEvent;
+            for (const key of Object.keys(data.events)) {
+                const value = data.events[key];
+
+                console.log(`Key: ${key}`);
+                console.log(`Value:`, value);
+
+                if (key === 'PutIntoPool') {
+                    putIntoPoolEvent = value;
+                    this.lastPutIntoPoolEvent = putIntoPoolEvent;
+                    console.log(`Tokens put into pool: ${putIntoPoolEvent.returnValues.amountsPut} ${putIntoPoolEvent.returnValues.tokensPut}`);
+                }
+
+                if (key === 'ReturnedToUser') {
+                    returnedToUserEvent = value;
+                    this.lastReturnedToUserEvent = returnedToUserEvent;
+                    console.log(`Tokens returned to user: ${returnedToUserEvent.returnValues.amountsReturned} ${returnedToUserEvent.returnValues.tokensReturned}`);
+                }
+
+            }
+
+            const inputTokens = [...this.selectedInputTokens]
+            const outputTokens = [...this.selectedOutputTokens]
+            this.showSuccessPoolModal(
+                true,
+                inputTokens,
+                outputTokens,
+                data.transactionHash,
+                putIntoPoolEvent,
+                returnedToUserEvent,
+                this.zapPool
+            );
+
+            // event
+            this.$bus.$emit('zap-transaction-finished', true);
+            this.clearZapData();
+            this.loadBalances();
+        },
+        async initZapInTransaction(responseData, requestInputTokens, requestOutputTokens, proportions, gaugeAddress, gasPrice) {
+            console.log("Chronos-odos transaction data", responseData, this.zapContract);
+
+            if (!this.zapContract) {
+                console.error("Init zap transactions failed, chronos contract not found. responseData: ", responseData)
+                return;
+            }
+
+            this.startSwapConfirmTimer();
+
+            console.log("Odos swap request success", responseData, this.zapContract, requestInputTokens, requestOutputTokens, gaugeAddress)
+            // console.log("Odos swap request success", data)
+            let requestInput = [];
+            for (let i = 0; i < requestInputTokens.length; i++) {
+                requestInput.push({
+                    tokenAddress: requestInputTokens[i].tokenAddress,
+                    amountIn: requestInputTokens[i].amount,
                 })
+            }
+
+            let requestOutput = [];
+            for (let i = 0; i < requestOutputTokens.length; i++) {
+                requestOutput.push({
+                    tokenAddress: requestOutputTokens[i].tokenAddress,
+                    receiver: this.zapContract.options.address,
+                })
+            }
+
+            let txData = {
+                inputs: requestInput,
+                outputs: requestOutput,
+                data: responseData.transaction.data
+            };
+
+            let gaugeData = {
+                gauge: gaugeAddress,
+                amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out]
+            }
+
+            console.log("Odos zap request data:", txData, gaugeData, this.zapContract);
+
+            this.showWaitingModal('Staking in process');
+
+            let params = {from: this.account, gasPrice: this.gasPriceGwei};
+            this.zapContract.methods.zapIn(
+                txData,
+                gaugeData).send(params)
+                .then(data => {
+                    this.lastZapResponseData = data;
+
+                    if (this.currentZapPlatformContractType.type === 'LP_WITH_STAKE_IN_ONE_STEP') {
+                        console.log("Finish single step transaction: ", this.lastZapResponseData);
+                        this.finishSingleStepTransaction(this.lastZapResponseData);
+                        return;
+                    }
+
+                    if (this.currentZapPlatformContractType.type === 'LP_STAKE_DIFF_STEPS') {
+                        console.log("Finish single step transaction: ", this.lastZapResponseData);
+                        this.toApproveAndDepositSteps(this.lastZapResponseData);
+                        return;
+                    }
+
+                    console.error("Error when end of transaction, method type not found. ", this.currentZapPlatformContractType);
+                }).catch(e => {
+                console.log("Zap odos call error: ", e);
+                if (e && e.code === 4001) {
+                    if (e.message === 'User rejected the request.') {
+                        this.stopSwapConfirmTimer();
+                        this.clickOnStake = false;
+                    }
+                }
+                this.closeWaitingModal();
+                this.showErrorModalWithMsg({errorType: 'zap', errorMsg: e}, );
+            })
 
             this.isSwapLoading = false;
         },
@@ -1151,7 +1205,7 @@ export default defineComponent({
 
             let tokenContract = this.tokensContractMap[selectedToken.address];
             // this.clearApproveToken(tokenContract, this.routerContract.options.address)
-            this.clearApproveToken(tokenContract, this.chronosContract.options.address)
+            this.clearApproveToken(tokenContract, this.zapContract.options.address)
                 .then(data => {
                     console.log("Clear approve success. ", token, data);
                     this.checkApproveForToken(token);
@@ -1170,9 +1224,9 @@ export default defineComponent({
             }
 
             let tokenContract = this.tokensContractMap[selectedToken.address];
-            console.log('Check Approve contract: ', token, tokenContract, this.account, this.chronosContract.options.address);
+            console.log('Check Approve contract: ', token, tokenContract, this.account, this.zapContract.options.address);
             // let allowanceValue = await this.getAllowanceValue(tokenContract, this.account, this.routerContract.options.address);
-            let allowanceValue = await this.getAllowanceValue(tokenContract, this.account, this.chronosContract.options.address);
+            let allowanceValue = await this.getAllowanceValue(tokenContract, this.account, this.zapContract.options.address);
             console.log('Approve value: ', allowanceValue);
 
             selectedToken.approveData.allowanceValue = allowanceValue * 1;
@@ -1202,10 +1256,10 @@ export default defineComponent({
 
             let tokenContract = this.tokensContractMap[selectedToken.address];
             // console.log('Approve contract: ', token, tokenContract, this.account, this.routerContract.options.address);
-            console.log('Approve contract: ', token, tokenContract, this.account, this.chronosContract.options.address);
+            console.log('Approve contract: ', token, tokenContract, this.account, this.zapContract.options.address);
             let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
             // this.approveToken(tokenContract, this.routerContract.options.address, approveValue)
-            this.approveToken(tokenContract, this.chronosContract.options.address, approveValue)
+            this.approveToken(tokenContract, this.zapContract.options.address, approveValue)
                 .then(data => {
                     console.log("Success approving", data);
                     this.checkApproveForToken(token, token.contractValue);

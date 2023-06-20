@@ -72,7 +72,7 @@
                  class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
                 <div class="pool-table-header-item">
                     <label v-if="pool.tvl" class="card-label">
-                        ${{ $utils.formatNumberToMln(pool.tvl, 1) }}M
+                        ${{ $utils.formatNumberToMln(pool.tvl, 2) }}M
                     </label>
                     <label v-else class="card-label see-on-dex-label">
                         -
@@ -83,13 +83,12 @@
                  class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                 <div v-if="!$wu.isMobile()" class="pool-table-header-item">
 
-<!--                    todo: return after zap upgrade -->
-<!--                    <v-btn v-if="pool.zappable"
+                    <v-btn v-if="pool.zappable"
                            x-small
                            class="button button-full-width btn-outlined mb-3"
                            @click.stop="openZapInFunc(pool)" outlined>
                         ZAP IN
-                    </v-btn>-->
+                    </v-btn>
                 </div>
             </div>
         </div>

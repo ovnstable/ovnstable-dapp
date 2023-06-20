@@ -15,7 +15,7 @@
                     </v-toolbar>
 
                     <v-card-text>
-                        <div class="tokens-container">
+                        <div v-if="successData" class="tokens-container">
                             <div class="success-logo-container">
                                 <v-row align="center">
                                     <div class="col-4"></div>
@@ -233,6 +233,10 @@ export default defineComponent({
     methods: {
         initStakeList() {
             console.log("initStakeList: ", this.successData)
+            if (!this.successData || !this.successData.outputTokens) {
+                return
+            }
+
             console.log(this.successData.outputTokens)
             for (let i = 0; i < this.successData.outputTokens.length; i++) {
                 let token = this.successData.outputTokens[i];
@@ -247,6 +251,9 @@ export default defineComponent({
             }
         },
         initReturnList() {
+            if (!this.successData || !this.successData.outputTokens) {
+                return
+            }
 
             for (let i = 0; i < this.successData.outputTokens.length; i++) {
                 let token = this.successData.outputTokens[i];
@@ -296,6 +303,21 @@ export default defineComponent({
             console.log('openPositionOnPool')
             if (this.successData.pool.platform === 'Chronos') {
                 window.open(`https://app.chronos.exchange/liquidity/${this.successData.pool.address}`, '_blank').focus();
+                return
+            }
+
+            if (this.successData.pool.platform === 'Thena') {
+                window.open(`https://www.thena.fi/liquidity/manage/${this.successData.pool.address}`, '_blank').focus();
+                return
+            }
+
+            if (this.successData.pool.platform === 'Ramses') {
+                window.open(`https://app.ramses.exchange/liquidity/${this.successData.pool.address}`, '_blank').focus();
+                return
+            }
+
+            if (this.successData.pool.platform === 'Velodrome') {
+                window.open(`https://app.velodrome.finance/liquidity/manage?address=${this.successData.pool.address}`, '_blank').focus();
                 return
             }
 

@@ -11,7 +11,7 @@
                     track-fill-color="#1C95E7"
                     tick-size="10"
                     min="0"
-                    max="2"
+                    :max="stepLabels.length - 1"
                     v-model="step"
                     step="1"
                     ticks
@@ -66,6 +66,14 @@ export default defineComponent({
         clickOnStake: {
             type: Boolean,
             required: true
+        },
+        currentZapPlatformContractType: {
+            type: Object,
+            required: true
+        },
+        additionalSwapStepType: {
+            type: String,
+            required: false // 'APPROVE', 'DEPOSIT'
         }
     },
     data() {
@@ -76,17 +84,52 @@ export default defineComponent({
     computed: {
         stepLabels: function () {
             let approvesLabel = `Approve tokens (${this.approvedTokensCount}/${this.selectedInputTokens.length})`;
-            return ['', approvesLabel, 'Stake LP']
-        },
-        step: function () {
-            if (this.clickOnStake) {
-                return 2;
+
+            if (this.currentZapPlatformContractType.type === 'LP_WITH_STAKE_IN_ONE_STEP') {
+                return ['', approvesLabel, 'Stake LP'];
             }
 
-            if (this.approvedTokensCount === this.selectedInputTokens.length) {
+            if (this.currentZapPlatformContractType.type === 'LP_STAKE_DIFF_STEPS') {
+                return ['', approvesLabel, 'Deposit', 'Approve Gauge', 'Stake LP'];
+            }
+
+            console.error("Type zap not found for steps labels", this.currentZapPlatformContractType);
+            return [];
+        },
+        step: function () {
+            if (this.currentZapPlatformContractType.type === 'LP_WITH_STAKE_IN_ONE_STEP') {
+                if (this.clickOnStake) {
+                    return 2;
+                }
+
+                if (this.approvedTokensCount === this.selectedInputTokens.length) {
+                    return 1;
+                }
+
                 return 1;
             }
 
+            if (this.currentZapPlatformContractType.type === 'LP_STAKE_DIFF_STEPS') {
+                if (this.additionalSwapStepType === 'APPROVE') {
+                    return 3
+                }
+
+                if (this.additionalSwapStepType === 'DEPOSIT') {
+                    return 4
+                }
+
+                if (this.clickOnStake) {
+                    return 2;
+                }
+
+                if (this.approvedTokensCount === this.selectedInputTokens.length) {
+                    return 1;
+                }
+
+                return 1;
+            }
+
+            console.error("this.currentZapPlatformContractType not found:", this.currentZapPlatformContractType);
             return 1;
         },
         approvedTokensCount: function () {

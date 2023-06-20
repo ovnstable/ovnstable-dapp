@@ -16,7 +16,7 @@
                         <tr v-for="item in items" v-bind:key="item.name" >
                             <template v-if="!item.isHidden">
                                 <td @click="openOnScan(item.address)" class="strategy-name-col">
-                                    {{ item.name }} {{item.isHidden}}
+                                    {{ item.name }}
                                 </td>
                                 <td class="text-right">
                                     ${{ $utils.formatMoney(item.netAssetValue, 2) }}

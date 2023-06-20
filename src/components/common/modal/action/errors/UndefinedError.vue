@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     openDiscord() {
-      window.open(`https://discord.gg/overnight-fi`, '_blank').focus();
+      window.open(`https://discord.com/channels/933003627444969552/967813123149033542/967813482684760135/`, '_blank').focus();
     },
 
     async copyErrorToClipboard(copyTooltip) {

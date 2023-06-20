@@ -41,7 +41,9 @@
 
         <ZapModal :set-show-func='setIsZapModalShow'
                   :zap-pool="currentZapPool"
-                  :is-show="isZapModalShow"></ZapModal>
+                  :is-show="isZapModalShow"
+                  :pool-tokens-for-zap-map="poolTokensForZapMap">
+        </ZapModal>
     </div>
 </template>
 
@@ -74,16 +76,89 @@ export default {
         isShowOnlyZap: false,
         isShowAprLimit: false,
         aprLimitForFilter: 100,
+        zapPlatformSupportList: [
+            'Chronos',
+            'Ramses',
+            'Thena',
+            'Velodrome',
+        ],
+        poolTokensForZapMap: {
+            // Chronos
+            // pool address
+            '0xb260163158311596ea88a700c5a30f101d072326': [
+                {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+                {name: 'DAI+', address: '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'},
+            ],
+            '0xbbd7ff1728963a5eb582d26ea90290f84e89bd66': [
+                {name: 'DOLA', address: '0x6a7661795c374c0bfc635934efaddff3a7ee23b6'},
+                {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+            ],
 
-        // featuredPoolsAddresses: [
-        //     '0x88beb144352bd3109c79076202fac2bceab87117',
-        //     '0x69c28d5bbe392ef48c0dc347c575023daf0cd243',
-        //     '0xb260163158311596ea88a700c5a30f101d072326'
-        // ]
+            '0x0d20ef7033b73ea0c9c320304b05da82e2c14e33': [
+                {name: 'FRAX', address: '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F'},
+                {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+            ],
+
+            '0xcd78e225e36e724c9fb4bd8287296557d728cda7': [
+                {name: 'LUSD', address: '0x93b346b6BC2548dA6A1E7d98E9a421B42541425b'},
+                {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+            ],
+
+            // Thena
+            '0x1561d9618db2dcfe954f5d51f4381fa99c8e5689': [
+                {name: 'USDT+', address: '0x5335E87930b410b8C5BB4D43c3360ACa15ec0C8C'},
+                {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+            ],
+
+            '0x1f3ca66c98d682fa1bec31264692dad4f17340bc': [
+                {name: 'HAY', address: '0x0782b6d8c4551B9760e74c0545a9bCD90bdc41E5'},
+                {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+            ],
+
+            // Velodrome
+            '0xa99817d2d286c894f8f3888096a5616d06f20d46': [
+                {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
+                {name: 'DOLA', address: '0x8ae125e8653821e851f12a49f7765db9a9ce7384'},
+            ],
+
+            '0x69c28d5bbe392ef48c0dc347c575023daf0cd243': [
+                {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
+                {name: 'DAI+', address: '0x970d50d09f3a656b43e11b0d45241a84e3a6e011'},
+            ],
+
+            '0x947a96b025c70497dbc0d095d966f3b59a675a70': [
+                {name: 'FRAX', address: '0x2e3d870790dc77a83dd1d18184acc7439a53f475'},
+                {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
+            ],
+
+            '0x67124355cce2ad7a8ea283e990612ebe12730175': [
+                {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
+                {name: 'USDC', address: '0x7f5c764cbc14f9669b88837ca1490cca17c31607'},
+            ],
+
+            '0x8a9cd3dce710e90177b4332c108e159a15736a0f': [
+                {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
+                {name: 'LUSD', address: '0xc40f949f8a4e094d1b49a23ea9241d289b7b2819'},
+            ],
+
+            // Ramses
+            '0xeb9153afbaa3a6cfbd4fce39988cea786d3f62bb': [
+                {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+                {name: 'DAI+', address: '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'},
+            ],
+
+
+        }
     }),
 
     computed: {
-        ...mapGetters('network', ['appApiUrl', 'networkId', 'networkName', 'allNetworkConfigs', 'getParams']),
+        ...mapGetters('network', [
+            'appApiUrl',
+            'networkId',
+            'networkName',
+            'allNetworkConfigs',
+            'getParams'
+        ]),
 
         filteredPools: function () {
             if (!this.isShowAprLimit) {
@@ -246,16 +321,11 @@ export default {
                     if (pool && pool.tvl && pool.tvl >= 10000.00) {
 
                         // todo move to backend
-                        if (pool.platform === 'Chronos') {
+                        if (this.zapPlatformSupportList.includes(pool.platform)
+                        && Object.keys(this.poolTokensForZapMap)
+                                .some(item => item.toLowerCase() === pool.id.address.toLowerCase())) {
                             pool.zappable = true;
                         }
-
-                        // todo move to backend
-                        // if (this.featuredPoolsAddresses.find(
-                        //     item => item.toLowerCase() === pool.id.address.toLowerCase())
-                        // ) {
-                        //     pool.feature = true;
-                        // }
 
 
                         // todo move to backend

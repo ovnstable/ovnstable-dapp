@@ -43,10 +43,14 @@ export const odosSwap = {
                 counterId: null,
                 waitingConformation: false
             },
+            additionalSwapStepType: null, // 'APPROVE', 'DEPOSIT'
 
             isShowDecreaseAllowanceButton: true,
 
             updateBalancesIntervalId: null,
+            lastZapResponseData: null,
+            lastPutIntoPoolEvent: null,
+            lastReturnedToUserEvent: null,
 
             isShowSuccessModal: false,
             isShowSuccessPoolModal: false,

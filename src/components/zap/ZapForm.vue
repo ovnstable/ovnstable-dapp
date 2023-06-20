@@ -153,11 +153,32 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-else-if="additionalSwapStepType === 'APPROVE'"
+                             @click="toApproveAndDepositSteps(lastZapResponseData)"
+                             class="swap-button">
+                            <div class="swap-button-title">
+                                <div>
+                                    APPROVE GAUGE
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else-if="additionalSwapStepType === 'DEPOSIT'"
+                             @click="depositGauge(lastPutIntoPoolEvent, lastReturnedToUserEvent)"
+                             class="swap-button">
+                            <div class="swap-button-title">
+                                <div>
+                                    STAKE LP
+                                </div>
+                            </div>
+                        </div>
                         <div v-else
                              @click="stake()"
                              class="swap-button">
                             <div class="swap-button-title">
-                                <div>
+                                <div v-if="currentZapPlatformContractType && currentZapPlatformContractType.type === 'LP_STAKE_DIFF_STEPS'">
+                                    DEPOSIT
+                                </div>
+                                <div v-else>
                                     STAKE
                                 </div>
                             </div>
@@ -169,7 +190,7 @@
                             <div class="col-12">
                                <ZapSteps :selected-input-tokens="selectedInputTokens"
                                          :click-on-stake="clickOnStake"
-                                         :click-on-approve-gauge="clickOnApproveGauge"
+                                         :additional-swap-step-type="additionalSwapStepType"
                                          :current-zap-platform-contract-type="currentZapPlatformContractType">
                                </ZapSteps>
                             </div>
@@ -245,6 +266,11 @@ export default defineComponent({
             default: null
         },
 
+        poolTokensForZapMap: {
+            type: Object,
+            required: true,
+        },
+
     },
     data() {
         return {
@@ -267,35 +293,11 @@ export default defineComponent({
             tokensQuotaCheckerSec: 0,
 
             clickOnStake: false,
-            clickOnApproveGauge: false,
 
             sourceLiquidityBlacklist: ["Hashflow"],
             mapExcludeLiquidityPlatform: { // Schema for hot exclude: {'Ovn pool platform name from db': ['odos', 'api/info/liquidity-sources', 'related', 'with', 'platform'] }
                 'Chronos': ["Chronos Volatile"] //"Chronos Stable"
             },
-
-            poolTokensMap: {
-                // pool address
-                '0xb260163158311596ea88a700c5a30f101d072326': [
-                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
-                    {name: 'DAI+', address: '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'},
-                ],
-                '0xbbd7ff1728963a5eb582d26ea90290f84e89bd66': [
-                    {name: 'DOLA', address: '0x6a7661795c374c0bfc635934efaddff3a7ee23b6'},
-                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
-                ],
-
-                '0x0d20ef7033b73ea0c9c320304b05da82e2c14e33': [
-                    {name: 'FRAX', address: '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F'},
-                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
-                ],
-
-                '0xcd78e225e36e724c9fb4bd8287296557d728cda7': [
-                    {name: 'LUSD', address: '0x93b346b6BC2548dA6A1E7d98E9a421B42541425b'},
-                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
-                ],
-
-            }
         }
     },
     mounted() {
@@ -439,6 +441,10 @@ export default defineComponent({
 
                 if (this.zapPool.chain === this.networkId) {
                     this.firstInit();
+
+                    setTimeout(() => {
+                        this.loadZapContract();
+                    }, 300)
                     return
                 }
 
@@ -464,13 +470,13 @@ export default defineComponent({
         },
 
         firstInit() {
-            this.zapPlatformName = this.zapPool.platform;
+            this.zapPoolRoot = this.zapPool;
 
             this.tokenSeparationScheme = 'POOL_SWAP';
             console.log("Zap form odos init by scheme: ", this.tokenSeparationScheme)
             console.log("Zap pool: ", this.zapPool)
             // todo: move to backend
-            let poolTokens = this.poolTokensMap[this.zapPool.address];
+            let poolTokens = this.poolTokensForZapMap[this.zapPool.address];
             if (!poolTokens) {
                 console.log("Pool address not found:");
                 return;
@@ -781,36 +787,13 @@ export default defineComponent({
 
             console.log("Proportion for odos: ", proportions);
 
-
-           /* const requestNew = await this.getOdosRequest({
-                "chainId": 42161,
-                "inputTokens": proportions.inputTokens,
-                "outputTokens": proportions.outputTokens,
-                "gasPrice": actualGas,
-                "userAddr": this.chronosContract.options.address,
-                "slippageLimitPercent": this.getSlippagePercent(),
-            });*/
-
             let requestOutputTokens = this.getRequestOutputTokens();
             let requestInputTokens = this.getRequestInputTokens();
-            // requestOutputTokens[0].proportion = reserves.token0Amount*1 / sumReserves;
-            // requestOutputTokens[1].proportion = reserves.token1Amount*1 / sumReserves;
+
             let request = {
                 "chainId": this.networkId,
-                // "inputTokens": requestInputTokens,
                 "inputTokens": proportions.inputTokens,
                 "outputTokens": proportions.outputTokens,
-                // "outputTokens": [
-                //     {
-                //         "tokenAddress": requestOutputTokens[0].tokenAddress,
-                //         "proportion": reserves[0] / sumReserves
-                //     },
-                //     {
-                //         "tokenAddress": requestOutputTokens[1].tokenAddress,
-                //         "proportion": reserves[1] / sumReserves
-                //     },
-                //
-                // ],
                 "gasPrice": actualGas,
                 "userAddr": this.zapContract.options.address,
                 "slippageLimitPercent": this.getSlippagePercent(),
@@ -828,34 +811,16 @@ export default defineComponent({
                 simulate: false,
                 pathViz: false,
                 disableRFQs: false
-                // chainId: this.networkId,
-                // // chainId: 1,
-                // inputTokens: requestInputTokens,
-                // outputTokens: requestTokens,
-                // gasPrice: actualGas,
-                // userAddr: this.chronosContract.options.address,
-                // slippageLimitPercent: this.getSlippagePercent(),
-                // sourceBlacklist: ['Hashflow'],
-                // sourceWhitelist: [],
-                // simulate: true,
-                // pathViz: true,
-                // // disableRFQs: false
             }
 
             console.log("Odos request data", requestData);
-            // this.testZapIn(requestOutputTokens, requestInputTokens, gaugeAddress);
             this.swapRequest(requestData)
                 .then(data => {
                     console.log("Odos swap request success from zap", data)
                     console.log("Odos swap request success from zap proportions", proportions)
 
-
-                    // todo 5 continue here
-                    // added logic for currentZapPlatformContractType
-                    // if LP_WITH_STAKE_IN_ONE_STEP -> old logic
-                    // if LP_STAKE_DIFF_STEPS -> new step logic
-
                     this.initZapInTransaction(data, proportions.inputTokens, proportions.outputTokens, proportions, gaugeAddress, request.gasPrice);
+
                     this.isSwapLoading = false;
                 }).catch(e => {
                 console.error("Odos swap request failed from zap", e)
@@ -917,6 +882,139 @@ export default defineComponent({
 
             return sourceBlacklist;
         },
+        toApproveAndDepositSteps: async function (data) {
+            console.log("Approve and deposit tx steps.", data, this.poolTokenContract, this.gaugeContract)
+            let putIntoPoolEvent;
+            let returnedToUserEvent;
+            for (const key of Object.keys(data.events)) {
+                const value = data.events[key];
+
+                console.log(`Key: ${key}`);
+                console.log(`Value:`, value);
+
+                if (key === 'PutIntoPool') {
+                    putIntoPoolEvent = value;
+                    this.lastPutIntoPoolEvent = putIntoPoolEvent;
+                    console.log(`Tokens put into pool: ${putIntoPoolEvent.returnValues.amountsPut} ${putIntoPoolEvent.returnValues.tokensPut}`);
+                }
+
+                if (key === 'ReturnedToUser') {
+                    returnedToUserEvent = value;
+                    this.lastReturnedToUserEvent = returnedToUserEvent;
+                    console.log(`Tokens returned to user: ${returnedToUserEvent.returnValues.amountsReturned} ${returnedToUserEvent.returnValues.tokensReturned}`);
+                }
+
+            }
+
+            this.stopSwapConfirmTimer();
+            this.additionalSwapStepType = 'APPROVE';
+
+            this.approveGauge(putIntoPoolEvent, returnedToUserEvent);
+
+        },
+        async approveGauge(putIntoPoolEvent, returnedToUserEvent) {
+            let isGaugeApproved = await this.checkApproveForGauge(this.poolTokenContract, this.gaugeContract.options.address, 1000000000000000);
+            console.log("Approving gauge", isGaugeApproved);
+            if (!isGaugeApproved) {
+                this.showWaitingModal('Approving gauge in process');
+                this.approveGaugeForStake().then(data => {
+                    console.log("Success gauge approve: ", data);
+                    this.additionalSwapStepType = 'DEPOSIT';
+                    this.closeWaitingModal();
+                    this.depositGauge(putIntoPoolEvent, returnedToUserEvent);
+                }).catch(e => {
+                    console.error("Error when gauge approve: ", e);
+                    this.closeWaitingModal();
+                });
+            } else {
+                this.additionalSwapStepType = 'DEPOSIT';
+                this.depositGauge(putIntoPoolEvent, returnedToUserEvent);
+            }
+        },
+        depositGauge(putIntoPoolEvent, returnedToUserEvent) {
+            this.showWaitingModal('Stake LP in process');
+
+            this.depositAllAtGauge().then(data => {
+                this.closeWaitingModal();
+
+                // todo:
+                // 1. approve by decimal + 10mln. +
+                // 2. stop timer make button info. +
+                // 3. add steps to view by enums. +
+                // success modal. +
+                // add other contracts.
+                console.log("Deposit success!", data);
+
+                const inputTokens = [...this.selectedInputTokens]
+                const outputTokens = [...this.selectedOutputTokens]
+                this.showSuccessPoolModal(
+                    true,
+                    inputTokens,
+                    outputTokens,
+                    data.transactionHash,
+                    putIntoPoolEvent,
+                    returnedToUserEvent,
+                    this.zapPool
+                );
+
+                // event
+                this.$bus.$emit('zap-transaction-finished', true);
+                this.additionalSwapStepType = null;
+                this.clearZapData();
+
+                this.loadBalances();
+            }).catch(e => {
+                console.log("Deposit error!", e);
+                this.closeWaitingModal();
+                this.additionalSwapStepType = null;
+            });
+        },
+        clearZapData() {
+            this.lastPutIntoPoolEvent = null;
+            this.lastReturnedToUserEvent = null;
+            this.lastZapResponseData = null;
+        },
+        finishSingleStepTransaction: function (data) {
+            console.log("Finish single tx step.", data)
+            let putIntoPoolEvent;
+            let returnedToUserEvent;
+            for (const key of Object.keys(data.events)) {
+                const value = data.events[key];
+
+                console.log(`Key: ${key}`);
+                console.log(`Value:`, value);
+
+                if (key === 'PutIntoPool') {
+                    putIntoPoolEvent = value;
+                    this.lastPutIntoPoolEvent = putIntoPoolEvent;
+                    console.log(`Tokens put into pool: ${putIntoPoolEvent.returnValues.amountsPut} ${putIntoPoolEvent.returnValues.tokensPut}`);
+                }
+
+                if (key === 'ReturnedToUser') {
+                    returnedToUserEvent = value;
+                    this.lastReturnedToUserEvent = returnedToUserEvent;
+                    console.log(`Tokens returned to user: ${returnedToUserEvent.returnValues.amountsReturned} ${returnedToUserEvent.returnValues.tokensReturned}`);
+                }
+
+            }
+
+            const inputTokens = [...this.selectedInputTokens]
+            const outputTokens = [...this.selectedOutputTokens]
+            this.showSuccessPoolModal(
+                true,
+                inputTokens,
+                outputTokens,
+                data.transactionHash,
+                putIntoPoolEvent,
+                returnedToUserEvent,
+                this.zapPool
+            );
+
+            // event
+            this.$bus.$emit('zap-transaction-finished', true);
+            this.clearZapData();
+            this.loadBalances();
+        },
         async initZapInTransaction(responseData, requestInputTokens, requestOutputTokens, proportions, gaugeAddress, gasPrice) {
             console.log("Chronos-odos transaction data", responseData, this.zapContract);
 
@@ -965,54 +1063,32 @@ export default defineComponent({
                 txData,
                 gaugeData).send(params)
                 .then(data => {
-                                // let data = this.getZapMocInfo();  // Retrieve event logs
-            let putIntoPoolEvent;
-            let returnedToUserEvent;
-            for (const key of Object.keys(data.events)) {
-                const value = data.events[key];
+                    this.lastZapResponseData = data;
 
-                console.log(`Key: ${key}`);
-                console.log(`Value:`, value);
-
-                if (key === 'PutIntoPool') {
-                    putIntoPoolEvent = value;
-                    console.log(`Tokens put into pool: ${putIntoPoolEvent.returnValues.amountsPut} ${putIntoPoolEvent.returnValues.tokensPut}`);
-                }
-
-                if (key === 'ReturnedToUser') {
-                    returnedToUserEvent = value;
-                    console.log(`Tokens returned to user: ${returnedToUserEvent.returnValues.amountsReturned} ${returnedToUserEvent.returnValues.tokensReturned}`);
-                }
-
-            }
-
-                const inputTokens = [...this.selectedInputTokens]
-                const outputTokens = [...this.selectedOutputTokens]
-                this.showSuccessPoolModal(
-                    true,
-                    inputTokens,
-                    outputTokens,
-                    data.transactionHash,
-                    putIntoPoolEvent,
-                    returnedToUserEvent,
-                    this.zapPool
-                );
-
-                // event
-                this.$bus.$emit('zap-transaction-finished', true);
-
-                this.loadBalances();
-                }).catch(e => {
-                    console.log("Zap odos call error: ", e);
-                    if (e && e.code === 4001) {
-                        if (e.message === 'User rejected the request.') {
-                            this.stopSwapConfirmTimer();
-                            this.clickOnStake = false;
-                        }
+                    if (this.currentZapPlatformContractType.type === 'LP_WITH_STAKE_IN_ONE_STEP') {
+                        console.log("Finish single step transaction: ", this.lastZapResponseData);
+                        this.finishSingleStepTransaction(this.lastZapResponseData);
+                        return;
                     }
-                    this.closeWaitingModal();
-                    this.showErrorModalWithMsg({errorType: 'zap', errorMsg: e}, );
-                })
+
+                    if (this.currentZapPlatformContractType.type === 'LP_STAKE_DIFF_STEPS') {
+                        console.log("Finish single step transaction: ", this.lastZapResponseData);
+                        this.toApproveAndDepositSteps(this.lastZapResponseData);
+                        return;
+                    }
+
+                    console.error("Error when end of transaction, method type not found. ", this.currentZapPlatformContractType);
+                }).catch(e => {
+                console.log("Zap odos call error: ", e);
+                if (e && e.code === 4001) {
+                    if (e.message === 'User rejected the request.') {
+                        this.stopSwapConfirmTimer();
+                        this.clickOnStake = false;
+                    }
+                }
+                this.closeWaitingModal();
+                this.showErrorModalWithMsg({errorType: 'zap', errorMsg: e}, );
+            })
 
             this.isSwapLoading = false;
         },

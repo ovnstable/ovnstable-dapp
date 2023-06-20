@@ -5,29 +5,36 @@ export const zap = {
 
     data() {
         return {
-            zapPlatformName: null,
+            zapPoolRoot: null,
             currentZapPlatformContractType: null,
             zapPlatformContractTypeMap: { // PlatformName: { name, type } name: ContractName, type: LP_WITH_STAKE_IN_ONE_STEP, LP_STAKE_DIFF_STEPS.
                 'Chronos': {
-                    name: 'ChronosZap',
-                    type: 'LP_WITH_STAKE_IN_ONE_STEP'
+                    name: 'Chronos',
+                    type: 'LP_WITH_STAKE_IN_ONE_STEP',
+                    network: 'arbitrum'
                 },
                 'Thena': {
-                    name: 'ThenaZap',
-                    type: 'LP_STAKE_DIFF_STEPS'
+                    name: 'Thena',
+                    type: 'LP_STAKE_DIFF_STEPS',
+                    network: 'bsc'
                 },
                 'Velodrome': {
-                    name: 'VelodromeZap',
-                    type: 'LP_STAKE_DIFF_STEPS'
+                    name: 'Velodrome',
+                    type: 'LP_STAKE_DIFF_STEPS',
+                    network: 'optimism'
                 },
                 'Ramses': {
-                    name: 'RamsesZap',
-                    type: 'LP_STAKE_DIFF_STEPS'
+                    name: 'Ramses',
+                    type: 'LP_STAKE_DIFF_STEPS',
+                    network: 'arbitrum'
                 },
             },
             zapContract: null,
-            pollsMap: {
-                "0xb260163158311596ea88a700c5a30f101d072326": '0xcd4a56221175b88d4fb28ca2138d670cc1197ca9',
+            poolTokenContract: null,
+            gaugeContract: null,
+            pollsMap: { // pool address : gauge
+                // Chronos https://arbiscan.io/address/0xc72b5c6d2c33063e89a50b2f77c99193ae6cee6c#readProxyContract
+                "0xb260163158311596ea88a700c5a30f101d072326": '0xcd4a56221175b88d4fb28ca2138d670cc11i97ca9',
                 "0x0d20ef7033b73ea0c9c320304b05da82e2c14e33": '0xaF618E6F5EF781e3aCFe00708BD005E0cc9A2e6F',
                 "0x0df5f52afa0308fdd65423234c4fda9add0b9eba": '0xF319285fa8b5323A40c71D3c006dBd0BE4f5171b',
                 "0x69fd0ea1041bc4c495d5371a074bf1dcd6700577": '0xD1C05e0770968c8b9C7dC0f3aC1DD419A3417971',
@@ -35,24 +42,68 @@ export const zap = {
                 "0xa885a1e7511cf6b572d949b1e60ac0a8449f3b18": '0xc8d79Fd3Ecc0F91d9C56E279Daba12257bE24619',
                 "0xbbd7ff1728963a5eb582d26ea90290f84e89bd66": '0x3004F018B2C01d40D19C7dC4a5a0AFA8743a7e24',
                 "0xcd78e225e36e724c9fb4bd8287296557d728cda7": '0x7de0998eE1Fce80c160AD1F5Fe768BFF9b0ee87f',
+
+                // Thena https://api.thena.fi/api/v1/fusions
+                "0x1561d9618db2dcfe954f5d51f4381fa99c8e5689": '0x3877c2C3D75aE80f2Ed8E9d4d68e3C1BFc77e5A6',
+                "0x1f3ca66c98d682fa1bec31264692dad4f17340bc": '0xB0a69681d82c90B80B689BaF43ccfa6270f1DdE5',
+
+                // Velodrome https://api.velodrome.finance/api/v1/pairs
+                '0xa99817d2d286c894f8f3888096a5616d06f20d46': '0x05d74f34ff651e80b0a1a4bd96d8867626ac2ddd',
+                '0x69c28d5bbe392ef48c0dc347c575023daf0cd243': '0xfc73bd75f1493f39de41ff41c20af69c7563f33a',
+                '0x947a96b025c70497dbc0d095d966f3b59a675a70': '0xae95f97c4b189144d0323b424121e2c94b823906',
+                '0x67124355cce2ad7a8ea283e990612ebe12730175': '0xd2d95775d35a6d492ced7c7e26817aacb7d264f2',
+                '0x8a9cd3dce710e90177b4332c108e159a15736a0f': '0x1032950b49fc23316655e5d0cc066bcd85b28ec7',
+
+                // Ramses https://ramses-api-5msw7.ondigitalocean.app/mixed-pairs
+                '0xeb9153afbaa3a6cfbd4fce39988cea786d3f62bb': '0x88d8d2bdc4f12862fbabea43cec08b8fcd2234da',
+
             }
         }
     },
-    mounted() {
-        this.loadZapContract();
+    created() {
+        setTimeout(() => {
+            this.loadZapContract();
+        }, 300)
     },
     methods: {
 
         async loadZapContract() {
-            thiis.currentZapPlatformContractType = this.zapPlatformContractTypeMap[this.zapPlatformName];
-            if (!this.currentZapPlatformContractType) {
-                console.log("Error when load zap contract name. Contract not found.", zapContractName, this.zapPlatformName);
+            if (!this.zapPoolRoot) {
+                console.error("Zap Pool Root not found: ", this.zapPoolRoot);
                 return;
             }
 
-            let abiFile = await loadJSON(`/contracts/arbitrum/${this.currentZapPlatformContractType.name}.json`);
+            this.currentZapPlatformContractType = this.zapPlatformContractTypeMap[this.zapPoolRoot.platform];
+            if (!this.currentZapPlatformContractType) {
+                console.error("Error when load zap contract name. Contract not found.", this.zapPoolRoot);
+                return;
+            }
+
+            console.log("Load contract: ", `/contracts/${this.currentZapPlatformContractType.network}/${this.currentZapPlatformContractType.name}Zap.json`);
+            let abiFile = await loadJSON(`/contracts/${this.currentZapPlatformContractType.network}/${this.currentZapPlatformContractType.name}Zap.json`);
             this.zapContract = this._loadContract(abiFile, this.web3, abiFile.address);
             console.log("Zap contract loaded: ", this.zapContract);
+
+            if (this.currentZapPlatformContractType.type === 'LP_STAKE_DIFF_STEPS') {
+                this.loadPoolTokenAndGaugeContracts();
+            }
+        },
+        async loadPoolTokenAndGaugeContracts() {
+            console.log("loadPoolTokenAndGaugeContracts", this.zapPoolRoot);
+            let poolAddress = this.zapPoolRoot.address;
+            let gaugeAddress = this.pollsMap[poolAddress];
+            if (!gaugeAddress) {
+                console.log("Error when get proportion. Gauge not found at pool: ", poolAddress)
+                return
+            }
+
+            let abiPoolTokenContractFile = await loadJSON(`/contracts/${this.currentZapPlatformContractType.network}/${this.currentZapPlatformContractType.name}PoolToken.json`);
+            this.poolTokenContract = this._loadContract(abiPoolTokenContractFile, this.web3, poolAddress);
+            console.log("Pool token contract loaded: ", this.poolTokenContract);
+
+            let abiGaugeContractFile = await loadJSON(`/contracts/${this.currentZapPlatformContractType.network}/${this.currentZapPlatformContractType.name}Gauge.json`);
+            this.gaugeContract = this._loadContract(abiGaugeContractFile, this.web3, gaugeAddress);
+            console.log("Gauge contract loaded: ", this.gaugeContract);
         },
         _loadContract(file, web3, address) {
             if (!address) {
@@ -154,9 +205,42 @@ export const zap = {
             }
 
         },
-        approveGaugeForStake() {
-
+        async checkApproveForGauge(poolTokenContract, gaugeAddress, checkedAllowanceValue) { // checkedAllowanceValue in wei
+            console.log('Check Approve pool contract for: ', gaugeAddress, poolTokenContract, this.account, this.routerContract.options.address);
+            let allowanceValue = await this.getAllowanceValue(poolTokenContract, this.account, this.routerContract.options.address);
+            console.log('Approve value: ', allowanceValue);
+            return allowanceValue >= checkedAllowanceValue;
         },
+        async approveGaugeForStake() {
+            console.log("Approving gauge stake")
+            this.showWaitingModal('Approving guage in process');
+
+            let isGaugeApproved = this.checkApproveForGauge(this.poolTokenContract, this.gaugeContract.options.address, 100000000000000);
+            if (!isGaugeApproved) {
+                console.log("Approve not needed for pool: ");
+                this.closeWaitingModal();
+                return;
+            }
+
+            // console.log('Approve contract: ', token, tokenContract, this.account, this.routerContract.options.address);
+            console.log('Approve contract: ', this.poolTokenContract, this.account, this.zapContract.options.address);
+            let approveValue = 100000000000000;
+            // this.approveToken(tokenContract, this.routerContract.options.address, approveValue)
+           return this.approveToken(this.poolTokenContract, this.gaugeContract.options.address, approveValue)
+                .then(data => {
+                    console.log("Success gauge approving", data);
+                    this.closeWaitingModal();
+                })
+                .catch(e => {
+                    console.error("Error when approve token.", e);
+                    this.closeWaitingModal();
+                    this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
+                });
+        },
+        depositAllAtGauge() {
+            let params = {from: this.account, gasPrice: this.gasPriceGwei};
+            return this.gaugeContract.methods.depositAll().send(params);
+        }
     }
 
 }

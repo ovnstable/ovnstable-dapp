@@ -34,12 +34,11 @@
                     Strategies
                 </v-btn>
             </v-row>
-
-<!--            <v-row class="ma-0 mt-4">
-                <v-btn @click="swapWeightsAction" outlined :disabled="financeLoading">
+            <v-row class="ma-0 mt-4">
+                <v-btn @click="swapWeightsAction()" outlined :disabled="financeLoading">
                     Swap Weights
                 </v-btn>
-            </v-row>-->
+            </v-row>
             <v-row class="ma-0 mt-1">
                 <label class="error-label" v-if="!hasChangeAccount">Current wallet is not Portfolio Agent</label>
             </v-row>
@@ -76,6 +75,7 @@ export default {
         'showZeroStrategiesAction'
     ],
     data: () => ({
+        isZeroStrategiesShow: false
     }),
 
     computed: {
@@ -131,6 +131,13 @@ export default {
         ...mapActions('governance', ['setStrategiesM2MWeights', 'estimateSetStrategiesM2MWeights', 'rebalancePortfolio', 'estimateRebalancePortfolio', 'getFinance']),
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
 
+        swapWeightsAction() {
+            for (let i = 0; i < this.m2mItems.length; i++) {
+                let item = this.m2mItems[i];
+                item.targetWeight = Number(item.currentWeight).toFixed(2);
+            }
+        },
+
         async changeWeightsAction() {
 
             let estimatedGasValue = await this.estimateSetStrategiesM2MWeights({weights: this.m2mItems, contractType: this.contractType});
@@ -166,6 +173,17 @@ export default {
         updateM2MItems() {
             this.getFinance(this.contractType);
         },
+        toggleZeroStrategies(isShow) {
+            if (isShow) {
+                this.showZeroStrategiesAction();
+                this.isZeroStrategiesShow = isShow;
+                return
+            }
+
+            this.hideZeroStrategiesAction()
+            this.isZeroStrategiesShow = isShow;
+        }
+
     }
 }
 </script>

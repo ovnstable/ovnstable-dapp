@@ -92,32 +92,41 @@
 
                         </tr>
 
-                    <tr>
-                        <td :colspan="networkId === 137 ? 10 : 9"></td>
-                    </tr>
+                        <tr>
+                            <td :colspan="networkId === 137 ? 10 : 9"></td>
+                        </tr>
 
-                    <tr>
-                        <td>
-                            <b>Total</b>
-                        </td>
-                        <td class="text-right">
-                            <b>${{ $utils.formatMoney(m2mTotal, 2) }}</b>
-                        </td>
-                        <td class="text-right">
-                            <b>${{ $utils.formatMoney(totalLiquidationSum, 2) }}</b>
-                        </td>
-                        <td :colspan="networkId === 137 ? 7 : 6"></td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <b>Total</b>
+                            </td>
+                            <td class="text-right">
+                                <b>${{ $utils.formatMoney(m2mTotal, 2) }}</b>
+                            </td>
+                            <td class="text-right">
+                                <b>${{ $utils.formatMoney(totalLiquidationSum, 2) }}</b>
+                            </td>
+                            <td class="text-right">
+                                <b>CW {{ $utils.formatMoney(totalCurrentWeight, 3) }}</b>
+                            </td>
+                            <td class="text-right">
+                            </td>
+                            <td class="center">
+                                <b>TW {{ $utils.formatMoney(totalTargetWeight, 1) }}</b>
+                            </td>
+                            <td :colspan="networkId === 137 ? 7 : 6"></td>
 
-                    <tr>
-                        <td>
-                            <b>Total USD+</b>
-                        </td>
-                        <td class="text-right">
-                            <b>${{ $utils.formatMoney(totalUsdPlusValue, 2) }}</b>
-                        </td>
-                        <td :colspan="networkId === 137 ? 7 : 6"></td>
-                    </tr>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <b>Total USD+</b>
+                            </td>
+                            <td class="text-right">
+                                <b>${{ $utils.formatMoney(totalUsdPlusValue, 2) }}</b>
+                            </td>
+                            <td :colspan="networkId === 137 ? 7 : 6"></td>
+                        </tr>
                     </tbody>
                 </template>
             </v-data-table>
@@ -190,6 +199,35 @@ export default {
 
             return result;
         },
+
+        totalCurrentWeight: function () {
+
+            let result = 0.0;
+
+            this.m2mItems.forEach(item => {
+                console.log("m2mItems: ", this.m2mItems, item);
+
+                if (item && item.currentWeight) {
+                    result += parseFloat(item.currentWeight);
+                }
+            });
+
+            return result;
+        },
+
+        totalTargetWeight: function() {
+            let result = 0.0;
+
+            this.m2mItems.forEach(item => {
+                console.log("m2mItems: ", this.m2mItems, item);
+
+                if (item && item.targetWeight) {
+                    result += parseFloat(item.targetWeight);
+                }
+            });
+
+            return result;
+        }
     },
 
     created() {

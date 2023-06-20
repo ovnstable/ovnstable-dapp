@@ -688,18 +688,20 @@ const actions = {
             }
             console.log('rootState.network.assetDecimals: ', rootState.network.assetDecimals)
 
+            let nav = (fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : numberUtils._fromE18(asset.netAssetValue.toString()));
             items.push(
                 {
                     name: mapping ? mapping.name : asset.strategy,
                     address: asset.strategy,
-                    netAssetValue: (fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : numberUtils._fromE18(asset.netAssetValue.toString())),
+                    netAssetValue: nav,
                     liquidationValue: (fromAsset6 ? numberUtils._fromE6(asset.liquidationValue.toString()) : numberUtils._fromE18(asset.liquidationValue.toString())),
                     minWeight: (weight.minWeight ? parseInt(weight.minWeight) / 1000 : 0),
                     maxWeight: (weight.maxWeight ? parseInt(weight.maxWeight) / 1000 : 0),
                     riskFactor: (weight.riskFactor ? parseInt(weight.riskFactor) / 1000 : 0),
                     targetWeight: (weight.targetWeight ? parseInt(weight.targetWeight) / 1000 : 0),
                     enabled: weight.enabled,
-                    enabledReward: weight.enabledReward
+                    enabledReward: weight.enabledReward,
+                    isHidden: nav > 0 ? false : true,
                 });
 
             sum += parseFloat((fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : numberUtils._fromE18(asset.netAssetValue.toString())));
@@ -721,7 +723,8 @@ const actions = {
                         riskFactor: 0,
                         targetWeight: 0,
                         enabled: false,
-                        enabledReward: false
+                        enabledReward: false,
+                        isHidden: false,
                     });
             }
         }

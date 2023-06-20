@@ -34,7 +34,7 @@ export const zap = {
             gaugeContract: null,
             pollsMap: { // pool address : gauge
                 // Chronos https://arbiscan.io/address/0xc72b5c6d2c33063e89a50b2f77c99193ae6cee6c#readProxyContract
-                "0xb260163158311596ea88a700c5a30f101d072326": '0xcd4a56221175b88d4fb28ca2138d670cc11i97ca9',
+                "0xb260163158311596ea88a700c5a30f101d072326": '0xCD4A56221175b88d4fb28CA2138d670Cc1197CA9',
                 "0x0d20ef7033b73ea0c9c320304b05da82e2c14e33": '0xaF618E6F5EF781e3aCFe00708BD005E0cc9A2e6F',
                 "0x0df5f52afa0308fdd65423234c4fda9add0b9eba": '0xF319285fa8b5323A40c71D3c006dBd0BE4f5171b',
                 "0x69fd0ea1041bc4c495d5371a074bf1dcd6700577": '0xD1C05e0770968c8b9C7dC0f3aC1DD419A3417971',
@@ -119,6 +119,7 @@ export const zap = {
                 return
             }
 
+            console.log('getProportion: ', this.zapContract, gauge);
             return this.zapContract.methods.getProportion(gauge).call().then(data => {
                 console.log('Get proportion: ', poolAddress, gauge, data);
                 return data;

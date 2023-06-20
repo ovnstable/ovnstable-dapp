@@ -122,7 +122,8 @@
 
         <ZapModal :set-show-func='setIsZapModalShow'
                   :zap-pool="currentZapPool"
-                  :is-show="isZapModalShow"></ZapModal>
+                  :is-show="isZapModalShow"
+                  :pool-tokens-for-zap-map="poolTokensForZapMap"></ZapModal>
 
         <resize-observer @notify="$forceUpdate()"/>
     </v-row>

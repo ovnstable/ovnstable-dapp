@@ -52,11 +52,12 @@ import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
 import {poolApiService} from "@/services/pool-api-service";
 import Pool from "@/components/market/cards/pool/Pool.vue";
+import {pool} from "@/components/mixins/pool";
 
 
 export default {
     name: "FeaturedView",
-
+    mixins: [pool],
     components: {
         Pool,
         UsdPlus,
@@ -413,7 +414,9 @@ export default {
                               if (pool && pool.tvl && pool.tvl >= 10000.00) {
 
                                   // todo move to backend
-                                  if (pool.platform === 'Chronos') {
+                                  if (this.zapPlatformSupportList.includes(pool.platform)
+                                      && Object.keys(this.poolTokensForZapMap)
+                                          .some(item => item.toLowerCase() === pool.id.address.toLowerCase())) {
                                       pool.zappable = true;
                                   }
 

@@ -148,7 +148,7 @@
                         </div>
                     </div>
 
-                    <div v-if="pool.aggregators && pool.aggregators.length"
+                    <div v-if="!isShowOnlyZap && pool.aggregators && pool.aggregators.length"
                          @click="toggleDetails(pool)"
                          class="toggle-icon-container"
                          v-bind:style="$wu.isMobile() ? 'top: 122px;' : ''">

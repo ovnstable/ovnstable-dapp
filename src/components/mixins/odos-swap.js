@@ -196,9 +196,9 @@ export const odosSwap = {
             console.log('init pool swap data for network: ', this.networkName);
             let networkId = this.getParams(this.networkName).networkId;
             // this.tokens = await this.getFilteredPoolTokens(networkId, false, listOfBuyTokensAddresses);
-            this.tokens = await this.getFilteredPoolTokens(networkId, false, []); // [] - none execute
+            this.tokens = await this.getFilteredPoolTokens(networkId, false, [], true); // [] - none execute
             console.log("TOKENS_ ", this.tokens)
-            this.secondTokens = (await this.getFilteredPoolTokens(networkId, true, listOfBuyTokensAddresses));
+            this.secondTokens = (await this.getFilteredPoolTokens(networkId, true, listOfBuyTokensAddresses, false));
             console.log("SECOND TOKENS_ ", this.secondTokens);
             this.isTokensLoadedAndFiltered = true;
 
@@ -383,7 +383,7 @@ export const odosSwap = {
                 console.log("Error load contract", e)
             });
         },
-        async getFilteredPoolTokens(chainId, isIncludeInListAddresses, listTokensAddresses) {
+        async getFilteredPoolTokens(chainId, isIncludeInListAddresses, listTokensAddresses, ignoreBaseNetworkCurrency) {
             let tokens = [];
             let tokenMap = this.tokensMap.chainTokenMap[chainId + ''].tokenMap;
             let leftListTokensAddresses = listTokensAddresses;
@@ -395,6 +395,11 @@ export const odosSwap = {
                 const isKeyIncludeList = leftListTokensAddresses.some(
                     address => address.toLowerCase() === key.toLowerCase()
                 );
+
+                // key === token address
+                if (ignoreBaseNetworkCurrency && key === "0x0000000000000000000000000000000000000000") {
+                    continue;
+                }
 
                 // add only included in list
                 if (isIncludeInListAddresses && isKeyIncludeList) {

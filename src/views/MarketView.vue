@@ -20,7 +20,9 @@
       <template>
         <v-row class="ma-0 mb-1 mt-10" align="center">
             <v-icon class="prototypes-icon" :size="$wu.isFull() ? 20 : 16">mdi-chart-line</v-icon>
-            <label class="prototypes-label prototypes-label-available ml-2">Production</label>
+            <label class="prototypes-label prototypes-label-available ml-2">
+                Production
+            </label>
         </v-row>
         <v-divider class="prototypes-list-divider"></v-divider>
 

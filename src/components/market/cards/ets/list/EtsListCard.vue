@@ -172,8 +172,8 @@
                             ${{ $utils.formatMoneyComma(cardData.tvl, 2) }}
                         </label>
                         <label class="card-label list-header-label-gray" v-if="cardData.overcapEnabled">&nbsp;/&nbsp;${{ $utils.formatMoneyComma(cardData.data.maxSupply, 2) }}</label>
-<!--                        <v-spacer></v-spacer>-->
-<!--                        <label class="card-label" :class="accountEtsBalance ? '' : 'list-header-label-gray'">{{ accountEtsBalance ? ('$' + $utils.formatMoneyComma(accountEtsBalance, 2)) : '—' }}</label>-->
+                        <v-spacer></v-spacer>
+                        <label class="card-label" :class="accountEtsBalance ? '' : 'list-header-label-gray'">{{ accountEtsBalance ? ('$' + $utils.formatMoneyComma(accountEtsBalance, 2)) : '—' }}</label>
                     </v-row>
                 </v-col>
             </v-row>

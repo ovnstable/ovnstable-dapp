@@ -39,6 +39,12 @@
                     Swap Weights
                 </v-btn>
             </v-row>
+            <v-row class="ma-0 mt-4">
+                <label>Total Target Weight: </label>
+            </v-row>
+            <v-row class="ma-0 mt-1">
+                {{ $utils.formatMoney(totalTargetWeight, 2) }}
+            </v-row>
             <v-row class="ma-0 mt-1">
                 <label class="error-label" v-if="!hasChangeAccount">Current wallet is not Portfolio Agent</label>
             </v-row>
@@ -51,6 +57,7 @@
             <v-row class="ma-0 mt-1">
                 <label class="error-label" v-if="!financeLoading && !weightsIsBtnEnabledTargetWeight">Target weight must be between min and max weights</label>
             </v-row>
+
         </template>
 
         <ErrorModal/>
@@ -121,6 +128,20 @@ export default {
 
             return result;
         },
+
+        totalTargetWeight: function() {
+            let result = 0.00;
+
+            this.m2mItems.forEach(item => {
+                console.log("m2mItems: ", this.m2mItems, item);
+
+                if (item && item.targetWeight) {
+                    result += parseFloat(item.targetWeight);
+                }
+            });
+
+            return result;
+        }
     },
 
     watch: {

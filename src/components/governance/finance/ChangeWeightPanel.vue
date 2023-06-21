@@ -106,14 +106,6 @@
                             <td class="text-right">
                                 <b>${{ $utils.formatMoney(totalLiquidationSum, 2) }}</b>
                             </td>
-                            <td class="text-right">
-                                <b>CW {{ $utils.formatMoney(totalCurrentWeight, 3) }}</b>
-                            </td>
-                            <td class="text-right">
-                            </td>
-                            <td class="center">
-                                <b>TW {{ $utils.formatMoney(totalTargetWeight, 1) }}</b>
-                            </td>
                             <td :colspan="networkId === 137 ? 7 : 6"></td>
 
                         </tr>
@@ -164,7 +156,7 @@ export default {
         totalUsdPlusValue: null,
 
         rules: {
-            required: val => (val === 0 || !!val) || 'Need to be filled',
+            required: val => (val === 0.00 || !!val) || 'Need to be filled',
         },
     }),
 
@@ -199,35 +191,6 @@ export default {
 
             return result;
         },
-
-        totalCurrentWeight: function () {
-
-            let result = 0.0;
-
-            this.m2mItems.forEach(item => {
-                console.log("m2mItems: ", this.m2mItems, item);
-
-                if (item && item.currentWeight) {
-                    result += parseFloat(item.currentWeight);
-                }
-            });
-
-            return result;
-        },
-
-        totalTargetWeight: function() {
-            let result = 0.0;
-
-            this.m2mItems.forEach(item => {
-                console.log("m2mItems: ", this.m2mItems, item);
-
-                if (item && item.targetWeight) {
-                    result += parseFloat(item.targetWeight);
-                }
-            });
-
-            return result;
-        }
     },
 
     created() {

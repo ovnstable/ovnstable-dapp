@@ -221,6 +221,7 @@ export default {
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
         ...mapGetters("network", ['appApiUrl', 'getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'zkConfig', 'networkName']),
         ...mapGetters("web3", ['contracts']),
+        ...mapGetters('etsAction', ['etsList']),
 
         tabNetworkName: function() {
             let params;
@@ -384,7 +385,10 @@ export default {
                         "#26A17B",
                         "#23DD00",
                         "#6E56C4",
-                        "#002868"
+                        "#002868",
+                        "#C8DE42",
+                        "#3FEFDA",
+                        "#DE42CE"
                     ];
 
                     this.currentTotalData = [];
@@ -392,18 +396,30 @@ export default {
 
                     for (let i = 0; i < strategies.length; i++) {
                         let element = strategies[i];
+                        let currentTotalDataElement = {
+                            type: element.type,
+                            label: element.name,
+                            fullName: element.fullName,
+                            value: element.netAssetValue,
+                            liquidationValue: element.liquidationValue,
+                            color: colors[i],
+                            link: null
+                        }
 
-                        this.currentTotalData.push(
-                            {
-                                label: element.name,
-                                fullName: element.fullName,
-                                value: element.netAssetValue,
-                                liquidationValue: element.liquidationValue,
-                                color: colors[i],
-                                link: (element.address || element.explorerAddress) ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + (element.explorerAddress ? element.explorerAddress : element.address)) : ''
-                            }
-                        );
+                        if (element.type === 'CORE') {
+                            currentTotalDataElement.link = (element.address || element.explorerAddress) ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + (element.explorerAddress ? element.explorerAddress : element.address)) : ''
+                        }
 
+                        if (element.name === 'Pika USDC') {
+                            currentTotalDataElement.link = (process.env.VUE_APP_ZAPPER_ACCOUNT + element.address + '?tab=dashboard')
+                        }
+
+                        if (element.type === 'ETS') {
+                            let etsName = this.getEtsName(element)
+                            currentTotalDataElement.link = (process.env.VUE_APP_UD_REDIRECT_URI + 'ets/' + etsName)
+                        }
+
+                        this.currentTotalData.push(currentTotalDataElement);
                         this.totalValue += element.netAssetValue ? element.netAssetValue : 0;
                     }
 
@@ -414,6 +430,18 @@ export default {
                     this.isCurrentTotalDataLoading = false;
                 })
 
+        },
+
+        getEtsName(element) {
+            for (let i = 0; i < this.etsList.length; i++) {
+                let ets = this.etsList[i]
+                let etsName;
+
+                if (ets.id === element.id) {
+                    etsName = ets.name
+                    return etsName
+                }
+            }
         },
 
         loadCollateralData(_apiUrl) {

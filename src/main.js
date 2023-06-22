@@ -39,10 +39,10 @@ Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
 
 Vue.use(VueGtm, {
-  id: 'GTM-TBCD9KR',
+  id: 'GTM-P265VFK',
   enabled: true,
   vueRouter: router,
-  debug: false,
+  debug: true,
 });
 
 Vue.use(VueYandexMetrika, {

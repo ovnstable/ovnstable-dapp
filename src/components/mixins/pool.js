@@ -170,6 +170,19 @@ export const pool = {
                 case 'Pearl':
                     url = 'https://www.pearl.exchange/liquidity/manage/';
                     break;
+                case 'Magixfox':
+                    url = 'https://app.magicfox.fi/vaults/';
+                    break;
+                case 'Sperax':
+                    url = 'https://demeter.sperax.io/farm/42161/';
+                    break;
+                case 'Ezkalibur':
+                    url = 'https://dapp.ezkalibur.com';
+                    break;
+                case 'Mute':
+                    url = 'https://app.mute.io/pool';
+                    break;
+
                 default:
                     url = pool.explorerUrl + '/address/';
                     break;
@@ -178,6 +191,8 @@ export const pool = {
             if (pool.platform === 'Thena' ||
                 pool.platform === 'Wombat' ||
                 pool.platform === 'Beefy' ||
+                pool.platform === 'Ezkalibur' ||
+                pool.platform === 'Mute' ||
                 pool.platform === 'Ennead') {
                 window.open(url, '_blank').focus();
                 return;

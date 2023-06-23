@@ -341,9 +341,13 @@ export default defineComponent({
             console.error("Track error:", e);
         }
 
-        if (this.$route.query.button === 'swap-in') {
-            return
-        } if (this.$route.query.button === 'swap-out') {
+        if (this.$route.query.action === 'swap-in') {
+            console.log("Swap action: swap-in")
+            // ignore
+        }
+
+        if (this.$route.query.action === 'swap-out') {
+            console.log("Swap action: swap-out")
             this.changeSwap()
         }
     },
@@ -686,7 +690,7 @@ export default defineComponent({
                 this.setSwapMethod('SELL');
                 this.addTokensEmptyIsNeeded();
                 this.resetOutputs();
-                this.initTabName('/swap', {button: 'swap-out'})
+                this.initTabName('/swap', {action: 'swap-out'})
 
                 return;
             }
@@ -695,7 +699,7 @@ export default defineComponent({
                 this.setSwapMethod('BUY');
                 this.addTokensEmptyIsNeeded();
                 this.resetOutputs();
-                this.initTabName('/swap', {button: 'swap-in'})
+                this.initTabName('/swap', {action: 'swap-in'})
                 return;
             }
 

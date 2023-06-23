@@ -306,11 +306,11 @@ export default {
     methods: {
         ...mapActions("network", ["setWalletNetwork"]),
         swapButtonIn() {
-            this.initTabName('/swap', {button: 'swap-in'})
+            this.initTabName('/swap', {action: 'swap-in'})
         },
 
         swapButtonOut() {
-            this.initTabName('/swap', {button: 'swap-out'})
+            this.initTabName('/swap', {action: 'swap-out'})
         },
 
         setTab(tabName) {

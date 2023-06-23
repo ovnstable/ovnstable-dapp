@@ -340,6 +340,12 @@ export default defineComponent({
         } catch (e) {
             console.error("Track error:", e);
         }
+
+        if (this.$route.query.button === 'swap-in') {
+            return
+        } if (this.$route.query.button === 'swap-out') {
+            this.changeSwap()
+        }
     },
     data() {
         return {
@@ -680,6 +686,8 @@ export default defineComponent({
                 this.setSwapMethod('SELL');
                 this.addTokensEmptyIsNeeded();
                 this.resetOutputs();
+                this.initTabName('/swap', {button: 'swap-out'})
+
                 return;
             }
 
@@ -687,6 +695,7 @@ export default defineComponent({
                 this.setSwapMethod('BUY');
                 this.addTokensEmptyIsNeeded();
                 this.resetOutputs();
+                this.initTabName('/swap', {button: 'swap-in'})
                 return;
             }
 
@@ -1389,7 +1398,14 @@ export default defineComponent({
             }, 1000);
 
             this.tokensQuotaCounterId = intervalId;
-        }
+        },
+
+        initTabName(path, queryParams) {
+            this.$router.push({
+                path: path,
+                query: queryParams ? queryParams : {}
+            });
+        },
     }
 })
 </script>

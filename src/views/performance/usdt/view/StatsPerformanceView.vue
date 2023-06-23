@@ -8,11 +8,11 @@
             <v-row v-if="networkId === 56">
                 <template v-if="$wu.isMobile()">
                     <v-col cols="12" align="center" class="mt-10">
-                        <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                            Mint USDT+
+                        <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
+                            Swap In
                         </v-btn>
-                        <v-btn class="header-btn btn-outlined" @click="redeemAction">
-                            Redeem USDT+
+                        <v-btn class="header-btn btn-outlined" @click="swapButtonOut">
+                            Swap Out
                         </v-btn>
                     </v-col>
                 </template>
@@ -23,11 +23,11 @@
                 </v-col>
                 <template v-if="!$wu.isMobile()">
                     <v-col align="end" cols="6" class="mt-6">
-                        <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                            Mint USDT+
+                        <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
+                            Swap In
                         </v-btn>
-                        <v-btn class="header-btn btn-outlined mr-3" @click="redeemAction">
-                            Redeem USDT+
+                        <v-btn class="header-btn btn-outlined mr-3" @click="swapButtonOut">
+                            Swap Out
                         </v-btn>
                     </v-col>
                 </template>
@@ -289,8 +289,14 @@ export default {
     },
 
     methods: {
-        ...mapActions('swapUsdtModal', ['showUsdtSwapModal', 'showUsdtMintView', 'showUsdtRedeemView']),
         ...mapActions("network", ["setWalletNetwork"]),
+        swapButtonIn() {
+            this.initTabName('/swap', {button: 'swap-in'})
+        },
+
+        swapButtonOut() {
+            this.initTabName('/swap', {button: 'swap-out'})
+        },
 
         setTab(tabName) {
             this.tab = tabName;
@@ -309,11 +315,6 @@ export default {
 
         openLink(url) {
             window.open(url, '_blank').focus();
-        },
-
-        mintAction() {
-            this.showUsdtMintView();
-            this.showUsdtSwapModal();
         },
 
         loadData() {
@@ -388,11 +389,6 @@ export default {
                 console.error("Payouts loading error: ", e)
               })
         },
-
-        redeemAction() {
-            this.showUsdtRedeemView();
-            this.showUsdtSwapModal();
-        }
     }
 }
 </script>
@@ -559,11 +555,6 @@ export default {
         width: 25px !important;
         height: auto !important;
     }
-
-    .info-card-container {
-        display: flex;
-        flex-direction: row;
-    }
 }
 
 /* full */
@@ -630,11 +621,6 @@ export default {
     .balance-network-icon {
         width: 25px !important;
         height: auto !important;
-    }
-
-    .info-card-container {
-        display: flex;
-        flex-direction: row;
     }
 }
 
@@ -707,11 +693,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .balance-network-icon {
         width: 25px !important;
         height: auto !important;
-    }
-
-    .info-card-container {
-        display: flex;
-        flex-direction: row;
     }
 }
 

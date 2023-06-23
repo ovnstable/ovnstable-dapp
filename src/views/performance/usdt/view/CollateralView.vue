@@ -13,9 +13,9 @@
             <label class="section-text">
               USDT+ is the equivalent of USD+, pegged to USDT 1:1. USDT+ consist of aUSDT (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on Optimism. It cannot be minted separately.
             </label>
-            <div class="section-text font-weight-bold">
-              Switch on Optimism or Arbitrum chain to see USDT+ collateral.
-            </div>
+              <div class="section-text font-weight-bold">
+                  Switch on BSC chain to see USDT+ collateral.
+              </div>
           </div>
         </div>
 

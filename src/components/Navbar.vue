@@ -84,22 +84,6 @@
                         </label>
                     </v-list-item-title>
                 </v-list-item>
-
-
-                <v-list-item link @click="swapClick"
-                             class="list-item-hover">
-                    <v-list-item-title>
-                        <label class="navbar-page-label-modal mx-5">Mint/redeem</label>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item v-if="(networkId !== 56 && networkId !== 324)"
-                             @click="wrapClick"
-                             class="list-item-hover">
-                    <v-list-item-title>
-                        <label class="navbar-page-label-modal mx-5">Wrap/Unwrap</label>
-                    </v-list-item-title>
-                </v-list-item>
             </v-list-group>
 
             <v-list-group :append-icon="null"
@@ -148,16 +132,6 @@
                         </label>
                     </v-list-item-title>
                  </v-list-item>
-
-                <v-list-item v-if="(networkId === 10 || networkId === 42161)"
-                             link @click="swapDaiClick"
-                             class="list-item-hover">
-                     <v-list-item-title>
-                            <label class="navbar-page-label-modal mx-5">
-                                Mint/redeem
-                            </label>
-                     </v-list-item-title>
-                </v-list-item>
             </v-list-group>
 
             <v-list-group :append-icon="null"
@@ -204,14 +178,6 @@
                                class="navbar-list-label mx-5">
                             Collateral
                         </label>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item v-if="(networkId === 56)"
-                             link @click="swapUsdtClick"
-                             class="list-item-hover">
-                    <v-list-item-title>
-                        <label class="navbar-page-label-modal mx-5">Mint/redeem</label>
                     </v-list-item-title>
                 </v-list-item>
             </v-list-group>
@@ -445,10 +411,6 @@ export default {
 
     methods: {
         ...mapActions('menuUI', ['selectTab']),
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView']),
-        ...mapActions('swapUsdtModal', ['showUsdtSwapModal', 'showUsdtMintView']),
-        ...mapActions('wrapModal', ['showWrapModal', 'showWrapView']),
         ...mapActions('theme', ['switchTheme']),
         ...mapActions('track', ['trackClick']),
 
@@ -538,24 +500,6 @@ export default {
             this.goToActionByPath('/market/archive');
         },
 
-        swapClick() {
-            this.showMintView();
-            this.showSwapModal();
-            this.trackClick({action: 'swap-click', event_category: 'Mint', event_label: 'Open mint modal', value: 1 });
-        },
-
-        swapDaiClick() {
-          this.showDaiMintView();
-          this.showDaiSwapModal();
-          this.trackClick({action: 'swap-dai-click', event_category: 'Mint', event_label: 'Open dai mint modal', value: 1 });
-        },
-
-        swapUsdtClick() {
-            this.showUsdtMintView();
-            this.showUsdtSwapModal();
-            this.trackClick({action: 'swap-usdt-click', event_category: 'Mint', event_label: 'Open usdt mint modal', value: 1 });
-        },
-
         wrapClick() {
             this.showWrapView();
             this.showWrapModal();
@@ -567,16 +511,6 @@ export default {
                 this.switchTheme();
                 this.trackClick({action: 'toggle-theme', event_category: 'Theme', event_label: 'Switch theme', value: 1 });
             }
-        },
-
-        mintAction() {
-            this.showMintView();
-            this.showInvestModal();
-        },
-
-        redeemAction() {
-            this.showRedeemView();
-            this.showInvestModal();
         },
 
         redemptionRequestAction() {

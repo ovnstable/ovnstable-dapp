@@ -8,11 +8,11 @@
             <v-row v-if="networkId === 10 || networkId === 42161">
                 <template v-if="$wu.isMobile()">
                     <v-col cols="12" align="center" class="mt-10">
-                        <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                            Mint DAI+
+                        <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
+                            Swap In
                         </v-btn>
-                        <v-btn class="header-btn btn-outlined" @click="redeemAction">
-                            Redeem DAI+
+                        <v-btn class="header-btn btn-outlined" @click="swapButtonOut">
+                            Swap Out
                         </v-btn>
                     </v-col>
                 </template>
@@ -24,11 +24,11 @@
                 </v-col>
                 <template v-if="!$wu.isMobile()">
                     <v-col align="end" cols="6" class="mt-6">
-                        <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                            Mint DAI+
+                        <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
+                            Swap In
                         </v-btn>
-                        <v-btn class="header-btn btn-outlined mr-3" @click="redeemAction">
-                            Redeem DAI+
+                        <v-btn class="header-btn btn-outlined mr-3" @click="swapButtonOut">
+                            Swap Out
                         </v-btn>
                     </v-col>
                 </template>
@@ -304,8 +304,14 @@ export default {
     },
 
     methods: {
-        ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView', 'showDaiRedeemView']),
         ...mapActions("network", ["setWalletNetwork"]),
+        swapButtonIn() {
+            this.initTabName('/swap', {button: 'swap-in'})
+        },
+
+        swapButtonOut() {
+            this.initTabName('/swap', {button: 'swap-out'})
+        },
 
         setTab(tabName) {
             this.tab = tabName;
@@ -332,10 +338,6 @@ export default {
             window.open(url, '_blank').focus();
         },
 
-        mintAction() {
-            this.showDaiMintView();
-            this.showDaiSwapModal();
-        },
 
         loadData() {
           this.payoutsApyData = null;
@@ -409,11 +411,6 @@ export default {
                 console.error("Payouts loading error: ", e)
               })
         },
-
-        redeemAction() {
-            this.showDaiRedeemView();
-            this.showDaiSwapModal();
-        }
     }
 }
 </script>

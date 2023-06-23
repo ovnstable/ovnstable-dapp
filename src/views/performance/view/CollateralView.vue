@@ -7,11 +7,11 @@
         <v-row v-if="!isCollateralLoading" align="center" justify="start">
             <template v-if="$wu.isMobile()">
                 <v-col cols="12" align="center" class="mt-10">
-                    <v-btn  class="header-btn btn-filled mr-5" @click="mintAction">
-                        Mint USD+
+                    <v-btn  class="header-btn btn-filled mr-5" @click="swapButtonIn">
+                        Swap In
                     </v-btn>
-                    <v-btn class="header-btn btn-outlined mr-5" @click="redeemAction">
-                        Redeem USD+
+                    <v-btn class="header-btn btn-outlined mr-5" @click="swapButtonOut">
+                        Swap Out
                     </v-btn>
                 </v-col>
             </template>
@@ -37,11 +37,11 @@
             </v-col>
             <template v-if="!$wu.isMobile()">
                 <v-col align="end" cols="6" class="mt-5">
-                    <v-btn  class="header-btn btn-filled mr-5 mx-15" @click="mintAction">
-                        Mint USD+
+                    <v-btn  class="header-btn btn-filled mr-5 mx-15" @click="swapButtonIn">
+                        Swap In
                     </v-btn>
-                    <v-btn class="header-btn btn-outlined" @click="redeemAction">
-                        Redeem USD+
+                    <v-btn class="header-btn btn-outlined" @click="swapButtonOut">
+                        Swap Out
                     </v-btn>
                 </v-col>
             </template>
@@ -342,7 +342,13 @@ export default {
     },
 
     methods: {
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView', 'showRedeemView']),
+        swapButtonIn() {
+            this.initTabName('/swap', {button: 'swap-in'})
+        },
+
+        swapButtonOut() {
+            this.initTabName('/swap', {button: 'swap-out'})
+        },
 
         openLink(url) {
             window.open(url, '_blank').focus();
@@ -501,16 +507,6 @@ export default {
                 return null;
             }
         },
-
-        mintAction() {
-            this.showMintView();
-            this.showSwapModal();
-        },
-
-        redeemAction() {
-            this.showRedeemView();
-            this.showSwapModal();
-        }
     }
 }
 </script>

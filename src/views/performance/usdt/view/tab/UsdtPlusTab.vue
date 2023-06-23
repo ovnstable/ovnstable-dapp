@@ -5,11 +5,11 @@
             <v-row v-if="networkId === 56">
                 <template v-if="$wu.isMobile()">
                     <v-col cols="12" align="center" class="mt-5">
-                        <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                            Mint USDT+
+                        <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
+                            Swap In
                         </v-btn>
-                        <v-btn class="header-btn btn-outlined" @click="redeemAction">
-                            Redeem USDT+
+                        <v-btn class="header-btn btn-outlined" @click="swapButtonOut">
+                            Swap Out
                         </v-btn>
                     </v-col>
                 </template>
@@ -20,11 +20,11 @@
                 </v-col>
                 <template v-if="!$wu.isMobile()">
                     <v-col align="end" cols="6" class="mt-6">
-                        <v-btn class="header-btn btn-filled mr-5" @click="mintAction">
-                            Mint USDT+
+                        <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
+                            Swap In
                         </v-btn>
-                        <v-btn class="header-btn btn-outlined mr-3" @click="redeemAction">
-                            Redeem USDT+
+                        <v-btn class="header-btn btn-outlined mr-3" @click="swapButtonOut">
+                            Swap Out
                         </v-btn>
                     </v-col>
                 </template>
@@ -248,8 +248,13 @@ export default {
     },
 
     methods: {
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-        ...mapActions('swapUsdtModal', ['showUsdtSwapModal', 'showUsdtMintView', 'showUsdtRedeemView']),
+        swapButtonIn() {
+            this.initTabName('/swap', {button: 'swap-in'})
+        },
+
+        swapButtonOut() {
+            this.initTabName('/swap', {button: 'swap-out'})
+        },
 
         setTab(tabName) {
             this.tab = tabName;
@@ -265,16 +270,6 @@ export default {
                 path: path,
                 query: queryParams ? queryParams : {}
             });
-        },
-
-        mintAction() {
-            this.showUsdtMintView();
-            this.showUsdtSwapModal();
-        },
-
-        redeemAction() {
-            this.showUsdtRedeemView();
-            this.showUsdtSwapModal();
         },
 
       openLink(url) {

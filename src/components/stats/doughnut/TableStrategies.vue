@@ -78,12 +78,12 @@
 
         <tr class="current-table-row-total-usd-plus">
             <td class="table-label-don" v-if="!minimized"></td>
-            <td class="table-label-don text-left pb-6">
+            <td v-if="totalSupply" class="table-label-don text-left pb-6">
                 <v-row>
                     <b>{{totalTitle}}</b>
                 </v-row>
             </td>
-            <td class="table-label-don table-label-don-total text-left pb-6" :colspan="minimized ? 3 : 1">
+            <td v-if="totalSupply" class="table-label-don table-label-don-total text-left pb-6" :colspan="minimized ? 3 : 1">
                 <b>
                   ${{ $utils.formatMoney(totalSupply, 2) }}
                 </b>
@@ -99,6 +99,7 @@
 <script>
 
 import {mapGetters} from "vuex";
+import * as numberUtils from "@/utils/number-utils";
 
 /* eslint-disable no-unused-vars,no-undef */
 
@@ -108,11 +109,8 @@ export default {
     props: {
         data: {
             type: Array,
+            // eslint-disable-next-line vue/require-valid-default-prop
             default: [],
-        },
-        totalSupply: {
-          type: Number,
-          default: 0
         },
         minimized: {
             type: Boolean,
@@ -134,21 +132,53 @@ export default {
 
     components: {},
 
-    data: () => ({}),
+    data: () => ({
+        totalSupply: 0,
+    }),
 
     computed: {
         ...mapGetters("statsData", ['currentTotalData',]),
         ...mapGetters("statsUI", ['loadingCurrentTotalData']),
-        ...mapGetters("network", ['assetName']),
+        ...mapGetters("network", ['assetName', 'assetDecimals']),
+        ...mapGetters("web3", ['contracts']),
     },
 
     mounted() {
     },
 
-    created() {
+    async created() {
+      this.initBlockchainTvl();
     },
 
     methods: {
+        async initBlockchainTvl() {
+            try {
+                let totalNetAssets;
+                if (this.assetType === 'USD') {
+                    totalNetAssets = await this.contracts.m2m.methods.totalNetAssets().call();
+                }
+
+                if (this.assetType === 'DAI') {
+                    totalNetAssets = await this.contracts.daiM2m.methods.totalNetAssets().call();
+                }
+
+                if (this.assetType === 'USDT') {
+                    totalNetAssets = await this.contracts.usdtM2m.methods.totalNetAssets().call();
+                }
+
+
+                let fromAsset6 = this.assetDecimals === 6;
+                console.log('fromAsset6: ', fromAsset6)
+                if (fromAsset6 && this.assetType === 'DAI') {
+                    fromAsset6 = false;
+                }
+
+                this.totalSupply = (fromAsset6 ? numberUtils._fromE6(totalNetAssets.toString()) : numberUtils._fromE18(totalNetAssets.toString()));
+                console.log("TOTAL NET ASSET: ", this.totalSupply);
+            } catch (e) {
+                console.error("Fail when load initBlockchainTvl", e);
+            }
+        },
         getPercent(item) {
             let sum = this.data.map(dataItem => dataItem.value).reduce((prev, next) => prev + next);
 

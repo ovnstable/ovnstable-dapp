@@ -294,7 +294,7 @@ export default defineComponent({
 
             clickOnStake: false,
 
-            sourceLiquidityBlacklist: ["Hashflow"],
+            sourceLiquidityBlacklist: ["Hashflow", 'Wombat'],
             mapExcludeLiquidityPlatform: { // Schema for hot exclude: {'Ovn pool platform name from db': ['odos', 'api/info/liquidity-sources', 'related', 'with', 'platform'] }
                 'Chronos': ["Chronos Volatile"] //"Chronos Stable"
             },
@@ -1158,7 +1158,7 @@ export default defineComponent({
                 gasPrice: actualGas,
                 userAddr: this.account,
                 slippageLimitPercent: this.getSlippagePercent(),
-                sourceBlacklist: ['Hashflow'],
+                sourceBlacklist: ['Hashflow', 'Wombat'],
                 sourceWhitelist: [],
                 simulate: true,
                 pathViz: true,

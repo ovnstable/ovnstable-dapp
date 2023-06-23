@@ -115,7 +115,7 @@
                         <TableStrategies
                             v-if="!$wu.isMobile()"
                             :data="currentTotalData"
-                            :total-supply="totalValue"
+                            asset-type="USD"
                             :total-title="'Total USD+ in circulation'"
                             :network-name="tab"
                         />
@@ -124,7 +124,7 @@
                             v-else
                             minimized
                             :data="currentTotalData"
-                            :total-supply="totalValue"
+                            asset-type="USD"
                             :total-title="'Total USD+ in circulation'"
                             :network-name="tab"
                         />

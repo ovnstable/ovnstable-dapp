@@ -36,14 +36,44 @@
                                     Staking platform
                                 </div>
                             </div>
-                            <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
-                                <div class="pool-table-header-item">
+                            <div @click="setOrderType('APR')"
+                                 class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4 cursor-pointer">
+                                <div
+                                    :class="orderType === 'APR' ? 'pool-table-header-item-selected' : ''"
+                                    class="pool-table-header-item">
                                     APR
+                                    <div v-if="light" class="pool-table-header-logo">
+                                        <img v-if="orderType === 'APR'" src="/assets/icon/pool/table-title-icon-up-selected.svg"
+                                             alt="toggle-open-pool">
+                                        <img v-else src="/assets/icon/pool/table-title-icon-up.svg"
+                                             alt="toggle-open-pool">
+                                    </div>
+                                    <div v-else class="pool-table-header-logo">
+                                        <img v-if="orderType === 'APR'" src="/assets/icon/pool/table-title-icon-up.svg"
+                                             alt="toggle-open-pool">
+                                        <img v-else src="/assets/icon/pool/table-title-icon-up-selected.svg"
+                                             alt="toggle-open-pool">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
-                                <div class="pool-table-header-item">
+                            <div @click="setOrderType('TVL')"
+                                 class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4 cursor-pointer">
+                                <div
+                                    :class="orderType === 'TVL' ? 'pool-table-header-item-selected' : ''"
+                                    class="pool-table-header-item">
                                     TVL
+                                    <div v-if="light" class="pool-table-header-logo">
+                                        <img v-if="orderType === 'TVL'" src="/assets/icon/pool/table-title-icon-up-selected.svg"
+                                             alt="toggle-open-pool">
+                                        <img v-else src="/assets/icon/pool/table-title-icon-up.svg"
+                                             alt="toggle-open-pool">
+                                    </div>
+                                    <div v-else class="pool-table-header-logo">
+                                        <img v-if="orderType === 'TVL'" src="/assets/icon/pool/table-title-icon-up.svg"
+                                             alt="toggle-open-pool">
+                                        <img v-else src="/assets/icon/pool/table-title-icon-up-selected.svg"
+                                             alt="toggle-open-pool">
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
@@ -181,6 +211,15 @@ export default defineComponent({
             type: Function,
             required: true
         },
+        orderType: {
+            type: String,
+            required: true,
+            default: "APR"
+        },
+        setOrderTypeFunc: {
+            type: Function,
+            required: true
+        },
         isShowOnlyZap: {
             type: Boolean,
             required: true
@@ -191,6 +230,7 @@ export default defineComponent({
         },
     },
     computed: {
+        ...mapGetters('theme', ['light']),
         ...mapGetters('network', ['getParams']),
 
         poolTableBodyStyle: function () {
@@ -216,6 +256,9 @@ export default defineComponent({
 
             // pools without aggregators always is opened
             pool.isOpened = true;
+        },
+        setOrderType(type) {
+            this.setOrderTypeFunc(type);
         }
     }
 })
@@ -293,6 +336,7 @@ div {
 }
 
 .pool-table-header-item {
+    position: relative;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -352,4 +396,17 @@ div {
     top: 17px;
 }
 
+.pool-table-header-item-selected {
+    color: var(--action-header-pool-item)
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.pool-table-header-logo {
+    position: absolute;
+    top: 1px;
+    left: 34px;
+}
 </style>

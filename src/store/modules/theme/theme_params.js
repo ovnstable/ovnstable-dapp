@@ -96,6 +96,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--action-header-pool-item',
+        enabled: true,
+        theme: {
+            light: '#29323E',
+            dark: '#E5E7EA'
+        }
+    },
+    {
         name: '--action-btn-color',
         enabled: true,
         theme: {
@@ -260,6 +268,22 @@ export const THEME_MODE_PARAMS = [
         enabled: true,
         theme: {
             light: '#707A8B',
+            dark: '#FFFFFF'
+        }
+    },
+    {
+        name: '--pools-updated-time-color',
+        enabled: true,
+        theme: {
+            light: '#707A8B',
+            dark: 'rgba(255,255,255,0.8)'
+        }
+    },
+    {
+        name: '--pools-updated-time-minutes-color',
+        enabled: true,
+        theme: {
+            light: '#0e1012',
             dark: '#FFFFFF'
         }
     },

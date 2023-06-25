@@ -1,7 +1,19 @@
 <template>
     <div class="mb-15">
-        <div class="mt-10 mb-10">
-            <label class="title-label">ALL POOLS</label>
+        <div class="row">
+            <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+                <div class="mt-lg-10 mt-md-5 mt-sm-3 mb-lg-10 mb-md-5 mb-sm-3">
+                    <label class="title-label">ALL POOLS</label>
+                </div>
+            </div>
+            <div v-if="lastUpdateAgoMinutes"
+                 class="col-12 col-lg-6 col-md-6 col-sm-6">
+                <div class="mt-lg-10 mt-md-5 mt-sm-3 mb-lg-10 mb-md-5 mb-sm-3">
+                    <div class="updated-title">
+                        Data updated <span class="update-time">{{lastUpdateAgoMinutes}}</span> min ago
+                    </div>
+                </div>
+            </div>
         </div>
 
         <v-row v-if="isPoolsLoading">
@@ -18,23 +30,28 @@
        <div v-else>
            <div class="pools-header-container">
                <div class="row">
-                   <div class="col-12 col-lg-9 col-md-9 col-sm-12">
+                   <div class="col-12 col-lg-12 col-md-12 col-sm-12">
                        <PoolFilter
                            :set-selected-tab-func="setSelectedTab"
                            :selected-tabs="selectedTabs"
                            :zap-filter-func="zapFilter"
                            :is-show-only-zap="isShowOnlyZap"
                            :apr-limit-filter-func="aprLimitFilter"
+                           :update-search-func="updateSearch"
                            :is-show-apr-limit="isShowAprLimit"
                        ></PoolFilter>
                    </div>
                </div>
            </div>
+
            <div class="pools-container">
                <PoolTable :pools="filteredPools"
                           :is-show-only-zap="isShowOnlyZap"
                           :is-show-apr-limit="isShowAprLimit"
-                          :open-zap-in-func="openZapIn"></PoolTable>
+                          :open-zap-in-func="openZapIn"
+                          :set-order-type-func="setOrderType"
+                          :order-type="orderType"
+               ></PoolTable>
            </div>
 
        </div>
@@ -57,6 +74,8 @@ import PoolFilter from "@/components/pool/PoolFilter.vue";
 import PoolTable from "@/components/pool/PoolTable.vue";
 import {pool} from "@/components/mixins/pool";
 
+const moment = require('moment');
+
 export default {
     name: "PoolsView",
     mixins: [pool],
@@ -76,7 +95,9 @@ export default {
         isShowOnlyZap: false,
         isShowAprLimit: false,
         aprLimitForFilter: 100,
+        searchQuery: null,
 
+        orderType: "APR" // APR, TVL
     }),
 
     computed: {
@@ -88,7 +109,35 @@ export default {
             'getParams'
         ]),
 
-        filteredPools: function () {
+        filteredPools () {
+            if (this.orderType === 'APR') {
+                // last step filter
+                return this.getSortedPools(this.filteredBySearchQueryPools);
+            }
+
+            if (this.orderType === 'TVL') {
+                // last step filter
+                return this.filteredBySearchQueryPools.sort((a, b) => b.tvl - a.tvl);
+            }
+
+            console.error("Order type not found when order pools", this.orderType);
+            return []
+        },
+
+        filteredBySearchQueryPools: function () {
+            if (!this.searchQuery) {
+                return this.filteredAprPools;
+            }
+
+           return this.filteredAprPools.filter(pool =>
+                pool.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                pool.id.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                pool.chainName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                pool.address.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                pool.platform.toLowerCase().includes(this.searchQuery.toLowerCase())
+            );
+        },
+        filteredAprPools: function () {
             if (!this.isShowAprLimit) {
                 return this.filteredZappablePools;
             }
@@ -97,6 +146,7 @@ export default {
                 pool.apr && this.aprLimitForFilter <= pool.apr*1
             )
         },
+
         filteredZappablePools: function () {
             if (!this.isShowOnlyZap) {
                 return this.filteredByTabPools;
@@ -112,6 +162,22 @@ export default {
             }
 
             return this.sortedPoolList.filter(pool => this.selectedTabs.includes(this.getParams(pool.chain).networkName));
+        },
+
+        lastUpdateAgoMinutes: function () {
+            if (!this.sortedPoolList || !this.sortedPoolList.length) {
+                return null;
+            }
+
+            let firstPool = this.sortedPoolList[0].data;
+            let lastUpdateDate = firstPool.updateDate;
+            if (!lastUpdateDate) {
+                return null;
+            }
+
+            const lastUpdateMoment = moment.utc(lastUpdateDate);
+            const now = moment.utc();
+            return now.diff(lastUpdateMoment, 'minutes');
         }
     },
     watch: {
@@ -136,6 +202,12 @@ export default {
         ...mapActions('track', ['trackClick']),
 
 
+        updateSearch(searchQuery) {
+            this.searchQuery = searchQuery;
+        },
+        setOrderType(orderType) {
+            this.orderType = orderType;
+        },
         zapFilter(isShow) {
             this.isShowOnlyZap = isShow;
             console.log("Is show zap? ", this.isShowOnlyZap);
@@ -190,7 +262,6 @@ export default {
                   if (data) {
 
                   data.forEach(pool => {
-
                     let token0Icon;
                     let token1Icon;
                     let token2Icon;
@@ -294,26 +365,30 @@ export default {
           // todo move to backend
           this.pools = this.initFeature(this.pools);
 
-          let topPools = this.pools.filter(pool => pool.tvl >= 500000);
-          topPools = topPools.sort((a, b) => {
-              if (a.feature && !b.feature) {
-                  return -1; // a comes first when a is featured and b is not
-              } else if (!a.feature && b.feature) {
-                  return 1; // b comes first when b is featured and a is not
-              } else if (a.apr !== b.apr) {
-                  return b.apr - a.apr; // sort by APR number
-              } else {
-                  return b.tvl - a.tvl; // sort by TVL number
-              }
-          });
 
-          let secondPools = this.pools.filter(pool => pool.tvl < 500000);
-          secondPools = secondPools.sort((a, b) => b.tvl - a.tvl);
 
-          this.sortedPoolList = [...topPools, ...secondPools];
-
+          this.sortedPoolList = this.getSortedPools(this.pools);
           this.isPoolsLoading = false;
       },
+
+        getSortedPools(pools) {
+            let topPools = pools.filter(pool => pool.tvl >= 500000);
+            topPools = topPools.sort((a, b) => {
+                if (a.feature && !b.feature) {
+                    return -1; // a comes first when a is featured and b is not
+                } else if (!a.feature && b.feature) {
+                    return 1; // b comes first when b is featured and a is not
+                } else if (a.apr !== b.apr) {
+                    return b.apr - a.apr; // sort by APR number
+                } else {
+                    return b.tvl - a.tvl; // sort by TVL number
+                }
+            });
+
+            let secondPools = pools.filter(pool => pool.tvl < 500000);
+            secondPools = secondPools.sort((a, b) => b.tvl - a.tvl);
+            return [...topPools, ...secondPools];
+        },
 
         initFeature(pools) {
             const topValuesByType = {};
@@ -470,8 +545,12 @@ export default {
         font-size: 32px;
         line-height: 40px;
     }
-}
 
+    .updated-title {
+        text-align: left!important;
+    }
+
+}
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
     .title-label {
@@ -514,4 +593,17 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     color: var(--main-gray-text);
 }
 
+.updated-title {
+    text-align: right;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--pools-updated-time-color);
+}
+
+.update-time {
+    color: var(--pools-updated-time-minutes-color);
+}
 </style>

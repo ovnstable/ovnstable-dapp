@@ -3,7 +3,7 @@
         <div v-if="isShow">
             <v-dialog
                 v-model="isShow"
-                width="630"
+                width="700"
                 persistent>
                 <v-card class="container_body container-body airdrop-body pt-4 px-4"
                         style="border-radius: 28px!important;">

@@ -25,8 +25,7 @@
                 <div class="col-12 col-lg-6 -col-md-6 col-sm-12">
 
                     <div class="row">
-                        <div class="col-2 col-lg-2 -col-md-2 col-sm-2"></div>
-                        <div class="col-4 col-lg-4 -col-md-4 col-sm-4">
+                        <div class="col-6 col-lg-3 col-md-3 col-sm-3">
                             <div
                                  class="filter-container text-center">
                                 <v-checkbox
@@ -40,7 +39,7 @@
                                 </v-checkbox>
                             </div>
                         </div>
-                        <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+                        <div class="col-6 col-lg-3 col-md-3 col-sm-3">
                             <div class="filter-container text-center">
                                 <v-checkbox
                                     @click="showAprLimit(!isShowAprLimit)"
@@ -53,6 +52,22 @@
                                         </span>
                                     </template>
                                 </v-checkbox>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+                            <div class="search-input-container">
+                                <input
+                                    v-model="searchQuery"
+                                    @input="updateInputSearch"
+                                    type="text"
+                                    placeholder="Add token, address..."
+                                    class="input-style"/>
+                                <div @click="clearSearchQuery()" class="search-input-close-container">
+                                    <img src="/assets/icon/swap/search-close.svg"
+                                         alt="close"
+                                         class="search-image-close-image">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -89,6 +104,10 @@ export default defineComponent({
             type: Function,
             required: true
         },
+        updateSearchFunc: {
+            type: Function,
+            required: true
+        },
         isShowAprLimit: {
             type: Boolean,
             required: true
@@ -97,6 +116,7 @@ export default defineComponent({
     data() {
         return {
             aprLimitForFilter: 15,
+            searchQuery: null
         }
     },
     computed: {
@@ -108,6 +128,13 @@ export default defineComponent({
         },
         showAprLimit(isShow) {
             this.aprLimitFilterFunc(isShow, this.aprLimitForFilter);
+        },
+        clearSearchQuery() {
+            this.searchQuery = null;
+            this.updateInputSearch();
+        },
+        updateInputSearch() {
+            this.updateSearchFunc(this.searchQuery);
         },
     }
 })
@@ -179,6 +206,38 @@ export default defineComponent({
     color: var(--main-gray-text);
 }
 
+.search-input-container {
+    position: relative;
+    align-items: center;
+    padding: 12px 20px;
+
+    height: 52px;
+
+    background: var(--card-info-background);
+    border-radius: 12px;
+    margin-bottom: 16px;
+
+    border: 1px solid rgba(186, 191, 200, 1)
+}
+
+.input-style {
+    border: none;
+    background: transparent;
+    outline: 0;
+    width: 100%;
+    color: var(--third-gray-text);
+    font-weight: 400;
+}
+
+.search-input-close-container {
+    position: absolute;
+    right: 15px;
+    top: 16px;
+    cursor: pointer;
+    width: 30px;
+    text-align: center
+}
+
 
 /* mobile */
 @media only screen and (max-width: 960px) {
@@ -195,6 +254,7 @@ export default defineComponent({
         width: 56px;
     }
 }
+
 </style>
 
 

@@ -100,6 +100,7 @@
 
 import {mapGetters} from "vuex";
 import * as numberUtils from "@/utils/number-utils";
+import axios from "axios";
 
 /* eslint-disable no-unused-vars,no-undef */
 
@@ -139,7 +140,7 @@ export default {
     computed: {
         ...mapGetters("statsData", ['currentTotalData',]),
         ...mapGetters("statsUI", ['loadingCurrentTotalData']),
-        ...mapGetters("network", ['assetName', 'assetDecimals']),
+        ...mapGetters("network", ['assetName', 'assetDecimals', 'appApiUrl']),
         ...mapGetters("web3", ['contracts']),
     },
 
@@ -147,33 +148,41 @@ export default {
     },
 
     async created() {
-      this.initBlockchainTvl();
+      this.initTotalTvl();
+    },
+
+    watch: {
+        networkName: function (val, oldVal) {
+            if (val) {
+                this.totalSupply = null;
+                this.initTotalTvl();
+            }
+        }
     },
 
     methods: {
-        async initBlockchainTvl() {
+        async initTotalTvl() {
             try {
                 let totalNetAssets;
+                let networkName = this.networkName;
+                let appRootApiUrl = "https://api.overnight.fi/" + networkName + '/';
+
                 if (this.assetType === 'USD') {
-                    totalNetAssets = await this.contracts.m2m.methods.totalNetAssets().call();
+                    totalNetAssets = (await axios.get(appRootApiUrl + 'usd+/dapp/getTotalUsdPlusValue')).data;
+                    // totalNetAssets = await this.contracts.m2m.methods.totalNetAssets().call();
                 }
 
                 if (this.assetType === 'DAI') {
-                    totalNetAssets = await this.contracts.daiM2m.methods.totalNetAssets().call();
+                    totalNetAssets = (await axios.get(appRootApiUrl + 'dai+/dapp/getTotalUsdPlusValue')).data;
+                    // totalNetAssets = await this.contracts.daiM2m.methods.totalNetAssets().call();
                 }
 
                 if (this.assetType === 'USDT') {
-                    totalNetAssets = await this.contracts.usdtM2m.methods.totalNetAssets().call();
+                    totalNetAssets = (await axios.get(appRootApiUrl + 'usdt+/dapp/getTotalUsdPlusValue')).data;
+                    // totalNetAssets = await this.contracts.usdtM2m.methods.totalNetAssets().call();
                 }
 
-
-                let fromAsset6 = this.assetDecimals === 6;
-                console.log('fromAsset6: ', fromAsset6)
-                if (fromAsset6 && this.assetType === 'DAI') {
-                    fromAsset6 = false;
-                }
-
-                this.totalSupply = (fromAsset6 ? numberUtils._fromE6(totalNetAssets.toString()) : numberUtils._fromE18(totalNetAssets.toString()));
+                this.totalSupply = totalNetAssets
                 console.log("TOTAL NET ASSET: ", this.totalSupply);
             } catch (e) {
                 console.error("Fail when load initBlockchainTvl", e);

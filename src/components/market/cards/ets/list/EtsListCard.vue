@@ -215,6 +215,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import loadJSON from "@/utils/http-utils";
 
 export default {
     name: "EtsListCard",
@@ -236,7 +237,8 @@ export default {
     computed: {
         ...mapGetters('network', ['networkId', 'networkName']),
         ...mapGetters("marketData", ["etsStrategyData"]),
-        ...mapGetters('accountData', ['etsBalance']),
+        ...mapGetters('accountData', ['etsBalance', 'account']),
+        ...mapGetters('web3', ['contracts', "web3"]),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
 
         dexLogo: function () {
@@ -265,6 +267,10 @@ export default {
         },
 
         accountEtsBalance: function () {
+            if (this.archived && this.componentTokenBalance) {
+                return this.componentTokenBalance;
+            }
+
             return this.etsBalance[this.cardData.data.name];
         },
 
@@ -275,18 +281,53 @@ export default {
 
     data: () => ({
         cardOpened: false,
+        componentTokenContract: null,
+        componentTokenBalance: null,
+        componentTokenOriginalBalance: null,
     }),
 
-    watch: {},
+    watch: {
+        networkId: function (val, oldVal) {
+            if (val) {
+                this.loadContract();
+            }
+        },
+        account: function (val, oldVal) {
+            if (val) {
+                this.loadContract();
+            }
+        },
+
+    },
 
     created() {
         this.cardOpened = this.cardData.cardOpened;
+        this.loadContract();
     },
 
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
 
+
+        async loadContract() {
+            if (!this.archived || this.contracts[this.cardData.data.exchangeContract] || this.cardData.data.chain !== this.networkId || !this.account) {
+                return
+            }
+
+            this.componentTokenContract = this._load(await loadJSON('/contracts/abi/ets/token.json'), this.web3, this.cardData.data.tokenAddress);
+            this.componentTokenBalance = await this.componentTokenContract.methods.balanceOf(this.account).call();
+            this.componentTokenOriginalBalance = this.componentTokenBalance;
+            this.componentTokenBalance = this.web3.utils.fromWei(this.componentTokenBalance, this.cardData.data.etsTokenDecimals === 18 ? 'ether' : 'mwei');
+        },
+
+        _load(file, web3, address) {
+            if (!address) {
+                address = file.address;
+            }
+
+            return new web3.eth.Contract(file.abi, address);
+        },
 
         mintAction() {
             this.showMintView();

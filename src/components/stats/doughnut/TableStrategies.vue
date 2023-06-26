@@ -23,7 +23,11 @@
         </thead>
 
         <tbody>
-        <tr v-for="item in data" :key="item.label" class="current-table-row" @click="openInNewTab(item.link)">
+        <tr
+            v-for="item in data"
+            :key="item.label"
+            class="current-table-row"
+            @click="item.type === 'CORE' ? openInNewTab(item.link) : openInDapp(item.link)">
             <td class="table-label-don text-right" v-if="!minimized">
                 <div class="color-rectangle" :style="{background: item.color}"></div>
             </td>
@@ -205,6 +209,10 @@ export default {
                 });
 
             return sum;
+        },
+
+        openInDapp(url) {
+            window.open(url, '_self').focus();
         },
 
         openInNewTab(url) {

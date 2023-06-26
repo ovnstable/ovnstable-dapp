@@ -82,14 +82,7 @@
                     <template>
                         <v-col class="mr-1">
                             <v-row>
-                                <v-btn class="button btn-filled" @click.stop="mintAction">Mint USD+</v-btn>
-                            </v-row>
-                        </v-col>
-                        <v-col class="ml-1">
-                            <v-row>
-                                <v-btn class="button btn-outlined" @click.stop="redeemAction" outlined>
-                                    REDEEM USD+
-                                </v-btn>
+                                <v-btn class="button btn-filled" @click="swapButton">SWAP</v-btn>
                             </v-row>
                         </v-col>
                     </template>
@@ -207,11 +200,17 @@ export default {
         },
 
         openPerformance() {
-            this.goToAction('/stats');
+            this.goToActionByPath('/stats', {tabName: this.networkName});
         },
 
-        goToAction(id) {
-            this.$router.push(id);
+        swapButton() {
+            this.goToActionByPath('/swap');
+        },
+
+        goToActionByPath(path) {
+            this.$router.push({
+                path: path
+            });
         },
 
         getBgColor() {
@@ -325,8 +324,6 @@ export default {
     }
 
     .apy {
-        font-style: normal;
-        font-weight: 600;
         font-size: 14px;
         line-height: 16px;
     }
@@ -414,8 +411,6 @@ export default {
     }
 
     .apy {
-        font-style: normal;
-        font-weight: 600;
         font-size: 16px;
         line-height: 22px;
     }
@@ -510,8 +505,6 @@ export default {
     }
 
     .apy {
-        font-style: normal;
-        font-weight: 600;
         font-size: 20px;
         line-height: 24px;
     }
@@ -567,8 +560,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     }
 
     .apy {
-        font-style: normal;
-        font-weight: 600;
         font-size: 18px;
         line-height: 24px;
     }
@@ -602,7 +593,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .apy {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #FFFFFF;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 1px;
 }
 
 .card-info {

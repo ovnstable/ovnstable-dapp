@@ -78,11 +78,16 @@
                     </label>
                 </v-row>
 
-                <v-row class="d-flex justify-space-between ma-0 mt-2">
+                <v-row class="ma-0 mt-2">
                     <template>
                         <v-col class="mr-1">
-                            <v-row>
-                                <v-btn class="button btn-filled" @click="swapButton">SWAP</v-btn>
+                            <v-row class="d-flex flex-row">
+                                <v-btn  class="button btn-filled" @click="swapButtonIn">
+                                    Swap In
+                                </v-btn>
+                                <v-btn class="button btn-outlined" @click="swapButtonOut">
+                                    Swap Out
+                                </v-btn>
                             </v-row>
                         </v-col>
                     </template>
@@ -203,13 +208,18 @@ export default {
             this.goToActionByPath('/stats', {tabName: this.networkName});
         },
 
-        swapButton() {
-            this.goToActionByPath('/swap');
+        swapButtonIn() {
+            this.goToActionByPath('/swap', {action: 'swap-in'})
         },
 
-        goToActionByPath(path) {
+        swapButtonOut() {
+            this.goToActionByPath('/swap', {action: 'swap-out'})
+        },
+
+        goToActionByPath(path, queryParams) {
             this.$router.push({
-                path: path
+                path: path,
+                query: queryParams ? queryParams : {}
             });
         },
 
@@ -654,7 +664,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .button {
     border-radius: 2px;
     box-shadow: none !important;
-    width: 100% !important;
+    width: 50% !important;
 
     font-family: 'Roboto', sans-serif !important;
     text-align: center !important;

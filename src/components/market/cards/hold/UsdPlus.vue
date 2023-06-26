@@ -78,17 +78,15 @@
                     </label>
                 </v-row>
 
-                <v-row class="d-flex justify-space-between ma-0 mt-2">
+                <v-row class="ma-0 mt-2">
                     <template>
                         <v-col class="mr-1">
-                            <v-row>
-                                <v-btn class="button btn-filled" @click.stop="mintAction">Mint USD+</v-btn>
-                            </v-row>
-                        </v-col>
-                        <v-col class="ml-1">
-                            <v-row>
-                                <v-btn class="button btn-outlined" @click.stop="redeemAction" outlined>
-                                    REDEEM USD+
+                            <v-row class="d-flex flex-row">
+                                <v-btn  class="button btn-filled" @click="swapButtonIn">
+                                    Swap In
+                                </v-btn>
+                                <v-btn class="button btn-outlined" @click="swapButtonOut">
+                                    Swap Out
                                 </v-btn>
                             </v-row>
                         </v-col>
@@ -207,11 +205,22 @@ export default {
         },
 
         openPerformance() {
-            this.goToAction('/stats');
+            this.goToActionByPath('/stats', {tabName: this.networkName});
         },
 
-        goToAction(id) {
-            this.$router.push(id);
+        swapButtonIn() {
+            this.goToActionByPath('/swap', {action: 'swap-in'})
+        },
+
+        swapButtonOut() {
+            this.goToActionByPath('/swap', {action: 'swap-out'})
+        },
+
+        goToActionByPath(path, queryParams) {
+            this.$router.push({
+                path: path,
+                query: queryParams ? queryParams : {}
+            });
         },
 
         getBgColor() {
@@ -325,8 +334,6 @@ export default {
     }
 
     .apy {
-        font-style: normal;
-        font-weight: 600;
         font-size: 14px;
         line-height: 16px;
     }
@@ -414,8 +421,6 @@ export default {
     }
 
     .apy {
-        font-style: normal;
-        font-weight: 600;
         font-size: 16px;
         line-height: 22px;
     }
@@ -510,8 +515,6 @@ export default {
     }
 
     .apy {
-        font-style: normal;
-        font-weight: 600;
         font-size: 20px;
         line-height: 24px;
     }
@@ -567,8 +570,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     }
 
     .apy {
-        font-style: normal;
-        font-weight: 600;
         font-size: 18px;
         line-height: 24px;
     }
@@ -602,7 +603,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .apy {
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
-    color: #FFFFFF;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 1px;
 }
 
 .card-info {
@@ -660,7 +664,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .button {
     border-radius: 2px;
     box-shadow: none !important;
-    width: 100% !important;
+    width: 50% !important;
 
     font-family: 'Roboto', sans-serif !important;
     text-align: center !important;

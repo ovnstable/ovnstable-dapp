@@ -339,9 +339,13 @@ export default {
                 if (minValue < -5) {
                     minValue = Math.min(Math.floor(Math.floor(minValue / 10)) * 10, 0);
                 }
+
             } catch (e) {
+                console.log("Min value char apy ERROR", e)
                 minValue = 0;
             }
+
+            console.log("Min value char apy ", minValue)
 
             let chartColor = this.$colorUtils.hexToRgb(this.getParams(this.etsData.chain).networkColor);
 
@@ -391,10 +395,10 @@ export default {
                     position: 'front',
                     yaxis: [
                         {
-                            y: minValue = 0,
+                            y: 0,
                             strokeDashArray: 5,
                             offsetX: 10,
-                            offsetY: -5,
+                            offsetY: 0,
                             width: '97%',
                             label: {
                                 borderColor: null,

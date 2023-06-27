@@ -153,6 +153,10 @@ export default {
         networkName: {
             type: String,
             default: 'optimism'
+        },
+        zoomType: {
+            type: String,
+            default: 'all'
         }
     },
 
@@ -220,11 +224,13 @@ export default {
     },
 
     mounted() {
+        this.zoom = this.zoomType;
         this.redraw();
     },
 
     created() {
-        this.zoomChart("all");
+        this.zoom = this.zoomType;
+        this.zoomChart(this.zoom);
     },
 
     methods: {

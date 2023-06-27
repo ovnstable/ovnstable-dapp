@@ -57,6 +57,7 @@
               <LineChartApy
                   :data="payoutsApyData"
                   asset-type="usdt+"
+                  :zoom-type="zoomType"
                   :network-name="tab"
               />
             </div>
@@ -66,6 +67,7 @@
               <LineChartTvl
                   :data="payoutsTvlData"
                   asset-type="usdt+"
+                  :zoom-type="zoomType"
                   :network-name="tab"
               />
             </div>
@@ -92,6 +94,7 @@
                   :data="payoutsApyData"
                   class="mx-n3"
                   asset-type="usdt+"
+                  :zoom-type="zoomType"
                   :network-name="tab"
             />
             <LineChartTvl
@@ -99,6 +102,7 @@
                 :data="payoutsTvlData"
                 class="mx-n3"
                 asset-type="usdt+"
+                :zoom-type="zoomType"
                 :network-name="tab"
             />
           </v-col>
@@ -203,8 +207,9 @@ export default {
     data: () => ({
       tab: 'bsc',
       rateTab: 1,
+        zoomType: 'all',
 
-      isPayoutsLoading: true,
+        isPayoutsLoading: true,
 
       payoutsApyData: null,
       payoutsTvlData: null,
@@ -278,13 +283,11 @@ export default {
     },
 
     mounted() {
-        console.log('Tab Name: ', this.$route.query.tabName);
+        console.log('Tab Name and chart type: ', this.$route.query.tabName,  this.$route.query.chart);
         if (!this.$route.query.tabName) {
-            this.setTab(this.networkName);
-            this.loadData();
+            this.setTab(this.networkName, this.$route.query.chart);
         } if (this.$route.query.tabName) {
-            this.setTab(this.$route.query.tabName);
-            this.loadData();
+            this.setTab(this.$route.query.tabName, this.$route.query.chart);
         }
     },
 
@@ -298,9 +301,23 @@ export default {
             this.initTabName('/swap', {action: 'swap-out'})
         },
 
-        setTab(tabName) {
+        setTab(tabName, chartType) {
             this.tab = tabName;
-            this.initTabName('/stats/usdt', {tabName: this.tab});
+            let tabParams;
+            if (chartType) {
+                tabParams = {
+                    tabName: tabName,
+                    chart: chartType
+                }
+
+                this.zoomType = chartType;
+            } else {
+                tabParams = {
+                    tabName: tabName
+                }
+            }
+
+            this.initTabName('/stats/usdt', tabParams);
 
             this.loadData();
             console.log("NetworkParams : ", this.getParams(this.tab));

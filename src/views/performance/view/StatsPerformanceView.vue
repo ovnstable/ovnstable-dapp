@@ -63,12 +63,18 @@
       <v-row v-if="isDataLoaded && !$wu.isMobile()" class="ma-0" justify="start" align="center">
         <v-col cols="6">
           <div class="info-card-container py-3">
-            <LineChartApy :data="payoutsApyData" :network-name="tab"/>
+            <LineChartApy
+                :data="payoutsApyData"
+                :zoom-type="zoomType"
+                :network-name="tab"/>
           </div>
         </v-col>
         <v-col cols="6">
           <div class="info-card-container py-3">
-            <LineChartTvl :data="payoutsTvlData" :network-name="tab"/>
+            <LineChartTvl
+                :data="payoutsTvlData"
+                :zoom-type="zoomType"
+                :network-name="tab"/>
           </div>
         </v-col>
       </v-row>
@@ -88,7 +94,12 @@
             </v-col>
           </v-row>
 
-          <LineChartApy class="mx-n3" v-if="rateTab === 1" :data="payoutsApyData" :network-name="tab"/>
+          <LineChartApy
+              class="mx-n3"
+              v-if="rateTab === 1"
+              :data="payoutsApyData"
+              :zoom-type="zoomType"
+              :network-name="tab"/>
           <LineChartTvl class="mx-n3" v-if="rateTab === 3" :data="payoutsTvlData" :network-name="tab"/>
         </v-col>
       </v-row>
@@ -137,10 +148,9 @@
 
 import Table from "@/components/market/strategy/payouts/Table";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut";
-import {mapActions, mapGetters} from "vuex";
+import {mapGetters} from "vuex";
 import LineChartApy from "@/components/stats/widget/LineChartApy";
 import LineChartTvl from "@/components/stats/widget/LineChartTvl";
-import {axios} from "@/plugins/http-axios";
 import moment from "moment/moment";
 import {payoutsApiService} from "@/services/payouts-api-service";
 
@@ -164,6 +174,7 @@ export default {
     data: () => ({
       tab: 'optimism',
       rateTab: 1,
+      zoomType: 'all',
 
       isPayoutsLoading: true,
 
@@ -274,20 +285,33 @@ export default {
     },
 
     mounted() {
-        console.log('Tab Name: ', this.$route.query.tabName);
+        console.log('Tab Name and chart type: ', this.$route.query.tabName,  this.$route.query.chart);
         if (!this.$route.query.tabName) {
-            this.setTab(this.networkName);
-            this.loadData();
+            this.setTab(this.networkName, this.$route.query.chart);
         } if (this.$route.query.tabName) {
-            this.setTab(this.$route.query.tabName);
-            this.loadData();
+            this.setTab(this.$route.query.tabName, this.$route.query.chart);
         }
     },
 
     methods: {
-        setTab(tabName) {
+        setTab(tabName, chartType) {
             this.tab = tabName;
-            this.initTabName('/stats', {tabName: this.tab});
+            let tabParams;
+            if (chartType) {
+                tabParams = {
+                    tabName: tabName,
+                    chart: chartType
+                }
+
+                this.zoomType = chartType;
+            } else {
+                tabParams = {
+                    tabName: tabName
+                }
+            }
+
+
+            this.initTabName('/stats', tabParams);
             this.loadData();
             console.log("NetworkParams : ", this.getParams(this.tab));
         },

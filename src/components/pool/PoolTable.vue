@@ -36,44 +36,95 @@
                                     Staking platform
                                 </div>
                             </div>
-                            <div @click="setOrderType('APR')"
+
+                            <div @click="toggleOrderType('APR')"
                                  class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4 cursor-pointer">
                                 <div
-                                    :class="orderType === 'APR' ? 'pool-table-header-item-selected' : ''"
+                                    :class="orderType.startsWith('APR') ? 'pool-table-header-item-selected' : ''"
                                     class="pool-table-header-item">
                                     APR
                                     <div v-if="light" class="pool-table-header-logo">
-                                        <img v-if="orderType === 'APR'" src="/assets/icon/pool/table-title-icon-up-selected.svg"
+                                        <img v-if="orderType === 'APR'"
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-filter.svg"
                                              alt="toggle-open-pool">
-                                        <img v-else src="/assets/icon/pool/table-title-icon-up.svg"
+                                        <img v-else-if="orderType === 'APR_UP'"
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-sort-ascending-black.svg"
+                                             alt="toggle-open-pool">
+                                        <img v-else-if="orderType === 'APR_DOWN'"
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-sort-descending-black.svg"
+                                             alt="toggle-open-pool">
+                                        <img v-else
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-filter.svg"
                                              alt="toggle-open-pool">
                                     </div>
                                     <div v-else class="pool-table-header-logo">
-                                        <img v-if="orderType === 'APR'" src="/assets/icon/pool/table-title-icon-up.svg"
+                                        <img v-if="orderType === 'APR'"
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-filter.svg"
                                              alt="toggle-open-pool">
-                                        <img v-else src="/assets/icon/pool/table-title-icon-up-selected.svg"
+                                        <img v-else-if="orderType === 'APR_UP'"
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-sort-ascending-white.svg"
+                                             alt="toggle-open-pool">
+                                        <img v-else-if="orderType === 'APR_DOWN'"
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-sort-descending-white.svg"
+                                             alt="toggle-open-pool">
+                                        <img v-else
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-filter.svg"
                                              alt="toggle-open-pool">
                                     </div>
                                 </div>
                             </div>
-                            <div @click="setOrderType('TVL')"
+                            <div @click="toggleOrderType('TVL')"
                                  class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4 cursor-pointer">
                                 <div
-                                    :class="orderType === 'TVL' ? 'pool-table-header-item-selected' : ''"
+                                    :class="orderType.startsWith('TVL') ? 'pool-table-header-item-selected' : ''"
                                     class="pool-table-header-item">
                                     TVL
+
                                     <div v-if="light" class="pool-table-header-logo">
-                                        <img v-if="orderType === 'TVL'" src="/assets/icon/pool/table-title-icon-up-selected.svg"
+                                        <img v-if="orderType === 'TVL'"
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-filter.svg"
                                              alt="toggle-open-pool">
-                                        <img v-else src="/assets/icon/pool/table-title-icon-up.svg"
+                                        <img v-else-if="orderType === 'TVL_UP'"
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-sort-ascending-black.svg"
+                                             alt="toggle-open-pool">
+                                        <img v-else-if="orderType === 'TVL_DOWN'"
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-sort-descending-black.svg"
+                                             alt="toggle-open-pool">
+                                        <img v-else
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-filter.svg"
                                              alt="toggle-open-pool">
                                     </div>
                                     <div v-else class="pool-table-header-logo">
-                                        <img v-if="orderType === 'TVL'" src="/assets/icon/pool/table-title-icon-up.svg"
+                                        <img v-if="orderType === 'TVL'"
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-filter.svg"
                                              alt="toggle-open-pool">
-                                        <img v-else src="/assets/icon/pool/table-title-icon-up-selected.svg"
+                                        <img v-else-if="orderType === 'TVL_UP'"
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-sort-ascending-white.svg"
+                                             alt="toggle-open-pool">
+                                        <img v-else-if="orderType === 'TVL_DOWN'"
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-sort-descending-white.svg"
+                                             alt="toggle-open-pool">
+                                        <img v-else
+                                             class="toggle-open-pool"
+                                             src="/assets/icon/pool/mdi-filter.svg"
                                              alt="toggle-open-pool">
                                     </div>
+
                                 </div>
                             </div>
                             <div class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
@@ -214,7 +265,7 @@ export default defineComponent({
         orderType: {
             type: String,
             required: true,
-            default: "APR"
+            default: "APR" // APR, APR_UP, APR_DOWN, TVL, TVL_UP, TVL_DOWN
         },
         setOrderTypeFunc: {
             type: Function,
@@ -257,8 +308,52 @@ export default defineComponent({
             // pools without aggregators always is opened
             pool.isOpened = true;
         },
-        setOrderType(type) {
-            this.setOrderTypeFunc(type);
+        toggleOrderType(type) {
+            if (type === 'APR') {
+                if (!this.orderType.startsWith("APR")) {
+                    this.setOrderTypeFunc('APR');
+                    this.setOrderTypeFunc('APR_UP');
+                }
+
+                if (this.orderType === 'APR') {
+                    this.setOrderTypeFunc('APR_UP');
+                    return
+                }
+
+                if (this.orderType === 'APR_UP') {
+                    this.setOrderTypeFunc('APR_DOWN');
+                    return
+                }
+
+                if (this.orderType === 'APR_DOWN') {
+                    this.setOrderTypeFunc('APR');
+                    return
+                }
+            }
+
+            if (type === 'TVL') {
+                if (!this.orderType.startsWith("TVL")) {
+                    this.setOrderTypeFunc('TVL');
+                    this.setOrderTypeFunc('TVL_UP');
+                }
+
+                if (this.orderType === 'TVL') {
+                    this.setOrderTypeFunc('TVL_UP');
+                    return
+                }
+
+                if (this.orderType === 'TVL_UP') {
+                    this.setOrderTypeFunc('TVL_DOWN');
+                    return
+                }
+
+                if (this.orderType === 'TVL_DOWN') {
+                    this.setOrderTypeFunc('TVL');
+                    return
+                }
+            }
+
+            console.error("Order type not found when toggle order.", type);
         }
     }
 })
@@ -409,4 +504,9 @@ div {
     top: 1px;
     left: 34px;
 }
+
+.toggle-open-pool {
+    height: 20px;
+}
+
 </style>

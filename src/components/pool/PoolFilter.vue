@@ -61,7 +61,7 @@
                                     v-model="searchQuery"
                                     @input="updateInputSearch"
                                     type="text"
-                                    placeholder="Add token, address..."
+                                    placeholder="Search token, address..."
                                     class="input-style"/>
                                 <div @click="clearSearchQuery()" class="search-input-close-container">
                                     <img src="/assets/icon/swap/search-close.svg"
@@ -225,7 +225,7 @@ export default defineComponent({
     background: transparent;
     outline: 0;
     width: 100%;
-    color: var(--third-gray-text);
+    color: var(--main-gray-text);
     font-weight: 400;
 }
 

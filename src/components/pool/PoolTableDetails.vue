@@ -45,7 +45,6 @@
                                  @click="openAggregatorLink(aggregator)"
                                  v-bind:style="'left:' + (index + 1) * 35 + 'px;'"
                                  class="pool-platform-icon">
-<!--                                {{index}}-->
                                 <div class="icon mr-2">
                                     <v-img :src="require('@/assets/cards/platform/' + aggregator.platform + '.svg')"
                                            :title="aggregator.platform"

@@ -97,7 +97,7 @@ export default {
         aprLimitForFilter: 100,
         searchQuery: null,
 
-        orderType: "APR" // APR, TVL
+        orderType: "APR" // APR, APR_UP, APR_DOWN, TVL, TVL_UP, TVL_DOWN
     }),
 
     computed: {
@@ -115,9 +115,29 @@ export default {
                 return this.getSortedPools(this.filteredBySearchQueryPools);
             }
 
+            if (this.orderType === 'APR_UP') {
+                // last step filter
+                return this.filteredBySearchQueryPools.sort((a, b) => b.apr - a.apr);
+            }
+
+            if (this.orderType === 'APR_DOWN') {
+                // last step filter
+                return this.filteredBySearchQueryPools.sort((a, b) => a.apr - b.apr);
+            }
+
             if (this.orderType === 'TVL') {
+                // last step filter. same like type 'APR'
+                return this.getSortedPools(this.filteredBySearchQueryPools);
+            }
+
+            if (this.orderType === 'TVL_UP') {
                 // last step filter
                 return this.filteredBySearchQueryPools.sort((a, b) => b.tvl - a.tvl);
+            }
+
+            if (this.orderType === 'TVL_DOWN') {
+                // last step filter
+                return this.filteredBySearchQueryPools.sort((a, b) => a.tvl - b.tvl);
             }
 
             console.error("Order type not found when order pools", this.orderType);

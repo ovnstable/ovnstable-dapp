@@ -196,6 +196,7 @@ export default {
 
     computed: {
         ...mapGetters("network", ['networkId', 'networkName', 'apiUrl', 'getParams']),
+        ...mapGetters('etsAction', ['etsList']),
 
         tabNetworkName: function() {
             let params;
@@ -302,27 +303,38 @@ export default {
               "#26A17B",
               "#23DD00",
               "#6E56C4",
-              "#002868"
+              "#002868",
+              "#C8DE42",
+              "#3FEFDA",
+              "#DE42CE"
             ];
 
             this.currentTotalData = [];
             this.totalValue = 0;
 
             for (let i = 0; i < strategies.length; i++) {
-              let element = strategies[i];
-
-              this.currentTotalData.push(
-                  {
+                let element = strategies[i];
+                let currentTotalDataElement = {
+                    type: element.type,
                     label: element.name,
                     fullName: element.fullName,
                     value: element.netAssetValue,
                     liquidationValue: element.liquidationValue,
                     color: colors[i],
-                    link: (element.address || element.explorerAddress) ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + (element.explorerAddress ? element.explorerAddress : element.address)) : ''
-                  }
-              );
+                    link: null
+                }
 
-              this.totalValue += element.netAssetValue ? element.netAssetValue : 0;
+                if (element.type === 'CORE') {
+                    currentTotalDataElement.link = (element.address || element.explorerAddress) ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + (element.explorerAddress ? element.explorerAddress : element.address)) : ''
+                }
+
+                if (element.type === 'ETS') {
+                    let etsName = this.getEtsName(element)
+                    currentTotalDataElement.link = (process.env.VUE_APP_UD_REDIRECT_URI + 'ets/' + etsName)
+                }
+
+                this.currentTotalData.push(currentTotalDataElement);
+                this.totalValue += element.netAssetValue ? element.netAssetValue : 0;
             }
 
             this.isCurrentTotalDataLoading = false;
@@ -333,6 +345,17 @@ export default {
           })
 
       },
+        getEtsName(element) {
+            for (let i = 0; i < this.etsList.length; i++) {
+                let ets = this.etsList[i]
+                let etsName;
+
+                if (ets.id === element.id) {
+                    etsName = ets.name
+                    return etsName
+                }
+            }
+        },
       loadCollateralData() {
           this.isCollateralLoading = true;
 

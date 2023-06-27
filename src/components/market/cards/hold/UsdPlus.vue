@@ -85,7 +85,7 @@
                                 <v-btn  class="button btn-filled" @click="swapButtonIn">
                                     Swap In
                                 </v-btn>
-                                <v-btn class="button btn-outlined" @click="swapButtonOut">
+                                <v-btn class="button btn-outlined ml-1" outlined @click="swapButtonOut">
                                     Swap Out
                                 </v-btn>
                             </v-row>
@@ -664,7 +664,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .button {
     border-radius: 2px;
     box-shadow: none !important;
-    width: 50% !important;
+    width: 49% !important;
 
     font-family: 'Roboto', sans-serif !important;
     text-align: center !important;

@@ -317,7 +317,7 @@ export default defineComponent({
             }
 
             if (this.successData.pool.platform === 'Velodrome') {
-                window.open(`https://app.velodrome.finance/liquidity/manage?address=${this.successData.pool.address}`, '_blank').focus();
+                window.open(`https://app.velodrome.finance/liquidity/?query=usd%2B&filter=default`, '_blank').focus();
                 return
             }
 

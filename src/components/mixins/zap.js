@@ -11,22 +11,26 @@ export const zap = {
                 'Chronos': {
                     name: 'Chronos',
                     type: 'LP_WITH_STAKE_IN_ONE_STEP',
-                    network: 'arbitrum'
+                    network: 'arbitrum',
+                    typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
                 },
                 'Thena': {
                     name: 'Thena',
                     type: 'LP_STAKE_DIFF_STEPS',
-                    network: 'bsc'
+                    network: 'bsc',
+                    typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
                 },
                 'Velodrome': {
                     name: 'Velodrome',
                     type: 'LP_STAKE_DIFF_STEPS',
-                    network: 'optimism'
+                    network: 'optimism',
+                    typeOfDepositConstructor: 'CONSTRUCTOR_WITH_TOKEN_ID'
                 },
                 'Ramses': {
                     name: 'Ramses',
                     type: 'LP_STAKE_DIFF_STEPS',
-                    network: 'arbitrum'
+                    network: 'arbitrum',
+                    typeOfDepositConstructor: 'CONSTRUCTOR_WITH_TOKEN_ID'
                 },
             },
             zapContract: null,
@@ -56,6 +60,14 @@ export const zap = {
 
                 // Ramses https://ramses-api-5msw7.ondigitalocean.app/mixed-pairs
                 '0xeb9153afbaa3a6cfbd4fce39988cea786d3f62bb': '0x88d8d2bdc4f12862fbabea43cec08b8fcd2234da',
+
+
+                // // Demeter Sperax https://ramses-api-5msw7.ondigitalocean.app/mixed-pairs
+                // '0x9be8026c5c55a3d5513d4c6607355b3678c0afdb': '0xC8F82e522BC5ca3C340753b69Cb18e68dA216362',
+                //
+                //
+                // // Arbidex
+                // '0x9be8026c5c55a3d5513d4c6607355b3678c0afdb': '0xd2bcFd6b84E778D2DE5Bb6A167EcBBef5D053A06',
 
             }
         }
@@ -240,7 +252,15 @@ export const zap = {
         },
         depositAllAtGauge() {
             let params = {from: this.account, gasPrice: this.gasPriceGwei};
-            return this.gaugeContract.methods.depositAll().send(params);
+            if (this.currentZapPlatformContractType.typeOfDepositConstructor === 'CONSTRUCTOR_WITH_TOKEN_ID') {
+                return this.gaugeContract.methods.depositAll(0).send(params);
+            }
+
+            if (this.currentZapPlatformContractType.typeOfDepositConstructor === 'BASE_CONSTRUCTOR') {
+                return this.gaugeContract.methods.depositAll().send(params);
+            }
+
+            console.error('Type contracts for deposit in gauge not found: ', this.currentZapPlatformContractType);
         }
     }
 

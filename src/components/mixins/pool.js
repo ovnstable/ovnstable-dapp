@@ -120,7 +120,7 @@ export const pool = {
                     url = 'https://meshswap.fi/exchange/pool/detail/';
                     break;
                 case 'Velodrome':
-                    url = 'https://app.velodrome.finance/liquidity/manage?address=';
+                    url = 'https://app.velodrome.finance/liquidity/?query=usd%2B&filter=default';
                     break;
                 case 'Beethoven':
                     url = 'https://op.beets.fi/pool/';
@@ -193,6 +193,7 @@ export const pool = {
                 pool.platform === 'Beefy' ||
                 pool.platform === 'Ezkalibur' ||
                 pool.platform === 'Mute' ||
+                pool.platform === 'Velodrome' ||
                 pool.platform === 'Ennead') {
                 window.open(url, '_blank').focus();
                 return;

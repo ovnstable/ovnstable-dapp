@@ -22,9 +22,9 @@ export const zap = {
                 },
                 'Velodrome': {
                     name: 'Velodrome',
-                    type: 'LP_STAKE_DIFF_STEPS',
+                    type: 'LP_WITH_STAKE_IN_ONE_STEP',
                     network: 'optimism',
-                    typeOfDepositConstructor: 'CONSTRUCTOR_WITH_TOKEN_ID'
+                    typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
                 },
                 'Ramses': {
                     name: 'Ramses',
@@ -52,11 +52,13 @@ export const zap = {
                 "0x1f3ca66c98d682fa1bec31264692dad4f17340bc": '0xB0a69681d82c90B80B689BaF43ccfa6270f1DdE5',
 
                 // Velodrome https://api.velodrome.finance/api/v1/pairs
-                '0xa99817d2d286c894f8f3888096a5616d06f20d46': '0x05d74f34ff651e80b0a1a4bd96d8867626ac2ddd',
-                '0x69c28d5bbe392ef48c0dc347c575023daf0cd243': '0xfc73bd75f1493f39de41ff41c20af69c7563f33a',
-                '0x947a96b025c70497dbc0d095d966f3b59a675a70': '0xae95f97c4b189144d0323b424121e2c94b823906',
-                '0x67124355cce2ad7a8ea283e990612ebe12730175': '0xd2d95775d35a6d492ced7c7e26817aacb7d264f2',
-                '0x8a9cd3dce710e90177b4332c108e159a15736a0f': '0x1032950b49fc23316655e5d0cc066bcd85b28ec7',
+                '0x0b28C2e41058EDc7D66c516c617b664Ea86eeC5d': '0x93e1152951ccfb02b1ad4d8a4afc68b28cac0614',
+                '0x667002F9DC61ebcBA8Ee1Cbeb2ad04060388f223': '0x4bc0547661f40e712a9793c3b99a14a68049a836',
+                '0xD330841EF9527E3Bd0abc28a230C7cA8dec9423B': '0x89913088bf483c65325fbd43ce15051b78d762d4',
+
+                '0xd95E98fc33670dC033424E7Aa0578D742D00f9C7': '0xc263655114cde848c73b899846fe7a2d219c10a8',
+
+                '0x37e7D30CC180A750C83D68ED0C2511dA10694d63': '0x7dca0f3023b80e8c724b11ddccac788940275f41',
 
                 // Ramses https://ramses-api-5msw7.ondigitalocean.app/mixed-pairs
                 '0xeb9153afbaa3a6cfbd4fce39988cea786d3f62bb': '0x88d8d2bdc4f12862fbabea43cec08b8fcd2234da',

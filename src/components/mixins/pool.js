@@ -48,27 +48,27 @@ export const pool = {
                 ],
 
                 // Velodrome
-                '0xa99817d2d286c894f8f3888096a5616d06f20d46': [
+                '0x0b28C2e41058EDc7D66c516c617b664Ea86eeC5d': [
                     {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
                     {name: 'DOLA', address: '0x8ae125e8653821e851f12a49f7765db9a9ce7384'},
                 ],
 
-                '0x69c28d5bbe392ef48c0dc347c575023daf0cd243': [
+                '0x667002F9DC61ebcBA8Ee1Cbeb2ad04060388f223': [
                     {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
                     {name: 'DAI+', address: '0x970d50d09f3a656b43e11b0d45241a84e3a6e011'},
                 ],
 
-                '0x947a96b025c70497dbc0d095d966f3b59a675a70': [
+                '0xD330841EF9527E3Bd0abc28a230C7cA8dec9423B': [
                     {name: 'FRAX', address: '0x2e3d870790dc77a83dd1d18184acc7439a53f475'},
                     {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
                 ],
 
-                '0x67124355cce2ad7a8ea283e990612ebe12730175': [
+                '0xd95E98fc33670dC033424E7Aa0578D742D00f9C7': [
                     {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
                     {name: 'USDC', address: '0x7f5c764cbc14f9669b88837ca1490cca17c31607'},
                 ],
 
-                '0x8a9cd3dce710e90177b4332c108e159a15736a0f': [
+                '0x37e7D30CC180A750C83D68ED0C2511dA10694d63': [
                     {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
                     {name: 'LUSD', address: '0xc40f949f8a4e094d1b49a23ea9241d289b7b2819'},
                 ],

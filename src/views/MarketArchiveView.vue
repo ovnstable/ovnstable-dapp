@@ -223,15 +223,31 @@ export default {
 
       this.isProductsInfoLoading = true;
 
-      productInfoApiService.getAllArchivedProducts(this.appApiUrl)
+      let originalArchiveList = await productInfoApiService.getAllArchivedProducts(this.appApiUrl)
           .then(data => {
             console.log("Archived Products loaded: ", data);
-            this.sortedCardList = this.getSortedCardList(data);
-            this.isProductsInfoLoading = false;
+            return data;
           }).catch(e => {
             console.error("Error when load products. ", e);
             this.isProductsInfoLoading = false;
-      });
+            return [];
+        });
+
+        let oldArchiveList = await productInfoApiService.getAllArchivedProducts_old(this.appApiUrl)
+            .then(data => {
+                console.log("Old Archived Products loaded: ", data);
+                return data;
+            }).catch(e => {
+                console.error("Error when load old products. ", e);
+                this.isProductsInfoLoading = false;
+                return [];
+            });
+
+        let data = [...oldArchiveList, ...originalArchiveList];
+        console.log('All Archived Products loaded:', data)
+
+        this.sortedCardList = this.getSortedCardList(data);
+        this.isProductsInfoLoading = false;
     },
 
     async refreshClientData() {

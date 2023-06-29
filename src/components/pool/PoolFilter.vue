@@ -61,7 +61,7 @@
                                     v-model="searchQuery"
                                     @input="updateInputSearch"
                                     type="text"
-                                    placeholder="Search token, address..."
+                                    placeholder="Search token, address, platform..."
                                     class="input-style"/>
                                 <div @click="clearSearchQuery()" class="search-input-close-container">
                                     <img src="/assets/icon/swap/search-close.svg"

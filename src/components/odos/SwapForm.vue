@@ -39,6 +39,7 @@
                                 </div>
                             </div>
                             <div v-for="token in inputTokens" :key="token.id" class="input-component-container">
+<!--                                {{token.selectedToken ? token.selectedToken.address : '-'}}-->
                                 <div v-if="isShowDecreaseAllowance && token.selectedToken"
                                      @click="disapproveToken(token)"
                                      class="decrease-allowance">

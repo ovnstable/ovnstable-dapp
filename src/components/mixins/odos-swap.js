@@ -48,6 +48,8 @@ export const odosSwap = {
             isShowDecreaseAllowanceButton: true,
 
             updateBalancesIntervalId: null,
+            lastPoolInfoData: null,
+            lastNftTokenId: null,
             lastZapResponseData: null,
             lastPutIntoPoolEvent: null,
             lastReturnedToUserEvent: null,

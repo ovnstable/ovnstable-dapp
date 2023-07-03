@@ -124,6 +124,10 @@
                     </div>
                 </div>
 
+<!--                <div @click="depositAllAtGauge(account, lastPoolInfoData)">
+                    STAKE LP
+                </div>-->
+
                 <div class="swap-footer pt-5">
                     <div v-if="!account" class="swap-button-container">
                         <div @click="connectWallet"
@@ -154,7 +158,7 @@
                             </div>
                         </div>
                         <div v-else-if="additionalSwapStepType === 'APPROVE'"
-                             @click="toApproveAndDepositSteps(lastZapResponseData)"
+                             @click="toApproveAndDepositSteps(lastZapResponseData, lastPoolInfoData)"
                              class="swap-button">
                             <div class="swap-button-title">
                                 <div>
@@ -163,7 +167,7 @@
                             </div>
                         </div>
                         <div v-else-if="additionalSwapStepType === 'DEPOSIT'"
-                             @click="depositGauge(lastPutIntoPoolEvent, lastReturnedToUserEvent)"
+                             @click="depositGauge(lastPutIntoPoolEvent, lastReturnedToUserEvent, lastPoolInfoData, lastNftTokenId)"
                              class="swap-button">
                             <div class="swap-button-title">
                                 <div>
@@ -310,6 +314,7 @@ export default defineComponent({
     computed: {
         ...mapGetters('network', ['getParams', 'networkId']),
         ...mapGetters('theme', ['light']),
+        ...mapGetters('accountData', ['account']),
 
         isInputTokensRemovable() {
             return this.inputTokens.length > 1;
@@ -668,12 +673,11 @@ export default defineComponent({
                 return;
             }
 
-            let gaugeAddress = this.pollsMap[this.zapPool.address];
-            if (!gaugeAddress) {
+            this.lastPoolInfoData = this.poolsInfoMap[this.zapPool.address];
+            if (!this.lastPoolInfoData) {
                 console.log("Error when stake. Gauge pool not found by pool address: ", this.zapPool.address)
                 return;
             }
-
 
             if (this.isSwapLoading) {
                 console.log('Swap method not available, prev swap in process');
@@ -698,7 +702,7 @@ export default defineComponent({
             }
 
 
-            let reserves = await this.getProportion(this.zapPool.address);
+            let reserves = await this.getProportion(this.zapPool.address, this.zapPool);
             console.log("reserves 1: ", reserves.token0Amount);
             console.log("reserves 2: ", reserves.token1Amount);
             let sumReserves = reserves.token0Amount*1 + reserves.token1Amount*1;
@@ -835,7 +839,7 @@ export default defineComponent({
                     console.log("Odos swap request success from zap", data)
                     console.log("Odos swap request success from zap proportions", proportions)
 
-                    this.initZapInTransaction(data, proportions.inputTokens, proportions.outputTokens, proportions, gaugeAddress, request.gasPrice);
+                    this.initZapInTransaction(data, proportions.inputTokens, proportions.outputTokens, proportions, this.lastPoolInfoData, this.zapPool, request.gasPrice);
 
                     this.isSwapLoading = false;
                 }).catch(e => {
@@ -898,8 +902,8 @@ export default defineComponent({
 
             return sourceBlacklist;
         },
-        toApproveAndDepositSteps: async function (data) {
-            console.log("Approve and deposit tx steps.", data, this.poolTokenContract, this.gaugeContract)
+        toApproveAndDepositSteps: async function (data, lastPoolInfoData) {
+            console.log("Approve and deposit tx steps.", data, this.poolTokenContract, this.gaugeContract, lastPoolInfoData)
             let putIntoPoolEvent;
             let returnedToUserEvent;
             for (const key of Object.keys(data.events)) {
@@ -925,10 +929,58 @@ export default defineComponent({
             this.stopSwapConfirmTimer();
             this.additionalSwapStepType = 'APPROVE';
 
-            this.approveGauge(putIntoPoolEvent, returnedToUserEvent);
+            if (lastPoolInfoData.approveType === 'NFT') {
+                console.log("Approve NFT gauge", lastPoolInfoData);
+                this.approveNftGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData);
+                return;
+            }
+
+            console.log("Approve gauge", lastPoolInfoData);
+            this.approveGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData);
 
         },
-        async approveGauge(putIntoPoolEvent, returnedToUserEvent) {
+        async approveNftGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData) {
+            console.log(this.gaugeContract);
+            this.showWaitingModal('Approving NFT in process');
+
+            if (!this.lastNftTokenId) {
+                try {
+                    let tokenId = await this.getLastNftId();
+                    this.lastNftTokenId = tokenId;
+                    console.log("Last nft id: ", tokenId);
+                    let params = {from: this.account, gasPrice: this.gasPriceGwei};
+                    this.gaugeContract.methods.approve(this.poolTokenContract.options.address, tokenId).send(params).then(data => {
+                        console.log("Approve nft gauge success", data);
+                        this.additionalSwapStepType = 'DEPOSIT';
+                        this.closeWaitingModal();
+                        this.depositGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData, this.lastNftTokenId);
+                    }).catch(e => {
+                        console.error("Approve nft gauge failed", e);
+                        this.this.lastNftTokenId = null;
+                        this.closeWaitingModal();
+                    });
+                } catch (e) {
+                    console.error("Approve nft gauge failed", e);
+                    this.this.lastNftTokenId = null;
+                    this.closeWaitingModal();
+                }
+            } else {
+                this.additionalSwapStepType = 'DEPOSIT';
+                this.depositGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData, this.lastNftTokenId);
+            }
+
+        },
+        getLastNftId() {
+            return this.gaugeContract.methods.balanceOf(this.account).call().then(count => {
+                console.log("Nft count: ", count);
+                return this.gaugeContract.methods.tokenOfOwnerByIndex(this.account, count - 1).call().then(tokenId => {
+                    console.log("Last nft id: ", tokenId);
+                    return tokenId;
+                });
+            });
+        },
+        async approveGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData) {
+            console.log(this.gaugeContract);
             let isGaugeApproved = await this.checkApproveForGauge(this.poolTokenContract, this.gaugeContract.options.address, 1000000000000000);
             console.log("Approving gauge", isGaugeApproved);
             if (!isGaugeApproved) {
@@ -937,20 +989,20 @@ export default defineComponent({
                     console.log("Success gauge approve: ", data);
                     this.additionalSwapStepType = 'DEPOSIT';
                     this.closeWaitingModal();
-                    this.depositGauge(putIntoPoolEvent, returnedToUserEvent);
+                    this.depositGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData);
                 }).catch(e => {
                     console.error("Error when gauge approve: ", e);
                     this.closeWaitingModal();
                 });
             } else {
                 this.additionalSwapStepType = 'DEPOSIT';
-                this.depositGauge(putIntoPoolEvent, returnedToUserEvent);
+                this.depositGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData);
             }
         },
-        depositGauge(putIntoPoolEvent, returnedToUserEvent) {
+        depositGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData, lastNftTokenId) {
             this.showWaitingModal('Stake LP in process');
 
-            this.depositAllAtGauge().then(data => {
+            this.depositAllAtGauge(this.account, lastPoolInfoData, lastNftTokenId).then(data => {
                 this.closeWaitingModal();
 
                 console.log("Deposit success!", data);
@@ -1025,9 +1077,9 @@ export default defineComponent({
             this.clearZapData();
             this.loadBalances();
         },
-        async initZapInTransaction(responseData, requestInputTokens, requestOutputTokens, proportions, gaugeAddress, gasPrice) {
-            console.log("Chronos-odos transaction data", responseData, this.zapContract);
-
+        async initZapInTransaction(responseData, requestInputTokens, requestOutputTokens, proportions, poolInfo, zapPool, gasPrice) {
+            console.log("Chronos-odos transaction data", responseData, this.zapContract, poolInfo, zapPool);
+            let gaugeAddress = poolInfo.gauge;
             if (!this.zapContract) {
                 console.error("Init zap transactions failed, chronos contract not found. responseData: ", responseData)
                 return;
@@ -1059,9 +1111,18 @@ export default defineComponent({
                 data: responseData.transaction.data
             };
 
-            let gaugeData = {
-                gauge: gaugeAddress,
-                amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out]
+            let gaugeData;
+            if (zapPool.platform === 'Arbidex') {
+                gaugeData = {
+                    gauge: gaugeAddress,
+                    amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out],
+                    poolId: poolInfo.poolId
+                }
+            } else {
+                gaugeData = {
+                    gauge: gaugeAddress,
+                    amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out],
+                }
             }
 
             console.log("Odos zap request data:", txData, gaugeData, this.zapContract);
@@ -1083,7 +1144,7 @@ export default defineComponent({
 
                     if (this.currentZapPlatformContractType.type === 'LP_STAKE_DIFF_STEPS') {
                         console.log("Finish single step transaction: ", this.lastZapResponseData);
-                        this.toApproveAndDepositSteps(this.lastZapResponseData);
+                        this.toApproveAndDepositSteps(this.lastZapResponseData, poolInfo);
                         return;
                     }
 
@@ -1109,7 +1170,7 @@ export default defineComponent({
             // this.updatePathViewFunc(this.pathViz, [], []);
         },
         async recalculateProportion() {
-            let reserves = await this.getProportion(this.zapPool.address);
+            let reserves = await this.getProportion(this.zapPool.address, this.zapPool);
             console.log("reserves 1: ", reserves.token0Amount);
             console.log("reserves 2: ", reserves.token1Amount);
             let sumReserves = reserves.token0Amount*1 + reserves.token1Amount*1;

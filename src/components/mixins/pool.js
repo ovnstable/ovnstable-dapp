@@ -10,9 +10,11 @@ export const pool = {
             currentZapPool: null,
             zapPlatformSupportList: [
                 'Chronos',
-                'Ramses',
                 'Thena',
                 'Velodrome',
+                'Ramses',
+                'Arbidex',
+                'Sperax',
             ],
             poolTokensForZapMap: {
                 // Chronos
@@ -78,6 +80,46 @@ export const pool = {
                     {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
                     {name: 'DAI+', address: '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'},
                 ],
+
+                // Demeter Sperax TODO: TOKEN ADDRESSES need to update
+                '0x9be8026c5c55a3d5513d4c6607355b3678c0afdb': [
+                    {name: 'USDS', address: '0xD74f5255D557944cf7Dd0E45FF521520002D5748'},
+                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+                ],
+
+
+                // Arbidex
+                '0xeE5e74Dc56594d070E0827ec270F974A68EBAF22': [
+                    {name: 'DAI', address: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1'},
+                    {name: 'DAI+', address: '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'},
+                ],
+
+                '0xE8C060d40D7Bc96fCd5b758Bd1437C8653400b0e': [
+                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+                    {name: 'DAI+', address: '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'},
+                ],
+
+                '0xECe52B1fc32D2B4f22eb45238210b470a64bfDd5': [
+                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+                    {name: 'USDC.E', address: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8'},
+                ],
+
+
+                '0xb0Fb1787238879171Edc30b9730968600D55762A': [
+                    {name: 'FRAX', address: '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F'},
+                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+                ],
+
+                '0xEa5f97aab76E397E4089137345c38b5c4e7939B3': [
+                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+                    {name: 'WETH', address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1'},
+                ],
+
+                '0x306132b6147751B85E608B4C1EC452E111531eA2': [
+                    {name: 'FRAX', address: '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F'},
+                    {name: 'DAI+', address: '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'},
+                ],
+
             }
         }
     },

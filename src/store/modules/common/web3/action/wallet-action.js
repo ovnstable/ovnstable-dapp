@@ -3,10 +3,7 @@ import injectedModule, {ProviderLabel} from '@web3-onboard/injected-wallets'
 import Onboard from "@web3-onboard/core";
 import walletConnectModule from '@web3-onboard/walletconnect'
 import coinbaseWalletModule from '@web3-onboard/coinbase'
-import trezorModule from '@web3-onboard/trezor'
-import gnosisModule from '@web3-onboard/gnosis'
 import WalletConnectProvider from "@walletconnect/web3-provider";
-
 // import argentModule from "@web3-onboard/argent";
 
 

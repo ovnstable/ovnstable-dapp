@@ -33,7 +33,7 @@ export const odosSwap = {
             tokensContractMap: {}, // { 'contractAddress': {ABI} }
             tokenPricesMap: {},
 
-            availableNetworksList: ['polygon', 'bsc', 'optimism', 'arbitrum'],
+            availableNetworksList: ['polygon', 'bsc', 'optimism', 'arbitrum', 'zksync'],
             dataBeInited: false,
 
             swapResponseInfo: null,
@@ -211,6 +211,7 @@ export const odosSwap = {
         async initOvernightSwap() {
             console.log('init overnight swap data for network: ', this.networkName);
             let networkId = this.getParams(this.networkName).networkId;
+            console.log('init overnight swap data for networkId: ', networkId);
             this.tokens = await this.getFilteredOvernightTokens(networkId, false);
             console.log("TOKENS_ ", this.tokens)
             this.secondTokens = await this.getFilteredOvernightTokens(networkId, true);
@@ -443,7 +444,7 @@ export const odosSwap = {
                 let item = tokenMap[key];
 
                 // add only overnight
-                if (isOnlyOvnToken && item.protocolId === 'overnight') {
+                if (isOnlyOvnToken && item.protocolId === 'overnight' || item.symbol === 'USD+') {
                     await this.addItemToFilteredTokens(tokens, key, item);
                     continue;
                 }
@@ -459,7 +460,7 @@ export const odosSwap = {
         },
         async addItemToFilteredTokens(tokens, key, item) {
             let logoUrl;
-            if (item.protocolId === 'overnight') {
+            if (item.protocolId === 'overnight' || item.symbol === 'USD+') {
                 logoUrl = await this.loadOvernightTokenImage(item);
             } else {
                 logoUrl = this.loadTokenImage(item);

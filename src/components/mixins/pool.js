@@ -110,10 +110,10 @@ export const pool = {
                     {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
                 ],
 
-                '0xEa5f97aab76E397E4089137345c38b5c4e7939B3': [
-                    {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
-                    {name: 'WETH', address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1'},
-                ],
+                // '0xEa5f97aab76E397E4089137345c38b5c4e7939B3': [
+                //     {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
+                //     {name: 'WETH', address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1'},
+                // ],
 
                 '0x306132b6147751B85E608B4C1EC452E111531eA2': [
                     {name: 'FRAX', address: '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F'},

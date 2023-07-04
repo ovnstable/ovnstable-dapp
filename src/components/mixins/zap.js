@@ -169,11 +169,11 @@ export const zap = {
                     poolId: 34,
                     approveType: 'TOKEN'
                 },
-                '0xEa5f97aab76E397E4089137345c38b5c4e7939B3': {
+               /* '0xEa5f97aab76E397E4089137345c38b5c4e7939B3': {
                     gauge: '0xd2bcFd6b84E778D2DE5Bb6A167EcBBef5D053A06',
                     poolId: 17,
                     approveType: 'TOKEN'
-                },
+                },*/
                 '0x306132b6147751B85E608B4C1EC452E111531eA2': {
                     gauge: '0xd2bcFd6b84E778D2DE5Bb6A167EcBBef5D053A06',
                     poolId: 35,

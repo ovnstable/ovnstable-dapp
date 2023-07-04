@@ -153,7 +153,6 @@ async function _load_ets(network, etsParams, contracts, web3) {
         tokenContract = _load(await loadJSON(`/contracts/${network}/ets/${etsParams.name}/token.json`), web3);
     }
 
-    console.log("etsParams : ", etsParams.name,  etsParams.tokenContract, etsParams.exchangeContract, etsParams);
     contracts[etsParams.exchangeContract] = exchangerContract;
     contracts[etsParams.tokenContract] = tokenContract;
 }

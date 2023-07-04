@@ -17,7 +17,7 @@
             <v-row class="ma-0 mt-4">
                 <v-btn @click="changeWeightsAction"
                        outlined
-                       :disabled="!hasChangeAccount || financeLoading || !weightsIsBtnEnabled || !weightsIsBtnEnabledMinMax || !weightsIsBtnEnabledTargetWeight">
+                       :disabled="financeLoading || !weightsIsBtnEnabled || !weightsIsBtnEnabledMinMax || !weightsIsBtnEnabledTargetWeight">
                     Change Weights
                 </v-btn>
             </v-row>
@@ -153,25 +153,37 @@ export default {
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
 
         swapWeightsAction() {
+            console.debug("Start swapWeightsAction")
+            let temp = 0;
             for (let i = 0; i < this.m2mItems.length; i++) {
                 let item = this.m2mItems[i];
-                item.targetWeight = Number(item.currentWeight).toFixed(2);
+                item.targetWeight = Number(item.currentWeight).toFixed(3);
+
+                console.debug("Target weight swapped: ", item)
+
+                temp += Number(item.targetWeight);
             }
+            console.debug("Check sum of target weights: ", temp)
         },
 
         async changeWeightsAction() {
-
+            console.debug("ChangeWeightsAction: ", this.m2mItems, this.contractType)
             let estimatedGasValue = await this.estimateSetStrategiesM2MWeights({weights: this.m2mItems, contractType: this.contractType});
+            console.debug("Change weight button clicked: ", estimatedGasValue)
 
             if (estimatedGasValue) {
                 if (estimatedGasValue.haveError) {
                     this.showErrorModalWithMsg({errorType: 'governanceChangeWeights', errorMsg: estimatedGasValue});
                 }
+                console.debug("If error in estimatedGasValue: ", estimatedGasValue)
 
                 await this.setStrategiesM2MWeights({weights: this.m2mItems, contractType: this.contractType});
+                console.debug("If error in StrategiesM2MWeights: ", this.m2mItems, this.contractType)
                 await this.getFinance(this.contractType);
+                console.debug("If error in GetFinance: ", this.contractType)
             } else {
                 this.showErrorModal('governanceChangeWeights');
+                console.debug("ShowErrorModal:")
             }
         },
 

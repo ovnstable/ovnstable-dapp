@@ -387,11 +387,12 @@ const actions = {
 
             items.push(item);
         }
+        console.debug("DATA setStrategiesM2MWeights: ", weights, contractType, account, params, items)
 
         try {
             await pm.methods.setStrategyWeights(items).send(params);
         } catch (e) {
-            console.log(e)
+            console.error("Error:", e)
         }
 
         commit('setFinanceLoading', false);
@@ -399,11 +400,13 @@ const actions = {
 
     async estimateSetStrategiesM2MWeights({commit, dispatch, getters, rootState}, data) {
         commit('setFinanceLoading', true);
+        console.debug("estimateSetStrategiesM2MWeights: ")
 
         let weights = data.weights
         let contractType = data.contractType
 
         let pm;
+        console.debug("If contract type === USD+: ", contractType)
         if (!contractType || contractType === 'USD+') {
             pm = rootState.web3.contracts.pm;
         } else if (contractType === 'DAI+') {
@@ -414,15 +417,19 @@ const actions = {
             console.log("Error when checkAccount. Contract type not found: ", contractType)
             return;
         }
+        console.debug("PM contract: ", pm)
 
         let result;
         let networkId = rootState.network.networkId;
 
+
         try {
+            console.debug("Success try estimateSetStrategiesM2MWeights: ")
             let blockNum = await rootState.web3.web3.eth.getBlockNumber();
             let account = rootState.accountData.account;
             let estimateOptions = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
 
+            console.debug("BlockNum, account and estimateOptions: ", blockNum, account, estimateOptions)
             let items = [];
             for (let i = 0; i < weights.length; i++) {
 
@@ -440,15 +447,18 @@ const actions = {
 
                 items.push(item);
             }
+            console.debug("ITEMS: ", items)
 
             await pm.methods.setStrategyWeights(items).estimateGas(estimateOptions)
                 .then(function (gasAmount) {
+                    console.debug("Success setStrategyWeights: ")
                     result = {
                         haveError: false,
                         gas: gasAmount,
                     };
                 })
                 .catch(function (error) {
+                    console.debug("Failure setStrategyWeights WITH MESSAGE: ")
                     if (error && error.message) {
                         result = {
                             haveError: true,
@@ -461,6 +471,7 @@ const actions = {
                             block: blockNum
                         };
                     } else {
+                        console.debug("Failure setStrategyWeights UNDEFINED error:")
                         result = {
                             haveError: true,
                             message: "Unexpected error",
@@ -468,12 +479,14 @@ const actions = {
                     }
                 });
         } catch (e) {
+            console.debug("Failure catch estimateSetStrategiesM2MWeights: ")
             result = {
                 haveError: true,
                 message: "Unexpected error",
             };
         }
 
+        console.debug("DEBUG SUCCESSFUL:")
         commit('setFinanceLoading', false);
 
         return result;

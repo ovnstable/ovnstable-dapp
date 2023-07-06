@@ -438,6 +438,12 @@ export default {
         swapOdosClick() {
             this.selectTab('swap-odos');
             this.goToActionByPath('/swap', {tabName: 'swap-odos'});
+
+            try {
+                this.trackClick({action: 'click_menu_swap', event_category: 'Click button', event_label: 'Click swap menu button' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
         },
 
         dashBoardClick() {

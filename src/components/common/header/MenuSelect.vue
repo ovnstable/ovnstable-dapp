@@ -347,6 +347,12 @@ export default {
         swapOdosClick() {
             this.selectTab('swap-odos');
             this.goToActionByPath('/swap', { tabName: 'swap-odos' });
+
+            try {
+                this.trackClick({action: 'click_menu_swap_mobile', event_category: 'Click button', event_label: 'Click swap mobile menu button' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
         },
 
         dashBoardClick() {

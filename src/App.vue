@@ -204,6 +204,20 @@ html {
     background-color: var(--main-background);
 }
 
+wcm-modal {
+    position: absolute!important;
+    z-index: 100!important;
+}
+
+onboard-v2 {
+    position: absolute!important;
+    z-index: 100!important;
+}
+
+#wcm-modal {
+    z-index: 200;
+}
+
 .blur-content > * {
     filter: blur(5px);
 }

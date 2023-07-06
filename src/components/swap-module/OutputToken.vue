@@ -4,12 +4,25 @@
             <div class="input-data-container">
                 <div class="row">
                     <div class="col-7">
-                        <input
-                                disabled
-                                v-model="tokenInfo.sum"
-                                type="text"
-                                placeholder="0"
-                                class="input-style"/>
+                        <div v-if="!isTokensPricesLoading">
+                            <input
+                                    disabled
+                                    v-model="tokenInfo.sum"
+                                    type="text"
+                                    placeholder="0"
+                                    class="input-style"/>
+                        </div>
+                        <div v-else>
+                            <div class="input-style">
+                                <v-progress-circular
+                                    width="2"
+                                    size="24"
+                                    color="#186ADE"
+                                    indeterminate
+                                ></v-progress-circular>
+                            </div>
+
+                        </div>
                     </div>
                     <div class="col-5 selected-image-right">
                         <div v-if="token.selectedToken"
@@ -53,7 +66,7 @@
             <div class="founds-container">
                 <div class="row">
                     <div class="col-6">
-                        <div class="usd-equal-text">
+                        <div v-if="!isTokensPricesLoading" class="usd-equal-text">
                             <div v-if="token.selectedToken && token.selectedToken.balanceData.balance">
                                 ~
                                 ${{ $utils.formatMoney((tokenInfo.sum ? tokenInfo.sum.replaceAll(' ', '') : 0) * 1 * token.selectedToken.price, 2) }}
@@ -61,6 +74,9 @@
                             <div v-else>
                                 $00.<span class="numeric-change">00</span>
                             </div>
+                        </div>
+                        <div v-else>
+                            -
                         </div>
                     </div>
                     <div class="col-6 text-right">
@@ -127,6 +143,7 @@ export default defineComponent({
         'selectTokenFunc',
         'isHideLockIcon',
         'isDisableSelect',
+        'isTokensPricesLoading'
     ],
     data() {
         return {

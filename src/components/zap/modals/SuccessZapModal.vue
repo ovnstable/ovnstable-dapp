@@ -322,7 +322,7 @@ export default defineComponent({
             }
 
             if (this.successData.pool.platform === 'Arbidex') {
-                window.open(`https://arbidex.fi/farms`, '_blank').focus();
+                window.open(`https://arbidex.fi/xarxfarms`, '_blank').focus();
                 return
             }
 

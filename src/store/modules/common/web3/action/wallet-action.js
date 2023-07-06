@@ -7,7 +7,8 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 // import argentModule from "@web3-onboard/argent";
 
 
-const SUPPORTED_NETWORKS = [137, 31337, 56, 10, 42161, 324];
+const SUPPORTED_NETWORKS = [137, 56, 10, 42161, 324];
+const WALLETCONNECT_SUPPORTED_NETWORKS = [137, 56, 10, 42161];
 
 const state = {
     onboard: null,
@@ -472,31 +473,34 @@ const actions = {
 
         })
 
-        const wcInitOptions = {
+/*        const wcInitOptions = {
             qrcodeModalOptions: {
                 mobileLinks: ['metamask', 'trust', 'rainbow', 'zerion', "argent", "imtoken", "pillar"] // 'argent',
             },
             connectFirstChainId: true,
             requiredChains: SUPPORTED_NETWORKS
-        }
+        }*/
 
-/*        const wcInit2Options = {
+        const wcInit2Options = {
             version: 2,
             // /!**
             //  * Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
             //  *!/
-            projectId: "699fb1306e95ed8b837fd8962c633422",
-        }*/
+            // projectId: "699fb1306e95ed8b837fd8962c633422",
+            projectId: "7a088ae8cc40c1eb6925dc98cd5fe5e3",
+            // requiredChains: SUPPORTED_NETWORKS
+        }
+
+        const walletConnect = walletConnectModule({
+            version: 2,
+            handleUri: uri => console.log('walletConnect uri: ' + uri),
+            projectId: '7a088ae8cc40c1eb6925dc98cd5fe5e3', // ***New Param* Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
+            connectFirstChainId: true,
+            requiredChains: WALLETCONNECT_SUPPORTED_NETWORKS // chains required to be supported by WC wallet 0xA4B1
+        })
 
         const coinbaseWalletSdk = coinbaseWalletModule({ darkMode: true });
-        const walletConnect = await walletConnectModule(wcInitOptions);
-        /*const gnosis = gnosisModule({
-            whitelistedDomains: ['app.safe.global']
-        });
-        const trezor = trezorModule({
-            appUrl: appApiUrl.replaceAll('/api', ''),
-            email: 'ovnstable@gmail.com',
-        })*/
+        // const walletConnect = await walletConnectModule(wcInit2Options);
 
         // const argent = argentModule(walletConnect);
 

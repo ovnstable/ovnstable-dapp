@@ -165,34 +165,34 @@ export default {
                 case 'mintUsdPlus':
                 case 'redeemUsdPlus':
                     this.addUsdPlusToken();
-                    this.trackClick({action: 'add-usdplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add usdplus token', value: 1 });
+                    // this.trackClick({action: 'add-usdplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add usdplus token', value: 1 });
                     break;
 
                 case 'mintDaiPlus':
                 case 'redeemDaiPlus':
                     this.addDaiPlusToken();
-                    this.trackClick({action: 'add-daiplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add daiplus token', value: 1 });
+                    // this.trackClick({action: 'add-daiplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add daiplus token', value: 1 });
                     break;
 
                 case 'swapOdosUsdPlus':
                     this.addUsdPlusToken();
-                    this.trackClick({action: 'add-daiplus-token-click', event_category: 'Add Token And Swap', event_label: 'Minted and add daiplus token', value: 1 });
+                    // this.trackClick({action: 'add-daiplus-token-click', event_category: 'Add Token And Swap', event_label: 'Minted and add daiplus token', value: 1 });
                     break;
 
                 case 'mintUsdtPlus':
                 case 'redeemUsdtPlus':
                     this.addUsdtPlusToken();
-                    this.trackClick({action: 'add-usdtplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add usdtplus token', value: 1 });
+                    // this.trackClick({action: 'add-usdtplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add usdtplus token', value: 1 });
                     break;
                 case 'wrapUsdPlus':
                 case 'unwrapUsdPlus':
                     this.addwUsdPlusToken();
-                    this.trackClick({action: 'add-wusdplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add wusdplus token', value: 1 });
+                    // this.trackClick({action: 'add-wusdplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add wusdplus token', value: 1 });
                     break;
                 case 'mintEts':
                 case 'redeemEts':
                     this.addEtsToken(this.etsData);
-                    this.trackClick({action: 'add-ets-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add ets token', value: 1 });
+                    // this.trackClick({action: 'add-ets-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add ets token', value: 1 });
                     break;
                 case 'mintInsurance':
                 case 'withdrawInsurance':
@@ -206,13 +206,13 @@ export default {
         openOnExplorer(hash) {
             if (hash) {
                 window.open(this.explorerUrl + `tx/${hash}`, '_blank').focus();
-                this.trackClick({action: 'open-tx-click', event_category: 'Mint Scan TX', event_label: 'Open scan tx', value: 1 });
+                // this.trackClick({action: 'open-tx-click', event_category: 'Mint Scan TX', event_label: 'Open scan tx', value: 1 });
             }
         },
 
         close() {
             this.closeSuccessModal();
-            this.trackClick({action: 'close-success-modal-click', event_category: 'Mint And Redeem Close', event_label: 'Close success modal', value: 1 });
+            // this.trackClick({action: 'close-success-modal-click', event_category: 'Mint And Redeem Close', event_label: 'Close success modal', value: 1 });
 
 
             this.$emit('input', false);

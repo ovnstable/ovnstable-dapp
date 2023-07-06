@@ -152,6 +152,7 @@
                         </div>
                         <div v-else
                              @click="swap()"
+                             id="click_form_swap"
                              class="swap-button">
                             <div class="swap-button-title">
                                 <div>
@@ -338,7 +339,7 @@ export default defineComponent({
         }
 
         try {
-            this.trackClick({action: 'swap_view', event_category: 'Page view', event_label: 'View swap page' });
+            this.trackClick({action: 'swap_page_view', event_category: 'Page view', event_label: 'View swap page' });
         } catch (e) {
             console.error("Track error:", e);
         }
@@ -752,6 +753,12 @@ export default defineComponent({
                 return;
             }
 
+            try {
+                this.trackClick({action: 'click_form_swap', event_category: 'Click Button', event_label: 'Click on swap', value: this.sumOfAllSelectedTokensInUsd });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
+
             this.isSwapLoading = true;
 
 
@@ -776,12 +783,6 @@ export default defineComponent({
                 simulate: true,
                 pathViz: true,
                 // disableRFQs: false
-            }
-
-            try {
-                this.trackClick({action: 'click_swap', event_category: 'Click Button', event_label: 'Click on swap', value: this.sumOfAllSelectedTokensInUsd });
-            } catch (e) {
-                console.error("Track error:", e);
             }
 
             console.log("Odos request data", requestData);

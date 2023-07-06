@@ -135,7 +135,7 @@ export const pool = {
             this.setIsZapModalShow(true);
 
             try {
-                this.trackClick({action: 'click_zap_in', event_category: 'Page view', event_label: 'View zap page' });
+                // this.trackClick({action: 'click_zap_in', event_category: 'Page view', event_label: 'View zap page' });
             } catch (e) {
                 console.error("Track error:", e);
             }

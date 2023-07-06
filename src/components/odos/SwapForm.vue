@@ -98,6 +98,7 @@
                                         :lock-proportion-func="lockProportion"
                                         :update-slider-value-func="updateSliderValue"
                                         :select-token-func="selectOutputToken"
+                                        :is-tokens-prices-loading="isSumulateSwapLoading"
                                 />
                             </div>
 
@@ -853,6 +854,10 @@ export default defineComponent({
             this.quoteRequest(requestData)
                 .then(data => {
                     console.log("Odos simulate swap request success", data)
+                    console.log("data.outTokens:", data.outTokens);
+                    console.log("data.outAmounts:", data.outAmounts);
+                    this.updateSelectedOutputTokens(data);
+
                     this.isSumulateSwapLoading = false;
                     this.updateIsLoadingDataFunc(false);
 
@@ -865,6 +870,44 @@ export default defineComponent({
                 this.isSumulateSwapLoading = false;
                 this.updateIsLoadingDataFunc(false);
             })
+        },
+        // function get data.outTokens and data.outAmounts and find matches in selectedOutputTokens
+        // and update selectedOutputTokens with new values
+        updateSelectedOutputTokens(data) {
+            if (!data || !data.outTokens || !data.outAmounts) {
+                return;
+            }
+
+            let outTokens = data.outTokens;
+            let outAmounts = data.outAmounts;
+            let selectedOutputTokens = this.selectedOutputTokens;
+            let selectedOutputTokensCount = selectedOutputTokens.length;
+            let outTokensCount = outTokens.length;
+            let outAmountsCount = outAmounts.length;
+
+            if (selectedOutputTokensCount < 1 || outTokensCount < 1 || outAmountsCount < 1) {
+                return;
+            }
+
+            let selectedOutputTokensMap = {};
+            for (let i = 0; i < selectedOutputTokensCount; i++) {
+                let token = selectedOutputTokens[i];
+                console.log("Token for update price: ", token);
+                selectedOutputTokensMap[token.selectedToken.address.toLowerCase()] = token;
+            }
+
+            for (let i = 0; i < outTokensCount; i++) {
+                let tokenAddress = outTokens[i];
+                let tokenAmount = outAmounts[i];
+                let token = selectedOutputTokensMap[tokenAddress.toLowerCase()];
+                if (token) {
+                    let selectedToken = token.selectedToken;
+                    console.log("Token for update : ", token, selectedToken, tokenAmount);
+                    let amount = this.web3.utils.fromWei(tokenAmount, this.getWeiMarker(selectedToken.decimals));
+                    console.log("Token for update amount: ", token, selectedToken, tokenAmount, amount);
+                    token.sum = amount;
+                }
+            }
         },
 
         getSlippagePercent() {

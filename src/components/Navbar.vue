@@ -21,7 +21,9 @@
                 Money Markets
             </label>
 
-            <v-list-item :class="selectedTab === 'swap-odos' ? 'selected-page-item' : ''"
+            <v-list-item
+                id="click_menu_swap"
+                :class="selectedTab === 'swap-odos' ? 'selected-page-item' : ''"
                          @click="swapOdosClick()"
                          class="list-item-hover mx-n2">
                 <v-list-item-icon>
@@ -441,25 +443,25 @@ export default {
         dashBoardClick() {
             this.selectTab('dashboard');
             this.goToActionByPath('/dashboard');
-            this.trackClick({action: 'dashboard-click', event_category: 'View Page', event_label: 'Open dashboard page', value: 1 });
+            // this.trackClick({action: 'dashboard-click', event_category: 'View Page', event_label: 'Open dashboard page', value: 1 });
         },
 
         collateralClick() {
             this.selectTab('usdplus_collateral');
             this.goToActionByPath('/collateral');
-            this.trackClick({action: 'collateral-click', event_category: 'View Page', event_label: 'Open collateral page', value: 1 });
+            // this.trackClick({action: 'collateral-click', event_category: 'View Page', event_label: 'Open collateral page', value: 1 });
         },
 
         daiCollateralClick() {
           this.selectTab('daiplus_collateral');
           this.goToActionByPath('/collateral/dai');
-          this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
+          // this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
         },
 
         usdtCollateralClick() {
           this.selectTab('usdtplus_collateral');
           this.goToActionByPath('/collateral/usdt');
-          this.trackClick({action: 'usdt-collateral-click', event_category: 'View Page', event_label: 'Open usdt collateral page', value: 1 });
+          // this.trackClick({action: 'usdt-collateral-click', event_category: 'View Page', event_label: 'Open usdt collateral page', value: 1 });
         },
 
         usdPlusPoolsClick() {
@@ -470,19 +472,19 @@ export default {
         statsClick() {
             this.selectTab('usdplus_performance');
             this.goToActionByPath('/stats');
-            this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open stats page', value: 1 });
+            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open stats page', value: 1 });
         },
 
         daiStatsClick() {
             this.selectTab('daiplus_performance');
             this.goToActionByPath('/stats/dai');
-            this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
+            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
         },
 
         usdtStatsClick() {
             this.selectTab('usdtplus_performance');
             this.goToActionByPath('/stats/usdt');
-            this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
+            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
         },
 
         aboutEtsClick() {
@@ -503,13 +505,13 @@ export default {
         wrapClick() {
             this.showWrapView();
             this.showWrapModal();
-            this.trackClick({action: 'wrap-click', event_category: 'Wrap', event_label: 'Open wrap modal', value: 1 });
+            // this.trackClick({action: 'wrap-click', event_category: 'Wrap', event_label: 'Open wrap modal', value: 1 });
         },
 
         toggleTheme(mode) {
             if ((mode === 'light' && !this.light) || (mode === 'dark' && this.light)) {
                 this.switchTheme();
-                this.trackClick({action: 'toggle-theme', event_category: 'Theme', event_label: 'Switch theme', value: 1 });
+                // this.trackClick({action: 'toggle-theme', event_category: 'Theme', event_label: 'Switch theme', value: 1 });
             }
         },
 

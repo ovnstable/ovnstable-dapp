@@ -151,6 +151,7 @@
                         </div>
                         <div v-else
                              @click="swap()"
+                             id="click_form_swap"
                              class="swap-button">
                             <div class="swap-button-title">
                                 <div>
@@ -337,7 +338,7 @@ export default defineComponent({
         }
 
         try {
-            this.trackClick({action: 'swap_view', event_category: 'Page view', event_label: 'View swap page' });
+            this.trackClick({action: 'swap_view_test', event_category: 'Page view', event_label: 'View swap page' });
         } catch (e) {
             console.error("Track error:", e);
         }
@@ -778,7 +779,7 @@ export default defineComponent({
             }
 
             try {
-                this.trackClick({action: 'click_swap', event_category: 'Click Button', event_label: 'Click on swap', value: this.sumOfAllSelectedTokensInUsd });
+                // this.trackClick({action: 'click_swap', event_category: 'Click Button', event_label: 'Click on swap', value: this.sumOfAllSelectedTokensInUsd });
             } catch (e) {
                 console.error("Track error:", e);
             }

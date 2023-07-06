@@ -104,10 +104,10 @@ export default {
         walletClickAction() {
             if (this.account) {
                 this.showAccountProfile();
-                this.trackClick({action: 'show-wallet-action-click', event_category: 'Account', event_label: 'Show account', value: 1 });
+                // this.trackClick({action: 'show-wallet-action-click', event_category: 'Account', event_label: 'Show account', value: 1 });
             } else {
                 this.connectWallet();
-                this.trackClick({action: 'connect-wallet-action-click', event_category: 'Account', event_label: 'Connect wallet', value: 1 });
+                // this.trackClick({action: 'connect-wallet-action-click', event_category: 'Account', event_label: 'Connect wallet', value: 1 });
             }
         },
     }

@@ -109,7 +109,7 @@ export default defineComponent({
         isShow: function (val, oldVal) {
             if (val) {
                 try {
-                    this.trackClick({action: 'success_swap', event_category: 'Page view', event_label: 'View success swap page' });
+                    this.trackClick({action: 'success_swap_test', event_category: 'Page view', event_label: 'View success swap page' });
                 } catch (e) {
                     console.error("Track error:", e);
                 }

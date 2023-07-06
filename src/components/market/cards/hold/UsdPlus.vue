@@ -82,10 +82,14 @@
                     <template>
                         <v-col class="mr-1">
                             <v-row class="d-flex flex-row">
-                                <v-btn  class="button btn-filled" @click="swapButtonIn">
+                                <v-btn id="click_featured_swap_in"
+                                       class="button btn-filled"
+                                       @click="swapButtonIn">
                                     Swap In
                                 </v-btn>
-                                <v-btn class="button btn-outlined ml-1" outlined @click="swapButtonOut">
+                                <v-btn id="click_featured_swap_out"
+                                       class="button btn-outlined ml-1" outlined
+                                       @click="swapButtonOut">
                                     Swap Out
                                 </v-btn>
                             </v-row>

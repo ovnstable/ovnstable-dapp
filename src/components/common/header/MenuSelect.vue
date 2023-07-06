@@ -15,7 +15,9 @@
                 Money Markets
             </label>
 
-            <v-list-item @click="swapOdosClick" :class="selectedTab === 'swap-odos' ? 'selected-page-item' : ''">
+            <v-list-item
+                id="click_menu_swap_mobile"
+                @click="swapOdosClick" :class="selectedTab === 'swap-odos' ? 'selected-page-item' : ''">
                 <div class="navbar-page-link mt-1">
                     <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10.0002 14.9999C8.67408 14.9999 7.40231 14.4731 6.46463 13.5355C5.52695 12.5978 5.00016 11.326 5.00016 9.99992C5.00016 9.16659 5.2085 8.35825 5.5835 7.66659L4.36683 6.44992C3.69162 7.51083 3.33315 8.74237 3.3335 9.99992C3.3335 11.768 4.03588 13.4637 5.28612 14.714C6.53636 15.9642 8.23205 16.6666 10.0002 16.6666V19.1666L13.3335 15.8333L10.0002 12.4999M10.0002 3.33325V0.833252L6.66683 4.16659L10.0002 7.49992V4.99992C11.3262 4.99992 12.598 5.5267 13.5357 6.46439C14.4734 7.40207 15.0002 8.67384 15.0002 9.99992C15.0002 10.8333 14.7918 11.6416 14.4168 12.3333L15.6335 13.5499C16.3087 12.489 16.6672 11.2575 16.6668 9.99992C16.6668 8.23181 15.9645 6.53612 14.7142 5.28587C13.464 4.03563 11.7683 3.33325 10.0002 3.33325Z" fill="#ADB3BD"/>
@@ -350,35 +352,35 @@ export default {
         dashBoardClick() {
             this.selectTab('dashboard');
             this.goToActionByPath('/dashboard', { tabName: 'dashboard' });
-            this.trackClick({
+            /*this.trackClick({
                 action: 'dashboard-click',
                 event_category: 'View Page',
                 event_label: 'Open dashboard page',
                 value: 1
-            });
+            });*/
         },
 
         collateralClick() {
             this.selectTab('usdplus_collateral');
             this.goToActionByPath('/collateral');
-            this.trackClick({
+            /*this.trackClick({
                 action: 'collateral-click',
                 event_category: 'View Page',
                 event_label: 'Open collateral page',
                 value: 1
-            });
+            });*/
         },
 
         daiCollateralClick() {
           this.selectTab('daiplus_collateral');
           this.goToActionByPath('/collateral/dai');
-          this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
+          // this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
         },
 
         usdtCollateralClick() {
           this.selectTab('usdtplus_collateral');
           this.goToActionByPath('/collateral/usdt');
-          this.trackClick({action: 'usdt-collateral-click', event_category: 'View Page', event_label: 'Open usdt collateral page', value: 1 });
+          // this.trackClick({action: 'usdt-collateral-click', event_category: 'View Page', event_label: 'Open usdt collateral page', value: 1 });
         },
 
         usdPlusPoolsClick() {
@@ -389,24 +391,24 @@ export default {
         statsClick() {
             this.selectTab('usdplus_performance');
             this.goToActionByPath('/stats');
-            this.trackClick({
+          /*  this.trackClick({
                 action: 'stats-click',
                 event_category: 'View Page',
                 event_label: 'Open stats page',
                 value: 1
-            });
+            });*/
         },
 
         daiStatsClick() {
           this.selectTab('daiplus_performance');
           this.goToActionByPath('/stats/dai');
-          this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
+          // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
         },
 
         usdtStatsClick() {
           this.selectTab('usdtplus_performance');
           this.goToActionByPath('/stats/usdt');
-          this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
+          // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
         },
 
         aboutEtsClick() {
@@ -427,18 +429,18 @@ export default {
         wrapClick() {
             this.showWrapView();
             this.showWrapModal();
-            this.trackClick({ action: 'wrap-click', event_category: 'Wrap', event_label: 'Open wrap modal', value: 1 });
+            // this.trackClick({ action: 'wrap-click', event_category: 'Wrap', event_label: 'Open wrap modal', value: 1 });
         },
 
         toggleTheme(mode) {
             if ((mode === 'light' && !this.light) || (mode === 'dark' && this.light)) {
                 this.switchTheme();
-                this.trackClick({
+                /*this.trackClick({
                     action: 'toggle-theme',
                     event_category: 'Theme',
                     event_label: 'Switch theme',
                     value: 1
-                });
+                });*/
             }
         },
 

@@ -17,7 +17,7 @@
             <v-row class="ma-0 mt-4">
                 <v-btn @click="changeWeightsAction"
                        outlined
-                       :disabled="financeLoading || !weightsIsBtnEnabled || !weightsIsBtnEnabledMinMax || !weightsIsBtnEnabledTargetWeight">
+                       :disabled="!hasChangeAccount || financeLoading || !weightsIsBtnEnabled || !weightsIsBtnEnabledMinMax || !weightsIsBtnEnabledTargetWeight">
                     Change Weights
                 </v-btn>
             </v-row>

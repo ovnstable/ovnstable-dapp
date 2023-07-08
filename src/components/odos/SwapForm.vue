@@ -1104,7 +1104,7 @@ export default defineComponent({
                 sum = this.swapMethod === 'BUY' ? sum * token.selectedToken.price : sum / token.selectedToken.price
                 console.log(`Recalculate token.selectedToken price: ${token.selectedToken.price}, newUsdSum: ${sum}`, token);
 
-                token.sum = this.$utils.formatMoney(sum, 4)
+                // token.sum = this.$utils.formatMoney(sum, 4)
             }
         },
         subTokensProportions(currentToken, difference) {

@@ -82,10 +82,14 @@
                     <template>
                         <v-col class="mr-1">
                             <v-row class="d-flex flex-row">
-                                <v-btn  class="button btn-filled" @click="swapButtonIn">
+                                <v-btn id="click_featured_swap_in"
+                                       class="button btn-filled"
+                                       @click="swapButtonIn">
                                     Swap In
                                 </v-btn>
-                                <v-btn class="button btn-outlined ml-1" outlined @click="swapButtonOut">
+                                <v-btn id="click_featured_swap_out"
+                                       class="button btn-outlined ml-1" outlined
+                                       @click="swapButtonOut">
                                     Swap Out
                                 </v-btn>
                             </v-row>
@@ -188,6 +192,7 @@ export default {
         ...mapActions("swapModal", ["showSwapModal", "showMintView"]),
         ...mapActions("swapModal", ["showSwapModal", "showRedeemView"]),
         ...mapActions('magicEye', ['switchEye']),
+        ...mapActions('track', ['trackClick']),
 
         loadData() {
           this.getUsdPlusAvgMonthApy();
@@ -210,10 +215,20 @@ export default {
 
         swapButtonIn() {
             this.goToActionByPath('/swap', {action: 'swap-in'})
+            try {
+                this.trackClick({action: 'click_featured_swap_in', event_category: 'Click button', event_label: 'Click swap_in on featured page' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
         },
 
         swapButtonOut() {
             this.goToActionByPath('/swap', {action: 'swap-out'})
+            try {
+                this.trackClick({action: 'click_featured_swap_out', event_category: 'Click button', event_label: 'Click swap_out on featured page' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
         },
 
         goToActionByPath(path, queryParams) {

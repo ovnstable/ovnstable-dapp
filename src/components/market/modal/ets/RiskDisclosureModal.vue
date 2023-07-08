@@ -76,7 +76,7 @@ export default {
 
         close() {
             this.closeRiskModal();
-            this.trackClick({action: 'close-risk-modal-click', event_category: 'ETS Risk', event_label: 'Close Risks Modal', value: 1 });
+            // this.trackClick({action: 'close-risk-modal-click', event_category: 'ETS Risk', event_label: 'Close Risks Modal', value: 1 });
 
             this.$emit('input', false);
             this.$emit('m-close');

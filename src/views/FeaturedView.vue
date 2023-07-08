@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import moment from "moment";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
@@ -160,6 +160,12 @@ export default {
     },
 
     async mounted() {
+        try {
+            this.trackClick({action: 'featured_page_view', event_category: 'Page view', event_label: 'View featured page' });
+        } catch (e) {
+            console.error("Track error:", e);
+        }
+
       console.log(this.$route.query.tabName);
       await this.loadPools();
       if (!this.$route.query.tabName) {
@@ -171,6 +177,7 @@ export default {
     },
 
     methods: {
+        ...mapActions('track', ['trackClick']),
 
         async setTab(tabName) {
             this.isResorting = true;

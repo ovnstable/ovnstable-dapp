@@ -9,6 +9,7 @@ const getters = {
 const actions = {
 
     async trackClick({commit, dispatch, getters, rootState}, trackParams) {
+        console.log('Mock google tag click: ', trackParams);
         Vue.prototype.$gtm.trackEvent({
             event: trackParams.action,
             action: trackParams.action,
@@ -16,6 +17,15 @@ const actions = {
             label: trackParams.event_label,
             value: trackParams.value,
         });
+
+        // try catch for metrika
+        setTimeout(() => {
+            try {
+                Vue.prototype.$metrika.reachGoal(trackParams.action);
+            } catch (e) {
+                console.log('Metrika not init yet', e);
+            }
+        }, 50)
     },
 };
 

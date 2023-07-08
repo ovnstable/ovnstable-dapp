@@ -38,6 +38,19 @@ Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;
 
+Vue.use(VueYandexMetrika, {
+  id: 86928892,
+  router: router,
+  env: process.env.NODE_ENV,
+  options: {
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    webvisor: true,
+    debug: true
+  }
+})
+
 Vue.use(VueGtm, {
   id: 'GTM-P265VFK',
   enabled: true,
@@ -45,12 +58,6 @@ Vue.use(VueGtm, {
   debug: true,
 });
 
-Vue.use(VueYandexMetrika, {
-  id: 86928892,
-  router: router,
-  env: process.env.NODE_ENV,
-  options: {clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true}
-})
 
 if (process.env.NODE_ENV === 'production') {
   console.log("Production app, init sentry.");

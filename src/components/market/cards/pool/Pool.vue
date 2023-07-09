@@ -1,5 +1,5 @@
 <template>
-    <v-row class="card-container" v-on:click.prevent @click="openPool()">
+    <v-row class="card-container" v-on:click.prevent @click="openAllPools()">
         <v-col cols="12" align-self="start">
             <v-row class="d-flex flex-row align-center header-row pl-4"
                    justify="center"
@@ -265,6 +265,17 @@ export default {
         redeemAction() {
             this.showRedeemView();
             this.showSwapModal();
+        },
+
+        openAllPools() {
+            this.goToActionByPath('/pools');
+        },
+
+        goToActionByPath(path, queryParams) {
+            this.$router.push({
+                path: path,
+                query: queryParams ? queryParams : {}
+            });
         },
 
         openPool() {

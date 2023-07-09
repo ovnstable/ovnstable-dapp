@@ -1,5 +1,5 @@
 <template>
-    <v-row class="card-container" v-on:click.prevent @click="openPerformance">
+    <v-row class="card-container" @click="openPerformance">
         <v-col cols="12" align-self="start">
             <v-row class="d-flex flex-row align-center header-row" justify="center" :style="{'--card-background': getBgColor()}">
                 <span class="currency ml-5">
@@ -84,12 +84,12 @@
                             <v-row class="d-flex flex-row">
                                 <v-btn id="click_featured_swap_in"
                                        class="button btn-filled"
-                                       @click="swapButtonIn">
+                                       @click.stop.prevent="swapButtonIn">
                                     Swap In
                                 </v-btn>
                                 <v-btn id="click_featured_swap_out"
                                        class="button btn-outlined ml-1" outlined
-                                       @click="swapButtonOut">
+                                       @click.stop.prevent="swapButtonOut">
                                     Swap Out
                                 </v-btn>
                             </v-row>

@@ -310,6 +310,7 @@ export const swap = {
         },
 
         async buyAction(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, resultTxInfo, finalizeFunc, disapproveActionFunc, approveActionFunc, ovnStableContract) {
+            console.debug(`Buy-Action in ${action}`);
             try {
 
                 let sumInUsd = sum + '';
@@ -384,27 +385,44 @@ export const swap = {
                             amount: sumInUsd,
                         };
 
-                        if (self.networkName === 'zksync' && self.zksyncFeeHistory) {
-                            try {
-                                // get balance from eth token
-                                console.log("this.account after tx: ", self.account)
-                                let weiBalance = await self.web3.eth.getBalance(self.account);
-                                let balance = self.web3.utils.fromWei(weiBalance);
-                                console.log("Balance from eth token after tx", balance, balance * 1854.91);
-                                self.zksyncFeeHistory.finalWeiBalance = balance;
-                            } catch (e) {
-                                console.error("Error get balance from eth token  after tx", e);
-                            }
-                        }
+
 
                         self.putTransaction(tx);
-                        self.showSuccessModal({
-                            successTxHash: hash,
-                            successAction: resultTxInfo.successAction,
-                            etsData: resultTxInfo.etsData,
-                            zksyncFeeHistory: self.zksyncFeeHistory
-                        });
-                        self.loadTransaction();
+
+                        if (self.networkName === 'zksync' && self.zksyncFeeHistory) {
+                            setTimeout(async () => {
+
+                                try {
+                                    // get balance from eth token
+                                    console.log("this.account after tx: ", self.account)
+                                    let weiBalance = await self.web3.eth.getBalance(self.account);
+                                    let balance = self.web3.utils.fromWei(weiBalance);
+                                    console.log("Balance from eth token after tx", balance, balance * 1854.91);
+                                    self.zksyncFeeHistory.finalWeiBalance = balance;
+                                } catch (e) {
+                                    console.error("Error get balance from eth token  after tx", e);
+                                }
+
+                                self.showSuccessModal({
+                                    successTxHash: hash,
+                                    successAction: resultTxInfo.successAction,
+                                    etsData: resultTxInfo.etsData,
+                                    zksyncFeeHistory: self.zksyncFeeHistory
+                                });
+
+                                self.loadTransaction();
+                            }, 5000);
+                        } else {
+                            self.showSuccessModal({
+                                successTxHash: hash,
+                                successAction: resultTxInfo.successAction,
+                                etsData: resultTxInfo.etsData,
+                                zksyncFeeHistory: self.zksyncFeeHistory
+                            });
+
+                            self.loadTransaction();
+                        }
+
                     });
 
                 if (this.isOvercapAvailable) {

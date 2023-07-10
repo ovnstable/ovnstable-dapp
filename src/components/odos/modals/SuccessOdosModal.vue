@@ -23,30 +23,90 @@
                             <div class="success-text-container py-10">
                                 You successfully swapped
                             </div>
+
                             <div class="success-table-info-container">
-                                <div class="input-token-container">
-                                    <div class="success-token-title">
-                                        Swapped from
+                                <div class="row">
+                                    <div class="col-12 col-lg-5 col-md-5 col-sm-12">
+                                        <div class="text-center">
+                                            <div class="success-token-title">
+                                                Swapped from
+                                            </div>
+
+                                            <div v-for="(token, index) in successData.inputTokens" :key="token.symbol"
+                                                 class="success-data-item">
+
+                                                <div>
+                                                    {{$utils.formatMoney(web3.utils.fromWei((successData.txData.inputTokens[index].amount + ""), getWeiMarker(token.selectedToken.decimals)), 2)}}  {{token.selectedToken.symbol}}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="success-data-list">
-                                            <span v-for="(token, index) in successData.inputTokens" :key="token.symbol"
-                                                  class="success-data-item">
-                                             {{index === 0 && token.selectedToken ?
-                                              token.selectedToken.symbol : ', ' + token.selectedToken.symbol}}
-                                            </span>
+                                    <div v-if="!$wu.isMobile()" class="col-12 col-lg-2 col-md-2 col-sm-12">
+                                        <div class="text-center" style="height: 100%;">
+                                            <div class="vert-line"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-5 col-md-5 col-sm-12">
+                                        <div class="text-center">
+                                            <div class="success-token-title">
+                                                Swapped to
+                                            </div>
+
+                                            <div v-for="(token, index) in successData.outputTokens" :key="token.symbol"
+                                                 class="success-data-item-out">
+                                                <div>
+                                                    {{$utils.formatMoney(web3.utils.fromWei(successData.txData.outputTokens[index].amount + "", getWeiMarker(token.selectedToken.decimals)), 2)}} {{token.selectedToken.symbol}}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="output-token-container">
-                                  <div class="success-token-title">
-                                      Swapped to
-                                  </div>
-                                  <div class="success-data-list">
-                                    <span v-for="(token, index) in successData.outputTokens" :key="token.symbol"
-                                            class="success-data-item">
-                                        {{index === 0 && token.selectedToken ?
-                                        token.selectedToken.symbol : ', ' + token.selectedToken.symbol}}
-                                    </span>
-                                  </div>
+                            </div>
+
+                            <div v-if="successData.zksyncFeeHistory"
+                                 @click="isRefundInfoOpen = !isRefundInfoOpen"
+                                 class="success-gas-refund-table-info-container">
+                                <div class="gas-refund-title" style="text-align: center;">
+                                    Gas Refund +{{$utils.formatMoney(gasRefundPercents, 2)}}% (${{$utils.formatMoney(gasRefundInUsd, 2)}})
+                                </div>
+
+                                <div v-if="isRefundInfoOpen">
+                                    <div>
+                                        <div class="input-token-container">
+                                            <div class="success-token-title">
+                                                Gross cost
+                                            </div>
+                                            <div class="success-data-list">
+                                               <span class="success-data-item">
+                                                   {{$utils.formatMoney(successData.zksyncFeeHistory.estimateFeeInEther, 6)}} ETH
+                                               </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="input-token-container">
+                                            <div class="success-token-title">
+                                                Refunded
+                                            </div>
+                                            <div class="success-data-list">
+                                               <span class="success-data-item">
+                                                   +{{$utils.formatMoney(refundEth, 6)}} ETH
+                                               </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="input-token-container">
+                                            <div class="success-token-title">
+                                                Net cost
+                                            </div>
+                                            <div class="success-data-list">
+                                               <span class="success-data-item">
+                                                   -{{$utils.formatMoney(netEthCost, 6) }} ETH (${{$utils.formatMoney(netEthCost * successData.zksyncFeeHistory.ethPrice, 2)}})
+                                               </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -98,12 +158,55 @@ export default defineComponent({
     },
     data() {
       return {
+          isRefundInfoOpen: false
       }
     },
     mounted() {
     },
     computed: {
         ...mapGetters('network', ['getParams']),
+        ...mapGetters('web3', ['web3', 'getWeiMarker']),
+
+        gasRefundPercents: function() {
+            if (!this.successData) {
+                return 0;
+            }
+            if (!this.successData.zksyncFeeHistory) {
+                return 0;
+            }
+
+            return this.refundEth * 100 / this.successData.zksyncFeeHistory.estimateFeeInEther;
+        },
+        gasRefundInUsd: function() {
+            if (!this.successData) {
+                return 0;
+            }
+            if (!this.successData.zksyncFeeHistory) {
+                return 0;
+            }
+
+            return this.refundEth * this.successData.zksyncFeeHistory.ethPrice
+        },
+        netEthCost: function() {
+            if (!this.successData) {
+                return 0;
+            }
+            if (!this.successData.zksyncFeeHistory) {
+                return 0;
+            }
+
+            return this.successData.zksyncFeeHistory.estimateFeeInEther - (this.successData.zksyncFeeHistory.startWeiBalance - this.successData.zksyncFeeHistory.finalWeiBalance);
+        },
+        refundEth: function() {
+            if (!this.successData) {
+                return 0;
+            }
+            if (!this.successData.zksyncFeeHistory) {
+                return 0;
+            }
+
+            return this.successData.zksyncFeeHistory.startWeiBalance - this.successData.zksyncFeeHistory.finalWeiBalance;
+        }
     },
     watch: {
         isShow: function (val, oldVal) {
@@ -282,6 +385,14 @@ div {
     color: var(--main-gray-text);
 }
 
+.success-data-item-out {
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 24px;
+    color: rgba(34, 171, 172, 1);
+}
+
 .scan-title {
     font-style: normal;
     font-weight: 400;
@@ -302,5 +413,27 @@ div {
     top: 22px;
     padding-left: 4px;
     display: inline-block;
+}
+
+.success-table-info-container {
+    margin-bottom: 15px;
+}
+
+.success-gas-refund-table-info-container {
+    background: rgba(34, 171, 172, 0.08);
+    padding: 10px;
+    cursor: pointer;
+}
+
+.gas-refund-title {
+    color: rgba(34, 171, 172, 1);
+    font-weight: bold;
+}
+
+.vert-line {
+    width: 1px;
+    background: rgba(173, 179, 189, 1);
+    height: 100%;
+    margin-left: 30px;
 }
 </style>

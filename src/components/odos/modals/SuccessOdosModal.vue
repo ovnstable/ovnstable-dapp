@@ -125,6 +125,7 @@ export default defineComponent({
     },
     computed: {
         ...mapGetters('network', ['getParams']),
+        ...mapGetters('web3', ['web3', 'getWeiMarker']),
     },
     watch: {
         isShow: function (val, oldVal) {

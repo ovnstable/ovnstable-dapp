@@ -411,7 +411,7 @@ export const swap = {
                                 });
 
                                 self.loadTransaction();
-                            }, 5000);
+                            }, 10000);
                         } else {
                             self.showSuccessModal({
                                 successTxHash: hash,

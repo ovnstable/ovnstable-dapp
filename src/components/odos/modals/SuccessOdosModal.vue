@@ -32,11 +32,15 @@
                                                 Swapped from
                                             </div>
 
-                                            <div v-for="(token, index) in successData.inputTokens" :key="token.symbol"
+                                            <div v-for="token in successData.inputTokens" :key="token.symbol"
                                                  class="success-data-item">
 
-                                                <div>
-                                                    {{$utils.formatMoney(web3.utils.fromWei((successData.txData.inputTokens[index].amount + ""), getWeiMarker(token.selectedToken.decimals)), 2)}}  {{token.selectedToken.symbol}}
+                                                <div v-if="getIndexOfTokenByAddress(successData.txData.inputTokens, token) != -1">
+                                                    {{
+                                                        $utils.formatMoney(web3.utils.fromWei((successData.txData.inputTokens[getIndexOfTokenByAddress(successData.txData.inputTokens, token)].amount + ""),
+                                                        getWeiMarker(token.selectedToken.decimals)), 2)
+                                                    }}
+                                                    {{token.selectedToken.symbol}}
                                                 </div>
                                             </div>
                                         </div>
@@ -52,10 +56,14 @@
                                                 Swapped to
                                             </div>
 
-                                            <div v-for="(token, index) in successData.outputTokens" :key="token.symbol"
+                                            <div v-for="token in successData.outputTokens" :key="token.symbol"
                                                  class="success-data-item-out">
-                                                <div>
-                                                    {{$utils.formatMoney(web3.utils.fromWei(successData.txData.outputTokens[index].amount + "", getWeiMarker(token.selectedToken.decimals)), 2)}} {{token.selectedToken.symbol}}
+                                                <div v-if="getIndexOfTokenByAddress(successData.txData.outputTokens, token) != -1">
+                                                    {{
+                                                        $utils.formatMoney(web3.utils.fromWei(successData.txData.outputTokens[getIndexOfTokenByAddress(successData.txData.outputTokens, token)].amount + "",
+                                                        getWeiMarker(token.selectedToken.decimals)), 2)
+                                                    }}
+                                                    {{token.selectedToken.symbol}}
                                                 </div>
                                             </div>
                                         </div>
@@ -145,6 +153,11 @@ export default defineComponent({
         openOnExplorer() {
             let explorerUrl = this.getParams(this.successData.chain).explorerUrl;
             window.open(explorerUrl + `tx/${this.successData.hash}`, '_blank').focus();
+        },
+        getIndexOfTokenByAddress(listOfTokens, token) {
+            return listOfTokens.findIndex((item) => {
+                return item.tokenAddress.toLowerCase() === token.selectedToken.address.toLowerCase()
+            })
         }
     }
 })

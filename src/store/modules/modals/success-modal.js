@@ -5,6 +5,7 @@ const state = {
     //mintUsdPlus, redeemUsdPlus, mintDaiPlus, redeemDaiPlus, wrapUsdPlus, unwrapUsdPlus, mintEts, redeemEts
     successAction: 'mint',
     etsData: null,
+    zksyncFeeHistory: null,
 };
 
 const getters = {
@@ -24,6 +25,10 @@ const getters = {
     etsData(state) {
         return state.etsData;
     },
+
+    zksyncFeeHistory(state) {
+        return state.zksyncFeeHistory;
+    },
 };
 
 const actions = {
@@ -32,6 +37,7 @@ const actions = {
         commit('setSuccessTxHash', successParams.successTxHash);
         commit('setSuccessAction', successParams.successAction);
         commit('setEtsData', successParams.etsData);
+        commit('setZksyncFeeHistory', successParams.zksyncFeeHistory);
     },
 
     closeSuccessModal({commit, dispatch, getters}) {
@@ -57,6 +63,10 @@ const mutations = {
 
     setEtsData(state, value) {
         state.etsData = value;
+    },
+
+    setZksyncFeeHistory(state, value) {
+        state.zksyncFeeHistory = value;
     },
 };
 

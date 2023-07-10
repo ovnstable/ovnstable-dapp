@@ -555,31 +555,31 @@ export const odosSwap = {
 
             try {
                 // get balance from eth token
-                console.log("this.account: ", this.account)
+                console.log("OdosSwap this.account: ", this.account)
                 let weiBalance = await this.web3.eth.getBalance(this.account);
                 let balance = this.web3.utils.fromWei(weiBalance);
-                console.log("Balance from eth token", balance, balance * 1854.91);
+                console.log("OdosSwap Balance from eth token", balance, balance * 1854.91);
 
                 // 'gasPrice', 'gasPriceGwei', 'gasPriceStation'
-                console.log("Get gasPrice ", this.gasPrice, this.gasPrice * 1854.91)
+                console.log("OdosSwap Get gasPrice ", this.gasPrice, this.gasPrice * 1854.91)
                 this.zksyncFeeHistory.startWeiBalance = balance;
 
             } catch (e) {
-                console.log("Error get balance from eth token", e);
+                console.error("OdosSwap Error get balance from eth token", e);
             }
 
 
             await this.web3.eth.estimateGas(transactionData, (error, gasLimit) => {
                 if (error) {
-                    console.log('Error estimating gas:', error);
+                    console.error('OdosSwap Error estimating gas:', error);
                 } else {
-                    console.log('Error estimating gasLimit:', gasLimit);
+                    console.log('OdosSwap estimating gasLimit:', gasLimit);
                     this.web3.eth.getGasPrice().then(gasPrice => {
-                        console.log('Error estimating gasPrice:', gasPrice);
+                        console.log('OdosSwap estimating gasPrice:', gasPrice);
                         let feeInWei = gasLimit * '262500000';
-                        console.log('Error estimating feeInWei:', feeInWei);
+                        console.log('OdosSwap estimating feeInWei:', feeInWei);
                         let feeInEther = this.web3.utils.fromWei(feeInWei.toString(), 'ether');
-                        console.log('Estimated transaction fee in Ether:', feeInEther, feeInEther * 1854.91);
+                        console.log('OdosSwap Estimated transaction fee in Ether:', feeInEther, feeInEther * 1854.91);
                         this.zksyncFeeHistory.estimateFeeInEther = feeInEther;
                     })
                 }
@@ -669,7 +669,7 @@ export const odosSwap = {
                             console.log("Balance from eth token after tx", balance, balance * 1854.91);
                             this.zksyncFeeHistory.finalWeiBalance = balance;
                         } catch (e) {
-                            console.log("Error get balance from eth token  after tx", e);
+                            console.error("Error get balance from eth token  after tx", e);
                         }
                     }
 
@@ -780,6 +780,10 @@ export const odosSwap = {
             }
 
             this.isShowSuccessModal = isShow;
+
+            if (!isShow) {
+                this.successData = null;
+            }
         },
 
 

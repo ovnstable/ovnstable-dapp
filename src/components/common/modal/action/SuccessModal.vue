@@ -26,7 +26,12 @@
                         Transaction successfully submitted
                     </label>
                 </v-row>
-                <v-row justify="center" class="mb-5">
+
+                <div v-if="zksyncFeeHistory">
+                    <RefundInfo :zksync-fee-history="zksyncFeeHistory"></RefundInfo>
+                </div>
+
+                <v-row v-if="!zksyncFeeHistory" justify="center" class="mb-5">
                     <v-btn dark
                            height="40"
                            width="300"
@@ -64,17 +69,18 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import RefundInfo from "@/components/common/modal/RefundInfo.vue";
 
 export default {
     name: "SuccessModal",
 
-    components: {},
+    components: {RefundInfo},
 
     props: {},
 
     computed: {
         ...mapGetters('network', ['explorerUrl']),
-        ...mapGetters('successModal', ['show', 'successTxHash', 'successAction', 'etsData']),
+        ...mapGetters('successModal', ['show', 'successTxHash', 'successAction', 'etsData', 'zksyncFeeHistory']),
 
         actionSuccessToken: function () {
             switch (this.successAction) {
@@ -147,7 +153,8 @@ export default {
         },
     },
 
-    data: () => ({}),
+    data: () => ({
+    }),
 
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),

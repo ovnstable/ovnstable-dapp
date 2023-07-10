@@ -63,51 +63,8 @@
                                 </div>
                             </div>
 
-                            <div v-if="successData.zksyncFeeHistory"
-                                 @click="isRefundInfoOpen = !isRefundInfoOpen"
-                                 class="success-gas-refund-table-info-container">
-                                <div class="gas-refund-title" style="text-align: center;">
-                                    Gas Refund +{{$utils.formatMoney(gasRefundPercents, 2)}}% (${{$utils.formatMoney(gasRefundInUsd, 2)}})
-                                </div>
-
-                                <div v-if="isRefundInfoOpen">
-                                    <div>
-                                        <div class="input-token-container">
-                                            <div class="success-token-title">
-                                                Gross cost
-                                            </div>
-                                            <div class="success-data-list">
-                                               <span class="success-data-item">
-                                                   {{$utils.formatMoney(successData.zksyncFeeHistory.estimateFeeInEther, 6)}} ETH
-                                               </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="input-token-container">
-                                            <div class="success-token-title">
-                                                Refunded
-                                            </div>
-                                            <div class="success-data-list">
-                                               <span class="success-data-item">
-                                                   +{{$utils.formatMoney(refundEth, 6)}} ETH
-                                               </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="input-token-container">
-                                            <div class="success-token-title">
-                                                Net cost
-                                            </div>
-                                            <div class="success-data-list">
-                                               <span class="success-data-item">
-                                                   -{{$utils.formatMoney(netEthCost, 6) }} ETH (${{$utils.formatMoney(netEthCost * successData.zksyncFeeHistory.ethPrice, 2)}})
-                                               </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div v-if="successData.zksyncFeeHistory">
+                                <RefundInfo :zksync-fee-history="successData.zksyncFeeHistory"></RefundInfo>
                             </div>
 
                             <div class="scan-container pt-5">
@@ -134,10 +91,12 @@ import {defineComponent} from 'vue'
 import SelectTokenShort from "@/components/swap-module/SelectTokenShort.vue";
 import SelectTokenWithSearch from "@/components/swap-module/SelectTokenWithSearch.vue";
 import {mapActions, mapGetters} from "vuex";
+import RefundInfo from "@/components/common/modal/RefundInfo.vue";
 
 export default defineComponent({
     name: "SuccessOdosModal",
     components: {
+        RefundInfo,
         SelectTokenWithSearch,
         SelectTokenShort
     },
@@ -155,6 +114,7 @@ export default defineComponent({
             type: Object,
             required: true
         },
+
     },
     data() {
       return {
@@ -165,48 +125,6 @@ export default defineComponent({
     },
     computed: {
         ...mapGetters('network', ['getParams']),
-        ...mapGetters('web3', ['web3', 'getWeiMarker']),
-
-        gasRefundPercents: function() {
-            if (!this.successData) {
-                return 0;
-            }
-            if (!this.successData.zksyncFeeHistory) {
-                return 0;
-            }
-
-            return this.refundEth * 100 / this.successData.zksyncFeeHistory.estimateFeeInEther;
-        },
-        gasRefundInUsd: function() {
-            if (!this.successData) {
-                return 0;
-            }
-            if (!this.successData.zksyncFeeHistory) {
-                return 0;
-            }
-
-            return this.refundEth * this.successData.zksyncFeeHistory.ethPrice
-        },
-        netEthCost: function() {
-            if (!this.successData) {
-                return 0;
-            }
-            if (!this.successData.zksyncFeeHistory) {
-                return 0;
-            }
-
-            return this.successData.zksyncFeeHistory.estimateFeeInEther - (this.successData.zksyncFeeHistory.startWeiBalance - this.successData.zksyncFeeHistory.finalWeiBalance);
-        },
-        refundEth: function() {
-            if (!this.successData) {
-                return 0;
-            }
-            if (!this.successData.zksyncFeeHistory) {
-                return 0;
-            }
-
-            return this.successData.zksyncFeeHistory.startWeiBalance - this.successData.zksyncFeeHistory.finalWeiBalance;
-        }
     },
     watch: {
         isShow: function (val, oldVal) {

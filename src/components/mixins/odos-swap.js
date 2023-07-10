@@ -60,6 +60,7 @@ export const odosSwap = {
                 inputTokens: [],
                 outputTokens: []
             },
+            zksyncFeeHistory: null,
 
             tokenSeparationScheme: null, // OVERNIGHT_SWAP, POOL_SWAP,
             listOfBuyTokensAddresses: null // for POOL_SWAP scheme
@@ -544,7 +545,47 @@ export const odosSwap = {
             clearInterval(this.swapResponseConfirmInfo.counterId);
             this.closeWaitingModal();
         },
-        initWalletTransaction(txData, selectedInputTokens, selectedOutputTokens) {
+        async addedZkSyncGasHistoryData(transactionData) {
+            this.zksyncFeeHistory = {
+                startWeiBalance: null,
+                finalWeiBalance: null,
+                estimateFeeInEther: null,
+                ethPrice: 1864.00,
+            }
+
+            try {
+                // get balance from eth token
+                console.log("this.account: ", this.account)
+                let weiBalance = await this.web3.eth.getBalance(this.account);
+                let balance = this.web3.utils.fromWei(weiBalance);
+                console.log("Balance from eth token", balance, balance * 1854.91);
+
+                // 'gasPrice', 'gasPriceGwei', 'gasPriceStation'
+                console.log("Get gasPrice ", this.gasPrice, this.gasPrice * 1854.91)
+                this.zksyncFeeHistory.startWeiBalance = balance;
+
+            } catch (e) {
+                console.log("Error get balance from eth token", e);
+            }
+
+
+            await this.web3.eth.estimateGas(transactionData, (error, gasLimit) => {
+                if (error) {
+                    console.log('Error estimating gas:', error);
+                } else {
+                    console.log('Error estimating gasLimit:', gasLimit);
+                    this.web3.eth.getGasPrice().then(gasPrice => {
+                        console.log('Error estimating gasPrice:', gasPrice);
+                        let feeInWei = gasLimit * '262500000';
+                        console.log('Error estimating feeInWei:', feeInWei);
+                        let feeInEther = this.web3.utils.fromWei(feeInWei.toString(), 'ether');
+                        console.log('Estimated transaction fee in Ether:', feeInEther, feeInEther * 1854.91);
+                        this.zksyncFeeHistory.estimateFeeInEther = feeInEther;
+                    })
+                }
+            });
+        },
+        async initWalletTransaction(txData, selectedInputTokens, selectedOutputTokens) {
             console.log("Odos transaction data", txData, this.routerContract, this.executorContract);
 
             if (!this.routerContract || !this.executorContract) {
@@ -603,34 +644,56 @@ export const odosSwap = {
             //     "blockNumber": 89181266
             // }
 
+            let transactionData = {
+                ...txData.transaction,
+                from: this.account
+            }
+
+            if (this.networkName === 'zksync') {
+                await this.addedZkSyncGasHistoryData(transactionData);
+            }
 
             this.showWaitingModal('Swapping in process');
-            const result = this.web3.eth.sendTransaction(
-                {
-                    ...txData.transaction,
-                    from: this.account}
-            ).then(data => {
-                console.log("Call result: ", data);
-                this.closeWaitingModal();
+            const result = this.web3.eth.sendTransaction(transactionData)
+                .then(async data => {
+                    console.log("Call result: ", data);
+                    this.closeWaitingModal();
 
-                const inputTokens = [...selectedInputTokens]
-                const outputTokens = [...selectedOutputTokens]
-                this.showSuccessModal(true, inputTokens, outputTokens, data.transactionHash);
 
-                // event
-                this.$bus.$emit('odos-transaction-finished', true);
-
-                this.loadBalances();
-            }).catch(e => {
-                console.log("Swap odos call error: ", e);
-                if (e && e.code === 4001) {
-                    if (e.message === 'User rejected the request.') {
-                        this.stopSwapConfirmTimer();
+                    if (this.networkName === 'zksync' && this.zksyncFeeHistory) {
+                        try {
+                            // get balance from eth token
+                            console.log("this.account after tx: ", this.account)
+                            let weiBalance = await this.web3.eth.getBalance(this.account);
+                            let balance = this.web3.utils.fromWei(weiBalance);
+                            console.log("Balance from eth token after tx", balance, balance * 1854.91);
+                            this.zksyncFeeHistory.finalWeiBalance = balance;
+                        } catch (e) {
+                            console.log("Error get balance from eth token  after tx", e);
+                        }
                     }
-                }
-                this.closeWaitingModal();
-                this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e}, );
-            })
+
+
+                    const inputTokens = [...selectedInputTokens]
+                    const outputTokens = [...selectedOutputTokens]
+
+                    this.showSuccessModal(true, inputTokens, outputTokens, data.transactionHash, txData);
+
+                    // event
+                    this.$bus.$emit('odos-transaction-finished', true);
+
+
+                    this.loadBalances();
+                }).catch(e => {
+                    console.log("Swap odos call error: ", e);
+                    if (e && e.code === 4001) {
+                        if (e.message === 'User rejected the request.') {
+                            this.stopSwapConfirmTimer();
+                        }
+                    }
+                    this.closeWaitingModal();
+                    this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e},);
+                })
 
 
             // this.routerContract.methods.router(txData).on('transactionHash', function (hash) {
@@ -705,12 +768,15 @@ export const odosSwap = {
         showSuccessModal(isShow,
                          inputTokens,
                          outputTokens,
-                         hash) {
+                         hash,
+                         txData) {
             this.successData = {
                 inputTokens: inputTokens,
                 outputTokens: outputTokens,
                 hash: hash,
                 chain: this.networkId,
+                zksyncFeeHistory: this.zksyncFeeHistory,
+                txData: txData
             }
 
             this.isShowSuccessModal = isShow;

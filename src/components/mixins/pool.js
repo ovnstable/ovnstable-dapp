@@ -236,7 +236,8 @@ export const pool = {
                 pool.platform === 'Ezkalibur' ||
                 pool.platform === 'Mute' ||
                 pool.platform === 'Velodrome' ||
-                pool.platform === 'Ennead') {
+                pool.platform === 'Ennead' ||
+                pool.platform === 'Gnd') {
                 window.open(url, '_blank').focus();
                 return;
             }

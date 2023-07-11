@@ -121,6 +121,13 @@
                     </div>
                 </div>
 
+                <div v-if="networkName === 'zksync'" class="slippage-info-container">
+                    <div class="slippage-info-title">
+                        <img src="/assets/icon/swap/warn-info-icon.svg" alt="info" style="margin-right: 2px;"/>
+                        30-90% of the displayed gas fee on zkSynk will be refunded automatically.
+                    </div>
+                </div>
+
                 <div class="swap-footer pt-5">
                     <div v-if="!account" class="swap-button-container">
                         <div @click="connectWallet"
@@ -376,9 +383,11 @@ export default defineComponent({
         }
     },
     computed: {
-        ...mapGetters('network', ['getParams', 'networkId']),
+        ...mapGetters('network', ['getParams', 'networkId', 'networkName']),
         ...mapGetters('theme', ['light']),
         ...mapGetters('web3', ['web3', 'getWeiMarker']),
+        ...mapGetters('gasPrice', ['show', 'gasPrice', 'gasPriceGwei', 'gasPriceStation']),
+
 
         isInputTokensRemovable() {
           return this.inputTokens.length > 1;
@@ -787,10 +796,10 @@ export default defineComponent({
 
             console.log("Odos request data", requestData);
             this.swapRequest(requestData)
-                .then(data => {
+                .then(async data => {
                     console.log("Odos swap request success from swap form", data)
                     // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
-                    this.initWalletTransaction(data, this.selectedInputTokens, this.selectedOutputTokens);
+                    await this.initWalletTransaction(data, this.selectedInputTokens, this.selectedOutputTokens);
 
                     this.isSwapLoading = false;
                 }).catch(e => {
@@ -1104,7 +1113,7 @@ export default defineComponent({
                 sum = this.swapMethod === 'BUY' ? sum * token.selectedToken.price : sum / token.selectedToken.price
                 console.log(`Recalculate token.selectedToken price: ${token.selectedToken.price}, newUsdSum: ${sum}`, token);
 
-                token.sum = this.$utils.formatMoney(sum, 4)
+                // token.sum = this.$utils.formatMoney(sum, 4)
             }
         },
         subTokensProportions(currentToken, difference) {
@@ -1822,6 +1831,23 @@ div {
 
 .dont-work-on-network-container {
     text-align: center;
+}
+
+
+.slippage-info-container {
+    background: rgba(254, 127, 45, 0.1);
+    padding: 8px;
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.slippage-info-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0em;
+    text-align: left;
+    color: rgba(254, 127, 45, 1);
 }
 
 </style>

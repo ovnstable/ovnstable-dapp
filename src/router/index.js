@@ -88,7 +88,7 @@ const routes = [
             },
             {
                 path: '/',
-                redirect: '/swap',
+                redirect: '/featured',
             },
             {
                 path: '/swap',

@@ -17,6 +17,15 @@ const actions = {
             label: trackParams.event_label,
             value: trackParams.value,
         });
+
+        // try catch for metrika
+        setTimeout(() => {
+            try {
+                Vue.prototype.$metrika.reachGoal(trackParams.action);
+            } catch (e) {
+                console.log('Metrika not init yet', e);
+            }
+        }, 50)
     },
 };
 

@@ -1,15 +1,19 @@
 import BN from "bn.js";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export const swap = {
     data() {
         return {
             sumApproveCheckerId: null,
             sumApproveCheckerSec: 0,
-            isShowDecreaseAllowanceButton: true
+            isShowDecreaseAllowanceButton: true,
+
+            zksyncFeeHistory: null,
         }
     },
     computed: {
+        ...mapGetters('network', ['getParams', 'networkName', 'networkId']),
+
         isShowDecreaseAllowance () {
             return this.isShowDecreaseAllowanceButton && this.account === '0x4473D652fb0b40b36d549545e5fF6A363c9cd686'; // test front dev address
         },
@@ -260,8 +264,53 @@ export const swap = {
 
             return allowanceValue;
         },
+        async addedZkSyncGasHistoryData(method, transactionData) {
+            this.zksyncFeeHistory = {
+                startWeiBalance: null,
+                finalWeiBalance: null,
+                estimateFeeInEther: null,
+                ethPrice: 1884.00,
+            }
+
+            try {
+                // get balance from eth token
+                console.log("Swap this.account: ", this.account)
+                let weiBalance = await this.web3.eth.getBalance(this.account);
+                let balance = this.web3.utils.fromWei(weiBalance);
+                console.log("Swap Balance from eth token", balance, balance * 1854.91);
+
+                // 'gasPrice', 'gasPriceGwei', 'gasPriceStation'
+                console.log("Swap Get gasPrice ", this.gasPrice, this.gasPrice * 1854.91)
+                this.zksyncFeeHistory.startWeiBalance = balance;
+
+            } catch (e) {
+                console.log("Error get balance from eth token", e);
+            }
+
+
+            try {
+                await method.estimateGas(transactionData, (error, gasLimit) => {
+                    if (error) {
+                        console.error('Swap Error estimating gas:', error);
+                    } else {
+                        console.log('Swap Estimating gasLimit:', gasLimit);
+                        this.web3.eth.getGasPrice().then(gasPrice => {
+                            console.log('Swap estimating gasPrice:', gasPrice);
+                            let feeInWei = gasLimit * '262500000';
+                            console.log('Swap estimating feeInWei:', feeInWei);
+                            let feeInEther = this.web3.utils.fromWei(feeInWei.toString(), 'ether');
+                            console.log('Swap  Estimated transaction fee in Ether:', feeInEther, feeInEther * 1854.91);
+                            this.zksyncFeeHistory.estimateFeeInEther = feeInEther;
+                        })
+                    }
+                });
+            } catch (e) {
+                console.log("Error estimateGas", e);
+            }
+        },
 
         async buyAction(action, sliderPercent, originalBalance, account, sum, actionDecimals, exchangeContract, exchangeMethodName, actionContract, resultTxInfo, finalizeFunc, disapproveActionFunc, approveActionFunc, ovnStableContract) {
+            console.debug(`Buy-Action in ${action}`);
             try {
 
                 let sumInUsd = sum + '';
@@ -326,24 +375,55 @@ export const swap = {
                     }
 
                     console.debug(`Invest blockchain. Buy action Sum: ${contractSum}. decimals: ${actionDecimals}. usdSum: ${sum}. Account: ${account}. SlidersPercent: ${sliderPercent}`);
-                    let buyResult = await method.send(buyParams).on('transactionHash', function (hash) {
-                    let tx = {
-                        hash: hash,
-                        text: resultTxInfo.text,
-                        product: resultTxInfo.product,
-                        productName: resultTxInfo.productName,
-                        action: resultTxInfo.action,
-                        amount: sumInUsd,
-                    };
+                    let buyResult = await method.send(buyParams).on('transactionHash', async function (hash) {
+                        let tx = {
+                            hash: hash,
+                            text: resultTxInfo.text,
+                            product: resultTxInfo.product,
+                            productName: resultTxInfo.productName,
+                            action: resultTxInfo.action,
+                            amount: sumInUsd,
+                        };
 
-                    self.putTransaction(tx);
-                    self.showSuccessModal({
-                        successTxHash: hash,
-                        successAction: resultTxInfo.successAction,
-                        etsData: resultTxInfo.etsData
+
+
+                        self.putTransaction(tx);
+
+                        if (self.networkName === 'zksync' && self.zksyncFeeHistory) {
+                            setTimeout(async () => {
+
+                                try {
+                                    // get balance from eth token
+                                    console.log("this.account after tx: ", self.account)
+                                    let weiBalance = await self.web3.eth.getBalance(self.account);
+                                    let balance = self.web3.utils.fromWei(weiBalance);
+                                    console.log("Balance from eth token after tx", balance, balance * 1854.91);
+                                    self.zksyncFeeHistory.finalWeiBalance = balance;
+                                } catch (e) {
+                                    console.error("Error get balance from eth token  after tx", e);
+                                }
+
+                                self.showSuccessModal({
+                                    successTxHash: hash,
+                                    successAction: resultTxInfo.successAction,
+                                    etsData: resultTxInfo.etsData,
+                                    zksyncFeeHistory: self.zksyncFeeHistory
+                                });
+
+                                self.loadTransaction();
+                            }, 10000);
+                        } else {
+                            self.showSuccessModal({
+                                successTxHash: hash,
+                                successAction: resultTxInfo.successAction,
+                                etsData: resultTxInfo.etsData,
+                                zksyncFeeHistory: self.zksyncFeeHistory
+                            });
+
+                            self.loadTransaction();
+                        }
+
                     });
-                    self.loadTransaction();
-                });
 
                 if (this.isOvercapAvailable) {
                     // TODO 5: ??
@@ -455,6 +535,10 @@ export const swap = {
                      this.showErrorModalWithMsg({errorType: 'approve', errorMsg: {code: 1, message: errorMessage}});
                     return;
                  }
+
+                if (this.networkName === 'zksync') {
+                    await this.addedZkSyncGasHistoryData(method, estimateOptions);
+                }
 
                 await method.estimateGas(estimateOptions)
                     .then(function (gasAmount) {

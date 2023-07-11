@@ -708,6 +708,8 @@ const actions = {
             console.log('rootState.network.assetDecimals: ', rootState.network.assetDecimals)
 
             let nav = (fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : numberUtils._fromE18(asset.netAssetValue.toString()));
+            let isHidden = !(nav > 0 || item.enabled || item.targetWeight > 0);
+
             items.push(
                 {
                     name: mapping ? mapping.name : asset.strategy,
@@ -720,7 +722,7 @@ const actions = {
                     targetWeight: (weight.targetWeight ? parseInt(weight.targetWeight) / 1000 : 0),
                     enabled: weight.enabled,
                     enabledReward: weight.enabledReward,
-                    isHidden: nav > 0 ? false : true,
+                    isHidden: isHidden,
                 });
 
             sum += parseFloat((fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : numberUtils._fromE18(asset.netAssetValue.toString())));

@@ -708,7 +708,7 @@ const actions = {
             console.log('rootState.network.assetDecimals: ', rootState.network.assetDecimals)
 
             let nav = (fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : numberUtils._fromE18(asset.netAssetValue.toString()));
-            let isHidden = !(nav > 0 || item.enabled || item.targetWeight > 0);
+            let isHidden = !(nav > 0 || items.enabled || items.targetWeight > 0);
 
             items.push(
                 {

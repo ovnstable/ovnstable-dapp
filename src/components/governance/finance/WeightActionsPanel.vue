@@ -43,7 +43,7 @@
                 <label>Total Target Weight: </label>
             </v-row>
             <v-row class="ma-0 mt-1">
-                {{ $utils.formatMoney(totalTargetWeight, 2) }}
+                {{ $utils.formatMoney(totalTargetWeight, 3) }}
             </v-row>
             <v-row class="ma-0 mt-1">
                 <label class="error-label" v-if="!hasChangeAccount">Current wallet is not Portfolio Agent</label>
@@ -130,7 +130,7 @@ export default {
         },
 
         totalTargetWeight: function() {
-            let result = 0.00;
+            let result = 0.000;
 
             this.m2mItems.forEach(item => {
                 console.log("m2mItems: ", this.m2mItems, item);
@@ -157,11 +157,11 @@ export default {
             let temp = 0;
             for (let i = 0; i < this.m2mItems.length; i++) {
                 let item = this.m2mItems[i];
-                item.targetWeight = Number(item.currentWeight).toFixed(3);
+                item.targetWeight = parseFloat(item.currentWeight).toFixed(3);
 
                 console.debug("Target weight swapped: ", item)
 
-                temp += Number(item.targetWeight);
+                temp += parseFloat(item.targetWeight);
             }
             console.debug("Check sum of target weights: ", temp)
         },

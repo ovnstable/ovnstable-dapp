@@ -174,17 +174,13 @@ export default {
             this.loadData();
         },
 
-        '$store.state.m2mTotal': {
-            immediate: true, // Trigger the watch callback immediately
-            handler(value) {
-                // Add your logic here to handle the m2mTotal change
-                this.loadData();
-            },
+        m2mTotal: function (newValue, oldValue) {
+            console.log("TOTAL updated: ", this.m2mTotal)
+            this.loadData();
         },
     },
 
     computed: {
-
         totalLiquidationSum: function () {
 
             let result = 0.0;

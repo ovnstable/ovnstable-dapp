@@ -121,6 +121,13 @@
                     </div>
                 </div>
 
+                <div v-if="networkName === 'zksync'" class="slippage-info-container">
+                    <div class="slippage-info-title">
+                        <img src="/assets/icon/swap/warn-info-icon.svg" alt="info" style="margin-right: 2px;"/>
+                        30-90% of the displayed gas fee on zkSynk will be refunded automatically.
+                    </div>
+                </div>
+
                 <div class="swap-footer pt-5">
                     <div v-if="!account" class="swap-button-container">
                         <div @click="connectWallet"
@@ -376,7 +383,7 @@ export default defineComponent({
         }
     },
     computed: {
-        ...mapGetters('network', ['getParams', 'networkId']),
+        ...mapGetters('network', ['getParams', 'networkId', 'networkName']),
         ...mapGetters('theme', ['light']),
         ...mapGetters('web3', ['web3', 'getWeiMarker']),
         ...mapGetters('gasPrice', ['show', 'gasPrice', 'gasPriceGwei', 'gasPriceStation']),
@@ -1824,6 +1831,23 @@ div {
 
 .dont-work-on-network-container {
     text-align: center;
+}
+
+
+.slippage-info-container {
+    background: rgba(254, 127, 45, 0.1);
+    padding: 8px;
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.slippage-info-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0em;
+    text-align: left;
+    color: rgba(254, 127, 45, 1);
 }
 
 </style>

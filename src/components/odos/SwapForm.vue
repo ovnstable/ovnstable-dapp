@@ -121,6 +121,9 @@
                     </div>
                 </div>
 
+                <SwapSlippageSettings/>
+
+
                 <div class="swap-footer pt-5">
                     <div v-if="!account" class="swap-button-container">
                         <div @click="connectWallet"
@@ -273,9 +276,6 @@
 
         />
 
-        <AdvancedSettingsModal :is-show="isShowSettingsModal"
-                               :set-show-func="showSettingsModals"/>
-
         <SuccessOdosModal :is-show="isShowSuccessModal"
                           :set-show-func="showSuccessModal"
                           :success-data="successData"/>
@@ -291,7 +291,7 @@ import InputToken from "@/components/swap-module/InputToken.vue";
 import OutputToken from "@/components/swap-module/OutputToken.vue";
 import SelectTokensModal from "@/components/swap-module/modals/SelectTokensModal.vue";
 import {mapActions, mapGetters} from "vuex";
-import AdvancedSettingsModal from "@/components/swap-module/modals/AdvancedSettingsModal.vue";
+import SwapSlippageSettings from "@/components/swap-module/SwapSlippageSettings.vue";
 import {odosSwap} from "@/components/mixins/odos-swap";
 import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
 import SuccessModal from "@/components/common/modal/action/SuccessModal.vue";
@@ -309,7 +309,7 @@ export default defineComponent({
         ErrorModal,
         SuccessModal,
         WaitingModal,
-        AdvancedSettingsModal,
+        SwapSlippageSettings,
         SelectTokensModal,
         InputToken,
         OutputToken
@@ -1374,9 +1374,6 @@ export default defineComponent({
 
         showSelectTokensModals(isShow) {
             this.isShowSelectTokensModal = isShow;
-        },
-        showSettingsModals(isShow) {
-            this.isShowSettingsModal = isShow;
         },
         selectInputToken(token) {
             if (this.swapMethod === "BUY") {

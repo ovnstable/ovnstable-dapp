@@ -128,6 +128,8 @@
                     STAKE LP
                 </div>-->
 
+                <SwapSlippageSettings/>
+
                 <div class="swap-footer pt-5">
                     <div v-if="!account" class="swap-button-container">
                         <div @click="connectWallet"
@@ -218,9 +220,6 @@
                            :max-token-count="selectTokenType === 'OVERNIGHT' ? secondTokens.length : 6"
         />
 
-        <AdvancedSettingsModal :is-show="isShowSettingsModal"
-                               :set-show-func="showSettingsModals"/>
-
         <SuccessZapModal :is-show="isShowSuccessPoolModal"
                           :set-show-func="showSuccessPoolModal"
                           :success-data="successData"/>
@@ -239,7 +238,7 @@ import {mapActions, mapGetters} from "vuex";
 import SelectTokensModal from "@/components/swap-module/modals/SelectTokensModal.vue";
 import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
 import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
-import AdvancedSettingsModal from "@/components/swap-module/modals/AdvancedSettingsModal.vue";
+import SwapSlippageSettings from "@/components/swap-module/SwapSlippageSettings.vue";
 import SuccessZapModal from "@/components/zap/modals/SuccessZapModal.vue";
 import ZapSteps from "@/components/zap/ZapSteps.vue";
 import {zap} from "@/components/mixins/zap";
@@ -256,7 +255,7 @@ export default defineComponent({
         PoolLabel,
         ZapSteps,
         SuccessZapModal,
-        AdvancedSettingsModal,
+        SwapSlippageSettings,
         ErrorModal,
         WaitingModal,
         SelectTokensModal,
@@ -287,7 +286,6 @@ export default defineComponent({
             swapMethod: 'BUY', // BUY (secondTokens) / SELL (secondTokens)
             selectTokenType: 'OVERNIGHT', // OVERNIGHT / ALL
 
-            isShowSettingsModal: false,
             isSwapLoading: false,
             isSumulateSwapLoading: false,
             pathViz: null,
@@ -1700,9 +1698,6 @@ export default defineComponent({
 
         showSelectTokensModals(isShow) {
             this.isShowSelectTokensModal = isShow;
-        },
-        showSettingsModals(isShow) {
-            this.isShowSettingsModal = isShow;
         },
         selectInputToken(token) {
             if (this.swapMethod === "BUY") {

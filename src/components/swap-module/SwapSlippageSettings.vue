@@ -1,53 +1,37 @@
 
 <template>
     <div>
-        <div v-if="isShow">
-            <v-dialog
-                    v-model="isShow"
-                    width="600"
-                    persistent>
-                <v-card class="container_body container-body airdrop-body pt-4 px-4"
-                        style="border-radius: 28px!important;">
-                    <v-toolbar class="container_header container-header" flat>
-                        <label class="title-container">
-                            Advanced Settings
-                        </label>
-                        <v-spacer></v-spacer>
-                        <v-btn icon @click="setShowFunc(false)">
-                            <v-icon class="close-icon">mdi-close</v-icon>
-                        </v-btn>
-                    </v-toolbar>
+        <div>
+            <div>
+                <div>
+                    <div class="tokens-container">
 
-                    <v-card-text>
-                        <div class="tokens-container">
-
-                            <div class="sub-title">
-                                Slippage Tolerance (%)
-                            </div>
-                            <div class="slippage-container">
-                                <div class="row">
-                                    <div v-for="setting in slippageSettings" :key="setting.id"
-                                         @click="newSlippageSetting(setting)"
-                                         class="col-lg-3 col-md-3 col-sm-12">
-                                        <div :class="currentSlippage && currentSlippage.type === setting.type  ? 'slippage-item-selected' : ''"
-                                             class="slippage-item">
-                                            <div class="slippage-name">
-                                                {{setting.name}}
-                                            </div>
-                                            <div class="slippage-value">
-                                                {{setting.value}}
-                                            </div>
+                        <div class="sub-title">
+                            Slippage Tolerance (%)
+                        </div>
+                        <div class="slippage-container">
+                            <div class="row">
+                                <div v-for="setting in slippageSettings" :key="setting.id"
+                                     @click="newSlippageSetting(setting)"
+                                     class="col-lg-3 col-md-3 col-sm-12">
+                                    <div :class="currentSlippage && currentSlippage.type === setting.type  ? 'slippage-item-selected' : ''"
+                                         class="slippage-item">
+                                        <div class="slippage-name">
+                                            {{setting.name}}
                                         </div>
-
+                                        <div class="slippage-value">
+                                            {{setting.value}}
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
-
                         </div>
 
-                    </v-card-text>
-                </v-card>
-            </v-dialog>
+                    </div>
+
+                </div>
+            </div>
 
             <resize-observer @notify="$forceUpdate()"/>
         </div>
@@ -58,16 +42,8 @@
 import {defineComponent} from 'vue'
 
 export default defineComponent({
-    name: "AdvancedSettingsModal",
+    name: "SwapSlippageSettings",
     props: {
-        isShow: {
-            type: Boolean,
-            default: false
-        },
-        setShowFunc: {
-            type: Function,
-            required: true
-        },
     },
     data() {
         return {

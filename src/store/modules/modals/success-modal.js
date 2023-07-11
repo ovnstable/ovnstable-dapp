@@ -43,6 +43,7 @@ const actions = {
     closeSuccessModal({commit, dispatch, getters}) {
         commit('setShow', false);
         commit('setSuccessTxHash', null);
+        commit('setZksyncFeeHistory', null);
     },
 
 };

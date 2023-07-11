@@ -782,6 +782,7 @@ export const odosSwap = {
             this.isShowSuccessModal = isShow;
 
             if (!isShow) {
+                this.zksyncFeeHistory = null;
                 this.successData = null;
             }
         },

@@ -176,6 +176,13 @@
                 </v-col>
             </v-row>
 
+            <div v-if="networkName === 'zksync'" class="slippage-info-container">
+                <div class="slippage-info-title">
+                    <img src="/assets/icon/swap/warn-info-icon.svg" alt="info" style="margin-right: 2px;"/>
+                    30-90% of the displayed gas fee on zkSynk will be refunded automatically.
+                </div>
+            </div>
+
             <div class="action-btn-container" v-if="!this.account">
                 <v-btn class='buy enabled-buy'
                        @click="connectWallet">
@@ -857,5 +864,22 @@ export default {
 .balance-network-icon {
     width: 16px !important;
     height: 16px !important;
+}
+
+
+.slippage-info-container {
+    background: rgba(254, 127, 45, 0.1);
+    padding: 8px;
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.slippage-info-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0em;
+    text-align: left;
+    color: rgba(254, 127, 45, 1);
 }
 </style>

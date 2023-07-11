@@ -172,7 +172,15 @@ export default {
 
         contractType: function (val, oldVal) {
             this.loadData();
-        }
+        },
+
+        '$store.state.m2mTotal': {
+            immediate: true, // Trigger the watch callback immediately
+            handler(value) {
+                // Add your logic here to handle the m2mTotal change
+                this.loadData();
+            },
+        },
     },
 
     computed: {

@@ -351,11 +351,13 @@ const actions = {
 
     async setStrategiesM2MWeights({commit, dispatch, getters, rootState}, data) {
         commit('setFinanceLoading', true);
+        console.debug("setStrategiesM2MWeights: ")
 
         let weights = data.weights
         let contractType = data.contractType
 
         let pm;
+        console.debug("If contract type === USD+ in setStrategiesM2MWeights: ", contractType)
         if (!contractType || contractType === 'USD+') {
             pm = rootState.web3.contracts.pm;
         } else if (contractType === 'DAI+') {
@@ -366,9 +368,12 @@ const actions = {
             console.log("Error when checkAccount. Contract type not found: ", contractType)
             return;
         }
+        console.debug("PM contract in setStrategiesM2MWeights: ", pm)
 
         let account = rootState.accountData.account;
+        console.debug("Account in setStrategiesM2MWeights: ", account)
         let params = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
+        console.debug("Params in setStrategiesM2MWeights: ", params)
 
         let items = [];
         for (let i = 0; i < weights.length; i++) {
@@ -395,6 +400,7 @@ const actions = {
             console.error("Error:", e)
         }
 
+        console.debug("DEBUG SUCCESSFUL in setStrategiesM2MWeights::")
         commit('setFinanceLoading', false);
     },
 
@@ -486,7 +492,7 @@ const actions = {
             };
         }
 
-        console.debug("DEBUG SUCCESSFUL:")
+        console.debug("DEBUG SUCCESSFUL in estimateSetStrategiesM2MWeights:")
         commit('setFinanceLoading', false);
 
         return result;

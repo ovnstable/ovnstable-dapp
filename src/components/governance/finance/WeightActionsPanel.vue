@@ -203,9 +203,11 @@ export default {
             }
         },
 
-        updateM2MItems() {
-            this.getFinance(this.contractType);
+        async updateM2MItems() {
+            await this.getFinance(this.contractType);
+            this.toggleZeroStrategies(this.isZeroStrategiesShow);
         },
+
         toggleZeroStrategies(isShow) {
             if (isShow) {
                 this.showZeroStrategiesAction();

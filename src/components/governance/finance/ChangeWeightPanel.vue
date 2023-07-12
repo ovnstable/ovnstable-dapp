@@ -156,7 +156,7 @@ export default {
         totalUsdPlusValue: null,
 
         rules: {
-            required: val => (val === 0.00 || !!val) || 'Need to be filled',
+            required: val => (val === 0 || !!val) || 'Need to be filled',
         },
     }),
 

@@ -3,6 +3,7 @@ import BN from "bn.js";
 const {axios} = require('@/plugins/http-axios');
 const {utils} = require('@/plugins/utils');
 import * as numberUtils from '@/utils/number-utils'
+import BigNumber from "bignumber.js";
 
 const proposalStates = ['Pending', 'Active', 'Canceled', 'Defeated', 'Succeeded', 'Queued', 'Expired', 'Executed'];
 
@@ -375,6 +376,12 @@ const actions = {
         let params = {from: account, "gasPrice": rootState.gasPrice.gasPriceGwei};
         console.debug("Params in setStrategiesM2MWeights: ", params)
 
+        // todo: remove after prod test
+        let sum = weights.reduce((acc, obj) => {
+            return new BigNumber(acc).plus(obj.targetWeight).toNumber();
+        }, 0);
+        console.debug("Gov difference reduce: ", sum)
+
         let items = [];
         for (let i = 0; i < weights.length; i++) {
 
@@ -383,21 +390,27 @@ const actions = {
             let item = {};
 
             item.strategy = weight.address;
-            item.minWeight = weight.minWeight * 1000;
-            item.targetWeight = weight.targetWeight * 1000;
-            item.maxWeight = weight.maxWeight * 1000;
+            item.minWeight =  new BigNumber(weight.minWeight).multipliedBy(1000).toNumber();
+            item.targetWeight = new BigNumber(weight.targetWeight).multipliedBy(1000).toNumber();
+            item.maxWeight = new BigNumber(weight.maxWeight).multipliedBy(1000).toNumber();
             item.enabled = weight.enabled;
             item.enabledReward = weight.enabledReward;
-            item.riskFactor = weight.riskFactor * 1000;
+            item.riskFactor =  new BigNumber(weight.riskFactor).multipliedBy(1000).toNumber();
 
             items.push(item);
         }
-        console.debug("DATA setStrategiesM2MWeights: ", weights, contractType, account, params, items)
+
+        // todo: remove after prod test
+        let sumFinal = items.reduce((acc, obj) => {
+            return new BigNumber(acc).plus(obj.targetWeight).toNumber();
+        }, 0);
+        console.debug("Gov difference reduce final: ", sumFinal)
+        console.debug("DATA setStrategiesM2MWeights: ", params, items)
 
         try {
             await pm.methods.setStrategyWeights(items).send(params);
         } catch (e) {
-            console.error("Error:", e)
+            console.error("Error with await pm.methods.setStrategyWeights(items).send(params):", e)
         }
 
         console.debug("DEBUG SUCCESSFUL in setStrategiesM2MWeights::")

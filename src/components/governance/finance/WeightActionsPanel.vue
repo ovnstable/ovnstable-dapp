@@ -43,7 +43,7 @@
                 <label>Total Target Weight: </label>
             </v-row>
             <v-row class="ma-0 mt-1">
-                {{ $utils.formatMoney(totalTargetWeight, 3) }}
+                {{ $utils.formatMoney(totalTargetWeight, 2) }}
             </v-row>
             <v-row class="ma-0 mt-1">
                 <label class="error-label" v-if="!hasChangeAccount">Current wallet is not Portfolio Agent</label>
@@ -70,6 +70,8 @@ import Tooltip from "@/components/common/element/Tooltip";
 import {axios} from "@/plugins/http-axios";
 import ErrorModal from "@/components/common/modal/action/ErrorModal";
 
+const BigNumber = require('bignumber.js');
+
 export default {
     name: "WeightActionsPanel",
     components: {ErrorModal, Tooltip},
@@ -82,7 +84,9 @@ export default {
         'showZeroStrategiesAction'
     ],
     data: () => ({
-        isZeroStrategiesShow: false
+        isZeroStrategiesShow: false,
+        targetWeightDelimiter: 100, // 0.01
+        targetWeightDecimals: 2
     }),
 
     computed: {
@@ -92,11 +96,14 @@ export default {
 
             this.m2mItems.forEach(item => {
                 if (item && item.targetWeight) {
-                    targetWeightSum += parseFloat(item.targetWeight);
+                    targetWeightSum = new BigNumber(targetWeightSum).plus(item.targetWeight).toNumber();
                 }
             })
 
-            return (targetWeightSum.toFixed(3) == 100.000);
+            console.log("targetWeightSum: ", targetWeightSum);
+            console.log("targetWeightSum with fixed: ", targetWeightSum.toFixed(3));
+
+            return (targetWeightSum == 100);
         },
 
         weightsIsBtnEnabledMinMax: function () {
@@ -130,17 +137,7 @@ export default {
         },
 
         totalTargetWeight: function() {
-            let result = 0.000;
-
-            this.m2mItems.forEach(item => {
-                console.log("m2mItems: ", this.m2mItems, item);
-
-                if (item && item.targetWeight) {
-                    result += parseFloat(item.targetWeight);
-                }
-            });
-
-            return result;
+            return this.getTotalTargetsWeights();
         }
     },
 
@@ -152,18 +149,55 @@ export default {
         ...mapActions('governance', ['setStrategiesM2MWeights', 'estimateSetStrategiesM2MWeights', 'rebalancePortfolio', 'estimateRebalancePortfolio', 'getFinance']),
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
 
+        adjustTargetWeights(array) {
+            let sum = array.reduce((acc, obj) => {
+                console.log("difference reduce: ", acc, obj)
+                return new BigNumber(acc).plus(obj.targetWeight).toNumber();
+            }, 0);
+
+            let difference = new BigNumber(100).minus(sum).toNumber();
+            console.log("difference: ", sum, difference);
+            let positiveSenseThreshold = (5 / this.targetWeightDelimiter);
+            let negativeSenseThreshold = (-5 / this.targetWeightDelimiter) ;
+            console.log("difference and threshold: ", difference, positiveSenseThreshold, negativeSenseThreshold);
+
+            if (difference <= positiveSenseThreshold && difference >= negativeSenseThreshold) {
+                if (difference > 0) {
+                    array[0].targetWeight = new BigNumber(array[0].targetWeight).plus(difference).toNumber();
+                } else {
+                    array[0].targetWeight = new BigNumber(array[0].targetWeight).minus(Math.abs(difference)).toNumber();
+                }
+            }
+
+            let aftersum = array.reduce((acc, obj) => {
+                console.log("difference reduce 2: ", acc, obj)
+                return new BigNumber(acc).plus(obj.targetWeight).toNumber();
+            }, 0);
+            console.log('difference aftersum', aftersum)
+
+            return array;
+        },
+
         swapWeightsAction() {
             console.debug("Start swapWeightsAction")
-            let temp = 0;
             for (let i = 0; i < this.m2mItems.length; i++) {
                 let item = this.m2mItems[i];
-                item.targetWeight = parseFloat(item.currentWeight).toFixed(3);
-
-                console.debug("Target weight swapped: ", item)
-
-                temp += parseFloat(item.targetWeight);
+                item.targetWeight = Number(item.currentWeight.toFixed(this.targetWeightDecimals));
             }
-            console.debug("Check sum of target weights: ", temp)
+
+            this.m2mItems = this.adjustTargetWeights(this.m2mItems);
+            console.log("Temporary: ", this.m2mItems);
+        },
+
+        getTotalTargetsWeights() {
+            let result = 0.0;
+            for (let i = 0; i < this.m2mItems.length; i++) {
+                let item = this.m2mItems[i];
+                result = new BigNumber(result).plus(item.targetWeight).toNumber();
+                console.log("Result of each target weight: ", result)
+            }
+
+            return result;
         },
 
         async changeWeightsAction() {

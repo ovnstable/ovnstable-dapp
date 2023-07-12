@@ -550,7 +550,7 @@ export const odosSwap = {
                 startWeiBalance: null,
                 finalWeiBalance: null,
                 estimateFeeInEther: null,
-                ethPrice: 1864.00,
+                ethPrice: 1884.00,
             }
 
             try {
@@ -782,6 +782,7 @@ export const odosSwap = {
             this.isShowSuccessModal = isShow;
 
             if (!isShow) {
+                this.zksyncFeeHistory = null;
                 this.successData = null;
             }
         },

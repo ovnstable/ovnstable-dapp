@@ -33,10 +33,6 @@
                                     Swap from
                                 </span>
                                 </div>
-                                <div @click="showSettingsModals(true)" class="swap-settings">
-                                    <img v-if="light" src="/assets/icon/swap/settings.svg" alt="settings">
-                                    <img v-else src="/assets/icon/swap/settings-dark.svg" alt="settings">
-                                </div>
                             </div>
                             <div v-for="token in inputTokens" :key="token.id" class="input-component-container">
 <!--                                {{token.selectedToken ? token.selectedToken.address : '-'}}-->

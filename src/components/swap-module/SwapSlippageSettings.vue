@@ -6,28 +6,68 @@
                 <div>
                     <div class="tokens-container">
 
-                        <div class="sub-title">
-                            Slippage Tolerance (%)
-                        </div>
-                        <div class="slippage-container">
-                            <div class="row">
-                                <div v-for="setting in slippageSettings" :key="setting.id"
-                                     @click="newSlippageSetting(setting)"
-                                     class="col-lg-3 col-md-3 col-sm-12">
-                                    <div :class="currentSlippage && currentSlippage.type === setting.type  ? 'slippage-item-selected' : ''"
-                                         class="slippage-item">
-                                        <div class="slippage-name">
-                                            {{setting.name}}
-                                        </div>
-                                        <div class="slippage-value">
-                                            {{setting.value}}
+                        <div class="row">
+                            <div class="col-12 col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                                <div class="sub-title">
+                                    Slippage Tolerance
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-8 col-lg-8 col-md-8 col-sm-12">
+                                <div class="slippage-container">
+                                    <div v-for="setting in slippageSettings" :key="setting.id"
+                                         @click="newSlippageSetting(setting)"
+                                            class="slippage-item-container">
+                                        <div :class="currentSlippage && currentSlippage.type === setting.type  ? 'slippage-item-selected' : ''"
+                                             class="slippage-item">
+                                            <div class="slippage-value">
+                                                {{setting.value}}%
+                                            </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
+                    </div>
 
+                    <div v-if="currentSlippage && currentSlippage.type === 'LOW'" class="warn-message-container">
+                        <div class="warn-message">
+                            Your transaction may fail if you swap volatile assets
+                            <div class="warn-message-icon">
+                                <v-tooltip
+                                    color="var(--tooltip-bg)"
+                                    min-width="50px"
+                                    min-height="50px"
+                                    right
+                                >
+                                    <template v-slot:activator="{on, attrs}">
+                                        <div :style="{width: 50 + 'px', height: 30 + 'px'}"
+                                             v-bind="attrs"
+                                             v-on="on">
+
+                                            <img src="/assets/icon/swap/slippage-warn.svg" alt="!">
+                                        </div>
+                                    </template>
+
+                                    <div style="color: var(--main-gray-text);">
+                                        <div>
+                                            <span style="font-weight: bold">0.05% – Low.</span> Recommended
+                                            <div>
+                                                for swapping stablecoins.
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span style="font-weight: bold">0.1% – Medium</span>
+                                        </div>
+                                        <div>
+                                            <span style="font-weight: bold">1% – High.</span> Recommended
+                                            <div>
+                                                for swapping volatile assets.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </v-tooltip>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -50,9 +90,9 @@ export default defineComponent({
             odosSlippageKey: 'odos_slippage_value',
             currentSlippage: null,
             slippageSettings: [
-                {id: 1, type: "HIGH", name: 'High', value: 1},
-                {id: 2, type: "MEDIUM", name: 'Medium', value: 0.1},
                 {id: 3, type: "LOW", name: 'Low', value: 0.05},
+                {id: 2, type: "MEDIUM", name: 'Medium', value: 0.1},
+                {id: 1, type: "HIGH", name: 'High', value: 1},
             ]
         }
     },
@@ -85,8 +125,11 @@ export default defineComponent({
     }
 
     .sub-title {
-        font-size: 20px;
-        line-height: 36px;
+        text-align: left!important;
+    }
+
+    .slippage-container {
+        text-align: left!important;
     }
 }
 
@@ -97,10 +140,6 @@ export default defineComponent({
         line-height: 40px;
     }
 
-    .sub-title {
-        font-size: 24px;
-        line-height: 36px;
-    }
 }
 
 /* full */
@@ -113,10 +152,6 @@ export default defineComponent({
         color: var(--main-gray-text);
     }
 
-    .sub-title {
-        font-size: 24px;
-        line-height: 36px;
-    }
 }
 
 @media
@@ -135,10 +170,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     }
 
 
-    .sub-title {
-        font-size: 24px;
-        line-height: 36px;
-    }
 }
 
 div {
@@ -160,23 +191,25 @@ div {
 }
 
 .sub-title {
-    font-style: normal;
+    font-size: 16px;
     font-weight: 400;
+    line-height: 28px;
+    letter-spacing: 0px;
+    text-align: left;
+
     color: var(--main-gray-text);
-
-
-    padding-bottom: 8px;
 }
 
 .slippage-container {
-
+    position: relative;
+    text-align: right;
 }
 
 .slippage-item {
     align-items: center;
-    padding: 12px 20px;
 
-    height: 78px;
+    height: 32px;
+    min-width: 71px;
 
     border: 1px solid #D7DADF;
     border-radius: 12px;
@@ -200,10 +233,38 @@ div {
 
 .slippage-value {
     font-style: normal;
+    padding-top: 3px;
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
 
     color: var(--main-gray-text);
+}
+
+.slippage-item-container {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.warn-message {
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0px;
+    text-align: left;
+    color: rgba(173, 179, 189, 1);
+    padding-left: 20px;
+}
+
+.warn-message-container {
+    position: relative;
+    padding-top: 10px;
+}
+
+.warn-message-icon {
+    position: absolute;
+    top: 13px;
+    left: 0;
 }
 </style>

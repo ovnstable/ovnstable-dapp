@@ -27,13 +27,6 @@
             </div>
 
             <div v-else>
-<!--                <div class="swap-header">
-                    <div @click="showSettingsModals(true)" class="swap-settings">
-                        <img v-if="light" src="/assets/icon/swap/settings.svg" alt="settings">
-                        <img v-else src="/assets/icon/swap/settings-dark.svg" alt="settings">
-                    </div>
-                </div>-->
-
                 <div class="swap-body">
                     <div>
                         <div class="mb-4 mt-1">
@@ -128,7 +121,9 @@
                     STAKE LP
                 </div>-->
 
-                <SwapSlippageSettings/>
+                <div style="padding-top: 10px">
+                    <SwapSlippageSettings/>
+                </div>
 
                 <div class="swap-footer pt-5">
                     <div v-if="!account" class="swap-button-container">

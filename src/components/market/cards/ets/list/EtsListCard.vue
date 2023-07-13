@@ -16,11 +16,8 @@
         </v-col>
         <v-col :cols="$wu.isFull() ? 3 : ($wu.isMobile() ? 7 : 3)" class="my-1">
             <v-row class="ma-0 ml-5" justify="start" align="center">
-<!--                <div class="icon mr-2">
-                    <v-img :src="'/assets/currencies/market/ets_' + cardData.data.name + '.svg'"/>
-                </div>-->
                 <label class="card-label ml-2">
-                    {{ cardData.data.nameUp }}
+                    {{ `ETS ${cardData.data.nameUp}` }}
                 </label>
             </v-row>
         </v-col>

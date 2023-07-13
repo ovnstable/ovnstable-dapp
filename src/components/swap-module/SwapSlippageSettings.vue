@@ -111,7 +111,7 @@ export default defineComponent({
         initSlippageSettings() {
             let value = localStorage.getItem(this.odosSlippageKey);
             if (!value || value === 'undefined' || value === 'null') {
-                this.newSlippageSetting(this.slippageSettings[2]); // default
+                this.newSlippageSetting(this.slippageSettings[0]); // default
                 return
             }
 

@@ -7,7 +7,8 @@
                 </span>
                 <v-row class="d-flex flex-column align-start mr-3 ml-8">
                     <v-row class="d-flex" align="center" style="width: 100% !important;">
-                        <label class="card-title">ETS {{ cardData.data.nameUp }}</label>
+                        <label class="card-title">ETS {{ `${borrowProtocolCheck() ? cardData.data.borrowProtocol + '&' : ''}${cardData.data.dex} ${cardData.data.token2}/${cardData.data.token1}` }}
+                        </label>
                         <v-spacer></v-spacer>
                         <v-icon v-if="cardData.data['prototype'] || cardData.data.openPrototype"
                                 title="ETS is in prototype"
@@ -188,7 +189,7 @@
 
         <v-col cols="12" align-self="end">
             <v-row class="footer-row align-center justify-center">
-                <label class="footer-link">View ETS {{ cardData.data.nameUp }} performance</label>
+                <label class="footer-link">View ETS {{ `${borrowProtocolCheck() ? cardData.data.borrowProtocol + '&' : ''}${cardData.data.dex} ${cardData.data.token2}/${cardData.data.token1}` }} performance</label>
                 <img class="open-icon ml-1" src="@/assets/icon/open-in-new.svg">
             </v-row>
         </v-col>
@@ -269,6 +270,12 @@ export default {
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
         ...mapActions('track', ['trackClick']),
         ...mapActions('magicEye', ['switchEye']),
+
+        borrowProtocolCheck() {
+            if (this.cardData.data.borrowProtocol !== undefined && this.cardData.data.borrowProtocol !== null) {
+                return this.cardData.data.borrowProtocol;
+            }
+        },
 
         mintAction() {
             this.showMintView();

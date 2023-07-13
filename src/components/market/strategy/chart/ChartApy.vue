@@ -4,7 +4,7 @@
             <v-col :cols="$wu.isMobile() ? 12 : 6">
               <v-row justify="start" align="left">
                 <label class="chart-title ml-5">
-                  ETS {{ etsData.nameUp }}
+                  ETS {{ `${borrowProtocolCheck() ? etsData.borrowProtocol + '&' : ''}${etsData.dex} ${etsData.token2}/${etsData.token1}` }}
                 </label>
               </v-row>
               <v-row justify="start" align="left">
@@ -208,6 +208,11 @@ export default {
 
     methods: {
         ...mapActions('track', ['trackClick']),
+        borrowProtocolCheck() {
+            if (this.etsData.borrowProtocol !== undefined && this.etsData.borrowProtocol !== null) {
+                return this.etsData.borrowProtocol;
+            }
+        },
 
         async zoomChart(zoom) {
 

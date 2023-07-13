@@ -19,7 +19,7 @@
             <v-row align="start" class="ma-0 mt-5">
                 <v-col>
                     <v-row align="center" :justify="$wu.isMobile() ? 'center' : 'start'">
-                        <label class="banner-title ml-10" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">ETS {{ etsData.nameUp }}</label>
+                        <label class="banner-title ml-10" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">ETS {{ `${borrowProtocolCheck() ? etsData.borrowProtocol + '&' : ''}${etsData.dex} ${etsData.token2}/${etsData.token1}` }}</label>
 
                         <v-spacer v-if="etsData.range"></v-spacer>
                         <div class="range-container" v-if="etsData.range" :class="$wu.isMobile() ? 'mt-4 mb-2' : 'ml-4'">
@@ -170,6 +170,12 @@ export default {
     },
 
     methods: {
+        borrowProtocolCheck() {
+            if (this.etsData.borrowProtocol !== undefined && this.etsData.borrowProtocol !== null) {
+                return this.etsData.borrowProtocol;
+            }
+        },
+
         openLink(url) {
             window.open(url, '_blank').focus();
         },

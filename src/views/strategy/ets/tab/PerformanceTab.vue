@@ -206,7 +206,7 @@
         <v-row class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-6'" justify="start" align="center">
             <v-col class="info-card-body-bottom">
                 <v-row align="center" justify="start" class="ma-0">
-                    <label class="section-title-label">ETS {{ etsData.nameUp }} payouts</label>
+                    <label class="section-title-label ets-label-with-payouts">ETS {{ `${borrowProtocolCheck() ? etsData.borrowProtocol + '&' : ''}${etsData.dex} ${etsData.token2}/${etsData.token1}` }} PAYOUTS</label>
                 </v-row>
 
                 <v-row align="center" justify="center">
@@ -389,6 +389,12 @@ export default {
     },
 
     methods: {
+        borrowProtocolCheck() {
+            if (this.etsData.borrowProtocol !== undefined && this.etsData.borrowProtocol !== null) {
+                return this.etsData.borrowProtocol;
+            }
+        },
+
         openLink(url) {
             window.open(url, '_blank').focus();
         },
@@ -684,6 +690,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-feature-settings: 'pnum' on, 'lnum' on;
     text-transform: uppercase;
     color: var(--secondary-gray-text);
+}
+
+.ets-label-with-payouts {
+    text-transform: none;
 }
 
 .info-card-container {

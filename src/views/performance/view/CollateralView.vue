@@ -402,9 +402,10 @@ export default {
 
                     for (let i = 0; i < strategies.length; i++) {
                         let element = strategies[i];
+                        console.log("Element:", element)
                         let currentTotalDataElement = {
                             type: element.type,
-                            label: '',
+                            label: element.name,
                             fullName: element.fullName,
                             value: element.netAssetValue,
                             liquidationValue: element.liquidationValue,
@@ -413,7 +414,6 @@ export default {
                         }
 
                         if (element.type === 'CORE') {
-                            currentTotalDataElement.label = element.name
                             currentTotalDataElement.link = (element.address || element.explorerAddress) ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + (element.explorerAddress ? element.explorerAddress : element.address)) : ''
                         }
 
@@ -422,8 +422,6 @@ export default {
                         }
 
                         if (element.type === 'ETS') {
-                            let etsNameUp = this.getEtsNameUp(element)
-                            currentTotalDataElement.label = `ETS ${etsNameUp}`
                             let etsName = this.getEtsName(element)
                             currentTotalDataElement.link = (process.env.VUE_APP_UD_REDIRECT_URI + 'ets/' + etsName)
                         }
@@ -449,19 +447,6 @@ export default {
                 if (ets.id === element.id) {
                     etsName = ets.name
                     return etsName
-                }
-            }
-        },
-
-        getEtsNameUp(element) {
-            for (let i = 0; i < this.etsList.length; i++) {
-                let ets = this.etsList[i]
-                let etsNameUp;
-                console.log("EtsListName: ", this.etsList)
-
-                if (ets.id === element.id) {
-                    etsNameUp = ets.nameUp
-                    return etsNameUp
                 }
             }
         },

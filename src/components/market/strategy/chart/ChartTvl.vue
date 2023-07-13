@@ -3,7 +3,7 @@
         <v-row class="chart-header-row">
             <v-col cols="8">
                 <v-row justify="start">
-                    <label class="chart-title">{{ totalTvl ? ('ETS: ' + etsData.nameUp + '&nbsp;') : ''}}</label>
+                    <label class="chart-title">{{ totalTvl ? ('ETS: ' + `${borrowProtocolCheck() ? etsData.borrowProtocol + '&' : ''}${etsData.dex} ${etsData.token2}/${etsData.token1}` + '&nbsp;') : ''}}</label>
                     <label class="chart-title ml-5"><abbr title="Total Value Locked">TVL</abbr></label>
                 </v-row>
 
@@ -127,6 +127,11 @@ export default {
 
     methods: {
         ...mapActions('track', ['trackClick']),
+        borrowProtocolCheck() {
+            if (this.etsData.borrowProtocol !== undefined && this.etsData.borrowProtocol !== null) {
+                return this.etsData.borrowProtocol;
+            }
+        },
 
         async zoomChart(zoom) {
             this.zoom = zoom;

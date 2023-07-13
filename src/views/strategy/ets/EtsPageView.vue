@@ -5,7 +5,7 @@
                 <label class="parent-page-label" @click="goToAction('/market')">ETS</label>
                 <label class="current-page-label">
                     <v-icon size="18" class="mx-2">mdi-chevron-right</v-icon>
-                    ETS {{ etsData.nameUp }}
+                    ETS {{ `${borrowProtocolCheck() ? etsData.borrowProtocol + '&' : ''}${etsData.dex} ${etsData.token2}/${etsData.token1}` }}
                 </label>
             </v-row>
         </div>
@@ -412,6 +412,11 @@ export default {
     ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
     ...mapActions('magicEye', ['switchEye']),
     ...mapActions('marketData', ['refreshMarket']),
+      borrowProtocolCheck() {
+          if (this.etsData.borrowProtocol !== undefined && this.etsData.borrowProtocol !== null) {
+              return this.etsData.borrowProtocol;
+          }
+      },
 
     loadData() {
       this.refreshMarket();

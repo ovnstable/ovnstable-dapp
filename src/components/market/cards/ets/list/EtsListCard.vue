@@ -17,7 +17,7 @@
         <v-col :cols="$wu.isFull() ? 3 : ($wu.isMobile() ? 7 : 3)" class="my-1">
             <v-row class="ma-0 ml-5" justify="start" align="center">
                 <label class="card-label ml-2">
-                    {{ `ETS ${cardData.data.nameUp}` }}
+                    {{ `ETS ${borrowProtocolCheck() ? cardData.data.borrowProtocol + '&' : ''}${cardData.data.dex} ${cardData.data.token2}/${cardData.data.token1}` }}
                 </label>
             </v-row>
         </v-col>
@@ -238,6 +238,7 @@ export default {
         ...mapGetters('web3', ['contracts', "web3"]),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
 
+
         dexLogo: function () {
             let dexName = this.cardData.data.dex;
             if (dexName === 'Ramsess' || dexName === 'Ramses/Ennead') {
@@ -306,6 +307,12 @@ export default {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
 
+
+        borrowProtocolCheck() {
+            if (this.cardData.data.borrowProtocol !== undefined && this.cardData.data.borrowProtocol !== null) {
+                return this.cardData.data.borrowProtocol;
+            }
+        },
 
         async loadContract() {
             if (!this.archived || this.contracts[this.cardData.data.exchangeContract] || this.cardData.data.chain !== this.networkId || !this.account) {

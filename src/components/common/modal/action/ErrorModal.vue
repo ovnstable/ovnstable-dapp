@@ -20,6 +20,11 @@
                         :error-code="errorCode">
               </RpcError>
             </div>
+            <div v-else-if="errorViewType === 'slippage'">
+              <SlippageError :error-msg="errorText"
+                            :error-code="errorCode">
+              </SlippageError>
+            </div>
             <div v-else>
               <UndefinedError :error-msg="errorMsg">
               </UndefinedError>
@@ -34,10 +39,12 @@ import {mapActions, mapGetters} from "vuex";
 import UndefinedError from "@/components/common/modal/action/errors/UndefinedError.vue";
 import RpcError from "@/components/common/modal/action/errors/RpcError.vue";
 import GasError from "@/components/common/modal/action/errors/GasError.vue";
+import SlippageError from "@/components/common/modal/action/errors/SlippageError.vue";
 
 export default {
     name: "ErrorModal",
     components: {
+        SlippageError,
       GasError,
       RpcError,
       UndefinedError
@@ -88,6 +95,12 @@ export default {
 
             console.log('this.errorCode', this.errorCode);
             console.log('this.errorText', this.errorText);
+            console.log('this.errorText', this.errorType);
+
+            if (this.errorType === 'slippage') {
+                this.errorViewType = 'slippage'
+                return;
+            }
 
             if (this.errorMsg.code === 4001) {
                 // user cancel transaction
@@ -103,6 +116,7 @@ export default {
 
             if (this.errorMsg.message.includes('Out of Gas')) {
                 this.errorViewType  = 'gas'
+                return;
             }
 
             console.log('Error type not found.')

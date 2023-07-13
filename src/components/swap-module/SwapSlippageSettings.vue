@@ -9,7 +9,44 @@
                         <div class="row">
                             <div class="col-12 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                                 <div class="sub-title">
-                                    Slippage Tolerance
+                                    <div style="position:relative;">
+                                        Slippage Tolerance
+                                        <div class="sub-title-icon">
+                                            <v-tooltip
+                                                color="var(--tooltip-bg)"
+                                                min-width="50px"
+                                                min-height="50px"
+                                                right
+                                            >
+                                                <template v-slot:activator="{on, attrs}">
+                                                    <div :style="{width: 50 + 'px', height: 30 + 'px'}"
+                                                         v-bind="attrs"
+                                                         v-on="on">
+                                                        <img v-if="light" src="/assets/icon/swap/slippage-tolerance-info.svg" alt="?">
+                                                        <img v-else src="/assets/icon/swap/slippage-tolerance-info-dark.svg" alt="?">
+                                                    </div>
+                                                </template>
+
+                                                <div style="color: var(--main-gray-text);">
+                                                    <div>
+                                                        <span style="font-weight: bold">0.05% – Low.</span> Recommended
+                                                        <div>
+                                                            for swapping stablecoins.
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <span style="font-weight: bold">0.1% – Medium</span>
+                                                    </div>
+                                                    <div>
+                                                        <span style="font-weight: bold">1% – High.</span> Recommended
+                                                        <div>
+                                                            for swapping volatile assets.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </v-tooltip>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-12 col-xl-8 col-lg-8 col-md-8 col-sm-12">
@@ -31,45 +68,12 @@
 
                     <div v-if="currentSlippage && currentSlippage.type === 'LOW'" class="warn-message-container">
                         <div class="warn-message">
-                            Your transaction may fail if you swap volatile assets
+                            With 0.05% of slippage your tx may fail if you swap volatile assets
                             <div class="warn-message-icon">
-                                <v-tooltip
-                                    color="var(--tooltip-bg)"
-                                    min-width="50px"
-                                    min-height="50px"
-                                    right
-                                >
-                                    <template v-slot:activator="{on, attrs}">
-                                        <div :style="{width: 50 + 'px', height: 30 + 'px'}"
-                                             v-bind="attrs"
-                                             v-on="on">
-
-                                            <img src="/assets/icon/swap/slippage-warn.svg" alt="!">
-                                        </div>
-                                    </template>
-
-                                    <div style="color: var(--main-gray-text);">
-                                        <div>
-                                            <span style="font-weight: bold">0.05% – Low.</span> Recommended
-                                            <div>
-                                                for swapping stablecoins.
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span style="font-weight: bold">0.1% – Medium</span>
-                                        </div>
-                                        <div>
-                                            <span style="font-weight: bold">1% – High.</span> Recommended
-                                            <div>
-                                                for swapping volatile assets.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </v-tooltip>
+                                <img src="/assets/icon/swap/slippage-warn.svg" alt="!">
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -80,6 +84,7 @@
 
 <script>
 import {defineComponent} from 'vue'
+import {mapGetters} from "vuex";
 
 export default defineComponent({
     name: "SwapSlippageSettings",
@@ -98,6 +103,9 @@ export default defineComponent({
     },
     mounted() {
         this.initSlippageSettings();
+    },
+    computed: {
+        ...mapGetters('theme', ['light']),
     },
     methods: {
         initSlippageSettings() {
@@ -191,6 +199,7 @@ div {
 }
 
 .sub-title {
+    position: relative;
     font-size: 16px;
     font-weight: 400;
     line-height: 28px;
@@ -253,7 +262,7 @@ div {
     line-height: 24px;
     letter-spacing: 0px;
     text-align: left;
-    color: rgba(173, 179, 189, 1);
+    color: rgba(254, 127, 45, 1);
     padding-left: 20px;
 }
 
@@ -266,5 +275,11 @@ div {
     position: absolute;
     top: 13px;
     left: 0;
+}
+
+.sub-title-icon {
+    position: absolute;
+    left: 140px;
+    top: 4px;
 }
 </style>

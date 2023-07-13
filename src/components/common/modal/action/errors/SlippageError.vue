@@ -24,7 +24,7 @@
       <v-row justify="center">
         <div class="info-container py-6 px-6">
               <v-row class="info-item">
-                  Check slippage settings. Recommended: <span style="font-weight: bold">0.05%</span> – for stablecoins, <span style="font-weight: bold">0.1%</span> or <span style="font-weight: bold">1%</span> – for volatile assets.
+                  Check slippage tolerance. Recommended: <span style="font-weight: bold">0.05%</span> – for stablecoins, <span style="font-weight: bold">0.1%</span> or <span style="font-weight: bold">1%</span> – for volatile assets.
               </v-row>
 
             <v-row class="info-item pt-4">

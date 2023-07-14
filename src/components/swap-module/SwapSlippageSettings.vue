@@ -11,41 +11,6 @@
                                 <div class="sub-title">
                                     <div style="position:relative;">
                                         Slippage Tolerance
-                                        <div class="sub-title-icon">
-                                            <v-tooltip
-                                                color="var(--tooltip-bg)"
-                                                min-width="50px"
-                                                min-height="50px"
-                                                right
-                                            >
-                                                <template v-slot:activator="{on, attrs}">
-                                                    <div :style="{width: 50 + 'px', height: 30 + 'px'}"
-                                                         v-bind="attrs"
-                                                         v-on="on">
-                                                        <img v-if="light" src="/assets/icon/swap/slippage-tolerance-info.svg" alt="?">
-                                                        <img v-else src="/assets/icon/swap/slippage-tolerance-info-dark.svg" alt="?">
-                                                    </div>
-                                                </template>
-
-                                                <div style="color: var(--main-gray-text);">
-                                                    <div>
-                                                        <span style="font-weight: bold">0.05% – Low.</span> Recommended
-                                                        <div>
-                                                            for swapping stablecoins.
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <span style="font-weight: bold">0.1% – Medium</span>
-                                                    </div>
-                                                    <div>
-                                                        <span style="font-weight: bold">1% – High.</span> Recommended
-                                                        <div>
-                                                            for swapping volatile assets.
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </v-tooltip>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -61,16 +26,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div v-if="currentSlippage && currentSlippage.type === 'LOW'" class="warn-message-container">
-                        <div class="warn-message">
-                            With 0.05% of slippage your tx may fail if you swap volatile assets
-                            <div class="warn-message-icon">
-                                <img src="/assets/icon/swap/slippage-warn.svg" alt="!">
+                                    <div v-if="currentSlippage" class="warn-message-container">
+                                        <div class="warn-message">
+                                            {{currentSlippage.info}}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -95,9 +57,9 @@ export default defineComponent({
             odosSlippageKey: 'odos_slippage_value',
             currentSlippage: null,
             slippageSettings: [
-                {id: 3, type: "LOW", name: 'Low', value: 0.05},
-                {id: 2, type: "MEDIUM", name: 'Medium', value: 0.1},
-                {id: 1, type: "HIGH", name: 'High', value: 1},
+                {id: 3, type: "LOW", name: 'Low', value: 0.05, info: 'Recommended for stablecoins only'},
+                {id: 2, type: "MEDIUM", name: 'Medium', value: 0.1, info: 'Recommended for volatile assets'},
+                {id: 1, type: "HIGH", name: 'High', value: 1, info: 'Recommended for exotic assets'},
             ]
         }
     },
@@ -262,8 +224,8 @@ div {
     line-height: 24px;
     letter-spacing: 0px;
     text-align: left;
-    color: rgba(254, 127, 45, 1);
-    padding-left: 20px;
+    color: rgba(173, 179, 189, 1);
+    float: right;
 }
 
 .warn-message-container {

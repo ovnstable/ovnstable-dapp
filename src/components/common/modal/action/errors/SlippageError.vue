@@ -24,13 +24,8 @@
       <v-row justify="center">
         <div class="info-container py-6 px-6">
               <v-row class="info-item">
-                  Check slippage tolerance. Recommended: <span style="font-weight: bold">0.05%</span> – for stablecoins, <span style="font-weight: bold">0.1%</span> or <span style="font-weight: bold">1%</span> – for volatile assets.
+                  Check slippage tolerance. Recommended: <span style="font-weight: bold">0.05%</span> – for stablecoins only, <span style="font-weight: bold">0.1%</span> – for volatile assets, <span style="font-weight: bold">1%</span> – for exotic assets.
               </v-row>
-
-            <v-row class="info-item pt-4">
-                <label class="discord-label">If it doesn’t work, submit a ticket in Discord </label>
-                <label class="discord-link" @click="openDiscord"> # | submit-ticket</label>
-            </v-row>
 
         </div>
       </v-row>

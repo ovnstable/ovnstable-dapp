@@ -224,6 +224,9 @@ export const pool = {
                 case 'Mute':
                     url = 'https://app.mute.io/pool';
                     break;
+                case 'Dracula':
+                    url = 'https://testnet.draculafi.xyz/liquidity';
+                    break
 
                 default:
                     url = pool.explorerUrl + '/address/';

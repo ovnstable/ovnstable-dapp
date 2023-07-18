@@ -177,7 +177,7 @@ export const pool = {
                     url = 'https://info.solidlizard.finance/pair/';
                     break;
                 case 'Arbidex':
-                    url = 'https://arbidex.fi/add/';
+                    url = 'https://arbidex.fi/farms';
                     break;
                 case 'Sterling':
                     url = 'https://www.sterling.finance/liquidity/';
@@ -237,6 +237,7 @@ export const pool = {
                 pool.platform === 'Mute' ||
                 pool.platform === 'Velodrome' ||
                 pool.platform === 'Ennead' ||
+                pool.platform === 'Arbidex' ||
                 pool.platform === 'Gnd') {
                 window.open(url, '_blank').focus();
                 return;

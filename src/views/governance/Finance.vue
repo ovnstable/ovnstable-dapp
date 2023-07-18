@@ -81,7 +81,7 @@ export default {
         hideZeroStrategiesAction: function() {
             for (let i = 0; i < this.m2mItems.length; i++) {
                 let item = this.m2mItems[i];
-                if (item.netAssetValue > 0) {
+                if (item.netAssetValue > 0 || item.enabled || item.targetWeight > 0) {
                     item.isHidden = false;
                     continue;
                 }

@@ -793,7 +793,7 @@ export default defineComponent({
             this.swapRequest(requestData)
                 .then(async data => {
                     console.log("Odos swap request success from swap form", data)
-                    if (data.simulation && data.simulation.isSuccess) {
+                    if (data.simulation && !data.simulation.isSuccess) {
                         this.closeWaitingModal();
                         let errMsg = data.simulation.simulationError && data.simulation.simulationError.errorMessage ? data.simulation.simulationError.errorMessage : 'Transaction simulation is failed';
                         console.log("Error before send swap transaction: ", errMsg)

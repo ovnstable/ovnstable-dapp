@@ -91,7 +91,7 @@ export default {
             }
 
             this.errorCode = this.errorMsg.code;
-            this.errorText = this.errorMsg.message;
+            this.errorText = this.errorMsg ? (this.errorMsg.message ? this.errorMsg.message : this.errorMsg) : null;
 
             console.log('this.errorCode', this.errorCode);
             console.log('this.errorText', this.errorText);

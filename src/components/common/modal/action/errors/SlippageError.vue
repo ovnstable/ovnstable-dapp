@@ -13,13 +13,13 @@
         </label>
       </v-row>
 
-<!--      <div v-if="errorMsg">
+      <div v-if="errorMsg">
           <v-row class="error-message-container">
               <v-row justify="center" class="error-message">
-                [ rpc error: code: {{errorCode}}. {{errorMsg}} ]
+                  Odos Error: {{errorMsg}}
               </v-row>
           </v-row>
-      </div>-->
+      </div>
 
       <v-row justify="center">
         <div class="info-container py-6 px-6">

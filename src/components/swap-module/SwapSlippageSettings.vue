@@ -151,6 +151,11 @@ export default defineComponent({
     .slippage-container {
         text-align: left!important;
     }
+
+
+    .warn-message {
+        float: left!important;;
+    }
 }
 
 /* tablet */

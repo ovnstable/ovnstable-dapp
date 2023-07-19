@@ -118,11 +118,20 @@ export default defineComponent({
                 return
             }
 
-            this.currentSlippage = JSON.parse(value);
+            // for update slippage value in localStorage if slippageSettings.info was changed
+            let lsSlippage = JSON.parse(value);
+            this.currentSlippage = this.getSlippageSettingById(lsSlippage.id);
+            if (this.slippageSettings) {
+                localStorage.setItem(this.odosSlippageKey, JSON.stringify(this.currentSlippage));
+            }
         },
         newSlippageSetting(setting) {
             this.currentSlippage = setting;
             localStorage.setItem(this.odosSlippageKey, JSON.stringify(this.currentSlippage));
+        },
+        // method get setting by id
+        getSlippageSettingById(id) {
+            return this.slippageSettings.find(setting => setting.id === id);
         }
     }
 })

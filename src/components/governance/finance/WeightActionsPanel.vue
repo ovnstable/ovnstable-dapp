@@ -66,7 +66,6 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import Tooltip from "@/components/common/element/Tooltip";
 import {axios} from "@/plugins/http-axios";
 import ErrorModal from "@/components/common/modal/action/ErrorModal";
 
@@ -74,7 +73,7 @@ const BigNumber = require('bignumber.js');
 
 export default {
     name: "WeightActionsPanel",
-    components: {ErrorModal, Tooltip},
+    components: {ErrorModal},
     props: [
         'm2mItems',
         'financeLoading',

@@ -514,16 +514,18 @@ export default defineComponent({
             // lock first
             if (val === 1) {
                 let token = this.selectedOutputTokens[0];
-                token.value = 100;
-                this.lockProportion(true, token);
+                if (!token.locked) {
+                    this.lockProportion(true, token);
+                }
                 this.recalculateOutputTokensSum();
                 return;
             }
 
-            // unlock first
             if (val === 2 && oldVal === 1) {
                 let token = this.selectedOutputTokens[0];
-                this.lockProportion(false, token);
+                if (token.locked) {
+                    this.lockProportion(false, token);
+                }
                 this.recalculateOutputTokensSum();
                 return;
             }
@@ -603,7 +605,9 @@ export default defineComponent({
             console.error("Error when add default ovn token. Method not found: ", this.swapMethod);
         },
         addNewOutputToken() {
-            this.outputTokens.push(this.getNewOutputToken());
+            const newToken = this.getNewOutputToken();
+            newToken.remainingValue = 100;
+            this.outputTokens.push(newToken);
         },
         removeOutputToken(id) {
             this.removeToken(this.outputTokens, id);
@@ -740,18 +744,49 @@ export default defineComponent({
 
             let totalValue = 100;
             let totalTokens = this.selectedOutputTokens.length;
-            let proportion = Math.floor(totalValue / totalTokens);
-            let remains = totalValue % totalTokens;
 
+            // Calculate the sum of values of locked tokens
+            let lockedTokensValue = 0;
             for (let i = 0; i < totalTokens; i++) {
-                this.selectedOutputTokens[i].value = proportion;
+                if (this.selectedOutputTokens[i].locked) {
+                    lockedTokensValue += this.selectedOutputTokens[i].value;
+                }
             }
 
-            for (let i = 0; i < remains; i++) {
-                this.selectedOutputTokens[i].value += 1;
+            // Calculate the available value for distribution
+            let availableValue = totalValue - lockedTokensValue;
+
+            // Count the number of unlocked tokens
+            let unlockedTokensCount = 0;
+            for (let i = 0; i < totalTokens; i++) {
+                if (!this.selectedOutputTokens[i].locked) {
+                    unlockedTokensCount++;
+                }
             }
 
-            console.log("this.selectedOutputTokens: ", this.selectedOutputTokens);
+            // Calculate the proportion for each unlocked token
+            let proportion = Math.floor(availableValue / unlockedTokensCount);
+            let remains = availableValue % unlockedTokensCount;
+
+            // Distribute the proportion among unlocked tokens
+            for (let i = 0; i < totalTokens; i++) {
+                if (!this.selectedOutputTokens[i].locked) {
+                    this.selectedOutputTokens[i].value = proportion;
+                }
+            }
+
+            // Distribute the remaining value among unlocked tokens
+            let count = 0;
+            while (remains > 0) {
+                if (!this.selectedOutputTokens[count].locked) {
+                    this.selectedOutputTokens[count].value += 1;
+                    remains--;
+                }
+                count++;
+            }
+
+            console.log("SELECTED TOKENS IN RESET OUTPUTS METHOD: ", this.selectedOutputTokens);
+            this.$emit('output-tokens-updated', this.selectedOutputTokens);
         },
         async swap() {
             if (this.isSwapLoading) {
@@ -1081,15 +1116,47 @@ export default defineComponent({
                 this.checkApproveForToken(token, token.contractValue);
             }
         },
+        recalculateRemainingValues() {
+            let remainingValues = new Array(this.outputTokens.length).fill(100);
+            for (let i = 0; i < this.outputTokens.length; i++) {
+                const token = this.outputTokens[i];
+                if (token.locked) {
+                    for (let j = 0; j < this.outputTokens.length; j++) {
+                        if (!this.outputTokens[j].locked) {
+                            remainingValues[j] -= token.value;
+                        }
+                    }
+                }
+            }
+            this.remainingValues = remainingValues;
+        },
 
         lockProportion(isLock, token) {
             console.log("lockProportionFunc", isLock, token);
             if (this.outputTokensWithSelectedTokensCount <= 1 && !isLock) {
-                console.log("Its first token, unlock is disable");
-                return
+                console.log("It's the first token, unlock is disabled");
+                return;
             }
 
-            token.locked = isLock
+            token.locked = isLock;
+
+            // Calculate the remaining value of unlocked tokens after locking
+            let remainingValue = 100;
+            for (let i = 0; i < this.selectedOutputTokens.length; i++) {
+                const selectedToken = this.selectedOutputTokens[i];
+                if (!selectedToken.locked && selectedToken !== token) {
+                    remainingValue -= selectedToken.value;
+                }
+            }
+
+            // Update the remainingValue prop of the corresponding Slider component
+            // in the OutputTokens component
+            const sliderIndex = this.outputTokens.indexOf(token);
+            if (sliderIndex !== -1) {
+                this.$set(this.remainingValues, sliderIndex, remainingValue);
+            }
+
+            this.recalculateOutputTokensSum();
         },
         updateSliderValue(token, value) {
             console.log("Swap form", token.id, value, !this.isSlidersOutOfLimit());
@@ -1110,72 +1177,11 @@ export default defineComponent({
             for (let i = 0; i < this.selectedOutputTokens.length; i++) {
                 let token = this.selectedOutputTokens[i];
                 let sum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
-                sum = this.swapMethod === 'BUY' ? sum * token.selectedToken.price : sum / token.selectedToken.price
+                sum = this.swapMethod === 'BUY' ? sum * token.selectedToken.price : sum / token.selectedToken.price;
                 console.log(`Recalculate token.selectedToken price: ${token.selectedToken.price}, newUsdSum: ${sum}`, token);
 
                 // token.sum = this.$utils.formatMoney(sum, 4)
             }
-        },
-        subTokensProportions(currentToken, difference) {
-            let tokens = this.getActiveTokens(currentToken);
-            if (tokens.length === 0) {
-                return;
-            }
-
-            let proportion = Math.floor(difference / tokens.length)
-            let remains = difference % tokens.length
-            console.log('proportion', proportion);
-            console.log('remains', remains);
-
-            for (let i = 0; i < tokens.length; i++) {
-                let token = tokens[i];
-                let tokenValue = token.value - proportion;
-                if (tokenValue <= 0) {
-                    token.value = 0;
-                    continue;
-                }
-
-                token.value = tokenValue;
-            }
-
-            let lastToken = tokens[0].value;
-            let lastTokenValue = lastToken - remains;
-            if (lastTokenValue <= 0) {
-                lastToken.value = 0;
-            } else {
-                lastToken.value = lastTokenValue;
-            }
-        },
-
-        addTokensProportions(currentToken, difference) {
-            let tokens = this.getActiveTokens(currentToken);
-            if (tokens.length === 0) {
-                return;
-            }
-
-            let proportion = Math.floor(difference / tokens.length)
-            let remains = difference % tokens.length
-            console.log('proportion', proportion);
-            console.log('remains', remains);
-
-            for (let i = 0; i < tokens.length; i++) {
-                let token = tokens[i];
-                let tokenValue = token.value + proportion;
-                // if (tokenValue >= 100) {
-                //     token.value = 0;
-                //     continue;
-                // }
-
-                token.value = tokenValue;
-            }
-
-            let lastToken = tokens[0].value;
-            let lastTokenValue = lastToken + remains;
-            // if (lastTokenValue <= 0) {
-            //     lastToken.value = 0;
-            // } else {
-            lastToken.value = lastTokenValue;
-            // }
         },
 
         subtraction(token, difference) {

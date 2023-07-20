@@ -6,6 +6,8 @@
                 :value="sliderValue"
                 @input="({ target }) => {
                     if (tokenInfo.locked) return;
+                    if (target.value >= 100)
+                        target.value = 100;
                     sliderValue = parseInt(target.value);
                     updateSliderValueFunc(tokenInfo, sliderValue);
                     // updateSlider();
@@ -21,12 +23,11 @@
        </span>
     </div>
 </template>
-
 <script setup>
 import { ref, watchEffect } from "vue";
 
 // define component props for the slider component
-const { min, max, step, modelValue, tokenInfo } = defineProps({
+const { min, max, step, modelValue, tokenInfo, updateSliderValueFunc } = defineProps({
     updateSliderValueFunc: {
       type: Function,
       required: true
@@ -72,6 +73,9 @@ const setCSSProgress = (progress) => {
     console.log("setCSSProgress: ", progress)
     slider.value.style.setProperty("--ProgressPercent", `${progress}%`);
 };
+// 1. Разобраться с  if (slider.value >= 50) {slider.value = 50;return;} где точно работает.
+// 2. Поправить почему NaN при slider.value.style.setProperty("--ProgressPercent", `${progress}%`); возможно там, не точно
+// 3. Передать с родительского компонента переменную с количеством свободных процентов и заменить slider.value = переменную.
 
 const updateSlider = () => {
     if (tokenInfo.locked) return;
@@ -96,6 +100,18 @@ const updateSlider = () => {
         setCSSProgress(progress + extraWidth);
     }
 }
+
+/*const inputUpdate = ({ target }) => {
+    if (tokenInfo.locked) return;
+    /!*if (target.value >= 50) {
+        target.value = 50;
+        return;
+    }*!/
+    console.log('Slider update: ', target.value)
+    sliderValue.value = parseInt(target.value);
+    updateSliderValueFunc(tokenInfo, sliderValue);
+    updateSlider();
+}*/
 
 // watchEffect to update the css variable when the slider value changes
 watchEffect(() => {

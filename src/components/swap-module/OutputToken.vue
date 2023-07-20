@@ -155,6 +155,7 @@ export default defineComponent({
     },
     mounted() {
         this.token.selectedToken = this.tokenInfo.selectedToken;
+        console.log("token info: ", this.tokenInfo)
     },
     methods: {
         updateSliderValue(tokenInfo, value) {

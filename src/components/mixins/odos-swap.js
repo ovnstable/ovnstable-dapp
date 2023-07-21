@@ -6,6 +6,7 @@ import {tokenLogo} from "@/components/mixins/token-logo";
 const ODOS_DURATION_CONFIRM_REQUEST = 60
 const SECONDTOKEN_DEFAULT_SYMBOL= 'USD+';
 const SECONDTOKEN_SECOND_DEFAULT_SYMBOL= 'DAI+';
+const SECONDTOKEN_THIRD_DEFAULT_SYMBOL = 'USDT+';
 
 export const odosSwap = {
     mixins: [tokenLogo],
@@ -461,7 +462,7 @@ export const odosSwap = {
         },
         async addItemToFilteredTokens(tokens, key, item) {
             let logoUrl;
-            if (item.protocolId === 'overnight' || item.symbol === 'USD+') {
+            if (item.protocolId === 'overnight' || item.symbol === 'USD+' || item.symbol === 'DAI+' || item.symbol === 'USDT+') {
                 logoUrl = await this.loadOvernightTokenImage(item);
             } else {
                 logoUrl = this.loadTokenImage(item);
@@ -724,6 +725,17 @@ export const odosSwap = {
 
             if (this.tokenSeparationScheme === 'POOL_SWAP') {
                 return this.innerGetDefaultSecondtokenByIndex(1);
+            }
+
+            console.error('TOKEN SEPARATION SCHEME NOT FOUND FOR GET SECOND DEFAULT', this.tokenSeparationScheme);
+        },
+        getSecondDefaultThirdtoken() {
+            if (this.tokenSeparationScheme === 'OVERNIGHT_SWAP') {
+                return this.innerGetDefaultSecondtokenBySymobl(SECONDTOKEN_THIRD_DEFAULT_SYMBOL)
+            }
+
+            if (this.tokenSeparationScheme === 'POOL_SWAP') {
+                return this.innerGetDefaultSecondtokenByIndex(2);
             }
 
             console.error('TOKEN SEPARATION SCHEME NOT FOUND FOR GET SECOND DEFAULT', this.tokenSeparationScheme);

@@ -17,7 +17,7 @@
                     </div>
                 </v-row>
                 <v-row justify="center" class="mb-8" :class="$wu.isMobile() ? '' : 'mx-8'">
-                    <label v-if="successAction === 'swapOdosUsdPlus'"
+                    <label v-if="successAction === 'swapOdosUsdPlus' || successAction === 'swapOdosDaiPlus' || successAction === 'swapOdosUsdtPlus'"
                            class="success-label">
                         You successfully swapped USD+
                     </label>
@@ -118,11 +118,11 @@ export default {
                 case 'redeemUsdPlus':
                     return require('@/assets/icon/redeemed.svg');
                 case 'mintDaiPlus':
-                    return require('@/assets/icon/minted.svg');
+                    return require('@/assets/icon/mintedDai.svg');
                 case 'redeemDaiPlus':
                     return require('@/assets/icon/redeemed.svg');
                 case 'mintUsdtPlus':
-                    return require('@/assets/icon/minted.svg');
+                    return require('@/assets/icon/mintedUsdt.svg');
                 case 'redeemUsdtPlus':
                     return require('@/assets/icon/redeemed.svg');
                 case 'wrapUsdPlus':

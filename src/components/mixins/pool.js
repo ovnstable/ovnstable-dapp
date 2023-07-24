@@ -227,6 +227,9 @@ export const pool = {
                 case 'Defiedge':
                     url = 'https://app.defiedge.io/s/optimism/';
                     break;
+                case 'Dracula':
+                    url = 'https://draculafi.xyz/liquidity';
+                    break
 
                 default:
                     url = pool.explorerUrl + '/address/';

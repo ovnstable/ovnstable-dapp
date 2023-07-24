@@ -740,16 +740,23 @@ export default defineComponent({
         resetOutputs() {
             console.log("Reset outputs");
             if (!this.selectedOutputTokens.length) {
-                return
+                return;
             }
 
-            let proportion = Math.floor(100 / this.selectedOutputTokens.length);
-            for (let i = 0; i < this.selectedOutputTokens.length; i++) {
-                let token = this.selectedOutputTokens[i];
-                token.value = proportion;
+            let totalValue = 100;
+            let totalTokens = this.selectedOutputTokens.length;
+            let proportion = Math.floor(totalValue / totalTokens);
+            let remains = totalValue % totalTokens;
+
+            for (let i = 0; i < totalTokens; i++) {
+                this.selectedOutputTokens[i].value = proportion;
             }
 
-            console.log("this.selectedOutputTokens: ", this.selectedOutputTokens)
+            for (let i = 0; i < remains; i++) {
+                this.selectedOutputTokens[i].value += 1;
+            }
+
+            console.log("this.selectedOutputTokens: ", this.selectedOutputTokens);
         },
         async swap() {
             if (this.isSwapLoading) {
@@ -1092,23 +1099,14 @@ export default defineComponent({
         },
         updateSliderValue(token, value) {
             console.log("Swap form", token.id, value, !this.isSlidersOutOfLimit());
-            let oldTokenValue = token.value;
 
             token.value = value;
 
-            // if(!this.isSlidersOutOfLimit()) {
-                token.value = value;
-                this.subtraction(token, 100 - value);
-                this.recalculateOutputTokensSum();
+            this.subtraction(token, 100 - value);
+            this.recalculateOutputTokensSum();
 
-                this.updateQuotaInfo();
+            this.updateQuotaInfo();
 
-                // if (oldTokenValue > value) {
-                //     this.subTokensProportions(token, 100 - value)
-                // } else {
-                //     this.addTokensProportions(token, 100 - value)
-                // }
-            // }
             if (token.value === 0 || !token.value) {
                 this.updateQuotaInfo();
             }
@@ -1154,6 +1152,7 @@ export default defineComponent({
                 lastToken.value = lastTokenValue;
             }
         },
+
         addTokensProportions(currentToken, difference) {
             let tokens = this.getActiveTokens(currentToken);
             if (tokens.length === 0) {
@@ -1184,60 +1183,35 @@ export default defineComponent({
             lastToken.value = lastTokenValue;
             // }
         },
-        subtraction(token, difference) {
 
-            let tokens = this.getActiveTokens(token)
-            // tokens.sort((a, b) => a.percentage - b.percentage)
-            console.log('tokens', tokens, difference)
+        subtraction(token, difference) {
+            let tokens = this.getActiveTokens(token);
+            console.log('tokens', tokens, difference);
+
             if (tokens.length === 0) {
                 return;
             }
 
-            let proportion = Math.floor(difference / tokens.length)
-            let remains = difference % tokens.length
+            let proportion = Math.floor(difference / tokens.length);
+            let remains = difference % tokens.length;
             console.log('proportion', proportion);
             console.log('remains', remains);
 
             this.calculateProportions(tokens, proportion);
-            // integer (natural)
-            // if (difference >= tokens.length) {
-            //     remains += this.calculateProportions(tokens, proportion)
-            //     this.subtractionOnAllSlidersWithProportion(tokens)
-            // }
 
-            // while (remains > 0) {
-            //     let slider = null
-            //     if (this.lastChangeIndexNumber + 1 > tokens.length) {
-            //         this.lastChangeIndexNumber = 1
-            //         slider = this.getByNumber(tokens, this.lastChangeIndexNumber)
-            //     } else {
-            //         this.lastChangeIndexNumber++
-            //         slider = this.getByNumber(tokens, this.lastChangeIndexNumber)
-            //     }
-            //
-            //     if (!slider) {
-            //         console.error("Slider not found by lastChangeIndexNumber: " + this.lastChangeIndexNumber)
-            //         return
-            //     }
-            //
-            //     if (slider.percentage >= 1) {
-            //         slider.percentage--
-            //         remains--
-            //     }
-            // }
+            // Distribute the remains among the tokens
+            for (let i = 0; i < remains; i++) {
+                tokens[i].value += 1;
+            }
         },
         calculateProportions(tokens, proportion) {
-            tokens.value = proportion;
-            for (let i = 0; i < proportion; i++) {
-                for (let i = 0; i < tokens.length; i++) {
-                    let token = tokens[i];
-                    // token.value++
-                    token.value = proportion;
-                }
+            for (let i = 0; i < tokens.length; i++) {
+                tokens[i].value = proportion;
             }
 
             this.recalculateOutputTokensSum();
         },
+
         getOutputsTokensPercentage() {
             let tokensPercentage = 0;
             for(let token of this.outputTokens) {

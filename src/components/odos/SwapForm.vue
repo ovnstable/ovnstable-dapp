@@ -383,22 +383,6 @@ export default defineComponent({
         ...mapGetters('theme', ['light']),
         ...mapGetters('web3', ['web3', 'getWeiMarker']),
         ...mapGetters('gasPrice', ['show', 'gasPrice', 'gasPriceGwei', 'gasPriceStation']),
-        freeOutputTokensPercentage() {
-            let sumLockedTokens = 0;
-            let result;
-
-            for (let i = 0; i < this.selectedOutputTokens.length; i++) {
-                let token = this.selectedOutputTokens[i];
-                if (token.locked) {
-                    sumLockedTokens += token.value;
-                    console.log("the sum of locked tokens:", sumLockedTokens)
-                }
-                result = 100 - sumLockedTokens;
-                console.log("the sum result:", result)
-            }
-
-            return result
-        },
 
         isInputTokensRemovable() {
           return this.inputTokens.length > 1;

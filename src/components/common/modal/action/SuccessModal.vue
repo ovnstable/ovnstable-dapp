@@ -17,7 +17,7 @@
                     </div>
                 </v-row>
                 <v-row justify="center" class="mb-8" :class="$wu.isMobile() ? '' : 'mx-8'">
-                    <label v-if="successAction === 'swapOdosUsdPlus' || successAction === 'swapOdosDaiPlus' || successAction === 'swapOdosUsdtPlus'"
+                    <label v-if="successAction === 'swapOdosUsdPlus'"
                            class="success-label">
                         You successfully swapped USD+
                     </label>

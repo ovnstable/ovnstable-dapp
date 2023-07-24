@@ -224,6 +224,9 @@ export const pool = {
                 case 'Mute':
                     url = 'https://app.mute.io/pool';
                     break;
+                case 'Defiedge':
+                    url = 'https://app.defiedge.io/s/optimism/';
+                    break;
 
                 default:
                     url = pool.explorerUrl + '/address/';

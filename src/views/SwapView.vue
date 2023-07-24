@@ -20,7 +20,7 @@
                         <SwapForm :update-path-view-func="updatePathView"
                                 :update-button-disabled-func="updateButtonDisabled"
                                 :update-is-loading-data-func="updateIsLoadingData"
-                                @form-reset="handleFormReset"/>
+                                :handle-form-reset-func="handleFormReset"/>
                     </div>
                     <div v-if="isFirstInitializationForPath" class="col-lg-7 col-md-7 col-sm-12">
                         <SwapInformation/>

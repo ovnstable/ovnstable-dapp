@@ -449,6 +449,17 @@ export default {
                 })
             }*/
 
+            if (pool.platform === 'Defiedge' || pool.platform === 'Gnd') {
+                pool.aggregators.push({
+                    id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Uniswap',
+                    zappable: false,
+                    link: 'https://info.uniswap.org/#/optimism/pools/' + pool.id.address
+                })
+            }
+
             if (poolAddress === '0x1F3cA66c98d682fA1BeC31264692daD4f17340BC')  {
                 pool.aggregators.push({
                     id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),

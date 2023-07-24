@@ -12,7 +12,7 @@
                 class="slider"
         />
        <span class="value-percent">
-           {{$utils.formatMoney(tokenInfo.value, 2)}}%
+           {{$utils.formatMoney(tokenInfo.value, 2)}}% "{{freeOutputTokensPercentage}}"
        </span>
     </div>
 </template>
@@ -83,9 +83,6 @@ const updateSlider = () => {
             slider.value.min,
             slider.value.max
         );
-        console.log("progress min", slider.value.min)
-        console.log("progress max", slider.value.max)
-        console.log("progress sliderValue:", sliderValue.value)
 
         console.log("progress: ", progress)
         // define extrawidth to ensure that the end of progress is always under the slider thumb.
@@ -95,19 +92,6 @@ const updateSlider = () => {
         // set the css variable
         setCSSProgress(progress + extraWidth);
     }
-}
-
-const inputUpdate = ({ target }) => {
-    if (tokenInfo.locked) return;
-    if (target.value >= freeOutputTokensPercentage) {
-        target.value = freeOutputTokensPercentage;
-        return;
-    }
-    console.log('Slider value in inputUpdate: ', target.value)
-
-    sliderValue.value = parseInt(target.value);
-    updateSliderValueFunc(tokenInfo, sliderValue.value);
-    updateSlider();
 }
 
 watchEffect(() => {

@@ -70,7 +70,6 @@
                        <div class="pt-5">
                            <div @click="changeSwap()" class="change-swap-container">
                                <div class="change-swap-image rotate" >
-                                   В UI - {{ freeOutputTokensPercentage}}
                                    <img src="/assets/icon/swap/change-swap-vector.svg" alt="change-swap">
                                </div>
                            </div>
@@ -437,6 +436,23 @@ export default defineComponent({
             return this.outputTokens.filter(item => item.selectedToken).length;
         },
 
+        freeOutputTokensPercentage() {
+            let sumLockedTokens = 0;
+            let result = 100;
+
+            for (let i = 0; i < this.selectedOutputTokens.length; i++) {
+                let token = this.selectedOutputTokens[i];
+                if (token.locked) {
+                    sumLockedTokens += token.value;
+                    console.log("the sum of locked tokens:", sumLockedTokens)
+                }
+            }
+
+            result = 100 - sumLockedTokens;
+            console.log("the sum result:", result)
+            return result
+        },
+
         selectedInputTokens() {
             //todo: add check balance
             return this.inputTokens.filter(item => item.selectedToken)
@@ -524,6 +540,7 @@ export default defineComponent({
 
             return true;
         },
+
     },
     watch: {
         outputTokensWithSelectedTokensCount: function (val, oldVal) {
@@ -572,6 +589,10 @@ export default defineComponent({
                 this.clearQuotaInfo();
             }
             this.updateButtonDisabledFunc(val);
+        },
+        freeOutputTokensPercentage: function(val, oldVal) {
+            console.log("freeOutputTokensPercentage watch:", val, oldVal);
+            this.$forceUpdate();
         }
     },
 
@@ -1145,8 +1166,6 @@ export default defineComponent({
             this.recalculateOutputTokensSum();
         },
         updateSliderValue(token, value) {
-            console.log("Swap form", token.id, value, !this.isSlidersOutOfLimit());
-
             token.value = value;
 
             this.subtraction(token, 100 - value);
@@ -1190,10 +1209,26 @@ export default defineComponent({
                 tokens[i].value += 1;
             }
         },
+
         calculateProportions(tokens, proportion) {
+            console.log("Calculate proportions: ", tokens, proportion)
             for (let i = 0; i < tokens.length; i++) {
                 tokens[i].value = proportion;
             }
+
+            this.recalculateOutputTokensSum();
+        },
+
+        distributeProportion(difference) {
+            let unlockedTokens = this.selectedOutputTokens.filter(token =>!token.locked);
+            let sumUnlockedTokens = unlockedTokens.reduce((acc, token) => acc + token.value, 0);
+            let proportion = Math.floor(difference / unlockedTokens.length);
+            let remaining = difference % unlockedTokens.length;
+
+            unlockedTokens.forEach((token, index) => {
+                let tokenValue = Math.min(token.value + (proportion + (index < remaining? 1 : 0)), 100 - sumUnlockedTokens);
+                token.value = tokenValue;
+            });
 
             this.recalculateOutputTokensSum();
         },

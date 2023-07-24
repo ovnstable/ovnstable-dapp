@@ -103,7 +103,7 @@
                       <Slider
                           :update-slider-value-func="updateSliderValue"
                           :token-info="tokenInfo"
-                          :freeOutputTokensPercentage="freeOutputTokensPercentage"
+                          :free-output-tokens-percentage="freeOutputTokensPercentage"
                       />
                   </div>
                   <div v-if="!isHideLockIcon" class="lock-container">
@@ -156,13 +156,10 @@ export default defineComponent({
     },
     mounted() {
         this.token.selectedToken = this.tokenInfo.selectedToken;
-        console.log("token info: ", this.tokenInfo)
     },
     methods: {
         updateSliderValue(tokenInfo, value) {
             this.updateSliderValueFunc(tokenInfo, value);
-            console.log("TokenInfo info: ", tokenInfo)
-            console.log("Token value: ", value)
         },
     }
 })

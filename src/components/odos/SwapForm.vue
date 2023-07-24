@@ -70,6 +70,7 @@
                        <div class="pt-5">
                            <div @click="changeSwap()" class="change-swap-container">
                                <div class="change-swap-image rotate" >
+                                   В UI - {{ freeOutputTokensPercentage}}
                                    <img src="/assets/icon/swap/change-swap-vector.svg" alt="change-swap">
                                </div>
                            </div>
@@ -95,7 +96,9 @@
                                         :update-slider-value-func="updateSliderValue"
                                         :select-token-func="selectOutputToken"
                                         :is-tokens-prices-loading="isSumulateSwapLoading"
+                                        :free-output-tokens-percentage="freeOutputTokensPercentage"
                                 />
+
                             </div>
 
                             <div class="row">
@@ -262,7 +265,6 @@
             </div>
         </div>
 
-
         <SelectTokensModal :is-show="isShowSelectTokensModal"
                            :set-show-func="showSelectTokensModals"
                            :swap-method="swapMethod"
@@ -382,7 +384,22 @@ export default defineComponent({
         ...mapGetters('theme', ['light']),
         ...mapGetters('web3', ['web3', 'getWeiMarker']),
         ...mapGetters('gasPrice', ['show', 'gasPrice', 'gasPriceGwei', 'gasPriceStation']),
+        freeOutputTokensPercentage() {
+            let sumLockedTokens = 0;
+            let result;
 
+            for (let i = 0; i < this.selectedOutputTokens.length; i++) {
+                let token = this.selectedOutputTokens[i];
+                if (token.locked) {
+                    sumLockedTokens += token.value;
+                    console.log("the sum of locked tokens:", sumLockedTokens)
+                }
+                result = 100 - sumLockedTokens;
+                console.log("the sum result:", result)
+            }
+
+            return result
+        },
 
         isInputTokensRemovable() {
           return this.inputTokens.length > 1;
@@ -784,9 +801,9 @@ export default defineComponent({
                 }
                 count++;
             }
+            this.updateQuotaInfo();
 
             console.log("SELECTED TOKENS IN RESET OUTPUTS METHOD: ", this.selectedOutputTokens);
-            this.$emit('output-tokens-updated', this.selectedOutputTokens);
         },
         async swap() {
             if (this.isSwapLoading) {
@@ -1116,20 +1133,6 @@ export default defineComponent({
                 this.checkApproveForToken(token, token.contractValue);
             }
         },
-        recalculateRemainingValues() {
-            let remainingValues = new Array(this.outputTokens.length).fill(100);
-            for (let i = 0; i < this.outputTokens.length; i++) {
-                const token = this.outputTokens[i];
-                if (token.locked) {
-                    for (let j = 0; j < this.outputTokens.length; j++) {
-                        if (!this.outputTokens[j].locked) {
-                            remainingValues[j] -= token.value;
-                        }
-                    }
-                }
-            }
-            this.remainingValues = remainingValues;
-        },
 
         lockProportion(isLock, token) {
             console.log("lockProportionFunc", isLock, token);
@@ -1139,23 +1142,6 @@ export default defineComponent({
             }
 
             token.locked = isLock;
-
-            // Calculate the remaining value of unlocked tokens after locking
-            let remainingValue = 100;
-            for (let i = 0; i < this.selectedOutputTokens.length; i++) {
-                const selectedToken = this.selectedOutputTokens[i];
-                if (!selectedToken.locked && selectedToken !== token) {
-                    remainingValue -= selectedToken.value;
-                }
-            }
-
-            // Update the remainingValue prop of the corresponding Slider component
-            // in the OutputTokens component
-            const sliderIndex = this.outputTokens.indexOf(token);
-            if (sliderIndex !== -1) {
-                this.$set(this.remainingValues, sliderIndex, remainingValue);
-            }
-
             this.recalculateOutputTokensSum();
         },
         updateSliderValue(token, value) {
@@ -1186,7 +1172,7 @@ export default defineComponent({
 
         subtraction(token, difference) {
             let tokens = this.getActiveTokens(token);
-            console.log('tokens', tokens, difference);
+            console.log('tokens after getActiveTokens function and difference: ', tokens, difference);
 
             if (tokens.length === 0) {
                 return;
@@ -1344,20 +1330,19 @@ export default defineComponent({
             return this.getOutputsTokensPercentage() + additionalPercent > 100;
         },
         getActiveTokens(currentToken) {
-            let sliders = []
+            console.log("currentToken in getActiveTokens: ", currentToken);
+            console.log("currentToken and this.outputTokens: ", this.outputTokens)
             // let count = 1
+            let sliders = [];
             for (let i = 0; i < this.outputTokens.length; i++) {
                 let token = this.outputTokens[i];
-                if(token.id === currentToken.id) {
-                    continue
+                if (token.id === currentToken.id || token.locked) {
+                    continue;
                 }
 
-                if(!token.locked) {
-                    // stockIndex.number = count
-                    // count++
-                    sliders.push(token)
-                }
+                sliders.push(token);
             }
+            console.log("Sliders array in getActiveTokens: ", sliders)
             return sliders
         },
 

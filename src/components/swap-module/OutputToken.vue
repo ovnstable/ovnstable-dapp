@@ -101,10 +101,10 @@
               <div>
                   <div class="slider-item-container">
                       <Slider
-                              :update-slider-value-func="updateSliderValue"
-                              :token-info="tokenInfo"
-                              :value="40"
-                              :model-value="tokenInfo.value"/>
+                          :update-slider-value-func="updateSliderValue"
+                          :token-info="tokenInfo"
+                          :freeOutputTokensPercentage="freeOutputTokensPercentage"
+                      />
                   </div>
                   <div v-if="!isHideLockIcon" class="lock-container">
                       <div v-if="tokenInfo.locked"
@@ -143,7 +143,8 @@ export default defineComponent({
         'selectTokenFunc',
         'isHideLockIcon',
         'isDisableSelect',
-        'isTokensPricesLoading'
+        'isTokensPricesLoading',
+        'freeOutputTokensPercentage'
     ],
     data() {
         return {
@@ -160,6 +161,8 @@ export default defineComponent({
     methods: {
         updateSliderValue(tokenInfo, value) {
             this.updateSliderValueFunc(tokenInfo, value);
+            console.log("TokenInfo info: ", tokenInfo)
+            console.log("Token value: ", value)
         },
     }
 })

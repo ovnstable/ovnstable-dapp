@@ -4,14 +4,7 @@
         <input
                 ref="slider"
                 :value="sliderValue"
-                @input="({ target }) => {
-                    if (tokenInfo.locked) return;
-                    if (target.value >= 100)
-                        target.value = 100;
-                    sliderValue = parseInt(target.value);
-                    updateSliderValueFunc(tokenInfo, sliderValue);
-                    // updateSlider();
-                }"
+                @input="inputUpdate"
                 type="range"
                 :min="min"
                 :max="max"
@@ -27,7 +20,7 @@
 import { ref, watchEffect } from "vue";
 
 // define component props for the slider component
-const { min, max, step, modelValue, tokenInfo, updateSliderValueFunc } = defineProps({
+const { min, max, step, tokenInfo, updateSliderValueFunc, freeOutputTokensPercentage } = defineProps({
     updateSliderValueFunc: {
       type: Function,
       required: true
@@ -48,14 +41,14 @@ const { min, max, step, modelValue, tokenInfo, updateSliderValueFunc } = defineP
         type: Number,
         default: 1,
     },
-    modelValue: {
+    freeOutputTokensPercentage: {
         type: Number,
-        default: 50,
-    },
+        default: 100
+    }
 });
 
 // define emits for the slider component
-const emit = defineEmits(["update:modelValue"]);
+// const emit = defineEmits(["update:modelValue"]);
 
 // define refs for the slider component
 const sliderValue = ref(tokenInfo.value);
@@ -90,6 +83,9 @@ const updateSlider = () => {
             slider.value.min,
             slider.value.max
         );
+        console.log("progress min", slider.value.min)
+        console.log("progress max", slider.value.max)
+        console.log("progress sliderValue:", sliderValue.value)
 
         console.log("progress: ", progress)
         // define extrawidth to ensure that the end of progress is always under the slider thumb.
@@ -101,22 +97,22 @@ const updateSlider = () => {
     }
 }
 
-/*const inputUpdate = ({ target }) => {
+const inputUpdate = ({ target }) => {
     if (tokenInfo.locked) return;
-    /!*if (target.value >= 50) {
-        target.value = 50;
+    if (target.value >= freeOutputTokensPercentage) {
+        target.value = freeOutputTokensPercentage;
         return;
-    }*!/
-    console.log('Slider update: ', target.value)
-    sliderValue.value = parseInt(target.value);
-    updateSliderValueFunc(tokenInfo, sliderValue);
-    updateSlider();
-}*/
+    }
+    console.log('Slider value in inputUpdate: ', target.value)
 
-// watchEffect to update the css variable when the slider value changes
+    sliderValue.value = parseInt(target.value);
+    updateSliderValueFunc(tokenInfo, sliderValue.value);
+    updateSlider();
+}
+
 watchEffect(() => {
     updateSlider();
-}, sliderValue)
+}, sliderValue.value)
 
 watchEffect(() => {
     sliderValue.value = tokenInfo.value;

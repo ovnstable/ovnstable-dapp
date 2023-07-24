@@ -4,7 +4,17 @@
         <input
                 ref="slider"
                 :value="sliderValue"
-                @input="inputUpdate"
+                @input="({ target }) => {
+                    if (tokenInfo.locked) return;
+                    if (target.value >= freeOutputTokensPercentage) {
+                        target.value = freeOutputTokensPercentage;
+                        return;
+                    }
+
+                    sliderValue = parseInt(target.value);
+                    updateSliderValueFunc(tokenInfo, sliderValue);
+                    updateSlider();
+                }"
                 type="range"
                 :min="min"
                 :max="max"

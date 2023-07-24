@@ -85,7 +85,7 @@
                     <v-btn v-if="pool.zappable"
                            x-small
                            class="button button-full-width btn-outlined mb-3"
-                           @click.stop="openZapInFunc(pool)" outlined>
+                           @click.stop="openZapInFunc(pool, 'pools')" outlined>
                         ZAP IN
                     </v-btn>
                 </div>

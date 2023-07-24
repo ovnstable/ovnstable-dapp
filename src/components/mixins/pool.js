@@ -134,10 +134,10 @@ export const pool = {
             this.currentZapPool = pool;
             this.setIsZapModalShow(true);
 
-            this.trackClick(clickType);
+            this.trackClickByType(clickType);
         },
 
-        trackClick(clickType) {
+        trackClickByType(clickType) {
             if (clickType === 'featured') {
                 try {
                     this.trackClick({action: 'click_zap_in_featured', event_category: 'Click button', event_label: 'View zap featured page' });

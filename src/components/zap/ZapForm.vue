@@ -477,6 +477,7 @@ export default defineComponent({
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions('walletAction', ['connectWallet']),
+        ...mapActions('track', ['trackClick']),
 
         mintAction() {
             this.showMintView();

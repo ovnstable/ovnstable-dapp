@@ -661,6 +661,12 @@ export default defineComponent({
             console.log("selectedOutputTokens after reset: ", this.selectedOutputTokens)
         },
         async stake() {
+            try {
+                this.trackClick({action: 'click_form_zap_in_stake', event_category: 'Button click', event_label: 'Button zap in stake click' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
+
             if (!this.zapPool) {
                 console.log("Error when stake. Zap pool not found.")
                 return;

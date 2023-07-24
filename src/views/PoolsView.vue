@@ -212,7 +212,7 @@ export default {
         await this.loadPools();
 
         try {
-            // this.trackClick({action: 'all_pool_view', event_category: 'Page view', event_label: 'View pool page' });
+            this.trackClick({action: 'pools_page_view', event_category: 'Page view', event_label: 'View pools page' });
         } catch (e) {
             console.error("Track error:", e);
         }

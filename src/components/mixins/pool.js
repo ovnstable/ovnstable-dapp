@@ -129,16 +129,34 @@ export const pool = {
         setIsZapModalShow(isShow) {
             this.isZapModalShow = isShow;
         },
-        openZapIn(pool) {
-            console.log("Zap open for pool: ", pool);
+        openZapIn(pool, clickType) {
+            console.log("Zap open for pool: ", pool, clickType);
             this.currentZapPool = pool;
             this.setIsZapModalShow(true);
 
-            try {
-                // this.trackClick({action: 'click_zap_in', event_category: 'Page view', event_label: 'View zap page' });
-            } catch (e) {
-                console.error("Track error:", e);
+            this.trackClick(clickType);
+        },
+
+        trackClick(clickType) {
+            if (clickType === 'featured') {
+                try {
+                    this.trackClick({action: 'click_zap_in_featured', event_category: 'Click button', event_label: 'View zap featured page' });
+                } catch (e) {
+                    console.error("Track error:", e);
+                }
+                return;
             }
+
+            if (clickType === 'pools') {
+                try {
+                    this.trackClick({action: 'click_zap_in_pools', event_category: 'Click button', event_label: 'View zap pools page' });
+                } catch (e) {
+                    console.error("Track error:", e);
+                }
+                return;
+            }
+
+            console.error("Unknown click type: ", clickType);
         },
 
         openLink(pool) {

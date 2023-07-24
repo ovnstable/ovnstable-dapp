@@ -392,6 +392,13 @@ export default {
         usdPlusPoolsClick() {
             this.selectTab('usdplus_pools');
             this.goToActionByPath('/pools', { tabName: 'usdPlusPools' });
+
+
+            try {
+                this.trackClick({action: 'click_menu_pools_mobile', event_category: 'Click button', event_label: 'Click pools mobile menu button' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
         },
 
         statsClick() {

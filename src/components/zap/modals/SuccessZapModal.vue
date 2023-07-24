@@ -312,6 +312,12 @@ export default defineComponent({
         },
         openPositionOnPool() {
             console.log('openPositionOnPool')
+            try {
+                this.trackClick({action: 'click_open_position_on_pool', event_category: 'Click button', event_label: 'Click open position on pool.' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
+
             if (this.successData.pool.platform === 'Chronos') {
                 window.open(`https://app.chronos.exchange/liquidity/${this.successData.pool.address}`, '_blank').focus();
                 return

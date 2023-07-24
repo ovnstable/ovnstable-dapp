@@ -564,6 +564,11 @@ export default defineComponent({
         ...mapActions('walletAction', ['connectWallet']),
         ...mapActions('track', ['trackClick']),
 
+        resetForm() {
+            // Code to reset the form fields and state in SwapForm component
+            this.$emit('form-reset'); // Emit the custom event when the form is reset
+        },
+
         mintAction() {
             this.showMintView();
             this.showSwapModal();
@@ -576,6 +581,7 @@ export default defineComponent({
 
             this.$bus.$on('odos-transaction-finished', (data) => {
                 this.finishTransaction();
+
             })
         },
         addDefaultOvnToken() {
@@ -715,6 +721,7 @@ export default defineComponent({
         finishTransaction() {
             console.log("Finish transaction");
             this.clearForm()
+            this.resetForm()
         },
 
         clearForm() {
@@ -722,6 +729,7 @@ export default defineComponent({
 
             if (this.swapMethod === 'BUY') {
                 this.addDefaultOvnToken();
+                this.resetForm()
                 return;
             }
 
@@ -1334,6 +1342,7 @@ export default defineComponent({
         clearAllTokens() {
             this.inputTokens = [];
             this.outputTokens = [];
+            this.resetForm()
         },
         isInputToken(swapMethod, selectTokenType) {
             if (swapMethod === 'BUY' && selectTokenType === 'ALL') {

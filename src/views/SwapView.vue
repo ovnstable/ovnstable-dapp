@@ -19,9 +19,10 @@
                     <div class="col-lg-5 col-md-6 col-sm-12">
                         <SwapForm :update-path-view-func="updatePathView"
                                 :update-button-disabled-func="updateButtonDisabled"
-                                :update-is-loading-data-func="updateIsLoadingData"/>
+                                :update-is-loading-data-func="updateIsLoadingData"
+                                @form-reset="handleFormReset"/>
                     </div>
-                    <div v-if="!isFirstInitialisationForPath" class="col-lg-7 col-md-7 col-sm-12">
+                    <div v-if="isFirstInitializationForPath" class="col-lg-7 col-md-7 col-sm-12">
                         <SwapInformation/>
                     </div>
                     <div v-else class="col-lg-7 col-md-7 col-sm-12">
@@ -54,7 +55,7 @@ export default defineComponent({
             outputTokens: [],
             buttonDisabled: true,
             isLoadingData: true,
-            isFirstInitialisationForPath: false
+            isFirstInitializationForPath: true,
         }
     },
     mounted() {
@@ -70,12 +71,13 @@ export default defineComponent({
             this.showSwapModal();
         },
         updatePathView(path, inputTokens, outputTokens) {
-            if (!this.pathViz) {
-                this.isFirstInitialisationForPath = true
-            }
             this.pathViz = path;
             this.inputTokens = inputTokens;
             this.outputTokens = outputTokens;
+            this.isFirstInitializationForPath = false;
+        },
+        handleFormReset() {
+            this.isFirstInitializationForPath = true; // Set to true when SwapForm is reset
         },
         updateButtonDisabled(value) {
             this.buttonDisabled = value

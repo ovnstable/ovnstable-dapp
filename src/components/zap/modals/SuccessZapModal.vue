@@ -184,7 +184,7 @@
 import {defineComponent} from 'vue'
 import SelectTokenShort from "@/components/swap-module/SelectTokenShort.vue";
 import SelectTokenWithSearch from "@/components/swap-module/SelectTokenWithSearch.vue";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default defineComponent({
     name: "SuccessZapModal",
@@ -228,9 +228,20 @@ export default defineComponent({
                 this.initStakeList();
                 this.initReturnList();
             }
+        },
+        isShow: function (val, oldVal) {
+            if (val) {
+                try {
+                    this.trackClick({action: 'success_zap_in_view', event_category: 'Page view', event_label: 'View success zap in page' });
+                } catch (e) {
+                    console.error("Track error:", e);
+                }
+            }
         }
     },
     methods: {
+        ...mapActions('track', ['trackClick']),
+
         initStakeList() {
             console.log("initStakeList: ", this.successData)
             if (!this.successData || !this.successData.outputTokens) {
@@ -301,6 +312,12 @@ export default defineComponent({
         },
         openPositionOnPool() {
             console.log('openPositionOnPool')
+            try {
+                this.trackClick({action: 'click_open_position_on_pool', event_category: 'Click button', event_label: 'Click open position on pool.' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
+
             if (this.successData.pool.platform === 'Chronos') {
                 window.open(`https://app.chronos.exchange/liquidity/${this.successData.pool.address}`, '_blank').focus();
                 return

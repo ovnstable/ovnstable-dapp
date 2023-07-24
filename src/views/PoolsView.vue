@@ -212,7 +212,7 @@ export default {
         await this.loadPools();
 
         try {
-            // this.trackClick({action: 'all_pool_view', event_category: 'Page view', event_label: 'View pool page' });
+            this.trackClick({action: 'pools_page_view', event_category: 'Page view', event_label: 'View pools page' });
         } catch (e) {
             console.error("Track error:", e);
         }
@@ -448,6 +448,17 @@ export default {
                     zappable: false,
                 })
             }*/
+
+            if (pool.platform === 'Defiedge' || pool.platform === 'Gnd') {
+                pool.aggregators.push({
+                    id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Uniswap',
+                    zappable: false,
+                    link: 'https://info.uniswap.org/#/optimism/pools/' + pool.id.address
+                })
+            }
 
             if (poolAddress === '0x1F3cA66c98d682fA1BeC31264692daD4f17340BC')  {
                 pool.aggregators.push({

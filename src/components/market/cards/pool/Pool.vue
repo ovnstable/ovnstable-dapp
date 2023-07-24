@@ -98,7 +98,7 @@
                             <v-row>
                                 <v-btn v-if="cardData.zappable"
                                        class="button btn-filled"
-                                       @click.stop="openZapIn(pool)">
+                                       @click.stop="openZapIn(pool, 'featured')">
                                     ZAP IN
                                 </v-btn>
                                 <v-btn v-else
@@ -251,6 +251,7 @@ export default {
         ...mapActions("swapModal", ["showSwapModal", "showMintView"]),
         ...mapActions("swapModal", ["showSwapModal", "showRedeemView"]),
         ...mapActions('magicEye', ['switchEye']),
+        ...mapActions('track', ['trackClick']),
 
         loadData() {
             // this.getUsdPlusAvgMonthApy();
@@ -269,6 +270,11 @@ export default {
 
         openAllPools() {
             this.goToActionByPath('/pools');
+            try {
+                this.trackClick({action: 'click_featured_pools', event_category: 'Click button', event_label: 'Click pools on featured page' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
         },
 
         goToActionByPath(path, queryParams) {
@@ -280,7 +286,7 @@ export default {
 
         openPool() {
             if (this.cardData.zappable) {
-                this.openZapIn(this.pool);
+                this.openZapIn(this.pool, 'featured');
                 return
             }
 

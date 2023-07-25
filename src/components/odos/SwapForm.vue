@@ -330,6 +330,10 @@ export default defineComponent({
             type: Function,
             required: true
         },
+        handleFormResetFunc: {
+            type: Function,
+            required: true
+        }
     },
     mounted() {
         this.tokenSeparationScheme = 'OVERNIGHT_SWAP'
@@ -741,6 +745,7 @@ export default defineComponent({
         finishTransaction() {
             console.log("Finish transaction");
             this.clearForm()
+            this.handleFormResetFunc(true);
         },
 
         clearForm() {
@@ -859,7 +864,8 @@ export default defineComponent({
                     console.log("Odos swap request success from swap form", data)
                     if (data.simulation && !data.simulation.isSuccess) {
                         this.closeWaitingModal();
-                        let errMsg = data.simulation.simulationError ? data.simulation.simulationError.errorMessage : 'Transaction simulation is failed';
+                        let errMsg = data.simulation.simulationError && data.simulation.simulationError.errorMessage ? data.simulation.simulationError.errorMessage : 'Transaction simulation is failed';
+                        console.log("Error before send swap transaction: ", errMsg)
                         this.showErrorModalWithMsg({errorType: 'slippage', errorMsg: errMsg}, );
                         this.isSwapLoading = false;
                         return;

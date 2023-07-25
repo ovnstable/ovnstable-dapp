@@ -177,7 +177,7 @@ export const pool = {
                     url = 'https://info.solidlizard.finance/pair/';
                     break;
                 case 'Arbidex':
-                    url = 'https://arbidex.fi/add/';
+                    url = 'https://arbidex.fi/farms';
                     break;
                 case 'Sterling':
                     url = 'https://www.sterling.finance/liquidity/';
@@ -224,8 +224,11 @@ export const pool = {
                 case 'Mute':
                     url = 'https://app.mute.io/pool';
                     break;
+                case 'Defiedge':
+                    url = 'https://app.defiedge.io/s/optimism/';
+                    break;
                 case 'Dracula':
-                    url = 'https://testnet.draculafi.xyz/liquidity';
+                    url = 'https://draculafi.xyz/liquidity';
                     break
 
                 default:
@@ -240,6 +243,7 @@ export const pool = {
                 pool.platform === 'Mute' ||
                 pool.platform === 'Velodrome' ||
                 pool.platform === 'Ennead' ||
+                pool.platform === 'Arbidex' ||
                 pool.platform === 'Gnd') {
                 window.open(url, '_blank').focus();
                 return;

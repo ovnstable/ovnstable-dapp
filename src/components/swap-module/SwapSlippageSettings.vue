@@ -11,6 +11,47 @@
                                 <div class="sub-title">
                                     <div style="position:relative;">
                                         Slippage Tolerance
+                                        <div class="sub-title-icon">
+                                            <v-tooltip
+                                                color="var(--tooltip-bg)"
+                                                min-width="50px"
+                                                min-height="50px"
+                                                right
+                                            >
+                                                <template v-slot:activator="{on, attrs}">
+                                                    <div :style="{width: 50 + 'px', height: 30 + 'px'}"
+                                                         v-bind="attrs"
+                                                         v-on="on">
+                                                        <img v-if="light" src="/assets/icon/swap/slippage-tolerance-info.svg" alt="?">
+                                                        <img v-else src="/assets/icon/swap/slippage-tolerance-info-dark.svg" alt="?">
+                                                    </div>
+                                                </template>
+
+                                                <div style="color: var(--main-gray-text);">
+                                                    <div>
+                                                        <span style="font-weight: bold">0.05% – Low.</span> Recommended
+                                                        <div>
+                                                            for stablecoins only.
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <span style="font-weight: bold">0.1% – Medium</span> Recommended
+                                                        <div>
+                                                            for mix of stablecoins and volatile
+                                                        </div>
+                                                        <div>
+                                                            assets.
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <span style="font-weight: bold">1% – High.</span> Recommended
+                                                        <div>
+                                                           for volatile assets
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </v-tooltip>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -57,9 +98,9 @@ export default defineComponent({
             odosSlippageKey: 'odos_slippage_value',
             currentSlippage: null,
             slippageSettings: [
-                {id: 3, type: "LOW", name: 'Low', value: 0.05, info: 'Recommended for stablecoins only'},
-                {id: 2, type: "MEDIUM", name: 'Medium', value: 0.1, info: 'Recommended for volatile assets'},
-                {id: 1, type: "HIGH", name: 'High', value: 1, info: 'Recommended for exotic assets'},
+                {id: 3, type: "LOW", name: 'Low', value: 0.05, info: 'For stablecoins only'},
+                {id: 2, type: "MEDIUM", name: 'Medium', value: 0.1, info: 'For mix of stablecoins and volatile assets'},
+                {id: 1, type: "HIGH", name: 'High', value: 1, info: 'For volatile assets'},
             ]
         }
     },
@@ -77,11 +118,20 @@ export default defineComponent({
                 return
             }
 
-            this.currentSlippage = JSON.parse(value);
+            // for update slippage value in localStorage if slippageSettings.info was changed
+            let lsSlippage = JSON.parse(value);
+            this.currentSlippage = this.getSlippageSettingById(lsSlippage.id);
+            if (this.slippageSettings) {
+                localStorage.setItem(this.odosSlippageKey, JSON.stringify(this.currentSlippage));
+            }
         },
         newSlippageSetting(setting) {
             this.currentSlippage = setting;
             localStorage.setItem(this.odosSlippageKey, JSON.stringify(this.currentSlippage));
+        },
+        // method get setting by id
+        getSlippageSettingById(id) {
+            return this.slippageSettings.find(setting => setting.id === id);
         }
     }
 })
@@ -100,6 +150,11 @@ export default defineComponent({
 
     .slippage-container {
         text-align: left!important;
+    }
+
+
+    .warn-message {
+        float: left!important;;
     }
 }
 

@@ -118,13 +118,13 @@ export default {
                 case 'redeemUsdPlus':
                     return require('@/assets/icon/redeemed.svg');
                 case 'mintDaiPlus':
-                    return require('@/assets/icon/minted.svg');
+                    return require('@/assets/icon/mintedDai.png');
                 case 'redeemDaiPlus':
-                    return require('@/assets/icon/redeemed.svg');
+                    return require('@/assets/icon/redeemedDai.png');
                 case 'mintUsdtPlus':
-                    return require('@/assets/icon/minted.svg');
+                    return require('@/assets/icon/mintedUsdt.png');
                 case 'redeemUsdtPlus':
-                    return require('@/assets/icon/redeemed.svg');
+                    return require('@/assets/icon/redeemedUsdt.png');
                 case 'wrapUsdPlus':
                     return require('@/assets/icon/wrap.svg');
                 case 'unwrapUsdPlus':

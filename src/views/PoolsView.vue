@@ -371,6 +371,7 @@ export default {
                         cardOpened: false,
                         data: pool,
                         aggregators: pool.aggregators,
+                        poolNameForAgregator: pool.poolNameForAgregator,
                         isOpened: pool.aggregators && pool.aggregators.length ? false : true, // pools without aggregators always is opened
 
                       });
@@ -458,6 +459,8 @@ export default {
                     zappable: false,
                     link: 'https://info.uniswap.org/#/optimism/pools/' + pool.id.address
                 })
+
+                pool.poolNameForAgregator = 'Uniswap';
             }
 
             if (poolAddress === '0x1F3cA66c98d682fA1BeC31264692daD4f17340BC')  {

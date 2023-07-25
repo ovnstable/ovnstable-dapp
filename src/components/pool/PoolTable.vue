@@ -210,7 +210,12 @@
                                     </div>
                                     <div class="platform-label-container d-inline-block">
                                         <div class="platform-label">
-                                            {{pool.platform.toUpperCase()}}
+                                            <span v-if="pool.poolNameForAgregator">
+                                                {{pool.poolNameForAgregator.toUpperCase()}}
+                                            </span>
+                                            <span v-else>
+                                                {{pool.platform.toUpperCase()}}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>

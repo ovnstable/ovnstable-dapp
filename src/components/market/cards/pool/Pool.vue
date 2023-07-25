@@ -20,7 +20,12 @@
                     </v-row>
                     <v-row class="d-flex" align="center">
                         <div class="platform-label">
-                            {{ cardData.platform.toUpperCase() }}
+                            <span v-if="pool.poolNameForAgregator">
+                                {{pool.poolNameForAgregator.toUpperCase()}}
+                            </span>
+                            <span v-else>
+                                {{pool.platform.toUpperCase()}}
+                            </span>
                         </div>
                     </v-row>
                     <v-row class="d-flex mt-5">

@@ -106,7 +106,7 @@ const updateSlider = () => {
 
 watchEffect(() => {
     updateSlider();
-}, sliderValue.value)
+}, sliderValue)
 
 watchEffect(() => {
     sliderValue.value = tokenInfo.value;

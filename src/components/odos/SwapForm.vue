@@ -578,10 +578,6 @@ export default defineComponent({
             }
             this.updateButtonDisabledFunc(val);
         },
-        freeOutputTokensPercentage: function(val, oldVal) {
-            console.log("freeOutputTokensPercentage watch:", val, oldVal);
-            this.$forceUpdate();
-        }
     },
 
     methods: {

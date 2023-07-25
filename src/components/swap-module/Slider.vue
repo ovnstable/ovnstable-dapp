@@ -22,7 +22,7 @@
                 class="slider"
         />
        <span class="value-percent">
-           {{$utils.formatMoney(tokenInfo.value, 2)}}% "{{freeOutputTokensPercentage}}"
+           {{$utils.formatMoney(tokenInfo.value, 2)}}%
        </span>
     </div>
 </template>

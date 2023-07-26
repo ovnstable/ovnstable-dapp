@@ -15,6 +15,7 @@ export const pool = {
                 'Ramses',
                 'Arbidex',
                 'Sperax',
+                'Defiedge',
             ],
             poolTokensForZapMap: {
                 // Chronos
@@ -118,6 +119,12 @@ export const pool = {
                 '0x306132b6147751B85E608B4C1EC452E111531eA2': [
                     {name: 'FRAX', address: '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F'},
                     {name: 'DAI+', address: '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'},
+                ],
+
+                // Defiedge
+                '0xd1c33d0af58eb7403f7c01b21307713aa18b29d3': [
+                    {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
+                    {name: 'USDC', address: '0x7f5c764cbc14f9669b88837ca1490cca17c31607'},
                 ],
 
             }

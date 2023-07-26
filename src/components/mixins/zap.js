@@ -44,6 +44,12 @@ export const zap = {
                     network: 'arbitrum',
                     typeOfDepositConstructor: 'CONSTRUCTOR_WITH_NFT_ID'
                 },
+                'Defiedge': {
+                    name: 'Defiedge',
+                    type: 'LP_WITH_STAKE_IN_ONE_STEP',
+                    network: 'optimism',
+                    typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
+                },
             },
             zapContract: null,
             poolTokenContract: null,
@@ -51,7 +57,7 @@ export const zap = {
 
             pollsMap: {},
 
-            poolsInfoMap: { // pool address : { gauge, poolId } poolId - id from dex, approveType TOKEN, NFT
+            poolsInfoMap: { // pool address : { gauge, poolId } poolId - id from dex, approveType - TOKEN, NFT
                 // Chronos https://arbiscan.io/address/0xc72b5c6d2c33063e89a50b2f77c99193ae6cee6c#readProxyContract
                 "0xb260163158311596ea88a700c5a30f101d072326": {
                     gauge: '0xCD4A56221175b88d4fb28CA2138d670Cc1197CA9',
@@ -177,6 +183,14 @@ export const zap = {
                 '0x306132b6147751B85E608B4C1EC452E111531eA2': {
                     gauge: '0xd2bcFd6b84E778D2DE5Bb6A167EcBBef5D053A06',
                     poolId: 35,
+                    approveType: 'TOKEN'
+                },
+
+                //  Defiedge
+                '0xd1c33d0af58eb7403f7c01b21307713aa18b29d3': {
+                    gauge: '0xd1c33d0af58eb7403f7c01b21307713aa18b29d3',
+                    chef: '0xD7cf8Dc79b15a61714061C5B7A1c12ddE9f3f088',
+                    poolId: 0,
                     approveType: 'TOKEN'
                 },
 

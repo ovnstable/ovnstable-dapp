@@ -61,7 +61,7 @@
                   :pool-tokens-for-zap-map="poolTokensForZapMap">
         </ZapModal>
 
-        <div v-if="!openPoolList">
+        <div v-if="!openPoolList  && !isPoolsLoading">
             <v-row class="ma-0 mb-1 mt-5" align="center">
                 <label class="show-more ml-2" @click="openPoolList = !openPoolList">Show more pools</label>
             </v-row>

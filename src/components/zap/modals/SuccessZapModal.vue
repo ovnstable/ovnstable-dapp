@@ -348,6 +348,11 @@ export default defineComponent({
                 return
             }
 
+            if (this.successData.pool.platform === 'Defiedge') {
+                window.open(`https://app.defiedge.io/s/optimism/${this.successData.pool.address}`, '_blank').focus();
+                return
+            }
+
             console.error("Open Position failed, dex not found.", this.successData.pool.platform)
         },
         openOnExplorer() {

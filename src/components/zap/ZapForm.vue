@@ -1118,6 +1118,13 @@ export default defineComponent({
                     amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out],
                     poolId: poolInfo.poolId
                 }
+            } else if (zapPool.platform === 'Defiedge') {
+                gaugeData = {
+                    chef: this.lastPoolInfoData.chef,
+                    pid: this.lastPoolInfoData.poolId,
+                    gauge: gaugeAddress,
+                    amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out],
+                }
             } else {
                 gaugeData = {
                     gauge: gaugeAddress,

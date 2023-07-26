@@ -69,9 +69,17 @@
             </div>
             <div @click="toggleDetailsFunc(pool)"
                  class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
-                <div class="pool-table-header-item">
+                <div v-if="pool.tvl >= 1000000" class="pool-table-header-item">
                     <label v-if="pool.tvl" class="card-label">
                         ${{ $utils.formatNumberToMln(pool.tvl, 2) }}M
+                    </label>
+                    <label v-else class="card-label see-on-dex-label">
+                        -
+                    </label>
+                </div>
+                <div v-if="pool.tvl < 1000000" class="pool-table-header-item">
+                    <label v-if="pool.tvl" class="card-label">
+                        ${{ $utils.formatNumberToMln(pool.tvl, 2) }}K
                     </label>
                     <label v-else class="card-label see-on-dex-label">
                         -

@@ -71,10 +71,10 @@ let accountingZeroConfigComma = {
 
 export default {
 
-    formatNumberToMln(num,  count = 2) {
+    formatNumberToMln(num,  count = 3) {
         let res = num / 1000000;
         if (res < 1) {
-            count = 2;
+            count = 3;
         }
 
         return (res).toFixed(count);

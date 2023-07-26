@@ -53,7 +53,6 @@
                           :order-type="orderType"
                ></PoolTable>
            </div>
-
        </div>
 
         <ZapModal :set-show-func='setIsZapModalShow'
@@ -61,6 +60,30 @@
                   :is-show="isZapModalShow"
                   :pool-tokens-for-zap-map="poolTokensForZapMap">
         </ZapModal>
+
+        <div v-if="!openPoolList">
+            <v-row class="ma-0 mb-1 mt-5" align="center">
+                <label class="show-more ml-2" @click="openPoolList = !openPoolList">Show more pools</label>
+            </v-row>
+        </div>
+        <template v-if="openPoolList">
+            <PoolTable class="mt-2"
+                         :pools="sortedPoolSecondList"
+                         :is-show-only-zap="isShowOnlyZap"
+                         :is-show-apr-limit="isShowAprLimit"
+                         :open-zap-in-func="openZapIn"
+                         :set-order-type-func="setOrderType"
+                         :order-type="orderType"
+            ></PoolTable>
+        </template>
+        <div v-if="openPoolList">
+            <label class="show-more ml-2 mt-2" @click="openPoolList = !openPoolList">
+                <span v-if="openPoolList">
+                    Hide
+                </span>
+                more pools
+            </label>
+        </div>
     </div>
 </template>
 
@@ -88,8 +111,10 @@ export default {
     data: () => ({
         avgApy: null,
         sortedPoolList: [],
+        sortedPoolSecondList: [],
         pools: [],
         isPoolsLoading: true,
+        openPoolList: false,
 
         selectedTabs: ['ALL'], // ALL or networkName,
         isShowOnlyZap: false,
@@ -163,7 +188,7 @@ export default {
             }
 
             return this.filteredZappablePools.filter(pool =>
-                pool.apr && this.aprLimitForFilter <= pool.apr*1
+                pool.apr && pool.tvl < 300000 && this.aprLimitForFilter <= pool.apr*1
             )
         },
 
@@ -337,7 +362,7 @@ export default {
                           }
                       }
 
-                    if (pool && pool.tvl && pool.tvl >= 10000.00) {
+                    if (pool && pool.tvl && pool.tvl >= 0) {
 
                         // todo move to backend
                         if (this.zapPlatformSupportList.includes(pool.platform)
@@ -389,11 +414,12 @@ export default {
 
 
           this.sortedPoolList = this.getSortedPools(this.pools);
+          this.sortedPoolSecondList = this.getSortedSecondPools(this.pools);
           this.isPoolsLoading = false;
       },
 
         getSortedPools(pools) {
-            let topPools = pools.filter(pool => pool.tvl >= 500000);
+            let topPools = pools.filter(pool => pool.tvl >= 300000);
             topPools = topPools.sort((a, b) => {
                 if (a.feature && !b.feature) {
                     return -1; // a comes first when a is featured and b is not
@@ -406,9 +432,14 @@ export default {
                 }
             });
 
-            let secondPools = pools.filter(pool => pool.tvl < 500000);
-            secondPools = secondPools.sort((a, b) => b.tvl - a.tvl);
-            return [...topPools, ...secondPools];
+            return [...topPools];
+        },
+
+        getSortedSecondPools(pools) {
+            let secondPools = pools.filter(pool => pool.tvl < 300000 && pool.tvl > 10000);
+            secondPools = secondPools.sort((a, b) => b.tvl - a.tvl)
+
+            return [...secondPools];
         },
 
         initFeature(pools) {
@@ -639,5 +670,15 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .update-time {
     color: var(--pools-updated-time-minutes-color);
+}
+
+.show-more {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: var(--links-blue);
+    cursor: pointer;
 }
 </style>

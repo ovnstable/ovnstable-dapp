@@ -333,6 +333,10 @@ export default defineComponent({
         handleFormResetFunc: {
             type: Function,
             required: true
+        },
+        updateStablecoinsListFunc: {
+            type: Function,
+            required: true
         }
     },
     mounted() {
@@ -577,6 +581,12 @@ export default defineComponent({
                 this.clearQuotaInfo();
             }
             this.updateButtonDisabledFunc(val);
+        },
+
+        stablecoinTokens: function (val, oldVal) {
+            if (val) {
+                this.updateStablecoinsListFunc(val);
+            }
         },
     },
 

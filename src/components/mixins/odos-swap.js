@@ -103,6 +103,12 @@ export const odosSwap = {
         tokensSelectedCount() {
             return this.tokens.filter(item => item.selected).length;
         },
+        stablecoinSecondTokens() {
+            return this.secondTokens.filter(item => item.assetType === 'usd');
+        },
+        stablecoinTokens() {
+            return this.tokens.filter(item => item.assetType === 'usd');
+        }
     },
     watch: {
         isAllDataLoaded: async function (newVal, oldValue) {
@@ -315,7 +321,7 @@ export const odosSwap = {
                     // console.log("Balance data: ", token.balanceData);
                 }).catch(e => {
                     // todo 5 return after load balance optimization
-                    // console.error('Error balance for: ', token, e);
+                    console.error('Error balance for: ', token, e);
                 });
                 // originAsset = asset;
                 // asset = asset ? web3.web3.utils.fromWei(asset, assetDecimals === 18 ? 'ether' : 'mwei') : null;
@@ -472,6 +478,7 @@ export const odosSwap = {
                 id: item.assetId + key,
                 address: key,
                 decimals: item.decimals,
+                assetType: item.assetType,
                 name: item.name,
                 symbol: item.symbol,
                 logoUrl: logoUrl,

@@ -24,6 +24,7 @@ import CollateralUsdt from "./midleware/dapp/CollateralUsdt";
 import Dashboard from "./midleware/dapp/Dashboard";
 import Pools from "./midleware/dapp/Pools";
 import Swap from "./midleware/dapp/Swap";
+import Swipe from "./midleware/dapp/Swipe";
 import EtsAbout from "./midleware/dapp/EtsAbout"
 
 Vue.use(VueRouter)
@@ -97,6 +98,16 @@ const routes = [
                 meta: {
                     middleware: [
                         Swap
+                    ]
+                }
+            },
+            {
+                path: '/swipe',
+                name: 'SwipeView',
+                component: () => import('../views/SwipeView.vue'),
+                meta: {
+                    middleware: [
+                        Swipe
                     ]
                 }
             },

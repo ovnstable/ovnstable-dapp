@@ -513,7 +513,7 @@ export default {
         },
 
         getSortedSecondPools(pools) {
-            let secondPools = pools.filter(pool => pool.tvl < 300000 && pool.tvl > 10000);
+            let secondPools = pools.filter(pool => pool.tvl < 300000 && pool.tvl > 40000);
             secondPools = secondPools.sort((a, b) => {
                 if (a.apr !== b.apr) {
                     return b.apr - a.apr; // sort by APR number

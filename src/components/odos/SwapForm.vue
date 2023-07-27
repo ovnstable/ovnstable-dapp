@@ -91,6 +91,7 @@
                                         :remove-item-func="removeOutputToken"
                                         :is-token-removable="isOutputTokensRemovable"
                                         :is-token-without-slider="isTokenWithoutSlider"
+                                        :is-token-without-line-slider="getLastUnlockedToken && getLastUnlockedToken.id === token.id"
                                         :lock-proportion-func="lockProportion"
                                         :update-slider-value-func="updateSliderValue"
                                         :select-token-func="selectOutputToken"
@@ -424,6 +425,22 @@ export default defineComponent({
             return this.outputTokens.filter(item => item.selectedToken).length;
         },
 
+        outputUnlockedTokens() {
+            return this.outputTokens.filter(item => !item.locked);
+        },
+
+        outputUnlockedTokensCount() {
+            return this.outputUnlockedTokens.length;
+        },
+
+        getLastUnlockedToken() {
+            if (this.outputUnlockedTokensCount === 1) {
+                return this.outputUnlockedTokens[0]
+            }
+
+            return null;
+        },
+
         freeOutputTokensPercentage() {
             let sumLockedTokens = 0;
             let result = 100;
@@ -628,7 +645,6 @@ export default defineComponent({
         },
         addNewOutputToken() {
             const newToken = this.getNewOutputToken();
-            newToken.remainingValue = 100;
             this.outputTokens.push(newToken);
         },
         removeOutputToken(id) {

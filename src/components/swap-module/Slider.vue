@@ -2,10 +2,11 @@
     <div :class="tokenInfo.locked ? 'slider-locked' : ''"
          class="custom-slider">
         <input
+                :disabled="isTokenWithoutLineSlider"
                 ref="slider"
                 :value="sliderValue"
                 @input="({ target }) => {
-                    if (tokenInfo.locked) return;
+                    if (tokenInfo.locked || isTokenWithoutLineSlider) return;
                     if (target.value >= freeOutputTokensPercentage) {
                         target.value = freeOutputTokensPercentage;
                         return;
@@ -21,16 +22,25 @@
                 :step="step"
                 class="slider"
         />
-       <span class="value-percent">
+
+        <span class="value-percent">
            {{$utils.formatMoney(tokenInfo.value, 2)}}%
-       </span>
+        </span>
     </div>
 </template>
 <script setup>
 import { ref, watchEffect } from "vue";
 
 // define component props for the slider component
-const { min, max, step, tokenInfo, updateSliderValueFunc, freeOutputTokensPercentage } = defineProps({
+const {
+    min,
+    max,
+    step,
+    tokenInfo,
+    updateSliderValueFunc,
+    freeOutputTokensPercentage,
+    isTokenWithoutLineSlider
+} = defineProps({
     updateSliderValueFunc: {
       type: Function,
       required: true
@@ -54,7 +64,12 @@ const { min, max, step, tokenInfo, updateSliderValueFunc, freeOutputTokensPercen
     freeOutputTokensPercentage: {
         type: Number,
         default: 100
+    },
+    isTokenWithoutLineSlider: {
+        type: Boolean,
+        default: false
     }
+
 });
 
 // define emits for the slider component

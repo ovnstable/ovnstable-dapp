@@ -104,9 +104,10 @@
                           :update-slider-value-func="updateSliderValue"
                           :token-info="tokenInfo"
                           :free-output-tokens-percentage="freeOutputTokensPercentage"
+                          :is-token-without-line-slider="isTokenWithoutLineSlider"
                       />
                   </div>
-                  <div v-if="!isHideLockIcon" class="lock-container">
+                  <div class="lock-container">
                       <div v-if="tokenInfo.locked"
                            @click="lockProportionFunc(false, tokenInfo)">
                           <img src="/assets/icon/swap/proportion-lock-close.svg" alt="select-token">
@@ -138,10 +139,10 @@ export default defineComponent({
         'removeItemFunc',
         'isTokenRemovable',
         'isTokenWithoutSlider',
+        'isTokenWithoutLineSlider',
         'lockProportionFunc',
         'updateSliderValueFunc',
         'selectTokenFunc',
-        'isHideLockIcon',
         'isDisableSelect',
         'isTokensPricesLoading',
         'freeOutputTokensPercentage'

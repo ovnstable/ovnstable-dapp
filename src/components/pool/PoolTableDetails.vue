@@ -79,7 +79,7 @@
                 </div>
                 <div v-if="pool.tvl < 1000000" class="pool-table-header-item">
                     <label v-if="pool.tvl" class="card-label">
-                        ${{ $utils.formatNumberToMln(pool.tvl, 2) }}K
+                        ${{ $utils.formatNumberToThousands(pool.tvl, 0) }}K
                     </label>
                     <label v-else class="card-label see-on-dex-label">
                         -

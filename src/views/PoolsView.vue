@@ -61,14 +61,24 @@
                   :pool-tokens-for-zap-map="poolTokensForZapMap">
         </ZapModal>
 
-        <div v-if="!openPoolList  && !isPoolsLoading">
+        <template v-if="!isPoolsLoading">
             <v-row class="ma-0 mb-1 mt-5" align="center">
-                <label class="show-more ml-2" @click="openPoolList = !openPoolList">Show more pools</label>
+                <v-icon class="circle-icon" :size="$wu.isFull() ? 20 : 16">mdi-circle-multiple-outline</v-icon>
+                <label class="show-more ml-2" @click="openPoolList = !openPoolList">Pools with TVL less than $300K</label>
+                <div class="select-bar-main-container ml-7" @click="openPoolList = !openPoolList">
+                    <v-row justify="end" align="center" class="select-bar-container">
+                        <v-icon color="var(--secondary-gray-text)" >
+                            {{ openPoolList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                        </v-icon>
+                    </v-row>
+                </div>
             </v-row>
-        </div>
-        <template v-if="openPoolList">
+            <v-divider class="prototypes-list-divider"></v-divider>
+
+            <template v-if="openPoolList">
+
             <PoolTable class="mt-2"
-                         :pools="sortedPoolSecondList"
+                         :pools="filteredPoolsForSecondTab"
                          :is-show-only-zap="isShowOnlyZap"
                          :is-show-apr-limit="isShowAprLimit"
                          :open-zap-in-func="openZapIn"
@@ -76,14 +86,8 @@
                          :order-type="orderType"
             ></PoolTable>
         </template>
-        <div v-if="openPoolList">
-            <label class="show-more ml-2 mt-2" @click="openPoolList = !openPoolList">
-                <span v-if="openPoolList">
-                    Hide
-                </span>
-                more pools
-            </label>
-        </div>
+
+        </template>
     </div>
 </template>
 
@@ -169,12 +173,60 @@ export default {
             return []
         },
 
+        filteredPoolsForSecondTab: function() {
+            if (this.orderType === 'APR') {
+                // last step filter
+                return this.getSortedSecondPools(this.filteredBySearchQuerySecondPools);
+            }
+
+            if (this.orderType === 'APR_UP') {
+                // last step filter
+                return this.filteredBySearchQuerySecondPools.sort((a, b) => b.apr - a.apr);
+            }
+
+            if (this.orderType === 'APR_DOWN') {
+                // last step filter
+                return this.filteredBySearchQuerySecondPools.sort((a, b) => a.apr - b.apr);
+            }
+
+            if (this.orderType === 'TVL') {
+                // last step filter. same like type 'APR'
+                return this.getSortedSecondPools(this.filteredBySearchQuerySecondPools);
+            }
+
+            if (this.orderType === 'TVL_UP') {
+                // last step filter
+                return this.filteredBySearchQuerySecondPools.sort((a, b) => b.tvl - a.tvl);
+            }
+
+            if (this.orderType === 'TVL_DOWN') {
+                // last step filter
+                return this.filteredBySearchQuerySecondPools.sort((a, b) => a.tvl - b.tvl);
+            }
+
+            console.error("Order type not found when order pools", this.orderType);
+            return []
+        },
+
         filteredBySearchQueryPools: function () {
             if (!this.searchQuery) {
                 return this.filteredAprPools;
             }
 
            return this.filteredAprPools.filter(pool =>
+                pool.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                pool.id.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                pool.chainName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                pool.address.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                pool.platform.toLowerCase().includes(this.searchQuery.toLowerCase())
+            );
+        },
+        filteredBySearchQuerySecondPools: function () {
+            if (!this.searchQuery) {
+                return this.filteredAprSecondPools;
+            }
+
+            return this.filteredAprSecondPools.filter(pool =>
                 pool.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
                 pool.id.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
                 pool.chainName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
@@ -191,6 +243,15 @@ export default {
                 pool.apr && pool.tvl < 300000 && this.aprLimitForFilter <= pool.apr*1
             )
         },
+        filteredAprSecondPools: function () {
+            if (!this.isShowAprLimit) {
+                return this.filteredZappableSecondPools;
+            }
+
+            return this.filteredZappableSecondPools.filter(pool =>
+                pool.apr && pool.tvl < 10000 && this.aprLimitForFilter <= pool.apr*1
+            )
+        },
 
         filteredZappablePools: function () {
             if (!this.isShowOnlyZap) {
@@ -201,12 +262,28 @@ export default {
                 this.isShowOnlyZap && pool.zappable
             )
         },
+        filteredZappableSecondPools: function () {
+            if (!this.isShowOnlyZap) {
+                return this.filteredBySecondTabPools;
+            }
+
+            return this.filteredBySecondTabPools.filter(pool =>
+                this.isShowOnlyZap && pool.zappable
+            )
+        },
         filteredByTabPools: function () {
             if (this.selectedTabs.length === 1 && this.selectedTabs.includes('ALL')) {
                 return this.sortedPoolList
             }
 
             return this.sortedPoolList.filter(pool => this.selectedTabs.includes(this.getParams(pool.chain).networkName));
+        },
+        filteredBySecondTabPools: function () {
+            if (this.selectedTabs.length === 1 && this.selectedTabs.includes('ALL')) {
+                return this.sortedPoolSecondList
+            }
+
+            return this.sortedPoolSecondList.filter(pool => this.selectedTabs.includes(this.getParams(pool.chain).networkName));
         },
 
         lastUpdateAgoMinutes: function () {
@@ -437,7 +514,13 @@ export default {
 
         getSortedSecondPools(pools) {
             let secondPools = pools.filter(pool => pool.tvl < 300000 && pool.tvl > 10000);
-            secondPools = secondPools.sort((a, b) => b.tvl - a.tvl)
+            secondPools = secondPools.sort((a, b) => {
+                if (a.apr !== b.apr) {
+                    return b.apr - a.apr; // sort by APR number
+                } else {
+                    return b.tvl - a.tvl; // sort by TVL number
+                }
+            })
 
             return [...secondPools];
         },
@@ -675,10 +758,15 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .show-more {
     font-family: 'Roboto';
     font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 18px;
     line-height: 22px;
-    color: var(--links-blue);
+    color: var(--main-gray-text);
     cursor: pointer;
+    text-transform: uppercase;
+}
+
+.prototypes-list-divider {
+    border-color: var(--fourth-gray-text) !important;
 }
 </style>

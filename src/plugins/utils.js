@@ -80,6 +80,15 @@ export default {
         return (res).toFixed(count);
     },
 
+    formatNumberToThousands(num,  count = 3) {
+        let res = num / 1000;
+        if (res < 1) {
+            count = 3;
+        }
+
+        return (res).toFixed(count);
+    },
+
     formatMoney(number = 0, count = 6) {
 
         if (!number) {

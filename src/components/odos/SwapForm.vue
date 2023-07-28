@@ -6,7 +6,7 @@
         </div>
 
         <div v-else class="swap-container">
-            <div v-if="!isTokensLoadedAndFiltered"
+            <div v-if="!isAllLoaded"
                  class="loader-container">
                 <div class="row">
                     <v-row align="center" justify="center">
@@ -319,6 +319,10 @@ export default defineComponent({
         OutputToken
     },
     props: {
+        viewType : {
+            type: String,
+            required: true
+        },
         updatePathViewFunc: {
             type: Function,
             required: true
@@ -341,6 +345,7 @@ export default defineComponent({
         }
     },
     mounted() {
+        this.baseViewType = this.viewType;
         this.tokenSeparationScheme = 'OVERNIGHT_SWAP'
         console.log("Swap form odos init by scheme: ", this.tokenSeparationScheme)
 
@@ -600,9 +605,9 @@ export default defineComponent({
             this.updateButtonDisabledFunc(val);
         },
 
-        stablecoinTokens: function (val, oldVal) {
+        isFirstBalanceLoaded: function (val, oldVal) {
             if (val) {
-                this.updateStablecoinsListFunc(val);
+                this.initTopInputTokensByBalance(this.stablecoinWithoutSecondTokens);
             }
         },
     },
@@ -1420,6 +1425,38 @@ export default defineComponent({
             }, 1000);
 
             this.tokensQuotaCounterId = intervalId;
+        },
+
+        initTopInputTokensByBalance(tokens) {
+            if (this.viewType !== 'SWIPE' || !tokens || tokens.length === 0) {
+                return
+            }
+
+              console.log("Top stable tokens: ", tokens)
+
+              // find top 6 tokens by balance and order desc
+              let topTokens = tokens.sort((a, b) => {
+                  return b.balanceData.balance - a.balanceData.balance;
+              }).slice(0, 6);
+
+              // find all with balance
+              topTokens = topTokens.filter((token) => {
+                  return token.balanceData.balance > 0;
+              });
+
+              console.log("Top stable tokens after filter: ", topTokens)
+
+              for (let i = 0; i < topTokens.length; i++) {
+                  let token = topTokens[i];
+                  token.selected = true;
+                  this.addSelectedTokenToInputList(token);
+                  // this.addNewOutputToken();
+              }
+
+              setTimeout(() => {
+                  this.maxAll();
+                  this.updateStablecoinsListFunc(tokens);
+              })
         },
 
         initTabName(path, queryParams) {

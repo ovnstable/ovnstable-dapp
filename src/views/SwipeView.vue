@@ -1,8 +1,5 @@
 <template>
     <div>
-
-        1. make list of stablecoin when load coins
-        2.
         <BaseSwapView
             :view-type="'SWIPE'"
         ></BaseSwapView>

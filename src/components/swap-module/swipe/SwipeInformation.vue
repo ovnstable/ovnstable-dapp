@@ -1,6 +1,22 @@
 <template>
     <div>
-        <div class="info-container">
+
+        <div v-if="!isAllDataLoaded" class="info-container" style="height: 140px;">
+            <div class="loader-container pt-10">
+                <div class="row">
+                    <v-row align="center" justify="center">
+                        <v-progress-circular
+                            width="2"
+                            size="24"
+                            color="#8FA2B7"
+                            indeterminate
+                        ></v-progress-circular>
+                    </v-row>
+                </div>
+            </div>
+        </div>
+
+        <div v-else class="info-container">
             <div class="info-header">
                 Manage your liquidity with USD+
             </div>
@@ -31,7 +47,7 @@
                     </div>
 
                     <div class="tokens-amount-table-body">
-                        <div v-for="token in sortedTokens" :key="token.symbol">
+                        <div v-for="token in filteredTokens" :key="token.symbol">
                             <div class="tokens-amount-info-container">
                                 <div class="row">
                                     <div class="col-6 col-lg-6 col-md-6 col-sm-6">
@@ -41,7 +57,7 @@
                                     </div>
                                     <div class="col-6 col-lg-6 col-md-6 col-sm-6">
                                         <div class="amount-info text-center">
-                                            ${{token.balanceData.balance ? parseFloat(token.balanceData.balance).toFixed(2) : 0.00}}
+                                            ${{token.balanceData.balance ? parseFloat(token.balanceData.balance * TEST_MULTIPLY_COUNT).toFixed(2) : 0.00}}
                                         </div>
                                     </div>
                                 </div>
@@ -67,39 +83,66 @@
             </div>
 
 
-            <div class="possible-income-container">
-                <div class="possible-income-header">
-                    If you had invested these stablecoins in USD+:
-                </div>
-                <div class="possible-income-body">
+            <div class="pt-10">
+                <div class="possible-income-container">
+                    <div class="possible-income-header-text">
+                        If you had invested your stablecoins in USD+
+                    </div>
                     <div class="row">
-                        <div class="col-4 col-lg-4 col-md-4 col-sm-4">
-                            <div class="date-info text-center text-center">
-                                1 month ago
-                            </div>
-                            <div class="possible-income-info-container">
-                                <div class="possible-income-info-text text-center">
-                                    +$100
-                                </div>
+                        <div class="col-4 col-lg-4 col-md-4 col-sm-4 profit-text-container" >
+                            <div class="profit-text">
+                                <img src="/assets/icon/swipe/money.svg" alt="$" class="money-img">
+                                YOUR PROFIT
                             </div>
                         </div>
-                        <div class="col-4 col-lg-4 col-md-4 col-sm-4">
-                            <div class="date-info text-center">
-                                3 month ago
-                            </div>
-                            <div class="possible-income-info-container">
-                                <div class="possible-income-info-text text-center">
-                                    +$300
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4 col-lg-4 col-md-4 col-sm-4">
-                            <div class="date-info text-center">
-                                6 month ago
-                            </div>
-                            <div class="possible-income-info-container">
-                                <div class="possible-income-info-text text-center">
-                                    +$600
+                        <div class="col-8 col-lg-8 col-md-8 col-sm-8">
+                            <div class="possible-income-body">
+                                <div class="row">
+                                    <div class="col-4 col-lg-4 col-md-4 col-sm-4">
+                                        <div class="possible-income-base-container">
+                                            <div class="possible-income-hr"></div>
+
+                                            <div class="date-info text-center text-center">
+                                                <!--                                1 month ago (apy: {{monthApy}})&ndash;&gt;-->
+                                                1 month ago
+                                            </div>
+                                            <div class="possible-income-info-container">
+                                                <div class="possible-income-info-text text-center">
+                                                    +${{possibleIncomeMonth.toFixed(0)}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-lg-4 col-md-4 col-sm-4">
+                                        <div class="possible-income-base-container">
+                                            <div class="possible-income-hr"></div>
+
+                                           <div class="date-info text-center">
+                                               <!--                                3 month ago (apy: {{threeMonthApy}})&ndash;&gt;-->
+                                               3 month ago
+                                           </div>
+                                           <div class="possible-income-info-container">
+                                               <div class="possible-income-info-text text-center">
+                                                   +${{possibleIncomeThreeMonth.toFixed(0)}}
+                                               </div>
+                                           </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-4 col-lg-4 col-md-4 col-sm-4">
+                                        <div class="possible-income-base-container">
+<!--                                            <div class="possible-income-hr"></div>-->
+
+                                            <div class="date-info text-center">
+                                                <!--                                6 month ago (apy: {{sixMonthApy}})&ndash;&gt;-->
+                                                6 month ago
+                                            </div>
+                                            <div class="possible-income-info-container">
+                                                <div class="possible-income-info-text text-center">
+                                                    +${{possibleIncomeSixMonth.toFixed(0)}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -107,8 +150,20 @@
                 </div>
             </div>
 
-            <div class="pt-5">
-                Make the most of your stablecoins – <span class="swipe-info">SWIPE LIQUIDITY FOR USD+</span>
+            <div class="pt-10">
+               <div
+                   @click="scrollToDown"
+                   class="swipe-info-container">
+                   <div>
+                       Make the most of your stablecoins
+                   </div>
+                   <div class="swipe-info">
+                       <img src="/assets/icon/swipe/arrow.svg" alt="<-" class="swipe-arrow-img">
+                       <div class="swipe-info-text">
+                           SWIPE LIQUIDITY FOR USD+
+                       </div>
+                   </div>
+               </div>
             </div>
         </div>
     </div>
@@ -116,6 +171,8 @@
 
 <script>
 import {defineComponent} from 'vue'
+import {mapGetters} from "vuex";
+import {payoutsApiService} from "@/services/payouts-api-service";
 
 export default defineComponent({
     name: "SwipeInformation",
@@ -127,28 +184,102 @@ export default defineComponent({
     },
     data() {
         return {
-            tokens: [
-                {symbol: 'USDC', amount: '1000', usdValue: '1000'},
-                // write more tokens here with random amounts and values
-                {symbol: 'USDT', amount: '12313', usdValue: '12313'},
-                {symbol: 'DAI', amount: '321', usdValue: '32'},
-                {symbol: 'TUSD', amount: '42141', usdValue: '12'},
-                {symbol: 'BUSD', amount: '32', usdValue: '32'},
-                {symbol: 'DOLA', amount: '0', usdValue: '0'},
-                {symbol: 'LUSD', amount: '0.0001', usdValue: '0.0001'},
-            ],
+            TEST_MULTIPLY_COUNT: 1000,
+            monthApy: 0,
+            threeMonthApy: 0,
+            sixMonthApy: 0,
+            isTokenApyLoaded: false,
+            isBalanceUpdated: false
         }
     },
+    mounted() {
+        this.loadPayoutsData();
+    },
     computed: {
+        ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl', 'apiUrl', 'getParams', 'networkName']),
+
+        isAllDataLoaded() {
+            return this.isTokenApyLoaded && this.isBalanceUpdated;
+        },
+
+        filteredTokens() {
+            return this.sortedTokens.filter(token => {
+                return token.balanceData.balance > 0
+            })
+        },
+
         sortedTokens() {
             return this.stablecoinTokens.sort((a, b) => {
                 return b.balanceData.balance - a.balanceData.balance
             })
         },
         totalTokenUsdValue() {
-            return this.sortedTokens.reduce((acc, token) => {
-                return acc + parseFloat(token.balanceData.balance ? token.balanceData.balance : 0)
+            return this.filteredTokens.reduce((acc, token) => {
+                return acc + parseFloat(token.balanceData.balance ? token.balanceData.balance * this.TEST_MULTIPLY_COUNT : 0)
             }, 0)
+        },
+        possibleIncomeMonth() {
+            return (this.totalTokenUsdValue * (this.monthApy / 12)) / 100;
+        },
+        possibleIncomeThreeMonth() {
+            return ((this.totalTokenUsdValue * (this.threeMonthApy / 12)) / 100) * 3;
+        },
+        possibleIncomeSixMonth() {
+            return ((this.totalTokenUsdValue * (this.sixMonthApy / 12)) / 100) * 6;
+        }
+    },
+    watch: {
+        stablecoinTokens: function (newVal, oldVal) {
+            if (newVal && newVal.length > 0) {
+                this.isBalanceUpdated = true;
+            }
+        }
+    },
+    methods: {
+        scrollToDown() {
+            window.scrollTo({
+                top: document.documentElement.scrollHeight,
+                behavior: 'smooth'
+            });
+        },
+        initPossibleIncome() {
+            this.loadPayoutsData();
+        },
+        loadPayoutsData() {
+            payoutsApiService.getPayouts(this.apiUrl + `/${this.networkName}/usd+`)
+                .then((response) => {
+                    console.log("Swipe payouts: ", response)
+                    this.calculateApys(response);
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        },
+        calculateApys(payouts) {
+            // order payouts by date
+            payouts = payouts.sort((a, b) => {
+                return new Date(b.payableDate) - new Date(a.payableDate);
+            });
+
+            console.log("Sorted payouts: ", payouts)
+
+            // get first 30 payouts
+            const lastMonthPayouts = payouts.slice(0, 30);
+            this.monthApy = lastMonthPayouts.reduce((acc, payout) => {
+                return acc + payout.annualizedYield;
+            }, 0) / lastMonthPayouts.length;
+
+            const lastThreeMonthPayouts = payouts.slice(0, 90);
+            this.threeMonthApy = lastThreeMonthPayouts.reduce((acc, payout) => {
+                return acc + payout.annualizedYield;
+            }, 0) / lastThreeMonthPayouts.length;
+
+            const lastSixMonthPayouts = payouts.slice(0, 180);
+            this.sixMonthApy = lastSixMonthPayouts.reduce((acc, payout) => {
+                return acc + payout.annualizedYield;
+            }, 0) / lastSixMonthPayouts.length;
+
+            this.isTokenApyLoaded = true
         }
     }
 })
@@ -323,7 +454,7 @@ div {
 }
 
 .date-info {
-    background: rgba(245, 245, 245, 1);
+    background: white;
     padding: 0px 8px 0px 8px;
     border-radius: 8px;
     margin-bottom: 5px;
@@ -332,24 +463,89 @@ div {
 .possible-income-info-container {
     padding: 10px 20px 10px 20px;
     border-radius: 8px;
-    background: rgba(34, 171, 172, 0.1);
+    //background: rgba(34, 171, 172, 0.1);
     color: rgba(34, 171, 172, 1);
-    font-weight: bold;
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 28px;
+    letter-spacing: 0px;
 }
 
 .possible-income-container {
-    max-width: 400px;
+    margin-top: 15px;
+    max-width: 600px;
+    background: rgba(28, 149, 231, 0.1);
+    border-radius: 8px;
+
+    padding: 20px 20px 0;
 }
 
 .swipe-info {
+    color: rgba(41, 50, 62, 1);
     font-family: Roboto;
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 600;
+    line-height: 22px;
+    letter-spacing: 0.04em;
+
+    position: relative;
+}
+
+.possible-income-header-text {
+    text-align: right;
+    padding-bottom: 10px;
+}
+
+
+.profit-text-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end; /* To center the text horizontally */
+}
+
+.profit-text {
+    position: relative;
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: 600;
     line-height: 28px;
     letter-spacing: 0px;
     text-align: left;
-    color: #1C95E7;
+    color: rgba(41, 50, 62, 1);
+    padding-bottom: 9px;
+
+}
+
+.possible-income-base-container {
+    position: relative;
+
+}
+
+.possible-income-hr {
+    position: absolute;
+    height: 88%;
+    right: -12px;
+    background-color: rgb(200 200 200);
+    width: 1px;
+}
+
+.money-img {
+    position: absolute;
+    left: -30px;
+    top: 5px;
+}
+
+.swipe-info-container {
     cursor: pointer;
 
+}
+
+.swipe-info-text {
+    padding-left: 23px;
+}
+
+.swipe-arrow-img {
+    position: absolute;
 }
 </style>

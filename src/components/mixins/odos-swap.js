@@ -11,9 +11,11 @@ export const odosSwap = {
     mixins: [tokenLogo],
     data() {
         return {
+            baseViewType: 'SWAP',
             isChainsLoading: false,
             isPricesLoading: false,
             isBalancesLoading: false,
+            isFirstBalanceLoaded: false,
             isContractLoading: false,
             isTokenExternalDataLoading: false,
 
@@ -87,6 +89,19 @@ export const odosSwap = {
         ...mapGetters('network', ['getParams', 'networkName', 'networkId']),
         ...mapGetters('accountData', ['account']),
 
+
+        isAllLoaded: function() { // form swap window show
+            if (this.baseViewType === 'SWIPE') {
+                return this.isTokensLoadedAndFiltered && this.isFirstBalanceLoaded;
+            }
+
+            if (this.baseViewType === 'SWAP') {
+                return this.isTokensLoadedAndFiltered;
+            }
+
+            return true;
+        },
+
         isAllDataLoaded: function() {
             return !this.isChainsLoading && !this.isTokensLoading;
         },
@@ -107,6 +122,16 @@ export const odosSwap = {
         },
         stablecoinTokens() {
             return this.tokens.filter(item => item.assetType === 'usd');
+        },
+        stablecoinWithoutSecondTokens() {
+            return this.stablecoinTokens.filter(item => !this.stablecoinSecondTokens.map(item => item.address).includes(item.address));
+        },
+        tokensToBalanceUpdate() {
+            if (this.baseViewType === 'SWIPE') {
+                return this.stablecoinTokens;
+            }
+
+            return [...this.secondTokens, ...this.tokens];
         }
     },
     watch: {
@@ -238,7 +263,7 @@ export const odosSwap = {
                 console.log("Contracts ERC20 loaded", ERC20);
                 this.loadContractsForTokens(ERC20);
 
-                this.loadBalances();
+                await this.loadBalances();
             }
         },
         loadContractsForTokens(contractFile) {
@@ -258,15 +283,15 @@ export const odosSwap = {
         initUpdateBalancesInterval() {
             setTimeout(() => {
                 console.log("Start loading balances for odos swap")
-                this.updateBalancesIntervalId = setInterval(() => {
+                this.updateBalancesIntervalId = setInterval(async () => {
                     console.log("odos balances update")
-                    this.loadBalances();
+                    await this.loadBalances();
                 }, 40000)
             }, 40000)
 
         },
 
-        loadBalances() {
+        async loadBalances() {
             if (this.isBalancesLoading) {
                 console.log("Balance already in loading status");
                 return;
@@ -280,15 +305,19 @@ export const odosSwap = {
                 return;
             }
 
-            let tokens = [...this.secondTokens, ...this.tokens]
+            console.log("Load tokens balances success. 1")
+
+            let tokens = this.tokensToBalanceUpdate;
+            console.log("Load tokens balances success. length: ", tokens)
             for (let i = 0; i < tokens.length; i++) {
                 let token = tokens[i];
-                this.loadBalance(this.tokensContractMap[token.address], token)
-                    .then(() => {
-                        this.isBalancesLoading = false;
-                    }).catch(() => {
-                        this.isBalancesLoading = false;
-                    });
+                await this.loadBalance(this.tokensContractMap[token.address], token);
+            }
+
+            console.log("Load tokens balances success. 2")
+            this.isBalancesLoading = false;
+            if (!this.isFirstBalanceLoaded) {
+                this.isFirstBalanceLoaded = true;
             }
         },
         async loadBalance(contract, token) {
@@ -308,7 +337,7 @@ export const odosSwap = {
                 }
 
                 // balance for ERC20
-                contract.methods.balanceOf(this.account).call().then(erc20Balance => {
+                await contract.methods.balanceOf(this.account).call().then(erc20Balance => {
                     // console.log('Balance for: ', token, erc20Balance, this.getWeiMarker(token.decimals));
                     token.balanceData = {
                         name: token.symbol,
@@ -690,7 +719,7 @@ export const odosSwap = {
                     this.$bus.$emit('odos-transaction-finished', true);
 
 
-                    this.loadBalances();
+                    await this.loadBalances();
                 }).catch(e => {
                     console.log("Swap odos call error: ", e);
                     if (e && e.code === 4001) {

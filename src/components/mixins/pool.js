@@ -272,7 +272,8 @@ export const pool = {
                 pool.platform === 'Velodrome' ||
                 pool.platform === 'Ennead' ||
                 pool.platform === 'Arbidex' ||
-                pool.platform === 'Gnd') {
+                pool.platform === 'Gnd' ||
+                pool.platform === 'Maverick') {
                 window.open(url, '_blank').focus();
                 return;
             }

@@ -255,6 +255,9 @@ export const pool = {
                 case 'Dracula':
                     url = 'https://draculafi.xyz/liquidity';
                     break
+                case 'Maverick':
+                    url = 'https://app.mav.xyz/pools?chain=324';
+                    break
 
                 default:
                     url = pool.explorerUrl + '/address/';

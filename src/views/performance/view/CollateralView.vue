@@ -109,6 +109,14 @@
                 <v-row align="center" justify="start" class="ma-0">
                     <label class="section-title-label">USD+ portfolio</label>
                 </v-row>
+                <v-row class="ma-0 mt-5 align-center">
+                   <div>
+                       <v-img :src="require('@/assets/icon/alert-circle-outline.svg')"/>
+                   </div>
+                    <label class="risk-text ml-1">
+                        By using our products, you assume the risk of the protocols integrated into our collateral. See more about risks in <a class="link-to-docs" href="https://docs.overnight.fi/advanced/terms-of-service">our docs.</a>
+                    </label>
+                </v-row>
 
                 <v-row align="center" justify="center">
                     <v-col :cols="!$wu.isFull() ? 12 : 8">
@@ -877,5 +885,16 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .tab-button-in-active {
     color: var(--secondary-gray-text) !important;
     cursor: pointer !important;
+}
+
+.risk-text {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.link-to-docs {
+    text-decoration: none;
 }
 </style>

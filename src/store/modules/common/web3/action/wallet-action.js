@@ -71,7 +71,7 @@ const actions = {
                             installWallet: "You do not have any wallets installed that {app}",
 
                             agreement: {
-                                agree: "I have read and accept",
+                                agree: "I assume the risk of the protocols integrated into the collateral of Overnight products, and  I have read and accept",
                                 terms: "Overnight's Terms of Service",
                                 and: "and",
                                 privacy: "Privacy Policy"

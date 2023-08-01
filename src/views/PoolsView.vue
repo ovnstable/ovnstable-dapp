@@ -453,9 +453,9 @@ export default {
                         pool = this.initAggregators(pool);
 
 
-                      this.pools.push({
+                        this.pools.push({
                         id: (pool.id.name + pool.tvl + pool.platform),
-                        name: pool.id.name,// + ' ' + pool.id.address,
+                        name: networkConfig.networkName === 'arbitrum' ? pool.id.name.toUpperCase().replace('USDC', 'USDC.e') : pool.id.name.toUpperCase(),// + ' ' + pool.id.address,
                         token0Icon: token0Icon,
                         token1Icon: token1Icon,
                         token2Icon: token2Icon,

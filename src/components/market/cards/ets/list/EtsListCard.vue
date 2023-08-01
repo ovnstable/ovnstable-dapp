@@ -17,7 +17,7 @@
         <v-col :cols="$wu.isFull() ? 3 : ($wu.isMobile() ? 7 : 3)" class="my-1">
             <v-row class="ma-0 ml-5" justify="start" align="center">
                 <label class="card-label ml-2">
-                    {{ `ETS ${borrowProtocolCheck() ? cardData.data.borrowProtocol + '&' : ''}${cardData.data.dex} ${cardData.data.token2}/${cardData.data.token1}` }}
+                    {{ `ETS ${borrowProtocolCheck() ? cardData.data.borrowProtocol + '&' : ''}${cardData.data.dex} ${(cardData.data.chainName === 'arbitrum' ? cardData.data.token2.replace('USDC', 'USDC.e') : cardData.data.token2)}/${(cardData.data.chainName === 'arbitrum' ? cardData.data.token1.replace('USDC', 'USDC.e') : cardData.data.token1)}` }}
                 </label>
             </v-row>
         </v-col>

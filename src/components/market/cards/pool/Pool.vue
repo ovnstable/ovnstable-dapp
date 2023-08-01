@@ -14,8 +14,8 @@
                     </div>
                 <v-row class="d-flex flex-column align-start mr-3 ml-8">
                     <v-row class="d-flex" align="center">
-                        <label class="card-title">
-                            {{ cardData.data.id.name }} LP
+                        <label class="card-title" style="text-transform: none;">
+                            {{pool.chainName === 'arbitrum' ? cardData.data.id.name.toUpperCase().replace('USDC', 'USDC.e') : cardData.data.id.name.toUpperCase()}} LP
                         </label>
                     </v-row>
                     <v-row class="d-flex" align="center">
@@ -172,9 +172,9 @@ export default {
 
     computed: {
         ...mapGetters("dashboardData", ["profitUsdPlus", "apy", "slice"]),
-        ...mapGetters("accountData", ["balance"]),
+        ...mapGetters("accountData", ["balance",]),
         ...mapGetters("wrapUI", ["showWrap"]),
-        ...mapGetters('network', ['networkId', 'getParams']),
+        ...mapGetters('network', ['networkId', 'networkName', 'getParams']),
         ...mapGetters('magicEye', ['dataHidden']),
 
 

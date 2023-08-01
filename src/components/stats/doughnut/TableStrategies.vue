@@ -25,7 +25,7 @@
         <tbody>
         <tr
             v-for="item in data"
-            :key="item.label"
+            :key="item.label + (item.value + '')"
             class="current-table-row"
             @click="item.type === 'CORE' ? openInNewTab(item.link) : openInDapp(item.link)">
             <td class="table-label-don text-right" v-if="!minimized">
@@ -34,7 +34,7 @@
             <td class="table-label-don text-left">
                 <v-row>
                     <label class="link-label link-name align-center" :title="item.fullName">
-                        {{ item.label }}
+                        {{ networkName === 'arbitrum' ? item.label.replace('USDC', 'USDC.e') : item.label }}
                     </label>
                     <v-spacer></v-spacer>
                     <label class="link-label mr-6" v-if="!$wu.isFull()">

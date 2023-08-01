@@ -789,6 +789,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
+    color: #707A8B;
 }
 
 .link-to-docs {

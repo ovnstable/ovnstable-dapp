@@ -92,7 +92,7 @@ export const odosSwap = {
 
         isAllLoaded: function() { // form swap window show
             if (this.baseViewType === 'SWIPE') {
-                return this.isTokensLoadedAndFiltered && this.isFirstBalanceLoaded;
+                return this.account ? (this.isTokensLoadedAndFiltered && this.isFirstBalanceLoaded) : this.isTokensLoadedAndFiltered;
             }
 
             if (this.baseViewType === 'SWAP') {

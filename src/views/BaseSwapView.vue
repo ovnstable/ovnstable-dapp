@@ -33,7 +33,8 @@
                     </div>
                     <div v-if="viewType === 'SWIPE'"
                          class="col-lg-7 col-md-7 col-sm-12">
-                        <SwipeInformation :stablecoin-tokens="stablecoinTokens"/>
+                        <SwipeDetalization v-if="account" :stablecoin-tokens="stablecoinTokens"/>
+                        <SwipeInformation v-else/>
                     </div>
                     <div v-else
                          class="col-lg-7 col-md-7 col-sm-12">
@@ -57,13 +58,15 @@
 import {defineComponent} from 'vue'
 import SwapForm from "@/components/odos/SwapForm.vue";
 import SwapInformation from "@/components/swap-module/SwapInformation.vue";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import PathView from "@/components/swap-module/PathView.vue";
+import SwipeDetalization from "@/components/swap-module/swipe/SwipeDetalization.vue";
 import SwipeInformation from "@/components/swap-module/swipe/SwipeInformation.vue";
 
 export default defineComponent({
     name: "BaseSwapView",
     components: {
+        SwipeDetalization,
         SwipeInformation,
         PathView,
         SwapInformation,
@@ -90,6 +93,7 @@ export default defineComponent({
 
     },
     computed: {
+        ...mapGetters('accountData', ['account']),
     },
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),

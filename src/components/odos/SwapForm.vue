@@ -27,10 +27,10 @@
                             <div class="swap-title pb-lg-2 mt-2">
                                 <div>
                                     <span v-if="swapMethod === 'SELL'">
-                                     Swap from Overnight
-                                </span>
+                                        <span v-if="viewType === 'SWIPE'">Swipe</span><span v-else>Swap</span> from Overnight
+                                    </span>
                                     <span v-else>
-                                    Swap from
+                                    <span v-if="viewType === 'SWIPE'">Swipe</span><span v-else>Swap</span> from
                                 </span>
                                 </div>
                             </div>
@@ -78,10 +78,10 @@
                         <div class="out-swap-container">
                             <div class="swap-title pb-2">
                                 <span v-if="swapMethod === 'BUY'">
-                                    Swap to Overnight
+                                    <span v-if="viewType === 'SWIPE'">Swipe</span><span v-else>Swap</span> to Overnight
                                 </span>
                                 <span v-else>
-                                    Swap to
+                                    <span v-if="viewType === 'SWIPE'">Swipe</span><span v-else>Swap</span> to
                                 </span>
                             </div>
                             <div v-for="token in outputTokens" :key="token.id" class="input-component-container">
@@ -164,7 +164,7 @@
                              class="swap-button">
                             <div class="swap-button-title">
                                 <div>
-                                    SWAP
+                                    <span v-if="viewType === 'SWIPE'">SWIPE LIQUIDITY</span><span v-else>SWAP</span>
                                 </div>
                             </div>
                         </div>

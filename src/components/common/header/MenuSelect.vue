@@ -6,6 +6,12 @@
                  v-on="on">
                 <v-row justify="end" align="center" class="select-bar-container">
                     <v-icon class="menu-icon">mdi-view-headline</v-icon>
+
+                    <div v-if="isShowSwipeNotification" class="ping-notify">
+                        <div class="ping d-inline ml-4">
+                            <div style=""></div>
+                        </div>
+                    </div>
                 </v-row>
             </div>
         </template>
@@ -44,6 +50,11 @@
                            class="navbar-page-label">
                         SWIPE
                     </label>
+
+                    <div v-if="isShowSwipeNotification" class="ping d-inline ml-4">
+                        <div style=""></div>
+                    </div>
+
                 </v-list-item-title>
             </v-list-item>
 
@@ -294,8 +305,13 @@ export default {
         isShowUsdt: false,
         isShowDai: false,
         closeOnContentClick: false,
+
+      isShowSwipeNotification: false
     }),
 
+    mounted() {
+      this.checkIsNotified();
+    },
     computed: {
         ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('theme', ['light']),
@@ -341,6 +357,46 @@ export default {
         ...mapActions('theme', ['switchTheme']),
         ...mapActions('track', ['trackClick']),
 
+      checkIsNotified(subscribe) {
+        let lastNotify = localStorage.getItem('lastNotify');
+        console.log('lastNotify 1:', lastNotify)
+
+        if (!lastNotify || lastNotify === 'null' || lastNotify === 'undefined') {
+          localStorage.setItem('lastNotify', '2');
+          this.isShowSwipeNotification = true;
+          return;
+        }
+
+        lastNotify = lastNotify * 1;
+        console.log('lastNotify 2: ', lastNotify)
+        if (lastNotify <= 0) {
+          console.log('lastNotify 3: ', lastNotify)
+          localStorage.setItem('lastNotify', '0');
+          this.isShowSwipeNotification = false;
+          return;
+        }
+
+        if (subscribe) {
+          this.subNotifyCount();
+          return;
+        }
+
+        this.isShowSwipeNotification = true;
+        //
+      },
+      subNotifyCount() {
+        let lastNotify = localStorage.getItem('lastNotify');
+        if (!lastNotify || lastNotify === 'null' || lastNotify === 'undefined') {
+          localStorage.setItem('lastNotify', '2');
+          this.isShowSwipeNotification = true;
+          return;
+        }
+
+        lastNotify = lastNotify - 1;
+        localStorage.setItem('lastNotify', (lastNotify + ""));
+        this.isShowSwipeNotification = true;
+      },
+
         openLink(url, isNotBlank) {
             window.open(url, isNotBlank ? '_self' : '_blank').focus();
         },
@@ -379,6 +435,8 @@ export default {
             } catch (e) {
                 console.error("Track error:", e);
             }
+
+          this.checkIsNotified(true);
         },
 
         dashBoardClick() {
@@ -617,6 +675,7 @@ export default {
 .select-bar-container {
     background-color: transparent;
     cursor: pointer;
+    position: relative;
 }
 
 .menu-item {
@@ -723,5 +782,47 @@ export default {
 
 .navbar-list-divider {
     border-top: 1px solid var(--input-placeholder) !important;
+}
+
+
+
+@keyframes ping {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.ping {
+    position: relative;
+    padding-left: 1em;
+    color: rgba(28, 149, 231);
+}
+
+.ping::before,
+.ping::after {
+    content: '';
+    position: absolute;
+    top: 0.25em;
+    left: 0;
+    width: 0.75em;
+    height: 0.75em;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+.ping::before {
+    animation: ping 1.7s ease infinite;
+    opacity: 0.25;
+}
+
+.ping-notify {
+    position: absolute;
+    top: -7px;
+    right: -7px;
 }
 </style>

@@ -58,6 +58,11 @@
                            class="navbar-page-label">
                         SWIPE
                     </label>
+
+                    <div v-if="isShowSwipeNotification" class="ping d-inline ml-4">
+                        <div style=""></div>
+                    </div>
+
                 </v-list-item-title>
             </v-list-item>
 
@@ -382,7 +387,12 @@ export default {
         isShowEts: false,
 
         iconColor: null,
+
+        isShowSwipeNotification: false
     }),
+    mounted() {
+        this.checkIsNotified();
+    },
 
     computed: {
         ...mapGetters('network', ['networkId']),
@@ -429,12 +439,51 @@ export default {
 
             return this.isShowEts ? '#FFFFFF' : '#ADB3BD';
         },
+
     },
 
     methods: {
         ...mapActions('menuUI', ['selectTab']),
         ...mapActions('theme', ['switchTheme']),
         ...mapActions('track', ['trackClick']),
+
+        checkIsNotified(subscribe) {
+            let lastNotify = localStorage.getItem('lastNotify');
+
+            if (!lastNotify || lastNotify === 'null' || lastNotify === 'undefined') {
+                localStorage.setItem('lastNotify', '2');
+                this.isShowSwipeNotification = true;
+                return;
+            }
+
+            lastNotify = lastNotify * 1;
+            if (lastNotify <= 0) {
+                localStorage.setItem('lastNotify', '0');
+                this.isShowSwipeNotification = false;
+                return;
+            }
+
+
+            if (subscribe) {
+                this.subNotifyCount();
+                return;
+            }
+
+            this.isShowSwipeNotification = true;
+
+        },
+        subNotifyCount() {
+            let lastNotify = localStorage.getItem('lastNotify');
+            if (!lastNotify || lastNotify === 'null' || lastNotify === 'undefined') {
+                localStorage.setItem('lastNotify', '2');
+                this.isShowSwipeNotification = true;
+                return;
+            }
+
+            lastNotify = lastNotify - 1;
+            localStorage.setItem('lastNotify', (lastNotify + ""));
+            this.isShowSwipeNotification = true;
+        },
 
         openLink(url, isNotBlank) {
             window.open(url, isNotBlank ? '_self' : '_blank').focus();
@@ -474,6 +523,8 @@ export default {
             } catch (e) {
                 console.error("Track error:", e);
             }
+
+            this.checkIsNotified(true);
         },
 
         dashBoardClick() {
@@ -743,4 +794,38 @@ export default {
     color: var(--theme-icon-color-selected) !important;
 }
 
+
+@keyframes ping {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.ping {
+    position: relative;
+    padding-left: 1em;
+    color: rgba(28, 149, 231);
+}
+
+.ping::before,
+.ping::after {
+    content: '';
+    position: absolute;
+    top: 0.25em;
+    left: 0;
+    width: 0.75em;
+    height: 0.75em;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+.ping::before {
+    animation: ping 1.7s ease infinite;
+    opacity: 0.25;
+}
 </style>

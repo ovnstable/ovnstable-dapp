@@ -1,9 +1,9 @@
 <template>
     <div>
 
-        <div v-if="!isAllDataLoaded" class="info-container" style="height: 140px;">
+        <div v-if="!isAllDataLoaded" class="info-container" style="height: 180px;">
             <div class="loader-container pt-10">
-                <div class="row">
+                <div>
                     <v-row align="center" justify="center">
                         <v-progress-circular
                             width="2"
@@ -12,6 +12,9 @@
                             indeterminate
                         ></v-progress-circular>
                     </v-row>
+                    <div class="possible-profit pt-10 text-center">
+                        Your possible profit is calculated
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,7 +38,7 @@
                     </div>
 
                     <div v-if="isNullableAllBalances" class="possible-income-header-text pb-2">
-                        If you had invested $10K stablecoins in USD+:
+                        If you had invested $10K stablecoins in USD+ on the <span class="network-name">{{networkName}}</span> chain:
                     </div>
                     <div v-else class="possible-income-header-text pb-2">
                         If you had invested your stablecoins in USD+
@@ -621,6 +624,14 @@ div {
     letter-spacing: 0.02em;
     text-align: center;
     color: rgba(255, 255, 255, 1);
+
+}
+
+.network-name:first-letter {
+    text-transform: uppercase!important;
+}
+
+.possible-profit {
 
 }
 </style>

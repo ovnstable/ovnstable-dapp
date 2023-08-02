@@ -15,17 +15,11 @@
         </v-list>
 
         <v-list nav subheader class="mx-3" dense>
-
-            <div class="navbar-list-divider mt-2 mb-1"></div>
-            <label class="navbar-list-header">
-                Money Markets
-            </label>
-
             <v-list-item
                 id="click_menu_swap"
                 :class="selectedTab === 'swap-odos' ? 'selected-page-item' : ''"
-                         @click="swapOdosClick()"
-                         class="list-item-hover mx-n2">
+                @click="swapOdosClick()"
+                class="list-item-hover mx-n2">
                 <v-list-item-icon>
                     <div class="navbar-page-link">
                         <svg width="24" height="24" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -47,9 +41,9 @@
                 @click="swipeOdosClick()"
                 class="list-item-hover mx-n2">
                 <v-list-item-icon>
-                    <div class="navbar-page-link">
-                        <svg width="24" height="24" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path v-bind:fill="changeIconColor" d="M14.4998 21.0001C12.6433 21.0001 10.8628 20.2626 9.55009 18.9498C8.23734 17.6371 7.49984 15.8566 7.49984 14.0001C7.49984 12.8334 7.7915 11.7017 8.3165 10.7334L6.61317 9.03008C5.66788 10.5154 5.16601 12.2395 5.1665 14.0001C5.1665 16.4754 6.14983 18.8494 7.90017 20.5997C9.65051 22.3501 12.0245 23.3334 14.4998 23.3334V26.8334L19.1665 22.1667L14.4998 17.5001M14.4998 4.66675V1.16675L9.83317 5.83342L14.4998 10.5001V7.00008C16.3564 7.00008 18.1368 7.73758 19.4496 9.05033C20.7623 10.3631 21.4998 12.1436 21.4998 14.0001C21.4998 15.1667 21.2082 16.2984 20.6832 17.2667L22.3865 18.9701C23.3318 17.4848 23.8337 15.7607 23.8332 14.0001C23.8332 11.5247 22.8498 9.15076 21.0995 7.40042C19.3492 5.65008 16.9752 4.66675 14.4998 4.66675V4.66675Z"/>
+                    <div class="navbar-page-link" style="padding-top: 3px;">
+                        <svg width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path v-bind:fill="changeIconColor" d="M0 0V14H12.04C11.7921 13.2471 11.6661 12.4594 11.6667 11.6667H4.66667C4.66667 11.0478 4.42083 10.4543 3.98325 10.0168C3.54566 9.57917 2.95217 9.33333 2.33333 9.33333V4.66667C3.62833 4.66667 4.66667 3.62833 4.66667 2.33333H16.3333C16.3333 2.95217 16.5792 3.54566 17.0168 3.98325C17.4543 4.42083 18.0478 4.66667 18.6667 4.66667V4.73667C19.4483 4.73667 20.23 4.87667 21 5.13333V0H0ZM10.5 3.5C8.51667 3.535 7 5.01667 7 7C7 8.98333 8.51667 10.43 10.5 10.5C10.9433 10.5 11.3983 10.4067 11.83 10.2317C12.145 8.94833 12.67 7.735 13.965 6.545C13.825 4.99333 12.355 3.465 10.5 3.5ZM21.735 7.315L17.22 11.865L15.645 10.2667L14 11.9233L17.2083 15.1667L23.3683 8.96L21.735 7.315Z"/>
                         </svg>
                     </div>
                 </v-list-item-icon>
@@ -65,6 +59,14 @@
 
                 </v-list-item-title>
             </v-list-item>
+        </v-list>
+
+        <v-list nav subheader class="mx-3" dense>
+
+            <div class="navbar-list-divider mt-2 mb-1"></div>
+            <label class="navbar-list-header">
+                Money Markets
+            </label>
 
             <v-list-group :append-icon="null"
                           @click="toggleUsdPlus(!isShowUsd)">

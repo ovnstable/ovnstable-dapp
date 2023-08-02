@@ -154,7 +154,13 @@
                              class="swap-button">
                             <div class="swap-button-title">
                                 <div>
-                                    APPROVE {{firstInputInQueueForToApprove.selectedToken.symbol}}
+                                    <span v-if="viewType === 'SWIPE' && !firstSwipeClickOnApprove">
+                                        SWIPE
+                                    </span>
+                                    <span v-else>
+                                        APPROVE {{firstInputInQueueForToApprove.selectedToken.symbol}}
+                                    </span>
+
                                 </div>
                             </div>
                         </div>
@@ -389,7 +395,9 @@ export default defineComponent({
             slippagePercent: 0.05,
 
             tokensQuotaCounterId: null,
-            tokensQuotaCheckerSec: 0
+            tokensQuotaCheckerSec: 0,
+
+            firstSwipeClickOnApprove: false,
         }
     },
     computed: {
@@ -477,7 +485,10 @@ export default defineComponent({
         },
 
         isAnyInputsNeedApprove() {
-            return this.allInputsWithNotApproved.length > 0
+            return this.inputsNeedApproveCount > 0
+        },
+        inputsNeedApproveCount() {
+            return this.allInputsWithNotApproved.length
         },
         allInputsWithNotApproved() {
             return this.selectedInputTokens.filter(token => !token.selectedToken.approveData.approved && token.value > 0);
@@ -1053,6 +1064,7 @@ export default defineComponent({
 
         async approve(token) {
             this.showWaitingModal('Approving in process');
+            this.firstSwipeClickOnApprove = true;
 
             await this.checkApproveForToken(token, token.contractValue);
             let selectedToken = token.selectedToken;

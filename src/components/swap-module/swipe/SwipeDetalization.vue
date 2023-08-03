@@ -265,6 +265,12 @@ export default defineComponent({
         }
     },
     watch: {
+        networkName: function (val, oldVal) {
+            if (val) {
+                this.clearData();
+                this.loadPayoutsData();
+            }
+        },
         stablecoinTokens: function (newVal, oldVal) {
             if (newVal && newVal.length > 0) {
                 this.isBalanceUpdated = true;
@@ -321,6 +327,13 @@ export default defineComponent({
             }, 0) / lastSixMonthPayouts.length;
 
             this.isTokenApyLoaded = true
+        },
+        clearData() {
+            this.monthApy = 0;
+            this.threeMonthApy = 0;
+            this.sixMonthApy = 0;
+            this.isTokenApyLoaded = false;
+            this.isBalanceUpdated = false;
         }
     }
 })

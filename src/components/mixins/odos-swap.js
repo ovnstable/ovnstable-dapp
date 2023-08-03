@@ -128,7 +128,7 @@ export const odosSwap = {
         },
         tokensToBalanceUpdate() {
             if (this.baseViewType === 'SWIPE') {
-                return this.stablecoinTokens;
+                return [...this.stablecoinTokens, ...this.stablecoinSecondTokens];
             }
 
             return [...this.secondTokens, ...this.tokens];
@@ -150,7 +150,9 @@ export const odosSwap = {
         },
         networkId: async function (newVal, oldVal) {
             if (newVal) {
-                console.log("set network for odos: ", newVal, this.tokenSeparationScheme, this.listOfBuyTokensAddresses)
+                console.log("set network for odos: ", newVal, this.tokenSeparationScheme, this.listOfBuyTokensAddresses);
+                this.isFirstBalanceLoaded = false;
+                this.quotaResponseInfo = null;
                 await this.initContractData()
                 await this.initData(this.tokenSeparationScheme, this.listOfBuyTokensAddresses);
             }
@@ -298,7 +300,7 @@ export const odosSwap = {
             }
 
             this.isBalancesLoading = true;
-            console.log("Load tokens balances.", this.secondTokens, this.tokens)
+            console.log("Load tokens balances.", this.tokensToBalanceUpdate)
             if (!this.account) {
                 console.log("Balance not loaded, wallet not login", this.account);
                 this.isBalancesLoading = false;
@@ -308,7 +310,7 @@ export const odosSwap = {
             console.log("Load tokens balances success. 1")
 
             let tokens = this.tokensToBalanceUpdate;
-            console.log("Load tokens balances success. length: ", tokens)
+            console.log("Load tokens balances success: ", tokens)
             for (let i = 0; i < tokens.length; i++) {
                 let token = tokens[i];
                 await this.loadBalance(this.tokensContractMap[token.address], token);

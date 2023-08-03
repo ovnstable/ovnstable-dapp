@@ -87,7 +87,7 @@
                 </div>
             </div>
             <div @click="toggleDetailsFunc(pool)"
-                 class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                 class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-6">
                 <div v-if="!$wu.isMobile()" class="pool-table-header-item">
 
                     <v-btn v-if="pool.zappable"
@@ -96,6 +96,23 @@
                            @click.stop="openZapInFunc(pool, 'pools')" outlined>
                         ZAP IN
                     </v-btn>
+                </div>
+            </div>
+            <div
+                v-if="pool.stableFishUrl"
+                class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-6">
+                <div class="tooltip-wrapper">
+                    <div class="tooltip-trigger">
+                        <v-img
+                            :src="require('@/assets/icon/stableFish.svg')"
+                            class="stable-fish-icon"
+                        />
+                    </div>
+                    <div class="tooltip-content">
+                        <Tooltip
+                            text="See on Stable Fish"
+                            link="https://stable.fish/rank?deposit_tk=212"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -165,6 +182,7 @@
 import {defineComponent} from 'vue'
 import {mapGetters} from "vuex";
 import {pool} from "@/components/mixins/pool";
+import Tooltip from "@/components/common/element/Tooltip";
 
 export default defineComponent({
     name: "PoolTableDetails",
@@ -190,6 +208,9 @@ export default defineComponent({
             type: Boolean,
             required: true
         },
+    },
+    components: {
+        Tooltip,
     },
     computed: {
         ...mapGetters('network', ['networkName']),
@@ -443,6 +464,30 @@ div {
 
 .aggregator-hr {
     border-bottom: 1px solid var(--main-border);
+}
+
+.tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-content {
+    position: absolute;
+    bottom: 29%; /* Position the tooltip above the icon */
+    left: 50%;
+    transform: translateX(-50%); /* Center the tooltip horizontally */
+    display: none; /* Hide the tooltip by default */
+    opacity: 0;
+}
+
+.tooltip-wrapper:hover .tooltip-content {
+    display: block; /* Show the tooltip when hovering over the icon */
+}
+
+/* Additional styles for the icon (adjust as needed) */
+.stable-fish-icon {
+    width: 32px;
+    height: 32px;
 }
 
 </style>

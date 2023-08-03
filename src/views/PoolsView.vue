@@ -495,7 +495,7 @@ export default {
           this.isPoolsLoading = false;
 
           const map = new Map();
-          map.set('0x667002F9DC61ebcBA8Ee1Cbeb2ad04060388f223', '1586'); // 1. Velodrome USD+/DAI+
+          // map.set('0x667002F9DC61ebcBA8Ee1Cbeb2ad04060388f223', '1586'); // 1. Velodrome USD+/DAI+
           map.set('0x0d20ef7033b73ea0c9c320304b05da82e2c14e33', '1482'); // 2. Chronos FRAX/USD+
           map.set('0x1561d9618db2dcfe954f5d51f4381fa99c8e5689', '1577'); // 3. Thena USDT+/USD+
           map.set('0xbbd7ff1728963a5eb582d26ea90290f84e89bd66', '1481'); // 4. Chronos DOLA/USD+
@@ -503,9 +503,9 @@ export default {
           map.set('0xcd78e225e36e724c9fb4bd8287296557d728cda7', '1483'); // 6. Chronos LUSD/USD+
           // map.set('', ''); // 8. Arbidex USD+/USDC.e ****
           map.set('0x571102a88928d74c049849af094a289c27fb794e', '1020'); // 7. SushiSwap USD+/USDC
-          map.set('0xd95E98fc33670dC033424E7Aa0578D742D00f9C7', '712'); // 8. Velodrome USD+/USDC
+          // map.set('0xd95E98fc33670dC033424E7Aa0578D742D00f9C7', '712'); // 8. Velodrome USD+/USDC
           map.set('0x421a018cc5839c4c0300afb21c725776dc389b1a', '603'); // 9. Dystopia USD+/USDC
-          map.set('0x37e7D30CC180A750C83D68ED0C2511dA10694d63', '1021'); // 10. Velodrome USD+/LUSD
+          // map.set('0x37e7D30CC180A750C83D68ED0C2511dA10694d63', '1021'); // 10. Velodrome USD+/LUSD
 
 
           for (let i = 0; i < this.pools.length; i++) {
@@ -513,7 +513,7 @@ export default {
               let stableFishId = map.get(pool.address)
 
               if (stableFishId) {
-                  pool.stableFishUrl = `'https://stable.fish/defi/' + ${stableFishId}`
+                  pool.stableFishUrl = 'https://stable.fish/defi/' + stableFishId
               }
           }
       },

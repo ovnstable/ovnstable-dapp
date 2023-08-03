@@ -98,10 +98,11 @@
                     </v-btn>
                 </div>
             </div>
+
             <div
                 v-if="pool.stableFishUrl"
                 class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-6">
-                <div class="tooltip-wrapper">
+                <div @click="openLinkToStableFish" class="tooltip-wrapper">
                     <div class="tooltip-trigger">
                         <v-img
                             :src="require('@/assets/icon/stableFish.svg')"
@@ -110,8 +111,9 @@
                     </div>
                     <div class="tooltip-content">
                         <Tooltip
+                            top
                             text="See on Stable Fish"
-                            link="https://stable.fish/rank?deposit_tk=212"/>
+                            :link="pool.stableFishUrl"/>
                     </div>
                 </div>
             </div>
@@ -232,8 +234,9 @@ export default defineComponent({
 
             this.openLink(aggregator)
         },
-
-
+        openLinkToStableFish(url) {
+            window.open(this.pool.stableFishUrl, '_blank').focus();
+        },
     }
 })
 </script>
@@ -469,6 +472,7 @@ div {
 .tooltip-wrapper {
     position: relative;
     display: inline-block;
+    cursor: pointer;
 }
 
 .tooltip-content {
@@ -488,6 +492,7 @@ div {
 .stable-fish-icon {
     width: 32px;
     height: 32px;
+    cursor: pointer;
 }
 
 </style>

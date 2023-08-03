@@ -502,9 +502,9 @@ export default {
           map.set('0xb260163158311596ea88a700c5a30f101d072326', '1479'); // 5. Chronos USD+/DAI+
           map.set('0xcd78e225e36e724c9fb4bd8287296557d728cda7', '1483'); // 6. Chronos LUSD/USD+
           // map.set('', ''); // 8. Arbidex USD+/USDC.e ****
-          map.set('0x571102a88928d74c049849af094a289c27fb794e', '1020'); // 7. SushiSwap USD+/USDC
+          // map.set('0x571102a88928d74c049849af094a289c27fb794e', '1020'); // 7. SushiSwap USD+/USDC
           // map.set('0xd95E98fc33670dC033424E7Aa0578D742D00f9C7', '712'); // 8. Velodrome USD+/USDC
-          map.set('0x421a018cc5839c4c0300afb21c725776dc389b1a', '603'); // 9. Dystopia USD+/USDC
+          // map.set('0x421a018cc5839c4c0300afb21c725776dc389b1a', '603'); // 9. Dystopia USD+/USDC
           // map.set('0x37e7D30CC180A750C83D68ED0C2511dA10694d63', '1021'); // 10. Velodrome USD+/LUSD
 
 

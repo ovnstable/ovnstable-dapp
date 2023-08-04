@@ -53,9 +53,11 @@
                         SWIPE
                     </label>
 
+<!--
                     <div v-if="isShowSwipeNotification" class="ping d-inline ml-4">
                         <div style=""></div>
                     </div>
+-->
 
                 </v-list-item-title>
             </v-list-item>
@@ -450,6 +452,11 @@ export default {
         ...mapActions('track', ['trackClick']),
 
         checkIsNotified(subscribe) {
+            let a = true;
+            if (a) {
+                return;
+            }
+
             let lastNotify = localStorage.getItem('lastNotify');
 
             if (!lastNotify || lastNotify === 'null' || lastNotify === 'undefined') {

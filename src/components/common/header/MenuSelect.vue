@@ -7,11 +7,11 @@
                 <v-row justify="end" align="center" class="select-bar-container">
                     <v-icon class="menu-icon">mdi-view-headline</v-icon>
 
-                    <div v-if="isShowSwipeNotification" class="ping-notify">
+<!--                    <div v-if="isShowSwipeNotification" class="ping-notify">
                         <div class="ping d-inline ml-4">
                             <div style=""></div>
                         </div>
-                    </div>
+                    </div>-->
                 </v-row>
             </div>
         </template>
@@ -46,9 +46,9 @@
                         SWIPE
                     </label>
 
-                    <div v-if="isShowSwipeNotification" class="ping d-inline ml-4">
+<!--                    <div v-if="isShowSwipeNotification" class="ping d-inline ml-4">
                         <div style=""></div>
-                    </div>
+                    </div>-->
 
                 </v-list-item-title>
             </v-list-item>
@@ -359,6 +359,11 @@ export default {
         ...mapActions('track', ['trackClick']),
 
       checkIsNotified(subscribe) {
+          let a = true;
+          if (a) {
+              return;
+          }
+
         let lastNotify = localStorage.getItem('lastNotify');
         console.log('lastNotify 1:', lastNotify)
 

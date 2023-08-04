@@ -211,7 +211,7 @@ export default defineComponent({
     },
     data() {
         return {
-            TEST_MULTIPLY_COUNT: 1000,
+            TEST_MULTIPLY_COUNT: 1,
             EXAMPLE_VALUE: 10000,
             monthApy: 0,
             threeMonthApy: 0,

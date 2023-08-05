@@ -109,6 +109,10 @@ export default defineComponent({
         SelectTokenShort
     },
     props: {
+        viewType : {
+            type: String,
+            required: true
+        },
         isShow: {
             type: Boolean,
             default: false
@@ -138,8 +142,15 @@ export default defineComponent({
     watch: {
         isShow: function (val, oldVal) {
             if (val) {
+
                 try {
-                    this.trackClick({action: 'success_swap_view', event_category: 'Page view', event_label: 'View success swap page' });
+                    if (this.viewType === 'SWIPE') {
+                        this.trackClick({action: 'success_swipe_view', event_category: 'Page view', event_label: 'View success swipe page' });
+                    } else if (this.viewType === 'SWAP') {
+                        this.trackClick({action: 'success_swap_view', event_category: 'Page view', event_label: 'View success swap page' });
+                    } else {
+                        console.log("Unknown success view type for view tracking: ", this.viewType);
+                    }
                 } catch (e) {
                     console.error("Track error:", e);
                 }

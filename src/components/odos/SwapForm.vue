@@ -288,7 +288,9 @@
 
         <SuccessOdosModal :is-show="isShowSuccessModal"
                           :set-show-func="showSuccessModal"
-                          :success-data="successData"/>
+                          :success-data="successData"
+                          :view-type="viewType"
+        />
 
         <WaitingModal/>
         <ErrorModal/>
@@ -362,7 +364,13 @@ export default defineComponent({
         }
 
         try {
-            this.trackClick({action: 'swap_page_view', event_category: 'Page view', event_label: 'View swap page' });
+            if (this.viewType === 'SWIPE') {
+                this.trackClick({action: 'swipe_page_view', event_category: 'Page view', event_label: 'View swipe page' });
+            } else if (this.viewType === 'SWAP') {
+                this.trackClick({action: 'swap_page_view', event_category: 'Page view', event_label: 'View swap page' });
+            } else {
+                console.log("Unknown view type for odos view tracking: ", this.viewType);
+            }
         } catch (e) {
             console.error("Track error:", e);
         }
@@ -835,7 +843,13 @@ export default defineComponent({
             }
 
             try {
-                this.trackClick({action: 'click_form_swap', event_category: 'Click Button', event_label: 'Click on swap', value: this.sumOfAllSelectedTokensInUsd });
+                if (this.viewType === 'SWIPE') {
+                    this.trackClick({action: 'click_form_swipe', event_category: 'Click Button', event_label: 'Click on swipe', value: this.sumOfAllSelectedTokensInUsd });
+                } else if (this.viewType === 'SWAP') {
+                    this.trackClick({action: 'click_form_swap', event_category: 'Click Button', event_label: 'Click on swap', value: this.sumOfAllSelectedTokensInUsd });
+                } else {
+                    console.log("Unknown view type for swap click tracking: ", this.viewType);
+                }
             } catch (e) {
                 console.error("Track error:", e);
             }

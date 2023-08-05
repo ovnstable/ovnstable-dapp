@@ -62,7 +62,7 @@ export const odosSwap = {
                 inputTokens: [],
                 outputTokens: []
             },
-            zksyncFeeHistory: null,
+                zksyncFeeHistory: null,
 
             tokenSeparationScheme: null, // OVERNIGHT_SWAP, POOL_SWAP,
             listOfBuyTokensAddresses: null // for POOL_SWAP scheme

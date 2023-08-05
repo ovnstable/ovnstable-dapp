@@ -9,7 +9,7 @@ export const pool = {
             isZapModalShow: false,
             currentZapPool: null,
             zapPlatformSupportList: [
-                'Chronos',
+                // 'Chronos',
                 'Thena',
                 'Velodrome',
                 'Ramses',

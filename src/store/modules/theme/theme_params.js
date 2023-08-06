@@ -424,6 +424,22 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--swipe-lable-info',
+        enabled: true,
+        theme: {
+            light: '#F5F5F5',
+            dark: '#29323E'
+        }
+    },
+    {
+        name: '--swipe-info',
+        enabled: true,
+        theme: {
+            light: '#29323E',
+            dark: '#F5F5F5'
+        }
+    },
+    {
         name: '--swap-input-placeholder',
         enabled: true,
         theme: {

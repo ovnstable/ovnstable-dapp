@@ -163,7 +163,7 @@
 
             <div v-if="isNullableAllBalances">
                 <div>
-                    <div class="pb-3">
+                    <div class="go-to-swap-message pb-3">
                         Go to Swap page to exchange any of your tokens for USD+.
                     </div>
                     <div>
@@ -456,6 +456,7 @@ div {
 
 .welcome-message {
     padding-bottom: 10px;
+    color: var(--main-gray-text);
 }
 
 .tokens-amount-table-footer {
@@ -469,8 +470,8 @@ div {
     padding-right: 15px;
     padding-top: 5px;
     padding-bottom: 5px;
-    background: rgba(245, 245, 245, 1);
-
+    background: var(--swipe-lable-info);
+    color: var(--main-gray-text);
     font-weight: bold;
 
 }
@@ -491,7 +492,7 @@ div {
     line-height: 28px;
     letter-spacing: 0px;
     text-align: center;
-    color: rgba(41, 50, 62, 1);
+    color: var(--main-gray-text);
 }
 
 .tokens-amount-table-body {
@@ -508,7 +509,8 @@ div {
 }
 
 .date-info {
-    background: rgba(245, 245, 245, 1);
+    background: var(--swipe-lable-info);
+    color: var(--main-gray-text);
     padding: 0px 8px 0px 8px;
     border-radius: 8px;
     margin-bottom: 5px;
@@ -535,7 +537,7 @@ div {
 }
 
 .swipe-info {
-    color: rgba(41, 50, 62, 1);
+    color: var(--swipe-info);
     font-family: Roboto;
     font-size: 18px;
     font-weight: 600;
@@ -548,6 +550,7 @@ div {
 .possible-income-header-text {
     //text-align: right;
     //padding-bottom: 10px;
+    color: var(--main-gray-text);
 }
 
 
@@ -591,6 +594,7 @@ div {
 
 .swipe-info-container {
     cursor: pointer;
+    color: var(--main-gray-text);
 
 }
 
@@ -645,6 +649,11 @@ div {
 }
 
 .possible-profit {
+    color: var(--main-gray-text);
 
+}
+
+.go-to-swap-message {
+    color: var(--main-gray-text);
 }
 </style>

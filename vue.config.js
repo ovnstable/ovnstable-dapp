@@ -29,6 +29,9 @@ module.exports = {
 
     configureWebpack: {
         devServer: {
+            watchOptions: {
+                ignored: [/node_modules/, /public/],
+            },
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',

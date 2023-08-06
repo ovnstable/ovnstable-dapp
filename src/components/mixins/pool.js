@@ -5,6 +5,7 @@ export const pool = {
 
     },
     data() {
+        
         return {
             isZapModalShow: false,
             currentZapPool: null,

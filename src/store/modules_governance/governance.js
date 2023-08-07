@@ -453,7 +453,6 @@ const actions = {
             for (let i = 0; i < weights.length; i++) {
 
                 let weight = weights[i];
-
                 let item = {};
 
                 item.strategy = weight.address;
@@ -466,7 +465,8 @@ const actions = {
 
                 items.push(item);
             }
-            console.debug("ITEMS: ", items)
+
+            console.debug("Estimate Set Strategy Weights ITEMS: ", items)
 
             await pm.methods.setStrategyWeights(items).estimateGas(estimateOptions)
                 .then(function (gasAmount) {
@@ -721,7 +721,12 @@ const actions = {
             console.log('rootState.network.assetDecimals: ', rootState.network.assetDecimals)
 
             let nav = (fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : numberUtils._fromE18(asset.netAssetValue.toString()));
-            let isHidden = !(nav > 0 || items.enabled || items.targetWeight > 0);
+
+
+            let targetWeights = (weight.targetWeight ? parseInt(weight.targetWeight) / 1000 : 0);
+            let enabledReward = weight.enabledReward;
+            let enabled = weight.enabled;
+            let isHidden = !(nav > 0 || enabled || targetWeights > 0 || enabledReward );
 
             items.push(
                 {
@@ -732,9 +737,9 @@ const actions = {
                     minWeight: (weight.minWeight ? parseInt(weight.minWeight) / 1000 : 0),
                     maxWeight: (weight.maxWeight ? parseInt(weight.maxWeight) / 1000 : 0),
                     riskFactor: (weight.riskFactor ? parseInt(weight.riskFactor) / 1000 : 0),
-                    targetWeight: (weight.targetWeight ? parseInt(weight.targetWeight) / 1000 : 0),
-                    enabled: weight.enabled,
-                    enabledReward: weight.enabledReward,
+                    targetWeight: targetWeights,
+                    enabled: enabled,
+                    enabledReward: enabledReward,
                     isHidden: isHidden,
                 });
 
@@ -863,16 +868,32 @@ const actions = {
     },
 
 
-    async getFinance({commit, dispatch, getters, rootState}, contractType) {
+    async getFinance({commit, dispatch, getters, rootState}, payload) {
 
         commit('setFinanceLoading', true);
 
-        dispatch('getAbroad', contractType);
-        dispatch('checkAccount', contractType);
-        await dispatch('getStrategyWeights', contractType);
-        await dispatch('getM2M', contractType);
+        dispatch('getAbroad', payload.contractType);
+        dispatch('checkAccount', payload.contractType);
 
+
+        console.debug("isAddDelay: ", payload.isAddDelay);
+        // added delay for a blockchain waiting
+        if (payload.isAddDelay) {
+            setTimeout(async () => {
+                console.debug("isAddDelay Update now.")
+                await dispatch('getStrategyWeights', payload.contractType);
+                await dispatch('getM2M', payload.contractType);
+                commit('setFinanceLoading', false);
+            }, 10000)
+
+            return;
+        }
+
+
+        await dispatch('getStrategyWeights', payload.contractType);
+        await dispatch('getM2M', payload.contractType);
         commit('setFinanceLoading', false);
+
     },
 };
 

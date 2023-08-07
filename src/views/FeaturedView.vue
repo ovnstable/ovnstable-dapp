@@ -8,6 +8,7 @@
             <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
             <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
             <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
+            <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
             <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
         </v-row>
 
@@ -120,6 +121,13 @@ export default {
       return {
           'tab-button': this.tab === 'arbitrum',
           'tab-button-in-active': this.tab !== 'arbitrum',
+      }
+    },
+
+    activeTabBase: function() {
+      return {
+          'tab-button': this.tab === 'base',
+          'tab-button-in-active': this.tab !== 'base',
       }
     },
 

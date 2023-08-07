@@ -7,8 +7,8 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 // import argentModule from "@web3-onboard/argent";
 
 
-const SUPPORTED_NETWORKS = [137, 56, 10, 42161, 324];
-const WALLETCONNECT_SUPPORTED_NETWORKS = [137, 56, 10, 42161];
+const SUPPORTED_NETWORKS = [137, 56, 10, 42161, 324, 8453];
+const WALLETCONNECT_SUPPORTED_NETWORKS = [137, 56, 10, 42161, 8453];
 
 const state = {
     onboard: null,
@@ -293,6 +293,12 @@ const actions = {
                 label: "Polygon",
                 rpcUrl: "https://polygon-rpc.com/",
             },
+            {
+                id: 8453,
+                token: "ETH",
+                label: "Base",
+                rpcUrl: "https://mainnet.base.org/",
+            },
             // ... other chains
         ]
     },
@@ -307,6 +313,7 @@ const actions = {
             rpc: {
                 ['324']: "https://mainnet.era.zksync.io",
                 ['42161']: "https://arb1.arbitrum.io/rpc",
+                ['8453']: "https://mainnet.base.org",
                 ['10']: "https://mainnet.optimism.io",
                 ['56']: "https://bsc-dataseed.binance.org",
                 ['137']: "https://polygon-rpc.com/"

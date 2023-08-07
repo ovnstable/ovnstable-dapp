@@ -50,8 +50,8 @@ export default defineComponent({
     },
     data() {
         return {
-            usdplusAvailibleNetworks: ['optimism', 'arbitrum', 'bsc', 'polygon', 'zksync'],
-            daiplusAvailibleNetworks: ['optimism', 'arbitrum'],
+            usdplusAvailibleNetworks: ['optimism', 'arbitrum', 'bsc', 'polygon', 'zksync', 'base'],
+            daiplusAvailibleNetworks: ['optimism', 'arbitrum', 'base'],
             usdtplusAvailibleNetworks: ['bsc'],
             wusdAvailibleNetworks: ['optimism', 'arbitrum', 'polygon'],
 

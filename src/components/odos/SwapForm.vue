@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="!isAvailableOnNetwork">
-            <NetworkNotAvailable :network-name="'ZkSync'">
+            <NetworkNotAvailable :network-name="networkName">
             </NetworkNotAvailable>
         </div>
 

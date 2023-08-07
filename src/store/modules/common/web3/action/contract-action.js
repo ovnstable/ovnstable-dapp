@@ -21,6 +21,7 @@ const actions = {
             polygon_dev: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
             optimism: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
             arbitrum: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+            base: '0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA',
             zksync: '0x3355df6d4c9c3035724fd0e3914de96a5a83aaf4',
             bsc: '0x55d398326f99059ff775485246999027b3197955',
         };
@@ -33,6 +34,7 @@ const actions = {
             polygon: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
             arbitrum: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
             optimism: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
+            base: '0x50c5725949a6f0c72e6c4a641f24049a917db0cb',
         };
 
         let networkUsdtMap = {
@@ -63,22 +65,28 @@ const actions = {
             contracts.usdt,
         ] = await Promise.all([
             _load(await loadJSON(`/contracts/${network}/Exchange.json`), web3),
-            (network === "optimism") || network === "arbitrum" ? _load(await loadJSON(`/contracts/${network}/DaiExchange.json`), web3) : _load_empty(),
-            (network === "bsc") ? _load(await loadJSON(`/contracts/${network}/UsdtExchange.json`), web3) : _load_empty(),
-            (network !== 'zksync') ? _load(await loadJSON(`/contracts/${network}/OvnToken.json`), web3) : _load_empty(),
-            (network !== 'zksync') ?_load(await loadJSON(`/contracts/${network}/OvnGovernor.json`), web3) : _load_empty(),
+
+            network === "optimism" || network === "arbitrum" || network === "base" ? _load(await loadJSON(`/contracts/${network}/DaiExchange.json`), web3) : _load_empty(),
+            network === "bsc" ? _load(await loadJSON(`/contracts/${network}/UsdtExchange.json`), web3) : _load_empty(),
+            network !== 'zksync' && network !== 'base' ? _load(await loadJSON(`/contracts/${network}/OvnToken.json`), web3) : _load_empty(),
+            network !== 'zksync' &&  network !== 'base' ?_load(await loadJSON(`/contracts/${network}/OvnGovernor.json`), web3) : _load_empty(),
             _load(await loadJSON(`/contracts/${network}/PortfolioManager.json`), web3),
-            (network === "optimism") || network === "arbitrum" ? _load(await loadJSON(`/contracts/${network}/DaiPortfolioManager.json`), web3) : _load_empty(),
+
+            network === "optimism" || network === "arbitrum"  || network === "base" ? _load(await loadJSON(`/contracts/${network}/DaiPortfolioManager.json`), web3) : _load_empty(),
             network === "bsc" ? _load(await loadJSON(`/contracts/${network}/UsdtPortfolioManager.json`), web3) : _load_empty(),
-            (network !== 'zksync') ?_load(await loadJSON(`/contracts/${network}/OvnTimelockController.json`), web3) : _load_empty(),
+            network !== 'zksync' && network !== 'base' ?_load(await loadJSON(`/contracts/${network}/OvnTimelockController.json`), web3) : _load_empty(),
             _load(await loadJSON(`/contracts/${network}/UsdPlusToken.json`), web3),
-            (network === "optimism") || network === "arbitrum" ? _load(await loadJSON(`/contracts/${network}/DaiPlusToken.json`), web3) : _load_empty(),
+
+            network === "optimism" || network === "arbitrum" || network === "base" ? _load(await loadJSON(`/contracts/${network}/DaiPlusToken.json`), web3) : _load_empty(),
+
             (network === "bsc") ? _load(await loadJSON(`/contracts/${network}/UsdtPlusToken.json`), web3) : _load_empty(),
             _load(await loadJSON(`/contracts/${network}/Mark2Market.json`), web3),
-            (network === "optimism") || network === "arbitrum" ? _load(await loadJSON(`/contracts/${network}/DaiMark2Market.json`), web3) : _load_empty(),
+
+            network === "optimism" || network === "arbitrum" || network === "base" ? _load(await loadJSON(`/contracts/${network}/DaiMark2Market.json`), web3) : _load_empty(),
             network === "bsc" ? _load(await loadJSON(`/contracts/${network}/UsdtMark2Market.json`), web3) : _load_empty(),
-            (network !== "bsc" && network !== 'zksync') ? _load(await loadJSON(`/contracts/${network}/Market.json`), web3) : _load_empty(),
-            (network !== "bsc" && network !== 'zksync') ? _load(await loadJSON(`/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
+            network !== "bsc" && network !== 'zksync' &&  network !== 'base' ? _load(await loadJSON(`/contracts/${network}/Market.json`), web3) : _load_empty(),
+            network !== "bsc" && network !== 'zksync' &&  network !== 'base' ? _load(await loadJSON(`/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
+
             networkAssetMap[network] ? _load(ERC20, web3, networkAssetMap[network]) : _load_empty(),
             networkAssetTwoMap[network] ? _load(ERC20, web3, networkAssetTwoMap[network]) : _load_empty(),
             networkDaiMap[network] ? _load(ERC20, web3, networkDaiMap[network]) : _load_empty(),

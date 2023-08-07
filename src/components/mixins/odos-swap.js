@@ -364,6 +364,11 @@ export const odosSwap = {
         },
 
         async initContractData() {
+            if (!this.isAvailableOnNetwork) {
+                console.info("Swap init not available on this network for loading contract.", this.networkName)
+                return
+            }
+
             let networkId = this.getParams(this.networkName).networkId;
             await this.loadContract(networkId).then(() => {
                 console.log("Contracts loaded", this.routerContract, this.executorContract);

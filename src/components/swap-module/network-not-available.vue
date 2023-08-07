@@ -3,11 +3,11 @@
         <div class="swap-container">
             <div class="not-available-container">
                 <div class="not-available-logo-container text-center">
-                    <img src="/assets/icon/swap/zksync-wait.svg" class="not-available-logo" alt="zksync-wait">
+                    <img src="/assets/icon/swap/zksync-wait.svg" class="not-available-logo" alt="wait">
                 </div>
                 <div class="not-available-info text-center">
                     <div>
-                        Swap will be available on {{networkName}} chain soon.
+                        Swap will be available on <span class="network-name">{{networkName}}</span> chain soon.
                     </div>
                     <div>
                         Now you can mint or redeem Overnight tokens.
@@ -254,6 +254,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-weight: 400 !important;
     letter-spacing: 0.02em !important;
     border-radius: 2px;
+}
+
+.network-name {
+    text-transform: capitalize;
 }
 
 </style>

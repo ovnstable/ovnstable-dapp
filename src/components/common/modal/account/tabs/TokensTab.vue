@@ -66,7 +66,7 @@ export default {
         ...mapGetters('etsAction', ['etsList']),
 
         showDai: function () {
-          return this.networkId === 10 || this.networkId === 42161;
+          return this.networkId === 10 || this.networkId === 42161 || this.networkId === 8453;
         },
         showUsdt: function () {
           return this.networkId === 56;

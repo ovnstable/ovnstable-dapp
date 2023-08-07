@@ -63,6 +63,19 @@ const ZKSYNC_PARAMS = {
     networkColor: '#8B8DFC'
 }
 
+const BASE_PARAMS = {
+    appApiUrl: 'https://base.overnight.fi/api',
+    networkName: 'base',
+    networkId: 8453,
+    rpcUrl: 'https://mainnet.base.org',
+    explorerUrl: 'https://basescan.org/',
+    assetName: 'USDC',
+    assetDecimals: 6,
+    nativeAssetName: 'ETH',
+    bridgeLink: 'https://bridge.base.org/',
+    networkColor: '#0052ff'
+}
+
 let dbNetworkName = localStorage.getItem('selectedNetwork');
 const state = {
     appApiUrl: _getParams(dbNetworkName).appApiUrl,
@@ -82,18 +95,21 @@ const state = {
     opApi: OPTIMISM_PARAMS.appApiUrl,
     arApi: ARBITRUM_PARAMS.appApiUrl,
     zkApi: ZKSYNC_PARAMS.appApiUrl,
+    baseApi: BASE_PARAMS.appApiUrl,
 
     polygonConfig: POLYGON_PARAMS,
     bscConfig: BSC_PARAMS,
     opConfig: OPTIMISM_PARAMS,
     arConfig: ARBITRUM_PARAMS,
     zkConfig: ZKSYNC_PARAMS,
+    baseConfig: BASE_PARAMS,
     allNetworkConfigs: [
         OPTIMISM_PARAMS,
         ARBITRUM_PARAMS,
         ZKSYNC_PARAMS,
+        BASE_PARAMS,
         BSC_PARAMS,
-        POLYGON_PARAMS
+        POLYGON_PARAMS,
     ],
 
     switchToOtherNetwork: false,
@@ -128,6 +144,11 @@ function _getParams(networkName) {
         case "324":
         case 324:
             return ZKSYNC_PARAMS;
+        case "base":
+        case "bs":
+        case "8453":
+        case 8453:
+            return BASE_PARAMS;
         default:
             return OPTIMISM_PARAMS; //BASE_PARAMS;
     }
@@ -187,6 +208,10 @@ const getters = {
         return state.bscApi;
     },
 
+    baseApi(state) {
+        return state.baseApi;
+    },
+
     opApi(state) {
         return state.opApi;
     },
@@ -205,6 +230,10 @@ const getters = {
 
     bscConfig(state) {
         return state.bscConfig;
+    },
+
+    baseConfig(state) {
+        return state.baseConfig;
     },
 
     opConfig(state) {
@@ -274,6 +303,11 @@ const actions = {
             case "zksync":
             case "324":
                 localStorage.setItem('selectedNetwork', 'zk');
+                break;
+            case "bs":
+            case "base":
+            case "8453":
+                localStorage.setItem('selectedNetwork', 'base');
                 break;
             default:
                 localStorage.setItem('selectedNetwork', 'op');
@@ -367,6 +401,21 @@ const actions = {
                                 rpcUrls: ['https://mainnet.era.zksync.io'],
                                 blockExplorerUrls: ['https://explorer.zksync.io'],
                                 chainName: 'ZkSync',
+                                nativeCurrency: {
+                                    symbol: 'ETH',
+                                    name: 'ETH',
+                                    decimals: 18,
+                                }
+                            };
+                            break;
+                        case "bs":
+                        case "base":
+                        case "8453":
+                            params = {
+                                chainId: rootState.web3.web3.utils.toHex(8453),
+                                rpcUrls: ['https://mainnet.base.org'],
+                                blockExplorerUrls: ['https://basescan.org'],
+                                chainName: 'Base',
                                 nativeCurrency: {
                                     symbol: 'ETH',
                                     name: 'ETH',

@@ -190,7 +190,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['polygonApi', 'bscApi', 'opApi', 'arApi', 'zkApi', 'getParams']),
+        ...mapGetters('network', ['polygonApi', 'bscApi', 'opApi', 'arApi', 'base', 'zkApi', 'getParams']),
         ...mapGetters('theme', ['light']),
 
         isMobile() {
@@ -230,6 +230,9 @@ export default {
                     break;
                 case 42161:
                     apiUrl = this.arApi;
+                    break;
+                case 8453:
+                    apiUrl = this.baseApi;
                     break;
                 case 324:
                     apiUrl = this.zkApi;

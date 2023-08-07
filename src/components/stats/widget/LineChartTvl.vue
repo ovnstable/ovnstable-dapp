@@ -79,6 +79,7 @@ import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import arbitrumIcon from "@/assets/network/ar.svg";
+import baseIcon from "@/assets/network/base.svg";
 import zksyncIcon from "@/assets/network/zk.svg";
 
 export default {
@@ -141,6 +142,8 @@ export default {
                 return '#7B3FE4';
             } else if (this.networkName === 'arbitrum') {
                 return '#29A0F0';
+            } else if (this.networkName === 'base') {
+                return '#0052ff';
             } else if (this.networkName === 'bsc') {
                 return '#F0B90B';
             } else if (this.networkName === 'optimism') {
@@ -161,6 +164,8 @@ export default {
                     return bscIcon;
                 case 'arbitrum':
                     return arbitrumIcon;
+                case 'base':
+                    return baseIcon;
                 case 'zksync':
                     return zksyncIcon;
             }

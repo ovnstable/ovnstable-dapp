@@ -20,6 +20,7 @@
                     <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
                     <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
                     <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
+                    <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
                     <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
                     <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
                 </v-row>
@@ -31,6 +32,7 @@
                     <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
                 </v-row>
                 <v-row class="ma-0 mt-5 ml-3 toggle-row toggle-row-second">
+                    <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
                     <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
                     <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
                 </v-row>
@@ -259,6 +261,13 @@ export default {
             }
         },
 
+        activeTabBase: function() {
+            return {
+                'tab-button': this.tab === 'base',
+                'tab-button-in-active': this.tab !== 'base',
+            }
+        },
+
         activeTabZkSync: function() {
             return {
                 'tab-button': this.tab === 'zksync',
@@ -301,6 +310,11 @@ export default {
                 return 'https://polygonscan.com/token/0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
             }
 
+
+            if (this.tabNetworkName === 'base') {
+                return 'https://basescan.org/token/0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
+            }
+
             console.error("Not found networkId type when return usd+ explorer link")
             return null;
         },
@@ -325,6 +339,12 @@ export default {
             if (this.tabNetworkName === 'polygon') {
                 return '0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
             }
+
+
+            if (this.tabNetworkName === 'base') {
+                return '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
+            }
+
 
             console.error("Not found networkId type when return usd+ contract address")
             return null;

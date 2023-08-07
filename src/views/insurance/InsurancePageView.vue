@@ -118,6 +118,9 @@
                         <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4" disabled>
                             Arbitrum
                         </label>
+                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4" disabled>
+                            Base
+                        </label>
                     </v-row>
 
                     <PerformanceTab v-if="tab === 1" :insurance-data="insuranceStrategyData"/>

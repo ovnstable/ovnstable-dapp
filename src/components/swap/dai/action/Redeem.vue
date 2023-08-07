@@ -265,13 +265,12 @@ import {mapActions, mapGetters} from "vuex";
 import ErrorModal from "@/components/common/modal/action/ErrorModal";
 import WaitingModal from "@/components/common/modal/action/WaitingModal";
 import SuccessModal from "@/components/common/modal/action/SuccessModal";
-import BN from "bn.js";
 import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import arbitrumIcon from "@/assets/network/ar.svg";
+import baseIcon from "@/assets/network/base.svg";
 import zksyncIcon from "@/assets/network/zk.svg";
 import bscIcon from "@/assets/network/bsc.svg";
-import {axios} from "@/plugins/http-axios";
 import Tooltip from "@/components/common/element/Tooltip";
 import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
 import {swap} from "@/components/mixins/swap";
@@ -340,6 +339,8 @@ export default {
                     return bscIcon;
                 case 42161:
                     return arbitrumIcon;
+                case 8453:
+                    return baseIcon;
                 case 324:
                     return zksyncIcon;
             }

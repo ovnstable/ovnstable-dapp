@@ -90,6 +90,8 @@ export default {
                 return '#7B3FE4';
             } else if (this.networkName === 'arbitrum') {
                 return '#29A0F0';
+            } else if (this.networkName === 'base') {
+                return '#0052ff';
             } else if (this.networkName === 'bsc') {
                 return '#F0B90B';
             } else if (this.networkName === 'optimism') {

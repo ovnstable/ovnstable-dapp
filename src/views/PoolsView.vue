@@ -123,7 +123,7 @@ export default {
         selectedTabs: ['ALL'], // ALL or networkName,
         isShowOnlyZap: false,
         isShowAprLimit: false,
-        aprLimitForFilter: 100,
+        aprLimitForFilter: 15,
         searchQuery: null,
 
         orderType: "APR" // APR, APR_UP, APR_DOWN, TVL, TVL_UP, TVL_DOWN
@@ -240,7 +240,7 @@ export default {
             }
 
             return this.filteredZappablePools.filter(pool =>
-                pool.apr && pool.tvl < 300000 && this.aprLimitForFilter <= pool.apr*1
+                pool.apr && this.aprLimitForFilter <= pool.apr*1
             )
         },
         filteredAprSecondPools: function () {
@@ -249,7 +249,7 @@ export default {
             }
 
             return this.filteredZappableSecondPools.filter(pool =>
-                pool.apr && pool.tvl < 10000 && this.aprLimitForFilter <= pool.apr*1
+                pool.apr && this.aprLimitForFilter <= pool.apr*1
             )
         },
 

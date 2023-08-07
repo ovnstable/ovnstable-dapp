@@ -212,7 +212,7 @@ export default {
 
                 await this.setStrategiesM2MWeights({weights: this.m2mItems, contractType: this.contractType});
                 console.debug("If error in StrategiesM2MWeights: ", this.m2mItems, this.contractType)
-                await this.getFinance(this.contractType);
+                await this.getFinance({contractType: this.contractType, isAddDelay: true});
                 console.debug("If error in GetFinance: ", this.contractType)
             } else {
                 this.showErrorModal('governanceChangeWeights');
@@ -230,14 +230,14 @@ export default {
                 }
 
                 await this.rebalancePortfolio(this.contractType);
-                await this.getFinance(this.contractType);
+                await this.getFinance({contractType: this.contractType, isAddDelay: true});
             } else {
                 this.showErrorModal('governanceRebalance');
             }
         },
 
         async updateM2MItems() {
-            await this.getFinance(this.contractType);
+            await this.getFinance({contractType: this.contractType, isAddDelay: false});
             this.toggleZeroStrategies(this.isZeroStrategiesShow);
         },
 

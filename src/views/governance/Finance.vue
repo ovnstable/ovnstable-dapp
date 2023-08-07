@@ -67,7 +67,7 @@ export default {
 
     watch: {
         contracts: async function (newVal, oldVal) {
-            await this.getFinance(this.tab);
+            await this.getFinance({contractType: this.tab, isAddDelay: false});
         },
     },
 
@@ -75,13 +75,13 @@ export default {
         ...mapActions('governance', ['getFinance']),
         setTab(tab) {
             this.tab = tab;
-            this.getFinance(this.tab);
+            this.getFinance({contractType: this.tab, isAddDelay: false});
         },
 
         hideZeroStrategiesAction: function() {
             for (let i = 0; i < this.m2mItems.length; i++) {
                 let item = this.m2mItems[i];
-                if (item.netAssetValue > 0 || item.enabled || item.targetWeight > 0) {
+                if (item.netAssetValue > 0 || item.enabled || item.targetWeight > 0 || item.enabledReward) {
                     item.isHidden = false;
                     continue;
                 }

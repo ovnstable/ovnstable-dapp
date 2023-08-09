@@ -47,7 +47,7 @@ class OdosApiService {
             }
         }
         return new Promise((resolve, reject) => {
-            apiService.get(API_URL + '/info/contract-info/' + chainId, fetchOptions)
+            apiService.get(API_URL + '/info/contract-info/v2/' + chainId, fetchOptions)
                 .then(data => {
                     resolve(data)
                 })
@@ -100,7 +100,7 @@ class OdosApiService {
         };
 
         return new Promise((resolve, reject) => {
-            apiService.postJson(API_URL + '/sor/quote', requestData, fetchOptions)
+            apiService.postJson(API_URL + '/sor/quote/v2', requestData, fetchOptions)
                 .then(data => {
                     resolve(data)
                 })
@@ -109,6 +109,26 @@ class OdosApiService {
                 })
         })
     }
+
+    assembleRequest(requestData) {
+        let fetchOptions = {
+            headers: {
+                "Access-Control-Allow-Origin": API_URL
+            }
+        };
+
+        return new Promise((resolve, reject) => {
+            apiService.postJson(API_URL + '/sor/assemble', requestData, fetchOptions)
+                .then(data => {
+                    resolve(data)
+                })
+                .catch(e => {
+                    reject(getErrorObject(e))
+                })
+        })
+    }
+
+
     swapRequest(requestData) {
         let fetchOptions = {
             headers: {

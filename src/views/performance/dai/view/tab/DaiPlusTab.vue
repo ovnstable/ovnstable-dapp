@@ -17,7 +17,7 @@
                     <v-row class="ma-0 mt-10 toggle-row">
                         <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
                         <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
-                        <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabBase">Base</label>
+                        <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
                     </v-row>
                 </v-col>
                 <template v-if="!$wu.isMobile()">

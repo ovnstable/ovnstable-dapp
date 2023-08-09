@@ -35,7 +35,7 @@ export const odosSwap = {
             tokensContractMap: {}, // { 'contractAddress': {ABI} }
             tokenPricesMap: {},
 
-            availableNetworksList: ['polygon', 'bsc', 'optimism', 'arbitrum', 'zksync'],
+            availableNetworksList: ['polygon', 'bsc', 'optimism', 'arbitrum', 'zksync', 'base'],
             dataBeInited: false,
 
             swapResponseInfo: null,
@@ -535,8 +535,27 @@ export const odosSwap = {
         },
 
 
+        assembleRequest(requestData) {
+            return odosApiService.assembleRequest(requestData).then((data) => {
+                console.log("Response data for odos assemble request: ", data)
+                return data;
+            }).catch(e => {
+                console.log("Assemble request error: ", e)
+            })
+        },
         swapRequest(requestData) {
-            return odosApiService.swapRequest(requestData)
+            return odosApiService.quoteRequest(requestData)
+                .then((data) => {
+                    console.log("Response data for odos swap request: ", data)
+                    this.swapResponseInfo = data;
+                    return data;
+                }).catch(e => {
+                    console.log("Swap request error: ", e)
+                    this.closeWaitingModal();
+                    this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e}, );
+                })
+
+           /* return odosApiService.swapRequest(requestData)
                 .then((data) => {
                     console.log("Response data for odos swap request: ", data)
                     this.swapResponseInfo = data;
@@ -545,7 +564,7 @@ export const odosSwap = {
                     console.log("Swap request error: ", e)
                     this.closeWaitingModal();
                     this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e}, );
-                })
+                })*/
         },
 
         getTokenByAddress(address) {

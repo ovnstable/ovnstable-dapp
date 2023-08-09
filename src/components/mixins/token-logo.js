@@ -20,6 +20,10 @@ export const tokenLogo = {
                 return '/assets/currencies/external/' + item.symbol + '.svg';
             }
 
+            if (item.symbol === 'USDbC') {
+                return '/assets/currencies/external/' + item.symbol + '.png';
+            }
+
             return 'https://api.overnight.fi/root/odos/asset/tokens/' + item.symbol + '.webp';
         },
 

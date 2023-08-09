@@ -24,6 +24,22 @@ export const tokenLogo = {
                 return '/assets/currencies/external/' + item.symbol + '.png';
             }
 
+            if (item.symbol === 'axlUSDT') {
+                return '/assets/currencies/external/' + item.symbol + '.webp';
+            }
+
+            if (item.symbol === 'BALD') {
+                return '/assets/currencies/external/' + item.symbol + '.png';
+            }
+
+            if (item.symbol === 'OGRE') {
+                return '/assets/currencies/external/' + item.symbol + '.webp';
+            }
+
+            if (item.symbol === 'KOKOS') {
+                return '/assets/currencies/external/' + item.symbol + '.svg';
+            }
+
             return 'https://api.overnight.fi/root/odos/asset/tokens/' + item.symbol + '.webp';
         },
 

@@ -5,7 +5,7 @@ export const pool = {
 
     },
     data() {
-        
+
         return {
             isZapModalShow: false,
             currentZapPool: null,
@@ -259,6 +259,12 @@ export const pool = {
                 case 'Maverick':
                     url = 'https://app.mav.xyz/pools?chain=324';
                     break
+                case 'Baseswap':
+                    url = 'https://baseswap.fi/farms';
+                    break
+                case 'Velocimeter':
+                    url = 'https://base.velocimeter.xyz/liquidity';
+                    break
 
                 default:
                     url = pool.explorerUrl + '/address/';
@@ -274,6 +280,8 @@ export const pool = {
                 pool.platform === 'Ennead' ||
                 pool.platform === 'Arbidex' ||
                 pool.platform === 'Gnd' ||
+                pool.platform === 'Baseswap' ||
+                pool.platform === 'Velocimeter' ||
                 pool.platform === 'Maverick') {
                 window.open(url, '_blank').focus();
                 return;

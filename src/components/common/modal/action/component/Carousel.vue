@@ -101,7 +101,7 @@ export default {
 
 <style scoped>
 .carousel-container {
-    padding-bottom: 20px;
+    padding-bottom: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;

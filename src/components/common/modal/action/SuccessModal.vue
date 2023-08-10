@@ -60,11 +60,7 @@
                         </v-row>
                     </v-col>
                 </v-row>
-                <div class="divider"></div>
             </v-card-text>
-            <div>
-                <Carousel />
-            </div>
         </v-card>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -74,12 +70,11 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import RefundInfo from "@/components/common/modal/RefundInfo.vue";
-import Carousel from "@/components/common/modal/action/component/Carousel.vue";
 
 export default {
     name: "SuccessModal",
 
-    components: {RefundInfo,  Carousel},
+    components: {RefundInfo},
 
     props: {},
 

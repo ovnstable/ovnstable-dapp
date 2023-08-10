@@ -84,11 +84,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="divider"></div>
                     </v-card-text>
-                    <div>
-                        <Carousel />
-                    </div>
                 </v-card>
 
             </v-dialog>
@@ -104,8 +100,6 @@ import SelectTokenShort from "@/components/swap-module/SelectTokenShort.vue";
 import SelectTokenWithSearch from "@/components/swap-module/SelectTokenWithSearch.vue";
 import {mapActions, mapGetters} from "vuex";
 import RefundInfo from "@/components/common/modal/RefundInfo.vue";
-import Carousel from "@/components/common/modal/action/component/Carousel.vue";
-
 
 export default defineComponent({
     name: "SuccessOdosModal",
@@ -113,7 +107,6 @@ export default defineComponent({
         RefundInfo,
         SelectTokenWithSearch,
         SelectTokenShort,
-        Carousel
     },
     props: {
         viewType : {

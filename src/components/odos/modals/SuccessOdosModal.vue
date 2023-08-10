@@ -6,7 +6,7 @@
                     width="570"
                     persistent>
                 <v-card class="container_body container-body airdrop-body pt-4 px-4"
-                        style="border-radius: 28px!important;">
+                        style="border-radius: 8px!important;">
                     <v-toolbar class="container_header container-header" flat>
                         <v-spacer></v-spacer>
                         <v-btn icon @click="setShowFunc(false)">
@@ -84,9 +84,13 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="divider"></div>
                     </v-card-text>
+                    <div>
+                        <Carousel />
+                    </div>
                 </v-card>
+
             </v-dialog>
 
             <resize-observer @notify="$forceUpdate()"/>
@@ -100,13 +104,16 @@ import SelectTokenShort from "@/components/swap-module/SelectTokenShort.vue";
 import SelectTokenWithSearch from "@/components/swap-module/SelectTokenWithSearch.vue";
 import {mapActions, mapGetters} from "vuex";
 import RefundInfo from "@/components/common/modal/RefundInfo.vue";
+import Carousel from "@/components/common/modal/action/component/Carousel.vue";
+
 
 export default defineComponent({
     name: "SuccessOdosModal",
     components: {
         RefundInfo,
         SelectTokenWithSearch,
-        SelectTokenShort
+        SelectTokenShort,
+        Carousel
     },
     props: {
         viewType : {
@@ -378,5 +385,9 @@ div {
     background: rgba(173, 179, 189, 1);
     height: 100%;
     margin-left: 30px;
+}
+
+.divider {
+    border-top: 1px solid #ADB3BD;
 }
 </style>

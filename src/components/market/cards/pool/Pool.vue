@@ -74,6 +74,7 @@
                             </div>
                         </v-row>
                     </v-col>
+
                     <v-col cols="6">
                         <v-row class="ma-0 ml-n2">
                             <div class="box">
@@ -93,9 +94,8 @@
 
         <v-col align-self="end">
             <v-container :class="$wu.isFull() ? 'mb-6' : 'mb-6'">
-                <v-row class="d-flex justify-space-between ma-0" align="center">
 
-                </v-row>
+                <v-row class="d-flex justify-space-between ma-0" align="center"></v-row>
 
                 <v-row class="d-flex justify-space-between ma-0 mt-2">
                     <template>
@@ -135,7 +135,6 @@
 </template>
 
 <script>
-import Tooltip from "@/components/common/element/Tooltip";
 import { mapActions, mapGetters } from "vuex";
 import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
@@ -152,7 +151,6 @@ export default {
 
     components: {
         ZapModal,
-        Tooltip
     },
 
     props: {

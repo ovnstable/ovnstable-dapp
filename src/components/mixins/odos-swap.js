@@ -554,17 +554,18 @@ export const odosSwap = {
                     this.closeWaitingModal();
                     this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e}, );
                 })
-
-           /* return odosApiService.swapRequest(requestData)
-                .then((data) => {
-                    console.log("Response data for odos swap request: ", data)
-                    this.swapResponseInfo = data;
-                   return data;
-                }).catch(e => {
-                    console.log("Swap request error: ", e)
-                    this.closeWaitingModal();
-                    this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e}, );
-                })*/
+        },
+        oldSwapRequest(requestData) {
+             return odosApiService.swapRequest(requestData)
+                 .then((data) => {
+                     console.log("Response data for odos swap request: ", data)
+                     this.swapResponseInfo = data;
+                    return data;
+                 }).catch(e => {
+                     console.log("Swap request error: ", e)
+                     this.closeWaitingModal();
+                     this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e}, );
+                 })
         },
 
         getTokenByAddress(address) {

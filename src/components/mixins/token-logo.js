@@ -59,7 +59,6 @@ export const tokenLogo = {
         async loadCoingeckoOvernightTokenImage(symbol) {
             // example
             // https://api.coingecko.com/api/v3/coins/overnight-dai?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false
-
             let coinGeckoUrl = 'https://api.coingecko.com/api'
             let coinGeckoApiVersion = 'v3'
             let coinGeckoApiMethod = 'coins'

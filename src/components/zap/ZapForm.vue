@@ -834,7 +834,8 @@ export default defineComponent({
             }
 
             console.log("Odos request data", requestData);
-            this.swapRequest(requestData)
+            // todo: update to V2
+            this.oldSwapRequest(requestData)
                 .then(data => {
                     console.log("Odos swap request success from zap", data)
                     console.log("Odos swap request success from zap proportions", proportions)

@@ -6,7 +6,8 @@
         <div>
             <span
                 class="list-items"
-                v-html="formatDescription(currentItem.description, currentItem.linkWord, currentItem.link)">
+                v-html="formatDescription(currentItem.description, currentItem.linkWord, currentItem.link)"
+                @click="handleLinkClick(currentItem.link)">
             </span>
         </div>
     </div>
@@ -14,6 +15,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
     name: "Carousel",
     data: () => ({
@@ -69,6 +72,8 @@ export default {
     },
 
     methods: {
+        ...mapActions('track', ['trackClick']),
+
         showNextItem() {
             if (this.currentItemIndex === this.items.length) {
                 this.currentItemIndex = 0; // Reset to 0 to start over
@@ -81,6 +86,14 @@ export default {
 
         formatDescription(description, linkWord, link) {
             return description.replace(`[${linkWord}]`, `<a href="${link}" target="_blank">${linkWord}</a>`);
+        },
+
+        handleLinkClick(link) {
+            try {
+                this.trackClick({action: 'carousel_link_clicked', event_category: 'Carousel link', event_label: 'Carousel Links Clicked' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
         },
     }
 }

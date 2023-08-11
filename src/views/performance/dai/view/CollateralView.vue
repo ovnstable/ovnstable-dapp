@@ -4,7 +4,8 @@
             <label class="title-label">DAI+ Collateral</label>
         </div>
 
-       <DaiPlusTab v-if="networkId === 10 || networkId === 42161 || networkId === 8453"/>
+        <DaiPlusTab v-if="networkId === 10 || networkId === 42161 || networkId === 8453"/>
+
         <div v-else class="ma-0 info-card-container d-flex">
           <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
             <v-img class="currency" :src="require('@/assets/currencies/DAI+.svg')" />

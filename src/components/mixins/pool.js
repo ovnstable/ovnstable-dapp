@@ -265,6 +265,9 @@ export const pool = {
                 case 'Velocimeter':
                     url = 'https://base.velocimeter.xyz/liquidity';
                     break
+                case 'Swapbased':
+                    url = 'https://swapbased.finance/#/farm';
+                    break
 
                 default:
                     url = pool.explorerUrl + '/address/';
@@ -282,6 +285,7 @@ export const pool = {
                 pool.platform === 'Gnd' ||
                 pool.platform === 'Baseswap' ||
                 pool.platform === 'Velocimeter' ||
+                pool.platform === 'Swapbased' ||
                 pool.platform === 'Maverick') {
                 window.open(url, '_blank').focus();
                 return;

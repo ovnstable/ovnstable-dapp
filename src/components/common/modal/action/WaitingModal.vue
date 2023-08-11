@@ -23,17 +23,35 @@
                     <label class="loading-sub2-label">Confirm this transaction in your wallet</label>
                 </v-row>
             </v-card-text>
+            <div>
+                <BestAprPromotion
+                    :zap-pool="currentZapPool"
+                />
+            </div>
         </v-card>
     </v-dialog>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import { pool } from "@/components/mixins/pool";
+import BestAprPromotion from "@/components/common/modal/action/component/BestAprPromotion";
+
+// create a filter with top apr inside pool.js
 
 export default {
     name: "WaitingModal",
+    mixins: [pool],
+
+    components: {
+        BestAprPromotion,
+    },
 
     props: {
+        pool: {
+            type: Object,
+            required: true
+        }
     },
 
     computed: {

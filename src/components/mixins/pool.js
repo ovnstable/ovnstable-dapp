@@ -2,7 +2,14 @@ import {mapActions} from "vuex";
 
 export const pool = {
     computed: {
+        topAprPools() {
+            const sortedPools = [...this.poolTokensForZapMap].sort((a, b) => {
+                // Assuming APR information is stored in 'apr' property of pool object
+                return b.apr - a.apr; // Sort in descending order of APR
+            });
 
+            return sortedPools.slice(0, 10); // Return top 10 pools
+        }
     },
     data() {
 

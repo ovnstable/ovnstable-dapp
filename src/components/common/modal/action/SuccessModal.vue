@@ -61,6 +61,9 @@
                     </v-col>
                 </v-row>
             </v-card-text>
+            <div>
+                <BestAprPromotion  :pool="pool"/>
+            </div>
         </v-card>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -70,13 +73,24 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import RefundInfo from "@/components/common/modal/RefundInfo.vue";
+import BestAprPromotion from "@/components/common/modal/action/component/BestAprPromotion";
+import { pool } from "@/components/mixins/pool";
 
 export default {
     name: "SuccessModal",
+    mixins: [pool],
 
-    components: {RefundInfo},
+    components: {
+        BestAprPromotion,
+        RefundInfo
+    },
 
-    props: {},
+    props: {
+        pool: {
+            type: Object,
+            required: true
+        }
+    },
 
     computed: {
         ...mapGetters('network', ['explorerUrl']),

@@ -50,6 +50,12 @@ export const zap = {
                     network: 'optimism',
                     typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
                 },
+                'Baseswap': {
+                    name: 'Baseswap',
+                    type: 'LP_STAKE_DIFF_STEPS',
+                    network: 'base',
+                    typeOfDepositConstructor: 'CONSTRUCTOR_WITH_POOL_ID_AND_TOKEN_AMOUNT'
+                },
             },
             zapContract: null,
             poolTokenContract: null,
@@ -194,6 +200,20 @@ export const zap = {
                     approveType: 'TOKEN'
                 },
 
+                // Baseswap
+                '0x696b4d181Eb58cD4B54a59d2Ce834184Cf7Ac31A': {
+                    gauge: '0x2b0a43dccbd7d42c18f6a83f86d1a19fa58d541a',
+                    poolId: 10,
+                    approveType: 'TOKEN'
+                },
+
+                // Baseswap
+                '0x7Fb35b3967798cE8322cC50eF52553BC5Ee4c306': {
+                    gauge: '0x2b0a43dccbd7d42c18f6a83f86d1a19fa58d541a',
+                    poolId: 11,
+                    approveType: 'TOKEN'
+                },
+
             },
 
         }
@@ -266,7 +286,9 @@ export const zap = {
 
             let gauge = poolInfo.gauge;
             console.log('getProportion: ', zapPool, this.zapContract, poolInfo, gauge);
-            if (zapPool.data.platform === "Arbidex") {
+
+            // todo 4: get type from configuration
+            if (zapPool.data.platform === "Arbidex" || zapPool.data.platform === 'Baseswap') {
 
                 return this.zapContract.methods.getProportion(gauge, (poolInfo.poolId).toString()).call().then(data => {
                     console.log('Get proportion: ', poolAddress, gauge, data, poolInfo.poolId);

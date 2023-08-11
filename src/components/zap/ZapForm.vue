@@ -833,21 +833,64 @@ export default defineComponent({
                 disableRFQs: false
             }
 
-            console.log("Odos request data", requestData);
-            // todo: update to V2
-            this.oldSwapRequest(requestData)
-                .then(data => {
-                    console.log("Odos swap request success from zap", data)
-                    console.log("Odos swap request success from zap proportions", proportions)
+            console.log("Odos request data", requestData, this.zapPool);
+            if (this.zapPool.platform === "Baseswap") {
+                // swap v2
+                this.swapRequest(requestData)
+                    .then(async data => {
+                        console.log("Odos swap request quota from zap", data)
+                            console.log("Odos swap request quota from zap proportions", proportions)
 
-                    this.initZapInTransaction(data, proportions.inputTokens, proportions.outputTokens, proportions, this.lastPoolInfoData, this.zapPool, request.gasPrice);
+                        let assembleData = {
+                            "userAddr": request.userAddr,
+                            "pathId": data.pathId,
+                            "simulate": true
+                        }
 
+                        this.assembleRequest(assembleData).then(async responseAssembleData => {
+                            console.log("Assemble data: ", responseAssembleData)
+
+                            // if (responseAssembleData.simulation && !responseAssembleData.simulation.isSuccess) {
+                            //     this.closeWaitingModal();
+                            //     let errMsg = responseAssembleData.simulation.simulationError && responseAssembleData.simulation.simulationError.errorMessage ? responseAssembleData.simulation.simulationError.errorMessage : 'Transaction simulation is failed';
+                            //     console.error("Error before send zap swap transaction: ", errMsg)
+                            //     this.showErrorModalWithMsg({errorType: 'slippage', errorMsg: errMsg},);
+                            //     this.isSwapLoading = false;
+                            //     return;
+                            // }
+
+                            // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
+                            await this.initZapInTransaction(responseAssembleData, proportions.inputTokens, proportions.outputTokens, proportions, this.lastPoolInfoData, this.zapPool, request.gasPrice);
+
+                            this.isSwapLoading = false;
+                            this.clickOnStake = false;
+                        }).catch(e => {
+                            console.error("Odos assemble request failed swap form", e)
+                            this.isSwapLoading = false;
+                            this.clickOnStake = false;
+                        })
+                    }).catch(e => {
+                        console.error("Odos swap request failed from zap", e)
+                        this.isSwapLoading = false;
+                        this.clickOnStake = false;
+                    })
+
+            } else {
+                // todo: update to V2
+                this.oldSwapRequest(requestData)
+                    .then(data => {
+                        console.log("Odos swap request success from zap", data)
+                        console.log("Odos swap request success from zap proportions", proportions)
+
+                        this.initZapInTransaction(data, proportions.inputTokens, proportions.outputTokens, proportions, this.lastPoolInfoData, this.zapPool, request.gasPrice);
+
+                        this.isSwapLoading = false;
+                    }).catch(e => {
+                    console.error("Odos swap request failed from zap", e)
                     this.isSwapLoading = false;
-                }).catch(e => {
-                console.error("Odos swap request failed from zap", e)
-                this.isSwapLoading = false;
-                this.clickOnStake = false;
-            })
+                    this.clickOnStake = false;
+                })
+            }
         },
 
         async getOdosRequest(request) {
@@ -1113,7 +1156,7 @@ export default defineComponent({
             };
 
             let gaugeData;
-            if (zapPool.platform === 'Arbidex') {
+            if (zapPool.platform === 'Arbidex' || zapPool.platform === 'Baseswap') {
                 gaugeData = {
                     gauge: gaugeAddress,
                     amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out],

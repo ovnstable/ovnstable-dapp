@@ -886,10 +886,10 @@ export default defineComponent({
                     console.log("Odos swap request success from swap form", data)
 
                         let assembleData = {
-                        "userAddr": this.account,
-                        "pathId": data.pathId,
-                        "simulate": true
-                    }
+                            "userAddr": this.account,
+                            "pathId": data.pathId,
+                            "simulate": true
+                        }
 
                     this.assembleRequest(assembleData).then(async responseAssembleData => {
                         console.log("Assemble data: ", responseAssembleData)

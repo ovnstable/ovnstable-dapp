@@ -238,6 +238,11 @@ onboard-v2 {
     font-family: 'Lato', sans-serif !important;
 }
 
+.v-application a{
+    color: var(--links-blue);
+    text-decoration: none;
+}
+
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     background-color: var(--scrollbar-track-color);

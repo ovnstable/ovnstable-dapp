@@ -364,4 +364,8 @@ export default {
     height: 20px;
     margin-top: 2px;
 }
+
+.divider {
+    border-top: 1px solid #ADB3BD;
+}
 </style>

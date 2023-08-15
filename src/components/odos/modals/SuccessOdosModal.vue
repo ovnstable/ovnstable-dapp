@@ -84,13 +84,13 @@
                                 </div>
                             </div>
                         </div>
-
                     </v-card-text>
 
                     <div v-if="!isPoolsLoading">
                         <BestAprPromotion  :pool="topZappablePool"/>
                     </div>
                 </v-card>
+
             </v-dialog>
 
             <resize-observer @notify="$forceUpdate()"/>
@@ -388,5 +388,9 @@ div {
     background: rgba(173, 179, 189, 1);
     height: 100%;
     margin-left: 30px;
+}
+
+.divider {
+    border-top: 1px solid #ADB3BD;
 }
 </style>

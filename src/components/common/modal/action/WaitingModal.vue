@@ -1,7 +1,7 @@
 <template>
     <v-dialog
             v-model="show"
-            width="450"
+            width="500"
             persistent>
         <v-card class="container_body">
             <v-card-text class="px-5 pt-5">
@@ -22,20 +22,25 @@
                 <v-row justify="center" class="mb-5" v-if="modalText">
                     <label class="loading-sub2-label">Confirm this transaction in your wallet</label>
                 </v-row>
+                <div class="divider"></div>
             </v-card-text>
+
+            <div>
+                <Carousel />
+            </div>
+
         </v-card>
+
     </v-dialog>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import Carousel from "@/components/common/modal/action/component/Carousel.vue";
 
 export default {
     name: "WaitingModal",
-
-    components: {
-    },
-
+    components: { Carousel },
     props: {
     },
 
@@ -108,8 +113,12 @@ export default {
 }
 
 .container_body {
-    border-radius: 24px !important;
+    border-radius: 8px !important;
     background-color: var(--secondary) !important;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .loading-label {
@@ -118,7 +127,7 @@ export default {
 }
 
 .loading-sub-label {
-    color: var(--secondary-gray-text);
+    color: var(--third-gray-text);
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
@@ -126,10 +135,14 @@ export default {
 }
 
 .loading-sub2-label {
-    color: var(--secondary-gray-text);
+    color: var(--third-gray-text);
     font-style: normal;
     font-weight: normal;
     line-height: 16px;
-    line-height: 24px;
+    font-size: 16px;
+}
+
+.divider {
+    border-top: 1px solid #ADB3BD;
 }
 </style>

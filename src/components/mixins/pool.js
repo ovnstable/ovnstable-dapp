@@ -323,23 +323,15 @@ export const pool = {
             window.open(url, '_blank').focus();
         },
         async loadPools() {
-            console.log('=== Start Pools Loading ===')
             this.isPoolsLoading = true;
 
-            console.log("=== Pools Loading Step# 1 ===", this.isPoolsLoading)
-
             this.pools = [];
-            console.log("=== Pools Loading Step# 1.1 ===", this.pools, this.allNetworkConfigs)
             let networkConfigList = [...this.allNetworkConfigs];
-            console.log("=== Pools Loading Step# 2 ===", networkConfigList)
 
             for (let networkConfig of networkConfigList) {
                 await poolApiService.getAllPools(networkConfig.appApiUrl)
                     .then(data => {
                         if (data) {
-
-                            console.log("=== Pools Loading Step# 3 ===")
-
                             data.forEach(pool => {
                                 let token0Icon;
                                 let token1Icon;
@@ -409,8 +401,6 @@ export const pool = {
                                     // todo move to backend
                                     pool = this.initAggregators(pool);
 
-                                    console.log("=== Pools Loading Step# 4 ===")
-
                                     this.pools.push({
                                         id: (pool.id.name + pool.tvl + pool.platform),
                                         name: networkConfig.networkName === 'arbitrum' ? pool.id.name.toUpperCase().replace('USDC', 'USDC.e') : pool.id.name.toUpperCase(),// + ' ' + pool.id.address,
@@ -439,43 +429,30 @@ export const pool = {
                             })
                         }
                     }).catch(reason => {
-                        console.log("=== Pools Loading Step# 4 error ===")
                         console.log('Error get pools data: ' + reason);
                     })
             }
 
-            console.log("=== Pools Loading Step# 5 ===")
             // todo move to backend
             this.pools = this.initFeature(this.pools);
-            console.log("=== Pools Loading Step# 6 ===")
-
             this.sortedPoolList = this.getSortedPools(this.pools);
-            console.log("=== Pools Loading Step# 7 ===", this.sortedPoolList)
 
             if (this.sortedPoolList && this.sortedPoolList.length) {
-                console.log("Top pool found!");
                 this.topPool = this.sortedPoolList[0];
-                console.log("Top pool is:", this.topPool)
             }
-
-            // todo: fori by sortedPoolList
 
             for (let i = 0; i < this.sortedPoolList.length; i++) {
                 let pool = this.sortedPoolList[i];
 
                 if (pool.zappable) {
                     this.topZappablePool = pool;
-                    console.log("The top pool zap:", pool)
                     break
                 }
 
             }
 
-            console.log("=== Pools Loading Step# 8 ===")
             this.sortedPoolSecondList = this.getSortedSecondPools(this.pools);
-            console.log("=== Pools Loading Step# 9 ===")
             this.isPoolsLoading = false;
-            console.log('=== End Pools Loading ===')
 
             const map = new Map();
             // map.set('0x667002F9DC61ebcBA8Ee1Cbeb2ad04060388f223', '1586'); // 1. Velodrome USD+/DAI+

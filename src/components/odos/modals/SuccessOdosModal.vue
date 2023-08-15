@@ -5,7 +5,7 @@
                     v-model="isShow"
                     width="570"
                     persistent>
-                <v-card class="container_body container-body airdrop-body pt-4 px-4"
+                <v-card class="container_body container-body airdrop-body pt-4 px-4 pb-10"
                         style="border-radius: 28px!important;">
                     <v-toolbar class="container_header container-header" flat>
                         <v-spacer></v-spacer>
@@ -86,6 +86,10 @@
                         </div>
 
                     </v-card-text>
+
+                    <div v-if="!isPoolsLoading">
+                        <BestAprPromotion  :pool="topZappablePool"/>
+                    </div>
                 </v-card>
             </v-dialog>
 
@@ -100,13 +104,18 @@ import SelectTokenShort from "@/components/swap-module/SelectTokenShort.vue";
 import SelectTokenWithSearch from "@/components/swap-module/SelectTokenWithSearch.vue";
 import {mapActions, mapGetters} from "vuex";
 import RefundInfo from "@/components/common/modal/RefundInfo.vue";
+import { pool } from "@/components/mixins/pool";
+import BestAprPromotion from "@/components/common/modal/action/component/BestAprPromotion";
 
 export default defineComponent({
     name: "SuccessOdosModal",
+    mixins: [pool],
+
     components: {
         RefundInfo,
         SelectTokenWithSearch,
-        SelectTokenShort
+        SelectTokenShort,
+        BestAprPromotion
     },
     props: {
         viewType : {
@@ -134,6 +143,7 @@ export default defineComponent({
       }
     },
     mounted() {
+        this.loadPools();
     },
     computed: {
         ...mapGetters('network', ['getParams']),

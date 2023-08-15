@@ -4,7 +4,7 @@
         v-model="show"
         :width="650"
         persistent>
-        <v-card class="container_body align-center">
+        <v-card class="container_body align-center pt-4 px-8 pb-10">
             <v-toolbar class="container_header" flat>
                 <v-btn icon class="ml-auto mr-5 mt-10" @click="close">
                     <v-icon class="close-icon">mdi-close</v-icon>
@@ -61,8 +61,8 @@
                     </v-col>
                 </v-row>
             </v-card-text>
-            <div>
-                <BestAprPromotion  :pool="pool"/>
+            <div v-if="!isPoolsLoading">
+                <BestAprPromotion  :pool="topZappablePool"/>
             </div>
         </v-card>
 
@@ -86,10 +86,6 @@ export default {
     },
 
     props: {
-        pool: {
-            type: Object,
-            required: true
-        }
     },
 
     computed: {
@@ -169,6 +165,10 @@ export default {
 
     data: () => ({
     }),
+
+    mounted() {
+        this.loadPools();
+    },
 
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),

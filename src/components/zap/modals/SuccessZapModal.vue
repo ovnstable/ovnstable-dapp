@@ -343,6 +343,11 @@ export default defineComponent({
                 return
             }
 
+            if (this.successData.pool.platform === 'Baseswap') {
+                window.open(`https://baseswap.fi/farms`, '_blank').focus();
+                return
+            }
+
             if (this.successData.pool.platform === 'Sperax') {
                 window.open(`https://demeter.sperax.io/farm/42161/${this.successData.pool.address}`, '_blank').focus();
                 return

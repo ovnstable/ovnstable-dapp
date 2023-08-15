@@ -24,6 +24,7 @@ export const pool = {
                 'Arbidex',
                 'Sperax',
                 'Defiedge',
+                'Baseswap',
             ],
             poolTokensForZapMap: {
                 // Chronos
@@ -133,6 +134,17 @@ export const pool = {
                 '0xd1c33d0af58eb7403f7c01b21307713aa18b29d3': [
                     {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
                     {name: 'USDC', address: '0x7f5c764cbc14f9669b88837ca1490cca17c31607'},
+                ],
+
+                // Baseswap
+                '0x696b4d181Eb58cD4B54a59d2Ce834184Cf7Ac31A': [
+                    {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
+                    {name: 'USDbC', address: '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca'},
+                ],
+
+                '0x7Fb35b3967798cE8322cC50eF52553BC5Ee4c306': [
+                    {name: 'DAI+', address: '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'},
+                    {name: 'USD+', address: '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'},
                 ],
 
             }
@@ -272,6 +284,9 @@ export const pool = {
                 case 'Velocimeter':
                     url = 'https://base.velocimeter.xyz/liquidity';
                     break
+                case 'Swapbased':
+                    url = 'https://swapbased.finance/#/farm';
+                    break
 
                 default:
                     url = pool.explorerUrl + '/address/';
@@ -289,6 +304,7 @@ export const pool = {
                 pool.platform === 'Gnd' ||
                 pool.platform === 'Baseswap' ||
                 pool.platform === 'Velocimeter' ||
+                pool.platform === 'Swapbased' ||
                 pool.platform === 'Maverick') {
                 window.open(url, '_blank').focus();
                 return;

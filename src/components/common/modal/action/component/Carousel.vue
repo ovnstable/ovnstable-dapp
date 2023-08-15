@@ -7,7 +7,8 @@
             <span
                 class="list-items"
                 v-html="formatDescription(currentItem.description, currentItem.linkWord, currentItem.link)"
-                @click="handleLinkClick(currentItem.link, currentItem.to_swap, currentItem.to_all_pools, currentItem.to_featured, currentItem.to_collateral, currentItem.to_zealy)">            </span>
+                @click="trackLinkClick(currentItem.linkWord)">
+            </span>
         </div>
     </div>
 
@@ -25,66 +26,36 @@ export default {
                 description: 'Swap Overnight tokens with MINIMAL FEES [here]',
                 linkWord: 'here',
                 link: 'https://app.overnight.fi/swap',
-                to_all_pools: false,
-                to_featured: false,
-                to_swap: true,
-                to_collateral: false,
-                to_zealy: false,
             },
             {
                 id: 2,
                 description: 'Find the BEST YIELD on the [All pools] page at a glance',
                 linkWord: 'All pools',
                 link: 'https://app.overnight.fi/pools',
-                to_all_pools: true,
-                to_featured: false,
-                to_swap: false,
-                to_collateral: false,
-                to_zealy: false,
             },
             {
                 id: 3,
                 description: 'Join our pools with one click with ["Zap in" button]',
                 linkWord: '"Zap in" button',
                 link: 'https://app.overnight.fi/featured',
-                to_all_pools: false,
-                to_featured: true,
-                to_swap: false,
-                to_collateral: false,
-                to_zealy: false,
             },
             {
                 id: 4,
                 description: 'Explore TOP POOLS on the [Featured page]',
                 linkWord: 'Featured page',
                 link: 'https://app.overnight.fi/featured',
-                to_all_pools: false,
-                to_featured: true,
-                to_swap: false,
-                to_collateral: false,
-                to_zealy: false,
             },
             {
                 id: 5,
                 description: 'Audit your risks on the [Collateral page]',
                 linkWord: 'Collateral page',
                 link: 'https://app.overnight.fi/collateral',
-                to_all_pools: false,
-                to_featured: false,
-                to_swap: false,
-                to_collateral: true,
-                to_zealy: false,
             },
             {
                 id: 6,
                 description: 'Join our [Zealy] to participate in the partner airdrop, token sale',
                 linkWord: 'Zealy',
                 link: 'https://zealy.io/c/overnight-fi/questboard',
-                to_all_pools: false,
-                to_featured: false,
-                to_swap: false,
-                to_collateral: false,
-                to_zealy: true,
             },
         ],
         currentItemIndex: 0
@@ -117,32 +88,20 @@ export default {
             return description.replace(`[${linkWord}]`, `<a href="${link}" target="_blank">${linkWord}</a>`);
         },
 
-        handleLinkClick(link, toSwap) {
-            try {
-                let eventLabel = 'Carousel Links Clicked';
-
-                if (toSwap) {
-                    eventLabel = 'Swap Link Clicked';
-                } else if (toAllPools) {
-                    eventLabel = 'All Pools Link Clicked';
-                } else if (toFeatured) {
-                    eventLabel = 'Featured Link Clicked';
-                } else if (toCollateral) {
-                    eventLabel = 'Collateral Link Clicked';
-                } else if (toZealy) {
-                    eventLabel = 'Zealy Link Clicked';
-                }
-
-                this.trackClick({
-                    action: 'carousel_link_clicked',
-                    event_category: 'Carousel link',
-                    event_label: eventLabel,
-                    link: link,
-                });
-            } catch (e) {
-                console.error("Track error:", e);
+        trackLinkClick(linkWord) {
+            const action = `carousel_link_clicked_${linkWord.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+            console.log("Action:", action)
+            const trackParams = {
+                action: action,
+                event_category: 'Click button',
+                event_label: `Click ${linkWord} button`
+            };
+            if (this.currentItem.link) {
+                this.trackClick(trackParams);
+            } else {
+                console.error('Track error:');
             }
-        }
+        },
     }
 }
 </script>

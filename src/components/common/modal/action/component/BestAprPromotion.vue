@@ -1,21 +1,33 @@
 <template>
-    <div class="container-main pa-2">
-        <div class="container-title mt-1 mb-1">
-            <label class="title">
-                Best APR of the day
-            </label>
-        </div>
-        <div v-if="!isPoolsLoading">
-            <PoolLabel :pool="topZappablePool" />
-        </div>
-        <div class="container-subtitle mt-2" @click="openLink('https://app.overnight.fi/featured')">
-            <label class="subtitle">
-                See on Featured page
-            </label>
-            <div>
-                <v-img class="arrow-icon" :src="require('@/assets/icon/arrow-right.svg')"/>
+    <div class="container-main pa-2" @click="openLink('https://app.overnight.fi/featured')">
+        <v-row v-if="isPoolsLoading">
+            <v-row align="center" justify="center" class="py-15">
+                <v-progress-circular
+                    width="2"
+                    size="24"
+                    color="#8FA2B7"
+                    indeterminate
+                ></v-progress-circular>
+            </v-row>
+        </v-row>
+        <template v-if="!isPoolsLoading">
+            <div class="container-title mt-1 mb-1">
+                <label class="title">
+                    Best APR of the day
+                </label>
             </div>
-        </div>
+            <div>
+                <PoolLabel :pool="topZappablePool" />
+            </div>
+            <div class="container-subtitle mt-2">
+                <label class="subtitle">
+                    See on Featured page
+                </label>
+                <div>
+                    <v-img class="arrow-icon" :src="require('@/assets/icon/arrow-right.svg')"/>
+                </div>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -66,6 +78,11 @@ export default {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
     background-color: var(--main-background);
     border-radius: 12px;
+    cursor: pointer;
+}
+
+.container-main:hover {
+    box-shadow: 0 2px 3px 0px rgba(0, 0, 0, 0.2);
 }
 
 .container-title {

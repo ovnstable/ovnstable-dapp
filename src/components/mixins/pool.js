@@ -290,6 +290,9 @@ export const pool = {
                 case 'Swapbased':
                     url = 'https://swapbased.finance/#/farm';
                     break
+                case 'Alienbase':
+                    url = 'https://app.alienbase.xyz/farms';
+                    break
 
                 default:
                     url = pool.explorerUrl + '/address/';
@@ -308,7 +311,8 @@ export const pool = {
                 pool.platform === 'Baseswap' ||
                 pool.platform === 'Velocimeter' ||
                 pool.platform === 'Swapbased' ||
-                pool.platform === 'Maverick') {
+                pool.platform === 'Maverick' ||
+                pool.platform === 'Alienbase') {
                 window.open(url, '_blank').focus();
                 return;
             }

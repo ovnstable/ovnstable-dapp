@@ -285,7 +285,7 @@
             <v-list-item>
                 <img class="footer-social-link ml-n3" :src="require('@/assets/social/twitterSocial.svg')" @click="openLink('https://twitter.com/overnight_fi')">
                 <img class="footer-social-link" :src="require('@/assets/social/discordSocial.svg')" @click="openLink('https://discord.gg/overnight-fi')">
-                <img class="footer-social-link" :src="require('@/assets/social/telegramSocial.svg')" @click="openLink('https://t.me/overnight_fi')">
+                <img class="footer-social-link zealy ml-3" :src="require('@/assets/social/zealySocial.svg')" @click="openLink('https://zealy.io/c/overnight-fi/questboard')">
             </v-list-item>
         </v-list>
     </v-menu>
@@ -756,7 +756,6 @@ export default {
     cursor: pointer;
 }
 
-
 .navbar-page-link {
     width: 25px;
     height: 25px;
@@ -766,7 +765,8 @@ export default {
 .main-container {
     background-color: var(--secondary) !important;
 }
-.list-item-hover:hover, .footer-social-link:hover {
+
+.list-item-hover:hover {
     color: var(--main-gray-text);
     background: linear-gradient(#28A0F0 100%, #0678C4 99.17%, #FFFFFF 16%);
 }
@@ -774,6 +774,10 @@ export default {
 .footer-social-link {
     cursor: pointer;
     height: 48px !important ;
+}
+
+.zealy {
+    height: 24px !important;
 }
 
 .toggleUpDown {
@@ -785,12 +789,9 @@ export default {
     transform: rotate(90deg);
 }
 
-
 .navbar-list-divider {
     border-top: 1px solid var(--input-placeholder) !important;
 }
-
-
 
 @keyframes ping {
     0% {

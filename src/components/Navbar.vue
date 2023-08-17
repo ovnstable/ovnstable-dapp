@@ -368,7 +368,7 @@
                 <v-list-item>
                     <img class="footer-social-link ml-n3" :src="require('@/assets/social/twitterSocial.svg')" @click="openLink('https://twitter.com/overnight_fi')">
                     <img class="footer-social-link" :src="require('@/assets/social/discordSocial.svg')" @click="openLink('https://discord.gg/overnight-fi')">
-                    <img class="footer-social-link" :src="require('@/assets/social/telegramSocial.svg')" @click="openLink('https://t.me/overnight_fi')">
+                    <img class="footer-social-link zealy ml-3" :src="require('@/assets/social/zealySocial.svg')" @click="openLink('https://zealy.io/c/overnight-fi/questboard')">
                 </v-list-item>
             </v-list>
         </template>
@@ -688,6 +688,10 @@ export default {
 .footer-social-link {
     cursor: pointer;
     height: 48px !important ;
+}
+
+.zealy {
+    height: 24px !important;
 }
 
 .navbar-page-link {

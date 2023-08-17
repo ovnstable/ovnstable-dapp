@@ -5,7 +5,7 @@
         </div>
 
         <div v-if="!isPayoutsLoading">
-            <v-row v-if="networkId === 10 || networkId === 42161 || networkId === 8453 || networkId === 59144">
+            <v-row v-if="networkId === 10 || networkId === 42161 || networkId === 8453">
                 <template v-if="$wu.isMobile()">
                     <v-col cols="12" align="center" class="mt-10">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
@@ -21,7 +21,6 @@
                         <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
                         <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
                         <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
-                        <label class="tab-btn mx-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
                     </v-row>
                 </v-col>
                 <template v-if="!$wu.isMobile()">
@@ -164,12 +163,12 @@
             DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on Optimism. It cannot be minted separately.
           </label>
           <div class="section-text font-weight-bold">
-            Switch on Optimism, Arbitrum, Base or Linea chain to see DAI+ collateral.
+            Switch on Optimism, Arbitrum, or Base chain to see DAI+ collateral.
           </div>
         </div>
       </div>
 
-        <div v-if="networkId !== 10 && networkId !== 42161 || networkId !== 8453 || networkId !== 59144"
+        <div v-if="networkId !== 10 && networkId !== 42161 || networkId !== 8453"
              :class="$wu.isMobile() ? 'flex-column' : ''"
              class="mt-3 buttons-div" >
             <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('10')">
@@ -180,9 +179,6 @@
             </v-btn>
             <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('8453')">
                 switch to base to mint
-            </v-btn>
-            <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('59144')">
-                switch to linea to mint
             </v-btn>
         </div>
 

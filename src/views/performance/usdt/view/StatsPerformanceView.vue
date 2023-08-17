@@ -5,7 +5,7 @@
         </div>
 
         <div v-if="!isPayoutsLoading">
-            <v-row v-if="networkId === 56">
+            <v-row v-if="networkId === 56 || networkId === 59144">
                 <template v-if="$wu.isMobile()">
                     <v-col cols="12" align="center" class="mt-10">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
@@ -19,7 +19,7 @@
                 <v-col cols="6">
                     <v-row class="ma-0 mt-10 toggle-row ml-3">
                         <label class="tab-btn mr-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
-                        <label class="tab-btn mr-4" @click="setTab('linea')" v-bind:class="activeTabLinea">BSC</label>
+                        <label class="tab-btn mr-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
                     </v-row>
                 </v-col>
                 <template v-if="!$wu.isMobile()">
@@ -35,7 +35,7 @@
             </v-row>
         </div>
 
-      <div v-if="networkId === 56">
+      <div v-if="networkId === 56 || networkId === 59144">
         <v-row v-if="isPayoutsLoading">
           <v-row align="center" justify="center" class="py-15">
             <v-progress-circular

@@ -157,11 +157,16 @@ const actions = {
             originDai = getters.originalBalance.dai
         }
 
-        if (networkId === 56) {
+        if (networkId === 56 || networkId === 59144) {
+            let unit = 'ether';
+            if (networkId === 59144) {
+                unit = 'mwei';
+            }
+
             try {
                 usdtPlus = await web3.contracts.usdtPlus.methods.balanceOf(getters.account).call();
                 originUsdtPlus = usdtPlus;
-                usdtPlus = usdtPlus ? web3.web3.utils.fromWei(usdtPlus, 'ether') : usdtPlus;
+                usdtPlus = usdtPlus ? web3.web3.utils.fromWei(usdtPlus, unit) : usdtPlus;
             } catch (e) {
                 usdtPlus = getters.balance.usdtPlus;
                 originUsdtPlus = getters.originalBalance.usdtPlus
@@ -170,7 +175,7 @@ const actions = {
             try {
                 usdt = await web3.contracts.usdt.methods.balanceOf(getters.account).call();
                 originUsdt = usdt;
-                usdt = usdt ? web3.web3.utils.fromWei(usdt, 'ether') : usdt;
+                usdt = usdt ? web3.web3.utils.fromWei(usdt, unit) : usdt;
             } catch (e) {
                 usdt = getters.balance.usdt;
                 originUsdt = getters.originalBalance.usdt

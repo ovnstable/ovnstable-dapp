@@ -289,10 +289,8 @@ export default {
     data: () => ({
         currency: {id: 'usdt'},
         currencies: [],
-        assetDecimals: 18,
 
-
-      assetName: "USDT",
+        assetName: "USDT",
 
         buyCurrency: null,
         buyCurrencies: [{
@@ -325,6 +323,10 @@ export default {
         ...mapGetters("network", ['networkId', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
+
+        assetDecimals: function () {
+            return this.networkId === 56 ? 18 : 6; // 56 - 18, 59144 - 6
+        },
 
         icon: function () {
             switch (this.networkId){

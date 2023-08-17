@@ -8,7 +8,9 @@ const state = {
         'arbitrum',
         // 'zksync',
         'polygon',
-        'bsc'
+        'bsc',
+        // 'base',
+        // 'linea'
     ],
     etsList: null,
 };

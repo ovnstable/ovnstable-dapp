@@ -7,8 +7,8 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 // import argentModule from "@web3-onboard/argent";
 
 
-const SUPPORTED_NETWORKS = [137, 56, 10, 42161, 324, 8453];
-const WALLETCONNECT_SUPPORTED_NETWORKS = [137, 56, 10, 42161, 8453];
+const SUPPORTED_NETWORKS = [137, 56, 10, 42161, 324, 8453, 59144];
+const WALLETCONNECT_SUPPORTED_NETWORKS = [137, 56, 10, 42161, 8453, 59144];
 
 const state = {
     onboard: null,
@@ -303,7 +303,7 @@ const actions = {
                 id: 59144,
                 token: "ETH",
                 label: "Linea",
-                rpcUrl: "https://rpc.linea.build/",
+                rpcUrl: "https://linea-mainnet.infura.io/v3/",
             },
             // ... other chains
         ]
@@ -320,7 +320,7 @@ const actions = {
                 ['324']: "https://mainnet.era.zksync.io",
                 ['42161']: "https://arb1.arbitrum.io/rpc",
                 ['8453']: "https://mainnet.base.org",
-                ['59144']: "https://rpc.linea.build",
+                ['59144']: "https://linea-mainnet.infura.io/v3",
                 ['10']: "https://mainnet.optimism.io",
                 ['56']: "https://bsc-dataseed.binance.org",
                 ['137']: "https://polygon-rpc.com/"

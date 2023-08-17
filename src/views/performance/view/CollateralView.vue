@@ -325,8 +325,7 @@ export default {
             }
 
             if (this.tabNetworkName === 'linea') {
-                // todo: linea
-                return 'https://basescan.org/token/0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
+                return 'https://lineascan.build/token/0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
             }
 
             console.error("Not found networkId type when return usd+ explorer link")
@@ -360,8 +359,7 @@ export default {
             }
 
             if (this.tabNetworkName === 'linea') {
-                // todo: linea
-                return '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
+                return '0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
             }
 
 

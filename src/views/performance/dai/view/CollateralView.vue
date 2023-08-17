@@ -4,7 +4,7 @@
             <label class="title-label">DAI+ Collateral</label>
         </div>
 
-        <DaiPlusTab v-if="networkId === 10 || networkId === 42161 || networkId === 8453 || networkId === 59144"/>
+        <DaiPlusTab v-if="networkId === 10 || networkId === 42161 || networkId === 8453"/>
 
         <div v-else class="ma-0 info-card-container d-flex">
           <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
@@ -15,7 +15,7 @@
               DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on Optimism. It cannot be minted separately.
             </label>
             <div class="section-text font-weight-bold">
-              Switch on Optimism, Arbitrum, Base or Linea chain to see DAI+ collateral.
+              Switch on Optimism, Arbitrum, or Base chain to see DAI+ collateral.
             </div>
           </div>
         </div>
@@ -31,9 +31,6 @@
             </v-btn>
             <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('8453')">
                 switch to base to mint
-            </v-btn>
-            <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('59144')">
-                switch to linea to mint
             </v-btn>
         </div>
 
@@ -63,20 +60,6 @@ export default {
 
     computed: {
       ...mapGetters("network", ['networkId']),
-
-      activeTabUsd: function () {
-            return {
-                'tab-button': this.tab === 1,
-                'tab-button-inactive': this.tab !== 1,
-            }
-        },
-
-        activeTabDai: function () {
-            return {
-                'tab-button': this.tab === 2,
-                'tab-button-inactive': this.tab !== 2,
-            }
-        },
     },
 
     methods: {

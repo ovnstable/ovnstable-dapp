@@ -299,6 +299,12 @@ const actions = {
                 label: "Base",
                 rpcUrl: "https://mainnet.base.org/",
             },
+            {
+                id: 59144,
+                token: "ETH",
+                label: "Linea",
+                rpcUrl: "https://rpc.linea.build/",
+            },
             // ... other chains
         ]
     },
@@ -314,6 +320,7 @@ const actions = {
                 ['324']: "https://mainnet.era.zksync.io",
                 ['42161']: "https://arb1.arbitrum.io/rpc",
                 ['8453']: "https://mainnet.base.org",
+                ['59144']: "https://rpc.linea.build",
                 ['10']: "https://mainnet.optimism.io",
                 ['56']: "https://bsc-dataseed.binance.org",
                 ['137']: "https://polygon-rpc.com/"

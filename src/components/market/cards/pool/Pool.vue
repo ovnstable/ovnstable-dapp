@@ -140,6 +140,7 @@ import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import arbitrumIcon from "@/assets/network/ar.svg";
 import baseIcon from "@/assets/network/base.svg";
+import lineaIcon from "@/assets/network/linea.svg";
 import zksyncIcon from "@/assets/network/zk.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import { pool } from "@/components/mixins/pool";
@@ -219,6 +220,8 @@ export default {
                     return arbitrumIcon;
                 case 8453:
                     return baseIcon;
+                case 59144:
+                    return lineaIcon;
                 case 324:
                     return zksyncIcon;
             }
@@ -315,6 +318,8 @@ export default {
                     return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #95bfdc 0%, #545e71 27.05%, #2d374b 52.07%, #27a0ef 100%)';
                 case 8453:
                     return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #95bfdc 0%, #545e71 27.05%, #2d374b 52.07%, #0052ff 100%)';
+                case 59144:
+                    return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #95bfdc 0%, #545e71 27.05%, #2d374b 52.07%, #5fdfff 100%)';
                 case 324:
                     return 'radial-gradient(108.67% 595.92% at 100% -3.25%, #95bfdc 0%, #545e71 27.05%, #2d374b 52.07%, #27a0ef 100%)';
                 case 10:

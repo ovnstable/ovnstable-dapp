@@ -2,7 +2,7 @@
     <div class="page-container">
 
         <div v-if="!isCollateralLoading">
-            <v-row v-if="networkId === 10 || networkId === 42161 || networkId === 8453">
+            <v-row v-if="networkId === 10 || networkId === 42161 || networkId === 8453 || networkId === 59144">
                 <template v-if="$wu.isMobile()">
                     <v-col cols="12" align="center" class="mt-5">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
@@ -18,6 +18,7 @@
                         <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
                         <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
                         <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
+                        <label class="tab-btn mx-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
                     </v-row>
                 </v-col>
                 <template v-if="!$wu.isMobile()">
@@ -236,6 +237,13 @@ export default {
             }
         },
 
+        activeTabLinea: function() {
+            return {
+                'tab-button': this.tab === 'linea',
+                'tab-button-in-active': this.tab !== 'linea',
+            }
+        },
+
         explorerLink: function () {
           if (this.tabNetworkName === 'optimism') {
             return 'https://optimistic.etherscan.io/token/0x970D50d09F3a656b43E11B0D45241a84e3a6e011'
@@ -246,6 +254,11 @@ export default {
           }
 
             if (this.tabNetworkName === 'base') {
+                return 'https://basescan.org/token/0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'
+            }
+
+            if (this.tabNetworkName === 'linea') {
+                //todo: linea
                 return 'https://basescan.org/token/0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'
             }
 
@@ -263,6 +276,12 @@ export default {
           }
 
             if (this.tabNetworkName === 'base') {
+                return '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'
+            }
+
+
+            if (this.tabNetworkName === 'linea') {
+                // todo: linea
                 return '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'
             }
 
@@ -303,18 +322,7 @@ export default {
 
         setTab(tabName) {
             this.tab = tabName;
-            if (this.tab === 'optimism') {
-                this.initTabName('/collateral/dai', {tabName: 'optimism'});
-            }
-
-            if (this.tab === 'arbitrum') {
-                this.initTabName('/collateral/dai', {tabName: 'arbitrum'});
-            }
-
-            if (this.tab === 'base') {
-                this.initTabName('/collateral/dai', {tabName: 'base'});
-            }
-
+            this.initTabName('/collateral/dai', {tabName: tabName});
             this.loadCurrentTotalData()
             this.loadCollateralData()
             console.log("NetworkParams : ", this.getParams(this.tab));

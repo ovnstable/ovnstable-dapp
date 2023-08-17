@@ -76,6 +76,19 @@ const BASE_PARAMS = {
     networkColor: '#0052ff'
 }
 
+const LINEA_PARAMS = {
+    appApiUrl: 'https://linea.overnight.fi/api',
+    networkName: 'linea',
+    networkId: 59140,
+    rpcUrl: 'https://rpc.linea.build',
+    explorerUrl: 'https://explorer.linea.build/',
+    assetName: 'USDC',
+    assetDecimals: 6,
+    nativeAssetName: 'ETH',
+    bridgeLink: 'https://bridge.linea.build/',
+    networkColor: '#5fdfff'
+}
+
 let dbNetworkName = localStorage.getItem('selectedNetwork');
 const state = {
     appApiUrl: _getParams(dbNetworkName).appApiUrl,
@@ -96,6 +109,7 @@ const state = {
     arApi: ARBITRUM_PARAMS.appApiUrl,
     zkApi: ZKSYNC_PARAMS.appApiUrl,
     baseApi: BASE_PARAMS.appApiUrl,
+    lineaApi: LINEA_PARAMS.appApiUrl,
 
     polygonConfig: POLYGON_PARAMS,
     bscConfig: BSC_PARAMS,
@@ -103,11 +117,13 @@ const state = {
     arConfig: ARBITRUM_PARAMS,
     zkConfig: ZKSYNC_PARAMS,
     baseConfig: BASE_PARAMS,
+    lineaConfig: LINEA_PARAMS,
     allNetworkConfigs: [
         OPTIMISM_PARAMS,
         ARBITRUM_PARAMS,
         ZKSYNC_PARAMS,
         BASE_PARAMS,
+        LINEA_PARAMS,
         BSC_PARAMS,
         POLYGON_PARAMS,
     ],
@@ -149,6 +165,11 @@ function _getParams(networkName) {
         case "8453":
         case 8453:
             return BASE_PARAMS;
+        case "linea":
+        case "ln":
+        case "59144":
+        case 59144:
+            return LINEA_PARAMS;
         default:
             return OPTIMISM_PARAMS; //BASE_PARAMS;
     }
@@ -212,6 +233,10 @@ const getters = {
         return state.baseApi;
     },
 
+    lineaApi(state) {
+        return state.lineaApi;
+    },
+
     opApi(state) {
         return state.opApi;
     },
@@ -234,6 +259,10 @@ const getters = {
 
     baseConfig(state) {
         return state.baseConfig;
+    },
+
+    lineaConfig(state) {
+        return state.lineaConfig;
     },
 
     opConfig(state) {
@@ -308,6 +337,11 @@ const actions = {
             case "base":
             case "8453":
                 localStorage.setItem('selectedNetwork', 'base');
+                break;
+            case "ln":
+            case "linea":
+            case "59144":
+                localStorage.setItem('selectedNetwork', 'linea');
                 break;
             default:
                 localStorage.setItem('selectedNetwork', 'op');
@@ -416,6 +450,21 @@ const actions = {
                                 rpcUrls: ['https://mainnet.base.org'],
                                 blockExplorerUrls: ['https://basescan.org'],
                                 chainName: 'Base',
+                                nativeCurrency: {
+                                    symbol: 'ETH',
+                                    name: 'ETH',
+                                    decimals: 18,
+                                }
+                            };
+                            break;
+                        case "ln":
+                        case "linea":
+                        case "59144":
+                            params = {
+                                chainId: rootState.web3.web3.utils.toHex(59144),
+                                rpcUrls: ['https://rpc.linea.build'],
+                                blockExplorerUrls: ['https://explorer.linea.build'],
+                                chainName: 'Linea',
                                 nativeCurrency: {
                                     symbol: 'ETH',
                                     name: 'ETH',

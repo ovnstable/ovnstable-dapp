@@ -52,6 +52,16 @@
                     Base
                 </v-list-item-title>
             </v-list-item>
+            <v-list-item style="cursor: pointer" @click="setWalletNetwork('59144')">
+                <v-list-item-avatar>
+                    <div class="list-item-icon">
+                        <v-img :src="require('@/assets/network/linea.svg')"/>
+                    </div>
+                </v-list-item-avatar>
+                <v-list-item-title class="network-select-list-item">
+                    Linea
+                </v-list-item-title>
+            </v-list-item>
             <v-list-item style="cursor: pointer" @click="setWalletNetwork('56')">
                 <v-list-item-avatar>
                     <div class="list-item-icon">
@@ -107,6 +117,7 @@ let bscIcon = require('@/assets/network/bsc.svg');
 let optimismIcon = require('@/assets/network/op.svg');
 let arbitrumIcon = require('@/assets/network/ar.svg');
 let baseIcon = require('@/assets/network/base.svg');
+let lineaIcon = require('@/assets/network/linea.svg');
 let zksyncIcon = require('@/assets/network/zk.svg');
 
 export default {
@@ -135,6 +146,8 @@ export default {
                     return arbitrumIcon;
                 case 8453:
                     return baseIcon;
+                case 59144:
+                    return lineaIcon;
                 case 324:
                     return zksyncIcon;
             }

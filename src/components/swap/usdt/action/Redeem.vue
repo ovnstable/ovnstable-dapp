@@ -269,6 +269,7 @@ import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import arbitrumIcon from "@/assets/network/ar.svg";
 import baseIcon from "@/assets/network/base.svg";
+import lineaIcon from "@/assets/network/linea.svg";
 import zksyncIcon from "@/assets/network/zk.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import Tooltip from "@/components/common/element/Tooltip";
@@ -297,7 +298,6 @@ export default {
                 image: require('@/assets/currencies/USDT+.svg')
             }
         ],
-        assetDecimals: 18,
 
         assetName: 'USDT',
 
@@ -329,6 +329,10 @@ export default {
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
+        assetDecimals: function () {
+            return this.networkId === 56 ? 18 : 6; // 56 - 18, 59144 - 6
+        },
+
         icon: function () {
             switch (this.networkId){
                 case 137:
@@ -341,6 +345,8 @@ export default {
                     return arbitrumIcon;
                 case 8453:
                     return baseIcon;
+                case 59144:
+                    return lineaIcon;
                 case 324:
                     return zksyncIcon;
             }

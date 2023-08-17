@@ -74,6 +74,9 @@ const actions = {
                     case 8453:
                         appApiUrl = rootState.network.baseApi;
                         break;
+                    case 59144:
+                        appApiUrl = rootState.network.lineaApi;
+                        break;
                     case 324:
                         appApiUrl = rootState.network.zkApi;
                         break;
@@ -278,6 +281,9 @@ const actions = {
                         break;
                     case 8453:
                         appApiUrl = rootState.network.baseApi;
+                        break;
+                    case 59144:
+                        appApiUrl = rootState.network.lineaApi;
                         break;
                     case 324:
                         appApiUrl = rootState.network.zkApi;

@@ -321,7 +321,7 @@ export default {
         moment() {
             return moment
         },
-        ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'baseConfig', 'zkConfig', 'getParams']),
+        ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'baseConfig', 'lineaConfig', 'zkConfig', 'getParams']),
         ...mapGetters('marketData', ['etsStrategyData', 'etsApyData', 'etsTvlData', 'usdPlusApyData', 'compoundData']),
 
         activeRateApy: function () {
@@ -382,6 +382,8 @@ export default {
                     return this.arConfig;
                 case 8453:
                     return this.baseConfig;
+                case 59144:
+                    return this.lineaConfig;
                 case 324:
                     return this.zkConfig;
                 default:

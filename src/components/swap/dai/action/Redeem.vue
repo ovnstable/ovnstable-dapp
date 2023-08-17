@@ -269,6 +269,7 @@ import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import arbitrumIcon from "@/assets/network/ar.svg";
 import baseIcon from "@/assets/network/base.svg";
+import lineaIcon from "@/assets/network/linea.svg";
 import zksyncIcon from "@/assets/network/zk.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import Tooltip from "@/components/common/element/Tooltip";
@@ -341,6 +342,8 @@ export default {
                     return arbitrumIcon;
                 case 8453:
                     return baseIcon;
+                case 59144:
+                    return lineaIcon;
                 case 324:
                     return zksyncIcon;
             }

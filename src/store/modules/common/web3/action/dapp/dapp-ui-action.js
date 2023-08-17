@@ -34,6 +34,11 @@ const actions = {
             case "8453":
                 dispatch('wrapUI/showPage', null, {root: true});
                 break;
+            case "ln":
+            case "linea":
+            case "59144":
+                dispatch('wrapUI/showPage', null, {root: true});
+                break;
             case "zk":
             case "zksync":
             case "324":

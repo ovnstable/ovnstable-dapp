@@ -110,7 +110,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('network', ['opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'baseConfig', 'networkId']),
+        ...mapGetters('network', ['opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'baseConfig', 'lineaConfig', 'networkId']),
         ...mapGetters('theme', ['light']),
     },
 
@@ -126,6 +126,9 @@ export default {
                     break;
                 case 8453:
                     url = this.baseConfig.explorerUrl;
+                    break;
+                case 59144:
+                    url = this.lineaConfig.explorerUrl;
                     break;
                 case 56:
                     url = this.bscConfig.explorerUrl;

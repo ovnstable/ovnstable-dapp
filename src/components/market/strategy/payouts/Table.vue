@@ -108,7 +108,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('network', ['getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'baseConfig', 'zkConfig']),
+        ...mapGetters('network', ['getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'baseConfig', 'lineaConfig', 'zkConfig']),
         ...mapGetters('theme', ['light']),
     },
 
@@ -130,6 +130,9 @@ export default {
                     break;
                 case 'base':
                     url = this.baseConfig.explorerUrl;
+                    break;
+                case 'linea':
+                    url = this.lineaConfig.explorerUrl;
                     break;
                 case 'zksync':
                     url = this.zkConfig.explorerUrl;

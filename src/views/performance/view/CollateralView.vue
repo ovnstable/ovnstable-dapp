@@ -21,6 +21,7 @@
                     <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
                     <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
                     <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
+                    <label class="tab-btn mx-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
                     <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
                     <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
                 </v-row>
@@ -33,6 +34,7 @@
                 </v-row>
                 <v-row class="ma-0 mt-5 ml-3 toggle-row toggle-row-second">
                     <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
+                    <label class="tab-btn mx-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
                     <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
                     <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
                 </v-row>
@@ -268,6 +270,13 @@ export default {
             }
         },
 
+        activeTabLinea: function() {
+            return {
+                'tab-button': this.tab === 'linea',
+                'tab-button-in-active': this.tab !== 'linea',
+            }
+        },
+
         activeTabZkSync: function() {
             return {
                 'tab-button': this.tab === 'zksync',
@@ -315,6 +324,10 @@ export default {
                 return 'https://basescan.org/token/0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
             }
 
+            if (this.tabNetworkName === 'linea') {
+                return 'https://lineascan.build/token/0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
+            }
+
             console.error("Not found networkId type when return usd+ explorer link")
             return null;
         },
@@ -343,6 +356,10 @@ export default {
 
             if (this.tabNetworkName === 'base') {
                 return '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
+            }
+
+            if (this.tabNetworkName === 'linea') {
+                return '0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
             }
 
 

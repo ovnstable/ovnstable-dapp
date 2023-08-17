@@ -50,9 +50,9 @@ export default defineComponent({
     },
     data() {
         return {
-            usdplusAvailibleNetworks: ['optimism', 'arbitrum', 'bsc', 'polygon', 'zksync', 'base'],
+            usdplusAvailibleNetworks: ['optimism', 'arbitrum', 'bsc', 'polygon', 'zksync', 'base', 'linea'],
             daiplusAvailibleNetworks: ['optimism', 'arbitrum', 'base'],
-            usdtplusAvailibleNetworks: ['bsc'],
+            usdtplusAvailibleNetworks: ['bsc', 'linea'],
             wusdAvailibleNetworks: ['optimism', 'arbitrum', 'polygon'],
 
             mapCountOfFutures: {} // network: count

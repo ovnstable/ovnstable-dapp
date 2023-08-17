@@ -184,6 +184,7 @@ import bscIcon from "@/assets/network/bsc.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import arbitrumIcon from "@/assets/network/ar.svg";
 import baseIcon from "@/assets/network/base.svg";
+import lineaIcon from "@/assets/network/linea.svg";
 import zksyncIcon from "@/assets/network/zk.svg";
 
 export default {
@@ -205,7 +206,7 @@ export default {
 
     computed: {
         ...mapGetters('transaction', ['transactions']),
-        ...mapGetters('network', ['opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'baseConfig', 'zkConfig']),
+        ...mapGetters('network', ['opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'baseConfig', 'baseConfig', 'zkConfig']),
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('network', ['networkId']),
 
@@ -221,6 +222,8 @@ export default {
                     return arbitrumIcon;
                 case 8453:
                     return baseIcon;
+                case 59144:
+                    return lineaIcon;
                 case 324:
                     return zksyncIcon;
             }
@@ -264,6 +267,9 @@ export default {
                     break;
                 case 8453:
                     explorerUrl = this.baseConfig.explorerUrl;
+                    break;
+                case 59144:
+                    explorerUrl = this.lineaConfig.explorerUrl;
                     break;
                 case 342:
                     explorerUrl = this.zkConfig.explorerUrl;

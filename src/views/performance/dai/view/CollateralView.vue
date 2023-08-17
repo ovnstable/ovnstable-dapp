@@ -15,7 +15,7 @@
               DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on Optimism. It cannot be minted separately.
             </label>
             <div class="section-text font-weight-bold">
-              Switch on Optimism, Arbitrum or Base chain to see DAI+ collateral.
+              Switch on Optimism, Arbitrum, or Base chain to see DAI+ collateral.
             </div>
           </div>
         </div>
@@ -60,20 +60,6 @@ export default {
 
     computed: {
       ...mapGetters("network", ['networkId']),
-
-      activeTabUsd: function () {
-            return {
-                'tab-button': this.tab === 1,
-                'tab-button-inactive': this.tab !== 1,
-            }
-        },
-
-        activeTabDai: function () {
-            return {
-                'tab-button': this.tab === 2,
-                'tab-button-inactive': this.tab !== 2,
-            }
-        },
     },
 
     methods: {

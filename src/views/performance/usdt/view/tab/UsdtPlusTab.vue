@@ -2,7 +2,7 @@
     <div class="page-container">
 
         <div v-if="!isCollateralLoading">
-            <v-row v-if="networkId === 56">
+            <v-row v-if="networkId === 56  || networkId === 59144">
                 <template v-if="$wu.isMobile()">
                     <v-col cols="12" align="center" class="mt-5">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
@@ -16,6 +16,7 @@
                 <v-col cols="6">
                     <v-row class="ma-0 mt-10 toggle-row">
                         <label class="tab-btn mr-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">Bsc</label>
+                        <label class="tab-btn mx-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
                     </v-row>
                 </v-col>
                 <template v-if="!$wu.isMobile()">
@@ -220,23 +221,40 @@ export default {
             }
         },
 
-        explorerLink: function () {
-          if (this.tabNetworkName === 'bsc') {
-            return 'https://bscscan.com/token/0x5335E87930b410b8C5BB4D43c3360ACa15ec0C8C'
-          }
+        activeTabLinea: function() {
+            return {
+                'tab-button': this.tab === 'linea',
+                'tab-button-in-active': this.tab !== 'linea',
+            }
+        },
 
-          console.error("Not found networkId type when return usdt explorer link")
-          return null;
+        explorerLink: function () {
+            if (this.tabNetworkName === 'bsc') {
+                return 'https://bscscan.com/token/0x5335E87930b410b8C5BB4D43c3360ACa15ec0C8C'
+            }
+
+
+            if (this.tabNetworkName === 'linea') {
+                return 'https://lineascan.build/token/0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
+            }
+
+            console.error("Not found networkId type when return usdt explorer link")
+            return null;
         },
 
         contractAddress: function () {
-          if (this.tabNetworkName === 'bsc') {
-            return '0x5335E87930b410b8C5BB4D43c3360ACa15ec0C8C'
-          }
+            if (this.tabNetworkName === 'bsc') {
+                return '0x5335E87930b410b8C5BB4D43c3360ACa15ec0C8C'
+            }
 
-          console.error("Not found networkId type when return usdt contract address")
-          return null;
-        },
+
+            if (this.tabNetworkName === 'linea') {
+                return '0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
+            }
+
+            console.error("Not found networkId type when return usdt contract address")
+            return null;
+            },
     },
 
     watch: {

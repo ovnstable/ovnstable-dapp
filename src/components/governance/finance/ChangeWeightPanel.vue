@@ -235,7 +235,7 @@ export default {
         },
 
         updateHeaders() {
-            if (this.networkId === 137 || this.networkId === 42161 || this.networkId === 8453) {
+            if (this.networkId === 137 || this.networkId === 42161 || this.networkId === 8453 || this.networkId === 59144) {
                 if (!this.headersM2M.find(value => value.text === 'Risk Factor')) {
                     this.headersM2M.push({text: 'Risk Factor', value: 'riskFactor'});
                 }

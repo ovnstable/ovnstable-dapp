@@ -19,6 +19,7 @@
                 <v-col cols="6">
                     <v-row class="ma-0 mt-10 toggle-row ml-3">
                         <label class="tab-btn mr-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
+                        <label class="tab-btn mr-4" @click="setTab('linea')" v-bind:class="activeTabLinea">BSC</label>
                     </v-row>
                 </v-col>
                 <template v-if="!$wu.isMobile()">
@@ -161,16 +162,19 @@
             USDT+ is the equivalent of USD+, pegged to USDT 1:1. USDT+ consist of aUSDT (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on BSC. It cannot be minted separately.
           </label>
           <div class="section-text font-weight-bold">
-            Switch on BSC chain to see USDT+ collateral.
+            Switch on BSC or Linea chain to see USDT+ collateral.
           </div>
         </div>
       </div>
 
-        <div v-if="networkId !== 56"
+        <div v-if="networkId !== 56 && networkId !== 59144"
              :class="$wu.isMobile() ? 'flex-column' : ''"
              class="mt-3 buttons-div" >
             <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('56')">
                 switch to bsc to mint
+            </v-btn>
+            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('59144')">
+                switch to linea to mint
             </v-btn>
         </div>
 
@@ -191,6 +195,8 @@ import {payoutsApiService} from "@/services/payouts-api-service";
 import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import bscIcon from "@/assets/network/bsc.svg";
+import baseIcon from "@/assets/network/base.svg";
+import lineaIcon from "@/assets/network/linea.svg";
 import arbitrumIcon from "@/assets/network/ar.svg";
 import zksyncIcon from "@/assets/network/zk.svg";
 
@@ -234,6 +240,13 @@ export default {
             }
         },
 
+        activeTabLinea: function() {
+            return {
+                'tab-button': this.tab === 'linea',
+                'tab-button-in-active': this.tab !== 'linea',
+            }
+        },
+
       activeRateApy: function () {
             return {
                 'rate-tab-button': this.rateTab === 1,
@@ -271,6 +284,10 @@ export default {
                     return arbitrumIcon;
                 case 'zksync':
                     return zksyncIcon;
+                case 'base':
+                    return baseIcon;
+                case 'linea':
+                    return lineaIcon;
             }
         },
     },

@@ -302,7 +302,7 @@ export default {
 
 
   computed: {
-    ...mapGetters('network', ['networkId', 'networkName', 'polygonConfig', 'opConfig', 'bscConfig', 'arConfig', 'baseConfig', 'zkConfig']),
+    ...mapGetters('network', ['networkId', 'networkName', 'polygonConfig', 'opConfig', 'bscConfig', 'arConfig', 'baseConfig', 'lineaConfig', 'zkConfig']),
     ...mapGetters('accountData', ['etsBalance', 'account']),
     ...mapGetters('supplyData', ['totalSupply']),
     ...mapGetters('etsAction', ['etsList']),
@@ -526,6 +526,9 @@ export default {
         case 8453:
           appApiUrl = this.baseConfig.appApiUrl;
           break;
+        case 59144:
+          appApiUrl = this.lineaConfig.appApiUrl;
+          break;
         case 324:
           appApiUrl = this.zkConfig.appApiUrl;
           break;
@@ -645,7 +648,7 @@ export default {
       this.isUsdPlusApyDataLoading = true;
 
       await Promise.all(
-          ['polygon', 'bsc', 'optimism', 'arbitrum', 'base', 'zksync'].map(async network => {
+          ['polygon', 'bsc', 'optimism', 'arbitrum', 'base', 'zksync', 'linea'].map(async network => {
 
             let appApiUrl;
 
@@ -664,6 +667,9 @@ export default {
                 break;
               case "base":
                 appApiUrl = this.baseConfig.appApiUrl;
+                break;
+              case "linea":
+                appApiUrl = this.lineaConfig.appApiUrl;
                 break;
               case "zksync":
                 appApiUrl = this.zkConfig.appApiUrl;
@@ -725,6 +731,9 @@ export default {
           break;
         case 8453:
           appApiUrl = this.baseConfig.appApiUrl;
+          break;
+        case 59144:
+          appApiUrl = this.lineaConfig.appApiUrl;
           break;
         case 324:
           appApiUrl = this.zkConfig.appApiUrl;

@@ -237,20 +237,20 @@ export default {
         },
 
         explorerLink: function () {
-          if (this.tabNetworkName === 'optimism') {
-            return 'https://optimistic.etherscan.io/token/0x970D50d09F3a656b43E11B0D45241a84e3a6e011'
-          }
+            if (this.tabNetworkName === 'optimism') {
+                return 'https://optimistic.etherscan.io/token/0x970D50d09F3a656b43E11B0D45241a84e3a6e011'
+            }
 
-          if (this.tabNetworkName === 'arbitrum') {
-            return 'https://arbiscan.io/token/0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
-          }
+            if (this.tabNetworkName === 'arbitrum') {
+                return 'https://arbiscan.io/token/0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
+            }
 
             if (this.tabNetworkName === 'base') {
                 return 'https://basescan.org/token/0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'
             }
 
-          console.error("Not found networkId type when return dai explorer link")
-          return null;
+            console.error("Not found networkId type when return dai explorer link")
+            return null;
         },
 
         contractAddress: function () {
@@ -265,6 +265,7 @@ export default {
             if (this.tabNetworkName === 'base') {
                 return '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'
             }
+
 
           console.error("Not found networkId type when return dai contract address")
           return null;
@@ -303,18 +304,7 @@ export default {
 
         setTab(tabName) {
             this.tab = tabName;
-            if (this.tab === 'optimism') {
-                this.initTabName('/collateral/dai', {tabName: 'optimism'});
-            }
-
-            if (this.tab === 'arbitrum') {
-                this.initTabName('/collateral/dai', {tabName: 'arbitrum'});
-            }
-
-            if (this.tab === 'base') {
-                this.initTabName('/collateral/dai', {tabName: 'base'});
-            }
-
+            this.initTabName('/collateral/dai', {tabName: tabName});
             this.loadCurrentTotalData()
             this.loadCollateralData()
             console.log("NetworkParams : ", this.getParams(this.tab));

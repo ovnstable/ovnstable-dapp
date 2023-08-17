@@ -392,7 +392,7 @@ export const zap = {
         },
         async approveGaugeForStake() {
             console.log("Approving gauge stake")
-            this.showWaitingModal('Approving guage in process');
+            this.showWaitingModal('Approving gauge in process');
 
             let isGaugeApproved = this.checkApproveForGauge(this.poolTokenContract, this.gaugeContract.options.address, 100000000000000);
             if (!isGaugeApproved) {

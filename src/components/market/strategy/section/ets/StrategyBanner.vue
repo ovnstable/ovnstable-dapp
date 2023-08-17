@@ -3,7 +3,7 @@
         <v-col class="main-col">
             <v-row align="start" :justify="$wu.isMobile() ? 'start' : 'end'" class="ma-0">
                 <div :class="$wu.isMobile() ? 'currency-icon' : 'icon'" class="mr-3">
-                    <v-img :src="'/assets/network/' + etsData.chainName + '.svg'"/>
+                    <v-img class="chain-icon" :src="'/assets/network/' + etsData.chainName + '.svg'"/>
                 </div>
 
                 <div class="icon-border">
@@ -474,6 +474,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .platform {
+    width: 34px !important;
+    height: 34px !important;
+}
+
+.chain-icon {
     width: 34px !important;
     height: 34px !important;
 }

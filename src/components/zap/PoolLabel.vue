@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="pool"
-             v-bind:style="'background: linear-gradient(57.78deg, ' + getParams(pool.chain).networkColor + ' -94.19%, transparent 57.68%);'"
+             v-bind:style="'background: linear-gradient(57.78deg, ' + getParams(pool.chain).networkColor + ' -94.19%, white 57.68%);'"
              class="pool-label-container">
             <div class="row">
                 <div class="col-12 col-lg-6 col-md-6 col-sm-12">

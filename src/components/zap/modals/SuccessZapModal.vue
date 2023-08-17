@@ -170,8 +170,13 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="divider"></div>
                     </v-card-text>
+
+                    <div>
+                        <Carousel />
+                    </div>
+
                 </v-card>
             </v-dialog>
 
@@ -185,12 +190,14 @@ import {defineComponent} from 'vue'
 import SelectTokenShort from "@/components/swap-module/SelectTokenShort.vue";
 import SelectTokenWithSearch from "@/components/swap-module/SelectTokenWithSearch.vue";
 import {mapActions, mapGetters} from "vuex";
+import Carousel from "@/components/common/modal/action/component/Carousel.vue";
 
 export default defineComponent({
     name: "SuccessZapModal",
     components: {
         SelectTokenWithSearch,
-        SelectTokenShort
+        SelectTokenShort,
+        Carousel
     },
     props: {
         isShow: {
@@ -503,5 +510,9 @@ div {
 .icon > .v-image {
     border-radius: 9999px !important;
 
+}
+
+.divider {
+    border-top: 1px solid #ADB3BD;
 }
 </style>

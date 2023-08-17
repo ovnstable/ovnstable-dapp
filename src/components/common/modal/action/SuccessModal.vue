@@ -4,7 +4,7 @@
         v-model="show"
         :width="650"
         persistent>
-        <v-card class="container_body align-center">
+        <v-card class="container_body align-center pt-4 px-8 pb-10">
             <v-toolbar class="container_header" flat>
                 <v-btn icon class="ml-auto mr-5 mt-10" @click="close">
                     <v-icon class="close-icon">mdi-close</v-icon>
@@ -61,6 +61,9 @@
                     </v-col>
                 </v-row>
             </v-card-text>
+            <div v-if="!isPoolsLoading">
+                <BestAprPromotion  :pool="topZappablePool"/>
+            </div>
         </v-card>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -70,13 +73,20 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import RefundInfo from "@/components/common/modal/RefundInfo.vue";
+import BestAprPromotion from "@/components/common/modal/action/component/BestAprPromotion";
+import { pool } from "@/components/mixins/pool";
 
 export default {
     name: "SuccessModal",
+    mixins: [pool],
 
-    components: {RefundInfo},
+    components: {
+        BestAprPromotion,
+        RefundInfo
+    },
 
-    props: {},
+    props: {
+    },
 
     computed: {
         ...mapGetters('network', ['explorerUrl']),
@@ -155,6 +165,10 @@ export default {
 
     data: () => ({
     }),
+
+    mounted() {
+        this.loadPools();
+    },
 
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
@@ -349,5 +363,9 @@ export default {
     width: 20px;
     height: 20px;
     margin-top: 2px;
+}
+
+.divider {
+    border-top: 1px solid #ADB3BD;
 }
 </style>

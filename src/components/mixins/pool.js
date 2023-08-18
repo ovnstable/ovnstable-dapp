@@ -293,6 +293,12 @@ export const pool = {
                 case 'Alienbase':
                     url = 'https://app.alienbase.xyz/farms';
                     break
+                case 'Balancer':
+                    url = 'https://app.balancer.fi/#/arbitrum';
+                    break
+                case 'Convex':
+                    url = 'https://www.convexfinance.com/stake/arbitrum/13';
+                    break
 
                 default:
                     url = pool.explorerUrl + '/address/';
@@ -312,7 +318,10 @@ export const pool = {
                 pool.platform === 'Velocimeter' ||
                 pool.platform === 'Swapbased' ||
                 pool.platform === 'Maverick' ||
-                pool.platform === 'Alienbase') {
+                pool.platform === 'Alienbase' ||
+                pool.platform === 'Balancer' ||
+                pool.platform === 'Convex'
+            ) {
                 window.open(url, '_blank').focus();
                 return;
             }

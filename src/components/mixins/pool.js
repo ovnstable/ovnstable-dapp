@@ -28,6 +28,8 @@ export const pool = {
                 'Sperax',
                 'Defiedge',
                 'Baseswap',
+                'Velocimeter',
+                'Alienbase',
             ],
             poolTokensForZapMap: {
                 // Chronos
@@ -146,6 +148,28 @@ export const pool = {
                 ],
 
                 '0x7Fb35b3967798cE8322cC50eF52553BC5Ee4c306': [
+                    {name: 'DAI+', address: '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'},
+                    {name: 'USD+', address: '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'},
+                ],
+
+                // Velocimeter
+                '0x298c9f812c470598c5f97e3da9261a9899b89d35': [// gauge 0x0daf00a383f8897553ac1d03f4445b15afa1dcb9
+                    {name: 'DAI+', address: '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'},
+                    {name: 'USD+', address: '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'},
+                ],
+
+
+                '0x653685aa9913c6ab13d659a4ea8f358ecec3d34f': [ // gauge 0xD9875fBe2A706f9Fed68F066D7420D63FDC5eD76
+                    {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
+                    {name: 'USDbC', address: '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca'},
+                ],
+
+                // Alienbase
+                '0x553666081db0a8fdB337560009932852059d589A': [ // 7 pool
+                    {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
+                    {name: 'USDbC', address: '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca'},
+                ],
+                '0xd97a40434627D5c897790DE9a3d2E577Cba5F2E0': [ // 8 pool
                     {name: 'DAI+', address: '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'},
                     {name: 'USD+', address: '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'},
                 ],

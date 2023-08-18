@@ -56,6 +56,18 @@ export const zap = {
                     network: 'base',
                     typeOfDepositConstructor: 'CONSTRUCTOR_WITH_POOL_ID_AND_TOKEN_AMOUNT'
                 },
+                'Velocimeter': {
+                    name: 'Velocimeter',
+                    type: 'LP_STAKE_DIFF_STEPS',
+                    network: 'base',
+                    typeOfDepositConstructor: 'CONSTRUCTOR_WITH_TOKEN_ID'
+                },
+                'Alienbase': {
+                    name: 'Alienbase',
+                    type: 'LP_STAKE_DIFF_STEPS',
+                    network: 'base',
+                    typeOfDepositConstructor: 'CONSTRUCTOR_WITH_POOL_ID_AND_TOKEN_AMOUNT'
+                },
             },
             zapContract: null,
             poolTokenContract: null,
@@ -207,10 +219,34 @@ export const zap = {
                     approveType: 'TOKEN'
                 },
 
-                // Baseswap
                 '0x7Fb35b3967798cE8322cC50eF52553BC5Ee4c306': {
                     gauge: '0x2b0a43dccbd7d42c18f6a83f86d1a19fa58d541a',
                     poolId: 11,
+                    approveType: 'TOKEN'
+                },
+
+                // Velocimeter
+                "0x298c9f812c470598c5f97e3da9261a9899b89d35": {
+                    gauge: '0x0daf00a383f8897553ac1d03f4445b15afa1dcb9',
+                    poolId: 0,
+                    approveType: 'TOKEN'
+                },
+                "0x653685aa9913c6ab13d659a4ea8f358ecec3d34f": {
+                    gauge: '0xD9875fBe2A706f9Fed68F066D7420D63FDC5eD76',
+                    poolId: 0,
+                    approveType: 'TOKEN'
+                },
+
+                // Alienbase
+                '0x553666081db0a8fdB337560009932852059d589A': {
+                    gauge: '0x52eaeCAC2402633d98b95213d0b473E069D86590',
+                    poolId: 7,
+                    approveType: 'TOKEN'
+                },
+
+                '0xd97a40434627D5c897790DE9a3d2E577Cba5F2E0': {
+                    gauge: '0x52eaeCAC2402633d98b95213d0b473E069D86590',
+                    poolId: 8,
                     approveType: 'TOKEN'
                 },
 
@@ -288,7 +324,7 @@ export const zap = {
             console.log('getProportion: ', zapPool, this.zapContract, poolInfo, gauge);
 
             // todo 4: get type from configuration
-            if (zapPool.data.platform === "Arbidex" || zapPool.data.platform === 'Baseswap') {
+            if (zapPool.data.platform === "Arbidex" || zapPool.data.platform === 'Baseswap' || zapPool.data.platform === 'Alienbase') {
 
                 return this.zapContract.methods.getProportion(gauge, (poolInfo.poolId).toString()).call().then(data => {
                     console.log('Get proportion: ', poolAddress, gauge, data, poolInfo.poolId);

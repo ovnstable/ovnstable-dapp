@@ -834,7 +834,9 @@ export default defineComponent({
             }
 
             console.log("Odos request data", requestData, this.zapPool);
-            if (this.zapPool.platform === "Baseswap") {
+
+            // todo: base => to all chains
+            if (this.zapPool.chainName === "base") {
                 // swap v2
                 this.swapRequest(requestData)
                     .then(async data => {
@@ -1156,7 +1158,7 @@ export default defineComponent({
             };
 
             let gaugeData;
-            if (zapPool.platform === 'Arbidex' || zapPool.platform === 'Baseswap') {
+            if (zapPool.platform === 'Arbidex' || zapPool.platform === 'Baseswap' || zapPool.platform === 'Alienbase') {
                 gaugeData = {
                     gauge: gaugeAddress,
                     amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out],

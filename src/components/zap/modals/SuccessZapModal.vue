@@ -355,6 +355,16 @@ export default defineComponent({
                 return
             }
 
+            if (this.successData.pool.platform === 'Alienbase') {
+                window.open(`https://app.alienbase.xyz/farms`, '_blank').focus();
+                return
+            }
+
+            if (this.successData.pool.platform === 'Velocimeter') {
+                window.open(`https://base.velocimeter.xyz/liquidity`, '_blank').focus();
+                return
+            }
+
             if (this.successData.pool.platform === 'Sperax') {
                 window.open(`https://demeter.sperax.io/farm/42161/${this.successData.pool.address}`, '_blank').focus();
                 return

@@ -238,7 +238,7 @@ export const zap = {
                 },
 
                 // Alienbase
-                '0x553666081db0a8fdB337560009932852059d589A': {
+                '0x553666081db0a8fdb337560009932852059d589a': {
                     gauge: '0x52eaeCAC2402633d98b95213d0b473E069D86590',
                     poolId: 7,
                     approveType: 'TOKEN'

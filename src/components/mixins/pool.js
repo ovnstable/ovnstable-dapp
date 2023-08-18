@@ -165,7 +165,7 @@ export const pool = {
                 ],
 
                 // Alienbase
-                '0x553666081db0a8fdB337560009932852059d589A': [ // 7 pool
+                '0x553666081db0a8fdb337560009932852059d589a': [ // 7 pool
                     {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
                     {name: 'USDbC', address: '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca'},
                 ],

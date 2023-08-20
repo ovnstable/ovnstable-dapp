@@ -211,7 +211,7 @@ wcm-modal {
 
 onboard-v2 {
     position: absolute!important;
-    z-index: 100!important;
+    z-index: 9999!important;
 }
 
 #wcm-modal {

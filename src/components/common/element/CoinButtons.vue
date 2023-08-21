@@ -59,6 +59,7 @@ export default defineComponent({
         }
     },
     mounted() {
+        this.initNeededModal();
         this.initSumOfFutures();
     },
     methods: {
@@ -66,6 +67,23 @@ export default defineComponent({
         ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView', 'showDaiRedeemView']),
         ...mapActions('swapUsdtModal', ['showUsdtSwapModal', 'showUsdtMintView', 'showUsdtRedeemView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView', 'showUnwrapView']),
+
+        initNeededModal() {
+            if (this.$route.query.asset) {
+                setTimeout(() => {
+                    console.log("this.$route.query.asset", this.$route.query.asset)
+                    if (this.$route.query.asset === 'wusd_plus') {
+                        this.swapWusdAction();
+                    } else if (this.$route.query.asset === 'dai_plus') {
+                        this.swapDaiAction();
+                    } else if (this.$route.query.asset === 'usdt_plus') {
+                        this.swapUsdtAction();
+                    }
+
+                    this.$router.push({ path: this.$route.path })
+                }, 0);
+            }
+        },
 
         initSumOfFutures() {
             for (let i = 0; i < this.usdplusAvailibleNetworks.length; i++) {
@@ -88,6 +106,7 @@ export default defineComponent({
             this.$forceUpdate();
 
         },
+
 
         swapAction() {
             if (this.modalType === 'USD+') {

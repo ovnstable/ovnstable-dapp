@@ -33,6 +33,7 @@
             </v-list-item>
 
             <v-list-item
+                v-if="networkName !== 'linea'"
                 id="click_menu_swipe_mobile"
                 @click="swipeOdosClick" :class="selectedTab === 'swipe-odos' ? 'selected-page-item' : ''">
                 <div class="navbar-page-link mt-1">
@@ -318,7 +319,7 @@ export default {
         ...mapGetters('theme', ['light']),
         ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('menuUI', ['selectedTab']),
-        ...mapGetters('network', ['networkId']),
+        ...mapGetters('network', ['networkId', "networkName"]),
 
         usdPlusIconColor: function() {
             if (this.light) {

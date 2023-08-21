@@ -179,7 +179,7 @@
             <div v-if="networkName === 'zksync'" class="slippage-info-container">
                 <div class="slippage-info-title">
                     <img src="/assets/icon/swap/warn-info-icon.svg" alt="info" style="margin-right: 2px;"/>
-                    20-80% of the displayed gas fee on zkSynk will be refunded automatically.
+                    20-80% of the displayed gas fee on zkSync will be refunded automatically.
                 </div>
             </div>
 

@@ -17,7 +17,7 @@
 
                 <v-card-text class="pt-2 content-container">
                     <CoinButtons
-                            :modal-type="'USD+'"
+                            :modal-type="modalType"
                             :close-func="close"
                             :modal-action-type="isMintView ? 'MINT' : 'REDEEM'"
                             class="pl-lg-10 pr-lg-10 pl-md-5 pr-md-5 pb-7">
@@ -57,7 +57,13 @@ export default  {
         ...mapGetters('swapModal', ['isMintView']),
     },
 
-    data: () => ({}),
+    watch: {
+
+    },
+
+    data: () => ({
+        modalType: 'USD+',
+    }),
 
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'closeSwapModal']),

@@ -327,11 +327,11 @@ export default {
     methods: {
         ...mapActions("network", ["setWalletNetwork"]),
         swapButtonIn() {
-            this.initTabName('/swap', {action: 'swap-in'})
+            this.initTabName('/swap', {action: 'swap-in', asset: 'dai_plus'})
         },
 
         swapButtonOut() {
-            this.initTabName('/swap', {action: 'swap-out'})
+            this.initTabName('/swap', {action: 'swap-out', asset: 'dai_plus'})
         },
 
         setTab(tabName, chartType) {

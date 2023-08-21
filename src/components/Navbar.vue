@@ -36,6 +36,7 @@
             </v-list-item>
 
             <v-list-item
+                v-if="networkName !== 'linea'"
                 id="click_menu_swap"
                 :class="selectedTab === 'swipe-odos' ? 'selected-page-item' : ''"
                 @click="swipeOdosClick()"
@@ -399,7 +400,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('network', ['networkId']),
+        ...mapGetters('network', ['networkId', 'networkName']),
         ...mapGetters('menuUI', ['selectedTab']),
         ...mapGetters('theme', ['light']),
 

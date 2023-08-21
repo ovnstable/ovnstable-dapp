@@ -492,17 +492,23 @@ export const pool = {
             this.isPoolsLoading = false;
 
             const map = new Map();
-            // map.set('0x667002F9DC61ebcBA8Ee1Cbeb2ad04060388f223', '1586'); // 1. Velodrome USD+/DAI+
-            map.set('0x0d20ef7033b73ea0c9c320304b05da82e2c14e33', '1482'); // 2. Chronos FRAX/USD+
-            map.set('0x1561d9618db2dcfe954f5d51f4381fa99c8e5689', '1577'); // 3. Thena USDT+/USD+
-            map.set('0xbbd7ff1728963a5eb582d26ea90290f84e89bd66', '1481'); // 4. Chronos DOLA/USD+
-            map.set('0xb260163158311596ea88a700c5a30f101d072326', '1479'); // 5. Chronos USD+/DAI+
-            map.set('0xcd78e225e36e724c9fb4bd8287296557d728cda7', '1483'); // 6. Chronos LUSD/USD+
-            // map.set('', ''); // 8. Arbidex USD+/USDC.e ****
-            // map.set('0x571102a88928d74c049849af094a289c27fb794e', '1020'); // 7. SushiSwap USD+/USDC
-            // map.set('0xd95E98fc33670dC033424E7Aa0578D742D00f9C7', '712'); // 8. Velodrome USD+/USDC
-            // map.set('0x421a018cc5839c4c0300afb21c725776dc389b1a', '603'); // 9. Dystopia USD+/USDC
-            // map.set('0x37e7D30CC180A750C83D68ED0C2511dA10694d63', '1021'); // 10. Velodrome USD+/LUSD
+
+            // map.set('0x0d20ef7033b73ea0c9c320304b05da82e2c14e33', '1482'); // 1. Chronos FRAX/USD+
+            // map.set('0xbbd7ff1728963a5eb582d26ea90290f84e89bd66', '1481'); // 2. Chronos DOLA/USD+
+            // map.set('0xb260163158311596ea88a700c5a30f101d072326', '1479'); // 3. Chronos USD+/DAI+
+            // map.set('0xcd78e225e36e724c9fb4bd8287296557d728cda7', '1483'); // 4. Chronos LUSD/USD+
+            map.set('0x1561d9618db2dcfe954f5d51f4381fa99c8e5689', '1577'); // 5. Thena USDT+/USD+
+            // map.set('', ''); // 6. Arbidex USD+/USDC.e ****
+            map.set('0x667002F9DC61ebcBA8Ee1Cbeb2ad04060388f223', '1619'); // 7. Velodrome USD+/DAI+
+            map.set('0xd95E98fc33670dC033424E7Aa0578D742D00f9C7', '1618'); // 8. Velodrome USD+/USDC
+            map.set('0x37e7D30CC180A750C83D68ED0C2511dA10694d63', '1621'); // 9. Velodrome USD+/LUSD
+            map.set('0x0b28C2e41058EDc7D66c516c617b664Ea86eeC5d','1620') // 10. Velodrome USD+/DOLA
+            map.set('0xD330841EF9527E3Bd0abc28a230C7cA8dec9423B','1622') // 11. Velodrome FRAX/USD+
+            map.set('0xd1c33d0af58eb7403f7c01b21307713aa18b29d3','1625') // 12. DefiEdge USD+/USDC
+            map.set('0xeb9153afbaa3a6cfbd4fce39988cea786d3f62bb','1575') // 12. Ramses USD+/DAI+
+            // map.set('0x571102a88928d74c049849af094a289c27fb794e', '1020'); // . SushiSwap USD+/USDC
+            // map.set('0x421a018cc5839c4c0300afb21c725776dc389b1a', '603'); // . Dystopia USD+/USDC
+
 
 
             for (let i = 0; i < this.pools.length; i++) {

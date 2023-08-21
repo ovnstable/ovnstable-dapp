@@ -361,6 +361,7 @@ export default defineComponent({
 
         if (!this.isAvailableOnNetwork) {
             this.mintAction();
+            return;
         }
 
         try {

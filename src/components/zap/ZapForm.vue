@@ -813,9 +813,13 @@ export default defineComponent({
 
 
             console.log("Proportion for odos: ", proportions);
+            proportions.outputTokens = proportions.outputTokens.filter((item, index) => item.proportion > 0);
+            console.log("Proportion for odos after filter: ", proportions);
 
             let requestOutputTokens = this.getRequestOutputTokens();
             let requestInputTokens = this.getRequestInputTokens();
+            console.log("requestOutputTokens: ", requestOutputTokens);
+            console.log("requestInputTokens: ", requestInputTokens);
 
             let request = {
                 "chainId": this.networkId,
@@ -848,7 +852,7 @@ export default defineComponent({
                 this.swapRequest(requestData)
                     .then(async data => {
                         console.log("Odos swap request quota from zap", data)
-                            console.log("Odos swap request quota from zap proportions", proportions)
+                        console.log("Odos swap request quota from zap proportions", proportions)
 
                         let assembleData = {
                             "userAddr": request.userAddr,

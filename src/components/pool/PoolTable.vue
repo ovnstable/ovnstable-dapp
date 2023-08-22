@@ -210,6 +210,19 @@
                                     </div>
                                     <div class="platform-label-container d-inline-block">
                                         <div class="platform-label">
+                                            <div  v-if="pool.platform === 'Swapbased'">
+                                                <Tooltip
+                                                    text="This pool have 1% deposit fee"
+                                                    bottom
+                                                />
+                                            </div>
+                                            <div  v-if="pool.platform === 'Balancer'">
+                                                <Tooltip
+                                                    text="Composable Stable Pool bb-DAI+/bb-USD+"
+                                                    bottom
+                                                />
+                                            </div>
+
                                             <span v-if="pool.poolNameForAgregator">
                                                 {{pool.poolNameForAgregator.toUpperCase()}}
                                             </span>
@@ -479,7 +492,7 @@ div {
     padding: 2px 4px;
     background: var(--card-info-background);
     border-radius: 4px;
-    max-width: 90px;
+    max-width: 120px;
 }
 
 .platform-label {
@@ -488,6 +501,11 @@ div {
     font-size: 12px;
     line-height: 16px;
     color: var(--action-label-text);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .toggle-icon-container {

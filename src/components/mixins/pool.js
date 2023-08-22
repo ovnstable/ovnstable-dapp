@@ -310,7 +310,7 @@ export const pool = {
                     url = 'https://app.defiedge.io/s/optimism/';
                     break;
                 case 'Dracula':
-                    url = 'https://draculafi.xyz/liquidity';
+                    url = 'https://draculafi.xyz/liquidity/';
                     break
                 case 'Maverick':
                     url = 'https://app.mav.xyz/pools?chain=324';
@@ -324,11 +324,14 @@ export const pool = {
                 case 'Swapbased':
                     url = 'https://swapbased.finance/#/farm';
                     break
+                case 'Curve':
+                    url = 'https://curve.fi/#/arbitrum/pools/factory-v2-117/deposit';
+                    break
                 case 'Alienbase':
                     url = 'https://app.alienbase.xyz/farms';
                     break
                 case 'Balancer':
-                    url = 'https://app.balancer.fi/#/arbitrum';
+                    url = 'https://app.balancer.fi/#/arbitrum/pool/';
                     break
                 case 'Convex':
                     url = 'https://www.convexfinance.com/stake/arbitrum/13';
@@ -352,8 +355,8 @@ export const pool = {
                 pool.platform === 'Velocimeter' ||
                 pool.platform === 'Swapbased' ||
                 pool.platform === 'Maverick' ||
+                pool.platform === 'Curve' ||
                 pool.platform === 'Alienbase' ||
-                pool.platform === 'Balancer' ||
                 pool.platform === 'Convex'
             ) {
                 window.open(url, '_blank').focus();
@@ -362,6 +365,24 @@ export const pool = {
 
             if (pool.platform === 'Beethoven') {
                 url += pool.address + '0000000000000000000000ae';
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Balancer' && pool.address === '0xa8af146d79ac0bb981e4e0d8b788ec5711b1d5d0') {
+                url +=  pool.address +  '00000000000000000000047b'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Balancer' && pool.address === '0x519cce718fcd11ac09194cff4517f12d263be067') {
+                url +=  pool.address +  '000000000000000000000382'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Balancer' && pool.address === '0xd6d20527c7b0669989ee082b9d3a1c63af742290') {
+                url +=  pool.address +  '000000000000000000000483'
                 window.open(url, '_blank').focus();
                 return;
             }
@@ -688,6 +709,16 @@ export const pool = {
                     zappable: false,
                 })
             }
+
+           /* if (poolAddress === '0xb34a7d1444a707349bc7b981b7f2e1f20f81f013') {
+                pool.aggregators.push({
+                    id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
+                    name: pool.id.name,
+                    address: pool.id.address,
+                    platform: 'Curve',
+                    zappable: false,
+                })
+            }*/
 
             /*            if (pool.id.address === '0x88beb144352bd3109c79076202fac2bceab87117') {
                             pool.aggregators.push({

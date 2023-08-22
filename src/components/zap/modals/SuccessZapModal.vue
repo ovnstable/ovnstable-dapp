@@ -360,6 +360,11 @@ export default defineComponent({
                 return
             }
 
+            if (this.successData.pool.platform === 'Swapbased') {
+                window.open(`https://swapbased.finance/#/farm`, '_blank').focus();
+                return
+            }
+
             if (this.successData.pool.platform === 'Velocimeter') {
                 window.open(`https://base.velocimeter.xyz/liquidity`, '_blank').focus();
                 return

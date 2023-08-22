@@ -68,6 +68,12 @@ export const zap = {
                     network: 'base',
                     typeOfDepositConstructor: 'CONSTRUCTOR_WITH_POOL_ID_AND_TOKEN_AMOUNT'
                 },
+                'Swapbased': {
+                    name: 'Swapbased',
+                    type: 'LP_STAKE_DIFF_STEPS',
+                    network: 'base',
+                    typeOfDepositConstructor: 'CONSTRUCTOR_STAKE_METHOD_AND_TOKEN_AMOUNT'
+                },
             },
             zapContract: null,
             poolTokenContract: null,
@@ -247,6 +253,19 @@ export const zap = {
                 '0xd97a40434627D5c897790DE9a3d2E577Cba5F2E0': {
                     gauge: '0x52eaeCAC2402633d98b95213d0b473E069D86590',
                     poolId: 8,
+                    approveType: 'TOKEN'
+                },
+
+                //  Swapbased
+                '0x282f9231e5294e7354744df36461c21e0e68061c': { // usd+/usdbc
+                    gauge: '0x1b0d1C09fD360ADe0Caf4bFfE2933E2CC8846a62',
+                    poolId: 0,
+                    approveType: 'TOKEN'
+                },
+
+                '0x164bc404c64fa426882d98dbce9b10d5df656eed': { // usd+/dai+
+                    gauge: '0xF4272b27C1AfE449FBdbe83C1C3D1EbC7351fA2d',
+                    poolId: 0,
                     approveType: 'TOKEN'
                 },
 
@@ -478,6 +497,12 @@ export const zap = {
                     _data: '0x0000000000000000000000000000000000000000000000000000000000000000'
                 }
                 return this.gaugeContract.methods.safeTransferFrom(data.from, data.to, data.tokenId, data._data).send(params);
+            }
+
+            if (this.currentZapPlatformContractType.typeOfDepositConstructor === 'CONSTRUCTOR_STAKE_METHOD_AND_TOKEN_AMOUNT') {
+                let balance = await this.poolTokenContract.methods.balanceOf(account).call();
+                console.log('Deposit with stake method and token amount: ', this.currentZapPlatformContractType, balance, account, lastPoolInfoData);
+                return this.gaugeContract.methods.stake(balance).send(params);
             }
 
             console.error('Type contracts for deposit in gauge not found: ', this.currentZapPlatformContractType, account);

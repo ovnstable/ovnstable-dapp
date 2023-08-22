@@ -125,6 +125,13 @@
                     <SwapSlippageSettings/>
                 </div>
 
+                <div v-if="zapPool && this.zapPool.platform === 'Swapbased'" class="slippage-info-container">
+                    <div class="slippage-info-title">
+                        <img src="/assets/icon/swap/warn-info-icon.svg" alt="info" style="margin-right: 2px;"/>
+                        By joining this pool, you are being notified that SwapBased takes a 1% deposit fee.
+                    </div>
+                </div>
+
                 <div class="swap-footer pt-5">
                     <div v-if="!account" class="swap-button-container">
                         <div @click="connectWallet"
@@ -2116,4 +2123,21 @@ div {
 .dont-work-on-network-container {
     text-align: center;
 }
+
+.slippage-info-container {
+    background: rgba(254, 127, 45, 0.1);
+    padding: 8px;
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.slippage-info-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0em;
+    text-align: left;
+    color: rgba(254, 127, 45, 1);
+}
+
 </style>

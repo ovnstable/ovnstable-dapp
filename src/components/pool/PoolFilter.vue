@@ -2,7 +2,7 @@
     <div>
         <div class="pool-filter-container">
             <div class="row">
-                <div class="col-12 col-lg-6 -col-md-6 col-sm-12">
+                <div class="col-12 col-lg-7 -col-md-6 col-sm-12">
                     <div class="networks-container">
                         <div
                             @click="setSelectedTabFunc('ALL')"
@@ -22,7 +22,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-6 -col-md-6 col-sm-12">
+                <div class="col-12 col-lg-5 -col-md-6 col-sm-12">
 
                     <div class="row">
                         <div class="col-6 col-lg-3 col-md-3 col-sm-3">
@@ -39,7 +39,7 @@
                                 </v-checkbox>
                             </div>
                         </div>
-                        <div class="col-6 col-lg-3 col-md-3 col-sm-3">
+                        <div class="col-6 col-lg-4 col-md-3 col-sm-3">
                             <div class="filter-container text-center">
                                 <v-checkbox
                                     @click="showAprLimit(!isShowAprLimit)"
@@ -55,7 +55,7 @@
                             </div>
                         </div>
 
-                        <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+                        <div class="col-12 col-lg-5 col-md-6 col-sm-6">
                             <div class="search-input-container">
                                 <input
                                     v-model="searchQuery"
@@ -148,6 +148,7 @@ export default defineComponent({
 
 .networks-container {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .networks-item {
@@ -164,6 +165,7 @@ export default defineComponent({
     display: flex;
     justify-content: center; /* horizontally center */
     align-items: center; /* vertically center */
+    margin-bottom: 10px;
 }
 
 .networks-item-selected {

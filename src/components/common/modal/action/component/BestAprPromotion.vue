@@ -17,7 +17,7 @@
                 </label>
             </div>
             <div>
-                <PoolLabel :pool="topZappablePool" />
+                <PoolLabel :pool="topPool" />
             </div>
             <div class="container-subtitle mt-2">
                 <label class="subtitle">

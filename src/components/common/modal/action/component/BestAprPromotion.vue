@@ -75,8 +75,8 @@ export default {
 .container-main {
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-    background-color: var(--card-info-background);
+    box-shadow: none;
+    background-color: transparent;
     border-radius: 12px;
     cursor: pointer;
 }

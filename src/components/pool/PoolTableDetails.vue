@@ -25,7 +25,7 @@
                            {{pool.platform}}
                        </div>
 
-                       <div v-bind:style="$wu.isMobile() ? 'right: -17px;' : ''"
+                       <div v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: 10px'"
                             class="pool-platform-link">
                            <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
                        </div>
@@ -137,7 +137,7 @@
                                 {{aggregator.platform}}
                             </div>
 
-                            <div v-bind:style="$wu.isMobile() ? 'right: -14px;' : ''"
+                            <div v-bind:style="$wu.isMobile() ? 'right: -14px;' : '10px'"
                                 class="pool-platform-link">
                                 <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
                             </div>

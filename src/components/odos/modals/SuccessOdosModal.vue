@@ -87,7 +87,7 @@
                     </v-card-text>
 
                     <div v-if="!isPoolsLoading">
-                        <BestAprPromotion  :pool="topZappablePool"/>
+                        <BestAprPromotion  :pool="topPool"/>
                     </div>
                 </v-card>
 

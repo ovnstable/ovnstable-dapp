@@ -1,5 +1,5 @@
 <template>
-    <div class="container-main pa-2" @click="openLink('https://app.overnight.fi/featured')">
+    <div class="container-main pa-2" @click="openLink('https://app.overnight.fi/pools')">
         <v-row v-if="isPoolsLoading">
             <v-row align="center" justify="center" class="py-15">
                 <v-progress-circular
@@ -17,11 +17,11 @@
                 </label>
             </div>
             <div>
-                <PoolLabel :pool="topZappablePool" />
+                <PoolLabel :pool="topPool" />
             </div>
             <div class="container-subtitle mt-2">
                 <label class="subtitle">
-                    See on Featured page
+                    See all pools here
                 </label>
                 <div>
                     <v-img class="arrow-icon" :src="require('@/assets/icon/arrow-right.svg')"/>
@@ -61,7 +61,7 @@ export default {
         openLink(url) {
             window.open(url, '_blank').focus();
             try {
-                this.trackClick({action: 'go_to_featured_from_promotion', event_category: 'Click Link', event_label: 'Open Link To Featured' });
+                this.trackClick({action: 'go_to_all_pools_from_promotion', event_category: 'Click Link', event_label: 'Open Link To Featured' });
             } catch (e) {
                 console.error("Track error:", e);
             }
@@ -76,7 +76,7 @@ export default {
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-    background-color: var(--main-background);
+    background-color: var(--card-info-background);
     border-radius: 12px;
     cursor: pointer;
 }

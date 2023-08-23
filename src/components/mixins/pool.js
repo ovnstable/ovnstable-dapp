@@ -15,7 +15,6 @@ export const pool = {
             isPoolsLoading: true,
 
             topPool: null,
-            topZappablePool: null,
 
             isZapModalShow: false,
             currentZapPool: null,
@@ -480,23 +479,17 @@ export const pool = {
             }
 
             // todo move to backend
+            if (this.pools && this.pools.length) {
+                const filteredPools = this.pools.filter(pool => pool.chain === this.networkId && pool.tvl > 300000);
+                filteredPools.sort((a, b) => b.apr - a.apr);
+
+                if (filteredPools.length > 0) {
+                    this.topPool = filteredPools[0];
+                }
+            }
+
             this.pools = this.initFeature(this.pools);
             this.sortedPoolList = this.getSortedPools(this.pools);
-
-            if (this.sortedPoolList && this.sortedPoolList.length) {
-                this.topPool = this.sortedPoolList[0];
-            }
-
-            for (let i = 0; i < this.sortedPoolList.length; i++) {
-                let pool = this.sortedPoolList[i];
-
-                if (pool.zappable) {
-                    this.topZappablePool = pool;
-                    break
-                }
-
-            }
-
             this.sortedPoolSecondList = this.getSortedSecondPools(this.pools);
             this.isPoolsLoading = false;
 

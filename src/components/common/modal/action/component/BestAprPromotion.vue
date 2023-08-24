@@ -11,12 +11,12 @@
             </v-row>
         </v-row>
         <template v-if="!isPoolsLoading">
-            <div class="container-title mt-1 mb-1">
+            <div v-if="topPool" class="container-title mt-1 mb-1">
                 <label class="title">
                     Best APR of the day
                 </label>
             </div>
-            <div>
+            <div v-if="topPool">
                 <PoolLabel :pool="topPool" />
             </div>
             <div class="container-subtitle mt-2">

@@ -43,7 +43,7 @@ export default {
 
     data:()=>({
         items: [
-            // { title: 'Overview', icon: 'mdi-view-dashboard' , to: 'Overview' },
+            { title: 'Overview', icon: 'mdi-view-dashboard' , to: 'Overview' },
             { title: 'Proposals', icon: 'mdi-folder-table-outline', to: 'Proposals'},
             { title: 'Portfolio Agent', icon: 'mdi-chart-bar', to:  'Finance' },
            /* { title: 'Abroad', icon: 'mdi-arrow-left-right', to:  'Abroad' },

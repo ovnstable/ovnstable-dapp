@@ -1,63 +1,64 @@
 <template>
-    <v-container>
-        <v-row justify="center">
-            <h1>Governance Overview</h1>
-        </v-row>
+    <div class="main-container">
+        <v-container>
+            <v-row justify="center">
+                <h1>Governance Overview</h1>
+            </v-row>
 
-        <template v-if="overviewLoading">
-            Loading...
-        </template>
+            <template v-if="overviewLoading">
+                Loading...
+            </template>
 
-        <v-row v-else>
-            <v-col lg="4">
-                <v-card>
-                    <v-card-title>Total votes</v-card-title>
-                    <v-card-actions>
-                        <h2>{{ overview.totalVotes }}</h2>
-                    </v-card-actions>
-                </v-card>
-            </v-col>
-            <v-col lg="4">
-                <v-card>
-                    <v-card-title>Your delegated</v-card-title>
-                    <v-card-actions>
-                        <h2>{{ overview.totalDelegated }}</h2>
-                    </v-card-actions>
-                </v-card>
-            </v-col>
-            <v-col lg="4">
-                <v-card>
-                    <v-card-title>Proposals</v-card-title>
-                    <v-card-actions>
-                        <h2>{{ overview.totalProposals }}</h2>
-                    </v-card-actions>
-                </v-card>
-            </v-col>
+            <v-row v-else>
+                <v-col lg="4">
+                    <v-card>
+                        <v-card-title>Total votes</v-card-title>
+                        <v-card-actions>
+                            <h2>{{ overview.totalVotes }}</h2>
+                        </v-card-actions>
+                    </v-card>
+                </v-col>
+                <v-col lg="4">
+                    <v-card>
+                        <v-card-title>Your delegated</v-card-title>
+                        <v-card-actions>
+                            <h2>{{ overview.totalDelegated }}</h2>
+                        </v-card-actions>
+                    </v-card>
+                </v-col>
+                <v-col lg="4">
+                    <v-card>
+                        <v-card-title>Proposals</v-card-title>
+                        <v-card-actions>
+                            <h2>{{ overview.totalProposals }}</h2>
+                        </v-card-actions>
+                    </v-card>
+                </v-col>
 
-        </v-row>
+            </v-row>
 
-        <v-row>
-            <v-col lg="4">
-                <GovSettings/>
-            </v-col>
-            <v-col lg="4">
-                <DelegatePanel/>
-            </v-col>
-        </v-row>
+            <v-row>
+                <v-col lg="4">
+                    <GovSettings/>
+                </v-col>
+                <v-col lg="4">
+                    <DelegatePanel/>
+                </v-col>
+            </v-row>
 
-    </v-container>
+        </v-container>
+    </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
 import DelegatePanel from "../../components/governance/DelegatePanel";
-import ChangeWeightPanel from "../../components/governance/finance/ChangeWeightPanel";
 import GovSettings from "../../components/governance/GovSettings";
 
 export default {
     name: "Overview",
 
-    components: {GovSettings, ChangeWeightPanel, DelegatePanel},
+    components: {GovSettings, DelegatePanel},
 
     computed: {
         ...mapGetters('web3', ['contracts']),
@@ -77,5 +78,9 @@ export default {
 </script>
 
 <style scoped>
-
+.main-container {
+    min-width: 100% !important;
+    min-height: 100% !important;
+    background-color: #FFFFFF !important;
+}
 </style>

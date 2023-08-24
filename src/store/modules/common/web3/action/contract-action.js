@@ -70,13 +70,13 @@ const actions = {
 
             network === "optimism" || network === "arbitrum" || network === "base" ? _load(await loadJSON(`/contracts/${network}/DaiExchange.json`), web3) : _load_empty(),
             network === "bsc" || network === 'linea' ? _load(await loadJSON(`/contracts/${network}/UsdtExchange.json`), web3) : _load_empty(),
-            network !== 'zksync' && network !== 'linea' ? _load(await loadJSON(`/contracts/${network}/OvnToken.json`), web3) : _load_empty(),
-            network !== 'zksync' && network !== 'linea' ?_load(await loadJSON(`/contracts/${network}/OvnGovernor.json`), web3) : _load_empty(),
+            network !== 'linea' ? _load(await loadJSON(`/contracts/${network}/OvnToken.json`), web3) : _load_empty(),
+            network !== 'linea' ?_load(await loadJSON(`/contracts/${network}/OvnGovernor.json`), web3) : _load_empty(),
             _load(await loadJSON(`/contracts/${network}/PortfolioManager.json`), web3),
 
             network === "optimism" || network === "arbitrum"  || network === "base" ? _load(await loadJSON(`/contracts/${network}/DaiPortfolioManager.json`), web3) : _load_empty(),
             network === "bsc" || network === 'linea' ? _load(await loadJSON(`/contracts/${network}/UsdtPortfolioManager.json`), web3) : _load_empty(),
-            network !== 'zksync' && network !== 'linea' ?_load(await loadJSON(`/contracts/${network}/OvnTimelockController.json`), web3) : _load_empty(),
+            network !== 'linea' ?_load(await loadJSON(`/contracts/${network}/OvnTimelockController.json`), web3) : _load_empty(),
             _load(await loadJSON(`/contracts/${network}/UsdPlusToken.json`), web3),
 
             network === "optimism" || network === "arbitrum" || network === "base" ? _load(await loadJSON(`/contracts/${network}/DaiPlusToken.json`), web3) : _load_empty(),

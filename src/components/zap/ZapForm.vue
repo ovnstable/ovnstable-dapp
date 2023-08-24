@@ -1013,12 +1013,12 @@ export default defineComponent({
                         this.depositGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData, this.lastNftTokenId);
                     }).catch(e => {
                         console.error("Approve nft gauge failed", e);
-                        this.this.lastNftTokenId = null;
+                        this.lastNftTokenId = null;
                         this.closeWaitingModal();
                     });
                 } catch (e) {
                     console.error("Approve nft gauge failed", e);
-                    this.this.lastNftTokenId = null;
+                    this.lastNftTokenId = null;
                     this.closeWaitingModal();
                 }
             } else {

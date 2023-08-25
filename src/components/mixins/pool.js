@@ -508,7 +508,8 @@ export const pool = {
                     this.topPool = filteredPools[0];
                 }
 
-                if (!filteredPools) {
+                // top pool on chain not found, get top pool from all pools
+                if (!this.topPool) {
                     this.topPool = this.pools.sort((a, b) => b.apr - a.apr);
                 }
             }

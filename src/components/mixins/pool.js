@@ -501,11 +501,15 @@ export const pool = {
 
             // todo move to backend
             if (this.pools && this.pools.length) {
-                const filteredPools = this.pools.filter(pool => pool.chain === this.networkId && pool.tvl > 300000);
+                const filteredPools = this.pools.filter(pool => pool.chain === this.networkId && pool.tvl > 100000);
                 filteredPools.sort((a, b) => b.apr - a.apr);
 
                 if (filteredPools.length > 0) {
                     this.topPool = filteredPools[0];
+                }
+
+                if (!filteredPools) {
+                    this.topPool = this.pools.sort((a, b) => b.apr - a.apr);
                 }
             }
 

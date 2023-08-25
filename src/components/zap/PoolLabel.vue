@@ -48,8 +48,11 @@
                             <div class="pool-detail-title">
                                 TVL
                             </div>
-                            <div class="pool-detail-item">
+                            <div  v-if="pool.tvl >= 1000000" class="pool-detail-item">
                                 {{('$' + $utils.formatNumberToMln(pool.tvl, 0))}}M
+                            </div>
+                            <div  v-if="pool.tvl < 1000000" class="pool-detail-item">
+                                ${{ $utils.formatNumberToThousands(pool.tvl, 0)}}K
                             </div>
                         </div>
                         <div class="col-4 col-lg-4 col-md-4 col-sm-4">

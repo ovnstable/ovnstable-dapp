@@ -12,6 +12,7 @@
                         </div>
                         <div
                             v-for="networkConfig in allNetworkConfigs" :key="networkConfig.networkName"
+                            v-if="!networkConfig.isDeprecated || isDeprecatedShow"
                             @click="setSelectedTabFunc(networkConfig.networkName)"
                             :class="selectedTabs.includes(networkConfig.networkName) ? 'networks-item-selected' : ''"
                             class="networks-item">
@@ -121,6 +122,7 @@ export default defineComponent({
     },
     computed: {
         ...mapGetters('network', ['allNetworkConfigs']),
+        ...mapGetters('deprecated', ['isDeprecatedShow']),
     },
     methods: {
         showWithZap(isShow) {

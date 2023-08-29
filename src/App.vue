@@ -6,20 +6,21 @@
 
 <script>
 
+import {mapActions, mapGetters} from "vuex";
+
 export default {
     name: 'App',
 
     data: () => ({
     }),
-
-    computed: {
-    },
-
     created() {
       console.log('App created');
+      this.loadDeprecatedShow();
     },
-
+    computed: {
+    },
     methods: {
+        ...mapActions('deprecated', ['loadDeprecatedShow']),
     }
 };
 </script>
@@ -375,5 +376,8 @@ onboard-v2 {
     color: var(--main-gray-text) !important;
 }
 
+.text-deprecated {
+    color: var(--third-gray-text) !important;
+}
 
 </style>

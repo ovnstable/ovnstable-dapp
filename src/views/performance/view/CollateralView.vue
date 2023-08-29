@@ -23,7 +23,19 @@
                     <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
                     <label class="tab-btn mx-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
                     <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
-                    <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
+                    <label  v-if="isDeprecatedShow"
+                            @click="setTab('polygon')" v-bind:class="activeTabPolygon"
+                            class="tab-btn mx-4 text-deprecated">
+                        Polygon
+                        <div style="position: relative">
+                            <div style="position:absolute;right: -26px;top: -23px;">
+                                <Tooltip
+                                    text="Chain is deprecated"
+                                    right
+                                />
+                            </div>
+                        </div>
+                    </label>
                 </v-row>
             </v-col>
             <v-col v-else>
@@ -36,7 +48,19 @@
                     <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
                     <label class="tab-btn mx-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
                     <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
-                    <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
+                    <label  v-if="isDeprecatedShow"
+                            @click="setTab('polygon')" v-bind:class="activeTabPolygon"
+                            class="tab-btn mx-4 text-deprecated">
+                        Polygon
+                        <div style="position: relative">
+                            <div style="position:absolute;right: -26px;top: -23px;">
+                                <Tooltip
+                                    text="Chain is deprecated"
+                                    right
+                                />
+                            </div>
+                        </div>
+                    </label>
                 </v-row>
             </v-col>
             <template v-if="!$wu.isMobile()">
@@ -208,11 +232,13 @@ import TableStrategies from "@/components/stats/doughnut/TableStrategies";
 import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies";
 import {strategiesApiService} from "@/services/strategies-api-service";
 import {collateralApiService} from "@/services/collateral-api-service";
+import Tooltip from "@/components/common/element/Tooltip.vue";
 
 export default {
     name: "CollateralView",
 
     components: {
+        Tooltip,
         DoughnutStrategies,
         TableStrategies,
         PieStablecoins,
@@ -234,6 +260,7 @@ export default {
         ...mapGetters("network", ['appApiUrl', 'getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'zkConfig', 'networkName']),
         ...mapGetters("web3", ['contracts']),
         ...mapGetters('etsAction', ['etsList']),
+        ...mapGetters('deprecated', ['isDeprecatedShow']),
 
         tabNetworkName: function() {
             let params;
@@ -934,5 +961,9 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .link-to-docs {
     text-decoration: none;
+}
+
+.text-deprecated {
+    color: var(--third-gray-text) !important;
 }
 </style>

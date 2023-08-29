@@ -59,7 +59,17 @@
                     </div>
                 </v-list-item-avatar>
                 <v-list-item-title class="network-select-list-item">
-                    Linea
+                    <div style="display: inline-block">
+                        Linea
+                    </div>
+                    <div style="position: relative">
+                        <div class="tooltip-info">
+                            <Tooltip
+                                text="In the process of launch"
+                                top
+                            />
+                        </div>
+                    </div>
                 </v-list-item-title>
             </v-list-item>
             <v-list-item style="cursor: pointer" @click="setWalletNetwork('56')">
@@ -83,17 +93,6 @@
                     ZkSync
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item style="cursor: pointer" @click="setWalletNetwork('137')">
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img :src="require('@/assets/network/polygon.svg')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item">
-                    Polygon
-                    <v-icon class="mb-5" small color="var(--secondary-gray-text)"></v-icon>
-                </v-list-item-title>
-            </v-list-item>
             <v-list-item disabled>
                 <v-list-item-avatar>
                     <div class="list-item-icon">
@@ -105,12 +104,56 @@
                     <v-icon class="mb-5" small></v-icon>
                 </v-list-item-title>
             </v-list-item>
+
+            <div class="divider-container">
+                <div class="navbar-list-divider mt-3 mb-1"></div>
+            </div>
+
+            <v-list-item>
+                <div class="title-deprecated pl-4">
+                    DEPRECATED
+                    <img :src="require('@/assets/icon/deprecated-link.svg')" width="13px" style="display: inline-block" alt="->"/>
+                </div>
+            </v-list-item>
+
+            <v-list-item @click.stop="toggleDeprecatedType()"
+                         class="switch-container">
+                <img v-if="isDeprecatedShow"
+                     :src="require('@/assets/icon/deprecated-on.svg')"
+                     width="50px"
+                     class="switch-text" alt="on"/>
+                <img v-if="!isDeprecatedShow"
+                     :src="require('@/assets/icon/deprecated-off.svg')"
+                     width="50px"
+                     class="switch-button-image" alt="off"/>
+                <div class="switch-text">
+                    Switched
+                    <span v-if="isDeprecatedShow">on</span>
+                    <span v-if="!isDeprecatedShow">off</span>
+                </div>
+            </v-list-item>
+
+            <v-list-item v-if="isDeprecatedShow">
+                <v-list-item style="cursor: pointer" @click="setWalletNetwork('137')">
+                    <v-list-item-avatar>
+                        <div class="list-item-icon">
+                            <v-img :src="require('@/assets/network/polygon-deprecated.svg')"/>
+                        </div>
+                    </v-list-item-avatar>
+                    <v-list-item-title class="network-select-list-item name-deprecated">
+                        Polygon
+                        <v-icon class="mb-5" small color="var(--secondary-gray-text)"></v-icon>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list-item>
+
         </v-list>
     </v-menu>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import Tooltip from "@/components/common/element/Tooltip.vue";
 
 let polygonIcon = require('@/assets/network/polygon.svg');
 let bscIcon = require('@/assets/network/bsc.svg');
@@ -123,7 +166,7 @@ let zksyncIcon = require('@/assets/network/zk.svg');
 export default {
     name: "NetworkSelect",
 
-    components: {},
+    components: {Tooltip},
 
     data: () => ({
         openedList: false,
@@ -133,6 +176,7 @@ export default {
 
     computed: {
         ...mapGetters('network', ['networkId']),
+        ...mapGetters('deprecated', ['isDeprecatedShow']),
 
         icon: function () {
             switch (this.networkId){
@@ -163,11 +207,16 @@ export default {
     },
 
     methods: {
+        ...mapActions('deprecated', ['loadDeprecatedShow', 'updateDeprecatedShow']),
         ...mapActions('network', ['setWalletNetwork']),
 
         clickMenuOutside() {
             this.openedList = false;
-        }
+        },
+        toggleDeprecatedType() {
+            console.log('toggleDeprecatedType', this.isDeprecatedShow)
+           this.updateDeprecatedShow(!this.isDeprecatedShow)
+        },
     }
 }
 </script>
@@ -218,5 +267,43 @@ export default {
     font-weight: 600;
     font-size: 17px;
     margin-left: -5px;
+}
+
+.navbar-list-divider {
+    border-top: 1px solid var(--input-placeholder) !important;
+}
+
+.divider-container {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.name-deprecated {
+    color:  rgba(112, 122, 139, 1) !important;
+}
+
+.title-deprecated {
+    color: rgba(173, 179, 189, 1);
+    cursor: pointer;
+}
+
+.switch-text {
+    display: inline-block;
+    padding-left: 8px;
+    color: var(--main-gray-text);
+}
+
+.switch-button-image {
+    display: inline-block;
+}
+
+.switch-container {
+    cursor: pointer;
+}
+
+.tooltip-info {
+    position: absolute;
+    right: 52px;
+    top: -19px;
 }
 </style>

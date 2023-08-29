@@ -77,6 +77,7 @@ import magicEye from "@/store/modules/magic-eye/magic-eye";
 
 // Theme
 import theme from "@/store/modules/theme/theme";
+import deprecated from "@/store/modules/chains/deprecated";
 
 import createPersistedState from "vuex-persistedstate";
 
@@ -149,6 +150,7 @@ export default new Vuex.Store({
         track,
 
         theme,
+        deprecated,
 
         magicEye
     },

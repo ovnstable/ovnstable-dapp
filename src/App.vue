@@ -175,11 +175,11 @@ export default {
     --onboard-wallet-button-border-color: transparent;
     --onboard-wallet-button-border-radius: 8px;
 
-    --account-center-z-index: 202 !important;
-    --onboard-modal-z-index: 202 !important;
-    --onboard-account-select-modal-z-index: 202 !important;
-    --onboard-login-modal-z-index: 202 !important;
-    --notify-onboard-z-index: 202 !important;
+    --account-center-z-index: 99 !important;
+    --onboard-modal-z-index: 99 !important;
+    --onboard-account-select-modal-z-index: 99 !important;
+    --onboard-login-modal-z-index: 99 !important;
+    --notify-onboard-z-index: 99 !important;
 
     /* CUSTOMIZE THE SHARED MODAL */
     --onboard-modal-color: var(--main-gray-text);
@@ -215,11 +215,18 @@ wcm-modal {
 
 onboard-v2 {
     position: absolute!important;
-    z-index: 202!important;
+    z-index: 99!important;
 }
 
 #wcm-modal {
-    z-index: 200;
+    z-index: 100 !important;
+}
+
+.v-overlay {
+    z-index: 98 !important;
+}
+.v-dialog__content {
+    z-index: 98 !important;
 }
 
 .blur-content > * {

@@ -58,6 +58,15 @@
                     </v-btn>
                 </v-row>
 
+<!--                <v-col cols="12" align="start" class="mt-10">
+                    <v-btn  class="header-btn btn-outlined mr-5" outlined >
+                        check history balance
+                    </v-btn>
+                    <v-btn class="header-btn btn-outlined mr-5" outlined>
+                        check current balance
+                    </v-btn>
+                </v-col>-->
+
                 <v-row align="start" justify="start" class="account-info-row ma-0 mt-10 toggle-row">
                     <label @click="openTab(1)" class="tab-btn mr-4" v-bind:class="activeTabTx">History</label>
                     <label @click="openTab(2)" class="tab-btn mx-4" v-bind:class="activeTabTokens">Tokens</label>

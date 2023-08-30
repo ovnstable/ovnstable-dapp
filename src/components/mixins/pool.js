@@ -366,6 +366,7 @@ export const pool = {
                 pool.platform === 'Ezkalibur' ||
                 pool.platform === 'Mute' ||
                 pool.platform === 'Velodrome' ||
+                pool.platform === 'Aerodrome' ||
                 pool.platform === 'Ennead' ||
                 pool.platform === 'Arbidex' ||
                 pool.platform === 'Gnd' ||

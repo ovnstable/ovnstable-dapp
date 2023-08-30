@@ -223,12 +223,14 @@ onboard-v2 {
     z-index: 100 !important;
 }
 
+/*
 .v-overlay {
     z-index: 98 !important;
 }
 .v-dialog__content {
     z-index: 98 !important;
 }
+*/
 
 .blur-content > * {
     filter: blur(5px);

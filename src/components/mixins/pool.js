@@ -261,6 +261,9 @@ export const pool = {
                 case 'Velodrome':
                     url = 'https://app.velodrome.finance/liquidity/?query=usd%2B&filter=default';
                     break;
+                case 'Aerodrome':
+                    url = 'https://aerodrome.finance/liquidity/?query=usd%2B&filter=all';
+                    break;
                 case 'Beethoven':
                     url = 'https://op.beets.fi/pool/';
                     break;

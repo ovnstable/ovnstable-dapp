@@ -110,7 +110,7 @@
             </div>
 
             <v-list-item>
-                <div class="title-deprecated pl-4">
+                <div @click="openDeprecatedDocsLink()" class="title-deprecated pl-4">
                     DEPRECATED
                     <img :src="require('@/assets/icon/deprecated-link.svg')" width="13px" style="display: inline-block" alt="->"/>
                 </div>
@@ -217,6 +217,9 @@ export default {
             console.log('toggleDeprecatedType', this.isDeprecatedShow)
            this.updateDeprecatedShow(!this.isDeprecatedShow)
         },
+        openDeprecatedDocsLink() {
+            window.open('https://docs.overnight.fi/advanced/deprecation', '_blank');
+        }
     }
 }
 </script>

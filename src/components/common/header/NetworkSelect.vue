@@ -127,7 +127,7 @@
                      width="50px"
                      class="switch-button-image" alt="off"/>
                 <div class="switch-text">
-                    Switched
+                    Deprecated
                     <span v-if="isDeprecatedShow">on</span>
                     <span v-if="!isDeprecatedShow">off</span>
                 </div>

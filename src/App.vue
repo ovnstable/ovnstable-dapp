@@ -377,7 +377,7 @@ onboard-v2 {
 }
 
 .text-deprecated {
-    color: var(--third-gray-text) !important;
+    color: #707a8b!important;
 }
 
 </style>

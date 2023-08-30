@@ -521,6 +521,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 
 .text-deprecated {
-    color: var(--third-gray-text) !important;
+    color: #707a8b!important;
 }
 </style>

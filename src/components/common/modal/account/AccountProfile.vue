@@ -58,7 +58,7 @@
                     </v-btn>
                 </v-row>
 
-                <div class="mt-10">
+                <div v-if="account && account === '0x4473D652fb0b40b36d549545e5fF6A363c9cd686'" class="mt-10">
                    <div v-if="isHistoryCached" class="pt-5">
                        <div class="success-text">
                            Historical balance already checked!

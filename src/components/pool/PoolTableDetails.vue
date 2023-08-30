@@ -145,7 +145,7 @@
                                 {{aggregator.platform}}
                             </div>
 
-                            <div v-bind:style="$wu.isMobile() ? 'right: -14px;' : '10px'"
+                            <div v-bind:style="$wu.isMobile() ? 'right: -14px;' : 'right: 10px'"
                                 class="pool-platform-link">
                                 <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
                             </div>
@@ -165,7 +165,7 @@
                 <div class="col-3 col-xl-3 col-lg-3 col-md-3 col-sm-4">
                     <div class="pool-table-header-item">
                         <label v-if="aggregator.tvl" class="card-label">
-                            ${{ $utils.formatNumberToMln(aggregator.tvl, 0) }}M
+                            ${{ $utils.formatNumberToThousands(aggregator.tvl, 0) }}K
                         </label>
                         <label v-else class="card-label see-on-dex-label see-on-dex-another">
                             see on platform

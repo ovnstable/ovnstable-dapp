@@ -332,7 +332,7 @@ export const pool = {
                 case 'Balancer':
                     url = 'https://app.balancer.fi/#/arbitrum/pool/';
                     break
-                case 'Convex':
+                case 'Convex': // aggregator of Curve
                     url = 'https://www.convexfinance.com/stake/arbitrum/13';
                     break
 
@@ -466,6 +466,7 @@ export const pool = {
 
                                     // todo move to backend
                                     pool = this.initAggregators(pool);
+                                    console.log("Pool = initAggregators", pool)
 
                                     this.pools.push({
                                         id: (pool.id.name + pool.tvl + pool.platform),
@@ -550,7 +551,7 @@ export const pool = {
         },
 
         getSortedPools(pools) {
-            let topPools = pools.filter(pool => pool.tvl >= 300000);
+            let topPools = pools.filter(pool => pool.tvl >= 300000 && pool.platform !== 'Curve');
             topPools = topPools.sort((a, b) => {
                 if (a.feature && !b.feature) {
                     return -1; // a comes first when a is featured and b is not
@@ -708,15 +709,21 @@ export const pool = {
                 })
             }
 
-           /* if (poolAddress === '0xb34a7d1444a707349bc7b981b7f2e1f20f81f013') {
+
+            if (poolAddress === '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013_convex') {
+                const curveData = this.getCurvePool(this.pools);
+
                 pool.aggregators.push({
-                    id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
+                    id: ('Aggregator' + pool.id.name + pool.apr + pool.tvl + pool.platform),
                     name: pool.id.name,
                     address: pool.id.address,
+                    apr: curveData.curveApr,
+                    tvl: curveData.curveTvl,
                     platform: 'Curve',
                     zappable: false,
+                    link: 'https://curve.fi/#/arbitrum/pools/factory-v2-117/deposit',
                 })
-            }*/
+            }
 
             /*            if (pool.id.address === '0x88beb144352bd3109c79076202fac2bceab87117') {
                             pool.aggregators.push({
@@ -738,5 +745,24 @@ export const pool = {
 
             return pool;
         },
+
+        getCurvePool(pools) {
+            let curveApr = 0;
+            let curveTvl = 0;
+
+            for (let i = 0; i < pools.length; i++) {
+                let pool = pools[i];
+                if (pool.address === '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013') {
+                    curveApr = pool.apr;
+                    curveTvl = pool.tvl;
+                    break;
+                }
+            }
+
+            return {
+                curveApr: curveApr,
+                curveTvl: curveTvl
+            };
+        }
     }
 }

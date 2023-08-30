@@ -22,7 +22,7 @@ export const pool = {
                 // 'Chronos',
                 'Thena',
                 'Velodrome',
-                // 'Aerodrome',
+                'Aerodrome',
                 'Ramses',
                 'Arbidex',
                 'Sperax',
@@ -178,17 +178,27 @@ export const pool = {
                 // Swapbased
                 '0x282f9231e5294e7354744df36461c21e0e68061c': [
                     {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
-                    {name: 'USDbC', address: '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca'},
                 ],
                 '0x164bc404c64fa426882d98dbce9b10d5df656eed': [
                     {name: 'DAI+', address: '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'},
                     {name: 'USD+', address: '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'},
                 ],
 
+                // Aerodrome
                 '0x1b05e4e814b3431a48b8164c41eac834d9ce2da6': [
                     {name: 'DAI+', address: '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'},
                     {name: 'USD+', address: '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'},
-                ]
+                ],
+
+                '0x4a3636608d7bc5776cb19eb72caa36ebb9ea683b': [
+                    {name: 'USD+', address: '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'},
+                    {name: 'USDbC', address: '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca'},
+                ],
+
+                '0xdc0f1f6ecd03ec1c9ffc2a17bababd313477b20e': [
+                    {name: 'USD+', address: '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'},
+                    {name: 'USDbC', address: '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca'},
+                ],
             }
         }
     },
@@ -494,6 +504,7 @@ export const pool = {
                                         cardOpened: false,
                                         data: pool,
                                         aggregators: pool.aggregators,
+                                        promoted: pool.promoted,
                                         poolNameForAgregator: pool.poolNameForAgregator,
                                         isOpened: pool.aggregators && pool.aggregators.length ? false : true, // pools without aggregators always is opened
                                         stableFishUrl: null,
@@ -574,7 +585,8 @@ export const pool = {
         },
 
         getSortedSecondPools(pools) {
-            let secondPools = pools.filter(pool => pool.tvl < 300000 && pool.tvl > 100000);
+            console.log("Sorted second pools", pools);
+            let secondPools = pools.filter(pool => pool.promoted || (pool.tvl < 300000 && pool.tvl > 100000));
             secondPools = secondPools.sort((a, b) => {
                 if (a.apr !== b.apr) {
                     return b.apr - a.apr; // sort by APR number

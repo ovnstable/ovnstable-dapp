@@ -320,8 +320,7 @@ export default {
 
         activeTabPolygon: function() {
             return {
-                'tab-button': this.tab === 'polygon',
-                'tab-button-in-active': this.tab !== 'polygon',
+                'tab-button': this.tab === 'polygon'
             }
         },
 
@@ -964,6 +963,6 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .text-deprecated {
-    color: #707a8b!important;
+    color: #707a8b;
 }
 </style>

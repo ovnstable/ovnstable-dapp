@@ -377,7 +377,7 @@ onboard-v2 {
 }
 
 .text-deprecated {
-    color: #707a8b!important;
+    color: #707a8b;
 }
 
 </style>

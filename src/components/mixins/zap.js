@@ -177,6 +177,18 @@ export const zap = {
                     approveType: 'TOKEN'
                 },
 
+                '0x4a3636608d7bc5776cb19eb72caa36ebb9ea683b': { // usd+/usdbc stable
+                    gauge: '0xa5972f0C07a2D1cc5A8457c28d88ec4f3C009864',
+                    poolId: 0,
+                    approveType: 'TOKEN'
+                },
+
+                '0xdc0f1f6ecd03ec1c9ffc2a17bababd313477b20e': {  // usd+/usdbc volatile
+                    gauge: '0xd2121cb13a28ab16cb0f0f19a665e9a9311f9abb',
+                    poolId: 0,
+                    approveType: 'TOKEN'
+                },
+
                 // Ramses https://ramses-api-5msw7.ondigitalocean.app/mixed-pairs
                 '0xeb9153afbaa3a6cfbd4fce39988cea786d3f62bb': {
                     gauge: '0x88d8d2bdc4f12862fbabea43cec08b8fcd2234da',

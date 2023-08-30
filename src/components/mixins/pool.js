@@ -22,7 +22,7 @@ export const pool = {
                 // 'Chronos',
                 'Thena',
                 'Velodrome',
-                'Aerodrome',
+                // 'Aerodrome',
                 'Ramses',
                 'Arbidex',
                 'Sperax',

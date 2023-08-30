@@ -6,20 +6,21 @@
 
 <script>
 
+import {mapActions, mapGetters} from "vuex";
+
 export default {
     name: 'App',
 
     data: () => ({
     }),
-
-    computed: {
-    },
-
     created() {
       console.log('App created');
+      this.loadDeprecatedShow();
     },
-
+    computed: {
+    },
     methods: {
+        ...mapActions('deprecated', ['loadDeprecatedShow']),
     }
 };
 </script>
@@ -154,8 +155,6 @@ export default {
     --blue-gradient: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
 
     --onboard-checkbox-background: var(--links-blue);
-    /*--account-center-z-index: 999 !important;*/
-    --onboard-modal-z-index: 999 !important;
 
     /* CUSTOMIZE SECTIONS OF THE CONNECT MODAL */
     --onboard-connect-content-width: 500px;
@@ -176,6 +175,12 @@ export default {
     --onboard-wallet-button-color-hover: var(--main-gray-text);
     --onboard-wallet-button-border-color: transparent;
     --onboard-wallet-button-border-radius: 8px;
+
+    --account-center-z-index: 99 !important;
+    --onboard-modal-z-index: 99 !important;
+    --onboard-account-select-modal-z-index: 99 !important;
+    --onboard-login-modal-z-index: 99 !important;
+    --notify-onboard-z-index: 99 !important;
 
     /* CUSTOMIZE THE SHARED MODAL */
     --onboard-modal-color: var(--main-gray-text);
@@ -211,11 +216,18 @@ wcm-modal {
 
 onboard-v2 {
     position: absolute!important;
-    z-index: 100!important;
+    z-index: 99!important;
 }
 
 #wcm-modal {
-    z-index: 200;
+    z-index: 100 !important;
+}
+
+.v-overlay {
+    z-index: 98 !important;
+}
+.v-dialog__content {
+    z-index: 98 !important;
 }
 
 .blur-content > * {
@@ -256,10 +268,6 @@ onboard-v2 {
 ::-webkit-scrollbar-thumb {
     border-radius: 10px !important;
     background-color: var(--scrollbar-slider-color);
-}
-
-.bn-onboard-modal {
-    z-index: 999 !important;
 }
 
 .bn-onboard-modal-content {
@@ -368,5 +376,8 @@ onboard-v2 {
     color: var(--main-gray-text) !important;
 }
 
+.text-deprecated {
+    color: var(--third-gray-text) !important;
+}
 
 </style>

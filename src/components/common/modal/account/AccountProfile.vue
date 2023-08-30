@@ -58,6 +58,53 @@
                     </v-btn>
                 </v-row>
 
+                <div class="mt-10">
+                   <div v-if="isHistoryCached" class="pt-5">
+                       <div class="success-text">
+                           Historical balance already checked!
+                       </div>
+                   </div>
+                   <div v-else class="pt-5">
+                       <v-btn v-if="!isHistoryCheckLoading" class="header-btn btn-outlined" outlined @click="checkHistoryBalance()">
+                           check historical balance
+                       </v-btn>
+                       <div v-else>
+                           <div class="pl-15 pb-5 pt-5">
+                               <v-row align="start" justify="start">
+                                   <v-progress-circular
+                                       width="2"
+                                       size="24"
+                                       color="#8FA2B7"
+                                       indeterminate
+                                   ></v-progress-circular>
+                               </v-row>
+                           </div>
+                       </div>
+                   </div>
+                    <div v-if="isCurrentCached">
+                        <div class="success-text">
+                            Current balance already checked!
+                        </div>
+                    </div>
+                    <div v-else class="pt-5">
+                        <v-btn v-if="!isCurrentCheckLoading" class="header-btn btn-outlined" outlined @click="checkCurrentBalance()">
+                            check current balance
+                        </v-btn>
+                        <div v-else>
+                            <div class="pl-15 pb-5 pt-5">
+                                <v-row align="start" justify="start">
+                                    <v-progress-circular
+                                        width="2"
+                                        size="24"
+                                        color="#8FA2B7"
+                                        indeterminate
+                                    ></v-progress-circular>
+                                </v-row>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <v-row align="start" justify="start" class="account-info-row ma-0 mt-10 toggle-row">
                     <label @click="openTab(1)" class="tab-btn mr-4" v-bind:class="activeTabTx">History</label>
                     <label @click="openTab(2)" class="tab-btn mx-4" v-bind:class="activeTabTokens">Tokens</label>
@@ -78,6 +125,7 @@
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import TokensTab from "@/components/common/modal/account/tabs/TokensTab";
 import TxTab from "@/components/common/modal/account/tabs/tx/TxTab";
+import {balanceApiService} from "@/services/balance-api-service";
 
 export default {
     name: "AccountProfile",
@@ -87,6 +135,12 @@ export default {
     data: () => ({
         showCopyTooltip: false,
         walletName: 'undefined',
+
+        isHistoryCheckLoading: false,
+        isCurrentCheckLoading: false,
+
+        isHistoryCached: false,
+        isCurrentCached: false,
     }),
 
     props: {
@@ -151,6 +205,16 @@ export default {
         if (walletName && walletName !== null && walletName !== 'null') {
             this.walletName = walletName;
         }
+
+        let historyBalanceChecked = localStorage.getItem('historyBalanceChecked');
+        if (historyBalanceChecked && historyBalanceChecked !== null && historyBalanceChecked !== 'null') {
+            this.isHistoryCached = true
+        }
+
+        let currentBalanceChecked = localStorage.getItem('currentBalanceChecked');
+        if (currentBalanceChecked && currentBalanceChecked !== null && currentBalanceChecked !== 'null') {
+            this.isCurrentCached = true
+        }
     },
 
     methods: {
@@ -160,6 +224,49 @@ export default {
         ...mapActions('track', ['trackClick']),
 
         ...mapMutations('accountUI', ['setTab']),
+
+        checkHistoryBalance() {
+            this.isHistoryCheckLoading = true;
+
+            // https://app.overnight.fi/api/dapp/client/balance/check/history/0x4473D652fb0b40b36d549545e5fF6A363c9cd686
+            // create request
+
+            let url = "https://app.overnight.fi/api/dapp";
+            balanceApiService.checkHistoryBalance(url, this.account).then((response) => {
+                console.log("checkHistoryBalance success", response);
+                setTimeout(() => {
+                        this.isHistoryCheckLoading = false;
+                        this.isHistoryCached = true;
+                        // save data to local storage
+                        localStorage.setItem('historyBalanceChecked', 'true');
+                    }, 10000)
+            }).catch((error) => {
+                console.log("checkHistoryBalance failed", error);
+                this.isHistoryCheckLoading = false;
+            });
+        },
+
+        checkCurrentBalance() {
+            this.isCurrentCheckLoading = true;
+
+            // https://app.overnight.fi/api/dapp/client/balance/check/current/0x4473D652fb0b40b36d549545e5fF6A363c9cd686
+            // create request
+
+            let url = "https://app.overnight.fi/api/dapp";
+            balanceApiService.checkCurrentBalance(url, this.account).then((response) => {
+                console.log("checkCurrentBalance success", response);
+                setTimeout(() => {
+                    this.isCurrentCheckLoading = false;
+                    this.isCurrentCached = true;
+                    // save data to local storage
+                    localStorage.setItem('currentBalanceChecked', 'true');
+                }, 10000)
+            }).catch((error) => {
+                console.log("checkCurrentBalance failed", error);
+                this.isCurrentCheckLoading = false;
+            });
+
+        },
 
         openOnExplorer(hash) {
             window.open(this.explorerUrl + `tx/${hash}`, '_blank').focus();
@@ -402,5 +509,10 @@ export default {
 
 .tab-btn-disabled {
     cursor: default;
+}
+
+.success-text {
+    color: #00961a;
+    font-size: larger;
 }
 </style>

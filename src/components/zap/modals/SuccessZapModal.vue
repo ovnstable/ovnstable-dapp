@@ -345,6 +345,11 @@ export default defineComponent({
                 return
             }
 
+            if (this.successData.pool.platform === 'Aerodrome') {
+                window.open(`https://aerodrome.finance/dash`, '_blank').focus();
+                return
+            }
+
             if (this.successData.pool.platform === 'Arbidex') {
                 window.open(`https://arbidex.fi/xarxfarms`, '_blank').focus();
                 return

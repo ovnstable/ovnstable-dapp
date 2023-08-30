@@ -10,7 +10,19 @@
             <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
             <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
             <label class="tab-btn mx-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
-            <label class="tab-btn mx-4" @click="setTab('polygon')" v-bind:class="activeTabPolygon">Polygon</label>
+            <label  v-if="isDeprecatedShow"
+                    @click="setTab('polygon')" v-bind:class="activeTabPolygon"
+                    class="tab-btn mx-4 text-deprecated">
+                Polygon
+                <div style="position: relative">
+                    <div style="position:absolute;right: -26px;top: -23px;">
+                        <Tooltip
+                            text="Chain is deprecated"
+                            right
+                        />
+                    </div>
+                </div>
+            </label>
         </v-row>
 
         <div class="mt-7 cards-list-container">
@@ -55,12 +67,14 @@ import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard"
 import {poolApiService} from "@/services/pool-api-service";
 import Pool from "@/components/market/cards/pool/Pool.vue";
 import {pool} from "@/components/mixins/pool";
+import Tooltip from "@/components/common/element/Tooltip.vue";
 
 
 export default {
     name: "FeaturedView",
     mixins: [pool],
     components: {
+        Tooltip,
         Pool,
         UsdPlus,
         InsuranceCard,
@@ -89,12 +103,13 @@ export default {
     }),
 
     computed: {
-    ...mapGetters('accountData', ['account']),
-      ...mapGetters('web3', ['contracts', 'web3']),
+        ...mapGetters('accountData', ['account']),
+        ...mapGetters('web3', ['contracts', 'web3']),
+        ...mapGetters('deprecated', ['isDeprecatedShow']),
 
-    isAllDataLoaded: function () {
-      return !this.isClientDataLoading &&
-          !this.isProductsInfoLoading && !this.isPoolsLoading;
+        isAllDataLoaded: function () {
+            return !this.isClientDataLoading &&
+               !this.isProductsInfoLoading && !this.isPoolsLoading;
     },
 
     tabNetworkId: function() {
@@ -502,5 +517,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
+}
+
+
+.text-deprecated {
+    color: var(--third-gray-text) !important;
 }
 </style>

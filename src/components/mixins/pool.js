@@ -22,6 +22,7 @@ export const pool = {
                 // 'Chronos',
                 'Thena',
                 'Velodrome',
+                // 'Aerodrome',
                 'Ramses',
                 'Arbidex',
                 'Sperax',
@@ -183,6 +184,11 @@ export const pool = {
                     {name: 'DAI+', address: '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'},
                     {name: 'USD+', address: '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'},
                 ],
+
+                '0x1b05e4e814b3431a48b8164c41eac834d9ce2da6': [
+                    {name: 'DAI+', address: '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'},
+                    {name: 'USD+', address: '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'},
+                ]
             }
         }
     },

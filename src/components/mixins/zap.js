@@ -26,6 +26,12 @@ export const zap = {
                     network: 'optimism',
                     typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
                 },
+                'Aerodrome': {
+                    name: 'Aerodrome',
+                    type: 'LP_WITH_STAKE_IN_ONE_STEP',
+                    network: 'base',
+                    typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
+                },
                 'Ramses': {
                     name: 'Ramses',
                     type: 'LP_STAKE_DIFF_STEPS',
@@ -161,6 +167,13 @@ export const zap = {
                 '0x37e7D30CC180A750C83D68ED0C2511dA10694d63': {
                     gauge: '0x7dca0f3023b80e8c724b11ddccac788940275f41',
                     poolId: 4,
+                    approveType: 'TOKEN'
+                },
+
+                // Aerodrome
+                '0x1b05e4e814b3431a48b8164c41eac834d9ce2da6': {
+                    gauge: '0x87803Cb321624921cedaAD4555F07Daa0D1Ed325',
+                    poolId: 0,
                     approveType: 'TOKEN'
                 },
 

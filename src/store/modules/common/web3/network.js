@@ -8,7 +8,8 @@ const POLYGON_PARAMS = {
     assetDecimals: 6,
     nativeAssetName: 'MATIC',
     bridgeLink: 'https://router.via.exchange/polygon/USD+/bsc/USD+',
-    networkColor: '#7B3FE4'
+    networkColor: '#7B3FE4',
+    isDeprecated: true
 }
 
 const BSC_PARAMS = {
@@ -21,7 +22,8 @@ const BSC_PARAMS = {
     assetDecimals: 18,
     nativeAssetName: 'BNB',
     bridgeLink: 'https://router.via.exchange/bsc/USD+/optimism/USD+',
-    networkColor: '#F3BA2F'
+    networkColor: '#F3BA2F',
+    isDeprecated: false
 }
 
 const OPTIMISM_PARAMS = {
@@ -34,7 +36,8 @@ const OPTIMISM_PARAMS = {
     assetDecimals: 6,
     nativeAssetName: 'ETH',
     bridgeLink: 'https://router.via.exchange/optimism/USD+/bsc/USD+',
-    networkColor: '#FF0420'
+    networkColor: '#FF0420',
+    isDeprecated: false
 }
 
 const ARBITRUM_PARAMS = {
@@ -47,7 +50,8 @@ const ARBITRUM_PARAMS = {
     assetDecimals: 6,
     nativeAssetName: 'ETH',
     bridgeLink: 'https://router.via.exchange/arbitrum/USD+/bsc/USD+',
-    networkColor: '#29A0F0'
+    networkColor: '#29A0F0',
+    isDeprecated: false
 }
 
 const ZKSYNC_PARAMS = {
@@ -60,7 +64,8 @@ const ZKSYNC_PARAMS = {
     assetDecimals: 6,
     nativeAssetName: 'ETH',
     bridgeLink: 'https://router.via.exchange/zksync/USD+/bsc/USD+',
-    networkColor: '#8B8DFC'
+    networkColor: '#8B8DFC',
+    isDeprecated: false
 }
 
 const BASE_PARAMS = {
@@ -73,7 +78,8 @@ const BASE_PARAMS = {
     assetDecimals: 6,
     nativeAssetName: 'ETH',
     bridgeLink: 'https://bridge.base.org/',
-    networkColor: '#0052ff'
+    networkColor: '#0052ff',
+    isDeprecated: false
 }
 
 const LINEA_PARAMS = {
@@ -86,7 +92,8 @@ const LINEA_PARAMS = {
     assetDecimals: 6,
     nativeAssetName: 'ETH',
     bridgeLink: 'https://bridge.linea.build/',
-    networkColor: '#5fdfff'
+    networkColor: '#5fdfff',
+    isDeprecated: false
 }
 
 let dbNetworkName = localStorage.getItem('selectedNetwork');
@@ -102,6 +109,7 @@ const state = {
     nativeAssetName: _getParams(dbNetworkName).nativeAssetName,
     bridgeLink: _getParams(dbNetworkName).bridgeLink,
     networkColor: _getParams(dbNetworkName).networkColor,
+    isDeprecated: _getParams(dbNetworkName).isDeprecated,
 
     polygonApi: POLYGON_PARAMS.appApiUrl,
     bscApi: BSC_PARAMS.appApiUrl,
@@ -213,6 +221,10 @@ const getters = {
         return state.networkColor;
     },
 
+    isDeprecated(state) {
+        return state.isDeprecated;
+    },
+
     bridgeLink(state) {
         return state.bridgeLink;
     },
@@ -300,6 +312,7 @@ const actions = {
         commit('setNativeAssetName', _getParams(networkName).nativeAssetName);
         commit('setBridgeLink', _getParams(networkName).bridgeLink);
         commit('setNetworkColor', _getParams(networkName).networkColor);
+        commit('setIsDeprecated', _getParams(networkName).isDeprecated);
 
         dispatch('walletAction/updateOnboardNetwork', null, {root: true});
         dispatch('web3/initWeb3', null, {root: true});
@@ -525,6 +538,10 @@ const mutations = {
 
     setNetworkColor(state, value) {
         state.networkColor = value;
+    },
+
+    setIsDeprecated(state, value) {
+        state.isDeprecated = value;
     },
 
     setBridgeLink(state, value) {

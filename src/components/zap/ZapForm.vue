@@ -113,6 +113,44 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row py-2" v-if="ifMoreThanOneSelectedTokensAdded">
+                                <div class="col-6 py-0 with-tooltip">
+                                    <div class="transaction-info-title">
+                                        Multi-swap Odos fee
+                                    </div>
+                                    <div>
+                                        <Tooltip
+                                            text="This fee is charged by Odos for using multi-input/multi-output"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-6 py-0">
+                                    <div class="transaction-info">
+                                        {{multiSwapOdosFeePercent*1}}% <span class="transaction-info-additional">
+                                            ({{$utils.formatMoney(sumOfAllSelectedTokensInUsd * multiSwapOdosFeePercent / 100, 3)}})$
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6 py-0 with-tooltip">
+                                    <div class="transaction-info-title">
+                                        Single-swap Odos fee
+                                    </div>
+                                    <div>
+                                        <Tooltip
+                                            text="Single-input/output swaps are free"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-6 py-0">
+                                    <div class="transaction-info">
+                                        0.00% <span class="transaction-info-additional">(0)$</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -130,6 +168,18 @@
                         <img src="/assets/icon/swap/warn-info-icon.svg" alt="info" style="margin-right: 2px;"/>
                         By joining this pool, you are being notified that SwapBased takes a 1% deposit fee.
                     </div>
+                </div>
+
+                <div class="odos-fees-container mt-5" v-if="ifMoreThanOneSelectedTokensAdded">
+                    <div>
+                        <v-img class="alert-icon mr-2" :src="require('@/assets/icon/alert-circle-outline.svg')"/>
+                    </div>
+                    <div>
+                        <label class="odos-fees-title">
+                            Odos collects 0.01% fee for multi-input/multi-output swaps.
+                        </label>
+                    </div>
+
                 </div>
 
                 <div class="swap-footer pt-5">
@@ -248,11 +298,13 @@ import PoolLabel from "@/components/zap/PoolLabel.vue";
 import ZapChangeNetwork from "@/components/zap/ZapChangeNetwork.vue";
 import axios from "axios";
 import {contractApprove} from "@/components/mixins/contract-approve";
+import Tooltip from "@/components/common/element/Tooltip";
 
 export default defineComponent({
     name: "ZapForm",
     mixins: [odosSwap, zap, contractApprove],
     components: {
+        Tooltip,
         ZapChangeNetwork,
         PoolLabel,
         ZapSteps,
@@ -292,6 +344,7 @@ export default defineComponent({
             isSumulateSwapLoading: false,
             pathViz: null,
             slippagePercent: 0.05,
+            multiSwapOdosFeePercent: 0.01,
 
             tokensQuotaCounterId: null,
             tokensQuotaCheckerSec: 0,
@@ -350,6 +403,10 @@ export default defineComponent({
 
         outputTokensWithSelectedTokensCount() {
             return this.outputTokens.filter(item => item.selectedToken).length;
+        },
+
+        ifMoreThanOneSelectedTokensAdded() {
+            return this.inputTokens.length > 1 || this.outputTokens.length > 1;
         },
 
         selectedInputTokens() {
@@ -2144,4 +2201,25 @@ div {
     color: rgba(254, 127, 45, 1);
 }
 
+
+.odos-fees-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.odos-fees-title {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: end;
+
+    color: var(--secondary-gray-text);
+}
+
+.with-tooltip {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 </style>

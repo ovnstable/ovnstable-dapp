@@ -334,7 +334,7 @@ export const pool = {
                     url = 'https://app.mav.xyz/pools?chain=324';
                     break
                 case 'Baseswap':
-                    url = 'https://baseswap.fi/farms';
+                    url = 'https://baseswap.fi/farm';
                     break
                 case 'Velocimeter':
                     url = 'https://base.velocimeter.xyz/liquidity';

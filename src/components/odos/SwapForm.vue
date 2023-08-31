@@ -453,7 +453,7 @@ export default defineComponent({
             isSumulateSwapLoading: false,
             pathViz: null,
             slippagePercent: 0.05,
-            multiSwapOdosFeePercent: 0.05,
+            multiSwapOdosFeePercent: 0.01,
 
             tokensQuotaCounterId: null,
             tokensQuotaCheckerSec: 0,
@@ -931,7 +931,6 @@ export default defineComponent({
                 gasPrice: actualGas,
                 userAddr: this.account,
                 slippageLimitPercent: this.getSlippagePercent(),
-                multiSwapOdosFeeLimitPercent: this.getMultiSwapOdosFeePercent(),
                 sourceBlacklist: ['Hashflow', 'Wombat'],
                 sourceWhitelist: [],
                 simulate: true,
@@ -1018,7 +1017,6 @@ export default defineComponent({
                 gasPrice: actualGas,
                 userAddr: this.account,
                 slippageLimitPercent: this.getSlippagePercent(),
-                multiSwapOdosFeeLimitPercent: this.getMultiSwapOdosFeePercent(),
                 sourceBlacklist: ['Hashflow', 'Wombat'],
                 sourceWhitelist: [],
                 simulate: true,
@@ -1104,24 +1102,6 @@ export default defineComponent({
 
             this.slippagePercent = slippagePercent;
             return slippagePercent;
-        },
-
-        getMultiSwapOdosFeePercent() {
-            // multi-swap Odos fee
-            let multiSwapOdosFeeInfo = localStorage.getItem('odos_slippage_value');
-            let multiSwapOdosFeePercent = 0.05; // default
-            if (!multiSwapOdosFeeInfo || multiSwapOdosFeeInfo === 'undefined' || multiSwapOdosFeeInfo === 'null') {
-                multiSwapOdosFeeInfo = null;
-            }
-
-            if (multiSwapOdosFeeInfo) {
-                console.log('multiSwapOdosFeeInfo: ', multiSwapOdosFeeInfo)
-                let multiSwapOdosFeeInfoObject = JSON.parse(multiSwapOdosFeeInfo);
-                multiSwapOdosFeePercent = multiSwapOdosFeeInfoObject.value;
-            }
-
-            this.multiSwapOdosFeePercent = multiSwapOdosFeePercent;
-            return multiSwapOdosFeePercent;
         },
 
         async disapproveToken(token) {

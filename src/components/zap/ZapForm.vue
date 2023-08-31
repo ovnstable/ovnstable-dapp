@@ -128,8 +128,8 @@
                                 <div class="col-6 py-0">
                                     <div class="transaction-info">
                                         {{multiSwapOdosFeePercent*1}}% <span class="transaction-info-additional">
-                                ({{$utils.formatMoney(sumOfAllSelectedTokensInUsd * multiSwapOdosFeePercent / 100, 3)}})$
-                            </span>
+                                            ({{$utils.formatMoney(sumOfAllSelectedTokensInUsd * multiSwapOdosFeePercent / 100, 3)}})$
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -344,7 +344,7 @@ export default defineComponent({
             isSumulateSwapLoading: false,
             pathViz: null,
             slippagePercent: 0.05,
-            multiSwapOdosFeePercent: 0.05,
+            multiSwapOdosFeePercent: 0.01,
 
             tokensQuotaCounterId: null,
             tokensQuotaCheckerSec: 0,
@@ -885,7 +885,6 @@ export default defineComponent({
                 "gasPrice": actualGas,
                 "userAddr": this.zapContract.options.address,
                 "slippageLimitPercent": this.getSlippagePercent(),
-                "multiSwapOdosFeeLimitPercent": this.getMultiSwapOdosFeePercent(),
             }
 
             let requestData = {
@@ -895,7 +894,6 @@ export default defineComponent({
                 gasPrice: request.gasPrice,
                 userAddr: request.userAddr,
                 slippageLimitPercent: request.slippageLimitPercent,
-                multiSwapOdosFeeLimitPercent: request.multiSwapOdosFeeLimitPercent,
                 sourceBlacklist: this.getSourceLiquidityBlackList(),
                 sourceWhitelist: [],
                 simulate: false,
@@ -973,7 +971,6 @@ export default defineComponent({
                 "gasPrice": request.gasPrice,
                 "userAddr": request.userAddr,
                 "slippageLimitPercent": request.slippageLimitPercent,
-                "multiSwapOdosFeeLimitPercent": request.multiSwapOdosFeeLimitPercent,
                 "sourceBlacklist": this.getSourceLiquidityBlackList(),
                 "sourceWhitelist": [],
                 "simulate": false,
@@ -1343,7 +1340,6 @@ export default defineComponent({
                 gasPrice: actualGas,
                 userAddr: this.account,
                 slippageLimitPercent: this.getSlippagePercent(),
-                multiSwapOdosFeeLimitPercent: this.getMultiSwapOdosFeePercent(),
                 sourceBlacklist: ['Hashflow', 'Wombat'],
                 sourceWhitelist: [],
                 simulate: true,
@@ -1391,24 +1387,6 @@ export default defineComponent({
 
             this.slippagePercent = slippagePercent;
             return slippagePercent;
-        },
-
-        getMultiSwapOdosFeePercent() {
-            // multi-swap Odos fee
-            let multiSwapOdosFeeInfo = localStorage.getItem('odos_slippage_value');
-            let multiSwapOdosFeePercent = 0.05; // default
-            if (!multiSwapOdosFeeInfo || multiSwapOdosFeeInfo === 'undefined' || multiSwapOdosFeeInfo === 'null') {
-                multiSwapOdosFeeInfo = null;
-            }
-
-            if (multiSwapOdosFeeInfo) {
-                console.log('multiSwapOdosFeeInfo: ', multiSwapOdosFeeInfo)
-                let multiSwapOdosFeeInfoObject = JSON.parse(multiSwapOdosFeeInfo);
-                multiSwapOdosFeePercent = multiSwapOdosFeeInfoObject.value;
-            }
-
-            this.multiSwapOdosFeePercent = multiSwapOdosFeePercent;
-            return multiSwapOdosFeePercent;
         },
 
         async disapproveToken(token) {

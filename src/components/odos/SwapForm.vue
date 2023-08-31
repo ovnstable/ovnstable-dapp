@@ -128,6 +128,17 @@
                         20-80% of the displayed gas fee on zkSync will be refunded automatically.
                     </div>
                 </div>
+                <div class="odos-fees-container mt-5" v-if="ifMoreThanOneSelectedTokensAdded">
+                    <div>
+                        <v-img class="alert-icon mr-2" :src="require('@/assets/icon/alert-circle-outline.svg')"/>
+                    </div>
+                    <div>
+                        <label class="odos-fees-title">
+                            Odos collects 0.01% fee for multi-input/multi-output swaps. Single input/output swaps collects 0% fee.
+                        </label>
+                    </div>
+
+                </div>
 
                 <div class="swap-footer pt-5">
                     <div v-if="!account" class="swap-button-container">
@@ -241,6 +252,44 @@
                         </div>
                     </div>
 
+                    <div class="row py-2" v-if="ifMoreThanOneSelectedTokensAdded">
+                        <div class="col-6 py-0 with-tooltip">
+                            <div class="transaction-info-title">
+                                Multi-swap Odos fee
+                            </div>
+                            <div>
+                                <Tooltip
+                                    text="This fee is charged by Odos for using multi-input/multi-output"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-6 py-0">
+                            <div class="transaction-info">
+                                {{multiSwapOdosFeePercent*1}}% <span class="transaction-info-additional">
+                                ({{$utils.formatMoney(sumOfAllSelectedTokensInUsd * multiSwapOdosFeePercent / 100, 3)}})$
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row py-2">
+                        <div class="col-6 py-0 with-tooltip">
+                            <div class="transaction-info-title">
+                                Single-swap Odos fee
+                            </div>
+                            <div>
+                                <Tooltip
+                                    text="Single-input/output swaps are free"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-6 py-0">
+                            <div class="transaction-info">
+                                0.00% <span class="transaction-info-additional">(0)$</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row py-2">
                         <div class="col-6 py-0">
                             <div class="transaction-info-title">
@@ -311,11 +360,13 @@ import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
 import SuccessOdosModal from "@/components/odos/modals/SuccessOdosModal.vue";
 import NetworkNotAvailable from "@/components/swap-module/network-not-available.vue";
 import {contractApprove} from "@/components/mixins/contract-approve";
+import Tooltip from "@/components/common/element/Tooltip";
 
 export default defineComponent({
     name: "SwapForm",
     mixins: [odosSwap, contractApprove],
     components: {
+        Tooltip,
         NetworkNotAvailable,
         SuccessOdosModal,
         ErrorModal,
@@ -402,11 +453,13 @@ export default defineComponent({
             isSumulateSwapLoading: false,
             pathViz: null,
             slippagePercent: 0.05,
+            multiSwapOdosFeePercent: 0.05,
 
             tokensQuotaCounterId: null,
             tokensQuotaCheckerSec: 0,
 
             firstSwipeClickOnApprove: false,
+            ifMoreThanOneTokensAdded: false
         }
     },
     computed: {
@@ -449,6 +502,10 @@ export default defineComponent({
 
         outputTokensWithSelectedTokensCount() {
             return this.outputTokens.filter(item => item.selectedToken).length;
+        },
+
+        ifMoreThanOneSelectedTokensAdded() {
+            return this.inputTokens.length > 1 || this.outputTokens.length > 1;
         },
 
         outputUnlockedTokens() {
@@ -874,6 +931,7 @@ export default defineComponent({
                 gasPrice: actualGas,
                 userAddr: this.account,
                 slippageLimitPercent: this.getSlippagePercent(),
+                multiSwapOdosFeeLimitPercent: this.getMultiSwapOdosFeePercent(),
                 sourceBlacklist: ['Hashflow', 'Wombat'],
                 sourceWhitelist: [],
                 simulate: true,
@@ -960,6 +1018,7 @@ export default defineComponent({
                 gasPrice: actualGas,
                 userAddr: this.account,
                 slippageLimitPercent: this.getSlippagePercent(),
+                multiSwapOdosFeeLimitPercent: this.getMultiSwapOdosFeePercent(),
                 sourceBlacklist: ['Hashflow', 'Wombat'],
                 sourceWhitelist: [],
                 simulate: true,
@@ -1045,6 +1104,24 @@ export default defineComponent({
 
             this.slippagePercent = slippagePercent;
             return slippagePercent;
+        },
+
+        getMultiSwapOdosFeePercent() {
+            // multi-swap Odos fee
+            let multiSwapOdosFeeInfo = localStorage.getItem('odos_slippage_value');
+            let multiSwapOdosFeePercent = 0.05; // default
+            if (!multiSwapOdosFeeInfo || multiSwapOdosFeeInfo === 'undefined' || multiSwapOdosFeeInfo === 'null') {
+                multiSwapOdosFeeInfo = null;
+            }
+
+            if (multiSwapOdosFeeInfo) {
+                console.log('multiSwapOdosFeeInfo: ', multiSwapOdosFeeInfo)
+                let multiSwapOdosFeeInfoObject = JSON.parse(multiSwapOdosFeeInfo);
+                multiSwapOdosFeePercent = multiSwapOdosFeeInfoObject.value;
+            }
+
+            this.multiSwapOdosFeePercent = multiSwapOdosFeePercent;
+            return multiSwapOdosFeePercent;
         },
 
         async disapproveToken(token) {
@@ -1890,6 +1967,27 @@ div {
     letter-spacing: 0em;
     text-align: left;
     color: rgba(254, 127, 45, 1);
+}
+
+.odos-fees-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.odos-fees-title {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: end;
+
+    color: var(--secondary-gray-text);
+}
+
+.with-tooltip {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 </style>

@@ -37,7 +37,7 @@ export default {
                 id: 3,
                 description: 'Join our pools with one click with ["Zap in" button]',
                 linkWord: '"Zap in" button',
-                link: 'https://app.overnight.fi/featured',
+                link: 'https://app.overnight.fi/pools',
             },
             {
                 id: 4,
@@ -89,8 +89,14 @@ export default {
         },
 
         trackLinkClick(linkWord) {
-            const action = `carousel_link_clicked_${linkWord.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
-            console.log("Action:", action)
+            let action = '';
+            if (linkWord === 'here') {
+                action = 'carousel_link_clicked_swap_page';
+            } else if (linkWord === '"Zap in" button') {
+                action = 'carousel_link_clicked_zap_to_allpools';
+            } else {
+                action = `carousel_link_clicked_${linkWord.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+            }            console.log("Action:", action)
             const trackParams = {
                 action: action,
                 event_category: 'Click button',

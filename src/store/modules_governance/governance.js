@@ -708,14 +708,11 @@ const actions = {
         let sum = 0;
         let items = [];
 
-        // найти ссылку с бэка
         for (let i = 0; i < strategyAssets.length; i++) {
             let asset = strategyAssets[i];
-            console.log("Assets", asset)
             let weight = strategyWeights[i];
 
             let mapping = strategiesMapping.find(value => value.address === asset.strategy);
-            console.log("Mapping", mapping)
 
             console.log('fromAsset6: ', fromAsset6)
             if (fromAsset6 && contractType === 'DAI+') {

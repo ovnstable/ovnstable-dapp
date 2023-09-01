@@ -936,6 +936,7 @@ export default defineComponent({
                 simulate: true,
                 pathViz: true,
                 // disableRFQs: false
+                referralCode: this.odosReferalCode
             }
 
             console.log("Odos request data", requestData);

@@ -898,7 +898,8 @@ export default defineComponent({
                 sourceWhitelist: [],
                 simulate: false,
                 pathViz: false,
-                disableRFQs: false
+                disableRFQs: false,
+                referralCode: this.odosReferalCode
             }
 
             console.log("Odos request data", requestData, this.zapPool);

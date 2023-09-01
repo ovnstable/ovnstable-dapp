@@ -65,7 +65,8 @@ export const odosSwap = {
                 zksyncFeeHistory: null,
 
             tokenSeparationScheme: null, // OVERNIGHT_SWAP, POOL_SWAP,
-            listOfBuyTokensAddresses: null // for POOL_SWAP scheme
+            listOfBuyTokensAddresses: null, // for POOL_SWAP scheme
+            odosReferalCode: 7777777,
         }
     },
     async mounted() {

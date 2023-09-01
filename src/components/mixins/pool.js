@@ -487,7 +487,6 @@ export const pool = {
 
                                     // todo move to backend
                                     pool = this.initAggregators(pool);
-                                    console.log("Pool = initAggregators", pool)
 
                                     this.pools.push({
                                         id: (pool.id.name + pool.tvl + pool.platform),

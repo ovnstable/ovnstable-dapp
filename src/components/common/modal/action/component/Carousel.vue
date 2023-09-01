@@ -95,20 +95,20 @@ export default {
         },
 
         trackLinkClick(item) {
-            let action =  action = `carousel_link_clicked_${item.postfix}`;
-            console.log("Action:", action)
+            let action = `carousel_link_clicked_${item.postfix}`;
+            console.log("Action:", action);
 
             const trackParams = {
                 action: action,
                 event_category: 'Click button',
                 event_label: `Click ${item.linkWord} button`
             };
-            if (this.currentItem.link) {
+            if (item.link) {
                 this.trackClick(trackParams);
             } else {
                 console.error('Track error:');
             }
-        },
+        }
     }
 }
 </script>

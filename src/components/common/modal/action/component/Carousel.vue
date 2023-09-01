@@ -103,11 +103,9 @@ export default {
                 event_category: 'Click button',
                 event_label: `Click ${item.linkWord} button`
             };
-            if (item.link) {
-                this.trackClick(trackParams);
-            } else {
-                console.error('Track error:');
-            }
+
+            this.trackClick(trackParams);
+
         }
     }
 }

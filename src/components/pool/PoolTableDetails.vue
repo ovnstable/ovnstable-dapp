@@ -59,7 +59,7 @@
             <div @click="toggleDetailsFunc(pool)"
                  class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
                 <div class="pool-table-header-item">
-                    <label v-if="pool.apr " class="card-label">
+                    <label v-if="pool.apr && !disabledAprInfoPlatformList.includes(pool.platform)" class="card-label">
                         {{ $utils.formatMoneyComma(pool.apr, 2) }}%
                     </label>
                     <label v-else class="card-label see-on-dex-label">
@@ -69,7 +69,7 @@
             </div>
             <div @click="toggleDetailsFunc(pool)"
                  class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
-                <div v-if="pool.tvl >= 1000000 && pool.platform !== 'Chronos'" class="pool-table-header-item">
+                <div v-if="pool.tvl >= 1000000 && !disabledTvlInfoPlatformList.includes(pool.platform)" class="pool-table-header-item">
                     <label v-if="pool.tvl" class="card-label">
                         ${{ $utils.formatNumberToMln(pool.tvl, 2) }}M
                     </label>
@@ -77,7 +77,7 @@
                         -
                     </label>
                 </div>
-                <div v-if="pool.tvl < 1000000 && pool.platform !== 'Chronos'" class="pool-table-header-item">
+                <div v-if="pool.tvl < 1000000 && !disabledTvlInfoPlatformList.includes(pool.platform)" class="pool-table-header-item">
                     <label v-if="pool.tvl" class="card-label">
                         ${{ $utils.formatNumberToThousands(pool.tvl, 0) }}K
                     </label>
@@ -85,7 +85,7 @@
                         -
                     </label>
                 </div>
-                <div v-if="pool.platform === 'Chronos'" class="pool-table-header-item">
+                <div v-if="disabledTvlInfoPlatformList.includes(pool.platform)" class="pool-table-header-item">
                     <label v-if="pool.tvl" class="card-label see-on-dex-label">
                         see on platform
                     </label>
@@ -221,6 +221,12 @@ export default defineComponent({
     },
     components: {
         Tooltip,
+    },
+    data() {
+        return {
+            disabledAprInfoPlatformList: ['Chronos', 'Baseswap', 'Swapbased'],
+            disabledTvlInfoPlatformList: ['Chronos', 'Baseswap'],
+        }
     },
     computed: {
         ...mapGetters('network', ['networkName']),

@@ -730,7 +730,7 @@ const actions = {
 
             items.push(
                 {
-                    name: mapping ? mapping.name : asset.strategy,
+                    name: mapping ? mapping.fullName : asset.strategy,
                     address: asset.strategy,
                     netAssetValue: nav,
                     liquidationValue: (fromAsset6 ? numberUtils._fromE6(asset.liquidationValue.toString()) : numberUtils._fromE18(asset.liquidationValue.toString())),
@@ -748,12 +748,12 @@ const actions = {
 
         for (let i = 0; i < strategiesMapping.length; i++) {
             let mappingAsset = strategiesMapping[i];
+            console.log("MappingAsset urls:", mappingAsset)
             let added = items.find(value => value.address === mappingAsset.address);
-
             if (!added) {
                 items.push(
                     {
-                        name: mappingAsset.name,
+                        name: mappingAsset.fullName,
                         address: mappingAsset.address,
                         netAssetValue: 0,
                         liquidationValue: 0,
@@ -877,14 +877,13 @@ const actions = {
 
 
         console.debug("isAddDelay: ", payload.isAddDelay);
-        // added delay for a blockchain waiting
         if (payload.isAddDelay) {
             setTimeout(async () => {
                 console.debug("isAddDelay Update now.")
                 await dispatch('getStrategyWeights', payload.contractType);
                 await dispatch('getM2M', payload.contractType);
                 commit('setFinanceLoading', false);
-            }, 10000)
+            }, 3500) // added delay for a blockchain waiting for 3.5 seconds
 
             return;
         }

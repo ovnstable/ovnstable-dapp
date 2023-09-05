@@ -65,7 +65,8 @@ export const odosSwap = {
                 zksyncFeeHistory: null,
 
             tokenSeparationScheme: null, // OVERNIGHT_SWAP, POOL_SWAP,
-            listOfBuyTokensAddresses: null // for POOL_SWAP scheme
+            listOfBuyTokensAddresses: null, // for POOL_SWAP scheme
+            odosReferalCode: 7777777,
         }
     },
     async mounted() {
@@ -152,6 +153,7 @@ export const odosSwap = {
             if (newVal) {
                 console.log("set network for odos: ", newVal, this.tokenSeparationScheme, this.listOfBuyTokensAddresses);
                 this.isFirstBalanceLoaded = false;
+                this.isBalancesLoading = false;
                 this.quotaResponseInfo = null;
                 await this.initContractData()
                 await this.initData(this.tokenSeparationScheme, this.listOfBuyTokensAddresses);

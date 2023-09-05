@@ -178,6 +178,7 @@ export const pool = {
                 // Swapbased
                 '0x282f9231e5294e7354744df36461c21e0e68061c': [
                     {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
+                    {name: 'USDbC', address: '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca'},
                 ],
                 '0x164bc404c64fa426882d98dbce9b10d5df656eed': [
                     {name: 'DAI+', address: '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'},
@@ -334,7 +335,7 @@ export const pool = {
                     url = 'https://app.mav.xyz/pools?chain=324';
                     break
                 case 'Baseswap':
-                    url = 'https://baseswap.fi/farms';
+                    url = 'https://baseswap.fi/farm';
                     break
                 case 'Velocimeter':
                     url = 'https://base.velocimeter.xyz/liquidity';
@@ -486,7 +487,6 @@ export const pool = {
 
                                     // todo move to backend
                                     pool = this.initAggregators(pool);
-                                    console.log("Pool = initAggregators", pool)
 
                                     this.pools.push({
                                         id: (pool.id.name + pool.tvl + pool.platform),

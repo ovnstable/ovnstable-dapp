@@ -299,6 +299,7 @@ import ZapChangeNetwork from "@/components/zap/ZapChangeNetwork.vue";
 import axios from "axios";
 import {contractApprove} from "@/components/mixins/contract-approve";
 import Tooltip from "@/components/common/element/Tooltip";
+import BigNumber from "bignumber.js";
 
 export default defineComponent({
     name: "ZapForm",
@@ -683,6 +684,7 @@ export default defineComponent({
         finishTransaction() {
             console.log("Finish transaction");
             this.clearForm()
+            this.closeWaitingModal();
         },
 
         clearForm() {
@@ -904,64 +906,44 @@ export default defineComponent({
 
             console.log("Odos request data", requestData, this.zapPool);
 
-            // todo: base => to all chains
-            if (this.zapPool.chainName === "base") {
-                // swap v2
-                this.swapRequest(requestData)
-                    .then(async data => {
-                        console.log("Odos swap request quota from zap", data)
-                        console.log("Odos swap request quota from zap proportions", proportions)
+            this.swapRequest(requestData)
+                .then(async data => {
+                    console.log("Odos swap request quota from zap", data)
+                    console.log("Odos swap request quota from zap proportions", proportions)
 
-                        let assembleData = {
-                            "userAddr": request.userAddr,
-                            "pathId": data.pathId,
-                            "simulate": true
-                        }
+                    let assembleData = {
+                        "userAddr": request.userAddr,
+                        "pathId": data.pathId,
+                        "simulate": true
+                    }
 
-                        this.assembleRequest(assembleData).then(async responseAssembleData => {
-                            console.log("Assemble data: ", responseAssembleData)
+                    this.assembleRequest(assembleData).then(async responseAssembleData => {
+                        console.log("Assemble data: ", responseAssembleData)
 
-                            // if (responseAssembleData.simulation && !responseAssembleData.simulation.isSuccess) {
-                            //     this.closeWaitingModal();
-                            //     let errMsg = responseAssembleData.simulation.simulationError && responseAssembleData.simulation.simulationError.errorMessage ? responseAssembleData.simulation.simulationError.errorMessage : 'Transaction simulation is failed';
-                            //     console.error("Error before send zap swap transaction: ", errMsg)
-                            //     this.showErrorModalWithMsg({errorType: 'slippage', errorMsg: errMsg},);
-                            //     this.isSwapLoading = false;
-                            //     return;
-                            // }
+                        // if (responseAssembleData.simulation && !responseAssembleData.simulation.isSuccess) {
+                        //     this.closeWaitingModal();
+                        //     let errMsg = responseAssembleData.simulation.simulationError && responseAssembleData.simulation.simulationError.errorMessage ? responseAssembleData.simulation.simulationError.errorMessage : 'Transaction simulation is failed';
+                        //     console.error("Error before send zap swap transaction: ", errMsg)
+                        //     this.showErrorModalWithMsg({errorType: 'slippage', errorMsg: errMsg},);
+                        //     this.isSwapLoading = false;
+                        //     return;
+                        // }
 
-                            // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
-                            await this.initZapInTransaction(responseAssembleData, proportions.inputTokens, proportions.outputTokens, proportions, this.lastPoolInfoData, this.zapPool, request.gasPrice);
+                        // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
+                        await this.initZapInTransaction(responseAssembleData, proportions.inputTokens, proportions.outputTokens, proportions, this.lastPoolInfoData, this.zapPool, request.gasPrice);
 
-                            this.isSwapLoading = false;
-                            this.clickOnStake = false;
-                        }).catch(e => {
-                            console.error("Odos assemble request failed swap form", e)
-                            this.isSwapLoading = false;
-                            this.clickOnStake = false;
-                        })
+                        this.isSwapLoading = false;
+                        this.clickOnStake = false;
                     }).catch(e => {
-                        console.error("Odos swap request failed from zap", e)
+                        console.error("Odos assemble request failed swap form", e)
                         this.isSwapLoading = false;
                         this.clickOnStake = false;
                     })
-
-            } else {
-                // todo: update to V2
-                this.oldSwapRequest(requestData)
-                    .then(data => {
-                        console.log("Odos swap request success from zap", data)
-                        console.log("Odos swap request success from zap proportions", proportions)
-
-                        this.initZapInTransaction(data, proportions.inputTokens, proportions.outputTokens, proportions, this.lastPoolInfoData, this.zapPool, request.gasPrice);
-
-                        this.isSwapLoading = false;
-                    }).catch(e => {
+                }).catch(e => {
                     console.error("Odos swap request failed from zap", e)
                     this.isSwapLoading = false;
                     this.clickOnStake = false;
                 })
-            }
         },
 
         async getOdosRequest(request) {
@@ -1438,6 +1420,7 @@ export default defineComponent({
 
         async approve(token) {
             this.showWaitingModal('Approving in process');
+            console.log("Approve contract token: ", token)
 
             await this.checkApproveForToken(token, token.contractValue);
             let selectedToken = token.selectedToken;
@@ -1448,10 +1431,10 @@ export default defineComponent({
             }
 
             let tokenContract = this.tokensContractMap[selectedToken.address];
-            // console.log('Approve contract: ', token, tokenContract, this.account, this.routerContract.options.address);
-            console.log('Approve contract: ', token, tokenContract, this.account, this.zapContract.options.address);
-            let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
-            // this.approveToken(tokenContract, this.routerContract.options.address, approveValue)
+            // let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
+            let approveValue = this.web3.utils.toWei("10000000", token.selectedToken.weiMarker);
+            console.log('Approve contract approveValue: ', approveValue);
+            console.log('Approve contract newApproveValue: ', token, selectedToken, selectedToken.decimals, tokenContract, this.account, this.zapContract.options.address, approveValue);
             this.approveToken(tokenContract, this.zapContract.options.address, approveValue)
                 .then(data => {
                     console.log("Success approving", data);

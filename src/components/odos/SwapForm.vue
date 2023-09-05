@@ -1151,6 +1151,8 @@ export default defineComponent({
 
         async approve(token) {
             this.showWaitingModal('Approving in process');
+            console.log("Approve contract token: ", token)
+
             this.firstSwipeClickOnApprove = true;
 
             await this.checkApproveForToken(token, token.contractValue);
@@ -1162,8 +1164,10 @@ export default defineComponent({
             }
 
             let tokenContract = this.tokensContractMap[selectedToken.address];
-            console.log('Approve contract: ', token, tokenContract, this.account, this.routerContract.options.address);
-            let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
+            // let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
+            let approveValue = this.web3.utils.toWei("10000000", token.selectedToken.weiMarker);
+            console.log('Approve contract approveValue: ', approveValue);
+            console.log('Approve contract: ', token, selectedToken, selectedToken.decimals, tokenContract, this.account, this.routerContract.options.address, approveValue);
             this.approveToken(tokenContract, this.routerContract.options.address, approveValue)
                 .then(data => {
                     console.log("Success approving", data);

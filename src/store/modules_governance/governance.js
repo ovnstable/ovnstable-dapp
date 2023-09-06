@@ -884,7 +884,7 @@ const actions = {
                 await dispatch('getStrategyWeights', payload.contractType);
                 await dispatch('getM2M', payload.contractType);
                 commit('setFinanceLoading', false);
-            }, 10000)
+            }, 3500)
 
             return;
         }

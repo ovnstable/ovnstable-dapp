@@ -153,6 +153,7 @@ export const odosSwap = {
             if (newVal) {
                 console.log("set network for odos: ", newVal, this.tokenSeparationScheme, this.listOfBuyTokensAddresses);
                 this.isFirstBalanceLoaded = false;
+                this.isBalancesLoading = false;
                 this.quotaResponseInfo = null;
                 await this.initContractData()
                 await this.initData(this.tokenSeparationScheme, this.listOfBuyTokensAddresses);

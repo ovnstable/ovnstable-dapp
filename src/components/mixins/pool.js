@@ -200,6 +200,11 @@ export const pool = {
                     {name: 'USD+', address: '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'},
                     {name: 'USDbC', address: '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca'},
                 ],
+
+                '0x8E9154AC849e839d60299E85156bcb589De2693A': [
+                    {name: 'DOLA', address: '0x4621b7a9c75199271f773ebd9a499dbd165c3191'},
+                    {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
+                ],
             }
         }
     },

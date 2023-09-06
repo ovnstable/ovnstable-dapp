@@ -352,7 +352,7 @@ export default defineComponent({
 
             clickOnStake: false,
 
-            sourceLiquidityBlacklist: ["Hashflow", 'Wombat'],
+            sourceLiquidityBlacklist: ["Hashflow", 'Wombat'], // "Overnight Exchange"
             mapExcludeLiquidityPlatform: { // Schema for hot exclude: {'Ovn pool platform name from db': ['odos', 'api/info/liquidity-sources', 'related', 'with', 'platform'] }
                 'Chronos': ["Chronos Volatile"] //"Chronos Stable"
             },

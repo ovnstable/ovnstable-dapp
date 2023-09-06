@@ -27,7 +27,7 @@
             v-for="item in data"
             :key="item.label + (item.value + '')"
             class="current-table-row"
-            @click="item.type === 'CORE' ? openInNewTab(item.link) : openInDapp(item.link)">
+            @click="(item.type === 'CORE' || item.type === 'SMM') ? openInNewTab(item.link) : openInDapp(item.link)">
             <td class="table-label-don text-right" v-if="!minimized">
                 <div class="color-rectangle" :style="{background: item.color}"></div>
             </td>

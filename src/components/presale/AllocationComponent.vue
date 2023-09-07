@@ -2,7 +2,7 @@
 <template>
     <div>
         <div class="pt-10">
-            <img src="/assets/icon/presale/allocation.svg" alt="Allocation">
+            <img class="info-image" src="/assets/icon/presale/allocation.svg" alt="Allocation">
         </div>
     </div>
 </template>
@@ -15,5 +15,9 @@ export default {
 
 
 <style scoped>
+
+.info-image {
+    width: 100%;
+}
 
 </style>

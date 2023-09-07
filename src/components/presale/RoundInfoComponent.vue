@@ -2,7 +2,7 @@
 <template>
     <div>
         <div class="pt-10">
-            <img src="/assets/icon/presale/private-round.svg" alt="Private Round">
+            <img class="info-image" src="/assets/icon/presale/private-round.svg" alt="Private Round">
         </div>
     </div>
 </template>
@@ -15,5 +15,7 @@ export default {
 
 
 <style scoped>
-
+.info-image {
+    width: 100%;
+}
 </style>

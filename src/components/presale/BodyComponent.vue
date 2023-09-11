@@ -133,12 +133,12 @@
                         </div>
                         <div>
                             <div class="step-info-description">
-                               With Presale NFT you can participate in the $OVN presale. You can get NFT on Optimism or on Base chain.
+                                You should get OVN presale NFT on Base chain
                             </div>
 
                             <div class="step-container-separator"></div>
 
-                            <div class="info-group">
+<!--                            <div class="info-group">
                                 <div class="info-title">
                                     Check status
                                 </div>
@@ -152,7 +152,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
 
                             <div class="info-group">
                                 <div class="info-title">
@@ -170,18 +170,13 @@
                             </div>
 
                             <div class="info-group">
-                                <div class="info-title">
-                                    Galxe campaign
-                                </div>
-
                                 <div class="step-info-description">
-                                    There are 2 campaigns on Optimism and on Base. Choose the chain that suits you best.
-                                    <div class="info-group pt-10">
-                                        As part of the campaign, please complete the following tasks:
+                                    <div class="info-group">
+                                        As part of the Galxe campaign, please complete the following tasks:
                                     </div>
 
                                     <div>
-                                        1. Reach 700 XP in <a href="https://zealy.io/c/overnight-fi/questboard" target="_blank">our Zealy</a>
+                                        1. Reach 500 XP in <a href="https://zealy.io/c/overnight-fi/questboard" target="_blank">our Zealy</a>
                                     </div>
                                     <div>
                                         2. Claim Presale participant role in <a href="https://discord.com/invite/overnight-fi" target="_blank">our Discord</a>
@@ -193,9 +188,20 @@
                             </div>
 
                             <div class="info-group" style="cursor: pointer">
-                                <a href="https://galxe.com/overnight/campaign/GCkGqUPaji" target="_blank">
-                                    <img src="/assets/icon/presale/button-nft-mint.svg" alt="to mint nft">
-                                </a>
+
+
+                                <v-row class="ma-0" justify="start" align="center">
+                                    <a href="https://galxe.com/overnight/campaign/GCkGqUPaji" target="_blank">
+                                        <v-btn x-large
+                                               width="90%"
+                                               class="button btn-outlined"
+                                               height="30px"
+                                               outlined>
+                                                    MINT NFT ON GALXE
+                                            <img src="/assets/icon/presale/link-blue.svg" alt="->" style="width: 21px; padding-left: 5px">
+                                        </v-btn>
+                                    </a>
+                                </v-row>
                             </div>
                         </div>
                     </div>
@@ -316,20 +322,26 @@
                         <div>
                             <div class="step-info-description">
                                 <div class="claim-step-description">
-                                    Overflow funds and farming bonus claimable on the End of sale
+                                    - Overflow funds and farming bonus claimable on the End of sale
                                 </div>
                                 <div class="claim-step-description">
-                                    25% of $OVN will be claimable starting 5 days after the End of Sale
+                                    - 25% of OVN will be claimable at the End of OVN Sale
                                 </div>
                                 <div class="claim-step-description">
-                                    75% of $OVN will be linearly vested over 4 weeks period, beginning 5 days after the End of sale
+                                    - 75% of OVN will be linearly vested over 4 weeks period, beginning 5 days after the End of sale
                                 </div>
                             </div>
                         </div>
 
                         <div class="step-container-separator"></div>
 
-                        <div class="info-group">
+                        <div >
+                            <div class="title-statistics">
+                                YOUR $OVN STATISTICS
+                            </div>
+                        </div>
+
+                        <div>
                             <div class="info-sub-title">
                                 Total  purchased
                             </div>
@@ -341,7 +353,7 @@
                             </div>
                         </div>
 
-                        <div class="info-group">
+                        <div>
                             <div class="info-sub-title">
                                 Vesting amounts
                             </div>
@@ -350,7 +362,7 @@
                             </div>
                         </div>
 
-                        <div class="info-group">
+                        <div >
                             <div class="info-sub-title">
                                 Claimable
                             </div>
@@ -359,7 +371,7 @@
                             </div>
                         </div>
 
-                        <div class="info-group">
+                        <div >
                             <div class="info-sub-title">
                                 Farming bonus
                             </div>
@@ -386,7 +398,7 @@
                             </div>
                         </div>
 
-                        <v-btn class="button btn-outlined" @click="claimFunds" outlined>
+                        <v-btn class="button btn-outlined-disabled" @click="claimFunds" outlined>
                             CLAIM FUNDS
                         </v-btn>
 
@@ -410,8 +422,8 @@ export default {
     components: {PresaleBuyForm, TokenOvnInfo, Timer},
     data() {
         return {
-            presaleTimestamp: 1695031200*1000,
-            presaleEndTimestamp: 1696068000*1000,
+            presaleTimestamp: 1695038400*1000,
+            presaleEndTimestamp: 1695639600*1000,
             vestingTimestamp: 1697194117040,
 
             overflowFarmingPool: 25000,
@@ -445,7 +457,7 @@ export default {
             return moment(this.presaleEndTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
         },
         differentdDysBeetwinStartAndEndPresale() {
-            return moment(this.presaleEndTimestamp).diff(moment(this.presaleTimestamp), 'days');
+            return moment(this.presaleEndTimestamp).diff(moment(this.presaleTimestamp), 'days') + 1;
         },
         vestingStartDate() {
             return moment(this.vestingTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
@@ -557,7 +569,7 @@ export default {
     padding: 28px;
     gap: 20px;
 
-    min-height: 1100px;
+    min-height: 955px;
 
     background: #FFFFFF;
     box-shadow: 0px 10px 20px rgba(9, 55, 98, 0.25);
@@ -624,9 +636,7 @@ export default {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
-    line-height: 22px;
     /* identical to box height, or 157% */
-    font-feature-settings: 'pnum' on, 'lnum' on;
     /* Grey/Grey 10 */
     color: #8D95A3;
 
@@ -722,10 +732,16 @@ export default {
     cursor: pointer;
 }
 
-.btn-outlined {
+.btn-outlined-disabled {
     //color: var(--links-blue) !important;
     color: #989b9d;
     max-width: 150px;
+}
+
+.btn-outlined {
+    color: var(--links-blue) !important;
+    //color: #989b9d;
+    //max-width: 150px;
 }
 
 .timer-container-center {
@@ -777,5 +793,10 @@ export default {
     left: -20px;
     top: 3px;
     //left: 0;
+}
+
+.title-statistics {
+    color: #8D95A3;
+    font-weight: bold;
 }
 </style>

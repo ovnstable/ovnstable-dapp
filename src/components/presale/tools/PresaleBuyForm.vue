@@ -46,7 +46,7 @@
             <div v-if="networkName === presaleChain" class="info-group">
                 <div @click="buyAndFarm"
                      class="button-buy-disabled">
-                    BUY AND FARM
+                    NOT STARTED
                 </div>
             </div>
             <div v-else class="info-group">

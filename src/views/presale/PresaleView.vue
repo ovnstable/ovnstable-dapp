@@ -10,9 +10,9 @@
             <div>
                 <RoundInfoComponent/>
             </div>
-            <div>
+<!--            <div>
                 <AllocationComponent/>
-            </div>
+            </div>-->
 
             <div>
                 <DisclaimerComponent/>

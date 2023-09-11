@@ -34,10 +34,26 @@
             </div>
         </div>
 
-        <div class="info-group">
-            <div @click="buyAndFarm"
-                 class="button-buy">
-                BUY AND FARM
+        <div v-if="!account">
+            <div class="info-group">
+                <div @click="connectWallet"
+                     class="button-buy">
+                    CONNECT WALLET
+                </div>
+            </div>
+        </div>
+        <div v-else>
+            <div v-if="networkName === presaleChain" class="info-group">
+                <div @click="buyAndFarm"
+                     class="button-buy-disabled">
+                    BUY AND FARM
+                </div>
+            </div>
+            <div v-else class="info-group">
+                <div @click="switchToNetwork"
+                     class="button-buy">
+                    SWITCH TO BASE
+                </div>
             </div>
         </div>
 
@@ -50,19 +66,26 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "PresaleBuyForm",
     data() {
         return {
             value: null,
+            presaleChain: 'base',
+            networkId: 8453,
         }
     },
     computed: {
+        ...mapGetters('network', ['networkName']),
         ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
 
         formattedBalanceUsdPlus() {
+            if (!this.account || this.networkName !== this.presaleChain) {
+                return "-"
+            }
+
             if (!this.balance && !this.balance.usdPlus) {
                 return '00.00'
             }
@@ -71,6 +94,13 @@ export default {
         }
     },
     methods: {
+        ...mapActions('network', ['setWalletNetwork']),
+        ...mapActions('transaction', ['loadTransaction']),
+        ...mapActions("walletAction", ['connectWallet']),
+
+        switchToNetwork() {
+            this.setWalletNetwork(this.networkId.toString());
+        },
 
         isNumber: function(evt) {
             evt = (evt) ? evt : window.event;
@@ -151,7 +181,7 @@ export default {
     max-width: 150px;
 }
 
-.button-buy {
+.button-buy-disabled {
 
     /* Auto layout */
     display: flex;
@@ -165,7 +195,32 @@ export default {
     max-width: 150px;
 
     /* Blue gradient */
-    background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+    //background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+    background: linear-gradient(91.26deg, #989b9d 0%, rgba(120, 136, 146, 0.99) 100%);
+    border-radius: 2px;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+
+.button-buy {
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 8px;
+    gap: 8px;
+
+    height: 40px;
+    max-width: 180px;
+
+    /* Blue gradient */
+background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+    //background: linear-gradient(91.26deg, #989b9d 0%, rgba(120, 136, 146, 0.99) 100%);
     border-radius: 2px;
 
     color: white;

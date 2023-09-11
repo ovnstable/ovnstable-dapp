@@ -232,7 +232,7 @@
                                 Duration
                             </div>
                             <div class="info-text">
-                                {{daysToStartPresale}} days
+                                {{ differentdDysBeetwinStartAndEndPresale }} days
                             </div>
                         </div>
 
@@ -250,9 +250,9 @@
 
 
                         <div class="bottom-contract-info">
-                            <div class="step-container-separator"></div>
+<!--                            <div class="step-container-separator"></div>-->
 
-                            <div class="info-group">
+<!--                            <div class="info-group">
                                 <div class="row">
                                     <div class="col-6 col-lg-6 col-md-6 col-sm-6">
                                         <div class="info-sub-title" style="position:relative;">
@@ -271,7 +271,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
 
                     </div>
@@ -289,11 +289,11 @@
                             <div class="step-container-separator"></div>
                         </div>
 
-                        <div class="timer-container-center">
+<!--                        <div class="timer-container-center">
                             <div class="info-group">
                                 <Timer :timestamp="vestingTimestamp" title="Vesting starts in"/>
                             </div>
-                        </div>
+                        </div>-->
 
                         <div>
                             <div class="step-info-description">
@@ -383,6 +383,7 @@
 import Timer from "@/components/presale/tools/Timer.vue";
 import TokenOvnInfo from "@/components/presale/tools/TokeOvnInfo.vue";
 import PresaleBuyForm from "@/components/presale/tools/PresaleBuyForm.vue";
+import {mapGetters} from "vuex";
 const moment = require('moment'); // import moment.js
 
 
@@ -391,8 +392,8 @@ export default {
     components: {PresaleBuyForm, TokenOvnInfo, Timer},
     data() {
         return {
-            presaleTimestamp: 1695194117040,
-            presaleEndTimestamp: 1697194117040,
+            presaleTimestamp: 1695031200*1000,
+            presaleEndTimestamp: 1696068000*1000,
             vestingTimestamp: 1697194117040,
 
             overflowFarmingPool: 25000,
@@ -408,7 +409,7 @@ export default {
             accountFarmingBonus: 0,
             accountOverflowFunds: 0,
 
-            nftStatus: false
+            nftStatus: false,
         }
     },
     mounted() {
@@ -416,14 +417,17 @@ export default {
     },
 
     computed: {
+        ...mapGetters('network', ['networkName']),
+
+
         presaleStartDate() {
             return moment(this.presaleTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
         },
         presaleEndDate() {
             return moment(this.presaleEndTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
         },
-        daysToStartPresale() {
-            return moment(this.presaleTimestamp).diff(moment(), 'days');
+        differentdDysBeetwinStartAndEndPresale() {
+            return moment(this.presaleEndTimestamp).diff(moment(this.presaleTimestamp), 'days');
         },
         vestingStartDate() {
             return moment(this.vestingTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
@@ -691,7 +695,8 @@ export default {
     max-width: 150px;
 
     /* Blue gradient */
-    background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+    //background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+    background: linear-gradient(91.26deg, #989b9d 0%, rgba(120, 136, 146, 0.99) 100%);
     border-radius: 2px;
 
     color: white;
@@ -700,7 +705,8 @@ export default {
 }
 
 .btn-outlined {
-    color: var(--links-blue) !important;
+    //color: var(--links-blue) !important;
+    color: #989b9d;
     max-width: 150px;
 }
 

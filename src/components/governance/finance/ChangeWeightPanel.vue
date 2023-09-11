@@ -50,7 +50,7 @@
                                             dense
                                             outlined
                                             v-model="item.targetWeight"
-                                            :disabled="financeLoading"
+                                            :disabled="financeLoading || !hasChangeAccount"
                                             @input="calculateNav(item)">
                                         </v-text-field>
                                     </v-row>

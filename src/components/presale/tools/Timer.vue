@@ -67,6 +67,34 @@ export default {
 
 
 <style scoped>
+
+@media only screen and (min-width: 1695px) {
+    .timer-container {
+        width: 100%;
+        height: 100%;
+    }
+    .timer-info {
+        font-size: 35px!important;
+    }
+    .timer-title {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (min-width: 1650px) {
+    .timer-container {
+        width: 100%;
+        height: 100%;
+    }
+    .timer-info {
+        font-size: 33px!important;
+    }
+    .timer-title {
+        font-size: 14px;
+    }
+}
+
+
 .timer-container {
     /* Auto layout */
     display: flex;
@@ -89,14 +117,13 @@ export default {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 600;
-    font-size: 35px;
+    font-size: 25px;
     line-height: 28px;
     /* identical to box height, or 70% */
     font-feature-settings: 'liga' off;
 
     /* Main blue */
     color: #1C95E7;
-
 
 }
 

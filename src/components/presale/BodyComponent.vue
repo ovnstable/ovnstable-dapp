@@ -1,9 +1,13 @@
 
 <template>
     <div>
-        <div class="pt-10">
+        <div class="pt-2">
             <div class="row">
-                <div class="col-12 col-lg-3 col-md-3 col-sm-12">
+                <div class="col-12 col-lg-3 col-md-6 col-sm-12">
+                    <div>
+                        <img src="/assets/icon/presale/step/step1.svg" width="100%" alt="Step1">
+                    </div>
+
                     <div class="step-container">
                         <div>
                             <div class="step-title">
@@ -87,7 +91,7 @@
                                 <div class="row">
                                     <div class="col-6 col-lg-6 col-md-6 col-sm-6">
                                         <div class="link-container">
-                                            <a href="/">
+                                            <a href="https://overnight.fi/blog/2023/09/11/ovn-token-sale/" target="_blank">
                                                 <label class="link-title ml-auto">Article</label>
                                                 <div class="link-image">
                                                     <img src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
@@ -95,7 +99,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+<!--                                    <div class="col-6 col-lg-6 col-md-6 col-sm-6">
                                         <div class="link-container">
                                             <a href="/">
                                                 <label class="link-title ml-auto">Docs</label>
@@ -104,14 +108,18 @@
                                                 </div>
                                             </a>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
 
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-lg-3 col-md-3 col-sm-12">
+                <div class="col-12 col-lg-3 col-md-6 col-sm-12">
+                    <div>
+                        <img src="/assets/icon/presale/step/step2.svg" width="100%" alt="Step1">
+                    </div>
+
                     <div class="step-container">
                         <div class="step-title-container">
                             <div class="step-title">
@@ -173,10 +181,10 @@
                                     </div>
 
                                     <div>
-                                        1. Reach 700 XP in <a href="https://zealy.com" target="_blank">our Zealy</a>
+                                        1. Reach 700 XP in <a href="https://zealy.io/c/overnight-fi/questboard" target="_blank">our Zealy</a>
                                     </div>
                                     <div>
-                                        2. Claim Presale participant role in <a href="https://discord.com" target="_blank">our Discord</a>
+                                        2. Claim Presale participant role in <a href="https://discord.com/invite/overnight-fi" target="_blank">our Discord</a>
                                     </div>
                                     <div>
                                         3. Mint NFT on Galxe
@@ -185,12 +193,18 @@
                             </div>
 
                             <div class="info-group" style="cursor: pointer">
-                                <img src="/assets/icon/presale/button-nft-mint.svg" alt="to mint nft">
+                                <a href="https://galxe.com/overnight" target="_blank">
+                                    <img src="/assets/icon/presale/button-nft-mint.svg" alt="to mint nft">
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-lg-3 col-md-3 col-sm-12">
+                <div class="col-12 col-lg-3 col-md-6 col-sm-12">
+                    <div>
+                        <img src="/assets/icon/presale/step/step3.svg" width="100%" alt="Step1">
+                    </div>
+
                     <div class="step-container">
                         <div class="step-title-container">
                             <div class="step-title">
@@ -276,7 +290,11 @@
 
                     </div>
                 </div>
-                <div class="col-12 col-lg-3 col-md-3 col-sm-12">
+                <div class="col-12 col-lg-3 col-md-6 col-sm-12">
+                    <div>
+                        <img src="/assets/icon/presale/step/step4.svg" width="100%" alt="Step1">
+                    </div>
+
                     <div class="step-container">
                         <div class="step-title">
                             <div class="step-title-container">

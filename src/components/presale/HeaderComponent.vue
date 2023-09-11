@@ -66,14 +66,16 @@ export default {
 }
 
 
-.header-logo {
-    //width: 200px;
-}
-
 @media (max-width: 768px) {
     .header-container {
         height: 200px;
     }
+
+
+    .header-logo {
+        width: 200px;
+    }
+
 
     .header-info-text {
         font-size: 20px;

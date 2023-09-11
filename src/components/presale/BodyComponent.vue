@@ -3,15 +3,22 @@
     <div>
         <div class="pt-10">
             <div class="row">
-                <div class="col-6 col-lg-3 col-md-3 col-sm-3">
+                <div class="col-12 col-lg-3 col-md-3 col-sm-12">
                     <div class="step-container">
                         <div>
                             <div class="step-title">
                                 Read information
+                                <div class="title-logo">
+                                    <img src="/assets/icon/presale/title-private-round.svg" alt="Private Round">
+                                </div>
                             </div>
+                            <div class="step-container-separator"></div>
                         </div>
 
-                        <div class="step-container-separator"></div>
+
+                        <div class="info-group">
+                            <TokenOvnInfo></TokenOvnInfo>
+                        </div>
 
                         <div>
                             <div class="step-info-description info-group">
@@ -42,8 +49,8 @@
                                 <div class="info-sub-title">
                                     Soft cap
                                 </div>
-                                <div class="info-text-blue">
-                                    350,000.00 USD+ total
+                                <div class="info-text-black">
+                                    {{ formattedSoftCap }} USD+
                                 </div>
                             </div>
 
@@ -51,8 +58,8 @@
                                 <div class="info-sub-title">
                                     Hard cap
                                 </div>
-                                <div class="info-text-blue">
-                                    500,000.00 USD+ total
+                                <div class="info-text-black">
+                                    {{ formattedHardCap }} USD+
                                 </div>
                             </div>
 
@@ -60,21 +67,58 @@
                                 <div class="info-sub-title">
                                     Overflow Farming Pool
                                 </div>
+                                <div class="info-text-black">
+                                    {{ formattedOvnTotal }} OVN
+                                </div>
+                            </div>
+
+                            <div class="info-group">
+                                <div class="info-sub-title">
+                                    Farming bonus
+                                </div>
                                 <div class="info-text-blue">
-                                    200,000 OVN total
+                                    {{ formattedFarmingBonus }} USD+
                                 </div>
                             </div>
 
                             <div class="step-container-separator"></div>
 
+                            <div class="info-group">
+                                <div class="row">
+                                    <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="link-container">
+                                            <a href="/">
+                                                <label class="link-title ml-auto">Article</label>
+                                                <div class="link-image">
+                                                    <img src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="link-container">
+                                            <a href="/">
+                                                <label class="link-title ml-auto">Docs</label>
+                                                <div class="link-image">
+                                                    <img  src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3 col-md-3 col-sm-3">
+                <div class="col-12 col-lg-3 col-md-3 col-sm-12">
                     <div class="step-container">
                         <div class="step-title-container">
                             <div class="step-title">
                                 get presale NFT
+                                <div class="title-logo">
+                                    <img src="/assets/icon/presale/title-nft.svg" alt="nft">
+                                </div>
                             </div>
 
                             <div class="step-container-separator"></div>
@@ -89,6 +133,16 @@
                             <div class="info-group">
                                 <div class="info-title">
                                     Check status
+                                </div>
+
+                                <div class="check-nft-status-container">
+                                    <div style="position:relative;">
+                                        You don’t have Presale NFT
+
+                                        <div class="check-nft-status-image">
+                                            <img src="/assets/icon/presale/cancel.svg" alt="X">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -119,30 +173,40 @@
                                     </div>
 
                                     <div>
-                                        1. Reach 700 XP in our Zealy
+                                        1. Reach 700 XP in <a href="https://zealy.com" target="_blank">our Zealy</a>
                                     </div>
                                     <div>
-                                        2. Claim Presale participant role in our Discord
+                                        2. Claim Presale participant role in <a href="https://discord.com" target="_blank">our Discord</a>
                                     </div>
                                     <div>
                                         3. Mint NFT on Galxe
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="info-group" style="cursor: pointer">
+                                <img src="/assets/icon/presale/button-nft-mint.svg" alt="to mint nft">
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3 col-md-3 col-sm-3">
+                <div class="col-12 col-lg-3 col-md-3 col-sm-12">
                     <div class="step-container">
                         <div class="step-title-container">
                             <div class="step-title">
                                 Participate
+                                <div class="title-logo">
+                                    <img src="/assets/icon/presale/title-participate.svg" alt="time">
+                                </div>
                             </div>
 
                             <div class="step-container-separator"></div>
                         </div>
-                        <div class="info-group">
-                            timer
+
+                        <div class="timer-container-center">
+                            <div class="info-group">
+                                <Timer :timestamp="presaleTimestamp" title="Presale starts in"/>
+                            </div>
                         </div>
 
                         <div class="info-group">
@@ -150,7 +214,7 @@
                                 Start Sale
                             </div>
                             <div class="info-text">
-                                September 11,2023 11:00 PM UTC
+                                {{ presaleStartDate }}
                             </div>
                         </div>
 
@@ -159,7 +223,7 @@
                                 End of Sale
                             </div>
                             <div class="info-text">
-                                September 30,2023 11:00 PM UTC
+                                {{ presaleEndDate }}
                             </div>
                         </div>
 
@@ -168,28 +232,67 @@
                                 Duration
                             </div>
                             <div class="info-text">
-                                14 days
+                                {{daysToStartPresale}} days
                             </div>
                         </div>
 
                         <div class="step-container-separator"></div>
 
                         <div class="info-group">
-                            <div class="info-title">
-                                Check status
+                            <div class="info-title" style="padding-bottom: 10px">
+                                Buy $OVN
+                            </div>
+
+                            <div>
+                                <PresaleBuyForm></PresaleBuyForm>
+                            </div>
+                        </div>
+
+
+                        <div class="bottom-contract-info">
+                            <div class="step-container-separator"></div>
+
+                            <div class="info-group">
+                                <div class="row">
+                                    <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="info-sub-title" style="position:relative;">
+                                            Presale contract
+                                            <div class="contract-info-label">
+                                                <img src="/assets/icon/presale/base.svg" height="16px" alt="Base">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="info-text contract-link">
+                                            0x9ff...x9ob
+                                            <div class="contract-info-label">
+                                                <img src="/assets/icon/presale/link.svg" height="16px" alt="Base">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                     </div>
                 </div>
-                <div class="col-6 col-lg-3 col-md-3 col-sm-3">
+                <div class="col-12 col-lg-3 col-md-3 col-sm-12">
                     <div class="step-container">
                         <div class="step-title">
                             <div class="step-title-container">
                                 Claim
+                                <div class="title-logo">
+                                    <img src="/assets/icon/presale/title-claim.svg" alt="claim">
+                                </div>
                             </div>
 
                             <div class="step-container-separator"></div>
+                        </div>
+
+                        <div class="timer-container-center">
+                            <div class="info-group">
+                                <Timer :timestamp="vestingTimestamp" title="Vesting starts in"/>
+                            </div>
                         </div>
 
                         <div>
@@ -212,11 +315,11 @@
                             <div class="info-sub-title">
                                 Total  purchased
                             </div>
-                            <div class="info-text-blue">
-                                000,000.00 USD+
+                            <div class="info-text-black">
+                                {{formattedAccountTotalUsdPurchased}} USD+
                             </div>
-                            <div class="info-text-blue">
-                                000,000.00 OVN
+                            <div class="info-text-black">
+                                {{formattedAccountTotalOvnPurchased}} OVN
                             </div>
                         </div>
 
@@ -224,8 +327,8 @@
                             <div class="info-sub-title">
                                 Vesting amounts
                             </div>
-                            <div class="info-text-blue">
-                                000,000.00 OVN
+                            <div class="info-text-black">
+                                 {{ formattedAccountVestingAmount }} OVN
                             </div>
                         </div>
 
@@ -233,21 +336,42 @@
                             <div class="info-sub-title">
                                 Claimable
                             </div>
+                            <div class="info-text-black">
+                                {{ formattedAccountClaimableAmount }} OVN
+                            </div>
+                        </div>
+
+                        <div class="info-group">
+                            <div class="info-sub-title">
+                                Farming bonus
+                            </div>
                             <div class="info-text-blue">
-                                000,000.00 OVN
+                                {{ formattedAccountFarmingBonus }} OVN
+                            </div>
+
+                            <div class="info-group">
+                                <div @click="claimOvn"
+                                     class="button-buy">
+                                    CLAIM OVN
+                                </div>
                             </div>
                         </div>
 
                         <div class="step-container-separator"></div>
 
                         <div class="info-group">
-                            <div class="info-sub-title" style="color: #1C95E7">
-                                Farming bonus
+                            <div class="info-sub-title">
+                                Overflow funds
                             </div>
-                            <div class="info-text-blue">
-                                000,000.00 OVN
+                            <div class="info-text-black">
+                                {{ formattedAccountOverflowFunds }} OVN
                             </div>
                         </div>
+
+                        <v-btn class="button btn-outlined" @click="claimFunds" outlined>
+                            CLAIM FUNDS
+                        </v-btn>
+
                     </div>
                 </div>
             </div>
@@ -256,8 +380,146 @@
 </template>
 
 <script>
+import Timer from "@/components/presale/tools/Timer.vue";
+import TokenOvnInfo from "@/components/presale/tools/TokeOvnInfo.vue";
+import PresaleBuyForm from "@/components/presale/tools/PresaleBuyForm.vue";
+const moment = require('moment'); // import moment.js
+
+
 export default {
-    name: "BodyComponent"
+    name: "BodyComponent",
+    components: {PresaleBuyForm, TokenOvnInfo, Timer},
+    data() {
+        return {
+            presaleTimestamp: 1695194117040,
+            presaleEndTimestamp: 1697194117040,
+            vestingTimestamp: 1697194117040,
+
+            overflowFarmingPool: 25000,
+            farmingBonus: 0,
+            softCap: 350000,
+            hardCap: 500000,
+
+            // personal data
+            accountTotalUsdPurchased: 0,
+            accountTotalOvnPurchased: 0,
+            accountVestingAmount: 0,
+            accountClaimableAmount: 0,
+            accountFarmingBonus: 0,
+            accountOverflowFunds: 0,
+
+            nftStatus: false
+        }
+    },
+    mounted() {
+        // this.initUserData();
+    },
+
+    computed: {
+        presaleStartDate() {
+            return moment(this.presaleTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
+        },
+        presaleEndDate() {
+            return moment(this.presaleEndTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
+        },
+        daysToStartPresale() {
+            return moment(this.presaleTimestamp).diff(moment(), 'days');
+        },
+        vestingStartDate() {
+            return moment(this.vestingTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
+        },
+        formattedSoftCap() {
+            if (!this.softCap) {
+                return "000,000";
+            }
+
+            return this.softCap.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+        formattedHardCap() {
+            if (!this.hardCap) {
+                return "000,000";
+            }
+
+            return this.hardCap.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+        formattedOvnTotal() {
+            if (!this.overflowFarmingPool) {
+                return "000,000";
+            }
+
+            return this.overflowFarmingPool.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+        formattedFarmingBonus() {
+            if (!this.farmingBonus) {
+                return "000,000";
+            }
+
+            return this.farmingBonus.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+
+        formattedAccountTotalUsdPurchased() {
+            if (!this.accountTotalUsdPurchased) {
+                return "000,000.00";
+            }
+
+            return this.accountTotalUsdPurchased.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+
+        formattedAccountTotalOvnPurchased() {
+            if (!this.accountTotalOvnPurchased) {
+                return "000,000.00";
+            }
+
+            return this.accountTotalOvnPurchased.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+
+        formattedAccountVestingAmount() {
+            if (!this.accountVestingAmount) {
+                return "000,000.00";
+            }
+
+            return this.accountVestingAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+
+        formattedAccountClaimableAmount() {
+            if (!this.accountClaimableAmount) {
+                return "000,000.00";
+            }
+
+            return this.accountClaimableAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+
+        formattedAccountFarmingBonus() {
+            if (!this.accountFarmingBonus) {
+                return "000,000.00";
+            }
+
+            return this.accountFarmingBonus.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+
+        formattedAccountOverflowFunds() {
+            if (!this.accountOverflowFunds) {
+                return "000,000.00";
+            }
+
+            return this.accountOverflowFunds.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+    },
+    methods: {
+        buyAndFarm() {
+            console.log("buy and farm");
+        },
+        claimOvn() {
+            console.log("claim ovn")
+        },
+        claimFunds() {
+            console.log("claim funds")
+        },
+        checkNft() {
+            console.log("check nft")
+            this.nftStatus = false;
+        },
+    }
 }
 </script>
 
@@ -265,15 +527,15 @@ export default {
 <style scoped>
 .step-container {
     /* Frame 28910 */
+    position: relative;
 
     /* Auto layout */
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     padding: 28px;
     gap: 20px;
 
-    min-height: 960px;
+    min-height: 1100px;
 
     background: #FFFFFF;
     box-shadow: 0px 10px 20px rgba(9, 55, 98, 0.25);
@@ -291,7 +553,7 @@ export default {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
-    font-size: 24px;
+    font-size: 22px;
     line-height: 40px;
     /* identical to box height, or 167% */
     letter-spacing: 0.03em;
@@ -300,6 +562,16 @@ export default {
 
     /* Grey/Grey 19_text */
     color: #29323E;
+
+    padding-left: 20px;
+    position: relative;
+}
+
+
+.title-logo {
+    position: absolute;
+    left: -11px;
+    top: 3px;
 }
 
 .step-info-description {
@@ -320,7 +592,7 @@ export default {
 }
 
 .info-group {
-    padding-top: 15px;
+    padding-top: 10px;
 }
 
 .info-sub-title {
@@ -362,6 +634,19 @@ export default {
     color: #1C95E7;
 }
 
+.info-text-black {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 28px;
+    /* or 156% */
+    font-feature-settings: 'liga' off;
+
+    /* Main blue */
+    color: rgba(41, 50, 62, 1);
+}
+
 .info-title {
     font-family: 'Roboto';
     font-style: normal;
@@ -374,5 +659,99 @@ export default {
 
     /* Grey/Grey 19_text */
     color: #29323E;
+}
+
+.link-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.link-image {
+    position: absolute;
+    left: 50px;
+    top: 2px;
+}
+
+.link-title {
+    color: #0678C4;
+    cursor: pointer;
+}
+
+.button-buy {
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 8px;
+    gap: 8px;
+
+    height: 40px;
+    max-width: 150px;
+
+    /* Blue gradient */
+    background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+    border-radius: 2px;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.btn-outlined {
+    color: var(--links-blue) !important;
+    max-width: 150px;
+}
+
+.timer-container-center {
+    display: flex;
+    justify-content: center!important;
+    align-items: center!important;
+}
+
+
+.bottom-contract-info {
+    position: absolute;
+    bottom: 30px;
+    width: 80%;
+}
+
+.contract-info-label {
+    position: absolute;
+    left: 107px;
+    top: 3px;
+}
+
+.contract-link {
+    position:relative;
+    font-size: 18px;
+    cursor: pointer
+}
+
+.check-nft-status-container {
+    /* Auto layout */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 12px;
+    gap: 8px;
+
+    width: 100%;
+    height: 52px;
+
+    /* Grey/Grey 1 */
+    background: #F5F5F5;
+    border-radius: 8px;
+
+    position: relative;
+}
+
+.check-nft-status-image {
+    position: absolute;
+    left: -20px;
+    top: 3px;
+    //left: 0;
 }
 </style>

@@ -4,7 +4,7 @@
         <div class="presale-header">
             <div class="header-container">
                <div class="header-info-container">
-                   <img src="/assets/icon/presale/header-logo.svg" alt="Logo">
+                   <img src="/assets/icon/presale/header-logo.svg" class="header-logo" alt="Logo">
                    <div class="header-info-text">
                        Private presale round
                    </div>
@@ -63,5 +63,20 @@ export default {
     position: absolute;
     top: 30px;
     right: 30px;
+}
+
+
+.header-logo {
+    //width: 200px;
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        height: 200px;
+    }
+
+    .header-info-text {
+        font-size: 20px;
+    }
 }
 </style>

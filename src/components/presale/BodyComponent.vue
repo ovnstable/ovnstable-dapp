@@ -193,7 +193,7 @@
                             </div>
 
                             <div class="info-group" style="cursor: pointer">
-                                <a href="https://galxe.com/overnight" target="_blank">
+                                <a href="https://galxe.com/overnight/campaign/GCkGqUPaji" target="_blank">
                                     <img src="/assets/icon/presale/button-nft-mint.svg" alt="to mint nft">
                                 </a>
                             </div>

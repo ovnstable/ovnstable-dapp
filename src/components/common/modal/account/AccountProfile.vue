@@ -251,7 +251,7 @@ export default {
             // create request
 
             let url = "https://app.overnight.fi/api/presale";
-            balanceApiService.checkHistoryBalance(url, this.account + "sa").then((response) => {
+            balanceApiService.checkHistoryBalance(url, this.account).then((response) => {
                 if (response.error) {
                     console.log("checkHistoryBalance failed", response, response.message);
                     this.isHistoryCheckLoading = false;
@@ -277,7 +277,7 @@ export default {
             // create request
 
             let url = "https://app.overnight.fi/api/presale";
-            balanceApiService.checkCurrentBalance(url, this.account+"das").then((response) => {
+            balanceApiService.checkCurrentBalance(url, this.account).then((response) => {
                 if (response.error) {
                     console.log("checkHistoryBalance failed", response);
                     this.isCurrentCheckLoading = false;

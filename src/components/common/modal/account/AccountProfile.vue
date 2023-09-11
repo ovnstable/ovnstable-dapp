@@ -61,7 +61,7 @@
                 <div v-if="account" class="mt-10">
                     <div v-if="isCurrentCached">
                         <div class="success-text">
-                            Current balance already checked!
+                            Current balance was already checked!
                         </div>
                     </div>
                     <div v-else class="pt-5">
@@ -84,7 +84,9 @@
                     </div>
                     <div v-if="currentCheckErrorMessage" class="pt-3">
                         <div class="error-text">
-                            {{ currentCheckErrorMessage }}
+                            {{
+                                currentCheckErrorMessage  === 'User Not Found' ? 'User not found in our Zealy community' : currentCheckErrorMessage
+                            }}
                         </div>
                     </div>
 
@@ -92,12 +94,12 @@
 
                     <div v-if="isHistoryCached" class="pt-5">
                         <div class="success-text">
-                            Historical balance already checked!
+                            Historic balance was already checked!
                         </div>
                     </div>
                     <div v-else class="pt-5">
                         <v-btn v-if="!isHistoryCheckLoading" class="header-btn btn-outlined" outlined @click="checkHistoryBalance()">
-                            check historical balance
+                            check historic balance
                         </v-btn>
                         <div v-else>
                             <div class="pl-15 pb-5 pt-5">
@@ -540,12 +542,12 @@ export default {
 }
 
 .success-text {
-    color: #00961a;
+    color: #03ae21;
     font-size: larger;
 }
 
 .error-text {
-    color: #be0f39;
+    color: #bc173f;
     font-size: larger;
 }
 </style>

@@ -595,7 +595,7 @@ export const pool = {
 
         getSortedSecondPools(pools) {
             console.log("Sorted second pools", pools);
-            let secondPools = pools.filter(pool => pool.promoted || (pool.tvl < 300000 && pool.tvl > 100000));
+            let secondPools = pools.filter(pool => pool.promoted !== false || (pool.tvl < 300000 && pool.tvl > 100000 && pool.platform !== 'Curve'));
             secondPools = secondPools.sort((a, b) => {
                 if (a.apr !== b.apr) {
                     return b.apr - a.apr; // sort by APR number

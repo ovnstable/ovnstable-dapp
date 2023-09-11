@@ -29,7 +29,8 @@
                     :api-url="apiUrl"
                     :network-name="networkName"
                     :contract-type="tab"
-                    :hide-zero-strategies-action="hideZeroStrategiesAction"/>
+                    :hide-zero-strategies-action="hideZeroStrategiesAction"
+                    :calculate-nav="calculateNav"/>
             </v-col>
             <v-col cols="2">
                 <WeightActionsPanel
@@ -38,7 +39,8 @@
                     :has-change-account="hasChangeAccount"
                     :contract-type="tab"
                     :hide-zero-strategies-action="hideZeroStrategiesAction"
-                    :show-zero-strategies-action="showZeroStrategiesAction"/>
+                    :show-zero-strategies-action="showZeroStrategiesAction"
+                    :calculate-nav="calculateNav"/>
             </v-col>
         </v-row>
     </v-container>
@@ -95,7 +97,11 @@ export default {
                 let item = this.m2mItems[i];
                 item.isHidden = false;
             }
-        }
+        },
+
+        calculateNav(item) {
+            item.calculatedNav = (this.m2mTotal / 100) * item.targetWeight;
+        },
     },
 }
 </script>

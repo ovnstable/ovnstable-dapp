@@ -80,7 +80,8 @@ export default {
         'hasChangeAccount',
         'contractType',
         'hideZeroStrategiesAction',
-        'showZeroStrategiesAction'
+        'showZeroStrategiesAction',
+        'calculateNav'
     ],
     data: () => ({
         isZeroStrategiesShow: false,
@@ -182,6 +183,7 @@ export default {
             for (let i = 0; i < this.m2mItems.length; i++) {
                 let item = this.m2mItems[i];
                 item.targetWeight = Number(item.currentWeight.toFixed(this.targetWeightDecimals));
+                this.calculateNav(item);
             }
 
             this.m2mItems = this.adjustTargetWeights(this.m2mItems);
@@ -212,7 +214,7 @@ export default {
 
                 await this.setStrategiesM2MWeights({weights: this.m2mItems, contractType: this.contractType});
                 console.debug("If error in StrategiesM2MWeights: ", this.m2mItems, this.contractType)
-                await this.getFinance({contractType: this.contractType, isAddDelay: true});
+                await this.getFinance({contractType: this.contractType, isAddDelay: false});
                 console.debug("If error in GetFinance: ", this.contractType)
             } else {
                 this.showErrorModal('governanceChangeWeights');
@@ -230,7 +232,7 @@ export default {
                 }
 
                 await this.rebalancePortfolio(this.contractType);
-                await this.getFinance({contractType: this.contractType, isAddDelay: true});
+                await this.getFinance({contractType: this.contractType, isAddDelay: false});
             } else {
                 this.showErrorModal('governanceRebalance');
             }

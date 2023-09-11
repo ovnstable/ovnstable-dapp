@@ -770,6 +770,8 @@ const actions = {
 
         for (let i = 0; i < items.length; i++) {
             items[i].currentWeight = Number((100 * parseFloat(items[i].netAssetValue) / sum).toFixed(3));
+            items[i].calculatedNav = (sum / 100) * items[i].targetWeight;
+            console.log("CALCULATED NAV:", sum)
         }
 
         commit('setM2mItems', items);
@@ -959,7 +961,6 @@ const mutations = {
     setHasChangeAccount(state, value) {
         state.hasChangeAccount = value;
     },
-
 }
 
 export default {

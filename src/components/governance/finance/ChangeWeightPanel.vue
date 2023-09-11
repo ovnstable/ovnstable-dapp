@@ -139,7 +139,7 @@ export default {
             {text: 'Name', value: 'name', width: '170px'},
             {text: 'Net Asset Value', value: 'netAssetValue', width: '140px', align: 'end'},
             {text: 'Liquidation Value', value: 'liquidationValue', width: '140px', align: 'end'},
-            {text: 'Calculated NAV', value: 'calculatedNav', width: '140px', align: 'end'},
+            {text: 'Target Nav', value: 'calculatedNav', width: '140px', align: 'end'},
             {text: 'Current Weight', value: 'currentWeight', align: 'end'},
             {text: 'Min Weight', value: 'minWeight'},
             {text: 'Target Weight', value: 'targetWeight'},

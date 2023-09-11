@@ -189,6 +189,12 @@ export const zap = {
                     approveType: 'TOKEN'
                 },
 
+                '0x8E9154AC849e839d60299E85156bcb589De2693A': {  // dola/usd+ volatile
+                    gauge: '0x969c70383A95704C6a35497d8C77BF38dc152e63',
+                    poolId: 0,
+                    approveType: 'TOKEN'
+                },
+
                 // Ramses https://ramses-api-5msw7.ondigitalocean.app/mixed-pairs
                 '0xeb9153afbaa3a6cfbd4fce39988cea786d3f62bb': {
                     gauge: '0x88d8d2bdc4f12862fbabea43cec08b8fcd2234da',

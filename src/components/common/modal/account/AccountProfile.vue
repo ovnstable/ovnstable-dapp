@@ -58,29 +58,7 @@
                     </v-btn>
                 </v-row>
 
-                <div v-if="account && account === '0x4473D652fb0b40b36d549545e5fF6A363c9cd686'" class="mt-10">
-                   <div v-if="isHistoryCached" class="pt-5">
-                       <div class="success-text">
-                           Historical balance already checked!
-                       </div>
-                   </div>
-                   <div v-else class="pt-5">
-                       <v-btn v-if="!isHistoryCheckLoading" class="header-btn btn-outlined" outlined @click="checkHistoryBalance()">
-                           check historical balance
-                       </v-btn>
-                       <div v-else>
-                           <div class="pl-15 pb-5 pt-5">
-                               <v-row align="start" justify="start">
-                                   <v-progress-circular
-                                       width="2"
-                                       size="24"
-                                       color="#8FA2B7"
-                                       indeterminate
-                                   ></v-progress-circular>
-                               </v-row>
-                           </div>
-                       </div>
-                   </div>
+                <div v-if="account" class="mt-10">
                     <div v-if="isCurrentCached">
                         <div class="success-text">
                             Current balance already checked!
@@ -101,6 +79,44 @@
                                     ></v-progress-circular>
                                 </v-row>
                             </div>
+                        </div>
+
+                    </div>
+                    <div v-if="currentCheckErrorMessage" class="pt-3">
+                        <div class="error-text">
+                            {{ currentCheckErrorMessage }}
+                        </div>
+                    </div>
+
+
+
+                    <div v-if="isHistoryCached" class="pt-5">
+                        <div class="success-text">
+                            Historical balance already checked!
+                        </div>
+                    </div>
+                    <div v-else class="pt-5">
+                        <v-btn v-if="!isHistoryCheckLoading" class="header-btn btn-outlined" outlined @click="checkHistoryBalance()">
+                            check historical balance
+                        </v-btn>
+                        <div v-else>
+                            <div class="pl-15 pb-5 pt-5">
+                                <v-row align="start" justify="start">
+                                    <v-progress-circular
+                                        width="2"
+                                        size="24"
+                                        color="#8FA2B7"
+                                        indeterminate
+                                    ></v-progress-circular>
+                                </v-row>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="historyCheckErrorMessage" class="pt-3">
+                        <div class="error-text">
+                            {{
+                                historyCheckErrorMessage === 'User Not Found' ? 'User not found in our Zealy community' : historyCheckErrorMessage
+                            }}
                         </div>
                     </div>
                 </div>
@@ -141,6 +157,9 @@ export default {
 
         isHistoryCached: false,
         isCurrentCached: false,
+
+        historyCheckErrorMessage: null,
+        currentCheckErrorMessage: null,
     }),
 
     props: {
@@ -228,18 +247,23 @@ export default {
         checkHistoryBalance() {
             this.isHistoryCheckLoading = true;
 
-            // https://app.overnight.fi/api/dapp/client/balance/check/history/0x4473D652fb0b40b36d549545e5fF6A363c9cd686
+            // https://app.overnight.fi/api/presale/client/balance/check/history/0x4473D652fb0b40b36d549545e5fF6A363c9cd686
             // create request
 
-            let url = "https://app.overnight.fi/api/dapp";
-            balanceApiService.checkHistoryBalance(url, this.account).then((response) => {
+            let url = "https://app.overnight.fi/api/presale";
+            balanceApiService.checkHistoryBalance(url, this.account + "sa").then((response) => {
+                if (response.error) {
+                    console.log("checkHistoryBalance failed", response, response.message);
+                    this.isHistoryCheckLoading = false;
+                    this.historyCheckErrorMessage = response.message;
+                    return;
+                }
+
+                this.isHistoryCheckLoading = false;
+                this.isHistoryCached = true;
+                // save data to local storage
+                localStorage.setItem('historyBalanceChecked', 'true');
                 console.log("checkHistoryBalance success", response);
-                setTimeout(() => {
-                        this.isHistoryCheckLoading = false;
-                        this.isHistoryCached = true;
-                        // save data to local storage
-                        localStorage.setItem('historyBalanceChecked', 'true');
-                    }, 10000)
             }).catch((error) => {
                 console.log("checkHistoryBalance failed", error);
                 this.isHistoryCheckLoading = false;
@@ -252,15 +276,19 @@ export default {
             // https://app.overnight.fi/api/dapp/client/balance/check/current/0x4473D652fb0b40b36d549545e5fF6A363c9cd686
             // create request
 
-            let url = "https://app.overnight.fi/api/dapp";
-            balanceApiService.checkCurrentBalance(url, this.account).then((response) => {
-                console.log("checkCurrentBalance success", response);
-                setTimeout(() => {
+            let url = "https://app.overnight.fi/api/presale";
+            balanceApiService.checkCurrentBalance(url, this.account+"das").then((response) => {
+                if (response.error) {
+                    console.log("checkHistoryBalance failed", response);
                     this.isCurrentCheckLoading = false;
-                    this.isCurrentCached = true;
-                    // save data to local storage
-                    localStorage.setItem('currentBalanceChecked', 'true');
-                }, 10000)
+                    this.currentCheckErrorMessage = response.message;
+                    return;
+                }
+
+                console.log("checkCurrentBalance success", response);
+                this.isCurrentCheckLoading = false;
+                this.isCurrentCached = true;
+                localStorage.setItem('currentBalanceChecked', 'true');
             }).catch((error) => {
                 console.log("checkCurrentBalance failed", error);
                 this.isCurrentCheckLoading = false;
@@ -513,6 +541,11 @@ export default {
 
 .success-text {
     color: #00961a;
+    font-size: larger;
+}
+
+.error-text {
+    color: #be0f39;
     font-size: larger;
 }
 </style>

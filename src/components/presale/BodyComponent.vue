@@ -180,7 +180,7 @@
                                     </div>
 
                                     <div>
-                                        1. Reach 500 XP in <a href="https://zealy.io/c/overnight-fi/questboard" target="_blank">our Zealy</a>
+                                        1. Reach 100 XP (level 2) in <a href="https://zealy.io/c/overnight-fi/questboard" target="_blank">our Zealy</a>
                                     </div>
                                     <div>
                                         2. Claim Presale participant role in <a href="https://discord.com/invite/overnight-fi" target="_blank">our Discord</a>

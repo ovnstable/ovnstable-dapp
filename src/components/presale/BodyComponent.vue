@@ -69,7 +69,7 @@
 
                             <div class="info-group">
                                 <div class="info-sub-title">
-                                    Overflow Farming Pool
+                                    Presale Pool
                                 </div>
                                 <div class="info-text-black">
                                     {{ formattedOvnTotal }} OVN
@@ -80,9 +80,13 @@
                                 <div class="info-sub-title">
                                     Farming bonus
                                 </div>
-                                <div class="info-text-blue">
-                                    {{ formattedFarmingBonus }} USD+
+                                <div class="info-text">
+                                    Formed with rebase of committed USD+
                                 </div>
+
+<!--                                <div class="info-text-blue">
+                                    {{ formattedFarmingBonus }} USD+
+                                </div>-->
                             </div>
 
                             <div class="step-container-separator"></div>

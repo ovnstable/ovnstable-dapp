@@ -25,14 +25,12 @@
 import HeaderComponent from "@/components/presale/HeaderComponent.vue";
 import RoundInfoComponent from "@/components/presale/RoundInfoComponent.vue";
 import BodyComponent from "@/components/presale/BodyComponent.vue";
-import AllocationComponent from "@/components/presale/AllocationComponent.vue";
 import DisclaimerComponent from "@/components/presale/DisclaimerComponent.vue";
 
 export default {
     name: "PresaleView.vue",
     components: {
         DisclaimerComponent,
-        AllocationComponent,
         BodyComponent,
         RoundInfoComponent,
         HeaderComponent

@@ -80,13 +80,10 @@
                                 <div class="info-sub-title">
                                     Farming bonus
                                 </div>
-                                <div class="info-text">
-                                    Formed with rebase of committed USD+
+                                <div class="info-text-blue">
+                                    {{ formattedFarmingBonus }} USD+
                                 </div>
 
-<!--                                <div class="info-text-blue">
-                                    {{ formattedFarmingBonus }} USD+
-                                </div>-->
                             </div>
 
                             <div class="step-container-separator"></div>
@@ -142,7 +139,7 @@
 
                             <div class="step-container-separator"></div>
 
-<!--                            <div class="info-group">
+                             <div class="info-group">
                                 <div class="info-title">
                                     Check status
                                 </div>
@@ -156,7 +153,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>-->
+                            </div>
 
                             <div class="info-group">
                                 <div class="info-title">
@@ -227,13 +224,18 @@
                             <div class="step-container-separator"></div>
                         </div>
 
-                        <div class="timer-container-center">
-                            <div class="info-group">
+                        <div v-if="currentStep === 'COMMIT'" class="timer-container-center">
+                            <div v-if="presaleTimestamp" class="info-group">
                                 <Timer :timestamp="presaleTimestamp" title="Presale starts in"/>
                             </div>
                         </div>
+                        <div v-else class="timer-container-center">
+                            <div v-if="presaleEndTimestamp" class="info-group">
+                                <Timer :timestamp="presaleEndTimestamp" title="Presale starts in"/>
+                            </div>
+                        </div>
 
-                        <div class="info-group">
+                        <div  v-if="presaleTimestamp" class="info-group">
                             <div class="info-sub-title">
                                 Start Sale
                             </div>
@@ -242,7 +244,7 @@
                             </div>
                         </div>
 
-                        <div class="info-group">
+                        <div v-if="presaleEndTimestamp" class="info-group">
                             <div class="info-sub-title">
                                 End of Sale
                             </div>
@@ -251,7 +253,7 @@
                             </div>
                         </div>
 
-                        <div class="info-group">
+                        <div v-if="presaleTimestamp && presaleEndTimestamp" class="info-group">
                             <div class="info-sub-title">
                                 Duration
                             </div>
@@ -268,15 +270,19 @@
                             </div>
 
                             <div>
-                                <PresaleBuyForm></PresaleBuyForm>
+                                <PresaleBuyForm
+                                    :ovnICOContract="ovnICOContract"
+                                    :ovnTokenContract="ovnTokenContract"
+                                    :ovnWhitelistContract="ovnWhitelistContract"
+                                ></PresaleBuyForm>
                             </div>
                         </div>
 
 
                         <div class="bottom-contract-info">
-<!--                            <div class="step-container-separator"></div>-->
+                            <div class="step-container-separator"></div>
 
-<!--                            <div class="info-group">
+                            <div class="info-group">
                                 <div class="row">
                                     <div class="col-6 col-lg-6 col-md-6 col-sm-6">
                                         <div class="info-sub-title" style="position:relative;">
@@ -295,7 +301,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>-->
+                            </div>
                         </div>
 
                     </div>
@@ -308,7 +314,7 @@
                     <div class="step-container">
                         <div class="step-title">
                             <div class="step-title-container">
-                                Claim
+                                Claim (step: {{currentStep}})
                                 <div class="title-logo">
                                     <img src="/assets/icon/presale/title-claim.svg" alt="claim">
                                 </div>
@@ -317,11 +323,11 @@
                             <div class="step-container-separator"></div>
                         </div>
 
-<!--                        <div class="timer-container-center">
-                            <div class="info-group">
+                        <div class="timer-container-center">
+                            <div v-if="vestingTimestamp" class="info-group">
                                 <Timer :timestamp="vestingTimestamp" title="Vesting starts in"/>
                             </div>
-                        </div>-->
+                        </div>
 
                         <div>
                             <div class="step-info-description">
@@ -418,7 +424,21 @@ import Timer from "@/components/presale/tools/Timer.vue";
 import TokenOvnInfo from "@/components/presale/tools/TokeOvnInfo.vue";
 import PresaleBuyForm from "@/components/presale/tools/PresaleBuyForm.vue";
 import {mapGetters} from "vuex";
+import loadJSON from "@/utils/http-utils";
 const moment = require('moment'); // import moment.js
+
+const USER_PRESALE_STATE_MAP = {
+    0: 'WAITING_FOR_PRESALE_START',
+    1: 'COMMIT',
+    2: 'CLAIM_REFUND',
+    3: 'WAITING_FOR_CLAIM_BONUS',
+    4: 'CLAIM_BONUS',
+    5: 'WAITING_FOR_CLAIM_SALES_FIRST_PART',
+    6: 'CLAIM_SALES_FIRST_PART',
+    7: 'WAITING_FOR_CLAIM_VESTING',
+    8: 'CLAIM_VESTING',
+    9: 'NOTHING_TO_DO',
+}
 
 
 export default {
@@ -426,14 +446,14 @@ export default {
     components: {PresaleBuyForm, TokenOvnInfo, Timer},
     data() {
         return {
-            presaleTimestamp: 1695038400*1000,
-            presaleEndTimestamp: 1695639600*1000,
-            vestingTimestamp: 1697194117040,
+            presaleTimestamp: 0,
+            presaleEndTimestamp: 0,
+            vestingTimestamp: 0,
 
-            overflowFarmingPool: 25000,
+            overflowFarmingPool: 0,
             farmingBonus: 0,
-            softCap: 350000,
-            hardCap: 500000,
+            softCap: 0,
+            hardCap: 0,
 
             // personal data
             accountTotalUsdPurchased: 0,
@@ -444,14 +464,36 @@ export default {
             accountOverflowFunds: 0,
 
             nftStatus: false,
+
+            ovnTokenAddress: "0x2a40Eab5dC171924937F242c5D73E1cd5A19e160",
+
+            ovnTokenContract: null,
+            ovnWhitelistContract: null,
+            ovnICOContract: null,
+
+            currentStep: null
         }
     },
     mounted() {
         // this.initUserData();
     },
 
+    watch: {
+
+        account: function (newVal, oldVal) {
+            console.log("Account changed", newVal, oldVal)
+            if (newVal) {
+                this.initAccountData();
+            }
+        },
+
+    },
+
     computed: {
         ...mapGetters('network', ['networkName']),
+        ...mapGetters('accountData', ['account']),
+        ...mapGetters("web3", ["web3"]),
+        ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
 
         presaleStartDate() {
@@ -544,9 +586,103 @@ export default {
         },
     },
     methods: {
-        buyAndFarm() {
-            console.log("buy and farm");
+        loadDataFromContract() {
+            console.log("Load data from contract")
+            this.loadIcoData();
         },
+        loadIcoData() {
+            console.log("Load ICO data")
+            this.ovnICOContract.methods.hardCap().call().then((result) => {
+                console.log("Hard cap result", result)
+                let fromWei = this.web3.utils.fromWei(result.toString(), 'mwei'); // mwei - 6, gwei - 9, ether - 18
+                this.hardCap = fromWei * 1;
+                console.log("Hard cap", this.hardCap, fromWei)
+            });
+
+            this.ovnICOContract.methods.softCap().call().then((result) => {
+                console.log("Soft cap result", result)
+                let fromWei = this.web3.utils.fromWei(result.toString(), 'mwei'); // mwei - 6, gwei - 9, ether - 18
+                this.softCap = fromWei * 1;
+                console.log("Soft cap", this.softCap, fromWei)
+            });
+
+
+            this.ovnICOContract.methods.totalSales().call().then((result) => {
+                console.log("Overflow farming pool result", result)
+                let fromWei = this.web3.utils.fromWei(result.toString(), 'ether'); // mwei - 6, gwei - 9, ether - 18
+                this.overflowFarmingPool = fromWei * 1;
+                console.log("Overflow farming pool", this.overflowFarmingPool, fromWei)
+            });
+
+            // TODO: farming bonus
+
+            // start time
+            this.ovnICOContract.methods.startTime().call().then((result) => {
+                console.log("Start time result", result)
+                this.presaleTimestamp = result * 1000;
+                console.log("Start time", this.presaleTimestamp)
+            });
+
+            // end time
+            this.ovnICOContract.methods.endTime().call().then((result) => {
+                console.log("End time result", result)
+                this.presaleEndTimestamp = result * 1000;
+                console.log("End time", this.presaleEndTimestamp)
+            });
+
+            // vestingBegin
+            this.ovnICOContract.methods.vestingBeginTime().call().then((result) => {
+                console.log("Vesting begin result", result)
+                this.vestingTimestamp = result * 1000;
+                console.log("Vesting begin", this.vestingTimestamp)
+            });
+
+            // current step
+            this.ovnICOContract.methods.getUserState(this.account).call().then((result) => {
+                console.log("Current step result", result)
+                this.currentStep = USER_PRESALE_STATE_MAP[result];
+                console.log("Current step", this.currentStep)
+            });
+
+
+        },
+
+        async initAccountData() {
+            console.log('Load User data')
+
+            if (this.account) {
+                await this.loadContracts();
+                this.loadDataFromContract();
+            }
+        },
+        async loadContracts() {
+            console.log("Load contracts for tokens")
+
+            const ERC20 = await loadJSON('/contracts/ERC20.json');
+            console.log("Contracts ERC20 loaded", ERC20);
+            this.ovnTokenContract = this._loadContract(ERC20, this.web3, this.ovnTokenAddress);
+            console.log("Token contract be loaded.", this.ovnTokenContract)
+
+            const whitelistFile = await loadJSON(`/contracts/${this.networkName}/presale/Whitelist.json`);
+            this.ovnWhitelistContract = this._loadContract(whitelistFile, this.web3);
+            console.log("Whitelist contract be loaded.", this.ovnWhitelistContract)
+
+            const icoFile = await loadJSON(`/contracts/${this.networkName}/presale/OverflowICO.json`);
+            this.ovnICOContract = this._loadContract(icoFile, this.web3);
+            console.log("ICO contract be loaded.", this.ovnICOContract)
+        },
+
+        _loadContract(file, web3, address) {
+            if (!address) {
+                address = file.address;
+            }
+
+            return new web3.eth.Contract(file.abi, address);
+
+        },
+        // buyAndFarm() {
+        //     console.log("buy and farm");
+        // },
         claimOvn() {
             console.log("claim ovn")
         },
@@ -573,7 +709,7 @@ export default {
     padding: 28px;
     gap: 20px;
 
-    min-height: 955px;
+    min-height: 1200px;
 
     background: #FFFFFF;
     box-shadow: 0px 10px 20px rgba(9, 55, 98, 0.25);

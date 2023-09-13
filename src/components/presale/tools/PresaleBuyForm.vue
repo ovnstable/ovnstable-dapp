@@ -44,9 +44,18 @@
         </div>
         <div v-else>
             <div v-if="networkName === presaleChain" class="info-group">
-                <div @click="buyAndFarm"
+                <div v-if="!value"
                      class="button-buy-disabled">
-                    NOT STARTED
+                    ENTER AMOUNT
+                </div>
+                <div v-else-if="!approveData.approved" @click="approve"
+                     class="button-buy">
+                    APPROVE
+                </div>
+                <div v-else
+                     @click="buyAndFarm"
+                     class="button-buy">
+                    BUY AND FARM
                 </div>
             </div>
             <div v-else class="info-group">
@@ -62,24 +71,48 @@
                 By participating in Private Presale you accept <a href="https://docs.overnight.fi/other/terms-of-service" target="_blank">Overnight's Terms of Service</a> and <a href="https://docs.overnight.fi/other/privacy-policy" target="_blank">Privacy Policy</a>.
             </div>
         </div>
+
+        <WaitingModal/>
+        <ErrorModal/>
     </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import {contractApprove} from "@/components/mixins/contract-approve";
+import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
+import SuccessModal from "@/components/common/modal/action/SuccessModal.vue";
+import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
 
 export default {
     name: "PresaleBuyForm",
+    props: ['ovnICOContract', 'ovnTokenContract', 'ovnWhitelistContract'],
+    mixins: [contractApprove],
+    components: {
+        ErrorModal,
+        SuccessModal,
+        WaitingModal,
+    },
     data() {
         return {
             value: null,
             presaleChain: 'base',
             networkId: 8453,
+
+            approveData: {
+                allowanceValue: 0,
+                approved: false
+            },
+
+            isBuyLoading: false,
+
         }
     },
     computed: {
         ...mapGetters('network', ['networkName']),
+        ...mapGetters('web3', ['web3'] ),
         ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
+        ...mapGetters('gasPrice', ['gasPrice', 'gasPriceGwei', 'gasPriceStation', 'gasPriceType']),
 
         formattedBalanceUsdPlus() {
             if (!this.account || this.networkName !== this.presaleChain) {
@@ -97,6 +130,10 @@ export default {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('transaction', ['loadTransaction']),
         ...mapActions("walletAction", ['connectWallet']),
+
+        ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
+        ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
+
 
         switchToNetwork() {
             this.setWalletNetwork(this.networkId.toString());
@@ -119,13 +156,111 @@ export default {
         inputUpdate(value) {
             console.log(value);
             // this.updateTokenValueFunc(this.tokenInfo, value)
+            if (value === '') {
+                this.value = null;
+                return;
+            }
+
+            let weiValue = this.web3.utils.toWei(value + "", 'ether')
+            console.log('inputUpdate weiValue: ', weiValue);
+            this.checkApproveForToken(weiValue);
         },
-        buyAndFarm() {
+        async buyAndFarm() {
             console.log('buyAndFarm from component');
+            if (this.isBuyLoading) {
+                console.log('Buy method not available, prev buy in process');
+                return;
+            }
+
+            this.isBuyLoading = true;
+            this.showWaitingModal('Buy in process');
+
+            try {
+                let contractValue = this.web3.utils.toWei(this.value + "", 'mwei');
+                console.log('Buy contractValue: ', contractValue);
+
+                let tokenId = 1;
+                let typeOfNft = 1;
+
+                let buyParams;
+
+                await this.refreshGasPrice();
+                if (this.gas == null) {
+                    buyParams = {from: this.account, gasPrice: this.gasPriceGwei};
+                } else {
+                    buyParams = {from: this.account, gasPrice: this.gasPriceGwei, gas: this.gas};
+                }
+
+                // check whitelist
+                let isWhitelist = await this.ovnWhitelistContract.methods.isWhitelist(this.account, [], [1]).call();
+                console.log('isWhitelist: ', isWhitelist);
+
+                console.log('Buy contract call: ', this.ovnICOContract, this.account, contractValue, tokenId, typeOfNft, buyParams)
+                let result = await this.ovnICOContract.methods.commit("1000000", tokenId, typeOfNft)
+                    .send(buyParams)
+                    .on('transactionHash', (hash) => {
+                        console.log('Buy transactionHash: ', hash);
+                    })
+
+                this.closeWaitingModal();
+
+            } catch (e) {
+                console.error("Error when buy token.", e);
+                this.closeWaitingModal();
+                this.showErrorModalWithMsg({errorType: 'ico-buy', errorMsg: e},);
+                this.isBuyLoading = false;
+            }
+        },
+        async approve() {
+            this.showWaitingModal('Approving in process');
+            console.log("Approve contract token.")
+
+            let contractValue = this.web3.utils.toWei(this.value + "", 'ether')
+            await this.checkApproveForToken(contractValue);
+            if (this.approveData.approved) {
+                console.log("Approve not needed for token.");
+                this.closeWaitingModal();
+                return;
+            }
+
+            // let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
+            let approveValue = this.web3.utils.toWei("10000000", 'ether');
+            console.log('Approve contract approveValue: ', approveValue);
+            console.log('Approve contract newApproveValue: ', this.ovnTokenContract, this.account, this.ovnICOContract.options.address, approveValue);
+            this.approveToken(this.ovnTokenContract, this.ovnICOContract.options.address, approveValue)
+                .then(data => {
+                    console.log("Success approving", data);
+                    this.checkApproveForToken(contractValue);
+                    this.closeWaitingModal();
+                })
+                .catch(e => {
+                    console.error("Error when approve token.", e);
+                    this.closeWaitingModal();
+                    this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
+                });
+        },
+        async checkApproveForToken(checkedAllowanceValue) { // checkedAllowanceValue in wei
+            console.log('Check Approve contract: ', this.ovnTokenContract, this.account, this.ovnICOContract.options.address);
+            let allowanceValue = await this.getAllowanceValue(this.ovnTokenContract, this.account, this.ovnICOContract.options.address);
+            console.log('Approve value: ', allowanceValue);
+
+            this.approveData.allowanceValue = allowanceValue * 1;
+            if (!this.approveData.allowanceValue) {
+                this.approveData.approved = false
+                return;
+            }
+
+            if (!checkedAllowanceValue) {
+                this.approveData.approved = true
+                return;
+            }
+
+            this.approveData.approved = this.approveData.allowanceValue >= checkedAllowanceValue;
         },
         max() {
             console.log('max from component');
             this.value = this.balance.usdPlus * 1;
+            this.inputUpdate(this.value);
         }
     }
 }

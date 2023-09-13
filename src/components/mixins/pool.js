@@ -380,7 +380,6 @@ export const pool = {
                 pool.platform === 'Velocimeter' ||
                 pool.platform === 'Swapbased' ||
                 pool.platform === 'Maverick' ||
-                pool.platform === 'Curve' ||
                 pool.platform === 'Alienbase' ||
                 pool.platform === 'Convex'
             ) {
@@ -408,6 +407,18 @@ export const pool = {
 
             if (pool.platform === 'Balancer' && pool.address === '0xd6d20527c7b0669989ee082b9d3a1c63af742290') {
                 url +=  pool.address +  '000000000000000000000483'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Curve' && pool.address === '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013') {
+                url = 'https://curve.fi/#/arbitrum/pools/factory-v2-117/deposit'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Curve' && pool.address === '0xda3de145054ED30Ee937865D31B500505C4bDfe7') {
+                url = 'https://curve.fi/#/base/pools/factory-v2-2/deposit'
                 window.open(url, '_blank').focus();
                 return;
             }

@@ -44,18 +44,30 @@
         </div>
         <div v-else>
             <div v-if="networkName === presaleChain" class="info-group">
-                <div v-if="!value"
-                     class="button-buy-disabled">
-                    ENTER AMOUNT
+                <div v-if="currentStepType === 'WAITING_FOR_PRESALE_START'">
+                    <div class="button-buy-disabled">
+                        NOT STARTED
+                    </div>
                 </div>
-                <div v-else-if="!approveData.approved" @click="approve"
-                     class="button-buy">
-                    APPROVE
+                <div v-else-if="currentStepType === 'COMMIT'">
+                    <div v-if="!value"
+                         class="button-buy-disabled">
+                        ENTER AMOUNT
+                    </div>
+                    <div v-else-if="!approveData.approved" @click="approve"
+                         class="button-buy">
+                        APPROVE
+                    </div>
+                    <div v-else
+                         @click="buyAndFarm"
+                         class="button-buy">
+                        BUY AND FARM
+                    </div>
                 </div>
-                <div v-else
-                     @click="buyAndFarm"
-                     class="button-buy">
-                    BUY AND FARM
+                <div v-else>
+                    <div class="button-buy-disabled">
+                        PRESALE PASSED
+                    </div>
                 </div>
             </div>
             <div v-else class="info-group">
@@ -63,6 +75,10 @@
                      class="button-buy">
                     SWITCH TO BASE
                 </div>
+            </div>
+
+            <div v-if="errorMessage" class="error--text pt-3">
+                {{errorMessage}}
             </div>
         </div>
 
@@ -72,26 +88,29 @@
             </div>
         </div>
 
-        <WaitingModal/>
-        <ErrorModal/>
     </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
 import {contractApprove} from "@/components/mixins/contract-approve";
-import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
-import SuccessModal from "@/components/common/modal/action/SuccessModal.vue";
-import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
 
 export default {
     name: "PresaleBuyForm",
-    props: ['ovnICOContract', 'ovnTokenContract', 'ovnWhitelistContract'],
+    props: [
+        'ovnICOContract',
+        'ovnTokenContract',
+        'ovnWhitelistContract',
+        'currentStepType',
+        'ovnWeiType',
+        'usdPlusWeiType',
+        'galxeNftsIds',
+        'partnerNftsIds',
+        'showSuccessModal',
+        'timeoutUpdateCurrentUserStep'
+    ],
     mixins: [contractApprove],
     components: {
-        ErrorModal,
-        SuccessModal,
-        WaitingModal,
     },
     data() {
         return {
@@ -105,7 +124,7 @@ export default {
             },
 
             isBuyLoading: false,
-
+            errorMessage: null,
         }
     },
     computed: {
@@ -123,10 +142,12 @@ export default {
                 return '00.00'
             }
 
-           return (this.balance.usdPlus * 1).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            let balance = (this.balance.usdPlus * 1).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') * 1;
+           return !isNaN(balance) ? balance : '00.00';
         }
     },
     methods: {
+        ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('transaction', ['loadTransaction']),
         ...mapActions("walletAction", ['connectWallet']),
@@ -153,6 +174,7 @@ export default {
                 }
             }
         },
+
         inputUpdate(value) {
             console.log(value);
             // this.updateTokenValueFunc(this.tokenInfo, value)
@@ -161,7 +183,7 @@ export default {
                 return;
             }
 
-            let weiValue = this.web3.utils.toWei(value + "", 'ether')
+            let weiValue = this.web3.utils.toWei(value + "", this.ovnWeiType)
             console.log('inputUpdate weiValue: ', weiValue);
             this.checkApproveForToken(weiValue);
         },
@@ -176,14 +198,25 @@ export default {
             this.showWaitingModal('Buy in process');
 
             try {
-                let contractValue = this.web3.utils.toWei(this.value + "", 'mwei');
-                console.log('Buy contractValue: ', contractValue);
+                // // 10**6
+                // let contractValue = this.web3.utils.toWei(this.value + "", this.usdPlusWeiType);
+                let contractValue = this.web3.utils.toWei(this.value + "", this.usdPlusWeiType);
+                console.log('Buy contractValue: ', this.value, contractValue, this.usdPlusWeiType);
 
-                let tokenId = 1;
-                let typeOfNft = 1;
+                let activeNft = await this.getFirstActiveNft();
+                console.log("activeNft:::", activeNft);
+                if (!activeNft) {
+                    console.log('Buy method not available, no active nft');
+                    this.errorMessage = 'You don’t have Presale NFT';
+                    this.closeWaitingModal();
+                    this.isBuyLoading = false;
+                    return;
+                }
+
+                let tokenId = activeNft.tokenId;
+                let typeOfNft = activeNft.typeOfNft;
 
                 let buyParams;
-
                 await this.refreshGasPrice();
                 if (this.gas == null) {
                     buyParams = {from: this.account, gasPrice: this.gasPriceGwei};
@@ -191,31 +224,29 @@ export default {
                     buyParams = {from: this.account, gasPrice: this.gasPriceGwei, gas: this.gas};
                 }
 
-                // check whitelist
-                let isWhitelist = await this.ovnWhitelistContract.methods.isWhitelist(this.account, [], [1]).call();
-                console.log('isWhitelist: ', isWhitelist);
-
                 console.log('Buy contract call: ', this.ovnICOContract, this.account, contractValue, tokenId, typeOfNft, buyParams)
-                let result = await this.ovnICOContract.methods.commit("1000000", tokenId, typeOfNft)
+                let result = await this.ovnICOContract.methods.commit(contractValue, tokenId, typeOfNft)
                     .send(buyParams)
                     .on('transactionHash', (hash) => {
                         console.log('Buy transactionHash: ', hash);
+                        this.showSuccessModal(true, result.transactionHash, "You successfully bought and farmed $OVN token");
                     })
 
                 this.closeWaitingModal();
-
             } catch (e) {
                 console.error("Error when buy token.", e);
                 this.closeWaitingModal();
                 this.showErrorModalWithMsg({errorType: 'ico-buy', errorMsg: e},);
                 this.isBuyLoading = false;
+            } finally {
+                this.timeoutUpdateCurrentUserStep()
             }
         },
         async approve() {
             this.showWaitingModal('Approving in process');
             console.log("Approve contract token.")
 
-            let contractValue = this.web3.utils.toWei(this.value + "", 'ether')
+            let contractValue = this.web3.utils.toWei(this.value + "", this.ovnWeiType)
             await this.checkApproveForToken(contractValue);
             if (this.approveData.approved) {
                 console.log("Approve not needed for token.");
@@ -224,7 +255,7 @@ export default {
             }
 
             // let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
-            let approveValue = this.web3.utils.toWei("10000000", 'ether');
+            let approveValue = this.web3.utils.toWei("10000000", this.ovnWeiType);
             console.log('Approve contract approveValue: ', approveValue);
             console.log('Approve contract newApproveValue: ', this.ovnTokenContract, this.account, this.ovnICOContract.options.address, approveValue);
             this.approveToken(this.ovnTokenContract, this.ovnICOContract.options.address, approveValue)
@@ -261,7 +292,54 @@ export default {
             console.log('max from component');
             this.value = this.balance.usdPlus * 1;
             this.inputUpdate(this.value);
-        }
+        },
+        async getFirstActiveNft() {
+            let tokenId; // 1,2,3..
+            let typeOfNft; // 0 - galxe, 1 - partner
+
+            // if not galaxe nfts and not partner nfts return null
+            if (!this.galxeNftsIds.length && !this.partnerNftsIds.length) {
+                return null;
+            }
+
+            // check whitelist
+            let isWhitelist
+            try {
+                isWhitelist = await this.ovnWhitelistContract.methods.isWhitelist(this.account, this.galxeNftsIds, this.partnerNftsIds).call();
+                console.log('isWhitelist: ', isWhitelist);
+            } catch (e) {
+                console.error("Error when check whitelist.", e);
+                this.errorMessage = 'Error when check nft';
+                this.closeWaitingModal()
+                return null;
+            }
+
+            // isWhitelist return array of bool
+            // 0 [true, false, true] - galxe
+            // 1 [false, false, true, true, true, true, true, true, true, true] - partner
+            // find first true and return nftid by index
+
+            // service check
+            if (isWhitelist[0].includes(true)) {
+                let index = isWhitelist[0].indexOf(true);
+                tokenId = this.galxeNftsIds[index];
+                typeOfNft = 0;
+
+                return {tokenId, typeOfNft};
+            }
+
+            // partner check
+            if (isWhitelist[1].includes(true)) {
+                let index = isWhitelist[1].indexOf(true);
+                tokenId = this.partnerNftsIds[index];
+                typeOfNft = 1;
+
+                return {tokenId, typeOfNft};
+            }
+
+
+            return null;
+        },
     }
 }
 </script>

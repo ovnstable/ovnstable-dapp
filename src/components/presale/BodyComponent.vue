@@ -144,12 +144,29 @@
                                     Check status
                                 </div>
 
-                                <div class="check-nft-status-container">
-                                    <div style="position:relative;">
+                                <div v-if="nftLoading" class="check-nft-status-container">
+                                    <div>
+                                        <v-row align="center" justify="center">
+                                            <v-progress-circular
+                                                width="2"
+                                                size="24"
+                                                color="#8FA2B7"
+                                                indeterminate
+                                            ></v-progress-circular>
+                                        </v-row>
+                                    </div>
+                                </div>
+                                <div v-else class="check-nft-status-container">
+                                    <div v-if="!nftStatus" style="position:relative;">
                                         You don’t have Presale NFT
 
                                         <div class="check-nft-status-image">
                                             <img src="/assets/icon/presale/cancel.svg" alt="X">
+                                        </div>
+                                    </div>
+                                    <div v-else style="position:relative;">
+                                        <div style="color: #00c853; font-weight: bold">
+                                            You have Presale NFT
                                         </div>
                                     </div>
                                 </div>
@@ -208,8 +225,11 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 col-md-6 col-sm-12">
-                    <div>
+                    <div v-if="!nftStatus">
                         <img src="/assets/icon/presale/step/step3.svg" width="100%" alt="Step1">
+                    </div>
+                    <div v-else>
+                        <img src="/assets/icon/presale/step/step3-active.svg" width="100%" alt="Step1">
                     </div>
 
                     <div class="step-container">
@@ -224,14 +244,14 @@
                             <div class="step-container-separator"></div>
                         </div>
 
-                        <div v-if="currentStep === 'COMMIT'" class="timer-container-center">
+                        <div v-if="currentStepType === 'COMMIT'" class="timer-container-center">
                             <div v-if="presaleTimestamp" class="info-group">
-                                <Timer :timestamp="presaleTimestamp" title="Presale starts in"/>
+                                <Timer :timestamp="presaleTimestamp" title="Presale starts in" end-of-message="Presale in process"/>
                             </div>
                         </div>
                         <div v-else class="timer-container-center">
                             <div v-if="presaleEndTimestamp" class="info-group">
-                                <Timer :timestamp="presaleEndTimestamp" title="Presale starts in"/>
+                                <Timer :timestamp="presaleEndTimestamp" title="Presale in process" end-of-message="Presale"/>
                             </div>
                         </div>
 
@@ -274,7 +294,14 @@
                                     :ovnICOContract="ovnICOContract"
                                     :ovnTokenContract="ovnTokenContract"
                                     :ovnWhitelistContract="ovnWhitelistContract"
-                                ></PresaleBuyForm>
+                                    :currentStepType="currentStepType"
+                                    :ovnWeiType='ovnWeiType'
+                                    :usdPlusWeiType='usdPlusWeiType'
+                                    :galxeNftsIds="galxeNftsIds"
+                                    :partnerNftsIds="partnerNftsIds"
+                                    :showSuccessModal="showSuccessModal"
+                                    :timeoutUpdateCurrentUserStep="timeoutUpdateCurrentUserStep">
+                                </PresaleBuyForm>
                             </div>
                         </div>
 
@@ -307,25 +334,48 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 col-md-6 col-sm-12">
-                    <div>
-                        <img src="/assets/icon/presale/step/step4.svg" width="100%" alt="Step1">
+                    <div v-if="currentStep > 1">
+                        <img src="/assets/icon/presale/step/step4.svg" width="100%" alt="Step4">
+                    </div>
+                    <div v-else>
+                        <img src="/assets/icon/presale/step/step4-active.svg" width="100%" alt="Step4">
                     </div>
 
                     <div class="step-container">
                         <div class="step-title">
-                            <div class="step-title-container">
-                                Claim (step: {{currentStep}})
+                            <div class="step-title-container" @click="devStepsUpper">
+                                Claim
                                 <div class="title-logo">
                                     <img src="/assets/icon/presale/title-claim.svg" alt="claim">
                                 </div>
                             </div>
+
+                            <div v-if="turnOfStatusControls">
+                                <div class="step-container-separator"></div>
+                                <div>
+                                    (step: {{currentStepType}})
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 col-lg-6 col-md-6 col-xs-6">
+                                        <div @click="prevStep" class="pr-5" style="cursor:pointer;">
+                                            prevStep
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-lg-6 col-md-6 col-xs-6">
+                                        <div @click="nextStep" style="cursor:pointer;">
+                                            nextStep
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                             <div class="step-container-separator"></div>
                         </div>
 
                         <div class="timer-container-center">
                             <div v-if="vestingTimestamp" class="info-group">
-                                <Timer :timestamp="vestingTimestamp" title="Vesting starts in"/>
+                                <Timer :timestamp="vestingTimestamp" title="Vesting starts in" end-of-message="Vesting"/>
                             </div>
                         </div>
 
@@ -390,9 +440,44 @@
                             </div>
 
                             <div class="info-group">
-                                <div @click="claimOvn"
+                                <div v-if="currentStepType === 'CLAIM_REFUND'"
+                                     @click="claimRefund"
                                      class="button-buy">
-                                    CLAIM OVN
+                                    CLAIM REFUND
+                                </div>
+                                <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_BONUS'"
+                                     class="button-buy-disabled">
+                                    WAITING CLAIM BONUS
+                                </div>
+                                <div v-else-if="currentStepType === 'CLAIM_BONUS'"
+                                      @click="claimBonus"
+                                     class="button-buy">
+                                    CLAIM BONUS
+                                </div>
+                                <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_SALES_FIRST_PART'"
+                                     class="button-buy-disabled">
+                                    WAITING CLAIM SALES
+                                </div>
+                                <div v-else-if="currentStepType === 'CLAIM_SALES_FIRST_PART'"
+                                     @click="claimSalesPart1"
+                                     class="button-buy">
+                                    CLAIM SALES (25%)
+                                </div>
+                                <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_VESTING'"
+                                     class="button-buy-disabled">
+                                    WAITING CLAIM VESTING
+                                </div>
+                                <div v-else-if="currentStepType === 'CLAIM_VESTING'"
+                                      @click="claimVesting"
+                                     class="button-buy">
+                                    CLAIM VESTING
+                                </div>
+                                <div v-else-if="currentStepType === 'NOTHING_TO_DO'"
+                                     class="button-buy-disabled">
+                                    CLAIM FINISHED
+                                </div>
+                                <div v-else class="button-buy-disabled">
+                                    WAITING CLAIM
                                 </div>
                             </div>
                         </div>
@@ -407,15 +492,23 @@
                                 {{ formattedAccountOverflowFunds }} OVN
                             </div>
                         </div>
-
+<!--
                         <v-btn class="button btn-outlined-disabled" @click="claimFunds" outlined>
                             CLAIM FUNDS
-                        </v-btn>
+                        </v-btn>-->
 
                     </div>
                 </div>
             </div>
         </div>
+
+        <SuccessPresaleModal :is-show="isShowSuccessModal"
+                          :set-show-func="showSuccessModal"
+                          :success-data="successData"
+        />
+
+        <WaitingModal/>
+        <ErrorModal/>
     </div>
 </template>
 
@@ -423,8 +516,12 @@
 import Timer from "@/components/presale/tools/Timer.vue";
 import TokenOvnInfo from "@/components/presale/tools/TokeOvnInfo.vue";
 import PresaleBuyForm from "@/components/presale/tools/PresaleBuyForm.vue";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import loadJSON from "@/utils/http-utils";
+import axios from "axios";
+import SuccessPresaleModal from "@/components/presale/modals/SuccessPresaleModal.vue";
+import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
+import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
 const moment = require('moment'); // import moment.js
 
 const USER_PRESALE_STATE_MAP = {
@@ -443,9 +540,13 @@ const USER_PRESALE_STATE_MAP = {
 
 export default {
     name: "BodyComponent",
-    components: {PresaleBuyForm, TokenOvnInfo, Timer},
+    components: {ErrorModal, WaitingModal, SuccessPresaleModal, PresaleBuyForm, TokenOvnInfo, Timer},
     data() {
         return {
+            isShowSuccessModal: false,
+            successData: null,
+
+
             presaleTimestamp: 0,
             presaleEndTimestamp: 0,
             vestingTimestamp: 0,
@@ -464,6 +565,12 @@ export default {
             accountOverflowFunds: 0,
 
             nftStatus: false,
+            nftLoading: true,
+
+            nftGalxeAddress: "0x512cc325bae1dd4590f6d67733aaf8e6a0526eab",
+            nftPartnerAddress: "0xe750a85e77bb505d5465f8045f25b27a3437b5f1",
+            galxeNftsIds: [],
+            partnerNftsIds: [],
 
             ovnTokenAddress: "0x2a40Eab5dC171924937F242c5D73E1cd5A19e160",
 
@@ -471,11 +578,19 @@ export default {
             ovnWhitelistContract: null,
             ovnICOContract: null,
 
-            currentStep: null
+            currentStep: null,
+            currentStepType: null,
+            ovnWeiType: 'ether',
+            usdPlusWeiType: 'mwei',
+
+            turnOfStatusControls: false,
+            devSteps: 0, // if 10 => turn of controls
         }
     },
     mounted() {
         // this.initUserData();
+
+        this.loadNft();
     },
 
     watch: {
@@ -483,6 +598,7 @@ export default {
         account: function (newVal, oldVal) {
             console.log("Account changed", newVal, oldVal)
             if (newVal) {
+                this.loadNft();
                 this.initAccountData();
             }
         },
@@ -490,17 +606,17 @@ export default {
     },
 
     computed: {
-        ...mapGetters('network', ['networkName']),
+        ...mapGetters('network', ['networkName', 'networkId']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters("web3", ["web3"]),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
 
         presaleStartDate() {
-            return moment(this.presaleTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
+            return moment(this.presaleTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
         },
         presaleEndDate() {
-            return moment(this.presaleEndTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
+            return moment(this.presaleEndTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
         },
         differentdDysBeetwinStartAndEndPresale() {
             return moment(this.presaleEndTimestamp).diff(moment(this.presaleTimestamp), 'days') + 1;
@@ -586,6 +702,32 @@ export default {
         },
     },
     methods: {
+        ...mapActions("gasPrice", ['refreshGasPrice']),
+
+        ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
+        ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
+
+
+
+        showSuccessModal(isShow, hash, text, type) {
+            this.isShowSuccessModal = isShow;
+
+            this.successData = {
+                chain: this.networkId,
+                hash: hash,
+                text: text,
+                type: type
+            }
+
+            this.isShowSuccessModal = isShow;
+
+            console.log("Show success modal", isShow, hash, text);
+
+            if (!isShow) {
+                this.successData = null;
+            }
+        },
+
         loadDataFromContract() {
             console.log("Load data from contract")
             this.loadIcoData();
@@ -594,14 +736,14 @@ export default {
             console.log("Load ICO data")
             this.ovnICOContract.methods.hardCap().call().then((result) => {
                 console.log("Hard cap result", result)
-                let fromWei = this.web3.utils.fromWei(result.toString(), 'mwei'); // mwei - 6, gwei - 9, ether - 18
+                let fromWei = this.web3.utils.fromWei(result.toString(), this.usdPlusWeiType); // mwei - 6, gwei - 9, ether - 18
                 this.hardCap = fromWei * 1;
                 console.log("Hard cap", this.hardCap, fromWei)
             });
 
             this.ovnICOContract.methods.softCap().call().then((result) => {
                 console.log("Soft cap result", result)
-                let fromWei = this.web3.utils.fromWei(result.toString(), 'mwei'); // mwei - 6, gwei - 9, ether - 18
+                let fromWei = this.web3.utils.fromWei(result.toString(), this.usdPlusWeiType); // mwei - 6, gwei - 9, ether - 18
                 this.softCap = fromWei * 1;
                 console.log("Soft cap", this.softCap, fromWei)
             });
@@ -609,7 +751,7 @@ export default {
 
             this.ovnICOContract.methods.totalSales().call().then((result) => {
                 console.log("Overflow farming pool result", result)
-                let fromWei = this.web3.utils.fromWei(result.toString(), 'ether'); // mwei - 6, gwei - 9, ether - 18
+                let fromWei = this.web3.utils.fromWei(result.toString(), this.ovnWeiType); // mwei - 6, gwei - 9, ether - 18
                 this.overflowFarmingPool = fromWei * 1;
                 console.log("Overflow farming pool", this.overflowFarmingPool, fromWei)
             });
@@ -637,14 +779,11 @@ export default {
                 console.log("Vesting begin", this.vestingTimestamp)
             });
 
-            // current step
-            this.ovnICOContract.methods.getUserState(this.account).call().then((result) => {
-                console.log("Current step result", result)
-                this.currentStep = USER_PRESALE_STATE_MAP[result];
-                console.log("Current step", this.currentStep)
-            });
+            // user step
+            this.updateCurrentUserStep();
 
-
+            // getUserInfo
+           this.updateUserInfo();
         },
 
         async initAccountData() {
@@ -680,19 +819,302 @@ export default {
             return new web3.eth.Contract(file.abi, address);
 
         },
-        // buyAndFarm() {
-        //     console.log("buy and farm");
-        // },
-        claimOvn() {
-            console.log("claim ovn")
+        async claimVesting() {
+            if (this.currentStepType !== 'CLAIM_VESTING') {
+                console.log("Not claim vesting step");
+                return;
+            }
+
+            this.showWaitingModal('Claim Vesting in process');
+
+            try {
+                let buyParams;
+                await this.refreshGasPrice();
+                if (this.gas == null) {
+                    buyParams = {from: this.account, gasPrice: this.gasPriceGwei};
+                } else {
+                    buyParams = {from: this.account, gasPrice: this.gasPriceGwei, gas: this.gas};
+                }
+
+                // claimVesting
+                await this.ovnICOContract.methods.claimVesting(this.account).send({
+                    ...buyParams
+                }).on('transactionHash', (hash) => {
+                    console.log("Claim vesting result", hash)
+                    this.showSuccessModal(true, hash, "You successfully claimed $OVN token");
+                })
+
+                this.closeWaitingModal();
+            } catch (e) {
+                console.log("Claim vesting error", e)
+                this.closeWaitingModal();
+                this.showErrorModalWithMsg({errorType: 'claim-vesting', errorMsg: e.message});
+            } finally {
+                this.timeoutUpdateCurrentUserStep();
+            }
+            console.log("claim vesting");
+        },
+
+        async claimSalesPart1() {
+            if (this.currentStepType !== 'CLAIM_SALES_FIRST_PART') {
+                console.log("Not claim sales step");
+                return;
+            }
+
+            this.showWaitingModal('Claim Sales First Part in process');
+
+            try {
+
+                let buyParams;
+                await this.refreshGasPrice();
+                if (this.gas == null) {
+                    buyParams = {from: this.account, gasPrice: this.gasPriceGwei};
+                } else {
+                    buyParams = {from: this.account, gasPrice: this.gasPriceGwei, gas: this.gas};
+                }
+
+                // claimSalesPart1
+                await this.ovnICOContract.methods.claimSalesFirstPart().send({
+                    ...buyParams
+                }).on('transactionHash', (hash) => {
+                    console.log("Claim sales part 1 result", hash)
+                    this.closeWaitingModal();
+                    this.showSuccessModal(true, hash, "You successfully claimed $OVN token");
+                })
+
+                this.closeWaitingModal();
+            } catch (e) {
+                console.log("Claim sales part 1 error", e)
+                this.closeWaitingModal();
+                this.showErrorModalWithMsg({errorType: 'claim-sales-first-part', errorMsg: e.message});
+            } finally {
+                this.timeoutUpdateCurrentUserStep();
+            }
+            console.log("claim sales part 1");
+        },
+
+        async claimBonus() {
+            if (this.currentStepType !== 'CLAIM_BONUS') {
+                console.log("Not claim bonus step");
+                return;
+            }
+
+            this.showWaitingModal('Claim Bonus in process');
+
+            try {
+                let buyParams;
+                await this.refreshGasPrice();
+                if (this.gas == null) {
+                    buyParams = {from: this.account, gasPrice: this.gasPriceGwei};
+                } else {
+                    buyParams = {from: this.account, gasPrice: this.gasPriceGwei, gas: this.gas};
+                }
+
+            // claimBonus
+                await this.ovnICOContract.methods.claimBonus().send({
+                    ...buyParams
+                }).on('transactionHash', (hash) => {
+                    console.log("Claim bonus result", hash)
+                    this.closeWaitingModal();
+                    this.showSuccessModal(true, hash, "You successfully claimed $OVN token");
+                    this.timeoutUpdateCurrentUserStep();
+                })
+
+                this.closeWaitingModal();
+            } catch (e) {
+                console.log("Claim bonus error", e)
+                this.closeWaitingModal();
+                this.showErrorModalWithMsg({errorType: 'claim-bonus', errorMsg: e.message});
+            } finally {
+                this.timeoutUpdateCurrentUserStep();
+            }
+
+            console.log("claim bonus");
+        },
+
+        async claimRefund() {
+            if (this.currentStepType !== 'CLAIM_REFUND') {
+                console.log("Not claim refund step");
+                return;
+            }
+
+            this.showWaitingModal('Claim Bonus in process');
+            try {
+                let buyParams;
+                await this.refreshGasPrice();
+                if (this.gas == null) {
+                    buyParams = {from: this.account, gasPrice: this.gasPriceGwei};
+                } else {
+                    buyParams = {from: this.account, gasPrice: this.gasPriceGwei, gas: this.gas};
+                }
+
+                // claimRefund
+                console.log("Claim refund", buyParams)
+                await this.ovnICOContract.methods.claimRefund().send({
+                    ...buyParams
+                }).on('transactionHash', (hash) => {
+                    console.log("Claim refund result", hash)
+                    this.closeWaitingModal();
+                    this.showSuccessModal(true, hash, "You successfully get your funds back", 'usd+');
+                })
+
+                this.closeWaitingModal();
+            } catch (e) {
+                console.log("Claim refund error", e)
+                this.closeWaitingModal();
+                this.showErrorModalWithMsg({errorType: 'claim-refund', errorMsg: e.message});
+            } finally {
+                this.timeoutUpdateCurrentUserStep();
+            }
+
+            console.log("claim refund");
         },
         claimFunds() {
             console.log("claim funds")
         },
-        checkNft() {
-            console.log("check nft")
-            this.nftStatus = false;
+        loadNft() {
+            if (!this.account) {
+                this.nftLoading = false;
+                return;
+            }
+
+            this.nftLoading = true;
+
+            axios.get(
+                'https://api.covalenthq.com/v1/base-mainnet/address/' + this.account + '/balances_v2/?nft=true',
+                {
+                    auth: {
+                        username: 'ckey_be6ae76a05f940e1aae6adc7540',
+                        password: ''
+                    }
+                }
+            ).then((result) => {
+                console.log("NFT result", result)
+
+                // filter by contract_address 0x512cc325bae1dd4590f6d67733aaf8e6a0526eab and 0xe750a85e77bb505d5465f8045f25b27a3437b5f1
+                if (!result || !result.data || !result.data.data || !result.data.data.items || !result.data.data.items.length) {
+                    this.nftStatus = false;
+                    this.nftLoading = false;
+                    return;
+                }
+
+                let galxeNfts = result.data.data.items.find((item) => {
+                    return item.contract_address === this.nftGalxeAddress;
+                });
+
+                if (galxeNfts) {
+                    this.galxeNftsIds = galxeNfts.nft_data.map((item) => {
+                        return item.token_id;
+                    })
+                }
+
+                // console.log()
+
+                let partnerNfts = result.data.data.items.find((item) => {
+                    return item.contract_address === this.nftPartnerAddress;
+                });
+
+                if (partnerNfts) {
+                    this.partnerNftsIds = partnerNfts.nft_data.map((item) => {
+                        return item.token_id;
+                    })
+                }
+
+                console.log("Nfts galxe: ", galxeNfts, this.galxeNftsIds);
+                console.log("Nfts partner: ", partnerNfts, this.partnerNftsIds);
+
+                this.nftStatus = this.galxeNftsIds.length || this.partnerNftsIds.length;
+                this.nftLoading = false;
+            }).catch(e => {
+                console.log("NFT LOADING error", e)
+                this.nftLoading = false;
+            })
         },
+        timeoutUpdateCurrentUserStep() {
+            setTimeout(() => {
+                this.updateCurrentUserStep();
+                this.updateUserInfo();
+            }, 2000)
+        },
+        updateCurrentUserStep() {
+            // current step
+            this.ovnICOContract.methods.getUserState(this.account).call().then((result) => {
+                console.log("Current step result", result)
+                this.currentStep = result;
+                this.currentStepType = USER_PRESALE_STATE_MAP[result];
+                console.log("Current step", this.currentStep, this.currentStepType)
+            });
+        },
+        updateUserInfo() {
+            this.ovnICOContract.methods.getUserInfo(this.account).call().then((result) => {
+                console.log("User info result", result)
+
+                let fromWei = this.web3.utils.fromWei(result.userCommitments.toString(), this.usdPlusWeiType);
+                this.accountTotalUsdPurchased = fromWei * 1;
+                console.log("Total usd purchased", this.accountTotalUsdPurchased, fromWei)
+
+                // salesToReceive
+                let salesToReceive = this.web3.utils.fromWei(result.salesToReceive.toString(), this.ovnWeiType);
+                this.accountTotalOvnPurchased = salesToReceive * 1;
+                console.log("Total ovn purchased", this.accountTotalOvnPurchased, salesToReceive)
+
+                //lockedSales
+                let lockedSales = this.web3.utils.fromWei(result.lockedSales.toString(), this.ovnWeiType);
+                this.accountVestingAmount = lockedSales * 1;
+                console.log("Vesting amount", this.accountVestingAmount, lockedSales)
+
+                // unlockedSales
+                let unlockedSales = this.web3.utils.fromWei(result.unlockedSales.toString(), this.ovnWeiType);
+                this.accountClaimableAmount = unlockedSales * 1;
+                console.log("Claimable amount", this.accountClaimableAmount, unlockedSales)
+
+                // commitToReceive
+                let commitToReceive = this.web3.utils.fromWei(result.commitToReceive.toString(), this.usdPlusWeiType);
+                this.accountFarmingBonus = commitToReceive * 1;
+                console.log("Farming bonus", this.accountFarmingBonus, commitToReceive)
+
+                // commitToRefund
+                let commitToRefund = this.web3.utils.fromWei(result.commitToRefund.toString(), this.usdPlusWeiType);
+                this.accountOverflowFunds = commitToRefund * 1;
+                console.log("Overflow funds", this.accountOverflowFunds, commitToRefund)
+            });
+        },
+
+        nextStep() {
+            if (this.currentStep === null) {
+                return;
+            }
+
+            if (this.currentStep >= 9) {
+                this.currentStep = 9;
+                return;
+            }
+
+            this.currentStep++
+            this.currentStepType = USER_PRESALE_STATE_MAP[this.currentStep];
+        },
+        prevStep() {
+            if (this.currentStep === null) {
+                return;
+            }
+
+            if (this.currentStep <= 0) {
+                this.currentStep = 0;
+                return;
+            }
+
+            this.currentStep--
+            this.currentStepType = USER_PRESALE_STATE_MAP[this.currentStep];
+        },
+        devStepsUpper() {
+            if (this.devSteps === 8) {
+                this.devSteps = 0;
+                this.turnOfStatusControls = true;
+            } else {
+                this.devSteps++;
+            }
+        }
+
     }
 }
 </script>
@@ -860,10 +1282,33 @@ export default {
     gap: 8px;
 
     height: 40px;
-    max-width: 150px;
+    max-width: 180px;
 
     /* Blue gradient */
-    //background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+    background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+    //background: linear-gradient(91.26deg, #989b9d 0%, rgba(120, 136, 146, 0.99) 100%);
+    border-radius: 2px;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.button-buy-disabled {
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 8px;
+    gap: 8px;
+
+    height: 40px;
+    max-width: 215px;
+
+    /* Blue gradient */
+//background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
     background: linear-gradient(91.26deg, #989b9d 0%, rgba(120, 136, 146, 0.99) 100%);
     border-radius: 2px;
 

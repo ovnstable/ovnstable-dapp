@@ -1,8 +1,11 @@
 <template>
     <div>
         <div class="timer-container">
-            <div class="timer-title">
+            <div v-if="!endOfTime" class="timer-title">
                 {{ title }}
+            </div>
+            <div v-else class="timer-title">
+                {{ endOfMessage }}
             </div>
 
             <div class="timer-info">
@@ -19,6 +22,7 @@ export default {
     props: [
         'timestamp',
         "title",
+        'endOfMessage'
     ],
     data() {
         return {
@@ -31,6 +35,11 @@ export default {
     },
     mounted() {
        this.initCountdown();
+    },
+    computed: {
+        endOfTime() {
+            return this.days === 0 && this.hours === 0 && this.minutes === 0 && this.seconds === 0;
+        }
     },
     methods: {
         initCountdown() {

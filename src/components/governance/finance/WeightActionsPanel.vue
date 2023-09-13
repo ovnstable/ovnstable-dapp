@@ -10,14 +10,14 @@
             <v-row class="ma-0 mt-4">
                 <v-btn @click="rebalanceAction"
                        outlined
-                       :disabled="financeLoading || !hasChangeAccount">
+                       :disabled="financeLoading ">
                     Rebalance
                 </v-btn>
             </v-row>
             <v-row class="ma-0 mt-4">
                 <v-btn @click="changeWeightsAction"
                        outlined
-                       :disabled="!hasChangeAccount || financeLoading || !weightsIsBtnEnabled || !weightsIsBtnEnabledMinMax || !weightsIsBtnEnabledTargetWeight">
+                       :disabled=" financeLoading || !weightsIsBtnEnabled || !weightsIsBtnEnabledMinMax || !weightsIsBtnEnabledTargetWeight">
                     Change Weights
                 </v-btn>
             </v-row>

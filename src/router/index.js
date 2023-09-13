@@ -25,6 +25,7 @@ import Dashboard from "./midleware/dapp/Dashboard";
 import Pools from "./midleware/dapp/Pools";
 import Swap from "./midleware/dapp/Swap";
 import Swipe from "./midleware/dapp/Swipe";
+import Presasle from "./midleware/dapp/Presasle";
 import EtsAbout from "./midleware/dapp/EtsAbout"
 
 Vue.use(VueRouter)
@@ -108,6 +109,16 @@ const routes = [
                 meta: {
                     middleware: [
                         Swipe
+                    ]
+                }
+            },
+            {
+                path: '/presale',
+                name: 'PresaleView',
+                component: () => import('../views/presale/PresaleView.vue'),
+                meta: {
+                    middleware: [
+                        Presasle
                     ]
                 }
             },

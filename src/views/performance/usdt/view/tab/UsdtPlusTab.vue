@@ -350,7 +350,7 @@ export default {
                     link: null
                 }
 
-                if (element.type === 'CORE') {
+                if (element.type === 'CORE' || element.type === 'SMM') {
                     currentTotalDataElement.label = element.name
                     currentTotalDataElement.link = (element.address || element.explorerAddress) ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + (element.explorerAddress ? element.explorerAddress : element.address)) : ''
                 }

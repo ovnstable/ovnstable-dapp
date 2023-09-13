@@ -7,6 +7,12 @@
                 <img v-if="!$wu.isFull()" class="ml-n3 logo-img" :src="require('@/assets/logo.svg')"  @click="openLinkToLanding('https://overnight.fi/')">
             </div>
 
+            <div>
+                <v-btn class="header-btn-presale btn-filled mr-2 mt-1" @click="goToPresale">
+                    PRESALE
+                </v-btn>
+            </div>
+
             <v-spacer></v-spacer>
 
             <template v-if="!loadingWeb3">
@@ -126,6 +132,10 @@ export default {
         openLinkToLanding(url) {
             window.open(url, '_self').focus();
         },
+
+        goToPresale() {
+            window.open('/presale', '_self').focus();
+        }
     }
 }
 </script>
@@ -150,6 +160,18 @@ export default {
         font-weight: 400 !important;
         font-size: 14px !important;
         line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .header-btn-presale {
+        width: 90px !important;
+        height: 25px !important;
+        margin-left: 3px;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 12px !important;
+        line-height: 25px !important;
         letter-spacing: 0.02em !important;
     }
 
@@ -187,6 +209,17 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
+    .header-btn-presale {
+        width: 170px !important;
+        height: 39px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 25px !important;
+        letter-spacing: 0.02em !important;
+    }
+
     .app-bar {
         height: 72px !important;
     }
@@ -221,6 +254,18 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
+    .header-btn-presale {
+        width: 178px !important;
+        height: 42px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 18px !important;
+        line-height: 25px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+
     .app-bar {
         height: 72px !important;
     }
@@ -250,6 +295,18 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-weight: 400 !important;
         font-size: 15px !important;
         line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+
+    .header-btn-presale {
+        width: 160px !important;
+        height: 42px !important;
+
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 25px !important;
         letter-spacing: 0.02em !important;
     }
 

@@ -385,6 +385,11 @@ export default defineComponent({
                 return
             }
 
+            if (this.successData.pool.platform === 'Curve') {
+                window.open(`https://curve.fi/#/base/pools/factory-v2-2/deposit`, '_blank').focus();
+                return
+            }
+
             console.error("Open Position failed, dex not found.", this.successData.pool.platform)
         },
         openOnExplorer() {

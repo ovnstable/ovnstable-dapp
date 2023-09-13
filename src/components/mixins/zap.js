@@ -80,6 +80,12 @@ export const zap = {
                     network: 'base',
                     typeOfDepositConstructor: 'CONSTRUCTOR_STAKE_METHOD_AND_TOKEN_AMOUNT'
                 },
+                'Curve': {
+                    name: 'Curve',
+                    type: 'LP_WITH_STAKE_IN_ONE_STEP',
+                    network: 'base',
+                    typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
+                },
             },
             zapContract: null,
             poolTokenContract: null,
@@ -296,6 +302,13 @@ export const zap = {
 
                 '0x164bc404c64fa426882d98dbce9b10d5df656eed': { // usd+/dai+
                     gauge: '0xF4272b27C1AfE449FBdbe83C1C3D1EbC7351fA2d',
+                    poolId: 0,
+                    approveType: 'TOKEN'
+                },
+
+                // Curve
+                '0xda3de145054ED30Ee937865D31B500505C4bDfe7': { // usd+/crvUSD
+                    gauge: '0xc0798d022eEE81F1408895325A9fBe171d2a24f1',
                     poolId: 0,
                     approveType: 'TOKEN'
                 },

@@ -30,7 +30,8 @@ export const pool = {
                 // 'Baseswap',
                 'Velocimeter',
                 'Alienbase',
-                'Swapbased'
+                'Swapbased',
+                'Curve',
             ],
             poolTokensForZapMap: {
                 // Chronos
@@ -204,6 +205,12 @@ export const pool = {
                 '0x8E9154AC849e839d60299E85156bcb589De2693A': [
                     {name: 'DOLA', address: '0x4621b7a9c75199271f773ebd9a499dbd165c3191'},
                     {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
+                ],
+
+                // Curve
+                '0xda3de145054ED30Ee937865D31B500505C4bDfe7': [
+                    {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
+                    {name: 'crvUSD', address: '0x417Ac0e078398C154EdFadD9Ef675d30Be60Af93'},
                 ],
             }
         }

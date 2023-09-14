@@ -83,36 +83,35 @@
                                 <div class="info-text">
                                     Formed with rebase of committed USD+
                                 </div>
-
-<!--                                <div class="info-text-blue">
-                                    {{ formattedFarmingBonus }} USD+
-                                </div>-->
                             </div>
 
                             <div class="step-container-separator"></div>
 
                             <div class="info-group">
-                                <div class="row">
-                                    <div class="col-6 col-lg-6 col-md-6 col-sm-6">
-                                        <div class="link-container">
-                                            <a href="https://overnight.fi/blog/2023/09/11/ovn-token-sale/" target="_blank">
-                                                <label class="link-title ml-auto">Article</label>
-                                                <div class="link-image">
-                                                    <img src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
-                                                </div>
-                                            </a>
-                                        </div>
+                                <div class="pt-5">
+                                    <div class="link-container">
+                                        <a href="https://overnight.fi/blog/2023/09/11/ovn-token-sale/" target="_blank">
+                                            <label class="link-title ml-auto">
+                                                OVN token sale
+                                            </label>
+                                            <div class="link-image">
+                                                <img src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
+                                            </div>
+                                        </a>
                                     </div>
-<!--                                    <div class="col-6 col-lg-6 col-md-6 col-sm-6">
-                                        <div class="link-container">
-                                            <a href="/">
-                                                <label class="link-title ml-auto">Docs</label>
-                                                <div class="link-image">
-                                                    <img  src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>-->
+                                </div>
+
+                                <div class="pt-5">
+                                    <div class="link-container">
+                                        <a href="https://overnight.fi/blog/2023/09/12/overnight-tokenomics/" target="_blank">
+                                            <label class="link-title ml-auto">
+                                                 Overnight Tokenomics
+                                            </label>
+                                            <div class="link-image" style="left: 160px;">
+                                                <img src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -179,14 +178,22 @@
                                         As part of the Galxe campaign, please complete the following tasks:
                                     </div>
 
-                                    <div>
-                                        1. Reach 100 XP (level 2) in <a href="https://zealy.io/c/overnight-fi/questboard" target="_blank">our Zealy</a>
-                                    </div>
-                                    <div>
-                                        2. Claim Presale participant role in <a href="https://discord.com/invite/overnight-fi" target="_blank">our Discord</a>
-                                    </div>
-                                    <div>
-                                        3. Mint NFT on Galxe
+                                    <div class="info-group">
+                                        <div>
+                                            1. Follow Overnight on Twitter
+                                        </div>
+                                        <div>
+                                            2. Like/retweet our tweet about Presale
+                                        </div>
+                                        <div>
+                                            3. Join our Discord
+                                        </div>
+                                        <div>
+                                            4. Check USD+ in your wallet on any chain (USD+ is needed to buy $OVN token)
+                                        </div>
+                                        <div>
+                                            5. Mint NFT on Galxe
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -573,7 +580,7 @@ export default {
     padding: 28px;
     gap: 20px;
 
-    min-height: 955px;
+    min-height: 1130px;
 
     background: #FFFFFF;
     box-shadow: 0px 10px 20px rgba(9, 55, 98, 0.25);
@@ -704,7 +711,7 @@ export default {
 
 .link-image {
     position: absolute;
-    left: 50px;
+    left: 115px;
     top: 2px;
 }
 

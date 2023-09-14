@@ -53,6 +53,22 @@
 
                 </v-list-item-title>
             </v-list-item>
+
+            <v-list-item
+                id="click_menu_bridge_mobile"
+                @click="bridgeClick()" :class="selectedTab === 'bridge' ? 'selected-page-item' : ''">
+                <div class="navbar-page-link mt-1">
+                    <svg width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#ADB3BD" d="M0 0V14H12.04C11.7921 13.2471 11.6661 12.4594 11.6667 11.6667H4.66667C4.66667 11.0478 4.42083 10.4543 3.98325 10.0168C3.54566 9.57917 2.95217 9.33333 2.33333 9.33333V4.66667C3.62833 4.66667 4.66667 3.62833 4.66667 2.33333H16.3333C16.3333 2.95217 16.5792 3.54566 17.0168 3.98325C17.4543 4.42083 18.0478 4.66667 18.6667 4.66667V4.73667C19.4483 4.73667 20.23 4.87667 21 5.13333V0H0ZM10.5 3.5C8.51667 3.535 7 5.01667 7 7C7 8.98333 8.51667 10.43 10.5 10.5C10.9433 10.5 11.3983 10.4067 11.83 10.2317C12.145 8.94833 12.67 7.735 13.965 6.545C13.825 4.99333 12.355 3.465 10.5 3.5ZM21.735 7.315L17.22 11.865L15.645 10.2667L14 11.9233L17.2083 15.1667L23.3683 8.96L21.735 7.315Z"/>
+                    </svg>
+                </div>
+                <v-list-item-title class="mx-3">
+                    <label :class="selectedTab === 'bridge' ? 'selected-page' : ''"
+                           class="navbar-page-label">
+                        BRIDGE
+                    </label>
+                </v-list-item-title>
+            </v-list-item>
         </v-list>
         <v-list class="main-container">
             <div class="navbar-list-divider mt-1 mb-1"></div>
@@ -444,6 +460,18 @@ export default {
             }
 
           this.checkIsNotified(true);
+        },
+        bridgeClick() {
+            this.selectTab('bridge');
+            this.goToActionByPath('/bridge', { tabName: 'bridge' });
+
+            try {
+                this.trackClick({action: 'click_menu_bridge_mobile', event_category: 'Click button', event_label: 'Click bridge mobile menu button' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
+
+            this.checkIsNotified(true);
         },
 
         dashBoardClick() {

@@ -1,11 +1,8 @@
 <template>
     <div>
         <div class="timer-container">
-            <div v-if="!endOfTime" class="timer-title">
+            <div class="timer-title">
                 {{ title }}
-            </div>
-            <div v-else class="timer-title">
-                {{ endOfMessage }}
             </div>
 
             <div class="timer-info">
@@ -22,7 +19,7 @@ export default {
     props: [
         'timestamp',
         "title",
-        'endOfMessage'
+        'updateStatus'
     ],
     data() {
         return {
@@ -31,6 +28,7 @@ export default {
             hours: 0,
             minutes: 0,
             seconds: 0,
+            isStatusUpdated: false
         }
     },
     mounted() {
@@ -63,10 +61,16 @@ export default {
 
                 if (distance < 0) {
                     clearInterval(this.timer);
-                    this.days = 0;
-                    this.hours = 0;
-                    this.minutes = 0;
-                    this.seconds = 0;
+                    this.days = "00";
+                    this.hours = "00";
+                    this.minutes = "00";
+                    this.seconds = "00";
+
+                    if (!this.isStatusUpdated && this.updateStatus) {
+                        this.updateStatus();
+                    }
+
+                    this.isStatusUpdated = true;
                 }
             }, 1000);
         },

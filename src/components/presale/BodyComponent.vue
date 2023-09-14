@@ -80,36 +80,38 @@
                                 <div class="info-sub-title">
                                     Farming bonus
                                 </div>
-                                <div class="info-text-blue">
-                                    {{ formattedFarmingBonus }} USD+
+                                <div class="info-text">
+                                    Formed with rebase of committed USD+
                                 </div>
-
                             </div>
 
                             <div class="step-container-separator"></div>
 
                             <div class="info-group">
-                                <div class="row">
-                                    <div class="col-6 col-lg-6 col-md-6 col-sm-6">
-                                        <div class="link-container">
-                                            <a href="https://overnight.fi/blog/2023/09/11/ovn-token-sale/" target="_blank">
-                                                <label class="link-title ml-auto">Article</label>
-                                                <div class="link-image">
-                                                    <img src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
-                                                </div>
-                                            </a>
-                                        </div>
+                                <div class="pt-5">
+                                    <div class="link-container">
+                                        <a href="https://overnight.fi/blog/2023/09/11/ovn-token-sale/" target="_blank">
+                                            <label class="link-title ml-auto">
+                                                OVN token sale
+                                            </label>
+                                            <div class="link-image">
+                                                <img src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
+                                            </div>
+                                        </a>
                                     </div>
-<!--                                    <div class="col-6 col-lg-6 col-md-6 col-sm-6">
-                                        <div class="link-container">
-                                            <a href="/">
-                                                <label class="link-title ml-auto">Docs</label>
-                                                <div class="link-image">
-                                                    <img  src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>-->
+                                </div>
+
+                                <div class="pt-5">
+                                    <div class="link-container">
+                                        <a href="https://overnight.fi/blog/2023/09/12/overnight-tokenomics/" target="_blank">
+                                            <label class="link-title ml-auto">
+                                                 Overnight Tokenomics
+                                            </label>
+                                            <div class="link-image" style="left: 160px;">
+                                                <img src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -193,14 +195,22 @@
                                         As part of the Galxe campaign, please complete the following tasks:
                                     </div>
 
-                                    <div>
-                                        1. Reach 100 XP (level 2) in <a href="https://zealy.io/c/overnight-fi/questboard" target="_blank">our Zealy</a>
-                                    </div>
-                                    <div>
-                                        2. Claim Presale participant role in <a href="https://discord.com/invite/overnight-fi" target="_blank">our Discord</a>
-                                    </div>
-                                    <div>
-                                        3. Mint NFT on Galxe
+                                    <div class="info-group">
+                                        <div>
+                                            1. Follow Overnight on Twitter
+                                        </div>
+                                        <div>
+                                            2. Like/retweet our tweet about Presale
+                                        </div>
+                                        <div>
+                                            3. Join <a href="https://discord.com/invite/overnight-fi" target="_blank">our Discord</a>
+                                        </div>
+                                        <div>
+                                            4. Check USD+ in your wallet on any chain (USD+ is needed to buy $OVN token)
+                                        </div>
+                                        <div>
+                                            5. Mint NFT on Galxe
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -241,44 +251,90 @@
                                 </div>
                             </div>
 
-                            <div class="step-container-separator"></div>
+                            <div v-if="currentStepType" class="step-container-separator"></div>
                         </div>
 
-                        <div v-if="currentStepType === 'COMMIT'" class="timer-container-center">
-                            <div v-if="presaleTimestamp" class="info-group">
-                                <Timer :timestamp="presaleTimestamp" title="Presale starts in" end-of-message="Presale in process"/>
+                        <div v-if="!isFirstLoading">
+                            <div v-if="currentStepType === 'WAITING_FOR_PRESALE_START'" class="timer-container-center">
+                                <div class="info-group">
+                                    <Timer
+                                        v-if="presaleTimestamp"
+                                        :timestamp="presaleTimestamp"
+                                        title="Presale starts in"
+                                        :updateStatus="updateStatus"
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div v-else class="timer-container-center">
-                            <div v-if="presaleEndTimestamp" class="info-group">
-                                <Timer :timestamp="presaleEndTimestamp" title="Presale in process" end-of-message="Presale"/>
+                            <div v-else-if="currentStepType === 'COMMIT'" class="timer-container-center">
+                                <div class="info-group">
+                                    <Timer
+                                        v-if="presaleEndTimestamp"
+                                        :timestamp="presaleEndTimestamp"
+                                        title="Presale in process"
+                                        :updateStatus="updateStatus"
+                                    />
+                                </div>
+                            </div>
+                            <div v-else class="timer-container-center">
+                                <div class="info-group">
+                                    <div class="presale-status">
+                                        Presale Ended
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div  v-if="presaleTimestamp" class="info-group">
+
+                        <div v-if="!isFirstLoading">
+                            <div  v-if="presaleTimestamp">
+                                <div class="info-sub-title">
+                                    Start Sale
+                                </div>
+                                <div class="info-text">
+                                    {{ presaleStartDate }}
+                                </div>
+                            </div>
+
+                            <div v-if="presaleEndTimestamp">
+                                <div class="info-sub-title">
+                                    End of Sale
+                                </div>
+                                <div class="info-text">
+                                    {{ presaleEndDate }}
+                                </div>
+                            </div>
+
+                            <div v-if="presaleTimestamp && presaleEndTimestamp">
+                                <div class="info-sub-title">
+                                    Duration
+                                </div>
+                                <div class="info-text">
+                                    {{ differentdDysBeetwinStartAndEndPresale }} days
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
                             <div class="info-sub-title">
-                                Start Sale
+                                Funds in Presale contract
                             </div>
                             <div class="info-text">
-                                {{ presaleStartDate }}
+                                {{ formattedFundsInPresale }} USD+
+
+                                <span class="funds-in-hard-cap-percent">
+                                    {{formattedDifferentHowManyPercentFundInPresaleByHardCap}}%
+
+                                    <img src="/assets/icon/presale/funds-percent.svg" class="funds-percent-image">
+                                </span>
                             </div>
                         </div>
 
-                        <div v-if="presaleEndTimestamp" class="info-group">
+                        <div>
                             <div class="info-sub-title">
-                                End of Sale
+                                Farming bonus
                             </div>
                             <div class="info-text">
-                                {{ presaleEndDate }}
-                            </div>
-                        </div>
-
-                        <div v-if="presaleTimestamp && presaleEndTimestamp" class="info-group">
-                            <div class="info-sub-title">
-                                Duration
-                            </div>
-                            <div class="info-text">
-                                {{ differentdDysBeetwinStartAndEndPresale }} days
+                                {{ formattedFarmingBonus }} USD+
                             </div>
                         </div>
 
@@ -320,12 +376,14 @@
                                         </div>
                                     </div>
                                     <div class="col-6 col-lg-6 col-md-6 col-sm-6">
-                                        <div class="info-text contract-link">
-                                            0x9ff...x9ob
-                                            <div class="contract-info-label">
-                                                <img src="/assets/icon/presale/link.svg" height="16px" alt="Base">
-                                            </div>
-                                        </div>
+                                       <a :href="'https://basescan.org/address/' + presaleContractAddress" target="_blank">
+                                           <div class="info-text contract-link">
+                                               {{ formattedPresaleContractAddress }}
+                                               <div class="contract-info-label">
+                                                   <img src="/assets/icon/presale/link.svg" height="16px" alt="Base">
+                                               </div>
+                                           </div>
+                                       </a>
                                     </div>
                                 </div>
                             </div>
@@ -344,7 +402,7 @@
                     <div class="step-container">
                         <div class="step-title">
                             <div class="step-title-container" @click="devStepsUpper">
-                                Claim
+                                {{ formattedClaimTitle }}
                                 <div class="title-logo">
                                     <img src="/assets/icon/presale/title-claim.svg" alt="claim">
                                 </div>
@@ -373,9 +431,37 @@
                             <div class="step-container-separator"></div>
                         </div>
 
-                        <div class="timer-container-center">
-                            <div v-if="vestingTimestamp" class="info-group">
-                                <Timer :timestamp="vestingTimestamp" title="Vesting starts in" end-of-message="Vesting"/>
+                        <!--          CLAIM_VESTING              -->
+                        <div v-if="!isFirstLoading">
+                            <div v-if="currentStep < 8"
+                                 class="timer-container-center">
+                                <div class="info-group">
+                                    <Timer
+                                        v-if="vestingTimestamp"
+                                        :timestamp="vestingTimestamp"
+                                        title="Vesting starts in"
+                                        :updateStatus="updateStatus"
+                                    />
+                                </div>
+                            </div>
+                            <div v-else-if="currentStepType === 'CLAIM_VESTING'" class="timer-container-center">
+                                <div v-if="presaleEndTimestamp" class="info-group">
+                                    <div class="presale-status">
+                                        <Timer
+                                            v-if="vestingEndTimestamp"
+                                            :timestamp="vestingEndTimestamp"
+                                            title="Vesting in process"
+                                            :updateStatus="updateStatus"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else class="timer-container-center">
+                                <div class="info-group">
+                                    <div class="presale-status">
+                                        Claim Ended
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -436,7 +522,7 @@
                                 Farming bonus
                             </div>
                             <div class="info-text-blue">
-                                {{ formattedAccountFarmingBonus }} OVN
+                                {{ formattedAccountFarmingBonus }} USD+
                             </div>
 
                             <div class="info-group">
@@ -489,7 +575,7 @@
                                 Overflow funds
                             </div>
                             <div class="info-text-black">
-                                {{ formattedAccountOverflowFunds }} OVN
+                                {{ formattedAccountOverflowFunds }} USD+
                             </div>
                         </div>
 <!--
@@ -543,6 +629,8 @@ export default {
     components: {ErrorModal, WaitingModal, SuccessPresaleModal, PresaleBuyForm, TokenOvnInfo, Timer},
     data() {
         return {
+            isFirstLoading: true,
+
             isShowSuccessModal: false,
             successData: null,
 
@@ -550,8 +638,10 @@ export default {
             presaleTimestamp: 0,
             presaleEndTimestamp: 0,
             vestingTimestamp: 0,
+            vestingDurationTimestamp: 0,
 
             overflowFarmingPool: 0,
+            fundsInPresale: 0,
             farmingBonus: 0,
             softCap: 0,
             hardCap: 0,
@@ -573,6 +663,7 @@ export default {
             partnerNftsIds: [],
 
             ovnTokenAddress: "0x2a40Eab5dC171924937F242c5D73E1cd5A19e160",
+            presaleContractAddress: null,
 
             ovnTokenContract: null,
             ovnWhitelistContract: null,
@@ -611,6 +702,53 @@ export default {
         ...mapGetters("web3", ["web3"]),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
+        formattedPresaleContractAddress() {
+            if (!this.presaleContractAddress) {
+                return 'XXXX...XXXX';
+            }
+
+            return this.presaleContractAddress.substring(0, 5) + '...' + this.presaleContractAddress.substring(this.presaleContractAddress.length - 4);
+        },
+
+        formattedClaimTitle() {
+            if (this.currentStepType === null || this.currentStep === null) {
+                return "Claim";
+            }
+
+            if (this.currentStepType === 'CLAIM_REFUND') {
+                return 'Claim Refund';
+            }
+
+            if (this.currentStepType === 'WAITING_FOR_CLAIM_BONUS') {
+                return 'Waiting bonus';
+            }
+
+            if (this.currentStepType === 'CLAIM_BONUS') {
+                return 'Claim bonus';
+            }
+
+            if (this.currentStepType === 'WAITING_FOR_CLAIM_SALES_FIRST_PART') {
+                return 'Waiting sales';
+            }
+
+            if (this.currentStepType === 'CLAIM_SALES_FIRST_PART') {
+                return 'Claim sales';
+            }
+
+            if (this.currentStepType === 'WAITING_FOR_CLAIM_VESTING') {
+                return 'Waiting vesting';
+            }
+
+            if (this.currentStepType === 'CLAIM_VESTING') {
+                return 'Claim vesting';
+            }
+
+            if (this.currentStepType === 'CLAIM_VESTING') {
+                return 'Claim ended';
+            }
+
+            return "Claim";
+        },
 
         presaleStartDate() {
             return moment(this.presaleTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
@@ -622,8 +760,20 @@ export default {
             return moment(this.presaleEndTimestamp).diff(moment(this.presaleTimestamp), 'days') + 1;
         },
         vestingStartDate() {
-            return moment(this.vestingTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
+            return moment(this.vestingTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
         },
+
+        vestingEndTimestamp() {
+            if (!this.vestingTimestamp || !this.vestingDurationTimestamp) {
+                return 0;
+            }
+
+            return this.vestingTimestamp + (this.vestingDurationTimestamp);
+        },
+
+        // vestingEndDate() {
+        //     return moment(this.vestingDurationTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
+        // },
         formattedSoftCap() {
             if (!this.softCap) {
                 return "000,000";
@@ -651,6 +801,22 @@ export default {
             }
 
             return this.farmingBonus.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+        formattedFundsInPresale() {
+            if (!this.fundsInPresale) {
+                return "000,000";
+            }
+
+            return this.fundsInPresale.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+
+        formattedDifferentHowManyPercentFundInPresaleByHardCap() {
+            if (!this.fundsInPresale || !this.hardCap) {
+                return "0";
+            }
+
+            let percentage = (this.fundsInPresale / this.hardCap) * 100;
+            return Math.round(percentage);
         },
 
         formattedAccountTotalUsdPurchased() {
@@ -734,6 +900,10 @@ export default {
         },
         loadIcoData() {
             console.log("Load ICO data")
+
+            this.presaleContractAddress = this.ovnICOContract.options.address
+            console.log('presaleContractAddress: ', this.presaleContractAddress);
+
             this.ovnICOContract.methods.hardCap().call().then((result) => {
                 console.log("Hard cap result", result)
                 let fromWei = this.web3.utils.fromWei(result.toString(), this.usdPlusWeiType); // mwei - 6, gwei - 9, ether - 18
@@ -777,6 +947,30 @@ export default {
                 console.log("Vesting begin result", result)
                 this.vestingTimestamp = result * 1000;
                 console.log("Vesting begin", this.vestingTimestamp)
+            });
+
+            // vestingDuration
+            this.ovnICOContract.methods.vestingDuration().call().then((result) => {
+                console.log("Vesting duration result", result)
+                this.vestingDurationTimestamp = result * 1000;
+                console.log("Vesting duration", this.vestingDurationTimestamp)
+            });
+
+
+            // farmingBonus
+            this.ovnICOContract.methods.totalCommitToBonus().call().then((result) => {
+                console.log("Farming bonus result", result)
+                let fromWei = this.web3.utils.fromWei(result.toString(), this.usdPlusWeiType); // mwei - 6, gwei - 9, ether - 18
+                this.farmingBonus = fromWei * 1;
+                console.log("Farming bonus", this.farmingBonus, fromWei)
+            });
+
+            // fundsInPresale
+            this.ovnICOContract.methods.totalCommitments().call().then((result) => {
+                console.log("Funds in presale result", result)
+                let fromWei = this.web3.utils.fromWei(result.toString(), this.usdPlusWeiType); // mwei - 6, gwei - 9, ether - 18
+                this.fundsInPresale = fromWei * 1;
+                console.log("Funds in presale", this.fundsInPresale, fromWei)
             });
 
             // user step
@@ -837,12 +1031,13 @@ export default {
                 }
 
                 // claimVesting
-                await this.ovnICOContract.methods.claimVesting(this.account).send({
+                let result = await this.ovnICOContract.methods.claimVesting(this.account).send({
                     ...buyParams
                 }).on('transactionHash', (hash) => {
                     console.log("Claim vesting result", hash)
                     this.showSuccessModal(true, hash, "You successfully claimed $OVN token");
                 })
+                console.log("Result: ", result)
 
                 this.closeWaitingModal();
             } catch (e) {
@@ -874,13 +1069,15 @@ export default {
                 }
 
                 // claimSalesPart1
-                await this.ovnICOContract.methods.claimSalesFirstPart().send({
+                let result = await this.ovnICOContract.methods.claimSalesFirstPart().send({
                     ...buyParams
                 }).on('transactionHash', (hash) => {
                     console.log("Claim sales part 1 result", hash)
                     this.closeWaitingModal();
                     this.showSuccessModal(true, hash, "You successfully claimed $OVN token");
                 })
+
+                console.log("Result: ", result)
 
                 this.closeWaitingModal();
             } catch (e) {
@@ -911,7 +1108,7 @@ export default {
                 }
 
             // claimBonus
-                await this.ovnICOContract.methods.claimBonus().send({
+                let result = await this.ovnICOContract.methods.claimBonus().send({
                     ...buyParams
                 }).on('transactionHash', (hash) => {
                     console.log("Claim bonus result", hash)
@@ -919,6 +1116,8 @@ export default {
                     this.showSuccessModal(true, hash, "You successfully claimed $OVN token");
                     this.timeoutUpdateCurrentUserStep();
                 })
+
+                console.log("Result: ", result)
 
                 this.closeWaitingModal();
             } catch (e) {
@@ -950,13 +1149,15 @@ export default {
 
                 // claimRefund
                 console.log("Claim refund", buyParams)
-                await this.ovnICOContract.methods.claimRefund().send({
+                let result = await this.ovnICOContract.methods.claimRefund().send({
                     ...buyParams
                 }).on('transactionHash', (hash) => {
                     console.log("Claim refund result", hash)
                     this.closeWaitingModal();
                     this.showSuccessModal(true, hash, "You successfully get your funds back", 'usd+');
                 })
+
+                console.log("Result: ", result)
 
                 this.closeWaitingModal();
             } catch (e) {
@@ -980,8 +1181,11 @@ export default {
 
             this.nftLoading = true;
 
+            let account = this.account;
+            // account = "0xF37955134Dda37eaC7380f5eb42bce10796bD224" // todo: remove
+
             axios.get(
-                'https://api.covalenthq.com/v1/base-mainnet/address/' + this.account + '/balances_v2/?nft=true',
+                'https://api.covalenthq.com/v1/base-mainnet/address/' + account + '/balances_v2/?nft=true&no-nft-asset-metadata=true',
                 {
                     auth: {
                         username: 'ckey_be6ae76a05f940e1aae6adc7540',
@@ -1032,9 +1236,12 @@ export default {
         },
         timeoutUpdateCurrentUserStep() {
             setTimeout(() => {
-                this.updateCurrentUserStep();
-                this.updateUserInfo();
-            }, 2000)
+                this.updateBaseAndUserInfo();
+            }, 4000);
+        },
+        updateBaseAndUserInfo() {
+            this.updateCurrentUserStep();
+            this.updateUserInfo();
         },
         updateCurrentUserStep() {
             // current step
@@ -1077,7 +1284,13 @@ export default {
                 let commitToRefund = this.web3.utils.fromWei(result.commitToRefund.toString(), this.usdPlusWeiType);
                 this.accountOverflowFunds = commitToRefund * 1;
                 console.log("Overflow funds", this.accountOverflowFunds, commitToRefund)
+
+                // end of loading
+                this.isFirstLoading = false;
             });
+        },
+        updateStatus() {
+            this.updateBaseAndUserInfo();
         },
 
         nextStep() {
@@ -1262,7 +1475,7 @@ export default {
 
 .link-image {
     position: absolute;
-    left: 50px;
+    left: 115px;
     top: 2px;
 }
 
@@ -1382,6 +1595,38 @@ export default {
 
 .title-statistics {
     color: #8D95A3;
+    font-weight: bold;
+}
+
+.funds-in-hard-cap-percent {
+    position: relative;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+
+    color: #22ABAC;
+    border-radius: 5px;
+    padding: 3px 23px 3px 7px;
+
+    background-color: rgba(34, 171, 172, 0.1);
+    cursor: pointer;
+
+}
+
+.funds-percent-image {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}
+
+.presale-status {
+    padding: 15px 20px;
+    background-color: rgba(28, 149, 231, 0.1);
+    border-radius: 12px;
+    width: 100%;
     font-weight: bold;
 }
 </style>

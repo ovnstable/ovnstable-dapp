@@ -55,6 +55,7 @@ export default defineComponent({
     name: "SuccessPresaleModal",
 
     components: {
+        ...mapGetters('network', ['networkId', 'getParams']),
     },
     props: {
 

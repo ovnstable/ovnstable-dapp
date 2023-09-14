@@ -129,7 +129,8 @@ export default {
     },
     computed: {
         ...mapGetters('network', ['networkName']),
-        ...mapGetters('web3', ['web3'] ),
+        ...mapGetters('network', ['networkName']),
+        ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
         ...mapGetters('gasPrice', ['gasPrice', 'gasPriceGwei', 'gasPriceStation', 'gasPriceType']),
 
@@ -229,8 +230,11 @@ export default {
                     .send(buyParams)
                     .on('transactionHash', (hash) => {
                         console.log('Buy transactionHash: ', hash);
-                        this.showSuccessModal(true, result.transactionHash, "You successfully bought and farmed $OVN token");
+                        this.showSuccessModal(true, hash, "You successfully bought and farmed $OVN token");
+                        this.closeWaitingModal();
                     })
+
+                console.log("Result: ", result)
 
                 this.closeWaitingModal();
             } catch (e) {
@@ -257,8 +261,8 @@ export default {
             // let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
             let approveValue = this.web3.utils.toWei("10000000", this.ovnWeiType);
             console.log('Approve contract approveValue: ', approveValue);
-            console.log('Approve contract newApproveValue: ', this.ovnTokenContract, this.account, this.ovnICOContract.options.address, approveValue);
-            this.approveToken(this.ovnTokenContract, this.ovnICOContract.options.address, approveValue)
+            console.log('Approve contract newApproveValue: ', this.contracts.usdPlus, this.account, this.ovnICOContract.options.address, approveValue);
+            this.approveToken(this.contracts.usdPlus, this.ovnICOContract.options.address, approveValue)
                 .then(data => {
                     console.log("Success approving", data);
                     this.checkApproveForToken(contractValue);
@@ -271,8 +275,8 @@ export default {
                 });
         },
         async checkApproveForToken(checkedAllowanceValue) { // checkedAllowanceValue in wei
-            console.log('Check Approve contract: ', this.ovnTokenContract, this.account, this.ovnICOContract.options.address);
-            let allowanceValue = await this.getAllowanceValue(this.ovnTokenContract, this.account, this.ovnICOContract.options.address);
+            console.log('Check Approve contract: ', this.contracts.usdPlus, this.account, this.ovnICOContract.options.address);
+            let allowanceValue = await this.getAllowanceValue(this.contracts.usdPlus, this.account, this.ovnICOContract.options.address);
             console.log('Approve value: ', allowanceValue);
 
             this.approveData.allowanceValue = allowanceValue * 1;

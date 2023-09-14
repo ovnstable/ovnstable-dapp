@@ -595,7 +595,7 @@ export const pool = {
         },
 
         getSortedPools(pools) {
-            let topPools = pools.filter(pool => pool.tvl >= 300000 && pool.platform !== 'Curve');
+            let topPools = pools.filter(pool => pool.tvl >= 300000 && pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013');
             topPools = topPools.sort((a, b) => {
                 if (a.feature && !b.feature) {
                     return -1; // a comes first when a is featured and b is not
@@ -613,7 +613,7 @@ export const pool = {
 
         getSortedSecondPools(pools) {
             console.log("Sorted second pools", pools);
-            let secondPools = pools.filter(pool => pool.promoted !== false || (pool.tvl < 300000 && pool.tvl > 100000 && pool.platform !== 'Curve'));
+            let secondPools = pools.filter(pool => pool.promoted !== false || (pool.tvl < 300000 && pool.tvl > 100000 && pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013'));
             secondPools = secondPools.sort((a, b) => {
                 if (a.apr !== b.apr) {
                     return b.apr - a.apr; // sort by APR number

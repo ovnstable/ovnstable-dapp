@@ -470,8 +470,6 @@ export default {
             } catch (e) {
                 console.error("Track error:", e);
             }
-
-            this.checkIsNotified(true);
         },
 
         dashBoardClick() {

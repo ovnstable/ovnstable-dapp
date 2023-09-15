@@ -183,7 +183,7 @@ const actions = {
         }
 
         // wrapped contracts
-        if (networkId === 137 || networkId === 10 || networkId === 42161) {
+        if (networkId === 137 || networkId === 10 || networkId === 42161 || networkId == 8453) {
             try {
                 wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
                 originWUsdPlus = wUsdPlus;

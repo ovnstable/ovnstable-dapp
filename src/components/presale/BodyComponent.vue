@@ -1173,6 +1173,49 @@ export default {
         claimFunds() {
             console.log("claim funds")
         },
+        async checkNftsInBlockchain() {
+            // if not galaxe nfts and not partner nfts return null
+            if (!this.galxeNftsIds.length && !this.partnerNftsIds.length) {
+                this.nftStatus = false;
+                return;
+            }
+
+            // isWhitelist = [[false, false], [false, false, true, true, true, true, true, true, true, true]]
+            // isWhitelist return array of bool
+            // 0 [true, false, true] - galxe
+            // 1 [false, false, true, true, true, true, true, true, true, true] - partner
+            // find first true and return nftid by index
+
+            let isWhitelist;
+            try {
+                isWhitelist = await this.ovnWhitelistContract.methods.isWhitelist(this.account, this.galxeNftsIds, this.partnerNftsIds).call();
+                console.log("Is whitelist result: ", isWhitelist)
+
+            } catch (e) {
+                console.log("Check nfts in blockchain error", e)
+                this.nftStatus = false;
+                return;
+            }
+
+            if (!isWhitelist || !isWhitelist.length) {
+                this.nftStatus = false;
+                return;
+            }
+
+            // service
+            if (isWhitelist[0].includes(true)) {
+                this.nftStatus = true;
+                return;
+            }
+
+            // partner
+            if (isWhitelist[1].includes(true)) {
+                this.nftStatus = true;
+                return;
+            }
+
+            this.nftStatus = false;
+        },
         loadNft() {
             if (!this.account) {
                 this.nftLoading = false;
@@ -1192,7 +1235,7 @@ export default {
                         password: ''
                     }
                 }
-            ).then((result) => {
+            ).then(async (result) => {
                 console.log("NFT result", result)
 
                 // filter by contract_address 0x512cc325bae1dd4590f6d67733aaf8e6a0526eab and 0xe750a85e77bb505d5465f8045f25b27a3437b5f1
@@ -1227,7 +1270,7 @@ export default {
                 console.log("Nfts galxe: ", galxeNfts, this.galxeNftsIds);
                 console.log("Nfts partner: ", partnerNfts, this.partnerNftsIds);
 
-                this.nftStatus = this.galxeNftsIds.length || this.partnerNftsIds.length;
+                await this.checkNftsInBlockchain()
                 this.nftLoading = false;
             }).catch(e => {
                 console.log("NFT LOADING error", e)
@@ -1237,7 +1280,7 @@ export default {
         timeoutUpdateCurrentUserStep() {
             setTimeout(() => {
                 this.updateBaseAndUserInfo();
-            }, 4000);
+            }, 2500);
         },
         updateBaseAndUserInfo() {
             this.updateCurrentUserStep();

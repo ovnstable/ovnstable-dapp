@@ -235,14 +235,13 @@ export default {
                     })
 
                 console.log("Result: ", result)
-
-                this.closeWaitingModal();
             } catch (e) {
                 console.error("Error when buy token.", e);
                 this.closeWaitingModal();
                 this.showErrorModalWithMsg({errorType: 'ico-buy', errorMsg: e},);
                 this.isBuyLoading = false;
             } finally {
+                this.closeWaitingModal();
                 this.timeoutUpdateCurrentUserStep()
             }
         },
@@ -316,6 +315,11 @@ export default {
                 this.errorMessage = 'Error when check nft';
                 this.closeWaitingModal()
                 return null;
+            }
+
+            if (!isWhitelist) {
+                console.error("Error when check whitelist.");
+                return
             }
 
             // isWhitelist return array of bool

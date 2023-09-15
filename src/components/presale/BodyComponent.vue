@@ -83,36 +83,35 @@
                                 <div class="info-text">
                                     Formed with rebase of committed USD+
                                 </div>
-
-<!--                                <div class="info-text-blue">
-                                    {{ formattedFarmingBonus }} USD+
-                                </div>-->
                             </div>
 
                             <div class="step-container-separator"></div>
 
                             <div class="info-group">
-                                <div class="row">
-                                    <div class="col-6 col-lg-6 col-md-6 col-sm-6">
-                                        <div class="link-container">
-                                            <a href="https://overnight.fi/blog/2023/09/11/ovn-token-sale/" target="_blank">
-                                                <label class="link-title ml-auto">Article</label>
-                                                <div class="link-image">
-                                                    <img src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
-                                                </div>
-                                            </a>
-                                        </div>
+                                <div class="pt-5">
+                                    <div class="link-container">
+                                        <a href="https://overnight.fi/blog/2023/09/11/ovn-token-sale/" target="_blank">
+                                            <label class="link-title ml-auto">
+                                                OVN token sale
+                                            </label>
+                                            <div class="link-image">
+                                                <img src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
+                                            </div>
+                                        </a>
                                     </div>
-<!--                                    <div class="col-6 col-lg-6 col-md-6 col-sm-6">
-                                        <div class="link-container">
-                                            <a href="/">
-                                                <label class="link-title ml-auto">Docs</label>
-                                                <div class="link-image">
-                                                    <img  src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>-->
+                                </div>
+
+                                <div class="pt-5">
+                                    <div class="link-container">
+                                        <a href="https://overnight.fi/blog/2023/09/12/overnight-tokenomics/" target="_blank">
+                                            <label class="link-title ml-auto">
+                                                 Overnight Tokenomics
+                                            </label>
+                                            <div class="link-image" style="left: 160px;">
+                                                <img src="/assets/icon/presale/link-blue.svg" style="width: 15px" alt="->"/>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -142,21 +141,38 @@
 
                             <div class="step-container-separator"></div>
 
-<!--                            <div class="info-group">
+                             <div class="info-group">
                                 <div class="info-title">
                                     Check status
                                 </div>
 
-                                <div class="check-nft-status-container">
-                                    <div style="position:relative;">
+                                <div v-if="nftLoading" class="check-nft-status-container">
+                                    <div>
+                                        <v-row align="center" justify="center">
+                                            <v-progress-circular
+                                                width="2"
+                                                size="24"
+                                                color="#8FA2B7"
+                                                indeterminate
+                                            ></v-progress-circular>
+                                        </v-row>
+                                    </div>
+                                </div>
+                                <div v-else class="check-nft-status-container">
+                                    <div v-if="!nftStatus" style="position:relative;">
                                         You don’t have Presale NFT
 
                                         <div class="check-nft-status-image">
                                             <img src="/assets/icon/presale/cancel.svg" alt="X">
                                         </div>
                                     </div>
+                                    <div v-else style="position:relative;">
+                                        <div style="color: #00c853; font-weight: bold">
+                                            You have Presale NFT
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>-->
+                            </div>
 
                             <div class="info-group">
                                 <div class="info-title">
@@ -179,14 +195,22 @@
                                         As part of the Galxe campaign, please complete the following tasks:
                                     </div>
 
-                                    <div>
-                                        1. Reach 100 XP (level 2) in <a href="https://zealy.io/c/overnight-fi/questboard" target="_blank">our Zealy</a>
-                                    </div>
-                                    <div>
-                                        2. Claim Presale participant role in <a href="https://discord.com/invite/overnight-fi" target="_blank">our Discord</a>
-                                    </div>
-                                    <div>
-                                        3. Mint NFT on Galxe
+                                    <div class="info-group">
+                                        <div>
+                                            1. Follow Overnight on Twitter
+                                        </div>
+                                        <div>
+                                            2. Like/retweet our tweet about Presale
+                                        </div>
+                                        <div>
+                                            3. Join our Discord
+                                        </div>
+                                        <div>
+                                            4. Check USD+ in your wallet on any chain (USD+ is needed to buy $OVN token)
+                                        </div>
+                                        <div>
+                                            5. Mint NFT on Galxe
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -418,6 +442,7 @@ import Timer from "@/components/presale/tools/Timer.vue";
 import TokenOvnInfo from "@/components/presale/tools/TokeOvnInfo.vue";
 import PresaleBuyForm from "@/components/presale/tools/PresaleBuyForm.vue";
 import {mapGetters} from "vuex";
+import axios from "axios";
 const moment = require('moment'); // import moment.js
 
 
@@ -444,27 +469,50 @@ export default {
             accountOverflowFunds: 0,
 
             nftStatus: false,
+            nftLoading: true,
+
+            nftGalxeAddress: "0x512cc325bae1dd4590f6d67733aaf8e6a0526eab",
+            nftPartnerAddress: "0xe750a85e77bb505d5465f8045f25b27a3437b5f1",
+            galxeNftsIds: [],
+            partnerNftsIds: [],
+
         }
     },
     mounted() {
         // this.initUserData();
+
+        this.loadNft();
+    },
+
+    watch: {
+
+        account: function (newVal, oldVal) {
+            console.log("Account changed", newVal, oldVal)
+            if (newVal) {
+                this.loadNft();
+            }
+        },
+
     },
 
     computed: {
         ...mapGetters('network', ['networkName']),
+        ...mapGetters('accountData', ['account']),
+        ...mapGetters("web3", ["web3"]),
+        ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
 
         presaleStartDate() {
-            return moment(this.presaleTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
+            return moment(this.presaleTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
         },
         presaleEndDate() {
-            return moment(this.presaleEndTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
+            return moment(this.presaleEndTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
         },
         differentdDysBeetwinStartAndEndPresale() {
             return moment(this.presaleEndTimestamp).diff(moment(this.presaleTimestamp), 'days') + 1;
         },
         vestingStartDate() {
-            return moment(this.vestingTimestamp).utc().format('MMMM DD, YYYY hh:mm A [UTC]');
+            return moment(this.vestingTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
         },
         formattedSoftCap() {
             if (!this.softCap) {
@@ -553,9 +601,66 @@ export default {
         claimFunds() {
             console.log("claim funds")
         },
-        checkNft() {
-            console.log("check nft")
-            this.nftStatus = false;
+        loadNft() {
+            if (!this.account) {
+                this.nftLoading = false;
+                return;
+            }
+
+            this.nftLoading = true;
+
+            let account = this.account;
+            // account = "0xF37955134Dda37eaC7380f5eb42bce10796bD224" // todo: remove
+
+            axios.get(
+                'https://api.covalenthq.com/v1/base-mainnet/address/' + account + '/balances_v2/?nft=true&no-nft-asset-metadata=true',
+                {
+                    auth: {
+                        username: 'ckey_be6ae76a05f940e1aae6adc7540',
+                        password: ''
+                    }
+                }
+            ).then((result) => {
+                console.log("NFT result", result)
+
+                // filter by contract_address 0x512cc325bae1dd4590f6d67733aaf8e6a0526eab and 0xe750a85e77bb505d5465f8045f25b27a3437b5f1
+                if (!result || !result.data || !result.data.data || !result.data.data.items || !result.data.data.items.length) {
+                    this.nftStatus = false;
+                    this.nftLoading = false;
+                    return;
+                }
+
+                let galxeNfts = result.data.data.items.find((item) => {
+                    return item.contract_address === this.nftGalxeAddress;
+                });
+
+                if (galxeNfts) {
+                    this.galxeNftsIds = galxeNfts.nft_data.map((item) => {
+                        return item.token_id;
+                    })
+                }
+
+                // console.log()
+
+                let partnerNfts = result.data.data.items.find((item) => {
+                    return item.contract_address === this.nftPartnerAddress;
+                });
+
+                if (partnerNfts) {
+                    this.partnerNftsIds = partnerNfts.nft_data.map((item) => {
+                        return item.token_id;
+                    })
+                }
+
+                console.log("Nfts galxe: ", galxeNfts, this.galxeNftsIds);
+                console.log("Nfts partner: ", partnerNfts, this.partnerNftsIds);
+
+                this.nftStatus = this.galxeNftsIds.length || this.partnerNftsIds.length;
+                this.nftLoading = false;
+            }).catch(e => {
+                console.log("NFT LOADING error", e)
+                this.nftLoading = false;
+            })
         },
     }
 }
@@ -573,7 +678,7 @@ export default {
     padding: 28px;
     gap: 20px;
 
-    min-height: 955px;
+    min-height: 1130px;
 
     background: #FFFFFF;
     box-shadow: 0px 10px 20px rgba(9, 55, 98, 0.25);
@@ -704,7 +809,7 @@ export default {
 
 .link-image {
     position: absolute;
-    left: 50px;
+    left: 115px;
     top: 2px;
 }
 

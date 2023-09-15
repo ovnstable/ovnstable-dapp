@@ -4,38 +4,46 @@
             <label class="title-label">Bridge</label>
         </div>
 
-        <div class="bridge-container">
-            <div v-if="!isIframeLoaded" class="loader-container">
-                <v-row align="center" justify="center">
-                    <v-progress-circular
-                        width="2"
-                        size="24"
-                        color="#8FA2B7"
-                        indeterminate
-                    ></v-progress-circular>
-                </v-row>
+        <div class="body-container">
+            <div class="bridge-container">
+                <div v-if="!isIframeLoaded" class="loader-container">
+                    <v-row align="center" justify="center">
+                        <v-progress-circular
+                            width="2"
+                            size="24"
+                            color="#8FA2B7"
+                            indeterminate
+                        ></v-progress-circular>
+                    </v-row>
+                </div>
+                <div class="iframe-container">
+                    <iframe id="iframe"
+                            style="border: none;"
+                            title="squid_widget"
+                            width="482" height="690"
+                            :src="link"
+                            @load="handleIframeLoad(link)">
+                    </iframe>
+                </div>
             </div>
-            <div class="iframe-container">
-                <iframe id="iframe"
-                        style="border: none;"
-                        title="squid_widget"
-                        width="482" height="690"
-                        :src="link"
-                        @load="handleIframeLoad(link)">
-                </iframe>
+            <div class="info-container">
+                <BridgeInformation />
             </div>
         </div>
+
     </div>
 </template>
 
 <script>
 import {defineComponent} from 'vue'
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
+import BridgeInformation from "@/components/bridge-module/BridgeInformation";
 
 export default defineComponent({
     name: "Bridge",
 
     components: {
+        BridgeInformation,
     },
 
     props: {
@@ -43,14 +51,136 @@ export default defineComponent({
 
     data: () => ({
         isIframeLoaded: false,
-        link: "https://widget.squidrouter.com/iframe?config=%7B%22integratorId%22%3A%22squid-swap-widget%22%2C%22companyName%22%3A%22Custom%22%2C%22style%22%3A%7B%22neutralContent%22%3A%22%2329323e%22%2C%22baseContent%22%3A%22%2329323e%22%2C%22base100%22%3A%22%23e5e7ea%22%2C%22base200%22%3A%22%23f5f5f5%22%2C%22base300%22%3A%22%23ffffff%22%2C%22error%22%3A%22%23ED6A5E%22%2C%22warning%22%3A%22%23FFB155%22%2C%22success%22%3A%22%232EAEB0%22%2C%22primary%22%3A%22%23e5e7ea%22%2C%22secondary%22%3A%22%23ffffff%22%2C%22secondaryContent%22%3A%22%23ffffff%22%2C%22neutral%22%3A%22%23ffffff%22%2C%22roundedBtn%22%3A%22999px%22%2C%22roundedCornerBtn%22%3A%22999px%22%2C%22roundedBox%22%3A%221rem%22%2C%22roundedDropDown%22%3A%22999px%22%7D%2C%22slippage%22%3A1.5%2C%22infiniteApproval%22%3Afalse%2C%22enableExpress%22%3Atrue%2C%22apiUrl%22%3A%22https%3A%2F%2Fapi.squidrouter.com%22%2C%22comingSoonChainIds%22%3A%5B%5D%2C%22titles%22%3A%7B%22swap%22%3A%22Swap%22%2C%22settings%22%3A%22Settings%22%2C%22wallets%22%3A%22Wallets%22%2C%22tokens%22%3A%22Select%20Token%22%2C%22chains%22%3A%22Select%20Chain%22%2C%22history%22%3A%22History%22%2C%22transaction%22%3A%22Transaction%22%2C%22allTokens%22%3A%22Select%20Token%22%2C%22destination%22%3A%22Destination%20address%22%7D%2C%22priceImpactWarnings%22%3A%7B%22warning%22%3A3%2C%22critical%22%3A5%7D%2C%22showOnRampLink%22%3Atrue%7D",
+        link: "",
+        allConfigs: {
+            widgetConfig: {
+                integratorId: "overnight-swap-widget",
+                companyName: "Overnight",
+                style: {
+                    neutralContent: "#29323e",
+                    baseContent: "#29323e",
+                    base100: "#e5e7ea",
+                    base200: "#f5f5f5",
+                    base300: "#ffffff",
+                    error: "#ED6A5E",
+                    warning: "#FFB155",
+                    success: "#2EAEB0",
+                    primary: "#e5e7ea",
+                    secondary: "#ffffff",
+                    secondaryContent: "#ffffff",
+                    neutral: "#ffffff",
+                    roundedBtn: "26px",
+                    roundedCornerBtn: "999px",
+                    roundedBox: "1rem",
+                    roundedDropDown: "20rem",
+                },
+                slippage: 1.5,
+                infiniteApproval: false,
+                enableExpress: true,
+                apiUrl: "https://v2.api.squidrouter.com",
+                comingSoonChainIds: [],
+                titles: {
+                    swap: "Bridge",
+                    settings: "Settings",
+                    wallets: "Wallets",
+                    tokens: "Select Token",
+                    chains: "Select Chains",
+                    history: "History",
+                    transaction: "Transaction",
+                    allTokens: "Select Token",
+                    destination: "Destination address"
+                },
+                priceImpactWarnings: {
+                    warning: 3,
+                    critical: 5
+                },
+                showOnRampLink: true,
+                initialFromChainId: "10",
+                initialToChainId: "8453",
+                defaultTokens: [
+                    {
+                        chainId: "10",
+                        address: "0x73cb180bf0521828d8849bc8CF2B920918e23032",
+                        symbol: "USD+",
+                        name: "USD+"
+                    },
+                    {
+                        chainId: "8453",
+                        address: "0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376",
+                        symbol: "USD+",
+                        name: "USD+"
+                    }
+                ]
+            },
+            widgetConfigForDarkTheme: {
+                integratorId: "overnight-swap-widget",
+                companyName: "Overnight",
+                style: {
+                    neutralContent: "#ffffff",
+                    baseContent: "#ffffff",
+                    base100: "#3d4657",
+                    base200: "#29323e",
+                    base300: "#1d2029",
+                    error: "#ED6A5E",
+                    warning: "#FFB155",
+                    success: "#2EAEB0",
+                    primary: "#3d4657",
+                    secondary: "#d9d8e4",
+                    secondaryContent: "#F6F7FB",
+                    neutral: "#1d2029",
+                    roundedBtn: "8px",
+                    roundedCornerBtn: "999px",
+                    roundedBox: "12px",
+                    roundedDropDown: "8px"
+                },
+                slippage: 1.5,
+                infiniteApproval: false,
+                enableExpress: true,
+                apiUrl: "https://v2.api.squidrouter.com",
+                comingSoonChainIds: [],
+                titles: {
+                    swap: "Bridge",
+                    settings: "Settings",
+                    wallets: "Wallets",
+                    tokens: "Select Token",
+                    chains: "Select Chain",
+                    history: "History",
+                    transaction: "Transaction",
+                    allTokens: "Select Token",
+                    destination: "Destination address"
+                },
+                priceImpactWarnings: {
+                    warning: 3,
+                    critical: 5
+                },
+                showOnRampLink: true,
+                initialFromChainId: "10",
+                initialToChainId: "8453",
+                defaultTokens: [
+                    {
+                        chainId: "10",
+                        address: "0x73cb180bf0521828d8849bc8CF2B920918e23032",
+                        symbol: "USD+",
+                        name: "USD+"
+                    },
+                    {
+                        chainId: "8453",
+                        address: "0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376",
+                        symbol: "USD+",
+                        name: "USD+"
+                    }
+                ]
+            }
+        }
     }),
 
     computed: {
-
+        ...mapGetters('theme', ['light']),
     },
 
     mounted() {
+        this.updateLink();
+
         try {
             this.trackClick({action: 'bridge_page_view', event_category: 'Page view', event_label: 'Bridge page view' });
         } catch (e) {
@@ -58,13 +188,37 @@ export default defineComponent({
         }
     },
 
+    watch: {
+        light: function (newVal, oldVal) {
+            this.updateLink();
+        },
+    },
+
     methods: {
         ...mapActions('track', ['trackClick']),
+
+        updateLink() {
+            if (this.light) {
+                // Light theme link config
+                this.link = this.generateIframeURL(this.allConfigs.widgetConfig);
+                console.log("Widget White Theme Link:", this.link);
+            } else {
+                // Dark theme link config
+                this.link = this.generateIframeURL(this.allConfigs.widgetConfigForDarkTheme);
+                console.log("Widget Dark Theme Link:", this.link);
+            }
+        },
+
+        generateIframeURL(config) {
+            const encodedConfig = encodeURIComponent(JSON.stringify(config));
+
+            return `https://squid-widget-git-main-v2-0xsquid.vercel.app/iframe?config=${encodedConfig}`;
+        },
 
         handleIframeLoad(link) {
             this.isIframeLoaded = true;
             console.log(`Iframe loaded with link: ${link}`);
-        }
+        },
     }
 })
 
@@ -93,6 +247,12 @@ export default defineComponent({
         padding-top: 10px;
         padding-left: 350px;
         min-height: 40px;
+    }
+
+    .body-container {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
     }
 }
 
@@ -202,5 +362,14 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.loader-container {
+    min-height: 40px;
+}
+
+.body-container {
+    display: flex;
+    gap: 50px;
 }
 </style>

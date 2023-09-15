@@ -74,7 +74,7 @@ export default defineComponent({
                     roundedBox: "1rem",
                     roundedDropDown: "20rem",
                 },
-                slippage: 1.5,
+                slippage: 0.5,
                 infiniteApproval: false,
                 enableExpress: true,
                 apiUrl: "https://v2.api.squidrouter.com",
@@ -133,7 +133,7 @@ export default defineComponent({
                     roundedBox: "12px",
                     roundedDropDown: "8px"
                 },
-                slippage: 1.5,
+                slippage: 0.5,
                 infiniteApproval: false,
                 enableExpress: true,
                 apiUrl: "https://v2.api.squidrouter.com",

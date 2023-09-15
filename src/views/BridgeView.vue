@@ -30,6 +30,7 @@
 
 <script>
 import {defineComponent} from 'vue'
+import { mapActions } from "vuex";
 
 export default defineComponent({
     name: "Bridge",
@@ -49,7 +50,17 @@ export default defineComponent({
 
     },
 
+    mounted() {
+        try {
+            this.trackClick({action: 'bridge_page_view', event_category: 'Page view', event_label: 'Bridge page view' });
+        } catch (e) {
+            console.error("Track error:", e);
+        }
+    },
+
     methods: {
+        ...mapActions('track', ['trackClick']),
+
         handleIframeLoad(link) {
             this.isIframeLoaded = true;
             console.log(`Iframe loaded with link: ${link}`);

@@ -558,7 +558,7 @@ export default {
             this.goToActionByPath('/bridge', {tabName: 'bridge'});
 
             try {
-                this.trackClick({action: 'click_bridge', event_category: 'Click button', event_label: 'Click bridge menu button' });
+                this.trackClick({action: 'click_menu_bridge', event_category: 'Click button', event_label: 'Click bridge menu button' });
             } catch (e) {
                 console.error("Track error:", e);
             }

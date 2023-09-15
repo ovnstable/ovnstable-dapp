@@ -30,7 +30,8 @@ export const pool = {
                 // 'Baseswap',
                 'Velocimeter',
                 'Alienbase',
-                'Swapbased'
+                'Swapbased',
+                'Curve',
             ],
             poolTokensForZapMap: {
                 // Chronos
@@ -204,6 +205,12 @@ export const pool = {
                 '0x8E9154AC849e839d60299E85156bcb589De2693A': [
                     {name: 'DOLA', address: '0x4621b7a9c75199271f773ebd9a499dbd165c3191'},
                     {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
+                ],
+
+                // Curve
+                '0xda3de145054ED30Ee937865D31B500505C4bDfe7': [
+                    {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
+                    {name: 'crvUSD', address: '0x417Ac0e078398C154EdFadD9Ef675d30Be60Af93'},
                 ],
             }
         }
@@ -380,7 +387,6 @@ export const pool = {
                 pool.platform === 'Velocimeter' ||
                 pool.platform === 'Swapbased' ||
                 pool.platform === 'Maverick' ||
-                pool.platform === 'Curve' ||
                 pool.platform === 'Alienbase' ||
                 pool.platform === 'Convex'
             ) {
@@ -408,6 +414,18 @@ export const pool = {
 
             if (pool.platform === 'Balancer' && pool.address === '0xd6d20527c7b0669989ee082b9d3a1c63af742290') {
                 url +=  pool.address +  '000000000000000000000483'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Curve' && pool.address === '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013') {
+                url = 'https://curve.fi/#/arbitrum/pools/factory-v2-117/deposit'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Curve' && pool.address === '0xda3de145054ED30Ee937865D31B500505C4bDfe7') {
+                url = 'https://curve.fi/#/base/pools/factory-v2-2/deposit'
                 window.open(url, '_blank').focus();
                 return;
             }
@@ -577,7 +595,7 @@ export const pool = {
         },
 
         getSortedPools(pools) {
-            let topPools = pools.filter(pool => pool.tvl >= 300000 && pool.platform !== 'Curve');
+            let topPools = pools.filter(pool => pool.tvl >= 300000 && pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013');
             topPools = topPools.sort((a, b) => {
                 if (a.feature && !b.feature) {
                     return -1; // a comes first when a is featured and b is not
@@ -595,7 +613,7 @@ export const pool = {
 
         getSortedSecondPools(pools) {
             console.log("Sorted second pools", pools);
-            let secondPools = pools.filter(pool => pool.promoted || (pool.tvl < 300000 && pool.tvl > 100000));
+            let secondPools = pools.filter(pool => pool.promoted !== false || (pool.tvl < 300000 && pool.tvl > 100000 && pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013'));
             secondPools = secondPools.sort((a, b) => {
                 if (a.apr !== b.apr) {
                     return b.apr - a.apr; // sort by APR number

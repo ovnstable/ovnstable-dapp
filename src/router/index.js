@@ -26,7 +26,8 @@ import Pools from "./midleware/dapp/Pools";
 import Swap from "./midleware/dapp/Swap";
 import Swipe from "./midleware/dapp/Swipe";
 import Presasle from "./midleware/dapp/Presasle";
-import EtsAbout from "./midleware/dapp/EtsAbout"
+import EtsAbout from "./midleware/dapp/EtsAbout";
+import Bridge from "./midleware/dapp/Bridge";
 
 Vue.use(VueRouter)
 
@@ -109,6 +110,16 @@ const routes = [
                 meta: {
                     middleware: [
                         Swipe
+                    ]
+                }
+            },
+            {
+                path: '/bridge',
+                name: 'BridgeView',
+                component: () => import('../views/BridgeView.vue'),
+                meta: {
+                    middleware: [
+                        Bridge
                     ]
                 }
             },

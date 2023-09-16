@@ -62,6 +62,23 @@
 
                 </v-list-item-title>
             </v-list-item>
+            <v-list-item
+                id="click_bridge"
+                :class="selectedTab === 'bridge' ? 'selected-page-item' : ''"
+                @click="bridgeClick()"
+                class="list-item-hover mx-n2">
+                <v-list-item-icon>
+                    <div class="navbar-page-link">
+                        <v-img :src="require('@/assets/icon/shuffle-variant.svg')"/>
+                    </div>
+                </v-list-item-icon>
+                <v-list-item-title>
+                    <label :class="selectedTab === 'bridge' ? 'selected-page' : ''"
+                           class="navbar-page-label">
+                        BRIDGE
+                    </label>
+                </v-list-item-title>
+            </v-list-item>
         </v-list>
 
         <v-list nav subheader class="mx-3" dense>
@@ -530,6 +547,18 @@ export default {
 
             try {
                 this.trackClick({action: 'click_menu_swipe', event_category: 'Click button', event_label: 'Click swipe menu button' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
+
+            this.checkIsNotified(true);
+        },
+        bridgeClick() {
+            this.selectTab('bridge');
+            this.goToActionByPath('/bridge', {tabName: 'bridge'});
+
+            try {
+                this.trackClick({action: 'click_menu_bridge', event_category: 'Click button', event_label: 'Click bridge menu button' });
             } catch (e) {
                 console.error("Track error:", e);
             }

@@ -146,32 +146,48 @@
                                     Check status
                                 </div>
 
-                                <div v-if="nftLoading" class="check-nft-status-container">
+                                <div v-if="!isSupportedNetwork" class="check-nft-status-container">
                                     <div>
-                                        <v-row align="center" justify="center">
-                                            <v-progress-circular
-                                                width="2"
-                                                size="24"
-                                                color="#8FA2B7"
-                                                indeterminate
-                                            ></v-progress-circular>
-                                        </v-row>
+                                        <div class="switch-to-support-chain-message">
+                                            Please switch to Base chain
+                                        </div>
                                     </div>
                                 </div>
-                                <div v-else class="check-nft-status-container">
-                                    <div v-if="!nftStatus" style="position:relative;">
-                                        You don’t have Presale NFT
+                                 <div v-if="!account" class="check-nft-status-container">
+                                     <div>
+                                         <div class="switch-to-support-chain-message">
+                                             Please connect wallet
+                                         </div>
+                                     </div>
+                                 </div>
+                                 <div v-else>
+                                     <div v-if="nftLoading" class="check-nft-status-container">
+                                         <div>
+                                             <v-row align="center" justify="center">
+                                                 <v-progress-circular
+                                                     width="2"
+                                                     size="24"
+                                                     color="#8FA2B7"
+                                                     indeterminate
+                                                 ></v-progress-circular>
+                                             </v-row>
+                                         </div>
+                                     </div>
+                                     <div v-else class="check-nft-status-container">
+                                         <div v-if="!nftStatus" style="position:relative;">
+                                             You don’t have Presale NFT
 
-                                        <div class="check-nft-status-image">
-                                            <img src="/assets/icon/presale/cancel.svg" alt="X">
-                                        </div>
-                                    </div>
-                                    <div v-else style="position:relative;">
-                                        <div style="color: #00c853; font-weight: bold">
-                                            You have Presale NFT
-                                        </div>
-                                    </div>
-                                </div>
+                                             <div class="check-nft-status-image">
+                                                 <img src="/assets/icon/presale/cancel.svg" alt="X">
+                                             </div>
+                                         </div>
+                                         <div v-else style="position:relative;">
+                                             <div style="color: #00c853; font-weight: bold">
+                                                 You have Presale NFT
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
                             </div>
 
                             <div class="info-group">
@@ -270,7 +286,7 @@
                                     <Timer
                                         v-if="presaleEndTimestamp"
                                         :timestamp="presaleEndTimestamp"
-                                        title="Presale in process"
+                                        title="Presale ends in"
                                         :updateStatus="updateStatus"
                                     />
                                 </div>
@@ -432,8 +448,49 @@
                         </div>
 
                         <!--          CLAIM_VESTING              -->
-                        <div v-if="!isFirstLoading">
-                            <div v-if="currentStep < 8"
+                        <div v-if="!isFirstLoading && currentStep >= 2">
+                            <div v-if="currentStepType === 'CLAIM_REFUND'">
+                                <div class="info-group">
+                                    <div class="presale-status">
+                                        Claim Refund
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_BONUS'">
+                                <div class="info-group">
+                                    <Timer
+                                        v-if="claimBonusTimestamp"
+                                        :timestamp="vestingTimestamp"
+                                        title="Claim bonus starts in"
+                                        :updateStatus="updateStatus"
+                                    />
+                                </div>
+                            </div>
+                            <div v-else-if="currentStepType === 'CLAIM_BONUS'">
+                                <div class="info-group">
+                                    <div class="presale-status">
+                                        Claim bonus
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_SALES_FIRST_PART'">
+                                <div class="info-group">
+                                    <Timer
+                                        v-if="claimSalesFirstPartTimestamp"
+                                        :timestamp="claimSalesFirstPartTimestamp"
+                                        title="Claim sales starts in"
+                                        :updateStatus="updateStatus"
+                                    />
+                                </div>
+                            </div>
+                            <div v-else-if="currentStepType === 'CLAIM_SALES_FIRST_PART'">
+                                <div class="info-group">
+                                    <div class="presale-status">
+                                        Claim sales
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_VESTING'"
                                  class="timer-container-center">
                                 <div class="info-group">
                                     <Timer
@@ -446,11 +503,11 @@
                             </div>
                             <div v-else-if="currentStepType === 'CLAIM_VESTING'" class="timer-container-center">
                                 <div v-if="presaleEndTimestamp" class="info-group">
-                                    <div class="presale-status">
+                                    <div class="info-group">
                                         <Timer
                                             v-if="vestingEndTimestamp"
                                             :timestamp="vestingEndTimestamp"
-                                            title="Vesting in process"
+                                            title="Vesting ends in"
                                             :updateStatus="updateStatus"
                                         />
                                     </div>
@@ -625,7 +682,7 @@ const USER_PRESALE_STATE_MAP = {
 
 
 export default {
-    name: "BodyComponent",
+    name: "PresaleBodyComponent",
     components: {ErrorModal, WaitingModal, SuccessPresaleModal, PresaleBuyForm, TokenOvnInfo, Timer},
     data() {
         return {
@@ -639,6 +696,8 @@ export default {
             presaleEndTimestamp: 0,
             vestingTimestamp: 0,
             vestingDurationTimestamp: 0,
+            claimBonusTimestamp: 0,
+            claimSalesFirstPartTimestamp: 0,
 
             overflowFarmingPool: 0,
             fundsInPresale: 0,
@@ -676,21 +735,31 @@ export default {
 
             turnOfStatusControls: false,
             devSteps: 0, // if 10 => turn of controls
+
+            supportedNetwork: ['base']
         }
     },
     mounted() {
         // this.initUserData();
 
-        this.loadNft();
+        if (this.isSupportedNetwork) {
+            this.loadData();
+        }
     },
 
     watch: {
 
         account: function (newVal, oldVal) {
             console.log("Account changed", newVal, oldVal)
-            if (newVal) {
-                this.loadNft();
-                this.initAccountData();
+            if (newVal && this.isSupportedNetwork) {
+                this.loadData();
+            }
+        },
+
+        networkName: function (newVal, oldVal) {
+            console.log("Network changed", newVal, oldVal)
+            if (newVal && this.isSupportedNetwork) {
+                this.loadData();
             }
         },
 
@@ -701,6 +770,10 @@ export default {
         ...mapGetters('accountData', ['account']),
         ...mapGetters("web3", ["web3"]),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
+
+        isSupportedNetwork() {
+            return this.supportedNetwork.includes(this.networkName);
+        },
 
         formattedPresaleContractAddress() {
             if (!this.presaleContractAddress) {
@@ -874,9 +947,20 @@ export default {
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
 
 
+        async loadData() {
+            console.log("Load data")
+            await this.initAccountData();
+        },
 
         showSuccessModal(isShow, hash, text, type) {
             this.isShowSuccessModal = isShow;
+            console.log("Show success modal", isShow, hash, text);
+
+            if (!isShow) {
+                this.successData = null;
+                this.isShowSuccessModal = false;
+                return
+            }
 
             this.successData = {
                 chain: this.networkId,
@@ -886,12 +970,7 @@ export default {
             }
 
             this.isShowSuccessModal = isShow;
-
             console.log("Show success modal", isShow, hash, text);
-
-            if (!isShow) {
-                this.successData = null;
-            }
         },
 
         loadDataFromContract() {
@@ -956,6 +1035,20 @@ export default {
                 console.log("Vesting duration", this.vestingDurationTimestamp)
             });
 
+            // claimBonusTime
+            this.ovnICOContract.methods.claimBonusTime().call().then((result) => {
+                console.log("Claim bonus time result", result)
+                this.claimBonusTimestamp = result * 1000;
+                console.log("Claim bonus time", this.claimBonusTimestamp)
+            });
+
+            //claimSalesFirstPartTime
+            this.ovnICOContract.methods.claimSalesFirstPartTime().call().then((result) => {
+                console.log("Claim sales first part time result", result)
+                this.claimSalesFirstPartTimestamp = result * 1000;
+                console.log("Claim sales first part time", this.claimSalesFirstPartTimestamp)
+            });
+
 
             // farmingBonus
             this.ovnICOContract.methods.totalCommitToBonus().call().then((result) => {
@@ -985,6 +1078,7 @@ export default {
 
             if (this.account) {
                 await this.loadContracts();
+                this.loadNft();
                 this.loadDataFromContract();
             }
         },
@@ -1190,26 +1284,28 @@ export default {
             try {
                 isWhitelist = await this.ovnWhitelistContract.methods.isWhitelist(this.account, this.galxeNftsIds, this.partnerNftsIds).call();
                 console.log("Is whitelist result: ", isWhitelist)
-
             } catch (e) {
                 console.log("Check nfts in blockchain error", e)
                 this.nftStatus = false;
                 return;
             }
 
-            if (!isWhitelist || !isWhitelist.length) {
+            if (!isWhitelist) {
                 this.nftStatus = false;
+                console.log("NFT isWhitelist error", isWhitelist)
                 return;
             }
 
             // service
             if (isWhitelist[0].includes(true)) {
+                console.log("NFT service exist at user")
                 this.nftStatus = true;
                 return;
             }
 
             // partner
             if (isWhitelist[1].includes(true)) {
+                console.log("NFT partner exist at user")
                 this.nftStatus = true;
                 return;
             }
@@ -1670,6 +1766,11 @@ export default {
     background-color: rgba(28, 149, 231, 0.1);
     border-radius: 12px;
     width: 100%;
+    font-weight: bold;
+}
+
+.switch-to-support-chain-message {
+    color: #0e7ec9;
     font-weight: bold;
 }
 </style>

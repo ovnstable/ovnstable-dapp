@@ -5,7 +5,7 @@
                 <HeaderComponent/>
             </div>
             <div>
-                <BodyComponent/>
+                <PresaleBodyComponent/>
             </div>
             <div>
                 <RoundInfoComponent/>
@@ -24,14 +24,14 @@
 <script>
 import HeaderComponent from "@/components/presale/HeaderComponent.vue";
 import RoundInfoComponent from "@/components/presale/RoundInfoComponent.vue";
-import BodyComponent from "@/components/presale/BodyComponent.vue";
+import PresaleBodyComponent from "@/components/presale/PresaleBodyComponent.vue";
 import DisclaimerComponent from "@/components/presale/DisclaimerComponent.vue";
 
 export default {
     name: "PresaleView.vue",
     components: {
         DisclaimerComponent,
-        BodyComponent,
+        PresaleBodyComponent,
         RoundInfoComponent,
         HeaderComponent
     }

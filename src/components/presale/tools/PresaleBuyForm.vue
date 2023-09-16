@@ -1,5 +1,10 @@
 <template>
     <div>
+
+        <div class="info-title" style="padding-bottom: 10px">
+            Buy $OVN
+        </div>
+
         <div class="input-container">
             <div class="input-data-container">
                 <div class="row">
@@ -21,18 +26,31 @@
             </div>
         </div>
 
-        <div class="balance-container">
+        <div class="balance-container pb-2">
             <div class="row">
-                <div class="col-8 col-lg-8 col-md-8 col-sm-8">
-                    <span class="balance-detail">Balance: {{ formattedBalanceUsdPlus }}</span> USD+
+                <div class="col-12 col-lg-12 col-md-12 col-sm-12">
+                     <span class="balance-detail">Balance: {{ formattedBalanceUsdPlus }}</span> USD+
                 </div>
-                <div class="col-4 col-lg-4 col-md-4 col-sm-4">
+            </div>
+        </div>
+
+        <div class="pb-2">
+            <div class="row">
+                <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+                    <div>
+                        <a href="/swap">Swap USD+</a>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-6 col-md-6 col-sm-6">
                     <div style="float: right">
-                        <a href="/#/swap">Swap USD+</a>
+                        <a href="/bridge">Bridge USD+</a>
                     </div>
                 </div>
             </div>
         </div>
+
+
 
         <div v-if="!account">
             <div class="info-group">
@@ -61,12 +79,12 @@
                     <div v-else
                          @click="buyAndFarm"
                          class="button-buy">
-                        BUY AND FARM
+                        BUY OVN AND FARM
                     </div>
                 </div>
                 <div v-else>
                     <div class="button-buy-disabled">
-                        PRESALE PASSED
+                        PRESALE FINISHED
                     </div>
                 </div>
             </div>
@@ -184,7 +202,7 @@ export default {
                 return;
             }
 
-            let weiValue = this.web3.utils.toWei(value + "", this.ovnWeiType)
+            let weiValue = this.web3.utils.toWei(value + "", this.usdPlusWeiType)
             console.log('inputUpdate weiValue: ', weiValue);
             this.checkApproveForToken(weiValue);
         },
@@ -413,7 +431,7 @@ export default {
     gap: 8px;
 
     height: 40px;
-    max-width: 150px;
+    max-width: 170px;
 
     /* Blue gradient */
     //background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
@@ -470,7 +488,7 @@ background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%
 }
 
 .balance-container {
-    padding-top: 10px;
+
 }
 
 .balance-detail {
@@ -481,5 +499,20 @@ background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%
     line-height: 24px;
 
     color: #707A8B;
+}
+
+
+.info-title {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height, or 150% */
+    letter-spacing: 0.5px;
+    font-feature-settings: 'liga' off;
+
+    /* Grey/Grey 19_text */
+    color: #29323E;
 }
 </style>

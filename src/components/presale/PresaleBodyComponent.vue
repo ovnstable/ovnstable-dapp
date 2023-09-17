@@ -317,7 +317,7 @@
                         </div>
 
 
-                        <div v-if="!isFirstLoading">
+                        <div>
                             <div  v-if="presaleTimestamp">
                                 <div class="info-sub-title">
                                     Start Presale
@@ -728,18 +728,18 @@ export default {
             successData: null,
 
 
-            presaleTimestamp: 0,
-            presaleEndTimestamp: 0,
+            presaleTimestamp: 1695038400 * 1000,
+            presaleEndTimestamp: 1695639600 * 1000,
             vestingTimestamp: 0,
             vestingDurationTimestamp: 0,
             claimBonusTimestamp: 0,
             claimSalesFirstPartTimestamp: 0,
 
-            overflowFarmingPool: 0,
+            overflowFarmingPool: 25000,
             fundsInPresale: 0,
             farmingBonus: 0,
-            softCap: 0,
-            hardCap: 0,
+            softCap: 350000,
+            hardCap: 500000,
 
             // personal data
             accountTotalUsdPurchased: 0,
@@ -1117,8 +1117,6 @@ export default {
                 console.log("Overflow farming pool", this.overflowFarmingPool, fromWei)
             });
 
-            // TODO: farming bonus
-
             // start time
             this.ovnICOContract.methods.startTime().call().then((result) => {
                 console.log("Start time result", result)
@@ -1379,7 +1377,8 @@ export default {
 
            let isWhitelist;
             try {
-                isWhitelist = await this.ovnWhitelistContract.methods.isWhitelist(this.account, this.galxeNftsIds, this.partnerNftsIds).call();
+                let account = this.account
+                isWhitelist = await this.ovnWhitelistContract.methods.isWhitelist(account, this.galxeNftsIds, this.partnerNftsIds).call();
                 this.isWhitelist = isWhitelist;
                 console.log("Is whitelist result: ", isWhitelist)
             } catch (e) {
@@ -1419,10 +1418,10 @@ export default {
             this.nftLoading = true;
 
             let account = this.account;
-            // account = "0xF37955134Dda37eaC7380f5eb42bce10796bD224" // todo: remove
-
+            let link = 'https://api.covalenthq.com/v1/base-mainnet/address/' + account + '/balances_v2/?nft=true&no-nft-asset-metadata=true';
+            console.log("Link for check nft: ", link);
             await axios.get(
-                'https://api.covalenthq.com/v1/base-mainnet/address/' + account + '/balances_v2/?nft=true&no-nft-asset-metadata=true',
+                link,
                 {
                     auth: {
                         username: 'ckey_be6ae76a05f940e1aae6adc7540',

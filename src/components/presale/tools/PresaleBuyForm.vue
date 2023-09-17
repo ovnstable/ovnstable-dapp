@@ -318,15 +318,18 @@ export default {
             let tokenId; // 1,2,3..
             let typeOfNft; // 0 - galxe, 1 - partner
 
+            console.log("Get first active Nft: ", this.galxeNftsIds, this.partnerNftsIds, this.galxeNftsIds.length, this.partnerNftsIds.length)
             // if not galaxe nfts and not partner nfts return null
             if (!this.galxeNftsIds.length && !this.partnerNftsIds.length) {
+                console.log("No one nfts, when get first active")
                 return null;
             }
 
             // check whitelist
             let isWhitelist
             try {
-                isWhitelist = await this.ovnWhitelistContract.methods.isWhitelist(this.account, this.galxeNftsIds, this.partnerNftsIds).call();
+                let account = this.account;
+                isWhitelist = await this.ovnWhitelistContract.methods.isWhitelist(account, this.galxeNftsIds, this.partnerNftsIds).call();
                 console.log('isWhitelist: ', isWhitelist);
             } catch (e) {
                 console.error("Error when check whitelist.", e);

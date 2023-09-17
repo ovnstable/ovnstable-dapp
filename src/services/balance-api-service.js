@@ -37,5 +37,23 @@ class BalanceApiService {
             })
         })
     }
+
+    checkBaseBalanceWithNft(apiUrl, address) {
+        let fetchOptions = {
+            headers: {
+                "Access-Control-Allow-Origin": apiUrl
+            }
+        };
+
+        return new Promise((resolve, reject) => {
+            apiService.get(apiUrl + '/client/balance/base/get/' + address, fetchOptions)
+                .then(data => {
+                    resolve(data)
+                })
+                .catch(e => {
+                    reject(getErrorObject(e))
+                })
+        })
+    }
 }
 export const balanceApiService = new BalanceApiService()

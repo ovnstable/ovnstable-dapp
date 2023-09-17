@@ -696,10 +696,10 @@ import TokenOvnInfo from "@/components/presale/tools/TokeOvnInfo.vue";
 import PresaleBuyForm from "@/components/presale/tools/PresaleBuyForm.vue";
 import {mapActions, mapGetters} from "vuex";
 import loadJSON from "@/utils/http-utils";
-import axios from "axios";
 import SuccessPresaleModal from "@/components/presale/modals/SuccessPresaleModal.vue";
 import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
 import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
+import {balanceApiService} from "@/services/balance-api-service";
 const moment = require('moment'); // import moment.js
 
 const USER_PRESALE_STATE_MAP = {
@@ -1418,27 +1418,18 @@ export default {
             this.nftLoading = true;
 
             let account = this.account;
-            let link = 'https://api.covalenthq.com/v1/base-mainnet/address/' + account + '/balances_v2/?nft=true&no-nft-asset-metadata=true';
-            console.log("Link for check nft: ", link);
-            await axios.get(
-                link,
-                {
-                    auth: {
-                        username: 'ckey_be6ae76a05f940e1aae6adc7540',
-                        password: ''
-                    }
-                }
-            ).then(async (result) => {
+            let url = "https://app.overnight.fi/api/presale";
+            balanceApiService.checkBaseBalanceWithNft(url, account)
+            .then(async (result) => {
                 console.log("NFT result", result)
 
-                // filter by contract_address 0x512cc325bae1dd4590f6d67733aaf8e6a0526eab and 0xe750a85e77bb505d5465f8045f25b27a3437b5f1
-                if (!result || !result.data || !result.data.data || !result.data.data.items || !result.data.data.items.length) {
+                if (!result || !result.data || !result.data.items || !result.data.items.length) {
                     this.nftStatus = false;
                     this.nftLoading = false;
                     return;
                 }
 
-                let galxeNfts = result.data.data.items.find((item) => {
+                let galxeNfts = result.data.items.find((item) => {
                     return item.contract_address === this.nftGalxeAddress;
                 });
 
@@ -1450,7 +1441,7 @@ export default {
 
                 // console.log()
 
-                let partnerNfts = result.data.data.items.find((item) => {
+                let partnerNfts = result.data.items.find((item) => {
                     return item.contract_address === this.nftPartnerAddress;
                 });
 
@@ -1468,7 +1459,7 @@ export default {
             }).catch(e => {
                 console.log("NFT LOADING error", e)
                 this.nftLoading = false;
-            })
+            });
         },
         updateCurrentUserStep() {
             // current step

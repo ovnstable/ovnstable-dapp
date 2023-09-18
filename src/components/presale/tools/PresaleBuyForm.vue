@@ -173,6 +173,7 @@ export default {
 
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
+        ...mapActions('track', ['trackClick']),
 
 
         switchToNetwork() {
@@ -217,6 +218,12 @@ export default {
             this.showWaitingModal('Buy in process');
 
             try {
+                this.trackClick({action: 'click_buy_and_farm', event_category: 'Click button', event_label: 'Click buy and farm' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
+
+            try {
                 // // 10**6
                 // let contractValue = this.web3.utils.toWei(this.value + "", this.usdPlusWeiType);
                 let contractValue = this.web3.utils.toWei(this.value + "", this.usdPlusWeiType);
@@ -249,7 +256,7 @@ export default {
                     .on('transactionHash', (hash) => {
                         console.log('Buy transactionHash: ', hash);
                         this.closeWaitingModal();
-                        this.showSuccessModal(true, hash, "You successfully bought OVN tokens", 'buy');
+                        this.showSuccessModal(true, hash, "You successfully bought OVN tokens", 'buy', this.value);
                     })
 
                 console.log("Result: ", result)
@@ -260,6 +267,7 @@ export default {
                 this.isBuyLoading = false;
             } finally {
                 this.closeWaitingModal();
+                this.isBuyLoading = false;
                 this.timeoutUpdateCurrentUserStep()
             }
         },

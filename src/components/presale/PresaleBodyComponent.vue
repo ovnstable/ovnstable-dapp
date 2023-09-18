@@ -290,9 +290,9 @@
                             <div class="timer-container-center">
                                 <div class="info-group">
                                     <Timer
-                                        v-if="presaleTimestamp"
-                                        :timestamp="presaleTimestamp"
-                                        title="Presale starts in"
+                                        v-if="presaleEndTimestamp"
+                                        :timestamp="presaleEndTimestamp"
+                                        title="Presale ends in"
                                         :updateStatus="updateStatus"
                                     />
                                 </div>
@@ -730,7 +730,14 @@ const USER_PRESALE_STATE_MAP = {
 
 export default {
     name: "PresaleBodyComponent",
-    components: {ErrorModal, WaitingModal, SuccessPresaleModal, PresaleBuyForm, TokenOvnInfo, Timer},
+    components: {
+        ErrorModal,
+        WaitingModal,
+        SuccessPresaleModal,
+        PresaleBuyForm,
+        TokenOvnInfo,
+        Timer
+    },
     data() {
         return {
             isFirstLoading: true,
@@ -770,7 +777,7 @@ export default {
             partnerNftsIds: [],
 
             ovnTokenAddress: "0xa3d1a8deb97b111454b294e2324efad13a9d8396", // ovn for test 0x2a40eab5dc171924937f242c5d73e1cd5a19e160
-            presaleContractAddress: "0x98e923e8D5f9E09AB87319dCEC36F17b95d48b7a",
+            presaleContractAddress: "0x5b4f6F099D5178209e032644B1184bFe906de836",
 
             ovnTokenContract: null,
             ovnWhitelistContract: null,
@@ -1081,9 +1088,9 @@ export default {
 
         },*/
 
-        showSuccessModal(isShow, hash, text, type) {
+        showSuccessModal(isShow, hash, text, type, value) {
             this.isShowSuccessModal = isShow;
-            console.log("Show success modal", isShow, hash, text);
+            console.log("Show success modal", isShow, hash, text, value);
 
             if (!isShow) {
                 this.successData = null;
@@ -1095,11 +1102,12 @@ export default {
                 chain: this.networkId,
                 hash: hash,
                 text: text,
-                type: type
+                type: type,
+                value: value
             }
 
             this.isShowSuccessModal = isShow;
-            console.log("Show success modal", isShow, hash, text);
+            console.log("Show success modal", isShow, hash, text, value);
         },
         loadIcoData() {
             console.log("Load ICO data")
@@ -1137,11 +1145,11 @@ export default {
             });
 
             // end time
-            this.ovnICOContract.methods.endTime().call().then((result) => {
+     /*       this.ovnICOContract.methods.endTime().call().then((result) => {
                 console.log("End time result", result)
                 this.presaleEndTimestamp = result * 1000;
                 console.log("End time", this.presaleEndTimestamp)
-            });
+            });*/
 
             // vestingBegin
             this.ovnICOContract.methods.vestingBeginTime().call().then((result) => {

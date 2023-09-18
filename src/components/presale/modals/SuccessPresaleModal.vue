@@ -26,8 +26,18 @@
                                 {{ successData? successData.text : 'Success'}}
                             </div>
 
-                            <div v-if="successData && successData.type === 'buy'" class="description-text">
-                                You can view your OVN tokens on the 'Claim' panel of the Presale page. Your OVN amount will vary during the Presale based on the amount of funds in the Presale contract. You will see the final amount of your OVN tokens and any overflow funds when the Presale ends.
+                            <div v-if="successData && successData.type === 'buy'">
+                                <div class="description-text">
+                                    You can view your OVN tokens on the 'Claim' panel of the Presale page. Your OVN amount will vary during the Presale based on the amount of funds in the Presale contract. You will see the final amount of your OVN tokens and any overflow funds when the Presale ends.
+                                </div>
+
+                               <div class="pt-6 text-center class-share-button-container">
+                                   <div @click="shareTwitter"
+                                        class="button-buy">
+                                       SHARE YOUR IMPRESSIONS
+                                       <img src="/assets/icon/presale/twitter.svg" alt="twitter"/>
+                                   </div>
+                               </div>
                             </div>
 
                             <div class="scan-container pt-5">
@@ -85,7 +95,16 @@ export default defineComponent({
     },
     watch: {
         isShow: function (val, oldVal) {
-            // TODO: tracking
+
+            if (val === true) {
+                if (this.successData && this.successData.type === 'buy') {
+                    try {
+                        this.trackClick({action: 'presale_success_view', event_category: 'View page', event_label: 'View presale success window' });
+                    } catch (e) {
+                        console.error("Track error:", e);
+                    }
+                }
+            }
         }
 
     },
@@ -97,6 +116,18 @@ export default defineComponent({
             console.log("explorerUrl", explorerUrl);
             window.open(explorerUrl, '_blank').focus();
         },
+
+        shareTwitter() {
+            let valueText = (this.successData && this.successData.value ? " for $" + this.successData.value : '');
+            let twitterLink = "https://twitter.com/share?text=I am participating in the $OVN Presale and have already purchased $OVN tokens" + valueText + ". See more details here&url=https://app.overnight.fi/presale&hashtags=overnight,overnight_fi,OVN_Presale"
+            console.log("Twitter share link: ", twitterLink)
+            window.open(twitterLink, '_blank').focus();
+            try {
+                this.trackClick({action: 'click_share_twitter_presale_info', event_category: 'Click button', event_label: 'Click share twitter' });
+            } catch (e) {
+                console.error("Track error:", e);
+            }
+        }
 
     }
 })
@@ -330,5 +361,41 @@ div {
 
     color: #707A8B;
 
+}
+
+.button-buy {
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 8px;
+    gap: 8px;
+
+    height: 40px;
+    min-width: 270px;
+
+    /* Blue gradient */
+    background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
+//background: linear-gradient(91.26deg, #989b9d 0%, rgba(120, 136, 146, 0.99) 100%);
+    border-radius: 2px;
+
+    color: white;
+
+    cursor: pointer;
+
+    /* Title 2 */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.class-share-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

@@ -39,6 +39,12 @@ export default {
             return this.days === 0 && this.hours === 0 && this.minutes === 0 && this.seconds === 0;
         }
     },
+    beforeDestroy() {
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
+
+    },
     methods: {
         initCountdown() {
             // event countdown

@@ -757,8 +757,8 @@ export default {
             galxeNftsIds: [],
             partnerNftsIds: [],
 
-            ovnTokenAddress: "0x2a40Eab5dC171924937F242c5D73E1cd5A19e160",
-            presaleContractAddress: null,
+            ovnTokenAddress: "0xa3d1a8deb97b111454b294e2324efad13a9d8396", // ovn for test 0x2a40eab5dc171924937f242c5d73e1cd5a19e160
+            presaleContractAddress: "0x98e923e8D5f9E09AB87319dCEC36F17b95d48b7a",
 
             ovnTokenContract: null,
             ovnWhitelistContract: null,

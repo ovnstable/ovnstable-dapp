@@ -119,7 +119,7 @@ export default defineComponent({
 
         shareTwitter() {
             let valueText = (this.successData && this.successData.value ? " for $" + this.successData.value : '');
-            let twitterLink = "https://twitter.com/share?text=I am participating in the $OVN Presale and have already purchased $OVN tokens" + valueText + ". See more details here&url=https://app.overnight.fi/presale&hashtags=overnight,overnight_fi,OVN_Presale"
+            let twitterLink = "https://twitter.com/share?text=I am participating in the $OVN Presale and have already purchased $OVN tokens" + valueText + ". See details on @overnight_fi dapp &url=https://app.overnight.fi/presale&hashtags=OVN_Presale"
             console.log("Twitter share link: ", twitterLink)
             window.open(twitterLink, '_blank').focus();
             try {

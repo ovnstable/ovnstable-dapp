@@ -104,7 +104,6 @@ export default {
         ...mapGetters('web3', ['loadingWeb3']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('accountData', ['account']),
-        ...mapActions('track', ['trackClick']),
     },
 
     watch: {
@@ -135,13 +134,13 @@ export default {
         },
 
         goToPresale() {
-            window.open('/presale', '_self').focus();
-
             try {
                 this.trackClick({action: 'presale_header_button', event_category: 'Button click', event_label: 'Click presale header button' });
             } catch (e) {
                 console.error("Track error:", e);
             }
+
+            window.open('/presale', '_self').focus();
         }
     }
 }

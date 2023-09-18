@@ -770,6 +770,9 @@ const actions = {
 
         for (let i = 0; i < items.length; i++) {
             items[i].currentWeight = Number((100 * parseFloat(items[i].netAssetValue) / sum).toFixed(3));
+            if (items[i].currentWeight < 0) {
+                items[i].currentWeight = 0;
+            }
             items[i].calculatedNav = (sum / 100) * items[i].targetWeight;
             console.log("CALCULATED NAV:", sum)
         }

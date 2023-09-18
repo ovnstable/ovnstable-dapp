@@ -183,6 +183,9 @@ export default {
             for (let i = 0; i < this.m2mItems.length; i++) {
                 let item = this.m2mItems[i];
                 item.targetWeight = Number(item.currentWeight.toFixed(this.targetWeightDecimals));
+                if (item.targetWeight < 0) {
+                    item.targetWeight = 0;
+                }
                 this.calculateNav(item);
             }
 

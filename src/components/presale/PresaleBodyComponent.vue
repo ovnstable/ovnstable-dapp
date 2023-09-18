@@ -1025,7 +1025,7 @@ export default {
         ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
 
         initRefreshData() {
-            this.initRefreshIntervalId = setInterval(this.loadContractData, 20000);
+            this.initRefreshIntervalId = setInterval(this.loadContractData, 30000);
         },
 
         async loadAllData() {

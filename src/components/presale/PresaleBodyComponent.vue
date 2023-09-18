@@ -1574,7 +1574,7 @@ export default {
     padding: 28px;
     gap: 20px;
 
-    min-height: 1050px;
+    min-height: 1100px;
 
     background: #FFFFFF;
     box-shadow: 0px 10px 20px rgba(9, 55, 98, 0.25);

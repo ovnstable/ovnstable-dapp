@@ -267,7 +267,7 @@ export default {
             this.showWaitingModal('Approving in process');
             console.log("Approve contract token.")
 
-            let contractValue = this.web3.utils.toWei(this.value + "", this.ovnWeiType)
+            let contractValue = this.web3.utils.toWei(this.value + "", this.usdPlusWeiType)
             await this.checkApproveForToken(contractValue);
             if (this.approveData.approved) {
                 console.log("Approve not needed for token.");
@@ -276,7 +276,7 @@ export default {
             }
 
             // let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
-            let approveValue = this.web3.utils.toWei("10000000", this.ovnWeiType);
+            let approveValue = this.web3.utils.toWei("10000000", this.usdPlusWeiType);
             console.log('Approve contract approveValue: ', approveValue);
             console.log('Approve contract newApproveValue: ', this.contracts.usdPlus, this.account, this.ovnICOContract.options.address, approveValue);
             this.approveToken(this.contracts.usdPlus, this.ovnICOContract.options.address, approveValue)
@@ -298,16 +298,19 @@ export default {
 
             this.approveData.allowanceValue = allowanceValue * 1;
             if (!this.approveData.allowanceValue) {
+                console.log("Approve 1", this.approveData.allowanceValue)
                 this.approveData.approved = false
                 return;
             }
 
             if (!checkedAllowanceValue) {
+                console.log("Approve 2", checkedAllowanceValue)
                 this.approveData.approved = true
                 return;
             }
 
             this.approveData.approved = this.approveData.allowanceValue >= checkedAllowanceValue;
+            console.log("Approve 3 ", this.approveData.approved, this.approveData.allowanceValue, checkedAllowanceValue)
         },
         max() {
             console.log('max from component');

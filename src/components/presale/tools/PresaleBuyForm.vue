@@ -248,8 +248,8 @@ export default {
                     .send(buyParams)
                     .on('transactionHash', (hash) => {
                         console.log('Buy transactionHash: ', hash);
-                        this.showSuccessModal(true, hash, "You successfully bought and farmed $OVN token");
                         this.closeWaitingModal();
+                        this.showSuccessModal(true, hash, "You successfully bought OVN tokens", 'buy');
                     })
 
                 console.log("Result: ", result)

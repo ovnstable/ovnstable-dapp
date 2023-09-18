@@ -286,7 +286,19 @@
                             <div v-if="currentStepType" class="step-container-separator"></div>
                         </div>
 
-                        <div v-if="!isFirstLoading">
+                        <div v-if="isFirstLoading">
+                            <div class="timer-container-center">
+                                <div class="info-group">
+                                    <Timer
+                                        v-if="presaleTimestamp"
+                                        :timestamp="presaleTimestamp"
+                                        title="Presale starts in"
+                                        :updateStatus="updateStatus"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
                             <div v-if="currentStepType === 'WAITING_FOR_PRESALE_START'" class="timer-container-center">
                                 <div class="info-group">
                                     <Timer
@@ -1230,7 +1242,7 @@ export default {
                     ...buyParams
                 }).on('transactionHash', (hash) => {
                     console.log("Claim vesting result", hash)
-                    this.showSuccessModal(true, hash, "You successfully claimed $OVN token");
+                    this.showSuccessModal(true, hash, "You successfully claimed OVN tokens");
                 })
                 console.log("Result: ", result)
 
@@ -1269,7 +1281,7 @@ export default {
                 }).on('transactionHash', (hash) => {
                     console.log("Claim sales part 1 result", hash)
                     this.closeWaitingModal();
-                    this.showSuccessModal(true, hash, "You successfully claimed $OVN token");
+                    this.showSuccessModal(true, hash, "You successfully claimed OVN tokens");
                 })
 
                 console.log("Result: ", result)
@@ -1308,7 +1320,7 @@ export default {
                 }).on('transactionHash', (hash) => {
                     console.log("Claim bonus result", hash)
                     this.closeWaitingModal();
-                    this.showSuccessModal(true, hash, "You successfully claimed $OVN token");
+                    this.showSuccessModal(true, hash, "You successfully claimed OVN tokens");
                     this.timeoutUpdateCurrentUserStep();
                 })
 

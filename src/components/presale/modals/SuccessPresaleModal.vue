@@ -26,7 +26,9 @@
                                 {{ successData? successData.text : 'Success'}}
                             </div>
 
-
+                            <div v-if="successData && successData.type === 'buy'" class="description-text">
+                                You can view your OVN tokens on the 'Claim' panel of the Presale page. Your OVN amount will vary during the Presale based on the amount of funds in the Presale contract. You will see the final amount of your OVN tokens and any overflow funds when the Presale ends.
+                            </div>
 
                             <div class="scan-container pt-5">
                                 <div @click="openOnExplorer" class="scan-title">
@@ -54,9 +56,6 @@ import {mapActions, mapGetters} from "vuex";
 export default defineComponent({
     name: "SuccessPresaleModal",
 
-    components: {
-        ...mapGetters('network', ['networkId', 'getParams']),
-    },
     props: {
 
         isShow: {
@@ -81,6 +80,7 @@ export default defineComponent({
     mounted() {
     },
     computed: {
+        ...mapGetters('network', ['networkId', 'getParams']),
 
     },
     watch: {
@@ -93,8 +93,9 @@ export default defineComponent({
         ...mapActions('track', ['trackClick']),
 
         openOnExplorer() {
-            let explorerUrl = this.getParams(this.successData.chain).explorerUrl;
-            window.open(explorerUrl + `tx/${this.successData.hash}`, '_blank').focus();
+            let explorerUrl = this.getParams(this.successData.chain).explorerUrl + `tx/${this.successData.hash}`;
+            console.log("explorerUrl", explorerUrl);
+            window.open(explorerUrl, '_blank').focus();
         },
 
     }
@@ -315,5 +316,19 @@ div {
 
 .divider {
     border-top: 1px solid #ADB3BD;
+}
+
+.description-text {
+    /* Caption */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    /* or 157% */
+    font-feature-settings: 'pnum' on, 'lnum' on;
+
+    color: #707A8B;
+
 }
 </style>

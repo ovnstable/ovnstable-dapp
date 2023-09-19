@@ -160,7 +160,7 @@
                 </div>-->
 
                 <div style="padding-top: 10px">
-                    <SwapSlippageSettings/>
+                    <SwapSlippageSettings :currentSlippageChanged="handleCurrentSlippageChanged" />/>
                 </div>
 
                 <div v-if="zapPool && this.zapPool.platform === 'Swapbased'" class="slippage-info-container">
@@ -681,6 +681,13 @@ export default defineComponent({
 
             console.error('Change swap method not found.', this.swapMethod);
         },
+
+        handleCurrentSlippageChanged(newSlippage) {
+            console.log('currentSlippage has changed:', newSlippage);
+
+            this.slippagePercent = newSlippage.value;
+        },
+
         finishTransaction() {
             console.log("Finish transaction");
             this.clearForm()

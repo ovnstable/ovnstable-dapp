@@ -453,8 +453,10 @@ export default {
         });
 
         this.currency = this.currencies[0];
+        if (this.networkId === 8453 && this.currency.title === "USDC") {
+            this.currency.title = "USDbC"
+        }
         this.buyCurrency = this.buyCurrencies[0];
-
         this.estimatedGas = null;
 
         this.gas = null;

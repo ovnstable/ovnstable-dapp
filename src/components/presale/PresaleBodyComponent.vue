@@ -1001,7 +1001,7 @@ export default {
                 return "000,000.00";
             }
 
-            return this.accountFarmingBonus.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            return this.accountFarmingBonus.toFixed(6).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         },
 
         formattedAccountOverflowFunds() {

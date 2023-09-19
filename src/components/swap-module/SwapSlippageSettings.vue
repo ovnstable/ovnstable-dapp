@@ -92,6 +92,10 @@ import {mapGetters} from "vuex";
 export default defineComponent({
     name: "SwapSlippageSettings",
     props: {
+        currentSlippageChanged: {
+            type: Function,
+            required: true
+        }
     },
     data() {
         return {
@@ -124,10 +128,14 @@ export default defineComponent({
             if (this.slippageSettings) {
                 localStorage.setItem(this.odosSlippageKey, JSON.stringify(this.currentSlippage));
             }
+            console.log("New setting:", this.currentSlippage)
         },
         newSlippageSetting(setting) {
             this.currentSlippage = setting;
             localStorage.setItem(this.odosSlippageKey, JSON.stringify(this.currentSlippage));
+
+            // Emit an event when currentSlippage changes
+            this.currentSlippageChanged(this.currentSlippage);
         },
         // method get setting by id
         getSlippageSettingById(id) {

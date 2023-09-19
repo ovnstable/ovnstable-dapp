@@ -120,7 +120,7 @@
                     </div>
                 </div>
 
-                <SwapSlippageSettings/>
+                <SwapSlippageSettings :currentSlippageChanged="handleCurrentSlippageChanged" />
 
                 <div v-if="networkName === 'zksync'" class="slippage-info-container">
                     <div class="slippage-info-title">
@@ -846,6 +846,13 @@ export default defineComponent({
 
             console.error('Change swap method not found.', this.swapMethod);
         },
+
+        handleCurrentSlippageChanged(newSlippage) {
+            console.log('currentSlippage has changed:', newSlippage);
+
+            this.slippagePercent = newSlippage.value;
+        },
+
         finishTransaction() {
             console.log("Finish transaction");
             this.clearForm()

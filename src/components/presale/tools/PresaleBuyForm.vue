@@ -82,9 +82,14 @@
                         BUY OVN AND FARM
                     </div>
                 </div>
-                <div v-else>
+                <div v-else-if="currentStep >= 2">
                     <div class="button-buy-disabled">
                         PRESALE FINISHED
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="button-buy-disabled">
+                        PRESALE
                     </div>
                 </div>
             </div>
@@ -119,6 +124,7 @@ export default {
         'ovnICOContract',
         'ovnTokenContract',
         'ovnWhitelistContract',
+        'currentStep',
         'currentStepType',
         'ovnWeiType',
         'usdPlusWeiType',

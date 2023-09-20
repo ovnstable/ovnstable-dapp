@@ -415,6 +415,7 @@
                                     :ovnTokenContract="ovnTokenContract"
                                     :ovnWhitelistContract="ovnWhitelistContract"
                                     :currentStepType="currentStepType"
+                                    :currentStep="currentStep"
                                     :ovnWeiType='ovnWeiType'
                                     :usdPlusWeiType='usdPlusWeiType'
                                     :galxeNftsIds="galxeNftsIds"
@@ -757,8 +758,10 @@ export default {
             overflowFarmingPool: 25000,
             fundsInPresale: 0,
             farmingBonus: 0,
+            totalCommitments: 0,
             softCap: 350000,
             hardCap: 500000,
+            icoBalance: 0,
 
             // personal data
             accountTotalUsdPurchased: 0,
@@ -822,7 +825,7 @@ export default {
     computed: {
         ...mapGetters('network', ['networkName', 'networkId']),
         ...mapGetters('accountData', ['account']),
-        ...mapGetters("web3", ["web3"]),
+        ...mapGetters("web3", ["web3", "contracts"]),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
         isSupportedNetwork() {
@@ -941,11 +944,19 @@ export default {
             return this.overflowFarmingPool.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         },
         formattedFarmingBonus() {
-            if (!this.farmingBonus) {
+            if (!this.account || !this.isSupportedNetwork || this.isFirstLoading) {
                 return "000,000";
             }
 
-            return this.farmingBonus.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            // presale finish:
+            if (this.farmingBonus) {
+                return this.farmingBonus.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            }
+
+            // before presale finish:
+            // (commitToken.balanceOf(address(this)) - totalCommitments)
+            let farmingBonus = this.icoBalance - this.totalCommitments;
+            return farmingBonus.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         },
         formattedFundsInPresale() {
             if (!this.fundsInPresale) {
@@ -965,6 +976,10 @@ export default {
         },
 
         formattedAccountTotalUsdPurchased() {
+            if (!this.account || !this.isSupportedNetwork || this.isFirstLoading) {
+                return "-";
+            }
+
             if (!this.accountTotalUsdPurchased) {
                 return "000,000.00";
             }
@@ -973,6 +988,10 @@ export default {
         },
 
         formattedAccountTotalOvnPurchased() {
+            if (!this.account || !this.isSupportedNetwork || this.isFirstLoading) {
+                return "-";
+            }
+
             if (!this.accountTotalOvnPurchased) {
                 return "000,000.00";
             }
@@ -981,6 +1000,10 @@ export default {
         },
 
         formattedAccountVestingAmount() {
+            if (!this.account || !this.isSupportedNetwork || this.isFirstLoading) {
+                return "-";
+            }
+
             if (!this.accountVestingAmount) {
                 return "000,000.00";
             }
@@ -989,6 +1012,10 @@ export default {
         },
 
         formattedAccountClaimableAmount() {
+            if (!this.account || !this.isSupportedNetwork || this.isFirstLoading) {
+                return "-";
+            }
+
             if (!this.accountClaimableAmount) {
                 return "000,000.00";
             }
@@ -997,6 +1024,10 @@ export default {
         },
 
         formattedAccountFarmingBonus() {
+            if (!this.account || !this.isSupportedNetwork || this.isFirstLoading) {
+                return "-";
+            }
+
             if (!this.accountFarmingBonus) {
                 return "000,000.00";
             }
@@ -1005,6 +1036,10 @@ export default {
         },
 
         formattedAccountOverflowFunds() {
+            if (!this.account || !this.isSupportedNetwork || this.isFirstLoading) {
+                return "-";
+            }
+
             if (!this.accountOverflowFunds) {
                 return "000,000.00";
             }
@@ -1188,6 +1223,14 @@ export default {
                 console.log("Farming bonus", this.farmingBonus, fromWei)
             });
 
+            // farmingBonus
+            this.ovnICOContract.methods.totalCommitments().call().then((result) => {
+                console.log("Total commitments result", result)
+                let fromWei = this.web3.utils.fromWei(result.toString(), this.usdPlusWeiType); // mwei - 6, gwei - 9, ether - 18
+                this.totalCommitments = fromWei * 1;
+                console.log("Total commitments", this.totalCommitments, fromWei)
+            });
+
             // fundsInPresale
             this.ovnICOContract.methods.totalCommitments().call().then((result) => {
                 console.log("Funds in presale result", result)
@@ -1201,6 +1244,18 @@ export default {
 
             // getUserInfo
            this.updateUserInfo();
+
+           // load ico usd+ balance
+            this.loadIcoBalance();
+        },
+
+        loadIcoBalance() {
+            this.contracts.usdPlus.methods.balanceOf(this.ovnICOContract.options.address).call().then((result) => {
+                console.log("icoBalance result", result)
+                let fromWei = this.web3.utils.fromWei(result.toString(), this.usdPlusWeiType); // mwei - 6, gwei - 9, ether - 18
+                this.icoBalance = fromWei * 1;
+                console.log("icoBalance", this.icoBalance, fromWei)
+            });
         },
 
         async loadContracts() {
@@ -1516,7 +1571,7 @@ export default {
                 // commitToReceive
                 let commitToReceive = this.web3.utils.fromWei(result.commitToReceive.toString(), this.usdPlusWeiType);
                 this.accountFarmingBonus = commitToReceive * 1;
-                console.log("Farming bonus", this.accountFarmingBonus, commitToReceive)
+                console.log("Account Farming bonus", this.accountFarmingBonus, commitToReceive)
 
                 // commitToRefund
                 let commitToRefund = this.web3.utils.fromWei(result.commitToRefund.toString(), this.usdPlusWeiType);

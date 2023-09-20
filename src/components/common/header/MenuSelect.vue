@@ -171,6 +171,38 @@
                 </v-list-item>
             </v-list-group>
 
+<!--
+            <div class="navbar-list-divider mt-1 mb-1"></div>
+            <label class="navbar-list-header mx-3">
+                OVN TOKEN
+            </label>
+
+            <v-list-item @click="buyOvnClick" :class="selectedTab === 'buy-ovn' ? 'selected-page-item' : ''">
+                <div class="navbar-page-link">
+                    <img :src="require('@/assets/icon/menu/buy-ovn.svg')"
+                         class="navbar-page-link" alt="">
+                </div>
+                <v-list-item-title class="mx-3">
+                    <label class="navbar-page-label" :class="selectedTab === 'buy-ovn' ? 'selected-page' : ''">
+                        BUY OVN
+                    </label>
+                </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item @click="provideLpClick" :class="selectedTab === 'provide-lp' ? 'selected-page-item' : ''">
+                <div class="navbar-page-link mt-1">
+                    <img :src="require('@/assets/icon/menu/provide-lp.svg')"
+                         class="navbar-page-link">
+                </div>
+                <v-list-item-title class="mx-3">
+                    <label :class="selectedTab === 'provide-lp' ? 'selected-page' : ''"
+                           class="navbar-page-label">
+                        PROVIDE LP
+                    </label>
+                </v-list-item-title>
+            </v-list-item>
+-->
+
 
 
             <div class="navbar-list-divider mt-1 mb-1"></div>
@@ -499,6 +531,17 @@ export default {
           this.goToActionByPath('/collateral/dai');
           // this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
         },
+
+        buyOvnClick() {
+            this.selectTab('buy-ovn');
+            this.goToActionByPath('/buy-ovn');
+        },
+
+        provideLpClick() {
+            this.selectTab('provide-lp');
+            this.goToActionByPath('/provide-lp');
+        },
+
 
         usdtCollateralClick() {
           this.selectTab('usdtplus_collateral');

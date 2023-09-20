@@ -231,7 +231,40 @@
                 </v-list-item>
             </v-list-group>
 
+<!--            <div class="navbar-list-divider mt-3 mb-1"></div>
+            <label class="navbar-list-header">
+                OVN TOKEN
+            </label>
 
+            <v-list-item :class="selectedTab === 'buy-ovn' ? 'selected-page-item' : ''"
+                         @click="buyOvnClick"
+                         class="list-item-hover mx-n2">
+                <v-list-item-icon>
+                    <img :src="require('@/assets/icon/menu/buy-ovn.svg')"
+                         class="navbar-page-link">
+                </v-list-item-icon>
+                <v-list-item-title>
+                    <label :class="selectedTab === 'buy-ovn' ? 'selected-page' : ''"
+                           class="navbar-page-label">
+                        BUY OVN
+                    </label>
+                </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item :class="selectedTab === 'provide-lp' ? 'selected-page-item' : ''"
+                         @click="provideLpClick"
+                         class="list-item-hover mx-n2">
+                <v-list-item-icon>
+                    <img :src="require('@/assets/icon/menu/provide-lp.svg')"
+                         class="navbar-page-link">
+                </v-list-item-icon>
+                <v-list-item-title>
+                    <label :class="selectedTab === 'provide-lp' ? 'selected-page' : ''"
+                           class="navbar-page-label">
+                        PROVIDE LP
+                    </label>
+                </v-list-item-title>
+            </v-list-item>-->
 
 
             <div class="navbar-list-divider mt-3 mb-1"></div>
@@ -530,6 +563,18 @@ export default {
             this.selectTab('featured');
             this.goToActionByPath('/featured');
         },
+
+
+        buyOvnClick() {
+            this.selectTab('buy-ovn');
+            this.goToActionByPath('/buy-ovn');
+        },
+
+        provideLpClick() {
+            this.selectTab('provide-lp');
+            this.goToActionByPath('/provide-lp');
+        },
+
 
         swapOdosClick() {
             this.selectTab('swap-odos');

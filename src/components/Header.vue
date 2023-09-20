@@ -3,9 +3,9 @@
             class="app-bar mr-n3"
             app>
         <v-row class="ma-0 header-container fill-height" align="center">
-            <div class="">
+<!--            <div class="">
                 <img v-if="!$wu.isFull()" class="ml-n3 logo-img" :src="require('@/assets/logo.svg')"  @click="openLinkToLanding('https://overnight.fi/')">
-            </div>
+            </div>-->
 
             <div>
                 <v-btn class="header-btn-presale btn-filled mr-2 mt-1" @click="goToPresale">
@@ -170,7 +170,8 @@ export default {
     }
 
     .header-btn-presale {
-        width: 90px !important;
+        min-width: 55px!important;
+        width: 55px !important;
         height: 25px !important;
         margin-left: 3px;
 

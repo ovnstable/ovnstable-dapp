@@ -956,6 +956,9 @@ export default {
             // before presale finish:
             // (commitToken.balanceOf(address(this)) - totalCommitments)
             let farmingBonus = this.icoBalance - this.totalCommitments;
+            if (farmingBonus <= 0) {
+                return "000,000";
+            }
             return farmingBonus.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         },
         formattedFundsInPresale() {

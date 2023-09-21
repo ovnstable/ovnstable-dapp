@@ -16,6 +16,8 @@ export const pool = {
 
             topPool: null,
 
+            typeOfPools: 'all', // all, ovn
+
             isZapModalShow: false,
             currentZapPool: null,
             zapPlatformSupportList: [
@@ -272,7 +274,7 @@ export const pool = {
                     url = 'https://meshswap.fi/exchange/pool/detail/';
                     break;
                 case 'Velodrome':
-                    url = 'https://app.velodrome.finance/liquidity/?query=usd%2B&filter=default';
+                    url = 'https://app.velodrome.finance/liquidity/?query=usd%2B&filter=all';
                     break;
                 case 'Aerodrome':
                     url = 'https://aerodrome.finance/liquidity/?query=usd%2B&filter=all';
@@ -444,6 +446,10 @@ export const pool = {
                     .then(data => {
                         if (data) {
                             data.forEach(pool => {
+                                if (this.typeOfPools === 'ovn' && !pool.id.name.toLowerCase().includes('ovn')) {
+                                    return;
+                                }
+
                                 let token0Icon;
                                 let token1Icon;
                                 let token2Icon;
@@ -500,7 +506,6 @@ export const pool = {
                                 }
 
                                 if (pool && pool.tvl && pool.tvl >= 0) {
-
                                     // todo move to backend
                                     if (this.zapPlatformSupportList.includes(pool.platform)
                                         && Object.keys(this.poolTokensForZapMap)
@@ -560,8 +565,16 @@ export const pool = {
             }
 
             this.pools = this.initFeature(this.pools);
-            this.sortedPoolList = this.getSortedPools(this.pools);
-            this.sortedPoolSecondList = this.getSortedSecondPools(this.pools);
+
+            if (this.typeOfPools === 'ovn') {
+                this.sortedPoolList = this.getSortedPools(this.pools, true);
+                console.log("Sorted pools", this.sortedPoolList);
+                this.sortedPoolSecondList = [];
+            } else {
+                this.sortedPoolList = this.getSortedPools(this.pools, false);
+                this.sortedPoolSecondList = this.getSortedSecondPools(this.pools);
+            }
+
             this.isPoolsLoading = false;
 
             const map = new Map();
@@ -594,8 +607,14 @@ export const pool = {
             }
         },
 
-        getSortedPools(pools) {
-            let topPools = pools.filter(pool => pool.tvl >= 300000 && pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013');
+        getSortedPools(pools, isOnvPools) {
+            let topPools;
+            if (!isOnvPools) {
+                topPools = pools.filter(pool => pool.tvl >= 300000 && pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013');
+            } else {
+                topPools = pools;
+            }
+
             topPools = topPools.sort((a, b) => {
                 if (a.feature && !b.feature) {
                     return -1; // a comes first when a is featured and b is not

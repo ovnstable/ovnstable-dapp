@@ -171,13 +171,13 @@
                 </v-list-item>
             </v-list-group>
 
-<!--
+
             <div class="navbar-list-divider mt-1 mb-1"></div>
             <label class="navbar-list-header mx-3">
                 OVN TOKEN
             </label>
 
-            <v-list-item @click="buyOvnClick" :class="selectedTab === 'buy-ovn' ? 'selected-page-item' : ''">
+<!--            <v-list-item @click="buyOvnClick" :class="selectedTab === 'buy-ovn' ? 'selected-page-item' : ''">
                 <div class="navbar-page-link">
                     <img :src="require('@/assets/icon/menu/buy-ovn.svg')"
                          class="navbar-page-link" alt="">
@@ -187,7 +187,7 @@
                         BUY OVN
                     </label>
                 </v-list-item-title>
-            </v-list-item>
+            </v-list-item>-->
 
             <v-list-item @click="provideLpClick" :class="selectedTab === 'provide-lp' ? 'selected-page-item' : ''">
                 <div class="navbar-page-link mt-1">
@@ -201,7 +201,7 @@
                     </label>
                 </v-list-item-title>
             </v-list-item>
--->
+
 
 
 

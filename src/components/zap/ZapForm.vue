@@ -160,7 +160,7 @@
                 </div>-->
 
                 <div style="padding-top: 10px">
-                    <SwapSlippageSettings :currentSlippageChanged="handleCurrentSlippageChanged" />/>
+                    <SwapSlippageSettings :currentSlippageChanged="handleCurrentSlippageChanged" />
                 </div>
 
                 <div v-if="zapPool && this.zapPool.platform === 'Swapbased'" class="slippage-info-container">

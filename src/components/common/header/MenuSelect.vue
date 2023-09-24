@@ -240,59 +240,6 @@
                 Delta-Neutrals
             </label>
 
-            <v-list-group :append-icon="null" @click="toggleEts(!isShowEts)">
-                <template v-slot:activator>
-                    <div class="navbar-page-link mt-1">
-                        <svg width="20" height="20" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path v-bind:fill="etsIconColor" d="M3.44252 12.7102L5.29426 10.7867L7.3117 10.8827L9.09836 12.6027L10.4854 11.1618L6.16288 7.00063L2.00168 11.3232L3.44252 12.7102Z"/>
-                            <path v-bind:fill="etsIconColor" d="M27.1123 17.6467L24.6781 18.7438L22.841 17.9045L21.822 15.6436L19.9986 16.4653L22.464 21.9355L27.9341 19.4701L27.1123 17.6467Z"/>
-                            <path v-bind:fill="etsIconColor" fill-rule="evenodd" clip-rule="evenodd" d="M20.7003 24.1574C19.1877 25.4263 17.4224 26.3633 15.5 26.8327C9.48 25.3627 5 19.3077 5 12.8327V8.57115L7.33333 10.8428V13.0893C7.33333 18.1294 11.125 23.3327 15.5 24.4994C17.0161 24.0951 18.4622 23.206 19.7046 22.007L20.7003 24.1574ZM24.0965 20.0304C25.3057 17.8657 26 15.3817 26 12.8327V5.83268L15.5 1.16602L7.76615 4.60328L9.56506 6.35464L15.5 3.70935L23.6667 7.34935V13.0893C23.6667 14.8208 23.2192 16.5715 22.4543 18.1712L23.0977 17.8733L24.0965 20.0304Z"/>
-                        </svg>
-                    </div>
-                    <v-list-item-title class="mx-3">
-                        <label :class="selectedTab.startsWith('ets_') ? 'selected-page' : ''"
-                               class="navbar-page-label">
-                            ETS
-                        </label>
-                    </v-list-item-title>
-                    <div class="select-bar-main-container ml-5">
-                        <v-row>
-                            <v-icon color="var(--secondary-gray-text)" >
-                                {{ isShowEts ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                            </v-icon>
-                        </v-row>
-                    </div>
-                </template>
-                <div>
-                    <v-list-item @click="aboutEtsClick"
-                                 :class="selectedTab === 'ets_about' ? 'selected-page-item' : ''"
-                                 class="list-item-hover">
-                        <label :class="selectedTab === 'ets_about' ? 'selected-page' : ''"
-                               class="navbar-list-label mx-7">
-                            About ETS
-                        </label>
-                    </v-list-item>
-
-                    <v-list-item @click="etsClick"
-                                 :class="selectedTab === 'ets_active' ? 'selected-page-item' : ''"
-                                 class="list-item-hover">
-                        <label :class="selectedTab === 'ets_active' ? 'selected-page' : ''"
-                               class="navbar-list-label mx-7">
-                            Active ETS
-                        </label>
-                    </v-list-item>
-
-                    <v-list-item @click="etsArchiveClick"
-                                 :class="selectedTab === 'ets_archive' ? 'selected-page-item' : ''"
-                                 class="list-item-hover">
-                        <label :class="selectedTab === 'ets_archive' ? 'selected-page' : ''"
-                               class="navbar-list-label mx-7">
-                            ETS Archive
-                        </label>
-                    </v-list-item>
-                </div>
-            </v-list-group>
-
             <div class="navbar-list-divider mt-1 mb-1"></div>
 
             <v-list-item @click="dashBoardClick" :class="selectedTab === 'dashboard' ? 'selected-page-item' : ''">
@@ -306,9 +253,12 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-item class="menu-item" @click="openLink('https://docs.overnight.fi/')">
-                <v-list-item-title class="network-select-list-item">
+            <v-list-item class="menu-item" >
+                <v-list-item-title class="network-select-list-item" @click="openLink('https://docs.overnight.fi/')">
                     Docs
+                </v-list-item-title>
+                <v-list-item-title @click="aboutEtsClick()">
+                    <label class="network-select-list-item">ETS</label>
                 </v-list-item-title>
             </v-list-item>
             <v-list-item link class="mb-0">
@@ -589,16 +539,6 @@ export default {
             this.goToActionByPath('/ets_about');
         },
 
-        etsClick() {
-            this.selectTab('market');
-            this.goToActionByPath('/market');
-        },
-
-        etsArchiveClick() {
-            this.selectTab('market/archive');
-            this.goToActionByPath('/market/archive');
-        },
-
         wrapClick() {
             this.showWrapView();
             this.showWrapModal();
@@ -742,6 +682,7 @@ export default {
 .network-select-list-item {
     font-family: 'Roboto', sans-serif !important;
     color: var(--secondary-gray-text) !important;
+    cursor: pointer;
 }
 
 .text-blue {

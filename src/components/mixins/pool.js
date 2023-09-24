@@ -513,7 +513,11 @@ export const pool = {
 
                                     this.pools.push({
                                         id: (pool.id.name + pool.tvl + pool.platform),
-                                        name: networkConfig.networkName === 'arbitrum' ? pool.id.name.toUpperCase().replace('USDC', 'USDC.e') : pool.id.name.toUpperCase(),// + ' ' + pool.id.address,
+                                        name: networkConfig.networkName === 'arbitrum'
+                                            ? pool.id.name.toUpperCase().replace('USDC', 'USDC.e')
+                                            : networkConfig.networkName === 'base'
+                                                ? pool.id.name.toUpperCase().replace('USDC', 'USDBC')
+                                                : pool.id.name.toUpperCase(),
                                         token0Icon: token0Icon,
                                         token1Icon: token1Icon,
                                         token2Icon: token2Icon,

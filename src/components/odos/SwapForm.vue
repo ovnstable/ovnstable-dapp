@@ -429,11 +429,20 @@ export default defineComponent({
 
         if (this.$route.query.action === 'swap-in') {
             console.log("Swap action: swap-in")
+            const symbol = this.$route.query.symbol;
+            console.log("this.$route.query.symbol", symbol);
+
+            this.addDefaultOvnToken(symbol);
+
             // ignore
         }
 
         if (this.$route.query.action === 'swap-out') {
             console.log("Swap action: swap-out")
+            const symbol = this.$route.query.symbol;
+            console.log("this.$route.query.symbol", symbol);
+
+            this.addDefaultOvnToken(symbol);
             this.changeSwap()
         }
     },
@@ -711,8 +720,9 @@ export default defineComponent({
                 this.finishTransaction();
             })
         },
-        addDefaultOvnToken() {
-            let ovnSelectedToken = this.getDefaultSecondtoken();
+        addDefaultOvnToken(symbol) {
+            console.log("ADD DEFAULT OVN TOKEN (symbol)", symbol)
+            let ovnSelectedToken = this.getDefaultSecondTokenFullFunction(symbol);
             if (!ovnSelectedToken) {
                 this.addNewInputToken();
                 this.addNewOutputToken();

@@ -489,7 +489,7 @@ export const odosSwap = {
                 let item = tokenMap[key];
 
                 // add only overnight
-                if (isOnlyOvnToken && item.protocolId === 'overnight' || item.symbol === 'USD+') {
+                if (isOnlyOvnToken && item.protocolId === 'overnight' || item.symbol === 'USD+' || item.symbol === 'DAI+' || item.symbol === 'USDT+') {
                     await this.addItemToFilteredTokens(tokens, key, item);
                     continue;
                 }
@@ -505,7 +505,7 @@ export const odosSwap = {
         },
         async addItemToFilteredTokens(tokens, key, item) {
             let logoUrl;
-            if (item.protocolId === 'overnight' || item.symbol === 'USD+') {
+            if (item.protocolId === 'overnight' || item.symbol === 'USD+' || item.symbol === 'DAI+' || item.symbol === 'USDT+') {
                 logoUrl = await this.loadOvernightTokenImage(item);
             } else {
                 logoUrl = this.loadTokenImage(item);
@@ -782,6 +782,7 @@ export const odosSwap = {
 
             console.error('TOKEN SEPARATION SCHEME NOT FOUND FOR GET DEFAULT', this.tokenSeparationScheme);
         },
+
         getSecondDefaultSecondtoken() {
             if (this.tokenSeparationScheme === 'OVERNIGHT_SWAP') {
                 return this.innerGetDefaultSecondtokenBySymobl(SECONDTOKEN_SECOND_DEFAULT_SYMBOL)
@@ -793,6 +794,7 @@ export const odosSwap = {
 
             console.error('TOKEN SEPARATION SCHEME NOT FOUND FOR GET SECOND DEFAULT', this.tokenSeparationScheme);
         },
+
         innerGetDefaultSecondtokenByIndex(index) {
             if (!this.secondTokens.length || this.secondTokens.length < index + 1) {
                 console.log("Inner get default token by index fail, secondTokens is empty or index not exist", this.secondTokens);
@@ -806,6 +808,7 @@ export const odosSwap = {
               console.log("Inner get default token by symbol fail, secondTokens is empty.", this.secondTokens);
               return null;
           }
+          console.log("innerGetDefaultSecondtokenBySymobl: ", symbolName)
 
             for (let i = 0; i < this.secondTokens.length; i++) {
                 let token = this.secondTokens[i];
@@ -818,6 +821,38 @@ export const odosSwap = {
             console.log('return first if usd+ not found')
             return this.secondTokens[0];
         },
+
+        /*getDefaultSecondTokenFullFunction(symbol) {
+            console.log("this.$innerGetDefaultSecondftokenBySymobl:", symbol);
+
+            console.log("this.$ TOKENS", this.secondTokens);
+
+            if (this.tokenSeparationScheme === 'OVERNIGHT_SWAP') {
+                for (let i = 0; i < this.secondTokens.length; i++) {
+                    let token = this.secondTokens[i];
+                    console.log("this.$ Checking token:", token);
+                    console.log("this.$ Comparing with symbolName:", symbol);
+                    if (token.symbol === symbol) {
+                        console.log("this.$Symbol matched:", symbol);
+                        return token;
+                    }
+                }
+
+                console.log("this.$ Symbol not found:", symbol);
+
+                if (symbol === 'USD+') {
+                    return this.secondTokens[0]
+                } else {
+                    return this.secondTokens[1];
+                }
+            }
+
+            if (this.tokenSeparationScheme === 'POOL_SWAP') {
+                return this.innerGetDefaultSecondtokenByIndex(1);
+            }
+
+            console.error('TOKEN SEPARATION SCHEME NOT FOUND FOR GET SECOND DEFAULT', this.tokenSeparationScheme);
+        },*/
 
         getActualGasPrice(networkId) {
             return odosApiService.getActualGasPrice(networkId);

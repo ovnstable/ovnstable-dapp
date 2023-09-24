@@ -295,11 +295,11 @@ export default {
 
     methods: {
         swapButtonIn() {
-            this.initTabName('/swap', {action: 'swap-in', asset: 'dai_plus'})
+            this.initTabName('/swap', {action: 'swap-in', symbol: 'DAI+'})
         },
 
         swapButtonOut() {
-            this.initTabName('/swap', {action: 'swap-out', asset: 'dai_plus'})
+            this.initTabName('/swap', {action: 'swap-out', symbol: 'DAI+'})
         },
 
         setTab(tabName) {

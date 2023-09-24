@@ -414,11 +414,11 @@ export default {
 
     methods: {
         swapButtonIn() {
-            this.initTabName('/swap', {action: 'swap-in'})
+            this.initTabName('/swap', {action: 'swap-in', symbol: 'USD+'})
         },
 
         swapButtonOut() {
-            this.initTabName('/swap', {action: 'swap-out'})
+            this.initTabName('/swap', {action: 'swap-out', symbol: 'USD+'})
         },
 
         openLink(url) {

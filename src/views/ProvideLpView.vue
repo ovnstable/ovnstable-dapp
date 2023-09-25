@@ -1,6 +1,6 @@
 <template>
     <div>
-        <PoolsContainer :type="'all'"></PoolsContainer>
+        <PoolsContainer :type="'ovn'"></PoolsContainer>
     </div>
 </template>
 
@@ -10,7 +10,7 @@
 import PoolsContainer from "@/components/pool/PoolsContainer.vue";
 
 export default {
-    name: "PoolsView",
+    name: "ProvideLpView",
     components: {
         PoolsContainer
     },

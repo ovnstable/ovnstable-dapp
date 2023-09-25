@@ -16,6 +16,14 @@
                     <br>
                     <br>
                     The unique feature of ETS is that it automatically administers a health factor on a lending protocol and rebalances your Lent/Borrowed amounts to maintain a stringent Health Factor meaning. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
+                    <div class="ets-links-container mt-5">
+                        <div class="links-text" @click="etsActiveClick()">
+                            Active ETS
+                        </div>
+                        <div class="links-text" @click="etsArchiveClick()">
+                            ETS Archive
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="how-container">
@@ -103,10 +111,13 @@
 
 <script>
 
+import PoolLabel from "@/components/zap/PoolLabel";
+import { mapActions } from "vuex";
 export default {
     name: "EtsAboutView",
 
     components: {
+        PoolLabel
     },
 
     props: {},
@@ -124,8 +135,26 @@ export default {
     },
 
     methods: {
+        ...mapActions('menuUI', ['selectTab']),
+
         openLink(url) {
             window.open(url, '_blank').focus();
+        },
+
+        goToActionByPath(path) {
+            this.$router.push({
+                path: path
+            });
+        },
+
+        etsActiveClick() {
+            this.selectTab('market');
+            this.goToActionByPath('/market');
+        },
+
+        etsArchiveClick() {
+            this.selectTab('market/archive');
+            this.goToActionByPath('/market/archive');
         },
     }
 };
@@ -413,4 +442,16 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .scheme {}
+
+.ets-links-container {
+    display: flex;
+    gap: 50px;
+}
+
+.links-text {
+    color: var(--links-blue);
+    font-weight: 400;
+    font-family: "Roboto", sans-serif;
+    cursor: pointer;
+}
 </style>

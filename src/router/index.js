@@ -23,6 +23,7 @@ import CollateralDai from "./midleware/dapp/CollateralDai";
 import CollateralUsdt from "./midleware/dapp/CollateralUsdt";
 import Dashboard from "./midleware/dapp/Dashboard";
 import Pools from "./midleware/dapp/Pools";
+import ProvideLp from "./midleware/dapp/ProvideLp";
 import Swap from "./midleware/dapp/Swap";
 import Swipe from "./midleware/dapp/Swipe";
 import Presasle from "./midleware/dapp/Presasle";
@@ -86,6 +87,16 @@ const routes = [
                 meta: {
                     middleware: [
                         Pools
+                    ]
+                }
+            },
+            {
+                path: '/provide-lp',
+                name: 'ProvideLpView',
+                component: () => import('../views/ProvideLpView.vue'),
+                meta: {
+                    middleware: [
+                        ProvideLp
                     ]
                 }
             },

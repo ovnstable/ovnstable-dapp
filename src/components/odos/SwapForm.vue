@@ -429,20 +429,11 @@ export default defineComponent({
 
         if (this.$route.query.action === 'swap-in') {
             console.log("Swap action: swap-in")
-            const symbol = this.$route.query.symbol;
-            console.log("this.$route.query.symbol", symbol);
-
-            this.addDefaultOvnToken(symbol);
-
             // ignore
         }
 
         if (this.$route.query.action === 'swap-out') {
             console.log("Swap action: swap-out")
-            const symbol = this.$route.query.symbol;
-            console.log("this.$route.query.symbol", symbol);
-
-            this.addDefaultOvnToken(symbol);
             this.changeSwap()
         }
     },
@@ -720,9 +711,9 @@ export default defineComponent({
                 this.finishTransaction();
             })
         },
-        addDefaultOvnToken(symbol) {
-            console.log("ADD DEFAULT OVN TOKEN (symbol)", symbol)
-            let ovnSelectedToken = this.getDefaultSecondTokenFullFunction(symbol);
+        addDefaultOvnToken() {
+            let symbol = this.$route.query.symbol ? this.$route.query.symbol : null;
+            let ovnSelectedToken = this.getDefaultSecondtoken(symbol);
             if (!ovnSelectedToken) {
                 this.addNewInputToken();
                 this.addNewOutputToken();
@@ -836,13 +827,21 @@ export default defineComponent({
             console.log("Tokens Transformed from Output to Input: ", this.inputTokens)
             this.outputTokens = tempOutputArray;
             console.log("Tokens Transformed from Input to Output: ", this.outputTokens)
+            let symbol = this.$route.query.symbol ? this.$route.query.symbol : null;
 
             if (this.swapMethod === 'BUY') {
                 this.setSwapMethod('SELL');
                 this.addTokensEmptyIsNeeded();
                 this.resetOutputs();
-                this.initTabName('/swap', {action: 'swap-out'})
 
+                let params = null;
+                if (symbol) {
+                    params = {action: 'swap-out', symbol: symbol}
+                } else {
+                    params = {action: 'swap-out' }
+                }
+
+                this.initTabName('/swap', params)
                 return;
             }
 
@@ -850,7 +849,15 @@ export default defineComponent({
                 this.setSwapMethod('BUY');
                 this.addTokensEmptyIsNeeded();
                 this.resetOutputs();
-                this.initTabName('/swap', {action: 'swap-in'})
+
+                let params = null;
+                if (symbol) {
+                    params = {action: 'swap-in', symbol: symbol}
+                } else {
+                    params = {action: 'swap-in' }
+                }
+
+                this.initTabName('/swap', params)
                 return;
             }
 

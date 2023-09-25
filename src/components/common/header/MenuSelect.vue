@@ -236,11 +236,6 @@
             </v-list-item>
 
             <div class="navbar-list-divider mt-1 mb-1"></div>
-            <label class="navbar-list-header mx-3">
-                Delta-Neutrals
-            </label>
-
-            <div class="navbar-list-divider mt-1 mb-1"></div>
 
             <v-list-item @click="dashBoardClick" :class="selectedTab === 'dashboard' ? 'selected-page-item' : ''">
                 <div class="navbar-page-link">

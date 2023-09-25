@@ -303,11 +303,6 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <div class="navbar-list-divider mt-3 mb-1"></div>
-
-            <label class="navbar-list-header">
-                Delta-Neutrals
-            </label>
         </v-list>
 
         <v-list nav subheader class="mx-3 my-n1" dense>

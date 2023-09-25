@@ -5,8 +5,10 @@
         </div>
 
         <v-row align="start" justify="start" class="ma-0 mt-5 toggle-row">
-            <label @click="tab=1" class="tab-btn mr-4" v-bind:class="activeTabAbout">About Insurance</label>
-            <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabAll" disabled>
+            <label @click="setTab('about')" class="tab-btn mr-4" v-bind:class="activeTabAbout">
+                About Insurance
+            </label>
+            <label @click="setTab('all')" class="tab-btn mx-4" v-bind:class="activeTabAll">
                 All Insurance
             </label>
 
@@ -14,7 +16,7 @@
         </v-row>
 
         <div class="mt-7 cards-list-container">
-            <v-row class="d-flex" justify="start" v-if="tab === 1">
+            <v-row class="d-flex" justify="start" v-if="tab === 'about'">
                 <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)">
                     <v-row class="fill-height">
                         <InsuranceCard class="ma-3"/>
@@ -27,9 +29,8 @@
                 </v-col>
             </v-row>
 
-            <template v-if="tab === 2">
-                <!-- TODO: add insurance list header -->
-                <!-- TODO: add insurance list cards -->
+            <template v-if="tab === 'all'">
+                <InsuranceList></InsuranceList>
             </template>
         </div>
 
@@ -41,6 +42,7 @@
 
 import {mapGetters} from "vuex";
 import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
+import InsuranceList from "@/components/insurance/cards/insurance/InsuranceList";
 import InsuranceInfoCard from "@/components/insurance/cards/insurance/InsuranceInfoCard";
 
 
@@ -50,10 +52,11 @@ export default {
     components: {
         InsuranceInfoCard,
         InsuranceCard,
+        InsuranceList
     },
 
     data: () => ({
-        tab: 1,
+        tab: 'about',
         sortedCardList: [],
     }),
 
@@ -62,15 +65,15 @@ export default {
 
         activeTabAbout: function () {
             return {
-                'tab-button': this.tab === 1,
-                'tab-button-in-active': this.tab !== 1,
+                'tab-button': this.tab === 'about',
+                'tab-button-in-active': this.tab !== 'about',
             }
         },
 
         activeTabAll: function () {
             return {
-                'tab-button': this.tab === 2,
-                'tab-button-in-active': this.tab !== 2,
+                'tab-button': this.tab === 'all',
+                'tab-button-in-active': this.tab !== 'all',
             }
         },
     },
@@ -84,6 +87,9 @@ export default {
     },
 
     methods: {
+        setTab(newTab) {
+            this.tab = newTab;
+        }
 
     }
 }

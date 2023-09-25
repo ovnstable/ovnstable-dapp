@@ -266,6 +266,21 @@
                 </v-list-item-title>
             </v-list-item>
 
+            <v-list-item :class="selectedTab === 'insurance' ? 'selected-page-item' : ''"
+                         @click="insuranceClick"
+                         class="list-item-hover mx-n2">
+                <v-list-item-icon>
+                    <img :src="require('@/assets/icon/menu/insurance.svg')"
+                         class="navbar-page-link">
+                </v-list-item-icon>
+                <v-list-item-title>
+                    <label :class="selectedTab === 'insurance' ? 'selected-page' : ''"
+                           class="navbar-page-label">
+                        INSURANCE
+                    </label>
+                </v-list-item-title>
+            </v-list-item>
+
 
             <div class="navbar-list-divider mt-3 mb-1"></div>
             <label class="navbar-list-header">
@@ -575,6 +590,10 @@ export default {
             this.goToActionByPath('/provide-lp');
         },
 
+        insuranceClick() {
+                this.selectTab('insurance');
+                this.goToActionByPath('/insurance');
+        },
 
         swapOdosClick() {
             this.selectTab('swap-odos');

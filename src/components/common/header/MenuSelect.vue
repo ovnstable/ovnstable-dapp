@@ -202,6 +202,19 @@
                 </v-list-item-title>
             </v-list-item>
 
+            <v-list-item @click="provideLpClick" :class="selectedTab === 'insurance' ? 'selected-page-item' : ''">
+                <div class="navbar-page-link mt-1">
+                    <img :src="require('@/assets/icon/menu/insurance.svg')"
+                         class="navbar-page-link">
+                </div>
+                <v-list-item-title class="mx-3">
+                    <label :class="selectedTab === 'insurance' ? 'selected-page' : ''"
+                           class="navbar-page-label">
+                        INSURANCE
+                    </label>
+                </v-list-item-title>
+            </v-list-item>
+
 
 
 
@@ -540,6 +553,11 @@ export default {
         provideLpClick() {
             this.selectTab('provide-lp');
             this.goToActionByPath('/provide-lp');
+        },
+
+        insuranceClick() {
+            this.selectTab('insurance');
+            this.goToActionByPath('/insurance');
         },
 
 

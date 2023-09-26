@@ -69,14 +69,14 @@ export default defineComponent({
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView', 'showUnwrapView']),
 
         initNeededModal() {
-            if (this.$route.query.asset) {
+            if (this.$route.query.symbol) {
                 setTimeout(() => {
-                    console.log("this.$route.query.asset", this.$route.query.asset)
-                    if (this.$route.query.asset === 'wusd_plus') {
+                    console.log("this.$route.query.asset", this.$route.query.symbol)
+                    if (this.$route.query.symbol === 'wUSD+') {
                         this.swapWusdAction();
-                    } else if (this.$route.query.asset === 'dai_plus') {
+                    } else if (this.$route.query.symbol === 'DAI+') {
                         this.swapDaiAction();
-                    } else if (this.$route.query.asset === 'usdt_plus') {
+                    } else if (this.$route.query.symbol === 'USDT+') {
                         this.swapUsdtAction();
                     }
 

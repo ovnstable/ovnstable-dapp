@@ -286,19 +286,7 @@
                             <div v-if="currentStepType" class="step-container-separator"></div>
                         </div>
 
-                        <div v-if="isFirstLoading">
-                            <div class="timer-container-center">
-                                <div class="info-group">
-                                    <Timer
-                                        v-if="presaleEndTimestamp"
-                                        :timestamp="presaleEndTimestamp"
-                                        title="Presale ends in"
-                                        :updateStatus="updateStatus"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else>
+                        <div v-if="!isFirstLoading">
                             <div v-if="currentStepType === 'WAITING_FOR_PRESALE_START'" class="timer-container-center">
                                 <div class="info-group">
                                     <Timer
@@ -527,7 +515,7 @@
                                     <Timer
                                         v-if="claimSalesFirstPartTimestamp"
                                         :timestamp="claimSalesFirstPartTimestamp"
-                                        title="Claim sales starts in"
+                                        title="Claim starts in"
                                         :updateStatus="updateStatus"
                                     />
                                 </div>
@@ -657,7 +645,7 @@
                                 </div>
                                 <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_SALES_FIRST_PART'"
                                      class="button-buy-disabled">
-                                    WAITING CLAIM SALES
+                                    WAITING CLAIM
                                 </div>
                                 <div v-else-if="currentStepType === 'CLAIM_SALES_FIRST_PART'"
                                      @click="claimSalesPart1"
@@ -880,7 +868,7 @@ export default {
             }
 
             if (this.currentStepType === 'WAITING_FOR_CLAIM_SALES_FIRST_PART') {
-                return 'Waiting sales';
+                return 'Waiting claim';
             }
 
             if (this.currentStepType === 'CLAIM_SALES_FIRST_PART') {

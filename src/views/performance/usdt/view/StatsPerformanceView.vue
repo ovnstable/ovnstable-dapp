@@ -307,11 +307,11 @@ export default {
     methods: {
         ...mapActions("network", ["setWalletNetwork"]),
         swapButtonIn() {
-            this.initTabName('/swap', {action: 'swap-in', asset: 'usdt_plus'})
+            this.initTabName('/swap', {action: 'swap-in', symbol: 'USDT+'})
         },
 
         swapButtonOut() {
-            this.initTabName('/swap', {action: 'swap-out', asset: 'usdt_plus'})
+            this.initTabName('/swap', {action: 'swap-out', symbol: 'USDT+'})
         },
 
         setTab(tabName, chartType) {

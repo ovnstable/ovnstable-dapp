@@ -516,9 +516,18 @@ export const pool = {
                                     // todo move to backend
                                     pool = this.initAggregators(pool);
 
+                                    const name = networkConfig.networkName;
+                                    let newName = pool.id.name.toUpperCase();
+
+                                    if (name === 'arbitrum') {
+                                        newName = newName.replace('USDC', 'USDC.e');
+                                    } else if (name === 'base') {
+                                        newName = newName.replace('USDC', 'USDBC');
+                                    }
+
                                     this.pools.push({
                                         id: (pool.id.name + pool.tvl + pool.platform),
-                                        name: networkConfig.networkName === 'arbitrum' ? pool.id.name.toUpperCase().replace('USDC', 'USDC.e') : pool.id.name.toUpperCase(),// + ' ' + pool.id.address,
+                                        name: newName,
                                         token0Icon: token0Icon,
                                         token1Icon: token1Icon,
                                         token2Icon: token2Icon,

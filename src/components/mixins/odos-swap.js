@@ -489,7 +489,7 @@ export const odosSwap = {
                 let item = tokenMap[key];
 
                 // add only overnight
-                if (isOnlyOvnToken && item.protocolId === 'overnight' || item.symbol === 'USD+') {
+                if (isOnlyOvnToken && item.protocolId === 'overnight' || item.symbol === 'USD+' || item.symbol === 'DAI+' || item.symbol === 'USDT+') {
                     await this.addItemToFilteredTokens(tokens, key, item);
                     continue;
                 }
@@ -505,7 +505,7 @@ export const odosSwap = {
         },
         async addItemToFilteredTokens(tokens, key, item) {
             let logoUrl;
-            if (item.protocolId === 'overnight' || item.symbol === 'USD+') {
+            if (item.protocolId === 'overnight' || item.symbol === 'USD+' || item.symbol === 'DAI+' || item.symbol === 'USDT+') {
                 logoUrl = await this.loadOvernightTokenImage(item);
             } else {
                 logoUrl = this.loadTokenImage(item);
@@ -535,7 +535,6 @@ export const odosSwap = {
             this.tokens = [];
             this.secondTokens = [];
         },
-
 
         assembleRequest(requestData) {
             return odosApiService.assembleRequest(requestData).then((data) => {
@@ -771,9 +770,9 @@ export const odosSwap = {
             // web3.eth.call({from: …, to: …, data: TransactionData, …}).on(…);
 
         },
-        getDefaultSecondtoken() {
+        getDefaultSecondtoken(symbol) {
             if (this.tokenSeparationScheme === 'OVERNIGHT_SWAP') {
-                return this.innerGetDefaultSecondtokenBySymobl(SECONDTOKEN_DEFAULT_SYMBOL)
+                return this.innerGetDefaultSecondtokenBySymobl(symbol ? symbol : SECONDTOKEN_DEFAULT_SYMBOL)
             }
 
             if (this.tokenSeparationScheme === 'POOL_SWAP') {
@@ -802,10 +801,10 @@ export const odosSwap = {
             return this.secondTokens[index];
         },
         innerGetDefaultSecondtokenBySymobl(symbolName) {
-          if (!this.secondTokens.length) {
+            if (!this.secondTokens.length) {
               console.log("Inner get default token by symbol fail, secondTokens is empty.", this.secondTokens);
               return null;
-          }
+            }
 
             for (let i = 0; i < this.secondTokens.length; i++) {
                 let token = this.secondTokens[i];

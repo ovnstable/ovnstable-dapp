@@ -30,7 +30,7 @@
             </v-row>
 
             <template v-if="tab === 'all'">
-                <InsuranceList></InsuranceList>
+<!--                <InsuranceList></InsuranceList>-->
             </template>
         </div>
 
@@ -42,7 +42,7 @@
 
 import {mapGetters} from "vuex";
 import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
-import InsuranceList from "@/components/insurance/cards/insurance/InsuranceList";
+// import InsuranceList from "@/components/insurance/cards/insurance/InsuranceList";
 import InsuranceInfoCard from "@/components/insurance/cards/insurance/InsuranceInfoCard";
 
 
@@ -52,7 +52,7 @@ export default {
     components: {
         InsuranceInfoCard,
         InsuranceCard,
-        InsuranceList
+        // InsuranceList
     },
 
     data: () => ({

@@ -477,7 +477,7 @@ export default defineComponent({
             let sum = 0
             for (let i = 0; i < this.selectedInputTokens.length; i++) {
                 let token = this.selectedInputTokens[i];
-                let selectedTokenUsdValue = token.value * token.selectedToken.price;
+                let selectedTokenUsdValue = this.swapMethod === 'BUY' ? token.value * token.selectedToken.price : token.value / token.selectedToken.price;
                 sum += selectedTokenUsdValue;
             }
 
@@ -1281,14 +1281,16 @@ export default defineComponent({
             // this.updatePathViewFunc(this.pathViz, [], []);
         },
         async recalculateProportion() {
+            console.log("Zap address: ", this.zapPool.address, this.zapPool)
             let reserves = await this.getProportion(this.zapPool.address, this.zapPool);
-            console.log("reserves 1: ", reserves.token0Amount);
-            console.log("reserves 2: ", reserves.token1Amount);
+            console.log("Reserves data ", reserves);
             let sumReserves = reserves.token0Amount*1 + reserves.token1Amount*1;
-            console.log("sumReserves: ", sumReserves);
+            console.log("Reserves sumReserves: ", sumReserves);
             // "proportion": reserves[0] / sumReserves
             this.selectedOutputTokens[0].value = reserves[0] / sumReserves * 100;
             this.selectedOutputTokens[1].value = reserves[1] / sumReserves * 100;
+
+            console.log("selectedOutputTokens after reset: ", this.selectedOutputTokens)
 
             this.recalculateOutputTokensSum();
         },
@@ -1549,18 +1551,12 @@ export default defineComponent({
             // }
         },
         recalculateOutputTokensSum() {
-            console.log('recalculateOutputTokensSum')
+            console.log(`recalculateOutputTokensSum. recalculate token count ${this.selectedOutputTokens.length} usdSum: ${this.sumOfAllSelectedTokensInUsd}`);
             for (let i = 0; i < this.selectedOutputTokens.length; i++) {
                 let token = this.selectedOutputTokens[i];
-                console.log("token: ", token, token.value);
                 let sum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
-                console.log("token sum: ", sum, this.sumOfAllSelectedTokensInUsd, token.value);
-                sum = this.swapMethod === 'BUY' ? sum * token.selectedToken.price : sum / token.selectedToken.price;
-                console.log("token sum: ", sum);
-                // console.log('recalculateOutputTokensSum', this.sumOfAllSelectedTokensInUsd, token.value, sum);
-
-                token.sum = this.$utils.formatMoney(sum, 4);
-                console.log("token token.sum: ", token.sum);
+                console.log(`Recalculate token.selectedToken ${token.selectedToken.symbol} price: ${token.selectedToken.price}, newUsdSum: ${sum}`, token);
+                token.sum = this.$utils.formatMoney(sum, 4)
             }
         },
         subTokensProportions(currentToken, difference) {

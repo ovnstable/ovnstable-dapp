@@ -444,8 +444,10 @@ export const odosSwap = {
                     address => address.toLowerCase() === key.toLowerCase()
                 );
 
+                let isNeedIgnore = (key === "0x0000000000000000000000000000000000000000" || (item.protocolId === 'overnight' && item.symbol === 'OVN'));
                 // key === token address
-                if (ignoreBaseNetworkCurrency && key === "0x0000000000000000000000000000000000000000") {
+                if (ignoreBaseNetworkCurrency && isNeedIgnore) {
+                    console.log("Ignore item: ", item);
                     continue;
                 }
 
@@ -505,8 +507,12 @@ export const odosSwap = {
         },
         async addItemToFilteredTokens(tokens, key, item) {
             let logoUrl;
-            if (item.protocolId === 'overnight' || item.symbol === 'USD+' || item.symbol === 'DAI+' || item.symbol === 'USDT+') {
-                logoUrl = await this.loadOvernightTokenImage(item);
+            if (item.protocolId === 'overnight' || item.symbol === 'USD+' || item.symbol === 'DAI+' || item.symbol === 'USDT+' || item.symbol === 'OVN') {
+                if (item.symbol === 'OVN') {
+                    logoUrl = this.loadTokenImage(item);
+                } else {
+                    logoUrl = await this.loadOvernightTokenImage(item);
+                }
             } else {
                 logoUrl = this.loadTokenImage(item);
             }

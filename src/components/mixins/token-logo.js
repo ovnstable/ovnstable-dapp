@@ -52,7 +52,7 @@ export const tokenLogo = {
 
                 return '/assets/currencies/stablecoins/' + token.symbol + '.png';
             } catch (e) {
-                console.log("load Overnight Token Image failed ", e)
+                console.log("load Overnight Token Image failed ", token.symbol, e)
                 return '/assets/currencies/stablecoins/' + token.symbol + '.png';
             }
         },

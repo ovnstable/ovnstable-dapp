@@ -94,6 +94,11 @@ export const pool = {
                     {name: 'LUSD', address: '0xc40f949f8a4e094d1b49a23ea9241d289b7b2819'},
                 ],
 
+                '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0': [
+                    {name: 'OVN', address: '0x3b08fcd15280e7B5A6e404c4abb87F7C774D1B2e'},
+                    {name: 'USD+', address: '0x73cb180bf0521828d8849bc8CF2B920918e23032'},
+                ],
+
                 // Ramses
                 '0xeb9153afbaa3a6cfbd4fce39988cea786d3f62bb': [
                     {name: 'USD+', address: '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'},
@@ -206,6 +211,11 @@ export const pool = {
 
                 '0x8E9154AC849e839d60299E85156bcb589De2693A': [
                     {name: 'DOLA', address: '0x4621b7a9c75199271f773ebd9a499dbd165c3191'},
+                    {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
+                ],
+
+                '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197': [
+                    {name: 'OVN', address: '0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396'},
                     {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
                 ],
 

@@ -444,8 +444,10 @@ export const odosSwap = {
                     address => address.toLowerCase() === key.toLowerCase()
                 );
 
+                let isNeedIgnore = (key === "0x0000000000000000000000000000000000000000" || (item.protocolId === 'overnight' && item.symbol === 'OVN'));
                 // key === token address
-                if (ignoreBaseNetworkCurrency && key === "0x0000000000000000000000000000000000000000") {
+                if (ignoreBaseNetworkCurrency && isNeedIgnore) {
+                    console.log("Ignore item: ", item);
                     continue;
                 }
 

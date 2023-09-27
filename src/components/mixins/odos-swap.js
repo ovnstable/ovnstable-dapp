@@ -505,8 +505,12 @@ export const odosSwap = {
         },
         async addItemToFilteredTokens(tokens, key, item) {
             let logoUrl;
-            if (item.protocolId === 'overnight' || item.symbol === 'USD+' || item.symbol === 'DAI+' || item.symbol === 'USDT+') {
-                logoUrl = await this.loadOvernightTokenImage(item);
+            if (item.protocolId === 'overnight' || item.symbol === 'USD+' || item.symbol === 'DAI+' || item.symbol === 'USDT+' || item.symbol === 'OVN') {
+                if (item.symbol === 'OVN') {
+                    logoUrl = this.loadTokenImage(item);
+                } else {
+                    logoUrl = await this.loadOvernightTokenImage(item);
+                }
             } else {
                 logoUrl = this.loadTokenImage(item);
             }

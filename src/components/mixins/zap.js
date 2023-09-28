@@ -176,6 +176,13 @@ export const zap = {
                     approveType: 'TOKEN'
                 },
 
+                '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0': {
+                    gauge: '0xfac0cf9e487356ddc72443061dfdb109885b04fd',
+                    poolId: 0,
+                    approveType: 'TOKEN'
+                },
+
+
                 // Aerodrome
                 '0x1b05e4e814b3431a48b8164c41eac834d9ce2da6': {
                     gauge: '0x87803Cb321624921cedaAD4555F07Daa0D1Ed325',
@@ -197,6 +204,12 @@ export const zap = {
 
                 '0x8E9154AC849e839d60299E85156bcb589De2693A': {  // dola/usd+ volatile
                     gauge: '0x969c70383A95704C6a35497d8C77BF38dc152e63',
+                    poolId: 0,
+                    approveType: 'TOKEN'
+                },
+
+                '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197': {  // ovn/usd+ volatile
+                    gauge: '0x00b2149d89677a5069ed4d303941614a33700146',
                     poolId: 0,
                     approveType: 'TOKEN'
                 },
@@ -404,7 +417,7 @@ export const zap = {
                 console.error('Error get proportion for: ', poolAddress, gauge, poolInfo, e);
             });
         },
-        calculateProportionForChronosSwapModif({
+        calculateProportionForPool({
                                                    inputTokensDecimals,
                                                    inputTokensAddresses,
                                                    inputTokensAmounts,

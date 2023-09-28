@@ -80,6 +80,18 @@
                                         v-model="item.enabledReward"
                                     ></v-switch>
                                 </td>
+                                <td>
+                                    <v-row class="fill-height" align="center" justify="center">
+                                        <v-text-field
+                                            class="m2m-field"
+                                            :rules="[rules.required, checkNumber]"
+                                            dense
+                                            outlined
+                                            v-model="item.riskFactor"
+                                            :disabled="financeLoading || !hasChangeAccount">
+                                        </v-text-field>
+                                    </v-row>
+                                </td>
                             </template>
 
                         </tr>
@@ -225,6 +237,16 @@ export default {
                 }
             } else {
                 return true;
+            }
+        },
+
+        updateHeaders() {
+            if (this.networkId === 137 || this.networkId === 42161 || this.networkId === 8453 || this.networkId === 59144) {
+                if (!this.headersM2M.find(value => value.text === 'Risk Factor')) {
+                    this.headersM2M.push({text: 'Risk Factor', value: 'riskFactor'});
+                }
+            } else {
+                this.headersM2M = this.headersM2M.filter(value => value.text !== 'Risk Factor');
             }
         },
         loadData() {

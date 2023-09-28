@@ -398,9 +398,6 @@
                     <v-list-item-title @click="openLink('https://docs.overnight.fi/')">
                         <label class="footer-item-label">Docs</label>
                     </v-list-item-title>
-                    <v-list-item-title @click="aboutEtsClick()">
-                        <label class="footer-item-label">ETS</label>
-                    </v-list-item-title>
                 </v-list-item>
 
                 <v-list-item link class="mb-0">
@@ -412,6 +409,12 @@
                 <v-list-item link class="mb-0">
                     <v-list-item-title @click="openLink('https://discord.com/channels/933003627444969552/967813123149033542/967813482684760135/')">
                         <label class="footer-item-label">Help center in Discord</label>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item link>
+                    <v-list-item-title @click="aboutEtsClick()">
+                        <label class="footer-item-label">ETS</label>
                     </v-list-item-title>
                 </v-list-item>
 

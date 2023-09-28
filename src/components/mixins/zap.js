@@ -417,7 +417,7 @@ export const zap = {
                 console.error('Error get proportion for: ', poolAddress, gauge, poolInfo, e);
             });
         },
-        calculateProportionForChronosSwapModif({
+        calculateProportionForPool({
                                                    inputTokensDecimals,
                                                    inputTokensAddresses,
                                                    inputTokensAmounts,

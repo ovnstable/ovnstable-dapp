@@ -477,7 +477,7 @@ export default defineComponent({
             let sum = 0
             for (let i = 0; i < this.selectedInputTokens.length; i++) {
                 let token = this.selectedInputTokens[i];
-                let selectedTokenUsdValue = this.swapMethod === 'BUY' ? token.value * token.selectedToken.price : token.value / token.selectedToken.price;
+                let selectedTokenUsdValue = token.value * token.selectedToken.price;
                 sum += selectedTokenUsdValue;
             }
 
@@ -774,11 +774,15 @@ export default defineComponent({
                 console.log("Actual price for gas when not found base fee. network: ", this.networkId, actualGasPriceObject)
             }
 
+            let outputToken0Price = this.selectedOutputTokens[0].selectedToken.price;
+            console.log("outputToken0Price: ", outputToken0Price);
+            let outputToken1Price = this.selectedOutputTokens[1].selectedToken.price;
+            console.log("outputToken1Price: ", outputToken1Price);
 
             let reserves = await this.getProportion(this.zapPool.address, this.zapPool);
             console.log("reserves 1: ", reserves.token0Amount);
             console.log("reserves 2: ", reserves.token1Amount);
-            let sumReserves = reserves.token0Amount*1 + reserves.token1Amount*1;
+            let sumReserves = (reserves.token0Amount * outputToken0Price) + (reserves.token1Amount * outputToken1Price);
             console.log("sumReserves: ", sumReserves);
 
             let userInputTokens = this.selectedInputTokens;
@@ -863,18 +867,16 @@ export default defineComponent({
             let outputPrices = formulaOutputTokens.map(token => token.price);
             console.log('outputPrices', outputPrices);
 
-            // todo 5: may by call another function (from test for thena ... )
-            // todo: if don't call, rename  calculateProportionForChronosSwapModif to calculateProportionForPool
-            const proportions = this.calculateProportionForChronosSwapModif({
+            const proportions = this.calculateProportionForPool({
                 inputTokensDecimals: [...inputDecimals],
                 inputTokensAddresses: [...inputAddresses],
                 inputTokensAmounts: [...inputAmounts],
-                inputTokensPrices: [...inputPrices], // todo: 5 get actual price
+                inputTokensPrices: [...inputPrices],
                 outputTokensDecimals: [...outputDecimals],
                 outputTokensAddresses: [...outputAddresses],
                 outputTokensAmounts: [...outputAmounts],
-                outputTokensPrices: [...outputPrices],  // todo: 5 get actual price
-                proportion0: reserves[0] / sumReserves
+                outputTokensPrices: [...outputPrices],
+                proportion0: (reserves[0] * outputPrices[0]) / sumReserves
             });
 
 
@@ -1281,16 +1283,22 @@ export default defineComponent({
             // this.updatePathViewFunc(this.pathViz, [], []);
         },
         async recalculateProportion() {
-            console.log("Zap address: ", this.zapPool.address, this.zapPool)
+            console.log("recalculateProportion Zap address: ", this.zapPool.address, this.zapPool)
             let reserves = await this.getProportion(this.zapPool.address, this.zapPool);
-            console.log("Reserves data ", reserves);
-            let sumReserves = reserves.token0Amount*1 + reserves.token1Amount*1;
-            console.log("Reserves sumReserves: ", sumReserves);
-            // "proportion": reserves[0] / sumReserves
-            this.selectedOutputTokens[0].value = reserves[0] / sumReserves * 100;
-            this.selectedOutputTokens[1].value = reserves[1] / sumReserves * 100;
+            console.log("recalculateProportion Reserves data ", reserves);
 
-            console.log("selectedOutputTokens after reset: ", this.selectedOutputTokens)
+            let outputToken0Price = this.selectedOutputTokens[0].selectedToken.price;
+            console.log("recalculateProportion outputToken0Price: ", outputToken0Price);
+            let outputToken1Price = this.selectedOutputTokens[1].selectedToken.price;
+            console.log("recalculateProportion outputToken1Price: ", outputToken1Price);
+
+            let sumReserves = (reserves.token0Amount * outputToken0Price) + (reserves.token1Amount * outputToken1Price);
+            console.log("recalculateProportion Reserves sumReserves: ", sumReserves);
+            // "proportion": reserves[0] / sumReserves
+            this.selectedOutputTokens[0].value = (reserves[0] * outputToken0Price) / sumReserves * 100;
+            this.selectedOutputTokens[1].value = (reserves[1] * outputToken1Price) / sumReserves * 100;
+
+            console.log("recalculateProportion selectedOutputTokens after reset: ", this.selectedOutputTokens)
 
             this.recalculateOutputTokensSum();
         },
@@ -1554,7 +1562,8 @@ export default defineComponent({
             console.log(`recalculateOutputTokensSum. recalculate token count ${this.selectedOutputTokens.length} usdSum: ${this.sumOfAllSelectedTokensInUsd}`);
             for (let i = 0; i < this.selectedOutputTokens.length; i++) {
                 let token = this.selectedOutputTokens[i];
-                let sum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
+                let tokenSum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
+                let sum = this.swapMethod === 'BUY' ? tokenSum / token.selectedToken.price : tokenSum * token.selectedToken.price;
                 console.log(`Recalculate token.selectedToken ${token.selectedToken.symbol} price: ${token.selectedToken.price}, newUsdSum: ${sum}`, token);
                 token.sum = this.$utils.formatMoney(sum, 4)
             }

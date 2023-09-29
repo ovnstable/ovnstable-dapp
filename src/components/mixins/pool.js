@@ -648,7 +648,12 @@ export const pool = {
         getSortedPools(pools, isOnvPools) {
             let topPools;
             if (!isOnvPools) {
-                topPools = pools.filter(pool => pool.tvl >= 300000 && pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013');
+                topPools = pools.filter(pool => pool.tvl >= 300000 &&
+                    (
+                        pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013' &&
+                        pool.address !== '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0' &&
+                        pool.address !== '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197'
+                    ));
             } else {
                 topPools = pools;
             }
@@ -670,7 +675,12 @@ export const pool = {
 
         getSortedSecondPools(pools) {
             console.log("Sorted second pools", pools);
-            let secondPools = pools.filter(pool => pool.promoted !== false || (pool.tvl < 300000 && pool.tvl > 100000 && pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013'));
+            let secondPools = pools.filter(pool => pool.promoted !== false || (pool.tvl < 300000 && pool.tvl > 100000 &&
+                (
+                    pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013' &&
+                    pool.address !== '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0' &&
+                    pool.address !== '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197'
+                )));
             secondPools = secondPools.sort((a, b) => {
                 if (a.apr !== b.apr) {
                     return b.apr - a.apr; // sort by APR number

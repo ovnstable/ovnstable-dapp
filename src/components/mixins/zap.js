@@ -11,79 +11,71 @@ export const zap = {
                 'Chronos': {
                     name: 'Chronos',
                     type: 'LP_WITH_STAKE_IN_ONE_STEP',
-                    network: 'arbitrum',
                     typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
                 },
                 'Thena': {
                     name: 'Thena',
                     type: 'LP_STAKE_DIFF_STEPS',
-                    network: 'bsc',
                     typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
                 },
                 'Velodrome': {
                     name: 'Velodrome',
                     type: 'LP_WITH_STAKE_IN_ONE_STEP',
-                    network: 'optimism',
                     typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
                 },
                 'Aerodrome': {
                     name: 'Aerodrome',
                     type: 'LP_WITH_STAKE_IN_ONE_STEP',
-                    network: 'base',
                     typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
                 },
                 'Ramses': {
                     name: 'Ramses',
                     type: 'LP_STAKE_DIFF_STEPS',
-                    network: 'arbitrum',
                     typeOfDepositConstructor: 'CONSTRUCTOR_WITH_TOKEN_ID'
                 },
                 'Arbidex': {
                     name: 'Arbidex',
                     type: 'LP_STAKE_DIFF_STEPS',
-                    network: 'arbitrum',
                     typeOfDepositConstructor: 'CONSTRUCTOR_WITH_POOL_ID_AND_TOKEN_AMOUNT'
                 },
                 'Sperax': {
                     name: 'Sperax',
                     type: 'LP_STAKE_DIFF_STEPS',
-                    network: 'arbitrum',
                     typeOfDepositConstructor: 'CONSTRUCTOR_WITH_NFT_ID'
                 },
                 'Defiedge': {
                     name: 'Defiedge',
                     type: 'LP_WITH_STAKE_IN_ONE_STEP',
-                    network: 'optimism',
                     typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
                 },
                 'Baseswap': {
                     name: 'Baseswap',
                     type: 'LP_STAKE_DIFF_STEPS',
-                    network: 'base',
                     typeOfDepositConstructor: 'CONSTRUCTOR_WITH_POOL_ID_AND_TOKEN_AMOUNT'
                 },
                 'Velocimeter': {
                     name: 'Velocimeter',
                     type: 'LP_STAKE_DIFF_STEPS',
-                    network: 'base',
                     typeOfDepositConstructor: 'CONSTRUCTOR_WITH_TOKEN_ID'
                 },
                 'Alienbase': {
                     name: 'Alienbase',
                     type: 'LP_STAKE_DIFF_STEPS',
-                    network: 'base',
                     typeOfDepositConstructor: 'CONSTRUCTOR_WITH_POOL_ID_AND_TOKEN_AMOUNT'
                 },
                 'Swapbased': {
                     name: 'Swapbased',
                     type: 'LP_STAKE_DIFF_STEPS',
-                    network: 'base',
                     typeOfDepositConstructor: 'CONSTRUCTOR_STAKE_METHOD_AND_TOKEN_AMOUNT'
                 },
                 'Curve': {
                     name: 'Curve',
                     type: 'LP_WITH_STAKE_IN_ONE_STEP',
-                    network: 'base',
+                    typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
+                },
+                'Beefy': {
+                    name: 'Beefy',
+                    type: 'LP_STAKE_DIFF_STEPS',
                     typeOfDepositConstructor: 'BASE_CONSTRUCTOR'
                 },
             },
@@ -326,6 +318,19 @@ export const zap = {
                     approveType: 'TOKEN'
                 },
 
+                // Beefy
+                '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197_Aerodrome': {  // ovn/usd+ Aerodrome volatile
+                    gauge: '0x98bEAa72230788572e3e3Be58D91C232dda315d4',
+                    poolId: 0,
+                    approveType: 'TOKEN'
+                },
+
+                '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0_Velodrome': {  // ovn/usd+ Velodrome volatile
+                    gauge: '0x366776D0709F7C49ce5ea7cF7eAEF0AB4E746cc9',
+                    poolId: 0,
+                    approveType: 'TOKEN'
+                },
+
             },
 
         }
@@ -350,8 +355,8 @@ export const zap = {
                 return;
             }
 
-            console.log("Load contract: ", `/contracts/${this.currentZapPlatformContractType.network}/${this.currentZapPlatformContractType.name}Zap.json`);
-            let abiFile = await loadJSON(`/contracts/${this.currentZapPlatformContractType.network}/${this.currentZapPlatformContractType.name}Zap.json`);
+            console.log("Load contract: ", `/contracts/${this.zapPoolRoot.chainName}/${this.currentZapPlatformContractType.name}Zap.json`);
+            let abiFile = await loadJSON(`/contracts/${this.zapPoolRoot.chainName}/${this.currentZapPlatformContractType.name}Zap.json`);
             this.zapContract = this._loadContract(abiFile, this.web3, abiFile.address);
             console.log("Zap contract loaded: ", this.zapContract);
 
@@ -371,13 +376,19 @@ export const zap = {
             let gaugeAddress = poolInfo.gauge;
 
             console.log("abiPoolTokenContractFile", this.currentZapPlatformContractType)
-            let abiPoolTokenContractFile = await loadJSON(`/contracts/${this.currentZapPlatformContractType.network}/${this.currentZapPlatformContractType.name}PoolToken.json`);
-            console.log("abiPoolTokenContractFile", abiPoolTokenContractFile)
+            let abiPoolTokenContractFile = await loadJSON(`/contracts/${this.zapPoolRoot.chainName}/${this.currentZapPlatformContractType.name}PoolToken.json`);
+            console.log("abiPoolTokenContractFile", abiPoolTokenContractFile);
+
+            // exclude _ from pool address (aggregators)
+            if (poolAddress.includes('_')) {
+                poolAddress = poolAddress.split('_')[0];
+            }
+
             this.poolTokenContract = this._loadContract(abiPoolTokenContractFile, this.web3, poolAddress);
             console.log("Pool token contract loaded: ", this.poolTokenContract);
 
             console.log("abiGaugeContractFile")
-            let abiGaugeContractFile = await loadJSON(`/contracts/${this.currentZapPlatformContractType.network}/${this.currentZapPlatformContractType.name}Gauge.json`);
+            let abiGaugeContractFile = await loadJSON(`/contracts/${this.zapPoolRoot.chainName}/${this.currentZapPlatformContractType.name}Gauge.json`);
             console.log("abiGaugeContractFile", abiGaugeContractFile)
             this.gaugeContract = this._loadContract(abiGaugeContractFile, this.web3, gaugeAddress);
             console.log("Gauge contract loaded: ", this.gaugeContract);

@@ -162,7 +162,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-3 col-xl-3 col-lg-3 col-md-3 col-sm-4">
+                <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
                     <div class="pool-table-header-item">
                         <label v-if="aggregator.tvl" class="card-label">
                             ${{ $utils.formatNumberToThousands(aggregator.tvl, 0) }}K
@@ -172,15 +172,15 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-3 col-xl-3 col-lg-3 col-md-3 col-sm-12">
-                    <!--                <div class="pool-table-header-item">-->
-                    <!--                    <v-btn v-if="aggregator.zappable"-->
-                    <!--                           x-small-->
-                    <!--                           class="button button-full-width btn-outlined mb-3"-->
-                    <!--                           @click.stop="openAggregatorZapInFunc(aggregator)" outlined>-->
-                    <!--                        ZAP IN-->
-                    <!--                    </v-btn>-->
-                    <!--                </div>-->
+                <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-6">
+                    <div class="pool-table-header-item">
+                        <v-btn v-if="aggregator.zappable"
+                               x-small
+                               class="button button-full-width btn-outlined mb-3"
+                               @click.stop="openZapInFunc(aggregator, 'pools')" outlined>
+                            ZAP IN
+                        </v-btn>
+                    </div>
                 </div>
             </div>
         </div>

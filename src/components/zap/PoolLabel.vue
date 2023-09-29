@@ -40,7 +40,7 @@
                             <div class="pool-detail-title">
                                 APR
                             </div>
-                            <div class="pool-detail-item">
+                            <div class="pool-detail-item" >
                                 {{$utils.formatMoney(pool.apr, 2)}}%
                             </div>
                         </div>
@@ -173,7 +173,7 @@ div {
 .pool-detail-item {
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
+    font-size: 15px;
     line-height: 36px;
     color: var(--main-gray-text);
 }

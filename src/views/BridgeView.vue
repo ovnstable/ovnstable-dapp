@@ -95,20 +95,20 @@ export default defineComponent({
                     critical: 5
                 },
                 showOnRampLink: true,
-                initialFromChainId: "10",
-                initialToChainId: "8453",
+                initialFromChainId: "8453",
+                initialToChainId: "10",
                 defaultTokens: [
                     {
-                        chainId: "10",
-                        address: "0x73cb180bf0521828d8849bc8CF2B920918e23032",
-                        symbol: "USD+",
-                        name: "USD+"
+                        chainId: "8453",
+                        address: "0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396",
+                        symbol: "OVN",
+                        name: "OVN"
                     },
                     {
-                        chainId: "8453",
-                        address: "0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376",
-                        symbol: "USD+",
-                        name: "USD+"
+                        chainId: "10",
+                        address: "0x3b08fcd15280e7B5A6e404c4abb87F7C774D1B2e",
+                        symbol: "OVN",
+                        name: "OVN"
                     }
                 ]
             },
@@ -154,20 +154,20 @@ export default defineComponent({
                     critical: 5
                 },
                 showOnRampLink: true,
-                initialFromChainId: "10",
-                initialToChainId: "8453",
+                initialFromChainId: "8453",
+                initialToChainId: "10",
                 defaultTokens: [
                     {
-                        chainId: "10",
-                        address: "0x73cb180bf0521828d8849bc8CF2B920918e23032",
-                        symbol: "USD+",
-                        name: "USD+"
+                        chainId: "8453",
+                        address: "0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396",
+                        symbol: "OVN",
+                        name: "OVN"
                     },
                     {
-                        chainId: "8453",
-                        address: "0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376",
-                        symbol: "USD+",
-                        name: "USD+"
+                        chainId: "10",
+                        address: "0x3b08fcd15280e7B5A6e404c4abb87F7C774D1B2e",
+                        symbol: "OVN",
+                        name: "OVN"
                     }
                 ]
             }

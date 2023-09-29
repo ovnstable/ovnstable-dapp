@@ -9,7 +9,7 @@
                     </div>
                 </v-row>
 
-                <!-- USD+ INS -->
+                <!-- OVN INS -->
 
                 <v-row class="ma-0 mt-1" align="center">
                     <v-text-field placeholder="0.00"
@@ -68,7 +68,7 @@
         <v-row class="mt-8 mx-n3 main-card">
             <v-col>
                 <v-row align="center" class="ma-0">
-                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(insuranceBalance.polygon, 3) }}</label>
+                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(insuranceBalance.optimism, 3) }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>
@@ -104,7 +104,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 {{ assetName }} = 1 USD+ INS</label>
+            <label class="exchange-label">1 {{ assetName }} = 1 INS</label>
         </v-row>
 
         <v-row class="mt-10">
@@ -249,9 +249,12 @@ export default {
         buyCurrency: null,
         buyCurrencies: [{
             id: 'insurance',
-            title: 'USD+ INS',
+            title: 'OVN INS',
             image: '/assets/currencies/insurance/INSURANCE.svg'
         }],
+
+        ovnDecimals: 18,
+        assetName: "OVN",
 
         sum: null,
 
@@ -276,7 +279,7 @@ export default {
         ...mapGetters('insuranceInvestModal', ['actionAssetApproved']),
         ...mapGetters('insuranceData', ['insuranceStrategyData']),
 
-        ...mapGetters("network", ['networkId', 'assetName', 'assetDecimals', 'polygonApi']),
+        ...mapGetters("network", ['networkId', "opApi"]),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
@@ -304,11 +307,11 @@ export default {
         },
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.balance.asset, 3);
+            return this.$utils.formatMoney(this.balance.ovn, 3);
         },
 
         sumResult: function () {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.asset) * 100;
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.ovn) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -338,9 +341,9 @@ export default {
                     return 'Confirm transaction'
                 } else {
                     this.step = 1;
-                    return 'Approve ' + this.assetName;
+                    return 'Approve ' + this.ovnName;
                 }
-            } else if (this.sum > parseFloat(this.balance.asset)) {
+            } else if (this.sum > parseFloat(this.balance.ovn)) {
                 return 'Mint'
             } else {
                 return 'Mint';
@@ -366,7 +369,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.asset).toFixed(6)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.ovn).toFixed(6)) return true;
 
             return false;
         },
@@ -388,9 +391,9 @@ export default {
 
     created() {
         this.currencies.push({
-            id: 'asset',
-            title: this.assetName,
-            image: '/assets/currencies/stablecoins/' + this.assetName + '.png'
+            id: 'ovn',
+            title: "OVN",
+            image: '/assets/currencies/stablecoins/OVN.png'
         });
 
         this.currency = this.currencies[0];
@@ -418,7 +421,7 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
-            this.sum = (this.balance.asset * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.balance.ovn * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
             await this.checkApprove();
         },
@@ -482,7 +485,7 @@ export default {
               return;
             }
 
-            sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
+            sum = this.web3.utils.toWei(this.sum, this.ovnDecimals === 18 ? 'ether' : 'mwei');
             let allowApprove = await this.checkAllowance(sum);
             console.log("allowApprove : ", allowApprove, sum)
             if (!allowApprove) {
@@ -527,7 +530,7 @@ export default {
                 }
 
                 console.log("Action clear contract allowance")
-                await contracts.asset.methods.decreaseAllowance( contracts.insurance.polygon_exchanger.options.address, allowanceValue)
+                await contracts.ovn.methods.decreaseAllowance( contracts.insurance.optimism_exchanger.options.address, allowanceValue)
                     .send(buyParams)
                     .on('transactionHash',  (hash) => {
                         console.log("Success clear allowance. hash: ", hash)
@@ -554,7 +557,7 @@ export default {
                       return;
                   }
                 } else {
-                  sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
+                  sum = this.web3.utils.toWei(this.sum, this.ovnDecimals === 18 ? 'ether' : 'mwei');
                 }
 
                 if (!(await this.checkApprove())) {
@@ -582,12 +585,12 @@ export default {
                     }
 
                     console.debug(`Insurance blockchain. Mit action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
-                    let buyResult = await contracts.insurance.polygon_exchanger.methods.mint(mintParams).send(buyParams).on('transactionHash', function (hash) {
+                    let buyResult = await contracts.insurance.optimism_exchanger.methods.mint(mintParams).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {
                             hash: hash,
-                            text: 'Mint USD+ INS',
+                            text: 'Mint OVN INS',
                             product: 'insurance',
-                            productName: 'USD+ INS',
+                            productName: 'OVN INS',
                             action: 'mint',
                             amount: sumInUsd,
                         };
@@ -624,7 +627,7 @@ export default {
                       return;
                   }
                 } else {
-                  sum = this.web3.utils.toWei(this.sum, this.assetDecimals === 18 ? 'ether' : 'mwei');
+                  sum = this.web3.utils.toWei(this.sum, this.ovnDecimals === 18 ? 'ether' : 'mwei');
                 }
 
                 let estimatedGasValue = await this.estimateGas(sum);
@@ -657,7 +660,7 @@ export default {
                 let approveSum = "10000000";
                 let sum;
 
-                if (this.assetDecimals === 18) {
+                if (this.ovnDecimals === 18) {
                     sum = this.web3.utils.toWei(approveSum, 'ether');
                 } else {
                     sum = this.web3.utils.toWei(approveSum, 'mwei');
@@ -685,7 +688,7 @@ export default {
 
             let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-            let tx = await contracts.asset.methods.approve(contracts.insurance.polygon_exchanger.options.address, sum).send(approveParams);
+            let tx = await contracts.ovn.methods.approve(contracts.insurance.optimism_exchanger.options.address, sum).send(approveParams);
 
             let minted = true;
             while (minted) {
@@ -715,7 +718,7 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts.asset.methods.allowance(from, contracts.insurance.polygon_exchanger.options.address).call();
+            let allowanceValue = await contracts.ovn.methods.allowance(from, contracts.insurance.optimism_exchanger.options.address).call();
             console.log('allowanceValue: ', allowanceValue)
             return allowanceValue;
         },
@@ -729,13 +732,13 @@ export default {
             try {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
                 let blockNum = await this.web3.eth.getBlockNumber();
-                let errorApi = this.polygonApi;
+                let errorApi = this.optimismApi;
 
                 let mintParams = {
                     amount: sum,
                 }
 
-                await contracts.insurance.polygon_exchanger.methods.mint(mintParams).estimateGas(estimateOptions)
+                await contracts.insurance.optimism_exchanger.methods.mint(mintParams).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })
@@ -744,13 +747,13 @@ export default {
                             let msg = error.message.replace(/(?:\r\n|\r|\n)/g, '');
 
                             let errorMsg = {
-                                product: 'USD+ INS',
+                                product: 'OVN INS',
                                 data: {
                                     from: from,
-                                    to: contracts.insurance.polygon_exchanger.options.address,
+                                    to: contracts.insurance.optimism_exchanger.options.address,
                                     gas: null,
                                     gasPrice: parseInt(estimateOptions.gasPrice, 16),
-                                    method: contracts.insurance.polygon_exchanger.methods.mint(mintParams).encodeABI(),
+                                    method: contracts.insurance.optimism_exchanger.methods.mint(mintParams).encodeABI(),
                                     message: msg,
                                     block: blockNum
                                 }

@@ -66,7 +66,7 @@
         <v-row class="mt-8 mx-n3 main-card">
             <v-col>
                 <v-row align="center" class="ma-0">
-                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.asset, 3) }}</label>
+                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.ovn, 3) }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>
@@ -102,7 +102,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 USD+ INS = 1 {{ assetName }}</label>
+            <label class="exchange-label">1 OVN INS = 1 {{ assetName }}</label>
         </v-row>
 
         <v-row class="mt-10">
@@ -263,7 +263,7 @@ export default {
         currencies: [
             {
                 id: 'insurance',
-                title: 'USD+ INS',
+                title: 'OVN INS',
                 image: '/assets/currencies/insurance/INSURANCE.svg'
             }
         ],
@@ -272,6 +272,8 @@ export default {
         buyCurrencies: [],
 
         sum: null,
+
+        assetName: 'OVN',
 
         estimatedGas: null,
         gas: null,
@@ -294,7 +296,7 @@ export default {
         ...mapGetters('insuranceInvestModal', ['insuranceTokenApproved']),
         ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceRedemptionData']),
 
-        ...mapGetters("network", ['networkId', 'assetName', 'polygonApi']),
+        ...mapGetters("network", ['networkId', 'opApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
@@ -323,11 +325,11 @@ export default {
         },
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.insuranceBalance.polygon, 3);
+            return this.$utils.formatMoney(this.insuranceBalance.optimism, 3);
         },
 
         sumResult: function () {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.insuranceBalance.polygon) * 100;
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.insuranceBalance.optimism) * 100;
 
             if (!this.sum || this.sum === 0)
                 return '0.00';
@@ -357,9 +359,9 @@ export default {
                     return 'Confirm transaction'
                 } else {
                     this.step = 1;
-                    return 'Approve USD+ INS';
+                    return 'Approve OVN INS';
                 }
-            } else if (this.sum > parseFloat(this.insuranceBalance.polygon)) {
+            } else if (this.sum > parseFloat(this.insuranceBalance.optimism)) {
                 return 'Redeem'
             } else {
                 return 'Redeem';
@@ -385,7 +387,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.insuranceBalance.polygon).toFixed(6)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.insuranceBalance.optimism).toFixed(6)) return true;
 
             return false;
         },
@@ -407,9 +409,9 @@ export default {
 
     created() {
         this.buyCurrencies.push({
-            id: 'asset',
-            title: 'USDC',
-            image: '/assets/currencies/stablecoins/' + this.assetName + '.png'
+            id: 'ovn',
+            title: "OVN",
+            image: '/assets/currencies/stablecoins/OVN.png'
         });
 
         this.buyCurrency = this.buyCurrencies[0];
@@ -438,7 +440,7 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
-            this.sum = (this.insuranceBalance.polygon * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.insuranceBalance.optimism * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
             await this.checkApprove();
         },
@@ -520,7 +522,7 @@ export default {
         },
 
         getMax() {
-          let balanceElement = this.insuranceOriginalBalance.polygon;
+          let balanceElement = this.insuranceOriginalBalance.optimism;
           return balanceElement ? balanceElement + '' : null;
         },
 
@@ -547,7 +549,7 @@ export default {
                 }
 
                 console.log("Action clear contract allowance")
-                await contracts.insurance.polygon_token.methods.decreaseAllowance( contracts.insurance.polygon_exchanger.options.address, allowanceValue)
+                await contracts.insurance.optimism_token.methods.decreaseAllowance( contracts.insurance.optimism_exchanger.options.address, allowanceValue)
                     .send(buyParams)
                     .on('transactionHash',  (hash) => {
                         console.log("Success clear allowance. hash: ", hash)
@@ -603,12 +605,12 @@ export default {
 
                     console.debug(`Insurance blockchain. Withdraw action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`);
 
-                    let buyResult = await contracts.insurance.polygon_exchanger.methods.redeem({ amount: sum }).send(buyParams).on('transactionHash', function (hash) {
+                    let buyResult = await contracts.insurance.optimism_exchanger.methods.redeem({ amount: sum }).send(buyParams).on('transactionHash', function (hash) {
                         let tx = {
                             hash: hash,
-                            text: 'Withdraw USD+ INS',
+                            text: 'Withdraw OVN INS',
                             product: 'insurance',
-                            productName: 'USD+ INS',
+                            productName: 'OVN INS',
                             action: 'withdraw',
                             amount: sumInUsd,
                         };
@@ -698,7 +700,7 @@ export default {
             let from = this.account;
             let approveParams = {gasPrice: this.gasPriceGwei, from: from};
 
-            let tx = await contracts.insurance.polygon_token.methods.approve(contracts.insurance.polygon_exchanger.options.address, sum).send(approveParams);
+            let tx = await contracts.insurance.optimism_token.methods.approve(contracts.insurance.optimism_exchanger.options.address, sum).send(approveParams);
 
             let minted = true;
             while (minted) {
@@ -729,7 +731,7 @@ export default {
             let contracts = this.contracts;
             let from = this.account;
 
-            let allowanceValue = await contracts.insurance.polygon_token.methods.allowance(from, contracts.insurance.polygon_exchanger.options.address).call();
+            let allowanceValue = await contracts.insurance.optimism_token.methods.allowance(from, contracts.insurance.optimism_exchanger.options.address).call();
             console.log('allowanceValue: ', allowanceValue)
             return allowanceValue * 1;
         },
@@ -744,9 +746,9 @@ export default {
             try {
                 let estimateOptions = {from: from, "gasPrice": this.gasPriceGwei};
                 let blockNum = await this.web3.eth.getBlockNumber();
-                let errorApi = this.polygonApi;
+                let errorApi = this.opApi;
 
-                await contracts.insurance.polygon_exchanger.methods.redeem({ amount: sum }).estimateGas(estimateOptions)
+                await contracts.insurance.optimism_exchanger.methods.redeem({ amount: sum }).estimateGas(estimateOptions)
                     .then(function (gasAmount) {
                         result = gasAmount;
                     })
@@ -755,13 +757,13 @@ export default {
                             let msg = error.message.replace(/(?:\r\n|\r|\n)/g, '');
 
                             let errorMsg = {
-                                product: 'USD+ INS',
+                                product: 'OVN INS',
                                 data: {
                                     from: from,
-                                    to: contracts.insurance.polygon_exchanger.options.address,
+                                    to: contracts.insurance.optimism_exchanger.options.address,
                                     gas: null,
                                     gasPrice: parseInt(estimateOptions.gasPrice, 16),
-                                    method: contracts.insurance.polygon_exchanger.methods.redeem({ amount: sum }).encodeABI(),
+                                    method: contracts.insurance.optimism_exchanger.methods.redeem({ amount: sum }).encodeABI(),
                                     message: msg,
                                     block: blockNum
                                 }

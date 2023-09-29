@@ -67,9 +67,13 @@ const actions = {
         let web3 = rootState.web3;
 
         let insuranceList = [
-            {
+            /*{
                 chainName: 'polygon',
                 chainId: 137,
+            }, */
+            {
+                chainName: 'optimism',
+                chainId: 10,
             },
         ];
 

@@ -43,6 +43,12 @@ const actions = {
             linea: '0xA219439258ca9da29E9Cc4cE5596924745e12B93',
         };
 
+        let networkOvnTokenMap = {
+            optimism: '0x3b08fcd15280e7B5A6e404c4abb87F7C774D1B2e',
+            arbitrum: '0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396',
+            base: '0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396',
+        };
+
         [
             contracts.exchange,
             contracts.daiExchange,
@@ -65,6 +71,7 @@ const actions = {
             contracts.asset_two,
             contracts.dai,
             contracts.usdt,
+            contracts.ovn,
         ] = await Promise.all([
             _load(await loadJSON(`/contracts/${network}/Exchange.json`), web3),
 
@@ -93,6 +100,7 @@ const actions = {
             networkAssetTwoMap[network] ? _load(ERC20, web3, networkAssetTwoMap[network]) : _load_empty(),
             networkDaiMap[network] ? _load(ERC20, web3, networkDaiMap[network]) : _load_empty(),
             networkUsdtMap[network] ? _load(ERC20, web3, networkUsdtMap[network]) : _load_empty(),
+            networkOvnTokenMap[network] ? _load(ERC20, web3, networkOvnTokenMap[network]) : _load_empty(),
         ]);
 
         let etsesByNetwork = [];
@@ -110,20 +118,21 @@ const actions = {
         );
 
         let insurances = [
-            { network: 'polygon' },
+            // { network: 'polygon' },
+            { network: 'optimism' },
         ];
 
         for (let i = 0; i < insurances.length; i++) {
             if (network === insurances[i].network) {
                 let ExchangerContract = await loadJSON(`/contracts/${insurances[i].network}/insurance/exchanger.json`);
                 let TokenContract = await loadJSON(`/contracts/${insurances[i].network}/insurance/token.json`);
-                let M2MContract = await loadJSON(`/contracts/${insurances[i].network}/insurance/m2m.json`);
+                // let M2MContract = await loadJSON(`/contracts/${insurances[i].network}/insurance/m2m.json`);
 
                 contracts.insurance = {};
 
                 contracts.insurance[insurances[i].network + '_exchanger'] = _load(ExchangerContract, web3);
                 contracts.insurance[insurances[i].network + '_token'] = _load(TokenContract, web3);
-                contracts.insurance[insurances[i].network + '_m2m'] = _load(M2MContract, web3);
+                // contracts.insurance[insurances[i].network + '_m2m'] = _load(M2MContract, web3);
             }
         }
 

@@ -9,7 +9,7 @@
             </v-btn>
         </div>
         <div class="row">
-            <div @click="openPoolLink(pool)" class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-4" style="cursor: pointer">
+            <div @click="openPoolLink(pool)" class="col-3 col-xl-4 col-lg-4 col-md-4 col-sm-3" style="cursor: pointer">
                 <div class="pool-table-header-item">
                    <div v-if="pool.isOpened" class="pool-table-platform-container">
                        <div class="pool-platform-icon">
@@ -25,7 +25,8 @@
                            {{pool.platform}}
                        </div>
 
-                       <div v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: 10px'"
+                       <div v-if="!$wu.isMobile()"
+                                 v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: 10px'"
                             class="pool-platform-link">
                            <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
                        </div>
@@ -57,7 +58,7 @@
                 </div>
             </div>
             <div @click="toggleDetailsFunc(pool)"
-                 class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
+                 class="col-4 col-xl-2 col-lg-2 col-md-2 col-sm-4">
                 <div class="pool-table-header-item">
                     <label v-if="pool.apr && !disabledAprInfoPlatformList.includes(pool.platform)" class="card-label">
                         {{ $utils.formatMoneyComma(pool.apr, 2) }}%
@@ -68,7 +69,7 @@
                 </div>
             </div>
             <div @click="toggleDetailsFunc(pool)"
-                 class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
+                 class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
                 <div v-if="pool.tvl >= 1000000 && !disabledTvlInfoPlatformList.includes(pool.platform)" class="pool-table-header-item">
                     <label v-if="pool.tvl" class="card-label">
                         ${{ $utils.formatNumberToMln(pool.tvl, 2) }}M
@@ -94,9 +95,10 @@
                     </label>
                 </div>
             </div>
-            <div @click="toggleDetailsFunc(pool)"
+            <div v-if="!$wu.isMobile()"
+                 @click="toggleDetailsFunc(pool)"
                  class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-6">
-                <div v-if="!$wu.isMobile()" class="pool-table-header-item">
+                <div class="pool-table-header-item">
 
                     <v-btn v-if="pool.zappable"
                            x-small
@@ -131,7 +133,19 @@
             <div class="aggregator-hr mt-4 mb-4"></div>
 
             <div v-for="aggregator in pool.aggregators" :key="aggregator.id" class="row">
-                <div @click="openAggregatorLink(aggregator)" class="col-4 col-xl-4 col-lg-4 col-md-4 col-sm-4" style="cursor: pointer">
+                <div class="col-12 col-lg-12 col-md-12 col-sm-12">
+                    <div v-if="$wu.isMobile()" class="d-block zap-btn">
+                        <v-btn v-if="aggregator.zappable"
+                               x-small
+                               class="button button-full-width btn-special btn-outlined mb-3"
+                               @click.stop="openZapInFunc(aggregator, 'pools')" outlined>
+                            ZAP IN
+                        </v-btn>
+                    </div>
+                </div>
+                <div @click="openAggregatorLink(aggregator)"
+                     class="col-3 col-xl-4 col-lg-4 col-md-4 col-sm-3"
+                     style="cursor: pointer">
                     <div class="pool-table-header-item">
                         <div class="pool-table-platform-container">
                             <div class="pool-platform-icon">
@@ -145,16 +159,17 @@
                                 {{aggregator.platform}}
                             </div>
 
-                            <div v-bind:style="$wu.isMobile() ? 'right: -14px;' : 'right: 10px'"
+                            <div v-if="!$wu.isMobile()"
+                                 v-bind:style="$wu.isMobile() ? 'right: -14px;' : 'right: 5px'"
                                 class="pool-platform-link">
                                 <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
+                <div class="col-4 col-xl-2 col-lg-2 col-md-2 col-sm-4">
                     <div class="pool-table-header-item">
-                        <label v-if="aggregator.apr" class="card-label">
+                        <label v-if="aggregator.apr" class="card-label text-center">
                             {{ $utils.formatMoneyComma(aggregator.apr, 2) }}%
                         </label>
                         <label v-else class="card-label see-on-dex-label see-on-dex-another">
@@ -162,7 +177,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-4">
+                <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
                     <div class="pool-table-header-item">
                         <label v-if="aggregator.tvl" class="card-label">
                             ${{ $utils.formatNumberToThousands(aggregator.tvl, 0) }}K
@@ -172,7 +187,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-6">
+                <div v-if="!$wu.isMobile()" class="col-12 col-xl-2 col-lg-2 col-md-2 col-sm-12">
                     <div class="pool-table-header-item">
                         <v-btn v-if="aggregator.zappable"
                                x-small

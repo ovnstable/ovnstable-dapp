@@ -56,6 +56,7 @@
                            :open-zap-in-func="openZapIn"
                            :set-order-type-func="setOrderType"
                            :order-type="orderType"
+                           :type="type"
                 ></PoolTable>
             </div>
         </div>

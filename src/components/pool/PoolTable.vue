@@ -297,6 +297,10 @@ export default defineComponent({
             type: Boolean,
             required: true
         },
+        type: { // ovn, all
+            type: String,
+            required: true
+        }
     },
     computed: {
         ...mapGetters('theme', ['light']),
@@ -305,6 +309,10 @@ export default defineComponent({
         poolTableBodyStyle: function () {
               return pool => {
                   if (!pool) {
+                      return '';
+                  }
+
+                  if (this.type === 'ovn') {
                       return '';
                   }
 

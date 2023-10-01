@@ -517,7 +517,7 @@ export default defineComponent({
             }
 
             if (this.isOvnValueOverflow) {
-                return 'OVN BALANCE IS OVERFLOW';
+                return 'OVN VALUE IS OVERFLOW';
             }
 
             if (this.swapResponseConfirmInfo.waitingConformation) {

@@ -62,16 +62,17 @@ export const odosSwap = {
                 inputTokens: [],
                 outputTokens: []
             },
-                zksyncFeeHistory: null,
+            zksyncFeeHistory: null,
 
             tokenSeparationScheme: null, // OVERNIGHT_SWAP, POOL_SWAP,
+            typeOfPoolScheme: null, // OVN, ALL, null
+
             listOfBuyTokensAddresses: null, // for POOL_SWAP scheme
             odosReferalCode: 7777777,
         }
     },
     async mounted() {
-       console.log("Odos swap init by scheme: ", this.tokenSeparationScheme)
-
+       console.log("Odos swap init");
        this.initUpdateBalancesInterval();
     },
     beforeMount() {
@@ -329,10 +330,12 @@ export const odosSwap = {
             try {
                 // balance for network currency
                 if (token.address === "0x0000000000000000000000000000000000000000") {
-                    let ethBalance = await this.web3.eth.getBalance(this.account)
+                    let ethBalance = await this.web3.eth.getBalance(this.account);
+                    let balance = this.web3.utils.fromWei(ethBalance, this.getWeiMarker(token.decimals));
                     token.balanceData = {
                         name: token.symbol,
-                        balance: this.web3.utils.fromWei(ethBalance, this.getWeiMarker(token.decimals)),
+                        balance: balance,
+                        balanceInUsd: balance * token.price,
                         originalBalance: ethBalance,
                         decimal: token.decimals
                     }
@@ -343,9 +346,11 @@ export const odosSwap = {
                 // balance for ERC20
                 await contract.methods.balanceOf(this.account).call().then(erc20Balance => {
                     // console.log('Balance for: ', token, erc20Balance, this.getWeiMarker(token.decimals));
+                    let balance = this.web3.utils.fromWei(erc20Balance, this.getWeiMarker(token.decimals));
                     token.balanceData = {
                         name: token.symbol,
-                        balance: this.web3.utils.fromWei(erc20Balance, this.getWeiMarker(token.decimals)),
+                        balance: balance,
+                        balanceInUsd: balance * token.price,
                         originalBalance: erc20Balance,
                         decimal: token.decimals
                     }
@@ -444,7 +449,12 @@ export const odosSwap = {
                     address => address.toLowerCase() === key.toLowerCase()
                 );
 
-                let isNeedIgnore = (key === "0x0000000000000000000000000000000000000000" || (item.protocolId === 'overnight' && item.symbol === 'OVN'));
+                let isNeedTokenIgnore = false;
+                /*if (this.typeOfPoolScheme === 'OVN') {
+                    isNeedTokenIgnore = (item.protocolId === 'overnight' && item.symbol === 'OVN');
+                }*/
+
+                let isNeedIgnore = (key === "0x0000000000000000000000000000000000000000" || isNeedTokenIgnore);
                 // key === token address
                 if (ignoreBaseNetworkCurrency && isNeedIgnore) {
                     console.log("Ignore item: ", item);
@@ -877,6 +887,67 @@ export const odosSwap = {
 
             this.isShowSuccessPoolModal = isShow;
 
+        },
+
+        getNewInputToken() {
+            let randomId = (Math.random() + 1).toString(36).substring(2);
+            return {
+                id: randomId,
+                value: null,
+                usdValue: null,
+                contractValue: null,
+                selectedToken: null
+            }
+        },
+        getNewOutputToken() {
+            let randomId = (Math.random() + 1).toString(36).substring(2);
+            return {
+                id: randomId,
+                value: 0,
+                sum: 0,
+                locked: false,
+                selectedToken: null
+            }
+        },
+
+        maxAll() {
+            console.log("Max all");
+            for (let i = 0; i < this.selectedInputTokens.length; i++) {
+                let token = this.selectedInputTokens[i];
+                console.log(token.selectedToken.balanceData.balance);
+                this.updateTokenValue(token, token.selectedToken.balanceData.balance);
+            }
+        },
+
+        updateTokenValue(token, value) {
+            console.log('updateTokenValue: ', token, value)
+            token.value = value;
+            this.updateQuotaInfo();
+
+            if (!value) {
+                token.usdValue = 0
+                token.value = 0
+                return
+            }
+
+            let selectedToken = token.selectedToken;
+            if (selectedToken) {
+                let sum = token.decimals === 6 ? token.value * 100 + '' : token.value + '';
+                token.contractValue = this.web3.utils.toWei(sum, token.selectedToken.weiMarker);
+                token.usdValue = token.value * selectedToken.price;
+                console.log("updateTokenValue price: ", token, value, token.contractValue, selectedToken);
+                console.log("updateTokenValue price: ", token.usdValue);
+
+                console.log('updateTokenValue with selected token: ', token, value, token.contractValue);
+
+                if (selectedToken.address === '0x0000000000000000000000000000000000000000') {
+                    console.log("Check approve in update value not available. its a root token: ", token);
+                    selectedToken.approveData.approved = true
+                    return;
+                }
+
+                this.checkApproveForToken(token, token.contractValue);
+            }
         },
 
     }

@@ -390,6 +390,11 @@ export default defineComponent({
                 return
             }
 
+            if (this.successData.pool.platform === 'Beefy') {
+                window.open(`https://app.beefy.com/dashboard`, '_blank').focus();
+                return
+            }
+
             console.error("Open Position failed, dex not found.", this.successData.pool.platform)
         },
         openOnExplorer() {

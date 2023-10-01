@@ -54,7 +54,7 @@
                     <div class="col-6">
                        <div class="usd-equal-text">
                            <div v-if="token.value && token.selectedToken && token.selectedToken.balanceData.balance">
-                              ~ ${{$utils.formatMoney(token.value * token.selectedToken.price, 2)}}
+                              ~ ${{$utils.formatMoney(token.usdValue, 2)}}
                            </div>
                            <div v-else>
                                $00.<span class="numeric-change">00</span>
@@ -109,6 +109,7 @@ export default defineComponent({
         return {
             token: {
                 value: null,
+                usdValue: null,
                 selectedToken: null,
             }
         }
@@ -117,6 +118,11 @@ export default defineComponent({
         'tokenInfo.value'(val, oldVal) {
             if (val) {
                 this.token.value = val
+            }
+        },
+        'tokenInfo.usdValue'(val, oldVal) {
+            if (val) {
+                this.token.usdValue = val
             }
         }
     },

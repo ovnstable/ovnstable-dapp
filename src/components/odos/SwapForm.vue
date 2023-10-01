@@ -613,7 +613,7 @@ export default defineComponent({
             let sum = 0
             for (let i = 0; i < this.selectedInputTokens.length; i++) {
                 let token = this.selectedInputTokens[i];
-                let selectedTokenUsdValue = token.value * token.selectedToken.price;
+                let selectedTokenUsdValue = token.usdValue;
                 sum += selectedTokenUsdValue;
             }
 
@@ -763,34 +763,7 @@ export default defineComponent({
             }
             this.updateQuotaInfo();
         },
-        getNewInputToken() {
-            let randomId = (Math.random() + 1).toString(36).substring(2);
-            return {
-                id: randomId,
-                value: null,
-                contractValue: null,
-                selectedToken: null
-            }
-        },
-        getNewOutputToken() {
-            let randomId = (Math.random() + 1).toString(36).substring(2);
-            return {
-                id: randomId,
-                value: 0,
-                sum: 0,
-                locked: false,
-                selectedToken: null
-            }
-        },
 
-        maxAll() {
-            console.log("Max all");
-            for (let i = 0; i < this.selectedInputTokens.length; i++) {
-                let token = this.selectedInputTokens[i];
-                console.log(token.selectedToken.balanceData.balance);
-                this.updateTokenValue(token, token.selectedToken.balanceData.balance);
-            }
-        },
         changeSwap() {
             console.log('INPUT SELECTED TOKENS: ', this.inputTokens)
             console.log('OUTPUT SELECTED TOKENS: ', this.outputTokens)
@@ -1243,31 +1216,6 @@ export default defineComponent({
             return outputTokens;
         },
 
-        updateTokenValue(token, value) {
-            token.value = value;
-            this.updateQuotaInfo();
-
-            if (!value) {
-                return
-            }
-
-            let selectedToken = token.selectedToken;
-            if (selectedToken) {
-                let sum = token.decimals === 6 ? token.value * 100 + '' : token.value + '';
-                token.contractValue = this.web3.utils.toWei(sum, token.selectedToken.weiMarker);
-
-                console.log('updateTokenValue with selected token: ', token, value, token.contractValue);
-
-                if (selectedToken.address === '0x0000000000000000000000000000000000000000') {
-                    console.log("Check approve in update value not available. its a root token: ", token);
-                    selectedToken.approveData.approved = true
-                    return;
-                }
-
-                this.checkApproveForToken(token, token.contractValue);
-            }
-        },
-
         lockProportion(isLock, token) {
             console.log("lockProportionFunc", isLock, token);
             if (this.outputTokensWithSelectedTokensCount <= 1 && !isLock) {
@@ -1559,7 +1507,7 @@ export default defineComponent({
                 return
             }
 
-              console.log("Top stable tokens: ", tokens)
+              console.log("Top stable tokens by balance: ", tokens)
 
               // find top 6 tokens by balance and order desc
               let topTokens = tokens.sort((a, b) => {
@@ -1577,7 +1525,6 @@ export default defineComponent({
                   let token = topTokens[i];
                   token.selected = true;
                   this.addSelectedTokenToInputList(token);
-                  // this.addNewOutputToken();
               }
 
               setTimeout(() => {

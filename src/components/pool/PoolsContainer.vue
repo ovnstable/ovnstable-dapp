@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-12 col-lg-6 col-md-6 col-sm-6">
                 <div class="mt-lg-10 mt-md-5 mt-sm-3 mb-lg-10 mb-md-5 mb-sm-3">
-                    <label v-if="type === 'ovn'" class="title-label">
+                    <label v-if="type === 'OVN'" class="title-label">
                         OVN POOLS
                     </label>
                     <label v-else class="title-label">
@@ -33,7 +33,7 @@
         </v-row>
 
         <div v-else>
-            <div v-if="type === 'all'" class="pools-header-container">
+            <div v-if="typeOfPool === 'ALL'" class="pools-header-container">
                 <div class="row">
                     <div class="col-12 col-lg-12 col-md-12 col-sm-12">
                         <PoolFilter
@@ -56,6 +56,7 @@
                            :open-zap-in-func="openZapIn"
                            :set-order-type-func="setOrderType"
                            :order-type="orderType"
+                           :type-of-pool="typeOfPool"
                 ></PoolTable>
             </div>
         </div>
@@ -63,10 +64,11 @@
         <ZapModal :set-show-func='setIsZapModalShow'
                   :zap-pool="currentZapPool"
                   :is-show="isZapModalShow"
+                  :type-of-pool="typeOfPool"
                   :pool-tokens-for-zap-map="poolTokensForZapMap">
         </ZapModal>
 
-        <template v-if="!isPoolsLoading && type === 'all'">
+        <template v-if="!isPoolsLoading && typeOfPool === 'ALL'">
             <v-row class="ma-0 mb-1 mt-5" align="center">
                 <v-icon class="circle-icon" :size="$wu.isFull() ? 20 : 16">mdi-circle-multiple-outline</v-icon>
                 <label class="show-more ml-2" @click="openPoolList = !openPoolList">Pools with TVL less than $300K</label>
@@ -111,7 +113,7 @@ export default {
     name: "PoolsContainer",
     mixins: [pool],
     props: {
-        type: { // ovn, all
+        type: { // OVN, ALL
             type: String,
             required: true
         }
@@ -140,7 +142,7 @@ export default {
         filteredPools () {
             if (this.orderType === 'APR') {
                 // last step filter
-                return this.getSortedPools(this.filteredBySearchQueryPools, this.typeOfPools === 'ovn');
+                return this.getSortedPools(this.filteredBySearchQueryPools, this.typeOfPool === 'OVN');
             }
 
             if (this.orderType === 'APR_UP') {
@@ -155,7 +157,7 @@ export default {
 
             if (this.orderType === 'TVL') {
                 // last step filter. same like type 'APR'
-                return this.getSortedPools(this.filteredBySearchQueryPools, this.typeOfPools === 'ovn');
+                return this.getSortedPools(this.filteredBySearchQueryPools, this.typeOfPool === 'OVN');
             }
 
             if (this.orderType === 'TVL_UP') {
@@ -308,10 +310,10 @@ export default {
         }
     },
     async mounted() {
-        if (this.type === 'ovn') {
-            this.typeOfPools = 'ovn';
+        if (this.type === 'OVN') {
+            this.typeOfPool = 'OVN';
         } else {
-            this.typeOfPools = 'all';
+            this.typeOfPool = 'ALL';
         }
 
         this.clearAllFilters();

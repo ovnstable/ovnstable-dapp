@@ -214,7 +214,7 @@ div {
 .pool-detail-item {
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
+    font-size: 15px;
     line-height: 36px;
     color: var(--main-gray-text);
 }

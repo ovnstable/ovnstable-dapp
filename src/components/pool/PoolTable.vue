@@ -12,7 +12,7 @@
                            </div>
                            <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
                                <div class="pool-table-header-item">
-                                   Chain
+                                   Chain {{typeOfPool}}
                                </div>
                            </div>
                            <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
@@ -297,9 +297,9 @@ export default defineComponent({
             type: Boolean,
             required: true
         },
-        type: { // ovn, all
+        typeOfPool: { // OVN, ALL, null
             type: String,
-            required: true
+            required: false
         }
     },
     computed: {
@@ -312,7 +312,7 @@ export default defineComponent({
                       return '';
                   }
 
-                  if (this.type === 'ovn') {
+                  if (this.typeOfPool === 'OVN') {
                       return '';
                   }
 

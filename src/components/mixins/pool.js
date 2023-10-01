@@ -16,7 +16,7 @@ export const pool = {
 
             topPool: null,
 
-            typeOfPools: 'all', // all, ovn
+            typeOfPool: 'ALL', // ALL, OVN
 
             isZapModalShow: false,
             currentZapPool: null,
@@ -468,7 +468,7 @@ export const pool = {
                     .then(data => {
                         if (data) {
                             data.forEach(pool => {
-                                if (this.typeOfPools === 'ovn' && !pool.id.name.toLowerCase().includes('ovn')) {
+                                if (this.typeOfPool === 'OVN' && !pool.id.name.toLowerCase().includes('ovn')) {
                                     return;
                                 }
 
@@ -604,7 +604,7 @@ export const pool = {
 
             this.pools = this.initFeature(this.pools);
 
-            if (this.typeOfPools === 'ovn') {
+            if (this.typeOfPool === 'OVN') {
                 this.sortedPoolList = this.getSortedPools(this.pools, true);
                 console.log("Sorted pools", this.sortedPoolList);
                 this.sortedPoolSecondList = [];

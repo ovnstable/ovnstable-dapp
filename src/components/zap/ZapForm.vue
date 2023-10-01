@@ -329,6 +329,11 @@ export default defineComponent({
             required: true,
         },
 
+        typeOfPool: { // OVN or ALL
+            type: String,
+            required: true,
+        }
+
     },
     data() {
         return {
@@ -369,6 +374,10 @@ export default defineComponent({
         ...mapGetters('network', ['getParams', 'networkId']),
         ...mapGetters('theme', ['light']),
         ...mapGetters('accountData', ['account']),
+
+        noneOvnTokens() {
+            return this.tokens.filter(item => item.symbol !== 'OVN')
+        },
 
         isInputTokensRemovable() {
             return this.inputTokens.length > 1;
@@ -411,12 +420,62 @@ export default defineComponent({
         },
 
         selectedInputTokens() {
-            //todo: add check balance
             return this.inputTokens.filter(item => item.selectedToken)
         },
         selectedOutputTokens() {
-            //todo: add check proportion values
             return this.outputTokens.filter(item => item.selectedToken)
+        },
+
+        noneOvnInputTokens() {
+            return this.inputTokens.filter(item => item.selectedToken && item.selectedToken.symbol !== 'OVN')
+        },
+
+        noneOvnOutputTokens() {
+            return this.outputTokens.filter(item => item.selectedToken && item.selectedToken.symbol !== 'OVN')
+        },
+
+        selectedOvnInputTokens() {
+            return this.selectedInputTokens.filter(item => item.selectedToken.symbol === 'OVN');
+        },
+        selectedOvnOutputTokens() {
+            return this.selectedOutputTokens.filter(item => item.selectedToken.symbol === 'OVN');
+        },
+        selectedNoneOvnInputTokens() {
+            return this.selectedInputTokens.filter(item => item.selectedToken.symbol !== 'OVN');
+        },
+        selectedNoneOvnOutputTokens() {
+            return this.selectedOutputTokens.filter(item => item.selectedToken.symbol !== 'OVN');
+        },
+        totalNoneOvnUsdInputsUsdBalance() {
+            let totalBalance = 0;
+            for (let i = 0; i < this.selectedNoneOvnInputTokens.length; i++) {
+                let token = this.selectedNoneOvnInputTokens[i];
+                totalBalance += token.selectedToken.balanceData.balanceInUsd;
+            }
+
+            return totalBalance;
+        },
+        totalNoneOvnUsdInputsUsdValue() {
+            let totalValue = 0;
+            for (let i = 0; i < this.selectedNoneOvnInputTokens.length; i++) {
+                let token = this.selectedNoneOvnInputTokens[i];
+                totalValue += token.usdValue;
+            }
+
+            return totalValue;
+        },
+        totalOvnUsdInputsUsdValue() {
+            let totalValue = 0;
+            for (let i = 0; i < this.selectedOvnInputTokens.length; i++) {
+                let token = this.selectedOvnInputTokens[i];
+                totalValue += token.usdValue;
+            }
+
+            return totalValue;
+        },
+
+        isOvnValueOverflow() {
+            return this.typeOfPool === 'OVN' && this.totalOvnUsdInputsUsdValue > this.totalNoneOvnUsdInputsUsdValue;
         },
 
         isAnyInputsNeedApprove() {
@@ -435,7 +494,8 @@ export default defineComponent({
                 this.swapResponseConfirmInfo.waitingConformation ||
                 !this.isAvailableOnNetwork ||
                 !this.isAnyTokensBalanceIsInsufficient ||
-                !this.isAmountEntered
+                !this.isAmountEntered ||
+                this.isOvnValueOverflow
         },
 
         disableButtonMessage() {
@@ -454,6 +514,10 @@ export default defineComponent({
 
             if (!this.isAnyTokensBalanceIsInsufficient) {
                 return 'BALANCE IS INSUFFICIENT';
+            }
+
+            if (this.isOvnValueOverflow) {
+                return 'OVN BALANCE IS OVERFLOW';
             }
 
             if (this.swapResponseConfirmInfo.waitingConformation) {
@@ -477,7 +541,7 @@ export default defineComponent({
             let sum = 0
             for (let i = 0; i < this.selectedInputTokens.length; i++) {
                 let token = this.selectedInputTokens[i];
-                let selectedTokenUsdValue = token.value * token.selectedToken.price;
+                let selectedTokenUsdValue = token.usdValue;
                 sum += selectedTokenUsdValue;
             }
 
@@ -534,7 +598,13 @@ export default defineComponent({
                 this.clearQuotaInfo();
             }
             // this.updateButtonDisabledFunc(val);
-        }
+        },
+
+        isFirstBalanceLoaded: function (val, oldVal) {
+            if (val) {
+                // this.initDefaultTopInputTokensByBalance(this.inputTokens);
+            }
+        },
     },
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
@@ -553,7 +623,8 @@ export default defineComponent({
             this.zapPoolRoot = this.zapPool;
 
             this.tokenSeparationScheme = 'POOL_SWAP';
-            console.log("Zap form odos init by scheme: ", this.tokenSeparationScheme)
+            this.typeOfPoolScheme = this.typeOfPool;
+            console.log("Zap form odos init by scheme: ", this.tokenSeparationScheme, this.typeOfPoolScheme)
             console.log("Zap pool: ", this.zapPool)
             // todo: move to backend
             let poolTokens = this.poolTokensForZapMap[this.zapPool.address];
@@ -604,8 +675,8 @@ export default defineComponent({
             }
 
             if (this.swapMethod === 'SELL') {
-                this.addSelectedTokenToInputList(poolSelectedToken);
-                this.addSelectedTokenToInputList(ovnSelectSelectedToken);
+                this.addSelectedTokenToInputList(poolSelectedToken, true);
+                this.addSelectedTokenToInputList(ovnSelectSelectedToken, true);
                 this.addNewOutputToken();
                 return;
             }
@@ -623,7 +694,8 @@ export default defineComponent({
             this.inputTokens.push(this.getNewInputToken());
         },
         removeInputToken(id) {
-            this.removeToken(this.inputTokens, id)
+            this.removeToken(this.inputTokens, id);
+            this.recalculateOvnTokenByAnotherTotalBalances();
         },
         removeToken(tokens, id) {
             // removing by token.id or token.selectedToken.id
@@ -637,34 +709,7 @@ export default defineComponent({
                 tokens.splice(index, 1);
             }
         },
-        getNewInputToken() {
-            let randomId = (Math.random() + 1).toString(36).substring(2);
-            return {
-                id: randomId,
-                value: null,
-                contractValue: null,
-                selectedToken: null
-            }
-        },
-        getNewOutputToken() {
-            let randomId = (Math.random() + 1).toString(36).substring(2);
-            return {
-                id: randomId,
-                value: 0,
-                sum: 0,
-                locked: false,
-                selectedToken: null
-            }
-        },
 
-        maxAll() {
-            console.log("Max all");
-            for (let i = 0; i < this.selectedInputTokens.length; i++) {
-                let token = this.selectedInputTokens[i];
-                console.log(token.selectedToken.balanceData.balance);
-                this.updateTokenValue(token, token.selectedToken.balanceData.balance);
-            }
-        },
         changeSwap() {
             console.log("Change swap");
             if (this.swapMethod === 'BUY') {
@@ -1503,32 +1548,6 @@ export default defineComponent({
             return outputTokens;
         },
 
-        updateTokenValue(token, value) {
-            console.log('updateTokenValue: ', token, value)
-            token.value = value;
-            this.updateQuotaInfo();
-
-            if (!value) {
-                return
-            }
-
-            let selectedToken = token.selectedToken;
-            if (selectedToken) {
-                let sum = token.decimals === 6 ? token.value * 100 + '' : token.value + '';
-                token.contractValue = this.web3.utils.toWei(sum, token.selectedToken.weiMarker);
-
-                console.log('updateTokenValue with selected token: ', token, value, token.contractValue);
-
-                if (selectedToken.address === '0x0000000000000000000000000000000000000000') {
-                    console.log("Check approve in update value not available. its a root token: ", token);
-                    selectedToken.approveData.approved = true
-                    return;
-                }
-
-                this.checkApproveForToken(token, token.contractValue);
-            }
-        },
-
         lockProportion(isLock, token) {
             console.log("lockProportionFunc", isLock, token);
             if (this.outputTokensWithSelectedTokensCount <= 1 && !isLock) {
@@ -1564,7 +1583,7 @@ export default defineComponent({
                 let token = this.selectedOutputTokens[i];
                 let tokenSum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
                 let sum = this.swapMethod === 'BUY' ? tokenSum / token.selectedToken.price : tokenSum * token.selectedToken.price;
-                console.log(`Recalculate token.selectedToken ${token.selectedToken.symbol} price: ${token.selectedToken.price}, newUsdSum: ${sum}`, token);
+                console.log(`Recalculate token.selectedToken ${token.selectedToken.symbol} price: ${token.selectedToken.price}, newUsdSum: ${sum} tokenSum ${tokenSum}`, token);
                 token.sum = this.$utils.formatMoney(sum, 4)
             }
         },
@@ -1692,25 +1711,140 @@ export default defineComponent({
             return tokensPercentage;
         },
 
+        recalculateOvnTokenByAnotherTotalBalances() {
+            console.log("Recalculate ovn token by another total balances: ", this.selectedOvnInputTokens, this.selectedNoneOvnInputTokens);
+            if (!this.selectedOvnInputTokens || !this.selectedOvnInputTokens.length) {
+                return;
+            }
+
+            if (!this.selectedNoneOvnInputTokens.length) {
+                this.clearAllInputSelectedTokens();
+                this.addNewInputToken();
+                return;
+            }
+
+            this.recalcualteOvnInputValue();
+        },
+        recalcualteOvnInputValue() {
+            setTimeout(() => {
+                let ovnToken = this.selectedOvnInputTokens[0];
+                console.log("Recalculate ovn token Total balance more than ovn token:", ovnToken, ovnToken.usdValue);
+                let ovnUsdValue = ovnToken.usdValue;
+
+                let totalBalance = this.totalNoneOvnUsdInputsUsdBalance;
+                if (totalBalance >= ovnUsdValue) {
+                    console.log("Recalculate ovn token Total balance more than ovn token balance: ", totalBalance, ovnUsdValue);
+                    return;
+                }
+
+                let diffInUsd = ovnUsdValue - totalBalance;
+                let diff = diffInUsd / ovnToken.selectedToken.price;
+                let newValue = ovnToken.value - diff;
+
+                // console.log("Total balance less than ovn token balance: ", totalBalance, ovnTokenBalance, diffInUsd, diff);
+                console.log(`Recalculate ovn token Total balance less than ovn token balance.
+            totalBalance: ${totalBalance} ovnUsdValue: ${ovnUsdValue} diffInUsd: ${diffInUsd} diff: ${diff} newValue: ${newValue}`)
+
+                if (newValue <= 0) {
+                    this.updateTokenValue(ovnToken, 0);
+                    return;
+                }
+
+                this.updateTokenValue(ovnToken, newValue);
+            }, 30)
+        },
+
+        initDefaultTopInputTokensByBalance(tokens) {
+            console.log("Top any tokens by balance: ", tokens);
+            console.log("Top any tokens by balance selectedOvnInputTokens: ", this.selectedOvnInputTokens);
+            console.log("Top any tokens by balance selectedOvnOutputTokens: ", this.selectedOvnOutputTokens);
+            console.log("Top any tokens by balance noneOvnInputTokens: ", this.noneOvnInputTokens);
+
+            if (!tokens || !tokens.length) {
+                return;
+            }
+
+            if (!this.selectedOvnInputTokens || !this.selectedOvnInputTokens.length) {
+                return;
+            }
+
+            let onvToken = this.selectedOvnInputTokens[0];
+            this.clearAllInputSelectedTokens(onvToken)
+            let ovnTokenBalance = onvToken.selectedToken.balanceData.balanceInUsd;
+
+            // find top 5 tokens by balance and order desc
+            let topTokens = tokens.sort((a, b) => {
+                return b.balanceData.balance - a.balanceData.balance;
+            }).slice(0, 5);
+
+            // find all with balance
+            topTokens = topTokens.filter((token) => {
+                return token.balanceData.balance > 0;
+            });
+
+            console.log("Top any tokens by balance tokensByBalance: ", topTokens);
+
+            let tokensByBalanceSum = 0;
+            let tokensByBalanceResult = [];
+            for (let i = 0; i < topTokens.length; i++) {
+                let token = topTokens[i];
+                if (!token.balanceData.balance) {
+                    continue;
+                }
+
+                tokensByBalanceSum += token.balanceData.balanceInUsd;
+                tokensByBalanceResult.push(token);
+                if (tokensByBalanceSum >= ovnTokenBalance) {
+                    break;
+                }
+            }
+
+            console.log("Top tokens after filter: ", tokensByBalanceSum, tokensByBalanceResult)
+
+            for (let i = 0; i < tokensByBalanceResult.length; i++) {
+                let token = tokensByBalanceResult[i];
+                token.selected = true;
+                console.log("Top tokens after filter token: ", token)
+                this.addSelectedTokenToInputList(token, true);
+                // this.addNewOutputToken();
+            }
+
+            this.recalcualteOvnInputValue();
+        },
+
         addSelectedTokenToList(selectedToken, swapMethod, selectTokenType) {
             console.log(this.isInputToken(swapMethod, selectTokenType) ? 'INPUT TOKEN' :  'OUTPUT TOKEN');
             if (this.isInputToken(swapMethod, selectTokenType)) {
-                this.addSelectedTokenToInputList(selectedToken);
+                this.addSelectedTokenToInputList(selectedToken, true);
                 return;
             }
 
             this.addSelectedTokenToOutputList(selectedToken, true, 50);
         },
-        addSelectedTokenToInputList(selectedToken) {
-            let newInputToken = this.getNewInputToken()
+        addSelectedTokenToInputList(selectedToken, isAddAllBalance) {
+            // todo computed ovn input tokens and logic here
+            console.log("computed ovn input tokens and logic here!", selectedToken, isAddAllBalance);
+
+            let newInputToken = this.getNewInputToken();
             newInputToken.selectedToken = selectedToken;
             this.inputTokens.push(newInputToken);
             this.removeAllWithoutSelectedTokens(this.inputTokens);
 
+            if (isAddAllBalance) {
+                console.log("computed ovn input tokens and logic here! 2", newInputToken, isAddAllBalance);
+                setTimeout(() => {
+                    this.updateTokenValue(newInputToken, newInputToken.selectedToken.balanceData.balance);
+                }, 10);
+            }
+
+            if (newInputToken.selectedToken.symbol === 'OVN') {
+                this.initDefaultTopInputTokensByBalance(this.noneOvnTokens);
+            }
+
             this.checkApproveForToken(newInputToken);
         },
         addSelectedTokenToOutputList(selectedToken, isLocked, startPercent) {
-            let newOutputToken = this.getNewOutputToken()
+            let newOutputToken = this.getNewOutputToken();
             newOutputToken.locked = isLocked;
             newOutputToken.value = startPercent;
             newOutputToken.selectedToken = selectedToken;
@@ -1749,19 +1883,36 @@ export default defineComponent({
                 this.removeToken(tokens, tokensToRemove[i].id);
             }
         },
-        clearAllSelectedTokens() {
+        clearAllInputSelectedTokens(exclude) {
             for (let i = 0; i < this.inputTokens.length; i++) {
                 if (this.inputTokens[i].selectedToken) {
+                    if (exclude && this.inputTokens[i].selectedToken.symbol === exclude.selectedToken.symbol) {
+                        continue;
+                    }
+
                     this.inputTokens[i].selectedToken.selected = false;
                 }
             }
 
+            if (exclude) {
+                this.inputTokens = [exclude];
+                return
+            }
+
+            this.inputTokens = [];
+        },
+        clearAllOutputSelectedTokens() {
             for (let i = 0; i < this.outputTokens.length; i++) {
                 if (this.outputTokens[i].selectedToken) {
                     this.outputTokens[i].selectedToken.selected = false;
                 }
             }
 
+            this.outputTokens = [];
+        },
+        clearAllSelectedTokens() {
+            this.clearAllInputSelectedTokens();
+            this.clearAllOutputSelectedTokens();
             this.clearAllTokens();
         },
         clearAllTokens() {

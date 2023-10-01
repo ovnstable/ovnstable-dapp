@@ -1,6 +1,6 @@
 <template>
     <div>
-        <PoolsContainer :type="'all'"></PoolsContainer>
+        <PoolsContainer :type="'ALL'"></PoolsContainer>
     </div>
 </template>
 

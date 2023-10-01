@@ -21,6 +21,7 @@
                         <ZapForm
                             :zap-pool="zapPool"
                             :pool-tokens-for-zap-map="poolTokensForZapMap"
+                            :type-of-pool="typeOfPool"
                         ></ZapForm>
                     </v-card-text>
                 </v-card>
@@ -58,6 +59,10 @@ export default defineComponent({
             type: Object,
             required: true,
         },
+        typeOfPool: { // OVN or ALL
+            type: String,
+            required: true,
+        }
 
     },
     data() {

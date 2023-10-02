@@ -266,6 +266,63 @@
                 </v-list-item-title>
             </v-list-item>
 
+            <v-list-group :append-icon="null"
+                          @click="toggleInsurance(!isShowInsurance)">
+                <template v-slot:activator>
+                    <v-list-item-icon class="mx-n2">
+                        <div class="navbar-page-link">
+                            <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path v-bind:fill="insuranceIconColor" d="M24.1364 12.9091C24.1364 18.9636 19.9473 24.6255 14.3182 26C8.68909 24.6255 4.5 18.9636 4.5 12.9091V6.36364L14.3182 2L24.1364 6.36364V12.9091ZM14.3182 23.8182C18.4091 22.7273 21.9545 17.8618 21.9545 13.1491V7.78182L14.3182 4.37818V23.8182Z"/>
+                            </svg>
+                        </div>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <label :class="selectedTab.startsWith('insurance_') ? 'selected-page' : ''"
+                               class="navbar-page-label" style="font-size: 14px">
+                            INSURANCE
+                        </label>
+                    </v-list-item-title>
+                    <div class="select-bar-main-container mr-15" >
+                        <v-row>
+                            <v-icon color="var(--secondary-gray-text)" >
+                                {{ isShowInsurance ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
+                            </v-icon>
+                        </v-row>
+                    </div>
+                </template>
+
+                <v-list-item @click="insuranceAboutClick" :class="selectedTab === 'insurance_about' ? 'selected-page-item' : ''"
+                             class="list-item-hover">
+                    <v-list-item-title>
+                        <label :class="selectedTab === 'insurance_about' ? 'selected-page' : ''"
+                               class="navbar-list-label mx-5">
+                            About
+                        </label>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item @click="insuranceStatsClick" :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''"
+                             class="list-item-hover">
+                    <v-list-item-title>
+                        <label :class="selectedTab === 'insurance_performance' ? 'selected-page' : ''"
+                               class="navbar-list-label mx-5">
+                            Performance
+                        </label>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item :class="selectedTab === 'insurance_collateral' ? 'selected-page-item' : ''"
+                             @click="insuranceCollateralClick"
+                             class="list-item-hover ">
+                    <v-list-item-title>
+                        <label :class="selectedTab === 'insurance_collateral' ? 'selected-page' : ''"
+                               class="navbar-list-label mx-5">
+                            Collateral
+                        </label>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
+
 
             <div class="navbar-list-divider mt-3 mb-1"></div>
             <label class="navbar-list-header">
@@ -384,6 +441,7 @@ export default {
         isShowUsd: false,
         isShowDai: false,
         isShowUsdt: false,
+        isShowInsurance: false,
         isShowEts: false,
 
         iconColor: null,
@@ -430,6 +488,15 @@ export default {
             }
 
             return this.isShowUsdt ? '#FFFFFF' : '#ADB3BD';
+        },
+
+
+        insuranceIconColor: function() {
+            if (this.light) {
+                return this.isShowInsurance ? '#000000' : '#ADB3BD';
+            }
+
+            return this.isShowInsurance ? '#FFFFFF' : '#ADB3BD';
         },
 
         etsIconColor: function() {
@@ -520,6 +587,28 @@ export default {
             this.goToActionByPath('/provide-lp');
         },
 
+        insuranceClick() {
+                this.selectTab('insurance');
+                this.goToActionByPath('/insurance');
+        },
+
+        insuranceStatsClick() {
+            this.selectTab('insurance_performance');
+            this.goToActionByPath('/insurance/polygon');
+            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
+        },
+
+        insuranceAboutClick() {
+            this.selectTab('insurance_about');
+            this.goToActionByPath('/insurance');
+        },
+
+
+        insuranceCollateralClick() {
+            this.selectTab('insurance_collateral');
+            this.goToActionByPath('/insurance/collateral');
+            // this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
+        },
 
         swapOdosClick() {
             this.selectTab('swap-odos');
@@ -633,32 +722,46 @@ export default {
 
         toggleUsdPlus(isShow) {
             if (isShow) {
+                this.toggleEts(false);
                 this.toggleDaiPlus(false);
                 this.toggleUsdtPlus(false);
-                this.toggleEts(false);
+                this.toggleInsurance(false);
             }
 
             this.isShowUsd = isShow;
         },
 
-      toggleDaiPlus(isShow) {
+        toggleDaiPlus(isShow) {
             if (isShow) {
+                this.toggleEts(false);
                 this.toggleUsdPlus(false);
                 this.toggleUsdtPlus(false);
-                this.toggleEts(false);
+                this.toggleInsurance(false);
             }
 
             this.isShowDai = isShow;
         },
 
-      toggleUsdtPlus(isShow) {
+        toggleUsdtPlus(isShow) {
             if (isShow) {
+                this.toggleEts(false);
                 this.toggleUsdPlus(false);
                 this.toggleDaiPlus(false);
-                this.toggleEts(false);
+                this.toggleInsurance(false);
             }
 
             this.isShowUsdt = isShow;
+        },
+
+        toggleInsurance(isShow) {
+            if (isShow) {
+                this.toggleEts(false);
+                this.toggleUsdPlus(false);
+                this.toggleUsdtPlus(false);
+                this.toggleDaiPlus(false);
+            }
+
+            this.isShowInsurance = isShow;
         },
 
         toggleEts(isShow) {
@@ -666,6 +769,7 @@ export default {
                 this.toggleUsdPlus(false);
                 this.toggleDaiPlus(false);
                 this.toggleUsdtPlus(false);
+                this.toggleInsurance(false);
             }
 
             this.isShowEts = isShow;

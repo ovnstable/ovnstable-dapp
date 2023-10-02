@@ -16,7 +16,11 @@ export const pool = {
 
             topPool: null,
 
-            typeOfPools: 'all', // all, ovn
+            // todo: remove after presale
+            aerodromePool: null,
+            velodromePool: null,
+
+            typeOfPool: 'ALL', // ALL, OVN
 
             isZapModalShow: false,
             currentZapPool: null,
@@ -34,6 +38,7 @@ export const pool = {
                 'Alienbase',
                 'Swapbased',
                 'Curve',
+                'Beefy',
             ],
             poolTokensForZapMap: {
                 // Chronos
@@ -224,6 +229,17 @@ export const pool = {
                     {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
                     {name: 'crvUSD', address: '0x417Ac0e078398C154EdFadD9Ef675d30Be60Af93'},
                 ],
+
+                // Beefy
+                '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197_Aerodrome': [ // Aerodrome
+                    {name: 'OVN', address: '0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396'},
+                    {name: 'USD+', address: '0xb79dd08ea68a908a97220c76d19a6aa9cbde4376'},
+                ],
+
+                '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0_Velodrome': [ // Velodrome
+                    {name: 'OVN', address: '0x3b08fcd15280e7B5A6e404c4abb87F7C774D1B2e'},
+                    {name: 'USD+', address: '0x73cb180bf0521828d8849bc8CF2B920918e23032'},
+                ],
             }
         }
     },
@@ -233,6 +249,11 @@ export const pool = {
         setIsZapModalShow(isShow) {
             this.isZapModalShow = isShow;
         },
+        openZapInWithInputOvn(pool, clickType) {
+            console.log("Zap open with ovn input for pool: ", pool, clickType);
+            this.openZapIn(pool, clickType);
+        },
+
         openZapIn(pool, clickType) {
             console.log("Zap open for pool: ", pool, clickType);
             this.currentZapPool = pool;
@@ -254,6 +275,15 @@ export const pool = {
             if (clickType === 'pools') {
                 try {
                     this.trackClick({action: 'click_zap_in_pools', event_category: 'Click button', event_label: 'View zap pools page' });
+                } catch (e) {
+                    console.error("Track error:", e);
+                }
+                return;
+            }
+
+            if (clickType === 'claim') {
+                try {
+                    this.trackClick({action: 'click_zap_in_claim', event_category: 'Click button', event_label: 'View zap claim page' });
                 } catch (e) {
                     console.error("Track error:", e);
                 }
@@ -456,7 +486,7 @@ export const pool = {
                     .then(data => {
                         if (data) {
                             data.forEach(pool => {
-                                if (this.typeOfPools === 'ovn' && !pool.id.name.toLowerCase().includes('ovn')) {
+                                if (this.typeOfPool === 'OVN' && !pool.id.name.toLowerCase().includes('ovn')) {
                                     return;
                                 }
 
@@ -570,6 +600,13 @@ export const pool = {
 
             // todo move to backend
             if (this.pools && this.pools.length) {
+                // init pool at aggregator
+                console.log("Reverse pool init", this.pools);
+                for (let i = 0; i < this.pools.length; i++) {
+                    let pool = this.pools[i];
+                    this.initReversePools(pool);
+                }
+
                 const filteredPools = this.pools.filter(pool => pool.chain === this.networkId && pool.tvl > 100000);
                 filteredPools.sort((a, b) => b.apr - a.apr);
 
@@ -581,11 +618,16 @@ export const pool = {
                 if (!this.topPool) {
                     this.topPool = this.pools.sort((a, b) => b.apr - a.apr);
                 }
+
+
+                // todo: remove after presale
+                this.velodromePool = this.pools.find(pool => pool.address === '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0_Velodrome');
+                this.aerodromePool = this.pools.find(pool => pool.address === '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197_Aerodrome');
             }
 
             this.pools = this.initFeature(this.pools);
 
-            if (this.typeOfPools === 'ovn') {
+            if (this.typeOfPool === 'OVN') {
                 this.sortedPoolList = this.getSortedPools(this.pools, true);
                 console.log("Sorted pools", this.sortedPoolList);
                 this.sortedPoolSecondList = [];
@@ -628,8 +670,16 @@ export const pool = {
 
         getSortedPools(pools, isOnvPools) {
             let topPools;
+
+            // execute revert aggregator
+            pools = pools.filter(pool =>
+                        pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013' &&
+                        pool.address !== '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0' &&
+                        pool.address !== '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197'
+                    );
+
             if (!isOnvPools) {
-                topPools = pools.filter(pool => pool.tvl >= 300000 && pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013');
+                topPools = pools.filter(pool => pool.tvl >= 300000);
             } else {
                 topPools = pools;
             }
@@ -651,7 +701,12 @@ export const pool = {
 
         getSortedSecondPools(pools) {
             console.log("Sorted second pools", pools);
-            let secondPools = pools.filter(pool => pool.promoted !== false || (pool.tvl < 300000 && pool.tvl > 100000 && pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013'));
+            let secondPools = pools.filter(pool => pool.promoted !== false || (pool.tvl < 300000 && pool.tvl > 100000 &&
+                (
+                    pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013' &&
+                    pool.address !== '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0' &&
+                    pool.address !== '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197'
+                )));
             secondPools = secondPools.sort((a, b) => {
                 if (a.apr !== b.apr) {
                     return b.apr - a.apr; // sort by APR number
@@ -685,6 +740,61 @@ export const pool = {
             })
 
             return pools;
+        },
+        initReversePools(pool) {
+            pool.aggregators = [];
+            // usd+ dola arb
+            let poolAddress = pool.address;
+
+            if (poolAddress === '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013_convex') {
+                let findedPool = this.pools.find(data=> data.address === "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013");
+                console.log("Reverse pool reverseData!", poolAddress, findedPool);
+                if (!pool) {
+                    console.error('Pool not found for aggregation reverse', poolAddress);
+                    return;
+                }
+
+                findedPool.link = 'https://curve.fi/#/arbitrum/pools/factory-v2-117/deposit'
+                pool.aggregators.push({
+                    ...findedPool
+                })
+
+                console.log("Reverse pool reverseData! 2", pool);
+                return
+            }
+
+            if (poolAddress === '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197_Aerodrome') {
+                let findedPool = this.pools.find(data=> data.address === "0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197");
+                console.log("Reverse pool reverseData!", poolAddress, findedPool);
+                if (!pool) {
+                    console.error('Pool not found for aggregation reverse', poolAddress);
+                    return;
+                }
+
+                findedPool.link = 'https://app.beefy.com/vault/aerodrome-ovn-usd+'
+                pool.aggregators.push({
+                    ...findedPool
+                })
+
+                console.log("Reverse pool reverseData! 2", pool);
+            }
+
+            if (poolAddress === '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0_Velodrome') {
+                let findedPool = this.pools.find(data=> data.address === "0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0");
+                console.log("Reverse pool reverseData!", poolAddress, findedPool);
+                if (!pool) {
+                    console.error('Pool not found for aggregation reverse', poolAddress);
+                    return;
+                }
+
+                findedPool.link = 'https://app.beefy.com/vault/velodrome-v2-ovn-usd+'
+                pool.aggregators.push({
+                    ...findedPool
+                })
+
+                console.log("Reverse pool reverseData! 2", pool);
+                return;
+            }
         },
         initAggregators(pool) {
             pool.aggregators = [];
@@ -792,60 +902,7 @@ export const pool = {
                 })
             }
 
-
-            if (poolAddress === '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013_convex') {
-                const curveData = this.getCurvePool(this.pools);
-
-                pool.aggregators.push({
-                    id: ('Aggregator' + pool.id.name + pool.apr + pool.tvl + pool.platform),
-                    name: pool.id.name,
-                    address: pool.id.address,
-                    apr: curveData.curveApr,
-                    tvl: curveData.curveTvl,
-                    platform: 'Curve',
-                    zappable: false,
-                    link: 'https://curve.fi/#/arbitrum/pools/factory-v2-117/deposit',
-                })
-            }
-
-            /*            if (pool.id.address === '0x88beb144352bd3109c79076202fac2bceab87117') {
-                            pool.aggregators.push({
-                                id: ('Aggregator' + 'Magpie' + pool.id.name + pool.tvl + pool.platform),
-                                name: pool.id.name,
-                                address: pool.id.address,
-                                platform: 'Magpie',
-                                zappable: false,
-                            })
-
-                            pool.aggregators.push({
-                                id: ('Aggregator'+ 'Wombax' + pool.id.name + pool.tvl + pool.platform),
-                                name: pool.id.name,
-                                address: pool.id.address,
-                                platform: 'Wombax',
-                                zappable: false,
-                            })
-                        }*/
-
             return pool;
         },
-
-        getCurvePool(pools) {
-            let curveApr = 0;
-            let curveTvl = 0;
-
-            for (let i = 0; i < pools.length; i++) {
-                let pool = pools[i];
-                if (pool.address === '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013') {
-                    curveApr = pool.apr;
-                    curveTvl = pool.tvl;
-                    break;
-                }
-            }
-
-            return {
-                curveApr: curveApr,
-                curveTvl: curveTvl
-            };
-        }
     }
 }

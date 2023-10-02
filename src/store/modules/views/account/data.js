@@ -109,6 +109,9 @@ const actions = {
         let wUsdPlus;
         let originWUsdPlus;
 
+        let ovn;
+        let originOvn;
+
         try {
             asset = await web3.contracts.asset.methods.balanceOf(getters.account).call();
             originAsset = asset;
@@ -182,8 +185,21 @@ const actions = {
             }
         }
 
+        // ovn contracts
+        if (networkId === 10 || networkId === 42161 || networkId === 8453) {
+            try {
+                ovn = await web3.contracts.ovn.methods.balanceOf(getters.account).call();
+                originOvn = ovn;
+                ovn = ovn ? web3.web3.utils.fromWei(ovn, 'ether') : null;
+            } catch (e) {
+                console.log("e:", e)
+                ovn = getters.balance.ovn;
+                originOvn = getters.originalBalance.ovn;
+            }
+        }
+
         // wrapped contracts
-        if (networkId === 137 || networkId === 10 || networkId === 42161 || networkId == 8453) {
+        if (networkId === 137 || networkId === 10 || networkId === 42161 || networkId === 8453) {
             try {
                 wUsdPlus = await web3.contracts.wUsdPlus.methods.balanceOf(getters.account).call();
                 originWUsdPlus = wUsdPlus;
@@ -204,6 +220,7 @@ const actions = {
             asset: asset,
             asset_two: asset_two,
             wUsdPlus: wUsdPlus,
+            ovn: ovn,
         });
 
         commit('setOriginalBalance', {
@@ -215,6 +232,7 @@ const actions = {
             asset: originAsset,
             asset_two: originAsset_two,
             wUsdPlus: originWUsdPlus,
+            ovn: originOvn,
         });
 
         let resultEtsBalance = {};
@@ -253,9 +271,13 @@ const actions = {
         let resultInsuranceBalance = {};
         let resultInsuranceOriginalBalance = {};
         let insuranceList = [
-            {
+   /*         {
                 chainName: 'polygon',
                 chainId: 137,
+            },*/
+            {
+                chainName: 'optimism',
+                chainId: 10,
             }
         ];
 
@@ -269,7 +291,7 @@ const actions = {
                     try {
                         insuranceBalance = await web3.contracts.insurance[insurance.chainName + '_token'].methods.balanceOf(getters.account).call();
                         insuranceOriginalBalance = insuranceBalance;
-                        insuranceBalance = web3.web3.utils.fromWei(insuranceBalance, 'mwei');
+                        insuranceBalance = web3.web3.utils.fromWei(insuranceBalance, 'ether');
                     } catch (e) {
                         try {
                             insuranceBalance = getters.insuranceBalance[insurance.chainName];

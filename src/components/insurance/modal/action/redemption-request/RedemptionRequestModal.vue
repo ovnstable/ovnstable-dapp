@@ -89,7 +89,8 @@ export default {
 
         async sendRedemptionRequest() {
             let insurance = {
-                chainName: 'polygon'
+                // chainName: 'polygon'
+                chainName: 'optimism'
             }
 
             let estimateResult = await this.estimateRedemptionRequest(insurance);

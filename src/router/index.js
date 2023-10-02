@@ -27,6 +27,7 @@ import ProvideLp from "./midleware/dapp/ProvideLp";
 import Swap from "./midleware/dapp/Swap";
 import Swipe from "./midleware/dapp/Swipe";
 import Presasle from "./midleware/dapp/Presasle";
+import PresaleClaim from "./midleware/dapp/PresaleClaim";
 import EtsAbout from "./midleware/dapp/EtsAbout";
 import Bridge from "./midleware/dapp/Bridge";
 
@@ -141,6 +142,16 @@ const routes = [
                 meta: {
                     middleware: [
                         Presasle
+                    ]
+                }
+            },
+            {
+                path: '/presale/claim',
+                name: 'ClaimView',
+                component: () => import('../views/presale/ClaimView.vue'),
+                meta: {
+                    middleware: [
+                        PresaleClaim
                     ]
                 }
             },

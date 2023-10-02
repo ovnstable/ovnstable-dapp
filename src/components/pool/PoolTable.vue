@@ -12,7 +12,7 @@
                            </div>
                            <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
                                <div class="pool-table-header-item">
-                                   Chain
+                                   Chain {{typeOfPool}}
                                </div>
                            </div>
                            <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
@@ -297,6 +297,10 @@ export default defineComponent({
             type: Boolean,
             required: true
         },
+        typeOfPool: { // OVN, ALL, null
+            type: String,
+            required: false
+        }
     },
     computed: {
         ...mapGetters('theme', ['light']),
@@ -305,6 +309,10 @@ export default defineComponent({
         poolTableBodyStyle: function () {
               return pool => {
                   if (!pool) {
+                      return '';
+                  }
+
+                  if (this.typeOfPool === 'OVN') {
                       return '';
                   }
 

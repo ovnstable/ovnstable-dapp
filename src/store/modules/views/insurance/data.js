@@ -44,9 +44,13 @@ const actions = {
         console.log('InsuranceData: refreshInsurance');
 
         let insuranceChainList = [
+            // {
+            //     chainName: 'polygon',
+            //     chainId: 137
+            // }
             {
-                chainName: 'polygon',
-                chainId: 137
+                chainName: 'optimism',
+                chainId: 10
             }
         ];
 
@@ -313,7 +317,8 @@ const actions = {
 
         if (account) {
             let insurance = {
-                chainName: 'polygon'
+                // chainName: 'polygon'
+                chainName: 'optimism'
             }
 
             let date = await web3.contracts.insurance[insurance.chainName + '_exchanger'].methods.withdrawRequests(account).call();

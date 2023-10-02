@@ -257,8 +257,8 @@ const actions = {
         // dispatch('refreshTotalUsdPlus');
         // dispatch('refreshTotalUsdPlusProfit');
         dispatch('refreshStablecoinData');
-        // dispatch('refreshInsuranceAssetData');
-        // dispatch('refreshInsuranceTotalData');
+        dispatch('refreshInsuranceAssetData');
+        dispatch('refreshInsuranceTotalData');
     },
 
     async refreshPayouts({commit, dispatch, getters, rootState}) {

@@ -16,6 +16,10 @@ export const pool = {
 
             topPool: null,
 
+            // todo: remove after presale
+            aerodromePool: null,
+            velodromePool: null,
+
             typeOfPool: 'ALL', // ALL, OVN
 
             isZapModalShow: false,
@@ -245,6 +249,11 @@ export const pool = {
         setIsZapModalShow(isShow) {
             this.isZapModalShow = isShow;
         },
+        openZapInWithInputOvn(pool, clickType) {
+            console.log("Zap open with ovn input for pool: ", pool, clickType);
+            this.openZapIn(pool, clickType);
+        },
+
         openZapIn(pool, clickType) {
             console.log("Zap open for pool: ", pool, clickType);
             this.currentZapPool = pool;
@@ -266,6 +275,15 @@ export const pool = {
             if (clickType === 'pools') {
                 try {
                     this.trackClick({action: 'click_zap_in_pools', event_category: 'Click button', event_label: 'View zap pools page' });
+                } catch (e) {
+                    console.error("Track error:", e);
+                }
+                return;
+            }
+
+            if (clickType === 'claim') {
+                try {
+                    this.trackClick({action: 'click_zap_in_claim', event_category: 'Click button', event_label: 'View zap claim page' });
                 } catch (e) {
                     console.error("Track error:", e);
                 }
@@ -600,6 +618,11 @@ export const pool = {
                 if (!this.topPool) {
                     this.topPool = this.pools.sort((a, b) => b.apr - a.apr);
                 }
+
+
+                // todo: remove after presale
+                this.velodromePool = this.pools.find(pool => pool.address === '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0_Velodrome');
+                this.aerodromePool = this.pools.find(pool => pool.address === '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197_Aerodrome');
             }
 
             this.pools = this.initFeature(this.pools);

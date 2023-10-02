@@ -473,7 +473,8 @@
 
                     <div class="step-container">
                         <div class="step-title">
-                            <div class="step-title-container" @click="devStepsUpper">
+                            <div @click="devStepsUpper"
+                                 class="step-title-container">
                                 {{ formattedClaimTitle }}
                                 <div class="title-logo">
                                     <img src="/assets/icon/presale/title-claim.svg" alt="claim">
@@ -630,6 +631,48 @@
 
                             <div class="info-group">
                                 <div v-if="currentStepType === 'CLAIM_REFUND'"
+                                     @click="goToClaim"
+                                     class="button-buy">
+                                    CLAIM REFUND
+                                </div>
+                                <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_BONUS'"
+                                     class="button-buy-disabled">
+                                    WAITING CLAIM BONUS
+                                </div>
+                                <div v-else-if="currentStepType === 'CLAIM_BONUS'"
+                                      @click="goToClaim"
+                                     class="button-buy">
+                                    CLAIM BONUS
+                                </div>
+                                <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_SALES_FIRST_PART'"
+                                     class="button-buy-disabled">
+                                    WAITING CLAIM
+                                </div>
+                                <div v-else-if="currentStepType === 'CLAIM_SALES_FIRST_PART'"
+                                     @click="goToClaim"
+                                     class="button-buy">
+                                    CLAIM SALES (25%)
+                                </div>
+                                <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_VESTING'"
+                                     class="button-buy-disabled">
+                                    WAITING CLAIM VESTING
+                                </div>
+                                <div v-else-if="currentStepType === 'CLAIM_VESTING'"
+                                      @click="goToClaim"
+                                     class="button-buy">
+                                    CLAIM VESTING
+                                </div>
+                                <div v-else-if="currentStepType === 'NOTHING_TO_DO'"
+                                     class="button-buy-disabled">
+                                    VESTING FINISHED
+                                </div>
+                                <div v-else class="button-buy-disabled">
+                                    NOT STARTED
+                                </div>
+                            </div>
+
+<!--                            <div class="info-group">
+                                <div v-if="currentStepType === 'CLAIM_REFUND'"
                                      @click="claimRefund"
                                      class="button-buy">
                                     CLAIM REFUND
@@ -668,7 +711,7 @@
                                 <div v-else class="button-buy-disabled">
                                     NOT STARTED
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
 
 <!--

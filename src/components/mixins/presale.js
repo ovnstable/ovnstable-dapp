@@ -2,6 +2,7 @@ import {mapActions, mapGetters} from "vuex";
 import moment from "moment/moment";
 import loadJSON from "@/utils/http-utils";
 import {balanceApiService} from "@/services/balance-api-service";
+import {pool} from "@/components/mixins/pool";
 
 const USER_PRESALE_STATE_MAP = {
     0: 'WAITING_FOR_PRESALE_START',
@@ -17,6 +18,7 @@ const USER_PRESALE_STATE_MAP = {
 }
 
 export const presale = {
+    mixins: [pool],
     data() {
         return {
             isFirstLoading: true,
@@ -25,6 +27,7 @@ export const presale = {
             isShowSuccessModal: false,
             successData: null,
 
+            finishType: 'HOLD',
 
             presaleTimestamp: 1695038400 * 1000,
             presaleEndTimestamp: 1695639600 * 1000,
@@ -338,7 +341,7 @@ export const presale = {
         ...mapActions("gasPrice", ['refreshGasPrice']),
 
         ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
-        ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
+        ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg', 'closeErrorModal']),
 
         initRefreshData() {
             this.initRefreshIntervalId = setInterval(this.loadContractData, 30000);
@@ -587,6 +590,7 @@ export const presale = {
                 }).on('transactionHash', (hash) => {
                     console.log("Claim vesting result", hash)
                     this.showSuccessModal(true, hash, "You successfully claimed OVN tokens");
+                    this.finishByFinishType(this.finishType);
                 })
                 console.log("Result: ", result)
 
@@ -626,6 +630,7 @@ export const presale = {
                     console.log("Claim sales part 1 result", hash)
                     this.closeWaitingModal();
                     this.showSuccessModal(true, hash, "You successfully claimed OVN tokens");
+                    this.finishByFinishType(this.finishType);
                 })
 
                 console.log("Result: ", result)
@@ -665,6 +670,7 @@ export const presale = {
                     console.log("Claim bonus result", hash)
                     this.closeWaitingModal();
                     this.showSuccessModal(true, hash, "You successfully claimed OVN tokens");
+                    this.finishByFinishType(this.finishType);
                     this.timeoutUpdateCurrentUserStep();
                 })
 
@@ -680,6 +686,11 @@ export const presale = {
             }
 
             console.log("claim bonus");
+        },
+
+        goToClaim() {
+            console.log("Go to claim");
+            window.location.replace("/presale/claim");
         },
 
         async claimRefund() {
@@ -900,6 +911,44 @@ export const presale = {
             } else {
                 this.devSteps++;
             }
+        },
+
+        finishByFinishType(finishType) {
+            setTimeout(() => {
+                try {
+                    this.closeWaitingModal();
+                    this.closeErrorModal();
+                } catch (e) {
+                    console.log("Close modal error", e)
+                }
+
+                if (finishType === 'HOLD') {
+                    console.log("Finish transaction by type HOLD");
+                    return;
+                }
+
+                if (finishType === 'BRIDGE') {
+                    console.log("Finish transaction by type BRIDGE");
+                    // location to bridge
+                    window.location.replace("/bridge");
+                    return;
+                }
+
+                if (finishType === 'FARM') {
+                    console.log("Finish transaction by type FARM", this.aerodromePool);
+                    this.openZapInWithInputOvn(this.aerodromePool, 'claim');
+                    return;
+                }
+
+                if (finishType === 'INSURANCE') {
+                    console.log("Finish transaction by type BRIDGE");
+                    // location to bridge
+                    window.location.replace("/insurance");
+                    return;
+                }
+
+                console.error("Finish transaction type not found", finishType);
+            }, 3000);
         }
 
     }

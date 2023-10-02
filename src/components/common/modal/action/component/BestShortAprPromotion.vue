@@ -1,5 +1,5 @@
 <template>
-    <div class="container-main pa-2">
+    <div class="container-main py-2">
         <v-row v-if="isPoolsLoading">
             <v-row align="center" justify="center" class="py-15">
                 <v-progress-circular
@@ -11,8 +11,8 @@
             </v-row>
         </v-row>
         <template v-if="!isPoolsLoading">
-            <div v-if="topPool">
-                <PoolLabel :pool="topPool" :isShort="true" />
+            <div v-if="initPool">
+                <PoolLabel :pool="initPool" :isShort="true" />
             </div>
         </template>
     </div>
@@ -29,6 +29,10 @@ export default {
     components: { PoolLabel },
 
     props: {
+        initPool : {
+            type: Object,
+            required: false,
+        }
     },
 
     data() {

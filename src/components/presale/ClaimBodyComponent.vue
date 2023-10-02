@@ -8,6 +8,9 @@
                         <div class="title-step-container">
                             <div class="title-step-text">
                                 claim and hold in wallet
+                                <div class="title-logo">
+                                    <img src="/assets/icon/presale/claim-wallet.svg" alt="Benefit">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -35,20 +38,98 @@
 
 
                             <div class="info-group" style="cursor: pointer">
-
-
-                                <v-row class="ma-0 pt-4" justify="start" align="center">
-                                    <div>
-                                        <v-btn
-                                            @click="claimAndHold"
-                                            x-large
-                                               width="90%"
-                                               class="button btn-outlined"
-                                               height="40px"
-                                               outlined>
-                                            CLAIM AND HOLD
-                                        </v-btn>
-                                    </div>
+                                <v-row @click="clickOnButton('HOLD')"
+                                       class="ma-0 pt-4" justify="center" align="center">
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        v-if="currentStepType === 'CLAIM_REFUND'"
+                                         @click="claimRefund">
+                                        CLAIM AND HOLD REFUND
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'WAITING_FOR_CLAIM_BONUS'">
+                                        WAITING CLAIM BONUS
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        v-else-if="currentStepType === 'CLAIM_BONUS'"
+                                         @click="claimBonus">
+                                        CLAIM AND HOLD BONUS
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'WAITING_FOR_CLAIM_SALES_FIRST_PART'">
+                                        WAITING CLAIM
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        v-else-if="currentStepType === 'CLAIM_SALES_FIRST_PART'"
+                                         @click="claimSalesPart1">
+                                        CLAIM AND HOLD OVN (25%)
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'WAITING_FOR_CLAIM_VESTING'">
+                                        WAITING CLAIM VESTING
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        v-else-if="currentStepType === 'CLAIM_VESTING'"
+                                         @click="claimVesting">
+                                        CLAIM AND HOLD VESTING
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'NOTHING_TO_DO'">
+                                        VESTING FINISHED
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else>
+                                        NOT STARTED
+                                    </v-btn>
                                 </v-row>
                             </div>
                         </div>
@@ -59,6 +140,9 @@
                         <div class="title-step-container">
                             <div class="title-step-text">
                                 claim and farm on op
+                                <div class="title-logo">
+                                    <img src="/assets/icon/presale/claim-farm-on.svg" alt="op">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -84,22 +168,106 @@
                                 </div>
                             </div>
 
+                            <div>
+                                <div>
+                                    <BestShortAprPromotion  :init-pool="velodromePool"/>
+                                </div>
+                            </div>
+
 
                             <div class="info-group" style="cursor: pointer">
-
-
-                                <v-row class="ma-0 pt-4" justify="start" align="center">
-                                    <div>
-                                        <v-btn
-                                            @click="claimAndBridgeToOp"
-                                            x-large
-                                            width="90%"
-                                            class="button btn-outlined"
-                                            height="40px"
-                                            outlined>
-                                            CLAIM AND BRIDGE TO OP
-                                        </v-btn>
-                                    </div>
+                                <v-row @click="clickOnButton('BRIDGE')"
+                                       class="ma-0 pt-4" justify="center" align="center">
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        v-if="currentStepType === 'CLAIM_REFUND'"
+                                        @click="claimRefund">
+                                        CLAIM AND BRIDGE TO OP
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'WAITING_FOR_CLAIM_BONUS'">
+                                        WAITING CLAIM BONUS
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        v-else-if="currentStepType === 'CLAIM_BONUS'"
+                                        @click="claimBonus">
+                                        CLAIM AND BRIDGE TO OP
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'WAITING_FOR_CLAIM_SALES_FIRST_PART'">
+                                        WAITING CLAIM
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        v-else-if="currentStepType === 'CLAIM_SALES_FIRST_PART'"
+                                        @click="claimSalesPart1">
+                                        CLAIM AND BRIDGE TO OP
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'WAITING_FOR_CLAIM_VESTING'">
+                                        WAITING CLAIM VESTING
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        v-else-if="currentStepType === 'CLAIM_VESTING'"
+                                        @click="claimVesting">
+                                        CLAIM AND BRIDGE TO OP
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'NOTHING_TO_DO'">
+                                        VESTING FINISHED
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else>
+                                        NOT STARTED
+                                    </v-btn>
                                 </v-row>
                             </div>
                         </div>
@@ -110,6 +278,9 @@
                         <div class="title-step-container">
                             <div class="title-step-text">
                                 claim and farm on base
+                                <div class="title-logo">
+                                    <img src="/assets/icon/presale/claim-farm-on.svg" alt="base">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -137,25 +308,105 @@
                             </div>
 
                             <div>
-                                <div v-if="!isPoolsLoading">
-                                    <BestShortAprPromotion  :pool="topPool"/>
+                                <div>
+                                    <BestShortAprPromotion  :init-pool="aerodromePool"/>
                                 </div>
                             </div>
 
 
                             <div class="info-group" style="cursor: pointer">
-                                <v-row class="ma-0 pt-4" justify="start" align="center">
-                                    <div>
-                                        <v-btn
-                                            @click="claimAndFarmOnBase"
-                                            x-large
-                                            width="90%"
-                                            class="button btn-outlined-lined"
-                                            height="40px"
-                                            outlined>
-                                            CLAIM AND FARM ON BASE
-                                        </v-btn>
-                                    </div>
+                                <v-row @click="clickOnButton('FARM')"
+                                       class="ma-0 pt-4" justify="center" align="center">
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined-lined"
+                                        height="40px"
+                                        outlined
+                                        v-if="currentStepType === 'CLAIM_REFUND'"
+                                        @click="claimRefund">
+                                        CLAIM AND FARM ON BASE
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'WAITING_FOR_CLAIM_BONUS'">
+                                        WAITING CLAIM BONUS
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined-lined"
+                                        height="40px"
+                                        outlined
+                                        v-else-if="currentStepType === 'CLAIM_BONUS'"
+                                        @click="claimBonus">
+                                        CLAIM AND FARM ON BASE
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'WAITING_FOR_CLAIM_SALES_FIRST_PART'">
+                                        WAITING CLAIM
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined-lined"
+                                        height="40px"
+                                        outlined
+                                        v-else-if="currentStepType === 'CLAIM_SALES_FIRST_PART'"
+                                        @click="claimSalesPart1">
+                                        CLAIM AND FARM ON BASE
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'WAITING_FOR_CLAIM_VESTING'">
+                                        WAITING CLAIM VESTING
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined-lined"
+                                        height="40px"
+                                        outlined
+                                        v-else-if="currentStepType === 'CLAIM_VESTING'"
+                                        @click="claimVesting">
+                                        CLAIM AND FARM ON BASE
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'NOTHING_TO_DO'">
+                                        VESTING FINISHED
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else>
+                                        NOT STARTED
+                                    </v-btn>
                                 </v-row>
                             </div>
                         </div>
@@ -163,10 +414,33 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 col-md-6 col-sm-12">
+                    <div v-if="turnOfStatusControls">
+                        <div class="step-container-separator"></div>
+                        <div>
+                            (step: {{currentStepType}} | finish: {{finishType}})
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-lg-6 col-md-6 col-xs-6">
+                                <button @click="prevStep" class="pr-5" style="cursor:pointer;">
+                                    prev
+                                </button>
+                            </div>
+                            <div class="col-6 col-lg-6 col-md-6 col-xs-6">
+                                <button @click="nextStep" style="cursor:pointer;">
+                                    next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div>
-                        <div class="title-step-container">
+                        <div @click="devStepsUpper"
+                             class="title-step-container">
                             <div class="title-step-text">
                                 claim and provide insurance
+                                <div class="title-logo">
+                                    <img src="/assets/icon/presale/claim-provide.svg" alt="insurance">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -193,92 +467,119 @@
 
 
                             <div class="info-group" style="cursor: pointer">
-                                <v-row class="ma-0 pt-4" justify="start" align="center">
-                                    <div>
-                                        <v-btn
-                                            @click="claimAndHold"
-                                            x-large
-                                            width="90%"
-                                            class="button btn-outlined"
-                                            height="40px"
-                                            outlined>
-                                            CLAIM/MINT INSURANCE
-                                        </v-btn>
-                                    </div>
+                                <v-row @click="clickOnButton('INSURANCE')"
+                                       class="ma-0 pt-4" justify="center" align="center">
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        v-if="currentStepType === 'CLAIM_REFUND'"
+                                        @click="claimRefund">
+                                        CLAIM AND MINT INSURANCE
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'WAITING_FOR_CLAIM_BONUS'">
+                                        WAITING CLAIM BONUS
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        v-else-if="currentStepType === 'CLAIM_BONUS'"
+                                        @click="claimBonus">
+                                        CLAIM AND MINT INSURANCE
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'WAITING_FOR_CLAIM_SALES_FIRST_PART'">
+                                        WAITING CLAIM
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        v-else-if="currentStepType === 'CLAIM_SALES_FIRST_PART'"
+                                        @click="claimSalesPart1">
+                                        CLAIM AND MINT INSURANCE
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'WAITING_FOR_CLAIM_VESTING'">
+                                        WAITING CLAIM VESTING
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        v-else-if="currentStepType === 'CLAIM_VESTING'"
+                                        @click="claimVesting">
+                                        CLAIM AND MINT INSURANCE
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else-if="currentStepType === 'NOTHING_TO_DO'">
+                                        VESTING FINISHED
+                                    </v-btn>
+                                    <v-btn
+                                        x-large
+                                        width="90%"
+                                        class="button btn-outlined"
+                                        height="40px"
+                                        outlined
+                                        disabled
+                                        v-else>
+                                        NOT STARTED
+                                    </v-btn>
                                 </v-row>
                             </div>
                         </div>
-
-
-<!--                        <div>
-                            <div class="info-sub-title">
-                                Farming bonus
-                            </div>
-                            <div class="info-text-blue">
-                                {{ formattedAccountFarmingBonus }} USD+
-                            </div>
-
-                            <div v-if="currentStep >= 2" class="info-group">
-                                <div class="info-sub-title">
-                                    Overflow funds
-                                </div>
-                                <div class="info-text-black">
-                                    {{ formattedAccountOverflowFunds }} USD+
-                                </div>
-                            </div>
-
-                            <div class="info-group">
-                                <div v-if="currentStepType === 'CLAIM_REFUND'"
-                                     @click="claimRefund"
-                                     class="button-buy">
-                                    CLAIM REFUND
-                                </div>
-                                <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_BONUS'"
-                                     class="button-buy-disabled">
-                                    WAITING CLAIM BONUS
-                                </div>
-                                <div v-else-if="currentStepType === 'CLAIM_BONUS'"
-                                      @click="claimBonus"
-                                     class="button-buy">
-                                    CLAIM BONUS
-                                </div>
-                                <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_SALES_FIRST_PART'"
-                                     class="button-buy-disabled">
-                                    WAITING CLAIM
-                                </div>
-                                <div v-else-if="currentStepType === 'CLAIM_SALES_FIRST_PART'"
-                                     @click="claimSalesPart1"
-                                     class="button-buy">
-                                    CLAIM SALES (25%)
-                                </div>
-                                <div v-else-if="currentStepType === 'WAITING_FOR_CLAIM_VESTING'"
-                                     class="button-buy-disabled">
-                                    WAITING CLAIM VESTING
-                                </div>
-                                <div v-else-if="currentStepType === 'CLAIM_VESTING'"
-                                      @click="claimVesting"
-                                     class="button-buy">
-                                    CLAIM VESTING
-                                </div>
-                                <div v-else-if="currentStepType === 'NOTHING_TO_DO'"
-                                     class="button-buy-disabled">
-                                    VESTING FINISHED
-                                </div>
-                                <div v-else class="button-buy-disabled">
-                                    NOT STARTED
-                                </div>
-                            </div>
-                        </div>-->
-
-<!--
-                        <v-btn class="button btn-outlined-disabled" @click="claimFunds" outlined>
-                            CLAIM FUNDS
-                        </v-btn>-->
-
                     </div>
                 </div>
             </div>
+
+            <div class="pb-10 pt-5">
+                <a href="/presale" class="go-back">
+                    <img src="/assets/icon/presale/go-to-presale.svg" alt="<- go to presale">
+                </a>
+            </div>
         </div>
+
+
+        <ZapModal :set-show-func='setIsZapModalShow'
+                  :zap-pool="currentZapPool"
+                  :is-show="isZapModalShow"
+                  :type-of-pool="typeOfPool"
+                  :pool-tokens-for-zap-map="poolTokensForZapMap">
+        </ZapModal>
 
         <SuccessPresaleModal :is-show="isShowSuccessModal"
                           :set-show-func="showSuccessModal"
@@ -297,13 +598,15 @@ import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
 import {presale} from "@/components/mixins/presale";
 import {pool} from "@/components/mixins/pool";
 import BestShortAprPromotion from "@/components/common/modal/action/component/BestShortAprPromotion.vue";
+import ZapModal from "@/components/zap/modals/ZapModal.vue";
 const moment = require('moment'); // import moment.js
 
 
 export default {
     name: "ClaimBodyComponent",
-    mixins: [presale, pool],
+    mixins: [presale],
     components: {
+        ZapModal,
         BestShortAprPromotion,
         ErrorModal,
         WaitingModal,
@@ -317,6 +620,11 @@ export default {
         this.loadPools();
     },
     methods: {
+        clickOnButton(buttonType) {
+            console.log("Button type", buttonType);
+            this.finishType = buttonType;
+        },
+
         claimAndHold() {
             console.log("Claim and hold")
         },
@@ -339,7 +647,10 @@ export default {
     border: 3px solid #0968AE;
     box-shadow: 0px 10px 20px rgba(9, 55, 98, 0.25);
     border-radius: 8px;
+    min-height: 610px!important;
+    padding: 28px 15px!important;
 }
+
 
 .step-container {
     /* Frame 28910 */
@@ -379,14 +690,14 @@ export default {
     /* Grey/Grey 19_text */
     color: #29323E;
 
-    padding-left: 20px;
+    padding-left: 25px;
     position: relative;
 }
 
 
 .title-logo {
     position: absolute;
-    left: -11px;
+    left: -3px;
     top: 3px;
 }
 
@@ -541,17 +852,20 @@ export default {
     //color: var(--links-blue) !important;
     color: #989b9d;
     max-width: 150px;
+    font-size: 13px;
 }
 
 .btn-outlined-lined {
     background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
     border-radius: 2px;
     color: white;
+    font-size: 13px;
 }
 
 .btn-outlined {
     color: var(--links-blue) !important;
-    //color: #989b9d;
+    font-size: 13px;
+//color: #989b9d;
     //max-width: 150px;
 }
 
@@ -677,9 +991,12 @@ export default {
     font-weight: 700;
     font-size: 24px;
     line-height: 30px;
+    padding-left: 26px;
 
     /* White */
     color: #FFFFFF;
     text-transform: uppercase;
+
+    position: relative;
 }
 </style>

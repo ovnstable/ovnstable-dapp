@@ -9,7 +9,7 @@
             </v-btn>
         </div>
         <div class="row">
-            <div @click="openPoolLink(pool)" class="col-3 col-xl-4 col-lg-4 col-md-4 col-sm-3" style="cursor: pointer">
+            <div @click="openPoolLink(pool)" class="col-3 col-xl-3 col-lg-3 col-md-3 col-sm-3" style="cursor: pointer">
                 <div class="pool-table-header-item">
                    <div v-if="pool.isOpened" class="pool-table-platform-container">
                        <div class="pool-platform-icon">
@@ -26,7 +26,7 @@
                        </div>
 
                        <div v-if="!$wu.isMobile()"
-                                 v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: 10px'"
+                                 v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: 5px'"
                             class="pool-platform-link">
                            <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
                        </div>
@@ -58,10 +58,10 @@
                 </div>
             </div>
             <div @click="toggleDetailsFunc(pool)"
-                 class="col-4 col-xl-2 col-lg-2 col-md-2 col-sm-4">
-                <div class="pool-table-header-item">
+                 class="col-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                <div class="pool-table-header-item text-center">
                     <label v-if="pool.apr && !disabledAprInfoPlatformList.includes(pool.platform)" class="card-label">
-                        {{ $utils.formatMoneyComma(pool.apr, 2) }}%
+                        {{ $utils.formatMoneyComma(pool.apr, 2) }}% <sup v-if="pool.platform === 'Beefy'">(apy)</sup>
                     </label>
                     <label v-else class="card-label see-on-dex-label">
                         see on platform
@@ -69,7 +69,7 @@
                 </div>
             </div>
             <div @click="toggleDetailsFunc(pool)"
-                 class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
+                 class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-2">
                 <div v-if="pool.tvl >= 1000000 && !disabledTvlInfoPlatformList.includes(pool.platform)" class="pool-table-header-item">
                     <label v-if="pool.tvl" class="card-label">
                         ${{ $utils.formatNumberToMln(pool.tvl, 2) }}M
@@ -144,7 +144,7 @@
                     </div>
                 </div>
                 <div @click="openAggregatorLink(aggregator)"
-                     class="col-3 col-xl-4 col-lg-4 col-md-4 col-sm-3"
+                     class="col-3 col-xl-3 col-lg-3 col-md-3 col-sm-3"
                      style="cursor: pointer">
                     <div class="pool-table-header-item">
                         <div class="pool-table-platform-container">
@@ -160,24 +160,24 @@
                             </div>
 
                             <div v-if="!$wu.isMobile()"
-                                 v-bind:style="$wu.isMobile() ? 'right: -14px;' : 'right: 5px'"
+                                 v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: 5px'"
                                 class="pool-platform-link">
                                 <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-4 col-xl-2 col-lg-2 col-md-2 col-sm-4">
-                    <div class="pool-table-header-item">
+                <div class="col-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                    <div class="pool-table-header-item text-center">
                         <label v-if="aggregator.apr" class="card-label text-center">
-                            {{ $utils.formatMoneyComma(aggregator.apr, 2) }}%
+                            {{ $utils.formatMoneyComma(aggregator.apr, 2) }}%<sup v-if="aggregator.platform === 'Beefy'">apy</sup>
                         </label>
                         <label v-else class="card-label see-on-dex-label see-on-dex-another">
                             see on platform
                         </label>
                     </div>
                 </div>
-                <div class="col-3 col-xl-2 col-lg-2 col-md-2 col-sm-3">
+                <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-2">
                     <div class="pool-table-header-item">
                         <label v-if="aggregator.tvl" class="card-label">
                             ${{ $utils.formatNumberToThousands(aggregator.tvl, 0) }}K

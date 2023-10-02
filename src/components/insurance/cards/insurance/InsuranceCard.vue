@@ -144,6 +144,18 @@
                         </v-col>
                     </template>
                 </v-row>
+
+                <v-row class="ma-0 pt-4" justify="center" align="center">
+                    <v-btn
+                        x-large
+                        width="90%"
+                        class="button btn-outlined"
+                        height="40px"
+                        outlined
+                        @click="goToBridge()">
+                        BRIDGE OVN ON OP
+                    </v-btn>
+                </v-row>
             </v-container>
 
 <!--            <v-row class="footer-row d-flex align-center justify-center" @click.stop="openInsurance">
@@ -207,6 +219,10 @@ export default {
         ...mapActions("insuranceInvestModal", ["showInvestModal", "showMintView", "showRedeemView"]),
         ...mapActions("network", ["setWalletNetwork"]),
         ...mapActions("insuranceData", ["refreshInsurance"]),
+
+        goToBridge() {
+            this.$router.push('/bridge');
+        },
 
 
         loadAvgApyInfo() {

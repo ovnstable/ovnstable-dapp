@@ -136,7 +136,7 @@
                     <label class="action-info-sub-label">{{ overnightFee ? $utils.formatMoneyComma(overnightFee, 2) + '%' : '—' }}</label>
                     <v-spacer></v-spacer>
                     <label class="action-info-label">You mint:</label>
-                    <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma(estimateResult, 2) : '0') }}</label>
+                    <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma((estimateResult * 24.14), 2) : '0') }}</label>
                 </v-row>
             </v-col>
         </v-row>
@@ -341,7 +341,7 @@ export default {
                     return 'Confirm transaction'
                 } else {
                     this.step = 1;
-                    return 'Approve ' + this.ovnName;
+                    return 'Approve ' + this.assetName;
                 }
             } else if (this.sum > parseFloat(this.balance.ovn)) {
                 return 'Mint'

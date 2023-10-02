@@ -8,9 +8,12 @@
             <label @click="setTab('about')" class="tab-btn mr-4" v-bind:class="activeTabAbout">
                 About Insurance
             </label>
-            <label @click="setTab('all')" class="tab-btn mx-4" v-bind:class="activeTabAll">
+            <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled mx-4" v-bind:class="activeTabAll" disabled>
                 All Insurance
             </label>
+<!--            <label @click="setTab('all')" class="tab-btn mx-4" v-bind:class="activeTabAll">-->
+<!--                All Insurance-->
+<!--            </label>-->
 
             <v-spacer></v-spacer>
         </v-row>

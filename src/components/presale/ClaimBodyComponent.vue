@@ -137,7 +137,7 @@
                 </div>
                 <div class="col-12 col-lg-3 col-md-6 col-sm-12">
                     <div>
-                        <div class="title-step-container">
+                        <div class="title-step-container title-step-container-premium">
                             <div class="title-step-text">
                                 claim and farm on op
                                 <div class="title-logo">
@@ -275,7 +275,7 @@
                 </div>
                 <div class="col-12 col-lg-3 col-md-6 col-sm-12">
                     <div>
-                        <div class="title-step-container">
+                        <div class="title-step-container title-step-container-premium">
                             <div class="title-step-text">
                                 claim and farm on base
                                 <div class="title-logo">
@@ -662,9 +662,11 @@ export default {
     padding: 28px;
     gap: 20px;
 
+    color: var(--secondary-gray-text);
+
     min-height: 400px;
 
-    background: #FFFFFF;
+    background: var(--main-background);
     box-shadow: 0px 10px 20px rgba(9, 55, 98, 0.25);
     border-radius: 20px;
 }
@@ -688,7 +690,7 @@ export default {
     font-feature-settings: 'pnum' on, 'lnum' on;
 
     /* Grey/Grey 19_text */
-    color: #29323E;
+    color: var(--swipe-info);
 
     padding-left: 25px;
     position: relative;
@@ -711,7 +713,7 @@ export default {
     /* or 150% */
     font-feature-settings: 'liga' off;
     /* Grey/Grey 16 */
-    color: #4C586D;
+    color: var(--theme-icon-color-selected);
 }
 
 .claim-step-description {
@@ -971,6 +973,10 @@ export default {
     font-weight: bold;
 }
 
+.title-step-container-premium {
+    background: #0968AE!important;
+}
+
 .title-step-container {
     padding: 10px;
     background: linear-gradient(90deg, #3BA9F2 2.58%, #2499E5 109.45%);
@@ -991,12 +997,16 @@ export default {
     font-weight: 700;
     font-size: 24px;
     line-height: 30px;
-    padding-left: 26px;
+    padding-left: 35px;;
 
     /* White */
     color: #FFFFFF;
     text-transform: uppercase;
 
     position: relative;
+}
+
+.theme--light.v-btn.v-btn--disabled {
+    color: var(--theme-icon-color-selected) !important;
 }
 </style>

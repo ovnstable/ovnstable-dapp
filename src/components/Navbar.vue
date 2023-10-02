@@ -301,7 +301,7 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item @click="insuranceStatsClick" :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''"
+<!--                <v-list-item @click="insuranceStatsClick" :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''"
                              class="list-item-hover">
                     <v-list-item-title>
                         <label :class="selectedTab === 'insurance_performance' ? 'selected-page' : ''"
@@ -309,9 +309,9 @@
                             Performance
                         </label>
                     </v-list-item-title>
-                </v-list-item>
+                </v-list-item>-->
 
-                <v-list-item :class="selectedTab === 'insurance_collateral' ? 'selected-page-item' : ''"
+<!--                <v-list-item :class="selectedTab === 'insurance_collateral' ? 'selected-page-item' : ''"
                              @click="insuranceCollateralClick"
                              class="list-item-hover ">
                     <v-list-item-title>
@@ -320,7 +320,7 @@
                             Collateral
                         </label>
                     </v-list-item-title>
-                </v-list-item>
+                </v-list-item>-->
             </v-list-group>
 
 

@@ -19,8 +19,7 @@
 
                         <br/>
                         <br/>
-                        Insurance is made for minor losses, first on
-                        Optimism, than on Base. We only insure collateral of our products on chains where the risks are
+                        Insurance is made to protect collateral of our rebase tokens from minor losses. First insurance is on Optimism, Base is the next chain. We only insure collateral of our products on chains where the risks are
                         acceptable to us.
                     </label>
                 </v-row>

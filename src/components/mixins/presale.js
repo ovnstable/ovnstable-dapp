@@ -948,7 +948,7 @@ export const presale = {
                 }
 
                 console.error("Finish transaction type not found", finishType);
-            }, 3000);
+            }, 4000);
         }
 
     }

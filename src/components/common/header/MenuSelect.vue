@@ -210,7 +210,7 @@
                         </svg>
                     </div>
                     <v-list-item-title>
-                        <label class="navbar-page-label ml-3" :class="selectedTab.startsWith('insurance_') ? 'selected-page' : ''">About</label>
+                        <label class="navbar-page-label ml-3" :class="selectedTab.startsWith('insurance_') ? 'selected-page' : ''">Insurance</label>
                     </v-list-item-title>
                     <div class="select-bar-main-container" >
                         <v-row>
@@ -227,7 +227,7 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item @click="insuranceStatsClick" :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''">
+<!--                <v-list-item @click="insuranceStatsClick" :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''">
                     <v-list-item-title>
                         <label class="navbar-list-label mx-5" :class="selectedTab === 'insurance_performance' ? 'selected-page' : ''">Performance</label>
                     </v-list-item-title>
@@ -239,7 +239,7 @@
                             Collateral
                         </label>
                     </v-list-item-title>
-                </v-list-item>
+                </v-list-item>-->
             </v-list-group>
 
             <div class="navbar-list-divider mt-1 mb-1"></div>

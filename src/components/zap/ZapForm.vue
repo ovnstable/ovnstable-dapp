@@ -379,6 +379,10 @@ export default defineComponent({
             return this.tokens.filter(item => item.symbol !== 'OVN')
         },
 
+        ovnTokens() {
+            return this.tokens.filter(item => item.symbol === 'OVN')
+        },
+
         isInputTokensRemovable() {
             return this.inputTokens.length > 1;
         },
@@ -602,7 +606,13 @@ export default defineComponent({
 
         isFirstBalanceLoaded: function (val, oldVal) {
             if (val) {
-                // this.initDefaultTopInputTokensByBalance(this.inputTokens);
+                // if router with path /claim
+                console.log("this.$route.path: ", this.$route.path);
+                if (this.$route.path === '/presale/claim') {
+                    this.addOvnTokenToInput();
+                    this.initDefaultTopInputTokensByBalance(this.noneOvnTokens)
+                }
+
             }
         },
     },
@@ -653,6 +663,16 @@ export default defineComponent({
             this.$bus.$on('zap-transaction-finished', (data) => {
                 this.finishTransaction();
             })
+        },
+        addOvnTokenToInput() {
+            if (!this.ovnTokens || !this.ovnTokens.length) {
+                return;
+            }
+
+            let ovnToken = this.ovnTokens[0];
+            ovnToken.selected = true;
+            console.log("add ovnToken to input ", ovnToken);
+            this.addSelectedTokenToInputList(ovnToken, true);
         },
         addDefaultPoolToken() {
             let poolSelectedToken = this.getDefaultSecondtoken();

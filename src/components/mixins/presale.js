@@ -949,6 +949,9 @@ export const presale = {
 
                 console.error("Finish transaction type not found", finishType);
             }, 4000);
+        },
+        openZap() {
+            this.openZapInWithInputOvn(this.aerodromePool, 'claim');
         }
 
     }

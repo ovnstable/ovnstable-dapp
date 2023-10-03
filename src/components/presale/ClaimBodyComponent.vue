@@ -419,6 +419,9 @@
                         <div>
                             (step: {{currentStepType}} | finish: {{finishType}})
                         </div>
+                        <div @click="openZap">
+                            open zap
+                        </div>
                         <div class="row">
                             <div class="col-6 col-lg-6 col-md-6 col-xs-6">
                                 <button @click="prevStep" class="pr-5" style="cursor:pointer;">

@@ -7,13 +7,20 @@
                 <img v-if="!$wu.isFull()" class="ml-n3 logo-img" :src="require('@/assets/logo.svg')"  @click="openLinkToLanding('https://overnight.fi/')">
             </div>-->
 
-            <div>
-                <v-btn class="header-btn-presale btn-filled mr-2 mt-1" @click="goToPresale">
+            <div :class="$wu.isMobile() ? 'mr-2' : ''">
+                <v-btn :class="$wu.isMobile() ? 'mx-n6' : 'mr-2'" class="header-btn-presale btn-filled" @click="goToPresale">
                     PRESALE
                 </v-btn>
             </div>
 
             <v-spacer></v-spacer>
+            <div class="theme-toggle-group" :class="$wu.isMobile() ? 'mr-4' : ' mt-1 mr-10'">
+                <v-btn outlined :class="light ? 'theme-toggle-btn-selected' : 'theme-toggle-btn'" icon @click="toggleTheme">
+                    <v-icon class="theme-icon">
+                        {{ light ? 'mdi-white-balance-sunny' : 'mdi-moon-waxing-crescent' }}
+                    </v-icon>
+                </v-btn>
+            </div>
 
             <template v-if="!loadingWeb3">
                 <template v-if="walletConnected">
@@ -27,7 +34,7 @@
                 </template>
 
                 <template v-else>
-                    <v-btn class="header-btn-connect btn-filled mr-2 mt-1" @click="connectWallet">
+                    <v-btn :class="$wu.isMobile() ? 'mt-1 mr-1' : 'mr-2 mt-1'" class="header-btn-connect btn-filled" @click="connectWallet">
                         Connect wallet
                     </v-btn>
                 </template>
@@ -42,7 +49,7 @@
                 ></v-progress-linear>
             </template>
 
-            <div class="ml-10">
+            <div class="" :class="$wu.isMobile() ? 'mr-auto' : 'ml-10'">
                 <NetworkSelect/>
             </div>
 
@@ -97,6 +104,7 @@ export default {
     },
 
     data: () => ({
+        light: true
     }),
 
     computed: {
@@ -104,6 +112,7 @@ export default {
         ...mapGetters('web3', ['loadingWeb3']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('accountData', ['account']),
+        ...mapGetters('theme', ['light']),
     },
 
     watch: {
@@ -119,6 +128,7 @@ export default {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('transaction', ['loadTransaction']),
         ...mapActions('track', ['trackClick']),
+        ...mapActions('theme', ['switchTheme']),
 
         switchToNetwork() {
             this.setWalletNetwork(this.networkId.toString());
@@ -141,6 +151,11 @@ export default {
             }
 
             window.open('/presale', '_self').focus();
+        },
+
+        toggleTheme() {
+            this.switchTheme();
+            this.light = !this.light;
         }
     }
 }
@@ -173,7 +188,6 @@ export default {
         min-width: 55px!important;
         width: 55px !important;
         height: 25px !important;
-        margin-left: 3px;
 
         font-style: normal !important;
         font-weight: 400 !important;
@@ -348,5 +362,35 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .logo-img {
     cursor: pointer;
+}
+
+.theme-toggle-group {
+    background-color: var(--theme-switch-background-light) !important;
+    border-radius: 5px !important;
+    border: 1px solid transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle-btn, .theme-toggle-btn-selected {
+    border: none !important;
+}
+
+.theme-toggle-btn {
+    background-color: transparent !important;
+}
+
+.theme-toggle-btn-selected {
+    background-color: var(--theme-switch-background-light) !important;
+}
+
+.theme-icon {
+    color: var(--theme-icon-color) !important;
+}
+
+.theme-icon-selected {
+    color: var(--theme-icon-color-selected) !important;
 }
 </style>

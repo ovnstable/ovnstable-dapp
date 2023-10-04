@@ -56,10 +56,7 @@
                             <div
                                 v-bind:class="isShort ? 'pool-detail-title-short' : ''"
                                 class="pool-detail-title">
-                                <span v-if="pool.platform === 'Beefy'">
-                                    APY
-                                </span>
-                                <span v-else>
+                                <span>
                                     APR
                                 </span>
                             </div>

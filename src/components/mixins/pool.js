@@ -619,7 +619,6 @@ export const pool = {
                     this.topPool = this.pools.sort((a, b) => b.apr - a.apr);
                 }
 
-
                 // todo: remove after presale
                 this.velodromePool = this.pools.find(pool => pool.address === '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0_Velodrome');
                 this.aerodromePool = this.pools.find(pool => pool.address === '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197_Aerodrome');

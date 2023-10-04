@@ -109,7 +109,7 @@
                     </label>
                     <v-spacer></v-spacer>
                     <label class="your-deposit" :class="dataHidden ? 'hidden-label' : ''">
-                        {{ dataHidden ? '' : (this.insuranceBalance.optimism && this.insuranceBalance.optimism > 0) ? ('$' + $utils.formatMoneyComma((this.insuranceBalance.optimism * 23.14), 2)) : "—"  }}
+                        {{ dataHidden ? '' : (this.insuranceBalance.optimism && this.insuranceBalance.optimism > 0) ? ('$' + $utils.formatMoneyComma((this.insuranceBalance.optimism * 17.65), 2)) : "—"  }}
                     </label>
                     <label class="your-deposit ml-1">
                         <v-icon color="var(--disabled-value)">

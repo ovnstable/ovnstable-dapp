@@ -134,7 +134,7 @@
                     <label class="action-info-sub-label">{{ overnightFee ? $utils.formatMoneyComma(overnightFee, 2) + '%' : '—' }}</label>
                     <v-spacer></v-spacer>
                     <label class="action-info-label">You redeem:</label>
-                    <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma((estimateResult * 23.14), 2) : '0') }}</label>
+                    <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma((estimateResult * 17.65), 2) : '0') }}</label>
                 </v-row>
             </v-col>
         </v-row>

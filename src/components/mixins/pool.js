@@ -472,6 +472,18 @@ export const pool = {
                 return;
             }
 
+            if (pool.platform === 'Velocore' && pool.chainName === 'linea') {
+                url = 'https://linea.velocore.xyz/stable-liquidity'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Velocore' && pool.chainName === 'zksync') {
+                url = 'https://zksync.velocore.xyz/stable-liquidity'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
             url += pool.address;
             window.open(url, '_blank').focus();
         },

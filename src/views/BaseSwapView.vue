@@ -90,13 +90,24 @@ export default defineComponent({
         }
     },
     mounted() {
+        const errorProperties = {
+            errorType: 'rpc',  // Set the error type to 'rpc' for RPC errors.
+            errorMsg: {
+                code: -32016,  // Replace with the actual error code you want to handle.
+                message: 'RPC error message asjdblaskbfsad;ifjddbsayhdbksdlnsb kbasdvjdkb nsandkasb sadjhsakdhsah dkjsah dkasjhd ksajh dksjah dkjsah dksajhk djhsakjdhsakj hdksa jhdsakhd jksa hdaskjdhasjkdhaskjdhdasdsadasdasdasd dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddds  djsal ndjskabdksabdskajdbaslkdmasdnjkasbdjshadbkasndl',  // Replace with the actual error message.
+                // You can also add other properties if needed.
+            },
+        };
 
+        this.showErrorModalWithMsg(errorProperties);
     },
+
     computed: {
         ...mapGetters('accountData', ['account']),
     },
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+        ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
 
         mintAction() {
             this.showMintView();
@@ -162,7 +173,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .title-label {
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 300;
 

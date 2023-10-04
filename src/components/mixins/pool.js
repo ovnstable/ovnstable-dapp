@@ -607,7 +607,32 @@ export const pool = {
                     this.initReversePools(pool);
                 }
 
-                const filteredPools = this.pools.filter(pool => pool.chain === this.networkId && pool.tvl > 100000);
+                // init top pool
+                const featuredPools = this.pools.filter(pool => pool.chain === this.networkId && pool.feature)
+                featuredPools.sort((a, b) => b.apr - a.apr);
+                if (featuredPools.length > 0) {
+                    this.topPool = featuredPools[0];
+                } else {
+                    const topByApr = this.pools.filter(pool => pool.chain === this.networkId);
+                    topByApr.sort((a, b) => b.apr - a.apr);
+
+                    if (topByApr.length > 0) {
+                        this.topPool = topByApr[0];
+                    } else {
+                        // any network
+                        const randomFeaturedPools = this.pools.filter(pool => pool.feature)
+                        randomFeaturedPools.sort((a, b) => b.apr - a.apr);
+                        if (randomFeaturedPools.length > 0) {
+                            this.topPool = randomFeaturedPools[Math.floor(Math.random() * randomFeaturedPools.length)];
+                        }
+                    }
+                }
+
+                // top pool from all pools
+                if (!this.topPool) {
+                    this.topPool = this.pools.sort((a, b) => b.apr - a.apr);
+                }
+               /* const filteredPools = this.pools.filter(pool => pool.chain === this.networkId && pool.tvl > 100000);
                 filteredPools.sort((a, b) => b.apr - a.apr);
 
                 if (filteredPools.length > 0) {
@@ -617,7 +642,9 @@ export const pool = {
                 // top pool on chain not found, get top pool from all pools
                 if (!this.topPool) {
                     this.topPool = this.pools.sort((a, b) => b.apr - a.apr);
-                }
+                }*/
+
+                // end init top pool
 
                 // todo: remove after presale
                 this.velodromePool = this.pools.find(pool => pool.address === '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0_Velodrome');
@@ -722,6 +749,12 @@ export const pool = {
 
             pools.forEach(entry => {
                 const { chain, apr } = entry;
+
+                // ignore binance chain
+                if (entry.chainName === 'bsc') {
+                    return;
+                }
+
                 if (entry.tvl < 500000) {
                     return;
                 }
@@ -770,7 +803,7 @@ export const pool = {
                     return;
                 }
 
-                findedPool.link = 'https://app.beefy.com/vault/aerodrome-ovn-usd+'
+                // findedPool.link = 'https://app.beefy.com/vault/aerodrome-ovn-usd+'
                 pool.aggregators.push({
                     ...findedPool
                 })
@@ -786,7 +819,7 @@ export const pool = {
                     return;
                 }
 
-                findedPool.link = 'https://app.beefy.com/vault/velodrome-v2-ovn-usd+'
+                // findedPool.link = 'https://app.beefy.com/vault/velodrome-v2-ovn-usd+'
                 pool.aggregators.push({
                     ...findedPool
                 })

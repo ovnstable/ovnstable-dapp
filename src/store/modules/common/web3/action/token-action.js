@@ -2,7 +2,7 @@ import UsdPlusImage from "@/assets/usdPlus.json";
 import DaiPlusImage from "@/assets/daiPlus.json";
 import UsdtPlusImage from "@/assets/usdtPlus.json";
 import WrappedUsdPlusImage from "@/assets/wUsdPlus.json";
-import PolygonInsurance from "@/assets/polygon_insurance.json";
+import OptimismInsurance from "@/assets/optimism_insurance.json";
 import OvnImage from "@/assets/ovn.json";
 
 const state = {};
@@ -133,10 +133,10 @@ const actions = {
                 params: {
                     type: 'ERC20',
                     options: {
-                        address: rootState.web3.contracts.insurance.polygon_token.options.address,
+                        address: rootState.web3.contracts.insurance.optimism_token.options.address,
                         symbol: 'USD+ INS',
-                        decimals: 6,
-                        image: PolygonInsurance.image,
+                        decimals: 18,
+                        image: OptimismInsurance.image,
                     },
                 },
             })

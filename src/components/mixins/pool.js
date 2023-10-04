@@ -802,7 +802,6 @@ export const pool = {
                     return;
                 }
 
-                findedPool.link = 'https://app.beefy.com/vault/velodrome-v2-ovn-usd+'
                 pool.aggregators.push({
                     ...findedPool
                 })

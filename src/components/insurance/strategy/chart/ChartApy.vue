@@ -1,99 +1,45 @@
 <template>
     <div class="apy-chart-container">
-        <v-row class="chart-header-row">
+        <v-row>
             <v-col cols="6">
                 <v-row justify="start" align="start">
                     <label class="chart-title ml-5">
-                      USD+ Insurance
+                        USD+ Insurance
                     </label>
                 </v-row>
-                <v-row justify="start" align="start">
-                  <label class="chart-sub-title-apy ml-5">
-                   {{ (compoundData && compoundData.firstDate) ? compoundData.firstDate : '-'}}
-                  </label>
-                </v-row>
-
-                <v-row justify="start">
-                    <label class="mobile-info-title ml-5">
-                      {{ (compoundData && compoundData.day) ? ($utils.formatMoneyComma(compoundData.day, 2)) + '%' : '' }}
-                    </label>
-                </v-row>
-
-<!--                <v-row justify="start" v-if="!isMobile">-->
-<!--                    <v-checkbox-->
-<!--                        class="hold-checkbox"-->
-<!--                        color="#22ABAC"-->
-<!--                        @click="redraw"-->
-<!--                        v-model="usdPlusDataEnabled"-->
-<!--                    >-->
-<!--                        <template v-slot:label>-->
-<!--                            <label class="hold-checkbox-label">USD+ APY</label>-->
-<!--                        </template>-->
-<!--                    </v-checkbox>-->
-<!--                </v-row>-->
             </v-col>
 
-          <v-col class="add-chart-info-col pt-10">
-            <v-row>
-              <v-col cols="3">
-                <v-row justify="center">
-                  <label :class="compoundData.day >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
-                    {{ (compoundData && compoundData.day) ? ($utils.formatMoneyComma(compoundData.day, 2)) + '%' : '' }}
-                  </label>
-                </v-row>
-                <v-row justify="center">
-                  <label class="chart-sub-title-apy">
-                    1 day
-                  </label>
-                </v-row>
-              </v-col>
+            <v-col cols="6">
+                <v-row justify="end" align="end">
+                    <v-col cols="12" justify="end" align="end">
+                       <div style="position:relative; padding-right: 12px">
+                           <div v-if="avgApyBySlice" :class="avgApyBySlice > 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
+                               {{ avgApyBySlice ? ($utils.formatMoneyComma(avgApyBySlice, 2)) + '%' : '' }}
+                           </div>
 
-              <v-col cols="3">
-                <v-row justify="center" class="chart-title-compound-container">
-                  <label :class="compoundData.week >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
-                    {{ (compoundData && compoundData.week) ? ($utils.formatMoneyComma(compoundData.week, 2)) + '%' : '' }}
-                  </label>
+                           <div class="tooltip-compound">
+                               <v-row justify="end" align="center">
+                                   <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'" text="Avg apy by all time"/>
+                               </v-row>
+                           </div>
+                       </div>
+                        <div class="chart-sub-title-apy ml-5">
+                            from {{ apyFirstDate ? apyFirstDate : '-'}}
+                        </div>
+                    </v-col>
                 </v-row>
-                <v-row justify="center">
-                  <label class="chart-sub-title-apy">
-                    1 week
-                  </label>
-                </v-row>
-              </v-col>
+            </v-col>
 
-              <v-col cols="3">
-                <v-row justify="center" class="chart-title-compound-container">
-                  <label :class="compoundData.month >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
-                    {{ (compoundData && compoundData.month) ? ($utils.formatMoneyComma(compoundData.month, 2)) + '%' : '' }}
-                  </label>
-                </v-row>
-                <v-row justify="center">
-                  <label class="chart-sub-title-apy">
-                    1 month
-                  </label>
-                </v-row>
-              </v-col>
 
-              <v-col cols="3">
-                <v-row justify="center" class="chart-title-compound-container">
-                  <label :class="compoundData.all >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
-                    {{ (compoundData && compoundData.all) ? ($utils.formatMoneyComma(compoundData.all, 2)) + '%' : '' }}
-                  </label>
-                </v-row>
-                <v-row justify="center" class="all-compound-container">
-                  <label class="chart-sub-title-apy">
-                    All
-                  </label>
+            <v-col class="add-chart-info-col pt-10">
+                <v-row>
+                  <v-col cols="12">
+                    <v-row justify="end" class="all-compound-container">
 
-                  <div class="tooltip-compound">
-                    <v-row justify="end" align="center">
-                      <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'" text="Cumulative return for the period"/>
                     </v-row>
-                  </div>
+                  </v-col>
                 </v-row>
-              </v-col>
-            </v-row>
-          </v-col>
+            </v-col>
         </v-row>
 
         <div class="chart-row" id="line-chart-apy"></div>
@@ -151,18 +97,9 @@ export default {
             type: Object,
             default: null,
         },
-
-        usdPlusData: {
-            type: Object,
+        payouts: {
+            type: Array,
             default: null,
-        },
-
-        insuranceData: {
-            type: Object,
-        },
-
-        compoundData: {
-          type: Object,
         },
     },
 
@@ -175,9 +112,6 @@ export default {
             this.redraw();
         },
 
-        usdPlusData: function (newVal, oldVal) {
-            this.redraw();
-        },
     },
 
     components: {Tooltip},
@@ -187,8 +121,9 @@ export default {
         slice: null,
         chart: null,
 
-        avgApy: null,
-        usdPlusDataEnabled: false,
+        apyData: null,
+
+        apyValuesBySlice: [],
     }),
 
     computed: {
@@ -197,6 +132,25 @@ export default {
 
         isMobile() {
             return window.innerWidth < 650;
+        },
+
+        apyFirstDate() {
+            if (this.payouts && this.payouts.length > 0) {
+                return moment(this.payouts[this.payouts.length - 1].date).format("DD MMM. ‘YY");
+            }
+
+            return null;
+        },
+
+        avgApyBySlice() {
+            let sum = 0;
+            if (this.apyValuesBySlice && this.apyValuesBySlice.length === 0) {
+                return 0;
+            }
+
+            this.apyValuesBySlice.forEach(v => sum += v);
+
+            return sum / this.apyValuesBySlice.length;
         }
     },
 
@@ -211,44 +165,12 @@ export default {
     methods: {
         async zoomChart(zoom) {
 
-            let apiUrl;
+            let url = "https://api.overnight.fi/optimism/usd+";
+            insuranceApiService.getApyInfo(url)
+                .then(data => {
+                  console.log("avg apy info: ", data);
 
-            switch (this.insuranceData.chainId) {
-                case 137:
-                    apiUrl = this.polygonApi;
-                    break;
-                case 10:
-                    apiUrl = this.opApi;
-                    break;
-                case 56:
-                    apiUrl = this.bscApi;
-                    break;
-                case 42161:
-                    apiUrl = this.arApi;
-                    break;
-                case 8453:
-                    apiUrl = this.baseApi;
-                    break;
-                case 59144:
-                    apiUrl = this.lineaApi;
-                    break;
-                case 324:
-                    apiUrl = this.zkApi;
-                    break;
-                default:
-                    apiUrl = this.polygonApi;
-                    break;
-            }
-
-            insuranceApiService.getAvgApyInfo(apiUrl, zoom)
-            .then(data => {
-              console.log("avg apy info: ", data);
-
-              this.avgApy = data;
-
-              if (this.avgApy.date) {
-                this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
-              }
+                  this.apyData = data;
             })
             .catch(e => {
               console.log('Error get data: ' + e);
@@ -295,28 +217,20 @@ export default {
             let values = [];
             this.data.datasets[0].data.forEach(v => values.push(v));
             values = this.slice ? values.slice(this.slice) : values;
+            this.apyValuesBySlice = values;
 
             let labels = [];
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(this.slice) : labels;
 
-            let valuesUsdPlus = [];
-            labels.forEach(v => valuesUsdPlus.push(this.usdPlusData[v] ? this.usdPlusData[v] : null));
+            // let valuesUsdPlus = [];
+            // labels.forEach(v => valuesUsdPlus.push(this.usdPlusData[v] ? this.usdPlusData[v] : null));
 
-            let averageValue = this.avgApy ? this.avgApy.value : 0;
+            // let averageValue = this.avgApy ? this.avgApy.value : 0;
 
             let maxValue;
             try {
-
-                if (this.usdPlusDataEnabled) {
-                    let maxValueEts = Math.max.apply(Math, values);
-                    let maxValueUsdPlus = Math.max.apply(Math, valuesUsdPlus);
-
-                    maxValue = Math.max(maxValueEts, maxValueUsdPlus);
-                } else {
-                    maxValue = Math.max.apply(Math, values);
-                }
-
+               maxValue = Math.max.apply(Math, values);
               if (maxValue > 5) {
                 maxValue = Math.round(Math.ceil(maxValue / 10)) * 10;
               }
@@ -327,16 +241,7 @@ export default {
 
             let minValue;
             try {
-
-                if (this.usdPlusDataEnabled) {
-                    let minValueEts = Math.min.apply(Math, values);
-                    let minValueUsdPlus = Math.min.apply(Math, valuesUsdPlus);
-
-                    minValue = Math.min(minValueEts, minValueUsdPlus);
-                } else {
-                    minValue = Math.min.apply(Math, values);
-                }
-
+                minValue = Math.min.apply(Math, values);
                 if (minValue < -5) {
                   minValue = Math.min(Math.floor(Math.floor(minValue / 10)) * 10, 0);
                 }
@@ -354,15 +259,6 @@ export default {
                     data: values
                 }
             );
-
-            if (this.usdPlusDataEnabled) {
-                seriesList.push(
-                    {
-                        name: "USD+ APY",
-                        data: valuesUsdPlus
-                    }
-                );
-            }
 
             let options = {
                 series: seriesList,
@@ -766,9 +662,9 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .tooltip-compound {
-  position: absolute;
-  right: 30px;
-  top: 11px;
+    position: absolute;
+    right: 0px;
+    top: 17px;
 }
 
 .all-compound-container {

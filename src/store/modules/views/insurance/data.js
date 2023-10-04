@@ -61,15 +61,15 @@ const actions = {
         for (let insuranceChain of insuranceChainList) {
             dispatch('refreshClientData', {chain: insuranceChain});
         }
-
-        dispatch('refreshUsdPlusPayoutsData', "polygon");
-        dispatch('refreshUsdPlusPayoutsData', "bsc");
-        dispatch('refreshUsdPlusPayoutsData', "optimism");
-        dispatch('refreshUsdPlusPayoutsData', "arbitrum");
-        dispatch('refreshUsdPlusPayoutsData', "zksync");
+        //
+        // dispatch('refreshUsdPlusPayoutsData', "polygon");
+        // dispatch('refreshUsdPlusPayoutsData', "bsc");
+        // dispatch('refreshUsdPlusPayoutsData', "optimism");
+        // dispatch('refreshUsdPlusPayoutsData', "arbitrum");
+        // dispatch('refreshUsdPlusPayoutsData', "zksync");
 
         dispatch('accountData/refreshBalance', null, {root:true});
-        dispatch('supplyData/refreshInsuranceSupply', null, {root:true});
+        // dispatch('supplyData/refreshInsuranceSupply', null, {root:true});
     },
 
     async refreshStrategyData({commit, dispatch, getters, rootState}, refreshParams) {

@@ -24,7 +24,7 @@
                                                 <label class="investor-card-sub-title">Your balance in INSURANCE</label>
                                             </v-row>
                                             <v-row align="center" class="mt-5">
-                                                <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">{{ dataHidden ? '' : insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
+                                                <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">{{ dataHidden ? '' : insuranceBalance.optimism ? ($utils.formatMoneyComma(insuranceBalance.optimism, 2)) + 'OVN' : '— OVN' }}</label>
                                             </v-row>
                                         </v-col>
                                     </v-row>
@@ -36,8 +36,8 @@
                                             <v-row class="info-row mt-6" justify="start" align="center">
                                                 <label class="fee-structure-label mt-1">Last day</label>
                                                 <v-spacer></v-spacer>
-                                                <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label mt-1' : (insuranceClientData.polygon > 0 ? 'success-color' : '')">
-                                                    {{ dataHidden ? '' : insuranceClientData.polygon ? ((insuranceClientData.polygon > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(insuranceClientData.polygon, 4)) : '—' }}
+                                                <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label mt-1' : (clientProfitDay > 0 ? 'success-color' : '')">
+                                                    {{ dataHidden ? '' : clientProfitDay ? ((clientProfitDay > 0 ? '+' : '') + $utils.formatMoneyComma(clientProfitDay, 4)) + ' OVN' : '—' }}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -58,8 +58,8 @@
                                             </v-btn>
                                         </template>
                                         <template v-if="insuranceRedemptionData.request === 'NEED_WAIT'">
-                                            <v-btn class="header-btn btn-investor-invest btn-investor-outline disabled-btn-outline" disabled outlined>
-                                                <label style="color: var(--progress-text)">
+                                            <v-btn class="header-btn btn-investor-invest btn-investor-outline disabled-btn-outline" outlined>
+                                                <label>
                                                     WITHDRAW IN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
                                                 </label>
                                             </v-btn>
@@ -74,8 +74,8 @@
 
                                 <template v-else>
                                     <v-row align="center" justify="center" class="ma-0">
-                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('polygon')">
-                                            SWITCH TO POLYGON TO MINT1
+                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('optimism')">
+                                            SWITCH TO OPTIMISM TO MINT
                                         </v-btn>
                                     </v-row>
                                 </template>
@@ -94,14 +94,14 @@
                                     <label class="fee-structure-label mt-1">Mint fee</label>
                                     <v-spacer></v-spacer>
                                     <label class="fee-structure-value mt-1">
-                                        {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.mintFee > 0) ? $utils.formatMoneyComma(insuranceStrategyData.polygon.mintFee, 2) + '%' : '—' }}
+                                        —
                                     </label>
                                 </v-row>
                                 <v-row class="info-row ma-0 mt-4" justify="start" align="center">
                                     <label class="fee-structure-label mt-1">Redeem fee</label>
                                     <v-spacer></v-spacer>
                                     <label class="fee-structure-value mt-1">
-                                        {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.redeemFee > 0) ? $utils.formatMoneyComma(insuranceStrategyData.polygon.redeemFee, 2) + '%' : '—' }}
+                                        —
                                     </label>
                                 </v-row>
                             </div>
@@ -109,24 +109,15 @@
                     </v-row>
 
                     <v-row align="center" justify="start" class="ma-0 toggle-row ">
-                        <label class="tab-btn mr-4" @click="setTab(1)" v-bind:class="activeTabPolygon">
-                            Polygon
-                        </label>
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4" disabled>
+                        <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">
                             Optimism
-                        </label>
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4" disabled>
-                            Arbitrum
                         </label>
                         <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4" disabled>
                             Base
                         </label>
-                        <label style="color: #C5C9D1 !important" class="tab-btn tab-btn-disabled ml-4" disabled>
-                            Linea
-                        </label>
                     </v-row>
 
-                    <PerformanceTab v-if="tab === 1" :insurance-data="insuranceStrategyData"/>
+                    <PerformanceTab/>
                 </v-col>
 
                 <v-col cols="3" v-if="$wu.isFull()">
@@ -144,8 +135,8 @@
                                         <label class="investor-card-sub-title">Your balance in INSURANCE</label>
                                     </v-row>
                                     <v-row align="center" class="mt-5">
-                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">{{ dataHidden ? '' : insuranceBalance.polygon ? ('$' + $utils.formatMoneyComma(insuranceBalance.polygon, 2)) : '—' }}</label>
-                                        <v-icon class="ml-1" color="var(--disabled-value)">
+                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">{{ dataHidden ? '' : insuranceBalance.optimism ? ($utils.formatMoneyComma(insuranceBalance.optimism, 2)) + ' OVN' : '— OVN' }}</label>
+                                        <v-icon class="ml-1" color="var(&#45;&#45;disabled-value)">
                                             {{ insuranceRedemptionData.request === 'CAN_WITHDRAW' ? 'mdi-lock-open-variant' : 'mdi-lock' }}
                                         </v-icon>
                                     </v-row>
@@ -155,8 +146,8 @@
                                     <v-row class="info-row mt-6" justify="start" align="center">
                                         <label class="fee-structure-label mt-1">Last day</label>
                                         <v-spacer></v-spacer>
-                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label mt-1' : (insuranceClientData.polygon > 0 ? 'success-color' : '')">
-                                            {{ dataHidden ? '' : insuranceClientData.polygon ? ((insuranceClientData.polygon > 0 ? '+' : '') + '$' + $utils.formatMoneyComma(insuranceClientData.polygon, 4)) : '—' }}
+                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label mt-1' : (clientProfitDay > 0 ? 'success-color' : '')">
+                                            {{ dataHidden ? '' : clientProfitDay ? ((clientProfitDay > 0 ? '+' : '') + $utils.formatMoneyComma(clientProfitDay, 4)) + ' OVN' : '—' }}
                                         </label>
                                     </v-row>
                                 </template>
@@ -176,7 +167,7 @@
                                         </template>
                                         <template v-if="insuranceRedemptionData.request === 'NEED_WAIT'">
                                             <v-btn class="header-btn btn-investor-invest btn-investor-outline disabled-btn-outline" disabled outlined>
-                                                <label style="color: var(--progress-text)">
+                                                <label style="color: var(&#45;&#45;progress-text)">
                                                     WITHDRAW IN {{ $utils.formatMoneyComma(insuranceRedemptionData.hours, 0) }} HOURS
                                                 </label>
                                             </v-btn>
@@ -212,7 +203,7 @@
                                             <label class="fee-structure-label">Mint fee</label>
                                             <v-spacer></v-spacer>
                                             <label class="fee-structure-value">
-                                                {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.mintFee > 0) ? $utils.formatMoneyComma(insuranceStrategyData.polygon.mintFee, 2) + '%' : '—' }}
+                                                —
                                             </label>
                                         </v-row>
                                     </v-col>
@@ -224,7 +215,7 @@
                                             <label class="fee-structure-label">Redeem fee</label>
                                             <v-spacer></v-spacer>
                                             <label class="fee-structure-value">
-                                                {{ (insuranceStrategyData.polygon && insuranceStrategyData.polygon.redeemFee > 0) ? $utils.formatMoneyComma(insuranceStrategyData.polygon.redeemFee, 2) + '%' : '—' }}
+                                                -
                                             </label>
                                         </v-row>
                                     </v-col>
@@ -246,10 +237,10 @@
 
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
-import AboutTab from "@/views/insurance/tab/AboutTab";
-import InsuranceBanner from "@/components/insurance/section/InsuranceBanner";
 import InsuranceRiskModal from "@/components/insurance/modal/InsuranceRiskModal";
 import PerformanceTab from "@/views/insurance/tab/PerformanceTab";
+import {insuranceApiService} from "@/services/insurance-api-service";
+import moment from "moment";
 
 export default {
     name: "InsurancePageView",
@@ -257,38 +248,44 @@ export default {
     components: {
         PerformanceTab,
         InsuranceRiskModal,
-        InsuranceBanner,
-        AboutTab,
         Tooltip,
     },
 
     data: () => ({
-        tab: 1,
+        tab: 'optimism',
+        ovnPrice: 17.65,
+        clientProfitDay: null,
+        isClientDataLoading: true,
     }),
 
     computed: {
-        ...mapGetters('network', ['networkId']),
-        ...mapGetters('accountData', ['insuranceBalance']),
+        ...mapGetters('network', ['networkId', 'networkName']),
+        ...mapGetters('accountData', ['insuranceBalance', 'account']),
         ...mapGetters('supplyData', ['totalSupply']),
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
-        ...mapGetters('insuranceData', ['insuranceStrategyData', 'insuranceClientData', 'insuranceRedemptionData']),
+        ...mapGetters('insuranceData', ['insuranceRedemptionData']),
         ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
         ...mapGetters('magicEye', ['dataHidden']),
 
-        activeTabPolygon: function () {
+        activeTabOptimism: function () {
             return {
-                'tab-button': this.tab === 1,
-                'tab-button-in-active': this.tab !== 1,
+                'tab-button': this.tab === 'optimism',
+                'tab-button-in-active': this.tab !== 'optimism',
             }
         },
 
         networkSupport: function () {
-            return this.networkId === this.insuranceStrategyData.polygon.chainId ? this.insuranceStrategyData.polygon.chainId : null;
+            return this.networkName === 'optimism' ? this.networkName : null;
         },
     },
 
     watch: {
+        account: function (val, oldVal) {
+            if (val) {
+                this.refreshClientData();
+            }
+        },
     },
 
     created() {
@@ -296,29 +293,24 @@ export default {
       this.refreshInsuranceTotalData();
     },
 
-    mounted() {
-        console.log(this.$route.query.tabName);
+    async mounted() {
         this.initTab();
+        await this.refreshClientData();
     },
 
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('insuranceRiskModal', ['showRiskModal']),
+        ...mapActions('insuranceData', ['refreshIsNeedRedemption']),
         ...mapActions('insuranceInvestModal', ['showInvestModal', 'showMintView', 'showRedeemView', 'showRedemptionRequestModal']),
         ...mapActions('statsData', ['refreshInsuranceAssetData', 'refreshInsuranceTotalData']),
 
-        setTab(tabId) {
-            this.tab = tabId;
+        setTab(tabName) {
+            this.tab = tabName;
         },
 
         initTab() {
-            if(this.$route.query.tabName === 'reserves') {
-                this.setTab(2);
-            }
-
-            if(this.$route.query.tabName === 'performance') {
-                this.setTab(1);
-            }
+            this.setTab('optimism')
         },
 
       goToAction(id) {
@@ -337,6 +329,36 @@ export default {
 
         redemptionRequestAction() {
             this.showRedemptionRequestModal();
+        },
+
+        async refreshClientData() {
+            console.log("refreshClientData 1")
+            this.isClientDataLoading = true;
+
+            if (!this.account){
+                console.log("refreshClientData 2")
+                this.isClientDataLoading = false;
+                return;
+            }
+
+            console.log("refreshClientData 3")
+            let account = this.account.toLowerCase();
+            // account = "0x6d1b0ba383cd362f180ccfe01733b19260ca2459";
+            let url = "https://api.overnight.fi/optimism/usd+";
+
+            console.log("refreshClientData 4")
+            insuranceApiService.getClientData(url, account)
+                .then(async value => {
+                    console.log("Client insurance data: ", value);
+                    console.log("refreshClientData 5", value)
+                    this.clientProfitDay = value.profitLastDay
+                    // this.clientProfitDay = 20.123
+                    await this.refreshIsNeedRedemption();
+                    this.isClientDataLoading = false;
+                }).catch(reason => {
+                console.log('Error get insurance data client: ' + reason);
+                this.isClientDataLoading = false;
+            })
         },
     }
 }
@@ -928,5 +950,9 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .disabled-btn-outline {
     color: var(--progress-text) !important;
     border-color: var(--progress-text) !important;
+}
+
+.theme--light.v-btn.v-btn--disabled {
+    color: var(--progress-text) !important;
 }
 </style>

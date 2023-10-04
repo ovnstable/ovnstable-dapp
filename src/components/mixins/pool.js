@@ -753,7 +753,6 @@ export const pool = {
                     return;
                 }
 
-                findedPool.link = 'https://curve.fi/#/arbitrum/pools/factory-v2-117/deposit'
                 pool.aggregators.push({
                     ...findedPool
                 })
@@ -770,7 +769,6 @@ export const pool = {
                     return;
                 }
 
-                findedPool.link = 'https://app.beefy.com/vault/aerodrome-ovn-usd+'
                 pool.aggregators.push({
                     ...findedPool
                 })

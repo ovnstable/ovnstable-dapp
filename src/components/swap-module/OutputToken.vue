@@ -60,6 +60,10 @@
                                 ~
                                 ${{ $utils.formatMoney((tokenInfo.sum ? tokenInfo.sum.replaceAll(' ', '') : 0) * 1 * token.selectedToken.price, 2) }}
                             </div>
+                            <div v-else-if="token.selectedToken">
+                                ~
+                                ${{ $utils.formatMoney((tokenInfo.sum ? tokenInfo.sum.replaceAll(' ', '') : 0) * 1 * token.selectedToken.price, 2) }}
+                            </div>
                             <div v-else>
                                 $00.<span class="numeric-change">00</span>
                             </div>

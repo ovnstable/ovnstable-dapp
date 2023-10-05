@@ -166,7 +166,7 @@ const routes = [
                 }
             },
             {
-                path: '/insurance/polygon',
+                path: '/insurance/network/:network',
                 name: 'InsurancePageView',
                 component: () => import('../views/insurance/InsurancePageView.vue'),
                 meta: {

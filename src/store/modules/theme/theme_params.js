@@ -216,6 +216,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--progress-text-w',
+        enabled: true,
+        theme: {
+            light: '#BABFC8',
+            dark: '#8292b0'
+        }
+    },
+    {
         name: '--network-tab',
         enabled: true,
         theme: {

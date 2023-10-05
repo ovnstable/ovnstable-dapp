@@ -227,11 +227,13 @@
                     </v-list-item-title>
                 </v-list-item>
 
-<!--                <v-list-item @click="insuranceStatsClick" :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''">
+                <v-list-item @click="insuranceStatsClick" :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''">
                     <v-list-item-title>
                         <label class="navbar-list-label mx-5" :class="selectedTab === 'insurance_performance' ? 'selected-page' : ''">Performance</label>
                     </v-list-item-title>
                 </v-list-item>
+
+<!--
 
                 <v-list-item @click="insuranceCollateralClick" :class="selectedTab === 'insurance_collateral' ? 'selected-page-item' : ''">
                     <v-list-item-title>
@@ -584,13 +586,13 @@ export default {
 
         insuranceStatsClick() {
             this.selectTab('insurance_performance');
-            this.goToActionByPath('/insurance/stats');
+            this.goToActionByPath('/insurance/network/optimism');
             // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
         },
 
         insuranceAboutClick() {
             this.selectTab('insurance_about');
-            this.goToActionByPath('/insurance/about');
+            this.goToActionByPath('/insurance');
         },
 
 

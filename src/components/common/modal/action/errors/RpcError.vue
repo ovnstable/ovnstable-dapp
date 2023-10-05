@@ -9,16 +9,20 @@
         </label>
 
         <div v-if="errorMsg" class="error-message-container">
-            <div class="copy-container" style="border: 1px solid red; height: 50px">
-                <v-icon @click="copyErrorToClipboard('link', errorMsg)">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         width="22"
-                         height="22"
-                         viewBox="0 0 512 512">
-                        <path fill="#1d2029" d="M408 432h-32v32H112V136h32v-32H80v392h328v-64z"/>
-                        <path fill="#1d2029" d="M176 16v384h320V153.373L358.627 16Zm288 352H208V48h104v152h152Zm0-200H344V48h1.372L464 166.627Z"/>
-                    </svg>
-                </v-icon>
+            <div class="copy-container"  @click="copyErrorToClipboard('link', errorMsg)">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                >
+                    <g transform="translate(24 0) scale(-1 1)">
+                        <path
+                            fill="var(--links-blue)"
+                            d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12V1Z"/>
+                    </g>
+                </svg>
+                <div class="copied-message" v-if="isCopied">Copied to Clipboard</div>
             </div>
             <div class="error-message">
                 [ rpc error: code: {{errorCode}}. {{errorMsg}} ]
@@ -70,10 +74,21 @@ export default {
         copyError: Function,
     },
 
+    data: () => ({
+        isCopied: false, // Initialize it as false
+    }),
+
     methods: {
         copyErrorToClipboard(copyTooltip, errorMsg) {
             if (typeof this.copyError === 'function') {
                 this.copyError(copyTooltip, errorMsg);
+
+                this.isCopied = true;
+                console.log(this.isCopied);
+
+                setTimeout(() => {
+                    this.isCopied = false;
+                }, 2000); // 2000 milliseconds (2 seconds)
             }
         },
     }
@@ -125,6 +140,17 @@ export default {
         margin-bottom: 10px;
         border: 1px dashed #c9c9c9;
     }
+
+    .copy-container {
+        right: 40px;
+    }
+
+    .copied-message {
+        top: -5px;
+        right: 25px; /* Adjust the position as per your design */
+        height: 30px;
+        min-width: 145px;
+    }
 }
 
 /* tablet */
@@ -169,6 +195,17 @@ export default {
         margin-bottom: 10px;
         border: 1px dashed #c9c9c9;
     }
+
+    .copy-container {
+        right: 65px;
+    }
+
+    .copied-message {
+        top: -5px;
+        right: 25px; /* Adjust the position as per your design */
+        height: 30px;
+        min-width: 145px;
+    }
 }
 
 /* full */
@@ -212,6 +249,17 @@ export default {
         padding: 5px;
         margin-bottom: 10px;
         border: 1px dashed #c9c9c9;
+    }
+
+    .copy-container {
+        right: 65px;
+    }
+
+    .copied-message {
+        top: -5px;
+        right: 25px; /* Adjust the position as per your design */
+        height: 30px;
+        min-width: 145px;
     }
 }
 
@@ -268,6 +316,32 @@ export default {
 
 .copy-container {
     background-color: transparent;
+    height: 25px;
+    width: 25px;
+
+    margin-left: auto;
+
+    position: absolute;
 }
+
+.copy-container:hover {
+    background-color: var(--card-banner-status-container);
+}
+
+.copied-message {
+    position: absolute;
+    color: #FFFFFF;
+    opacity: 1;
+    transition: opacity 0.3s;
+
+    background-color: var(--links-blue);
+    padding: 5px 10px;
+    border-radius: 10px;
+
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 
 </style>

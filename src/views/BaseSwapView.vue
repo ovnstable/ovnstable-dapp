@@ -90,16 +90,6 @@ export default defineComponent({
         }
     },
     mounted() {
-        const errorProperties = {
-            errorType: 'rpc',  // Set the error type to 'rpc' for RPC errors.
-            errorMsg: {
-                code: -32016,  // Replace with the actual error code you want to handle.
-                message: 'RPC error message asjdblaskbfsad;ifjddbsayhdbksdlnsb kbasdvjdkb nsandkasb sadjhsakdhsah dkjsah dkasjhd ksajh dksjah dkjsah dksajhk djhsakjdhsakj hdksa jhdsakhd jksa hdaskjdhasjkdhaskjdhdasdsadasdasdasd dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddds  djsal ndjskabdksabdskajdbaslkdmasdnjkasbdjshadbkasndl',  // Replace with the actual error message.
-                // You can also add other properties if needed.
-            },
-        };
-
-        this.showErrorModalWithMsg(errorProperties);
     },
 
     computed: {
@@ -107,7 +97,6 @@ export default defineComponent({
     },
     methods: {
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-        ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
 
         mintAction() {
             this.showMintView();

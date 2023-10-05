@@ -134,7 +134,7 @@
                     <label class="action-info-sub-label">{{ overnightFee ? $utils.formatMoneyComma(overnightFee, 2) + '%' : '—' }}</label>
                     <v-spacer></v-spacer>
                     <label class="action-info-label">You redeem:</label>
-                    <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma((estimateResult * 17.65), 2) : '0') }}</label>
+                    <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma((estimateResult * ovnPrice), 2) : '0') }}</label>
                 </v-row>
             </v-col>
         </v-row>
@@ -246,6 +246,7 @@ import bscIcon from "@/assets/network/bsc.svg";
 import {axios} from "@/plugins/http-axios";
 import Tooltip from "@/components/common/element/Tooltip";
 import GasSettingsMenu from "@/components/common/modal/gas/components/GasSettingsMenu";
+import {ovnApiService} from "@/services/ovn-api-service";
 
 export default {
     name: "Withdraw",
@@ -259,6 +260,7 @@ export default {
     },
 
     data: () => ({
+        ovnPrice: 0,
         currency: null,
         currencies: [
             {
@@ -422,6 +424,8 @@ export default {
         this.gas = null;
         this.gasAmountInMatic = null;
         this.gasAmountInUsd = null;
+
+        this.loadOvnPrice();
     },
 
     methods: {
@@ -438,6 +442,16 @@ export default {
         ...mapActions("successModal", ['showSuccessModal']),
 
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
+
+        loadOvnPrice() {
+            let url = "https://api.overnight.fi/root/dapp";
+            ovnApiService.getOvnPrice(url).then(value => {
+                console.log("ovn price: ", value);
+                this.ovnPrice = value;
+            }).catch(reason => {
+                console.log('Error get ovn price: ' + reason);
+            });
+        },
 
         async changeSliderPercent() {
             this.sum = (this.insuranceBalance.optimism * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';

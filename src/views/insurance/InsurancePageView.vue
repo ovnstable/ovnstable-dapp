@@ -182,8 +182,8 @@
 
                                 <template v-else>
                                     <v-row align="center" justify="center" class="mt-0">
-                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('polygon')">
-                                            SWITCH TO POLYGON TO MINT
+                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('optimism')">
+                                            SWITCH TO OPTIMISM TO MINT
                                         </v-btn>
                                     </v-row>
                                 </template>
@@ -241,6 +241,7 @@ import InsuranceRiskModal from "@/components/insurance/modal/InsuranceRiskModal"
 import PerformanceTab from "@/views/insurance/tab/PerformanceTab";
 import {insuranceApiService} from "@/services/insurance-api-service";
 import moment from "moment";
+import {ovnApiService} from "@/services/ovn-api-service";
 
 export default {
     name: "InsurancePageView",
@@ -253,7 +254,7 @@ export default {
 
     data: () => ({
         tab: 'optimism',
-        ovnPrice: 17.65,
+        ovnPrice: 0,
         clientProfitDay: null,
         isClientDataLoading: true,
     }),
@@ -295,6 +296,7 @@ export default {
 
     async mounted() {
         this.initTab();
+        this.loadOvnPrice();
         await this.refreshClientData();
     },
 
@@ -304,6 +306,16 @@ export default {
         ...mapActions('insuranceData', ['refreshIsNeedRedemption']),
         ...mapActions('insuranceInvestModal', ['showInvestModal', 'showMintView', 'showRedeemView', 'showRedemptionRequestModal']),
         ...mapActions('statsData', ['refreshInsuranceAssetData', 'refreshInsuranceTotalData']),
+
+        loadOvnPrice() {
+            let url = "https://api.overnight.fi/root/dapp";
+            ovnApiService.getOvnPrice(url).then(value => {
+                console.log("ovn price: ", value);
+                this.ovnPrice = value;
+            }).catch(reason => {
+                console.log('Error get ovn price: ' + reason);
+            });
+        },
 
         setTab(tabName) {
             this.tab = tabName;

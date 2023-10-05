@@ -19,7 +19,8 @@
 
                            <div class="tooltip-compound">
                                <v-row justify="end" align="center">
-                                   <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'" text="Avg apy by all time"/>
+                                   <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'"
+                                            :text="avgApyMessage"/>
                                </v-row>
                            </div>
                        </div>
@@ -129,6 +130,10 @@ export default {
     computed: {
         ...mapGetters('network', ['polygonApi', 'bscApi', 'opApi', 'arApi', 'baseApi', "lineaApi", 'zkApi']),
         ...mapGetters('theme', ['light']),
+
+        avgApyMessage() {
+            return "Average APY for the selected period";
+        },
 
         isMobile() {
             return window.innerWidth < 650;

@@ -151,6 +151,7 @@
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import { insuranceApiService } from "@/services/insurance-api-service";
 import Tooltip from "@/components/common/element/Tooltip.vue";
+import {ovnApiService} from "@/services/ovn-api-service";
 
 export default {
     name: "InsuranceCard",
@@ -175,7 +176,7 @@ export default {
         return {
             apyData: null,
             isLoaded: false,
-            ovnPrice: 17.65,
+            ovnPrice: 0,
         }
     },
 
@@ -184,6 +185,7 @@ export default {
 
     mounted() {
         this.loadApyDataInfo()
+        this.loadOvnPrice();
     },
 
     methods: {
@@ -191,6 +193,16 @@ export default {
         ...mapActions("swapModal", ["showSwapModal", "showRedeemView"]),
         ...mapActions("insuranceInvestModal", ["showInvestModal", "showMintView", "showRedeemView"]),
         ...mapActions("network", ["setWalletNetwork"]),
+
+        loadOvnPrice() {
+            let url = "https://api.overnight.fi/root/dapp";
+            ovnApiService.getOvnPrice(url).then(value => {
+                console.log("ovn price: ", value);
+                this.ovnPrice = value;
+            }).catch(reason => {
+                console.log('Error get ovn price: ' + reason);
+            });
+        },
 
         goToBridge() {
             this.$router.push('/bridge');

@@ -75,8 +75,8 @@
         </template>
         <template v-else>
             <v-row align="start" justify="start" class=" ma-0 mt-5">
-                <v-btn class="header-btn btn-investor-invest btn-filled" @click.stop="setWalletNetwork('137')">
-                    SWITCH TO POLYGON TO MINT
+                <v-btn class="header-btn btn-investor-invest btn-filled" @click.stop="setWalletNetwork('10')">
+                    SWITCH TO OPTIMISM TO MINT
                 </v-btn>
             </v-row>
         </template>

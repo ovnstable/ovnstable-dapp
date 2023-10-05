@@ -182,8 +182,8 @@
 
                                 <template v-else>
                                     <v-row align="center" justify="center" class="mt-0">
-                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('polygon')">
-                                            SWITCH TO POLYGON TO MINT
+                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('optimism')">
+                                            SWITCH TO OPTIMISM TO MINT
                                         </v-btn>
                                     </v-row>
                                 </template>

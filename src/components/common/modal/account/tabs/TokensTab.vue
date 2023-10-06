@@ -32,11 +32,11 @@
                 </div>
                 <label class="ml-2 coin-btn-label">wUSD+</label>
             </v-btn>
-            <v-btn v-if="networkId === 137" class="coin-btn ma-1" @click="addInsuranceToken">
+            <v-btn v-if="networkId === 10" class="coin-btn ma-1" @click="addInsuranceToken">
                 <div class="coin-img">
                     <v-img :src="require('@/assets/currencies/insurance/INSURANCE.svg')"/>
                 </div>
-                <label class="ml-2 coin-btn-label">USD+ INS</label>
+                <label class="ml-2 coin-btn-label">OVN INS</label>
             </v-btn>
         </v-row>
 

@@ -3,6 +3,7 @@ const state = {
 
     show: false,
     showRedemptionRequest: false,
+    redemptionRequestHash: null,
     showRedemptionRequestSuccess: false,
 
     insuranceTokenApproved: false,
@@ -21,6 +22,10 @@ const getters = {
 
     showRedemptionRequest(state) {
         return state.showRedemptionRequest;
+    },
+
+    redemptionRequestHash(state) {
+        return state.redemptionRequestHash;
     },
 
     showRedemptionRequestSuccess(state) {
@@ -57,6 +62,10 @@ const actions = {
 
     showRedemptionRequestModal({commit, dispatch, getters}) {
         commit('setShowRedemptionRequest', true);
+    },
+
+    setRedemptionRequestInfo({commit, dispatch, getters}, hash) {
+        commit('setRedemptionRequestHash', hash);
     },
 
     closeRedemptionRequestModal({commit, dispatch, getters}) {
@@ -100,6 +109,10 @@ const mutations = {
 
     setShowRedemptionRequest(state, value) {
         state.showRedemptionRequest = value;
+    },
+
+    setRedemptionRequestHash(state, value) {
+        state.redemptionRequestHash = value;
     },
 
     setShowRedemptionRequestSuccess(state, value) {

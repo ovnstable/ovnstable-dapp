@@ -73,11 +73,14 @@ export default {
         redemptionRequestSent: false,
     }),
 
+    mounted() {
+    },
+
     methods: {
         ...mapActions('insuranceInvestModal', ['closeRedemptionRequestModal']),
         ...mapActions('errorModal', ['showErrorModalWithMsg']),
         ...mapActions('insuranceData', ['refreshIsNeedRedemption']),
-        ...mapActions('insuranceInvestModal', ['showRedemptionRequestSuccessModal']),
+        ...mapActions('insuranceInvestModal', ['setRedemptionRequestInfo', 'showRedemptionRequestSuccessModal']),
 
         openLink(link) {
             window.open(link, '_blank').focus();
@@ -103,7 +106,13 @@ export default {
                 let requestParams = {from: this.account, gasPrice: this.gasPriceGwei};
 
                 try {
-                    await this.contracts.insurance[insurance.chainName + '_exchanger'].methods.requestWithdraw().send(requestParams);
+                    let tx = await this.contracts.insurance[insurance.chainName + '_exchanger'].methods.requestWithdraw().send(requestParams);
+
+                    try {
+                        this.setRedemptionRequestInfo(tx.transactionHash);
+                    } catch (e) {
+                        console.log(e);
+                    }
 
                     await this.refreshIsNeedRedemption();
                     this.showRedemptionRequestSuccessModal();

@@ -21,7 +21,7 @@
             <v-card-text class="pt-8 content-container">
                 <v-row class="modal-info-row" align="center">
                     <label class="modal-info-text">
-                        Overnight Finance is an Asset Management Protocol that offers low to medium risk passive yield product. Overnight Finance offers protection on USD+ the yield bearing token that represents user’s deposits. User can file an event if USD+ will face the negative rebase.
+                        Overnight Finance is an Asset Management Protocol that offers low to medium risk passive yield product. Overnight Finance offers protection on our yield bearing tokens (USD+, DAI+, USDT+) that represents user’s deposits. User can file an event if USD+ (DAI+, USDT+) will face the negative rebase. In this case, tokens from the Insurance vault will be allocated to cover this loss.
                     </label>
                 </v-row>
 

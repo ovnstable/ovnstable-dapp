@@ -134,7 +134,7 @@ const actions = {
                     type: 'ERC20',
                     options: {
                         address: rootState.web3.contracts.insurance.optimism_token.options.address,
-                        symbol: 'USD+ INS',
+                        symbol: 'OVN INS',
                         decimals: 18,
                         image: OptimismInsurance.image,
                     },
@@ -142,7 +142,7 @@ const actions = {
             })
             .then((success) => {
                 if (success) {
-                    console.log('USD+ INS successfully added to wallet!')
+                    console.log('OVN INS successfully added to wallet!')
                 } else {
                     throw new Error('Something went wrong.')
                 }

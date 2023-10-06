@@ -25,6 +25,15 @@
                             You can withdraw your deposit in 72 hours
                         </label>
                     </v-row>
+
+                    <v-row class="invest-body-row mx-n2 mt-10 mb-4" align="center" justify="center">
+                        <label class="discord-label">
+                            <label class="discord-link" @click="openTx">
+                                View transaction
+                            </label>
+                        </label>
+                    </v-row>
+
                     <v-row class="invest-body-row mx-n2 mt-10 mb-4" align="center" justify="center">
                         <label class="discord-label">
                             If you have questions, contact us in our&nbsp;
@@ -53,7 +62,7 @@ export default {
     props: {},
 
     computed: {
-        ...mapGetters('insuranceInvestModal', ['showRedemptionRequestSuccess']),
+        ...mapGetters('insuranceInvestModal', ['showRedemptionRequestSuccess', 'redemptionRequestHash']),
     },
 
     data: () => ({
@@ -64,6 +73,10 @@ export default {
 
         openDiscord() {
             window.open(`https://discord.gg/overnight-fi`, '_blank').focus();
+        },
+
+        openTx() {
+            window.open(`https://optimistic.etherscan.io/tx/${this.redemptionRequestHash}`, '_blank').focus();
         },
 
         close() {

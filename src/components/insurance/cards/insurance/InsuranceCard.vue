@@ -65,9 +65,16 @@
                     </label>
                 </v-row>
 
-                <v-row class="ma-0 mt-3 insurance-card-info-row d-flex justify-space-between">
+                <v-row class="ma-0 mt-3 insurance-card-info-row d-flex justify-space-between info-container">
                     <label class="card-info-label mt-2">Insurance coverage</label>
-                    <label class="card-info-value mt-2">{{ (apyData && apyData.coverage) ? ($utils.formatMoneyComma(apyData.coverage, 2) + '%') : '—' }}</label>
+                    <label class="card-info-value mt-2 mr-4">
+                        {{ (apyData && apyData.coverage) ? ($utils.formatMoneyComma(apyData.coverage, 2) + '%') : '—' }}
+                    </label>
+                    <div class="tooltip-info">
+                        <Tooltip :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
+                                 :maxWidth="300"
+                                 text="% of insured funds on chain with Insurance"/>
+                    </div>
                 </v-row>
 
                 <v-row class="ma-0 mt-3 insurance-card-info-row d-flex justify-space-between">
@@ -130,8 +137,8 @@
                         class="button btn-outlined"
                         height="40px"
                         outlined
-                        @click="goToBridge()">
-                        BRIDGE OVN ON OP
+                        @click.stop="goToBridge()">
+                        BRIDGE OVN
                     </v-btn>
                 </v-row>
             </v-container>
@@ -236,7 +243,7 @@ export default {
         },
 
         openInsurance() {
-            // this.goToAction('/insurance/optimism');
+            this.goToAction('/insurance/network/optimism');
         },
 
         goToAction(id) {

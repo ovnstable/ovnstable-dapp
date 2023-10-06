@@ -319,11 +319,20 @@
                         </div>
                     </div>
 
-                    <!--                <v-list-item @click="insuranceStatsClick" :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''">
-                                        <v-list-item-title>
-                                            <label class="navbar-list-label mx-5" :class="selectedTab === 'insurance_performance' ? 'selected-page' : ''">Performance</label>
-                                        </v-list-item-title>
-                                    </v-list-item>
+                    <div
+                        @click="insuranceStatsClick"
+                        :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''"
+                        v-if="isShowInsurance"
+                    >
+                        <div
+                            class="navbar-list-label pa-2 pl-11"
+                            :class="selectedTab === 'insurance_performance' ? 'selected-page' : ''"
+                        >
+                            Performance
+                        </div>
+                    </div>
+
+                    <!--
 
                                     <v-list-item @click="insuranceCollateralClick" :class="selectedTab === 'insurance_collateral' ? 'selected-page-item' : ''">
                                         <v-list-item-title>

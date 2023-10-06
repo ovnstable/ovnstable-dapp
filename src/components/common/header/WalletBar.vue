@@ -1,5 +1,5 @@
 <template>
-    <div class="wallet-bar-main-container mt-1">
+    <div class="wallet-bar-main-container mt-1" :class="$wu.isMobile() ? 'mr-5' : ''">
         <v-row align="center" class="wallet-bar-container" @click="walletClickAction()">
             <v-col cols="1" class="wallet-col mr-4">
                 <div v-if="walletName" class="wallet-icon">
@@ -29,7 +29,7 @@
                     </template>
 
                     <label v-else class="account-label" :class="dataHidden ? 'hidden-label' : ''">
-                        {{ account ? (dataHidden ? '' : accountDisplay) : 'XXXXX...XXXX' }}
+                        {{ account ? (dataHidden ? '' : accountDisplay) : 'XXX...XXXX' }}
                     </label>
                 </v-row>
             </v-col>
@@ -68,7 +68,7 @@ export default {
             if (this.uns) {
                 return this.uns;
             } else if (this.account) {
-                return this.account.substring(0, 5) + '...' + this.account.substring(this.account.length - 4);
+                return this.account.substring(0, 3) + '...' + this.account.substring(this.account.length - 4);
             } else {
                 return null;
             }
@@ -119,7 +119,7 @@ export default {
 /* mobile */
 @media only screen and (max-width: 960px) {
     .wallet-bar-main-container {
-        width: 150px !important;
+        width: 120px !important;
     }
 
     .wallet-bar-container {
@@ -142,7 +142,7 @@ export default {
     .balance-label, .account-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 14px;
+        font-size: 13px;
         line-height: 18px;
         letter-spacing: 0.02em;
     }

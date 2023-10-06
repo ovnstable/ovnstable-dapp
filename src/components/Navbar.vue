@@ -2,7 +2,7 @@
     <v-navigation-drawer
             app
             permanent
-            width="228"
+            width="242"
             color="var(--secondary)"
     >
         <v-list class="mt-2">

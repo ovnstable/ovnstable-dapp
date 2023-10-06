@@ -383,7 +383,7 @@ onboard-v2 {
 }
 
 .v-navigation-drawer__content {
-    overflow-y: hidden!important;
+    //overflow-y: hidden!important;
 }
 
 </style>

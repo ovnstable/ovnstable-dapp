@@ -1,52 +1,43 @@
 <template>
-  <div>
-    <v-card-text :class="$wu.isMobile() ? 'px-2 pt-2' : 'px-5 pt-5'">
-        <v-row justify="center">
-            <div class="loading-img">
-                <v-img :src="require('@/assets/icon/error-circle.svg')"/>
-            </div>
-        </v-row>
+    <div :class="$wu.isMobile() ? 'px-2 pt-2' : 'px-5 pt-5'">
+        <div class="loading-img">
+            <v-img :src="require('@/assets/icon/error-circle.svg')"/>
+        </div>
 
-        <v-row justify="center">
-            <label class="error-label pt-5 pb-5">
-                Error in estimating gas
-            </label>
-        </v-row>
+        <label class="error-label pt-5 pb-5">
+            Error in estimating gas
+        </label>
 
-
-        <v-row justify="center" class="error-message pb-5">
+        <div class="error-message pb-5">
             Issue with settings of gas fees or gas limits in your wallet.
-        </v-row>
+        </div>
 
-        <v-row justify="center">
-            <div class="info-container py-6 px-6">
-                <v-row class="info-item">
-                    1. Change gas settings in your wallet manually
-                </v-row>
-                <v-row class="info-item">
-                    or
-                </v-row>
-                <v-row class="info-item">
-                    2. Change the input amount slightly
-                </v-row>
-                <v-row class="info-item">
-                    3. Delete your cookies for the last several hours
-                </v-row>
-
-                <v-row class="info-item pt-4">
-                    Useful article:
-                </v-row>
-                <v-row>
-                    <a href="https://overnight.fi/blog/2022/10/28/what-to-do-if-your-transaction-is-still-stuck/"
-                       class="info-item-link pl-2"
-                       target="_blank">
-                        • What to do if your transaction is still stuck
-                    </a>
-                </v-row>
+        <div class="info-container py-6 px-6">
+            <div class="info-item">
+                1. Change gas settings in your wallet manually
             </div>
-        </v-row>
-    </v-card-text>
-  </div>
+            <div class="info-item">
+                or
+            </div>
+            <div class="info-item">
+                2. Change the input amount slightly
+            </div>
+            <div class="info-item">
+                3. Delete your cookies for the last several hours
+            </div>
+
+            <div class="info-item pt-4">
+                Useful article:
+            </div>
+            <div>
+                <a href="https://overnight.fi/blog/2022/10/28/what-to-do-if-your-transaction-is-still-stuck/"
+                   class="info-item-link pl-2"
+                   target="_blank">
+                    • What to do if your transaction is still stuck
+                </a>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -75,6 +66,10 @@ export default {
         line-height: 24px;
     }
 
+    .info-container {
+        min-width: 300px;
+        min-height: 140px;
+    }
 }
 
 /* tablet */

@@ -706,13 +706,13 @@ export default {
 
         insuranceStatsClick() {
             this.selectTab('insurance_performance');
-            this.goToActionByPath('/insurance/stats');
+            this.goToActionByPath('/insurance/network/optimism');
             // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
         },
 
         insuranceAboutClick() {
             this.selectTab('insurance_about');
-            this.goToActionByPath('/insurance/about');
+            this.goToActionByPath('/insurance');
         },
 
 

@@ -90,8 +90,8 @@ export default defineComponent({
         }
     },
     mounted() {
-
     },
+
     computed: {
         ...mapGetters('accountData', ['account']),
     },
@@ -162,7 +162,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .title-label {
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 300;
 

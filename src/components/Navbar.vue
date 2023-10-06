@@ -399,7 +399,7 @@
                     </div>
                 </div>
 
-<!--                <v-list-item @click="insuranceStatsClick" :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''"
+                <v-list-item @click="insuranceStatsClick" :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''"
                              class="list-item-hover">
                     <v-list-item-title>
                         <label :class="selectedTab === 'insurance_performance' ? 'selected-page' : ''"
@@ -407,7 +407,7 @@
                             Performance
                         </label>
                     </v-list-item-title>
-                </v-list-item>-->
+                </v-list-item>
 
 <!--                <v-list-item :class="selectedTab === 'insurance_collateral' ? 'selected-page-item' : ''"
                              @click="insuranceCollateralClick"
@@ -804,7 +804,7 @@ export default {
 
         insuranceStatsClick() {
             this.selectTab('insurance_performance');
-            this.goToActionByPath('/insurance/polygon');
+            this.goToActionByPath('/insurance/network/optimism');
             // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
         },
 

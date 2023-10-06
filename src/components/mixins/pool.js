@@ -472,6 +472,24 @@ export const pool = {
                 return;
             }
 
+            if (pool.platform === 'Velocore' && pool.chainName === 'linea') {
+                url = 'https://linea.velocore.xyz/stable-liquidity'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Velocore' && pool.address === '0xf5E67261CB357eDb6C7719fEFAFaaB280cB5E2A6') {
+                url = 'https://zksync.velocore.xyz/stable-liquidity'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Velocore' && pool.address === '0x4b9f00860d7f42870addeb687fa4e47062df71d9') {
+                url = 'https://zksync-v1.velocore.xyz/liquidity/0x4b9f00860d7f42870addeb687fa4e47062df71d9'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
             url += pool.address;
             window.open(url, '_blank').focus();
         },
@@ -619,7 +637,6 @@ export const pool = {
                     this.topPool = this.pools.sort((a, b) => b.apr - a.apr);
                 }
 
-
                 // todo: remove after presale
                 this.velodromePool = this.pools.find(pool => pool.address === '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0_Velodrome');
                 this.aerodromePool = this.pools.find(pool => pool.address === '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197_Aerodrome');
@@ -754,7 +771,6 @@ export const pool = {
                     return;
                 }
 
-                findedPool.link = 'https://curve.fi/#/arbitrum/pools/factory-v2-117/deposit'
                 pool.aggregators.push({
                     ...findedPool
                 })
@@ -771,7 +787,6 @@ export const pool = {
                     return;
                 }
 
-                findedPool.link = 'https://app.beefy.com/vault/aerodrome-ovn-usd+'
                 pool.aggregators.push({
                     ...findedPool
                 })
@@ -787,7 +802,6 @@ export const pool = {
                     return;
                 }
 
-                findedPool.link = 'https://app.beefy.com/vault/velodrome-v2-ovn-usd+'
                 pool.aggregators.push({
                     ...findedPool
                 })

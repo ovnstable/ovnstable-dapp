@@ -56,6 +56,9 @@
                            <div v-if="token.value && token.selectedToken && token.selectedToken.balanceData.balance">
                               ~ ${{$utils.formatMoney(token.usdValue, 2)}}
                            </div>
+                           <div v-else-if="token.value && token.selectedToken">
+                               ~ ${{$utils.formatMoney(token.usdValue, 2)}}
+                           </div>
                            <div v-else>
                                $00.<span class="numeric-change">00</span>
                            </div>

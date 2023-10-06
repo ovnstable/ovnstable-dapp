@@ -472,6 +472,24 @@ export const pool = {
                 return;
             }
 
+            if (pool.platform === 'Velocore' && pool.chainName === 'linea') {
+                url = 'https://linea.velocore.xyz/stable-liquidity'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Velocore' && pool.address === '0xf5E67261CB357eDb6C7719fEFAFaaB280cB5E2A6') {
+                url = 'https://zksync.velocore.xyz/stable-liquidity'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Velocore' && pool.address === '0x4b9f00860d7f42870addeb687fa4e47062df71d9') {
+                url = 'https://zksync-v1.velocore.xyz/liquidity/0x4b9f00860d7f42870addeb687fa4e47062df71d9'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
             url += pool.address;
             window.open(url, '_blank').focus();
         },
@@ -786,7 +804,6 @@ export const pool = {
                     return;
                 }
 
-                findedPool.link = 'https://curve.fi/#/arbitrum/pools/factory-v2-117/deposit'
                 pool.aggregators.push({
                     ...findedPool
                 })
@@ -803,7 +820,6 @@ export const pool = {
                     return;
                 }
 
-                // findedPool.link = 'https://app.beefy.com/vault/aerodrome-ovn-usd+'
                 pool.aggregators.push({
                     ...findedPool
                 })
@@ -819,7 +835,6 @@ export const pool = {
                     return;
                 }
 
-                // findedPool.link = 'https://app.beefy.com/vault/velodrome-v2-ovn-usd+'
                 pool.aggregators.push({
                     ...findedPool
                 })

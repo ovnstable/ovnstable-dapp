@@ -216,6 +216,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--progress-text-w',
+        enabled: true,
+        theme: {
+            light: '#BABFC8',
+            dark: '#8292b0'
+        }
+    },
+    {
         name: '--network-tab',
         enabled: true,
         theme: {
@@ -459,15 +467,15 @@ export const THEME_MODE_PARAMS = [
         name: '--theme-icon-color',
         enabled: true,
         theme: {
-            light: '#ADB3BD',
-            dark: '#4C586D'
+            light: '#4C586D',
+            dark: '#FFFFFF'
         }
     },
     {
         name: '--theme-icon-color-selected',
         enabled: true,
         theme: {
-            light: '#4C586D',
+            light: '#FFFFFF',
             dark: '#ADB3BD'
         }
     },
@@ -477,6 +485,14 @@ export const THEME_MODE_PARAMS = [
         theme: {
             light: '#F5F5F5',
             dark: '#29323E'
+        }
+    },
+    {
+        name: '--theme-switch-background-light',
+        enabled: true,
+        theme: {
+            light: '#FFFFFF',
+            dark: '#1D2029'
         }
     },
     {

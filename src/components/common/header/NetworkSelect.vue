@@ -13,7 +13,7 @@
                             <v-img class="selected-network-icon" :src="icon"/>
                             <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="var(--secondary-gray-text)" v-if="alphaNetwork">mdi-alpha</v-icon>
                             <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="var(--secondary-gray-text)" v-if="betaNetwork">mdi-beta</v-icon>
-                            <v-icon color="var(--secondary-gray-text)" :class="(alphaNetwork || betaNetwork) ? 'ml-n1' : 'ml-2'">
+                            <v-icon color="var(--secondary-gray-text)" :class="(alphaNetwork || betaNetwork) ? 'ml-n1' : 'ml-0'">
                                 {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
                             </v-icon>
                         </div>
@@ -229,8 +229,8 @@ export default {
 @media only screen and (max-width: 960px) {
 
     .list-item-icon, .btn-icon, .selected-network-icon {
-        width: 26px !important;
-        height: 26px !important;
+        width: 24px !important;
+        height: 24px !important;
     }
 }
 

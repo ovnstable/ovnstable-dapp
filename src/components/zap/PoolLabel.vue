@@ -56,14 +56,22 @@
                             <div
                                 v-bind:class="isShort ? 'pool-detail-title-short' : ''"
                                 class="pool-detail-title">
-                                <span>
+                                <span v-if="pool.platform === 'Beefy'">
+                                    APY
+                                </span>
+                                <span v-else>
                                     APR
                                 </span>
                             </div>
                             <div
                                 v-bind:class="isShort ? 'pool-detail-item-short' : ''"
                                 class="pool-detail-item">
-                                {{$utils.formatMoney(pool.apr, 2)}}%
+                                <span  v-if="pool.apr < 10000">
+                                    {{$utils.formatMoney(pool.apr, 2)}}%
+                                </span>
+                                <span v-else>
+                                    {{ $utils.formatNumberToThousands(pool.apr, 0)}}K %
+                                </span>
                             </div>
                         </div>
                         <div v-bind:class="isShort ? 'col-4 col-lg-4 col-md-4 col-sm-4' : 'col-4 col-lg-4 col-md-4 col-sm-4'">

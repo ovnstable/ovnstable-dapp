@@ -61,7 +61,7 @@
                  class="col-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
                 <div class="pool-table-header-item text-center">
                     <label v-if="pool.apr && !disabledAprInfoPlatformList.includes(pool.platform)" class="card-label">
-                        {{ $utils.formatMoneyComma(pool.apr, 2) }}%
+                        {{ $utils.formatMoneyComma(pool.apr, 2) }}% <sup v-if="pool.platform === 'Beefy'">(apy)</sup>
                     </label>
                     <label v-else class="card-label see-on-dex-label">
                         see on platform
@@ -170,7 +170,7 @@
                 <div class="col-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
                     <div class="pool-table-header-item text-center">
                         <label v-if="aggregator.apr" class="card-label text-center">
-                            {{ $utils.formatMoneyComma(aggregator.apr, 2) }}%
+                            {{ $utils.formatMoneyComma(aggregator.apr, 2) }}%<sup v-if="aggregator.platform === 'Beefy'">apy</sup>
                         </label>
                         <label v-else class="card-label see-on-dex-label see-on-dex-another">
                             see on platform

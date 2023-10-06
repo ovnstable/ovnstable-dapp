@@ -3,11 +3,34 @@
         <div class="mt-10">
             <label class="title-label">featured</label>
         </div>
-        <v-row v-if="isAllDataLoaded && !isResorting" align="center" justify="start" class="ma-0 toggle-row mt-10">
+        <v-row v-if="isAllDataLoaded && !isResorting && !$wu.isMobile()" align="center" justify="start" class="ma-0 toggle-row mt-10">
             <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
             <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
             <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
             <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
+            <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
+            <label class="tab-btn mx-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
+            <label  v-if="isDeprecatedShow"
+                    @click="setTab('polygon')" v-bind:class="activeTabPolygon"
+                    class="tab-btn mx-4 text-deprecated">
+                Polygon
+                <div style="position: relative">
+                    <div style="position:absolute;right: -26px;top: -23px;">
+                        <Tooltip
+                            text="Chain is deprecated"
+                            right
+                        />
+                    </div>
+                </div>
+            </label>
+        </v-row>
+        <v-row v-if="isAllDataLoaded && !isResorting && $wu.isMobile()" align="center" justify="start" class="ma-0 toggle-row mt-10" >
+            <label class="tab-btn mr-4" @click="setTab('optimism')" v-bind:class="activeTabOptimism">Optimism</label>
+            <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
+            <label class="tab-btn mx-4" @click="setTab('zksync')" v-bind:class="activeTabZkSync">ZkSync</label>
+            <label class="tab-btn mx-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
+        </v-row>
+        <v-row v-if="isAllDataLoaded && !isResorting && $wu.isMobile()" align="center" justify="start" class="ma-0 toggle-row mt-5">
             <label class="tab-btn mx-4" @click="setTab('base')" v-bind:class="activeTabBase">Base</label>
             <label class="tab-btn mx-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
             <label  v-if="isDeprecatedShow"

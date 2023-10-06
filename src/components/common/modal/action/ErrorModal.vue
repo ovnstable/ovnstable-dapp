@@ -5,28 +5,40 @@
             persistent>
         <v-card class="container_body py-10 px-10">
             <v-toolbar class="container_header" flat>
-                <v-btn icon class="ml-auto" @click="close">
+                <v-btn
+                    @click="close"
+                    icon
+                    class="ml-auto"
+                >
                     <v-icon class="close-icon">mdi-close</v-icon>
                 </v-btn>
             </v-toolbar>
 
             <div v-if="errorViewType === 'gas'">
-              <GasError :error-msg="errorText"
-                        :error-code="errorCode">
+              <GasError
+                        :error-msg="errorText"
+                        :error-code="errorCode"
+                        :copy-error="copyErrorToClipboard">
               </GasError>
             </div>
             <div v-else-if="errorViewType === 'rpc'">
-              <RpcError :error-msg="errorText"
-                        :error-code="errorCode">
+              <RpcError
+                        :error-msg="errorText"
+                        :error-code="errorCode"
+                        :copy-error="copyErrorToClipboard">
               </RpcError>
             </div>
             <div v-else-if="errorViewType === 'slippage'">
-              <SlippageError :error-msg="errorText"
-                            :error-code="errorCode">
+              <SlippageError
+                        :error-msg="errorText"
+                        :error-code="errorCode"
+                        :copy-error="copyErrorToClipboard">
               </SlippageError>
             </div>
             <div v-else>
-              <UndefinedError :error-msg="errorMsg">
+              <UndefinedError
+                        :error-msg="errorMsg"
+                        :copy-error="copyErrorToClipboard">
               </UndefinedError>
             </div>
 

@@ -204,11 +204,20 @@
                                     </div>
                                 </div>
                                 <div class="col-3 col-xl-6 col-lg-6 col-md-6 col-sm-3">
-                                    <div class="pool-table-body-item d-inline-block mr-2">
+                                    <div v-if="pool.address === '0x4b9f00860d7f42870addeb687fa4e47062df71d9'" class="pool-table-body-item d-inline-block mr-2">
+                                        <!--                                        {{pool.name}} LP {{pool.address}}-->
+                                        {{pool.name}} LP V1
+                                    </div>
+                                    <div v-else-if="pool.address === '0xf5E67261CB357eDb6C7719fEFAFaaB280cB5E2A6'" class="pool-table-body-item d-inline-block mr-2">
+                                        <!--                                        {{pool.name}} LP {{pool.address}}-->
+                                        {{pool.name}} LP V2
+                                    </div>
+                                    <div v-else class="pool-table-body-item d-inline-block mr-2">
 <!--                                        {{pool.name}} LP {{pool.address}}-->
                                         {{pool.name}} LP
                                     </div>
-                                    <div class="platform-label-container d-inline-block">
+
+                                    <div  class="platform-label-container d-inline-block">
                                         <div class="platform-label">
                                             <div  v-if="pool.platform === 'Swapbased'">
                                                 <Tooltip

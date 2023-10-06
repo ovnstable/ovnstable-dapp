@@ -382,4 +382,8 @@ onboard-v2 {
     color: #707a8b;
 }
 
+.v-navigation-drawer__content {
+    overflow-y: hidden!important;
+}
+
 </style>

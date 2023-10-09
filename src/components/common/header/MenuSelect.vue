@@ -320,7 +320,7 @@
                     </div>
 
                     <div
-                        @click="insuranceStatsClick"
+                        @click="insuranceCollateralClick"
                         :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''"
                         v-if="isShowInsurance"
                     >
@@ -328,7 +328,7 @@
                             class="navbar-list-label pa-2 pl-11"
                             :class="selectedTab === 'insurance_performance' ? 'selected-page' : ''"
                         >
-                            Performance
+                            Premiums
                         </div>
                     </div>
 
@@ -715,7 +715,7 @@ export default {
 
         insuranceStatsClick() {
             this.selectTab('insurance_performance');
-            this.goToActionByPath('/insurance/network/optimism');
+            this.goToActionByPath('/insurance/network/optimism?tab=performance');
             // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
         },
 
@@ -727,7 +727,7 @@ export default {
 
         insuranceCollateralClick() {
             this.selectTab('insurance_collateral');
-            this.goToActionByPath('/insurance/collateral');
+            this.goToActionByPath('/insurance/collateral/optimism');
             // this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
         },
 

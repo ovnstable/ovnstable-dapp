@@ -152,9 +152,9 @@ export default {
                       return require('@/assets/icon/redeemed.svg');
                     }
                 case 'mintInsurance':
-                    return require('@/assets/currencies/insurance/INSURANCE.svg');
+                    return require('@/assets/currencies/insurance/round_insurance_optimism.svg');
                 case 'withdrawInsurance':
-                    return require('@/assets/currencies/insurance/INSURANCE.svg');
+                    return require('@/assets/currencies/insurance/round_insurance_optimism.svg');
                 case 'swapOdosUsdPlus':
                     return require('@/assets/icon/minted.svg');
                 default:

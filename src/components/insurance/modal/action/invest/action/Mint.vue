@@ -253,7 +253,7 @@ export default {
         buyCurrencies: [{
             id: 'insurance',
             title: 'OVN INS',
-            image: '/assets/currencies/insurance/INSURANCE.svg'
+            image: '/assets/currencies/insurance/round_insurance_optimism.svg'
         }],
 
         ovnDecimals: 18,

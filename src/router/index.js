@@ -176,6 +176,16 @@ const routes = [
                 }
             },
             {
+                path: '/insurance/collateral/:network',
+                name: 'InsuranceCollateralView',
+                component: () => import('../views/insurance/InsuranceCollateralView.vue'),
+                meta: {
+                    middleware: [
+                        Insurance
+                    ]
+                }
+            },
+            {
                 path: '/reserves',
                 name: 'InsuranceReservesView',
                 component: () => import('../views/InsuranceReservesView.vue'),

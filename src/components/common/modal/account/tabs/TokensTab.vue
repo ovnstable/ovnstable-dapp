@@ -34,7 +34,7 @@
             </v-btn>
             <v-btn v-if="networkId === 10" class="coin-btn ma-1" @click="addInsuranceToken">
                 <div class="coin-img">
-                    <v-img :src="require('@/assets/currencies/insurance/INSURANCE.svg')"/>
+                    <v-img :src="require('@/assets/currencies/insurance/round_insurance_optimism.svg')"/>
                 </div>
                 <label class="ml-2 coin-btn-label">OVN INS</label>
             </v-btn>

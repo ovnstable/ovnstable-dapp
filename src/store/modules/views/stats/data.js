@@ -157,7 +157,7 @@ const actions = {
         let result = [];
 
         try {
-            let appApiUrl = rootState.network.polygonApi;
+            let appApiUrl = rootState.network.opApi;
             let collateralsTotal = (await axios.get(appApiUrl + '/insurance/collateral/total')).data;
             console.log(collateralsTotal);
 

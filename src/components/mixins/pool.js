@@ -626,12 +626,12 @@ export const pool = {
                 }
 
                 // init top pool
-                const featuredPools = this.pools.filter(pool => pool.chain === this.networkId && pool.feature)
+                const featuredPools = this.pools.filter(pool => pool.chain == this.networkId && pool.feature)
                 featuredPools.sort((a, b) => b.apr - a.apr);
                 if (featuredPools.length > 0) {
                     this.topPool = featuredPools[0];
                 } else {
-                    const topByApr = this.pools.filter(pool => pool.chain === this.networkId);
+                    const topByApr = this.pools.filter(pool => pool.chain == this.networkId && pool.tvl > 50000);
                     topByApr.sort((a, b) => b.apr - a.apr);
 
                     if (topByApr.length > 0) {

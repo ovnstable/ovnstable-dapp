@@ -18,8 +18,7 @@
                     </v-row>
                     <v-row class="d-flex mt-4">
                         <label class="percentage">
-                            {{ apyData ? $utils.formatMoneyComma(apyData.apy, 0) + '%' : '—' }}
-<!--                            {{ apyData ? ((apyData.apy > 500 ? '>500' : $utils.formatMoneyComma(apyData.apy, 0)) + '%') : '—' }}-->
+                            {{ apyData ? $utils.formatMoneyComma(last30DayApy, 0) + '%' : '—' }}
                         </label>
                         <label class="apy ml-3">
                           30-DAY APY
@@ -37,8 +36,7 @@
                                 Insurance premiums
                               </label>
                               <label class="card-info-value mt-2 value-info">
-                                {{ apyData ? $utils.formatMoneyComma(apyData.apy, 0) + '%' : '—' }}
-<!--                                {{ apyData ? ((apyData.apy > 500 ? '>500' : $utils.formatMoneyComma(apyData.apy, 0)) + '%') : '—' }}-->
+                                {{ apyData ? $utils.formatMoneyComma(last30DayApy, 0) + '%' : '—' }}
                               </label>
                               <div class="tooltip-info">
                                 <Tooltip :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
@@ -159,6 +157,7 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import { insuranceApiService } from "@/services/insurance-api-service";
 import Tooltip from "@/components/common/element/Tooltip.vue";
 import {ovnApiService} from "@/services/ovn-api-service";
+import moment from "moment";
 
 export default {
     name: "InsuranceCard",
@@ -170,6 +169,15 @@ export default {
 
     props: {},
 
+    data() {
+        return {
+            apyData: null,
+            isLoaded: false,
+            ovnPrice: 0,
+            payoutsData: [],
+        }
+    },
+
     computed: {
         ...mapGetters("accountData", ["insuranceBalance"]),
         // ...mapGetters("supplyData", ["totalInsuranceSupply"]),
@@ -177,14 +185,30 @@ export default {
         ...mapGetters("insuranceData", ['insuranceRedemptionData']),
         ...mapGetters("network", ["appApiUrl", "networkId", "networkName", "getParams"]),
         ...mapGetters('magicEye', ['dataHidden']),
-    },
 
-     data() {
-        return {
-            apyData: null,
-            isLoaded: false,
-            ovnPrice: 0,
-        }
+        payouts: function () {
+            let data = this.payoutsData;
+            return data ? data.sort(
+                function(o1,o2){
+                    return moment(o2.date).isBefore(moment(o1.date)) ? -1 : moment(o2.date).isAfter(moment(o1.date)) ? 1 : 0;
+                }
+            ) : null;
+        },
+
+        last30DayApy: function () {
+            if (!this.payouts) {
+                return null
+            }
+
+            // get 30 first payouts and avg apy
+            // if payouts less than 30, get all payouts and avg apy
+            let payouts = this.payouts.length > 30 ? this.payouts.slice(0, 30) : this.payouts;
+            let sum = 0;
+            for (let i = 0; i < payouts.length; i++) {
+                sum += payouts[i].apy;
+            }
+            return sum / payouts.length;
+        },
     },
 
     watch: {
@@ -192,6 +216,7 @@ export default {
 
     mounted() {
         this.loadApyDataInfo()
+        this.loadPayouts()
         this.loadOvnPrice();
     },
 
@@ -228,6 +253,23 @@ export default {
             .catch(e => {
                 console.error('Error load avg apy info for insurance card', e);
                 this.isLoaded = true;
+            })
+
+        },
+        loadPayouts() {
+            let url = "https://api.overnight.fi/optimism/usd+";
+            insuranceApiService.getPayouts(url)
+            .then(data => {
+                console.log('Load payouts info for insurance card', data);
+                this.payoutsData = data.sort(
+                    function (o1, o2) {
+                        return moment(o1.date).isBefore(moment(o2.date)) ? -1 : moment(o1.date).isAfter(moment(o2.date)) ? 1 : 0;
+                    }
+                );
+                console.log('Sorted payouts info for insurance card', this.payoutsData)
+            })
+            .catch(e => {
+                console.error('Error load payouts info for insurance card', e);
             })
 
         },

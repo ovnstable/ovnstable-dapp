@@ -4,7 +4,7 @@
             <v-col cols="6">
                 <v-row justify="start" align="start">
                     <label class="chart-title ml-5">
-                        USD+ Insurance
+                        Insurance
                     </label>
                 </v-row>
             </v-col>
@@ -254,7 +254,7 @@ export default {
                 minValue = 0;
             }
 
-            let chartColor = this.$colorUtils.hexToRgb('#7944DA');
+            let chartColor = this.$colorUtils.hexToRgb('#FF0420');
 
             let seriesList = [];
 
@@ -326,7 +326,7 @@ export default {
                 stroke: {
                     curve: 'straight',
                     width: this.isMobile ? 1 : 2,
-                    colors: ['#7944DA', "#22ABAC"],
+                    colors: ['#FF0420', "#22ABAC"],
                 },
 
                 xaxis: {
@@ -374,7 +374,7 @@ export default {
                     show: false,
                 },
 
-                colors: this.light ? [`rgba(${chartColor.r}, ${chartColor.g}, ${chartColor.b}, 0.3)`, 'rgba(34, 171, 172, 0.3)'] : ['#7944DA', '#0d4444'],
+                colors: this.light ? [`rgba(${chartColor.r}, ${chartColor.g}, ${chartColor.b}, 0.3)`, 'rgba(34, 171, 172, 0.3)'] : ['#FF0420', '#0d4444'],
 
                 theme: {
                     mode: this.light ? 'light' : 'dark',

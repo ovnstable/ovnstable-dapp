@@ -321,7 +321,13 @@ const actions = {
                 chainName: 'optimism'
             }
 
-            let date = await web3.contracts.insurance[insurance.chainName + '_exchanger'].methods.withdrawRequests(account).call();
+            let contract = web3.contracts.insurance[insurance.chainName + '_exchanger']
+            if (!contract) {
+                console.log('Insurance/redemptionCheck: contract not found')
+                return;
+            }
+
+            let date = await contract.methods.withdrawRequests(account).call();
             try {
                 date = parseFloat(date);
             } catch (e) {

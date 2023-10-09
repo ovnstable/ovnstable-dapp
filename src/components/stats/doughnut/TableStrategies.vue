@@ -34,7 +34,7 @@
             <td class="table-label-don text-left">
                 <v-row>
                     <label class="link-label link-name align-center" :title="item.fullName">
-                        {{ networkName === 'arbitrum' ? item.label.replace('USDC', 'USDC.e') : item.label }}
+                        {{ networkName === 'arbitrum' ? item.label.replace('USDC', 'USDC.e').replace(/null/g, '') : item.label.replace(/null/g, '') }}
                     </label>
                     <v-spacer></v-spacer>
                     <label class="link-label mr-6" v-if="!$wu.isFull()">

@@ -631,7 +631,7 @@ export const pool = {
                 if (featuredPools.length > 0) {
                     this.topPool = featuredPools[0];
                 } else {
-                    const topByApr = this.pools.filter(pool => pool.chain == this.networkId && pool.tvl > 50000);
+                    const topByApr = this.pools.filter(pool => pool.chain == this.networkId && (pool.tvl > 100000 || pool.promoted));
                     topByApr.sort((a, b) => b.apr - a.apr);
 
                     if (topByApr.length > 0) {

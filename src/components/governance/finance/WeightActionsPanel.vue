@@ -162,10 +162,19 @@ export default {
             console.log("difference and threshold: ", difference, positiveSenseThreshold, negativeSenseThreshold);
 
             if (difference <= positiveSenseThreshold && difference >= negativeSenseThreshold) {
-                if (difference > 0) {
-                    array[0].targetWeight = new BigNumber(array[0].targetWeight).plus(difference).toNumber();
-                } else {
-                    array[0].targetWeight = new BigNumber(array[0].targetWeight).minus(Math.abs(difference)).toNumber();
+                for (let i = 0; i < array.length; i++) {
+                    let item = array[i];
+                    if (difference > 0) {
+                        if (item.netAssetValue > 0 || item.enabled || item.targetWeight > 0 || item.enabledReward) {
+                            item.targetWeight = new BigNumber(item.targetWeight).plus(difference).toNumber();
+                            break;
+                        }
+                    } else {
+                        if (item.netAssetValue > 0 || item.enabled || item.targetWeight > 0 || item.enabledReward) {
+                            item.targetWeight = new BigNumber(item.targetWeight).minus(Math.abs(difference)).toNumber();
+                            break;
+                        }
+                    }
                 }
             }
 

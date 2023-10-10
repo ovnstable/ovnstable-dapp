@@ -36,11 +36,11 @@
               </SlippageError>
             </div>
             <div v-else-if="errorViewType && errorViewType.includes('odos')">
-                <SlippageError
+                <OdosError
                     :error-msg="errorText"
                     :error-code="errorCode"
                     :copy-error="copyErrorToClipboard">
-                </SlippageError>
+                </OdosError>
             </div>
             <div v-else>
               <UndefinedError
@@ -59,10 +59,12 @@ import UndefinedError from "@/components/common/modal/action/errors/UndefinedErr
 import RpcError from "@/components/common/modal/action/errors/RpcError.vue";
 import GasError from "@/components/common/modal/action/errors/GasError.vue";
 import SlippageError from "@/components/common/modal/action/errors/SlippageError.vue";
+import OdosError from "@/components/common/modal/action/errors/OdosError.vue";
 
 export default {
     name: "ErrorModal",
     components: {
+        OdosError,
         SlippageError,
       GasError,
       RpcError,

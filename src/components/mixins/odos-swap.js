@@ -569,7 +569,12 @@ export const odosSwap = {
                 }).catch(e => {
                     console.log("Swap request error: ", e)
                     this.closeWaitingModal();
-                    this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e}, );
+                    if (e && e.message && e.message.includes('path')) {
+                        this.showErrorModalWithMsg({errorType: 'odos-path', errorMsg: e}, );
+                        return;
+                    }
+
+                    this.showErrorModalWithMsg({errorType: 'odos', errorMsg: e}, );
                 })
         },
         oldSwapRequest(requestData) {
@@ -581,7 +586,7 @@ export const odosSwap = {
                  }).catch(e => {
                      console.log("Swap request error: ", e)
                      this.closeWaitingModal();
-                     this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e}, );
+                     this.showErrorModalWithMsg({errorType: 'odos', errorMsg: e}, );
                  })
         },
 

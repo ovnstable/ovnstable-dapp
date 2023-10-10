@@ -14,6 +14,10 @@ export function getErrorObject(e) {
         return {code: e.status, message: getErrorMessage({code: e.status, message: e.message})};
     }
 
+    if (e.detail) {
+        return {code: 0, message: e.detail};
+    }
+
     console.error('Unknown api error: ', e);
 
     if (e.message) {

@@ -35,6 +35,13 @@
                         :copy-error="copyErrorToClipboard">
               </SlippageError>
             </div>
+            <div v-else-if="errorViewType && errorViewType.includes('odos')">
+                <SlippageError
+                    :error-msg="errorText"
+                    :error-code="errorCode"
+                    :copy-error="copyErrorToClipboard">
+                </SlippageError>
+            </div>
             <div v-else>
               <UndefinedError
                         :error-msg="errorMsg"
@@ -111,6 +118,11 @@ export default {
 
             if (this.errorType === 'slippage') {
                 this.errorViewType = 'slippage'
+                return;
+            }
+
+            if (this.errorType.includes('odos')) {
+                this.errorViewType = 'odos'
                 return;
             }
 

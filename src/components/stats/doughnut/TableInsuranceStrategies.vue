@@ -68,7 +68,9 @@
             <td class="table-label-don text-left" :colspan="minimized ? 3 : 1">
                 <b>${{ $utils.formatMoney(getTotal(), 2) }}</b>
             </td>
-            <td class="table-label-don" v-if="!minimized"></td>
+            <td class="table-label-don">
+                <b>{{ $utils.formatMoney(avgByPremiums, 2) }}%</b>
+            </td>
             <td class="table-label-don" v-if="!minimized"></td>
         </tr>
 
@@ -142,6 +144,18 @@ export default {
                     sum += dataItem.riskFactor
                 });
             return sum;
+        },
+        avgByPremiums() {
+            let avgByPremiums = 0;
+            for (let i = 0; i <  this.data.length ; i++) {
+                let item = this.data[i];
+                let percent = this.getPercent(item);
+                let avgPremium = percent * (item.riskFactor / 100);
+                avgByPremiums += avgPremium;
+            }
+            // this.getPercent(item)
+
+            return avgByPremiums.toFixed(2);
         }
     },
 

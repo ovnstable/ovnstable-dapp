@@ -135,6 +135,10 @@ export default {
                     return require('@/assets/icon/mintedUsdt.png');
                 case 'redeemUsdtPlus':
                     return require('@/assets/icon/redeemedUsdt.png');
+                case 'mintEthPlus':
+                    return require('@/assets/icon/mintedEth.png');
+                case 'redeemEthPlus':
+                    return require('@/assets/icon/redeemedEth.png');
                 case 'wrapUsdPlus':
                     return require('@/assets/icon/wrap.svg');
                 case 'unwrapUsdPlus':
@@ -173,7 +177,7 @@ export default {
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addwUsdPlusToken', 'addEthPlusToken', 'addEtsToken', 'addInsuranceToken']),
         ...mapActions('swapModal', ['closeSwapModal']),
         ...mapActions('wrapModal', ['closeWrapModal']),
         ...mapActions('investModal', ['closeInvestModal']),
@@ -182,6 +186,7 @@ export default {
 
 
         addTokenAction() {
+            console.log(this.successAction)
             switch (this.successAction) {
                 case 'mintUsdPlus':
                 case 'redeemUsdPlus':
@@ -203,6 +208,12 @@ export default {
                 case 'mintUsdtPlus':
                 case 'redeemUsdtPlus':
                     this.addUsdtPlusToken();
+                    // this.trackClick({action: 'add-usdtplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add usdtplus token', value: 1 });
+                    break;
+
+                case 'mintEthPlus':
+                case 'redeemEthPlus':
+                    this.addEthPlusToken();
                     // this.trackClick({action: 'add-usdtplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add usdtplus token', value: 1 });
                     break;
                 case 'wrapUsdPlus':

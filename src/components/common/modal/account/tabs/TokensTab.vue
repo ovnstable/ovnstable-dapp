@@ -26,6 +26,13 @@
                 <label class="ml-2 coin-btn-label">USDT+</label>
             </v-btn>
 
+            <v-btn v-if="showEth" class="coin-btn ma-1" @click="addEthPlusToken">
+                <div class="coin-img">
+                    <v-img :src="require('@/assets/currencies/ethPlus.svg')"/>
+                </div>
+                <label class="ml-2 coin-btn-label">ETH+</label>
+            </v-btn>
+
             <v-btn v-if="showWrap"  class="coin-btn ma-1" @click="addwUsdPlusToken">
                 <div class="coin-img">
                     <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
@@ -72,6 +79,10 @@ export default {
           return this.networkId === 56 || this.networkId === 59144;
         },
 
+        showEth: function () {
+            return this.networkId === 42161;
+        },
+
     },
 
     watch: {
@@ -81,7 +92,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addEthPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
     },
 }
 </script>

@@ -6,10 +6,10 @@
                 <template v-if="$wu.isMobile()">
                     <v-col cols="12" align="center" class="mt-5">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
-                            Swap In
+                            Mint
                         </v-btn>
                         <v-btn class="header-btn btn-outlined" @click="swapButtonOut">
-                            Swap Out
+                            Redeem
                         </v-btn>
                     </v-col>
                 </template>
@@ -33,20 +33,20 @@
 
 
         <v-row v-if="isCollateralLoading">
-          <v-row align="center" justify="center" class="py-15">
-            <v-progress-circular
-                width="2"
-                size="24"
-                color="#8FA2B7"
-                indeterminate
-            ></v-progress-circular>
-          </v-row>
+            <v-row align="center" justify="center" class="py-15">
+                <v-progress-circular
+                    width="2"
+                    size="24"
+                    color="#8FA2B7"
+                    indeterminate
+                ></v-progress-circular>
+            </v-row>
         </v-row>
         <v-row v-else class="ma-0 info-card-container mt-3" justify="start" align="start">
             <v-col class="info-card-body-bottom">
                 <v-row align="start" justify="start" class="ma-0">
                     <label class="section-title-label">
-                      ETH+ collateral assets
+                        ETH+ collateral assets
                     </label>
                 </v-row>
 
@@ -78,20 +78,20 @@
         </v-row>
 
         <v-row v-if="isCurrentTotalDataLoading">
-          <v-row align="center" justify="center" class="py-15">
-            <v-progress-circular
-                width="2"
-                size="24"
-                color="#8FA2B7"
-                indeterminate
-            ></v-progress-circular>
-          </v-row>
+            <v-row align="center" justify="center" class="py-15">
+                <v-progress-circular
+                    width="2"
+                    size="24"
+                    color="#8FA2B7"
+                    indeterminate
+                ></v-progress-circular>
+            </v-row>
         </v-row>
         <v-row v-else class="ma-0 info-card-container mt-3" justify="start" align="start">
             <v-col class="info-card-body-bottom">
                 <v-row align="center" justify="start" class="ma-0">
                     <label class="section-title-label">
-                      ETH+ portfolio
+                        ETH+ portfolio
                     </label>
                 </v-row>
                 <v-row class="ma-0 mt-5 align-center">
@@ -99,7 +99,9 @@
                         <v-img :src="require('@/assets/icon/alert-circle-outline.svg')"/>
                     </div>
                     <label class="risk-text ml-1">
-                        By using our products, you assume the risk of the protocols integrated into our collateral. See more about risks in <a class="link-to-docs" href="https://docs.overnight.fi/advanced/terms-of-service">our docs.</a>
+                        By using our products, you assume the risk of the protocols integrated into our collateral. See
+                        more about risks in <a class="link-to-docs"
+                                               href="https://docs.overnight.fi/advanced/terms-of-service">our docs.</a>
                     </label>
                 </v-row>
 
@@ -131,6 +133,7 @@
                             :total-value="totalValue"
                             :size="!$wu.isFull() ? 200 : 300"
                             :network-name="tab"
+                            asset-type="eth+"
                         />
                     </v-col>
                 </v-row>
@@ -138,12 +141,14 @@
         </v-row>
 
         <div v-if="!isCurrentTotalDataLoading" class="ma-0 info-card-container d-flex mt-3">
-            <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
-                <v-img class="currency" :src="require('@/assets/currencies/DAI+.svg')" />
+            <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'">
+                <v-img class="currency" :src="require('@/assets/currencies/ETH+.svg')"/>
             </div>
-            <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'" >
+            <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'">
                 <label class="section-title-label label-about">About ETH+</label>
-                <label class="section-text">ETH+ is the equivalent of USD+, pegged to ETH 1:1. ETH+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on Optimism. It cannot be minted separately.</label>
+                <label class="section-text">
+                    ETH+ is the equivalent of USD+, pegged to ETH 1:1, instantly mintable and redeemable in ETH. 100% collateralized with delta-neutral and other strategies based on the best protocols.
+                </label>
             </div>
         </div>
 
@@ -152,7 +157,7 @@
                 <v-row align="center" :class="$wu.isMobile() ? 'ma-2' : 'ma-5'"
                        @click="openLink(explorerLink)">
                     <div>
-                        <v-img class="currency-dai" :src="require('@/assets/currencies/ETH+.svg')" />
+                        <v-img class="currency-dai" :src="require('@/assets/currencies/ETH+.svg')"/>
                     </div>
                     <label class="currency-text ml-2">ETH+ token address</label>
 
@@ -193,27 +198,27 @@ export default {
     },
 
     data: () => ({
-      tab: 'optimism',
-      isCurrentTotalDataLoading: true,
-      isCollateralLoading: true,
+        tab: 'optimism',
+        isCurrentTotalDataLoading: true,
+        isCollateralLoading: true,
 
-      collateralData: null,
-      currentTotalData: null,
-      totalValue: 0
+        collateralData: null,
+        currentTotalData: null,
+        totalValue: 0
     }),
 
     computed: {
         ...mapGetters("network", ['networkId', 'networkName', 'apiUrl', 'getParams']),
         ...mapGetters('etsAction', ['etsList']),
 
-        tabNetworkName: function() {
+        tabNetworkName: function () {
             let params;
             params = this.getParams(this.tab)
 
             return params.networkName;
         },
 
-        activeTabArbitrum: function() {
+        activeTabArbitrum: function () {
             return {
                 'tab-button': this.tab === 'arbitrum',
                 'tab-button-in-active': this.tab !== 'arbitrum',
@@ -230,12 +235,12 @@ export default {
         },
 
         contractAddress: function () {
-          if (this.tabNetworkName === 'arbitrum') {
-            return '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
-          }
+            if (this.tabNetworkName === 'arbitrum') {
+                return '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
+            }
 
-          console.error("Not found networkId type when return dai contract address")
-          return null;
+            console.error("Not found networkId type when return dai contract address")
+            return null;
         },
     },
 
@@ -254,7 +259,8 @@ export default {
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName);
             // this.loadData();
-        } if (this.$route.query.tabName) {
+        }
+        if (this.$route.query.tabName) {
             this.setTab(this.$route.query.tabName);
             // this.loadData();
         }
@@ -284,81 +290,82 @@ export default {
             });
         },
 
-      openLink(url) {
-          window.open(url, '_blank').focus();
-      },
+        openLink(url) {
+            window.open(url, '_blank').focus();
+        },
 
-      shortAddress(address) {
-          if (address) {
-              return address.substring(0, 5) + '...' + address.substring(address.length - 4);
-          } else {
-              return null;
-          }
-      },
+        shortAddress(address) {
+            if (address) {
+                return address.substring(0, 5) + '...' + address.substring(address.length - 4);
+            } else {
+                return null;
+            }
+        },
 
-      loadCurrentTotalData() {
-        this.isCurrentTotalDataLoading = true;
+        loadCurrentTotalData() {
+            this.isCurrentTotalDataLoading = true;
 
-        strategiesApiService.getStrategies(this.apiUrl + `/${this.tabNetworkName}/eth+`)
-          .then(data => {
-            let strategies = data;
-            strategies.sort((a,b) => b.netAssetValue - a.netAssetValue);
+            strategiesApiService.getStrategies(this.apiUrl + `/${this.tabNetworkName}/eth+`)
+                .then(data => {
+                    console.log("Strategies eth+: ", data)
+                    let strategies = data;
+                    strategies.sort((a, b) => b.netAssetValue - a.netAssetValue);
 
-            let colors = [
-              "#FCCA46",
-              "#FE7F2D",
-              "#3D8DFF",
-              "#22ABAC",
-              "#B22174",
-              "#2775CA",
-              "#26A17B",
-              "#23DD00",
-              "#6E56C4",
-              "#002868",
-              "#C8DE42",
-              "#3FEFDA",
-              "#DE42CE"
-            ];
+                    let colors = [
+                        "#FCCA46",
+                        "#FE7F2D",
+                        "#3D8DFF",
+                        "#22ABAC",
+                        "#B22174",
+                        "#2775CA",
+                        "#26A17B",
+                        "#23DD00",
+                        "#6E56C4",
+                        "#002868",
+                        "#C8DE42",
+                        "#3FEFDA",
+                        "#DE42CE"
+                    ];
 
-            this.currentTotalData = [];
-            this.totalValue = 0;
+                    this.currentTotalData = [];
+                    this.totalValue = 0;
 
-              for (let i = 0; i < strategies.length; i++) {
-                  let element = strategies[i];
-                  let currentTotalDataElement = {
-                      type: element.type,
-                      label: '',
-                      fullName: element.fullName,
-                      value: element.netAssetValue,
-                      liquidationValue: element.liquidationValue,
-                      color: colors[i],
-                      link: null
-                  }
+                    for (let i = 0; i < strategies.length; i++) {
+                        let element = strategies[i];
+                        let currentTotalDataElement = {
+                            type: element.type,
+                            label: '',
+                            fullName: element.fullName,
+                            value: element.netAssetValue,
+                            liquidationValue: element.liquidationValue,
+                            color: colors[i],
+                            link: null
+                        }
 
-                  if (element.type === 'CORE' || element.type === 'SMM') {
-                      currentTotalDataElement.label = element.name
-                      currentTotalDataElement.link = (element.address || element.explorerAddress) ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + (element.explorerAddress ? element.explorerAddress : element.address)) : ''
-                  }
+                        if (element.type === 'CORE' || element.type === 'SMM') {
+                            currentTotalDataElement.label = element.name
+                            currentTotalDataElement.link = (element.address || element.explorerAddress) ? (process.env.VUE_APP_DEBANK_EXPLORER + 'profile/' + (element.explorerAddress ? element.explorerAddress : element.address)) : ''
+                        }
 
-                  if (element.type === 'ETS') {
-                      let etsNameUp = this.getEtsNameUp(element)
-                      currentTotalDataElement.label = `ETS ${etsNameUp}`
-                      let etsName = this.getEtsName(element)
-                      currentTotalDataElement.link = (process.env.VUE_APP_UD_REDIRECT_URI + 'ets/' + etsName)
-                  }
+                        if (element.type === 'ETS') {
+                            let etsNameUp = this.getEtsNameUp(element)
+                            currentTotalDataElement.label = `ETS ${etsNameUp}`
+                            let etsName = this.getEtsName(element)
+                            currentTotalDataElement.link = (process.env.VUE_APP_UD_REDIRECT_URI + 'ets/' + etsName)
+                        }
 
-                  this.currentTotalData.push(currentTotalDataElement);
-                  this.totalValue += element.netAssetValue ? element.netAssetValue : 0;
-              }
+                        this.currentTotalData.push(currentTotalDataElement);
+                        this.totalValue += element.netAssetValue ? element.netAssetValue : 0;
+                    }
 
-            this.isCurrentTotalDataLoading = false;
-          })
-          .catch(e => {
-            console.error("Error while adding stablecoins to list: " + e);
-            this.isCurrentTotalDataLoading = false;
-          })
+                    this.isCurrentTotalDataLoading = false;
+                })
+                .catch(e => {
+                    console.error("Error while adding stablecoins to list: " + e);
+                    this.isCurrentTotalDataLoading = false;
+                })
 
-      },
+        },
 
         getEtsName(element) {
             for (let i = 0; i < this.etsList.length; i++) {
@@ -385,55 +392,55 @@ export default {
             }
         },
 
-      loadCollateralData() {
-          this.isCollateralLoading = true;
+        loadCollateralData() {
+            this.isCollateralLoading = true;
 
-        collateralApiService.getCollateralData(this.apiUrl + `/${this.tabNetworkName}/eth+`)
-        .then(data => {
-          let stablecoinList = data;
-          stablecoinList.sort((a,b) => b.netAssetValue - a.netAssetValue);
-          stablecoinList = stablecoinList.filter(el => el.netAssetValue > 0);
+            collateralApiService.getCollateralData(this.apiUrl + `/${this.tabNetworkName}/eth+`)
+                .then(data => {
+                    let stablecoinList = data;
+                    stablecoinList.sort((a, b) => b.netAssetValue - a.netAssetValue);
+                    stablecoinList = stablecoinList.filter(el => el.netAssetValue > 0);
 
-          let colors = [
-            "#2775CA",
-            "#26A17B",
-            "#FCCA46",
-            "#6E56C4",
-            "#002868",
-            "#26A17B",
-            "#23DD00",
-            "#3D8DFF",
-            "#FE7F2D",
-            "#B22174"
-          ];
+                    let colors = [
+                        "#2775CA",
+                        "#26A17B",
+                        "#FCCA46",
+                        "#6E56C4",
+                        "#002868",
+                        "#26A17B",
+                        "#23DD00",
+                        "#3D8DFF",
+                        "#FE7F2D",
+                        "#B22174"
+                    ];
 
-          this.collateralData = [];
-          for (let i = 0; i < stablecoinList.length; i++) {
-            let element = stablecoinList[i];
+                    this.collateralData = [];
+                    for (let i = 0; i < stablecoinList.length; i++) {
+                        let element = stablecoinList[i];
 
-            try {
-              this.collateralData.push(
-                  {
-                    label: element.id.tokenName,
-                    value: element.netAssetValue,
-                    link: element.tokenAddress ? element.tokenAddress : '',
-                    color: colors[i],
-                    logo: require('@/assets/currencies/stablecoins/' + element.id.tokenName + '.png')
-                  }
-              );
-              console.log("Token name : ", element.id.tokenName);
-            } catch (e) {
-              console.error("Error while adding stablecoin to list: " + e);
-            }
-          }
+                        try {
+                            this.collateralData.push(
+                                {
+                                    label: element.id.tokenName,
+                                    value: element.netAssetValue,
+                                    link: element.tokenAddress ? element.tokenAddress : '',
+                                    color: colors[i],
+                                    logo: require('@/assets/currencies/stablecoins/' + element.id.tokenName + '.png')
+                                }
+                            );
+                            console.log("Token name : ", element.id.tokenName);
+                        } catch (e) {
+                            console.error("Error while adding stablecoin to list: " + e);
+                        }
+                    }
 
-          this.isCollateralLoading = false;
-        })
-        .catch(e => {
-          console.log("Error Strategy Weights: ", e);
-          this.isCollateralLoading = false;
-        })
-      },
+                    this.isCollateralLoading = false;
+                })
+                .catch(e => {
+                    console.log("Error Strategy Weights: ", e);
+                    this.isCollateralLoading = false;
+                })
+        },
     }
 }
 </script>
@@ -461,7 +468,7 @@ export default {
     }
 
     .currency-dai {
-        width: 30px ;
+        width: 30px;
         height: 30px;
     }
 
@@ -616,13 +623,7 @@ export default {
     }
 }
 
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+@media only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px), only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px), only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px), only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px), only screen and (                min-resolution: 192dpi) and (min-width: 1300px), only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
     .section-title-label {
         font-style: normal;
         font-weight: 400;

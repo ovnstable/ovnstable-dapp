@@ -1,6 +1,7 @@
 import UsdPlusImage from "@/assets/usdPlus.json";
 import DaiPlusImage from "@/assets/daiPlus.json";
 import UsdtPlusImage from "@/assets/usdtPlus.json";
+import EthPlusImage from "@/assets/ethPlus.json";
 import WrappedUsdPlusImage from "@/assets/wUsdPlus.json";
 import OptimismInsurance from "@/assets/optimism_insurance.json";
 import OvnImage from "@/assets/ovn.json";
@@ -98,6 +99,35 @@ const actions = {
             })
             .catch(console.error)
     },
+
+    async addEthPlusToken({commit, dispatch, getters, rootState}) {
+        let option = {
+            address: rootState.web3.contracts.ethPlus.options.address,
+            symbol: process.env.VUE_APP_ETH_TOKEN_NAME,
+            decimals: 18,
+            image: EthPlusImage.image,
+        };
+
+        console.log('addEthPlusToken: ', option)
+
+        await rootState.web3.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: option,
+                },
+            })
+            .then((success) => {
+                if (success) {
+                    console.log('Eth+ successfully added to wallet!')
+                } else {
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
 
 
     async addwUsdPlusToken({commit, dispatch, getters, rootState}) {

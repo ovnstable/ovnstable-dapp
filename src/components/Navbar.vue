@@ -308,6 +308,71 @@
                 </div>
             </template>
 
+            <template>
+                <div
+                    @click="toggleEthPlus(!isShowEth)"
+                    class="single-item pa-1 list-item-hover mb-1"
+                >
+                    <div class="navbar-page-link pl-1">
+                        <svg
+                            width="22"
+                            height="24"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                v-bind:fill="usdtPlusIconColor"
+                                d="M2.98715 17.0129H1.42871V12.3376H6.10404V13.896H4.17157C5.42611 15.7739 7.56897 17.0129 10.0001 17.0129C11.8601 17.0129 13.6439 16.274 14.9591 14.9588C16.2743 13.6436 17.0131 11.8599 17.0131 9.9999H18.5716C18.5716 14.7376 14.7378 18.5713 10.0001 18.5713C7.10144 18.5713 4.5378 17.1298 2.98715 14.9324V17.0129ZM1.42871 9.9999C1.42871 5.26223 5.26248 1.42847 10.0001 1.42847C12.8988 1.42847 15.4625 2.87003 17.0131 5.06743V2.98691H18.5716V7.66223H13.8962V6.10379H15.8287C14.5742 4.22587 12.4313 2.98691 10.0001 2.98691C8.14018 2.98691 6.3564 3.72577 5.04121 5.04097C3.72602 6.35616 2.98715 8.13994 2.98715 9.9999H1.42871Z"/>
+                            <path
+                                v-bind:fill="usdtPlusIconColor"
+                                d="M10.8243 14.9999V8.11763H13.1603V6.42847H6.42871V8.11763H8.76466V14.9999H10.8243Z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <label
+                            :class="selectedTab.startsWith('ethplus_') ? 'selected-page' : ''"
+                            class="navbar-page-label pl-2"
+                        >
+                            ETH+
+                        </label>
+                    </div>
+                    <div class="ml-12">
+                        <v-icon color="var(--secondary-gray-text)" >
+                            {{ isShowEth ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
+                        </v-icon>
+                    </div>
+                </div>
+
+                <div
+                    @click="ethStatsClick"
+                    v-if="isShowEth"
+                    :class="selectedTab === 'ethplus_performance' ? 'selected-page-item' : ''"
+                    class="list-item-hover mb-1"
+                >
+                    <div
+                        :class="selectedTab === 'ethplus_performance' ? 'selected-page' : ''"
+                        class="navbar-list-label pa-1 pl-11"
+                    >
+                        Performance
+                    </div>
+                </div>
+
+                <div
+                    @click="ethCollateralClick"
+                    v-if="isShowEth"
+                    :class="selectedTab === 'ethplus_collateral' ? 'selected-page-item' : ''"
+                    class="list-item-hover mb-1"
+                >
+                    <div
+                        :class="selectedTab === 'ethplus_collateral' ? 'selected-page' : ''"
+                        class="navbar-list-label pa-1 pl-11"
+                    >
+                        Collateral
+                    </div>
+                </div>
+            </template>
+
             <div class="navbar-list-divider mt-1"></div>
             <label class="navbar-list-header pl-2">
                 OVN TOKEN
@@ -669,20 +734,16 @@
 <script>
 
 import { mapActions, mapGetters, mapMutations } from "vuex";
+import {menu} from "@/components/mixins/menu";
 
 export default {
     name: 'Navbar',
+    mixins: [menu],
 
     components: {
     },
 
     data: () => ({
-        isShowUsd: false,
-        isShowDai: false,
-        isShowUsdt: false,
-        isShowInsurance: false,
-        isShowEts: false,
-
         iconColor: null,
 
         isShowSwipeNotification: false
@@ -804,145 +865,6 @@ export default {
             window.open(url, '_self').focus();
         },
 
-        goToActionByPath(path) {
-            this.$router.push({
-                path: path
-            });
-        },
-
-        featuredClick() {
-            this.selectTab('featured');
-            this.goToActionByPath('/featured');
-        },
-
-
-        buyOvnClick() {
-            this.selectTab('buy-ovn');
-            this.goToActionByPath('/buy-ovn');
-        },
-
-        provideLpClick() {
-            this.selectTab('provide-lp');
-            this.goToActionByPath('/provide-lp');
-        },
-
-        insuranceClick() {
-            this.selectTab('insurance');
-            this.goToActionByPath('/insurance');
-        },
-
-        insuranceStatsClick() {
-            this.selectTab('insurance_performance');
-            this.goToActionByPath('/insurance/network/optimism');
-            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
-        },
-
-        insuranceAboutClick() {
-            this.selectTab('insurance_about');
-            this.goToActionByPath('/insurance');
-        },
-
-
-        insuranceCollateralClick() {
-            this.selectTab('insurance_collateral');
-            // this.goToActionByPath('/insurance/collateral/optimism');
-            this.goToActionByPath('/insurance/collateral/optimism');
-            //
-            // this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
-        },
-
-        swapOdosClick() {
-            this.selectTab('swap-odos');
-            this.goToActionByPath('/swap', {tabName: 'swap-odos'});
-
-            try {
-                this.trackClick({action: 'click_menu_swap', event_category: 'Click button', event_label: 'Click swap menu button' });
-            } catch (e) {
-                console.error("Track error:", e);
-            }
-        },
-        swipeOdosClick() {
-            this.selectTab('swipe-odos');
-            this.goToActionByPath('/swipe', {tabName: 'swipe-odos'});
-
-            try {
-                this.trackClick({action: 'click_menu_swipe', event_category: 'Click button', event_label: 'Click swipe menu button' });
-            } catch (e) {
-                console.error("Track error:", e);
-            }
-
-            this.checkIsNotified(true);
-        },
-        bridgeClick() {
-            this.selectTab('bridge');
-            this.goToActionByPath('/bridge', {tabName: 'bridge'});
-
-            try {
-                this.trackClick({action: 'click_menu_bridge', event_category: 'Click button', event_label: 'Click bridge menu button' });
-            } catch (e) {
-                console.error("Track error:", e);
-            }
-
-            this.checkIsNotified(true);
-        },
-
-        dashBoardClick() {
-            this.selectTab('dashboard');
-            this.goToActionByPath('/dashboard');
-            // this.trackClick({action: 'dashboard-click', event_category: 'View Page', event_label: 'Open dashboard page', value: 1 });
-        },
-
-        collateralClick() {
-            this.selectTab('usdplus_collateral');
-            this.goToActionByPath('/collateral');
-            // this.trackClick({action: 'collateral-click', event_category: 'View Page', event_label: 'Open collateral page', value: 1 });
-        },
-
-        daiCollateralClick() {
-            this.selectTab('daiplus_collateral');
-            this.goToActionByPath('/collateral/dai');
-            // this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
-        },
-
-        usdtCollateralClick() {
-            this.selectTab('usdtplus_collateral');
-            this.goToActionByPath('/collateral/usdt');
-            // this.trackClick({action: 'usdt-collateral-click', event_category: 'View Page', event_label: 'Open usdt collateral page', value: 1 });
-        },
-
-        usdPlusPoolsClick() {
-            this.selectTab('pools');
-            this.goToActionByPath('/pools');
-
-            try {
-                this.trackClick({action: 'click_menu_pools', event_category: 'Click button', event_label: 'Click pools menu button' });
-            } catch (e) {
-                console.error("Track error:", e);
-            }
-        },
-
-        statsClick() {
-            this.selectTab('usdplus_performance');
-            this.goToActionByPath('/stats');
-            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open stats page', value: 1 });
-        },
-
-        daiStatsClick() {
-            this.selectTab('daiplus_performance');
-            this.goToActionByPath('/stats/dai');
-            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
-        },
-
-        usdtStatsClick() {
-            this.selectTab('usdtplus_performance');
-            this.goToActionByPath('/stats/usdt');
-            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
-        },
-
-        aboutEtsClick() {
-            this.selectTab('about');
-            this.goToActionByPath('/ets_about');
-        },
 
         wrapClick() {
             this.showWrapView();
@@ -950,70 +872,8 @@ export default {
             // this.trackClick({action: 'wrap-click', event_category: 'Wrap', event_label: 'Open wrap modal', value: 1 });
         },
 
-        toggleTheme(mode) {
-            if ((mode === 'light' && !this.light) || (mode === 'dark' && this.light)) {
-                this.switchTheme();
-                // this.trackClick({action: 'toggle-theme', event_category: 'Theme', event_label: 'Switch theme', value: 1 });
-            }
-        },
-
         redemptionRequestAction() {
             this.showRedemptionRequestModal();
-        },
-
-        toggleUsdPlus(isShow) {
-            if (isShow) {
-                this.toggleEts(false);
-                this.toggleDaiPlus(false);
-                this.toggleUsdtPlus(false);
-                this.toggleInsurance(false);
-            }
-
-            this.isShowUsd = isShow;
-        },
-
-        toggleDaiPlus(isShow) {
-            if (isShow) {
-                this.toggleEts(false);
-                this.toggleUsdPlus(false);
-                this.toggleUsdtPlus(false);
-                this.toggleInsurance(false);
-            }
-
-            this.isShowDai = isShow;
-        },
-
-        toggleUsdtPlus(isShow) {
-            if (isShow) {
-                this.toggleEts(false);
-                this.toggleUsdPlus(false);
-                this.toggleDaiPlus(false);
-                this.toggleInsurance(false);
-            }
-
-            this.isShowUsdt = isShow;
-        },
-
-        toggleInsurance(isShow) {
-            if (isShow) {
-                this.toggleEts(false);
-                this.toggleUsdPlus(false);
-                this.toggleUsdtPlus(false);
-                this.toggleDaiPlus(false);
-            }
-
-            this.isShowInsurance = isShow;
-        },
-
-        toggleEts(isShow) {
-            if (isShow) {
-                this.toggleUsdPlus(false);
-                this.toggleDaiPlus(false);
-                this.toggleUsdtPlus(false);
-                this.toggleInsurance(false);
-            }
-
-            this.isShowEts = isShow;
         },
     }
 }

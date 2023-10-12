@@ -97,8 +97,14 @@ const actions = {
         let usdtPlus;
         let originUsdtPlus;
 
+        let ethPlus;
+        let originEthPlus;
+
         let usdt;
         let originUsdt;
+
+        let weth;
+        let originWeth;
 
         let asset;
         let originAsset;
@@ -182,6 +188,29 @@ const actions = {
             } catch (e) {
                 usdt = getters.balance.usdt;
                 originUsdt = getters.originalBalance.usdt
+            }
+        }
+
+        // eth contracts
+        if (networkId === 42161) {
+            let unit = 'ether';
+
+            try {
+                ethPlus = await web3.contracts.ethPlus.methods.balanceOf(getters.account).call();
+                originUsdtPlus = ethPlus;
+                ethPlus = ethPlus ? web3.web3.utils.fromWei(ethPlus, unit) : ethPlus;
+            } catch (e) {
+                ethPlus = getters.balance.ethPlus;
+                originUsdtPlus = getters.originalBalance.ethPlus
+            }
+
+            try {
+                weth = await web3.contracts.weth.methods.balanceOf(getters.account).call();
+                originUsdt = weth;
+                weth = weth ? web3.web3.utils.fromWei(weth, unit) : weth;
+            } catch (e) {
+                weth = getters.balance.weth;
+                originUsdt = getters.originalBalance.weth
             }
         }
 

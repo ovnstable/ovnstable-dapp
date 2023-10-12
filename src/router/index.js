@@ -18,9 +18,11 @@ import Reserves from "./midleware/dapp/Reserves";
 import Stats from "./midleware/dapp/Stats";
 import DaiStats from "./midleware/dapp/DaiStats";
 import UsdtStats from "./midleware/dapp/UsdtStats";
+import EthStats from "./midleware/dapp/EthStats";
 import Collateral from "./midleware/dapp/Collateral";
 import CollateralDai from "./midleware/dapp/CollateralDai";
 import CollateralUsdt from "./midleware/dapp/CollateralUsdt";
+import CollateralEth from "./midleware/dapp/CollateralEth";
 import Dashboard from "./midleware/dapp/Dashboard";
 import Pools from "./midleware/dapp/Pools";
 import ProvideLp from "./midleware/dapp/ProvideLp";
@@ -240,6 +242,16 @@ const routes = [
                 }
             },
             {
+                path: '/collateral/eth',
+                name: 'CollateralEthView',
+                component: () => import('../views/performance/eth/view/CollateralView.vue'),
+                meta: {
+                    middleware: [
+                        CollateralEth,
+                    ]
+                }
+            },
+            {
                 path: '/stats',
                 name: 'StatsPerformanceView',
                 component: () => import('../views/performance/view/StatsPerformanceView.vue'),
@@ -266,6 +278,15 @@ const routes = [
                 meta: {
                     middleware: [
                         UsdtStats,
+                    ]
+                }
+            }, {
+                path: '/stats/eth',
+                name: 'StatsEthPerformanceView',
+                component: () => import('../views/performance/eth/view/StatsPerformanceView.vue'),
+                meta: {
+                    middleware: [
+                        EthStats,
                     ]
                 }
             },

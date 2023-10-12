@@ -378,6 +378,7 @@ export const zap = {
             console.log("abiPoolTokenContractFile", this.currentZapPlatformContractType)
             let abiPoolTokenContractFile = await loadJSON(`/contracts/${this.zapPoolRoot.chainName}/${this.currentZapPlatformContractType.name}PoolToken.json`);
             console.log("abiPoolTokenContractFile", abiPoolTokenContractFile);
+            console.log("abiPoolTokenContractFile", abiPoolTokenContractFile);
 
             // exclude _ from pool address (aggregators)
             if (poolAddress.includes('_')) {

@@ -12,7 +12,7 @@
 
                 <v-row justify="start">
                     <label class="mobile-info-title">
-                        {{ totalTvl ? ('$' + $utils.formatMoneyComma(totalTvl, 2)) : '' }}
+                        {{ totalTvl ? ((assetType === 'eth+' ? '' : '$') + $utils.formatMoneyComma(totalTvl, 2)) : '' }}
                     </label>
                 </v-row>
             </v-col>
@@ -20,7 +20,7 @@
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
                     <label class="chart-title-apy">
-                        {{ totalTvl ? ('$' + $utils.formatMoneyComma(totalTvl, 2)) : '' }}
+                        {{ totalTvl ? ((assetType === 'eth+' ? '' : '$') + $utils.formatMoneyComma(totalTvl, 2)) : '' }}
                     </label>
                 </v-row>
                 <v-row justify="end">

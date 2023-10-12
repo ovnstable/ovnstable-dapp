@@ -33,6 +33,14 @@
                     USDT+
                 </v-btn>
             </v-col>
+            <v-col v-if="ethplusAvailibleNetworks.includes(networkName)"
+                   class="col-lg-3 col-md-3 col-sm-6">
+                <v-btn :class="modalType === 'ETH+' ? 'btn-outlined-enabled' : ''"
+                       @click.stop="swapEthAction"
+                       class="button btn-outlined" outlined>
+                    ETH+
+                </v-btn>
+            </v-col>
         </v-row>
     </div>
 </template>
@@ -53,6 +61,7 @@ export default defineComponent({
             usdplusAvailibleNetworks: ['optimism', 'arbitrum', 'bsc', 'polygon', 'zksync', 'base', 'linea'],
             daiplusAvailibleNetworks: ['optimism', 'arbitrum', 'base'],
             usdtplusAvailibleNetworks: ['bsc', 'linea'],
+            ethplusAvailibleNetworks: ['arbitrum'],
             wusdAvailibleNetworks: ['optimism', 'arbitrum', 'polygon', 'base'],
 
             mapCountOfFutures: {} // network: count
@@ -66,6 +75,7 @@ export default defineComponent({
         ...mapActions('swapModal', ['showSwapModal', 'showMintView', 'showRedeemView']),
         ...mapActions('swapDaiModal', ['showDaiSwapModal', 'showDaiMintView', 'showDaiRedeemView']),
         ...mapActions('swapUsdtModal', ['showUsdtSwapModal', 'showUsdtMintView', 'showUsdtRedeemView']),
+        ...mapActions('swapEthModal', ['showEthSwapModal', 'showEthMintView', 'showEthRedeemView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView', 'showUnwrapView']),
 
         initNeededModal() {
@@ -78,6 +88,8 @@ export default defineComponent({
                         this.swapDaiAction();
                     } else if (this.$route.query.symbol === 'USDT+') {
                         this.swapUsdtAction();
+                    } else if (this.$route.query.symbol === 'ETH+') {
+                        this.swapEthAction();
                     }
 
                     this.$router.push({ path: this.$route.path })
@@ -95,6 +107,10 @@ export default defineComponent({
                 }
 
                 if (this.usdtplusAvailibleNetworks.includes(network)) {
+                    this.mapCountOfFutures[network]++;
+                }
+
+                if (this.ethplusAvailibleNetworks.includes(network)) {
                     this.mapCountOfFutures[network]++;
                 }
 
@@ -154,6 +170,22 @@ export default defineComponent({
 
             this.showUsdtSwapModal();
             this.showUsdtRedeemView();
+            this.closeFunc();
+        },
+        swapEthAction() {
+            if (this.modalType === 'ETH+') {
+                return;
+            }
+
+            if (this.modalActionType === 'MINT') {
+                this.showEthSwapModal();
+                this.showEthMintView();
+                this.closeFunc();
+                return;
+            }
+
+            this.showEthSwapModal();
+            this.showEthRedeemView();
             this.closeFunc();
         },
         swapWusdAction() {

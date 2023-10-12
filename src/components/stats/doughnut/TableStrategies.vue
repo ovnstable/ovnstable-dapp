@@ -42,11 +42,12 @@
                     </label>
                 </v-row>
             </td>
+
             <td class="table-label-don text-left">
-                ${{ $utils.formatMoney(item.value, 2) }}
+                {{ assetType === 'ETH' ? '' : '$' }}{{ $utils.formatMoney(item.value, 2) }}
             </td>
             <td class="table-label-don text-left" v-if="!minimized">
-                ${{ $utils.formatMoney(item.liquidationValue, 2) }}
+                {{ assetType === 'ETH' ? '' : '$' }}{{ $utils.formatMoney(item.liquidationValue, 2) }}
             </td>
             <td class="table-label-don text-left progress-col">
                 <v-progress-linear :value="getPercent(item)"
@@ -71,10 +72,10 @@
                 </v-row>
             </td>
             <td class="table-label-don text-left" :colspan="minimized ? 3 : 1">
-                <b>${{ $utils.formatMoney(getTotal(), 2) }}</b>
+                <b>{{ assetType === 'ETH' ? '' : '$' }}{{ $utils.formatMoney(getTotal(), 2) }}</b>
             </td>
             <td class="table-label-don text-left" v-if="!minimized">
-                <b>${{ $utils.formatMoney(getLiquidationTotal(), 2) }}</b>
+                <b>{{ assetType === 'ETH' ? '' : '$' }}{{ $utils.formatMoney(getLiquidationTotal(), 2) }}</b>
             </td>
             <td class="table-label-don" v-if="!minimized"></td>
             <td class="table-label-don" v-if="!minimized"></td>
@@ -89,7 +90,7 @@
             </td>
             <td v-if="totalSupply" class="table-label-don table-label-don-total text-left pb-6" :colspan="minimized ? 3 : 1">
                 <b>
-                  ${{ $utils.formatMoney(totalSupply, 2) }}
+                  {{ assetType === 'ETH' ? '' : '$' }}{{ $utils.formatMoney(totalSupply, 2) }}
                 </b>
             </td>
             <td class="table-empty" v-if="!minimized"></td>

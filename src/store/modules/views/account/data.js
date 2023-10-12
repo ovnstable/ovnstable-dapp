@@ -197,20 +197,20 @@ const actions = {
 
             try {
                 ethPlus = await web3.contracts.ethPlus.methods.balanceOf(getters.account).call();
-                originUsdtPlus = ethPlus;
+                originEthPlus = ethPlus;
                 ethPlus = ethPlus ? web3.web3.utils.fromWei(ethPlus, unit) : ethPlus;
             } catch (e) {
                 ethPlus = getters.balance.ethPlus;
-                originUsdtPlus = getters.originalBalance.ethPlus
+                originEthPlus = getters.originalBalance.ethPlus
             }
 
             try {
                 weth = await web3.contracts.weth.methods.balanceOf(getters.account).call();
-                originUsdt = weth;
+                originWeth = weth;
                 weth = weth ? web3.web3.utils.fromWei(weth, unit) : weth;
             } catch (e) {
                 weth = getters.balance.weth;
-                originUsdt = getters.originalBalance.weth
+                originWeth = getters.originalBalance.weth
             }
         }
 
@@ -244,8 +244,10 @@ const actions = {
             usdPlus: usdPlus,
             daiPlus: daiPlus,
             usdtPlus: usdtPlus,
+            ethPlus: ethPlus,
             dai: dai,
             usdt: usdt,
+            weth: weth,
             asset: asset,
             asset_two: asset_two,
             wUsdPlus: wUsdPlus,
@@ -256,8 +258,10 @@ const actions = {
             usdPlus: originUsdPlus,
             daiPlus: originDaiPlus,
             usdtPlus: originUsdtPlus,
+            ethPlus: originEthPlus,
             dai: originDai,
             usdt: originUsdt,
+            weth: originWeth,
             asset: originAsset,
             asset_two: originAsset_two,
             wUsdPlus: originWUsdPlus,

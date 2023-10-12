@@ -42,6 +42,7 @@
                     </label>
                 </v-row>
             </td>
+
             <td class="table-label-don text-left">
                 ${{ $utils.formatMoney(item.value, 2) }}
             </td>

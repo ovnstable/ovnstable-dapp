@@ -325,12 +325,12 @@ export default {
 
         ...mapGetters('swapEthModal', ['ethPlusApproved']),
 
-        ...mapGetters("network", ['networkId', 'polygonApi']),
+        ...mapGetters("network", ['networkId', 'networkName', 'polygonApi']),
         ...mapGetters("web3", ["web3", 'contracts']),
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
         assetDecimals: function () {
-            return this.networkId === 56 ? 18 : 6; // 56 - 18, 59144 - 6
+            return this.networkName === 'bsc' || this.networkName === 'arbitrum' ? 18 : 6; // 56 - 18, 59144 - 6
         },
 
         icon: function () {

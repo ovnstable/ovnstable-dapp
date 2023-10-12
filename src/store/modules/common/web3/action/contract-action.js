@@ -76,7 +76,7 @@ const actions = {
             contracts.usdPlus,
             contracts.daiPlus,
             contracts.usdtPlus,
-            contracts.wethPlus,
+            contracts.ethPlus,
 
             // m2m
             contracts.m2m,

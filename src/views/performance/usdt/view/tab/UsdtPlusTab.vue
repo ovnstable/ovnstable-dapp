@@ -267,10 +267,10 @@ export default {
       console.log('Tab Name: ', this.$route.query.tabName);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName);
-            this.loadData();
+            // this.loadData();
         } if (this.$route.query.tabName) {
             this.setTab(this.$route.query.tabName);
-            this.loadData();
+            // this.loadData();
         }
     },
 

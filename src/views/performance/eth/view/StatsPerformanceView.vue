@@ -9,10 +9,10 @@
                 <template v-if="$wu.isMobile()">
                     <v-col cols="12" align="center" class="mt-10">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
-                            Swap In
+                            Mint
                         </v-btn>
                         <v-btn class="header-btn btn-outlined" @click="swapButtonOut">
-                            Swap Out
+                            Redeem
                         </v-btn>
                     </v-col>
                 </template>
@@ -24,10 +24,10 @@
                 <template v-if="!$wu.isMobile()">
                     <v-col align="end" cols="6" class="mt-6">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
-                            Swap In
+                            Mint
                         </v-btn>
                         <v-btn class="header-btn btn-outlined mr-3" @click="swapButtonOut">
-                            Swap Out
+                            Redeem
                         </v-btn>
                     </v-col>
                 </template>
@@ -161,7 +161,7 @@
               ETH+ is the equivalent of USD+, pegged to ETH 1:1, instantly mintable and redeemable in ETH. 100% collateralized with delta-neutral and other strategies based on the best protocols.
           </label>
           <div class="section-text font-weight-bold">
-            Switch on Optimism, Arbitrum, or Base chain to see ETH+ collateral.
+            Switch to Arbitrum chain to see ETH+ collateral.
           </div>
         </div>
       </div>

@@ -21,10 +21,10 @@
                 <template v-if="!$wu.isMobile()">
                     <v-col align="end" cols="6" class="mt-6">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
-                            Swap In
+                            Mint
                         </v-btn>
                         <v-btn class="header-btn btn-outlined mr-3" @click="swapButtonOut">
-                            Swap Out
+                            Redeem
                         </v-btn>
                     </v-col>
                 </template>

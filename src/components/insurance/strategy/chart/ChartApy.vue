@@ -125,6 +125,7 @@ export default {
         apyData: null,
 
         apyValuesBySlice: [],
+        apyFirstDate: null,
     }),
 
     computed: {
@@ -137,14 +138,6 @@ export default {
 
         isMobile() {
             return window.innerWidth < 650;
-        },
-
-        apyFirstDate() {
-            if (this.payouts && this.payouts.length > 0) {
-                return moment(this.payouts[this.payouts.length - 1].date).format("DD MMM. ‘YY");
-            }
-
-            return null;
         },
 
         avgApyBySlice() {
@@ -223,10 +216,18 @@ export default {
             this.data.datasets[0].data.forEach(v => values.push(v));
             values = this.slice ? values.slice(this.slice) : values;
             this.apyValuesBySlice = values;
+            console.log("ins values: ", values)
 
             let labels = [];
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(this.slice) : labels;
+            console.log("ins labels: ", labels)
+            console.log("lastData: ", labels && labels.length ? labels[0] : null);
+
+            if (labels && labels.length) {
+                // labels[0] = 07.10.2023 to DD MMM. ‘YY with moment
+                this.apyFirstDate = moment(labels[0], "DD.MM.YYYY").format("DD MMM. ‘YY");
+            }
 
             // let valuesUsdPlus = [];
             // labels.forEach(v => valuesUsdPlus.push(this.usdPlusData[v] ? this.usdPlusData[v] : null));

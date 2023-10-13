@@ -137,7 +137,9 @@
                                         <label class="investor-card-sub-title">Your balance in INSURANCE</label>
                                     </v-row>
                                     <v-row align="center" class="mt-5">
-                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">{{ dataHidden ? '' : insuranceBalance.optimism ? ($utils.formatMoneyComma(insuranceBalance.optimism, 2)) + ' OVN' : '— OVN' }}</label>
+                                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">
+                                            {{ dataHidden ? '' : insuranceBalance.optimism ? ($utils.formatMoneyComma(insuranceBalance.optimism, 2)) + ' OVN' : '— OVN' }}
+                                        </label>
                                         <v-icon class="ml-1" color="var(&#45;&#45;disabled-value)">
                                             {{ insuranceRedemptionData.request === 'CAN_WITHDRAW' ? 'mdi-lock-open-variant' : 'mdi-lock' }}
                                         </v-icon>

@@ -351,14 +351,14 @@ export default {
     .percentage {
         font-style: normal;
         font-weight: 600;
-        font-size: 40px;
+        font-size: 25px;
         line-height: 40px;
     }
 
     .apy {
         font-style: normal;
         font-weight: 600;
-        font-size: 14px;
+        font-size: 12px;
         line-height: 16px;
     }
 
@@ -369,7 +369,7 @@ export default {
     .apy-box-total-label {
         font-style: normal;
         font-weight: 400;
-        font-size: 14px;
+        font-size: 12px;
         line-height: 18px;
         letter-spacing: 0.03em;
     }
@@ -448,14 +448,14 @@ export default {
     .percentage {
         font-style: normal;
         font-weight: 600;
-        font-size: 50px;
+        font-size: 35px;
         line-height: 56px;
     }
 
     .apy {
         font-style: normal;
         font-weight: 600;
-        font-size: 16px;
+        font-size: 14px;
         line-height: 22px;
     }
 
@@ -622,7 +622,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .percentage {
         font-style: normal;
         font-weight: 600;
-        font-size: 38px;
+        font-size: 23px;
         line-height: 42px;
     }
 

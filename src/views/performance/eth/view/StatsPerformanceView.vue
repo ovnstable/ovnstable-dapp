@@ -34,148 +34,151 @@
             </v-row>
         </div>
 
-      <div v-if="networkId === 42161">
-        <v-row v-if="isPayoutsLoading">
-          <v-row align="center" justify="center" class="py-15">
-            <v-progress-circular
-                width="2"
-                size="24"
-                color="#8FA2B7"
-                indeterminate
-            ></v-progress-circular>
-          </v-row>
-        </v-row>
-
-        <v-row
-            v-if="!isPayoutsLoading && !$wu.isMobile()"
-            class="ma-0"
-            justify="start"
-            align="center"
-        >
-          <v-col cols="6">
-            <div class="info-card-container py-3">
-              <LineChartApy
-                  :data="payoutsApyData"
-                  asset-type="eth+"
-                  :zoom-type="zoomType"
-                  :network-name="tab"
-              />
-            </div>
-          </v-col>
-          <v-col cols="6">
-            <div class="info-card-container py-3">
-              <LineChartTvl
-                  :data="payoutsTvlData"
-                  asset-type="eth+"
-                  :zoom-type="zoomType"
-                  :network-name="tab"
-              />
-            </div>
-          </v-col>
-        </v-row>
-
-        <v-row v-else-if="!isPayoutsLoading && $wu.isMobile()" class="ma-0 mt-5 info-card-container" justify="start" align="center">
-          <v-col class="info-card-body-bottom">
-            <v-row align="center" justify="start" class="ma-0">
-              <v-col class="ml-n3 mt-n3">
-                <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
-                  APY
-                </v-btn>
-              </v-col>
-              <v-col class="mr-n3 mt-n3">
-                <v-btn outlined class="rate-tab-btn" @click="rateTab=3" v-bind:class="activeRateTvl">
-                  TVL
-                </v-btn>
-              </v-col>
-            </v-row>
-
-            <LineChartApy
-                  v-if="rateTab === 1"
-                  :data="payoutsApyData"
-                  class="mx-n3"
-                  asset-type="eth+"
-                  :zoom-type="zoomType"
-                  :network-name="tab"
-            />
-            <LineChartTvl
-                v-if="rateTab === 3"
-                :data="payoutsTvlData"
-                class="mx-n3"
-                asset-type="eth+"
-                :zoom-type="zoomType"
-                :network-name="tab"
-            />
-          </v-col>
-        </v-row>
-
-        <v-row v-if="!isPayoutsLoading" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
-          <v-col class="info-card-body-bottom">
-            <v-row align="center" justify="start" class="ma-0">
-              <label class="section-title-label">ETH+ payouts</label>
-                <div class="balance-network-icon ml-3">
-                    <v-img :src="icon"/>
-                </div>
-            </v-row>
-
-            <v-row align="center" justify="center">
-              <v-col :cols="!$wu.isFull() ? 12 : 8">
-                <Table
-                    v-if="!$wu.isMobile()"
-                    :profit-label="assetName + ' per ETH+'"
-                    :payout-data="payouts"
-                    :network-name="tab"
-                />
-
-                <Table
-                    v-else
-                    minimized
-                    :profit-label="assetName + ' per ETH+'"
-                    :payout-data="payouts"
-                    :network-name="tab"
-                />
-
-                <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
-                  <label class="table-scroll-label">scroll to see more</label>
+        <div v-if="networkId === 42161">
+            <v-row v-if="isPayoutsLoading">
+                <v-row align="center" justify="center" class="py-15">
+                    <v-progress-circular
+                        width="2"
+                        size="24"
+                        color="#8FA2B7"
+                        indeterminate
+                    ></v-progress-circular>
                 </v-row>
-              </v-col>
-
-              <v-col :cols="!$wu.isFull() ? 12 : 4">
-                <Doughnut
-                      :last-date="lastPayoutDate"
-                      :size="280"
-                      color="#3D8DFF"
-                      :network-name="tab"
-                />
-              </v-col>
             </v-row>
-          </v-col>
-        </v-row>
-      </div>
 
-      <div v-else class="ma-0 info-card-container d-flex mt-3">
-        <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
-          <v-img class="currency" :src="require('@/assets/currencies/ETH+.svg')" />
+            <v-row
+                v-if="!isPayoutsLoading && !$wu.isMobile()"
+                class="ma-0"
+                justify="start"
+                align="center"
+            >
+                <v-col cols="6">
+                    <div class="info-card-container py-3">
+                        <LineChartApy
+                            :data="payoutsApyData"
+                            asset-type="eth+"
+                            :zoom-type="zoomType"
+                            :network-name="tab"
+                        />
+                    </div>
+                </v-col>
+                <v-col cols="6">
+                    <div class="info-card-container py-3">
+                        <LineChartTvl
+                            :data="payoutsTvlData"
+                            asset-type="eth+"
+                            :zoom-type="zoomType"
+                            :network-name="tab"
+                        />
+                    </div>
+                </v-col>
+            </v-row>
+
+            <v-row v-else-if="!isPayoutsLoading && $wu.isMobile()" class="ma-0 mt-5 info-card-container" justify="start"
+                   align="center">
+                <v-col class="info-card-body-bottom">
+                    <v-row align="center" justify="start" class="ma-0">
+                        <v-col class="ml-n3 mt-n3">
+                            <v-btn outlined class="rate-tab-btn" @click="rateTab=1" v-bind:class="activeRateApy">
+                                APY
+                            </v-btn>
+                        </v-col>
+                        <v-col class="mr-n3 mt-n3">
+                            <v-btn outlined class="rate-tab-btn" @click="rateTab=3" v-bind:class="activeRateTvl">
+                                TVL
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+
+                    <LineChartApy
+                        v-if="rateTab === 1"
+                        :data="payoutsApyData"
+                        class="mx-n3"
+                        asset-type="eth+"
+                        :zoom-type="zoomType"
+                        :network-name="tab"
+                    />
+                    <LineChartTvl
+                        v-if="rateTab === 3"
+                        :data="payoutsTvlData"
+                        class="mx-n3"
+                        asset-type="eth+"
+                        :zoom-type="zoomType"
+                        :network-name="tab"
+                    />
+                </v-col>
+            </v-row>
+
+            <v-row v-if="!isPayoutsLoading" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'"
+                   justify="start" align="center">
+                <v-col class="info-card-body-bottom">
+                    <v-row align="center" justify="start" class="ma-0">
+                        <label class="section-title-label">ETH+ payouts</label>
+                        <div class="balance-network-icon ml-3">
+                            <v-img :src="icon"/>
+                        </div>
+                    </v-row>
+
+                    <v-row align="center" justify="center">
+                        <v-col :cols="!$wu.isFull() ? 12 : 8">
+                            <Table
+                                v-if="!$wu.isMobile()"
+                                :profit-label="assetName + ' per ETH+'"
+                                :payout-data="payouts"
+                                :network-name="tab"
+                            />
+
+                            <Table
+                                v-else
+                                minimized
+                                :profit-label="assetName + ' per ETH+'"
+                                :payout-data="payouts"
+                                :network-name="tab"
+                            />
+
+                            <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
+                                <label class="table-scroll-label">scroll to see more</label>
+                            </v-row>
+                        </v-col>
+
+                        <v-col :cols="!$wu.isFull() ? 12 : 4">
+                            <Doughnut
+                                :last-date="lastPayoutDate"
+                                :size="280"
+                                color="#3D8DFF"
+                                :network-name="tab"
+                            />
+                        </v-col>
+                    </v-row>
+                </v-col>
+            </v-row>
         </div>
-        <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5 ml-5' : 'mt-0'" >
-          <label class="section-text">
-              ETH+ is the equivalent of USD+, pegged to ETH 1:1, instantly mintable and redeemable in ETH. 100% collateralized with delta-neutral and other strategies based on the best protocols.
-          </label>
-          <div class="section-text font-weight-bold">
-            Switch to Arbitrum chain to see ETH+ collateral.
-          </div>
+
+        <div v-else class="ma-0 info-card-container d-flex mt-3">
+            <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'">
+                <v-img class="currency" :src="require('@/assets/currencies/ETH+.svg')"/>
+            </div>
+            <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5 ml-5' : 'mt-0'">
+                <label class="section-text">
+                    ETH+ is the equivalent of USD+, pegged to ETH 1:1, instantly mintable and redeemable in ETH. 100%
+                    collateralized with delta-neutral and other strategies based on the best protocols.
+                </label>
+                <div class="section-text font-weight-bold">
+                    Switch to Arbitrum chain to see ETH+ collateral.
+                </div>
+            </div>
         </div>
-      </div>
 
         <div v-if="networkId !== 42161"
              :class="$wu.isMobile() ? 'flex-column' : ''"
-             class="mt-3 buttons-div" >
+             class="mt-3 buttons-div">
             <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('42161')">
                 switch to arbitrum to mint
             </v-btn>
         </div>
 
 
-      <resize-observer v-if="!isPayoutsLoading" @notify="$forceUpdate()"/>
+        <resize-observer v-if="!isPayoutsLoading" @notify="$forceUpdate()"/>
     </div>
 </template>
 
@@ -205,57 +208,57 @@ export default {
     },
 
     data: () => ({
-      tab: 'arbitrum',
-      rateTab: 1,
-      zoomType: 'all',
+        tab: 'arbitrum',
+        rateTab: 1,
+        zoomType: 'all',
 
-      isPayoutsLoading: true,
+        isPayoutsLoading: true,
 
-      payoutsApyData: null,
-      payoutsTvlData: null,
-      payoutsApyDataDict: null,
-      payouts: null,
+        payoutsApyData: null,
+        payoutsTvlData: null,
+        payoutsApyDataDict: null,
+        payouts: null,
     }),
 
     computed: {
-      ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl', 'apiUrl', 'getParams', 'networkName']),
+        ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl', 'apiUrl', 'getParams', 'networkName']),
 
-        tabNetworkName: function() {
+        tabNetworkName: function () {
             let params;
             params = this.getParams(this.tab)
 
             return params.networkName;
         },
 
-        activeTabOptimism: function() {
+        activeTabOptimism: function () {
             return {
                 'tab-button': this.tab === 'optimism',
                 'tab-button-in-active': this.tab !== 'optimism',
             }
         },
 
-        activeTabArbitrum: function() {
+        activeTabArbitrum: function () {
             return {
                 'tab-button': this.tab === 'arbitrum',
                 'tab-button-in-active': this.tab !== 'arbitrum',
             }
         },
 
-        activeTabBase: function() {
+        activeTabBase: function () {
             return {
                 'tab-button': this.tab === 'base',
                 'tab-button-in-active': this.tab !== 'base',
             }
         },
 
-        activeTabLinea: function() {
+        activeTabLinea: function () {
             return {
                 'tab-button': this.tab === 'linea',
                 'tab-button-in-active': this.tab !== 'linea',
             }
         },
 
-      activeRateApy: function () {
+        activeRateApy: function () {
             return {
                 'rate-tab-button': this.rateTab === 1,
                 'rate-tab-button-in-active': this.rateTab !== 1,
@@ -281,7 +284,7 @@ export default {
         },
 
         icon: function () {
-            switch (this.tabNetworkName){
+            switch (this.tabNetworkName) {
                 case 'polygon':
                     return polygonIcon;
                 case 'optimism':
@@ -308,22 +311,31 @@ export default {
     },
 
     mounted() {
-        console.log('Tab Name and chart type: ', this.$route.query.tabName,  this.$route.query.chart);
+        console.log('Tab Name and chart type: ', this.$route.query.tabName, this.$route.query.chart);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName, this.$route.query.chart);
-        } if (this.$route.query.tabName) {
+        }
+        if (this.$route.query.tabName) {
             this.setTab(this.$route.query.tabName, this.$route.query.chart);
         }
     },
 
     methods: {
         ...mapActions("network", ["setWalletNetwork"]),
+        ...mapActions('swapEthModal', ['showEthSwapModal', 'showEthMintView', 'showEthRedeemView']),
+
         swapButtonIn() {
-            this.initTabName('/swap', {action: 'swap-in', symbol: 'ETH+'})
+            // todo: return after odos implementation
+            // this.initTabName('/swap', {action: 'swap-in', symbol: 'ETH+'})
+            this.showEthSwapModal();
+            this.showEthMintView();
         },
 
         swapButtonOut() {
-            this.initTabName('/swap', {action: 'swap-out', symbol: 'ETH+'})
+            // todo: return after odos implementation
+            // this.initTabName('/swap', {action: 'swap-out', symbol: 'ETH+'})
+            this.showEthSwapModal();
+            this.showEthRedeemView();
         },
 
         setTab(tabName, chartType) {
@@ -359,77 +371,77 @@ export default {
         },
 
         loadData() {
-          this.payoutsApyData = null;
-          this.payoutsTvlData = null;
-          this.payoutsApyDataDict = null;
-          this.payouts = null;
+            this.payoutsApyData = null;
+            this.payoutsTvlData = null;
+            this.payoutsApyDataDict = null;
+            this.payouts = null;
 
-          this.loadPayouts();
+            this.loadPayouts();
         },
 
         loadPayouts() {
-          this.isPayoutsLoading = true;
+            this.isPayoutsLoading = true;
 
-          payoutsApiService.getPayouts(this.apiUrl + `/${this.tabNetworkName}/eth+`)
-              .then(data => {
-                this.payouts = data
-                let clientData = data;
+            payoutsApiService.getPayouts(this.apiUrl + `/${this.tabNetworkName}/eth+`)
+                .then(data => {
+                    this.payouts = data
+                    let clientData = data;
 
-                let widgetDataDict = {};
-                let widgetData = {
-                  labels: [],
-                  datasets: [
-                    {
-                      fill: false,
-                      borderColor: '#69a5fd',
-                      data: [],
+                    let widgetDataDict = {};
+                    let widgetData = {
+                        labels: [],
+                        datasets: [
+                            {
+                                fill: false,
+                                borderColor: '#69a5fd',
+                                data: [],
+                            }
+                        ]
+                    };
+
+                    [...clientData].reverse().forEach(item => {
+                        widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
+                    });
+
+                    this.payoutsApyDataDict = widgetDataDict;
+
+                    for (let key in widgetDataDict) {
+                        widgetData.labels.push(key);
+                        widgetData.datasets[0].data.push(widgetDataDict[key]);
                     }
-                  ]
-                };
 
-                [...clientData].reverse().forEach(item => {
-                  widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
-                });
+                    this.payoutsApyData = widgetData;
 
-                this.payoutsApyDataDict = widgetDataDict;
+                    let widgetDataDictTvl = {};
+                    let widgetDataTvl = {
+                        labels: [],
+                        datasets: [
+                            {
+                                fill: false,
+                                borderColor: '#69a5fd',
+                                data: [],
+                            }
+                        ]
+                    };
 
-                for(let key in widgetDataDict) {
-                  widgetData.labels.push(key);
-                  widgetData.datasets[0].data.push(widgetDataDict[key]);
-                }
+                    [...clientData].reverse().forEach(item => {
+                        widgetDataDictTvl[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.totalUsdc ? item.totalUsdc : 0.0).toFixed(2);
+                    });
 
-                this.payoutsApyData = widgetData;
-
-                let widgetDataDictTvl = {};
-                let widgetDataTvl = {
-                  labels: [],
-                  datasets: [
-                    {
-                      fill: false,
-                      borderColor: '#69a5fd',
-                      data: [],
+                    for (let key in widgetDataDictTvl) {
+                        widgetDataTvl.labels.push(key);
+                        widgetDataTvl.datasets[0].data.push(widgetDataDictTvl[key]);
                     }
-                  ]
-                };
 
-                [...clientData].reverse().forEach(item => {
-                  widgetDataDictTvl[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.totalUsdc ? item.totalUsdc : 0.0).toFixed(2);
-                });
+                    this.payoutsTvlData = widgetDataTvl;
+                    console.log("Payouts data: ", this.payoutsApyData, this.payoutsTvlData);
 
-                for(let key in widgetDataDictTvl) {
-                  widgetDataTvl.labels.push(key);
-                  widgetDataTvl.datasets[0].data.push(widgetDataDictTvl[key]);
-                }
-
-                this.payoutsTvlData = widgetDataTvl;
-                console.log("Payouts data: ", this.payoutsApyData, this.payoutsTvlData);
-
-                this.isPayoutsLoading = false;
-              })
-              .catch(e => {
-                this.isPayoutsLoading = false;
-                console.error("Payouts loading error: ", e)
-              })
+                    this.isPayoutsLoading = false;
+                })
+                .catch(e => {
+                    this.isPayoutsLoading = false;
+                    console.error("Payouts loading error: ", e)
+                })
         },
     }
 }
@@ -666,13 +678,7 @@ export default {
     }
 }
 
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+@media only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px), only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px), only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px), only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px), only screen and (                min-resolution: 192dpi) and (min-width: 1300px), only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
     .title-label {
         font-style: normal;
         font-weight: 300;
@@ -728,8 +734,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     }
 
     .section-text {
-      font-size: 17px;
-      line-height: 28px;
+        font-size: 17px;
+        line-height: 28px;
     }
 
     .balance-network-icon {
@@ -771,10 +777,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .info-card-container-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
 }
 
 
@@ -879,9 +885,9 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .section-text {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 300;
-  color: var(--main-gray-text);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: var(--main-gray-text);
 }
 
 .tab-button {

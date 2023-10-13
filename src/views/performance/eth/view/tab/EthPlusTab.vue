@@ -267,12 +267,20 @@ export default {
     },
 
     methods: {
+        ...mapActions('swapEthModal', ['showEthSwapModal', 'showEthMintView', 'showEthRedeemView']),
+
         swapButtonIn() {
-            this.initTabName('/swap', {action: 'swap-in', symbol: 'ETH+'})
+            // this.initTabName('/swap', {action: 'swap-in', symbol: 'ETH+'})
+            // todo: return after odos implementation
+            this.showEthSwapModal();
+            this.showEthMintView();
         },
 
         swapButtonOut() {
-            this.initTabName('/swap', {action: 'swap-out', symbol: 'ETH+'})
+            // this.initTabName('/swap', {action: 'swap-out', symbol: 'ETH+'})
+            // todo: return after odos implementation
+            this.showEthSwapModal();
+            this.showEthRedeemView();
         },
 
         setTab(tabName) {

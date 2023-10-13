@@ -195,7 +195,7 @@ export default {
     },
 
     data: () => ({
-      tab: 'bsc',
+      tab: 'arbitrum',
       isCurrentTotalDataLoading: true,
       isCollateralLoading: true,
 
@@ -247,8 +247,7 @@ export default {
             }
 
             if (this.tabNetworkName === 'arbitrum') {
-                //todo: arbitrum usdt
-                return 'https://arbiscan.io/token/0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
+                return 'https://arbiscan.io/token/0xb1084db8D3C05CEbd5FA9335dF95EE4b8a0edc30'
             }
 
             console.error("Not found networkId type when return usdt explorer link")
@@ -266,8 +265,7 @@ export default {
             }
 
             if (this.tabNetworkName === 'arbitrum') {
-                //todo: arbitrum usdt
-                return '0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
+                return '0xb1084db8D3C05CEbd5FA9335dF95EE4b8a0edc30'
             }
 
             console.error("Not found networkId type when return usdt contract address")

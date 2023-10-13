@@ -29,7 +29,7 @@ const actions = {
 
         let networkAssetTwoMap = {
             bsc: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d', // usdc
-            arbitrum: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1', // weth // todo: arbitrum usdt weth/usdc?? ???
+            arbitrum: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1', // weth
         };
 
         let networkDaiMap = {

@@ -325,7 +325,7 @@ export default {
         ...mapGetters("gasPrice", ["gasPriceGwei", "gasPrice", "gasPriceStation"]),
 
         assetDecimals: function () {
-            return this.networkId === 56 ? 18 : 6; // 56 - 18, 59144 - 6
+            return this.networkId === 56 ? 18 : 6; // 56 - 18, 59144 - 6, 59144 - 6
         },
 
         icon: function () {

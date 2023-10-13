@@ -163,7 +163,7 @@
             USDT+ is the equivalent of USD+, pegged to USDT 1:1. USDT+ consist of aUSDT (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on BSC. It cannot be minted separately.
           </label>
           <div class="section-text font-weight-bold">
-            Switch on BSC or Linea chain to see USDT+ collateral.
+            Switch to BSC, Linea or Arbitrum chain to see USDT+ collateral.
           </div>
         </div>
       </div>
@@ -310,7 +310,7 @@ export default {
     },
 
     mounted() {
-        console.log('Tab Name and chart type: ', this.$route.query.tabName,  this.$route.query.chart);
+        console.log('Tab Name and chart type: ', this.tab, this.$route.query.tabName,  this.$route.query.chart);
         this.setTab(this.tab, this.$route.query.chart);
     },
 
@@ -340,6 +340,7 @@ export default {
                 }
             }
 
+            console.log("Tab Params : ", tabParams)
             this.initTabName('/stats/usdt', tabParams);
 
             this.loadData();

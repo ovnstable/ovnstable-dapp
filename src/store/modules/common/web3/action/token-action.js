@@ -73,10 +73,11 @@ const actions = {
     },
 
     async addUsdtPlusToken({commit, dispatch, getters, rootState}) {
+        console.log('addUsdtPlusToken: ', rootState.web3.contracts.usdtPlus.options.address);
         let option = {
             address: rootState.web3.contracts.usdtPlus.options.address,
             symbol: process.env.VUE_APP_USDT_TOKEN_NAME,
-            decimals: 18,
+            decimals: 6,
             image: UsdtPlusImage.image,
         };
 

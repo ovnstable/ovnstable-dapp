@@ -217,9 +217,9 @@ export default {
     data: () => ({
       tab: 'bsc',
       rateTab: 1,
-        zoomType: 'all',
+      zoomType: 'all',
 
-        isPayoutsLoading: true,
+      isPayoutsLoading: true,
 
       payoutsApyData: null,
       payoutsTvlData: null,
@@ -310,8 +310,12 @@ export default {
     },
 
     mounted() {
-        console.log('Tab Name and chart type: ', this.tab, this.$route.query.tabName,  this.$route.query.chart);
-        this.setTab(this.tab, this.$route.query.chart);
+        console.log('Tab Name and chart type: ', this.$route.query.tabName,  this.$route.query.chart);
+        if (!this.$route.query.tabName) {
+            this.setTab(this.networkName, this.$route.query.chart);
+        } if (this.$route.query.tabName) {
+            this.setTab(this.$route.query.tabName, this.$route.query.chart);
+        }
     },
 
     methods: {

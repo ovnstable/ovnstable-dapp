@@ -2,7 +2,7 @@
     <div class="page-container">
 
         <div v-if="!isCollateralLoading">
-            <v-row v-if="networkId === 56  || networkId === 59144">
+            <v-row v-if="networkId === 56 || networkId === 59144 || networkId === 42161">
                 <template v-if="$wu.isMobile()">
                     <v-col cols="12" align="center" class="mt-5">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
@@ -17,6 +17,7 @@
                     <v-row class="ma-0 mt-10 toggle-row">
                         <label class="tab-btn mr-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">Bsc</label>
                         <label class="tab-btn mx-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
+                        <label class="tab-btn mx-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
                     </v-row>
                 </v-col>
                 <template v-if="!$wu.isMobile()">
@@ -228,6 +229,13 @@ export default {
             }
         },
 
+        activeTabArbitrum: function() {
+            return {
+                'tab-button': this.tab === 'arbitrum',
+                'tab-button-in-active': this.tab !== 'arbitrum',
+            }
+        },
+
         explorerLink: function () {
             if (this.tabNetworkName === 'bsc') {
                 return 'https://bscscan.com/token/0x5335E87930b410b8C5BB4D43c3360ACa15ec0C8C'
@@ -236,6 +244,11 @@ export default {
 
             if (this.tabNetworkName === 'linea') {
                 return 'https://lineascan.build/token/0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
+            }
+
+            if (this.tabNetworkName === 'arbitrum') {
+                //todo: arbitrum usdt
+                return 'https://arbiscan.io/token/0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
             }
 
             console.error("Not found networkId type when return usdt explorer link")
@@ -249,6 +262,11 @@ export default {
 
 
             if (this.tabNetworkName === 'linea') {
+                return '0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
+            }
+
+            if (this.tabNetworkName === 'arbitrum') {
+                //todo: arbitrum usdt
                 return '0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
             }
 

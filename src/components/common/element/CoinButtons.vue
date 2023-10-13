@@ -60,7 +60,7 @@ export default defineComponent({
         return {
             usdplusAvailibleNetworks: ['optimism', 'arbitrum', 'bsc', 'polygon', 'zksync', 'base', 'linea'],
             daiplusAvailibleNetworks: ['optimism', 'arbitrum', 'base'],
-            usdtplusAvailibleNetworks: ['bsc', 'linea'],
+            usdtplusAvailibleNetworks: ['bsc', 'linea', 'arbitrum'],
             ethplusAvailibleNetworks: ['arbitrum'],
             wusdAvailibleNetworks: ['optimism', 'arbitrum', 'polygon', 'base'],
 

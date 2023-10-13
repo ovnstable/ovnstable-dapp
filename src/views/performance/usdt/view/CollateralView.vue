@@ -4,7 +4,7 @@
             <label class="title-label">USDT+ Collateral</label>
         </div>
 
-       <UsdtPlusTab v-if="networkId === 56 || networkId === 59144"/>
+       <UsdtPlusTab v-if="networkId === 56 || networkId === 59144 || networkId === 42161"/>
         <div v-else class="ma-0 info-card-container d-flex">
           <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
             <v-img class="currency" :src="require('@/assets/currencies/USDT+.svg')" />
@@ -19,14 +19,17 @@
           </div>
         </div>
 
-        <div v-if="networkId !== 56 && networkId !== 59144"
+        <div v-if="networkId !== 56 && networkId !== 59144 && networkId !== 42161"
              :class="$wu.isMobile() ? 'flex-column' : ''"
              class="mt-3 buttons-div" >
             <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('56')">
                 switch to bsc to mint
             </v-btn>
-            <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('59144')">
+            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('59144')">
                 switch to linea to mint
+            </v-btn>
+            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('42161')">
+                switch to arbitrum to mint
             </v-btn>
         </div>
 

@@ -5,7 +5,7 @@
         </div>
 
         <div v-if="!isPayoutsLoading">
-            <v-row v-if="networkId === 56 || networkId === 59144">
+            <v-row v-if="networkId === 56 || networkId === 59144 || networkId === 42161">
                 <template v-if="$wu.isMobile()">
                     <v-col cols="12" align="center" class="mt-10">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
@@ -20,6 +20,7 @@
                     <v-row class="ma-0 mt-10 toggle-row ml-3">
                         <label class="tab-btn mr-4" @click="setTab('bsc')" v-bind:class="activeTabBsc">BSC</label>
                         <label class="tab-btn mr-4" @click="setTab('linea')" v-bind:class="activeTabLinea">Linea</label>
+                        <label class="tab-btn mr-4" @click="setTab('arbitrum')" v-bind:class="activeTabArbitrum">Arbitrum</label>
                     </v-row>
                 </v-col>
                 <template v-if="!$wu.isMobile()">
@@ -35,7 +36,7 @@
             </v-row>
         </div>
 
-      <div v-if="networkId === 56 || networkId === 59144">
+      <div v-if="networkId === 56 || networkId === 59144 || networkId === 42161">
         <v-row v-if="isPayoutsLoading">
           <v-row align="center" justify="center" class="py-15">
             <v-progress-circular
@@ -167,7 +168,7 @@
         </div>
       </div>
 
-        <div v-if="networkId !== 56 && networkId !== 59144"
+        <div v-if="networkId !== 56 && networkId !== 59144 && networkId !== 42161"
              :class="$wu.isMobile() ? 'flex-column' : ''"
              class="mt-3 buttons-div" >
             <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('56')">
@@ -175,6 +176,9 @@
             </v-btn>
             <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('59144')">
                 switch to linea to mint
+            </v-btn>
+            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('42161')">
+                switch to arbitrum to mint
             </v-btn>
         </div>
 
@@ -244,6 +248,12 @@ export default {
             return {
                 'tab-button': this.tab === 'linea',
                 'tab-button-in-active': this.tab !== 'linea',
+            }
+        },
+        activeTabArbitrum: function() {
+            return {
+                'tab-button': this.tab === 'arbitrum',
+                'tab-button-in-active': this.tab !== 'arbitrum',
             }
         },
 

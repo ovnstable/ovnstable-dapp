@@ -127,6 +127,7 @@ const actions = {
             originAsset = getters.originalBalance.asset;
         }
 
+        // todo: arbitrum usdt ?
         if (web3.contracts.asset_two) {
             try {
                 asset_two = await web3.contracts.asset_two.methods.balanceOf(getters.account).call();
@@ -166,7 +167,7 @@ const actions = {
             originDai = getters.originalBalance.dai
         }
 
-        if (networkId === 56 || networkId === 59144) {
+        if (networkId === 56 || networkId === 59144 || networkId === 42161) {
             let unit = 'ether';
             if (networkId === 59144) {
                 unit = 'mwei';

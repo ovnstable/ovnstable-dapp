@@ -381,12 +381,12 @@
 
                     <div
                         @click="insuranceCollateralClick"
-                        :class="selectedTab === 'insurance_performance' ? 'selected-page-item' : ''"
+                        :class="selectedTab === 'insurance_collateral' ? 'selected-page-item' : ''"
                         v-if="isShowInsurance"
                     >
                         <div
                             class="navbar-list-label pa-2 pl-11"
-                            :class="selectedTab === 'insurance_performance' ? 'selected-page' : ''"
+                            :class="selectedTab === 'insurance_collateral' ? 'selected-page' : ''"
                         >
                             Premiums
                         </div>

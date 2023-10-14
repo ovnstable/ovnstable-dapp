@@ -409,6 +409,9 @@ export const pool = {
                 case 'Convex': // aggregator of Curve
                     url = 'https://www.convexfinance.com/stake/arbitrum/13';
                     break
+                case 'Baseswapdefiedge':
+                    url = 'https://baseswap.defiedge.io/s/base/';
+                    break
 
                 default:
                     url = pool.explorerUrl + '/address/';

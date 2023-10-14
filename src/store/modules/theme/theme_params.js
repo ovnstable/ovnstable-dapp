@@ -480,6 +480,14 @@ export const THEME_MODE_PARAMS = [
         }
     },
     {
+        name: '--theme-claim-color',
+        enabled: true,
+        theme: {
+            light: '#4C586D',
+            dark: '#ADB3BD'
+        }
+    },
+    {
         name: '--theme-switch-background',
         enabled: true,
         theme: {

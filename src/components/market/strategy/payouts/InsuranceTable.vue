@@ -31,8 +31,8 @@
                 {{ $utils.formatMoney(item.dailyProfit, 6) }}
 
             </td>
-            <td v-if="item.apy" class="table-label-payouts-strategy text-right">
-                <div :class="item.apy > 0 ? 'yield-green' : 'yield-red'">
+            <td class="table-label-payouts-strategy text-right">
+                <div :class="apyInfoClass(item)">
                     <div v-if="item.apy > 10000">
                         {{ $utils.formatNumberToThousands(item.apy, 0) }}K %
                     </div>
@@ -142,6 +142,15 @@ export default {
             } else {
                 return '—';
             }
+        },
+
+
+        apyInfoClass(item) {
+            if (!item.apy) {
+                return '';
+            }
+
+            return item.apy > 0 ? 'yield-green' : 'yield-red';
         }
     }
 }

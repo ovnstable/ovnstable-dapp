@@ -463,6 +463,18 @@ export const pool = {
                 return;
             }
 
+            if (pool.platform === 'Balancer' && pool.address === '0x85ec6ae01624ae0d2a04d0ffaad3a25884c7d0f3') {
+                url +=  pool.address +  '0002000000000000000004b6'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Balancer' && pool.address === '0xa036553ad30f077bd46c37b1e8ac28e010d7b39e') {
+                url = 'https://app.balancer.fi/#/base/pool/' + pool.address + '000200000000000000000056'
+                window.open(url, '_blank').focus();
+                return;
+            }
+
             if (pool.platform === 'Curve' && pool.address === '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013') {
                 url = 'https://curve.fi/#/arbitrum/pools/factory-v2-117/deposit'
                 window.open(url, '_blank').focus();

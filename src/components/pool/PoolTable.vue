@@ -225,12 +225,6 @@
                                                     bottom
                                                 />
                                             </div>
-                                            <div  v-if="pool.platform === 'Balancer'">
-                                                <Tooltip
-                                                    text="Composable Stable Pool bb-DAI+/bb-USD+"
-                                                    bottom
-                                                />
-                                            </div>
 
                                             <span v-if="pool.poolNameForAgregator">
                                                 {{pool.poolNameForAgregator.toUpperCase()}}

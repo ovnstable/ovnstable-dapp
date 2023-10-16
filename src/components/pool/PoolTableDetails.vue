@@ -21,7 +21,16 @@
                            </div>
                        </div>
 
-                       <div class="pool-platform-name">
+                       <div v-if="pool.platform === 'Baseswapdefiedge'" class="pool-platform-name">
+                            <div>
+                                Baseswap
+                            </div>
+                            <div>
+                                Defiedge
+                            </div>
+                       </div>
+
+                       <div v-else class="pool-platform-name">
                            {{pool.platform}}
                        </div>
 

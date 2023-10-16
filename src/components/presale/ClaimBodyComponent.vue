@@ -716,7 +716,7 @@ export default {
     /* or 150% */
     font-feature-settings: 'liga' off;
     /* Grey/Grey 16 */
-    color: var(--theme-icon-color-selected);
+    color: var(--theme-claim-color);
 }
 
 .claim-step-description {
@@ -1010,6 +1010,6 @@ export default {
 }
 
 .theme--light.v-btn.v-btn--disabled {
-    color: var(--theme-icon-color-selected) !important;
+    color: var(--theme-claim-color) !important;
 }
 </style>

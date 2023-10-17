@@ -1,7 +1,7 @@
 <template>
     <v-row class="card-container" v-on:click.prevent @click="openInsurance">
         <v-col cols="12" align-self="start">
-            <v-row class="d-flex flex-row align-center header-row" justify="center" :style="{'--card-background': getBgColor()}">
+            <v-row class="d-flex flex-row align-center header-row header-container" justify="center" :style="{'--card-background': getBgColor()}">
                 <span class="currency ml-5">
                     <v-img :src="'/assets/currencies/insurance/insurance_' + getParams(networkId).networkName + '.svg'"/>
                 </span>
@@ -206,6 +206,7 @@ export default {
             let sum = 0;
             for (let i = 0; i < payouts.length; i++) {
                 sum += payouts[i].apy;
+                console.log("PAYOURS SUM:", sum)
             }
             return sum / payouts.length;
         },
@@ -498,6 +499,12 @@ export default {
         height: 28px;
         background: var(--hide-account);
     }
+
+    .header-container {
+        height: 160px !important;
+        padding-top: 10px;
+
+    }
 }
 
 /* full */
@@ -602,6 +609,12 @@ export default {
         height: 28px;
         background: var(--hide-account);
     }
+
+    .header-container {
+        height: 160px !important;
+        padding-top: 10px;
+        padding-bottom: 100px;
+    }
 }
 
 @media
@@ -704,6 +717,12 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-weight: 400;
         font-size: 16px;
         line-height: 24px;
+    }
+
+    .header-container {
+        height: 160px !important;
+        padding-top: 10px;
+        padding-bottom: 100px;
     }
 }
 

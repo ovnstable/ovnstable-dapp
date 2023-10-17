@@ -96,14 +96,14 @@
                                     <label class="fee-structure-label mt-1">Mint fee</label>
                                     <v-spacer></v-spacer>
                                     <label class="fee-structure-value mt-1">
-                                        —
+                                        0%
                                     </label>
                                 </v-row>
                                 <v-row class="info-row ma-0 mt-4" justify="start" align="center">
                                     <label class="fee-structure-label mt-1">Redeem fee</label>
                                     <v-spacer></v-spacer>
                                     <label class="fee-structure-value mt-1">
-                                        —
+                                        0%
                                     </label>
                                 </v-row>
                             </div>
@@ -207,7 +207,7 @@
                                             <label class="fee-structure-label">Mint fee</label>
                                             <v-spacer></v-spacer>
                                             <label class="fee-structure-value">
-                                                —
+                                                0%
                                             </label>
                                         </v-row>
                                     </v-col>
@@ -219,7 +219,7 @@
                                             <label class="fee-structure-label">Redeem fee</label>
                                             <v-spacer></v-spacer>
                                             <label class="fee-structure-value">
-                                                -
+                                                0%
                                             </label>
                                         </v-row>
                                     </v-col>

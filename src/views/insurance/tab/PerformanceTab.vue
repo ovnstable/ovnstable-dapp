@@ -28,14 +28,14 @@
               <Table
                   v-if="!$wu.isMobile()"
                   :profit-label="' OVN per 1 INS'"
-                  :payout-data="payoutsData.reverse()"/>
+                  :payout-data="payoutsData"/>
 
 
               <Table
                   v-else
                   minimized
                   :profit-label="' OVN per 1 INS'"
-                  :payout-data="payoutsData.reverse()"/>
+                  :payout-data="payoutsData"/>
 
               <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
                 <label class="table-scroll-label">scroll to see more</label>

@@ -8,8 +8,18 @@
             <th class="table-header-payouts-strategy text-right" v-if="!minimized">
                 Daily profit{{ minimized ? '' : (profitLabel ? ', ' + profitLabel : '')}}
             </th>
-            <th v-if="(payoutData && payoutData[0]) ? payoutData[0].apy : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
-                APY{{ minimized ? '' : ', % per year'}}
+            <th v-if="(payoutData && payoutData[0]) ? payoutData[0].comp : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
+                <div class="return-container">
+                    <label>
+                        Cumulative return
+                    </label>
+
+                    <div class="tooltip-compound">
+                        <v-row align="start" justify="end">
+                            <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'" text="Cumulative return since inception date"/>
+                        </v-row>
+                    </div>
+                </div>
             </th>
             <th class="table-header-payouts-strategy text-right" width="180px" v-if="!minimized">
                 Explorer
@@ -28,18 +38,12 @@
                 </label>
             </td>
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">
-                {{ $utils.formatMoney(item.dailyProfit, 6) }}
-
+                $ {{ $utils.formatMoney(item.dailyProfit, 6) }}
             </td>
-            <td class="table-label-payouts-strategy text-right">
-                <div :class="apyInfoClass(item)">
-                    <div v-if="item.apy > 10000">
-                        {{ $utils.formatNumberToThousands(item.apy, 0) }}K %
-                    </div>
-                    <div v-else>
-                        {{ $utils.formatMoney(item.apy, 1) }}%
-                    </div>
-                </div>
+            <td v-if="item.comp" class="table-label-payouts-strategy text-right">
+                <label :class="item.comp >= 0 ? 'yield-green' : 'yield-red'">
+                    {{ $utils.formatMoney(item.comp, 3) }}%
+                </label>
             </td>
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">
                 <label @click="openOnScan(item)" class="link-label">
@@ -338,8 +342,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .tooltip-compound {
   position: relative;
-  right: -7px;
-  bottom: 4px
+  right: -10px;
+  bottom: 10px
 }
 
 .return-container {

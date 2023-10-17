@@ -1,44 +1,83 @@
 <template>
     <div class="apy-chart-container">
-        <v-row>
-            <v-col cols="6">
-                <v-row justify="start" align="start">
+        <v-row class="chart-header-row">
+            <v-col :cols="$wu.isMobile() ? 12 : 6">
+                <v-row justify="start" align="left">
                     <label class="chart-title ml-5">
                         Insurance
                     </label>
                 </v-row>
-            </v-col>
-
-            <v-col cols="6">
-                <v-row justify="end" align="end">
-                    <v-col cols="12" justify="end" align="end">
-                       <div style="position:relative; padding-right: 12px">
-                           <div v-if="avgApyBySlice" :class="avgApyBySlice > 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
-                               {{ avgApyBySlice ? ($utils.formatMoneyComma(avgApyBySlice, 2)) + '%' : '' }}
-                           </div>
-
-                           <div class="tooltip-compound">
-                               <v-row justify="end" align="center">
-                                   <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'"
-                                            :text="avgApyMessage"/>
-                               </v-row>
-                           </div>
-                       </div>
-                        <div class="chart-sub-title-apy ml-5">
-                            from {{ apyFirstDate ? apyFirstDate : '-'}}
-                        </div>
-                    </v-col>
+                <v-row justify="start" align="left">
+                    <div>
+                        <label class="mobile-info-title ml-5">
+                            {{ (compoundData && compoundData.all) ? ($utils.formatMoneyComma(compoundData.all, 2)) + '%' : '' }}
+                        </label>
+                    </div>
+                    <div class="chart-sub-title-apy ml-5 mb-5">
+                        {{ (compoundData && compoundData.firstDate) ? compoundData.firstDate : '-'}}
+                    </div>
                 </v-row>
             </v-col>
 
-
             <v-col class="add-chart-info-col pt-10">
                 <v-row>
-                  <v-col cols="12">
-                    <v-row justify="end" class="all-compound-container">
+                    <v-col cols="3">
+                        <v-row justify="center">
+                            <label :class="compoundData.day >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
+                                {{ (compoundData && compoundData.day) ? ($utils.formatMoneyComma(compoundData.day, 2)) + '%' : '' }}
+                            </label>
+                        </v-row>
+                        <v-row justify="center">
+                            <label class="chart-sub-title-apy">
+                                1 day
+                            </label>
+                        </v-row>
+                    </v-col>
 
-                    </v-row>
-                  </v-col>
+                    <v-col cols="3">
+                        <v-row justify="center" class="chart-title-compound-container">
+                            <label :class="compoundData.week >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
+                                {{ (compoundData && compoundData.week) ? ($utils.formatMoneyComma(compoundData.week, 2)) + '%' : '' }}
+                            </label>
+                        </v-row>
+                        <v-row justify="center">
+                            <label class="chart-sub-title-apy">
+                                1 week
+                            </label>
+                        </v-row>
+                    </v-col>
+
+                    <v-col cols="3">
+                        <v-row justify="center" class="chart-title-compound-container">
+                            <label :class="compoundData.month >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
+                                {{ (compoundData && compoundData.month) ? ($utils.formatMoneyComma(compoundData.month, 2)) + '%' : '' }}
+                            </label>
+                        </v-row>
+                        <v-row justify="center">
+                            <label class="chart-sub-title-apy">
+                                1 month
+                            </label>
+                        </v-row>
+                    </v-col>
+
+                    <v-col cols="3">
+                        <v-row justify="center" class="chart-title-compound-container">
+                            <label :class="compoundData.all >= 0 ? 'chart-title-compound' : 'chart-title-compound-minus'">
+                                {{ (compoundData && compoundData.all) ? ($utils.formatMoneyComma(compoundData.all, 2)) + '%' : '' }}
+                            </label>
+                        </v-row>
+                        <v-row justify="center" class="all-compound-container">
+                            <label class="chart-sub-title-apy">
+                                All
+                            </label>
+
+                            <div class="tooltip-compound">
+                                <v-row align="start" justify="start">
+                                    <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'" text="Cumulative return for the period"/>
+                                </v-row>
+                            </div>
+                        </v-row>
+                    </v-col>
                 </v-row>
             </v-col>
         </v-row>
@@ -50,7 +89,7 @@
             <v-btn
                 text
                 id="week-zoom-btn"
-                class="zoom-btn"
+                class="zoom-btn mt-5"
                 dark
                 @click="zoomChart('week')"
             >
@@ -59,7 +98,7 @@
             <v-btn
                 text
                 id="month-zoom-btn"
-                class="zoom-btn"
+                class="zoom-btn mt-5"
                 dark
                 @click="zoomChart('month')"
             >
@@ -68,7 +107,7 @@
             <v-btn
                 text
                 id="all-zoom-btn"
-                class="zoom-btn mr-3"
+                class="zoom-btn mr-3 mt-5"
                 dark
                 @click="zoomChart('all')"
             >
@@ -102,6 +141,9 @@ export default {
             type: Array,
             default: null,
         },
+        compoundData: {
+            type: Object,
+        },
     },
 
     watch: {
@@ -112,7 +154,6 @@ export default {
         light: function (newVal, oldVal) {
             this.redraw();
         },
-
     },
 
     components: {Tooltip},
@@ -334,7 +375,7 @@ export default {
                     type: 'category',
 
                     tickAmount: this.isMobile ? 6 : 10,
-                    tickPlacement: 'between',
+                    tickPlacement: 'on',
 
                     labels: {
                         show: false,
@@ -669,8 +710,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .tooltip-compound {
     position: absolute;
-    right: 0px;
-    top: 17px;
+    right: 5px;
+    top: -15px;
 }
 
 .all-compound-container {

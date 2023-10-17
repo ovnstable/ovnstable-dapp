@@ -12,7 +12,7 @@
       </v-row>
       <v-row v-if="isAllDataLoaded" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-5'" justify="start" align="center">
           <v-col class="info-card-body-bottom">
-              <ChartApy class="mx-n3" :data="insurancePerformanceData.optimism" :payouts="payoutsData" />
+              <ChartApy class="mx-n3" :data="insurancePerformanceData.optimism" :compound-data="insuranceCompoundData.optimism"/>
           </v-col>
       </v-row>
 
@@ -28,14 +28,14 @@
               <Table
                   v-if="!$wu.isMobile()"
                   :profit-label="' OVN per 1 INS'"
-                  :payout-data="payouts"/>
+                  :payout-data="payoutsData.reverse()"/>
 
 
               <Table
                   v-else
                   minimized
                   :profit-label="' OVN per 1 INS'"
-                  :payout-data="payouts"/>
+                  :payout-data="payoutsData.reverse()"/>
 
               <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
                 <label class="table-scroll-label">scroll to see more</label>
@@ -81,6 +81,7 @@ export default {
         insurancePerformanceData: {},
         insuranceTvlData: {},
         insuranceRedemptionData: {},
+        insuranceCompoundData: {},
      }),
 
     props: {
@@ -92,34 +93,34 @@ export default {
     },
 
     computed: {
-      ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'baseConfig', 'lineaConfig', 'zkConfig']),
-      ...mapGetters('accountData', ['account']),
-      ...mapGetters('web3', ['contracts', 'web3']),
+        ...mapGetters('network', ['appApiUrl', 'networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'baseConfig', 'lineaConfig', 'zkConfig']),
+        ...mapGetters('accountData', ['account']),
+        ...mapGetters('web3', ['contracts', 'web3']),
 
-      isAllDataLoaded: function () {
-        return !this.isStrategyDataLoading;
-      },
+        isAllDataLoaded: function () {
+            return !this.isStrategyDataLoading;
+        },
 
-    activeRateApy: function () {
-          return {
+        activeRateApy: function () {
+            return {
               'rate-tab-button': this.rateTab === 1,
               'rate-tab-button-in-active': this.rateTab !== 1,
-          }
-      },
+            }
+        },
 
-      activeRateDist: function () {
-          return {
+        activeRateDist: function () {
+            return {
               'rate-tab-button': this.rateTab === 2,
               'rate-tab-button-in-active': this.rateTab !== 2,
-          }
-      },
+            }
+        },
 
-      activeRateTvl: function () {
-          return {
+        activeRateTvl: function () {
+            return {
               'rate-tab-button': this.rateTab === 3,
               'rate-tab-button-in-active': this.rateTab !== 3,
-          }
-      },
+            }
+        },
 
       lastPayoutDate: function () {
         let data = this.payoutsData;
@@ -136,7 +137,7 @@ export default {
     },
 
     mounted() {
-      this.loadData();
+        this.loadData();
     },
 
     methods: {
@@ -163,9 +164,6 @@ export default {
                 this.payoutsData = value;
                 strategyData = value;
 
-                // strategyData.apy = (avgApyStrategyMonth && avgApyStrategyMonth.value) ? (avgApyStrategyMonth.value) : strategyData.lastApy;
-                // strategyData.diffApy = (avgApy && avgApy.value && strategyData.apy) ? (strategyData.apy - avgApy.value) : null;
-
                 strategyData.sort(
                     function (o1, o2) {
                         return moment(o1.date).isBefore(moment(o2.date)) ? -1 : moment(o1.date).isAfter(moment(o2.date)) ? 1 : 0;
@@ -186,17 +184,67 @@ export default {
                     ]
                 };
 
+                let startValue = 1;
+                let accumulator = startValue;
+                let accumulatorDay = startValue;
+                let accumulatorWeek = startValue;
+                let accumulatorMonth = startValue;
+
+                let compoundData = {};
+
                 let clientDataPreferment = [...clientData];
+                let clientDataLengthCounter = clientDataPreferment.length;
                 for (let i = 0; i < clientDataPreferment.length; i++) {
                     const payout = clientDataPreferment[i];
                     try {
                         console.log("InsuranceData: refreshStrategyData payout: ", payout);
 
+                        //all
+                        accumulator = accumulator * (1 + payout.dailyProfit);
+                        payout.comp =  (accumulator * 100 / startValue - 100);
+                        payout.comp =  parseFloat(payout.comp ? payout.comp : 0.00).toFixed(3);
 
-                        // all
-                        widgetDataDict[moment(payout.date).format('DD.MM.YYYY')] = payout.apy;
+                        widgetDataDict[moment(payout.date).format('DD.MM.YYYY')] = payout.comp;
+
+                        // date
+                        if (i === 0) {
+                            compoundData.firstDate = moment(payout.date).format('MMM D, YYYY');
+                        }
+
+                        // week
+                        if (clientDataLengthCounter <= 7) {
+                            accumulatorWeek = accumulatorWeek * (1 + payout.dailyProfit);
+                        }
+
+                        // month
+                        if (clientDataLengthCounter <= 30) {
+                            accumulatorMonth = accumulatorMonth * (1 + payout.dailyProfit);
+                        }
+
+                        // day
+                        if (clientDataLengthCounter === 1) {
+                            // day
+                            accumulatorDay = accumulatorDay * (1 + payout.dailyProfit);
+                            let dayComp = (accumulatorDay * 100 / startValue - 100);
+
+                            compoundData.day = parseFloat(dayComp ? dayComp : 0.0).toFixed(3)
+
+                            // week
+                            let weekComp = (accumulatorWeek * 100 / startValue - 100);
+                            compoundData.week = parseFloat(weekComp ? weekComp : 0.0).toFixed(3)
+
+                            // month
+                            let monthComp = (accumulatorMonth * 100 / startValue - 100);
+                            compoundData.month = parseFloat(monthComp ? monthComp : 0.0).toFixed(3)
+
+                            compoundData.all = payout.comp // last payout comp
+
+                            this.addInsuranceCompoundData({ name: 'optimism', data: compoundData});
+                        }
+
+                        clientDataLengthCounter--;
                     } catch (e) {
-                        console.error("strategyData build Widget Data Dict insurance error:", e)
+                        console.error("strategyData build Widget Data Dict insurance error:", e);
                     }
                 }
 
@@ -227,6 +275,9 @@ export default {
         this.insuranceTvlData[insuranceTvlDataParams.name] = insuranceTvlDataParams.data;
       },
 
+      addInsuranceCompoundData(compoundDataParams) {
+          this.insuranceCompoundData[compoundDataParams.name] = compoundDataParams.data;
+      }
     }
 }
 </script>

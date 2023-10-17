@@ -124,7 +124,7 @@ export default {
 
       lastPayoutDate: function () {
         let data = this.payoutsData;
-        return data ? data[0].date : null;
+        return data ? data.reverse()[0].date : null;
       },
       payouts: function () {
         let data = this.payoutsData;

@@ -1,73 +1,87 @@
 <template>
-    <v-simple-table class="current-table-payouts-strategy" height="400px">
-        <thead>
-        <tr class="current-strategy-table-row-header">
-            <th class="table-header-payouts-strategy text-left" :width="minimized ? '' : '30%'">
-                Payout date, UTC
-            </th>
-            <th class="table-header-payouts-strategy text-right" v-if="!minimized">
-                Daily profit{{ minimized ? '' : (profitLabel ? ', ' + profitLabel : '')}}
-            </th>
-            <th v-if="(payoutData && payoutData[0]) ? payoutData[0].comp : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
-              <div class="return-container">
-                <label>
-                  Cumulative return
-                </label>
+    <div class="table-container">
+        <v-simple-table class="current-table-payouts-strategy" height="400px">
+            <thead>
+            <tr class="current-strategy-table-row-header fixed-header-table">
+                <th class="table-header-payouts-strategy text-left" :width="minimized ? '' : '30%'">
+                    Payout date, UTC
+                </th>
+                <th class="table-header-payouts-strategy text-right" v-if="!minimized">
+                    Daily profit{{ minimized ? '' : (profitLabel ? ', ' + profitLabel : '')}}
+                </th>
+                <th v-if="(payoutData && payoutData[0]) ? payoutData[0].comp : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
+                    <div class="return-container">
+                        <label>
+                            Cumulative return
+                        </label>
 
-                <div class="tooltip-compound">
-                  <v-row align="center" justify="end">
-                    <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'" text="Cumulative return since inception date"/>
-                  </v-row>
-                </div>
-              </div>
-            </th>
-            <th v-else-if="payoutData && payoutData[0] ? payoutData[0].annualizedYield : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
-                Annualized yield{{ minimized ? '' : ', % per year'}}
-            </th>
-            <th class="table-header-payouts-strategy text-right" width="180px" v-if="!minimized">
-                Explorer
-            </th>
-        </tr>
-        </thead>
+                        <div class="tooltip-compound">
+                            <v-row align="center" justify="end">
+                                <Tooltip :size="16" :icon-color="light ? '#ADB3BD' :  '#707A8B'" text="Cumulative return since inception date"/>
+                            </v-row>
+                        </div>
+                    </div>
+                </th>
+                <th v-else-if="payoutData && payoutData[0] ? payoutData[0].annualizedYield : false" class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
+                    Annualized yield{{ minimized ? '' : ', % per year'}}
+                </th>
+                <th v-else class="table-header-payouts-strategy text-right" :colspan="minimized ? 2 : 1">
+                    Annualized yield
+                </th>
+                <th class="table-header-payouts-strategy text-right" width="180px" v-if="!minimized">
+                    Explorer
+                </th>
+            </tr>
+            </thead>
 
-        <tbody>
-        <tr v-for="item in payoutData" :key="item.payableDate" class="current-strategy-table-row" @click="openOnScan(item)">
-            <td class="table-label-payouts-strategy text-left">
-                <label>
-                    {{ formatDate(item.payableDate) }}
-                </label>
-                <label class="ml-4" v-if="!minimized">
-                    {{ formatTime(item.payableDate) }}
-                </label>
-            </td>
-            <td class="table-label-payouts-strategy text-right" v-if="!minimized">
-                $ {{ $utils.formatMoney(item.dailyProfit, 6) }}
-
-            </td>
-            <td v-if="item.comp" class="table-label-payouts-strategy text-right">
-                <label :class="item.comp >= 0 ? 'yield-green' : 'yield-red'">
-                    {{ $utils.formatMoney(item.comp, 2) }}%
-                </label>
-            </td>
-            <td v-else-if="item.annualizedYield" class="table-label-payouts-strategy text-right">
-                <label :class="item.annualizedYield > 0 ? 'yield-green' : 'yield-red'">
-                    {{ $utils.formatMoney(item.annualizedYield, 1) }}%
-                </label>
-            </td>
-            <td class="table-label-payouts-strategy text-right" v-if="!minimized">
-                <label @click="openOnScan(item)" class="link-label">
-                    {{ shortHash(item.transactionHash) }}
-                    <v-img class="icon-img ml-2" :src="require('@/assets/icon/open.svg')"/>
-                </label>
-            </td>
-            <td v-if="minimized" class="table-label-payouts-strategy text-right">
-                <label class="text-right">
-                    <v-img class="icon-img ml-2" :src="require('@/assets/icon/open.svg')"/>
-                </label>
-            </td>
-        </tr>
-        </tbody>
-    </v-simple-table>
+            <tbody>
+            <tr v-for="item in payoutData" :key="item.payableDate" class="current-strategy-table-row" @click="openOnScan(item)">
+                <td class="table-label-payouts-strategy text-left">
+                    <label>
+                        {{ formatDate(item.payableDate) }}
+                    </label>
+                    <label class="ml-4" v-if="!minimized">
+                        {{ formatTime(item.payableDate) }}
+                    </label>
+                </td>
+                <td class="table-label-payouts-strategy text-right" v-if="!minimized">
+                    <label v-if="assetType === 'eth+'">
+                        {{ $utils.formatMoney(item.dailyProfit, 6) }} ETH
+                    </label>
+                    <label v-else>
+                        $ {{ $utils.formatMoney(item.dailyProfit, 6) }}
+                    </label>
+                </td>
+                <td v-if="item.comp" class="table-label-payouts-strategy text-right">
+                    <label :class="item.comp >= 0 ? 'yield-green' : 'yield-red'">
+                        {{ $utils.formatMoney(item.comp, 2) }}%
+                    </label>
+                </td>
+                <td v-else-if="item.annualizedYield" class="table-label-payouts-strategy text-right">
+                    <label :class="item.annualizedYield > 0 ? 'yield-green' : 'yield-red'">
+                        {{ $utils.formatMoney(item.annualizedYield, 1) }}%
+                    </label>
+                </td>
+                <td v-else class="table-label-payouts-strategy text-right">
+                    <label>
+                        -
+                    </label>
+                </td>
+                <td class="table-label-payouts-strategy text-right" v-if="!minimized">
+                    <label @click="openOnScan(item)" class="link-label">
+                        {{ shortHash(item.transactionHash) }}
+                        <v-img class="icon-img ml-2" :src="require('@/assets/icon/open.svg')"/>
+                    </label>
+                </td>
+                <td v-if="minimized" class="table-label-payouts-strategy text-right">
+                    <label class="text-right">
+                        <v-img class="icon-img ml-2" :src="require('@/assets/icon/open.svg')"/>
+                    </label>
+                </td>
+            </tr>
+            </tbody>
+        </v-simple-table>
+    </div>
 </template>
 
 <script>
@@ -104,7 +118,12 @@ export default {
         networkName: {
             type: String,
             default: 'optimism'
-        }
+        },
+
+        assetType: {
+            type: String,
+            default: 'usd+'
+        },
     },
 
     computed: {
@@ -348,5 +367,21 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .return-container {
   position: relative;
+}
+
+.table-container {
+    max-height: 500px; /* Set the maximum height for the table to enable scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+
+    /* Additional styling for the container if needed */
+    border: none;
+}
+
+.fixed-header-table {
+    /* Style the fixed table header */
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Adjust the background color as needed */
+    z-index: 1;
 }
 </style>

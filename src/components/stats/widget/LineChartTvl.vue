@@ -11,8 +11,11 @@
                 </v-row>
 
                 <v-row justify="start">
-                    <label class="mobile-info-title">
-                        {{ totalTvl ? ((assetType === 'eth+' ? 'ETH ' : '$') + $utils.formatMoneyComma(totalTvl, 2)) : '' }}
+                    <label v-if="this.assetType === 'eth+'" class="mobile-info-title">
+                        {{ $utils.formatMoneyComma(totalTvl, 6) }} ETH
+                    </label>
+                    <label v-else class="mobile-info-title">
+                        {{ totalTvl ? ((assetType === 'eth+' ? '' : '$') + $utils.formatMoneyComma(totalTvl, 2)) : '' }}
                     </label>
                 </v-row>
             </v-col>
@@ -20,7 +23,7 @@
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
                     <label v-if="this.assetType === 'eth+'" class="chart-title-apy">
-                        {{ $utils.formatMoneyComma(totalTvl, 2) }} ETH
+                        {{ $utils.formatMoneyComma(totalTvl, 6) }} ETH
                     </label>
                     <label v-else class="chart-title-apy">
                         {{ totalTvl ? ((assetType === 'eth+' ? '' : '$') + $utils.formatMoneyComma(totalTvl, 2)) : '' }}

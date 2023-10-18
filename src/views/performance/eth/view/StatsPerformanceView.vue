@@ -123,7 +123,8 @@
                         <v-col :cols="!$wu.isFull() ? 12 : 8">
                             <Table
                                 v-if="!$wu.isMobile()"
-                                :profit-label="assetName + ' per ETH+'"
+                                asset-type="eth+"
+                                :profit-label="'ETH' + ' per ETH+'"
                                 :payout-data="payouts"
                                 :network-name="tab"
                             />
@@ -131,7 +132,8 @@
                             <Table
                                 v-else
                                 minimized
-                                :profit-label="assetName + ' per ETH+'"
+                                asset-type="eth+"
+                                :profit-label="'ETH' + ' per ETH+'"
                                 :payout-data="payouts"
                                 :network-name="tab"
                             />

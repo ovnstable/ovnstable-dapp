@@ -28,13 +28,10 @@
             </v-row>
 
             <v-container class="mt-6">
-                <v-row class="ma-0 mb-8 box">
+<!--                <v-row class="ma-0 mb-8 box">
                     <v-col cols="12">
 
                       <v-row class="ma-0 d-flex justify-space-between info-container">
-                              <label class="card-info-label mt-2">
-                                Insurance premiums
-                              </label>
                               <label class="card-info-value mt-2 value-info">
                                 {{ apyData ? $utils.formatMoneyComma(last30DayApy, 0) + '%' : '—' }}
                               </label>
@@ -45,10 +42,11 @@
                               </div>
                         </v-row>
                     </v-col>
-                </v-row>
+                      add class to the next v-row insurance-card-info-row
+                </v-row>-->
 
-                <v-row class="ma-0 insurance-card-info-row d-flex justify-space-between">
-                    <label class="card-info-label mt-2">Insurance vault</label>
+                <v-row class="ma-0 d-flex justify-space-between">
+                    <label class="card-info-label mt-2 mb-2">Insurance vault</label>
                     <label class="card-info-value mt-2">
                         {{ apyData && apyData.supply ? $utils.formatMoneyComma(apyData.supply, 0) : '—' }} OVN
                     </label>

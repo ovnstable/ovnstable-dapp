@@ -4,7 +4,7 @@
             <v-col :cols="$wu.isMobile() ? 12 : 6">
                 <v-row justify="start" align="left">
                     <label class="chart-title ml-5">
-                        Insurance
+                        Cumulative return
                     </label>
                 </v-row>
                 <v-row justify="start" align="left">

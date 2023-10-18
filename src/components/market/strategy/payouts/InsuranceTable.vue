@@ -353,18 +353,16 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .table-container {
-    max-height: 500px; /* Set the maximum height for the table to enable scrolling */
-    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 500px;
+    overflow-y: auto;
 
-    /* Additional styling for the container if needed */
     border: none;
 }
 
 .fixed-header-table {
-    /* Style the fixed table header */
     position: sticky;
     top: 0;
-    background-color: #fff; /* Adjust the background color as needed */
+    background-color: var(--card-info-background);
     z-index: 1;
 }
 </style>

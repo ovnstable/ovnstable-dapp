@@ -174,10 +174,10 @@
             <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('10')">
                 switch to optimism to mint
             </v-btn>
-            <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('42161')">
+            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('42161')">
                 switch to arbitrum to mint
             </v-btn>
-            <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('8453')">
+            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('8453')">
                 switch to base to mint
             </v-btn>
         </div>

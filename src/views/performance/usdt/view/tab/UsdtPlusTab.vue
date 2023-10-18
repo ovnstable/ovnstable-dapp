@@ -274,6 +274,10 @@ export default {
     },
 
     watch: {
+        networkName: function (newVal, oldVal) {
+            this.setTab(newVal);
+            this.loadData(newVal);
+        }
     },
 
     created() {
@@ -283,10 +287,8 @@ export default {
       console.log('Tab Name: ', this.$route.query.tabName);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName);
-            // this.loadData();
         } if (this.$route.query.tabName) {
             this.setTab(this.$route.query.tabName);
-            // this.loadData();
         }
     },
 
@@ -301,8 +303,7 @@ export default {
 
         setTab(tabName) {
             this.tab = tabName;
-            this.initTabName('/collateral/usdt', {tabName: this.tab});
-
+            this.initTabName('/collateral/usdt', {tabName: tabName});
             this.loadCurrentTotalData()
             this.loadCollateralData()
             console.log("NetworkParams : ", this.getParams(this.tab));

@@ -205,7 +205,7 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("network", ['networkId', 'networkName', 'apiUrl', 'getParams']),
+        ...mapGetters("network", ['networkId', 'assetName', 'appApiUrl', 'apiUrl', 'getParams', 'networkName']),
         ...mapGetters('etsAction', ['etsList']),
 
         tabNetworkName: function() {
@@ -275,7 +275,8 @@ export default {
     watch: {
         networkName: function (newVal, oldVal) {
             this.setTab(newVal);
-            this.loadData(newVal);
+            this.loadCurrentTotalData(newVal);
+            this.loadCollateralData(newVal);
         }
     },
 
@@ -286,14 +287,13 @@ export default {
         console.log('Tab Name: ', this.$route.query.tabName);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName);
-            this.loadData();
         } if (this.$route.query.tabName) {
             this.setTab(this.$route.query.tabName);
-            this.loadData();
         }
     },
 
     methods: {
+        ...mapActions("network", ["setWalletNetwork"]),
         swapButtonIn() {
             this.initTabName('/swap', {action: 'swap-in', symbol: 'DAI+'})
         },
@@ -443,6 +443,7 @@ export default {
           this.collateralData = [];
           for (let i = 0; i < stablecoinList.length; i++) {
             let element = stablecoinList[i];
+            console.log("Elements:", element)
 
             try {
               this.collateralData.push(

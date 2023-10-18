@@ -247,7 +247,6 @@ export default {
     watch: {
         networkName: function (newVal, oldVal) {
             this.setTab(newVal);
-            this.loadData(newVal);
         }
     },
 
@@ -258,11 +257,9 @@ export default {
         console.log('Tab Name: ', this.$route.query.tabName);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName);
-            // this.loadData();
         }
         if (this.$route.query.tabName) {
             this.setTab(this.$route.query.tabName);
-            // this.loadData();
         }
     },
 

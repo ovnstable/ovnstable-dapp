@@ -303,6 +303,10 @@ export default {
     },
 
     watch: {
+        networkName: function (newVal, oldVal) {
+            this.setTab(newVal);
+            this.loadData(newVal);
+        }
     },
 
     created() {

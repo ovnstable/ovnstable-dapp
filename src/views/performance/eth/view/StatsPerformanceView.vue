@@ -124,7 +124,7 @@
                             <Table
                                 v-if="!$wu.isMobile()"
                                 asset-type="eth+"
-                                :profit-label="'ETH' + ' per ETH+'"
+                                :profit-label="'WETH' + ' per ETH+'"
                                 :payout-data="payouts"
                                 :network-name="tab"
                             />
@@ -133,7 +133,7 @@
                                 v-else
                                 minimized
                                 asset-type="eth+"
-                                :profit-label="'ETH' + ' per ETH+'"
+                                :profit-label="'WETH' + ' per ETH+'"
                                 :payout-data="payouts"
                                 :network-name="tab"
                             />
@@ -162,7 +162,7 @@
             </div>
             <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5 ml-5' : 'mt-0'">
                 <label class="section-text">
-                    ETH+ is the equivalent of USD+, pegged to ETH 1:1, instantly mintable and redeemable in ETH. 100%
+                    ETH+ is the equivalent of USD+, pegged to WETH 1:1, instantly mintable and redeemable in WETH. 100%
                     collateralized with delta-neutral and other strategies based on the best protocols.
                 </label>
                 <div class="section-text font-weight-bold">

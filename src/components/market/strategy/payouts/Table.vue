@@ -46,7 +46,7 @@
                 </td>
                 <td class="table-label-payouts-strategy text-right" v-if="!minimized">
                     <label v-if="assetType === 'eth+'">
-                        {{ $utils.formatMoney(item.dailyProfit, 6) }} ETH
+                        {{ $utils.formatMoney(item.dailyProfit, 6) }} WETH
                     </label>
                     <label v-else>
                         $ {{ $utils.formatMoney(item.dailyProfit, 6) }}

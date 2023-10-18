@@ -12,7 +12,7 @@
 
                 <v-row justify="start">
                     <label v-if="this.assetType === 'eth+'" class="mobile-info-title">
-                        {{ $utils.formatMoneyComma(totalTvl, 6) }} ETH
+                        {{ $utils.formatMoneyComma(totalTvl, 6) }} WETH
                     </label>
                     <label v-else class="mobile-info-title">
                         {{ totalTvl ? ((assetType === 'eth+' ? '' : '$') + $utils.formatMoneyComma(totalTvl, 2)) : '' }}
@@ -23,7 +23,7 @@
             <v-col class="add-chart-info-col">
                 <v-row justify="end">
                     <label v-if="this.assetType === 'eth+'" class="chart-title-apy">
-                        {{ $utils.formatMoneyComma(totalTvl, 6) }} ETH
+                        {{ $utils.formatMoneyComma(totalTvl, 6) }} WETH
                     </label>
                     <label v-else class="chart-title-apy">
                         {{ totalTvl ? ((assetType === 'eth+' ? '' : '$') + $utils.formatMoneyComma(totalTvl, 2)) : '' }}
@@ -356,7 +356,7 @@ export default {
                     y: {
                         formatter: (val, opts) => {
                             if (this.assetType === 'eth+') {
-                                return val + ' ETH';
+                                return val + ' WETH';
                             } else {
                                 return '$' + val;
                             }

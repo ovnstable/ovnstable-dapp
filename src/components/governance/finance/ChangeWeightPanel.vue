@@ -11,7 +11,7 @@
                 disable-filtering
                 disable-pagination
             >
-                <template v-slot:body="{items}">
+                <template v-if="contractType !== 'ETH+'" v-slot:body="{items}">
                     <tbody>
                         <tr v-for="item in items" v-bind:key="item.name" >
                             <template v-if="!item.isHidden">
@@ -123,6 +123,120 @@
                             </td>
                             <td :colspan="networkId === 137 ? 7 : 6"></td>
                         </tr>
+                    </tbody>
+                </template>
+                <template v-else v-slot:body="{items}">
+                    <tbody>
+                    <tr v-for="item in items" v-bind:key="item.name" >
+                        <template v-if="!item.isHidden">
+                            <td @click="openOnScan(item.address)" class="strategy-name-col">
+                                {{ item.name }}
+                            </td>
+                            <td class="text-right">
+                                {{ $utils.formatMoney(item.netAssetValue, 2) }} WETH
+                            </td>
+                            <td class="text-right">
+                                {{ $utils.formatMoney(item.liquidationValue, 2) }} WETH
+                            </td>
+                            <td class="text-right">
+                                <b>{{ $utils.formatMoney(item.calculatedNav, 2) }} WETH</b>
+                            </td>
+                            <td class="text-right">
+                                <b>{{ item.currentWeight }}</b>
+                            </td>
+                            <td>
+                                <v-row class="fill-height" align="center" justify="center">
+                                    <v-text-field
+                                        class="m2m-field"
+                                        :rules="[rules.required, checkNumber]"
+                                        dense
+                                        outlined
+                                        v-model="item.minWeight"
+                                        :disabled="financeLoading || !hasChangeAccount">
+                                    </v-text-field>
+                                </v-row>
+                            </td>
+                            <td>
+                                <v-row class="fill-height" align="center" justify="center">
+                                    <v-text-field
+                                        class="m2m-field"
+                                        :rules="[rules.required, checkNumber]"
+                                        dense
+                                        outlined
+                                        v-model="item.targetWeight"
+                                        :disabled="financeLoading || !hasChangeAccount"
+                                        @input="calculateNav(item)">
+                                    </v-text-field>
+                                </v-row>
+                            </td>
+                            <td>
+                                <v-row class="fill-height" align="center" justify="center">
+                                    <v-text-field
+                                        class="m2m-field"
+                                        :rules="[rules.required, checkNumber]"
+                                        dense
+                                        outlined
+                                        v-model="item.maxWeight"
+                                        :disabled="financeLoading || !hasChangeAccount"
+                                    >
+                                    </v-text-field>
+                                </v-row>
+                            </td>
+                            <td>
+                                <v-switch
+                                    :disabled="financeLoading || !hasChangeAccount"
+                                    v-model="item.enabled"
+                                ></v-switch>
+                            </td>
+                            <td>
+                                <v-switch
+                                    :disabled="financeLoading || !hasChangeAccount"
+                                    v-model="item.enabledReward"
+                                ></v-switch>
+                            </td>
+                            <td>
+                                <v-row class="fill-height" align="center" justify="center">
+                                    <v-text-field
+                                        class="m2m-field"
+                                        :rules="[rules.required, checkNumber]"
+                                        dense
+                                        outlined
+                                        v-model="item.riskFactor"
+                                        :disabled="financeLoading || !hasChangeAccount">
+                                    </v-text-field>
+                                </v-row>
+                            </td>
+                        </template>
+
+                    </tr>
+
+                    <tr>
+                        <td :colspan="networkId === 137 ? 10 : 9"></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <b>Total</b>
+                        </td>
+                        <td class="text-right">
+                            <b>{{ $utils.formatMoney(m2mTotal, 2) }} WETH</b>
+                        </td>
+                        <td class="text-right">
+                            <b>{{ $utils.formatMoney(totalLiquidationSum, 2) }} WETH</b>
+                        </td>
+                        <td :colspan="networkId === 137 ? 7 : 6"></td>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <b>Total ETH+</b>
+                        </td>
+                        <td class="text-right">
+                            <b>{{ $utils.formatMoney(totalUsdPlusValue, 2) }} WETH</b>
+                        </td>
+                        <td :colspan="networkId === 137 ? 7 : 6"></td>
+                    </tr>
                     </tbody>
                 </template>
             </v-data-table>
@@ -298,6 +412,10 @@ export default {
 
             if (this.contractType === 'USDT+') {
                 return this.contracts.usdtPlus;
+            }
+
+            if (this.contractType === 'ETH+') {
+                return this.contracts.ethPlus;
             }
 
             console.log("Error when load blockchain total values contract type not found: ", this.contractType)

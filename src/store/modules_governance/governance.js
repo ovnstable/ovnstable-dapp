@@ -338,6 +338,8 @@ const actions = {
             pm = rootState.web3.contracts.daiPm;
         } else if (contractType === 'USDT+') {
             pm = rootState.web3.contracts.usdtPm;
+        } else if (contractType === 'ETH+') {
+            pm = rootState.web3.contracts.wethPm;
         } else {
             console.log("Error when checkAccount. Contract type not found: ", contractType)
             return;
@@ -365,6 +367,8 @@ const actions = {
             pm = rootState.web3.contracts.daiPm;
         } else if (contractType === 'USDT+') {
             pm = rootState.web3.contracts.usdtPm;
+        } else if (contractType === 'ETH+') {
+            pm = rootState.web3.contracts.wethPm;
         } else {
             console.log("Error when checkAccount. Contract type not found: ", contractType)
             return;
@@ -432,7 +436,9 @@ const actions = {
             pm = rootState.web3.contracts.daiPm;
         } else if (contractType === 'USDT+') {
             pm = rootState.web3.contracts.usdtPm;
-        } else {
+        } else if (contractType === 'ETH+') {
+            pm = rootState.web3.contracts.wethPm;
+        }else {
             console.log("Error when checkAccount. Contract type not found: ", contractType)
             return;
         }
@@ -522,6 +528,8 @@ const actions = {
             pm = rootState.web3.contracts.daiPm;
         } else if (contractType === 'USDT+') {
             pm = rootState.web3.contracts.usdtPm;
+        } else if (contractType === 'ETH+') {
+            pm = rootState.web3.contracts.wethPm;
         } else {
             console.log("Error when checkAccount. Contract type not found: ", contractType)
             return;
@@ -555,6 +563,8 @@ const actions = {
                 pm = rootState.web3.contracts.daiPm;
             } else if (contractType === 'USDT+') {
                 pm = rootState.web3.contracts.usdtPm;
+            } else if (contractType === 'ETH+') {
+                pm = rootState.web3.contracts.wethPm;
             } else {
                 console.log("Error when checkAccount. Contract type not found: ", contractType)
                 return;
@@ -610,6 +620,8 @@ const actions = {
             pm = rootState.web3.contracts.daiPm;
         } else if (contractType === 'USDT+') {
             pm = rootState.web3.contracts.usdtPm;
+        } else if (contractType === 'ETH+') {
+            pm = rootState.web3.contracts.wethPm;
         } else {
             console.log("Error when checkAccount. Contract type not found: ", contractType)
             return;
@@ -661,22 +673,27 @@ const actions = {
     },
 
     async getM2M({commit, dispatch, getters, rootState}, contractType) {
+        let web3 = rootState.web3;
 
         let m2m;
         let tokenPlusContract;
         let pm;
         if (contractType === 'USD+') {
-            tokenPlusContract = rootState.web3.contracts.usdPlus;
-            pm = rootState.web3.contracts.pm;
-            m2m = rootState.web3.contracts.m2m;
+            tokenPlusContract = web3.contracts.usdPlus;
+            pm = web3.contracts.pm;
+            m2m = web3.contracts.m2m;
         } else if (contractType === 'DAI+') {
-            tokenPlusContract = rootState.web3.contracts.daiPlus;
-            pm = rootState.web3.contracts.daiPm;
-            m2m = rootState.web3.contracts.daiM2m;
+            tokenPlusContract = web3.contracts.daiPlus;
+            pm = web3.contracts.daiPm;
+            m2m = web3.contracts.daiM2m;
         } else if (contractType === 'USDT+') {
-            tokenPlusContract = rootState.web3.contracts.usdtPlus;
-            pm = rootState.web3.contracts.usdtPm;
-            m2m = rootState.web3.contracts.usdtM2m;
+            tokenPlusContract = web3.contracts.usdtPlus;
+            pm = web3.contracts.usdtPm;
+            m2m = web3.contracts.usdtM2m;
+        } else if (contractType === 'ETH+') {
+            tokenPlusContract = web3.contracts.ethPlus;
+            pm = web3.contracts.wethPm;
+            m2m = web3.contracts.wethM2m;
         } else {
             console.log("Error when get m2m. Contract type not found: ", contractType)
             return;
@@ -710,18 +727,18 @@ const actions = {
 
         for (let i = 0; i < strategyAssets.length; i++) {
             let asset = strategyAssets[i];
+            console.log("ASSET:", asset)
             let weight = strategyWeights[i];
 
             let mapping = strategiesMapping.find(value => value.address === asset.strategy);
 
             console.log('fromAsset6: ', fromAsset6)
-            if (fromAsset6 && contractType === 'DAI+') {
+            if (fromAsset6 && contractType === 'DAI+' || contractType === 'ETH+') {
                 fromAsset6 = false;
             }
             console.log('rootState.network.assetDecimals: ', rootState.network.assetDecimals)
 
-            let nav = (fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : numberUtils._fromE18(asset.netAssetValue.toString()));
-
+            let nav = (fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : web3.web3.utils.fromWei(asset.netAssetValue, 'ether'));
 
             let targetWeights = (weight.targetWeight ? parseInt(weight.targetWeight) / 1000 : 0);
             let enabledReward = weight.enabledReward;
@@ -733,7 +750,7 @@ const actions = {
                     name: mapping ? mapping.fullName : asset.strategy,
                     address: asset.strategy,
                     netAssetValue: nav,
-                    liquidationValue: (fromAsset6 ? numberUtils._fromE6(asset.liquidationValue.toString()) : numberUtils._fromE18(asset.liquidationValue.toString())),
+                    liquidationValue: (fromAsset6 ? numberUtils._fromE6(asset.liquidationValue.toString()) : web3.web3.utils.fromWei(asset.liquidationValue, 'ether')),
                     minWeight: (weight.minWeight ? parseInt(weight.minWeight) / 1000 : 0),
                     maxWeight: (weight.maxWeight ? parseInt(weight.maxWeight) / 1000 : 0),
                     riskFactor: (weight.riskFactor ? parseInt(weight.riskFactor) / 1000 : 0),
@@ -743,12 +760,11 @@ const actions = {
                     isHidden: isHidden,
                 });
 
-            sum += parseFloat((fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : numberUtils._fromE18(asset.netAssetValue.toString())));
+            sum += parseFloat((fromAsset6 ? numberUtils._fromE6(asset.netAssetValue.toString()) : web3.web3.utils.fromWei(asset.netAssetValue, 'ether')));
         }
 
         for (let i = 0; i < strategiesMapping.length; i++) {
             let mappingAsset = strategiesMapping[i];
-            console.log("MappingAsset urls:", mappingAsset)
             let added = items.find(value => value.address === mappingAsset.address);
             if (!added) {
                 items.push(
@@ -777,12 +793,19 @@ const actions = {
             console.log("CALCULATED NAV:", sum)
         }
 
+        console.log("ITEMS:", items)
+
         commit('setM2mItems', items);
-        commit('setM2mTotal', (fromAsset6 ? numberUtils._fromE6(totalNetAssets.toString()) : numberUtils._fromE18(totalNetAssets.toString())));
+        commit('setM2mTotal', (fromAsset6 ? numberUtils._fromE6(totalNetAssets) : web3.web3.utils.fromWei(totalNetAssets, 'ether')));
 
         if (tokenPlusContract) {
             let totalTokenPlus = numberUtils._fromE6(await tokenPlusContract.methods.totalSupply().call());
-            let liquidityIndex = (await tokenPlusContract.methods.liquidityIndex().call()).toString();
+            if (contractType === 'ETH+') {
+                totalTokenPlus = web3.web3.utils.fromWei(await tokenPlusContract.methods.totalSupply().call(), 'ether');
+                console.log(typeof totalTokenPlus);
+            }
+            console.log(typeof totalTokenPlus);
+            let liquidityIndex = (await tokenPlusContract.methods.liquidityIndex().call());
             console.log("totalTokenPlus: ", totalTokenPlus)
             commit('setUsdPlusTotal', totalTokenPlus);
             commit('setUsdPlusLiquidityIndex', liquidityIndex);
@@ -845,6 +868,15 @@ const actions = {
             return;
         }
 
+        if (contractType === 'ETH+') {
+            console.log("getAbroad for eth ")
+            abroad.min = await rootState.web3.contracts.wethExchange.methods.abroadMin().call();
+            abroad.max = await rootState.web3.contracts.wethExchange.methods.abroadMax().call();
+            console.log("getAbroad for eth: ", abroad)
+            commit('setAbroad', abroad);
+            return;
+        }
+
         console.log("Error when get abroad. Contract type not found: ", contractType)
     },
 
@@ -866,6 +898,11 @@ const actions = {
 
         if (contractType === 'USDT+') {
             await rootState.web3.contracts.usdtExchange.methods.setAbroad(abroad.min, abroad.max).send(params);
+            return;
+        }
+
+        if (contractType === 'ETH+') {
+            await rootState.web3.contracts.wethExchange.methods.setAbroad(abroad.min, abroad.max).send(params);
             return;
         }
 

@@ -10,6 +10,7 @@
                     <v-tab v-if="contracts && contracts.usdPlus" @click="setTab('USD+')">Usd+</v-tab>
                     <v-tab v-if="contracts && contracts.daiPlus" @click="setTab('DAI+')">Dai+</v-tab>
                     <v-tab v-if="contracts && contracts.usdtPlus" @click="setTab('USDT+')">Usdt+</v-tab>
+                    <v-tab v-if="contracts && contracts.usdtPlus" @click="setTab('ETH+')">Eth+</v-tab>
                 </v-tabs>
             </template>
         </v-row>

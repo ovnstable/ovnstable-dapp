@@ -440,7 +440,7 @@ export const pool = {
             }
 
             if (pool.platform === 'Beethoven') {
-                url += pool.address + '0000000000000000000000ae';
+                url += pool.address + '000200000000000000000105';
                 window.open(url, '_blank').focus();
                 return;
             }

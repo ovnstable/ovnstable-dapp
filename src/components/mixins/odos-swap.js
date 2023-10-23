@@ -73,6 +73,8 @@ export const odosSwap = {
 
             listOfBuyTokensAddresses: null, // for POOL_SWAP scheme
             odosReferalCode: 7777777,
+
+            swapSessionId: null,
         }
     },
     async mounted() {
@@ -665,10 +667,10 @@ export const odosSwap = {
             });
         },
         async initWalletTransaction(txData, selectedInputTokens, selectedOutputTokens) {
-            console.debug(this.getOdosLogMsg("Odos init transaction data", txData));
+            console.debug(this.getOdosLogMsg({message: "Odos init transaction data", swapSession: this.swapSessionId, data: txData}));
 
             if (!this.routerContract || !this.executorContract) {
-                console.error(this.getOdosLogMsg("Init wallet transactions failed, odos contracts not found. txData: ", txData));
+                console.error(this.getOdosLogMsg({message: "Init wallet transactions failed, odos contracts not found. txData: ", swapSession: this.swapSessionId, data: txData}));
                 return;
             }
 
@@ -685,13 +687,14 @@ export const odosSwap = {
 
             this.showWaitingModal('Swapping in process');
 
-            let txLogMessage = this.getOdosLogMsg("Odos send transaction", transactionData);
+            let txLogMessage = this.getOdosLogMsg({message: "Odos send transaction", swapSession: this.swapSessionId, data: transactionData});
             txLogMessage += " | Current block: " + await this.web3.eth.getBlockNumber();
             console.debug(txLogMessage);
             const result = this.web3.eth.sendTransaction(transactionData)
                 .then(async data => {
                     console.log("Call result: ", data);
-                    console.debug(this.getOdosLogMsg("Odos response from transaction", data));
+
+                    console.debug(this.getOdosLogMsg({message: "Odos response from transaction", swapSession: this.swapSessionId, data: data}));
                     this.closeWaitingModal();
 
                     if (this.networkName === 'zksync' && this.zksyncFeeHistory) {
@@ -703,7 +706,7 @@ export const odosSwap = {
                             console.log("Balance from eth token after tx", balance, balance * 1854.91);
                             this.zksyncFeeHistory.finalWeiBalance = balance;
                         } catch (e) {
-                            console.error(this.getOdosLogMsg("Error get balance from eth token  after tx", e));
+                            console.error(this.getOdosLogMsg({message: "Error get balance from eth token  after tx", swapSession: this.swapSessionId, data: e}));
                         }
                     }
 
@@ -712,7 +715,6 @@ export const odosSwap = {
                     const outputTokens = [...selectedOutputTokens]
 
                     this.showSuccessModal(true, inputTokens, outputTokens, data.transactionHash, txData);
-
                     // event
                     this.$bus.$emit('odos-transaction-finished', true);
 
@@ -724,12 +726,12 @@ export const odosSwap = {
                             this.stopSwapConfirmTimer();
                             this.closeWaitingModal();
                             this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e},);
-                            console.error(this.getOdosLogMsg("User rejected the request", e));
+                            console.error(this.getOdosLogMsg({message: "User rejected the request", swapSession: this.swapSessionId, data: e}));
                             return;
                         }
                     }
 
-                    console.error(this.getOdosLogMsg("Swap odos send transaction error", e));
+                    console.error(this.getOdosLogMsg({message: "Swap odos send transaction error", swapSession: this.swapSessionId, data: e}));
                     this.closeWaitingModal();
                     this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e});
                 })

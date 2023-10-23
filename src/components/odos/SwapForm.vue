@@ -891,13 +891,15 @@ export default defineComponent({
         },
         async swap() {
             if (this.isSwapLoading) {
-                console.error(this.getOdosLogMsg('Swap method not available, prev swap in process'));
+                console.error(this.getOdosLogMsg({message: 'Swap method not available, prev swap in process.', swapSession: this.swapSessionId}));
                 return;
             }
 
             if (this.inputTokensWithSelectedTokensCount < 1 || this.outputTokensWithSelectedTokensCount < 1) {
                 return;
             }
+
+            this.swapSessionId = this.$utils.getRandomString(10);
 
             try {
                 if (this.viewType === 'SWIPE') {
@@ -908,17 +910,17 @@ export default defineComponent({
                     console.error("Unknown view type for swap click tracking: ", this.viewType);
                 }
             } catch (e) {
-                console.error(this.getOdosLogMsg("Track error", this.viewType));
+                console.error(this.getOdosLogMsg({message: "Track error. ",  swapSession: this.swapSessionId, data: this.viewType}));
             }
 
             this.isSwapLoading = true;
 
             let actualGasPriceObject = await this.getActualGasPrice(this.networkId);
-            console.debug(this.getOdosLogMsg("Actual price for gas.", actualGasPriceObject))
+            console.debug(this.getOdosLogMsg({message: "Actual price for gas.", swapSession: this.swapSessionId, data: actualGasPriceObject}))
             let actualGas = actualGasPriceObject.baseFee;
             if (!actualGas && actualGasPriceObject.prices && actualGasPriceObject.prices.length) {
                 actualGas = actualGasPriceObject.prices[0].fee;
-                console.error(this.getOdosLogMsg("Actual price for gas when not found base fee.", actualGasPriceObject))
+                console.error(this.getOdosLogMsg({message: "Actual price for gas when not found base fee.", swapSession: this.swapSessionId, data: actualGasPriceObject}))
             }
 
             let requestData = {
@@ -936,11 +938,11 @@ export default defineComponent({
                 referralCode: this.odosReferalCode
             }
 
-            console.debug(this.getOdosLogMsg("Odos Swap quota request data", requestData, actualGas));
+            console.debug(this.getOdosLogMsg({message: "Odos Swap quota request data", swapSession: this.swapSessionId, data: requestData, actualGas: actualGas}));
 
             this.swapRequest(requestData)
                 .then(async data => {
-                    console.debug(this.getOdosLogMsg("Odos Swap quota response data", data));
+                    console.debug(this.getOdosLogMsg({message: "Odos Swap quota response data", swapSession: this.swapSessionId, data: data, actualGas: actualGas}));
 
                     let assembleData = {
                         "userAddr": this.account,
@@ -948,33 +950,33 @@ export default defineComponent({
                         "simulate": true
                     }
 
-                    console.debug(this.getOdosLogMsg("Odos Assemble request data", assembleData));
+                    console.debug(this.getOdosLogMsg({message: "Odos Assemble request data", swapSession: this.swapSessionId, data: assembleData, actualGas: actualGas}));
                     this.assembleRequest(assembleData).then(async responseAssembleData => {
-                        console.debug(this.getOdosLogMsg("Odos Assemble response data", responseAssembleData));
+                        console.debug(this.getOdosLogMsg({message: "Odos Assemble response data", swapSession: this.swapSessionId, data: responseAssembleData, actualGas: actualGas}));
 
                         if (responseAssembleData.simulation && !responseAssembleData.simulation.isSuccess) {
                             this.closeWaitingModal();
                             let errMsg = responseAssembleData.simulation.simulationError && responseAssembleData.simulation.simulationError.errorMessage ? responseAssembleData.simulation.simulationError.errorMessage : 'Transaction simulation is failed';
-                            console.error(this.getOdosLogMsg("Error before send swap transaction", errMsg))
+                            console.error(this.getOdosLogMsg({message: "Error before send swap transaction", swapSession: this.swapSessionId, data: errMsg, actualGas: actualGas}));
 
                             if (errMsg && errMsg.toLowerCase().includes('slippage')) {
                                 this.showErrorModalWithMsg({errorType: 'slippage', errorMsg: errMsg},);
                             } else {
                                 this.showErrorModalWithMsg({errorType: 'odos', errorMsg: errMsg},);
                             }
+
                             this.isSwapLoading = false;
                             return;
                         }
-                        // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
-                        await this.initWalletTransaction(responseAssembleData, this.selectedInputTokens, this.selectedOutputTokens);
 
+                        await this.initWalletTransaction(responseAssembleData, this.selectedInputTokens, this.selectedOutputTokens);
                         this.isSwapLoading = false;
                     }).catch(e => {
-                        console.error(this.getOdosLogMsg("Odos assemble request failed swap form", e))
+                        console.debug(this.getOdosLogMsg({message: "Odos assemble request failed swap form", swapSession: this.swapSessionId, data: e}));
                         this.isSwapLoading = false;
                     })
                 }).catch(e => {
-                console.error(this.getOdosLogMsg("Odos swap request failed swap form", e))
+                console.debug(this.getOdosLogMsg({message: "Odos swap request failed swap form", swapSession: this.swapSessionId, data: e}));
                 this.isSwapLoading = false;
             })
         },

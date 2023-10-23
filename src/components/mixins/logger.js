@@ -8,19 +8,28 @@ export const logger = {
     },
     methods: {
 
-        getOdosLogMsg(message, data = null, actualGas = null) {
-           try {
-               let logMessage = `[ODOS-SWAP] ${message} `;
-               logMessage += data ? (": | Data: " + JSON.stringify(data)) : "";
-               logMessage += actualGas ? (" | Actual gas price: " + actualGas) : "";
-               logMessage += " | User Wallet: " + this.account;
-               logMessage += " | Chain: " + this.networkName;
+        getOdosLogMsg(data) {
+            let message = data.message;
 
-               return logMessage;
-           } catch (e) {
-               console.log("[ODOS-SWAP] Error when create log message: ", e);
-               return message;
-           }
+            try {
+                let logMessage = `[ODOS-SWAP] ${message} `;
+
+                let swapSession = data.swapSession;
+                logMessage += swapSession ? (" | SwapSession: " + swapSession) : "";
+
+                let msgData = data.data;
+                logMessage += msgData ? (": | Data: " + JSON.stringify(msgData)) : "";
+
+                let actualGas = data.actualGas;
+                logMessage += actualGas ? (" | Actual gas price: " + actualGas) : "";
+                logMessage += " | User Wallet: " + this.account;
+                logMessage += " | Chain: " + this.networkName;
+
+                return logMessage;
+            } catch (e) {
+                console.log("[ODOS-SWAP] Error when create log message: ", e);
+                return message;
+            }
         }
     }
 }

@@ -915,14 +915,7 @@ export default defineComponent({
 
             this.isSwapLoading = true;
 
-            let actualGasPriceObject = await this.getActualGasPrice(this.networkId);
-            console.debug(this.getOdosLogMsg({message: "Actual price for gas.", swapSession: this.swapSessionId, data: actualGasPriceObject}))
-            let actualGas = actualGasPriceObject.baseFee;
-            if (!actualGas && actualGasPriceObject.prices && actualGasPriceObject.prices.length) {
-                actualGas = actualGasPriceObject.prices[0].fee;
-                console.error(this.getOdosLogMsg({message: "Actual price for gas when not found base fee.", swapSession: this.swapSessionId, data: actualGasPriceObject}))
-            }
-
+            let actualGas = await this.getActualGasPrice(this.networkId);
             let requestData = {
                 chainId: this.networkId,
                 inputTokens: this.getRequestInputTokens(),
@@ -1000,13 +993,7 @@ export default defineComponent({
             this.updateIsLoadingDataFunc(true);
             this.isSumulateSwapLoading = true;
 
-            let actualGasPriceObject = await this.getActualGasPrice(this.networkId);
-            console.log("Actual price for gas. network: ", this.networkId, actualGasPriceObject)
-            let actualGas = actualGasPriceObject.baseFee;
-            if (!actualGas && actualGasPriceObject.prices && actualGasPriceObject.prices.length) {
-                actualGas = actualGasPriceObject.prices[0].fee;
-                console.log("Actual price for gas when not found base fee. network: ", this.networkId, actualGasPriceObject)
-            }
+            let actualGas = await this.getActualGasPrice(this.networkId);
 
             let input = this.getRequestInputTokens(false);
             let output = this.getRequestOutputTokens(false);

@@ -784,8 +784,29 @@ export const odosSwap = {
             return this.secondTokens[0];
         },
 
-        getActualGasPrice(networkId) {
-            return odosApiService.getActualGasPrice(networkId);
+        async getActualGasPrice(networkId) {
+            let actualGasPriceObject = await odosApiService.getActualGasPrice(networkId);
+            console.debug(this.getOdosLogMsg({
+                message: "Actual price for gas.",
+                swapSession: this.swapSessionId,
+                data: actualGasPriceObject
+            }))
+
+            if (this.networkName === 'polygon' && actualGasPriceObject.prices && actualGasPriceObject.prices.length) {
+                return actualGasPriceObject.prices[0].fee;
+            }
+
+            let actualGas = actualGasPriceObject.baseFee;
+            if (!actualGas && actualGasPriceObject.prices && actualGasPriceObject.prices.length) {
+                console.error(this.getOdosLogMsg({
+                    message: "Actual price for gas when not found base fee.",
+                    swapSession: this.swapSessionId,
+                    data: actualGasPriceObject
+                }))
+                return actualGasPriceObject.prices[0].fee;
+            }
+
+            return actualGas;
         },
         _loadContract(file, web3, address) {
             if (!address) {

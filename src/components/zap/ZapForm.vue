@@ -830,15 +830,7 @@ export default defineComponent({
             this.clickOnStake = true;
             this.isSwapLoading = true;
 
-            let actualGasPriceObject = await this.getActualGasPrice(this.networkId);
-            console.log("Actual price for gas. network: ", this.networkId, actualGasPriceObject)
-            console.log("Actual price for gas from us calculation. ", this.gasPriceGwei, this.gasPrice, this.gasPriceStation)
-            let actualGas = actualGasPriceObject.baseFee;
-            if (!actualGas && actualGasPriceObject.prices && actualGasPriceObject.prices.length) {
-                actualGas = actualGasPriceObject.prices[0].fee;
-                console.log("Actual price for gas when not found base fee. network: ", this.networkId, actualGasPriceObject)
-            }
-
+            let actualGas = await this.getActualGasPrice(this.networkId);
             let outputToken0Price = this.selectedOutputTokens[0].selectedToken.price;
             console.log("outputToken0Price: ", outputToken0Price);
             let outputToken1Price = this.selectedOutputTokens[1].selectedToken.price;
@@ -1381,13 +1373,7 @@ export default defineComponent({
             this.updateIsLoadingDataFunc(true);
             this.isSumulateSwapLoading = true;
 
-            let actualGasPriceObject = await this.getActualGasPrice(this.networkId);
-            console.log("Actual price for gas. network: ", this.networkId, actualGasPriceObject)
-            let actualGas = actualGasPriceObject.baseFee;
-            if (!actualGas && actualGasPriceObject.prices && actualGasPriceObject.prices.length) {
-                actualGas = actualGasPriceObject.prices[0].fee;
-                console.log("Actual price for gas when not found base fee. network: ", this.networkId, actualGasPriceObject)
-            }
+            let actualGas = await this.getActualGasPrice(this.networkId);
 
             let input = this.getRequestInputTokens(false);
             let output = this.getRequestOutputTokens(false);

@@ -2,13 +2,17 @@ import {odosApiService} from "@/services/external/odos-api-service";
 import loadJSON from "@/utils/http-utils";
 import {mapActions, mapGetters} from "vuex";
 import {tokenLogo} from "@/components/mixins/token-logo";
+import {logger} from "@/components/mixins/logger";
 
 const ODOS_DURATION_CONFIRM_REQUEST = 60
 const SECONDTOKEN_DEFAULT_SYMBOL= 'USD+';
 const SECONDTOKEN_SECOND_DEFAULT_SYMBOL= 'DAI+';
 
 export const odosSwap = {
-    mixins: [tokenLogo],
+    mixins: [
+        tokenLogo,
+        logger
+    ],
     data() {
         return {
             baseViewType: 'SWAP',
@@ -72,7 +76,6 @@ export const odosSwap = {
         }
     },
     async mounted() {
-       console.log("Odos swap init");
        this.initUpdateBalancesInterval();
     },
     beforeMount() {
@@ -310,16 +313,13 @@ export const odosSwap = {
                 return;
             }
 
-            console.log("Load tokens balances success. 1")
-
             let tokens = this.tokensToBalanceUpdate;
-            console.log("Load tokens balances success: ", tokens)
             for (let i = 0; i < tokens.length; i++) {
                 let token = tokens[i];
                 await this.loadBalance(this.tokensContractMap[token.address], token);
             }
 
-            console.log("Load tokens balances success. 2")
+            console.log("Load tokens balances success.")
             this.isBalancesLoading = false;
             if (!this.isFirstBalanceLoaded) {
                 this.isFirstBalanceLoaded = true;
@@ -354,17 +354,12 @@ export const odosSwap = {
                         originalBalance: erc20Balance,
                         decimal: token.decimals
                     }
-
-                    // console.log("Balance data: ", token.balanceData);
                 }).catch(e => {
                     // todo 5 return after load balance optimization
-                    console.error('Error balance for: ', token, e);
+                    // tmp ignore
+                    // console.error('Error balance for: ', token, e);
                 });
-                // originAsset = asset;
-                // asset = asset ? web3.web3.utils.fromWei(asset, assetDecimals === 18 ? 'ether' : 'mwei') : null;
             } catch (e) {
-                // asset = getters.balance.asset;
-                // originAsset = getters.originalBalance.asset;
                 console.log("Error when load balance at token: ", token.address, e)
             }
 
@@ -406,7 +401,6 @@ export const odosSwap = {
                 return
             }
 
-            console.log("Tokens prices loading start.", this.tokenPricesMap)
             this.isPricesLoading = true;
             this.loadPrices(chainId).then(() => {
                 let tokens = [...this.secondTokens, ...this.tokens]
@@ -416,7 +410,7 @@ export const odosSwap = {
                     try {
                         token.estimatePerOne = this.web3.utils.fromWei(1+"", this.getWeiMarker(token.decimals))
                     } catch (e) {
-                        console.log("token.estimatePerOne error", token.estimatePerOne, e);
+                        console.error("token.estimatePerOne error", token.estimatePerOne, e);
                     }
                     // console.log("token.price", token.price);
                 }
@@ -433,7 +427,7 @@ export const odosSwap = {
                 console.log("Prices: ", data)
                 this.tokenPricesMap = data.tokenPrices;
             }).catch(e => {
-                console.log("Error load contract", e)
+                console.error("Error load contract", e)
             });
         },
         async getFilteredPoolTokens(chainId, isIncludeInListAddresses, listTokensAddresses, ignoreBaseNetworkCurrency) {
@@ -671,63 +665,14 @@ export const odosSwap = {
             });
         },
         async initWalletTransaction(txData, selectedInputTokens, selectedOutputTokens) {
-            console.log("Odos transaction data", txData, this.routerContract, this.executorContract);
+            console.debug(this.getOdosLogMsg("Odos init transaction data", txData));
 
             if (!this.routerContract || !this.executorContract) {
-                console.error("Init wallet transactions failed, odos contracts not found. txData: ", txData)
+                console.error(this.getOdosLogMsg("Init wallet transactions failed, odos contracts not found. txData: ", txData));
                 return;
             }
 
             this.startSwapConfirmTimer();
-
-            // this.routerContract.methods.swa(txData.data).send({
-            //     to: txData.to,
-            //     gas: txData.gas,
-            //     gasPrice: txData.gasPrice,
-            //     nonce: txData.nonce,
-            // }, function(error, transactionHash) {
-            //     if (error) {
-            //         console.log(error);
-            //     } else {
-            //         console.log(transactionHash);
-            //     }
-            // });
-            // {
-            //     "inTokens": [
-            //     "0x0000000000000000000000000000000000000000",
-            //     "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a"
-            // ],
-            //     "outTokens": [
-            //     "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8",
-            //     "0xb86fb1047a955c0186c77ff6263819b37b32440d"
-            // ],
-            //     "inAmounts": [
-            //     "1000000000000000000",
-            //     "1000000000000000000"
-            // ],
-            //     "outAmounts": [
-            //     "868854660994279538688",
-            //     "940862774"
-            // ],
-            //     "gasEstimate": 979112,
-            //     "dataGasEstimate": 0,
-            //     "gweiPerGas": 1000000,
-            //     "gasEstimateValue": 1802324.3488295842,
-            //     "inValues": [
-            //     1840.773482115335,
-            //     1.000072979038449
-            // ],
-            //     "outValues": [
-            //     868.8546327431228,
-            //     971.935412755341
-            // ],
-            //     "netOutValue": -1800483.5587840858,
-            //     "priceImpact": -0.0009847657784032592,
-            //     "percentDiff": -0.05340013668831034,
-            //     "pathId": "b96a780d08a387f966d7e55c3c8cc729",
-            //     "pathViz": null,
-            //     "blockNumber": 89181266
-            // }
 
             let transactionData = {
                 ...txData.transaction,
@@ -739,11 +684,15 @@ export const odosSwap = {
             }
 
             this.showWaitingModal('Swapping in process');
+
+            let txLogMessage = this.getOdosLogMsg("Odos send transaction", transactionData);
+            txLogMessage += " | Current block: " + await this.web3.eth.getBlockNumber();
+            console.debug(txLogMessage);
             const result = this.web3.eth.sendTransaction(transactionData)
                 .then(async data => {
                     console.log("Call result: ", data);
+                    console.debug(this.getOdosLogMsg("Odos response from transaction", data));
                     this.closeWaitingModal();
-
 
                     if (this.networkName === 'zksync' && this.zksyncFeeHistory) {
                         try {
@@ -754,7 +703,7 @@ export const odosSwap = {
                             console.log("Balance from eth token after tx", balance, balance * 1854.91);
                             this.zksyncFeeHistory.finalWeiBalance = balance;
                         } catch (e) {
-                            console.error("Error get balance from eth token  after tx", e);
+                            console.error(this.getOdosLogMsg("Error get balance from eth token  after tx", e));
                         }
                     }
 
@@ -770,26 +719,20 @@ export const odosSwap = {
 
                     await this.loadBalances();
                 }).catch(e => {
-                    console.log("Swap odos call error: ", e);
                     if (e && e.code === 4001) {
                         if (e.message === 'User rejected the request.') {
                             this.stopSwapConfirmTimer();
+                            this.closeWaitingModal();
+                            this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e},);
+                            console.error(this.getOdosLogMsg("User rejected the request", e));
+                            return;
                         }
                     }
+
+                    console.error(this.getOdosLogMsg("Swap odos send transaction error", e));
                     this.closeWaitingModal();
-                    this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e},);
+                    this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e});
                 })
-
-
-            // this.routerContract.methods.router(txData).on('transactionHash', function (hash) {
-            //     console.log("Router contract response: ", hash);
-            // });
-
-            // this.routerContract.call({value: 0})(txData.data);
-
-            // this.routerContract.eth.sendTransaction({from: …, to: …, data: TransactionData, …}).on(…);
-            // web3.eth.call({from: …, to: …, data: TransactionData, …}).on(…);
-
         },
         getDefaultSecondtoken(symbol) {
             if (this.tokenSeparationScheme === 'OVERNIGHT_SWAP') {

@@ -576,7 +576,8 @@ export default defineComponent({
                 this.swapResponseConfirmInfo.waitingConformation ||
                 !this.isAvailableOnNetwork ||
                 !this.isAnyTokensBalanceIsInsufficient ||
-                !this.isAmountEntered
+                !this.isAmountEntered ||
+                this.isSwapLoading
         },
 
         disableButtonMessage() {
@@ -599,6 +600,10 @@ export default defineComponent({
 
             if (this.swapResponseConfirmInfo.waitingConformation) {
                 return "Confirm in your wallet (" + this.swapResponseConfirmInfo.duration + " sec)"
+            }
+
+            if (this.isSwapLoading) {
+                return "SWAP LOADING"
             }
 
             return null;

@@ -39,7 +39,14 @@ export const odosSwap = {
             tokensContractMap: {}, // { 'contractAddress': {ABI} }
             tokenPricesMap: {},
 
-            availableNetworksList: ['polygon', 'bsc', 'optimism', 'arbitrum', 'zksync', 'base'],
+            availableNetworksList: [
+                'polygon',
+                'bsc',
+                'optimism',
+                'arbitrum',
+                'zksync',
+                'base'
+            ],
             dataBeInited: false,
 
             swapResponseInfo: null,

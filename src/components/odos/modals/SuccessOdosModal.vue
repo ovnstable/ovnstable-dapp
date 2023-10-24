@@ -24,7 +24,7 @@
                                 You successfully swapped
                             </div>
 
-                            <div class="success-table-info-container">
+                            <div v-if="successData" class="success-table-info-container">
                                 <div class="row">
                                     <div class="col-12 col-lg-5 col-md-5 col-sm-12">
                                         <div class="text-center">
@@ -71,7 +71,7 @@
                                 </div>
                             </div>
 
-                            <div v-if="successData.zksyncFeeHistory">
+                            <div v-if="successData && successData.zksyncFeeHistory">
                                 <RefundInfo :zksync-fee-history="successData.zksyncFeeHistory"></RefundInfo>
                             </div>
 
@@ -133,7 +133,7 @@ export default defineComponent({
 
         successData: {
             type: Object,
-            required: true
+            required: false,
         },
 
     },

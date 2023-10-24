@@ -7,7 +7,7 @@
                     <div class="tokens-container">
 
                         <div class="row">
-                            <div class="col-12 col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                            <div class="col-12 col-xl-3 col-lg-3 col-md-3 col-sm-12">
                                 <div class="sub-title">
                                     <div style="position:relative;">
                                         Slippage Tolerance
@@ -55,15 +55,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-xl-8 col-lg-8 col-md-8 col-sm-12">
+                            <div class="col-12 col-xl-9 col-lg-9 col-md-9 col-sm-12">
                                 <div class="slippage-container">
                                     <div v-for="setting in slippageSettings" :key="setting.id"
                                          @click="newSlippageSetting(setting)"
                                             class="slippage-item-container">
                                         <div :class="currentSlippage && currentSlippage.type === setting.type  ? 'slippage-item-selected' : ''"
                                              class="slippage-item">
-                                            <div class="slippage-value">
-                                                {{setting.value}}%
+                                            <div
+                                                :class="setting.type === 'AUTO' ? 'auto-value' : ''"
+                                                class="slippage-value">
+                                                {{setting.value}}% <span v-if="setting.type === 'AUTO'" class="auto-message">(auto)</span>
                                             </div>
                                         </div>
                                     </div>
@@ -95,57 +97,77 @@ export default defineComponent({
         currentSlippageChanged: {
             type: Function,
             required: true
-        }
+        },
+        selectedInputTokens: {
+            type: Array,
+            required: true
+        },
+        selectedOutputTokens: {
+            type: Array,
+            required: true
+        },
     },
     data() {
         return {
-            odosSlippageKey: 'odos_slippage_value',
             currentSlippage: null,
             slippageSettings: [
-                {id: 3, type: "LOW", name: 'Low', value: 0.05, info: 'For stablecoins only'},
-                {id: 2, type: "MEDIUM", name: 'Medium', value: 0.1, info: 'For mix of stablecoins and volatile assets'},
+                {id: 4, type: "AUTO", name: 'Auto', value: 0.1, info: 'Automatic selection by current tokens'},
+                {id: 2, type: "LOW", name: 'Low', value: 0.05, info: 'For stablecoins only'},
+                {id: 3, type: "MEDIUM", name: 'Medium', value: 0.5, info: 'For mix of stablecoins and volatile assets'},
                 {id: 1, type: "HIGH", name: 'High', value: 1, info: 'For volatile assets'},
             ]
         }
     },
     mounted() {
-        this.initSlippageSettings();
+        // auto
+        this.autoUpdateSlippage();
     },
     computed: {
         ...mapGetters('theme', ['light']),
+
+        isAnyNonStablecoinSelected() {
+            return this.selectedInputTokens.some(token => token.selectedToken.assetType !== 'usd') ||
+                this.selectedOutputTokens.some(token => token.selectedToken.assetType !== 'usd');
+        }
+
+    },
+    watch: {
+        isAnyNonStablecoinSelected: {
+            handler: function (val) {
+                this.autoUpdateSlippage();
+            },
+            immediate: true
+        }
     },
     methods: {
-        initSlippageSettings() {
-            let value = localStorage.getItem(this.odosSlippageKey);
-            if (!value || value === 'undefined' || value === 'null') {
-                this.newSlippageSetting(this.slippageSettings[0]); // default
-                return
-            }
-
-            // for update slippage value in localStorage if slippageSettings.info was changed
-            let lsSlippage = JSON.parse(value);
-            this.currentSlippage = this.getSlippageSettingById(lsSlippage.id);
-            if (this.slippageSettings) {
-                localStorage.setItem(this.odosSlippageKey, JSON.stringify(this.currentSlippage));
-            }
-            console.log("New setting:", this.currentSlippage)
-        },
         newSlippageSetting(setting) {
             this.currentSlippage = setting;
-            localStorage.setItem(this.odosSlippageKey, JSON.stringify(this.currentSlippage));
-
             // Emit an event when currentSlippage changes
             this.currentSlippageChanged(this.currentSlippage);
         },
         // method get setting by id
         getSlippageSettingById(id) {
             return this.slippageSettings.find(setting => setting.id === id);
+        },
+        autoUpdateSlippage() {
+            if (this.isAnyNonStablecoinSelected) {
+                let updatedValue = this.getSlippageSettingById(3);
+                let auto = this.getSlippageSettingById(4);
+                auto.value = updatedValue.value;
+                this.newSlippageSetting(auto);
+                return;
+            }
+
+            let auto = this.getSlippageSettingById(4);
+            auto.value = 0.1
+            this.newSlippageSetting(auto);
         }
     }
 })
 </script>
 
 <style scoped>
+
 @media only screen and (max-width: 960px) {
     .title-container {
         font-size: 24px;
@@ -163,6 +185,11 @@ export default defineComponent({
 
     .warn-message {
         float: left!important;;
+    }
+
+    .sub-title-icon {
+        left: 150px;
+        right: unset;
     }
 }
 
@@ -243,7 +270,7 @@ div {
     align-items: center;
 
     height: 32px;
-    min-width: 71px;
+    min-width: 55px;
 
     border: 1px solid #D7DADF;
     border-radius: 12px;
@@ -304,7 +331,22 @@ div {
 
 .sub-title-icon {
     position: absolute;
-    left: 140px;
+    right: -50px;
     top: 4px;
+}
+
+.auto-message {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0px;
+    text-align: left;
+    //color: rgba(173, 179, 189, 1);
+}
+
+.auto-value {
+    font-size: 14px;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 </style>

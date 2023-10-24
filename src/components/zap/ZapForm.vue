@@ -160,7 +160,11 @@
                 </div>-->
 
                 <div style="padding-top: 10px">
-                    <SwapSlippageSettings :currentSlippageChanged="handleCurrentSlippageChanged" />
+                    <SwapSlippageSettings
+                        :currentSlippageChanged="handleCurrentSlippageChanged"
+                        :selected-input-tokens="selectedInputTokens"
+                        :selected-output-tokens="selectedOutputTokens"
+                    />
                 </div>
 
                 <div v-if="zapPool && this.zapPool.platform === 'Swapbased'" class="slippage-info-container">
@@ -1423,21 +1427,7 @@ export default defineComponent({
         },
 
         getSlippagePercent() {
-            // slippage
-            let slippageInfo = localStorage.getItem('odos_slippage_value');
-            let slippagePercent = 0.05; // default
-            if (!slippageInfo || slippageInfo === 'undefined' || slippageInfo === 'null') {
-                slippageInfo = null;
-            }
-
-            if (slippageInfo) {
-                console.log('slippageInfo: ', slippageInfo)
-                let slippageInfoObject = JSON.parse(slippageInfo);
-                slippagePercent = slippageInfoObject.value;
-            }
-
-            this.slippagePercent = slippagePercent;
-            return slippagePercent;
+            return this.slippagePercent;
         },
 
         async disapproveToken(token) {

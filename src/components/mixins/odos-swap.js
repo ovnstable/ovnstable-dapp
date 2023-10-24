@@ -300,6 +300,16 @@ export const odosSwap = {
             }, 40000)
 
         },
+        updateDirectBalances(addresses) {
+            let tokens = [...this.secondTokens, ...this.tokens]
+            for (let i = 0; i < tokens.length; i++) {
+                let token = tokens[i];
+                if (addresses.includes(token.address)) {
+                    console.log("Direct Update balance for token: ", token.address, token.symbol, token.name);
+                    this.loadBalance(this.tokensContractMap[token.address], token);
+                }
+            }
+        },
 
         async loadBalances() {
             if (this.isBalancesLoading) {
@@ -713,20 +723,23 @@ export const odosSwap = {
 
                     const inputTokens = [...selectedInputTokens]
                     const outputTokens = [...selectedOutputTokens]
+                    let addressesToUpdate = [...inputTokens, ...outputTokens].map(item => item.selectedToken.address);
 
                     this.showSuccessModal(true, inputTokens, outputTokens, data.transactionHash, txData);
                     // event
                     this.$bus.$emit('odos-transaction-finished', true);
+                    this.stopSwapConfirmTimer();
 
-
-                    await this.loadBalances();
+                    // await this.loadBalances();
+                    console.log("addresses to balance update: ", addressesToUpdate);
+                    this.updateDirectBalances(addressesToUpdate);
                 }).catch(e => {
                     if (e && e.code === 4001) {
-                        if (e.message === 'User rejected the request.') {
+                        if (e.message && (e.message.toLowerCase().includes('user rejected') || e.message.toLowerCase().includes('user denied'))) {
                             this.stopSwapConfirmTimer();
                             this.closeWaitingModal();
                             this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e},);
-                            console.error(this.getOdosLogMsg({message: "User rejected the request", swapSession: this.swapSessionId, data: e}));
+                            console.debug(this.getOdosLogMsg({message: "User rejected the request", swapSession: this.swapSessionId, data: e}));
                             return;
                         }
                     }

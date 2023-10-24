@@ -120,7 +120,11 @@
                     </div>
                 </div>
 
-                <SwapSlippageSettings :currentSlippageChanged="handleCurrentSlippageChanged" />
+                <SwapSlippageSettings
+                    :currentSlippageChanged="handleCurrentSlippageChanged"
+                    :selected-input-tokens="selectedInputTokens"
+                    :selected-output-tokens="selectedOutputTokens"
+                />
 
                 <div v-if="networkName === 'zksync'" class="slippage-info-container">
                     <div class="slippage-info-title">
@@ -891,7 +895,7 @@ export default defineComponent({
         },
         async swap() {
             if (this.isSwapLoading) {
-                console.error(this.getOdosLogMsg({message: 'Swap method not available, prev swap in process.', swapSession: this.swapSessionId}));
+                console.debug(this.getOdosLogMsg({message: 'Swap method not available, prev swap in process.', swapSession: this.swapSessionId}));
                 return;
             }
 
@@ -969,7 +973,7 @@ export default defineComponent({
                         this.isSwapLoading = false;
                     })
                 }).catch(e => {
-                console.debug(this.getOdosLogMsg({message: "Odos swap request failed swap form", swapSession: this.swapSessionId, data: e}));
+                console.error(this.getOdosLogMsg({message: "Odos swap request failed swap form", swapSession: this.swapSessionId, data: e}));
                 this.isSwapLoading = false;
             })
         },
@@ -1081,21 +1085,7 @@ export default defineComponent({
         },
 
         getSlippagePercent() {
-            // slippage
-            let slippageInfo = localStorage.getItem('odos_slippage_value');
-            let slippagePercent = 0.05; // default
-            if (!slippageInfo || slippageInfo === 'undefined' || slippageInfo === 'null') {
-                slippageInfo = null;
-            }
-
-            if (slippageInfo) {
-                console.log('slippageInfo: ', slippageInfo)
-                let slippageInfoObject = JSON.parse(slippageInfo);
-                slippagePercent = slippageInfoObject.value;
-            }
-
-            this.slippagePercent = slippagePercent;
-            return slippagePercent;
+            return this.slippagePercent;
         },
 
         async disapproveToken(token) {

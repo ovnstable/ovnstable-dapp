@@ -964,7 +964,7 @@ export default defineComponent({
                 inputTokens: request.inputTokens,
                 outputTokens: request.outputTokens,
                 gasPrice: request.gasPrice,
-                userAddr: request.userAddr,
+                userAddr: this.web3.utils.toChecksumAddress(request.userAddr.toLowerCase()),
                 slippageLimitPercent: request.slippageLimitPercent,
                 sourceBlacklist: this.getSourceLiquidityBlackList(),
                 sourceWhitelist: [],
@@ -982,7 +982,7 @@ export default defineComponent({
                     console.log("Odos swap request quota from zap proportions", proportions)
 
                     let assembleData = {
-                        "userAddr": request.userAddr,
+                        "userAddr": this.web3.utils.toChecksumAddress(request.userAddr.toLowerCase()),
                         "pathId": data.pathId,
                         "simulate": true
                     }
@@ -1022,7 +1022,7 @@ export default defineComponent({
                 "inputTokens": request.inputTokens,
                 "outputTokens": request.outputTokens,
                 "gasPrice": request.gasPrice,
-                "userAddr": request.userAddr,
+                "userAddr": this.web3.utils.toChecksumAddress(request.userAddr.toLowerCase()),
                 "slippageLimitPercent": request.slippageLimitPercent,
                 "sourceBlacklist": this.getSourceLiquidityBlackList(),
                 "sourceWhitelist": [],
@@ -1393,7 +1393,7 @@ export default defineComponent({
                 inputTokens: input,
                 outputTokens: output,
                 gasPrice: actualGas,
-                userAddr: this.account,
+                userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
                 slippageLimitPercent: this.getSlippagePercent(),
                 sourceBlacklist: ['Hashflow', 'Wombat'],
                 sourceWhitelist: [],

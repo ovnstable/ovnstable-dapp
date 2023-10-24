@@ -925,7 +925,7 @@ export default defineComponent({
                 inputTokens: this.getRequestInputTokens(),
                 outputTokens: this.getRequestOutputTokens(),
                 gasPrice: actualGas,
-                userAddr: this.account,
+                userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
                 slippageLimitPercent: this.getSlippagePercent(),
                 sourceBlacklist: ['Hashflow', 'Wombat'],
                 sourceWhitelist: [],
@@ -942,7 +942,7 @@ export default defineComponent({
                     console.debug(this.getOdosLogMsg({message: "Odos Swap quota response data", swapSession: this.swapSessionId, data: data, actualGas: actualGas}));
 
                     let assembleData = {
-                        "userAddr": this.account,
+                        "userAddr": this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
                         "pathId": data.pathId,
                         "simulate": true
                     }
@@ -1009,17 +1009,15 @@ export default defineComponent({
 
             let requestData = {
                 chainId: this.networkId,
-                // chainId: 1,
                 inputTokens: input,
                 outputTokens: output,
                 gasPrice: actualGas,
-                userAddr: this.account,
+                userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
                 slippageLimitPercent: this.getSlippagePercent(),
                 sourceBlacklist: ['Hashflow', 'Wombat'],
                 sourceWhitelist: [],
                 simulate: true,
                 pathViz: true,
-                // disableRFQs: false
             }
 
            this.clearQuotaInfo();

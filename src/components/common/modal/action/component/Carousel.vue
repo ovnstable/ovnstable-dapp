@@ -75,6 +75,7 @@ export default {
     },
 
     mounted() {
+        this.items = this.shuffleArray(this.items);
         this.showNextItem();
     },
 
@@ -90,8 +91,6 @@ export default {
         },
 
         showNextItem() {
-            this.shuffleArray(this.items);
-
             if (this.currentItemIndex === this.items.length) {
                 this.currentItemIndex = 0;
             }

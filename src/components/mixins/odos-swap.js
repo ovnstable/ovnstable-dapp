@@ -838,7 +838,7 @@ export const odosSwap = {
                 data: actualGasPriceObject
             }))
 
-            if (this.networkName === 'polygon' && actualGasPriceObject.prices && actualGasPriceObject.prices.length) {
+            if ((this.networkName === 'polygon' || this.networkName === 'bsc') && actualGasPriceObject.prices && actualGasPriceObject.prices.length) {
                 return actualGasPriceObject.prices[0].fee;
             }
 

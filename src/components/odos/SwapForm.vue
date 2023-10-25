@@ -120,7 +120,11 @@
                     </div>
                 </div>
 
-                <SwapSlippageSettings :currentSlippageChanged="handleCurrentSlippageChanged" />
+                <SwapSlippageSettings
+                    :currentSlippageChanged="handleCurrentSlippageChanged"
+                    :selected-input-tokens="selectedInputTokens"
+                    :selected-output-tokens="selectedOutputTokens"
+                />
 
                 <div v-if="networkName === 'zksync'" class="slippage-info-container">
                     <div class="slippage-info-title">
@@ -572,7 +576,8 @@ export default defineComponent({
                 this.swapResponseConfirmInfo.waitingConformation ||
                 !this.isAvailableOnNetwork ||
                 !this.isAnyTokensBalanceIsInsufficient ||
-                !this.isAmountEntered
+                !this.isAmountEntered ||
+                this.isSwapLoading
         },
 
         disableButtonMessage() {
@@ -595,6 +600,10 @@ export default defineComponent({
 
             if (this.swapResponseConfirmInfo.waitingConformation) {
                 return "Confirm in your wallet (" + this.swapResponseConfirmInfo.duration + " sec)"
+            }
+
+            if (this.isSwapLoading) {
+                return "SWAP LOADING"
             }
 
             return null;
@@ -891,7 +900,7 @@ export default defineComponent({
         },
         async swap() {
             if (this.isSwapLoading) {
-                console.error(this.getOdosLogMsg({message: 'Swap method not available, prev swap in process.', swapSession: this.swapSessionId}));
+                console.debug(this.getOdosLogMsg({message: 'Swap method not available, prev swap in process.', swapSession: this.swapSessionId}));
                 return;
             }
 
@@ -921,7 +930,7 @@ export default defineComponent({
                 inputTokens: this.getRequestInputTokens(),
                 outputTokens: this.getRequestOutputTokens(),
                 gasPrice: actualGas,
-                userAddr: this.account,
+                userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
                 slippageLimitPercent: this.getSlippagePercent(),
                 sourceBlacklist: ['Hashflow', 'Wombat'],
                 sourceWhitelist: [],
@@ -938,7 +947,7 @@ export default defineComponent({
                     console.debug(this.getOdosLogMsg({message: "Odos Swap quota response data", swapSession: this.swapSessionId, data: data, actualGas: actualGas}));
 
                     let assembleData = {
-                        "userAddr": this.account,
+                        "userAddr": this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
                         "pathId": data.pathId,
                         "simulate": true
                     }
@@ -969,7 +978,7 @@ export default defineComponent({
                         this.isSwapLoading = false;
                     })
                 }).catch(e => {
-                console.debug(this.getOdosLogMsg({message: "Odos swap request failed swap form", swapSession: this.swapSessionId, data: e}));
+                console.error(this.getOdosLogMsg({message: "Odos swap request failed swap form", swapSession: this.swapSessionId, data: e}));
                 this.isSwapLoading = false;
             })
         },
@@ -1005,17 +1014,15 @@ export default defineComponent({
 
             let requestData = {
                 chainId: this.networkId,
-                // chainId: 1,
                 inputTokens: input,
                 outputTokens: output,
                 gasPrice: actualGas,
-                userAddr: this.account,
+                userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
                 slippageLimitPercent: this.getSlippagePercent(),
                 sourceBlacklist: ['Hashflow', 'Wombat'],
                 sourceWhitelist: [],
                 simulate: true,
                 pathViz: true,
-                // disableRFQs: false
             }
 
            this.clearQuotaInfo();
@@ -1081,21 +1088,7 @@ export default defineComponent({
         },
 
         getSlippagePercent() {
-            // slippage
-            let slippageInfo = localStorage.getItem('odos_slippage_value');
-            let slippagePercent = 0.05; // default
-            if (!slippageInfo || slippageInfo === 'undefined' || slippageInfo === 'null') {
-                slippageInfo = null;
-            }
-
-            if (slippageInfo) {
-                console.log('slippageInfo: ', slippageInfo)
-                let slippageInfoObject = JSON.parse(slippageInfo);
-                slippagePercent = slippageInfoObject.value;
-            }
-
-            this.slippagePercent = slippagePercent;
-            return slippagePercent;
+            return this.slippagePercent;
         },
 
         async disapproveToken(token) {

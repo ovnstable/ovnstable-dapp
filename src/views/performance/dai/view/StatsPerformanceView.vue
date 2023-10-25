@@ -36,7 +36,7 @@
             </v-row>
         </div>
 
-      <div v-if="networkId === 10 || networkId === 42161 || networkId === 8453 || networkId === 'linea'">
+      <div v-if="networkId === 10 || networkId === 42161 || networkId === 8453 || networkId === 59144">
         <v-row v-if="isPayoutsLoading">
           <v-row align="center" justify="center" class="py-15">
             <v-progress-circular

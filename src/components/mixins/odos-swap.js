@@ -39,7 +39,14 @@ export const odosSwap = {
             tokensContractMap: {}, // { 'contractAddress': {ABI} }
             tokenPricesMap: {},
 
-            availableNetworksList: ['polygon', 'bsc', 'optimism', 'arbitrum', 'zksync', 'base'],
+            availableNetworksList: [
+                'polygon',
+                'bsc',
+                'optimism',
+                'arbitrum',
+                'zksync',
+                'base'
+            ],
             dataBeInited: false,
 
             swapResponseInfo: null,
@@ -296,9 +303,28 @@ export const odosSwap = {
                 this.updateBalancesIntervalId = setInterval(async () => {
                     console.log("odos balances update")
                     await this.loadBalances();
-                }, 40000)
-            }, 40000)
+                }, 30000)
+            }, 30000)
 
+        },
+
+        async updateDirectBalances(addresses) {
+            this.isBalancesLoading = true;
+            try {
+                let tokens = [...this.secondTokens, ...this.tokens]
+                for (let i = 0; i < tokens.length; i++) {
+                    let token = tokens[i];
+                    if (addresses.includes(token.address)) {
+                        console.log("Direct Update balance for token: ", token.address, token.symbol, token.name);
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                        await this.loadBalance(this.tokensContractMap[token.address], token);
+                    }
+                }
+            } catch (e) {
+                console.error("Error when update direct balance", e);
+            } finally {
+                this.isBalancesLoading = false;
+            }
         },
 
         async loadBalances() {
@@ -315,17 +341,21 @@ export const odosSwap = {
                 return;
             }
 
-            let tokens = this.tokensToBalanceUpdate;
-            for (let i = 0; i < tokens.length; i++) {
-                let token = tokens[i];
-                await this.loadBalance(this.tokensContractMap[token.address], token);
-            }
-
-            console.log("Load tokens balances success.")
-            this.isBalancesLoading = false;
-            if (!this.isFirstBalanceLoaded) {
-                this.isFirstBalanceLoaded = true;
-            }
+           try {
+               let tokens = this.tokensToBalanceUpdate;
+               for (let i = 0; i < tokens.length; i++) {
+                   let token = tokens[i];
+                   await this.loadBalance(this.tokensContractMap[token.address], token);
+               }
+           } catch (e) {
+                console.error("Error when load balance", e);
+           } finally {
+               console.log("Load tokens balances success.")
+               this.isBalancesLoading = false;
+               if (!this.isFirstBalanceLoaded) {
+                   this.isFirstBalanceLoaded = true;
+               }
+           }
         },
         async loadBalance(contract, token) {
             // console.log("Load balance from contract: ", token)
@@ -713,20 +743,22 @@ export const odosSwap = {
 
                     const inputTokens = [...selectedInputTokens]
                     const outputTokens = [...selectedOutputTokens]
+                    let addressesToUpdate = [...inputTokens, ...outputTokens].map(item => item.selectedToken.address);
 
                     this.showSuccessModal(true, inputTokens, outputTokens, data.transactionHash, txData);
                     // event
                     this.$bus.$emit('odos-transaction-finished', true);
+                    this.stopSwapConfirmTimer();
 
-
-                    await this.loadBalances();
+                    console.log("addresses to balance update: ", addressesToUpdate);
+                    this.updateDirectBalances(addressesToUpdate);
                 }).catch(e => {
                     if (e && e.code === 4001) {
-                        if (e.message === 'User rejected the request.') {
+                        if (e.message && (e.message.toLowerCase().includes('user rejected') || e.message.toLowerCase().includes('user denied'))) {
                             this.stopSwapConfirmTimer();
                             this.closeWaitingModal();
                             this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e},);
-                            console.error(this.getOdosLogMsg({message: "User rejected the request", swapSession: this.swapSessionId, data: e}));
+                            console.debug(this.getOdosLogMsg({message: "User rejected the request", swapSession: this.swapSessionId, data: e}));
                             return;
                         }
                     }

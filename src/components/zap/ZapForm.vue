@@ -160,7 +160,11 @@
                 </div>-->
 
                 <div style="padding-top: 10px">
-                    <SwapSlippageSettings :currentSlippageChanged="handleCurrentSlippageChanged" />
+                    <SwapSlippageSettings
+                        :currentSlippageChanged="handleCurrentSlippageChanged"
+                        :selected-input-tokens="selectedInputTokens"
+                        :selected-output-tokens="selectedOutputTokens"
+                    />
                 </div>
 
                 <div v-if="zapPool && this.zapPool.platform === 'Swapbased'" class="slippage-info-container">
@@ -960,7 +964,7 @@ export default defineComponent({
                 inputTokens: request.inputTokens,
                 outputTokens: request.outputTokens,
                 gasPrice: request.gasPrice,
-                userAddr: request.userAddr,
+                userAddr: this.web3.utils.toChecksumAddress(request.userAddr.toLowerCase()),
                 slippageLimitPercent: request.slippageLimitPercent,
                 sourceBlacklist: this.getSourceLiquidityBlackList(),
                 sourceWhitelist: [],
@@ -978,7 +982,7 @@ export default defineComponent({
                     console.log("Odos swap request quota from zap proportions", proportions)
 
                     let assembleData = {
-                        "userAddr": request.userAddr,
+                        "userAddr": this.web3.utils.toChecksumAddress(request.userAddr.toLowerCase()),
                         "pathId": data.pathId,
                         "simulate": true
                     }
@@ -1018,7 +1022,7 @@ export default defineComponent({
                 "inputTokens": request.inputTokens,
                 "outputTokens": request.outputTokens,
                 "gasPrice": request.gasPrice,
-                "userAddr": request.userAddr,
+                "userAddr": this.web3.utils.toChecksumAddress(request.userAddr.toLowerCase()),
                 "slippageLimitPercent": request.slippageLimitPercent,
                 "sourceBlacklist": this.getSourceLiquidityBlackList(),
                 "sourceWhitelist": [],
@@ -1389,7 +1393,7 @@ export default defineComponent({
                 inputTokens: input,
                 outputTokens: output,
                 gasPrice: actualGas,
-                userAddr: this.account,
+                userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
                 slippageLimitPercent: this.getSlippagePercent(),
                 sourceBlacklist: ['Hashflow', 'Wombat'],
                 sourceWhitelist: [],
@@ -1423,21 +1427,7 @@ export default defineComponent({
         },
 
         getSlippagePercent() {
-            // slippage
-            let slippageInfo = localStorage.getItem('odos_slippage_value');
-            let slippagePercent = 0.05; // default
-            if (!slippageInfo || slippageInfo === 'undefined' || slippageInfo === 'null') {
-                slippageInfo = null;
-            }
-
-            if (slippageInfo) {
-                console.log('slippageInfo: ', slippageInfo)
-                let slippageInfoObject = JSON.parse(slippageInfo);
-                slippagePercent = slippageInfoObject.value;
-            }
-
-            this.slippagePercent = slippagePercent;
-            return slippagePercent;
+            return this.slippagePercent;
         },
 
         async disapproveToken(token) {

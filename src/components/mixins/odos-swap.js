@@ -311,7 +311,15 @@ export const odosSwap = {
         async updateDirectBalances(addresses) {
             this.isBalancesLoading = true;
             try {
-                let tokens = [...this.secondTokens, ...this.tokens]
+                let tokens = [...this.secondTokens, ...this.tokens];
+
+                // filter unique tokens by address
+                tokens = tokens.filter((token, index, self) =>
+                    index === self.findIndex((t) => (
+                        t.address === token.address
+                    ))
+                );
+
                 for (let i = 0; i < tokens.length; i++) {
                     let token = tokens[i];
                     if (addresses.includes(token.address)) {
@@ -751,7 +759,9 @@ export const odosSwap = {
                     this.stopSwapConfirmTimer();
 
                     console.log("addresses to balance update: ", addressesToUpdate);
-                    this.updateDirectBalances(addressesToUpdate);
+                    setTimeout(() => {
+                        this.updateDirectBalances(addressesToUpdate);
+                    }, 2000)
                 }).catch(e => {
                     if (e && e.code === 4001) {
                         if (e.message && (e.message.toLowerCase().includes('user rejected') || e.message.toLowerCase().includes('user denied'))) {

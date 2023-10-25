@@ -42,6 +42,13 @@
                     :copy-error="copyErrorToClipboard">
                 </OdosError>
             </div>
+            <div v-else-if="errorViewType === 'highload-network'">
+                <HighLoadInfo
+                    :error-msg="errorText"
+                    :error-code="errorCode"
+                    :copy-error="copyErrorToClipboard">
+                </HighLoadInfo>
+            </div>
             <div v-else>
               <UndefinedError
                         :error-msg="errorMsg"
@@ -60,15 +67,17 @@ import RpcError from "@/components/common/modal/action/errors/RpcError.vue";
 import GasError from "@/components/common/modal/action/errors/GasError.vue";
 import SlippageError from "@/components/common/modal/action/errors/SlippageError.vue";
 import OdosError from "@/components/common/modal/action/errors/OdosError.vue";
+import HighLoadInfo from "@/components/common/modal/action/errors/HighLoadInfo.vue";
 
 export default {
     name: "ErrorModal",
     components: {
+        HighLoadInfo,
         OdosError,
         SlippageError,
-      GasError,
-      RpcError,
-      UndefinedError
+        GasError,
+        RpcError,
+        UndefinedError
     },
     props: {
     },
@@ -120,6 +129,11 @@ export default {
 
             if (this.errorType === 'slippage') {
                 this.errorViewType = 'slippage'
+                return;
+            }
+
+            if (this.errorType === 'highload-network') {
+                this.errorViewType = 'highload-network'
                 return;
             }
 

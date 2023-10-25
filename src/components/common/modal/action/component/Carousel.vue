@@ -17,6 +17,14 @@
 <script>
 import { mapActions } from "vuex";
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const shuffledArray = Math.floor(Math.random() * (i + 1));
+        [array[i], array[shuffledArray]] = [array[shuffledArray], array[i]];
+    }
+    return array;
+}
+
 export default {
     name: "Carousel",
     data: () => ({
@@ -81,8 +89,10 @@ export default {
         ...mapActions('track', ['trackClick']),
 
         showNextItem() {
+            shuffleArray(this.items);
+
             if (this.currentItemIndex === this.items.length) {
-                this.currentItemIndex = 0; // Reset to 0 to start over
+                this.currentItemIndex = 0;
             }
             setTimeout(() => {
                 this.currentItemIndex++;

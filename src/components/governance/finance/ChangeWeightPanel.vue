@@ -248,6 +248,7 @@
 
 import { usdPlusApiService } from "@/services/usd-plus-api-service";
 import * as numberUtils from '@/utils/number-utils'
+import { mapGetters } from "vuex";
 
 export default {
     name: "ChangeWeightPanel",
@@ -301,6 +302,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters('web3', ['web3']),
         totalLiquidationSum: function () {
 
             let result = 0.0;
@@ -396,8 +398,9 @@ export default {
 
                 let assetDecimals = (await contractTokenPlus.methods.decimals().call()) * 1;
                 let blockchainValue = await contractTokenPlus.methods.totalSupply().call();
+                console.log("blockhain total usd:", blockchainValue)
                 let fromAsset6 = assetDecimals === 6;
-                this.totalUsdPlusValue = (fromAsset6 ? numberUtils._fromE6(blockchainValue.toString()) : numberUtils._fromE18(blockchainValue.toString()))
+                this.totalUsdPlusValue = (fromAsset6 ? numberUtils._fromE6(blockchainValue.toString()) : this.web3.utils.fromWei(blockchainValue, 'ether'))
           }, 3000)
         },
 

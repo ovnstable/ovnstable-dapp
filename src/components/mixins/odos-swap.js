@@ -3,6 +3,7 @@ import loadJSON from "@/utils/http-utils";
 import {mapActions, mapGetters} from "vuex";
 import {tokenLogo} from "@/components/mixins/token-logo";
 import {logger} from "@/components/mixins/logger";
+import {errorHandler} from "@/components/mixins/error-handler";
 
 const ODOS_DURATION_CONFIRM_REQUEST = 60
 const SECONDTOKEN_DEFAULT_SYMBOL= 'USD+';
@@ -11,7 +12,8 @@ const SECONDTOKEN_SECOND_DEFAULT_SYMBOL= 'DAI+';
 export const odosSwap = {
     mixins: [
         tokenLogo,
-        logger
+        logger,
+        errorHandler
     ],
     data() {
         return {
@@ -763,23 +765,9 @@ export const odosSwap = {
                         this.updateDirectBalances(addressesToUpdate);
                     }, 2000)
                 }).catch(e => {
-                    if (e && e.code === 4001) {
-                        if (e.message && (e.message.toLowerCase().includes('user rejected') || e.message.toLowerCase().includes('user denied'))) {
-                            this.stopSwapConfirmTimer();
-                            this.closeWaitingModal();
-                            this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e},);
-                            console.debug(this.getOdosLogMsg({message: "User rejected the request", swapSession: this.swapSessionId, data: e}));
-                            return;
-                        }
-                    }
-
-                    console.error(this.getOdosLogMsg({message: "Swap odos send transaction error", swapSession: this.swapSessionId, data: e}));
-                    this.closeWaitingModal();
-                    this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e});
-                })
-                // }).catch(e => {
-                //     this.handleTransactionError(e);
-                // })
+                    this.handleTransactionError(e);
+                    this.stopSwapConfirmTimer();
+                });
         },
 
         getDefaultSecondtoken(symbol) {
@@ -965,40 +953,6 @@ export const odosSwap = {
 
                 this.checkApproveForToken(token, token.contractValue);
             }
-        },
-
-        handleTransactionError(e) {
-            console.log("Handle Swap odos send transaction error", e);
-            if (!e) {
-                console.error(this.getOdosLogMsg({message: "Swap odos send transaction error", swapSession: this.swapSessionId, data: "Error is empty"}));
-                this.closeWaitingModal();
-                this.showErrorModalWithMsg({errorType: 'swap', errorMsg: "Error is empty"});
-                return
-            }
-
-            if (this.isUserRejectTx(e)) {
-                this.stopSwapConfirmTimer();
-                this.closeWaitingModal();
-                console.debug(this.getOdosLogMsg({message: "User rejected the request", swapSession: this.swapSessionId, data: e}));
-                return;
-            }
-
-            if (this.isNetworkHighLoad(e)) {
-                console.debug(this.getOdosLogMsg({message: "Swap odos send highload network", swapSession: this.swapSessionId, data: e}));
-                this.closeWaitingModal();
-                this.showErrorModalWithMsg({errorType: 'highload-network', errorMsg: e});
-                return;
-            }
-
-            console.error(this.getOdosLogMsg({message: "Swap odos send transaction error", swapSession: this.swapSessionId, data: e}));
-            this.closeWaitingModal();
-            this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e});
-        },
-        isNetworkHighLoad(e) {
-            return e.message && e.message.toLowerCase().includes('transaction was within 50 blocks');
-        },
-        isUserRejectTx(e) {
-            return e.code === 4001 && e.message && (e.message.toLowerCase().includes('user rejected') || e.message.toLowerCase().includes('user denied'));
         },
 
     }

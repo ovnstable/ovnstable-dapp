@@ -49,6 +49,27 @@
                     :copy-error="copyErrorToClipboard">
                 </HighLoadInfo>
             </div>
+            <div v-else-if="errorViewType === 'gas-price-increase'">
+                <GasPriceIncreaseInfo
+                    :error-msg="errorText"
+                    :error-code="errorCode"
+                    :copy-error="copyErrorToClipboard">
+                </GasPriceIncreaseInfo>
+            </div>
+            <div v-else-if="errorViewType === 'over-rate-limit'">
+                <OverRateLimitInfo
+                    :error-msg="errorText"
+                    :error-code="errorCode"
+                    :copy-error="copyErrorToClipboard">
+                </OverRateLimitInfo>
+            </div>
+            <div v-else-if="errorViewType === 'insufficient-funds'">
+                <InsufficientFundsInfo
+                    :error-msg="errorText"
+                    :error-code="errorCode"
+                    :copy-error="copyErrorToClipboard">
+                </InsufficientFundsInfo>
+            </div>
             <div v-else>
               <UndefinedError
                         :error-msg="errorMsg"
@@ -68,10 +89,16 @@ import GasError from "@/components/common/modal/action/errors/GasError.vue";
 import SlippageError from "@/components/common/modal/action/errors/SlippageError.vue";
 import OdosError from "@/components/common/modal/action/errors/OdosError.vue";
 import HighLoadInfo from "@/components/common/modal/action/errors/HighLoadInfo.vue";
+import GasPriceIncreaseInfo from "@/components/common/modal/action/errors/GasPriceIncreaseInfo.vue";
+import OverRateLimitInfo from "@/components/common/modal/action/errors/OverRateLimitInfo.vue";
+import InsufficientFundsInfo from "@/components/common/modal/action/errors/InsufficientFundsInfo.vue";
 
 export default {
     name: "ErrorModal",
     components: {
+        InsufficientFundsInfo,
+        OverRateLimitInfo,
+        GasPriceIncreaseInfo,
         HighLoadInfo,
         OdosError,
         SlippageError,
@@ -134,6 +161,21 @@ export default {
 
             if (this.errorType === 'highload-network') {
                 this.errorViewType = 'highload-network'
+                return;
+            }
+
+            if (this.errorType === 'gas-price-increase') {
+                this.errorViewType = 'gas-price-increase'
+                return;
+            }
+
+            if (this.errorType === 'over-rate-limit') {
+                this.errorViewType = 'over-rate-limit'
+                return;
+            }
+
+            if (this.errorType === 'insufficient-funds') {
+                this.errorViewType = 'insufficient-funds'
                 return;
             }
 

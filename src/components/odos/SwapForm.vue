@@ -964,7 +964,7 @@ export default defineComponent({
                             if (errMsg && errMsg.toLowerCase().includes('slippage')) {
                                 this.showErrorModalWithMsg({errorType: 'slippage', errorMsg: errMsg},);
                             } else {
-                                this.showErrorModalWithMsg({errorType: 'odos', errorMsg: errMsg},);
+                                this.handleOdosRequestError({message: errMsg});
                             }
 
                             this.isSwapLoading = false;

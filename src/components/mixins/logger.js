@@ -33,6 +33,7 @@ export const logger = {
                 console.log("[ODOS-SWAP] Error when create log message: ", e);
                 return message;
             }
-        }
+        },
+
     }
 }

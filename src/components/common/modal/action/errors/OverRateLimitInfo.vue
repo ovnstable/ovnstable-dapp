@@ -2,20 +2,18 @@
     <div class="main-container" :class="$wu.isMobile() ? 'px-2 pt-2' : 'px-5 pt-5'">
 
         <div class="loading-img">
-            <v-img :src="require('@/assets/icon/high-load-network.svg')"/>
+            <v-img :src="require('@/assets/icon/over-rate-limit.svg')"/>
         </div>
 
         <label class="error-label pb-5 pt-5">
-            Network load
+            Over rate limit
         </label>
 
-        <div class="info-message-container">
-            The network is load and the transaction is delayed
-        </div>
 
         <div class="info-container" :class="$wu.isMobile() ? 'pa-2 pt-4' : 'pa-5'">
             <div class="info-container-text">
-                Track the transaction in your wallet
+                An transaction limits error has occurred in your wallet.<br/>
+                Check in your wallet whether the transaction went through.
             </div>
         </div>
     </div>
@@ -24,7 +22,7 @@
 <script>
 
 export default {
-    name: "HighLoadInfo",
+    name: "OverRateLimitInfo",
     props: ["errorMsg", 'errorCode', 'copyError'],
 
     data: () => ({
@@ -63,7 +61,7 @@ export default {
     }
 
     .info-container {
-        font-size: 19px;
+        font-size: 16px;
     }
 
     .error-label {
@@ -145,14 +143,13 @@ export default {
 
     font-family: 'Roboto';
     font-style: normal;
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 36px;
+    font-size: 20px;
+    line-height: 30px;
     text-align: center;
 }
 
 .error-label {
-    color: var(--secondary-gray-text);
+    color: rgba(250, 136, 72, 1);
     font-size: 30px;
 }
 

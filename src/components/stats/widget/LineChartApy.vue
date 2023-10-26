@@ -329,34 +329,6 @@ export default {
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(this.slice) : labels;
 
-            let weekApySum = 0;
-            let monthApySum = 0;
-            let allApySum = 0;
-
-            let averageValue = 0;
-
-            const data = this.data.datasets[0].data;
-            const dataLength = data.length;
-
-            if (this.zoom === 'week') {
-                for (let i = Math.max(0, dataLength - 7); i < dataLength; i++) {
-                    weekApySum += parseFloat(data[i]);
-                }
-                averageValue = weekApySum / Math.min(dataLength, 7);
-            }
-            if (this.zoom === 'month') {
-                for (let i = Math.max(0, dataLength - 30); i < dataLength; i++) {
-                    monthApySum += parseFloat(data[i]);
-                }
-                averageValue = monthApySum / Math.min(dataLength, 30);
-            }
-            if (this.zoom === 'all') {
-                for (let i = 0; i < dataLength; i++) {
-                    allApySum += parseFloat(data[i]);
-                }
-                averageValue = allApySum / dataLength;
-            }
-
             let maxValue;
             try {
                 maxValue = Math.max.apply(Math, values);

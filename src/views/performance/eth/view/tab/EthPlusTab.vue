@@ -56,6 +56,7 @@
                             v-if="!$wu.isMobile()"
                             :data="collateralData"
                             :network-name="tab"
+                            asset-type="eth+"
                         />
 
                         <TableStablecoins
@@ -63,6 +64,7 @@
                             minimized
                             :data="collateralData"
                             :network-name="tab"
+                            asset-type="eth+"
                         />
                     </v-col>
 

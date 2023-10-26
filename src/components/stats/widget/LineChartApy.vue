@@ -22,6 +22,13 @@
                     <label class="chart-title-apy">
                         {{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '' }}
                     </label>
+                    <div class="tooltip-container">
+                        <Tooltip
+                            :size="16"
+                            text="Weighted average APY for a period"
+                            top
+                        />
+                    </div>
                 </v-row>
                 <v-row justify="end">
                     <label class="chart-sub-title-apy">
@@ -128,6 +135,7 @@
 
 import {mapGetters} from "vuex";
 import moment from "moment";
+import Tooltip from "@/components/common/element/Tooltip";
 
 import ApexCharts from 'apexcharts'
 import polygonIcon from "@/assets/network/polygon.svg";
@@ -176,7 +184,9 @@ export default {
         },
     },
 
-    components: {},
+    components: {
+        Tooltip,
+    },
 
     data: () => ({
         zoom: "all",
@@ -319,7 +329,33 @@ export default {
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(this.slice) : labels;
 
-            let averageValue = this.avgApy ? this.avgApy.value : 0;
+            let weekApySum = 0;
+            let monthApySum = 0;
+            let allApySum = 0;
+
+            let averageValue = 0;
+
+            const data = this.data.datasets[0].data;
+            const dataLength = data.length;
+
+            if (this.zoom === 'week') {
+                for (let i = Math.max(0, dataLength - 7); i < dataLength; i++) {
+                    weekApySum += parseFloat(data[i]);
+                }
+                averageValue = weekApySum / Math.min(dataLength, 7);
+            }
+            if (this.zoom === 'month') {
+                for (let i = Math.max(0, dataLength - 30); i < dataLength; i++) {
+                    monthApySum += parseFloat(data[i]);
+                }
+                averageValue = monthApySum / Math.min(dataLength, 30);
+            }
+            if (this.zoom === 'all') {
+                for (let i = 0; i < dataLength; i++) {
+                    allApySum += parseFloat(data[i]);
+                }
+                averageValue = allApySum / dataLength;
+            }
 
             let maxValue;
             try {
@@ -705,5 +741,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text) !important;
+}
+
+.tooltip-container {
+    position: relative;
+    top: 30px;
+    right: 10px;
 }
 </style>

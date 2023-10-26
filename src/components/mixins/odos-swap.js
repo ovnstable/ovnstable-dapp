@@ -763,23 +763,9 @@ export const odosSwap = {
                         this.updateDirectBalances(addressesToUpdate);
                     }, 2000)
                 }).catch(e => {
-                    if (e && e.code === 4001) {
-                        if (e.message && (e.message.toLowerCase().includes('user rejected') || e.message.toLowerCase().includes('user denied'))) {
-                            this.stopSwapConfirmTimer();
-                            this.closeWaitingModal();
-                            this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e},);
-                            console.debug(this.getOdosLogMsg({message: "User rejected the request", swapSession: this.swapSessionId, data: e}));
-                            return;
-                        }
-                    }
-
-                    console.error(this.getOdosLogMsg({message: "Swap odos send transaction error", swapSession: this.swapSessionId, data: e}));
-                    this.closeWaitingModal();
-                    this.showErrorModalWithMsg({errorType: 'swap', errorMsg: e});
-                })
-                // }).catch(e => {
-                //     this.handleTransactionError(e);
-                // })
+                    this.handleTransactionError(e);
+                    this.stopSwapConfirmTimer();
+                });
         },
 
         getDefaultSecondtoken(symbol) {

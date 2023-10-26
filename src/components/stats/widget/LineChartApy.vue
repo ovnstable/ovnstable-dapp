@@ -324,6 +324,7 @@ export default {
             let values = [];
             this.data.datasets[0].data.forEach(v => values.push(v));
             values = this.slice ? values.slice(this.slice) : values;
+            let averageValue = this.getAvgByValues(values);
 
             let labels = [];
             this.data.labels.forEach(v => labels.push(v));
@@ -466,6 +467,19 @@ export default {
             this.chart = new ApexCharts(document.querySelector("#line-chart-apy"), options);
             this.chart.render();
         },
+        getAvgByValues(values) {
+            let averageValue = 0;
+            let sumOfValues = 0;
+            for (let i = 0; i < values.length; i++) {
+                sumOfValues += parseFloat(values[i]);
+            }
+
+            if (values.length) {
+                averageValue = sumOfValues / values.length;
+            }
+
+            return averageValue;
+        }
     }
 }
 </script>

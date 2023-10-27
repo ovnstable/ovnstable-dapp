@@ -71,7 +71,12 @@ export const errorHandler = {
             return e.message && (e.message.toLowerCase().includes('insufficient funds'))
         },
         isUserRejectTx(e) {
-            return e.code === 4001 && e.message && (e.message.toLowerCase().includes('user rejected') || e.message.toLowerCase().includes('user denied'));
+            return e.code === 4001 && e.message &&
+                (
+                    e.message.toLowerCase().includes('user rejected') ||
+                    e.message.toLowerCase().includes('user denied') ||
+                    e.message.toLowerCase().includes('user declined transaction')
+                );
         },
 
         handleControlledError(logMessage, errorType, errorMessage, isImportantToLog = false) {

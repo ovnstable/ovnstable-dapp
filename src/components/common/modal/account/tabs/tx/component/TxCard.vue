@@ -493,7 +493,7 @@ export default {
     width: 16px !important;
     margin-top: -20px !important;
     margin-left: -8px !important;
-    z-index: 1000 !important;
+    z-index: 55 !important;
     background-color: var(--card-coin-background);
     border-radius: 9999px !important;
 }

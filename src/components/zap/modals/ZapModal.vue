@@ -101,4 +101,8 @@ div {
     background-color: var(--secondary) !important;
 }
 
+.airdrop-body {
+    z-index: 48 !important;
+}
+
 </style>

@@ -50,11 +50,17 @@ export const tokenLogo = {
                     return tokenUrl;
                 }
 
-                return '/assets/currencies/stablecoins/' + token.symbol + '.png';
+                return this.getOvnCoinBaseImagePath(token);
             } catch (e) {
                 console.log("load Overnight Token Image failed ", token.symbol, e)
-                return '/assets/currencies/stablecoins/' + token.symbol + '.png';
+                return this.getOvnCoinBaseImagePath(token);
             }
+        },
+        getOvnCoinBaseImagePath(token) {
+            if (token.symbol === 'ETH+') {
+                return '/assets/currencies/stablecoins/' + token.symbol + '.svg';
+            }
+            return '/assets/currencies/stablecoins/' + token.symbol + '.png';
         },
         async loadCoingeckoOvernightTokenImage(symbol) {
             // example

@@ -1,6 +1,6 @@
 <template>
     <v-dialog
-        style="z-index: 1000"
+        style="z-index: 55"
         v-model="show"
         :width="650"
         persistent>

@@ -154,7 +154,7 @@ export default defineComponent({
           isImagesLoading: true,
           poolLabelsMap: {}, // key = set() (unique values)
 
-          ovnMarkers: ['USD+', "DAI+", "USDT+", "wUSD+", 'OVN'],
+          ovnMarkers: ['USD+', "DAI+", "USDT+", "wUSD+", 'OVN', 'ETH+'],
           isPoolOpenMap: {}
       }
     },

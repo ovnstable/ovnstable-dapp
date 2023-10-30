@@ -154,34 +154,34 @@
         </v-row>
       </div>
 
-      <div v-else class="ma-0 info-card-container d-flex mt-3">
-        <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
-          <v-img class="currency" :src="require('@/assets/currencies/DAI+.svg')" />
+        <div v-else>
+            <div class="ma-0 info-card-container d-flex mt-3">
+                <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
+                    <v-img class="currency" :src="require('@/assets/currencies/DAI+.svg')" />
+                </div>
+                <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5 ml-5' : 'mt-0'" >
+                    <label class="section-text">
+                        DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on Optimism. It cannot be minted separately.
+                    </label>
+                    <div class="section-text font-weight-bold">
+                        Switch on Optimism, Arbitrum, or Base chain to see DAI+ collateral.
+                    </div>
+                </div>
+            </div>
+            <div v-if="networkId !== 10 && networkId !== 42161 || networkId !== 8453"
+                 :class="$wu.isMobile() ? 'flex-column' : ''"
+                 class="mt-3 buttons-div" >
+                <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('10')">
+                    switch to optimism to mint
+                </v-btn>
+                <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('42161')">
+                    switch to arbitrum to mint
+                </v-btn>
+                <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('8453')">
+                    switch to base to mint
+                </v-btn>
+            </div>
         </div>
-        <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5 ml-5' : 'mt-0'" >
-          <label class="section-text">
-            DAI+ is the equivalent of USD+, pegged to DAI 1:1. DAI+ consist of aDAI (Aave) and USD+. It has been designed for boosted pools (Balancer and Beethoven) on Optimism. It cannot be minted separately.
-          </label>
-          <div class="section-text font-weight-bold">
-            Switch on Optimism, Arbitrum, or Base chain to see DAI+ collateral.
-          </div>
-        </div>
-      </div>
-
-        <div v-if="networkId !== 10 && networkId !== 42161 || networkId !== 8453"
-             :class="$wu.isMobile() ? 'flex-column' : ''"
-             class="mt-3 buttons-div" >
-            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('10')">
-                switch to optimism to mint
-            </v-btn>
-            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('42161')">
-                switch to arbitrum to mint
-            </v-btn>
-            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('8453')">
-                switch to base to mint
-            </v-btn>
-        </div>
-
 
       <resize-observer v-if="!isPayoutsLoading" @notify="$forceUpdate()"/>
     </div>

@@ -4,12 +4,9 @@ export default async function getPools({ context, nextMiddleware }){
 
     context.store.dispatch('menuUI/selectTab', 'pools');
 
-    // await context.store.dispatch('poolAction/getPoolList').then(value => {
-    //   context.store.dispatch('statsData/refreshStats')
-    // });
   }
   catch(e){
-    console.error(e);
+    console.log(e);
     return context.next(false);
   }
   return nextMiddleware()

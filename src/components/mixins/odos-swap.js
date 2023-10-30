@@ -820,7 +820,7 @@ export const odosSwap = {
 
         async getActualGasPrice(networkId) {
             let actualGasPriceObject = await odosApiService.getActualGasPrice(networkId);
-            console.debug(this.getOdosLogMsg({
+            console.log(this.getOdosLogMsg({
                 message: "Actual price for gas.",
                 swapSession: this.swapSessionId,
                 data: actualGasPriceObject

@@ -5,7 +5,7 @@ export default async function getEtsAbout({ context, nextMiddleware }){
     context.store.dispatch('menuUI/selectTab', 'ets_about');
   }
   catch(e){
-    console.error(e);
+    console.log(e);
     return context.next(false);
   }
   return nextMiddleware()

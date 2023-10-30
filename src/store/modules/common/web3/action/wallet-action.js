@@ -8,7 +8,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 
 const SUPPORTED_NETWORKS = [137, 56, 10, 42161, 324, 8453, 59144];
-const WALLETCONNECT_SUPPORTED_NETWORKS = [137, 56, 10, 42161, 8453, 59144];
+const WALLETCONNECT_SUPPORTED_NETWORKS = [10, 42161, 8453, 56, 59144, 137];
 
 const state = {
     onboard: null,
@@ -120,6 +120,17 @@ const actions = {
             connectedWallets = await onboard.connectWallet();
         }
 
+        // connectedWallets
+        // connectedWallets.on("accountsChanged", (data) => {
+        //     console.log("connectedWallets callback accountsChanged", data);
+        // });
+        // connectedWallets.on("chainChanged",  (data) => {
+        //     console.log("connectedWallets callback chainChanged", data);
+        // });
+        // connectedWallets.on("disconnect",  (data) => {
+        //     console.log("connectedWallets callback disconnect", data);
+        // });
+
         console.log("walletConnect onboard after connect wallet ", connectedWallets)
 
         let wallet = connectedWallets[0];
@@ -185,7 +196,7 @@ const actions = {
             let wallets = await dispatch('getMainWalletsConfig');
 
             getters.onboard.networkId = rootState.network.networkId;
-            console.log("updateOnboardNetwork")
+            console.log("updateOnboardNetwork", rootState.network.networkId)
             // await getters.onboard.connectWallet()
         }
     },
@@ -202,6 +213,7 @@ const actions = {
 
             if (netId) {
                 if (getters.onboard) {
+                    console.log("connectWallet setChain:", netId);
                     await getters.onboard.setChain({ chainId: netId });
                 }
             }
@@ -414,10 +426,10 @@ const actions = {
         let rpcUrl = rootState.network.rpcUrl;
         let appApiUrl = rootState.network.appApiUrl;
 
-        let customWallets = await dispatch('getCustomWallets');
+        // let customWallets = await dispatch('getCustomWallets');
 
         const injected = injectedModule({
-            custom: customWallets,
+            // custom: customWallets,
             // display all wallets even if they are unavailable
             displayUnavailable: true,
             // but only show Binance and Bitski wallet if they are available
@@ -487,44 +499,21 @@ const actions = {
 
         })
 
-/*        const wcInitOptions = {
-            qrcodeModalOptions: {
-                mobileLinks: ['metamask', 'trust', 'rainbow', 'zerion', "argent", "imtoken", "pillar"] // 'argent',
-            },
-            connectFirstChainId: true,
-            requiredChains: SUPPORTED_NETWORKS
-        }*/
-
-        const wcInit2Options = {
-            version: 2,
-            // /!**
-            //  * Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
-            //  *!/
-            // projectId: "699fb1306e95ed8b837fd8962c633422",
-            projectId: "7a088ae8cc40c1eb6925dc98cd5fe5e3",
-            // requiredChains: SUPPORTED_NETWORKS
-        }
-
         const walletConnect = walletConnectModule({
             version: 2,
             handleUri: uri => console.log('walletConnect uri: ' + uri),
             projectId: '7a088ae8cc40c1eb6925dc98cd5fe5e3', // ***New Param* Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
-            connectFirstChainId: true,
-            requiredChains: WALLETCONNECT_SUPPORTED_NETWORKS // chains required to be supported by WC wallet 0xA4B1
+            // connectFirstChainId: true,
+            requiredChains: WALLETCONNECT_SUPPORTED_NETWORKS, // chains required to be supported by WC wallet 0xA4B1,
+            dappUrl: 'http://app.overnight.fi'
         })
 
         const coinbaseWalletSdk = coinbaseWalletModule({ darkMode: true });
-        // const walletConnect = await walletConnectModule(wcInit2Options);
-
-        // const argent = argentModule(walletConnect);
 
         return [
             injected,
             walletConnect,
             coinbaseWalletSdk,
-            // argent,
-            // trezor,
-            // gnosis,
             // ... other wallets
         ];
     },

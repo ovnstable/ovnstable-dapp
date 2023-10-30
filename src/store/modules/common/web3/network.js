@@ -301,6 +301,7 @@ const getters = {
 const actions = {
 
     changeDappNetwork({commit, dispatch, getters, rootState}, networkName) {
+        console.log('changeDappNetwork', networkName);
 
         commit('setAppApiUrl', _getParams(networkName).appApiUrl);
         commit('setNetworkName', _getParams(networkName).networkName);

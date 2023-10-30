@@ -39,7 +39,7 @@
                     </label>
                 </td>
                 <td class="table-label-payouts-strategy text-right" v-if="!minimized">
-                    $ {{ $utils.formatMoney(item.dailyProfit, 6) }}
+                    {{ formatDailyProfitSubZeroValue[payoutData.indexOf(item)] }}
                 </td>
                 <td v-if="item.comp" class="table-label-payouts-strategy text-right">
                     <label :class="item.comp >= 0 ? 'yield-green' : 'yield-red'">
@@ -103,6 +103,15 @@ export default {
     computed: {
         ...mapGetters('network', ['getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'baseConfig', 'lineaConfig', 'zkConfig']),
         ...mapGetters('theme', ['light']),
+
+        formatDailyProfitSubZeroValue() {
+            const formattedValues = [];
+            for (let i = 0; i < this.payoutData.length; i++) {
+                let dailyProfit = this.payoutData[i].dailyProfit;
+                formattedValues.push(`${dailyProfit < 0 ? '-' : ''}$${this.$utils.formatMoney(Math.abs(dailyProfit), 6)}`);
+            }
+            return formattedValues;
+        },
     },
 
     methods: {

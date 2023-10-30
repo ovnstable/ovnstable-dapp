@@ -328,7 +328,7 @@
                             ETH+
                         </label>
                     </div>
-                    <div class="ml-12">
+                    <div class="ml-14">
                         <v-icon color="var(--secondary-gray-text)" >
                             {{ isShowEth ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
                         </v-icon>

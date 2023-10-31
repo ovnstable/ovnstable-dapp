@@ -75,7 +75,8 @@ export const errorHandler = {
                 (
                     e.message.toLowerCase().includes('user rejected') ||
                     e.message.toLowerCase().includes('user denied') ||
-                    e.message.toLowerCase().includes('user declined transaction')
+                    e.message.toLowerCase().includes('user declined transaction'),
+                    e.message.toLowerCase().includes('cancelled')
                 );
         },
 

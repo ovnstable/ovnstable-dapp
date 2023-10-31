@@ -50,11 +50,7 @@
 
 <script>
 import UsdPlusImage from "@/assets/usdPlus.json";
-// import Onboard from 'bnc-onboard';
-import Web3 from "web3";
 import {mapGetters} from 'vuex'
-import Onboard from "@web3-onboard/core";
-import injectedModule from "@web3-onboard/injected-wallets";
 
 const connectIcon = require('@/assets/discord/connect.png');
 const loadingIcon = require('@/assets/discord/loading.png');
@@ -93,49 +89,6 @@ export default {
         const resp = await axios.post(this.appApiUrl + '/discord/get_user', parsedParams);
         localStorage.setItem('discord_backend_token', resp.data.token);
         localStorage.setItem('discord_user', JSON.stringify(resp.data.user));
-
-        const injected = injectedModule();
-        let rpcUrl = this.rpcUrl;
-
-        let onboard =   Onboard({
-            // ... other Onboard options
-            wallets: [
-                injected,
-                // argent,
-                // ... other wallets
-            ],
-            chains: [
-                {
-                    id: '0x1',
-                    token: 'ETH',
-                    label: 'Ethereum Mainnet',
-                    rpcUrl: rpcUrl
-                }
-                // {
-                //     id: "0x144",  // = 280
-                //     token: "ETH",
-                //     label: "zkSync Mainnet",
-                //     rpcUrl: "https://mainnet.era.zksync.io",
-                // },
-                // ... other chains
-            ]
-        });
-        // this.onboard = Onboard({
-        //     dappId: 'e7473c8b-6d55-418d-8fd7-e26e75446065',
-        //     networkId: this.networkId,
-        //     darkMode: true,
-        //     walletSelect: {
-        //         wallets: wallets,
-        //     },
-        //
-        //     subscriptions: {
-        //         wallet: async wallet => {
-        //             this.web3 = new Web3(wallet.provider);
-        //
-        //             this.account = wallet;
-        //         }
-        //     }
-        // });
 
         this.isMounted = true;
     },

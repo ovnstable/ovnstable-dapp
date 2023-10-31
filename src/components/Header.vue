@@ -107,7 +107,6 @@ export default {
     },
 
     data: () => ({
-        light: true
     }),
 
     computed: {

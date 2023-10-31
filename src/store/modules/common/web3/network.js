@@ -301,6 +301,7 @@ const getters = {
 const actions = {
 
     changeDappNetwork({commit, dispatch, getters, rootState}, networkName) {
+        console.log('changeDappNetwork', networkName);
 
         commit('setAppApiUrl', _getParams(networkName).appApiUrl);
         commit('setNetworkName', _getParams(networkName).networkName);
@@ -314,7 +315,6 @@ const actions = {
         commit('setNetworkColor', _getParams(networkName).networkColor);
         commit('setIsDeprecated', _getParams(networkName).isDeprecated);
 
-        dispatch('walletAction/updateOnboardNetwork', null, {root: true});
         dispatch('web3/initWeb3', null, {root: true});
     },
 
@@ -556,8 +556,8 @@ const mutations = {
         state.switchToOtherNetwork = value;
     },
 
-    setNetworkChanged(state, value) {
-        state.networkChanged = value;
+    setChainChanged(state, value) {
+        state.chainChanged = value;
     },
 };
 

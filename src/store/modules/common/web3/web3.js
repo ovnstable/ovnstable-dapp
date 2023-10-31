@@ -91,6 +91,16 @@ const actions = {
         web3 = await new Web3(provider);
         console.log('InitWeb3: Provider default');
 
+        /*getters.provider.on("accountsChanged", (data) => {
+            console.log("provider callback def accountsChanged", data);
+        });
+        getters.provider.on("chainChanged",  (data) => {
+            console.log("provider callback def chainChanged", data);
+        });
+        getters.provider.on("disconnect",  (data) => {
+            console.log("provider callback def disconnect", data);
+        });*/
+
         commit('setIsProviderDefault', true);
         commit('setProvider', provider);
         commit('setWeb3', web3);
@@ -103,6 +113,17 @@ const actions = {
 
         console.log("initWeb3 Provider: ", rootState.network.networkName, getters.provider);
         dispatch('network/saveNetworkToLocalStore', rootState.network.networkName, {root: true});
+
+/*
+        getters.provider.on("accountsChanged", (data) => {
+            console.log("provider callback accountsChanged", data);
+        });
+        getters.provider.on("chainChanged",  (data) => {
+            console.log("provider callback chainChanged", data);
+        });
+        getters.provider.on("disconnect",  (data) => {
+            console.log("provider callback disconnect", data);
+        });*/
 
         commit('setIsProviderDefault', false);
         commit('setProvider', provider);

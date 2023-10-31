@@ -8,7 +8,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 
 const SUPPORTED_NETWORKS = [137, 56, 10, 42161, 324, 8453, 59144];
-const WALLETCONNECT_SUPPORTED_NETWORKS = [137, 56, 10, 42161, 8453, 59144];
+const WALLETCONNECT_SUPPORTED_NETWORKS = [10, 42161, 8453, 56, 59144, 137];
 
 const state = {
     onboard: null,
@@ -29,20 +29,7 @@ const getters = {
 const actions = {
 
     async initOnboard({commit, dispatch, getters, rootState}) {
-        let logo = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">/n' +
-            '<path fill-rule="evenodd" clip-rule="evenodd" d="M24.339 7.66102H9.28814V4H24.339C26.3608 4 27.9998 5.63889 28 7.66064H24.339L24.339 7.66102ZM24.339 8.88136V24.339L24.339 24.3394L24.339 28C26.3609 28 28 26.3609 28 24.339L28 9.28776H24.339L24.339 8.88136ZM23.1186 24.339V24.3394H22.7119V28H7.66102C5.63909 28 4 26.3609 4 24.339H7.66102H23.1186ZM7.66102 4V7.66102V22.7119H4V7.66102C4 5.63909 5.63909 4 7.66102 4Z" fill="url(#paint0_linear_8985_99599)"/>/n' +
-            '<path fill-rule="evenodd" clip-rule="evenodd" d="M15.6827 11.3223C15.2961 11.3223 14.9827 11.6357 14.9827 12.0223V14.5764L12.4285 14.5764C12.0419 14.5764 11.7285 14.8898 11.7285 15.2764V16.3171C11.7285 16.7037 12.0419 17.0171 12.4285 17.0171H14.9827V19.5714C14.9827 19.958 15.2961 20.2714 15.6827 20.2714H16.7234C17.11 20.2714 17.4234 19.958 17.4234 19.5714V17.0171H19.9777C20.3643 17.0171 20.6777 16.7037 20.6777 16.3171V15.2764C20.6777 14.8898 20.3643 14.5764 19.9777 14.5764L17.4234 14.5764V12.0223C17.4234 11.6357 17.11 11.3223 16.7234 11.3223H15.6827Z" fill="url(#paint1_linear_8985_99599)"/>/n' +
-            '<defs>/n' +
-                '<linearGradient id="paint0_linear_8985_99599" x1="4" y1="4" x2="28.5149" y2="4.53805" gradientUnits="userSpaceOnUse">/n' +
-                    '<stop stop-color="#28A0F0"/>/n' +
-                    '<stop offset="1" stop-color="#0678C4" stop-opacity="0.9917"/>/n' +
-                '</linearGradient>/n' +
-                '<linearGradient id="paint1_linear_8985_99599" x1="11.7285" y1="11.3223" x2="20.8697" y2="11.5229" gradientUnits="userSpaceOnUse">/n' +
-                    '<stop stop-color="#28A0F0"/>/n' +
-                    '<stop offset="1" stop-color="#0678C4" stop-opacity="0.9917"/>/n' +
-                '</linearGradient>/n' +
-            '</defs>/n' +
-        '</svg>'
+        let logo = await dispatch('getLogo');
 
         console.log("Init new Onboard")
 
@@ -84,11 +71,6 @@ const actions = {
             connect: {
                 showSidebar: true,
                 disableClose: false,
-                // autoConnectLastWallet: true,
-                // autoConnectAllPreviousWallet: true,
-                // iDontHaveAWalletLink: '',
-                // wheresMyWalletLink: '',
-                // disableUDResolution: false,
             },
             accountCenter: {
                 desktop: {
@@ -141,8 +123,9 @@ const actions = {
                 dispatch('accountChanged', accounts);
             });
 
-            rootState.web3.provider.on('networkChanged', async function (newNetworkId) {
-                dispatch('networkChanged', newNetworkId);
+            rootState.web3.provider.on('chainChanged', async function (newNetworkId) {
+                console.log("chainChanged callback", Number(newNetworkId).toString(10));
+                dispatch('chainChanged', newNetworkId);
             });
         }
 
@@ -153,12 +136,6 @@ const actions = {
             console.log("====== initOnboard Provider callback initWeb3 initWeb3 provider ======", rootState.web3, rootState.web3.isProviderDefault)
 
             if (!rootState.web3.isProviderDefault) {
-
-                let accounts = await rootState.web3.web3.eth.getAccounts();
-                if (!accounts || accounts.length === 0) {
-                    dispatch('checkWallet');
-                }
-
                 commit('setWalletConnected', true);
 
                 if (wallet.label !== undefined && wallet.label && wallet.label !== 'undefined') {
@@ -179,17 +156,6 @@ const actions = {
         commit('setOnboard', onboard);
     },
 
-    async updateOnboardNetwork({commit, dispatch, getters, rootState}) {
-
-        if (getters.onboard) {
-            let wallets = await dispatch('getMainWalletsConfig');
-
-            getters.onboard.networkId = rootState.network.networkId;
-            console.log("updateOnboardNetwork")
-            // await getters.onboard.connectWallet()
-        }
-    },
-
     async connectWallet({commit, dispatch, getters, rootState}) {
         console.log("connectWallet")
 
@@ -202,6 +168,7 @@ const actions = {
 
             if (netId) {
                 if (getters.onboard) {
+                    console.log("connectWallet setChain:", netId);
                     await getters.onboard.setChain({ chainId: netId });
                 }
             }
@@ -309,13 +276,69 @@ const actions = {
         ]
     },
 
+    async getWalletsFilter({commit, dispatch, getters, rootState}) {
+        return {
+            [ProviderLabel.Binance]: 'unavailable',
+            [ProviderLabel.Bitski]: 'unavailable',
+            [ProviderLabel.Zerion]: 'unavailable',
+            [ProviderLabel.AlphaWallet]: 'unavailable',
+            [ProviderLabel.ApexWallet]: 'unavailable',
+            [ProviderLabel.AToken]: 'unavailable',
+            [ProviderLabel.BifrostWallet]: 'unavailable',
+            [ProviderLabel.Brave]: 'unavailable',
+            [ProviderLabel.BitKeep]: 'unavailable',
+            [ProviderLabel.Core]: 'unavailable',
+            [ProviderLabel.Dcent]: 'unavailable',
+            [ProviderLabel.Zeal]: 'unavailable',
+            [ProviderLabel.XDEFI]: 'unavailable',
+            [ProviderLabel.WalletIo]: 'unavailable',
+            [ProviderLabel.TP]: 'unavailable',
+            [ProviderLabel.TokenPocket]: 'unavailable',
+            [ProviderLabel.Tokenary]: 'unavailable',
+            [ProviderLabel.Tally]: 'unavailable',
+            [ProviderLabel.Status]: 'unavailable',
+            [ProviderLabel.Sequence]: 'unavailable',
+            [ProviderLabel.Rainbow]: 'unavailable',
+            [ProviderLabel.Phantom]: 'unavailable',
+            [ProviderLabel.OwnBit]: 'unavailable',
+            [ProviderLabel.Opera]: 'unavailable',
+            [ProviderLabel.OneInch]: 'unavailable',
+            [ProviderLabel.OKXWallet]: 'unavailable',
+            [ProviderLabel.MyKey]: 'unavailable',
+            [ProviderLabel.MeetOne]: 'unavailable',
+            [ProviderLabel.MathWallet]: 'unavailable',
+            [ProviderLabel.Liquality]: 'unavailable',
+            [ProviderLabel.InfinityWallet]: 'unavailable',
+            [ProviderLabel.ImToken]: 'unavailable',
+            [ProviderLabel.HyperPay]: 'unavailable',
+            [ProviderLabel.HuobiWallet]: 'unavailable',
+            [ProviderLabel.GameStop]: 'unavailable',
+            [ProviderLabel.Frontier]: 'unavailable',
+            [ProviderLabel.Frame]: 'unavailable',
+            [ProviderLabel.Exodus]: 'unavailable',
+            [ProviderLabel.Enkrypt]: 'unavailable',
+            [ProviderLabel.DeFiWallet]: 'unavailable',
+            [ProviderLabel.Rabby]: 'unavailable',
+            [ProviderLabel.BlockWallet]: 'unavailable',
+            [ProviderLabel.SafePal]: 'unavailable',
+            [ProviderLabel.Trust]: 'unavailable',
+            [ProviderLabel.RoninWallet]: 'unavailable',
+            [ProviderLabel.Coin98Wallet]: 'unavailable',
+            [ProviderLabel.Kayros]: 'unavailable',
+            [ProviderLabel.OneKey]: 'unavailable',
+            [ProviderLabel.SubWallet]: 'unavailable',
+            [ProviderLabel.Fordefi]: 'unavailable',
+            [ProviderLabel.Safeheron]: 'unavailable',
+            [ProviderLabel.Talisman]: 'unavailable',
+            [ProviderLabel.Coinbase]: 'unavailable',
+        }
+    },
+
     async getCustomWallets({commit, dispatch, getters, rootState}) {
         let customWallets = []; // include custom (not natively supported) injected wallet modules here
 
         //  Create WalletConnect Provider for argent
         const wcprovider = new WalletConnectProvider({
-            // infuraId: "ee707251f43f41ae98103e051eed7580",
-            // rpc: 'https://mainnet.era.zksync.io'
             rpc: {
                 ['324']: "https://mainnet.era.zksync.io",
                 ['42161']: "https://arb1.arbitrum.io/rpc",
@@ -347,16 +370,9 @@ const actions = {
             getIcon: async () => "https://images.prismic.io/argentwebsite/313db37e-055d-42ee-9476-a92bda64e61d_logo.svg?auto=format%2Ccompress&amp;fit=max&amp;q=50",
             // Returns a valid EIP1193 provider. In some cases the provider will need to be patched to satisfy the EIP1193 Provider interface
             getInterface: async ({ chains }) => {
-                // wcprovider.enable();
                 const [chain] = chains;
                 console.log("Argent provider chains: ", chains, chain)
-                // const { getEthereumProvider } = await import('@argent/login');
                 const { createEIP1193Provider } = await import('@web3-onboard/common');
-                // const ethereumProvider = await getEthereumProvider({
-                //     chainId: parseInt(chain.id),
-                //     rpcUrl: chain.rpcUrl,
-                //     wcprovider,
-                // });
 
                 wcprovider.onConnect(async data => {
                     console.log("WalletConnect for Argent CONNECTED!", data);
@@ -367,21 +383,10 @@ const actions = {
                 console.log("====== Init Onboard ARGENT Provider callbacks ======")
                 wcprovider.on('accountsChanged', async function (accounts) {
                     dispatch('accountChanged', accounts);
-
-                    // console.log("====== initOnboard ARGENT Provider callback accountsChanged ======", accounts[0], parseInt(await rootState.web3.web3.eth.net.getId()))
-                    //
-                    // try {
-                    //     dispatch('setNetwork', parseInt(await rootState.web3.web3.eth.net.getId()));
-                    //     commit('accountData/setAccount', accounts[0], {root: true});
-                    //     console.log("Argent: account set to:", accounts[0]);
-                    // } catch (e) {
-                    //     console.error("Error when on accountsChanged")
-                    // }
-
                 });
 
-                wcprovider.on('networkChanged', async function (newNetworkId) {
-                    dispatch('networkChanged', newNetworkId);
+                wcprovider.on('chainChanged', async function (newNetworkId) {
+                    dispatch('chainChanged', newNetworkId);
                 });
 
                 await wcprovider.enable();
@@ -411,62 +416,12 @@ const actions = {
     },
 
     async getMainWalletsConfig({commit, dispatch, getters, rootState}) {
-        let rpcUrl = rootState.network.rpcUrl;
-        let appApiUrl = rootState.network.appApiUrl;
-
         let customWallets = await dispatch('getCustomWallets');
-
         const injected = injectedModule({
             custom: customWallets,
             // display all wallets even if they are unavailable
             displayUnavailable: true,
-            // but only show Binance and Bitski wallet if they are available
-            filter: {
-                [ProviderLabel.Binance]: 'unavailable',
-                [ProviderLabel.Bitski]: 'unavailable',
-                [ProviderLabel.Zerion]: 'unavailable',
-                [ProviderLabel.AlphaWallet]: 'unavailable',
-                [ProviderLabel.ApexWallet]: 'unavailable',
-                [ProviderLabel.AToken]: 'unavailable',
-                [ProviderLabel.BifrostWallet]: 'unavailable',
-                [ProviderLabel.Brave]: 'unavailable',
-                [ProviderLabel.BitKeep]: 'unavailable',
-                [ProviderLabel.Core]: 'unavailable',
-                [ProviderLabel.Dcent]: 'unavailable',
-                [ProviderLabel.Zeal]: 'unavailable',
-                [ProviderLabel.XDEFI]: 'unavailable',
-                [ProviderLabel.WalletIo]: 'unavailable',
-                [ProviderLabel.TP]: 'unavailable',
-                [ProviderLabel.TokenPocket]: 'unavailable',
-                [ProviderLabel.Tokenary]: 'unavailable',
-                [ProviderLabel.Tally]: 'unavailable',
-                [ProviderLabel.Status]: 'unavailable',
-                [ProviderLabel.Sequence]: 'unavailable',
-                [ProviderLabel.Rainbow]: 'unavailable',
-                [ProviderLabel.Phantom]: 'unavailable',
-                [ProviderLabel.OwnBit]: 'unavailable',
-                [ProviderLabel.Opera]: 'unavailable',
-                [ProviderLabel.OneInch]: 'unavailable',
-                [ProviderLabel.OKXWallet]: 'unavailable',
-                [ProviderLabel.MyKey]: 'unavailable',
-                [ProviderLabel.MeetOne]: 'unavailable',
-                [ProviderLabel.MathWallet]: 'unavailable',
-                [ProviderLabel.Liquality]: 'unavailable',
-                [ProviderLabel.InfinityWallet]: 'unavailable',
-                [ProviderLabel.ImToken]: 'unavailable',
-                [ProviderLabel.HyperPay]: 'unavailable',
-                [ProviderLabel.HuobiWallet]: 'unavailable',
-                [ProviderLabel.GameStop]: 'unavailable',
-                [ProviderLabel.Frontier]: 'unavailable',
-                [ProviderLabel.Frame]: 'unavailable',
-                [ProviderLabel.Exodus]: 'unavailable',
-                [ProviderLabel.Enkrypt]: 'unavailable',
-                [ProviderLabel.DeFiWallet]: 'unavailable',
-                [ProviderLabel.Rabby]: 'unavailable',
-                [ProviderLabel.BlockWallet]: 'unavailable',
-                [ProviderLabel.SafePal]: 'unavailable',
-                [ProviderLabel.Trust]: 'unavailable',
-            },
+            filter: await dispatch('getWalletsFilter'),
             sort: (wallets) => {
                 const metaMask = wallets.find(({ label }) => label === ProviderLabel.MetaMask)
                 const coinbase = wallets.find(({ label }) => label === ProviderLabel.Coinbase)
@@ -487,44 +442,22 @@ const actions = {
 
         })
 
-/*        const wcInitOptions = {
-            qrcodeModalOptions: {
-                mobileLinks: ['metamask', 'trust', 'rainbow', 'zerion', "argent", "imtoken", "pillar"] // 'argent',
-            },
-            connectFirstChainId: true,
-            requiredChains: SUPPORTED_NETWORKS
-        }*/
-
-        const wcInit2Options = {
-            version: 2,
-            // /!**
-            //  * Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
-            //  *!/
-            // projectId: "699fb1306e95ed8b837fd8962c633422",
-            projectId: "7a088ae8cc40c1eb6925dc98cd5fe5e3",
-            // requiredChains: SUPPORTED_NETWORKS
-        }
-
         const walletConnect = walletConnectModule({
             version: 2,
             handleUri: uri => console.log('walletConnect uri: ' + uri),
             projectId: '7a088ae8cc40c1eb6925dc98cd5fe5e3', // ***New Param* Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
-            connectFirstChainId: true,
-            requiredChains: WALLETCONNECT_SUPPORTED_NETWORKS // chains required to be supported by WC wallet 0xA4B1
+            // connectFirstChainId: true,
+            requiredChains: [WALLETCONNECT_SUPPORTED_NETWORKS[0]], // get first chain
+            optionalChains: SUPPORTED_NETWORKS, // chains optional to be supported by WC wallet 0xA4B1,
+            dappUrl: 'http://app.overnight.fi'
         })
 
-        const coinbaseWalletSdk = coinbaseWalletModule({ darkMode: true });
-        // const walletConnect = await walletConnectModule(wcInit2Options);
-
-        // const argent = argentModule(walletConnect);
+        const coinbaseWalletSdk = coinbaseWalletModule({ darkMode: true })
 
         return [
             injected,
             walletConnect,
             coinbaseWalletSdk,
-            // argent,
-            // trezor,
-            // gnosis,
             // ... other wallets
         ];
     },
@@ -541,7 +474,7 @@ const actions = {
             }
 
             if (SUPPORTED_NETWORKS.includes(newNetworkId)) {
-                console.log("======  Provider callback networkChanged SUPPORTED_NETWORKS ======")
+                console.log("======  Provider callback chainChanged SUPPORTED_NETWORKS ======")
 
                 dispatch('network/saveNetworkToLocalStore', newNetworkId.toString(), {root: true});
 
@@ -559,12 +492,12 @@ const actions = {
         }
     },
 
-    async networkChanged({commit, dispatch, getters, rootState}, newNetworkId) {
-        console.log("====== initOnboard Provider callback networkChanged ======")
+    async chainChanged({commit, dispatch, getters, rootState}, newNetworkId) {
+        console.log("====== initOnboard Provider callback chainChanged ======")
         try {
             dispatch('setNetwork', newNetworkId);
         } catch (e) {
-            console.error("Error when on networkChanged")
+            console.error("Error when on chainChanged")
         }
     },
 
@@ -614,10 +547,21 @@ const actions = {
         }
     },
 
-    async checkWallet({commit, dispatch, getters, rootState}) {
-        if (getters.onboard) {
-            // await getters.onboard.walletCheck();
-        }
+    async getLogo({commit, dispatch, getters, rootState}) {
+        return '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">/n' +
+            '<path fill-rule="evenodd" clip-rule="evenodd" d="M24.339 7.66102H9.28814V4H24.339C26.3608 4 27.9998 5.63889 28 7.66064H24.339L24.339 7.66102ZM24.339 8.88136V24.339L24.339 24.3394L24.339 28C26.3609 28 28 26.3609 28 24.339L28 9.28776H24.339L24.339 8.88136ZM23.1186 24.339V24.3394H22.7119V28H7.66102C5.63909 28 4 26.3609 4 24.339H7.66102H23.1186ZM7.66102 4V7.66102V22.7119H4V7.66102C4 5.63909 5.63909 4 7.66102 4Z" fill="url(#paint0_linear_8985_99599)"/>/n' +
+            '<path fill-rule="evenodd" clip-rule="evenodd" d="M15.6827 11.3223C15.2961 11.3223 14.9827 11.6357 14.9827 12.0223V14.5764L12.4285 14.5764C12.0419 14.5764 11.7285 14.8898 11.7285 15.2764V16.3171C11.7285 16.7037 12.0419 17.0171 12.4285 17.0171H14.9827V19.5714C14.9827 19.958 15.2961 20.2714 15.6827 20.2714H16.7234C17.11 20.2714 17.4234 19.958 17.4234 19.5714V17.0171H19.9777C20.3643 17.0171 20.6777 16.7037 20.6777 16.3171V15.2764C20.6777 14.8898 20.3643 14.5764 19.9777 14.5764L17.4234 14.5764V12.0223C17.4234 11.6357 17.11 11.3223 16.7234 11.3223H15.6827Z" fill="url(#paint1_linear_8985_99599)"/>/n' +
+            '<defs>/n' +
+            '<linearGradient id="paint0_linear_8985_99599" x1="4" y1="4" x2="28.5149" y2="4.53805" gradientUnits="userSpaceOnUse">/n' +
+            '<stop stop-color="#28A0F0"/>/n' +
+            '<stop offset="1" stop-color="#0678C4" stop-opacity="0.9917"/>/n' +
+            '</linearGradient>/n' +
+            '<linearGradient id="paint1_linear_8985_99599" x1="11.7285" y1="11.3223" x2="20.8697" y2="11.5229" gradientUnits="userSpaceOnUse">/n' +
+            '<stop stop-color="#28A0F0"/>/n' +
+            '<stop offset="1" stop-color="#0678C4" stop-opacity="0.9917"/>/n' +
+            '</linearGradient>/n' +
+            '</defs>/n' +
+            '</svg>'
     },
 };
 

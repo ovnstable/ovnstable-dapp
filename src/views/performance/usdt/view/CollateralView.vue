@@ -5,7 +5,7 @@
         </div>
 
        <UsdtPlusTab v-if="networkId === 56 || networkId === 59144 || networkId === 42161"/>
-        <div v-else class="ma-0 info-card-container d-flex">
+        <div v-else class="ma-0 info-card-container d-flex mt-3">
           <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'" >
             <v-img class="currency" :src="require('@/assets/currencies/USDT+.svg')" />
           </div>
@@ -182,6 +182,9 @@ export default {
         letter-spacing: 0.02em !important;
     }
 
+    .footer-btn {
+        width: 26% !important;
+    }
 }
 
 /* full */
@@ -218,6 +221,10 @@ export default {
         font-size: 16px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .footer-btn {
+        width: 26% !important;
     }
 }
 
@@ -265,6 +272,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         font-size: 15px !important;
         line-height: 20px !important;
         letter-spacing: 0.02em !important;
+    }
+
+    .footer-btn {
+        width: 26% !important;
     }
 }
 

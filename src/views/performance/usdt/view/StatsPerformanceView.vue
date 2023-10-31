@@ -604,6 +604,10 @@ export default {
         width: 25px !important;
         height: auto !important;
     }
+
+    .footer-btn {
+        width: 26% !important;
+    }
 }
 
 /* full */
@@ -670,6 +674,10 @@ export default {
     .balance-network-icon {
         width: 25px !important;
         height: auto !important;
+    }
+
+    .footer-btn {
+        width: 26% !important;
     }
 }
 
@@ -742,6 +750,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .balance-network-icon {
         width: 25px !important;
         height: auto !important;
+    }
+
+    .footer-btn {
+        width: 26% !important;
     }
 }
 

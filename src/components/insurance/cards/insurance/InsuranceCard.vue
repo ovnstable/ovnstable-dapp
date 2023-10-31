@@ -118,7 +118,7 @@
                     <template v-else>
                         <v-col>
                             <v-row>
-                                <v-btn class="button btn-outlined" @click.stop="setWalletNetwork('10')" outlined>
+                                <v-btn class="button btn-outlined" @click="setWalletNetwork('10')" outlined>
                                     SWITCH TO OPTIMISM TO MINT
                                 </v-btn>
                             </v-row>

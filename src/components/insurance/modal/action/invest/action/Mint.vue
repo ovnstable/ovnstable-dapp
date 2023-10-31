@@ -161,6 +161,11 @@
                     {{ buttonLabel }}
                 </v-btn>
             </div>
+            <div class="action-btn-container" v-else-if="this.networkId !== 10">
+                <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('optimism')">
+                    {{ buttonLabel }}
+                </v-btn>
+            </div>
 
             <div class="action-btn-container" v-else>
                 <v-btn v-if="actionAssetApproved"
@@ -336,6 +341,8 @@ export default {
 
             if (!this.account) {
                 return 'Connect wallet';
+            } else if (this.networkId !== 10){
+                return 'Switch to optimism to mint'
             } else if (this.transactionPending) {
                 return 'Transaction is pending';
             } else if (this.isBuy) {
@@ -412,7 +419,7 @@ export default {
     },
 
     methods: {
-
+        ...mapActions('network', ['setWalletNetwork']),
         ...mapActions("insuranceData", ['refreshInsurance']),
         ...mapActions("insuranceInvestModal", ['showRedeemView', 'approveActionAsset', 'disapproveActionAsset']),
 
@@ -882,6 +889,19 @@ export default {
     .field-sum {
         width: 30%;
     }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-investor-invest {
+        width: 100% !important;
+        height: 40px !important;
+    }
 }
 
 /* tablet */
@@ -964,6 +984,19 @@ export default {
 
     .field-sum {
         width: 45%;
+    }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-investor-invest {
+        width: 100% !important;
+        height: 44px !important;
     }
 }
 
@@ -1048,6 +1081,20 @@ export default {
     .field-sum {
         width: 45%;
     }
+
+    .header-btn {
+        font-style: normal !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        line-height: 20px !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .btn-investor-invest {
+        width: 100% !important;
+        height: 44px !important;
+    }
+
 }
 
 .main-card {
@@ -1141,5 +1188,20 @@ export default {
 .balance-network-icon {
     width: 16px !important;
     height: 16px !important;
+}
+
+.header-btn {
+    border-radius: 4px;
+    box-shadow: none !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    font-feature-settings: 'pnum' on, 'lnum' on !important;
+}
+
+.btn-investor-invest {
+    background: var(--blue-gradient);
+    color: #FFFFFF !important;
 }
 </style>

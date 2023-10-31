@@ -35,7 +35,7 @@
                        </div>
 
                        <div v-if="!$wu.isMobile()"
-                                 v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: 5px'"
+                                 v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: -20px'"
                             class="pool-platform-link">
                            <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
                        </div>
@@ -169,7 +169,7 @@
                             </div>
 
                             <div v-if="!$wu.isMobile()"
-                                 v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: 5px'"
+                                 v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: -20px'"
                                 class="pool-platform-link">
                                 <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
                             </div>

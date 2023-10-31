@@ -36,7 +36,7 @@
             </v-row>
         </div>
 
-      <div v-if="networkId === 10 || networkId === 42161 || networkId === 8453 || networkId === 59144">
+      <div v-if="networkId === 10 || networkId === 42161 || networkId === 8453">
         <v-row v-if="isPayoutsLoading">
           <v-row align="center" justify="center" class="py-15">
             <v-progress-circular
@@ -605,6 +605,10 @@ export default {
         width: 25px !important;
         height: auto !important;
     }
+
+    .footer-btn {
+        width: 26% !important;
+    }
 }
 
 /* full */
@@ -671,6 +675,10 @@ export default {
     .balance-network-icon {
         width: 25px !important;
         height: auto !important;
+    }
+
+    .footer-btn {
+        width: 26% !important;
     }
 }
 
@@ -743,6 +751,10 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     .balance-network-icon {
         width: 25px !important;
         height: auto !important;
+    }
+
+    .footer-btn {
+        width: 26% !important;
     }
 }
 

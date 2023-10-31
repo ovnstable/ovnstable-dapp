@@ -4,7 +4,7 @@ export default async function getFeatured({ context, nextMiddleware }){
     context.store.dispatch('menuUI/selectTab', 'featured');
   }
   catch(e){
-    console.error(e);
+    console.log(e);
     return context.next(false);
   }
   return nextMiddleware()

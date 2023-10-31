@@ -310,7 +310,7 @@ const actions = {
     },
 
     async refreshIsNeedRedemption({commit, dispatch, getters, rootState}) {
-        console.log('Insurance/redemptionCheck')
+        console.log('Insurance/redemptionCheck', rootState.network.networkName)
 
         let web3 = rootState.web3;
         let account = rootState.accountData.account;
@@ -319,6 +319,10 @@ const actions = {
             let insurance = {
                 // chainName: 'polygon'
                 chainName: 'optimism'
+            }
+
+            if (insurance.chainName !== rootState.network.networkName) {
+                return;
             }
 
             let contract = web3.contracts.insurance[insurance.chainName + '_exchanger']

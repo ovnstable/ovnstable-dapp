@@ -9,7 +9,6 @@
 
                         <label class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
                         <label class="tab-btn mx-4" @click="setTab(2)" v-bind:class="activeTabUsdPlus">USD+</label>
-                        <label class="tab-btn mx-4" @click="setTab(3)" v-bind:class="activeTabETS" disabled>ETS</label>
 
                         <v-spacer></v-spacer>
 
@@ -107,10 +106,6 @@
         <div :class="$wu.isMobile() ? 'ml-5' : ''">
             <v-row align="start" justify="start" class="page-container ma-0">
 
-                <v-col v-if="tab === 3" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
-                  <EtsTab></EtsTab>
-                </v-col>
-
                 <v-col v-if="tab === 2" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
 
                     <v-row v-if="isUsdPlusLoading">
@@ -174,7 +169,7 @@
                                             </v-row>
                                             <v-row justify="center" align="center">
                                                 <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                                                    {{ dataHidden ? '' : '$' + $utils.formatMoney(profitUsdPlus, isMobile ? 2 : 6) }}
+                                                    {{ dataHidden ? '' : '' + formatDailyProfitSubZeroValue() }}
                                                 </label>
                                             </v-row>
                                         </v-col>
@@ -430,14 +425,6 @@ export default {
       }
     },
 
-    activeTabETS: function () {
-      // this.trackClick({action: 'open-etstab-action-click', event_category: 'Dashboard ETS', event_label: 'Open ETS Tab', value: 1 });
-      return {
-        'tab-button': this.tab === 3,
-        'tab-button-in-active': this.tab !== 3,
-      }
-    },
-
     anyActivities() {
       return this.activities && this.activities.length > 0;
     },
@@ -495,6 +482,13 @@ export default {
         this.resetDashboard();
         this.refreshDashboard();
       },
+
+
+    formatDailyProfitSubZeroValue() {
+        return this.profitUsdPlus < 0
+            ? `-$${this.$utils.formatMoney(Math.abs(this.profitUsdPlus), 6)}`
+            : `$${this.$utils.formatMoney(this.profitUsdPlus, 6)}`;
+    },
 
         openLink(url) {
             window.open(url, '_blank').focus();

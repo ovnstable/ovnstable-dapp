@@ -3,10 +3,9 @@ export default async function getStats({ context, nextMiddleware }) {
         console.log('Get Dapp/EthStats');
 
         context.store.dispatch('menuUI/selectTab', 'ethplus_performance');
-        // context.store.dispatch('statsData/refreshStats');
     }
     catch(e){
-        console.error(e);
+        console.log(e);
         return context.next(false);
     }
     return nextMiddleware()

@@ -149,7 +149,7 @@
             <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'">
                 <label class="section-title-label label-about">About ETH+</label>
                 <label class="section-text">
-                    ETH+ is the equivalent of USD+, pegged to ETH 1:1, instantly mintable and redeemable in ETH. 100% collateralized with delta-neutral and other strategies based on the best protocols.
+                    ETH+ is the equivalent of USD+, pegged to WETH 1:1, instantly mintable and redeemable in WETH. 100% collateralized with delta-neutral and other strategies based on the best protocols.
                 </label>
             </div>
         </div>

@@ -5,7 +5,7 @@ export default async function getPools({ context, nextMiddleware }){
     context.store.dispatch('menuUI/selectTab', 'provide-lp');
   }
   catch(e){
-    console.error(e);
+    console.log(e);
     return context.next(false);
   }
   return nextMiddleware()

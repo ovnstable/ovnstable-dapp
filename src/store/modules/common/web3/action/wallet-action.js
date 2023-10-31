@@ -270,7 +270,7 @@ const actions = {
                 id: 59144,
                 token: "ETH",
                 label: "Linea",
-                rpcUrl: "https://linea-mainnet.infura.io/v3/",
+                rpcUrl: "https://linea.drpc.org",
             },
             // ... other chains
         ]
@@ -343,7 +343,7 @@ const actions = {
                 ['324']: "https://mainnet.era.zksync.io",
                 ['42161']: "https://arb1.arbitrum.io/rpc",
                 ['8453']: "https://mainnet.base.org",
-                ['59144']: "https://linea-mainnet.infura.io/v3",
+                ['59144']: "https://linea.drpc.org",
                 ['10']: "https://mainnet.optimism.io",
                 ['56']: "https://bsc-dataseed.binance.org",
                 ['137']: "https://polygon-rpc.com/"

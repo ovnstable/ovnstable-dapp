@@ -86,7 +86,7 @@ const LINEA_PARAMS = {
     appApiUrl: 'https://linea.overnight.fi/api',
     networkName: 'linea',
     networkId: 59144,
-    rpcUrl: 'https://linea-mainnet.infura.io/v3',
+    rpcUrl: 'https://linea.drpc.org',
     explorerUrl: 'https://lineascan.build/',
     assetName: 'USDC',
     assetDecimals: 6,
@@ -475,7 +475,7 @@ const actions = {
                         case "59144":
                             params = {
                                 chainId: rootState.web3.web3.utils.toHex(59144),
-                                rpcUrls: ['https://linea-mainnet.infura.io/v3'],
+                                rpcUrls: ['https://linea.drpc.org'],
                                 blockExplorerUrls: ['https://lineascan.build'],
                                 chainName: 'Linea',
                                 nativeCurrency: {

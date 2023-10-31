@@ -368,7 +368,7 @@ export const odosSwap = {
            }
         },
         async loadBalance(contract, token) {
-            // console.log("Load balance from contract: ", token)
+            console.log("Load balance from contract: ", token)
             try {
                 // balance for network currency
                 if (token.address === "0x0000000000000000000000000000000000000000") {
@@ -399,7 +399,7 @@ export const odosSwap = {
                 }).catch(e => {
                     // todo 5 return after load balance optimization
                     // tmp ignore
-                    // console.error('Error balance for: ', token, e);
+                    console.info('Error balance for: ', token, e);
                 });
             } catch (e) {
                 console.log("Error when load balance at token: ", token.address, e)

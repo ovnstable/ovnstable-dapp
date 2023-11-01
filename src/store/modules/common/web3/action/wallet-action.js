@@ -95,10 +95,8 @@ const actions = {
         console.log("walletConnect onboard before connect wallet: ", walletName)
         let connectedWallets;
         if (walletName !== undefined && walletName && walletName !== 'undefined' && walletName !== 'null') {
-            console.log("onboard with preview wallet: ", walletName)
             connectedWallets = await onboard.connectWallet({ autoSelect: { label: walletName, disableModals: true }});
         } else {
-            console.log("onboard with new select wallet: ")
             connectedWallets = await onboard.connectWallet();
         }
 
@@ -112,6 +110,8 @@ const actions = {
             console.error("Wallet not connected when init onboard.")
             return;
         }
+
+        console.debug('[Connect Wallet] initOnboard: ', wallet ? wallet.label : 'undefined');
 
         await commit('web3/setProvider', wallet.provider, {root: true});
         await commit('web3/setIsProviderDefault', false, {root: true});

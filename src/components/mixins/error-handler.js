@@ -62,7 +62,9 @@ export const errorHandler = {
             return e.message && e.message.toLowerCase().includes('transaction was within 50 blocks');
         },
         isGasPriceIncrease(e) {
-            return e.message && e.message.toLowerCase().includes('transaction underpriced');
+            return e.message &&
+                (e.message.toLowerCase().includes('transaction underpriced')
+                    || e.message.toLowerCase().includes('max fee per gas less than block'))
         },
         isOverRateLimit(e) {
             return e.message && (e.message.toLowerCase().includes('rate limit'))

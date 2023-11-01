@@ -172,6 +172,7 @@ export const odosSwap = {
                 this.quotaResponseInfo = null;
                 await this.initContractData()
                 await this.initData(this.tokenSeparationScheme, this.listOfBuyTokensAddresses);
+                this.loadPricesInfo(newVal);
             }
         }
     },

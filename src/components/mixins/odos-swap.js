@@ -368,7 +368,7 @@ export const odosSwap = {
            }
         },
         async loadBalance(contract, token) {
-            console.log("Load balance from contract: ", token)
+            // console.log("Load balance from contract: ", token)
             try {
                 // balance for network currency
                 if (token.address === "0x0000000000000000000000000000000000000000") {

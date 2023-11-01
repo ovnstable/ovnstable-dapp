@@ -444,7 +444,7 @@ export default {
                     this.isCollateralLoading = false;
                 })
                 .catch(e => {
-                    console.log("Error Strategy Weights: ", e);
+                    console.error("Error when get collateral data: ", e);
                     this.isCollateralLoading = false;
                 })
         },

@@ -204,7 +204,7 @@ export default {
                 }
 
                 if (this.assetType === 'ETH') {
-                    totalNetAssets = (await axios.get(appRootApiUrl + 'usdt+/dapp/getTotalUsdPlusValue')).data;
+                    totalNetAssets = (await axios.get(appRootApiUrl + 'eth+/dapp/getTotalUsdPlusValue')).data;
                     // totalNetAssets = await this.contracts.usdtM2m.methods.totalNetAssets().call();
                 }
 

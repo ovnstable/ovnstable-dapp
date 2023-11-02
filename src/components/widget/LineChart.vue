@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-row class="chart-header-row" justify="start" align="center">
-            <label class="chart-title">{{name}} {{type}}</label>
+            <label class="chart-title">{{assetType.toUpperCase()}} {{type}}</label>
             <label class="chart-title chart-title-slice" v-if="$wu.isFull()">&nbsp;&nbsp;|&nbsp;</label>
             <v-spacer v-if="!$wu.isFull()"></v-spacer>
             <label class="chart-title chart-title-slice">{{ sliceLabel }}</label>
@@ -17,6 +17,7 @@
 /* eslint-disable no-unused-vars,no-undef */
 
 import {mapActions, mapGetters} from "vuex";
+import BN from "bn.js";
 
 import ApexCharts from 'apexcharts'
 
@@ -32,9 +33,9 @@ export default {
           type: Number,
           default: 1,
         },
-        name: {
-          type: String,
-          default: "USD+",
+        assetType: {
+            type: String,
+            default: "USD+",
         },
         type: {
           type: String,
@@ -65,6 +66,7 @@ export default {
     computed: {
         ...mapGetters('dashboardData', ['slice']),
         ...mapGetters('theme', ['light']),
+        ...mapGetters('web3', ['web3']),
 
         isMobile() {
             return window.innerWidth < 650;
@@ -211,8 +213,8 @@ export default {
 
                     y: {
                         formatter: (val) => {
-                            if (this.type === 'Cumulative return') {
-                                return '%' + val
+                            if (this.assetType === 'eth+') {
+                                return  val.toFixed(4) + ' WETH'
                             }
                             return '$' + val
                         },

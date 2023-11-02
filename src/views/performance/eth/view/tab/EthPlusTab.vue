@@ -4,12 +4,12 @@
         <div v-if="!isCollateralLoading">
             <v-row v-if="networkId === 42161">
                 <template v-if="$wu.isMobile()">
-                    <v-col cols="12" align="center" class="mt-5">
+                    <v-col cols="12" align="center" class="mt-10">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
-                            Mint
+                            Swap In
                         </v-btn>
                         <v-btn class="header-btn btn-outlined" @click="swapButtonOut">
-                            Redeem
+                            Swap Out
                         </v-btn>
                     </v-col>
                 </template>
@@ -21,10 +21,10 @@
                 <template v-if="!$wu.isMobile()">
                     <v-col align="end" cols="6" class="mt-6">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
-                            Mint
+                            Swap In
                         </v-btn>
                         <v-btn class="header-btn btn-outlined mr-3" @click="swapButtonOut">
-                            Redeem
+                            Swap Out
                         </v-btn>
                     </v-col>
                 </template>
@@ -269,17 +269,11 @@ export default {
         ...mapActions('swapEthModal', ['showEthSwapModal', 'showEthMintView', 'showEthRedeemView']),
 
         swapButtonIn() {
-            // this.initTabName('/swap', {action: 'swap-in', symbol: 'ETH+'})
-            // todo: return after odos implementation
-            this.showEthSwapModal();
-            this.showEthMintView();
+            this.initTabName('/swap', {action: 'swap-in', symbol: 'ETH+'})
         },
 
         swapButtonOut() {
-            // this.initTabName('/swap', {action: 'swap-out', symbol: 'ETH+'})
-            // todo: return after odos implementation
-            this.showEthSwapModal();
-            this.showEthRedeemView();
+            this.initTabName('/swap', {action: 'swap-out', symbol: 'ETH+'})
         },
 
         setTab(tabName) {

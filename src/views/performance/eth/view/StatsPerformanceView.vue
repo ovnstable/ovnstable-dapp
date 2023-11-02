@@ -9,10 +9,10 @@
                 <template v-if="$wu.isMobile()">
                     <v-col cols="12" align="center" class="mt-10">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
-                            Mint
+                            Swap In
                         </v-btn>
                         <v-btn class="header-btn btn-outlined" @click="swapButtonOut">
-                            Redeem
+                            Swap Out
                         </v-btn>
                     </v-col>
                 </template>
@@ -24,10 +24,10 @@
                 <template v-if="!$wu.isMobile()">
                     <v-col align="end" cols="6" class="mt-6">
                         <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
-                            Mint
+                            Swap In
                         </v-btn>
                         <v-btn class="header-btn btn-outlined mr-3" @click="swapButtonOut">
-                            Redeem
+                            Swap Out
                         </v-btn>
                     </v-col>
                 </template>
@@ -174,7 +174,7 @@
         <div v-if="networkId !== 42161"
              :class="$wu.isMobile() ? 'flex-column' : ''"
              class="mt-3 buttons-div">
-            <v-btn class="footer-btn btn-filled" @click.stop="setWalletNetwork('42161')">
+            <v-btn class="footer-btn btn-filled mr-5" @click.stop="setWalletNetwork('42161')">
                 switch to arbitrum to mint
             </v-btn>
         </div>
@@ -327,17 +327,11 @@ export default {
         ...mapActions('swapEthModal', ['showEthSwapModal', 'showEthMintView', 'showEthRedeemView']),
 
         swapButtonIn() {
-            // todo: return after odos implementation
-            // this.initTabName('/swap', {action: 'swap-in', symbol: 'ETH+'})
-            this.showEthSwapModal();
-            this.showEthMintView();
+            this.initTabName('/swap', {action: 'swap-in', symbol: 'ETH+'})
         },
 
         swapButtonOut() {
-            // todo: return after odos implementation
-            // this.initTabName('/swap', {action: 'swap-out', symbol: 'ETH+'})
-            this.showEthSwapModal();
-            this.showEthRedeemView();
+            this.initTabName('/swap', {action: 'swap-out', symbol: 'ETH+'})
         },
 
         setTab(tabName, chartType) {
@@ -611,6 +605,10 @@ export default {
         width: 25px !important;
         height: auto !important;
     }
+
+    .footer-btn {
+        width: 26% !important;
+    }
 }
 
 /* full */
@@ -678,6 +676,10 @@ export default {
         width: 25px !important;
         height: auto !important;
     }
+
+    .footer-btn {
+        width: 26% !important;
+    }
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px), only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px), only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px), only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px), only screen and (                min-resolution: 192dpi) and (min-width: 1300px), only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
@@ -743,6 +745,10 @@ export default {
     .balance-network-icon {
         width: 25px !important;
         height: auto !important;
+    }
+
+    .footer-btn {
+        width: 26% !important;
     }
 }
 

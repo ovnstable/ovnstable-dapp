@@ -9,6 +9,7 @@
 
                         <label class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
                         <label class="tab-btn mx-4" @click="setTab(2)" v-bind:class="activeTabUsdPlus">USD+</label>
+                        <label class="tab-btn mx-4" @click="setTab(3)" v-bind:class="activeTabEthPlus" disabled>ETH+</label>
 
                         <v-spacer></v-spacer>
 
@@ -51,9 +52,6 @@
                             </v-list>
                         </v-menu>
                     </v-row>
-                </v-col>
-
-                <v-col cols="3" v-if="$wu.isFull()">
                 </v-col>
             </v-row>
 
@@ -105,7 +103,9 @@
 
         <div :class="$wu.isMobile() ? 'ml-5' : ''">
             <v-row align="start" justify="start" class="page-container ma-0">
-
+                <v-col v-if="tab === 3" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
+                    <EthTab></EthTab>
+                </v-col>
                 <v-col v-if="tab === 2" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
 
                     <v-row v-if="isUsdPlusLoading">
@@ -367,7 +367,7 @@
 import Table from "@/components/dashboard/Table";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import LineChart from "@/components/widget/LineChart";
-import EtsTab from "@/views/dashboard/tab/ets/EtsTab.vue";
+import EthTab from "@/views/dashboard/eth/EthTab.vue";
 import {axios} from "@/plugins/http-axios";
 import moment from "moment/moment";
 
@@ -375,7 +375,7 @@ export default {
   name: "MyPerformanceView",
 
   components: {
-    EtsTab,
+    EthTab,
     LineChart,
     Table,
   },
@@ -423,6 +423,15 @@ export default {
         'tab-button': this.tab === 2,
         'tab-button-in-active': this.tab !== 2,
       }
+    },
+
+    activeTabEthPlus: function () {
+        // this.trackClick({action: 'open-usdplustab-action-click', event_category: 'Dashboard USD+', event_label: 'Open USD+ Tab', value: 1 });
+
+        return {
+            'tab-button': this.tab === 3,
+            'tab-button-in-active': this.tab !== 3,
+        }
     },
 
     anyActivities() {

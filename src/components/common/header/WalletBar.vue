@@ -1,56 +1,52 @@
 <template>
-    <div class="wallet-bar-main-container mt-1" :class="$wu.isMobile() ? 'mr-5' : ''">
-        <v-row align="center" class="wallet-bar-container" @click="walletClickAction()">
-            <v-col cols="1" class="wallet-col mr-4">
-                <div v-if="walletName" class="wallet-icon">
-                    <v-img :src="require('@/assets/wallet/' + walletName.toLowerCase() + '.svg')"/>
-                </div>
-            </v-col>
-            <v-col cols="5" class="wallet-col" v-if="!$wu.isMobile()">
-                <label class="balance-label" :class="dataHidden ? 'hidden-label' : ''">
-                    {{ dataHidden ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : ($utils.formatMoney(account ? balance.usdPlus : 0, 2)) }}
-                </label>
-                <label class="balance-label">
-                    &nbsp;USD+
-                </label>
-            </v-col>
-            <v-col :cols="$wu.isMobile() ? 0 : 4" class="wallet-col" :class="$wu.isMobile() ? 'mr-4' : ''">
-                <v-row class="account-display-container" align="center" justify="center" @click.stop="pendingTx? showTxHistory() : walletClickAction()">
-                    <template v-if="pendingTx">
-                        <v-progress-circular
-                            width="2"
-                            :size="14"
-                            color="var(--third-gray-text)"
-                            indeterminate
-                        ></v-progress-circular>
-                        <label class="account-label pending-label ml-2">
-                            Pending...
-                        </label>
-                    </template>
+    <div class="wallet-bar-main-container" :class="$wu.isMobile() ? 'mr-5' : ''">
+        <div class="wallet-bar-container">
+            <WalletSelect/>
 
-                    <label v-else class="account-label" :class="dataHidden ? 'hidden-label' : ''">
-                        {{ account ? (dataHidden ? '' : accountDisplay) : 'XXX...XXXX' }}
-                    </label>
-                </v-row>
-            </v-col>
-            <v-col cols="1" class="wallet-col" v-if="!$wu.isMobile()" @click.stop="switchEye">
+            <div class="wallet-col"
+                 v-if="!$wu.isMobile()" @click.stop="switchEye">
                 <v-icon class="eye-icon">
                     {{ dataHidden ? 'mdi-eye-off-outline' : 'mdi-eye-outline'}}
                 </v-icon>
-            </v-col>
-        </v-row>
+            </div>
 
+            <div v-if="!$wu.isMobile()" class="account-display-container" @click.stop="pendingTx? showTxHistory() : walletClickAction()">
+                <template v-if="pendingTx">
+                    <v-progress-circular
+                        width="2"
+                        :size="14"
+                        color="var(--third-gray-text)"
+                        indeterminate
+                    ></v-progress-circular>
+                    <label class="account-label pending-label ml-2">
+                        Pending...
+                    </label>
+                </template>
+
+                <label v-else class="account-label" :class="dataHidden ? 'hidden-label' : ''">
+                    {{ account ? (dataHidden ? '' : accountDisplay) : 'XXX...XXXX' }}
+                </label>
+            </div>
+
+            <div class="wallet-col" v-if="!$wu.isMobile()">
+                <div v-if="walletName" class="wallet-icon">
+                    <v-img :src="require('@/assets/wallet/' + walletName.toLowerCase() + '.svg')"/>
+                </div>
+            </div>
+        </div>
         <resize-observer @notify="$forceUpdate()"/>
     </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import WalletSelect from "@/components/common/header/WalletSelect";
 
 export default {
     name: "WalletBar",
 
     components: {
+        WalletSelect
     },
 
     data: () => ({
@@ -151,11 +147,11 @@ export default {
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
     .wallet-bar-main-container {
-        width: 365px !important;
+        width: 450px !important;
     }
 
     .wallet-bar-container {
-        height: 48px !important;
+        height: 44px !important;
     }
 
     .wallet-col {
@@ -189,11 +185,11 @@ export default {
 /* full */
 @media only screen and (min-width: 1400px) {
     .wallet-bar-main-container {
-        width: 365px !important;
+        width: 450px !important;
     }
 
     .wallet-bar-container {
-        height: 48px !important;
+        height: 44px !important;
     }
 
     .wallet-col {
@@ -228,6 +224,10 @@ export default {
     background-color: var(--secondary) !important;
     border-radius: 2px;
     cursor: pointer !important;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 .balance-label, .account-label {
@@ -253,6 +253,12 @@ export default {
 .account-display-container {
     background: var(--card-coin-background);
     border-radius: 4px;
+
+    padding: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .account-display-container, .account-display-container > * {

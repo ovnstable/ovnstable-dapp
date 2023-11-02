@@ -50,7 +50,7 @@
                                     </v-row>
                                     <v-row justify="center" align="center">
                                         <label class="container-info-text" :class="dataHidden ? 'hidden-label' : ''">
-                                            {{ dataHidden ? '' : '' + $utils.formatMoney(this.balance.ethPlus, 6) + ' WETH' }}
+                                            {{ dataHidden ? '' : '' + $utils.formatMoney(this.balance.ethPlus, 9) + ' WETH' }}
                                         </label>
                                     </v-row>
                                 </v-col>

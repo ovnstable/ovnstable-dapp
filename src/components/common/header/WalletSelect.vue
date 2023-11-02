@@ -67,7 +67,7 @@
                 <v-list-item-title class="token-select-list-item">
                     <div class="balance-container">
                         <label class="balance-label" :class="dataHidden ? 'hidden-label' : ''">
-                            {{ dataHidden ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : ($utils.formatMoney(account ? balance.daiPlus : 0, 4)) }}
+                            {{ dataHidden ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : ($utils.formatMoney(account && networkId !== 59144 && networkId !== 324 && networkId !== 56 ? balance.daiPlus : 0, 4)) }}
                         </label>
                         <label class="balance-label token-label">
                             &nbsp;DAI+
@@ -126,7 +126,6 @@ export default {
         ...mapGetters('network', ['networkId']),
         ...mapGetters('deprecated', ['isDeprecatedShow']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
-        ...mapGetters('network', ['networkId']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('magicEye', ['dataHidden']),
 

@@ -40,14 +40,14 @@
                 </label>
             </td>
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">
-                {{ assetType === 'eth+' ? $utils.formatMoney(item.openingBalance, 6) + ' WETH' : '$' + $utils.formatMoney(item.openingBalance, 6) }}
+                {{ assetType === 'eth+' ? $utils.formatMoney(item.openingBalance, 9) + ' WETH' : '$' + $utils.formatMoney(item.openingBalance, 6) }}
             </td>
             <td class="table-label-payouts-strategy text-center" v-if="!$wu.isMobile()">
                 {{ item.type }}
             </td>
             <td v-if="assetType === 'eth+'" class="table-label-payouts-strategy text-right">
                 {{ item.balanceChange ? (item.balanceChange < 0 ? '-' : '') : '' }}
-                {{ item.balanceChange ? '' + ($utils.formatMoney((item.balanceChange < 0 ? -1 : 1) * item.balanceChange, 6)) : '—' }} WETH
+                {{ item.balanceChange ? '' + ($utils.formatMoney((item.balanceChange < 0 ? -1 : 1) * item.balanceChange, 9)) : '—' }} WETH
             </td>
             <td v-else class="table-label-payouts-strategy text-right">
                 {{ item.balanceChange ? (item.balanceChange < 0 ? '-' : '') : '' }}
@@ -57,7 +57,7 @@
                 {{ (item.fee == null || item.fee === 0) ? '—' : ('$' + $utils.formatMoney(item.fee, 2)) }}
             </td>
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">
-                {{ assetType === 'eth+' ? $utils.formatMoney(item.closingBalance, 6) + ' WETH' : '$' + $utils.formatMoney(item.closingBalance, 6) }}
+                {{ assetType === 'eth+' ? $utils.formatMoney(item.closingBalance, 9) + ' WETH' : '$' + $utils.formatMoney(item.closingBalance, 6) }}
             </td>
             <td class="table-label-payouts-strategy text-right">
                 <label :class="(item.comp == null || item.comp === 0) ? 'yield-default' : (item.comp > 0 ? 'yield-green' : 'yield-red')">

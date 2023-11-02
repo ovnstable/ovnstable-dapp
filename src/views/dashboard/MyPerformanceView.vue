@@ -7,9 +7,34 @@
                 <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
                     <v-row align="center" justify="start" class="ma-0 toggle-row mt-10">
 
-                        <label class="tab-btn tab-btn-disabled mr-4" v-bind:class="activeTabOverall" disabled>Overall</label>
-                        <label class="tab-btn mx-4" @click="setTab(2)" v-bind:class="activeTabUsdPlus">USD+</label>
-                        <label class="tab-btn mx-4" @click="setTab(3)" v-bind:class="activeTabEthPlus" disabled>ETH+</label>
+                        <label
+                            class="tab-btn mx-4"
+                            @click="setTab(2)"
+                            v-bind:class="activeTabUsdPlus"
+                        >
+                            USD+
+                        </label>
+                        <label
+                            v-if="networkId !== 42161"
+                            class="tab-btn-disabled mx-4 d-flex"
+                        >
+                            ETH+
+                            <Tooltip
+                                v-if="networkId !== 42161"
+                                class="mx-n5"
+                                text="Available on Arbitrum chain"
+                                max-width="12px"
+                            />
+                        </label>
+
+                        <label
+                            v-else
+                            class="tab-btn mx-4"
+                            @click="setTab(3)"
+                            v-bind:class="activeTabEthPlus"
+                        >
+                            ETH+
+                        </label>
 
                         <v-spacer></v-spacer>
 
@@ -103,8 +128,8 @@
 
         <div :class="$wu.isMobile() ? 'ml-5' : ''">
             <v-row align="start" justify="start" class="page-container ma-0">
-                <v-col v-if="tab === 3" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
-                    <EthTab></EthTab>
+                <v-col :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
+                    <EthTab v-if="tab === 3 && networkId === 42161"></EthTab>
                 </v-col>
                 <v-col v-if="tab === 2" :cols="$wu.isFull() ? 9 : 12" class="ma-n3">
 
@@ -291,7 +316,7 @@
                     </v-row>
                 </v-col>
 
-                <v-col :cols="$wu.isFull() ? 3 : 12">
+                <v-col v-if="tab !== 3" :cols="$wu.isFull() ? 3 : 12">
                     <div :class="$wu.isFull() ? 'sticky' : ''">
                         <v-row align="center" justify="start" class="ma-0 mt-3 info-card-container"
                                :class="$wu.isFull() ? '' : 'mr-3 ml-n3'">
@@ -370,6 +395,7 @@ import LineChart from "@/components/widget/LineChart";
 import EthTab from "@/views/dashboard/eth/EthTab.vue";
 import {axios} from "@/plugins/http-axios";
 import moment from "moment/moment";
+import Tooltip from "@/components/common/element/Tooltip";
 
 export default {
   name: "MyPerformanceView",
@@ -378,6 +404,7 @@ export default {
     EthTab,
     LineChart,
     Table,
+    Tooltip,
   },
 
     data: () => ({
@@ -403,18 +430,11 @@ export default {
     }),
 
     computed: {
-        ...mapGetters('network', ['appApiUrl']),
+        ...mapGetters('network', ['appApiUrl', 'networkId']),
         ...mapGetters('accountData', ['balance', 'account']),
         ...mapGetters('dashboardData', ['slice']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('magicEye', ['dataHidden']),
-
-    activeTabOverall: function () {
-      return {
-        'tab-button': this.tab === 1,
-        'tab-button-in-active': this.tab !== 1,
-      }
-    },
 
     activeTabUsdPlus: function () {
       // this.trackClick({action: 'open-usdplustab-action-click', event_category: 'Dashboard USD+', event_label: 'Open USD+ Tab', value: 1 });
@@ -457,16 +477,23 @@ export default {
             return window.innerWidth <= 1400;
         }
     },
-    watch: {
+    watch: { networkId: function (newNetworkId, oldNetworkId) {
+            if (this.tab === 3 && newNetworkId !== 42161) {
+                this.tab = 2; // Switch to tab 2 when the network changes
+                this.initTabName('/dashboard', { tabName: 'usdPlus' });
+                this.loadData();
+            }
+        },
       account: function () {
         this.loadData();
       },
       appApiUrl: function () {
         this.loadData();
-      }
+      },
     },
     mounted() {
-     this.loadData();
+      this.initTabName('/dashboard', {tabName: 'usdPlus'});
+      this.loadData();
     },
     methods: {
         ...mapActions('walletAction', ['connectWallet']),
@@ -479,11 +506,20 @@ export default {
       setTab(tab) {
           if (tab === 2) {
             this.tab = tab;
+            this.initTabName('/dashboard', {tabName: 'usdPlus'});
             this.loadData();
             return
           }
 
           this.tab = tab;
+          this.initTabName('/dashboard', {tabName: 'ethPlus'});
+      },
+
+      initTabName(path, queryParams) {
+        this.$router.push({
+            path: path,
+            query: queryParams ? queryParams : {}
+        });
       },
 
       loadData() {
@@ -1088,7 +1124,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
   font-feature-settings: 'liga' off;
   color: var(--secondary-gray-text);
   margin-bottom: -2px;
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .toggle-row {
@@ -1114,8 +1150,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .tab-btn-disabled {
-  cursor: default;
-  color: var(--disabled-value) !important;
+    font-family: 'Roboto', sans-serif;
+    font-feature-settings: 'liga' off;
+    margin-bottom: -2px;
+    cursor: default;
+    color: var(--disabled-value) !important;
 }
 
 .slice-select-container {

@@ -58,7 +58,7 @@
                     </v-btn>
                 </v-row>
 
-                <div v-if="account" class="mt-10">
+                <div v-if="account" class="mt-10 ml-10">
                     <div v-if="isCurrentCached">
                         <div class="success-text">
                             Current balance was already checked!

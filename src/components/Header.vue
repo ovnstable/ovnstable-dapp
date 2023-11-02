@@ -14,7 +14,7 @@
             </div>
 
             <v-spacer></v-spacer>
-            <div class="theme-toggle-group" :class="$wu.isMobile() ? 'mr-4' : ' mt-1 mr-10'">
+            <div class="theme-toggle-group" :class="$wu.isMobile() ? 'mr-5' : ' mt-1 mr-10'">
                 <v-btn outlined :class="light ? 'theme-toggle-btn-selected' : 'theme-toggle-btn'" icon @click="toggleTheme">
                     <v-icon class="theme-icon">
                         {{ light ? 'mdi-white-balance-sunny' : 'mdi-moon-waxing-crescent' }}

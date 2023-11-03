@@ -214,7 +214,7 @@ export default {
                     y: {
                         formatter: (val) => {
                             if (this.assetType === 'eth+') {
-                                return  val.toFixed(4) + ' WETH'
+                                return  val.toFixed(9) + ' WETH'
                             }
                             return '$' + val
                         },

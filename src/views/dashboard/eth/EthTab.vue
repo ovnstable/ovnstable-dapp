@@ -248,8 +248,8 @@ export default {
 
         formatDailyProfitSubZeroValue() {
             return this.profitEthPlus < 0
-                ? `-${this.$utils.formatMoney(Math.abs(this.profitEthPlus), 4)}`
-                : `${this.$utils.formatMoney(this.profitEthPlus, 4)}`;
+                ? `-${this.$utils.formatMoney(Math.abs(this.profitEthPlus), 9)}`
+                : `${this.$utils.formatMoney(this.profitEthPlus, 9)}`;
         },
 
         openLink(url) {

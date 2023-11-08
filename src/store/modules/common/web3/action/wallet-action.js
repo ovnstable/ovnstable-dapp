@@ -263,7 +263,7 @@ const actions = {
                 // id: "0xA",  // = 10
                 token: "ETH",
                 label: "Optimism",
-                rpcUrl: "https://mainnet.optimism.io",
+                rpcUrl: "https://optimism.llamarpc.com",
             },
             {
                 id: 324,  // = 324
@@ -321,7 +321,7 @@ const actions = {
                 ['42161']: "https://arb1.arbitrum.io/rpc",
                 ['8453']: "https://mainnet.base.org",
                 ['59144']: "https://linea-mainnet.infura.io/v3",
-                ['10']: "https://mainnet.optimism.io",
+                ['10']: "https://optimism.llamarpc.com",
                 ['56']: "https://bsc-dataseed.binance.org",
                 ['137']: "https://polygon-rpc.com/"
             },

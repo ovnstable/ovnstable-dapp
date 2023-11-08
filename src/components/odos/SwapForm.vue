@@ -1094,7 +1094,7 @@ export default defineComponent({
         getSourceBlackList(networkId){
             
             if(networkId==324){
-                return ['Maverick']
+                return ['Hashflow', 'Wombat','Maverick']
             }else{
                 return ['Hashflow', 'Wombat']
             }

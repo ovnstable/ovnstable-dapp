@@ -932,7 +932,7 @@ export default defineComponent({
                 gasPrice: actualGas,
                 userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
                 slippageLimitPercent: this.getSlippagePercent(),
-                sourceBlacklist: ['Hashflow', 'Wombat'],
+                sourceBlacklist: this.getSourceBlackList(this.networkId),
                 sourceWhitelist: [],
                 simulate: true,
                 pathViz: true,
@@ -1019,7 +1019,7 @@ export default defineComponent({
                 gasPrice: actualGas,
                 userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
                 slippageLimitPercent: this.getSlippagePercent(),
-                sourceBlacklist: ['Hashflow', 'Wombat'],
+                sourceBlacklist: this.getSourceBlackList(this.networkId),
                 sourceWhitelist: [],
                 simulate: true,
                 pathViz: true,
@@ -1091,6 +1091,15 @@ export default defineComponent({
             return this.slippagePercent;
         },
 
+        getSourceBlackList(networkId){
+            
+            if(networkId==324){
+                return ['Hashflow', 'Wombat','Maverick']
+            }else{
+                return ['Hashflow', 'Wombat']
+            }
+        },
+        
         async disapproveToken(token) {
             let selectedToken = token.selectedToken;
             if (!selectedToken || !selectedToken.approveData.approved) {

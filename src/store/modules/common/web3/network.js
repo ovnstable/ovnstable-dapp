@@ -30,7 +30,7 @@ const OPTIMISM_PARAMS = {
     appApiUrl: 'https://op.overnight.fi/api',
     networkName: 'optimism',
     networkId: 10,
-    rpcUrl: 'https://mainnet.optimism.io',
+    rpcUrl: 'https://optimism.llamarpc.com',
     explorerUrl: 'https://optimistic.etherscan.io/',
     assetName: 'USDC',
     assetDecimals: 6,
@@ -414,7 +414,7 @@ const actions = {
                         case "10":
                             params = {
                                 chainId: rootState.web3.web3.utils.toHex(10),
-                                rpcUrls: ['https://mainnet.optimism.io'],
+                                rpcUrls: ['https://optimism.llamarpc.com'],
                                 blockExplorerUrls: ['https://optimistic.etherscan.io/'],
                                 chainName: 'Optimism',
                                 nativeCurrency: {

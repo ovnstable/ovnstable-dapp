@@ -33,7 +33,7 @@
                 <label class="ml-2 coin-btn-label">ETH+</label>
             </v-btn>
 
-            <v-btn v-if="showWrap"  class="coin-btn ma-1" @click="addwUsdPlusToken">
+            <v-btn v-if="showWrap && showWusd"  class="coin-btn ma-1" @click="addwUsdPlusToken">
                 <div class="coin-img">
                     <v-img :src="require('@/assets/currencies/wUsdPlus.svg')"/>
                 </div>
@@ -82,6 +82,11 @@ export default {
         showEth: function () {
             return this.networkId === 42161;
         },
+
+        showWusd: function () {
+            const allowedNetworkIds = [10,42161,8453,137];
+            return allowedNetworkIds.includes(this.networkId);
+        }
 
     },
 

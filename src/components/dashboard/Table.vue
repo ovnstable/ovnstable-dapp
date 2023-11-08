@@ -1,7 +1,7 @@
 <template>
     <v-simple-table class="current-table-payouts-strategy" height="400px">
         <thead>
-        <tr class="current-strategy-table-row-header">
+        <tr class="current-strategy-table-row-header fixed-header-table">
             <th class="table-header-payouts-strategy text-left" :width="$wu.isMobile() ? '100px' : '180px'">
                 Payable date, UTC
             </th>
@@ -40,20 +40,24 @@
                 </label>
             </td>
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">
-                $ {{ $utils.formatMoney(item.openingBalance, 6) }}
+                {{ assetType === 'eth+' ? $utils.formatMoney(item.openingBalance, 9) + ' WETH' : '$' + $utils.formatMoney(item.openingBalance, 6) }}
             </td>
             <td class="table-label-payouts-strategy text-center" v-if="!$wu.isMobile()">
                 {{ item.type }}
             </td>
-            <td class="table-label-payouts-strategy text-right">
-                {{ item.balanceChange ? (item.balanceChange < 0 ? '-' : '+') : '' }}
+            <td v-if="assetType === 'eth+'" class="table-label-payouts-strategy text-right">
+                {{ item.balanceChange ? (item.balanceChange < 0 ? '-' : '') : '' }}
+                {{ item.balanceChange ? '' + ($utils.formatMoney((item.balanceChange < 0 ? -1 : 1) * item.balanceChange, 9)) : '—' }} WETH
+            </td>
+            <td v-else class="table-label-payouts-strategy text-right">
+                {{ item.balanceChange ? (item.balanceChange < 0 ? '-' : '') : '' }}
                 {{ item.balanceChange ? '$' + ($utils.formatMoney((item.balanceChange < 0 ? -1 : 1) * item.balanceChange, 6)) : '—' }}
             </td>
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">
                 {{ (item.fee == null || item.fee === 0) ? '—' : ('$' + $utils.formatMoney(item.fee, 2)) }}
             </td>
             <td class="table-label-payouts-strategy text-right" v-if="!minimized">
-                ${{ $utils.formatMoney(item.closingBalance, 6) }}
+                {{ assetType === 'eth+' ? $utils.formatMoney(item.closingBalance, 9) + ' WETH' : '$' + $utils.formatMoney(item.closingBalance, 6) }}
             </td>
             <td class="table-label-payouts-strategy text-right">
                 <label :class="(item.comp == null || item.comp === 0) ? 'yield-default' : (item.comp > 0 ? 'yield-green' : 'yield-red')">
@@ -92,6 +96,11 @@ export default {
         minimized: {
             type: Boolean,
             default: false,
+        },
+
+        assetType: {
+            type: String,
+            default: "USD+",
         },
 
         data: {
@@ -262,5 +271,12 @@ export default {
     width: 24px !important;
     height: 24px !important;
     cursor: pointer;
+}
+
+.fixed-header-table {
+    position: sticky;
+    top: 0;
+    background-color: var(--card-info-background);
+    z-index: 1;
 }
 </style>

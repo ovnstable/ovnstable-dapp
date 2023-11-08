@@ -7,7 +7,7 @@
       :auto-adjust-text-size="false">
 
         <p class="total-label">Total {{assetType.toUpperCase()}}</p>
-        <p v-if="assetType === 'eth+'" class="total-sum-label">{{ $utils.formatMoneyComma(totalValue, 2) }}</p>
+        <p v-if="assetType === 'eth+'" class="total-sum-label">{{ $utils.formatMoneyComma(totalValue, 4) }}</p>
         <p v-else class="total-sum-label">{{ $utils.formatMoneyComma(totalValue, 0) }}</p>
     </vc-donut>
 </template>

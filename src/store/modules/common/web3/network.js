@@ -86,7 +86,7 @@ const LINEA_PARAMS = {
     appApiUrl: 'https://linea.overnight.fi/api',
     networkName: 'linea',
     networkId: 59144,
-    rpcUrl: 'https://linea-mainnet.infura.io/v3',
+    rpcUrl: 'https://linea.drpc.org',
     explorerUrl: 'https://lineascan.build/',
     assetName: 'USDC',
     assetDecimals: 6,
@@ -301,6 +301,7 @@ const getters = {
 const actions = {
 
     changeDappNetwork({commit, dispatch, getters, rootState}, networkName) {
+        console.log('changeDappNetwork', networkName);
 
         commit('setAppApiUrl', _getParams(networkName).appApiUrl);
         commit('setNetworkName', _getParams(networkName).networkName);
@@ -314,7 +315,6 @@ const actions = {
         commit('setNetworkColor', _getParams(networkName).networkColor);
         commit('setIsDeprecated', _getParams(networkName).isDeprecated);
 
-        dispatch('walletAction/updateOnboardNetwork', null, {root: true});
         dispatch('web3/initWeb3', null, {root: true});
     },
 
@@ -475,7 +475,7 @@ const actions = {
                         case "59144":
                             params = {
                                 chainId: rootState.web3.web3.utils.toHex(59144),
-                                rpcUrls: ['https://linea-mainnet.infura.io/v3'],
+                                rpcUrls: ['https://linea.drpc.org'],
                                 blockExplorerUrls: ['https://lineascan.build'],
                                 chainName: 'Linea',
                                 nativeCurrency: {
@@ -556,8 +556,8 @@ const mutations = {
         state.switchToOtherNetwork = value;
     },
 
-    setNetworkChanged(state, value) {
-        state.networkChanged = value;
+    setChainChanged(state, value) {
+        state.chainChanged = value;
     },
 };
 

@@ -22,6 +22,13 @@
                     <label class="chart-title-apy">
                         {{ (avgApy && avgApy.value) ? ($utils.formatMoneyComma(avgApy.value, 1)) + '%' : '' }}
                     </label>
+                    <div class="tooltip-container">
+                        <Tooltip
+                            :size="16"
+                            text="Weighted average APY for a period"
+                            top
+                        />
+                    </div>
                 </v-row>
                 <v-row justify="end">
                     <label class="chart-sub-title-apy">
@@ -128,6 +135,7 @@
 
 import {mapGetters} from "vuex";
 import moment from "moment";
+import Tooltip from "@/components/common/element/Tooltip";
 
 import ApexCharts from 'apexcharts'
 import polygonIcon from "@/assets/network/polygon.svg";
@@ -176,7 +184,9 @@ export default {
         },
     },
 
-    components: {},
+    components: {
+        Tooltip,
+    },
 
     data: () => ({
         zoom: "all",
@@ -314,12 +324,11 @@ export default {
             let values = [];
             this.data.datasets[0].data.forEach(v => values.push(v));
             values = this.slice ? values.slice(this.slice) : values;
+            let averageValue = this.getAvgByValues(values);
 
             let labels = [];
             this.data.labels.forEach(v => labels.push(v));
             labels = this.slice ? labels.slice(this.slice) : labels;
-
-            let averageValue = this.avgApy ? this.avgApy.value : 0;
 
             let maxValue;
             try {
@@ -458,6 +467,19 @@ export default {
             this.chart = new ApexCharts(document.querySelector("#line-chart-apy"), options);
             this.chart.render();
         },
+        getAvgByValues(values) {
+            let averageValue = 0;
+            let sumOfValues = 0;
+            for (let i = 0; i < values.length; i++) {
+                sumOfValues += parseFloat(values[i]);
+            }
+
+            if (values.length) {
+                averageValue = sumOfValues / values.length;
+            }
+
+            return averageValue;
+        }
     }
 }
 </script>
@@ -705,5 +727,11 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text) !important;
+}
+
+.tooltip-container {
+    position: relative;
+    top: 30px;
+    right: 10px;
 }
 </style>

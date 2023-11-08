@@ -43,11 +43,22 @@
                 </v-row>
             </td>
 
-            <td class="table-label-don text-left">
-                {{ assetType === 'ETH' ? '' : '$' }}{{ $utils.formatMoney(item.value, 2) }}
+            <td v-if="assetType === 'ETH'" class="table-label-don text-left">
+               {{ $utils.formatMoney(item.value, 4) }} WETH
+            </td>
+            <td v-else class="table-label-don text-left">
+               ${{ $utils.formatMoney(item.value, 2) }}
             </td>
             <td class="table-label-don text-left" v-if="!minimized">
-                {{ assetType === 'ETH' ? '' : '$' }}{{ $utils.formatMoney(item.liquidationValue, 2) }}
+                <div v-if="assetType === 'ETH'" >
+                    {{ $utils.formatMoney(item.liquidationValue, 4) }} WETH
+                </div>
+                <div v-else>
+                    ${{ $utils.formatMoney(item.liquidationValue, 2) }}
+                </div>
+            </td>
+            <td class="table-label-don text-left" v-else>
+                ${{ $utils.formatMoney(item.liquidationValue, 2) }}
             </td>
             <td class="table-label-don text-left progress-col">
                 <v-progress-linear :value="getPercent(item)"
@@ -71,11 +82,15 @@
                     <b>Total</b>
                 </v-row>
             </td>
-            <td class="table-label-don text-left" :colspan="minimized ? 3 : 1">
-                <b>{{ assetType === 'ETH' ? '' : '$' }}{{ $utils.formatMoney(getTotal(), 2) }}</b>
+            <td v-if="assetType === 'ETH'" class="table-label-don text-left" :colspan="minimized ? 3 : 1">
+                <b>{{ $utils.formatMoney(getTotal(), 4) }} WETH</b>
+            </td>
+            <td v-else class="table-label-don text-left" :colspan="minimized ? 3 : 1">
+                <b>${{ $utils.formatMoney(getTotal(), 2) }}</b>
             </td>
             <td class="table-label-don text-left" v-if="!minimized">
-                <b>{{ assetType === 'ETH' ? '' : '$' }}{{ $utils.formatMoney(getLiquidationTotal(), 2) }}</b>
+                <b v-if="assetType === 'ETH'">{{ $utils.formatMoney(getLiquidationTotal(), 4) }} WETH</b>
+                <b v-else>${{ $utils.formatMoney(getLiquidationTotal(), 2) }}</b>
             </td>
             <td class="table-label-don" v-if="!minimized"></td>
             <td class="table-label-don" v-if="!minimized"></td>
@@ -89,9 +104,10 @@
                 </v-row>
             </td>
             <td v-if="totalSupply" class="table-label-don table-label-don-total text-left pb-6" :colspan="minimized ? 3 : 1">
-                <b>
-                  {{ assetType === 'ETH' ? '' : '$' }}{{ $utils.formatMoney(totalSupply, 2) }}
+                <b v-if="assetType === 'ETH'">
+                  {{ $utils.formatMoney(totalSupply, 4) }} WETH
                 </b>
+                <b v-else>${{ $utils.formatMoney(totalSupply, 2) }}</b>
             </td>
             <td class="table-empty" v-if="!minimized"></td>
             <td class="table-empty" v-if="!minimized"></td>
@@ -184,6 +200,11 @@ export default {
 
                 if (this.assetType === 'USDT') {
                     totalNetAssets = (await axios.get(appRootApiUrl + 'usdt+/dapp/getTotalUsdPlusValue')).data;
+                    // totalNetAssets = await this.contracts.usdtM2m.methods.totalNetAssets().call();
+                }
+
+                if (this.assetType === 'ETH') {
+                    totalNetAssets = (await axios.get(appRootApiUrl + 'eth+/dapp/getTotalUsdPlusValue')).data;
                     // totalNetAssets = await this.contracts.usdtM2m.methods.totalNetAssets().call();
                 }
 

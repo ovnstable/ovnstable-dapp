@@ -62,7 +62,7 @@
                                     v-model="searchQuery"
                                     @input="updateInputSearch"
                                     type="text"
-                                    placeholder="Search token, address, platform..."
+                                    placeholder="Search"
                                     class="input-style"/>
                                 <div @click="clearSearchQuery()" class="search-input-close-container">
                                     <img src="/assets/icon/swap/search-close.svg"
@@ -263,7 +263,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 .search-input-close-container {
     position: absolute;
     right: 15px;
-    top: 16px;
+    top: 13px;
     cursor: pointer;
     width: 30px;
     text-align: center

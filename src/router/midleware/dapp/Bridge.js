@@ -4,7 +4,7 @@ export default async function getBridge({ context, nextMiddleware }){
     context.store.dispatch('menuUI/selectTab', 'bridge');
   }
   catch(e){
-    console.error(e);
+    console.log(e);
     return context.next(false);
   }
   return nextMiddleware()

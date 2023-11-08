@@ -2109,6 +2109,7 @@ div {
     //box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
     //border-radius: 28px;
     //max-width: 600px;
+    z-index: 48!important;
 }
 
 .swap-header {

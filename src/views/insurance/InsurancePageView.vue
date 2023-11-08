@@ -74,7 +74,7 @@
 
                                 <template v-else>
                                     <v-row align="center" justify="center" class="ma-0">
-                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('optimism')">
+                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('10')">
                                             SWITCH TO OPTIMISM TO MINT
                                         </v-btn>
                                     </v-row>
@@ -184,7 +184,7 @@
 
                                 <template v-else>
                                     <v-row align="center" justify="center" class="mt-0">
-                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('optimism')">
+                                        <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork('10')">
                                             SWITCH TO OPTIMISM TO MINT
                                         </v-btn>
                                     </v-row>

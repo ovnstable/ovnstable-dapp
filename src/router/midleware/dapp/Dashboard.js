@@ -5,7 +5,7 @@ export default async function getDashboard({ context, nextMiddleware }){
         context.store.dispatch('menuUI/selectTab', 'dashboard');
     }
     catch(e){
-        console.error(e);
+        console.log(e);
         return context.next(false);
     }
     return nextMiddleware()

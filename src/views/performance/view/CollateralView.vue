@@ -4,7 +4,7 @@
             <label class="title-label">USD+ Collateral</label>
         </div>
 
-        <v-row v-if="!isCollateralLoading" align="center" justify="start">
+        <v-row v-if="!isCurrentTotalDataLoading" align="center" justify="start">
             <template v-if="$wu.isMobile()">
                 <v-col cols="12" align="center" class="mt-10">
                     <v-btn  class="header-btn btn-filled mr-5" @click="swapButtonIn">
@@ -75,7 +75,7 @@
             </template>
         </v-row>
 
-        <v-row v-if="isCollateralLoading && isCurrentTotalDataLoading">
+        <v-row v-if="isCurrentTotalDataLoading">
             <v-row align="center" justify="center" class="py-15">
                 <v-progress-circular
                     width="2"

@@ -62,7 +62,9 @@ export const errorHandler = {
             return e.message && e.message.toLowerCase().includes('transaction was within 50 blocks');
         },
         isGasPriceIncrease(e) {
-            return e.message && e.message.toLowerCase().includes('transaction underpriced');
+            return e.message &&
+                (e.message.toLowerCase().includes('transaction underpriced')
+                    || e.message.toLowerCase().includes('max fee per gas less than block'))
         },
         isOverRateLimit(e) {
             return e.message && (e.message.toLowerCase().includes('rate limit'))
@@ -71,7 +73,13 @@ export const errorHandler = {
             return e.message && (e.message.toLowerCase().includes('insufficient funds'))
         },
         isUserRejectTx(e) {
-            return e.code === 4001 && e.message && (e.message.toLowerCase().includes('user rejected') || e.message.toLowerCase().includes('user denied'));
+            return e.code === 4001 && e.message &&
+                (
+                    e.message.toLowerCase().includes('user rejected') ||
+                    e.message.toLowerCase().includes('user denied') ||
+                    e.message.toLowerCase().includes('user declined transaction'),
+                    e.message.toLowerCase().includes('cancelled')
+                );
         },
 
         handleControlledError(logMessage, errorType, errorMessage, isImportantToLog = false) {

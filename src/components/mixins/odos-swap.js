@@ -172,6 +172,7 @@ export const odosSwap = {
                 this.quotaResponseInfo = null;
                 await this.initContractData()
                 await this.initData(this.tokenSeparationScheme, this.listOfBuyTokensAddresses);
+                this.loadPricesInfo(newVal);
             }
         }
     },
@@ -399,7 +400,7 @@ export const odosSwap = {
                 }).catch(e => {
                     // todo 5 return after load balance optimization
                     // tmp ignore
-                    // console.error('Error balance for: ', token, e);
+                    console.info('Error balance for: ', token, e);
                 });
             } catch (e) {
                 console.log("Error when load balance at token: ", token.address, e)
@@ -820,7 +821,7 @@ export const odosSwap = {
 
         async getActualGasPrice(networkId) {
             let actualGasPriceObject = await odosApiService.getActualGasPrice(networkId);
-            console.debug(this.getOdosLogMsg({
+            console.log(this.getOdosLogMsg({
                 message: "Actual price for gas.",
                 swapSession: this.swapSessionId,
                 data: actualGasPriceObject

@@ -12,7 +12,7 @@ export const logger = {
             let message = data.message;
 
             try {
-                let logMessage = `[ODOS-SWAP] ${message} `;
+                let logMessage = `[ODOS-SWAP] [${this.networkName}] :${message} `;
 
                 let swapSession = data.swapSession;
                 logMessage += swapSession ? (" | SwapSession: " + swapSession) : "";
@@ -23,7 +23,6 @@ export const logger = {
                 let actualGas = data.actualGas;
                 logMessage += actualGas ? (" | Actual gas price: " + actualGas) : "";
                 logMessage += " | User Wallet: " + this.account;
-                logMessage += " | Chain: " + this.networkName;
 
                 // get first 2000 characters
                 logMessage = logMessage.substring(0, 2000);

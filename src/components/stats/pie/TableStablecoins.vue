@@ -45,7 +45,12 @@
             </td>
             <td class="table-label-don text-left">
                 <template v-if="!onlyPercents">
-                    ${{ $utils.formatMoney(item.value, 2)}}
+                    <div v-if="assetType === 'eth+'">
+                        {{ $utils.formatMoney(item.value, 2)}} WETH
+                    </div>
+                    <div v-else>
+                        ${{ $utils.formatMoney(item.value, 2)}}
+                    </div>
                 </template>
             </td>
             <td class="table-label-don text-left progress-col" v-if="!minimized">
@@ -91,7 +96,12 @@ export default {
         networkName: {
             type: String,
             default: 'optimism',
-        }
+        },
+
+        assetType: {
+            type: String,
+            default: 'usd+'
+        },
     },
 
     components: {},
@@ -192,7 +202,7 @@ export default {
     .table-label-don {
         font-style: normal !important;
         font-weight: 300 !important;
-        font-size: 16px !important;
+        font-size: 14px !important;
         line-height: 24px !important;
     }
 

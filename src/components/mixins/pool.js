@@ -32,7 +32,7 @@ export const pool = {
                 'Ramses',
                 'Arbidex',
                 'Sperax',
-                'Defiedge',
+                // 'Defiedge',
                 // 'Baseswap',
                 'Velocimeter',
                 'Alienbase',
@@ -150,10 +150,10 @@ export const pool = {
                 ],
 
                 // Defiedge
-                '0xd1c33d0af58eb7403f7c01b21307713aa18b29d3': [
-                    {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
-                    {name: 'USDC', address: '0x7f5c764cbc14f9669b88837ca1490cca17c31607'},
-                ],
+                // '0xd1c33d0af58eb7403f7c01b21307713aa18b29d3': [
+                //     {name: 'USD+', address: '0x73cb180bf0521828d8849bc8cf2b920918e23032'},
+                //     {name: 'USDC', address: '0x7f5c764cbc14f9669b88837ca1490cca17c31607'},
+                // ],
 
                 // Baseswap
                 '0x696b4d181Eb58cD4B54a59d2Ce834184Cf7Ac31A': [
@@ -379,9 +379,6 @@ export const pool = {
                 case 'Mute':
                     url = 'https://app.mute.io/pool';
                     break;
-                case 'Defiedge':
-                    url = 'https://app.defiedge.io/s/optimism/';
-                    break;
                 case 'Dracula':
                     url = 'https://draculafi.xyz/liquidity/';
                     break
@@ -435,6 +432,30 @@ export const pool = {
                 pool.platform === 'Alienbase' ||
                 pool.platform === 'Convex'
             ) {
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Defiedge' && pool.address === '0xd1c33d0af58eb7403f7c01b21307713aa18b29d3') {
+                url = 'https://app.defiedge.io/s/optimism/' + pool.address;
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Defiedge' && pool.address === '0x4784be205996d53d7a40bdb4e1d7b84e551d71d4') {
+                url = 'https://app.defiedge.io/s/arbitrum/' + pool.address;
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Defiedge' && pool.address === '0x73f7039224c88378de8e2ce31b13debba1f0e05a') {
+                url = 'https://app.defiedge.io/s/arbitrum/' + pool.address;
+                window.open(url, '_blank').focus();
+                return;
+            }
+
+            if (pool.platform === 'Defiedge' && pool.address === '0x35a3b69f579ed1b0b88dc433ebcd7c65fdf57389') {
+                url = 'https://app.defiedge.io/s/arbitrum/' + pool.address;
                 window.open(url, '_blank').focus();
                 return;
             }
@@ -874,7 +895,7 @@ export const pool = {
                   })
               }*/
 
-            if (pool.platform === 'Defiedge' || pool.platform === 'Gnd') {
+         /*   if (pool.platform === 'Defiedge' || pool.platform === 'Gnd') {
                 pool.aggregators.push({
                     id: ('Aggregator' + pool.id.name + pool.tvl + pool.platform),
                     name: pool.id.name,
@@ -885,7 +906,7 @@ export const pool = {
                 })
 
                 pool.poolNameForAgregator = 'Uniswap';
-            }
+            }*/
 
             if (poolAddress === '0x1F3cA66c98d682fA1BeC31264692daD4f17340BC')  {
                 pool.aggregators.push({

@@ -4,7 +4,7 @@ export default async function getSwipe({ context, nextMiddleware }){
     context.store.dispatch('menuUI/selectTab', 'swipe-odos');
   }
   catch(e){
-    console.error(e);
+    console.log(e);
     return context.next(false);
   }
   return nextMiddleware()

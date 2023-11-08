@@ -151,7 +151,7 @@ export default {
 }
 
 .airdrop-body {
-    z-index: 100;
+    z-index: 48 !important;
 }
 
 .container_body {

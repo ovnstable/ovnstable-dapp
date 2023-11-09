@@ -144,20 +144,6 @@ const actions = {
             networkOvnTokenMap[network] ? _load(ERC20, web3, networkOvnTokenMap[network]) : _load_empty(),
         ]);
 
-        let etsesByNetwork = [];
-        let etsesByNetworkOld = await loadJSON(`https://api.overnight.fi/${network}/usd+/design_ets/list`);
-        let etses = await loadJSON(`${ROOT_API}/product/ets/all`);
-        let filteredEtses = etses.map(ets => ets.data);
-        console.log('filteredEtses: ', filteredEtses);
-        etsesByNetwork = [...etsesByNetworkOld, ...filteredEtses];
-        console.log('etsesByNetwork: ', etsesByNetwork);
-
-        await Promise.all(
-            etsesByNetwork.map(async ets => {
-                await _load_ets(network, ets, contracts, web3);
-            })
-        );
-
         let insurances = [
             // { network: 'polygon' },
             { network: 'optimism' },
@@ -198,23 +184,6 @@ function _load(file, web3, address) {
     }
 
     return new web3.eth.Contract(file.abi, address);
-}
-
-async function _load_ets(network, etsParams, contracts, web3) {
-
-    let exchangerContract;
-    let tokenContract;
-
-    try {
-        exchangerContract = _load(await loadJSON('/contracts/abi/ets/exchanger.json'), web3, etsParams.address);
-        tokenContract = _load(await loadJSON('/contracts/abi/ets/token.json'), web3, etsParams.tokenAddress);
-    } catch (e) {
-        exchangerContract = _load(await loadJSON(`/contracts/${network}/ets/${etsParams.name}/exchanger.json`), web3);
-        tokenContract = _load(await loadJSON(`/contracts/${network}/ets/${etsParams.name}/token.json`), web3);
-    }
-
-    contracts[etsParams.exchangeContract] = exchangerContract;
-    contracts[etsParams.tokenContract] = tokenContract;
 }
 
 function _load_empty() {

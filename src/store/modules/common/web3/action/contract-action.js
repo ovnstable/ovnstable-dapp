@@ -2384,7 +2384,6 @@ const ABI_PortfolioManager = [
       "type": "function"
     }
 ]
-
 const ABI_PlusToken = [
     {
       "inputs": [],
@@ -3285,7 +3284,6 @@ const ABI_PlusToken = [
       "type": "function"
     }
 ]
-
 const ABI_WusdPlus = [
     {
       "inputs": [],
@@ -8721,7 +8719,228 @@ const ABI_OvnTimelock = [
       "type": "receive"
     }
 ]
-
+const ERC20_ABI = [
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "name",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_spender",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "approve",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "totalSupply",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_from",
+                "type": "address"
+            },
+            {
+                "name": "_to",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "transferFrom",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint8"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_owner",
+                "type": "address"
+            }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+            {
+                "name": "balance",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "symbol",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_to",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "transfer",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_owner",
+                "type": "address"
+            },
+            {
+                "name": "_spender",
+                "type": "address"
+            }
+        ],
+        "name": "allowance",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "fallback"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "spender",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "value",
+                "type": "uint256"
+            }
+        ],
+        "name": "Approval",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "value",
+                "type": "uint256"
+            }
+        ],
+        "name": "Transfer",
+        "type": "event"
+    }
+]
 
 
 const chainContractsMap ={
@@ -8849,51 +9068,12 @@ const actions = {
     async initContracts({commit, dispatch, getters, rootState}) {
      
         const ABI_ERC20 = await loadJSON('/contracts/ERC20.json');
+        console.log(JSON.stringify(ABI_ERC20, null, 2))
         console.log("contractAction/initContracts");
         
         let web3 = rootState.web3.web3;
         let network = rootState.network.networkName;
         let contracts = {};
-
-        let networkAssetMap = {
-            polygon: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-            polygon_dev: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-            optimism: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
-            arbitrum: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
-            base: '0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA',
-            zksync: '0x3355df6d4c9c3035724fd0e3914de96a5a83aaf4',
-            bsc: '0x55d398326f99059ff775485246999027b3197955',
-            linea: '0x176211869cA2b568f2A7D4EE941E073a821EE1ff',
-        };
-
-        let networkAssetTwoMap = {
-            bsc: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d', // usdc
-            arbitrum: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1', // weth
-        };
-
-        let networkDaiMap = {
-            polygon: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
-            arbitrum: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
-            optimism: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
-            base: '0x50c5725949a6f0c72e6c4a641f24049a917db0cb',
-        };
-
-        let networkUsdtMap = {
-            bsc: '0x55d398326f99059fF775485246999027B3197955',
-            linea: '0xA219439258ca9da29E9Cc4cE5596924745e12B93',
-            arbitrum: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
-        };
-
-        let networkEthMap = {
-            arbitrum: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1', // weth
-        };
-
-        let networkOvnTokenMap = {
-            optimism: '0x3b08fcd15280e7B5A6e404c4abb87F7C774D1B2e',
-            arbitrum: '0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396',
-            base: '0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396',
-        };
-
 
         [
             // exchange
@@ -8971,20 +9151,17 @@ const actions = {
             
             // market
             load(ABI_Market,web3,chainContractsMap[network]?.market ?? null),
-            // network !== "bsc" && network !== 'zksync' && network !== 'linea' ? _load(await loadJSON(`/contracts/${network}/Market.json`), web3) : _load_empty(),
-         
 
-            //wUsdPlus
-            network !== "bsc" && network !== 'zksync' && network !== 'linea' ? _load(await loadJSON(`/contracts/${network}/WrappedUsdPlusToken.json`), web3) : _load_empty(),
+            //wusd
+            load(ABI_WusdPlus,web3,chainContractsMap[network]["usdPlus"]?.wUsdPlus ?? null),
 
             // assets
-            // load(ABI_ERC20,web3,chainContractsMap[network]?.usdc ?? null),
-            networkAssetMap[network] ? _load(ABI_ERC20, web3, networkAssetMap[network]) : _load_empty(),
-            networkAssetTwoMap[network] ? _load(ABI_ERC20, web3, networkAssetTwoMap[network]) : _load_empty(),
-            networkDaiMap[network] ? _load(ABI_ERC20, web3, networkDaiMap[network]) : _load_empty(),
-            networkUsdtMap[network] ? _load(ABI_ERC20, web3, networkUsdtMap[network]) : _load_empty(),
-            networkEthMap[network] ? _load(ABI_ERC20, web3, networkEthMap[network]) : _load_empty(),
-            networkOvnTokenMap[network] ? _load(ABI_ERC20, web3, networkOvnTokenMap[network]) : _load_empty(),
+            load(ERC20_ABI,web3,chainContractsMap[network]?.usdc ?? null),
+            load(ERC20_ABI,web3,chainContractsMap[network]?.wrapped ?? null),
+            load(ERC20_ABI,web3,chainContractsMap[network]["daiPlus"]?.tokenPlus ?? null),
+            load(ERC20_ABI,web3,chainContractsMap[network]["usdtPlus"]?.tokenPlus ?? null),
+            load(ERC20_ABI,web3,chainContractsMap[network]["ethPlus"]?.tokenPlus ?? null),
+            load(ERC20_ABI,web3,chainContractsMap[network]?.ovn ?? null),
         ]);
 
 

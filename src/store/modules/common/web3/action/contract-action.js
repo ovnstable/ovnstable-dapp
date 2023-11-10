@@ -8961,7 +8961,9 @@ const chainContractsMap ={
         ovn:"0x3b08fcd15280e7B5A6e404c4abb87F7C774D1B2e",
         ovnGovernor:"0x279a30ed284D49D32De901acfC0004B2dB1c091E",
         ovnTimelockController:"0xA4fc2F25CA4dFEc08F07eE92d3173BA21A01E9f8",
-        usdc:"0x7F5c764cBc14f9669B88837ca1490cCa17c31607"
+        usdc:"0x7F5c764cBc14f9669B88837ca1490cCa17c31607",
+        market:"0x9489d4769d3AbD3483421Fbff41BD6C7fe8541cA",
+        
     },
     arbitrum:{
         usdPlus:{
@@ -8992,6 +8994,7 @@ const chainContractsMap ={
         ovn:"0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396",
         usdc:"0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
         wrapped:"0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+        market:"0x149Eb6E777aDa78D383bD93c57D45a9A71b171B1",
     },
     zksync:{
         usdPlus:{
@@ -9032,7 +9035,8 @@ const chainContractsMap ={
             portfolioManager:"0xb9619DB586972CC0754a22e1697a72Bacf30aca9",
         },
         ovn:"0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396",
-        usdc:"0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA"
+        usdc:"0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA",
+        market:"0x20FAF24BEb86B81092D63E95A6E764C4fEd85873",
     },
     bsc:{
         usdPlus:{
@@ -9066,9 +9070,6 @@ const chainContractsMap ={
 
 const actions = {
     async initContracts({commit, dispatch, getters, rootState}) {
-     
-        const ABI_ERC20 = await loadJSON('/contracts/ERC20.json');
-        console.log(JSON.stringify(ABI_ERC20, null, 2))
         console.log("contractAction/initContracts");
         
         let web3 = rootState.web3.web3;

@@ -8963,6 +8963,7 @@ const chainContractsMap ={
         ovnTimelockController:"0xA4fc2F25CA4dFEc08F07eE92d3173BA21A01E9f8",
         usdc:"0x7F5c764cBc14f9669B88837ca1490cCa17c31607",
         market:"0x9489d4769d3AbD3483421Fbff41BD6C7fe8541cA",
+        dai:"0xda10009cbd5d07dd0cecc66161fc93d7c9000da1"
         
     },
     arbitrum:{
@@ -8995,6 +8996,9 @@ const chainContractsMap ={
         usdc:"0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
         wrapped:"0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
         market:"0x149Eb6E777aDa78D383bD93c57D45a9A71b171B1",
+        dai:"0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+        usdt:"0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+        wETH:"0x82af49447d8a07e3bd95bd0d56f35241523fbab1"
     },
     zksync:{
         usdPlus:{
@@ -9018,7 +9022,8 @@ const chainContractsMap ={
             mark2market:"0x3d67655A49Adb0F44530233Cbf8375D33FfAde41",
             portfolioManager:"0x0932BB4c7e4bdD9cd717331b86d999046f8420E0",
         },
-        usdc:"0x176211869cA2b568f2A7D4EE941E073a821EE1ff"
+        usdc:"0x176211869cA2b568f2A7D4EE941E073a821EE1ff",
+        usdt:"0xA219439258ca9da29E9Cc4cE5596924745e12B93"
     },
     base:{
         usdPlus:{
@@ -9037,6 +9042,7 @@ const chainContractsMap ={
         ovn:"0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396",
         usdc:"0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA",
         market:"0x20FAF24BEb86B81092D63E95A6E764C4fEd85873",
+        dai:"0x50c5725949a6f0c72e6c4a641f24049a917db0cb"
     },
     bsc:{
         usdPlus:{
@@ -9052,7 +9058,8 @@ const chainContractsMap ={
             portfolioManager:"0x4788b55aBcA88610F1586A90017337399A62f8ae",
         },
         usdc:"0x55d398326f99059ff775485246999027b3197955",
-        wrapped:"0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+        wrapped:"0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d", // usdc
+        usdt:"0x55d398326f99059fF775485246999027B3197955"
     },
     polygon:{
         usdPlus:{
@@ -9061,9 +9068,10 @@ const chainContractsMap ={
             mark2market:"0x33efB0868A6f12aEce19B451e0fcf62302Ec4A72",
             portfolioManager:"0x6911F2e474D34a4cbBE9Fe56F909EA37DF15E649",
             wUsdPlus:"0x4e36D8006416EA1d939A0EeaE73AFDAcA86BD376",
-            market:"0x4f1499185aBf3BcAb91a9B77DDC113f97bF0342C"
         },
-        usdc:"0x2791bca1f2de4661ed88a30c99a7a9449aa84174"
+        usdc:"0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+        market:"0x4f1499185aBf3BcAb91a9B77DDC113f97bF0342C",
+        dai:"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"
     }
     
 }
@@ -9075,6 +9083,7 @@ const actions = {
         let web3 = rootState.web3.web3;
         let network = rootState.network.networkName;
         let contracts = {};
+        
 
         [
             // exchange
@@ -9159,9 +9168,9 @@ const actions = {
             // assets
             load(ERC20_ABI,web3,chainContractsMap[network]?.usdc ?? null),
             load(ERC20_ABI,web3,chainContractsMap[network]?.wrapped ?? null),
-            load(ERC20_ABI,web3,chainContractsMap[network]["daiPlus"]?.tokenPlus ?? null),
-            load(ERC20_ABI,web3,chainContractsMap[network]["usdtPlus"]?.tokenPlus ?? null),
-            load(ERC20_ABI,web3,chainContractsMap[network]["ethPlus"]?.tokenPlus ?? null),
+            load(ERC20_ABI,web3,chainContractsMap[network]?.dai ?? null),
+            load(ERC20_ABI,web3,chainContractsMap[network]?.usdt ?? null),
+            load(ERC20_ABI,web3,chainContractsMap[network]?.wETH ?? null),
             load(ERC20_ABI,web3,chainContractsMap[network]?.ovn ?? null),
         ]);
 
@@ -9214,9 +9223,5 @@ function _load(file, web3, address) {
     }
 
     return new web3.eth.Contract(file.abi, address);
-}
-
-function _load_empty() {
-    return null;
 }
 

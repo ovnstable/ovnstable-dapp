@@ -100,7 +100,7 @@
                 </div>
                 <div class="second-how-container">
                     <img
-                        src="/assets/market/scheme.svg"
+                        :src="require('@/assets/market/scheme.svg')"
                         class="scheme"
                         alt="Scheme">
                 </div>

@@ -66,7 +66,7 @@
                             <div class="box">
                                 <label class="box-name mt-2">Chain</label>
                                 <div class="icon">
-                                    <v-img :src="'/assets/network/' + cardData.chainName + '.svg'"
+                                    <v-img :src="require('@/assets/network/' + cardData.chainName + '.svg')"
                                            class="mt-1"
                                            alt="chain icon"/>
                                 </div>
@@ -80,7 +80,7 @@
                             <div class="box">
                                 <label class="box-name mt-2">Staking Platform</label>
                                 <div class="icon platform-logo">
-                                    <v-img :src="'/assets/cards/platform/' + dexLogo + '.svg'"
+                                    <v-img :src="require('@/assets/cards/platform/' + dexLogo + '.svg')"
                                            class="mt-1"
                                            alt="platform icon"/>
                                 </div>
@@ -111,7 +111,7 @@
                                        outlined
                                        @click.stop="openExternalPool()">
                                     <label>STAKE</label>
-                                    <img class="open-icon ml-1" src="@/assets/icon/open_in_new_blue.svg">
+                                    <img class="open-icon ml-1" :src="require('@/assets/icon/open_in_new_blue.svg')">
                                 </v-btn>
                             </v-row>
                         </v-col>
@@ -121,7 +121,7 @@
 
             <v-row class="footer-row d-flex align-center justify-center" @click.stop="openExternalPool()">
                 <label class="footer-link">View Pool on {{cardData.platform}}</label>
-                <img class="open-icon ml-1" src="@/assets/icon/open-in-new.svg">
+                <img class="open-icon ml-1" :src="require('@/assets/icon/open-in-new.svg')">
             </v-row>
         </v-col>
 

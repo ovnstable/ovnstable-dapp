@@ -1,6 +1,0 @@
-{
-    "name": "Overnight",
-    "description": "USD+ is USDC that pays you yield daily via rebase.",
-    "iconPath": "favicon.svg",
-    "display": "standalone"
-}

@@ -293,24 +293,6 @@ const actions = {
                         break;
                 }
 
-                let account = rootState.accountData.account.toLowerCase();
-                let profitDay = null;
-
-                let fetchOptions = {
-                    headers: {
-                        "Access-Control-Allow-Origin": appApiUrl
-                    }
-                };
-
-                await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress + '/account/' + account, fetchOptions)
-                    .then(value => value.json())
-                    .then(value => {
-                        profitDay = value.profit;
-                    }).catch(reason => {
-                        console.log('Error get data: ' + reason);
-                    })
-
-                dispatch('addEtsClientData', { name: refreshParams.strategyName, data: profitDay});
             })
         );
     },

@@ -10888,7 +10888,7 @@ const chainContractsMap ={
             mark2market:"0xF3434f6a11AA950150AF3e4962E39E6281496EF9",
             portfolioManager:"0x4788b55aBcA88610F1586A90017337399A62f8ae",
         },
-        usdc:"0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d", // pegged usdt
+        usdc:"0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d", // pegged usdc
         wrapped:"0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d", // pegged usdc
         usdt:"0x55d398326f99059fF775485246999027B3197955" // pegged usdt
     },

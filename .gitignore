@@ -9,3 +9,8 @@ src/contracts/local
 #package-lock.json
 
 public/.DS_Store
+
+### OSX template
+.DS_Store
+.AppleDouble
+.LSOverride

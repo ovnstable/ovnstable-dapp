@@ -16,7 +16,7 @@
                             @click="setSelectedTabFunc(networkConfig.networkName)"
                             :class="selectedTabs.includes(networkConfig.networkName) ? 'networks-item-selected' : ''"
                             class="networks-item">
-                            <img :src="`/assets/network/${networkConfig.networkName}.svg`"
+                            <img :src="require(`@/assets/network/${networkConfig.networkName}.svg`)"
                                  :alt="networkConfig.networkName"
                                  class="network-logo">
                         </div>

@@ -66,7 +66,7 @@
                             <div class="box">
                                 <label class="box-name mt-2">Chain</label>
                                 <div class="icon">
-                                    <v-img :src="require('@/assets/network/' + cardData.chainName + '.svg')"
+                                    <v-img :src="'/assets/network/' + cardData.chainName + '.svg'"
                                            class="mt-1"
                                            alt="chain icon"/>
                                 </div>
@@ -80,7 +80,7 @@
                             <div class="box">
                                 <label class="box-name mt-2">Staking Platform</label>
                                 <div class="icon platform-logo">
-                                    <v-img :src="require('@/assets/cards/platform/' + dexLogo + '.svg')"
+                                    <v-img :src="'/assets/cards/platform/' + dexLogo + '.svg'"
                                            class="mt-1"
                                            alt="platform icon"/>
                                 </div>
@@ -894,8 +894,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     top: 50px;
     left: 3px;
 }
-src="/assets/icon/swap/change-swap-vector.svg"
 
+.pool-logo-container {
    background-image: url("/assets/icon/pool/feature/circulation.svg");
    background-size: cover;
    background-position: center;

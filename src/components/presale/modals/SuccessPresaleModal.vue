@@ -17,10 +17,16 @@
                     <v-card-text>
                         <div class="tokens-container">
                             <div class="success-logo-container">
-                                <img v-if="successData && successData.type === 'usd+'" src="/assets/icon/presale/usd-success.svg"
-                                     alt="success">
-                                <img v-else src="/assets/icon/presale/ovn-success.svg"
-                                     alt="success">
+                                <img
+                                    v-if="successData && successData.type === 'usd+'"
+                                    :src="require('@/assets/icon/presale/usd-success.svg')"
+                                     alt="success"
+                                >
+                                <img
+                                    v-else
+                                    :src="require('@/assets/icon/presale/ovn-success.svg')"
+                                    alt="success"
+                                >
                             </div>
                             <div class="success-text-container py-10">
                                 {{ successData? successData.text : 'Success'}}
@@ -35,7 +41,10 @@
                                    <div @click="shareTwitter"
                                         class="button-buy">
                                        SHARE YOUR IMPRESSIONS
-                                       <img src="/assets/icon/presale/twitter.svg" alt="twitter"/>
+                                       <img
+                                            :src="require('@/assets/icon/presale/twitter.svg')"
+                                            alt="twitter"
+                                        />
                                    </div>
                                </div>
                             </div>
@@ -45,7 +54,10 @@
                                     View on Scan
                                 </div>
                                 <div class="scan-icon">
-                                    <img src="/assets/icon/swap/scan-open.svg" alt="scan">
+                                    <img
+                                        :src="require('@/assets/icon/swap/scan-open.svg')"
+                                        alt="scan"
+                                    >
                                 </div>
                             </div>
                         </div>

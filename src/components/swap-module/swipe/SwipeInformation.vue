@@ -9,7 +9,7 @@
                    <div class="row">
                        <div class="col-lg-4 col-md-4 col-sm-12">
                            <div class="info-image-container">
-                               <img src="/assets/icon/swipe/experience/accomulate.svg"
+                               <img :src="require('@/assets/icon/swipe/experience/accomulate.svg')"
                                     class="info-image"
                                     alt="swap">
                            </div>
@@ -25,7 +25,7 @@
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-12">
                             <div class="info-image-container">
-                                <img src="/assets/icon/swipe/experience/potential-income.svg"
+                                <img :src="require('@/assets/icon/swipe/experience/potential-income.svg')"
                                      class="info-image"
                                      alt="best">
                             </div>
@@ -41,7 +41,7 @@
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-12">
                             <div class="info-image-container">
-                                <img src="/assets/icon/swipe/experience/swap.svg"
+                                <img :src="require('@/assets/icon/swipe/experience/swap.svg')"
                                      class="info-image"
                                      alt="mint">
                             </div>

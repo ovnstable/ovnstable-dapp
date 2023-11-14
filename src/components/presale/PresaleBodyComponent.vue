@@ -268,10 +268,10 @@
                 </div>
                 <div class="col-12 col-lg-3 col-md-6 col-sm-12">
                     <div v-if="!nftStatus">
-                        <img src="/assets/icon/presale/step/step3.svg" width="100%" alt="Step1">
+                        <img :src="require('@/assets/icon/presale/step/step3.svg')" width="100%" alt="Step1">
                     </div>
                     <div v-else>
-                        <img src="/assets/icon/presale/step/step3-active.svg" width="100%" alt="Step1">
+                        <img :src="require('@/assets/icon/presale/step/step3-active.svg')"  width="100%" alt="Step1">
                     </div>
 
                     <div class="step-container">
@@ -279,7 +279,7 @@
                             <div class="step-title">
                                 Participate
                                 <div class="title-logo">
-                                    <img src="/assets/icon/presale/title-participate.svg" alt="time">
+                                    <img :src="require('@/assets/icon/presale/title-participate.svg')" alt="time">
                                 </div>
                             </div>
 
@@ -367,7 +367,7 @@
                                                 <div :style="{width: 50 + 'px', height: 30 + 'px'}"
                                                      v-bind="attrs"
                                                      v-on="on">
-                                                    <img src="/assets/icon/presale/funds-percent.svg" class="funds-percent-image">
+                                                    <img :src="require('@/assets/icon/presale/funds-percent.svg')" class="funds-percent-image">
                                                 </div>
                                             </template>
 
@@ -424,7 +424,7 @@
                                         <div class="info-sub-title" style="position:relative;">
                                             Presale contract
                                             <div class="contract-info-label">
-                                                <img src="/assets/icon/presale/base.svg" height="16px" alt="Base">
+                                                <img :src="require('@/assets/icon/presale/base.svg')" height="16px" alt="Base">
                                             </div>
                                         </div>
                                     </div>
@@ -433,7 +433,7 @@
                                            <div class="info-text contract-link">
                                                {{ formattedPresaleContractAddress }}
                                                <div class="contract-info-label">
-                                                   <img src="/assets/icon/presale/link.svg" height="16px" alt="Base">
+                                                   <img :src="require('@/assets/icon/presale/link.svg')" height="16px" alt="Base">
                                                </div>
                                            </div>
                                        </a>
@@ -465,10 +465,10 @@
                     </div>
 
                     <div v-if="currentStep > 1">
-                        <img src="/assets/icon/presale/step/step4.svg" width="100%" alt="Step4">
+                        <img :src="require('@/assets/icon/presale/step/step4.svg')" width="100%" alt="Step4">
                     </div>
                     <div v-else>
-                        <img src="/assets/icon/presale/step/step4-active.svg" width="100%" alt="Step4">
+                        <img :src="require('@/assets/icon/presale/step/step4-active.svg')" width="100%" alt="Step4">
                     </div>
 
                     <div class="step-container">
@@ -477,7 +477,7 @@
                                  class="step-title-container">
                                 {{ formattedClaimTitle }}
                                 <div class="title-logo">
-                                    <img src="/assets/icon/presale/title-claim.svg" alt="claim">
+                                    <img :src="require('@/assets/icon/presale/title-claim.svg')" alt="claim">
                                 </div>
                             </div>
 

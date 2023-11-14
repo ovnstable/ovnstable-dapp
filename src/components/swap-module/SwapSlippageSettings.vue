@@ -22,8 +22,8 @@
                                                     <div :style="{width: 50 + 'px', height: 30 + 'px'}"
                                                          v-bind="attrs"
                                                          v-on="on">
-                                                        <img v-if="light" src="/assets/icon/swap/slippage-tolerance-info.svg" alt="?">
-                                                        <img v-else src="/assets/icon/swap/slippage-tolerance-info-dark.svg" alt="?">
+                                                        <img v-if="light" :src="require('@/assets/icon/swap/slippage-tolerance-info.svg')" alt="?">
+                                                        <img v-else :src="require('@/assets/icon/swap/slippage-tolerance-info-dark.svg')" alt="?">
                                                     </div>
                                                 </template>
 

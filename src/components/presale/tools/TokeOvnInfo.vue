@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-3 col-lg-3 col-md-3 col-sm-3">
                     <div class="">
-                        <img src="/assets/icon/presale/logo.svg" alt="logo">
+                        <img :src="require('@/assets/icon/presale/logo.svg')" alt="logo">
                     </div>
                 </div>
                 <div class="col-9 col-lg-9 col-md-9 col-sm-9">

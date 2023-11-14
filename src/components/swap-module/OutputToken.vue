@@ -81,7 +81,7 @@
                     <div class="col-6 text-right">
                         <div class="select-token-balance-container">
                             <div class="select-token-balance-img">
-                                <img src="/assets/icon/swap/wallet.svg" alt="select-token">
+                                <img :src="require('@/assets/icon/swap/wallet.svg')" alt="select-token">
                             </div>
                             <div class="select-token-balance-text">
                                 <div v-if="token.selectedToken && token.selectedToken.balanceData.balance">
@@ -109,11 +109,11 @@
                   <div class="lock-container">
                       <div v-if="tokenInfo.locked"
                            @click="lockProportionFunc(false, tokenInfo)">
-                          <img src="/assets/icon/swap/proportion-lock-close.svg" alt="select-token">
+                          <img :src="require('@/assets/icon/swap/proportion-lock-close.svg')" alt="select-token">
                       </div>
                       <div v-else
                            @click="lockProportionFunc(true, tokenInfo)">
-                          <img src="/assets/icon/swap/proportion-lock-open.svg" alt="select-token">
+                          <img :src="require('@/assets/icon/swap/proportion-lock-open.svg')" alt="select-token">
                       </div>
                   </div>
 

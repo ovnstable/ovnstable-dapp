@@ -3,7 +3,7 @@
         <div class="swap-container">
             <div class="not-available-container">
                 <div class="not-available-logo-container text-center">
-                    <img src="/assets/icon/swap/chain-wait.svg" class="not-available-logo" alt="wait">
+                    <img :src="require('@/assets/icon/swap/chain-wait.svg')" class="not-available-logo" alt="wait">
                 </div>
                 <div class="not-available-info text-center">
                     <div>

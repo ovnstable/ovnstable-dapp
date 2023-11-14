@@ -2,7 +2,7 @@
 <template>
     <div>
         <div class="pt-10">
-            <img class="info-image" src="/assets/icon/presale/private-round.svg" alt="Private Round">
+            <img class="info-image" :src="require('@/assets/icon/presale/private-round.svg')" alt="Private Round">
         </div>
     </div>
 </template>

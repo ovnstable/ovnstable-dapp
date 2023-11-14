@@ -71,7 +71,7 @@
                         <div class="pt-5">
                             <div class="change-swap-container">
                                 <div class="change-swap-image" >
-                                    <img src="/assets/icon/swap/change-swap-vector.svg" alt="change-swap">
+                                    <img :src="require('@/assets/icon/swap/change-swap-vector.svg')" alt="change-swap">
                                 </div>
                             </div>
                         </div>
@@ -169,7 +169,7 @@
 
                 <div v-if="zapPool && this.zapPool.platform === 'Swapbased'" class="slippage-info-container">
                     <div class="slippage-info-title">
-                        <img src="/assets/icon/swap/warn-info-icon.svg" alt="info" style="margin-right: 2px;"/>
+                        <img :src="require('@/assets/icon/swap/warn-info-icon.svg')" alt="info" style="margin-right: 2px;"/>
                         By joining this pool, you are being notified that SwapBased takes a 1% deposit fee.
                     </div>
                 </div>

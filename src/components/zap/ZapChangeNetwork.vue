@@ -3,7 +3,7 @@
         <div class="change-network-container mb-4">
             <div class="change-network-inner-container">
                 <div class="change-network-icon-container mb-10">
-                    <img src="/assets/icon/pool/change-network.svg"
+                    <img :src="require('@/assets/icon/pool/change-network.svg')"
                          alt="change-network"
                          class="change-network-icon">
                 </div>

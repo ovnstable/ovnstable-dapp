@@ -37,7 +37,10 @@
                        <div v-if="!$wu.isMobile()"
                                  v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: -20px'"
                             class="pool-platform-link">
-                           <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
+                           <img
+                                :src="require('@/assets/icon/pool/platform-link.svg')"
+                                alt="link"
+                            />
                        </div>
                    </div>
                     <div v-else>
@@ -171,7 +174,10 @@
                             <div v-if="!$wu.isMobile()"
                                  v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: -20px'"
                                 class="pool-platform-link">
-                                <img src="/assets/icon/pool/platform-link.svg" alt="link"/>
+                                <img
+                                    :src="require('@/assets/icon/pool/platform-link.svg')"
+                                    alt="link"
+                                />
                             </div>
                         </div>
                     </div>

@@ -208,9 +208,7 @@
                             <div class="col-6 pl-0">
                                 <div class="powered-image">
                                     <img
-                                        src="/assets/icon/swap/powered-by-odos.svg"
-
-                            :src="require('@/assets/icon/swap/warn-info-icon.svg')"
+                                        :src="require('@/assets/icon/swap/powered-by-odos.svg')"
                                         alt="powered by odos"
                                     >
                                 </div>

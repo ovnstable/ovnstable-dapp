@@ -46,37 +46,37 @@
                                     <div v-if="light" class="pool-table-header-logo">
                                         <img v-if="orderType === 'APR'"
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-filter.svg"
-                                             alt="toggle-open-pool">
+                                            :src="require('@/assets/icon/pool/mdi-filter.svg')"
+                                            alt="toggle-open-pool">
                                         <img v-else-if="orderType === 'APR_UP'"
-                                             class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-sort-ascending-black.svg"
-                                             alt="toggle-open-pool">
+                                            class="toggle-open-pool"
+                                            :src="require('@/assets/icon/pool/mdi-sort-ascending-black.svg')"
+                                            alt="toggle-open-pool">
                                         <img v-else-if="orderType === 'APR_DOWN'"
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-sort-descending-black.svg"
-                                             alt="toggle-open-pool">
+                                            :src="require('@/assets/icon/pool/mdi-sort-descending-black.svg')"
+                                            alt="toggle-open-pool">
                                         <img v-else
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-filter.svg"
+                                            :src="require('@/assets/icon/pool/mdi-filter.svg')"
                                              alt="toggle-open-pool">
                                     </div>
                                     <div v-else class="pool-table-header-logo">
                                         <img v-if="orderType === 'APR'"
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-filter.svg"
+                                            :src="require('@/assets/icon/pool/mdi-filter.svg')"
                                              alt="toggle-open-pool">
                                         <img v-else-if="orderType === 'APR_UP'"
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-sort-ascending-white.svg"
+                                            :src="require('@/assets/icon/pool/mdi-sort-ascending-white.svg')"
                                              alt="toggle-open-pool">
                                         <img v-else-if="orderType === 'APR_DOWN'"
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-sort-descending-white.svg"
+                                            :src="require('@/assets/icon/pool/mdi-sort-descending-white.svg')"
                                              alt="toggle-open-pool">
                                         <img v-else
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-filter.svg"
+                                            :src="require('@/assets/icon/pool/mdi-filter.svg')"
                                              alt="toggle-open-pool">
                                     </div>
                                 </div>
@@ -91,37 +91,37 @@
                                     <div v-if="light" class="pool-table-header-logo">
                                         <img v-if="orderType === 'TVL'"
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-filter.svg"
+                                            :src="require('@/assets/icon/pool/mdi-filter.svg')"
                                              alt="toggle-open-pool">
                                         <img v-else-if="orderType === 'TVL_UP'"
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-sort-ascending-black.svg"
+                                            :src="require('@/assets/icon/pool/mdi-sort-ascending-black.svg')"
                                              alt="toggle-open-pool">
                                         <img v-else-if="orderType === 'TVL_DOWN'"
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-sort-descending-black.svg"
+                                            :src="require('@/assets/icon/pool/mdi-sort-descending-black.svg')"
                                              alt="toggle-open-pool">
                                         <img v-else
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-filter.svg"
+                                            :src="require('@/assets/icon/pool/mdi-filter.svg')"
                                              alt="toggle-open-pool">
                                     </div>
                                     <div v-else class="pool-table-header-logo">
                                         <img v-if="orderType === 'TVL'"
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-filter.svg"
+                                            :src="require('@/assets/icon/pool/mdi-filter.svg')"
                                              alt="toggle-open-pool">
                                         <img v-else-if="orderType === 'TVL_UP'"
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-sort-ascending-white.svg"
+                                            :src="require('@/assets/icon/pool/mdi-sort-ascending-white.svg')"
                                              alt="toggle-open-pool">
                                         <img v-else-if="orderType === 'TVL_DOWN'"
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-sort-descending-white.svg"
+                                            :src="require('@/assets/icon/pool/mdi-sort-descending-white.svg')"
                                              alt="toggle-open-pool">
                                         <img v-else
                                              class="toggle-open-pool"
-                                             src="/assets/icon/pool/mdi-filter.svg"
+                                            :src="require('@/assets/icon/pool/mdi-filter.svg')"
                                              alt="toggle-open-pool">
                                     </div>
 
@@ -159,7 +159,11 @@
                                                          v-bind="attrs"
                                                          v-on="on">
 
-                                                        <img src="/assets/icon/pool/featured.svg" alt="featured" class="info-icon">
+                                                        <img
+                                                            :src="require('@/assets/icon/pool/featured.svg')"
+                                                            alt="featured"
+                                                            class="info-icon"
+                                                        >
                                                     </div>
                                                 </template>
 
@@ -254,7 +258,8 @@
                          @click="toggleDetails(pool)"
                          class="toggle-icon-container"
                          v-bind:style="$wu.isMobile() ? 'top: 122px;' : ''">
-                        <img src="/assets/icon/pool/toggle-open-pool.svg"
+                        <img
+                            :src="require('@/assets/icon/pool/toggle-open-pool.svg')"
                              v-bind:style="pool.isOpened ? '': 'transform: rotate(180deg);' "
                              alt="toggle-open-pool">
                     </div>

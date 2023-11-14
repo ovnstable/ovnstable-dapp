@@ -87,7 +87,6 @@ export default {
 }
 
 .v-text-field >>> input, .v-text-field >>> label, .v-text-field >>> button {
-    font-family: 'Lato', sans-serif;
     font-style: normal !important;
     font-weight: 700 !important;
     font-size: 20px !important;
@@ -100,7 +99,6 @@ export default {
 }
 
 .list-header {
-    font-family: 'Lato', sans-serif !important;
     font-style: normal;
     font-weight: 400;
     font-size: 14px !important;

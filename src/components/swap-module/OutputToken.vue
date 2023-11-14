@@ -29,7 +29,10 @@
                                     {{token.selectedToken.symbol}}
                                 </div>
                                 <div v-if="!isDisableSelect" class="select-token-with-token-item-img">
-                                    <img src="/assets/icon/swap/token-select-closed.svg" alt="select-token">
+                                    <img
+                                        :src="require('@/assets/icon/swap/token-select-closed.svg')"
+                                        alt="select-token"
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -40,7 +43,10 @@
                                 Select token
                             </div>
                             <div class="select-token-item-img">
-                                <img src="/assets/icon/swap/token-select-closed.svg" alt="select-token">
+                                <img
+                                    :src="require('@/assets/icon/swap/token-select-closed.svg')"
+                                    alt="select-token"
+                                >
                             </div>
                         </div>
                     </div>
@@ -48,7 +54,10 @@
 
                 <div v-if="isTokenRemovable" class="remove-container">
                     <div @click="removeItemFunc(tokenInfo.id)" class="remove-button">
-                        <img src="/assets/icon/swap/remove-token.svg" alt="remove-token">
+                        <img
+                            :src="require('@/assets/icon/swap/remove-token.svg')"
+                            alt="remove-token"
+                        >
                     </div>
                 </div>
             </div>

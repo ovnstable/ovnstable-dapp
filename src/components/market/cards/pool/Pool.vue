@@ -894,8 +894,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     top: 50px;
     left: 3px;
 }
+src="/assets/icon/swap/change-swap-vector.svg"
 
-.pool-logo-container {
    background-image: url("/assets/icon/pool/feature/circulation.svg");
    background-size: cover;
    background-position: center;

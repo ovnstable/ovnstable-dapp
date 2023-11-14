@@ -9,9 +9,9 @@
                         Gas Refund +{{$utils.formatMoney(gasRefundPercents, 2)}}% (${{$utils.formatMoney(gasRefundInUsd, 2)}})
                         <img
                             :class="isRefundInfoOpen ? 'gas-refund-arrow-revert' : ''"
-                            src="/assets/icon/swap/gas-refund-arrow.svg"
-                             alt="change-swap"
-                             class="swap-refund-img">
+                            :src="require('@/assets/icon/swap/gas-refund-arrow.svg')"
+                            alt="change-swap"
+                            class="swap-refund-img">
                     </span>
                 </div>
 

@@ -896,7 +896,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .pool-logo-container {
-   background-image: url("/assets/icon/pool/feature/circulation.svg");
+   background-image: url("/icon/circulation.svg");
    background-size: cover;
    background-position: center;
    height: 120px;

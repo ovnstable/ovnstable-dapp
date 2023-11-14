@@ -29,7 +29,7 @@ export default {
 <style scoped>
 .header-container {
     height: 250px;
-    background-image: url("/assets/icon/presale/header.svg");
+    background-image: url("/icon/header.svg");
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 20px;

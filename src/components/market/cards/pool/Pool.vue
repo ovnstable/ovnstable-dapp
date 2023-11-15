@@ -111,7 +111,7 @@
                                        outlined
                                        @click.stop="openExternalPool()">
                                     <label>STAKE</label>
-                                    <img class="open-icon ml-1" src="@/assets/icon/open_in_new_blue.svg">
+                                    <img class="open-icon ml-1" :src="require('@/assets/icon/open_in_new_blue.svg')">
                                 </v-btn>
                             </v-row>
                         </v-col>
@@ -121,7 +121,7 @@
 
             <v-row class="footer-row d-flex align-center justify-center" @click.stop="openExternalPool()">
                 <label class="footer-link">View Pool on {{cardData.platform}}</label>
-                <img class="open-icon ml-1" src="@/assets/icon/open-in-new.svg">
+                <img class="open-icon ml-1" :src="require('@/assets/icon/open-in-new.svg')">
             </v-row>
         </v-col>
 
@@ -896,7 +896,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .pool-logo-container {
-   background-image: url("/assets/icon/pool/feature/circulation.svg");
+   background-image: url("/icon/circulation.svg");
    background-size: cover;
    background-position: center;
    height: 120px;

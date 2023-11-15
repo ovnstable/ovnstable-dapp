@@ -6,7 +6,7 @@
 
 <script>
 
-import {mapActions, mapGetters} from "vuex";
+import {mapActions} from "vuex";
 
 export default {
     name: 'App',
@@ -26,15 +26,11 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
-
 /* mobile */
 @media all and (min-width:0px) and (max-width: 650px) {
 
     .title-header {
         color: white;
-        font-family: 'Raleway', sans-serif;
         font-style: normal;
         font-weight: 800;
         font-size: 36px;
@@ -42,7 +38,6 @@ export default {
     }
 
     .title-modal {
-        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 18px;
@@ -71,7 +66,6 @@ export default {
 
     .title-header {
         color: white;
-        font-family: 'Raleway', sans-serif;
         font-style: normal;
         font-weight: 800;
         font-size: 48px;
@@ -79,7 +73,6 @@ export default {
     }
 
     .title-modal {
-        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 22px;
@@ -107,7 +100,6 @@ export default {
 
     .title-header {
         color: white;
-        font-family: 'Raleway', sans-serif;
         font-style: normal;
         font-weight: 800;
         font-size: 48px;
@@ -115,7 +107,6 @@ export default {
     }
 
     .title-modal {
-        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 30px;
@@ -205,6 +196,10 @@ html {
     overflow-y: auto !important;
 }
 
+html *, body * {
+    font-family: 'Roboto', sans-serif;
+}
+
 #app {
     background-color: var(--main-background);
 }
@@ -261,10 +256,6 @@ onboard-v2 {
 
 .enable-content {
     pointer-events: initial !important;
-}
-
-.v-application {
-    font-family: 'Lato', sans-serif !important;
 }
 
 .v-application a{
@@ -398,7 +389,7 @@ onboard-v2 {
 }
 
 .v-navigation-drawer__content {
-    //overflow-y: hidden!important;
+    /* //overflow-y: hidden!important; */
 }
 
 </style>

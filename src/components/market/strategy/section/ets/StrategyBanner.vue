@@ -3,16 +3,16 @@
         <v-col class="main-col">
             <v-row align="start" :justify="$wu.isMobile() ? 'start' : 'end'" class="ma-0">
                 <div :class="$wu.isMobile() ? 'currency-icon' : 'icon'" class="mr-3">
-                    <v-img class="chain-icon" :src="'/assets/network/' + etsData.chainName + '.svg'"/>
+                    <v-img class="chain-icon" :src="require('@/assets/network/' + etsData.chainName + '.svg')"/>
                 </div>
 
                 <div class="icon-border">
                     <div :class="$wu.isMobile() ? 'currency-icon' : 'icon'" class="mx-3">
-                        <v-img class="platform" :src="'/assets/cards/platform/' + dexLogo + '.svg'"/>
+                        <v-img class="platform" :src="'@/assets/cards/platform/' + dexLogo + '.svg'"/>
                     </div>
                 </div>
                 <div class="icon ml-3">
-                    <v-img class="token-pair" :src="'/assets/cards/token_pair/' + etsData.tokenPair + '.svg'"/>
+                    <v-img class="token-pair" :src="require('@/assets/cards/token_pair/' + etsData.tokenPair + '.svg')"/>
                 </div>
             </v-row>
 

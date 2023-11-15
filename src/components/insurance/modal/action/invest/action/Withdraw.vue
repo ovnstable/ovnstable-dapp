@@ -266,7 +266,7 @@ export default {
             {
                 id: 'insurance',
                 title: 'OVN INS',
-                image: '/assets/currencies/insurance/round_insurance_optimism.svg'
+                image: require('@/assets/currencies/insurance/round_insurance_optimism.svg')
             }
         ],
 
@@ -413,7 +413,7 @@ export default {
         this.buyCurrencies.push({
             id: 'ovn',
             title: "OVN",
-            image: '/assets/currencies/stablecoins/OVN.png'
+            image: require('@/assets/currencies/stablecoins/OVN.png')
         });
 
         this.buyCurrency = this.buyCurrencies[0];

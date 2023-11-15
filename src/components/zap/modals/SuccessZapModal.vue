@@ -157,7 +157,7 @@
                                     MY POSITION IN POOL
                                 </div>
                                 <div class="position-icon">
-                                    <img src="/assets/icon/swap/scan-open-white.svg"  alt="position">
+                                    <img :src="require('@/assets/icon/swap/scan-open-white.svg')"  alt="position">
                                 </div>
                             </div>
 
@@ -166,7 +166,7 @@
                                     View on Scan
                                 </div>
                                 <div class="scan-icon">
-                                    <img src="/assets/icon/swap/scan-open.svg" alt="scan">
+                                    <img :src="require('@/assets/icon/swap/scan-open.svg')" alt="scan">
                                 </div>
                             </div>
                         </div>

@@ -37,9 +37,11 @@
                         <div class="col-lg-8 col-md-8 col-sm-12">
                           <div class="routing-info-container">
                               <div class="routing-info-image">
-                                  <img src="/assets/icon/swap/path/alert.svg"
-                                       class="routing-info-image-config"
-                                       alt="!">
+                                  <img
+                                    :src="require('@/assets/icon/swap/path/alert.svg')"
+                                    class="routing-info-image-config"
+                                    alt="!"
+                                >
                               </div>
                               <div class="routing-info">
                                   The route is preliminary and can be changed before you press swap.
@@ -77,7 +79,7 @@
                                          class="token-image"
                                          :alt="token.symbol">
                                     <div v-if="tokenIndex < branch.length - 1" class="token-arrow-image">
-                                        <img src="/assets/icon/swap/path/arrow.svg" alt="->">
+                                        <img :src="require('@/assets/icon/swap/path/arrow.svg')" alt="->">
                                     </div>
                                 </div>
                             </div>

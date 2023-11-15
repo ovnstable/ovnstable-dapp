@@ -32,15 +32,15 @@ export default {
 
 .header-container {
     height: 250px;
-    background-image: url("/assets/icon/presale/claim-header.svg");
+    background-image: url("/icon/claim-header.svg");
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 20px;
 
     display: flex;
     justify-content: start; /* align horizontal */
-    //align-items: center; /* align vertical */
-    //height: 100vh; /* use viewport height, ensures that the parent covers the screen */
+    /* //align-items: center; align vertical */
+    /* //height: 100vh; use viewport height, ensures that the parent covers the screen */
     position: relative;
 }
 

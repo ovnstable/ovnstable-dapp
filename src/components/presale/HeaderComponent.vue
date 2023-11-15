@@ -4,14 +4,14 @@
         <div class="presale-header">
             <div class="header-container">
                <div class="header-info-container">
-                   <img src="/assets/icon/presale/header-logo.svg" class="header-logo" alt="Logo">
+                   <img :src="require('@/assets/icon/presale/header-logo.svg')" class="header-logo" alt="Logo">
                    <div class="header-info-text">
                        Private presale round
                    </div>
                </div>
 
                 <div class="network-icon-container">
-                    <img src="/assets/icon/presale/base.svg" alt="Base">
+                    <img :src="require('@/assets/icon/presale/base.svg')" alt="Base">
                 </div>
             </div>
 
@@ -29,7 +29,7 @@ export default {
 <style scoped>
 .header-container {
     height: 250px;
-    background-image: url("/assets/icon/presale/header.svg");
+    background-image: url("/icon/header.svg");
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 20px;

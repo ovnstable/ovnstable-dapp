@@ -17,8 +17,10 @@
                     <v-card-text>
                         <div class="tokens-container">
                             <div class="success-logo-container">
-                                <img src="/assets/icon/swap/success.svg"
-                                     alt="success">
+                                <img
+                                    :src="require('@/assets/icon/swap/success.svg')"
+                                    alt="success"
+                                >
                             </div>
                             <div class="success-text-container py-10">
                                 You successfully swapped
@@ -80,7 +82,10 @@
                                     View on Scan
                                 </div>
                                 <div class="scan-icon">
-                                    <img src="/assets/icon/swap/scan-open.svg" alt="scan">
+                                    <img
+                                        :src="require('@/assets/icon/swap/scan-open.svg')"
+                                        alt="scan"
+                                    >
                                 </div>
                             </div>
                         </div>

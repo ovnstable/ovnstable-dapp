@@ -30,7 +30,7 @@
             <div v-if="!$wu.isMobile()" class="info-card-container-debank" @click="openLink('https://debank.com/profile/' + etsStrategyData[etsData.name].strategyAddress)">
                 <v-row class="ma-0" justify="start" align="center">
                     <div class="info-card-icon ml-2 my-2">
-                        <v-img class="debank-icon" src="/assets/currencies/market/debank.svg"/>
+                        <v-img class="debank-icon" :src="require('@/assets/currencies/market/debank.svg')"/>
                     </div>
                     <label class="title-card-debank ma-2">View on DeBank</label>
                 </v-row>
@@ -41,7 +41,7 @@
             <div class="info-card-container-debank" style="width: 100% !important;" @click="openLink('https://debank.com/profile/' + etsStrategyData[etsData.name].strategyAddress)">
                 <v-row class="ma-0" justify="center" align="center">
                     <div class="info-card-icon ml-2 my-2">
-                        <v-img class="debank-icon" src='/assets/currencies/market/debank.svg'/>
+                        <v-img class="debank-icon" :src="require('@/assets/currencies/market/debank.svg')"/>
                     </div>
                     <label class="title-card-debank ma-2">View on DeBank</label>
                 </v-row>
@@ -62,7 +62,7 @@
                             <div class="info-card-icon ml-2">
                                 <v-img
                                     v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].ownedAsset.token"
-                                    :src="'/assets/currencies/stablecoins/' + etsStrategyData[etsData.name].ownedAsset.token + '.png'"/>
+                                    :src="require('@/assets/currencies/stablecoins/' + etsStrategyData[etsData.name].ownedAsset.token + '.png')"/>
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
@@ -98,7 +98,7 @@
                             <div class="info-card-icon ml-2">
                                 <v-img
                                     v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].depositAsset.token"
-                                    :src="'/assets/currencies/stablecoins/' + etsStrategyData[etsData.name].depositAsset.token + '.png'"/>
+                                    :src="require('@/assets/currencies/stablecoins/' + etsStrategyData[etsData.name].depositAsset.token + '.png')"/>
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
@@ -134,7 +134,7 @@
                             <div class="info-card-icon ml-2">
                                 <v-img
                                     v-if="etsStrategyData[etsData.name] && etsStrategyData[etsData.name].borrowedAsset.token"
-                                    :src="'/assets/currencies/' + etsData.hedgeToken + '.svg'"/>
+                                    :src="require('@/assets/currencies/' + etsData.hedgeToken + '.svg')"/>
                             </div>
                         </v-row>
                         <v-row class="info-row mt-8" justify="start" align="center">
@@ -164,7 +164,7 @@
                     <v-col class="info-card-body-bottom">
                         <v-row align="center">
                             <div class="info-card-icon">
-                                <v-img :src="'/assets/currencies/market/' + etsData.borrowFrom + '.png'"/>
+                                <v-img :src="require('@/assets/currencies/market/' + etsData.borrowFrom + '.png')"/>
                             </div>
                             <label class="title-card-text-bottom label-light ml-2">{{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}}</label>
                             <v-spacer></v-spacer>
@@ -185,7 +185,7 @@
                     <v-col class="info-card-body-bottom">
                         <v-row align="center" justify="center">
                             <div class="info-card-icon">
-                                <v-img :src="'/assets/currencies/market/' + etsData.borrowFrom + '.png'"/>
+                                <v-img :src="require('@/assets/currencies/market/' + etsData.borrowFrom + '.png')"/>
                             </div>
                             <label class="title-card-text-bottom label-light ml-2">{{ etsData.borrowFrom }}{{ etsData.borrowFrom === "AAVE" ? ' V3' : ''}}</label>
                         </v-row>

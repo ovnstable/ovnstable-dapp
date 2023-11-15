@@ -134,7 +134,6 @@ export default {
 .text-list-item {
     cursor: pointer;
     color: white;
-    font-family: 'Lato', sans-serif !important;
     font-style: normal !important;
     font-weight: 600 !important;
     font-size: 14px !important;

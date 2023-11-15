@@ -29,9 +29,11 @@
                             placeholder="Search by name or paste address"
                             class="input-style"/>
                     <div @click="clearSearchQuery()" class="search-input-close-container">
-                        <img src="/assets/icon/swap/search-close.svg"
-                             alt="close"
-                             class="search-image-close-image">
+                        <img
+                            :src="require('@/assets/icon/swap/search-close.svg')"
+                            alt="close"
+                            class="search-image-close-image"
+                        >
                     </div>
                 </div>
                 <div class="search-items-container">

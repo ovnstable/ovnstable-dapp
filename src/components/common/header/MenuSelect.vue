@@ -76,8 +76,10 @@
                 class="stroke-item pa-2"
             >
                 <div class="navbar-page-link mr-2">
-                    <img :src="require('@/assets/icon/menu/shuffle-variant.svg')"
-                         class="navbar-page-link">
+                    <img
+                        :src="require('@/assets/icon/menu/shuffle-variant.svg')"
+                         class="navbar-page-link"
+                    >
                 </div>
                 <div
                     :class="selectedTab === 'bridge' ? 'selected-page' : ''"

@@ -7,7 +7,7 @@
             <div class="info-container mb-5">
                 <div class="">
                     <img
-                        src="/assets/icon/ets_icon.svg"
+                        :src="require('@/assets/icon/ets_icon.svg')"
                         class="ets-logo"
                         alt="ETS logo">
                 </div>
@@ -64,7 +64,7 @@
                             <div class="risk-container mt-5">
                                 <div>
                                     <img
-                                        src="/assets/icon/bellRed.svg"
+                                        :src="require('@/assets/icon/bellRed.svg')"
                                         class="bell-icon"
                                         alt="Red Bell">
                                 </div>
@@ -92,7 +92,7 @@
                     </div>
                     <div class="link-block mt-10">
                         <img
-                            src="/assets/icon/youtube-outlined.svg"
+                            :src="require('@/assets/icon/youtube-outlined.svg')"
                             class="youtube-outlined-icon"
                             alt="Youtube Link">
                         <label class="youtube-link" @click="openLink('https://www.youtube.com/watch?v=wIVAiUMLmvA')">Learn more about ETS</label>
@@ -100,7 +100,7 @@
                 </div>
                 <div class="second-how-container">
                     <img
-                        src="/assets/market/scheme.svg"
+                        :src="require('@/assets/market/scheme.svg')"
                         class="scheme"
                         alt="Scheme">
                 </div>

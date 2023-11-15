@@ -6,7 +6,7 @@
 
 <script>
 
-import {mapActions, mapGetters} from "vuex";
+import {mapActions} from "vuex";
 
 export default {
     name: 'App',
@@ -389,7 +389,7 @@ onboard-v2 {
 }
 
 .v-navigation-drawer__content {
-    //overflow-y: hidden!important;
+    /* //overflow-y: hidden!important; */
 }
 
 </style>

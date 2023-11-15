@@ -9,7 +9,10 @@
                             <div class="title-step-text">
                                 claim and hold in wallet
                                 <div class="title-logo">
-                                    <img src="/assets/icon/presale/claim-wallet.svg" alt="Benefit">
+                                    <img
+                                        :src="require('@/assets/icon/presale/claim-wallet.svg')"
+                                        alt="Benefit"
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -20,7 +23,10 @@
                             <div class="step-title">
                                 benefit from ovn growth
                                 <div class="title-logo">
-                                    <img src="/assets/icon/presale/benefit.svg" alt="Benefit">
+                                    <img
+                                        :src="require('@/assets/icon/presale/benefit.svg')"
+                                        alt="Benefit"
+                                    >
                                 </div>
                             </div>
                             <div class="step-container-separator"></div>
@@ -141,7 +147,10 @@
                             <div class="title-step-text">
                                 claim and farm on op
                                 <div class="title-logo">
-                                    <img src="/assets/icon/presale/claim-farm-on.svg" alt="op">
+                                    <img
+                                        :src="require('@/assets/icon/presale/claim-farm-on.svg')"
+                                        alt="op"
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -152,7 +161,10 @@
                             <div class="step-title">
                                 provide Ovn/USD+ LP
                                 <div class="title-logo">
-                                    <img src="/assets/icon/presale/provide-velodrome.svg" alt="velo">
+                                    <img
+                                        :src="require('@/assets/icon/presale/provide-velodrome.svg')"
+                                        alt="velo"
+                                    >
                                 </div>
                             </div>
 
@@ -279,7 +291,7 @@
                             <div class="title-step-text">
                                 claim and farm on base
                                 <div class="title-logo">
-                                    <img src="/assets/icon/presale/claim-farm-on.svg" alt="base">
+                                    <img :src="require('@/assets/icon/presale/claim-farm-on.svg')" alt="base">
                                 </div>
                             </div>
                         </div>
@@ -290,7 +302,7 @@
                             <div class="step-title">
                                 provide Ovn/USD+ LP
                                 <div class="title-logo">
-                                    <img src="/assets/icon/presale/provide-aerodrome.svg" alt="aero">
+                                    <img :src="require('@/assets/icon/presale/provide-aerodrome.svg')" alt="aero">
                                 </div>
                             </div>
 
@@ -442,7 +454,7 @@
                             <div class="title-step-text">
                                 claim and provide insurance
                                 <div class="title-logo">
-                                    <img src="/assets/icon/presale/claim-provide.svg" alt="insurance">
+                                    <img :src="require('@/assets/icon/presale/claim-provide.svg')" alt="insurance">
                                 </div>
                             </div>
                         </div>
@@ -453,7 +465,7 @@
                             <div class="step-title-container">
                                 get premiums every day
                                 <div class="title-logo">
-                                    <img src="/assets/icon/presale/title-participate.svg" alt="part">
+                                    <img :src="require('@/assets/icon/presale/title-participate.svg')" alt="part">
                                 </div>
                             </div>
 
@@ -571,7 +583,7 @@
 
             <div class="pb-10 pt-5">
                 <a href="/presale" class="go-back">
-                    <img src="/assets/icon/presale/go-to-presale.svg" alt="<- go to presale">
+                    <img :src="require('@/assets/icon/presale/go-to-presale.svg')" alt="<- go to presale">
                 </a>
             </div>
         </div>

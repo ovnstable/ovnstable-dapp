@@ -5,11 +5,11 @@
         <v-col v-if="!$wu.isMobile()" class="my-1">
             <v-row class="ma-0" justify="start" align="center">
                 <div class="icon mr-2">
-                    <v-img :src="'/assets/network/' + cardData.data.chainName + '.svg'"
+                    <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
                            :title="cardData.data.chainName.toUpperCase()"/>
                 </div>
                 <div class="icon mr-2">
-                    <v-img :src="'/assets/cards/platform/' + dexLogo + '.svg'"
+                    <v-img :src="'@/assets/cards/platform/' + dexLogo + '.svg'"
                            :title="dexLogo"/>
                 </div>
             </v-row>
@@ -44,7 +44,7 @@
         <v-col v-if="!$wu.isMobile()" class="my-1">
             <v-row class="ma-0" justify="center" align="center">
                 <div class="icon-token-pair">
-                    <v-img :src="'/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg'"
+                    <v-img :src="require('@/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg')"
                            :title="cardData.data.tokenPair"/>
                 </div>
             </v-row>
@@ -122,7 +122,7 @@
                 <v-col>
                     <v-row justify="start" align="center">
                         <div class="icon mr-3">
-                            <v-img :src="'/assets/network/' + cardData.data.chainName + '.svg'"
+                            <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
                                    :title="cardData.data.chainName.toUpperCase()"/>
                         </div>
                     </v-row>
@@ -130,7 +130,7 @@
                 <v-col>
                     <v-row justify="center" align="center">
                         <div class="icon mr-2">
-                            <v-img :src="'/assets/cards/platform/' + dexLogo + '.svg'"
+                            <v-img :src="'@/assets/cards/platform/' + dexLogo + '.svg'"
                                    :title="dexLogo"/>
                         </div>
                     </v-row>
@@ -138,7 +138,7 @@
                 <v-col>
                     <v-row justify="end" align="center">
                         <div class="icon-token-pair">
-                            <v-img :src="'/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg'"
+                            <v-img :src="require('@/assets/cards/token_pair/' + cardData.data.tokenPair + '.svg')"
                                    :title="cardData.data.tokenPair"/>
                         </div>
                     </v-row>

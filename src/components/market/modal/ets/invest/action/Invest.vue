@@ -416,10 +416,10 @@ export default {
             return {
                 id: this.etsData.actionAsset,
                 title: this.etsData.actionTokenName,
-                image: '/assets/currencies/' +
+                image: require('@/assets/currencies/' +
                     (this.etsData.actionTokenName === 'USDC' ?
                         this.etsData.actionTokenName.toLowerCase() : this.etsData.actionTokenName) +
-                    '.png'
+                    '.png')
             }
         },
 
@@ -427,7 +427,7 @@ export default {
             return {
                 id: this.etsData.name,
                 title: 'ETS ' + this.etsData.nameToken,
-                image: '/assets/currencies/market/ets_' + this.etsData.name + '.svg'
+                image: require('@/assets/currencies/market/ets_' + this.etsData.name + '.svg')
             }
         },
 

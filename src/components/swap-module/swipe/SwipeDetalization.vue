@@ -31,7 +31,7 @@
             <div class="">
                 <div class="possible-income-container">
                     <div class="swipe-info">
-                        <img src="/assets/icon/swipe/cash.svg" style="top: 4px;" alt="<-" class="swipe-arrow-img">
+                        <img :src="require('@/assets/icon/swipe/cash.svg')" style="top: 4px;" alt="<-" class="swipe-arrow-img">
                         <div class="swipe-info-text">
                             YOUR POTENTIAL PROFIT
                         </div>
@@ -94,7 +94,7 @@
             <div class="info-body pt-10">
 
                 <div class="swipe-info pb-2">
-                    <img src="/assets/icon/swipe/wallet.svg" alt="<-" class="swipe-arrow-img">
+                    <img :src="require('@/assets/icon/swipe/wallet.svg')" alt="<-" class="swipe-arrow-img">
                     <div class="swipe-info-text">
                         YOUR ACCUMULATED STABLECOINS
                     </div>
@@ -185,7 +185,7 @@
                        Make the most of your stablecoins
                    </div>
                    <div class="swipe-info">
-                       <img src="/assets/icon/swipe/arrow.svg" alt="<-" class="swipe-arrow-img">
+                       <img :src="require('@/assets/icon/swipe/arrow.svg')" alt="<-" class="swipe-arrow-img">
                        <div class="swipe-info-text" style="color: rgba(28, 149, 231, 1)">
                            SWIPE LIQUIDITY FOR USD+
                        </div>

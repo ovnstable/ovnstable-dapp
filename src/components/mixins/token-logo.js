@@ -9,35 +9,35 @@ export const tokenLogo = {
             }
 
             if (item.symbol === 'GND') {
-                return '/assets/currencies/external/' + item.symbol + '.png';
+                return require('@/assets/currencies/external/' + item.symbol + '.png');
             }
 
             if (item.symbol === 'LEX') {
-                return '/assets/currencies/external/' + item.symbol + '.jpg';
+                return require('@/assets/currencies/external/' + item.symbol + '.jpg');
             }
 
             if (item.symbol === 'PREMIA') {
-                return '/assets/currencies/external/' + item.symbol + '.svg';
+                return require('@/assets/currencies/external/' + item.symbol + '.svg');
             }
 
             if (item.symbol === 'USDbC') {
-                return '/assets/currencies/external/' + item.symbol + '.png';
+                return require('@/assets/currencies/external/' + item.symbol + '.png');
             }
 
             if (item.symbol === 'axlUSDT') {
-                return '/assets/currencies/external/' + item.symbol + '.webp';
+                return require('@/assets/currencies/external/' + item.symbol + '.webp');
             }
 
             if (item.symbol === 'BALD') {
-                return '/assets/currencies/external/' + item.symbol + '.png';
+                return require('@/assets/currencies/external/' + item.symbol + '.png');
             }
 
             if (item.symbol === 'OGRE') {
-                return '/assets/currencies/external/' + item.symbol + '.webp';
+                return require('@/assets/currencies/external/' + item.symbol + '.webp');
             }
 
             if (item.symbol === 'KOKOS') {
-                return '/assets/currencies/external/' + item.symbol + '.svg';
+                return require('@/assets/currencies/external/' + item.symbol + '.svg');
             }
 
             if (item.symbol === 'mooCurveWSTETH' ||
@@ -72,7 +72,7 @@ export const tokenLogo = {
                 item.symbol === 'ankrBNB' ||
                 item.symbol === 'ceBNB' ||
                 item.symbol === 'ceMATIC') {
-                return '/assets/currencies/undefined.svg';
+                return require('@/assets/currencies/undefined.svg');
             }
 
             return 'https://api.overnight.fi/root/odos/asset/tokens/' + item.symbol + '.webp';
@@ -93,9 +93,9 @@ export const tokenLogo = {
         },
         getOvnCoinBaseImagePath(token) {
             if (token.symbol === 'ETH+') {
-                return '/assets/currencies/stablecoins/' + token.symbol + '.svg';
+                return require('@/assets/currencies/stablecoins/' + token.symbol + '.svg');
             }
-            return '/assets/currencies/stablecoins/' + token.symbol + '.png';
+            return require('@/assets/currencies/stablecoins/' + token.symbol + '.png');
         },
         async loadCoingeckoOvernightTokenImage(symbol) {
             // example

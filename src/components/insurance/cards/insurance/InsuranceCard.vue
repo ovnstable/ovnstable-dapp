@@ -3,7 +3,7 @@
         <v-col cols="12" align-self="start">
             <v-row class="d-flex flex-row align-center header-row" justify="center" :style="{'--card-background': getBgColor()}">
                 <span class="currency ml-5">
-                    <v-img :src="'/assets/currencies/insurance/insurance_' + getParams(networkId).networkName + '.svg'"/>
+                    <v-img :src="require('@/assets/currencies/insurance/insurance_' + getParams(networkId).networkName + '.svg')"/>
                 </span>
                 <v-row class="d-flex flex-column align-start mr-3 ml-8">
                     <v-row class="d-flex" align="center">

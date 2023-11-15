@@ -70,7 +70,10 @@
                        <div class="pt-5">
                            <div @click="changeSwap()" class="change-swap-container">
                                <div class="change-swap-image rotate" >
-                                   <img src="/assets/icon/swap/change-swap-vector.svg" alt="change-swap">
+                                   <img
+                                        :src="require('@/assets/icon/swap/change-swap-vector.svg')"
+                                        alt="change-swap"
+                                    >
                                </div>
                            </div>
                        </div>
@@ -128,7 +131,11 @@
 
                 <div v-if="networkName === 'zksync'" class="slippage-info-container">
                     <div class="slippage-info-title">
-                        <img src="/assets/icon/swap/warn-info-icon.svg" alt="info" style="margin-right: 2px;"/>
+                        <img
+                            :src="require('@/assets/icon/swap/warn-info-icon.svg')"
+                            alt="info"
+                            style="margin-right: 2px;"
+                        />
                         20-80% of the displayed gas fee on zkSync will be refunded automatically.
                     </div>
                 </div>
@@ -200,7 +207,10 @@
                             </div>
                             <div class="col-6 pl-0">
                                 <div class="powered-image">
-                                    <img src="/assets/icon/swap/powered-by-odos.svg" alt="powered by odos">
+                                    <img
+                                        :src="require('@/assets/icon/swap/powered-by-odos.svg')"
+                                        alt="powered by odos"
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -1820,7 +1830,6 @@ div {
 }
 
 .decrease-allowance {
-    font-family: Lato, sans-serif;
     font-size: 14px;
     font-weight: 400;
     height: auto;

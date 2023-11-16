@@ -11015,7 +11015,7 @@ const actions = {
               contracts.insurance[insurances[i].network + '_exchanger'] = load(EXCHANGER_INSURANCE_ABI, web3,chainContractsMap[network]?.exchange_insurance ?? null);
               contracts.insurance[insurances[i].network + '_token'] = load(INSURANCE_TOKEN_ABI, web3,chainContractsMap[network]?.token_insurance ?? null);
           }
-          
+
         }
         commit('web3/setContracts', contracts, {root: true})
     },

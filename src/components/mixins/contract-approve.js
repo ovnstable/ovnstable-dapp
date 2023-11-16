@@ -1,4 +1,3 @@
-import {odosApiService} from "@/services/external/odos-api-service";
 import {mapActions} from "vuex";
 
 export const contractApprove = {

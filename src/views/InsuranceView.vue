@@ -45,7 +45,6 @@
 
 import {mapGetters} from "vuex";
 import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
-// import InsuranceList from "@/components/insurance/cards/insurance/InsuranceList";
 import InsuranceInfoCard from "@/components/insurance/cards/insurance/InsuranceInfoCard";
 
 

@@ -120,7 +120,6 @@
 <script>
 
 import {mapGetters} from "vuex";
-import * as numberUtils from "@/utils/number-utils";
 import axios from "axios";
 
 /* eslint-disable no-unused-vars,no-undef */

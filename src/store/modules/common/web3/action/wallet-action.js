@@ -4,7 +4,6 @@ import Onboard from "@web3-onboard/core";
 import walletConnectModule from '@web3-onboard/walletconnect'
 import coinbaseWalletModule from '@web3-onboard/coinbase'
 import WalletConnectProvider from "@walletconnect/web3-provider";
-// import argentModule from "@web3-onboard/argent";
 
 
 const SUPPORTED_NETWORKS = [137, 56, 10, 42161, 324, 8453, 59144];

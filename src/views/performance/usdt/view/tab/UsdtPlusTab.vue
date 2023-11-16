@@ -174,15 +174,13 @@
 
 <script>
 
-import {mapActions, mapGetters} from "vuex";
+import { mapGetters} from "vuex";
 import TableStablecoins from "@/components/stats/pie/TableStablecoins.vue";
 import PieStablecoins from "@/components/stats/pie/PieStablecoins.vue";
 import TableStrategies from "@/components/stats/doughnut/TableStrategies.vue";
 import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies.vue";
-
 import {collateralApiService} from "@/services/collateral-api-service";
 import {strategiesApiService} from "@/services/strategies-api-service";
-import * as numberUtils from "@/utils/number-utils";
 
 export default {
     name: "CollateralView",

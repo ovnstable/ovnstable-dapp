@@ -127,7 +127,6 @@
 <script>
 import {defineComponent} from 'vue'
 import Slider from "@/components/swap-module/Slider.vue";
-import SelectTokensModal from "@/components/swap-module/modals/SelectTokensModal.vue";
 
 export default defineComponent({
     name: "OutputToken",

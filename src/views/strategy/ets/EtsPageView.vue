@@ -267,7 +267,6 @@ import Tooltip from "@/components/common/element/Tooltip";
 import PerformanceTab from "@/views/strategy/ets/tab/PerformanceTab";
 import moment from "moment/moment";
 import {axios} from "@/plugins/http-axios";
-import network from "@/store/modules/common/web3/network";
 import loadJSON from "@/utils/http-utils";
 
 export default {

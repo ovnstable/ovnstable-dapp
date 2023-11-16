@@ -742,7 +742,6 @@ import SuccessPresaleModal from "@/components/presale/modals/SuccessPresaleModal
 import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
 import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
 import {presale} from "@/components/mixins/presale";
-const moment = require('moment'); // import moment.js
 
 
 export default {

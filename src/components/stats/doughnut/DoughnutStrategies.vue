@@ -14,7 +14,6 @@
 
 <script>
 
-import {mapGetters} from "vuex";
 
 /* eslint-disable no-unused-vars,no-undef */
 

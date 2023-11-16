@@ -303,7 +303,6 @@ import ZapChangeNetwork from "@/components/zap/ZapChangeNetwork.vue";
 import axios from "axios";
 import {contractApprove} from "@/components/mixins/contract-approve";
 import Tooltip from "@/components/common/element/Tooltip";
-import BigNumber from "bignumber.js";
 
 export default defineComponent({
     name: "ZapForm",

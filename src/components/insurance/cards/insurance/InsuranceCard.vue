@@ -151,7 +151,7 @@
 
 <script>
 
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters } from "vuex";
 import { insuranceApiService } from "@/services/insurance-api-service";
 import Tooltip from "@/components/common/element/Tooltip.vue";
 import {ovnApiService} from "@/services/ovn-api-service";

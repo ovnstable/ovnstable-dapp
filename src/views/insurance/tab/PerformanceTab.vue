@@ -55,7 +55,7 @@
 
 <script>
 
-import {mapActions, mapGetters} from "vuex";
+import {mapGetters} from "vuex";
 import ChartApy from "@/components/insurance/strategy/chart/ChartApy";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut.vue";
 import Table from "@/components/market/strategy/payouts/InsuranceTable.vue";

@@ -225,7 +225,7 @@
 
 <script>
 
-import {mapActions, mapGetters} from "vuex";
+import {mapGetters} from "vuex";
 import TableStablecoins from "@/components/stats/pie/TableStablecoins";
 import PieStablecoins from "@/components/stats/pie/PieStablecoins";
 import TableStrategies from "@/components/stats/doughnut/TableStrategies";

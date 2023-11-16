@@ -87,7 +87,6 @@ import {mapActions, mapGetters} from "vuex";
 import moment from "moment";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
-import {poolApiService} from "@/services/pool-api-service";
 import Pool from "@/components/market/cards/pool/Pool.vue";
 import {pool} from "@/components/mixins/pool";
 import Tooltip from "@/components/common/element/Tooltip.vue";

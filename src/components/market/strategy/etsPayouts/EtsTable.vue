@@ -74,7 +74,6 @@
 
 import {mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
-import network from "@/store/modules/common/web3/network";
 
 
 /* eslint-disable no-unused-vars,no-undef */

@@ -1,7 +1,4 @@
-import BN from "bn.js";
-
 const {axios} = require('@/plugins/http-axios');
-const {utils} = require('@/plugins/utils');
 import * as numberUtils from '@/utils/number-utils'
 import BigNumber from "bignumber.js";
 

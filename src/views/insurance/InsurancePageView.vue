@@ -242,7 +242,6 @@ import Tooltip from "@/components/common/element/Tooltip";
 import InsuranceRiskModal from "@/components/insurance/modal/InsuranceRiskModal";
 import PerformanceTab from "@/views/insurance/tab/PerformanceTab";
 import {insuranceApiService} from "@/services/insurance-api-service";
-import moment from "moment";
 import {ovnApiService} from "@/services/ovn-api-service";
 
 export default {

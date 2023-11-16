@@ -56,10 +56,7 @@ const connectIcon = require('@/assets/discord/connect.png');
 const loadingIcon = require('@/assets/discord/loading.png');
 const successIcon = require('@/assets/discord/success.png');
 const failIcon = require('@/assets/discord/fail.png');
-
 const {axios} = require('@/plugins/http-axios');
-
-const {wallets} = require('@/store/modules/common/web3/web3');
 
 
 export default {

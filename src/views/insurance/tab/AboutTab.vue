@@ -92,9 +92,7 @@
 
 import {mapActions, mapGetters} from "vuex";
 import TableStablecoins from "@/components/stats/pie/TableStablecoins";
-import PieStablecoins from "@/components/stats/pie/PieStablecoins";
 import TableStrategies from "@/components/stats/doughnut/TableStrategies";
-import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies";
 
 export default {
     name: "CollateralView",

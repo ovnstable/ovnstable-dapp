@@ -157,7 +157,6 @@
 import Table from "@/components/dashboard/Table";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import LineChart from "@/components/widget/LineChart";
-import {axios} from "@/plugins/http-axios";
 import moment from "moment/moment";
 import { dashboardApiService } from '/src/services/dashboard-api-service';
 

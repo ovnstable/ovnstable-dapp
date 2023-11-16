@@ -82,7 +82,6 @@
 <script>
 
 import {mapGetters} from "vuex";
-import * as numberUtils from "@/utils/number-utils";
 import axios from "axios";
 import Tooltip from "@/components/common/element/Tooltip.vue";
 

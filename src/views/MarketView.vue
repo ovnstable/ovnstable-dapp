@@ -71,7 +71,6 @@
 import {mapGetters} from "vuex";
 import EtsListCard from "@/components/market/cards/ets/list/EtsListCard";
 import EtsListHeader from "@/components/market/cards/ets/list/EtsListHeader";
-import moment from "moment";
 import {productInfoApiService} from "@/services/product-info-api-service";
 import loadJSON from "@/utils/http-utils";
 

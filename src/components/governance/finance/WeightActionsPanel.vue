@@ -65,8 +65,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
-import {axios} from "@/plugins/http-axios";
+import {mapActions} from "vuex";
 import ErrorModal from "@/components/common/modal/action/ErrorModal";
 
 const BigNumber = require('bignumber.js');

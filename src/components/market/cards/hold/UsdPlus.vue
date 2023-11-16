@@ -110,7 +110,7 @@
 
 <script>
 import Tooltip from "@/components/common/element/Tooltip";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import arbitrumIcon from "@/assets/network/ar.svg";
@@ -120,7 +120,6 @@ import zksyncIcon from "@/assets/network/zk.svg";
 import bscIcon from "@/assets/network/bsc.svg";
 import moment from "moment";
 import {axios} from "@/plugins/http-axios";
-import network from "@/store/modules/common/web3/network";
 
 export default {
     name: "UsdPlus",

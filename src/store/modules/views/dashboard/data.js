@@ -1,5 +1,4 @@
-import {axios} from "@/plugins/http-axios";
-import moment from "moment";
+
 
 const state = {
     profitUsdPlus: null,

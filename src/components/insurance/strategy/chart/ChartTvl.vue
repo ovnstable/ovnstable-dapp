@@ -68,7 +68,7 @@
 <script>
 /* eslint-disable no-unused-vars,no-undef */
 
-import {mapActions, mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 import ApexCharts from 'apexcharts'
 

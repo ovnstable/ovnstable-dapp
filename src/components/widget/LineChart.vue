@@ -16,9 +16,7 @@
 <script>
 /* eslint-disable no-unused-vars,no-undef */
 
-import {mapActions, mapGetters} from "vuex";
-import BN from "bn.js";
-
+import { mapGetters } from "vuex";
 import ApexCharts from 'apexcharts'
 
 export default {

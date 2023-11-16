@@ -724,7 +724,7 @@
 </template>
 <script>
 
-import { mapActions, mapGetters, mapMutations } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import {menu} from "@/components/mixins/menu";
 
 export default {

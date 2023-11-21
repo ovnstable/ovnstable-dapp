@@ -136,10 +136,9 @@
 /* eslint-disable no-unused-vars,no-undef */
 
 import {mapActions, mapGetters} from "vuex";
-import moment from "moment";
-
 import ApexCharts from 'apexcharts'
 import Tooltip from "@/components/common/element/Tooltip";
+import dayjs from "dayjs";
 
 export default {
     name: "ChartApy",
@@ -257,7 +256,7 @@ export default {
                     this.avgApy = value;
 
                     if (this.avgApy.date) {
-                        this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+                        this.avgApy.date = dayjs(this.avgApy.date).format("DD MMM. ‘YY")
                     }
                 }).catch(reason => {
                     console.log('Error get data: ' + reason);

@@ -155,7 +155,7 @@ import {mapActions, mapGetters } from "vuex";
 import { insuranceApiService } from "@/services/insurance-api-service";
 import Tooltip from "@/components/common/element/Tooltip.vue";
 import {ovnApiService} from "@/services/ovn-api-service";
-import moment from "moment";
+import {differenceInDays} from "@/utils/dates.js"
 
 export default {
     name: "InsuranceCard",
@@ -187,11 +187,9 @@ export default {
 
         payouts: function () {
             let data = this.payoutsData;
-            return data ? data.sort(
-                function(o1,o2){
-                    return moment(o2.date).isBefore(moment(o1.date)) ? -1 : moment(o2.date).isAfter(moment(o1.date)) ? 1 : 0;
-                }
-            ) : null;
+            return data
+                    ? [...data].sort((o1, o2) => differenceInDays(o2.date, o1.date))
+                    : null;
         },
 
         last30DayApy: function () {
@@ -249,11 +247,7 @@ export default {
             insuranceApiService.getPayouts(url)
             .then(data => {
                 console.log('Load payouts info for insurance card', data);
-                this.payoutsData = data.sort(
-                    function (o1, o2) {
-                        return moment(o1.date).isBefore(moment(o2.date)) ? -1 : moment(o1.date).isAfter(moment(o2.date)) ? 1 : 0;
-                    }
-                );
+                this.payoutsData = data.sort((o1, o2) => differenceInDays(o1.date, o2.date));
                 console.log('Sorted payouts info for insurance card', this.payoutsData)
             })
             .catch(e => {

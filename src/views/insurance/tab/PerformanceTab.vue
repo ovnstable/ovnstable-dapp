@@ -149,7 +149,6 @@ export default {
           this.refreshInsurance();
       },
       async refreshInsurance() {
-        console.log('InsuranceData: refreshInsurance');
         await this.refreshStrategyData();
       },
 

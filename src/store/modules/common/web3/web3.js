@@ -89,8 +89,6 @@ const actions = {
 
         let provider = await new Web3.providers.HttpProvider(rpcUrl);
         web3 = await new Web3(provider);
-        console.log('InitWeb3: Provider default');
-
         /*getters.provider.on("accountsChanged", (data) => {
             console.log("provider callback def accountsChanged", data);
         });
@@ -109,9 +107,6 @@ const actions = {
     async initCustomProvider({commit, dispatch, getters, rootState}, provider) {
 
         let web3 = await new Web3(provider);
-        console.log('InitWeb3: Provider custom');
-
-        console.log("initWeb3 Provider: ", rootState.network.networkName, getters.provider);
         dispatch('network/saveNetworkToLocalStore', rootState.network.networkName, {root: true});
 
 /*

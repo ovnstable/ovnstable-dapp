@@ -29,9 +29,6 @@ const actions = {
 
     async initOnboard({commit, dispatch, getters, rootState}) {
         let logo = await dispatch('getLogo');
-
-        console.log("Init new Onboard")
-
         let wallets = await dispatch('getMainWalletsConfig');
         let chains = await dispatch('getMainWalletsChains');
 
@@ -91,7 +88,7 @@ const actions = {
         });
 
         let walletName = localStorage.getItem('walletName');
-        console.log("walletConnect onboard before connect wallet: ", walletName)
+        // console.log("walletConnect onboard before connect wallet: ", walletName)
         let connectedWallets;
         if (walletName !== undefined && walletName && walletName !== 'undefined' && walletName !== 'null') {
             connectedWallets = await onboard.connectWallet({ autoSelect: { label: walletName, disableModals: true }});
@@ -99,10 +96,9 @@ const actions = {
             connectedWallets = await onboard.connectWallet();
         }
 
-        console.log("walletConnect onboard after connect wallet ", connectedWallets)
+        // console.log("walletConnect onboard after connect wallet ", connectedWallets)
 
         let wallet = connectedWallets[0];
-        console.log('initOnboard: wallet: ', wallet);
 
         if (!wallet) {
             localStorage.removeItem('walletName');
@@ -116,8 +112,6 @@ const actions = {
         await commit('web3/setIsProviderDefault', false, {root: true});
 
         if (rootState.web3.provider) {
-
-            console.log("====== Init inboard Provider callbacks ======")
             rootState.web3.provider.on('accountsChanged', async function (accounts) {
                 dispatch('accountChanged', accounts);
             });
@@ -128,12 +122,7 @@ const actions = {
             });
         }
 
-        console.log("Wallet, wallet label: ", wallet.label, wallet.label === 'WalletConnect');
-
         await dispatch('web3/initWeb3', null, {root: true}).then(async value => {
-            console.log("====== initOnboard Provider callback initWeb3 initWeb3 ======", wallet)
-            console.log("====== initOnboard Provider callback initWeb3 initWeb3 provider ======", rootState.web3, rootState.web3.isProviderDefault)
-
             if (!rootState.web3.isProviderDefault) {
                 commit('setWalletConnected', true);
 
@@ -145,7 +134,6 @@ const actions = {
                     commit('accountData/setUns', wallet.instance.cacheOptions.getDefaultUsername(), {root: true})
                 }
 
-                console.log("====== initOnboard Provider callback initWeb3 setAccount ======", wallet.address)
                 commit('accountData/setAccount', wallet.address, {root: true});
             }
 
@@ -156,8 +144,6 @@ const actions = {
     },
 
     async connectWallet({commit, dispatch, getters, rootState}) {
-        console.log("connectWallet")
-
         if (!getters.onboard) {
             await dispatch('initOnboard');
         }
@@ -167,7 +153,6 @@ const actions = {
 
             if (netId) {
                 if (getters.onboard) {
-                    console.log("connectWallet setChain:", netId);
                     await getters.onboard.setChain({ chainId: netId });
                 }
             }
@@ -185,7 +170,6 @@ const actions = {
 
         let walletName = localStorage.getItem('walletName');
         if (walletName !== undefined && walletName && walletName !== 'undefined') {
-            console.log("dappInitWalletConnect", getters.onboard, walletName);
             await getters.onboard.connectWallet({ autoSelect: { label: walletName, disableModals: true }});
         }
     },
@@ -198,14 +182,11 @@ const actions = {
             try {
 
                 const [primaryWallet] = getters.onboard.state.get().wallets
-                console.log('Disconnect wallet onboard: ', getters.onboard);
                 await getters.onboard.disconnectWallet({ label: primaryWallet.label });
                 localStorage.removeItem('walletName');
 
                 await dispatch('web3/initWeb3', null, {root: true}).then(value => {
                     commit('setWalletConnected', false);
-                    console.log('Wallet was disconnected');
-
                     dispatch('checkAccount');
                 });
             } catch (e) {
@@ -511,12 +492,10 @@ const actions = {
     },
 
     async checkAccount({commit, dispatch, getters, rootState}, account) {
-        console.log("checkAccount: ", account, getters.walletConnected)
-
         if (getters.walletConnected) {
             if (!account) {
-                console.log("Account not exist: ", rootState.web3)
-                console.log("Account not exist: ", rootState.web3.web3)
+                // console.log("Account not exist: ", rootState.web3)
+                // console.log("Account not exist: ", rootState.web3.web3)
                 try {
                     let accounts = await rootState.web3.web3.eth.getAccounts();
                     account = accounts[0];
@@ -530,7 +509,6 @@ const actions = {
                 }
             }
 
-            console.log("Account: ", account)
             commit('accountData/setAccount', account, {root: true});
 
             if (account) {

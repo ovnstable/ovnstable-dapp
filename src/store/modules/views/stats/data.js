@@ -145,7 +145,6 @@ const actions = {
                         logo: require('@/assets/currencies/stablecoins/' + element.id.tokenName + '.png')
                     }
                 );
-                console.log("Token name : ", element.id.tokenName);
             } catch (e) {
                 console.error("Error while adding stablecoin to list: " + e);
             }
@@ -159,8 +158,6 @@ const actions = {
         try {
             let appApiUrl = rootState.network.opApi;
             let collateralsTotal = (await axios.get(appApiUrl + '/insurance/collateral/total')).data;
-            console.log(collateralsTotal);
-
             collateralsTotal.sort((a,b) => b.netAssetValue * 1 - a.netAssetValue * 1);
             collateralsTotal = collateralsTotal.filter(el => el.netAssetValue > 0);
 
@@ -197,7 +194,6 @@ const actions = {
                       })
             }
 
-            console.log(resAssets)
             for (let value of resAssets.values()) {
                 result.push(value);
             }
@@ -249,9 +245,6 @@ const actions = {
         commit('setInsuranceTotalData', result);
     },
     async refreshStats({commit, dispatch, getters}){
-
-        console.log('StatsData: refreshStats');
-
         dispatch('refreshPayouts');
         dispatch('refreshCurrentTotalData');
         // dispatch('refreshTotalUsdPlus');

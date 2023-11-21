@@ -18,11 +18,7 @@ const getters = {
 const actions = {
 
     async refreshSupply({commit, dispatch, getters, rootState}) {
-
-        console.log('Supply: refreshSupply');
-
         let networkId = rootState.network.networkId;
-
         let resultSupply = {};
         let web3 = rootState.web3;
 

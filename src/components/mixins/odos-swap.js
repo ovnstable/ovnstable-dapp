@@ -345,7 +345,6 @@ export const odosSwap = {
             }
 
             this.isBalancesLoading = true;
-            console.log("Load tokens balances.", this.tokensToBalanceUpdate)
             if (!this.account) {
                 console.log("Balance not loaded, wallet not login", this.account);
                 this.isBalancesLoading = false;
@@ -361,7 +360,6 @@ export const odosSwap = {
            } catch (e) {
                 console.error("Error when load balance", e);
            } finally {
-               console.log("Load tokens balances success.")
                this.isBalancesLoading = false;
                if (!this.isFirstBalanceLoaded) {
                    this.isFirstBalanceLoaded = true;

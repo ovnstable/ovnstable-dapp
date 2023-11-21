@@ -49,14 +49,10 @@ export default {
     }),
 
     async created() {
-      console.log('Dapp created')
-
       try {
         let web3 = await new Web3(Web3.givenProvider);
-        console.log('InitWeb3: Provider custom');
         let networkID = await web3.eth.net.getId();
         networkID = networkID + '';
-        console.log("Load wallet from init dapp ", networkID);
         this.saveNetworkToLocalStore(networkID);
 
       } catch (e) {

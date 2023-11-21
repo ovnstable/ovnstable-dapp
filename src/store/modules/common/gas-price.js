@@ -54,12 +54,9 @@ const actions = {
     },
 
     async refreshGasPrice({commit, dispatch, getters, rootState}) {
-
         let networkId = rootState.network.networkId;
-
-        console.log("Getting gas price for network_id=" + networkId);
-
         let url;
+
         if (networkId === 137)
             url = "https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle";
         else if(networkId === 56)
@@ -83,8 +80,6 @@ const actions = {
                 gasPriceGwei = networkId === 10 ? 0.001 : 0.1; // Support hardcode value only for Arbitrum and Optimism
                 gasPriceWei = rootState.web3.web3.utils.toWei(gasPriceGwei + "", 'gwei');
             }
-
-            console.log(`Refresh GasPriceGwei: ${gasPriceGwei}, GasPriceWei: ${gasPriceWei}`);
 
             let priceStationValues = {
                 low: gasPriceGwei,

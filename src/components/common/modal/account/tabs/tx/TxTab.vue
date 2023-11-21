@@ -22,7 +22,7 @@
 import {mapActions, mapGetters} from "vuex";
 import TxCard from "@/components/common/modal/account/tabs/tx/component/TxCard";
 import TxListHeader from "@/components/common/modal/account/tabs/tx/component/TxListHeader";
-import moment from "moment";
+import dayjs from "dayjs";
 
 export default {
     name: "TxTab",
@@ -39,11 +39,7 @@ export default {
         ...mapGetters('transaction', ['transactions']),
 
         transactionsList: function () {
-            return [...this.transactions].sort(
-                function(o1,o2){
-                    return moment(o1.date).isBefore(moment(o2.date)) ? 1 : moment(o1.date).isAfter(moment(o2.date)) ? -1 : 0;
-                }
-            );
+            return [...this.transactions].sort((o1, o2) => dayjs(o2.date).diff(o1.date));
         },
     },
 

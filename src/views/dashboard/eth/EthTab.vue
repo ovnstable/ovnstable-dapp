@@ -157,7 +157,7 @@
 import Table from "@/components/dashboard/Table";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import LineChart from "@/components/widget/LineChart";
-import moment from "moment/moment";
+import dayjs from "dayjs";
 import { dashboardApiService } from '/src/services/dashboard-api-service';
 
 
@@ -337,7 +337,7 @@ export default {
                 };
 
                 [...clientData].reverse().forEach(item => {
-                    widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = item.closingBalance;
+                    widgetDataDict[dayjs(item.date).format('DD.MM.YYYY')] = item.closingBalance;
                 });
 
                 for (let key in widgetDataDict) {

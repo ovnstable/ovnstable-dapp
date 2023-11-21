@@ -84,7 +84,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import dayjs from "dayjs";
+import { unixTsToDateStr } from "@/utils/dates";
 import UsdPlus from "@/components/market/cards/hold/UsdPlus";
 import InsuranceCard from "@/components/insurance/cards/insurance/InsuranceCard";
 import Pool from "@/components/market/cards/pool/Pool.vue";
@@ -378,7 +378,7 @@ export default {
               .then(value => value.json())
               .then(value => {
                 this.avgApy = value;
-                this.avgApy.date =  dayjs(this.avgApy.date).format("DD MMM. ‘YY");
+                this.avgApy.date =  unixTsToDateStr(this.avgApy.date/1000,"DD MMM. ‘YY");
               }).catch(reason => {
                 console.log('Error get data: ' + reason);
               })

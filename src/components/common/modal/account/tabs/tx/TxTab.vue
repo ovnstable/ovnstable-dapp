@@ -22,7 +22,7 @@
 import {mapActions, mapGetters} from "vuex";
 import TxCard from "@/components/common/modal/account/tabs/tx/component/TxCard";
 import TxListHeader from "@/components/common/modal/account/tabs/tx/component/TxListHeader";
-import dayjs from "dayjs";
+import {differenceInDays} from "@/utils/dates.js"
 
 export default {
     name: "TxTab",
@@ -39,7 +39,7 @@ export default {
         ...mapGetters('transaction', ['transactions']),
 
         transactionsList: function () {
-            return [...this.transactions].sort((o1, o2) => dayjs(o2.date).diff(o1.date));
+            return [...this.transactions].sort((o1, o2) => differenceInDays(o2.date,o1.date));
         },
     },
 

@@ -64,7 +64,7 @@
 import {mapActions, mapGetters} from "vuex";
 
 import { dashboardApiService } from "@/services/dashboard-api-service";
-import dayjs from "dayjs";
+import { unixTsToDateStr } from "@/utils/dates";
 import EtsStrategyStatistic from "@/views/dashboard/tab/ets/EtsStrategyStatistic.vue";
 import EtsStrategyList from "@/views/dashboard/tab/ets/EtsStrategyList.vue";
 import StatisticListCard from "@/views/dashboard/tab/ets/StatisticListCard.vue";
@@ -313,12 +313,12 @@ export default {
       if (onlyType) {
         [...productData].reverse().forEach(item => {
           if (item.type === onlyType) {
-            widgetDataDict[dayjs(item.date).format('DD.MM.YYYY')] = item[propertyName];
+            widgetDataDict[unixTsToDateStr(item.date/1000,'DD.MM.YYYY')] = item[propertyName];
           }
         });
       } else {
         [...productData].reverse().forEach(item => {
-          widgetDataDict[dayjs(item.date).format('DD.MM.YYYY')] = item[propertyName];
+          widgetDataDict[unixTsToDateStr(item.date/1000,'DD.MM.YYYY')] = item[propertyName];
         });
 
       }
@@ -356,7 +356,7 @@ export default {
 
           // date
           if (i === 0) {
-            compoundData.firstDate = dayjs(payout.date).format('MMM D, YYYY');
+            compoundData.firstDate = unixTsToDateStr(payout.date/1000,'MMM D, YYYY');
           }
 
 

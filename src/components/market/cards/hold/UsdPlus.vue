@@ -118,9 +118,8 @@ import baseIcon from "@/assets/network/base.svg";
 import lineaIcon from "@/assets/network/linea.svg";
 import zksyncIcon from "@/assets/network/zk.svg";
 import bscIcon from "@/assets/network/bsc.svg";
-import {unixTsToDateStr} from "@/utils/dates.js"
 import {axios} from "@/plugins/http-axios";
-import dayjs from "dayjs";
+import {unixTsToDateStr} from "@/utils/dates";
 
 export default {
     name: "UsdPlus",
@@ -279,7 +278,7 @@ export default {
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;
-                    this.avgApy.date = dayjs(this.avgApy.date).format("DD MMM. ‘YY")
+                    this.avgApy.date = unixTsToDateStr(this.avgApy.date/1000,"DD MMM. ‘YY")
                 }).catch(reason => {
                     console.log('Error get data: ' + reason);
                 })

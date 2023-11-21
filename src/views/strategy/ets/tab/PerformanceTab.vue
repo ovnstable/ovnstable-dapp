@@ -273,7 +273,7 @@
                 <v-row class="info-row footer-row mt-6" justify="start" align="center">
                     <label class="card-info footer-label mt-2">Inception date</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value date mt-2">{{ lastPayoutData ? moment(lastPayoutData.payableDate).format('DD MMM YYYY') : null }}</label>
+                    <label class="card-info-value date mt-2">{{ lastPayoutData ? dayjs(lastPayoutData.payableDate).format('DD MMM YYYY') : null }}</label>
                 </v-row>
             </v-col>
         </v-row>
@@ -289,7 +289,7 @@ import EtsTable from "@/components/market/strategy/etsPayouts/EtsTable";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut";
 import ChartApy from "@/components/market/strategy/chart/ChartApy";
 import ChartTvl from "@/components/market/strategy/chart/ChartTvl";
-import moment from "moment/moment";
+import dayjs from "dayjs";
 
 export default {
     name: "PerformanceTab",
@@ -318,8 +318,8 @@ export default {
 
 
     computed: {
-        moment() {
-            return moment
+        dayjs() {
+            return dayjs
         },
         ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'baseConfig', 'lineaConfig', 'zkConfig', 'getParams']),
         ...mapGetters('marketData', ['etsStrategyData', 'etsApyData', 'etsTvlData', 'usdPlusApyData', 'compoundData']),

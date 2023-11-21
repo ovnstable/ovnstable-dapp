@@ -265,7 +265,7 @@ export default {
             console.log("lastData: ", labels && labels.length ? labels[0] : null);
 
             if (labels && labels.length) {
-                this.apyFirstDate = unixTsToDateStr(labels[0], "DD MMM. 'YY");
+                this.apyFirstDate = unixTsToDateStr(labels[0]/1000, "DD MMM. 'YY");
             }
 
             // let valuesUsdPlus = [];

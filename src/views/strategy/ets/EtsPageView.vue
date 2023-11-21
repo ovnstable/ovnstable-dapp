@@ -265,8 +265,7 @@ import RiskDisclosureModal from "@/components/market/modal/ets/RiskDisclosureMod
 import {mapActions, mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import PerformanceTab from "@/views/strategy/ets/tab/PerformanceTab";
-import dayjs from "dayjs";
-import {differenceInDays} from "@/utils/dates.js"
+import {differenceInDays,unixTsToDateStr} from "@/utils/dates.js"
 import {axios} from "@/plugins/http-axios";
 import loadJSON from "@/utils/http-utils";
 
@@ -551,7 +550,7 @@ export default {
           .then(value => value.json())
           .then(value => {
             avgApy = value;
-            avgApy.date = dayjs(avgApy.date).format("DD MMM. ‘YY");
+            avgApy.date = unixTsToDateStr(avgApy.date/1000,"DD MMM. ‘YY");
           }).catch(reason => {
             console.log('Error get data: ' + reason);
           })
@@ -560,7 +559,7 @@ export default {
           .then(value => value.json())
           .then(value => {
             avgApyStrategyMonth = value;
-            avgApyStrategyMonth.date = dayjs(avgApyStrategyMonth.date).format("DD MMM. ‘YY");
+            avgApyStrategyMonth.date = unixTsToDateStr(avgApyStrategyMonth.date/1000,"DD MMM. ‘YY");
           }).catch(reason => {
             console.log('Error get data: ' + reason);
           })
@@ -596,7 +595,7 @@ export default {
             };
 
             [...clientData].forEach(item => {
-              widgetDataDict[dayjs(item.date).format('DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
+              widgetDataDict[unixTsToDateStr(item.date/1000,'DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
             });
 
             for(let key in widgetDataDict) {
@@ -619,7 +618,7 @@ export default {
             };
 
             [...clientData].forEach(item => {
-              widgetTvlDataDict[dayjs(item.date).format('DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
+              widgetTvlDataDict[unixTsToDateStr(item.date/1000,'DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
             });
 
             for(let key in widgetTvlDataDict) {
@@ -682,7 +681,7 @@ export default {
                   let widgetDataDict = {};
 
                   [...clientData].reverse().forEach(item => {
-                    widgetDataDict[dayjs(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
+                    widgetDataDict[unixTsToDateStr(item.payableDate/1000,'DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
                   });
 
                   resultDataList = widgetDataDict;

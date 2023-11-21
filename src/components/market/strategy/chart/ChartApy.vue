@@ -138,7 +138,7 @@
 import {mapActions, mapGetters} from "vuex";
 import ApexCharts from 'apexcharts'
 import Tooltip from "@/components/common/element/Tooltip";
-import dayjs from "dayjs";
+import {unixTsToDateStr} from "@/utils/dates";
 
 export default {
     name: "ChartApy",
@@ -256,7 +256,7 @@ export default {
                     this.avgApy = value;
 
                     if (this.avgApy.date) {
-                        this.avgApy.date = dayjs(this.avgApy.date).format("DD MMM. ‘YY")
+                        this.avgApy.date = unixTsToDateStr(this.avgApy.date/1000,"DD MMM. ‘YY")
                     }
                 }).catch(reason => {
                     console.log('Error get data: ' + reason);

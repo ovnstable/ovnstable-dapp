@@ -1,6 +1,5 @@
 import {axios} from "@/plugins/http-axios";
-import { differenceInDays } from "@/utils/dates.js";
-import dayjs from "dayjs";
+import { differenceInDays,unixTsToDateStr} from "@/utils/dates.js";
 
 const state = {
     etsStrategyData: {},
@@ -97,7 +96,7 @@ const actions = {
                     .then(value => value.json())
                     .then(value => {
                         avgApy = value;
-                        avgApy.date = dayjs(avgApy.date).format("DD MMM. ‘YY");
+                        avgApy.date = unixTsToDateStr(avgApy.date/1000,"DD MMM. ‘YY");
                     }).catch(reason => {
                         console.log('Error get data: ' + reason);
                     })
@@ -106,7 +105,7 @@ const actions = {
                     .then(value => value.json())
                     .then(value => {
                         avgApyStrategyMonth = value;
-                        avgApyStrategyMonth.date = dayjs(avgApyStrategyMonth.date).format("DD MMM. ‘YY");
+                        avgApyStrategyMonth.date = unixTsToDateStr(avgApyStrategyMonth.date/1000,"DD MMM. ‘YY");
                     }).catch(reason => {
                         console.log('Error get data: ' + reason);
                     })
@@ -159,11 +158,11 @@ const actions = {
                                 accumulator = accumulator * (1 + payout.dailyProfit);
                                 payout.comp =  (accumulator * 100 / startValue - 100);
                                 payout.comp =  parseFloat(payout.comp ? payout.comp : 0.00).toFixed(3);
-                                widgetDataDict[dayjs(payout.payableDate).format('DD.MM.YYYY')] = payout.comp;
+                                widgetDataDict[unixTsToDateStr(payout.payableDate/1000,'DD.MM.YYYY')] = payout.comp;
 
                                 // date
                                 if (i === 0) {
-                                    compoundData.firstDate = dayjs(payout.payableDate).format('MMM D, YYYY');
+                                    compoundData.firstDate = unixTsToDateStr(payout.payableDate/1000,'MMM D, YYYY');
                                 }
 
 
@@ -225,7 +224,7 @@ const actions = {
                         };
 
                         [...clientData].forEach(item => {
-                            widgetTvlDataDict[dayjs(item.date).format('DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
+                            widgetTvlDataDict[unixTsToDateStr(item.date/1000,'DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
                         });
 
                         for(let key in widgetTvlDataDict) {
@@ -323,7 +322,7 @@ const actions = {
                         let widgetDataDict = {};
 
                         [...clientData].reverse().forEach(item => {
-                            widgetDataDict[dayjs(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
+                            widgetDataDict[unixTsToDateStr(item.payableDate/1000,'DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
                         });
 
                         resultDataList = widgetDataDict;

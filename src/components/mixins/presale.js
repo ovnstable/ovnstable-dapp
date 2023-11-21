@@ -200,9 +200,6 @@ export const presale = {
             return this.vestingTimestamp + (this.vestingDurationTimestamp);
         },
 
-        // vestingEndDate() {
-        //     return moment(this.vestingDurationTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
-        // },
         formattedSoftCap() {
             if (!this.softCap) {
                 return "000,000";

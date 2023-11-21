@@ -123,8 +123,7 @@
 /* eslint-disable no-unused-vars,no-undef */
 
 import { mapGetters } from "vuex";
-import moment from "moment";
-
+import {unixTsToDateStr} from "@/utils/dates.js";
 import ApexCharts from 'apexcharts'
 import Tooltip from "@/components/common/element/Tooltip";
 import { insuranceApiService } from "@/services/insurance-api-service";
@@ -266,8 +265,7 @@ export default {
             console.log("lastData: ", labels && labels.length ? labels[0] : null);
 
             if (labels && labels.length) {
-                // labels[0] = 07.10.2023 to DD MMM. ‘YY with moment
-                this.apyFirstDate = moment(labels[0], "DD.MM.YYYY").format("DD MMM. ‘YY");
+                this.apyFirstDate = unixTsToDateStr(labels[0], "DD MMM. 'YY");
             }
 
             // let valuesUsdPlus = [];

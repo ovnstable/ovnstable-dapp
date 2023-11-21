@@ -655,7 +655,6 @@ export const pool = {
             // todo move to backend
             if (this.pools && this.pools.length) {
                 // init pool at aggregator
-                console.log("Reverse pool init", this.pools);
                 for (let i = 0; i < this.pools.length; i++) {
                     let pool = this.pools[i];
                     this.initReversePools(pool);
@@ -780,13 +779,18 @@ export const pool = {
         },
 
         getSortedSecondPools(pools) {
-            console.log("Sorted second pools", pools);
-            let secondPools = pools.filter(pool => pool.promoted !== false || (pool.tvl < 300000 && pool.tvl > 100000 &&
-                (
-                    pool.address !== '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013' &&
-                    pool.address !== '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0' &&
-                    pool.address !== '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197'
-                )));
+            let secondPools = pools.filter(pool => {
+                const exception = [
+                    '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013',
+                    '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0',
+                    '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197'
+                ]
+                if (exception.includes(pool.address)) return pool
+                if (pool.promoted !== false) return pool
+                if (pool.tvl < 300000 && pool.tvl > 100000) return pool
+
+                return false
+            });
             secondPools = secondPools.sort((a, b) => {
                 if (a.apr !== b.apr) {
                     return b.apr - a.apr; // sort by APR number
@@ -832,9 +836,9 @@ export const pool = {
             // usd+ dola arb
             let poolAddress = pool.address;
 
+            console.log(poolAddress === "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013_convex", 'poolAddress')
             if (poolAddress === '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013_convex') {
                 let findedPool = this.pools.find(data=> data.address === "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013");
-                console.log("Reverse pool reverseData!", poolAddress, findedPool);
                 if (!pool) {
                     console.error('Pool not found for aggregation reverse', poolAddress);
                     return;
@@ -843,14 +847,11 @@ export const pool = {
                 pool.aggregators.push({
                     ...findedPool
                 })
-
-                console.log("Reverse pool reverseData! 2", pool);
                 return
             }
 
             if (poolAddress === '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197_Aerodrome') {
                 let findedPool = this.pools.find(data=> data.address === "0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197");
-                console.log("Reverse pool reverseData!", poolAddress, findedPool);
                 if (!pool) {
                     console.error('Pool not found for aggregation reverse', poolAddress);
                     return;
@@ -859,13 +860,10 @@ export const pool = {
                 pool.aggregators.push({
                     ...findedPool
                 })
-
-                console.log("Reverse pool reverseData! 2", pool);
             }
 
             if (poolAddress === '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0_Velodrome') {
                 let findedPool = this.pools.find(data=> data.address === "0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0");
-                console.log("Reverse pool reverseData!", poolAddress, findedPool);
                 if (!pool) {
                     console.error('Pool not found for aggregation reverse', poolAddress);
                     return;
@@ -874,8 +872,6 @@ export const pool = {
                 pool.aggregators.push({
                     ...findedPool
                 })
-
-                console.log("Reverse pool reverseData! 2", pool);
                 return;
             }
         },

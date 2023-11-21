@@ -558,7 +558,6 @@ export default {
                                     logo: require('@/assets/currencies/stablecoins/' + element.id.tokenName + '.png')
                                 }
                             );
-                            console.log("Token name : ", element.id.tokenName);
                         } catch (e) {
                             console.error("Error while adding stablecoin to list: " + e);
                         }

@@ -23,10 +23,8 @@ const actions = {
     async initReferralCode({commit, dispatch, getters, rootState}) {
 
         const exist = document.cookie.indexOf(`${KEY}=`) !== -1;
-        if (exist) {
-            console.log('REFERRAL_CODE already marked');
-        } else {
 
+        if (!exist) {
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             const referralValue = urlParams.get('referral');
@@ -40,8 +38,6 @@ const actions = {
                 document.cookie = `${KEY}=${referralValue}; expires=${expire};path=/;`;
 
                 console.log(`Setup [REFERRAL_CODE=${referralValue}] to cookies`);
-            } else {
-                console.log('Referral not found in URL');
             }
         }
     }

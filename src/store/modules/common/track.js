@@ -9,7 +9,6 @@ const getters = {
 const actions = {
 
     async trackClick({commit, dispatch, getters, rootState}, trackParams) {
-        console.log('Mock google tag click: ', trackParams);
         Vue.prototype.$gtm.trackEvent({
             event: trackParams.action,
             action: trackParams.action,

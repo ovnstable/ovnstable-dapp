@@ -41,8 +41,6 @@ const getters = {
 const actions = {
 
     async refreshInsurance({commit, dispatch, getters, rootState}) {
-        console.log('InsuranceData: refreshInsurance');
-
         let insuranceChainList = [
             // {
             //     chainName: 'polygon',
@@ -310,8 +308,6 @@ const actions = {
     },
 
     async refreshIsNeedRedemption({commit, dispatch, getters, rootState}) {
-        console.log('Insurance/redemptionCheck', rootState.network.networkName)
-
         let web3 = rootState.web3;
         let account = rootState.accountData.account;
 

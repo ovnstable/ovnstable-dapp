@@ -10909,8 +10909,6 @@ const chainContractsMap ={
 
 const actions = {
     async initContracts({commit, dispatch, getters, rootState}) {
-        console.log("contractAction/initContracts");
-        
         let web3 = rootState.web3.web3;
         let network = rootState.network.networkName;
         let contracts = {};

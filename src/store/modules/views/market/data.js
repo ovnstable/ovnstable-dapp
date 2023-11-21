@@ -41,8 +41,6 @@ const getters = {
 const actions = {
 
     async refreshMarket({commit, dispatch, getters, rootState}) {
-        console.log('MarketData: refreshMarket');
-
         dispatch('refreshStrategyData');
         dispatch('refreshClientData');
         dispatch('refreshUsdPlusPayoutsData');
@@ -55,7 +53,6 @@ const actions = {
             rootState.etsAction.etsList.map(async ets => {
 
                 let refreshParams = {contractAddress: ets.address, strategyName: ets.name, chain: ets.chain};
-                console.log("REFRESH refreshParams: ", refreshParams, ets)
                 let appApiUrl;
 
                 switch (refreshParams.chain) {
@@ -254,8 +251,6 @@ const actions = {
     },
 
     async refreshClientData({commit, dispatch, getters, rootState}) {
-        console.log('MarketData: refreshClientData');
-
         await Promise.all(
             rootState.etsAction.etsList.map(async ets => {
 
@@ -298,8 +293,6 @@ const actions = {
     },
 
     async refreshUsdPlusPayoutsData({commit, dispatch, getters, rootState}) {
-        console.log('MarketData: refreshUsdPlusPayoutsData');
-
         await Promise.all(
             ['polygon', 'bsc', 'optimism', 'arbitrum', 'zksync'].map(async network => {
 

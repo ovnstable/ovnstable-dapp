@@ -59,7 +59,6 @@ import {mapGetters} from "vuex";
 import ChartApy from "@/components/insurance/strategy/chart/ChartApy";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut.vue";
 import Table from "@/components/market/strategy/payouts/InsuranceTable.vue";
-import dayjs from "dayjs";
 import {differenceInDays} from "@/utils/dates.js"
 import {insuranceApiService} from "@/services/insurance-api-service";
 
@@ -199,10 +198,10 @@ export default {
                         payout.comp =  (accumulator * 100 / startValue - 100);
                         payout.comp =  parseFloat(payout.comp ? payout.comp : 0.00).toFixed(3);
 
-                        widgetDataDict[dayjs(payout.date).format('DD.MM.YYYY')] = payout.comp;
+                        widgetDataDict[this.$dayjs(payout.date).format('DD.MM.YYYY')] = payout.comp;
                         // date
                         if (i === 0) {
-                            compoundData.firstDate = dayjs(payout.date).format('MMM D, YYYY');
+                            compoundData.firstDate = this.$dayjs(payout.date).format('MMM D, YYYY');
                         }
 
                         // week

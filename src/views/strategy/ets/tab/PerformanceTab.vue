@@ -273,7 +273,7 @@
                 <v-row class="info-row footer-row mt-6" justify="start" align="center">
                     <label class="card-info footer-label mt-2">Inception date</label>
                     <v-spacer></v-spacer>
-                    <label class="card-info-value date mt-2">{{ lastPayoutData ? dayjs(lastPayoutData.payableDate).format('DD MMM YYYY') : null }}</label>
+                    <label class="card-info-value date mt-2">{{ lastPayoutDateComputed  }}</label>
                 </v-row>
             </v-col>
         </v-row>
@@ -289,7 +289,6 @@ import EtsTable from "@/components/market/strategy/etsPayouts/EtsTable";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut";
 import ChartApy from "@/components/market/strategy/chart/ChartApy";
 import ChartTvl from "@/components/market/strategy/chart/ChartTvl";
-import dayjs from "dayjs";
 
 export default {
     name: "PerformanceTab",
@@ -318,9 +317,6 @@ export default {
 
 
     computed: {
-        dayjs() {
-            return dayjs
-        },
         ...mapGetters('network', ['networkId', 'polygonConfig', 'bscConfig', 'opConfig', 'arConfig', 'baseConfig', 'lineaConfig', 'zkConfig', 'getParams']),
         ...mapGetters('marketData', ['etsStrategyData', 'etsApyData', 'etsTvlData', 'usdPlusApyData', 'compoundData']),
 
@@ -340,6 +336,10 @@ export default {
         },
         lastPayoutData: function () {
           return this.payoutsData && this.payoutsData.length ? this.payoutsData[this.payoutsData.length - 1] : null
+        },
+
+        lastPayoutDateComputed() {
+          return this.lastPayoutData ? this.$dayjs(this.lastPayoutData.payableDate).format('DD MMM YYYY') : null;
         },
 
         activeRateDist: function () {

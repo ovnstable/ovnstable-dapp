@@ -14,7 +14,7 @@ export default {
     data: () => ({
     }),
     created() {
-      console.log('App created');
+      console.log('App created 2');
       this.loadDeprecatedShow();
     },
     computed: {

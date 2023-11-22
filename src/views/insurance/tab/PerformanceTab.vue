@@ -1,66 +1,57 @@
 <template>
     <div>
-      <v-row v-if="!isAllDataLoaded">
-        <v-row align="center" justify="center" class="py-15">
-          <v-progress-circular
-              width="2"
-              size="24"
-              color="#8FA2B7"
-              indeterminate
-          ></v-progress-circular>
+        <v-row v-if="!isAllDataLoaded">
+            <v-row align="center" justify="center" class="py-15">
+                <v-progress-circular width="2" size="24" color="#8FA2B7" indeterminate></v-progress-circular>
+            </v-row>
         </v-row>
-      </v-row>
-      <v-row v-if="isAllDataLoaded" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-5'" justify="start" align="center">
-          <v-col class="info-card-body-bottom">
-              <ChartApy class="mx-n3" :data="insurancePerformanceData.optimism" :compound-data="insuranceCompoundData.optimism"/>
-          </v-col>
-      </v-row>
-
-      <v-row v-if="isAllDataLoaded" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'" justify="start" align="center">
-        <v-col class="info-card-body-bottom">
-          <v-row align="center" justify="start" class="ma-0">
-            <label class="section-title-label">Insurance payouts</label>
-          </v-row>
-
-          <v-row align="center" justify="center">
-            <v-col :cols="!$wu.isFull() ? 12 : 8">
-
-              <Table
-                  v-if="!$wu.isMobile()"
-                  :profit-label="' OVN per 1 INS'"
-                  :payout-data="payoutsData"/>
-
-
-              <Table
-                  v-else
-                  minimized
-                  :profit-label="' OVN per 1 INS'"
-                  :payout-data="payoutsData"/>
-
-              <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
-                <label class="table-scroll-label">scroll to see more</label>
-              </v-row>
+        <v-row v-if="isAllDataLoaded" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-5'"
+            justify="start" align="center">
+            <v-col class="info-card-body-bottom">
+                <ChartApy class="mx-n3" :data="insurancePerformanceData.optimism"
+                    :compound-data="insuranceCompoundData.optimism" />
             </v-col>
+        </v-row>
 
-            <v-col :cols="!$wu.isFull() ? 12 : 4">
-              <Doughnut :size="280" color="#3D8DFF" :last-date="lastPayoutDate"/>
+        <v-row v-if="isAllDataLoaded" class="ma-0 info-card-container" :class="$wu.isMobile() ? 'mt-5' : 'mt-4'"
+            justify="start" align="center">
+            <v-col class="info-card-body-bottom">
+                <v-row align="center" justify="start" class="ma-0">
+                    <label class="section-title-label">Insurance payouts</label>
+                </v-row>
+
+                <v-row align="center" justify="center">
+                    <v-col :cols="!$wu.isFull() ? 12 : 8">
+
+                        <Table v-if="!$wu.isMobile()" :profit-label="' OVN per 1 INS'" :payout-data="payoutsData" />
+
+
+                        <Table v-else minimized :profit-label="' OVN per 1 INS'" :payout-data="payoutsData" />
+
+                        <v-row justify="center" align="center" class="ma-0 mb-10 scroll-container">
+                            <label class="table-scroll-label">scroll to see more</label>
+                        </v-row>
+                    </v-col>
+
+                    <v-col :cols="!$wu.isFull() ? 12 : 4">
+                        <Doughnut :size="280" color="#3D8DFF" :last-date="lastPayoutDate" />
+                    </v-col>
+                </v-row>
             </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
+        </v-row>
 
-        <resize-observer @notify="$forceUpdate()"/>
+        <resize-observer @notify="$forceUpdate()" />
     </div>
 </template>
 
 <script>
 
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import ChartApy from "@/components/insurance/strategy/chart/ChartApy";
 import Doughnut from "@/components/market/strategy/payouts/Doughnut.vue";
 import Table from "@/components/market/strategy/payouts/InsuranceTable.vue";
-import {differenceInDays} from "@/utils/dates.js"
-import {insuranceApiService} from "@/services/insurance-api-service";
+import { difference } from "@/utils/dates.js"
+import { insuranceApiService } from "@/services/insurance-api-service";
 
 export default {
     name: "PerformanceTab",
@@ -82,7 +73,7 @@ export default {
         insuranceTvlData: {},
         insuranceRedemptionData: {},
         insuranceCompoundData: {},
-     }),
+    }),
 
     props: {
 
@@ -103,35 +94,35 @@ export default {
 
         activeRateApy: function () {
             return {
-              'rate-tab-button': this.rateTab === 1,
-              'rate-tab-button-in-active': this.rateTab !== 1,
+                'rate-tab-button': this.rateTab === 1,
+                'rate-tab-button-in-active': this.rateTab !== 1,
             }
         },
 
         activeRateDist: function () {
             return {
-              'rate-tab-button': this.rateTab === 2,
-              'rate-tab-button-in-active': this.rateTab !== 2,
+                'rate-tab-button': this.rateTab === 2,
+                'rate-tab-button-in-active': this.rateTab !== 2,
             }
         },
 
         activeRateTvl: function () {
             return {
-              'rate-tab-button': this.rateTab === 3,
-              'rate-tab-button-in-active': this.rateTab !== 3,
+                'rate-tab-button': this.rateTab === 3,
+                'rate-tab-button-in-active': this.rateTab !== 3,
             }
         },
 
-      lastPayoutDate: function () {
-        let data = this.payoutsData;
-        return data ? data.reverse()[0].date : null;
-      },
-      payouts: function () {
-        let data = this.payoutsData;
-        return data
-            ? [...data].sort((o1, o2) => differenceInDays(o2.date, o1.date))
-            : null;
-      }
+        lastPayoutDate: function () {
+            let data = this.payoutsData;
+            return data ? data.reverse()[0].date : null;
+        },
+        payouts: function () {
+            let data = this.payoutsData;
+            return data
+                ? [...data].sort((o1, o2) => difference(o1.date, o2.date))
+                : null;
+        }
     },
 
     mounted() {
@@ -143,140 +134,139 @@ export default {
             window.open(url, '_blank').focus();
         },
 
-      loadData() {
-          this.refreshInsurance();
-      },
-      async refreshInsurance() {
-        await this.refreshStrategyData();
-      },
+        loadData() {
+            this.refreshInsurance();
+        },
+        async refreshInsurance() {
+            await this.refreshStrategyData();
+        },
 
-      async refreshStrategyData() {
-        this.isStrategyDataLoading = true;
-        let strategyData;
+        async refreshStrategyData() {
+            this.isStrategyDataLoading = true;
+            let strategyData;
 
-         let url = "https://api.overnight.fi/optimism/usd+";
-         insuranceApiService.getPayouts(url)
-            .then(value => {
-                console.log('InsuranceData: refreshStrategyData', value)
-                this.payoutsData = value;
-                strategyData = value;
+            let url = "https://api.overnight.fi/optimism/usd+";
+            insuranceApiService.getPayouts(url)
+                .then(value => {
+                    console.log('InsuranceData: refreshStrategyData', value)
+                    this.payoutsData = value;
+                    strategyData = value;
 
-                strategyData.sort((o1, o2) => differenceInDays(o1.date, o2.date));
+                    strategyData.sort((o1, o2) => difference(o1.date, o2.date));
 
 
-                let clientData = strategyData;
+                    let clientData = strategyData;
 
-                let widgetDataDict = {};
-                let widgetData = {
-                    labels: [],
-                    datasets: [
-                        {
-                            fill: false,
-                            borderColor: '#1C95E7',
-                            data: [],
-                        }
-                    ]
-                };
+                    let widgetDataDict = {};
+                    let widgetData = {
+                        labels: [],
+                        datasets: [
+                            {
+                                fill: false,
+                                borderColor: '#1C95E7',
+                                data: [],
+                            }
+                        ]
+                    };
 
-                let startValue = 1;
-                let accumulator = startValue;
-                let accumulatorDay = startValue;
-                let accumulatorWeek = startValue;
-                let accumulatorMonth = startValue;
+                    let startValue = 1;
+                    let accumulator = startValue;
+                    let accumulatorDay = startValue;
+                    let accumulatorWeek = startValue;
+                    let accumulatorMonth = startValue;
 
-                let compoundData = {};
+                    let compoundData = {};
 
-                let clientDataPreferment = [...clientData];
-                let clientDataLengthCounter = clientDataPreferment.length;
-                for (let i = 0; i < clientDataPreferment.length; i++) {
-                    const payout = clientDataPreferment[i];
-                    try {
-                        console.log("InsuranceData: refreshStrategyData payout: ", payout);
+                    let clientDataPreferment = [...clientData];
+                    let clientDataLengthCounter = clientDataPreferment.length;
+                    for (let i = 0; i < clientDataPreferment.length; i++) {
+                        const payout = clientDataPreferment[i];
+                        try {
+                            console.log("InsuranceData: refreshStrategyData payout: ", payout);
 
-                        //all
-                        accumulator = accumulator * (1 + payout.dailyProfit);
-                        payout.comp =  (accumulator * 100 / startValue - 100);
-                        payout.comp =  parseFloat(payout.comp ? payout.comp : 0.00).toFixed(3);
+                            //all
+                            accumulator = accumulator * (1 + payout.dailyProfit);
+                            payout.comp = (accumulator * 100 / startValue - 100);
+                            payout.comp = parseFloat(payout.comp ? payout.comp : 0.00).toFixed(3);
 
-                        widgetDataDict[this.$dayjs(payout.date).format('DD.MM.YYYY')] = payout.comp;
-                        // date
-                        if (i === 0) {
-                            compoundData.firstDate = this.$dayjs(payout.date).format('MMM D, YYYY');
-                        }
-
-                        // week
-                        if (clientDataLengthCounter <= 7) {
-                            accumulatorWeek = accumulatorWeek * (1 + payout.dailyProfit);
-                        }
-
-                        // month
-                        if (clientDataLengthCounter <= 30) {
-                            accumulatorMonth = accumulatorMonth * (1 + payout.dailyProfit);
-                        }
-
-                        // day
-                        if (clientDataLengthCounter === 1) {
-                            // day
-                            accumulatorDay = accumulatorDay * (1 + payout.dailyProfit);
-                            let dayComp = (accumulatorDay * 100 / startValue - 100);
-
-                            compoundData.day = parseFloat(dayComp ? dayComp : 0.0).toFixed(3)
+                            widgetDataDict[this.$dayjs(payout.date).format('DD.MM.YYYY')] = payout.comp;
+                            // date
+                            if (i === 0) {
+                                compoundData.firstDate = this.$dayjs(payout.date).format('MMM D, YYYY');
+                            }
 
                             // week
-                            let weekComp = (accumulatorWeek * 100 / startValue - 100);
-                            compoundData.week = parseFloat(weekComp ? weekComp : 0.0).toFixed(3)
+                            if (clientDataLengthCounter <= 7) {
+                                accumulatorWeek = accumulatorWeek * (1 + payout.dailyProfit);
+                            }
 
                             // month
-                            let monthComp = (accumulatorMonth * 100 / startValue - 100);
-                            compoundData.month = parseFloat(monthComp ? monthComp : 0.0).toFixed(3)
+                            if (clientDataLengthCounter <= 30) {
+                                accumulatorMonth = accumulatorMonth * (1 + payout.dailyProfit);
+                            }
 
-                            compoundData.all = payout.comp // last payout comp
+                            // day
+                            if (clientDataLengthCounter === 1) {
+                                // day
+                                accumulatorDay = accumulatorDay * (1 + payout.dailyProfit);
+                                let dayComp = (accumulatorDay * 100 / startValue - 100);
 
-                            this.addInsuranceCompoundData({ name: 'optimism', data: compoundData});
+                                compoundData.day = parseFloat(dayComp ? dayComp : 0.0).toFixed(3)
+
+                                // week
+                                let weekComp = (accumulatorWeek * 100 / startValue - 100);
+                                compoundData.week = parseFloat(weekComp ? weekComp : 0.0).toFixed(3)
+
+                                // month
+                                let monthComp = (accumulatorMonth * 100 / startValue - 100);
+                                compoundData.month = parseFloat(monthComp ? monthComp : 0.0).toFixed(3)
+
+                                compoundData.all = payout.comp // last payout comp
+
+                                this.addInsuranceCompoundData({ name: 'optimism', data: compoundData });
+                            }
+
+                            clientDataLengthCounter--;
+                        } catch (e) {
+                            console.error("strategyData build Widget Data Dict insurance error:", e);
                         }
-
-                        clientDataLengthCounter--;
-                    } catch (e) {
-                        console.error("strategyData build Widget Data Dict insurance error:", e);
                     }
-                }
 
-                for (let key in widgetDataDict) {
-                    widgetData.labels.push(key);
-                    // widgetData.datasets[0].data.push(widgetDataDict[key] > 500 ? 500.00 : widgetDataDict[key]);
-                    widgetData.datasets[0].data.push(widgetDataDict[key]);
-                }
+                    for (let key in widgetDataDict) {
+                        widgetData.labels.push(key);
+                        // widgetData.datasets[0].data.push(widgetDataDict[key] > 500 ? 500.00 : widgetDataDict[key]);
+                        widgetData.datasets[0].data.push(widgetDataDict[key]);
+                    }
 
-                console.log("InsuranceData: refreshStrategyData widgetData: ", widgetData);
-                this.addInsurancePerformanceData({name: 'optimism', data: widgetData});
-                this.isStrategyDataLoading = false;
-            }).catch(reason => {
-              console.log('Error get data: ' + reason);
-                this.isStrategyDataLoading = false;
-            })
-      },
+                    console.log("InsuranceData: refreshStrategyData widgetData: ", widgetData);
+                    this.addInsurancePerformanceData({ name: 'optimism', data: widgetData });
+                    this.isStrategyDataLoading = false;
+                }).catch(reason => {
+                    console.log('Error get data: ' + reason);
+                    this.isStrategyDataLoading = false;
+                })
+        },
 
-      addInsuranceApyData(insuranceApyDataParams) {
-        this.insuranceApyData[insuranceApyDataParams.name] = insuranceApyDataParams.data;
-      },
+        addInsuranceApyData(insuranceApyDataParams) {
+            this.insuranceApyData[insuranceApyDataParams.name] = insuranceApyDataParams.data;
+        },
 
-      addInsurancePerformanceData(insurancePerformanceDataParams) {
-        this.insurancePerformanceData[insurancePerformanceDataParams.name] = insurancePerformanceDataParams.data;
-      },
+        addInsurancePerformanceData(insurancePerformanceDataParams) {
+            this.insurancePerformanceData[insurancePerformanceDataParams.name] = insurancePerformanceDataParams.data;
+        },
 
-      addInsuranceTvlData(insuranceTvlDataParams) {
-        this.insuranceTvlData[insuranceTvlDataParams.name] = insuranceTvlDataParams.data;
-      },
+        addInsuranceTvlData(insuranceTvlDataParams) {
+            this.insuranceTvlData[insuranceTvlDataParams.name] = insuranceTvlDataParams.data;
+        },
 
-      addInsuranceCompoundData(compoundDataParams) {
-          this.insuranceCompoundData[compoundDataParams.name] = compoundDataParams.data;
-      }
+        addInsuranceCompoundData(compoundDataParams) {
+            this.insuranceCompoundData[compoundDataParams.name] = compoundDataParams.data;
+        }
     }
 }
 </script>
 
 <style scoped>
-
 /* mobile */
 @media only screen and (max-width: 960px) {
     .section-title-label {
@@ -469,13 +459,12 @@ export default {
     }
 }
 
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 1300px),
+only screen and (min--moz-device-pixel-ratio: 2) and (min-width: 1300px),
+only screen and (-o-min-device-pixel-ratio: 2/1) and (min-width: 1300px),
+only screen and (min-device-pixel-ratio: 2) and (min-width: 1300px),
+only screen and (min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (min-resolution: 2dppx) and (min-width: 1300px) {
     .section-title-label {
         font-style: normal;
         font-weight: 400;

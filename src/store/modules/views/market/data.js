@@ -1,5 +1,5 @@
 import {axios} from "@/plugins/http-axios";
-import { differenceInDays,unixTsToDateStr} from "@/utils/dates.js";
+import { difference,unixTsToDateStr} from "@/utils/dates.js";
 
 const state = {
     etsStrategyData: {},
@@ -121,8 +121,8 @@ const actions = {
                         /* TODO: get onChain */
                         strategyData.targetHealthFactor = 1.2;
 
-                        strategyData.payoutItems.sort((o1, o2) => differenceInDays(o1.payableDate, o2.payableDate));
-                        strategyData.timeData.sort((o1, o2) => differenceInDays(o1.date, o2.date));
+                        strategyData.payoutItems.sort((o1, o2) => difference(o1.payableDate, o2.payableDate));
+                        strategyData.timeData.sort((o1, o2) => difference(o1.date, o2.date));
    
 
                         let clientData = strategyData.timeData;

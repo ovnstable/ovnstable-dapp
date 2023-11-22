@@ -1,4 +1,4 @@
-import { differenceInDays } from "@/utils/dates.js";
+import { difference } from "@/utils/dates.js";
 import dayjs from "dayjs";
 import {axios} from "@/plugins/http-axios";
 const duration = require('dayjs/plugin/duration')
@@ -141,7 +141,7 @@ const actions = {
 
                 strategyData.chainId = refreshParams.chain.chainId;
 
-                strategyData.payouts.sort((o1, o2) => differenceInDays(o1.payableDate, o2.payableDate));
+                strategyData.payouts.sort((o1, o2) => difference(o1.payableDate, o2.payableDate));
                 let clientData = strategyData.payouts;
 
                 let widgetDataDict = {};

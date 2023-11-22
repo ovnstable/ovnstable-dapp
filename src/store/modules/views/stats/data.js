@@ -1,5 +1,5 @@
 import {axios} from "@/plugins/http-axios";
-import moment from "moment";
+import { unixTsToDateStr } from "@/utils/dates";
 import * as numberUtils from '@/utils/number-utils';
 
 const state = {
@@ -17,7 +17,6 @@ const state = {
 
     payoutsTvlData: {},
     totalUsdPlusValue: null,
-    // totalUsdPlusProfit: null,
 };
 
 const getters = {
@@ -61,10 +60,6 @@ const getters = {
     totalUsdPlusValue(state) {
         return state.totalUsdPlusValue;
     },
-
-    // totalUsdPlusProfit(state) {
-    //     return state.totalUsdPlusProfit;
-    // },
 };
 
 const actions = {
@@ -184,7 +179,6 @@ const actions = {
                         resAssets.set(colleteral.id.tokenName, resAsset);
                         continue;
                     }
-//
                 resAssets.set(colleteral.id.tokenName,
                       {
                           label: colleteral.id.tokenName,
@@ -247,8 +241,6 @@ const actions = {
     async refreshStats({commit, dispatch, getters}){
         dispatch('refreshPayouts');
         dispatch('refreshCurrentTotalData');
-        // dispatch('refreshTotalUsdPlus');
-        // dispatch('refreshTotalUsdPlusProfit');
         dispatch('refreshStablecoinData');
         dispatch('refreshInsuranceAssetData');
         dispatch('refreshInsuranceTotalData');
@@ -277,7 +269,7 @@ const actions = {
                 };
 
                 [...clientData].reverse().forEach(item => {
-                    widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
+                    widgetDataDict[unixTsToDateStr(item.payableDate/1000,'DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
                 });
 
                 commit('setPayoutsApyDataDict', widgetDataDict);
@@ -302,7 +294,7 @@ const actions = {
                 };
 
                 [...clientData].reverse().forEach(item => {
-                    widgetDataDictTvl[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.totalUsdc ? item.totalUsdc : 0.0).toFixed(2);
+                    widgetDataDictTvl[unixTsToDateStr(item.payableDate/1000,'DD.MM.YYYY')] = parseFloat(item.totalUsdc ? item.totalUsdc : 0.0).toFixed(2);
                 });
 
                 for(let key in widgetDataDictTvl) {
@@ -315,30 +307,6 @@ const actions = {
 
             })
     },
-
-    // async refreshTotalUsdPlus({commit, dispatch, getters, rootState}) {
-    //     commit('statsUI/setLoadingTotalUsdPlus', true, { root: true });
-    //
-    //     let appApiUrl = rootState.network.appApiUrl;
-    //
-    //     let usdPlusValue = (await axios.get(appApiUrl + '/dapp/getTotalUsdPlusValue')).data;
-    //     commit('setTotalUsdPlusValue', usdPlusValue);
-    //
-    //     commit('statsUI/setLoadingTotalUsdPlus', false, { root: true });
-    //
-    // },
-
-    // async refreshTotalUsdPlusProfit({commit, dispatch, getters, rootState}) {
-    //     commit('statsUI/setLoadingTotalUsdPlus', true, { root: true });
-    //
-    //     let appApiUrl = rootState.network.appApiUrl;
-    //
-    //     let usdPlusProfit = (await axios.get(appApiUrl + '/dapp/getTotalUsdPlusProfit')).data;
-    //     commit('setTotalUsdPlusProfit', usdPlusProfit);
-    //
-    //     commit('statsUI/setLoadingTotalUsdPlus', false, { root: true });
-    //
-    // },
 
 };
 
@@ -400,10 +368,3 @@ export default {
     actions,
     mutations
 };
-
-
-function getInsuranceColateralFromBackend() {
-    return [
-
-    ]
-}

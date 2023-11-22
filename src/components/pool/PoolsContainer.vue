@@ -107,7 +107,6 @@ import PoolFilter from "@/components/pool/PoolFilter.vue";
 import PoolTable from "@/components/pool/PoolTable.vue";
 import {pool} from "@/components/mixins/pool";
 
-const moment = require('moment');
 
 export default {
     name: "PoolsContainer",
@@ -298,8 +297,8 @@ export default {
                 return null;
             }
 
-            const lastUpdateMoment = moment.utc(lastUpdateDate);
-            const now = moment.utc();
+            const lastUpdateMoment = this.$dayjs.utc(lastUpdateDate);
+            const now = this.$dayjs.utc();    
             return now.diff(lastUpdateMoment, 'minutes');
         }
     },

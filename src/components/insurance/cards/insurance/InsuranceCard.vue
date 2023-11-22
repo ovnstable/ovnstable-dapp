@@ -1,19 +1,21 @@
 <template>
     <v-row class="card-container" v-on:click.prevent @click="openInsurance">
         <v-col cols="12" align-self="start">
-            <v-row class="d-flex flex-row align-center header-row" justify="center" :style="{'--card-background': getBgColor()}">
+            <v-row class="d-flex flex-row align-center header-row" justify="center"
+                :style="{ '--card-background': getBgColor() }">
                 <span class="currency ml-5">
-                    <v-img :src="require('@/assets/currencies/insurance/insurance_' + getParams(networkId).networkName + '.svg')"/>
+                    <v-img
+                        :src="require('@/assets/currencies/insurance/insurance_' + getParams(networkId).networkName + '.svg')" />
                 </span>
                 <v-row class="d-flex flex-column align-start mr-3 ml-8">
                     <v-row class="d-flex" align="center">
                         <label class="card-title">
-                          Insurance
+                            Insurance
                         </label>
                     </v-row>
                     <v-row class="d-flex" align="center">
                         <label class="card-title">
-                          ON optimism
+                            ON optimism
                         </label>
                     </v-row>
                     <v-row class="d-flex mt-4">
@@ -21,14 +23,14 @@
                             {{ apyData ? $utils.formatMoneyComma(last30DayApy, 0) + '%' : '—' }}
                         </label>
                         <label class="apy ml-3">
-                          30-DAY APY
+                            30-DAY APY
                         </label>
                     </v-row>
                 </v-row>
             </v-row>
 
             <v-container class="mt-6">
-<!--                <v-row class="ma-0 mb-8 box">
+                <!--                <v-row class="ma-0 mb-8 box">
                     <v-col cols="12">
 
                       <v-row class="ma-0 d-flex justify-space-between info-container">
@@ -67,9 +69,8 @@
                         {{ (apyData && apyData.coverage) ? ($utils.formatMoneyComma(apyData.coverage, 2) + '%') : '—' }}
                     </label>
                     <div class="tooltip-info">
-                        <Tooltip :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)"
-                                 :maxWidth="300"
-                                 text="% of insured funds on chain with Insurance"/>
+                        <Tooltip :size="$wu.isFull() ? 18 : ($wu.isTablet() ? 16 : 14)" :maxWidth="300"
+                            text="% of insured funds on chain with Insurance" />
                     </div>
                 </v-row>
 
@@ -84,11 +85,12 @@
             <v-container :class="$wu.isFull() ? 'mb-6' : 'mb-6'">
                 <v-row class="d-flex ma-0" align="center">
                     <label class="your-deposit">
-                      Your deposit
+                        Your deposit
                     </label>
                     <v-spacer></v-spacer>
                     <label class="your-deposit" :class="dataHidden ? 'hidden-label' : ''">
-                        {{ dataHidden ? '' : (this.insuranceBalance.optimism && this.insuranceBalance.optimism > 0) ? ('$' + $utils.formatMoneyComma((this.insuranceBalance.optimism * this.ovnPrice), 2)) : "—"  }}
+                        {{ dataHidden ? '' : (this.insuranceBalance.optimism && this.insuranceBalance.optimism > 0) ? ('$' +
+                            $utils.formatMoneyComma((this.insuranceBalance.optimism * this.ovnPrice), 2)) : "—" }}
                     </label>
                     <label class="your-deposit ml-1">
                         <v-icon color="var(--disabled-value)">
@@ -127,35 +129,30 @@
                 </v-row>
 
                 <v-row class="ma-0 pt-4" justify="center" align="center">
-                    <v-btn
-                        x-large
-                        width="90%"
-                        class="button btn-outlined"
-                        height="40px"
-                        outlined
+                    <v-btn x-large width="90%" class="button btn-outlined" height="40px" outlined
                         @click.stop="goToBridge()">
                         BRIDGE OVN
                     </v-btn>
                 </v-row>
             </v-container>
 
-<!--            <v-row class="footer-row d-flex align-center justify-center" @click.stop="openInsurance">
+            <!--            <v-row class="footer-row d-flex align-center justify-center" @click.stop="openInsurance">
                 <label class="footer-link">View OVN Insurance performance</label>
                 <img class="open-icon ml-1" src="@/assets/icon/open-in-new.svg">
             </v-row>-->
         </v-col>
 
-        <resize-observer @notify="$forceUpdate()"/>
+        <resize-observer @notify="$forceUpdate()" />
     </v-row>
 </template>
 
 <script>
 
-import {mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { insuranceApiService } from "@/services/insurance-api-service";
 import Tooltip from "@/components/common/element/Tooltip.vue";
-import {ovnApiService} from "@/services/ovn-api-service";
-import moment from "moment";
+import { ovnApiService } from "@/services/ovn-api-service";
+import { difference } from "@/utils/dates.js"
 
 export default {
     name: "InsuranceCard",
@@ -179,19 +176,15 @@ export default {
 
     computed: {
         ...mapGetters("accountData", ["insuranceBalance"]),
-        // ...mapGetters("supplyData", ["totalInsuranceSupply"]),
-        // ...mapGetters("statsData", ["totalUsdPlusValue"]),
         ...mapGetters("insuranceData", ['insuranceRedemptionData']),
         ...mapGetters("network", ["appApiUrl", "networkId", "networkName", "getParams"]),
         ...mapGetters('magicEye', ['dataHidden']),
 
         payouts: function () {
             let data = this.payoutsData;
-            return data ? data.sort(
-                function(o1,o2){
-                    return moment(o2.date).isBefore(moment(o1.date)) ? -1 : moment(o2.date).isAfter(moment(o1.date)) ? 1 : 0;
-                }
-            ) : null;
+            return data
+                ? [...data].sort((o1, o2) => difference(o1.date, o2.date))
+                : null;
         },
 
         last30DayApy: function () {
@@ -233,32 +226,28 @@ export default {
 
             let url = "https://api.overnight.fi/optimism/usd+";
             insuranceApiService.getApyInfo(url)
-            .then(data => {
-                console.log('Load avg apy info for insurance card', data);
-                this.apyData = data
-                this.isLoaded = true;
-            })
-            .catch(e => {
-                console.error('Error load avg apy info for insurance card', e);
-                this.isLoaded = true;
-            })
+                .then(data => {
+                    console.log('Load avg apy info for insurance card', data);
+                    this.apyData = data
+                    this.isLoaded = true;
+                })
+                .catch(e => {
+                    console.error('Error load avg apy info for insurance card', e);
+                    this.isLoaded = true;
+                })
 
         },
         loadPayouts() {
             let url = "https://api.overnight.fi/optimism/usd+";
             insuranceApiService.getPayouts(url)
-            .then(data => {
-                console.log('Load payouts info for insurance card', data);
-                this.payoutsData = data.sort(
-                    function (o1, o2) {
-                        return moment(o1.date).isBefore(moment(o2.date)) ? -1 : moment(o1.date).isAfter(moment(o2.date)) ? 1 : 0;
-                    }
-                );
-                console.log('Sorted payouts info for insurance card', this.payoutsData)
-            })
-            .catch(e => {
-                console.error('Error load payouts info for insurance card', e);
-            })
+                .then(data => {
+                    console.log('Load payouts info for insurance card', data);
+                    this.payoutsData = data.sort((o1, o2) => difference(o1.date, o2.date));
+                    console.log('Sorted payouts info for insurance card', this.payoutsData)
+                })
+                .catch(e => {
+                    console.error('Error load payouts info for insurance card', e);
+                })
 
         },
 
@@ -289,7 +278,6 @@ export default {
 </script>
 
 <style scoped>
-
 /* mobile */
 @media only screen and (max-width: 960px) {
     .button {
@@ -325,8 +313,7 @@ export default {
         height: 100px !important;
     }
 
-    .card-container {
-    }
+    .card-container {}
 
     .card-title {
         font-style: normal;
@@ -592,13 +579,12 @@ export default {
     }
 }
 
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 1300px),
+only screen and (min--moz-device-pixel-ratio: 2) and (min-width: 1300px),
+only screen and (-o-min-device-pixel-ratio: 2/1) and (min-width: 1300px),
+only screen and (min-device-pixel-ratio: 2) and (min-width: 1300px),
+only screen and (min-resolution: 192dpi) and (min-width: 1300px),
+only screen and (min-resolution: 2dppx) and (min-width: 1300px) {
     .card-title {
         font-style: normal;
         font-weight: 600;
@@ -816,32 +802,33 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     border-top: 1px solid var(--main-border) !important;
 }
 
-.card-info-label, .card-info-value {
+.card-info-label,
+.card-info-value {
     font-family: 'Roboto', sans-serif;
     color: var(--main-gray-text);
 }
 
 .card-about-label {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 18px;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
 }
 
 .tooltip-info {
-  position: absolute;
-  right: -4px;
-  top: 10px;
+    position: absolute;
+    right: -4px;
+    top: 10px;
 }
 
 .value-info {
-  padding-right: 15px;
+    padding-right: 15px;
 }
 
 .info-container {
-  position: relative;
+    position: relative;
 }
 </style>

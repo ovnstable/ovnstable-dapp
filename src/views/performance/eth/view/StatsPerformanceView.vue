@@ -191,7 +191,6 @@ import Doughnut from "@/components/market/strategy/payouts/Doughnut";
 import {mapActions, mapGetters} from "vuex";
 import LineChartApy from "@/components/stats/widget/LineChartApy";
 import LineChartTvl from "@/components/stats/widget/LineChartTvl";
-import moment from "moment/moment";
 import {payoutsApiService} from "@/services/payouts-api-service";
 import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
@@ -396,7 +395,7 @@ export default {
                     };
 
                     [...clientData].reverse().forEach(item => {
-                        widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
+                        widgetDataDict[this.$dayjs(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
                     });
 
                     this.payoutsApyDataDict = widgetDataDict;
@@ -421,7 +420,7 @@ export default {
                     };
 
                     [...clientData].reverse().forEach(item => {
-                        widgetDataDictTvl[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.totalUsdc ? item.totalUsdc : 0.0).toFixed(2);
+                        widgetDataDictTvl[this.$dayjs(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.totalUsdc ? item.totalUsdc : 0.0).toFixed(2);
                     });
 
                     for (let key in widgetDataDictTvl) {

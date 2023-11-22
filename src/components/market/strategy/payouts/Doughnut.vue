@@ -127,14 +127,14 @@ export default {
         },
 
         formatDate(date) {
-            return this.$moment.utc(date).format('DD.MM.YY');
+            return this.$dayjs.utc(date).format('DD.MM.YY');
         },
 
         getHours() {
             if (this.lastDate) {
-                let now = this.$moment.utc(new Date());
-                let lastPayoutDateTime = this.$moment.utc(this.lastDate);
-                let duration = this.$moment.duration(now.diff(lastPayoutDateTime));
+                let now = this.$dayjs.utc(new Date());
+                let lastPayoutDateTime = this.$dayjs.utc(this.lastDate);
+                let duration = this.$dayjs.duration(now.diff(lastPayoutDateTime));
 
                 return duration.asHours();
             } else {

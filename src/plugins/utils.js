@@ -1,8 +1,7 @@
 import BN from "bn.js";
-
+import dayjs from "dayjs";
 
 let accounting = require("accounting-js")
-const dayjs = require("dayjs")
 
 let accountingEightConfig = {
     symbol: "",

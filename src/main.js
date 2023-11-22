@@ -10,6 +10,7 @@ import vuetify from './plugins/vuetify'
 import router from './router/index'
 import {axios} from './plugins/http-axios';
 import dayjs from "dayjs";
+import utc from 'dayjs/plugin/utc';
 import VueGtm from '@gtm-support/vue2-gtm';
 import VueYandexMetrika from 'vue-yandex-metrika'
 import Donut from 'vue-css-donut-chart';
@@ -21,12 +22,12 @@ import { CaptureConsole } from '@sentry/integrations';
 import { BrowserTracing } from "@sentry/tracing";
 import Web3 from "web3";
 
-var utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
+
 
 
 // global emit
 export const bus = new Vue();
+dayjs.extend(utc)
 Vue.prototype.$bus = bus;
 
 Vue.use(Vuex)

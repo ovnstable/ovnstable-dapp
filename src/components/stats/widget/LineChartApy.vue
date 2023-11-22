@@ -135,7 +135,6 @@
 
 import {mapGetters} from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
-import {unixTsToDateStr} from "@/utils/dates";
 import ApexCharts from 'apexcharts'
 import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
@@ -264,7 +263,7 @@ export default {
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;
-                    this.avgApy.date = unixTsToDateStr(this.avgApy.date/1000,"DD MMM. ‘YY")
+                    this.avgApy.date = this.$dayjs(this.avgApy.date).format("DD MMM. ‘YY")
                     this.redraw();
                 }).catch(reason => {
                     console.log('Error get data: ' + reason);

@@ -1,7 +1,8 @@
 import BN from "bn.js";
 
+
 let accounting = require("accounting-js")
-let moment = require("moment");
+const dayjs = require("dayjs")
 
 let accountingEightConfig = {
     symbol: "",
@@ -182,7 +183,7 @@ export default {
     },
 
     formatDate(date, pattern){
-        return moment(date, pattern, true)
+        return dayjs(date).format(pattern)
     },
 
     fromE18: (value) => new BN(value.toString()).divRound(new BN(10).pow(new BN(18))).toString(),

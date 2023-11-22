@@ -330,27 +330,6 @@ export default {
             }
         },
 
-        // async loadTotalUsdPlus() {
-        //     let usdPlusValue = (await axios.get(this.networkParams.appApiUrl + '/dapp/getTotalUsdPlusValue')).data;
-        //     this.totalUsdPlusValue = usdPlusValue
-        // },
-
-        // async getUsdPlusAvgMonthApy() {
-        //     let fetchOptions = {
-        //         headers: {
-        //             "Access-Control-Allow-Origin": this.networkParams.appApiUrl
-        //         }
-        //     };
-        //
-        //     await fetch(this.networkParams.appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
-        //         .then(value => value.json())
-        //         .then(value => {
-        //             this.avgApy = value;
-        //             this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
-        //         }).catch(reason => {
-        //             console.log('Error get data: ' + reason);
-        //         })
-        // },
     }
 };
 </script>

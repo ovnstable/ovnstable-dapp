@@ -31,7 +31,7 @@
                        </div>
 
                        <div v-else class="pool-platform-name">
-                           {{pool.platform}}
+                          {{ pool.platform === "Shekel" ? "Shekelswap": pool.platform }}
                        </div>
 
                        <div v-if="!$wu.isMobile()"

@@ -117,15 +117,14 @@ export default {
         openOnScan(item) {
             let url = this.explorerUrl + "tx/" + item.transactionHash;
             window.open(url, '_blank').focus();
-
         },
 
         formatDate(date) {
-            return this.$moment.utc(date).format('DD.MM.YYYY');
+            return this.$dayjs.utc(date).format('DD.MM.YYYY');
         },
 
         formatTime(date) {
-            return this.$moment.utc(date).format('HH:mm');
+            return this.$dayjs.utc(date).format('HH:mm');
         },
 
         shortHash(s) {

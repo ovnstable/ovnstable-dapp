@@ -141,11 +141,11 @@ export default {
         },
 
         formatDate(date) {
-            return this.$moment.utc(date).format('DD.MM.YYYY');
+            return this.$dayjs.utc(date).format('DD.MM.YYYY');
         },
 
         formatTime(date) {
-            return this.$moment.utc(date).format('HH:mm');
+            return this.$dayjs.utc(date).format('HH:mm');
         },
 
         shortHash(s) {

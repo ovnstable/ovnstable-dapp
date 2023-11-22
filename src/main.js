@@ -9,19 +9,21 @@ import abiDecoder from "./plugins/abiDecoder";
 import vuetify from './plugins/vuetify'
 import router from './router/index'
 import {axios} from './plugins/http-axios';
-import moment from 'moment';
+import dayjs from "dayjs";
 import VueGtm from '@gtm-support/vue2-gtm';
 import VueYandexMetrika from 'vue-yandex-metrika'
 import Donut from 'vue-css-donut-chart';
 import 'vue-css-donut-chart/dist/vcdonut.css';
 import 'vue-resize/dist/vue-resize.css'
 import {ResizeObserver} from 'vue-resize'
-
 import * as Sentry from "@sentry/vue";
 import { CaptureConsole } from '@sentry/integrations';
 import { BrowserTracing } from "@sentry/tracing";
-
 import Web3 from "web3";
+
+var utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
+
 
 // global emit
 export const bus = new Vue();
@@ -29,7 +31,7 @@ Vue.prototype.$bus = bus;
 
 Vue.use(Vuex)
 
-Vue.prototype.$moment = moment;
+Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$utils = utils;
 Vue.prototype.$wu = wu;
 Vue.prototype.$colorUtils = colorUtils;

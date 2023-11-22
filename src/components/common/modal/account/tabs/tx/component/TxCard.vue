@@ -238,11 +238,11 @@ export default {
         ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
 
         formatDate(date) {
-            return this.$moment.utc(date).format('DD.MM.YYYY');
+            return this.$dayjs.utc(date).format('DD.MM.YYYY');
         },
 
         formatTime(date) {
-            return this.$moment.utc(date).format('HH:mm');
+            return this.$dayjs.utc(date).format('HH:mm');
         },
 
         switchCard() {

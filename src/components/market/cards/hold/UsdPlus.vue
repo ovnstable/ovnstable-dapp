@@ -118,8 +118,8 @@ import baseIcon from "@/assets/network/base.svg";
 import lineaIcon from "@/assets/network/linea.svg";
 import zksyncIcon from "@/assets/network/zk.svg";
 import bscIcon from "@/assets/network/bsc.svg";
-import moment from "moment";
 import {axios} from "@/plugins/http-axios";
+import {unixTsToDateStr} from "@/utils/dates";
 
 export default {
     name: "UsdPlus",
@@ -278,7 +278,7 @@ export default {
                 .then(value => value.json())
                 .then(value => {
                     this.avgApy = value;
-                    this.avgApy.date = moment(this.avgApy.date).format("DD MMM. ‘YY");
+                    this.avgApy.date = unixTsToDateStr(this.avgApy.date/1000,"DD MMM. ‘YY")
                 }).catch(reason => {
                     console.log('Error get data: ' + reason);
                 })

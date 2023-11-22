@@ -394,7 +394,6 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import LineChart from "@/components/widget/LineChart";
 import EthTab from "@/views/dashboard/eth/EthTab.vue";
 import {axios} from "@/plugins/http-axios";
-import moment from "moment/moment";
 import Tooltip from "@/components/common/element/Tooltip";
 
 export default {
@@ -621,7 +620,7 @@ export default {
         };
 
         [...clientData].reverse().forEach(item => {
-          widgetDataDict[moment(item.date).format('DD.MM.YYYY')] = item.closingBalance;
+          widgetDataDict[this.$dayjs(item.date).format('DD.MM.YYYY')] = item.closingBalance;
         });
 
         for (let key in widgetDataDict) {

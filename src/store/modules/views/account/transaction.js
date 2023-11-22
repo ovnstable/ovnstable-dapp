@@ -1,4 +1,5 @@
-import moment from "moment";
+import dayjs from "dayjs";
+import {getUnixTsNow} from "@/utils/dates.js"
 
 const state = {
     transactions: [],
@@ -14,7 +15,7 @@ const getters = {
 const actions = {
 
     async putTransaction({commit, dispatch, getters, rootState}, tx) {
-        tx.date = moment.utc(new Date());
+        tx.date = getUnixTsNow();
         tx.pending = true;
         tx.isError = false;
         tx.chain = rootState.network.networkId;
@@ -55,7 +56,7 @@ const actions = {
                     receipt.cancel = false;
                     return receipt;
                   } else {
-                    let minutes = moment.duration(moment.utc(new Date()).diff(transaction.date)).asMinutes();
+                    let minutes = dayjs.duration(getUnixTsNow().diff(dayjs(transaction.date))).asMinutes();
 
                     if (minutes > 10) {
                       receipt = { transactionHash: transaction.hash, cancel: true };

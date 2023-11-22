@@ -1,6 +1,6 @@
 import {mapActions, mapGetters} from "vuex";
-import moment from "moment/moment";
 import loadJSON from "@/utils/http-utils";
+import { unixTsToDateStr, differenceInDays } from "@/utils/dates";
 import {balanceApiService} from "@/services/balance-api-service";
 import {pool} from "@/components/mixins/pool";
 
@@ -180,16 +180,16 @@ export const presale = {
         },
 
         presaleStartDate() {
-            return moment(this.presaleTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
+            return unixTsToDateStr(this.presaleTimestamp / 1000, 'MMMM DD, YYYY hh:mm [UTC]');
         },
         presaleEndDate() {
-            return moment(this.presaleEndTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
+            return unixTsToDateStr(this.presaleEndTimestamp / 1000, 'MMMM DD, YYYY hh:mm [UTC]');
         },
         differentdDysBeetwinStartAndEndPresale() {
-            return moment(this.presaleEndTimestamp).diff(moment(this.presaleTimestamp), 'days') + 1;
+            return differenceInDays(this.presaleEndTimestamp, this.presaleTimestamp) + 1
         },
         vestingStartDate() {
-            return moment(this.vestingTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
+            return unixTsToDateStr(this.vestingTimestamp / 1000, 'MMMM DD, YYYY hh:mm [UTC]');
         },
 
         vestingEndTimestamp() {
@@ -200,9 +200,6 @@ export const presale = {
             return this.vestingTimestamp + (this.vestingDurationTimestamp);
         },
 
-        // vestingEndDate() {
-        //     return moment(this.vestingDurationTimestamp).utc().format('MMMM DD, YYYY hh:mm [UTC]');
-        // },
         formattedSoftCap() {
             if (!this.softCap) {
                 return "000,000";

@@ -1,5 +1,8 @@
-import moment from "moment";
+import { difference } from "@/utils/dates.js";
+import dayjs from "dayjs";
 import {axios} from "@/plugins/http-axios";
+const duration = require('dayjs/plugin/duration')
+dayjs.extend(duration)
 
 const state = {
     insuranceStrategyData: {},
@@ -114,7 +117,7 @@ const actions = {
             .then(value => value.json())
             .then(value => {
                 avgApy = value;
-                avgApy.date = moment(avgApy.date).format("DD MMM. ‘YY");
+                avgApy.date = dayjs(avgApy.date).format("DD MMM. ‘YY");
             }).catch(reason => {
                 console.log('Error get data: ' + reason);
             })
@@ -123,7 +126,7 @@ const actions = {
             .then(value => value.json())
             .then(value => {
                 avgApyStrategyMonth = value;
-                avgApyStrategyMonth.date = moment(avgApyStrategyMonth.date).format("DD MMM. ‘YY");
+                avgApyStrategyMonth.date = dayjs(avgApyStrategyMonth.date).format("DD MMM. ‘YY");
             }).catch(reason => {
                 console.log('Error get data: ' + reason);
             })
@@ -138,12 +141,7 @@ const actions = {
 
                 strategyData.chainId = refreshParams.chain.chainId;
 
-                strategyData.payouts.sort(
-                    function(o1,o2){
-                        return moment(o1.payableDate).isBefore(moment(o2.payableDate)) ? -1 : moment(o1.payableDate).isAfter(moment(o2.payableDate)) ? 1 : 0;
-                    }
-                );
-
+                strategyData.payouts.sort((o1, o2) => difference(o1.payableDate, o2.payableDate));
                 let clientData = strategyData.payouts;
 
                 let widgetDataDict = {};
@@ -160,7 +158,7 @@ const actions = {
 
                 [...clientData].forEach(item => {
                     try {
-                        widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
+                        widgetDataDict[dayjs(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
                     } catch (e) {
                         console.error("strategyData build Widget Data Dict insurance error:", e)
                     }
@@ -187,7 +185,7 @@ const actions = {
 
                 [...clientData].forEach(item => {
                     try {
-                        widgetTvlDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
+                        widgetTvlDataDict[dayjs(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
                     } catch (e) {
                         console.error("strategyData build Widget Tvl Dict insurance error:", e)
                     }
@@ -298,7 +296,7 @@ const actions = {
                 let widgetDataDict = {};
 
                 [...clientData].reverse().forEach(item => {
-                    widgetDataDict[moment(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
+                    widgetDataDict[dayjs(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
                 });
 
                 resultDataList = widgetDataDict;
@@ -354,7 +352,7 @@ const actions = {
                         let withdrawDate = new Date(date.getTime() + (withdrawPeriod * 1000));
 
                         if (withdrawDate.getTime() > currentDate.getTime()){
-                            let hours = moment.duration(moment(withdrawDate).diff(moment(currentDate))).asHours();
+                            let hours = dayjs.duration(dayjs(withdrawDate).diff(dayjs(currentDate))).asHours();
                             redemptionData.request = 'CAN_WITHDRAW';
                             redemptionData.date = date;
                             redemptionData.hours = hours;
@@ -364,7 +362,7 @@ const actions = {
                             redemptionData.hours = 0;
                         }
                     } else {
-                        let hours = moment.duration(moment(date).diff(moment(currentDate))).asHours();
+                        let hours = dayjs.duration(dayjs(date).diff(dayjs(currentDate))).asHours();
                         redemptionData.request = 'NEED_WAIT';
                         redemptionData.date = date;
                         redemptionData.hours = hours;

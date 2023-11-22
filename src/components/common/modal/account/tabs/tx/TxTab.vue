@@ -8,26 +8,26 @@
             </label>
         </v-row>
 
-        <TxListHeader/>
+        <TxListHeader />
 
         <template v-for="tx in transactions.slice().reverse()">
             <TxCard class="ma-0 mt-2" :tx-data="tx" v-bind:key="`${tx.hash}_${tx.pending}`" />
         </template>
 
-        <resize-observer @notify="$forceUpdate()"/>
+        <resize-observer @notify="$forceUpdate()" />
     </div>
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import TxCard from "@/components/common/modal/account/tabs/tx/component/TxCard";
 import TxListHeader from "@/components/common/modal/account/tabs/tx/component/TxListHeader";
-import moment from "moment";
+import { difference } from "@/utils/dates.js"
 
 export default {
     name: "TxTab",
 
-    components: {TxListHeader, TxCard},
+    components: { TxListHeader, TxCard },
 
     data: () => ({
     }),
@@ -39,11 +39,7 @@ export default {
         ...mapGetters('transaction', ['transactions']),
 
         transactionsList: function () {
-            return [...this.transactions].sort(
-                function(o1,o2){
-                    return moment(o1.date).isBefore(moment(o2.date)) ? 1 : moment(o1.date).isAfter(moment(o2.date)) ? -1 : 0;
-                }
-            );
+            return [...this.transactions].sort((o1, o2) => difference(o1.date, o2.date));
         },
     },
 
@@ -57,7 +53,6 @@ export default {
 </script>
 
 <style scoped>
-
 /* mobile */
 @media only screen and (max-width: 960px) {
 

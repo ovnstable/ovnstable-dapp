@@ -710,8 +710,6 @@ export const pool = {
 
             this.pools = this.initFeature(this.pools);
 
-            const find1=  this.pools.find((_) => _.platform === "Shekel")
-
             if (this.typeOfPool === 'OVN') {
                 this.sortedPoolList = this.getSortedPools(this.pools, true);
                 this.sortedPoolSecondList = [];
@@ -719,8 +717,6 @@ export const pool = {
                 this.sortedPoolList = this.getSortedPools(this.pools, false);
                 this.sortedPoolSecondList = this.getSortedSecondPools(this.pools);
             }
-
-            const find2=  this.sortedPoolList.find((_) => _.platform === "Shekel")
 
             this.isPoolsLoading = false;
 

@@ -120,7 +120,7 @@ export default {
         payouts: function () {
             let data = this.payoutsData;
             return data
-                ? [...data].sort((o1, o2) => difference(o1.date, o2.date))
+                ? [...data].sort((o1, o2) => difference(o2.date, o1.date))
                 : null;
         }
     },
@@ -152,7 +152,7 @@ export default {
                     this.payoutsData = value;
                     strategyData = value;
 
-                    strategyData.sort((o1, o2) => difference(o1.date, o2.date));
+                    strategyData.sort((o1, o2) => difference(o2.date, o1.date));
 
 
                     let clientData = strategyData;

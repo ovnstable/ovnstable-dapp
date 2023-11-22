@@ -391,6 +391,9 @@ export const pool = {
                 case 'Velocimeter':
                     url = 'https://base.velocimeter.xyz/liquidity';
                     break
+                case 'Shekel':
+                    url = 'https://shekelswap.finance/#/farm';
+                    break
                 case 'Swapbased':
                     url = 'https://swapbased.finance/#/farm';
                     break
@@ -428,6 +431,7 @@ export const pool = {
                 pool.platform === 'Baseswap' ||
                 pool.platform === 'Velocimeter' ||
                 pool.platform === 'Swapbased' ||
+                pool.platform === 'Shekel' ||
                 pool.platform === 'Maverick' ||
                 pool.platform === 'Alienbase' ||
                 pool.platform === 'Convex'
@@ -706,14 +710,17 @@ export const pool = {
 
             this.pools = this.initFeature(this.pools);
 
+            const find1=  this.pools.find((_) => _.platform === "Shekel")
+
             if (this.typeOfPool === 'OVN') {
                 this.sortedPoolList = this.getSortedPools(this.pools, true);
-                console.log("Sorted pools", this.sortedPoolList);
                 this.sortedPoolSecondList = [];
             } else {
                 this.sortedPoolList = this.getSortedPools(this.pools, false);
                 this.sortedPoolSecondList = this.getSortedSecondPools(this.pools);
             }
+
+            const find2=  this.sortedPoolList.find((_) => _.platform === "Shekel")
 
             this.isPoolsLoading = false;
 
@@ -780,10 +787,14 @@ export const pool = {
 
         getSortedSecondPools(pools) {
             let secondPools = pools.filter(pool => {
+                // this is for new pools which TVL do not pass pool.tvl < 300000 && pool.tvl > 100000
+                // but its should be displayed
                 const exception = [
                     '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013',
                     '0x844D7d2fCa6786Be7De6721AabdfF6957ACE73a0',
-                    '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197'
+                    '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197',
+                    '0x0627dcdca49d749583c6a00327eb5e3846e265d3',
+                    '0x77ca2ddfd61d1d5e5d709cf07549fec3e2d80315'
                 ]
                 if (exception.includes(pool.address)) return pool
                 if (pool.promoted !== false) return pool
@@ -836,7 +847,6 @@ export const pool = {
             // usd+ dola arb
             let poolAddress = pool.address;
 
-            console.log(poolAddress === "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013_convex", 'poolAddress')
             if (poolAddress === '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013_convex') {
                 let findedPool = this.pools.find(data=> data.address === "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013");
                 if (!pool) {

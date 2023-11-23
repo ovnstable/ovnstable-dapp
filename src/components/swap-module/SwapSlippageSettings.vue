@@ -277,10 +277,12 @@ div {
 
     text-align: center;
     cursor: pointer;
+
+    transition: box-shadow 0.3s;
 }
 
 .slippage-item-selected {
-    border: 2px solid #1C95E7;
+    box-shadow: 0px 0px 0px 1px #1C95E7;
 }
 
 .slippage-name {

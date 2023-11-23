@@ -10,7 +10,7 @@
                 </v-row>
 
                 <v-row class="ma-0 mt-1" align="center">
-                    <v-text-field placeholder="0.00"
+                    <v-text-field placeholder="0"
                                   @keypress="isNumber($event)"
                                   flat
                                   solo
@@ -76,7 +76,7 @@
         </v-row>
 
         <v-row class="mt-8 mx-n3 main-card">
-            <v-col>
+            <v-col cols="7">
                 <v-row align="center" class="ma-0">
                     <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.usdtPlus, 3) }}</label>
                     <div class="balance-network-icon ml-2">
@@ -85,7 +85,7 @@
                 </v-row>
 
                 <v-row class="ma-0 mt-1" align="center">
-                    <v-text-field placeholder="0.00"
+                    <v-text-field placeholder="0"
                                   flat
                                   readonly
                                   solo
@@ -355,7 +355,7 @@ export default {
             this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.usdt) * 100;
 
             if (!this.sum || this.sum === 0)
-                return '0.00';
+                return '0';
             else {
                 return this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
             }

@@ -2,7 +2,7 @@
     <div class="mb-15">
         <div class="row">
             <div class="col-12 col-lg-6 col-md-6 col-sm-6">
-                <div class="mt-lg-10 mt-md-5 mt-sm-3 mb-lg-10 mb-md-5 mb-sm-3">
+                <div class="mt-lg-5 mt-md-5 mt-sm-5 mb-lg-10 mb-md-5 mb-sm-5">
                     <label v-if="type === 'OVN'" class="title-label">
                         OVN POOLS
                     </label>
@@ -10,6 +10,7 @@
                         ALL POOLS
                     </label>
                 </div>
+
             </div>
             <div v-if="lastUpdateAgoMinutes"
                  class="col-12 col-lg-6 col-md-6 col-sm-6">
@@ -389,6 +390,7 @@ export default {
 /* mobile */
 @media only screen and (max-width: 960px) {
     .title-label {
+        
         font-style: normal;
         font-weight: 300;
         font-size: 32px;

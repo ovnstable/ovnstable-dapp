@@ -277,9 +277,14 @@ div {
 
     text-align: center;
     cursor: pointer;
+
+    transition: box-shadow 0.3s;
+    box-shadow: 0px 0px 0px transparent;
+    
 }
 
 .slippage-item-selected {
+    box-shadow: 0px 0px 8px #1C95E7;
     border: 2px solid #1C95E7;
 }
 

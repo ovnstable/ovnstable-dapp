@@ -76,7 +76,7 @@
         </v-row>
 
         <v-row class="mt-8 mx-n3 main-card">
-            <v-col>
+            <v-col cols="7">
                 <v-row align="center" class="ma-0">
                     <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.wUsdPlus, 3) }}</label>
                     <div class="balance-network-icon ml-2">

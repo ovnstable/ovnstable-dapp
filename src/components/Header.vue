@@ -370,7 +370,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     background-color: var(--theme-switch-background-light) !important;
     border-radius: 5px !important;
     border: 1px solid transparent;
-
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -381,6 +381,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .theme-toggle-btn {
+    height: 42px;
     background-color: transparent !important;
 }
 

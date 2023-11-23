@@ -525,7 +525,7 @@ export default {
             this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance[this.currency.id]) * 100;
 
             if (!this.sum || this.sum === 0)
-                this.sumResult = '0.00';
+                this.sumResult = '0';
             else {
                 this.sumResult = this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
             }

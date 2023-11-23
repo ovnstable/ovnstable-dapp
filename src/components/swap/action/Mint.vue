@@ -361,14 +361,14 @@ export default {
         },
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.assetBalance);
+            return this.$utils.formatMoney(this.assetBalance,3);
         },
 
         sumResult: function () {
             this.sliderPercent = parseFloat(this.sum) / parseFloat(this.assetBalance) * 100;
 
             if (!this.sum || this.sum === 0)
-                return '0.00';
+                return '0';
             else {
                 return this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
             }

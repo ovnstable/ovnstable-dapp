@@ -360,7 +360,7 @@ export default {
             this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.usdtPlus) * 100;
 
             if (!this.sum || this.sum === 0)
-                return '0.00';
+                return '0';
             else {
                 return this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
             }

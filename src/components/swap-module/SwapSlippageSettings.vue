@@ -285,7 +285,6 @@ div {
 
 .slippage-item-selected {
     box-shadow: 0px 0px 8px #1C95E7;
-    border: 2px solid #1C95E7;
 }
 
 .slippage-name {

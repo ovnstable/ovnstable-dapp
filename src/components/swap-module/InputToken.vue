@@ -60,7 +60,7 @@
                                ~ ${{$utils.formatMoney(token.usdValue, 2)}}
                            </div>
                            <div v-else>
-                               $00.<span class="numeric-change">00</span>
+                               $0
                            </div>
                        </div>
                     </div>

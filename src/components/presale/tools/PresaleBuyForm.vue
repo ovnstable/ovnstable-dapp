@@ -164,11 +164,11 @@ export default {
             }
 
             if (!this.balance && !this.balance.usdPlus) {
-                return '00.00'
+                return '0'
             }
 
             let balance = (this.balance.usdPlus * 1).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') * 1;
-           return !isNaN(balance) ? balance : '00.00';
+           return !isNaN(balance) ? balance : '0';
         }
     },
     methods: {

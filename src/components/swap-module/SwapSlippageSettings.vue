@@ -279,12 +279,10 @@ div {
     cursor: pointer;
 
     transition: box-shadow 0.3s;
-    box-shadow: 0px 0px 0px transparent;
-    
 }
 
 .slippage-item-selected {
-    box-shadow: 0px 0px 8px #1C95E7;
+    box-shadow: 0px 0px 0px 1px #1C95E7;
 }
 
 .slippage-name {

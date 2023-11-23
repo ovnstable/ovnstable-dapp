@@ -80,7 +80,7 @@
                                     </span>
                                 </div>
                                 <div v-else>
-                                    00.<span class="numeric-change numeric-blue">00</span>
+                                    0.<span class="numeric-change numeric-blue">00</span>
                                 </div>
                             </div>
                         </div>
@@ -382,7 +382,7 @@ div {
 }
 
 .numeric-change {
-    font-size: 14px;
+    font-size: 18px;
 }
 
 .numeric-blue {

@@ -3,7 +3,8 @@
         <v-dialog
                 v-model="showRedemptionRequestSuccess"
                 width="600"
-                persistent>
+                persistent
+                @click:outside="close">
             <v-card class="container_body airdrop-body">
                 <v-toolbar class="container_header" flat>
                     <v-spacer></v-spacer>

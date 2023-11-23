@@ -3,7 +3,8 @@
             v-model="show"
             width="630"
             persistent
-            scrollable>
+            scrollable
+            @click:outside="close">
         <v-card class="container_body">
             <v-toolbar class="container_header" flat>
                 <div class="title-modal-icon">

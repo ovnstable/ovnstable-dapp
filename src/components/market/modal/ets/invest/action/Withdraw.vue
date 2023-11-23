@@ -10,7 +10,7 @@
                 </v-row>
 
                 <v-row class="ma-0 mt-1" align="center">
-                    <v-text-field placeholder="0.00"
+                    <v-text-field placeholder="0"
                                   @keypress="isNumber($event)"
                                   flat
                                   solo
@@ -84,7 +84,7 @@
                 </v-row>
 
                 <v-row class="ma-0 mt-1" align="center">
-                    <v-text-field placeholder="0.00"
+                    <v-text-field placeholder="0"
                                   flat
                                   readonly
                                   solo
@@ -405,7 +405,7 @@ export default {
             this.sliderPercent = parseFloat(this.sum) / parseFloat(this.componentBalance) * 100;
 
             if (!this.sum || this.sum === 0)
-                return '0.00';
+                return '0';
             else {
                 return this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
             }

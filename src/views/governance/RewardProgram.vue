@@ -22,7 +22,7 @@
             <v-col cols="3"><b>{{ pool.name }}</b></v-col>
 
             <v-col cols="3">
-                <v-text-field placeholder="0.00"
+                <v-text-field placeholder="0"
                               flat
                               solo
                               class="field-sum"

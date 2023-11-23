@@ -189,7 +189,7 @@ export default {
     }
 
     .wallet-bar-container {
-        height: 44px !important;
+        height: 42px !important;
     }
 
     .wallet-col {

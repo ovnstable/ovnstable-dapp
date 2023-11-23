@@ -10,7 +10,7 @@
         </v-row>
 
         <v-row class="ma-0 mt-1" align="center">
-          <v-text-field placeholder="0.00"
+          <v-text-field placeholder="0"
                         @keypress="isNumber($event)"
                         flat
                         solo
@@ -87,7 +87,7 @@
         </v-row>
 
         <v-row class="ma-0 mt-1" align="center">
-          <v-text-field placeholder="0.00"
+          <v-text-field placeholder="0"
                         flat
                         readonly
                         solo

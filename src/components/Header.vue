@@ -152,7 +152,7 @@ export default {
                 console.error("Track error:", e);
             }
 
-            window.open('/presale', '_self').focus();
+            this.$router.push('/presale');
         },
 
         toggleTheme() {

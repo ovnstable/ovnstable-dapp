@@ -367,7 +367,6 @@ export const swap = {
                     let referral = await this.getReferralCode();
                     referral = referral ? referral : '';
 
-                    console.log(exchangeContract, 'exchangeContract')
                     let method = await this.getContractMethodWithParams(action, account, contractSum, exchangeContract, exchangeMethodName, actionContract, ovnStableContract);
                     if (!method){
                         let errorMessage = "Exchange Method type not found when create method params in buy action. MethodType: " + exchangeMethodName;
@@ -386,9 +385,6 @@ export const swap = {
                             action: resultTxInfo.action,
                             amount: sumInUsd,
                         };
-
-                        console.log(tx, 'txbuyResult')
-
 
                         self.putTransaction(tx);
 
@@ -596,11 +592,6 @@ export const swap = {
             }
 
             if (exchangeMethodName === 'wrap') {
-                console.log({
-                    asset: actionContract.options.address,
-                    sum: contractSum,
-                    account: account
-                }, '---contractSum')
                 methodParam = {
                     asset: actionContract.options.address,
                     sum: contractSum,

@@ -41,6 +41,14 @@
                     ETH+
                 </v-btn>
             </v-col>
+            <v-col v-if="ethplusAvailibleNetworks.includes(networkName)"
+                   class="col-lg-3 col-md-3 col-sm-6">
+                <v-btn :class="modalType === 'WETH+' ? 'btn-outlined-enabled' : ''"
+                       @click.stop="swapWethAction"
+                       class="button btn-outlined" outlined>
+                    WETH+
+                </v-btn>
+            </v-col>
         </v-row>
     </div>
 </template>
@@ -77,6 +85,7 @@ export default defineComponent({
         ...mapActions('swapUsdtModal', ['showUsdtSwapModal', 'showUsdtMintView', 'showUsdtRedeemView']),
         ...mapActions('swapEthModal', ['showEthSwapModal', 'showEthMintView', 'showEthRedeemView']),
         ...mapActions('wrapModal', ['showWrapModal', 'showWrapView', 'showUnwrapView']),
+        ...mapActions('ethWrapModal', ['showEthWrapModal', 'showEthWrapView', 'showEthUnwrapView']),
 
         initNeededModal() {
             if (this.$route.query.symbol) {
@@ -186,6 +195,23 @@ export default defineComponent({
 
             this.showEthSwapModal();
             this.showEthRedeemView();
+            this.closeFunc();
+        },
+        swapWethAction() {
+            if (this.modalType === 'WETH+') {
+                return;
+            }
+
+            if (this.modalActionType === 'MINT') {
+                this.showEthWrapModal();
+                this.showEthWrapView();
+                this.closeFunc();
+                return;
+            }
+
+
+            this.showEthWrapModal();
+            this.showEthUnwrapView();
             this.closeFunc();
         },
         swapWusdAction() {

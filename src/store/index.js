@@ -15,6 +15,7 @@ import swapDaiModal from '@/store/modules/modals/swap/swap-dai-modal';
 import swapUsdtModal from '@/store/modules/modals/swap/swap-usdt-modal';
 import swapEthModal from '@/store/modules/modals/swap/swap-eth-modal';
 import wrapModal from '@/store/modules/modals/wrap/wrap-modal';
+import ethWrapModal from '@/store/modules/modals/wrap/eth-wrap-modal';
 import bscInfoModal from '@/store/modules/modals/bsc-info-modal';
 
 
@@ -98,6 +99,7 @@ export default new Vuex.Store({
         swapUsdtModal,
         swapEthModal,
         wrapModal,
+        ethWrapModal,
         riskModal,
         insuranceRiskModal,
         insuranceInvestModal,

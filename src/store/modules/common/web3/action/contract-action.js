@@ -4296,6 +4296,7 @@ const ABI_WusdPlus = [
       "type": "function"
     }
 ]
+const ABI_WethPlus = [{"inputs":[{"internalType":"address","name":"_logic","type":"address"},{"internalType":"bytes","name":"_data","type":"bytes"}],"stateMutability":"payable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"previousAdmin","type":"address"},{"indexed":false,"internalType":"address","name":"newAdmin","type":"address"}],"name":"AdminChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"beacon","type":"address"}],"name":"BeaconUpgraded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"implementation","type":"address"}],"name":"Upgraded","type":"event"},{"stateMutability":"payable","type":"fallback"},{"stateMutability":"payable","type":"receive"}]
 const ABI_Market = [
     {
       "inputs": [],
@@ -10823,6 +10824,9 @@ const chainContractsMap ={
             mark2market:"0x672F0f9ECF78406E4E31cd531b0CefE32f0A84B5",
             portfolioManager:"0x769B4EFA1560AF66D4FE338A5041cB5710352583",
         },
+        wEthPlus:{
+            tokenPlus:"0x72f99511615Cd8fA4D776d76bb8B8f7A5162F60F"
+        },
         ovn:"0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396",
         usdc:"0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
         wrapped:"0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
@@ -10949,6 +10953,7 @@ const actions = {
 
             // wUsdPlus
             contracts.wUsdPlus,
+            contracts.wEthPlus,
 
             // assets
             contracts.asset,
@@ -10993,6 +10998,7 @@ const actions = {
 
             //wusd
             load(ABI_WusdPlus,web3,chainContractsMap[network]["usdPlus"]?.wUsdPlus ?? null),
+            load(ABI_WethPlus,web3,chainContractsMap[network]["wEthPlus"]?.tokenPlus ?? null),
 
             // assets
             load(ERC20_ABI,web3,chainContractsMap[network]?.usdc ?? null),

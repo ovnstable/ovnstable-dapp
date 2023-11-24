@@ -38,8 +38,8 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import Wrap from "@/components/wrap/action/Wrap";
-import Unwrap from "@/components/wrap/action/Unwrap";
+import Wrap from "@/components/swap/wusd/action/Wrap";
+import Unwrap from "@/components/swap/wusd/action/Unwrap";
 import CoinButtons from "@/components/common/element/CoinButtons.vue";
 
 export default {
@@ -51,21 +51,13 @@ export default {
         Unwrap,
     },
 
-    props: {},
-
     computed: {
         ...mapGetters('wrapModal', ['show']),
         ...mapGetters('wrapModal', ['isWrapView']),
     },
 
-    data: () => ({}),
-
     methods: {
         ...mapActions('wrapModal', ['showWrapModal', 'closeWrapModal']),
-
-        openLink(link) {
-            window.open(link, '_blank').focus();
-        },
 
         close() {
             this.closeWrapModal();

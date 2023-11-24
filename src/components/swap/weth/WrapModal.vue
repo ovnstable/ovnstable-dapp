@@ -8,7 +8,7 @@
             <v-card class="container_body airdrop-body">
                 <v-toolbar class="container_header" flat>
                     <label class="title-modal mt-4">
-                        {{ isMintView ? 'Mint USD+' : 'Redeem USD+' }}
+                        {{ isWrapView ? 'Wrap' : 'Unwrap' }}
                     </label>
                     <v-spacer></v-spacer>
                     <v-btn icon @click="close" class="mt-4">
@@ -18,15 +18,15 @@
 
                 <v-card-text class="pt-2 content-container">
                     <CoinButtons
-                            :modal-type="modalType"
+                            :modal-type="'WETH+'"
                             :close-func="close"
-                            :modal-action-type="isMintView ? 'MINT' : 'REDEEM'"
+                            :modal-action-type="isWrapView ? 'MINT' : 'REDEEM'"
                             class="pl-lg-10 pr-lg-10 pl-md-5 pr-md-5 pb-7">
                     </CoinButtons>
 
                     <v-row class="invest-body-row mx-n2" align="center">
-                        <Mint v-if="isMintView"/>
-                        <Redeem v-else/>
+                        <Wrap v-if="isWrapView"/>
+                        <Unwrap v-else/>
                     </v-row>
                 </v-card-text>
             </v-card>
@@ -38,38 +38,29 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import Mint from "@/components/swap/action/Mint";
-import Redeem from "@/components/swap/action/Redeem";
+import Wrap from "@/components/swap/weth/action/Wrap";
+import Unwrap from "@/components/swap/weth/action/Unwrap";
 import CoinButtons from "@/components/common/element/CoinButtons.vue";
 
-export default  {
-    name: "SwapModal",
+export default {
+    name: "ethWrapModal",
 
     components: {
         CoinButtons,
-        Mint,
-        Redeem
+        Wrap,
+        Unwrap,
     },
 
     computed: {
-        ...mapGetters('swapModal', ['show']),
-        ...mapGetters('swapModal', ['isMintView']),
+        ...mapGetters('ethWrapModal', ['show']),
+        ...mapGetters('ethWrapModal', ['isWrapView']),
     },
 
-    data: () => ({
-        modalType: 'USD+',
-    }),
-
     methods: {
-        ...mapActions('swapModal', ['closeSwapModal']),
-        ...mapActions('track', ['trackClick']),
-
-        openLink(link) {
-            window.open(link, '_blank').focus();
-        },
+        ...mapActions('ethWrapModal', ['closeEthWrapModal']),
 
         close() {
-            this.closeSwapModal();
+            this.closeEthWrapModal();
         },
     },
 }
@@ -163,5 +154,4 @@ export default  {
     color: var(--links-blue);
     cursor: pointer;
 }
-
 </style>

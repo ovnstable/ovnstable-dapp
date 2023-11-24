@@ -112,12 +112,10 @@
             </v-col>
         </v-row>
 
-        <!-- TODO: add wrap checkbox -->
-
         <v-row class="mt-5">
             <label class="exchange-label">Current index = {{ $utils.formatMoney(index, 2) }}</label>
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 USD+ = {{ $utils.formatMoney(Number.parseFloat(amountPerUsdPlus), 2) }} wUSD+</label>
+            <label class="exchange-label">1 ETH+ = {{ $utils.formatMoney(Number.parseFloat(amountPerUsdPlus), 2) }} wETH+</label>
         </v-row>
 
         <v-row class="mt-10">
@@ -287,16 +285,18 @@ export default {
      mixins: [swap],
 
     data: () => ({
-        currency: {id: 'usdc'},
+        currency: {
+            id: 'eth'
+        },
         currencies: [],
-        assetDecimals: 6,
+        assetDecimals: 18,
 
 
         buyCurrency: null,
         buyCurrencies: [{
-            id: 'wUsdPlus',
-            title: 'wUSD+',
-            image: require('@/assets/currencies/wUsdPlus.svg')
+            id: 'weth',
+            title: 'wETH+',
+            image: require('@/assets/currencies/WETH+.svg')
         }],
 
         sum: null,
@@ -315,8 +315,8 @@ export default {
         ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
         ...mapGetters('transaction', ['transactions']),
 
-        ...mapGetters('wrapData', ['index', 'amountPerUsdPlus']),
-        ...mapGetters('wrapModal', ['usdcApproved', 'usdPlusApproved']),
+        ...mapGetters('ethWrapData', ['index', 'amountPerUsdPlus']),
+        ...mapGetters('ethWrapModal', ['usdcApproved', 'usdPlusApproved']),
 
         ...mapGetters("network", ['networkId']),
         ...mapGetters("web3", ["web3", 'contracts']),
@@ -354,10 +354,11 @@ export default {
         },
 
         tokenContract(){
-            if (this.currency.id === 'usdc')
-                return this.contracts.usdc;
+            console.log(this.contracts, 'tokenContract')
+            if (this.currency.id === 'ethPlus')
+                return this.contracts.ethPlus;
             else
-                return this.contracts.usdPlus;
+                return this.contracts.wEthPlus;
         },
 
         buttonLabel: function () {
@@ -387,9 +388,7 @@ export default {
         },
 
         approved: function () {
-            if (this.currency.id === 'usdc') {
-                return this.usdcApproved;
-            } else if (this.currency.id === 'usdPlus') {
+            if (this.currency.id === 'ethPlus') {
                 return this.usdPlusApproved;
             } else {
                 return false;
@@ -434,21 +433,19 @@ export default {
             return labelList;
         },
       approveActionFunc: function() {
-        if (this.currency.id === 'usdc')
-          return this.approveUsdc;
-        else if (this.currency.id === 'usdPlus')
-         return this.approveUsdPlus;
-        else
-          throw new Error('Unknown currency');
+        if (this.currency.id === 'ethPlus') {
+            return this.approveUsdPlus;
+        }
+
+        return false
       },
 
       disapproveActionFunc() {
-        if (this.currency.id === 'usdc')
-          return this.disapproveUsdc;
-        else if (this.currency.id === 'usdPlus')
-         return this.disapproveUsdPlus;
-        else
-          throw new Error('Unknown currency');
+        if (this.currency.id === 'ethPlus') {
+            return this.disapproveUsdPlus;
+        }
+
+        return false
       }
     },
 
@@ -460,18 +457,18 @@ export default {
         this.gasAmountInUsd = null;
 
         this.currencies.push({
-            id: 'usdc',
-            title: 'USDC',
-            image: require('@/assets/currencies/usdc.png')
+            id: 'wEthPlus',
+            title: 'WETH+',
+            image: require('@/assets/currencies/WETH+.svg')
         });
+
         this.currencies.push({
-            id: 'usdPlus',
-            title: 'USD+',
-            image: require('@/assets/currencies/usdPlus.svg')
+            id: 'ethPlus',
+            title: 'ETH+',
+            image: require('@/assets/currencies/ETH+.svg')
         });
 
         this.currency = this.currencies[1];
-
         this.buyCurrency = this.buyCurrencies[0];
     },
 
@@ -489,7 +486,7 @@ export default {
     methods: {
 
         ...mapActions("wrapData", ['refreshWrap']),
-        ...mapActions("wrapModal", ['showUnwrapView', 'approveUsdc', 'approveUsdPlus', 'disapproveUsdc', 'disapproveUsdPlus']),
+        ...mapActions("ethWrapModal", ['showUnwrapView', 'approveUsdc', 'approveUsdPlus', 'disapproveUsdc', 'disapproveUsdPlus']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
@@ -501,8 +498,6 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
-            console.log("Swap wrap changeSliderPercent: ", this.currency.id, this.balance[this.currency.id], this.originalBalance[this.currency.id]);
-
             this.sum = (this.balance[this.currency.id] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
 

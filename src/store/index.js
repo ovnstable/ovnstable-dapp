@@ -45,6 +45,7 @@ import marketUI from "@/store/modules/views/market/ui";
 import insuranceData from "@/store/modules/views/insurance/data";
 import insuranceUI from "@/store/modules/views/insurance/ui";
 
+import wrapEthData from "@/store/modules/views/wrap/WETH";
 import wrapData from "@/store/modules/views/wrap/data";
 import wrapUI from "@/store/modules/views/wrap/ui";
 
@@ -124,6 +125,7 @@ export default new Vuex.Store({
         swapEthUI,
 
         wrapData,
+        wrapEthData,
         wrapUI,
 
         overcapData,

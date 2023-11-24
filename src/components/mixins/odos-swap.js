@@ -398,7 +398,7 @@ export const odosSwap = {
                 }).catch(e => {
                     // todo 5 return after load balance optimization
                     // tmp ignore
-                    console.info('Error balance for: ', token, e);
+                    // console.info('Error balance for: ', token, e);
                 });
             } catch (e) {
                 console.log("Error when load balance at token: ", token.address, e)

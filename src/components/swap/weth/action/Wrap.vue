@@ -69,7 +69,7 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <div class="swap-view-btn" @click="showUnwrapView">
+            <div class="swap-view-btn" @click="showEthUnwrapView">
                 <v-img :src="require('@/assets/icon/arrowsSwap.svg')"/>
             </div>
             <v-spacer></v-spacer>
@@ -115,7 +115,7 @@
         <v-row class="mt-5">
             <label class="exchange-label">Current index = {{ $utils.formatMoney(index, 2) }}</label>
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 ETH+ = {{ $utils.formatMoney(Number.parseFloat(amountPerUsdPlus), 2) }} wETH+</label>
+            <label class="exchange-label">1 ETH+ = {{ $utils.formatMoney(Number.parseFloat(amountTokenPlus), 2) }} wETH+</label>
         </v-row>
 
         <v-row class="mt-10">
@@ -315,7 +315,7 @@ export default {
         ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
         ...mapGetters('transaction', ['transactions']),
 
-        ...mapGetters('ethWrapData', ['index', 'amountPerUsdPlus']),
+        ...mapGetters('wrapEthData', ['index', 'amountTokenPlus']),
         ...mapGetters('ethWrapModal', ['usdcApproved', 'usdPlusApproved']),
 
         ...mapGetters("network", ['networkId']),
@@ -342,7 +342,6 @@ export default {
         },
 
         maxResult: function () {
-            console.log(this.balance, 'this.balance')
             return this.$utils.formatMoney(this.balance.ethPlus, 3);
         },
 
@@ -355,7 +354,6 @@ export default {
         },
 
         tokenContract(){
-            console.log(this.balance, 'tokenContract')
             if (this.currency.id === 'ethPlus')
                 return this.contracts.ethPlus;
             else
@@ -401,7 +399,7 @@ export default {
         },
 
         transactionPending: function () {
-            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === 'wUsdPlus') && (value.action === 'wrap'))).length > 0;
+            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === 'ethPlus') && (value.action === 'wrap'))).length > 0;
         },
 
         numberRule: function () {
@@ -451,7 +449,6 @@ export default {
     },
 
     created() {
-        console.log(this.balance, 'BALLLANCE')
         this.estimatedGas = null;
 
         this.gas = null;
@@ -472,6 +469,7 @@ export default {
 
         this.currency = this.currencies[1];
         this.buyCurrency = this.buyCurrencies[0];
+        this.refreshWrap()
     },
 
     watch: {
@@ -487,8 +485,8 @@ export default {
 
     methods: {
 
-        ...mapActions("wrapData", ['refreshWrap']),
-        ...mapActions("ethWrapModal", ['showUnwrapView', 'approveUsdc', 'approveUsdPlus', 'disapproveUsdc', 'disapproveUsdPlus']),
+        ...mapActions("wrapEthData", ['refreshWrap']),
+        ...mapActions("ethWrapModal", ['showEthUnwrapView', 'approveUsdc', 'approveUsdPlus', 'disapproveUsdc', 'disapproveUsdPlus']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
@@ -534,7 +532,7 @@ export default {
 
             let value = await this.contracts.marketWeth.methods.previewWrap(address, sum).call();
             value = this.web3.utils.fromWei(value, 'mwei');
-            this.sumResult = this.$utils.formatMoney(Number.parseFloat(value), 2);
+            this.sumResult = value;
         },
 
         isNumber: function(evt) {

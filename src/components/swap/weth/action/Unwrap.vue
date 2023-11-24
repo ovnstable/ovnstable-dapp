@@ -1,7 +1,7 @@
 <template>
     <v-col>
         <v-row class="mx-n3 main-card">
-            <v-col cols="7">
+            <v-col>
                 <v-row align="center" class="ma-0">
                     <label class="balance-label ml-3">Balance: {{ maxResult }}</label>
                     <div class="balance-network-icon ml-2">
@@ -19,17 +19,18 @@
                                   background-color="transparent"
                                   v-model="sum"
                                   @input="checkApproveCounter(
-                                        'wrap-invest',
+                                        'unwrap-redeem',
                                          sliderPercent,
-                                         originalBalance[currency.id],
+                                         originalBalance.wEthPlus,
                                          account,
                                          sum,
                                          assetDecimals,
-                                         contracts.market,
-                                         'wrap',
+                                         contracts.marketWeth,
+                                         'unwrap',
                                          tokenContract,
-                                         disapproveActionFunc,
-                                         approveActionFunc
+                                         disapproveWUsdPlus,
+                                         approveWUsdPlus,
+                                         contracts.wEthPlus
                                        )">
                     </v-text-field>
                 </v-row>
@@ -41,9 +42,9 @@
                     <div class="coin-card mr-3">
                         <v-row class="ma-2" align="center">
                             <div class="coin-img mr-2">
-                                <v-img :src="currency.image"/>
+                                <v-img :src="buyCurrency.image"/>
                             </div>
-                            <label class="coin-title">{{ currency.title }}</label>
+                            <label class="coin-title">{{ buyCurrency.title }}</label>
                         </v-row>
                     </div>
                 </v-row>
@@ -69,16 +70,16 @@
 
         <v-row class="mt-5">
             <v-spacer></v-spacer>
-            <div class="swap-view-btn" @click="showUnwrapView">
+            <div class="swap-view-btn" @click="showEthWrapView">
                 <v-img :src="require('@/assets/icon/arrowsSwap.svg')"/>
             </div>
             <v-spacer></v-spacer>
         </v-row>
 
         <v-row class="mt-8 mx-n3 main-card">
-            <v-col cols="7">
+            <v-col>
                 <v-row align="center" class="ma-0">
-                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.wUsdPlus, 3) }}</label>
+                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance[currency.id], 3) }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>
@@ -103,9 +104,9 @@
                     <div class="coin-card mr-3">
                         <v-row class="ma-2" align="center">
                             <div class="coin-img mr-2">
-                                <v-img :src="buyCurrency.image"/>
+                                <v-img :src="currency.image"/>
                             </div>
-                            <label class="coin-title">{{ buyCurrency.title }}</label>
+                            <label class="coin-title">{{ currency.title }}</label>
                         </v-row>
                     </div>
                 </v-row>
@@ -117,7 +118,7 @@
         <v-row class="mt-5">
             <label class="exchange-label">Current index = {{ $utils.formatMoney(index, 2) }}</label>
             <v-spacer></v-spacer>
-            <label class="exchange-label">1 USD+ = {{ $utils.formatMoney(Number.parseFloat(amountPerUsdPlus), 2) }} wUSD+</label>
+            <label class="exchange-label">1 WETH+ = {{ $utils.formatMoney(Number.parseFloat(amountWrapTokenPlus), 2) }} ETH+</label>
         </v-row>
 
         <v-row class="mt-10">
@@ -148,11 +149,12 @@
                 <v-row>
                     <label class="action-info-sub-label">{{ overnightFee ? $utils.formatMoneyComma(overnightFee, 2) + '%' : '—' }}</label>
                     <v-spacer></v-spacer>
-                    <label class="action-info-label">You wrap:</label>
+                    <label class="action-info-label">You unwrap:</label>
                     <label class="action-info-sub-label ml-2">{{ '$' + (estimateResult ? $utils.formatMoneyComma(estimateResult, 2) : '0') }}</label>
                 </v-row>
             </v-col>
         </v-row>
+
 
         <v-row class="mt-15" align="center" justify="center">
 
@@ -160,13 +162,14 @@
                 <v-col>
                     <label
                         @click="clearApprove(
-                            'wrap-invest',
+                            'unwrap-redeem',
                                account,
-                               contracts.market,
-                               'wrap',
+                               contracts.marketWeth,
+                               'unwrap',
                                tokenContract,
-                               disapproveActionFunc,
-                               approveActionFunc
+                               disapproveWUsdPlus,
+                               approveWUsdPlus,
+                               contracts.wEthPlus
                            )"
                         style="cursor: pointer;">
                         Decrease Allowance
@@ -182,27 +185,27 @@
             </div>
 
             <div class="action-btn-container" v-else>
-                <v-btn v-if="approved"
+                <v-btn v-if="wUsdPlusApproved"
                        height="56"
                        class="buy"
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
                        @click="confirmSwapAction(
-                            'wrap-invest',
+                            'unwrap-redeem',
                              sliderPercent,
-                             originalBalance[currency.id],
+                             originalBalance.wEthPlus,
                              account,
                              sum,
                              assetDecimals,
-                             contracts.market,
-                             'wrap',
+                             contracts.marketWeth,
+                             'unwrap',
                              tokenContract,
-                             {successAction: 'wrapUsdPlus'},
+                             {successAction: 'unwrapUsdPlus'},
                              finalizeFunc,
-                             disapproveActionFunc,
-                             approveActionFunc
+                             disapproveWUsdPlus,
+                             approveWUsdPlus,
+                             contracts.wEthPlus
                        )">
-
                     <v-progress-circular
                         v-if="transactionPending"
                         class="mr-2"
@@ -218,16 +221,17 @@
                        :class="isBuy ? 'enabled-buy' : 'disabled-buy'"
                        :disabled="!isBuy"
                        @click="approveAction(
-                           'wrap-invest',
+                           'unwrap-redeem',
                            account,
                            assetDecimals,
-                           contracts.market,
-                           'wrap',
+                           contracts.marketWeth,
+                           'unwrap',
                            tokenContract,
-                           disapproveActionFunc,
-                           approveActionFunc
+                           disapproveWUsdPlus,
+                           approveWUsdPlus,
+                           contracts.wEthPlus
                        )">
-                    {{ buttonLabel }}
+                  {{ buttonLabel }}
                 </v-btn>
             </div>
         </v-row>
@@ -274,7 +278,7 @@ import GasSettingsMenu from "@/components/common/modal/gas/components/GasSetting
 import {swap} from "@/components/mixins/swap";
 
 export default {
-    name: "Wrap",
+    name: "Unwrap",
 
     components: {
         GasSettingsMenu,
@@ -284,19 +288,19 @@ export default {
         SuccessModal,
     },
 
-     mixins: [swap],
+    mixins: [swap],
 
     data: () => ({
-        currency: {id: 'usdc'},
-        currencies: [],
-        assetDecimals: 6,
+        currency: {id: 'wEthPlus'},
 
+        currencies: [],
+        assetDecimals: 18,
 
         buyCurrency: null,
         buyCurrencies: [{
-            id: 'wUsdPlus',
-            title: 'wUSD+',
-            image: require('@/assets/currencies/wUsdPlus.svg')
+            id: 'wEthPlus',
+            title: 'wETH+',
+            image: require('@/assets/currencies/WETH+.svg')
         }],
 
         sum: null,
@@ -308,6 +312,7 @@ export default {
         gasAmountInUsd: null,
 
         sliderPercent: 0,
+        stepLabels: ['', 'Approve wETH+', 'Confirmation'],
         step: 0
     }),
 
@@ -315,8 +320,8 @@ export default {
         ...mapGetters('accountData', ['balance', 'originalBalance', 'account']),
         ...mapGetters('transaction', ['transactions']),
 
-        ...mapGetters('wrapData', ['index', 'amountPerUsdPlus']),
-        ...mapGetters('wrapModal', ['usdcApproved', 'usdPlusApproved']),
+        ...mapGetters('wrapEthData', ['index', 'amountWrapTokenPlus']),
+        ...mapGetters('ethWrapModal', ['wUsdPlusApproved']),
 
         ...mapGetters("network", ['networkId']),
         ...mapGetters("web3", ["web3", 'contracts']),
@@ -342,7 +347,7 @@ export default {
         },
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.balance[this.currency.id], 3);
+            return this.$utils.formatMoney(this.balance.wEthPlus, 3);
         },
 
         overnightFee: function () {
@@ -353,13 +358,6 @@ export default {
             return this.sum * (1 - (this.overnightFee ? (this.overnightFee / 100.0) : 0.0004));
         },
 
-        tokenContract(){
-            if (this.currency.id === 'usdc')
-                return this.contracts.usdc;
-            else
-                return this.contracts.usdPlus;
-        },
-
         buttonLabel: function () {
             this.step = 0;
 
@@ -368,32 +366,25 @@ export default {
             } else if (this.transactionPending) {
                 return 'Transaction is pending';
             } else if (this.isBuy) {
-                if (this.approved) {
+                if (this.wUsdPlusApproved) {
                     this.step = 2;
                     return 'Confirm transaction'
                 } else {
                     this.step = 1;
-                    return 'Approve ' + this.currency.title;
+                    return 'Approve wETH+';
                 }
-            } else if (this.sum > parseFloat(this.balance[this.currency.id])) {
-                return 'Wrap'
+            } else if (this.sum > parseFloat(this.balance.wEthPlus)) {
+                return 'Redeem'
             } else {
-                return 'Wrap';
+                return 'Redeem';
             }
         },
 
-        stepLabels: function () {
-            return ['', 'Approve ' + this.currency.title, 'Confirmation'];
-        },
-
-        approved: function () {
-            if (this.currency.id === 'usdc') {
-                return this.usdcApproved;
-            } else if (this.currency.id === 'usdPlus') {
-                return this.usdPlusApproved;
-            } else {
-                return false;
-            }
+        tokenContract(){
+            if (this.currency.id === 'ethPlus')
+                return this.contracts.ethPlus;
+            else
+                return this.contracts.wEthPlus;
         },
 
         isBuy: function () {
@@ -401,7 +392,7 @@ export default {
         },
 
         transactionPending: function () {
-            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === 'wUsdPlus') && (value.action === 'wrap'))).length > 0;
+            return this.transactions.filter(value => (value.pending && (value.chain === this.networkId) && (value.product === 'wEthPlus') && (value.action === 'unwrap'))).length > 0;
         },
 
         numberRule: function () {
@@ -415,7 +406,7 @@ export default {
 
             v = parseFloat(v.trim().replace(/\s/g, ''));
 
-            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance[this.currency.id]).toFixed(6)) return true;
+            if (!isNaN(parseFloat(v)) && v >= 0 && v <= parseFloat(this.balance.wEthPlus).toFixed(6)) return true;
 
             return false;
         },
@@ -433,23 +424,6 @@ export default {
 
             return labelList;
         },
-      approveActionFunc: function() {
-        if (this.currency.id === 'usdc')
-          return this.approveUsdc;
-        else if (this.currency.id === 'usdPlus')
-         return this.approveUsdPlus;
-        else
-          throw new Error('Unknown currency');
-      },
-
-      disapproveActionFunc() {
-        if (this.currency.id === 'usdc')
-          return this.disapproveUsdc;
-        else if (this.currency.id === 'usdPlus')
-         return this.disapproveUsdPlus;
-        else
-          throw new Error('Unknown currency');
-      }
     },
 
     created() {
@@ -460,36 +434,36 @@ export default {
         this.gasAmountInUsd = null;
 
         this.currencies.push({
-            id: 'usdc',
-            title: 'USDC',
-            image: require('@/assets/currencies/usdc.png')
+            id: 'wEthPlus',
+            title: 'wETH+',
+            image: require('@/assets/currencies/WETH+.svg')
         });
+
         this.currencies.push({
-            id: 'usdPlus',
-            title: 'USD+',
-            image: require('@/assets/currencies/usdPlus.svg')
+            id: 'ethPlus',
+            title: 'ETH+',
+            image: require('@/assets/currencies/ETH+.svg')
         });
 
         this.currency = this.currencies[1];
 
         this.buyCurrency = this.buyCurrencies[0];
+        this.refreshWrap();
     },
 
     watch: {
-
         currency: function() {
-            this.previewWrap();
+            this.previewUnwrap();
         },
 
         sum: function (){
-            this.previewWrap();
+            this.previewUnwrap();
         }
     },
 
     methods: {
-
-        ...mapActions("wrapData", ['refreshWrap']),
-        ...mapActions("wrapModal", ['showUnwrapView', 'approveUsdc', 'approveUsdPlus', 'disapproveUsdc', 'disapproveUsdPlus']),
+        ...mapActions("wrapEthData", ['refreshWrap']),
+        ...mapActions("ethWrapModal", ['showEthWrapView', 'approveWUsdPlus', 'disapproveWUsdPlus']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),
@@ -501,43 +475,23 @@ export default {
         ...mapActions("transaction", ['putTransaction', 'loadTransaction']),
 
         async changeSliderPercent() {
-            console.log("Swap wrap changeSliderPercent: ", this.currency.id, this.balance[this.currency.id], this.originalBalance[this.currency.id]);
-
-            this.sum = (this.balance[this.currency.id] * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
+            this.sum = (this.balance.wEthPlus * (this.sliderPercent / 100.0)).toFixed(this.sliderPercent === 0 ? 0 : 6) + '';
             this.sum = isNaN(this.sum) ? 0 : this.sum
 
-            await this.checkApprove(
-                'wrap-invest',
-                this.sliderPercent,
-                this.originalBalance[this.currency.id],
-                this.account,
-                this.sum,
-                this.assetDecimals,
-                this.contracts.market,
-                'wrap',
-                this.tokenContract,
-                this.disapproveActionFunc,
-                this.approveActionFunc
-            );
-        },
-
-        async previewWrap() {
-            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance[this.currency.id]) * 100;
-
-            if (!this.sum || this.sum === 0)
-                this.sumResult = '0';
-            else {
-                this.sumResult = this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
-            }
-
-            let stringSum = this.sum ? this.sum + "" : '0'
-
-            let sum = this.web3.utils.toWei(stringSum, 'mwei');
-            let address = this.tokenContract.options.address;
-
-            let value = await this.contracts.market.methods.previewWrap(address, sum).call();
-            value = this.web3.utils.fromWei(value, 'mwei');
-            this.sumResult = this.$utils.formatMoney(Number.parseFloat(value), 2);
+          await this.checkApprove(
+              'unwrap-redeem',
+              this.sliderPercent,
+              this.originalBalance.wEthPlus,
+              this.account,
+              this.sum,
+              this.assetDecimals,
+              this.contracts.marketWeth,
+              'unwrap',
+              this.tokenContract,
+              this.disapproveWUsdPlus,
+              this.approveWUsdPlus,
+              this.contracts.wEthPlus
+          );
         },
 
         isNumber: function(evt) {
@@ -557,6 +511,30 @@ export default {
 
         setSum(value) {
             this.sum = value;
+        },
+
+        max() {
+            let balanceElement = this.balance.wEthPlus;
+            this.sum = balanceElement + "";
+        },
+
+        async previewUnwrap() {
+            this.sliderPercent = parseFloat(this.sum) / parseFloat(this.balance.wEthPlus) * 100;
+
+            if (!this.sum || this.sum === 0)
+                this.sumResult = '0.00';
+            else {
+                this.sumResult = this.$utils.formatMoney(this.sum.replace(/,/g, '.'), 2);
+            }
+
+            let stringSum = this.sum ? this.sum + "" : '0'
+
+            let sum = this.web3.utils.toWei(stringSum, 'mwei');
+            let address = this.tokenContract.options.address;
+
+            let value = await this.contracts.marketWeth.methods.previewUnwrap(address, sum).call();
+            value = this.web3.utils.fromWei(value, 'mwei');
+            this.sumResult = value;
         },
 
         finalizeFunc() {

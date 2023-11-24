@@ -61,10 +61,19 @@
         <InvestModal/>
         <InsuranceInvestModal/>
         <SwapModal/>
+
+        <!-- TODO, remove that in swapmodal -->
         <SwapDaiModal/>
         <SwapUsdtModal/>
         <SwapEthModal/>
-        <WrapModal/>
+        <!-- TODO, remove that -->
+
+
+        <!-- TODO, remove that in swapmodal -->
+        <EthWrapModal/>
+        <UsdWrapModal/>
+        <!-- TODO, remove that -->
+        
         <RedemptionRequestModal/>
         <RedemptionRequestSuccessModal/>
 
@@ -81,8 +90,9 @@ import SwapModal from "@/components/swap/SwapModal";
 import SwapDaiModal from "@/components/swap/dai/SwapDaiModal";
 import SwapUsdtModal from "@/components/swap/usdt/SwapUsdtModal";
 import SwapEthModal from "@/components/swap/eth/SwapEthModal";
+import UsdWrapModal from "@/components/swap/wusd/WrapModal";
+import EthWrapModal from "@/components/swap/weth/WrapModal";
 import InvestModal from "@/components/market/modal/ets/invest/InvestModal";
-import WrapModal from "@/components/wrap/WrapModal";
 import RedemptionRequestModal from "@/components/insurance/modal/action/redemption-request/RedemptionRequestModal";
 import RedemptionRequestSuccessModal
     from "@/components/insurance/modal/action/redemption-request/RedemptionRequestSuccessModal";
@@ -95,12 +105,13 @@ export default {
         InsuranceInvestModal,
         RedemptionRequestSuccessModal,
         RedemptionRequestModal,
-        WrapModal,
         InvestModal,
         SwapModal,
         SwapDaiModal,
         SwapUsdtModal,
         SwapEthModal,
+        UsdWrapModal,
+        EthWrapModal,
         MenuSelect,
         NetworkSelect,
         WalletBar,

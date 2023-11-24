@@ -349,6 +349,7 @@ export const swap = {
                     return;
                 }
 
+
                 let from = account;
                 let self = this;
 
@@ -384,8 +385,6 @@ export const swap = {
                             action: resultTxInfo.action,
                             amount: sumInUsd,
                         };
-
-
 
                         self.putTransaction(tx);
 
@@ -425,22 +424,6 @@ export const swap = {
 
                     });
 
-                if (this.isOvercapAvailable) {
-                    // TODO 5: ??
-                    // let noOvercapSum = parseFloat(this.etsData.maxSupply) - parseFloat(this.totalSupply[this.etsData.name]);
-                    // let useOvercapSum;
-                    //
-                    // if (noOvercapSum <= 0) {
-                    //     useOvercapSum = this.sum;
-                    // } else {
-                    //     useOvercapSum = Math.max(this.sum - noOvercapSum, 0);
-                    // }
-                    //
-                    // await this.useOvercap({
-                    //     overcapLeft: this.overcapRemaining(),
-                    //     overcapVolume: useOvercapSum
-                    // });
-                }
                 } catch (e) {
                     console.error(`[Contract part method]. Action buy in ${action}. Sum: ${sum}. ContractSum: ${contractSum}, Account: ${account}. Error: ${e}`);
                     this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
@@ -512,15 +495,11 @@ export const swap = {
                     this.closeWaitingModal();
                 }
             } catch (e) {
-                console.error(`Market swap action in ${action}. Sum: ${sum}. Account: ${account}. Error: ${e}`);
                 this.showErrorModalWithMsg({errorType: 'estimateGas', errorMsg: e});
             }
         },
 
         async estimateGas(action, account, sum, productName, exchangeContract, exchangeMethodName, actionContract, ovnStableContract) {
-
-            console.log("actionContract: ", actionContract);
-
             let from = account;
             let result;
 
@@ -569,7 +548,6 @@ export const swap = {
                         return -1;
                     });
             } catch (e) {
-                console.error(`Estimate action in ${action}. Account: ${account} Sum: ${sum}.error: ${e} `);
                 this.showErrorModalWithMsg({errorType: 'estimateGas', errorMsg: e});
                 return -1;
             }

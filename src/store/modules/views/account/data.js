@@ -115,6 +115,9 @@ const actions = {
         let wUsdPlus;
         let originWUsdPlus;
 
+        let wEthPlus;
+        let originWethPlus;
+
         let ovn;
         let originOvn;
 
@@ -178,7 +181,6 @@ const actions = {
                 originUsdtPlus = usdtPlus;
                 usdtPlus = usdtPlus ? web3.web3.utils.fromWei(usdtPlus, unit) : usdtPlus;
             } catch (e) {
-                console.log("e originUsdtPlus:", e)
                 usdtPlus = getters.balance.usdtPlus;
                 originUsdtPlus = getters.originalBalance.usdtPlus
             }
@@ -188,7 +190,6 @@ const actions = {
                 originUsdt = usdt;
                 usdt = usdt ? web3.web3.utils.fromWei(usdt, unit) : usdt;
             } catch (e) {
-                console.log("e originUsdt:", e)
                 usdt = getters.balance.usdt;
                 originUsdt = getters.originalBalance.usdt
             }
@@ -200,8 +201,11 @@ const actions = {
 
             try {
                 ethPlus = await web3.contracts.ethPlus.methods.balanceOf(getters.account).call();
+                wEthPlus = await web3.contracts.wEthPlus.methods.balanceOf(getters.account).call();
                 originEthPlus = ethPlus;
+                originWethPlus = wEthPlus;
                 ethPlus = ethPlus ? web3.web3.utils.fromWei(ethPlus, unit) : ethPlus;
+                wEthPlus = wEthPlus ? web3.web3.utils.fromWei(wEthPlus, unit) : wEthPlus;
             } catch (e) {
                 ethPlus = getters.balance.ethPlus;
                 originEthPlus = getters.originalBalance.ethPlus
@@ -224,7 +228,6 @@ const actions = {
                 originOvn = ovn;
                 ovn = ovn ? web3.web3.utils.fromWei(ovn, 'ether') : null;
             } catch (e) {
-                console.log("e:", e)
                 ovn = getters.balance.ovn;
                 originOvn = getters.originalBalance.ovn;
             }
@@ -237,7 +240,6 @@ const actions = {
                 originWUsdPlus = wUsdPlus;
                 wUsdPlus = wUsdPlus ? web3.web3.utils.fromWei(wUsdPlus, 'mwei') : null;
             } catch (e) {
-                console.log("e:", e)
                 wUsdPlus = getters.balance.wUsdPlus;
                 originWUsdPlus = getters.originalBalance.wUsdPlus;
             }
@@ -254,6 +256,7 @@ const actions = {
             asset: asset,
             asset_two: asset_two,
             wUsdPlus: wUsdPlus,
+            wEthPlus: wEthPlus,
             ovn: ovn,
         });
 
@@ -268,6 +271,7 @@ const actions = {
             asset: originAsset,
             asset_two: originAsset_two,
             wUsdPlus: originWUsdPlus,
+            wEthPlus: originWethPlus,
             ovn: originOvn,
         });
 

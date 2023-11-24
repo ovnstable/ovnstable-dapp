@@ -5,7 +5,8 @@ token=$1
 url=$2
 stand=$3
 dockerComposePath="/home/ubuntu/docker-compose.yaml"
-
+zoneId=$4
+apiKey=$5
 
 if [ "$stand" = "prod" ]
 then
@@ -43,3 +44,14 @@ ssh $url docker login \
 
 ssh $url docker pull cr.yandex/crpg11k469bhc8lch9gm/overnight/dapp:$tag
 ssh $url docker-compose -f $dockerComposePath up -d --no-deps $nameDapp
+
+# Reset cache on Cloudflare
+# Affects all domains
+
+curl --request POST \
+  --url https://api.cloudflare.com/client/v4/zones/$zoneId/purge_cache \
+  --header 'Content-Type: application/json' \
+  --header "Authorization: Bearer $apiKey" \
+  --data '{
+  "purge_everything": true
+}'

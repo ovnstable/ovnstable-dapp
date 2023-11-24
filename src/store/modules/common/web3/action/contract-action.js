@@ -10833,6 +10833,7 @@ const chainContractsMap ={
         market:"0x149Eb6E777aDa78D383bD93c57D45a9A71b171B1",
         dai:"0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
         usdt:"0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+        marketWeth:"0x1C47D35DF5A18f592A8ee128A372780C746003D1",
         wETH:"0x82af49447d8a07e3bd95bd0d56f35241523fbab1"
     },
     zksync:{
@@ -10950,6 +10951,7 @@ const actions = {
 
             // market
             contracts.market,
+            contracts.marketWeth,
 
             // wUsdPlus
             contracts.wUsdPlus,
@@ -10995,10 +10997,11 @@ const actions = {
             
             // market
             load(ABI_Market,web3,chainContractsMap[network]?.market ?? null),
+            load(ABI_Market,web3,chainContractsMap[network]?.marketWeth ?? null),
 
             //wusd
             load(ABI_WusdPlus,web3,chainContractsMap[network]["usdPlus"]?.wUsdPlus ?? null),
-            load(ABI_WethPlus,web3,chainContractsMap[network]["wEthPlus"]?.tokenPlus ?? null),
+            load(ABI_WusdPlus,web3,chainContractsMap[network]["wEthPlus"]?.tokenPlus ?? null),
 
             // assets
             load(ERC20_ABI,web3,chainContractsMap[network]?.usdc ?? null),

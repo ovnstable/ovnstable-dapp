@@ -25,7 +25,7 @@
                                          account,
                                          sum,
                                          assetDecimals,
-                                         contracts.market,
+                                         contracts.marketWeth,
                                          'wrap',
                                          tokenContract,
                                          disapproveActionFunc,
@@ -78,7 +78,7 @@
         <v-row class="mt-8 mx-n3 main-card">
             <v-col cols="7">
                 <v-row align="center" class="ma-0">
-                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.wUsdPlus, 3) }}</label>
+                    <label class="balance-label ml-3">Balance: {{ $utils.formatMoney(balance.wEthPlus, 3) }}</label>
                     <div class="balance-network-icon ml-2">
                         <v-img :src="icon"/>
                     </div>
@@ -160,7 +160,7 @@
                         @click="clearApprove(
                             'wrap-invest',
                                account,
-                               contracts.market,
+                               contracts.marketWeth,
                                'wrap',
                                tokenContract,
                                disapproveActionFunc,
@@ -192,7 +192,7 @@
                              account,
                              sum,
                              assetDecimals,
-                             contracts.market,
+                             contracts.marketWeth,
                              'wrap',
                              tokenContract,
                              {successAction: 'wrapUsdPlus'},
@@ -219,7 +219,7 @@
                            'wrap-invest',
                            account,
                            assetDecimals,
-                           contracts.market,
+                           contracts.marketWeth,
                            'wrap',
                            tokenContract,
                            disapproveActionFunc,
@@ -342,7 +342,8 @@ export default {
         },
 
         maxResult: function () {
-            return this.$utils.formatMoney(this.balance[this.currency.id], 3);
+            console.log(this.balance, 'this.balance')
+            return this.$utils.formatMoney(this.balance.ethPlus, 3);
         },
 
         overnightFee: function () {
@@ -354,7 +355,7 @@ export default {
         },
 
         tokenContract(){
-            console.log(this.contracts, 'tokenContract')
+            console.log(this.balance, 'tokenContract')
             if (this.currency.id === 'ethPlus')
                 return this.contracts.ethPlus;
             else
@@ -450,6 +451,7 @@ export default {
     },
 
     created() {
+        console.log(this.balance, 'BALLLANCE')
         this.estimatedGas = null;
 
         this.gas = null;
@@ -508,7 +510,7 @@ export default {
                 this.account,
                 this.sum,
                 this.assetDecimals,
-                this.contracts.market,
+                this.contracts.marketWeth,
                 'wrap',
                 this.tokenContract,
                 this.disapproveActionFunc,
@@ -530,7 +532,7 @@ export default {
             let sum = this.web3.utils.toWei(stringSum, 'mwei');
             let address = this.tokenContract.options.address;
 
-            let value = await this.contracts.market.methods.previewWrap(address, sum).call();
+            let value = await this.contracts.marketWeth.methods.previewWrap(address, sum).call();
             value = this.web3.utils.fromWei(value, 'mwei');
             this.sumResult = this.$utils.formatMoney(Number.parseFloat(value), 2);
         },

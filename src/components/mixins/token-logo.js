@@ -75,7 +75,8 @@ export const tokenLogo = {
                 return require('@/assets/currencies/undefined.svg');
             }
 
-            return 'https://api.overnight.fi/root/odos/asset/tokens/' + item.symbol + '.webp';
+            // return 'https://api.overnight.fi/root/odos/asset/tokens/' + item.symbol + '.webp';
+                return require('@/assets/currencies/undefined.svg');
         },
 
         async loadOvernightTokenImage(token) {

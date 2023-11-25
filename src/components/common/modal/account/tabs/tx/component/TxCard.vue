@@ -2,7 +2,7 @@
     <v-row class="ma-0 account-info-row list-card-container" align="center" @click="switchCard">
         <v-col class="my-3" :cols="$wu.isMobile() ? 2 : 4">
             <v-row justify="start" align="center">
-                <div class="icon" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'">
+                <div class="icon" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" v-if="txData.product">
                     <v-img :src="require('@/assets/currencies/market/' + txData.product + '.svg')"/>
                 </div>
                 <div class="network-icon">
@@ -226,6 +226,8 @@ export default {
                     return lineaIcon;
                 case 324:
                     return zksyncIcon;
+                default:
+                    return null;
             }
         },
     },
@@ -238,11 +240,11 @@ export default {
         ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
 
         formatDate(date) {
-            return this.$dayjs.utc(date).format('DD.MM.YYYY');
+            return this.$dayjs.unix(date).format('DD.MM.YYYY');
         },
 
         formatTime(date) {
-            return this.$dayjs.utc(date).format('HH:mm');
+            return this.$dayjs.unix(date).format('HH:mm');
         },
 
         switchCard() {
@@ -491,9 +493,8 @@ export default {
 .network-icon {
     height: 16px !important;
     width: 16px !important;
-    margin-top: -20px !important;
-    margin-left: -8px !important;
     z-index: 55 !important;
+    margin-left: 10px;
     background-color: var(--card-coin-background);
     border-radius: 9999px !important;
 }

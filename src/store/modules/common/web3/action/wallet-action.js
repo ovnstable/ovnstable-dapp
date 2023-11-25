@@ -5,7 +5,6 @@ import walletConnectModule from '@web3-onboard/walletconnect'
 import coinbaseWalletModule from '@web3-onboard/coinbase'
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
-
 const SUPPORTED_NETWORKS = [137, 56, 10, 42161, 324, 8453, 59144];
 const WALLETCONNECT_SUPPORTED_NETWORKS = [10, 42161, 8453, 56, 59144, 137];
 
@@ -117,7 +116,6 @@ const actions = {
             });
 
             rootState.web3.provider.on('chainChanged', async function (newNetworkId) {
-                console.log("chainChanged callback", Number(newNetworkId).toString(10));
                 dispatch('chainChanged', newNetworkId);
             });
         }
@@ -157,7 +155,6 @@ const actions = {
                 }
             }
         } catch (e) {
-            console.log('Wallet not connected: ', e)
             await dispatch('initOnboard');
         }
     },
@@ -351,16 +348,13 @@ const actions = {
             // Returns a valid EIP1193 provider. In some cases the provider will need to be patched to satisfy the EIP1193 Provider interface
             getInterface: async ({ chains }) => {
                 const [chain] = chains;
-                console.log("Argent provider chains: ", chains, chain)
                 const { createEIP1193Provider } = await import('@web3-onboard/common');
 
                 wcprovider.onConnect(async data => {
-                    console.log("WalletConnect for Argent CONNECTED!", data);
                     localStorage.setItem('walletName', 'WalletConnect');
                     window.location.reload();
                 })
 
-                console.log("====== Init Onboard ARGENT Provider callbacks ======")
                 wcprovider.on('accountsChanged', async function (accounts) {
                     dispatch('accountChanged', accounts);
                 });
@@ -374,12 +368,10 @@ const actions = {
                 const provider = createEIP1193Provider(wcprovider, {
                     eth_chainId: async ({ baseRequest }) => {
                         const chainId = await baseRequest({ method: 'eth_chainId' });
-                        console.log("Chain it from provider: ", chainId)
                         return `0x${parseInt(324).toString(16)}`;
                     }
                 });
-                console.log("Argent provider: ", provider)
-                console.log("Argent  wcprovider provider: ", wcprovider)
+
                 return { provider };
             },
             // A list of platforms that this wallet supports
@@ -424,7 +416,6 @@ const actions = {
 
         const walletConnect = walletConnectModule({
             version: 2,
-            handleUri: uri => console.log('walletConnect uri: ' + uri),
             projectId: '7a088ae8cc40c1eb6925dc98cd5fe5e3', // ***New Param* Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
             // connectFirstChainId: true,
             requiredChains: [WALLETCONNECT_SUPPORTED_NETWORKS[0]], // get first chain
@@ -444,8 +435,6 @@ const actions = {
 
     async setNetwork({commit, dispatch, getters, rootState}, newNetworkId){
         {
-            console.log("======  Provider setNetwork  ======")
-
             if (newNetworkId !== undefined && newNetworkId && newNetworkId !== '') {
                 newNetworkId = parseInt(newNetworkId)
             } else {
@@ -454,8 +443,6 @@ const actions = {
             }
 
             if (SUPPORTED_NETWORKS.includes(newNetworkId)) {
-                console.log("======  Provider callback chainChanged SUPPORTED_NETWORKS ======")
-
                 dispatch('network/saveNetworkToLocalStore', newNetworkId.toString(), {root: true});
 
                 if (rootState.network.networkId !== newNetworkId) {
@@ -473,7 +460,6 @@ const actions = {
     },
 
     async chainChanged({commit, dispatch, getters, rootState}, newNetworkId) {
-        console.log("====== initOnboard Provider callback chainChanged ======")
         try {
             dispatch('setNetwork', newNetworkId);
         } catch (e) {
@@ -482,7 +468,6 @@ const actions = {
     },
 
     async accountChanged({commit, dispatch, getters, rootState}, accounts) {
-        console.log("====== initOnboard Provider callback accountsChanged ======", accounts[0], parseInt(await rootState.web3.web3.eth.net.getId()))
         try {
             dispatch('checkAccount', accounts[0]);
             dispatch('setNetwork', parseInt(await rootState.web3.web3.eth.net.getId()));
@@ -500,7 +485,6 @@ const actions = {
                     let accounts = await rootState.web3.web3.eth.getAccounts();
                     account = accounts[0];
                 } catch (e) {
-                    console.error('CheckAccount Error: ', e)
                     if (e && e.message && e.message.indexOf('disconnected') !== -1) {
                         commit('setWalletConnected', false);
                     }

@@ -10,27 +10,32 @@
                 </v-icon>
             </div>
 
-            <div v-if="!$wu.isMobile()" class="account-display-container" @click.stop="pendingTx? showTxHistory() : walletClickAction()">
-                <template v-if="pendingTx">
-                    <v-progress-circular
-                        width="2"
-                        :size="14"
-                        color="var(--third-gray-text)"
-                        indeterminate
-                    ></v-progress-circular>
-                    <label class="account-label pending-label ml-2">
-                        Pending...
+            <div class="wallet-bar__wrap" @click.stop="pendingTx? showTxHistory() : walletClickAction()">
+                <div
+                    v-if="!$wu.isMobile()"
+                    class="account-display-container"
+                >
+                    <template v-if="pendingTx">
+                        <v-progress-circular
+                            width="2"
+                            :size="14"
+                            color="var(--third-gray-text)"
+                            indeterminate
+                        ></v-progress-circular>
+                        <label class="account-label pending-label ml-2">
+                            Pending...
+                        </label>
+                    </template>
+
+                    <label v-else class="account-label" :class="dataHidden ? 'hidden-label' : ''">
+                        {{ account ? (dataHidden ? '' : accountDisplay) : 'XXX...XXXX' }}
                     </label>
-                </template>
+                </div>
 
-                <label v-else class="account-label" :class="dataHidden ? 'hidden-label' : ''">
-                    {{ account ? (dataHidden ? '' : accountDisplay) : 'XXX...XXXX' }}
-                </label>
-            </div>
-
-            <div class="wallet-col" v-if="!$wu.isMobile()">
-                <div v-if="walletName" class="wallet-icon">
-                    <v-img :src="require('@/assets/wallet/' + walletName.toLowerCase() + '.svg')"/>
+                <div class="wallet-col" v-if="!$wu.isMobile()">
+                    <div v-if="walletName" class="wallet-icon">
+                        <v-img :src="require('@/assets/wallet/' + walletName.toLowerCase() + '.svg')"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,6 +165,7 @@ export default {
 
     .account-display-container {
         height: 28px !important;
+        margin-right: 5px;
     }
 
     .wallet-icon {
@@ -263,5 +269,13 @@ export default {
 
 .account-display-container, .account-display-container > * {
     cursor: pointer !important;
+}
+
+.account-display-container {
+    margin-right: 8px;
+}
+
+.wallet-bar__wrap {
+    display: flex;
 }
 </style>

@@ -152,7 +152,6 @@ export const odosSwap = {
     },
     watch: {
         isAllDataLoaded: async function (newVal, oldValue) {
-            console.log("all data loaded for odos: ", newVal, this.tokenSeparationScheme, this.listOfBuyTokensAddresses)
             if (newVal && !this.dataBeInited) {
                 await this.initData(this.tokenSeparationScheme, this.listOfBuyTokensAddresses);
                 this.dataBeInited = true
@@ -187,7 +186,6 @@ export const odosSwap = {
 
             this.isChainsLoading = true;
             odosApiService.loadChains().then(data => {
-                console.log("Chains: ", data)
                 this.chains = data.chains
                 this.isChainsLoading = false;
             }).catch(e => {
@@ -203,7 +201,6 @@ export const odosSwap = {
             this.isTokensLoading = true;
             odosApiService.loadTokens()
                 .then(data => {
-                    console.log("Tokens: ", data)
                     this.tokensMap = data
                     this.isTokensLoading = false;
                 }).catch(e => {
@@ -251,9 +248,7 @@ export const odosSwap = {
             let networkId = this.getParams(this.networkName).networkId;
             // this.tokens = await this.getFilteredPoolTokens(networkId, false, listOfBuyTokensAddresses);
             this.tokens = await this.getFilteredPoolTokens(networkId, false, [], true); // [] - none execute
-            console.log("TOKENS_ ", this.tokens)
             this.secondTokens = (await this.getFilteredPoolTokens(networkId, true, listOfBuyTokensAddresses, false));
-            console.log("SECOND TOKENS_ ", this.secondTokens);
             this.isTokensLoadedAndFiltered = true;
 
             this.loadPricesInfo(networkId);
@@ -261,13 +256,9 @@ export const odosSwap = {
             await this.initAccountData(networkId);
         },
         async initOvernightSwap() {
-            console.log('init overnight swap data for network: ', this.networkName);
             let networkId = this.getParams(this.networkName).networkId;
-            console.log('init overnight swap data for networkId: ', networkId);
             this.tokens = await this.getFilteredOvernightTokens(networkId, false);
-            console.log("TOKENS_ ", this.tokens)
             this.secondTokens = await this.getFilteredOvernightTokens(networkId, true);
-            console.log("SECOND TOKENS_ ", this.secondTokens);
             this.isTokensLoadedAndFiltered = true;
 
             this.loadPricesInfo(networkId);
@@ -276,8 +267,6 @@ export const odosSwap = {
 
         },
         async initAccountData(networkId) {
-            console.log('Load User data')
-
             if (this && this.account) {
                 const ERC20 = await loadJSON('/contracts/ERC20.json');
                 console.log("Contracts ERC20 loaded", ERC20);
@@ -287,7 +276,6 @@ export const odosSwap = {
             }
         },
         loadContractsForTokens(contractFile) {
-            console.log("Load contracts for tokens")
             for (let i = 0; i < this.secondTokens.length; i++) {
                 let secondtoken = this.secondTokens[i];
                 this.tokensContractMap[secondtoken.address] = this._loadContract(contractFile, this.web3, secondtoken.address);
@@ -297,14 +285,10 @@ export const odosSwap = {
                 let token = this.tokens[i];
                 this.tokensContractMap[token.address] = this._loadContract(contractFile, this.web3, token.address);
             }
-
-            console.log("Token contracts be loaded.", this.tokensContractMap)
         },
         initUpdateBalancesInterval() {
             setTimeout(() => {
-                console.log("Start loading balances for odos swap")
                 this.updateBalancesIntervalId = setInterval(async () => {
-                    console.log("odos balances update")
                     await this.loadBalances();
                 }, 30000)
             }, 30000)
@@ -340,13 +324,11 @@ export const odosSwap = {
 
         async loadBalances() {
             if (this.isBalancesLoading) {
-                console.log("Balance already in loading status");
                 return;
             }
 
             this.isBalancesLoading = true;
             if (!this.account) {
-                console.log("Balance not loaded, wallet not login", this.account);
                 this.isBalancesLoading = false;
                 return;
             }
@@ -413,9 +395,10 @@ export const odosSwap = {
             }
 
             let networkId = this.getParams(this.networkName).networkId;
-            await this.loadContract(networkId).then(() => {
-                console.log("Contracts loaded", this.routerContract, this.executorContract);
-            })
+            await this.loadContract(networkId)
+                // .then(() => {
+                //     console.log("Contracts loaded", this.routerContract, this.executorContract);
+                // })
 
         },
         async loadContract(chainId) {
@@ -424,13 +407,9 @@ export const odosSwap = {
             }
             this.isContractLoading = true;
             return odosApiService.loadContractData(chainId).then(data => {
-                console.log("Swap form Contract: ", data)
                 this.contractData = data
                 this.routerContract = this._loadContract(this.contractData.routerAbi, this.web3, this.contractData.routerAddress)
                 this.executorContract = this._loadContract(this.contractData.erc20Abi, this.web3, this.contractData.executorAddress)
-
-                console.log("Swap form routerContract: ", this.routerContract)
-                console.log("Swap form routerContract: ", this.executorContract)
                 this.isContractLoading = false;
             }).catch(e => {
                 console.log("Error load contract", e)

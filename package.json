@@ -62,6 +62,7 @@
     "vue-cli-plugin-vuetify": "~2.4.2",
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.7.0",
+    "web-vitals": "^3.5.0",
     "web3": "^1.5.2",
     "webpack": "^4.46.0"
   },

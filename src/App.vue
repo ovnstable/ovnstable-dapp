@@ -5,7 +5,7 @@
 </template>
 
 <script>
-
+import {onLCP, onFID, onCLS} from 'web-vitals/attribution';
 import {mapActions} from "vuex";
 
 export default {
@@ -16,6 +16,9 @@ export default {
     created() {
       console.log('App created 2');
       this.loadDeprecatedShow();
+        onCLS(console.log);
+        onFID(console.log);
+        onLCP(console.log);
     },
     computed: {
     },

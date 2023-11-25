@@ -637,8 +637,7 @@ export default defineComponent({
 
             this.tokenSeparationScheme = 'POOL_SWAP';
             this.typeOfPoolScheme = this.typeOfPool;
-            console.log("Zap form odos init by scheme: ", this.tokenSeparationScheme, this.typeOfPoolScheme)
-            console.log("Zap pool: ", this.zapPool)
+
             // todo: move to backend
             let poolTokens = this.poolTokensForZapMap[this.zapPool.address];
             if (!poolTokens) {
@@ -646,7 +645,6 @@ export default defineComponent({
                 return;
             }
 
-            console.log("poolTokens: ", poolTokens, this.zapPool.address);
             this.listOfBuyTokensAddresses = [];
             this.listOfBuyTokensAddresses.push(poolTokens[0].address);
             this.listOfBuyTokensAddresses.push(poolTokens[1].address);
@@ -778,7 +776,6 @@ export default defineComponent({
             console.error('Clear form, swap method not found.', this.swapMethod);
         },
         resetOutputs() {
-            console.log("Reset outputs");
             if (!this.selectedOutputTokens.length) {
                 return
             }
@@ -835,20 +832,13 @@ export default defineComponent({
 
             let actualGas = await this.getActualGasPrice(this.networkId);
             let outputToken0Price = this.selectedOutputTokens[0].selectedToken.price;
-            console.log("outputToken0Price: ", outputToken0Price);
             let outputToken1Price = this.selectedOutputTokens[1].selectedToken.price;
-            console.log("outputToken1Price: ", outputToken1Price);
 
             let reserves = await this.getProportion(this.zapPool.address, this.zapPool);
-            console.log("reserves 1: ", reserves.token0Amount);
-            console.log("reserves 2: ", reserves.token1Amount);
             let sumReserves = (reserves.token0Amount * outputToken0Price) + (reserves.token1Amount * outputToken1Price);
-            console.log("sumReserves: ", sumReserves);
 
             let userInputTokens = this.selectedInputTokens;
-            console.log("User input tokens: ", userInputTokens);
             let poolOutputTokens = this.selectedOutputTokens;
-            console.log("Pool output tokens: ", poolOutputTokens);
             let formulaInputTokens = [];
             let formulaOutputTokens = [];
             for (let i = 0; i < userInputTokens.length; i++) {
@@ -856,7 +846,6 @@ export default defineComponent({
                 let userInputToken = inputToken.selectedToken;
 
                 let isFindUserInputTokenInPoolTokens = poolOutputTokens.find((poolToken) => poolToken.selectedToken.address === userInputToken.address);
-                console.log("User token find in pool: ", isFindUserInputTokenInPoolTokens, userInputToken);
                 if (isFindUserInputTokenInPoolTokens) {
                     // if user token exist in pool pair, move to output for proportion formula
                     formulaOutputTokens.push({
@@ -876,9 +865,6 @@ export default defineComponent({
                     price: userInputToken.price
                 });
             }
-
-            console.log("formulaInputTokens: ", formulaInputTokens);
-            console.log("formulaOutputTokens: ", formulaOutputTokens);
 
             // sort output formula and fill amount by 0;
             let formulaResultOutputWithZero = [];
@@ -940,14 +926,10 @@ export default defineComponent({
             });
 
 
-            console.log("Proportion for odos: ", proportions);
             proportions.outputTokens = proportions.outputTokens.filter((item, index) => item.proportion > 0);
-            console.log("Proportion for odos after filter: ", proportions);
 
-            let requestOutputTokens = this.getRequestOutputTokens();
-            let requestInputTokens = this.getRequestInputTokens();
-            console.log("requestOutputTokens: ", requestOutputTokens);
-            console.log("requestInputTokens: ", requestInputTokens);
+            // let requestOutputTokens = this.getRequestOutputTokens();
+            // let requestInputTokens = this.getRequestInputTokens();
 
             let request = {
                 "chainId": this.networkId,
@@ -1544,7 +1526,6 @@ export default defineComponent({
         },
 
         lockProportion(isLock, token) {
-            console.log("lockProportionFunc", isLock, token);
             if (this.outputTokensWithSelectedTokensCount <= 1 && !isLock) {
                 console.log("Its first token, unlock is disable");
                 return
@@ -1553,7 +1534,6 @@ export default defineComponent({
             token.locked = isLock
         },
         updateSliderValue(token, value) {
-            console.log("Swap form", token.id, value, !this.isSlidersOutOfLimit());
             let oldTokenValue = token.value;
 
             token.value = value;
@@ -1573,12 +1553,10 @@ export default defineComponent({
             // }
         },
         recalculateOutputTokensSum() {
-            console.log(`recalculateOutputTokensSum. recalculate token count ${this.selectedOutputTokens.length} usdSum: ${this.sumOfAllSelectedTokensInUsd}`);
             for (let i = 0; i < this.selectedOutputTokens.length; i++) {
                 let token = this.selectedOutputTokens[i];
                 let tokenSum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
                 let sum = this.swapMethod === 'BUY' ? tokenSum / token.selectedToken.price : tokenSum * token.selectedToken.price;
-                console.log(`Recalculate token.selectedToken ${token.selectedToken.symbol} price: ${token.selectedToken.price}, newUsdSum: ${sum} tokenSum ${tokenSum}`, token);
                 token.sum = this.$utils.formatMoney(sum, 4)
             }
         },
@@ -1590,8 +1568,6 @@ export default defineComponent({
 
             let proportion = Math.floor(difference / tokens.length)
             let remains = difference % tokens.length
-            console.log('proportion', proportion);
-            console.log('remains', remains);
 
             for (let i = 0; i < tokens.length; i++) {
                 let token = tokens[i];
@@ -1620,8 +1596,6 @@ export default defineComponent({
 
             let proportion = Math.floor(difference / tokens.length)
             let remains = difference % tokens.length
-            console.log('proportion', proportion);
-            console.log('remains', remains);
 
             for (let i = 0; i < tokens.length; i++) {
                 let token = tokens[i];
@@ -1646,15 +1620,12 @@ export default defineComponent({
 
             let tokens = this.getActiveTokens(token)
             // tokens.sort((a, b) => a.percentage - b.percentage)
-            console.log('tokens', tokens, difference)
             if (tokens.length === 0) {
                 return;
             }
 
             let proportion = Math.floor(difference / tokens.length)
             let remains = difference % tokens.length
-            console.log('proportion', proportion);
-            console.log('remains', remains);
 
             this.calculateProportions(tokens, proportion);
             // integer (natural)
@@ -1702,12 +1673,10 @@ export default defineComponent({
                 tokensPercentage += token.value
             }
 
-            console.log("Outs percent: ", tokensPercentage)
             return tokensPercentage;
         },
 
         recalculateOvnTokenByAnotherTotalBalances() {
-            console.log("Recalculate ovn token by another total balances: ", this.selectedOvnInputTokens, this.selectedNoneOvnInputTokens);
             if (!this.selectedOvnInputTokens || !this.selectedOvnInputTokens.length) {
                 return;
             }
@@ -1723,7 +1692,6 @@ export default defineComponent({
         recalcualteOvnInputValue() {
             setTimeout(() => {
                 let ovnToken = this.selectedOvnInputTokens[0];
-                console.log("Recalculate ovn token Total balance more than ovn token:", ovnToken, ovnToken.usdValue);
                 let ovnUsdValue = ovnToken.usdValue;
 
                 let totalBalance = this.totalNoneOvnUsdInputsUsdBalance;
@@ -1750,11 +1718,6 @@ export default defineComponent({
         },
 
         initDefaultTopInputTokensByBalance(tokens) {
-            console.log("Top any tokens by balance: ", tokens);
-            console.log("Top any tokens by balance selectedOvnInputTokens: ", this.selectedOvnInputTokens);
-            console.log("Top any tokens by balance selectedOvnOutputTokens: ", this.selectedOvnOutputTokens);
-            console.log("Top any tokens by balance noneOvnInputTokens: ", this.noneOvnInputTokens);
-
             if (!tokens || !tokens.length) {
                 return;
             }
@@ -1777,8 +1740,6 @@ export default defineComponent({
                 return token.balanceData.balance > 0;
             });
 
-            console.log("Top any tokens by balance tokensByBalance: ", topTokens);
-
             let tokensByBalanceSum = 0;
             let tokensByBalanceResult = [];
             for (let i = 0; i < topTokens.length; i++) {
@@ -1794,8 +1755,6 @@ export default defineComponent({
                 }
             }
 
-            console.log("Top tokens after filter: ", tokensByBalanceSum, tokensByBalanceResult)
-
             for (let i = 0; i < tokensByBalanceResult.length; i++) {
                 let token = tokensByBalanceResult[i];
                 token.selected = true;
@@ -1808,7 +1767,6 @@ export default defineComponent({
         },
 
         addSelectedTokenToList(selectedToken, swapMethod, selectTokenType) {
-            console.log(this.isInputToken(swapMethod, selectTokenType) ? 'INPUT TOKEN' :  'OUTPUT TOKEN');
             if (this.isInputToken(swapMethod, selectTokenType)) {
                 this.addSelectedTokenToInputList(selectedToken, true);
                 return;
@@ -1818,15 +1776,12 @@ export default defineComponent({
         },
         addSelectedTokenToInputList(selectedToken, isAddAllBalance) {
             // todo computed ovn input tokens and logic here
-            console.log("computed ovn input tokens and logic here!", selectedToken, isAddAllBalance);
-
             let newInputToken = this.getNewInputToken();
             newInputToken.selectedToken = selectedToken;
             this.inputTokens.push(newInputToken);
             this.removeAllWithoutSelectedTokens(this.inputTokens);
 
             if (isAddAllBalance) {
-                console.log("computed ovn input tokens and logic here! 2", newInputToken, isAddAllBalance);
                 setTimeout(() => {
                     this.updateTokenValue(newInputToken, newInputToken.selectedToken.balanceData.balance);
                 }, 10);
@@ -1849,7 +1804,6 @@ export default defineComponent({
             this.resetOutputs();
         },
         removeSelectedTokenFromList(selectedToken, swapMethod, selectTokenType) {
-            console.log(this.isInputToken(swapMethod, selectTokenType) ? 'INPUT TOKEN' :  'OUTPUT TOKEN');
             if (this.isInputToken(swapMethod, selectTokenType)) {
                 this.removeInputToken(selectedToken.id);
                 if (this.inputTokens.length === 0) {
@@ -1873,7 +1827,6 @@ export default defineComponent({
                 tokensToRemove.push(tokens[i]);
             }
 
-            console.log("removeAllWithoutSelectedTokens: ", tokens, tokensToRemove);
             for (let i = 0; i < tokensToRemove.length; i++) {
                 this.removeToken(tokens, tokensToRemove[i].id);
             }
@@ -2006,7 +1959,6 @@ export default defineComponent({
                 // first call
                 this.tokensQuotaCounterId = -1;
                 // update
-                console.log("UPDATE Proportion FIRST DATA")
                 this.recalculateProportion()
                 return;
             }

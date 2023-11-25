@@ -1,18 +1,10 @@
 <template>
-    <v-menu :close-on-content-click="closeOnContentClick">
+    <v-menu transition="slide-x-reverse-transition" :close-on-content-click="closeOnContentClick">
         <template v-slot:activator="{ on, attrs }">
-            <div class="select-bar-main-container mt-1"
+            <div class="select-bar-main-container"
                  v-bind="attrs"
                  v-on="on">
-                <v-row justify="end" align="center" class="select-bar-container">
-                    <v-icon class="menu-icon">mdi-view-headline</v-icon>
-
-<!--                    <div v-if="isShowSwipeNotification" class="ping-notify">
-                        <div class="ping d-inline ml-4">
-                            <div style=""></div>
-                        </div>
-                    </div>-->
-                </v-row>
+                <v-icon class="menu-icon">mdi-view-headline</v-icon>
             </div>
         </template>
         <div class="main-container">
@@ -653,90 +645,100 @@ export default {
 }
 </script>
 
-<style scoped>
-/* mobile */
+<style lang="scss" scoped>
+.select-bar-main-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 21px;
+    width: 32px;
+    height: 100%;
+    border-radius: 2px;
+    transition: opacity .2s ease, background-color .2s ease;
+}
+
+.select-bar-main-container:hover {
+    background-color: rgba(6, 120, 196, 0.9);
+    opacity: .9;
+
+    .menu-icon {
+        color: #fff;
+    }
+}
+
 @media only screen and (max-width: 960px) {
     .network-select-list-item {
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 14px !important;
-        line-height: 20px !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
     }
 
     .select-bar-main-container {
-        width: 20px !important;
+        width: 20px;
         margin-left: 20px;
     }
 
     .network-select-list {
-        width: 50vw !important;
+        width: 50vw;
     }
 
     .switch-theme-icon {
-        width: 26px !important;
-        height: 26px !important;
+        width: 26px;
+        height: 26px;
     }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
     .network-select-list-item {
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 18px !important;
-        line-height: 24px !important;
-    }
-
-    .select-bar-main-container {
-        width: 56px !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 24px;
     }
 
     .network-select-list {
-        width: 30vw !important;
+        width: 30vw;
     }
 
     .switch-theme-icon {
-        width: 32px !important;
-        height: 32px !important;
+        width: 32px;
+        height: 32px;
     }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
     .network-select-list-item {
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 18px !important;
-        line-height: 24px !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 24px;
     }
-
-    .select-bar-main-container {
-        width: 56px !important;
-    }
-
     .network-select-list {
-        width: 20vw !important;
+        width: 20vw;
     }
 
     .switch-theme-icon {
-        width: 32px !important;
-        height: 32px !important;
+        width: 32px;
+        height: 32px;
     }
 }
 
 .network-select-list {
-    background-color: var(--secondary) !important;
+    background-color: var(--secondary);
     border-radius: 10px;
 }
 
 .network-select-list-item {
-    font-family: 'Roboto', sans-serif !important;
-    color: var(--secondary-gray-text) !important;
+    font-family: 'Roboto', sans-serif;
+    color: var(--secondary-gray-text);
     cursor: pointer;
 }
 
 .text-blue {
-    color: var(--links-blue) !important;
+    color: var(--links-blue);
 }
 
 .select-bar-container {
@@ -750,15 +752,15 @@ export default {
 }
 
 .menu-icon {
-    color: var(--main-gray-text) !important;
+    color: var(--main-gray-text);
 }
 
 .switch-theme-icon {
-    color: var(--theme-icon-color) !important;
+    color: var(--theme-icon-color);
 }
 
 .theme-switch-btn {
-    background-color: var(--theme-switch-background) !important;
+    background-color: var(--theme-switch-background);
 }
 
 .navbar-list-header {
@@ -767,7 +769,7 @@ export default {
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;
-    letter-spacing: 0.01em !important;
+    letter-spacing: 0.01em;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--third-gray-text);
     text-transform: uppercase;
@@ -797,11 +799,11 @@ export default {
 
 .selected-page {
     color: var(--main-gray-text);
-    font-weight: 700 !important;
+    font-weight: 700;
 }
 
 .selected-page-item {
-    background-color: var(--card-banner-status-container) !important;
+    background-color: var(--card-banner-status-container);
 }
 
 .navbar-page-label {
@@ -810,7 +812,7 @@ export default {
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;
-    letter-spacing: 0.02em !important;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
@@ -823,7 +825,7 @@ export default {
 }
 
 .main-container {
-    background-color: var(--secondary) !important;
+    background-color: var(--secondary);
 }
 
 .list-item-hover:hover {
@@ -838,16 +840,16 @@ export default {
 
 .footer-social-link {
     cursor: pointer;
-    height: 48px !important ;
+    height: 48px ;
 }
 
 .zealy {
-    height: 24px !important;
+    height: 24px;
 }
 
 .toggleUpDown {
-    transition: transform .3s ease-in-out !important;
-    color: var(--main-gray-text) !important;
+    transition: transform .3s ease-in-out;
+    color: var(--main-gray-text);
 }
 
 .toggleUpDown.rotate {
@@ -855,7 +857,7 @@ export default {
 }
 
 .navbar-list-divider {
-    border-top: 1px solid var(--input-placeholder) !important;
+    border-top: 1px solid var(--input-placeholder);
 }
 
 @keyframes ping {

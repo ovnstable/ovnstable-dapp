@@ -5,7 +5,7 @@
 
         <v-main>
             <div class="main-container mt-5">
-                <router-view></router-view>
+                <router-view />
             </div>
         </v-main>
 
@@ -49,6 +49,8 @@ export default {
     }),
 
     async created() {
+        await this.initTheme();
+
       try {
         let web3 = await new Web3(Web3.givenProvider);
         let networkID = await web3.eth.net.getId();
@@ -67,8 +69,6 @@ export default {
           }
         }
       }
-
-        await this.initTheme();
 
         await this.initEtsList();
 

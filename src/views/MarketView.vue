@@ -268,16 +268,16 @@ export default {
 
       this.isProductsInfoLoading = true;
 
-      productInfoApiService.getAllProducts(this.appApiUrl)
+      // productInfoApiService.getAllProducts(this.appApiUrl)
       // productInfoApiService.getAllProducts('http://localhost:9999/api')
-          .then(data => {
-            console.log("Products loaded: ", data);
-            this.sortedCardList = this.getSortedCardList(data);
-            this.isProductsInfoLoading = false;
-          }).catch(e => {
-            console.error("Error when load products. ", e);
-            this.isProductsInfoLoading = false;
-      });
+      //     .then(data => {
+      //       console.log("Products loaded: ", data);
+      //       this.sortedCardList = this.getSortedCardList(data);
+      //       this.isProductsInfoLoading = false;
+      //     }).catch(e => {
+      //       console.error("Error when load products. ", e);
+      //       this.isProductsInfoLoading = false;
+      // });
     },
 
     async refreshClientData() {

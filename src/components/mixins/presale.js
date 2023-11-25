@@ -543,17 +543,13 @@ export const presale = {
             console.log("Load contracts for tokens")
 
             const ERC20 = await loadJSON('/contracts/ERC20.json');
-            console.log("Contracts ERC20 loaded", ERC20);
             this.ovnTokenContract = this._loadContract(ERC20, this.web3, this.ovnTokenAddress);
-            console.log("Token contract be loaded.", this.ovnTokenContract)
 
             const whitelistFile = await loadJSON(`/contracts/${this.networkName}/presale/Whitelist.json`);
             this.ovnWhitelistContract = this._loadContract(whitelistFile, this.web3);
-            console.log("Whitelist contract be loaded.", this.ovnWhitelistContract)
 
             const icoFile = await loadJSON(`/contracts/${this.networkName}/presale/OverflowICO.json`);
             this.ovnICOContract = this._loadContract(icoFile, this.web3);
-            console.log("ICO contract be loaded.", this.ovnICOContract)
         },
 
         _loadContract(file, web3, address) {

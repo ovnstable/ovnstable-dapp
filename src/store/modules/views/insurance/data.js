@@ -119,7 +119,7 @@ const actions = {
                 avgApy = value;
                 avgApy.date = dayjs(avgApy.date).format("DD MMM. ‘YY");
             }).catch(reason => {
-                console.log('Error get data: ' + reason);
+                console.debug('Error get data: ' + reason);
             })
 
         await fetch(appApiUrl + '/insurance/avg-apy-info/month', fetchOptions)
@@ -128,9 +128,10 @@ const actions = {
                 avgApyStrategyMonth = value;
                 avgApyStrategyMonth.date = dayjs(avgApyStrategyMonth.date).format("DD MMM. ‘YY");
             }).catch(reason => {
-                console.log('Error get data: ' + reason);
+                console.debug('Error get data: ' + reason);
             })
 
+        // TODO: do not EXIST
         await fetch(appApiUrl + '/insurance/', fetchOptions)
             .then(value => value.json())
             .then(value => {
@@ -141,6 +142,7 @@ const actions = {
 
                 strategyData.chainId = refreshParams.chain.chainId;
 
+                if (!strategyData.payouts) throw Error("no insurance payouts")
                 strategyData.payouts.sort((o1, o2) => difference(o1.payableDate, o2.payableDate));
                 let clientData = strategyData.payouts;
 
@@ -198,7 +200,7 @@ const actions = {
 
                 dispatch('addInsuranceTvlData', { name: refreshParams.chain.chainName, data: widgetTvlData});
             }).catch(reason => {
-                console.log('Error get data: ' + reason);
+                console.debug('Error get data: ' + reason);
             })
 
         dispatch('addInsuranceStrategyData', { name: refreshParams.chain.chainName, data: strategyData});

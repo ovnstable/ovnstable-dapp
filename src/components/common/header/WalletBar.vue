@@ -3,8 +3,11 @@
         <div class="wallet-bar-container">
             <WalletSelect/>
 
-            <div class="wallet-col"
-                 v-if="!$wu.isMobile()" @click.stop="switchEye">
+            <div
+                class="wallet-col"
+                v-if="!$wu.isMobile()"
+                @click.stop="switchEye"
+            >
                 <v-icon class="eye-icon">
                     {{ dataHidden ? 'mdi-eye-off-outline' : 'mdi-eye-outline'}}
                 </v-icon>
@@ -116,13 +119,10 @@ export default {
 </script>
 
 <style scoped>
-
-/* mobile */
+.hidden-label {
+    border-radius: 4px;
+}
 @media only screen and (max-width: 960px) {
-    .wallet-bar-main-container {
-        width: 120px !important;
-    }
-
     .wallet-bar-container {
         height: 28px !important;
     }
@@ -151,10 +151,6 @@ export default {
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .wallet-bar-main-container {
-        width: 450px !important;
-    }
-
     .wallet-bar-container {
         height: 44px !important;
     }
@@ -182,7 +178,7 @@ export default {
     }
 
     .hidden-label {
-        width: 130px;
+        width: 85px;
         height: 28px;
         background: var(--hide-account);
     }
@@ -190,10 +186,6 @@ export default {
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .wallet-bar-main-container {
-        width: 450px !important;
-    }
-
     .wallet-bar-container {
         height: 42px !important;
     }
@@ -220,7 +212,7 @@ export default {
     }
 
     .hidden-label {
-        width: 130px;
+        width: 85px;
         height: 28px;
         background: var(--hide-account);
     }
@@ -259,9 +251,6 @@ export default {
 .account-display-container {
     background: var(--card-coin-background);
     border-radius: 4px;
-
-    padding: 5px;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -277,5 +266,26 @@ export default {
 
 .wallet-bar__wrap {
     display: flex;
+    transition: opacity .2s ease;
+}
+
+.wallet-bar__wrap:hover {
+    opacity: .7;
+}
+
+.wallet-bar-container {
+    padding: 5px 10px;
+}
+
+.wallet-col {
+    padding: 0 10px;
+}
+
+.account-label {
+    margin: 0 5px;
+}
+
+.account-label.hidden-label {
+    margin: 0;
 }
 </style>

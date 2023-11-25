@@ -269,7 +269,6 @@ export const odosSwap = {
         async initAccountData(networkId) {
             if (this && this.account) {
                 const ERC20 = await loadJSON('/contracts/ERC20.json');
-                console.log("Contracts ERC20 loaded", ERC20);
                 this.loadContractsForTokens(ERC20);
 
                 await this.loadBalances();
@@ -435,7 +434,6 @@ export const odosSwap = {
                     // console.log("token.price", token.price);
                 }
 
-                console.log("Tokens prices be loaded.")
                 this.isPricesLoading = false;
             }).catch(e => {
                 console.error("Error when load prices info", e);
@@ -444,7 +442,6 @@ export const odosSwap = {
         },
         async loadPrices(chainId) {
             return odosApiService.loadPrices(chainId).then(data => {
-                console.log("Prices: ", data)
                 this.tokenPricesMap = data.tokenPrices;
             }).catch(e => {
                 console.error("Error load contract", e)

@@ -178,7 +178,7 @@ export default {
     }
 
     .hidden-label {
-        width: 85px;
+        width: 90.5px;
         height: 28px;
         background: var(--hide-account);
     }

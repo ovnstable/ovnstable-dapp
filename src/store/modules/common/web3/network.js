@@ -361,6 +361,7 @@ const actions = {
     },
 
     async setWalletNetwork({commit, dispatch, getters, rootState}, network) {
+        console.log("setWalletNetwork")
         if (rootState.web3.provider && !rootState.web3.isProviderDefault) {
 
             dispatch('saveNetworkToLocalStore', network);
@@ -375,6 +376,7 @@ const actions = {
             } catch (switchError) {
                 try {
                     let params;
+                    console.log(network, 'network')
 
                     switch (network) {
                         case "polygon":

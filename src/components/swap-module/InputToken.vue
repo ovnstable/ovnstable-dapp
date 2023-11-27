@@ -16,7 +16,7 @@
                         <div v-if="token.selectedToken"
                              @click="selectTokenFunc(token)"
                              class="selected-token-container">
-                            <div>
+                            <div class="selected-token-container__content">
                                 <div class="selected-token-item-img">
                                     <img :src="token.selectedToken.logoUrl"
                                          class="selected-token"
@@ -165,6 +165,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.selected-token-container__content {
+    display: flex;
+    align-items: center;
+}
+
 @media only screen and (max-width: 960px) {
     .select-token-item-text {
         font-size: 16px;
@@ -313,7 +318,7 @@ div {
     font-weight: 600;
     color: var(--main-gray-text);
     margin-right: 15px;
-    padding-left: 30px;
+    padding-left: 6px;
 }
 
 .select-token-item-img {
@@ -328,10 +333,7 @@ div {
     top: 12px;
 }
 .selected-token-item-img {
-    display: inline-block;
-    position: absolute;
-    top: 8px;
-    left: 8px;
+    display: flex;
 }
 
 .select-token-balance-container {

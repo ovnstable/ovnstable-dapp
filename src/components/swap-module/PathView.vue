@@ -203,8 +203,6 @@ export default defineComponent({
 
                 node.logoUrl = this.loadTokenImage(node);
             }
-
-            console.log("Logos is loaded: ", this.pathViz)
         },
         getInitedRoot(pathViz, inputTokens, outputTokens) {
             let root = new Map();
@@ -226,13 +224,9 @@ export default defineComponent({
                         poolLabel: link.label,
                         ...pathViz.nodes[link.target]
                     });
-                    console.log("First branch init: ", link.target, branch)
                     root.set(link.source, branch);
                     continue;
                 }
-
-                console.log("Founded branch: ", link.source, branch)
-                console.log("Add to branch: ", link.source, pathViz.nodes[link.target].symbol, pathViz.nodes[link.target])
 
                 let id = (Math.random() + 1).toString(36).substring(2);
                 branch.push({
@@ -241,9 +235,7 @@ export default defineComponent({
                     ...pathViz.nodes[link.target]
                 });
 
-                console.log("new add to branch: ", link.source, branch)
                 root.set(link.source, branch);
-                console.log("new rename branch to : ", link.target, branch)
                 // root.delete(link.source);
                 // console.log("Root: ", root);
             }
@@ -263,7 +255,6 @@ export default defineComponent({
 
             let existsPathMap = new Map(); // write full path by queue of symbol
 
-            console.log("For clear duplicate data: ", root);
             let newRoot = new Map();
             let branches = Array.from(root.values());
             let keys = Array.from(root.keys());
@@ -307,7 +298,6 @@ export default defineComponent({
                 return root;
             }
 
-            console.log("Filtered data: ", root, inputTokens, outputTokens)
             let newRoot = new Map();
             let branches = Array.from(root.values());
             for (let i = 0; i < inputTokens.length; i++) {
@@ -343,7 +333,6 @@ export default defineComponent({
                     let lastToken = tokens[tokens.length - 1];
                     let branchInfo = this.findBranchWithFirstToken(root, branches, lastToken);
                     if (branchInfo && branchInfo.key) {
-                        console.log("Key to delete", branchInfo.key)
                         keysToDeleteList.push(branchInfo.key);
                         anyConnect = true;
                     }
@@ -375,7 +364,6 @@ export default defineComponent({
                 }
             }
 
-            console.log("Merged root", root);
             return root;
         },
         getKeyByValue(map, value) {
@@ -399,7 +387,6 @@ export default defineComponent({
                 }
             }
 
-            console.log("Branch not found with first token: ", searchToken);
             return null;
         },
         findBranchWithLastToken(root, branches, searchToken) {
@@ -415,12 +402,10 @@ export default defineComponent({
                 }
             }
 
-            console.log("Branch not found with first token: ", searchToken);
             return null;
         },
         getUniquePools(branch) {
             // selectedKey is index
-            console.log("getUniqueStrings: ", branch, this.root, Array.from(this.root.keys()));
             // Set to store unique strings
             const uniqueSet = new Set();
             //

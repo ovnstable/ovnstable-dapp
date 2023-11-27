@@ -122,6 +122,10 @@ export default {
 .hidden-label {
     border-radius: 4px;
 }
+
+.account-display-container {
+    width: 90px;
+}
 @media only screen and (max-width: 960px) {
     .wallet-bar-container {
         height: 28px !important;
@@ -178,7 +182,7 @@ export default {
     }
 
     .hidden-label {
-        width: 90.5px;
+        width: 90px;
         height: 28px;
         background: var(--hide-account);
     }
@@ -212,7 +216,7 @@ export default {
     }
 
     .hidden-label {
-        width: 85px;
+        width: 90px;
         height: 28px;
         background: var(--hide-account);
     }

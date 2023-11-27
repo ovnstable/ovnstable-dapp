@@ -445,7 +445,6 @@ export default {
 </script>
 
 <style scoped>
-
 /* mobile */
 @media only screen and (max-width: 960px) {
     .section-title-label {

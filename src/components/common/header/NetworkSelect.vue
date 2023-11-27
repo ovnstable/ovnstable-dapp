@@ -88,17 +88,6 @@
                     ZkSync
                 </v-list-item-title>
             </v-list-item>
-            <v-list-item disabled>
-                <v-list-item-avatar>
-                    <div class="list-item-icon">
-                        <v-img style="filter: grayscale(100%);" :src="require('@/assets/currencies/ETH.svg')"/>
-                    </div>
-                </v-list-item-avatar>
-                <v-list-item-title class="network-select-list-item list-item-disabled">
-                    Ethereum
-                    <v-icon class="mb-5" small></v-icon>
-                </v-list-item-title>
-            </v-list-item>
 
             <div class="divider-container">
                 <div class="navbar-list-divider mt-3 mb-1"></div>

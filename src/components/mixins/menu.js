@@ -146,18 +146,6 @@ export const menu = {
                 console.error("Track error:", e);
             }
         },
-        swipeOdosClick() {
-            this.selectTab('swipe-odos');
-            this.goToActionByPath('/swipe', {tabName: 'swipe-odos'});
-
-            try {
-                this.trackClick({action: 'click_menu_swipe', event_category: 'Click button', event_label: 'Click swipe menu button' });
-            } catch (e) {
-                console.error("Track error:", e);
-            }
-
-            this.checkIsNotified(true);
-        },
         bridgeClick() {
             this.selectTab('bridge');
             this.goToActionByPath('/bridge', {tabName: 'bridge'});

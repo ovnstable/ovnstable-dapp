@@ -2,15 +2,10 @@
     <div>
         <div class="page-container">
             <div class="mt-10">
-                <label v-if="viewType === 'SWAP'" class="title-label">SWAP</label>
-                <label v-else-if="viewType === 'SWIPE'" class="title-label">SWIPE</label>
-                <label v-else class="title-label">SWAP</label>
+                <label class="title-label">SWAP</label>
             </div>
 
-            <v-row v-if="viewType === 'SWIPE'">
-                <div class="mb-20" style="height: 20px"></div>
-            </v-row>
-            <v-row v-else align="start" justify="start" class="ma-0 mt-5 mb-5 toggle-row">
+            <v-row align="start" justify="start" class="ma-0 mt-5 mb-5 toggle-row">
                 <label class="tab-btn mr-4 tab-button">SWAP</label>
 
                 <label @click="mintAction()"
@@ -31,12 +26,7 @@
                                 :handle-form-reset-func="handleFormReset"
                                 :update-stablecoins-list-func="updateStablecoinsList"/>
                     </div>
-                    <div v-if="viewType === 'SWIPE'"
-                         class="col-lg-7 col-md-7 col-sm-12">
-                        <SwipeDetalization v-if="account" :stablecoin-tokens="stablecoinTokens"/>
-                        <SwipeInformation v-else/>
-                    </div>
-                    <div v-else
+                    <div
                          class="col-lg-7 col-md-7 col-sm-12">
                         <div v-if="isFirstInitializationForPath">
                             <SwapInformation/>
@@ -60,14 +50,10 @@ import SwapForm from "@/components/odos/SwapForm.vue";
 import SwapInformation from "@/components/swap-module/SwapInformation.vue";
 import {mapActions, mapGetters} from "vuex";
 import PathView from "@/components/swap-module/PathView.vue";
-import SwipeDetalization from "@/components/swap-module/swipe/SwipeDetalization.vue";
-import SwipeInformation from "@/components/swap-module/swipe/SwipeInformation.vue";
 
 export default defineComponent({
     name: "BaseSwapView",
     components: {
-        SwipeDetalization,
-        SwipeInformation,
         PathView,
         SwapInformation,
         SwapForm

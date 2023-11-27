@@ -2,7 +2,7 @@
     <div>
         <BaseSwapView
             :view-type="'SWAP'"
-        ></BaseSwapView>
+        />
     </div>
 </template>
 

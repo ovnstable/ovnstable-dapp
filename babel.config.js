@@ -1,7 +1,3 @@
-// module.exports = {
-//   presets: ["@vue/app"]
-// };
-
 module.exports = (api) => {
   api.cache(true)
   const plugins = [
@@ -9,5 +5,6 @@ module.exports = (api) => {
     '@babel/plugin-proposal-nullish-coalescing-operator',
     '@babel/plugin-syntax-bigint'
   ]
+
   return { plugins }
 }

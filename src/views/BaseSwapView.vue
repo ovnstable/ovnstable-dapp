@@ -185,7 +185,7 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 
 .toggle-row {
     border-bottom: 2px solid var(--main-border);
-    //width: 200% !important;
+    /* //width: 200% !important; */
     color: var(--main-gray-text);
 }
 

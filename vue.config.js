@@ -1,9 +1,6 @@
 const zlib = require("zlib");
 
 module.exports = {
-    chainWebpack: config => {
-        config.optimization.delete('splitChunks')
-    },
     pluginOptions: {
         compression: {
             modes: ['production'],
@@ -41,12 +38,30 @@ module.exports = {
         module: {
             rules:  [
                 {
+                    test: /node_modules[\\/]@walletconnect/,
+                    loader: 'babel-loader',
+                },
+                {
+                    test: /node_modules[\\/]unstorage/,
+                    loader: 'babel-loader',
+                },
+                {
                     test: /\.js|mjs$/,
-                    exclude: (_) => !/node_modules\/(@web3auth|@ethereumjs|@walletconnect|@web3-onboard|@web3modal|eth-block-tracker|@eth-block-tracker|superstruct|@superstruct|@coinbase|@web3-onboard\/coinbase|@coinbase\/wallet-sdk)/.test(_),
+                    exclude: (_) => !/node_modules\/(@web3auth|@ethereumjs|@web3-onboard|@web3modal|eth-block-tracker|@eth-block-tracker)/.test(_),
+                    loader: 'babel-loader'
+                },
+                {
+                    test: /\.js|mjs$/,
+                    exclude: (_) => !/node_modules\/(superstruct|@superstruct|@coinbase|@web3-onboard\/coinbase|@coinbase\/wallet-sdk)/.test(_),
                     loader: 'babel-loader'
                 }
-            ]
-        }
+            ],
+        },
+        optimization: {
+          splitChunks: {
+            chunks: "all",
+          },
+        },
     },
 
     transpileDependencies: [

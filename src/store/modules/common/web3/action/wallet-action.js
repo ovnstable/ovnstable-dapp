@@ -3,11 +3,11 @@ import injectedModule, {ProviderLabel} from '@web3-onboard/injected-wallets'
 import Onboard from "@web3-onboard/core";
 import walletConnectModule from '@web3-onboard/walletconnect'
 import coinbaseWalletModule from '@web3-onboard/coinbase'
-import WalletConnectProvider from "@walletconnect/web3-provider";
-
+import { EthereumProvider } from '@walletconnect/ethereum-provider'
 
 const SUPPORTED_NETWORKS = [137, 56, 10, 42161, 324, 8453, 59144];
 const WALLETCONNECT_SUPPORTED_NETWORKS = [10, 42161, 8453, 56, 59144, 137];
+const WC_PROJECT_ID = '7a088ae8cc40c1eb6925dc98cd5fe5e3'
 
 const state = {
     onboard: null,
@@ -90,6 +90,7 @@ const actions = {
         let walletName = localStorage.getItem('walletName');
         // console.log("walletConnect onboard before connect wallet: ", walletName)
         let connectedWallets;
+
         if (walletName !== undefined && walletName && walletName !== 'undefined' && walletName !== 'null') {
             connectedWallets = await onboard.connectWallet({ autoSelect: { label: walletName, disableModals: true }});
         } else {
@@ -117,7 +118,6 @@ const actions = {
             });
 
             rootState.web3.provider.on('chainChanged', async function (newNetworkId) {
-                console.log("chainChanged callback", Number(newNetworkId).toString(10));
                 dispatch('chainChanged', newNetworkId);
             });
         }
@@ -157,7 +157,6 @@ const actions = {
                 }
             }
         } catch (e) {
-            console.log('Wallet not connected: ', e)
             await dispatch('initOnboard');
         }
     },
@@ -317,21 +316,7 @@ const actions = {
     async getCustomWallets({commit, dispatch, getters, rootState}) {
         let customWallets = []; // include custom (not natively supported) injected wallet modules here
 
-        //  Create WalletConnect Provider for argent
-        const wcprovider = new WalletConnectProvider({
-            rpc: {
-                ['324']: "https://mainnet.era.zksync.io",
-                ['42161']: "https://arb1.arbitrum.io/rpc",
-                ['8453']: "https://mainnet.base.org",
-                ['59144']: "https://linea.drpc.org",
-                ['10']: "https://optimism.llamarpc.com",
-                ['56']: "https://bsc-dataseed.binance.org",
-                ['137']: "https://polygon-rpc.com/"
-            },
-            chainId: 324
-        });
-
-
+        // ARGENT is zk-wallet
         const customArgent = {
             // The label that will be displayed in the wallet selection modal
             label: 'Argent',
@@ -349,19 +334,34 @@ const actions = {
             // A method that returns a string of the wallet icon which will be displayed
             getIcon: async () => "https://images.prismic.io/argentwebsite/313db37e-055d-42ee-9476-a92bda64e61d_logo.svg?auto=format%2Ccompress&amp;fit=max&amp;q=50",
             // Returns a valid EIP1193 provider. In some cases the provider will need to be patched to satisfy the EIP1193 Provider interface
-            getInterface: async ({ chains }) => {
-                const [chain] = chains;
-                console.log("Argent provider chains: ", chains, chain)
+            getInterface: async () => {
                 const { createEIP1193Provider } = await import('@web3-onboard/common');
 
-                wcprovider.onConnect(async data => {
-                    console.log("WalletConnect for Argent CONNECTED!", data);
+                // //  Create WalletConnect Provider for argent
+                const wcprovider = await EthereumProvider.init({
+                    projectId: WC_PROJECT_ID,
+                    rpcMap: {
+                        ['324']: "https://mainnet.era.zksync.io",
+                        ['42161']: "https://arb1.arbitrum.io/rpc",
+                        ['8453']: "https://mainnet.base.org",
+                        ['59144']: "https://linea.drpc.org",
+                        ['10']: "https://optimism.llamarpc.com",
+                        ['56']: "https://bsc-dataseed.binance.org",
+                        ['137']: "https://polygon-rpc.com/"
+                    },
+                    optionalChains: [324],
+                    showQrModal: true,
+                    chainId: 324
+                });
+
+                wcprovider.on('connect', async data => {
+                    console.log(data, 'CONNECT');
                     localStorage.setItem('walletName', 'WalletConnect');
                     window.location.reload();
                 })
 
-                console.log("====== Init Onboard ARGENT Provider callbacks ======")
                 wcprovider.on('accountsChanged', async function (accounts) {
+                    console.log(accounts, 'accountsChanged');
                     dispatch('accountChanged', accounts);
                 });
 
@@ -372,14 +372,11 @@ const actions = {
                 await wcprovider.enable();
 
                 const provider = createEIP1193Provider(wcprovider, {
-                    eth_chainId: async ({ baseRequest }) => {
-                        const chainId = await baseRequest({ method: 'eth_chainId' });
-                        console.log("Chain it from provider: ", chainId)
+                    eth_chainId: ({ baseRequest }) => {
                         return `0x${parseInt(324).toString(16)}`;
                     }
                 });
-                console.log("Argent provider: ", provider)
-                console.log("Argent  wcprovider provider: ", wcprovider)
+
                 return { provider };
             },
             // A list of platforms that this wallet supports
@@ -397,10 +394,11 @@ const actions = {
 
     async getMainWalletsConfig({commit, dispatch, getters, rootState}) {
         let customWallets = await dispatch('getCustomWallets');
+        console.log(customWallets, 'customWallets');
         const injected = injectedModule({
             custom: customWallets,
             // display all wallets even if they are unavailable
-            displayUnavailable: true,
+            displayUnavailable: false,
             filter: await dispatch('getWalletsFilter'),
             sort: (wallets) => {
                 const metaMask = wallets.find(({ label }) => label === ProviderLabel.MetaMask)
@@ -424,8 +422,7 @@ const actions = {
 
         const walletConnect = walletConnectModule({
             version: 2,
-            handleUri: uri => console.log('walletConnect uri: ' + uri),
-            projectId: '7a088ae8cc40c1eb6925dc98cd5fe5e3', // ***New Param* Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
+            projectId: WC_PROJECT_ID, // ***New Param* Project ID associated with [WalletConnect account](https://cloud.walletconnect.com)
             // connectFirstChainId: true,
             requiredChains: [WALLETCONNECT_SUPPORTED_NETWORKS[0]], // get first chain
             optionalChains: SUPPORTED_NETWORKS, // chains optional to be supported by WC wallet 0xA4B1,
@@ -444,8 +441,6 @@ const actions = {
 
     async setNetwork({commit, dispatch, getters, rootState}, newNetworkId){
         {
-            console.log("======  Provider setNetwork  ======")
-
             if (newNetworkId !== undefined && newNetworkId && newNetworkId !== '') {
                 newNetworkId = parseInt(newNetworkId)
             } else {
@@ -454,8 +449,6 @@ const actions = {
             }
 
             if (SUPPORTED_NETWORKS.includes(newNetworkId)) {
-                console.log("======  Provider callback chainChanged SUPPORTED_NETWORKS ======")
-
                 dispatch('network/saveNetworkToLocalStore', newNetworkId.toString(), {root: true});
 
                 if (rootState.network.networkId !== newNetworkId) {
@@ -473,7 +466,6 @@ const actions = {
     },
 
     async chainChanged({commit, dispatch, getters, rootState}, newNetworkId) {
-        console.log("====== initOnboard Provider callback chainChanged ======")
         try {
             dispatch('setNetwork', newNetworkId);
         } catch (e) {
@@ -482,7 +474,6 @@ const actions = {
     },
 
     async accountChanged({commit, dispatch, getters, rootState}, accounts) {
-        console.log("====== initOnboard Provider callback accountsChanged ======", accounts[0], parseInt(await rootState.web3.web3.eth.net.getId()))
         try {
             dispatch('checkAccount', accounts[0]);
             dispatch('setNetwork', parseInt(await rootState.web3.web3.eth.net.getId()));
@@ -500,7 +491,6 @@ const actions = {
                     let accounts = await rootState.web3.web3.eth.getAccounts();
                     account = accounts[0];
                 } catch (e) {
-                    console.error('CheckAccount Error: ', e)
                     if (e && e.message && e.message.indexOf('disconnected') !== -1) {
                         commit('setWalletConnected', false);
                     }

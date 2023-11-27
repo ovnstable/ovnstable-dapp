@@ -232,7 +232,7 @@ const actions = {
                 });
             }
         } catch(e) {
-            console.log("Error Strategy Weights: ", e);
+            console.debug("refreshInsuranceTotalData: ", e);
         }
 
 

@@ -3,7 +3,6 @@ export default async function getSwap({ context, nextMiddleware }){
     console.log('Get Dapp/Swap');
   }
   catch(e){
-    console.log(e);
     return context.next(false);
   }
   return nextMiddleware()

@@ -1,23 +1,17 @@
 <template>
     <v-app id="app">
-        <router-view></router-view>
+        <router-view />
     </v-app>
 </template>
 
 <script>
-
 import {mapActions} from "vuex";
 
 export default {
     name: 'App',
-
-    data: () => ({
-    }),
     created() {
-      console.log('App created 2');
+      console.log('App created 3');
       this.loadDeprecatedShow();
-    },
-    computed: {
     },
     methods: {
         ...mapActions('deprecated', ['loadDeprecatedShow']),
@@ -204,12 +198,12 @@ html *, body * {
     background-color: var(--main-background);
 }
 
-wcm-modal {
+.wcm-modal {
     position: absolute!important;
     z-index: 50!important;
 }
 
-onboard-v2 {
+.onboard-v2 {
     position: absolute!important;
     z-index: 49!important;
 }

@@ -1,24 +1,19 @@
 <template>
-    <v-menu offset-y>
+    <v-menu nudge-width="100" offset-y>
         <template v-slot:activator="{ on, attrs }">
-            <div class="select-bar-main-container mt-1"
+            <div class="select-bar-main-container"
                  v-click-outside="clickMenuOutside"
                  @click="openedList = !openedList"
                  v-bind="attrs"
                  v-on="on">
-                <v-row justify="end" align="center" class="select-bar-container">
-                    <v-col cols="12" class="select-col">
-                        <div class="btn-icon"
-                             style="display: flex">
-                            <v-img class="selected-network-icon" :src="icon"/>
-                            <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="var(--secondary-gray-text)" v-if="alphaNetwork">mdi-alpha</v-icon>
-                            <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="var(--secondary-gray-text)" v-if="betaNetwork">mdi-beta</v-icon>
-                            <v-icon color="var(--secondary-gray-text)" :class="(alphaNetwork || betaNetwork) ? 'ml-n1' : 'ml-0'">
-                                {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                            </v-icon>
-                        </div>
-                    </v-col>
-                </v-row>
+                <div class="btn-icon">
+                    <v-img class="selected-network-icon" :src="icon"/>
+                    <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="var(--secondary-gray-text)" v-if="alphaNetwork">mdi-alpha</v-icon>
+                    <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="var(--secondary-gray-text)" v-if="betaNetwork">mdi-beta</v-icon>
+                    <v-icon class="btn-icon__chevron" :class="(alphaNetwork || betaNetwork) ? 'ml-n1' : 'ml-0'">
+                        {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                    </v-icon>
+                </div>
             </div>
         </template>
         <v-list class="network-select-list">
@@ -194,6 +189,8 @@ export default {
                     return lineaIcon;
                 case 324:
                     return zksyncIcon;
+                default:
+                    return null
             }
         },
 
@@ -224,56 +221,59 @@ export default {
 }
 </script>
 
-<style scoped>
-/* mobile */
-@media only screen and (max-width: 960px) {
-
-    .list-item-icon, .btn-icon, .selected-network-icon {
-        width: 24px !important;
-        height: 24px !important;
-    }
+<style lang="scss" scoped>
+.btn-icon {
+    display: flex;
 }
 
-/* tablet */
-@media only screen and (min-width: 960px) and (max-width: 1400px) {
-
-    .list-item-icon, .btn-icon, .selected-network-icon {
-        width: 32px !important;
-        height: 32px !important;
-    }
+.btn-icon__chevron {
+    color: var(--secondary-gray-text);
+}
+.select-bar-main-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 10px;
+    border-radius: 2px;
+    transition: opacity .2s ease, background-color .2s ease;
 }
 
-/* full */
-@media only screen and (min-width: 1400px) {
+.select-bar-main-container:hover {
+    background-color: rgba(6, 120, 196, 0.9);
+    opacity: .9;
 
-    .list-item-icon, .btn-icon, .selected-network-icon {
-        width: 32px !important;
-        height: 32px !important;
+    .btn-icon__chevron {
+        color: #fff;
     }
+}
+.list-item-icon, .btn-icon, .selected-network-icon .v-image__image {
+    width: 28px;
+    height: 28px;
+    margin-right: 24px;
 }
 
 .network-select-list {
-    background-color: var(--secondary) !important;
+    background-color: var(--secondary);
     border-radius: 10px;
-    width: 200px !important;
+    width: 200px;
 }
 
 .network-select-list-item {
-    color: var(--secondary-gray-text) !important;
+    color: var(--secondary-gray-text);
     font-weight: 600;
     font-size: 17px;
     margin-left: -5px;
 }
 
 .list-item-disabled {
-    color: var(--third-gray-text) !important;
+    color: var(--third-gray-text);
     font-weight: 600;
     font-size: 17px;
     margin-left: -5px;
 }
 
 .navbar-list-divider {
-    border-top: 1px solid var(--input-placeholder) !important;
+    border-top: 1px solid var(--input-placeholder);
 }
 
 .divider-container {
@@ -282,7 +282,7 @@ export default {
 }
 
 .name-deprecated {
-    color:  rgba(112, 122, 139, 1) !important;
+    color:  rgba(112, 122, 139, 1);
 }
 
 .title-deprecated {
@@ -308,5 +308,12 @@ export default {
     position: absolute;
     right: 52px;
     top: -19px;
+}
+
+
+@media only screen and (min-width: 960px) {
+    .select-bar-main-container {
+        padding-right: 0;
+    }
 }
 </style>

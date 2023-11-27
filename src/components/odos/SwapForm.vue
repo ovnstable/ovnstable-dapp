@@ -423,8 +423,6 @@ export default defineComponent({
     mounted() {
         this.baseViewType = this.viewType;
         this.tokenSeparationScheme = 'OVERNIGHT_SWAP'
-        console.log("Swap form odos init by scheme: ", this.tokenSeparationScheme)
-
         this.init();
 
         if (!this.isAvailableOnNetwork) {
@@ -445,12 +443,10 @@ export default defineComponent({
         }
 
         if (this.$route.query.action === 'swap-in') {
-            console.log("Swap action: swap-in")
             // ignore
         }
 
         if (this.$route.query.action === 'swap-out') {
-            console.log("Swap action: swap-out")
             this.changeSwap()
         }
     },
@@ -549,12 +545,11 @@ export default defineComponent({
                 let token = this.selectedOutputTokens[i];
                 if (token.locked) {
                     sumLockedTokens += token.value;
-                    console.log("the sum of locked tokens:", sumLockedTokens)
                 }
             }
 
             result = 100 - sumLockedTokens;
-            console.log("the sum result:", result)
+
             return result
         },
 
@@ -775,7 +770,7 @@ export default defineComponent({
         removeToken(tokens, id) {
             // removing by token.id or token.selectedToken.id
             const index = tokens.findIndex(item => item.id === id || (item.selectedToken ? item.selectedToken.id === id : false));
-            console.log("removeToken: ", id, index);
+
             if (index !== -1) {
                 if (tokens[index].selectedToken) {
                     tokens[index].selectedToken.selected = false;
@@ -787,9 +782,6 @@ export default defineComponent({
         },
 
         changeSwap() {
-            console.log('INPUT SELECTED TOKENS: ', this.inputTokens)
-            console.log('OUTPUT SELECTED TOKENS: ', this.outputTokens)
-
             // Transform Input Tokens into Output format by adding temporary variable "tempOutputArray"
             let tempOutputArray = [];
             for (let i = 0; i < this.inputTokens.length; i++) {
@@ -819,9 +811,8 @@ export default defineComponent({
             }
 
             this.inputTokens = tempInputArray;
-            console.log("Tokens Transformed from Output to Input: ", this.inputTokens)
             this.outputTokens = tempOutputArray;
-            console.log("Tokens Transformed from Input to Output: ", this.outputTokens)
+
             let symbol = this.$route.query.symbol ? this.$route.query.symbol : null;
 
             if (this.swapMethod === 'BUY') {
@@ -860,13 +851,10 @@ export default defineComponent({
         },
 
         handleCurrentSlippageChanged(newSlippage) {
-            console.log('currentSlippage has changed:', newSlippage);
-
             this.slippagePercent = newSlippage.value;
         },
 
         finishTransaction() {
-            console.log("Finish transaction");
             this.clearForm()
             this.handleFormResetFunc(true);
         },
@@ -888,7 +876,6 @@ export default defineComponent({
         },
 
         resetOutputs() {
-            console.log("Reset outputs");
             if (!this.selectedOutputTokens.length) {
                 return;
             }
@@ -905,8 +892,6 @@ export default defineComponent({
             for (let i = 0; i < remains; i++) {
                 this.selectedOutputTokens[i].value += 1;
             }
-
-            console.log("this.selectedOutputTokens: ", this.selectedOutputTokens);
         },
         async swap() {
             if (this.isSwapLoading) {
@@ -1000,11 +985,9 @@ export default defineComponent({
         },
         async simulateSwap() {
             if (this.isSumulateSwapLoading) {
-                console.log('Simulate Swap method not available, prev swap in process');
                 return;
             }
 
-            console.log("Simulate Swap", this.inputTokensWithSelectedTokensCount, this.outputTokensWithSelectedTokensCount);
             if (this.inputTokensWithSelectedTokensCount < 1 || this.outputTokensWithSelectedTokensCount < 1) {
                 return;
             }
@@ -1018,7 +1001,6 @@ export default defineComponent({
             let output = this.getRequestOutputTokens(false);
             if (!input.length || !output.length) {
                 this.isSumulateSwapLoading = false;
-                console.log('simulate Swap not allowed', input, output);
                 return;
             }
 
@@ -1037,12 +1019,8 @@ export default defineComponent({
 
            this.clearQuotaInfo();
 
-            console.log("Odos simulate swap request data", requestData);
             this.quoteRequest(requestData)
                 .then(data => {
-                    console.log("Odos simulate swap request success", data)
-                    console.log("data.outTokens:", data.outTokens);
-                    console.log("data.outAmounts:", data.outAmounts);
                     this.updateSelectedOutputTokens(data);
 
                     this.isSumulateSwapLoading = false;
@@ -1079,7 +1057,6 @@ export default defineComponent({
             let selectedOutputTokensMap = {};
             for (let i = 0; i < selectedOutputTokensCount; i++) {
                 let token = selectedOutputTokens[i];
-                console.log("Token for update price: ", token);
                 selectedOutputTokensMap[token.selectedToken.address.toLowerCase()] = token;
             }
 
@@ -1089,9 +1066,7 @@ export default defineComponent({
                 let token = selectedOutputTokensMap[tokenAddress.toLowerCase()];
                 if (token) {
                     let selectedToken = token.selectedToken;
-                    console.log("Token for update : ", token, selectedToken, tokenAmount);
                     let amount = this.web3.utils.fromWei(tokenAmount, this.getWeiMarker(selectedToken.decimals));
-                    console.log("Token for update amount: ", token, selectedToken, tokenAmount, amount);
                     token.sum = amount;
                 }
             }
@@ -1119,7 +1094,6 @@ export default defineComponent({
             let tokenContract = this.tokensContractMap[selectedToken.address];
             this.clearApproveToken(tokenContract, this.routerContract.options.address)
                 .then(data => {
-                    console.log("Clear approve success. ", token, data);
                     this.checkApproveForToken(token);
                     this.isShowDecreaseAllowanceButton = false;
                 }).catch(e => {
@@ -1130,15 +1104,12 @@ export default defineComponent({
         async checkApproveForToken(token, checkedAllowanceValue) { // checkedAllowanceValue in wei
             let selectedToken = token.selectedToken;
             if (selectedToken.address === '0x0000000000000000000000000000000000000000') {
-                console.log("Check approve not available. its a root token: ", token);
                 selectedToken.approveData.approved = true
                 return;
             }
 
             let tokenContract = this.tokensContractMap[selectedToken.address];
-            console.log('Check Approve contract: ', token, tokenContract, this.account, this.routerContract.options.address);
             let allowanceValue = await this.getAllowanceValue(tokenContract, this.account, this.routerContract.options.address);
-            console.log('Approve value: ', allowanceValue);
 
             selectedToken.approveData.allowanceValue = allowanceValue * 1;
             if (!selectedToken.approveData.allowanceValue) {
@@ -1156,14 +1127,12 @@ export default defineComponent({
 
         async approve(token) {
             this.showWaitingModal('Approving in process');
-            console.log("Approve contract token: ", token)
 
             this.firstSwipeClickOnApprove = true;
 
             await this.checkApproveForToken(token, token.contractValue);
             let selectedToken = token.selectedToken;
             if (selectedToken.approveData.approved) {
-                console.log("Approve not needed for token: ", token);
                 this.closeWaitingModal();
                 return;
             }
@@ -1171,11 +1140,9 @@ export default defineComponent({
             let tokenContract = this.tokensContractMap[selectedToken.address];
             // let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
             let approveValue = this.web3.utils.toWei("10000000", token.selectedToken.weiMarker);
-            console.log('Approve contract approveValue: ', approveValue);
-            console.log('Approve contract: ', token, selectedToken, selectedToken.decimals, tokenContract, this.account, this.routerContract.options.address, approveValue);
+
             this.approveToken(tokenContract, this.routerContract.options.address, approveValue)
                 .then(data => {
-                    console.log("Success approving", data);
                     this.checkApproveForToken(token, token.contractValue);
                     this.closeWaitingModal();
                 })
@@ -1191,7 +1158,6 @@ export default defineComponent({
             for (let i = 0; i < this.selectedInputTokens.length; i++) {
                 let token = this.selectedInputTokens[i];
                 let selectedToken = token.selectedToken;
-                console.log("input token: ", token);
                 if (!ignoreNullable && !token.value) {
                     console.log("token value is 0: ", token);
                     continue;
@@ -1225,7 +1191,6 @@ export default defineComponent({
         },
 
         lockProportion(isLock, token) {
-            console.log("lockProportionFunc", isLock, token);
             if (this.outputTokensWithSelectedTokensCount <= 1 && !isLock) {
                 console.log("It's the first token, unlock is disabled");
                 return;
@@ -1247,13 +1212,10 @@ export default defineComponent({
             }
         },
         recalculateOutputTokensSum() {
-            console.log(`recalculateOutputTokensSum. recalculate token count ${this.selectedOutputTokens.length} usdSum: ${this.sumOfAllSelectedTokensInUsd}`);
             for (let i = 0; i < this.selectedOutputTokens.length; i++) {
                 let token = this.selectedOutputTokens[i];
                 let sum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
                 sum = this.swapMethod === 'BUY' ? sum * token.selectedToken.price : sum / token.selectedToken.price;
-                console.log(`Recalculate token.selectedToken price: ${token.selectedToken.price}, newUsdSum: ${sum}`, token);
-
                 // token.sum = this.$utils.formatMoney(sum, 4)
             }
         },
@@ -1267,8 +1229,6 @@ export default defineComponent({
 
             let proportion = Math.floor(difference / tokens.length);
             let remains = difference % tokens.length;
-            console.log('proportion', proportion);
-            console.log('remains', remains);
 
             this.calculateProportions(tokens, proportion);
 
@@ -1292,12 +1252,10 @@ export default defineComponent({
                 tokensPercentage += token.value
             }
 
-            console.log("Outs percent: ", tokensPercentage)
             return tokensPercentage;
         },
 
         addSelectedTokenToList(selectedToken, swapMethod, selectTokenType) {
-            console.log(this.isInputToken(swapMethod, selectTokenType) ? 'INPUT TOKEN' :  'OUTPUT TOKEN');
             if (this.isInputToken(swapMethod, selectTokenType)) {
                 this.addSelectedTokenToInputList(selectedToken);
                 this.removeOutputToken(selectedToken.id);
@@ -1340,7 +1298,6 @@ export default defineComponent({
             this.resetOutputs();
         },
         removeSelectedTokenFromList(selectedToken, swapMethod, selectTokenType) {
-            console.log(this.isInputToken(swapMethod, selectTokenType) ? 'INPUT TOKEN' :  'OUTPUT TOKEN');
             if (this.isInputToken(swapMethod, selectTokenType)) {
                 this.removeInputToken(selectedToken.id);
                 if (this.inputTokens.length === 0) {
@@ -1364,7 +1321,6 @@ export default defineComponent({
                 tokensToRemove.push(tokens[i]);
             }
 
-            console.log("removeAllWithoutSelectedTokens: ", tokens, tokensToRemove);
             for (let i = 0; i < tokensToRemove.length; i++) {
                 this.removeToken(tokens, tokensToRemove[i].id);
             }
@@ -1418,8 +1374,6 @@ export default defineComponent({
             return this.getOutputsTokensPercentage() + additionalPercent > 100;
         },
         getActiveTokens(currentToken) {
-            console.log("currentToken in getActiveTokens: ", currentToken);
-            console.log("currentToken and this.outputTokens: ", this.outputTokens)
             // let count = 1
             let sliders = [];
             for (let i = 0; i < this.outputTokens.length; i++) {
@@ -1479,7 +1433,6 @@ export default defineComponent({
                 // first call
                 this.tokensQuotaCounterId = -1;
                 // update
-                console.log("UPDATE QUOTA FIRST DATA")
                 this.simulateSwap()
                 return;
             }
@@ -1493,7 +1446,6 @@ export default defineComponent({
                         this.tokensQuotaCheckerSec = 0;
                         try {
                             // update
-                            console.log("UPDATE QUOTA SECOND DATA")
                             this.simulateSwap()
                         } catch (e) {
                             // ignore
@@ -1515,8 +1467,6 @@ export default defineComponent({
                 return
             }
 
-              console.log("Top stable tokens by balance: ", tokens)
-
               // find top 6 tokens by balance and order desc
               let topTokens = tokens.sort((a, b) => {
                   return b.balanceData.balance - a.balanceData.balance;
@@ -1526,8 +1476,6 @@ export default defineComponent({
               topTokens = topTokens.filter((token) => {
                   return token.balanceData.balance > 0;
               });
-
-              console.log("Top stable tokens after filter: ", topTokens)
 
               for (let i = 0; i < topTokens.length; i++) {
                   let token = topTokens[i];

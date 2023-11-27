@@ -109,97 +109,9 @@ const actions = {
             }
         };
 
-        let avgApy;
-        let avgApyStrategyMonth;
-        let strategyData;
-
-        await fetch(appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
-            .then(value => value.json())
-            .then(value => {
-                avgApy = value;
-                avgApy.date = dayjs(avgApy.date).format("DD MMM. ‘YY");
-            }).catch(reason => {
-                console.log('Error get data: ' + reason);
-            })
-
-        await fetch(appApiUrl + '/insurance/avg-apy-info/month', fetchOptions)
-            .then(value => value.json())
-            .then(value => {
-                avgApyStrategyMonth = value;
-                avgApyStrategyMonth.date = dayjs(avgApyStrategyMonth.date).format("DD MMM. ‘YY");
-            }).catch(reason => {
-                console.log('Error get data: ' + reason);
-            })
-
-        await fetch(appApiUrl + '/insurance/', fetchOptions)
-            .then(value => value.json())
-            .then(value => {
-                strategyData = value;
-
-                strategyData.apy = (avgApyStrategyMonth && avgApyStrategyMonth.value) ? (avgApyStrategyMonth.value) : strategyData.lastApy;
-                strategyData.diffApy = (avgApy && avgApy.value && strategyData.apy) ? (strategyData.apy - avgApy.value) : null;
-
-                strategyData.chainId = refreshParams.chain.chainId;
-
-                strategyData.payouts.sort((o1, o2) => difference(o1.payableDate, o2.payableDate));
-                let clientData = strategyData.payouts;
-
-                let widgetDataDict = {};
-                let widgetData = {
-                    labels: [],
-                    datasets: [
-                        {
-                            fill: false,
-                            borderColor: '#1C95E7',
-                            data: [],
-                        }
-                    ]
-                };
-
-                [...clientData].forEach(item => {
-                    try {
-                        widgetDataDict[dayjs(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
-                    } catch (e) {
-                        console.error("strategyData build Widget Data Dict insurance error:", e)
-                    }
-                });
-
-                for(let key in widgetDataDict) {
-                    widgetData.labels.push(key);
-                    widgetData.datasets[0].data.push(widgetDataDict[key] > 500 ? 500.00 : widgetDataDict[key]);
-                }
-
-                dispatch('addInsuranceApyData', { name: refreshParams.chain.chainName, data: widgetData});
-
-                let widgetTvlDataDict = {};
-                let widgetTvlData = {
-                    labels: [],
-                    datasets: [
-                        {
-                            fill: false,
-                            borderColor: '#1C95E7',
-                            data: [],
-                        }
-                    ]
-                };
-
-                [...clientData].forEach(item => {
-                    try {
-                        widgetTvlDataDict[dayjs(item.payableDate).format('DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
-                    } catch (e) {
-                        console.error("strategyData build Widget Tvl Dict insurance error:", e)
-                    }
-                });
-
-                for(let key in widgetTvlDataDict) {
-                    widgetTvlData.labels.push(key);
-                    widgetTvlData.datasets[0].data.push(widgetTvlDataDict[key]);
-                }
-
-                dispatch('addInsuranceTvlData', { name: refreshParams.chain.chainName, data: widgetTvlData});
-            }).catch(reason => {
-                console.log('Error get data: ' + reason);
-            })
+        const strategyData = {
+            tvlData: 0
+        };
 
         dispatch('addInsuranceStrategyData', { name: refreshParams.chain.chainName, data: strategyData});
     },
@@ -238,22 +150,7 @@ const actions = {
             return;
         }
 
-        let account = rootState.accountData.account.toLowerCase();
         let profitDay = null;
-
-        let fetchOptions = {
-            headers: {
-                "Access-Control-Allow-Origin": appApiUrl
-            }
-        };
-
-        await fetch(appApiUrl + '/insurance/account/' + account, fetchOptions)
-            .then(value => value.json())
-            .then(value => {
-                profitDay = value.profit;
-            }).catch(reason => {
-                console.log('Error get data: ' + reason);
-            })
 
         dispatch('addInsuranceClientData', { name: refreshParams.chain.chainName, data: profitDay});
         dispatch('refreshIsNeedRedemption');

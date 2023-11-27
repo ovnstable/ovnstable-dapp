@@ -80,14 +80,13 @@ export const tokenLogo = {
 
         async loadOvernightTokenImage(token) {
             try {
-                let tokenUrl = await this.loadCoingeckoOvernightTokenImage(token.symbol);
-                if (tokenUrl) {
-                    return tokenUrl;
-                }
+                // let tokenUrl = await this.loadCoingeckoOvernightTokenImage(token.symbol);
+                // if (tokenUrl) {
+                //     return tokenUrl;
+                // }
 
                 return this.getOvnCoinBaseImagePath(token);
             } catch (e) {
-                console.log("load Overnight Token Image failed ", token.symbol, e)
                 return this.getOvnCoinBaseImagePath(token);
             }
         },
@@ -113,7 +112,6 @@ export const tokenLogo = {
                 return null;
             }
 
-            console.log('Coingeko info: ', coinInfo)
             return coinInfo.image.large
         },
     }

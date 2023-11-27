@@ -1,20 +1,13 @@
 <template>
-    <v-app-bar
-            class="app-bar mr-n3"
-            app>
-        <v-row class="ma-0 header-container fill-height" align="center">
-<!--            <div class="">
-                <img v-if="!$wu.isFull()" class="ml-n3 logo-img" :src="require('@/assets/logo.svg')"  @click="openLinkToLanding('https://overnight.fi/')">
-            </div>-->
-
+    <div class="app-header mr-n3">
+        <div class="app-header__container">
             <div :class="$wu.isMobile() ? 'mr-2' : ''">
                 <v-btn :class="$wu.isMobile() ? 'mx-n6' : 'mr-2'" class="header-btn-presale btn-filled" @click="goToPresale">
                     PRESALE
                 </v-btn>
             </div>
 
-            <v-spacer></v-spacer>
-            <div class="theme-toggle-group" :class="$wu.isMobile() ? 'mr-5' : 'mr-10'">
+            <div class="theme-toggle-group">
                 <v-btn outlined :class="light ? 'theme-toggle-btn-selected' : 'theme-toggle-btn'" icon @click="toggleTheme">
                     <v-icon class="theme-icon">
                         {{ light ? 'mdi-white-balance-sunny' : 'mdi-moon-waxing-crescent' }}
@@ -49,14 +42,14 @@
                 ></v-progress-linear>
             </template>
 
-            <div class="" :class="$wu.isMobile() ? 'mr-auto' : 'ml-10'">
+            <div class="header__network-wrap">
                 <NetworkSelect/>
             </div>
 
             <div v-if="!$wu.isFull()">
                 <MenuSelect/>
             </div>
-        </v-row>
+        </div>
 
         <InvestModal/>
         <InsuranceInvestModal/>
@@ -78,7 +71,7 @@
         <RedemptionRequestSuccessModal/>
 
         <resize-observer @notify="$forceUpdate()"/>
-    </v-app-bar>
+    </div>
 </template>
 <script>
 
@@ -168,56 +161,69 @@ export default {
 
         toggleTheme() {
             this.switchTheme();
-            this.light = !this.light;
         }
     }
 }
 </script>
 
 <style scoped>
+.theme-toggle-group {
+    margin-left: auto;
+    margin-right: 20px;
+}
+.app-header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.app-header {
+    position: relative;
+}
+
+.header__network-wrap {
+    margin-left: 24px;
+    margin-right: 8px;
+}
+
 /* mobile */
 @media only screen and (max-width: 960px) {
     .progress {
         width: 150px;
     }
 
-    .header-container {
-        margin-left: 5% !important;
-        margin-right: 5% !important;
+    .app-header__container {
+        margin: 0 5%;
     }
 
     .header-btn, .header-btn-connect {
-        width: 148px !important;
-        height: 28px !important;
+        width: 148px;
+        height: 28px;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 14px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.02em !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
     }
 
     .header-btn-presale {
-        min-width: 55px!important;
-        width: 55px !important;
-        height: 25px !important;
+        min-width: 55p;
+        width: 55px;
+        height: 25px;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 12px !important;
-        line-height: 25px !important;
-        letter-spacing: 0.02em !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 25px;
+        letter-spacing: 0.02em;
     }
-
-    .app-bar {
-        height: 60px !important;
-    }
-
     .logo-img {
-        width: 28px !important;
-        height: 28px !important;
+        width: 28px;
+        height: 28px;
 
-        margin-top: 10px !important;
+        margin-top: 10px;
     }
 }
 
@@ -227,81 +233,79 @@ export default {
         width: 300px;
     }
 
-    .header-container {
-        margin-left: 3% !important;
-        margin-right: 3% !important;
+    .app-header__container {
+        margin: 0 3%;
     }
 
     .header-btn, .header-btn-connect {
-        width: 200px !important;
-        height: 36px !important;
+        width: 200px;
+        height: 36px;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.02em !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
     }
 
     .header-btn-presale {
-        width: 170px !important;
-        height: 39px !important;
+        width: 170px;
+        height: 39px;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 14px !important;
-        line-height: 25px !important;
-        letter-spacing: 0.02em !important;
-    }
-
-    .app-bar {
-        height: 72px !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 25px;
+        letter-spacing: 0.02em;
     }
 
     .logo-img {
-        width: 48px !important;
-        height: 48px !important;
+        width: 48px;
+        height: 48px;
 
-        margin-top: 8px !important;
+        margin-top: 8px;
     }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
+    .header__network-wrap {
+        margin-right: 0;
+        margin-left: 24px;
+    }
+
+    .app-header {
+        left: 242px;
+        width: calc(100% - 242px);
+    }
     .progress {
         width: 300px;
     }
 
-    .header-container {
-        margin-left: 5% !important;
-        margin-right: 5% !important;
+    .app-header__container {
+        margin: 0 5%;
     }
 
     .header-btn, .header-btn-connect {
-        width: 210px !important;
-        height: 36px !important;
+        width: 210px;
+        height: 36px;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.02em !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
     }
 
     .header-btn-presale {
-        width: 178px !important;
-        height: 42px !important;
+        width: 178px;
+        height: 42px;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 18px !important;
-        line-height: 25px !important;
-        letter-spacing: 0.02em !important;
-    }
-
-
-    .app-bar {
-        height: 72px !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 25px;
+        letter-spacing: 0.02em;
     }
 }
 
@@ -316,36 +320,31 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         width: 300px;
     }
 
-    .header-container {
-        margin-left: 5% !important;
-        margin-right: 5% !important;
+    .app-header__container {
+        margin: 0 20px;
     }
 
     .header-btn, .header-btn-connect {
-        width: 210px !important;
-        height: 36px !important;
+        width: 210px;
+        height: 36px;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 15px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.02em !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 20px;
+        letter-spacing: 0.02em;
     }
 
 
     .header-btn-presale {
-        width: 160px !important;
-        height: 42px !important;
+        width: 160px;
+        height: 42px;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 14px !important;
-        line-height: 25px !important;
-        letter-spacing: 0.02em !important;
-    }
-
-    .app-bar {
-        height: 72px !important;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 25px;
+        letter-spacing: 0.02em;
     }
 }
 
@@ -353,24 +352,19 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     background: var(--blue-gradient);
 }
 
-.app-bar {
-    box-shadow: none !important;
-    background-color: var(--main-background) !important;
-}
-
 .header-btn, .header-btn-connect {
     border-radius: 2px;
-    box-shadow: none !important;
+    box-shadow: none;
 
-    font-family: 'Roboto', sans-serif !important;
-    text-align: center !important;
-    text-transform: uppercase !important;
-    font-feature-settings: 'pnum' on, 'lnum' on !important;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
 }
 
 .btn-filled {
     background: var(--blue-gradient);
-    color: var(--secondary) !important;
+    color: var(--secondary);
 }
 
 .logo-img {
@@ -378,8 +372,8 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .theme-toggle-group {
-    background-color: var(--theme-switch-background-light) !important;
-    border-radius: 5px !important;
+    background-color: var(--theme-switch-background-light);
+    border-radius: 5px;
     border: 1px solid transparent;
     height: 42px;
     display: flex;
@@ -389,23 +383,23 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
 }
 
 .theme-toggle-btn, .theme-toggle-btn-selected {
-    border: none !important;
+    border: none;
 }
 
 .theme-toggle-btn {
     height: 42px;
-    background-color: transparent !important;
+    background-color: transparent;
 }
 
 .theme-toggle-btn-selected {
-    background-color: var(--theme-switch-background-light) !important;
+    background-color: var(--theme-switch-background-light);
 }
 
-.theme-icon {
-    color: var(--theme-icon-color) !important;
+.v-btn__content .theme-icon {
+    color: var(--theme-icon-color);
 }
 
 .theme-icon-selected {
-    color: var(--theme-icon-color-selected) !important;
+    color: var(--theme-icon-color-selected);
 }
 </style>

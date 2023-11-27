@@ -10,9 +10,9 @@
 
         <TxListHeader />
 
-        <template v-for="tx in transactions.slice().reverse()">
-            <TxCard class="ma-0 mt-2" :tx-data="tx" v-bind:key="`${tx.hash}_${tx.pending}`" />
-        </template>
+        <div v-for="tx in transactionsList" :key="`${tx.hash}_${tx.pending}`">
+            <TxCard class="ma-0 mt-2" :tx-data="tx" />
+        </div>
 
         <resize-observer @notify="$forceUpdate()" />
     </div>
@@ -22,28 +22,19 @@
 import { mapActions, mapGetters } from "vuex";
 import TxCard from "@/components/common/modal/account/tabs/tx/component/TxCard";
 import TxListHeader from "@/components/common/modal/account/tabs/tx/component/TxListHeader";
-import { difference } from "@/utils/dates.js"
 
 export default {
     name: "TxTab",
 
     components: { TxListHeader, TxCard },
 
-    data: () => ({
-    }),
-
-    props: {
-    },
-
     computed: {
         ...mapGetters('transaction', ['transactions']),
 
-        transactionsList: function () {
-            return [...this.transactions].sort((o1, o2) => difference(o1.date, o2.date));
+        transactionsList() {
+            console.log(this.transactions, 'transactions')
+            return this.transactions.slice().reverse()
         },
-    },
-
-    watch: {
     },
 
     methods: {

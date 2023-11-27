@@ -27,7 +27,6 @@ import Dashboard from "./midleware/dapp/Dashboard";
 import Pools from "./midleware/dapp/Pools";
 import ProvideLp from "./midleware/dapp/ProvideLp";
 import Swap from "./midleware/dapp/Swap";
-import Swipe from "./midleware/dapp/Swipe";
 import Presasle from "./midleware/dapp/Presasle";
 import PresaleClaim from "./midleware/dapp/PresaleClaim";
 import EtsAbout from "./midleware/dapp/EtsAbout";
@@ -114,16 +113,6 @@ const routes = [
                 meta: {
                     middleware: [
                         Swap
-                    ]
-                }
-            },
-            {
-                path: '/swipe',
-                name: 'SwipeView',
-                component: () => import('../views/SwipeView.vue'),
-                meta: {
-                    middleware: [
-                        Swipe
                     ]
                 }
             },

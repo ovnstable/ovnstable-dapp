@@ -197,7 +197,16 @@ export default {
 </script>
 
 <style scoped>
-/* mobile */
+.balance-container {
+    padding-right: 5px;
+    cursor: pointer;
+    transition: opacity .2s ease;
+}
+
+.balance-container:hover {
+    opacity: .6;
+}
+
 @media only screen and (max-width: 960px) {
     .balance-container {
         height: 28px !important;
@@ -205,7 +214,6 @@ export default {
     }
 }
 
-/* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
     .balance-container {
         height: 28px !important;
@@ -237,7 +245,6 @@ export default {
 .balance-container {
     display: flex;
     background-color: var(--card-coin-background);
-    padding: 5px;
     border-radius: 4px;
 
     align-items: center;
@@ -246,14 +253,16 @@ export default {
 }
 
 .balance-label {
-    font-family: Roboto, sans-serif;
     font-weight: 400;
     letter-spacing: 0.2px;
     line-height: 20px;
     text-align: left;
-    margin-left: 5px;
-
     color: var(--main-gray-text);
+    margin-left: 5px;
+}
+
+.balance-label.hidden-label {
+    margin-left: 0;
 }
 
 .token-label {
@@ -261,8 +270,9 @@ export default {
 }
 
 .hidden-label {
-    width: 130px;
+    width: 85px;
     height: 28px;
+    border-radius: 4px 0 0 4px;
     background: var(--hide-account);
 }
 </style>

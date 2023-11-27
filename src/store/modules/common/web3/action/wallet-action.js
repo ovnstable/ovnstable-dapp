@@ -355,7 +355,6 @@ const actions = {
                 });
 
                 wcprovider.on('connect', async data => {
-                    console.log(data, 'CONNECT');
                     localStorage.setItem('walletName', 'WalletConnect');
                     window.location.reload();
                 })
@@ -394,7 +393,7 @@ const actions = {
 
     async getMainWalletsConfig({commit, dispatch, getters, rootState}) {
         let customWallets = await dispatch('getCustomWallets');
-        console.log(customWallets, 'customWallets');
+
         const injected = injectedModule({
             custom: customWallets,
             // display all wallets even if they are unavailable

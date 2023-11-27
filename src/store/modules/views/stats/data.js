@@ -152,9 +152,10 @@ const actions = {
 
         try {
             let appApiUrl = rootState.network.opApi;
-            let collateralsTotal = (await axios.get(appApiUrl + '/insurance/collateral/total')).data;
-            collateralsTotal.sort((a,b) => b.netAssetValue * 1 - a.netAssetValue * 1);
-            collateralsTotal = collateralsTotal.filter(el => el.netAssetValue > 0);
+            const collateralsTotal = []
+            // let collateralsTotal = (await axios.get(appApiUrl + '/insurance/collateral/total')).data;
+            // collateralsTotal.sort((a,b) => b.netAssetValue * 1 - a.netAssetValue * 1);
+            // collateralsTotal = collateralsTotal.filter(el => el.netAssetValue > 0);
 
             let colors = [
                 "#2775CA",

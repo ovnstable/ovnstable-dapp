@@ -46,16 +46,14 @@ Vue.use(VueYandexMetrika, {
     clickmap: true,
     trackLinks: true,
     accurateTrackBounce: true,
-    webvisor: true,
-    debug: true
+    webvisor: false
   }
 })
 
 Vue.use(VueGtm, {
   id: 'GTM-P265VFK',
   enabled: true,
-  vueRouter: router,
-  debug: true,
+  vueRouter: router
 });
 
 

@@ -42,7 +42,7 @@
                 ></v-progress-linear>
             </template>
 
-            <div class="" :class="$wu.isMobile() ? 'mr-auto' : 'ml-6 mr-2'">
+            <div class="header__network-wrap">
                 <NetworkSelect/>
             </div>
 
@@ -182,6 +182,11 @@ export default {
     position: relative;
 }
 
+.header__network-wrap {
+    margin-left: 24px;
+    margin-right: 8px;
+}
+
 /* mobile */
 @media only screen and (max-width: 960px) {
     .progress {
@@ -264,6 +269,11 @@ export default {
 
 /* full */
 @media only screen and (min-width: 1400px) {
+    .header__network-wrap {
+        margin-right: 0;
+        margin-left: 24px;
+    }
+
     .app-header {
         left: 242px;
         width: calc(100% - 242px);

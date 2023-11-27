@@ -4,79 +4,13 @@ export const tokenLogo = {
     methods: {
 
         loadTokenImage(item) {
-            if (item.symbol.includes(' (OLD)')) {
-                return 'https://api.overnight.fi/root/odos/asset/tokens/' + item.symbol.replace(' (OLD)', '') + '.webp';
-            }
+            try {
+                return require('@/assets/currencies/select/' + item.symbol + '.webp');
+            } catch (error) {
 
-            if (item.symbol === 'GND') {
-                return require('@/assets/currencies/external/' + item.symbol + '.png');
-            }
-
-            if (item.symbol === 'LEX') {
-                return require('@/assets/currencies/external/' + item.symbol + '.jpg');
-            }
-
-            if (item.symbol === 'PREMIA') {
-                return require('@/assets/currencies/external/' + item.symbol + '.svg');
-            }
-
-            if (item.symbol === 'USDbC') {
-                return require('@/assets/currencies/external/' + item.symbol + '.png');
-            }
-
-            if (item.symbol === 'axlUSDT') {
-                return require('@/assets/currencies/external/' + item.symbol + '.webp');
-            }
-
-            if (item.symbol === 'BALD') {
-                return require('@/assets/currencies/external/' + item.symbol + '.png');
-            }
-
-            if (item.symbol === 'OGRE') {
-                return require('@/assets/currencies/external/' + item.symbol + '.webp');
-            }
-
-            if (item.symbol === 'KOKOS') {
-                return require('@/assets/currencies/external/' + item.symbol + '.svg');
-            }
-
-            if (item.symbol === 'mooCurveWSTETH' ||
-                item.symbol === 'mooOptimismBIFI' ||
-                item.symbol === 'mooCurveFsBTC' ||
-                item.symbol === 'mooCurveMIM' ||
-                item.symbol === 'mooCurveFsUSD' ||
-                item.symbol === 'mooAaveOPWBTC' ||
-                item.symbol === 'mooAaveOpWBTC' ||
-                item.symbol === 'FRAXBP-f' ||
-                item.symbol === 'wstETHCRV' ||
-                item.symbol === 'sUSD3CRV-f' ||
-                item.symbol === 'seth-f' ||
-                item.symbol === 'sbtc-f' ||
-                item.symbol === 'mim3CRV-f' ||
-                item.symbol === 'MIM3CRV-f' ||
-                item.symbol === 'wstETHCRV' ||
-                item.symbol === 'VSTFRAX-f' ||
-                item.symbol === 'FRAXBP-f' ||
-                item.symbol === 'USX2CRV3CRV-f' ||
-                item.symbol === 'mooCurveWSTETH' ||
-                item.symbol === 'mooAbrcdbrMIM-2CRV' ||
-                item.symbol === 'mooCurve2Pool' ||
-                item.symbol === 'mooArbitrumBIFI' ||
-                item.symbol === 'gmdUSDC' ||
-                item.symbol === 'fxUSD' ||
-                item.symbol === '3c-f' ||
-                item.symbol === 'aBascbETH' ||
-                item.symbol === 'mooBIFIV2' ||
-                item.symbol === 'mooVenusBNB' ||
-                item.symbol === 'mooValasETH' ||
-                item.symbol === 'ankrBNB' ||
-                item.symbol === 'ceBNB' ||
-                item.symbol === 'ceMATIC') {
                 return require('@/assets/currencies/undefined.svg');
             }
-
-            // return 'https://api.overnight.fi/root/odos/asset/tokens/' + item.symbol + '.webp';
-                return require('@/assets/currencies/undefined.svg');
+            
         },
 
         async loadOvernightTokenImage(token) {

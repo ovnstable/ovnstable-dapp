@@ -1,6 +1,6 @@
 <template>
     <div>
-        <PoolsContainer :type="'OVN'"></PoolsContainer>
+        <PoolsContainer :type="'OVN'" />
     </div>
 </template>
 

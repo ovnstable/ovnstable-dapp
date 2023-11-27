@@ -157,7 +157,7 @@
         </div>
 
         <div v-else class="ma-0 info-card-container d-flex mt-3">
-            <div class="" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'">
+            <div class="coin-box" :class="$wu.isMobile() ? 'ml-5 mr-5 mt-5' : 'ml-10 mr-5 my-5'">
                 <v-img class="currency" :src="require('@/assets/currencies/ETH+.svg')"/>
             </div>
             <div class="info-card-container-box" :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5 ml-5' : 'mt-0'">
@@ -443,6 +443,9 @@ export default {
 </script>
 
 <style scoped>
+.coin-box {
+    max-width: 200px;
+}
 
 /* mobile */
 @media only screen and (max-width: 960px) {

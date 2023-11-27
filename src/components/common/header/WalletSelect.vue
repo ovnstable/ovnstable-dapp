@@ -1,5 +1,5 @@
 <template >
-    <v-menu offset-y>
+    <v-menu transition="slide-y-reverse-transition" offset-y>
         <template v-slot:activator="{ on, attrs }" >
             <div
                 class="balance-container"
@@ -198,8 +198,14 @@ export default {
 
 <style scoped>
 .balance-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--card-coin-background);
+    border-radius: 4px;
     padding-right: 5px;
     cursor: pointer;
+    min-width: 198px;
     transition: opacity .2s ease;
 }
 
@@ -209,48 +215,43 @@ export default {
 
 @media only screen and (max-width: 960px) {
     .balance-container {
-        height: 28px !important;
-        width: 198px;
+        height: 28px;
     }
 }
 
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
     .balance-container {
-        height: 28px !important;
-        width: 198px;
+        height: 28px;
     }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
     .balance-container {
-        height: 30px !important;
-        width: 198px;
+        height: 30px;
     }
 }
 
+.v-menu__content .balance-container {
+    min-width: unset;
+}
+
 .token-select-list {
-    background-color: var(--secondary) !important;
+    background-color: var(--secondary);
     border-radius: 4px;
-    width: 218px !important;
+}
+
+.token-select-list {
+    max-width: 198px;
 }
 
 .token-select-list-item {
-    color: var(--secondary-gray-text) !important;
+    color: var(--secondary-gray-text);
     font-weight: 600;
     font-size: 17px;
     margin-left: -5px;
 }
 
-.balance-container {
-    display: flex;
-    background-color: var(--card-coin-background);
-    border-radius: 4px;
-
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-}
 
 .balance-label {
     font-weight: 400;
@@ -270,7 +271,7 @@ export default {
 }
 
 .hidden-label {
-    width: 85px;
+    width: 90.5px;
     height: 28px;
     border-radius: 4px 0 0 4px;
     background: var(--hide-account);

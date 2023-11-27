@@ -143,4 +143,9 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
         margin-right: 3% !important;
     }
 }
+
+.v-main {
+    min-height: 100vh;
+    padding-bottom: 30px!important;
+}
 </style>

@@ -309,7 +309,6 @@ export const odosSwap = {
                 for (let i = 0; i < tokens.length; i++) {
                     let token = tokens[i];
                     if (addresses.includes(token.address)) {
-                        console.log("Direct Update balance for token: ", token.address, token.symbol, token.name);
                         await new Promise(resolve => setTimeout(resolve, 500));
                         await this.loadBalance(this.tokensContractMap[token.address], token);
                     }
@@ -565,7 +564,6 @@ export const odosSwap = {
 
         assembleRequest(requestData) {
             return odosApiService.assembleRequest(requestData).then((data) => {
-                console.log("Response data for odos assemble request: ", data)
                 return data;
             }).catch(e => {
                 console.log("Assemble request error: ", e)
@@ -735,7 +733,6 @@ export const odosSwap = {
                     this.$bus.$emit('odos-transaction-finished', true);
                     this.stopSwapConfirmTimer();
 
-                    console.log("addresses to balance update: ", addressesToUpdate);
                     setTimeout(() => {
                         this.updateDirectBalances(addressesToUpdate);
                     }, 2000)

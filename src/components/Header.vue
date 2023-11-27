@@ -27,7 +27,7 @@
                 </template>
 
                 <template v-else>
-                    <v-btn :class="$wu.isMobile() ? 'mt-1 mr-1' : 'mr-2 mt-1'" class="header-btn-connect btn-filled" @click="connectWallet">
+                    <v-btn :class="$wu.isMobile() ? 'mr-1' : 'mr-2'" class="header-btn-connect btn-filled" @click="connectWallet">
                         Connect wallet
                     </v-btn>
                 </template>
@@ -167,6 +167,10 @@ export default {
 </script>
 
 <style scoped>
+.header-btn-connect.v-btn, .header-btn-presale.v-btn {
+    height: 42px;
+}
+
 .theme-toggle-group {
     margin-left: auto;
     margin-right: 20px;

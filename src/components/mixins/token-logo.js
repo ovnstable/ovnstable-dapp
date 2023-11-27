@@ -10,7 +10,6 @@ export const tokenLogo = {
                 }
                 return require('@/assets/currencies/select/' + item.symbol + '.webp');
             } catch (error) {
-
                 return require('@/assets/currencies/undefined.svg');
             }
             

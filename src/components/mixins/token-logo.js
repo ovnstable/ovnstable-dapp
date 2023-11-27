@@ -5,6 +5,9 @@ export const tokenLogo = {
 
         loadTokenImage(item) {
             try {
+                if (item.symbol.includes(' (OLD)')) {
+                    return require('@/assets/currencies/select/' + item.symbol.replace(' (OLD)', '') + '.webp');
+                }
                 return require('@/assets/currencies/select/' + item.symbol + '.webp');
             } catch (error) {
 

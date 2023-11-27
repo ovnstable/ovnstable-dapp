@@ -243,6 +243,8 @@ export default {
 
         getTotalTvl() {
             let sum = 0;
+
+            if (this.currentTotalData.length === 0) return 0;
             this.currentTotalData.forEach(dataItem => {
                 sum += dataItem.value
             });

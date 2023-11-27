@@ -31,7 +31,6 @@ const actions = {
         let logo = await dispatch('getLogo');
         let wallets = await dispatch('getMainWalletsConfig');
         let chains = await dispatch('getMainWalletsChains');
-        console.log('connectedWallets0')
 
         let onboard =  Onboard({
             // ... other Onboard options

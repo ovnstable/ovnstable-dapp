@@ -45,7 +45,6 @@ const actions = {
     },
 
     async addDaiPlusToken({commit, dispatch, getters, rootState}) {
-        console.log(process.env, 'rootState.web3.contracts')
         let option = {
             address: rootState.web3.contracts.daiPlus.options.address,
             symbol: process.env.VUE_APP_DAI_TOKEN_NAME,

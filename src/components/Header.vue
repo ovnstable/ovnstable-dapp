@@ -42,7 +42,7 @@
                 ></v-progress-linear>
             </template>
 
-            <div class="" :class="$wu.isMobile() ? 'mr-auto' : 'ml-5 mr-0'">
+            <div class="" :class="$wu.isMobile() ? 'mr-auto' : 'ml-6 mr-2'">
                 <NetworkSelect/>
             </div>
 
@@ -161,7 +161,6 @@ export default {
 
         toggleTheme() {
             this.switchTheme();
-            this.light = !this.light;
         }
     }
 }

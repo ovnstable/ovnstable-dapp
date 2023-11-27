@@ -338,6 +338,8 @@ export default {
                     return lineaIcon;
                 case 324:
                     return zksyncIcon;
+                default:
+                    return null;
             }
         },
 
@@ -489,7 +491,7 @@ export default {
     methods: {
 
         ...mapActions("wrapData", ['refreshWrap']),
-        ...mapActions("wrapModal", ['showEthUnwrapView', 'approveUsdc', 'approveUsdPlus', 'disapproveUsdc', 'disapproveUsdPlus']),
+        ...mapActions("wrapModal", ['showUnwrapView', 'approveUsdc', 'approveUsdPlus', 'disapproveUsdc', 'disapproveUsdPlus']),
 
         ...mapActions("gasPrice", ['refreshGasPrice']),
         ...mapActions("walletAction", ['connectWallet']),

@@ -2,6 +2,7 @@ import UsdPlusImage from "@/assets/usdPlus.json";
 import DaiPlusImage from "@/assets/daiPlus.json";
 import UsdtPlusImage from "@/assets/usdtPlus.json";
 import EthPlusImage from "@/assets/ethPlus.json";
+import wETHPlusImage from "@/assets/wEthPlus.json"
 import WrappedUsdPlusImage from "@/assets/wUsdPlus.json";
 import OptimismInsurance from "@/assets/optimism_insurance.json";
 import OvnImage from "@/assets/ovn.json";
@@ -19,25 +20,16 @@ const actions = {
             image: UsdPlusImage.image,
         };
 
-        console.log('addUsdPlusToken: ', option)
-
         await rootState.web3.provider
             .request({
                 method: 'wallet_watchAsset',
                 params: {
                     type: 'ERC20',
-                    options: {
-                        address: rootState.web3.contracts.usdPlus.options.address,
-                        symbol: process.env.VUE_APP_USD_TOKEN_NAME,
-                        decimals: 6,
-                        image: UsdPlusImage.image,
-                    },
+                    options: option,
                 },
             })
             .then((success) => {
-                if (success) {
-                    console.log('USD+ successfully added to wallet!')
-                } else {
+                if (!success) {
                     throw new Error('Something went wrong.')
                 }
             })
@@ -52,8 +44,6 @@ const actions = {
             image: DaiPlusImage.image,
         };
 
-        console.log('addDaiPlusToken: ', option)
-
         await rootState.web3.provider
             .request({
                 method: 'wallet_watchAsset',
@@ -63,9 +53,7 @@ const actions = {
                 },
             })
             .then((success) => {
-                if (success) {
-                    console.log('Dai+ successfully added to wallet!')
-                } else {
+                if (!success) {                   
                     throw new Error('Something went wrong.')
                 }
             })
@@ -73,15 +61,12 @@ const actions = {
     },
 
     async addUsdtPlusToken({commit, dispatch, getters, rootState}) {
-        console.log('addUsdtPlusToken: ', rootState.web3.contracts.usdtPlus.options.address);
         let option = {
             address: rootState.web3.contracts.usdtPlus.options.address,
             symbol: process.env.VUE_APP_USDT_TOKEN_NAME,
             decimals: 6,
             image: UsdtPlusImage.image,
         };
-
-        console.log('addUsdtPlusToken: ', option)
 
         await rootState.web3.provider
             .request({
@@ -92,9 +77,7 @@ const actions = {
                 },
             })
             .then((success) => {
-                if (success) {
-                    console.log('Usdt+ successfully added to wallet!')
-                } else {
+                if (!success) {
                     throw new Error('Something went wrong.')
                 }
             })
@@ -109,7 +92,29 @@ const actions = {
             image: EthPlusImage.image,
         };
 
-        console.log('addEthPlusToken: ', option)
+        await rootState.web3.provider
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: option,
+                },
+            })
+            .then((success) => {
+                if (!success) {                   
+                    throw new Error('Something went wrong.')
+                }
+            })
+            .catch(console.error)
+    },
+
+    async addwEthPlusToken({commit, dispatch, getters, rootState}) {
+        let option = {
+            address: rootState.web3.contracts.wEthPlus.options.address,
+            symbol: process.env.VUE_APP_WRAPPED_ETH_TOKEN_NAME,
+            decimals: 18,
+            image: wETHPlusImage.image,
+        };
 
         await rootState.web3.provider
             .request({
@@ -120,9 +125,7 @@ const actions = {
                 },
             })
             .then((success) => {
-                if (success) {
-                    console.log('Eth+ successfully added to wallet!')
-                } else {
+                if (!success) {             
                     throw new Error('Something went wrong.')
                 }
             })
@@ -132,24 +135,23 @@ const actions = {
 
 
     async addwUsdPlusToken({commit, dispatch, getters, rootState}) {
+        let option = {
+            address: rootState.web3.contracts.wUsdPlus.options.address,
+            symbol: process.env.VUE_APP_WRAPPED_USD_TOKEN_NAME,
+            decimals: 6,
+            image: WrappedUsdPlusImage.image,
+        };
 
         await rootState.web3.provider
             .request({
                 method: 'wallet_watchAsset',
                 params: {
                     type: 'ERC20',
-                    options: {
-                        address: rootState.web3.contracts.wUsdPlus.options.address,
-                        symbol: process.env.VUE_APP_WRAPPED_USD_TOKEN_NAME,
-                        decimals: 6,
-                        image: WrappedUsdPlusImage.image,
-                    },
+                    options: option,
                 },
             })
             .then((success) => {
-                if (success) {
-                    console.log('wUSD+ successfully added to wallet!')
-                } else {
+                if (!success) {                  
                     throw new Error('Something went wrong.')
                 }
             })
@@ -157,24 +159,23 @@ const actions = {
     },
 
     async addInsuranceToken({commit, dispatch, getters, rootState}) {
+        let option = {
+            address: rootState.web3.contracts.insurance.optimism_token.options.address,
+            symbol: 'OVN INS',
+            decimals: 18,
+            image: OptimismInsurance.image,
+        };
 
         await rootState.web3.provider
             .request({
                 method: 'wallet_watchAsset',
                 params: {
                     type: 'ERC20',
-                    options: {
-                        address: rootState.web3.contracts.insurance.optimism_token.options.address,
-                        symbol: 'OVN INS',
-                        decimals: 18,
-                        image: OptimismInsurance.image,
-                    },
+                    options: option,
                 },
             })
             .then((success) => {
-                if (success) {
-                    console.log('OVN INS successfully added to wallet!')
-                } else {
+                if (!success) {                
                     throw new Error('Something went wrong.')
                 }
             })
@@ -193,8 +194,6 @@ const actions = {
             image: etsImage.image,
         };
 
-        console.log('addETSToken: ', option)
-
         await rootState.web3.provider
             .request({
                 method: 'wallet_watchAsset',
@@ -204,9 +203,7 @@ const actions = {
                 },
             })
             .then((success) => {
-                if (success) {
-                    console.log('ETS successfully added to wallet!')
-                } else {
+                if (!success) {                   
                     throw new Error('Something went wrong.')
                 }
             })
@@ -229,9 +226,7 @@ const actions = {
                 },
             })
             .then((success) => {
-                if (success) {
-                    console.log('OVN successfully added to wallet!')
-                } else {
+                if (!success) {                 
                     throw new Error('Something went wrong.')
                 }
             })

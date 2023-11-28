@@ -256,7 +256,6 @@ export default {
     },
 
     mounted() {
-        console.log('Tab Name: ', this.$route.query.tabName);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName);
         }
@@ -281,7 +280,6 @@ export default {
             this.initTabName('/collateral/eth', {tabName: tabName});
             this.loadCurrentTotalData()
             this.loadCollateralData()
-            console.log("NetworkParams : ", this.getParams(this.tab));
         },
 
         initTabName(path, queryParams) {
@@ -308,7 +306,6 @@ export default {
 
             strategiesApiService.getStrategies(this.apiUrl + `/${this.tabNetworkName}/eth+`)
                 .then(data => {
-                    console.log("Strategies eth+: ", data)
                     let strategies = data;
                     strategies.sort((a, b) => b.netAssetValue - a.netAssetValue);
 
@@ -384,7 +381,6 @@ export default {
             for (let i = 0; i < this.etsList.length; i++) {
                 let ets = this.etsList[i]
                 let etsNameUp;
-                console.log("EtsListName: ", this.etsList)
 
                 if (ets.id === element.id) {
                     etsNameUp = ets.nameUp

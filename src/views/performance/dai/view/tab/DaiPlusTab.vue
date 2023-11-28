@@ -284,7 +284,6 @@ export default {
     },
 
     mounted() {
-        console.log('Tab Name: ', this.$route.query.tabName);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName);
         } if (this.$route.query.tabName) {
@@ -307,7 +306,6 @@ export default {
             this.initTabName('/collateral/dai', {tabName: tabName});
             this.loadCurrentTotalData()
             this.loadCollateralData()
-            console.log("NetworkParams : ", this.getParams(this.tab));
         },
 
         initTabName(path, queryParams) {
@@ -409,7 +407,6 @@ export default {
             for (let i = 0; i < this.etsList.length; i++) {
                 let ets = this.etsList[i]
                 let etsNameUp;
-                console.log("EtsListName: ", this.etsList)
 
                 if (ets.id === element.id) {
                     etsNameUp = ets.nameUp
@@ -443,7 +440,6 @@ export default {
           this.collateralData = [];
           for (let i = 0; i < stablecoinList.length; i++) {
             let element = stablecoinList[i];
-            console.log("Elements:", element)
 
             try {
               this.collateralData.push(

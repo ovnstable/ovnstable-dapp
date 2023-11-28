@@ -1,5 +1,5 @@
 <template>
-    <v-menu nudge-width="100" offset-y>
+    <v-menu transition="slide-y-reverse-transition" offset-y>
         <template v-slot:activator="{ on, attrs }">
             <div class="select-bar-main-container"
                  v-click-outside="clickMenuOutside"
@@ -238,7 +238,7 @@ export default {
 .list-item-icon, .btn-icon, .selected-network-icon .v-image__image {
     width: 28px;
     height: 28px;
-    margin-right: 24px;
+    margin-right: 10px;
 }
 
 .network-select-list {

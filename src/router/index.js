@@ -177,16 +177,6 @@ const routes = [
                 }
             },
             {
-                path: '/reserves',
-                name: 'InsuranceReservesView',
-                component: () => import('../views/InsuranceReservesView.vue'),
-                meta: {
-                    middleware: [
-                        Reserves
-                    ]
-                }
-            },
-            {
                 path: '/ets',
                 redirect: '/market',
             },

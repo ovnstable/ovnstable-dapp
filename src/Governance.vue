@@ -68,7 +68,7 @@ export default {
     },
 
     computed:{
-        ...mapGetters('web3', ['web3', 'loadingWeb3']),
+        ...mapGetters('web3', ['loadingWeb3']),
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('network', ['networkName', 'switchToOtherNetwork', 'networkId']),
         ...mapGetters('accountData', ['account']),

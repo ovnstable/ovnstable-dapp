@@ -3,7 +3,6 @@ export default async function getMarket({ context, nextMiddleware }){
         console.log('Get Dapp/Market');
 
         context.store.dispatch('menuUI/selectTab', 'ets');
-        context.store.dispatch('statsData/refreshStats');
     }
     catch(e){
         console.error(e);

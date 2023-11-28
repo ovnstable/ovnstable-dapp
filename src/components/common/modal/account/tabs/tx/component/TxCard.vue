@@ -227,7 +227,7 @@ export default {
                 case 324:
                     return zksyncIcon;
                 default:
-                    return null;
+                    return ""
             }
         },
     },

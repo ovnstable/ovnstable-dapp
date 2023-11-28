@@ -508,7 +508,6 @@ const actions = {
         } else {
             dispatch('dappDataAction/resetUserData', null, {root: true});
             commit('accountData/setAccount', null, {root: true});
-            dispatch('statsData/refreshStats', null, {root:true});
             dispatch('insuranceData/refreshInsurance', null, {root:true});
         }
     },

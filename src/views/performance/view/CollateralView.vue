@@ -256,7 +256,6 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("statsData", ['stablecoinData']),
         ...mapGetters("network", ['appApiUrl', 'getParams', 'opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'zkConfig', 'networkName']),
         ...mapGetters("web3", ['contracts']),
         ...mapGetters('etsAction', ['etsList']),

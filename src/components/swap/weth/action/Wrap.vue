@@ -195,7 +195,7 @@
                              contracts.marketWeth,
                              'wrap',
                              tokenContract,
-                             {successAction: 'wrapUsdPlus'},
+                             {successAction: 'wrapEthPlus'},
                              finalizeFunc,
                              disapproveActionFunc,
                              approveActionFunc

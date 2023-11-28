@@ -181,7 +181,7 @@ import TableStrategies from "@/components/stats/doughnut/TableStrategies.vue";
 import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies.vue";
 import {collateralApiService} from "@/services/collateral-api-service";
 import {strategiesApiService} from "@/services/strategies-api-service";
-import {DAI_CONTRACT_ADDRESS_OPTIMISM,DAI_CONTRACT_ADDRESS_ARBITRUM,DAI_CONTRACT_ADDRESS_BASE} from "@/utils/const.js"
+import {DAI_PLUS_CONTRACT_ADDRESS_OPTIMISM,DAI_PLUS_CONTRACT_ADDRESS_ARBITRUM,DAI_PLUS_CONTRACT_ADDRESS_BASE} from "@/utils/const.js"
 
 
 export default {
@@ -238,15 +238,15 @@ export default {
 
         explorerLink: function () {
             if (this.tabNetworkName === 'optimism') {
-                return `https://optimistic.etherscan.io/token/${DAI_CONTRACT_ADDRESS_OPTIMISM}`
+                return `https://optimistic.etherscan.io/token/${DAI_PLUS_CONTRACT_ADDRESS_OPTIMISM}`
             }
 
             if (this.tabNetworkName === 'arbitrum') {
-                return `https://arbiscan.io/token/${DAI_CONTRACT_ADDRESS_ARBITRUM}`
+                return `https://arbiscan.io/token/${DAI_PLUS_CONTRACT_ADDRESS_ARBITRUM}`
             }
 
             if (this.tabNetworkName === 'base') {
-                return `https://basescan.org/token/${DAI_CONTRACT_ADDRESS_BASE}`
+                return `https://basescan.org/token/${DAI_PLUS_CONTRACT_ADDRESS_BASE}`
             }
 
             console.error("Not found networkId type when return dai explorer link")
@@ -255,15 +255,15 @@ export default {
 
         contractAddress: function () {
           if (this.tabNetworkName === 'optimism') {
-            return DAI_CONTRACT_ADDRESS_OPTIMISM
+            return DAI_PLUS_CONTRACT_ADDRESS_OPTIMISM
           }
 
           if (this.tabNetworkName === 'arbitrum') {
-            return DAI_CONTRACT_ADDRESS_ARBITRUM
+            return DAI_PLUS_CONTRACT_ADDRESS_ARBITRUM
           }
 
             if (this.tabNetworkName === 'base') {
-                return DAI_CONTRACT_ADDRESS_BASE
+                return DAI_PLUS_CONTRACT_ADDRESS_BASE
             }
 
 

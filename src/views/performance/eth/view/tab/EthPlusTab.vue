@@ -186,6 +186,7 @@ import TableStrategies from "@/components/stats/doughnut/TableStrategies.vue";
 import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies.vue";
 import {collateralApiService} from "@/services/collateral-api-service";
 import {strategiesApiService} from "@/services/strategies-api-service";
+import {ETH_PLUS_CONTRACT_ADDRESS_ARBITRUM} from "@/utils/const.js"
 
 
 export default {
@@ -228,7 +229,7 @@ export default {
 
         explorerLink: function () {
             if (this.tabNetworkName === 'arbitrum') {
-                return 'https://arbiscan.io/token/0xD4939D69B31fbE981ed6904A3aF43Ee1dc777Aab'
+                return `https://arbiscan.io/token/${ETH_PLUS_CONTRACT_ADDRESS_ARBITRUM}`
             }
 
             console.error("Not found networkId type when return dai explorer link")
@@ -237,7 +238,7 @@ export default {
 
         contractAddress: function () {
             if (this.tabNetworkName === 'arbitrum') {
-                return '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
+                return ETH_PLUS_CONTRACT_ADDRESS_ARBITRUM
             }
 
             console.error("Not found networkId type when return dai contract address")

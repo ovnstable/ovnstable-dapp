@@ -110,6 +110,10 @@ export default {
                     return 'wUSD+'
                 case 'unwrapUsdPlus':
                     return 'wUSD+'
+                case 'wrapEthPlus':
+                    return 'wETH+'   
+                case 'unwrapEthPlus':
+                    return 'wETH+'       
                 case 'mintEts':
                     return 'ETS ' + (this.etsData ? this.etsData.nameToken : '');
                 case 'redeemEts':
@@ -143,6 +147,10 @@ export default {
                     return require('@/assets/icon/wrap.svg');
                 case 'unwrapUsdPlus':
                     return require('@/assets/icon/unwrap.svg');
+                case 'wrapEthPlus':
+                    return require('@/assets/icon/wETHwrap.svg');
+                case 'unwrapEthPlus':
+                    return require('@/assets/icon/wETHunwrap.svg');    
                 case 'mintEts':
                     if (this.etsData) {
                       return require('@/assets/currencies/market/ets_' + this.etsData.name + '.svg');
@@ -221,6 +229,10 @@ export default {
                     this.addwUsdPlusToken();
                     // this.trackClick({action: 'add-wusdplus-token-click', event_category: 'Add Token And Mint', event_label: 'Minted and add wusdplus token', value: 1 });
                     break;
+                case 'wrapEthPlus':
+                case 'unwrapEthPlus':    
+                    this.addwEthPlusToken();
+                    break; 
                 case 'mintEts':
                 case 'redeemEts':
                     this.addEtsToken(this.etsData);

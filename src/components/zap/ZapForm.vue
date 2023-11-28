@@ -610,7 +610,6 @@ export default defineComponent({
         isFirstBalanceLoaded: function (val, oldVal) {
             if (val) {
                 // if router with path /claim
-                console.log("this.$route.path: ", this.$route.path);
                 if (this.$route.path === '/presale/claim') {
                     this.addOvnTokenToInput();
                     this.initDefaultTopInputTokensByBalance(this.noneOvnTokens)
@@ -641,7 +640,6 @@ export default defineComponent({
             // todo: move to backend
             let poolTokens = this.poolTokensForZapMap[this.zapPool.address];
             if (!poolTokens) {
-                console.log("Pool address not found:");
                 return;
             }
 
@@ -672,7 +670,6 @@ export default defineComponent({
 
             let ovnToken = this.ovnTokens[0];
             ovnToken.selected = true;
-            console.log("add ovnToken to input ", ovnToken);
             this.addSelectedTokenToInputList(ovnToken, true);
         },
         addDefaultPoolToken() {
@@ -686,7 +683,6 @@ export default defineComponent({
 
             poolSelectedToken.selected = true;
             ovnSelectSelectedToken.selected = true;
-            console.log("poolSelectedToken: ", poolSelectedToken, ovnSelectSelectedToken);
 
             if (this.swapMethod === 'BUY') {
                 this.addSelectedTokenToOutputList(poolSelectedToken, true, 50);
@@ -721,7 +717,6 @@ export default defineComponent({
         removeToken(tokens, id) {
             // removing by token.id or token.selectedToken.id
             const index = tokens.findIndex(item => item.id === id || (item.selectedToken ? item.selectedToken.id === id : false));
-            console.log("removeToken: ", id, index);
             if (index !== -1) {
                 if (tokens[index].selectedToken) {
                     tokens[index].selectedToken.selected = false;
@@ -732,7 +727,6 @@ export default defineComponent({
         },
 
         changeSwap() {
-            console.log("Change swap");
             if (this.swapMethod === 'BUY') {
                 this.setSwapMethod('SELL');
                 this.clearForm();
@@ -749,13 +743,10 @@ export default defineComponent({
         },
 
         handleCurrentSlippageChanged(newSlippage) {
-            console.log('currentSlippage has changed:', newSlippage);
-
             this.slippagePercent = newSlippage.value;
         },
 
         finishTransaction() {
-            console.log("Finish transaction");
             this.clearForm()
             this.closeWaitingModal();
         },
@@ -793,11 +784,8 @@ export default defineComponent({
                 token.value = 0;
             }
 
-
             // init first token value
             this.selectedOutputTokens[0].value = 100;
-
-            console.log("selectedOutputTokens after reset: ", this.selectedOutputTokens)
         },
         async stake() {
             try {
@@ -807,22 +795,18 @@ export default defineComponent({
             }
 
             if (!this.zapPool) {
-                console.log("Error when stake. Zap pool not found.")
                 return;
             }
 
             this.lastPoolInfoData = this.poolsInfoMap[this.zapPool.address];
             if (!this.lastPoolInfoData) {
-                console.log("Error when stake. Gauge pool not found by pool address: ", this.zapPool.address)
                 return;
             }
 
             if (this.isSwapLoading) {
-                console.log('Swap method not available, prev swap in process');
                 return;
             }
 
-            console.log("Swap", this.inputTokensWithSelectedTokensCount, this.outputTokensWithSelectedTokensCount);
             if (this.inputTokensWithSelectedTokensCount < 1 || this.outputTokensWithSelectedTokensCount < 1) {
                 return;
             }
@@ -872,7 +856,6 @@ export default defineComponent({
                 let outputToken = poolOutputTokens[i];
                 let poolOutputToken = outputToken.selectedToken;
                 let userInputTokenInFormulaOutputTokens = formulaOutputTokens.find((formulaToken) => formulaToken.address === poolOutputToken.address);
-                console.log("Pool token find in formula output token: ", userInputTokenInFormulaOutputTokens, poolOutputToken);
                 if (userInputTokenInFormulaOutputTokens) {
                     // if user token exist in pool pair, move to output for proportion formula
                     formulaResultOutputWithZero.push(userInputTokenInFormulaOutputTokens);
@@ -892,26 +875,18 @@ export default defineComponent({
 
             // formulaOutputTokens sorted by pool pair and with zero for not exist in output formula.
             formulaOutputTokens = formulaResultOutputWithZero;
-            console.log('formulaOutputTokens after sort and fill zero', formulaOutputTokens);
 
             let inputDecimals = formulaInputTokens.map(token => token.decimals);
-            console.log('inputDecimals', inputDecimals);
             let inputAddresses = formulaInputTokens.map(token => token.address);
-            console.log('inputAddresses', inputAddresses);
             let inputAmounts = formulaInputTokens.map(token => token.contractValue);
-            console.log('inputAmounts', inputAmounts);
             let inputPrices = formulaInputTokens.map(token => token.price);
-            console.log('inputPrices', inputPrices);
+
 
             // (!) List - formulaOutputTokens with 0 amount and sort like in pool pair.
             let outputDecimals = formulaOutputTokens.map(token => token.decimals);
-            console.log('outputDecimals', outputDecimals);
             let outputAddresses = formulaOutputTokens.map(token => token.address);
-            console.log('outputAddresses', outputAddresses);
             let outputAmounts = formulaOutputTokens.map(token => token.contractValue);
-            console.log('outputAmounts', outputAmounts);
             let outputPrices = formulaOutputTokens.map(token => token.price);
-            console.log('outputPrices', outputPrices);
 
             const proportions = this.calculateProportionForPool({
                 inputTokensDecimals: [...inputDecimals],
@@ -955,12 +930,8 @@ export default defineComponent({
                 referralCode: this.odosReferalCode
             }
 
-            console.log("Odos request data", requestData, this.zapPool);
-
             this.swapRequest(requestData)
                 .then(async data => {
-                    console.log("Odos swap request quota from zap", data)
-                    console.log("Odos swap request quota from zap proportions", proportions)
 
                     let assembleData = {
                         "userAddr": this.web3.utils.toChecksumAddress(request.userAddr.toLowerCase()),
@@ -969,18 +940,6 @@ export default defineComponent({
                     }
 
                     this.assembleRequest(assembleData).then(async responseAssembleData => {
-                        console.log("Assemble data: ", responseAssembleData)
-
-                        // if (responseAssembleData.simulation && !responseAssembleData.simulation.isSuccess) {
-                        //     this.closeWaitingModal();
-                        //     let errMsg = responseAssembleData.simulation.simulationError && responseAssembleData.simulation.simulationError.errorMessage ? responseAssembleData.simulation.simulationError.errorMessage : 'Transaction simulation is failed';
-                        //     console.error("Error before send zap swap transaction: ", errMsg)
-                        //     this.showErrorModalWithMsg({errorType: 'slippage', errorMsg: errMsg},);
-                        //     this.isSwapLoading = false;
-                        //     return;
-                        // }
-
-                        // { "inTokens": [ "0x0000000000000000000000000000000000000000", "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a" ], "outTokens": [ "0xe80772eaf6e2e18b651f160bc9158b2a5cafca65", "0xeb8e93a0c7504bffd8a8ffa56cd754c63aaebfe8" ], "inAmounts": [ "1000000000000000000", "1000000000000000000" ], "outAmounts": [ "748864357", "1091926251518831755264" ], "gasEstimate": 613284, "dataGasEstimate": 0, "gweiPerGas": 1000000, "gasEstimateValue": 1129317.6351027626, "inValues": [ 1841.4255542063122, 1.0001535800151131 ], "outValues": [ 748.6976540455693, 1091.9074095761437 ], "netOutValue": -1127477.030039141, "priceImpact": -0.0008666645762853047, "percentDiff": -0.09881777902469935, "pathId": "a5fc8568c59f7cf8cc8df9194d66b4f6", "pathViz": null, "blockNumber": 89177560 }
                         await this.initZapInTransaction(responseAssembleData, proportions.inputTokens, proportions.outputTokens, proportions, this.lastPoolInfoData, this.zapPool, request.gasPrice);
 
                         this.isSwapLoading = false;
@@ -1012,15 +971,11 @@ export default defineComponent({
                 "disableRFQs": false
             }
 
-            console.log("Odos request function: ", swapParams)
-
             // @ts-ignore
             const url = 'https://api.overnight.fi/root/odos/sor/swap';
             let transaction;
             try {
-                // transaction = (await axios.post(url, swapParams, { headers: { "Accept-Encoding": "br" } }));
                 transaction = (await axios.post(url, swapParams));
-                console.log("Odos success response function: ", transaction)
             } catch (e) {
                 console.error("[chronosZap] getSwapTransaction: " + e);
                 return 0;
@@ -1036,13 +991,11 @@ export default defineComponent({
                 return 0;
             }
 
-            console.log('Success get data from Odos!', transaction);
             return transaction.data.transaction;
         },
 
         getSourceLiquidityBlackList() {
             let sourceBlacklist = [...this.sourceLiquidityBlacklist];
-            console.log("this.zapPool for exclude liquidity: ", this.zapPool);
             let excludeLiquidityByPlatform = this.mapExcludeLiquidityPlatform[this.zapPool.platform];
             if (excludeLiquidityByPlatform && excludeLiquidityByPlatform.length) {
                 sourceBlacklist = [...sourceBlacklist, ...excludeLiquidityByPlatform];
@@ -1051,25 +1004,19 @@ export default defineComponent({
             return sourceBlacklist;
         },
         toApproveAndDepositSteps: async function (data, lastPoolInfoData) {
-            console.log("Approve and deposit tx steps.", data, this.poolTokenContract, this.gaugeContract, lastPoolInfoData)
             let putIntoPoolEvent;
             let returnedToUserEvent;
             for (const key of Object.keys(data.events)) {
                 const value = data.events[key];
 
-                console.log(`Key: ${key}`);
-                console.log(`Value:`, value);
-
                 if (key === 'PutIntoPool') {
                     putIntoPoolEvent = value;
                     this.lastPutIntoPoolEvent = putIntoPoolEvent;
-                    console.log(`Tokens put into pool: ${putIntoPoolEvent.returnValues.amountsPut} ${putIntoPoolEvent.returnValues.tokensPut}`);
                 }
 
                 if (key === 'ReturnedToUser') {
                     returnedToUserEvent = value;
-                    this.lastReturnedToUserEvent = returnedToUserEvent;
-                    console.log(`Tokens returned to user: ${returnedToUserEvent.returnValues.amountsReturned} ${returnedToUserEvent.returnValues.tokensReturned}`);
+                    this.lastReturnedToUserEvent = returnedToUserEvent;                  
                 }
 
             }
@@ -1078,27 +1025,22 @@ export default defineComponent({
             this.additionalSwapStepType = 'APPROVE';
 
             if (lastPoolInfoData.approveType === 'NFT') {
-                console.log("Approve NFT gauge", lastPoolInfoData);
                 this.approveNftGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData);
                 return;
             }
 
-            console.log("Approve gauge", lastPoolInfoData);
             this.approveGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData);
 
         },
         async approveNftGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData) {
-            console.log(this.gaugeContract);
             this.showWaitingModal('Approving NFT in process');
 
             if (!this.lastNftTokenId) {
                 try {
                     let tokenId = await this.getLastNftId();
                     this.lastNftTokenId = tokenId;
-                    console.log("Last nft id: ", tokenId);
                     let params = {from: this.account, gasPrice: this.gasPriceGwei};
                     this.gaugeContract.methods.approve(this.poolTokenContract.options.address, tokenId).send(params).then(data => {
-                        console.log("Approve nft gauge success", data);
                         this.additionalSwapStepType = 'DEPOSIT';
                         this.closeWaitingModal();
                         this.depositGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData, this.lastNftTokenId);
@@ -1120,21 +1062,16 @@ export default defineComponent({
         },
         getLastNftId() {
             return this.gaugeContract.methods.balanceOf(this.account).call().then(count => {
-                console.log("Nft count: ", count);
                 return this.gaugeContract.methods.tokenOfOwnerByIndex(this.account, count - 1).call().then(tokenId => {
-                    console.log("Last nft id: ", tokenId);
                     return tokenId;
                 });
             });
         },
         async approveGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData) {
-            console.log(this.gaugeContract);
             let isGaugeApproved = await this.checkApproveForGauge(this.poolTokenContract, this.gaugeContract.options.address, 1000000000000000);
-            console.log("Approving gauge", isGaugeApproved);
             if (!isGaugeApproved) {
                 this.showWaitingModal('Approving gauge in process');
                 this.approveGaugeForStake().then(data => {
-                    console.log("Success gauge approve: ", data);
                     this.additionalSwapStepType = 'DEPOSIT';
                     this.closeWaitingModal();
                     this.depositGauge(putIntoPoolEvent, returnedToUserEvent, lastPoolInfoData);
@@ -1152,8 +1089,6 @@ export default defineComponent({
 
             this.depositAllAtGauge(this.account, lastPoolInfoData, lastNftTokenId).then(data => {
                 this.closeWaitingModal();
-
-                console.log("Deposit success!", data);
 
                 const inputTokens = [...this.selectedInputTokens]
                 const outputTokens = [...this.selectedOutputTokens]
@@ -1174,7 +1109,6 @@ export default defineComponent({
 
                 this.loadBalances();
             }).catch(e => {
-                console.log("Deposit error!", e);
                 this.closeWaitingModal();
                 this.additionalSwapStepType = 'DEPOSIT';
             });
@@ -1185,25 +1119,19 @@ export default defineComponent({
             this.lastZapResponseData = null;
         },
         finishSingleStepTransaction: function (data) {
-            console.log("Finish single tx step.", data)
             let putIntoPoolEvent;
             let returnedToUserEvent;
             for (const key of Object.keys(data.events)) {
                 const value = data.events[key];
 
-                console.log(`Key: ${key}`);
-                console.log(`Value:`, value);
-
                 if (key === 'PutIntoPool') {
                     putIntoPoolEvent = value;
-                    this.lastPutIntoPoolEvent = putIntoPoolEvent;
-                    console.log(`Tokens put into pool: ${putIntoPoolEvent.returnValues.amountsPut} ${putIntoPoolEvent.returnValues.tokensPut}`);
+                    this.lastPutIntoPoolEvent = putIntoPoolEvent;                 
                 }
 
                 if (key === 'ReturnedToUser') {
                     returnedToUserEvent = value;
-                    this.lastReturnedToUserEvent = returnedToUserEvent;
-                    console.log(`Tokens returned to user: ${returnedToUserEvent.returnValues.amountsReturned} ${returnedToUserEvent.returnValues.tokensReturned}`);
+                    this.lastReturnedToUserEvent = returnedToUserEvent;                 
                 }
 
             }
@@ -1226,7 +1154,6 @@ export default defineComponent({
             this.loadBalances();
         },
         async initZapInTransaction(responseData, requestInputTokens, requestOutputTokens, proportions, poolInfo, zapPool, gasPrice) {
-            console.log("Chronos-odos transaction data", responseData, this.zapContract, poolInfo, zapPool);
             let gaugeAddress = poolInfo.gauge;
             if (!this.zapContract) {
                 console.error("Init zap transactions failed, chronos contract not found. responseData: ", responseData)
@@ -1235,8 +1162,6 @@ export default defineComponent({
 
             this.startSwapConfirmTimer();
 
-            console.log("Odos swap request success", responseData, this.zapContract, requestInputTokens, requestOutputTokens, gaugeAddress)
-            // console.log("Odos swap request success", data)
             let requestInput = [];
             for (let i = 0; i < requestInputTokens.length; i++) {
                 requestInput.push({
@@ -1280,8 +1205,6 @@ export default defineComponent({
                 }
             }
 
-            console.log("Odos zap request data:", txData, gaugeData, this.zapContract);
-
             this.showWaitingModal('Staking in process');
 
             let params = {from: this.account, gasPrice: this.gasPriceGwei};
@@ -1292,20 +1215,17 @@ export default defineComponent({
                     this.lastZapResponseData = data;
 
                     if (this.currentZapPlatformContractType.type === 'LP_WITH_STAKE_IN_ONE_STEP') {
-                        console.log("Finish single step transaction: ", this.lastZapResponseData);
                         this.finishSingleStepTransaction(this.lastZapResponseData);
                         return;
                     }
 
                     if (this.currentZapPlatformContractType.type === 'LP_STAKE_DIFF_STEPS') {
-                        console.log("Finish single step transaction: ", this.lastZapResponseData);
                         this.toApproveAndDepositSteps(this.lastZapResponseData, poolInfo);
                         return;
                     }
 
                     console.error("Error when end of transaction, method type not found. ", this.currentZapPlatformContractType);
                 }).catch(e => {
-                console.log("Zap odos call error: ", e);
                 if (e && e.code === 4001) {
                     if (e.message === 'User rejected the request.') {
                         this.stopSwapConfirmTimer();
@@ -1322,35 +1242,25 @@ export default defineComponent({
             this.pathViz = null
             this.quotaResponseInfo = null;
             this.swapResponseInfo = null;
-            // this.updatePathViewFunc(this.pathViz, [], []);
         },
         async recalculateProportion() {
-            console.log("recalculateProportion Zap address: ", this.zapPool.address, this.zapPool)
             let reserves = await this.getProportion(this.zapPool.address, this.zapPool);
-            console.log("recalculateProportion Reserves data ", reserves);
 
             let outputToken0Price = this.selectedOutputTokens[0].selectedToken.price;
-            console.log("recalculateProportion outputToken0Price: ", outputToken0Price);
             let outputToken1Price = this.selectedOutputTokens[1].selectedToken.price;
-            console.log("recalculateProportion outputToken1Price: ", outputToken1Price);
 
             let sumReserves = (reserves.token0Amount * outputToken0Price) + (reserves.token1Amount * outputToken1Price);
-            console.log("recalculateProportion Reserves sumReserves: ", sumReserves);
-            // "proportion": reserves[0] / sumReserves
             this.selectedOutputTokens[0].value = (reserves[0] * outputToken0Price) / sumReserves * 100;
             this.selectedOutputTokens[1].value = (reserves[1] * outputToken1Price) / sumReserves * 100;
 
-            console.log("recalculateProportion selectedOutputTokens after reset: ", this.selectedOutputTokens)
 
             this.recalculateOutputTokensSum();
         },
         async simulateSwap() {
             if (this.isSumulateSwapLoading) {
-                console.log('Simulate Swap method not available, prev swap in process');
                 return;
             }
 
-            console.log("Simulate Swap", this.inputTokensWithSelectedTokensCount, this.outputTokensWithSelectedTokensCount);
             if (this.inputTokensWithSelectedTokensCount < 1 || this.outputTokensWithSelectedTokensCount < 1) {
                 return;
             }
@@ -1364,7 +1274,6 @@ export default defineComponent({
             let output = this.getRequestOutputTokens(false);
             if (!input.length || !output.length) {
                 this.isSumulateSwapLoading = false;
-                console.log('simulate Swap not allowed', input, output);
                 return;
             }
 
@@ -1380,22 +1289,14 @@ export default defineComponent({
                 sourceWhitelist: [],
                 simulate: true,
                 pathViz: true,
-                // disableRFQs: false
             }
 
             this.clearQuotaInfo();
 
-            console.log("Odos simulate swap request data", requestData);
             this.quoteRequest(requestData)
                 .then(data => {
-                    console.log("Odos simulate swap request success", data)
                     this.isSumulateSwapLoading = false;
                     this.updateIsLoadingDataFunc(false);
-
-                    // todo 5 filter by value > 0 this.selectedInputTokens.filer(item => item.selectedToken.value > 0);
-                    // .filter(item => item.selectedToken.value && item.selectedToken.value > 0)
-                    // .filter(item => item.selectedToken.value && item.selectedToken.value > 0)
-                    // .filter(item => item.selectedToken.value && item.selectedToken.value > 0)
                     this.updatePathViewFunc(data.pathViz,
                         this.selectedInputTokens,
                         this.selectedOutputTokens)
@@ -1421,7 +1322,6 @@ export default defineComponent({
             // this.clearApproveToken(tokenContract, this.routerContract.options.address)
             this.clearApproveToken(tokenContract, this.zapContract.options.address)
                 .then(data => {
-                    console.log("Clear approve success. ", token, data);
                     this.checkApproveForToken(token);
                     this.isShowDecreaseAllowanceButton = false;
                 }).catch(e => {
@@ -1432,16 +1332,13 @@ export default defineComponent({
         async checkApproveForToken(token, checkedAllowanceValue) { // checkedAllowanceValue in wei
             let selectedToken = token.selectedToken;
             if (selectedToken.address === '0x0000000000000000000000000000000000000000') {
-                console.log("Check approve not available. its a root token: ", token);
+
                 selectedToken.approveData.approved = true
                 return;
             }
 
             let tokenContract = this.tokensContractMap[selectedToken.address];
-            console.log('Check Approve contract: ', token, tokenContract, this.account, this.zapContract.options.address);
-            // let allowanceValue = await this.getAllowanceValue(tokenContract, this.account, this.routerContract.options.address);
             let allowanceValue = await this.getAllowanceValue(tokenContract, this.account, this.zapContract.options.address);
-            console.log('Approve value: ', allowanceValue);
 
             selectedToken.approveData.allowanceValue = allowanceValue * 1;
             if (!selectedToken.approveData.allowanceValue) {
@@ -1459,24 +1356,19 @@ export default defineComponent({
 
         async approve(token) {
             this.showWaitingModal('Approving in process');
-            console.log("Approve contract token: ", token)
 
             await this.checkApproveForToken(token, token.contractValue);
             let selectedToken = token.selectedToken;
             if (selectedToken.approveData.approved) {
-                console.log("Approve not needed for token: ", token);
                 this.closeWaitingModal();
                 return;
             }
 
             let tokenContract = this.tokensContractMap[selectedToken.address];
             // let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
-            let approveValue = this.web3.utils.toWei("10000000", token.selectedToken.weiMarker);
-            console.log('Approve contract approveValue: ', approveValue);
-            console.log('Approve contract newApproveValue: ', token, selectedToken, selectedToken.decimals, tokenContract, this.account, this.zapContract.options.address, approveValue);
+            let approveValue = this.web3.utils.toWei("10000000", token.selectedToken.weiMarker);         
             this.approveToken(tokenContract, this.zapContract.options.address, approveValue)
                 .then(data => {
-                    console.log("Success approving", data);
                     this.checkApproveForToken(token, token.contractValue);
                     this.closeWaitingModal();
                 })
@@ -1492,9 +1384,7 @@ export default defineComponent({
             for (let i = 0; i < this.selectedInputTokens.length; i++) {
                 let token = this.selectedInputTokens[i];
                 let selectedToken = token.selectedToken;
-                console.log("input token: ", token);
                 if (!ignoreNullable && !token.value) {
-                    console.log("token value is 0: ", token);
                     continue;
                 }
 
@@ -1513,7 +1403,6 @@ export default defineComponent({
                 let token = this.selectedOutputTokens[i];
                 let selectedToken = token.selectedToken;
                 if (!ignoreNullable && !token.value) {
-                    console.log("output token value is 0: ", token);
                     continue;
                 }
 
@@ -1527,7 +1416,6 @@ export default defineComponent({
 
         lockProportion(isLock, token) {
             if (this.outputTokensWithSelectedTokensCount <= 1 && !isLock) {
-                console.log("Its first token, unlock is disable");
                 return
             }
 
@@ -1696,17 +1584,12 @@ export default defineComponent({
 
                 let totalBalance = this.totalNoneOvnUsdInputsUsdBalance;
                 if (totalBalance >= ovnUsdValue) {
-                    console.log("Recalculate ovn token Total balance more than ovn token balance: ", totalBalance, ovnUsdValue);
                     return;
                 }
 
                 let diffInUsd = ovnUsdValue - totalBalance;
                 let diff = diffInUsd / ovnToken.selectedToken.price;
                 let newValue = ovnToken.value - diff;
-
-                // console.log("Total balance less than ovn token balance: ", totalBalance, ovnTokenBalance, diffInUsd, diff);
-                console.log(`Recalculate ovn token Total balance less than ovn token balance.
-            totalBalance: ${totalBalance} ovnUsdValue: ${ovnUsdValue} diffInUsd: ${diffInUsd} diff: ${diff} newValue: ${newValue}`)
 
                 if (newValue <= 0) {
                     this.updateTokenValue(ovnToken, 0);
@@ -1758,9 +1641,7 @@ export default defineComponent({
             for (let i = 0; i < tokensByBalanceResult.length; i++) {
                 let token = tokensByBalanceResult[i];
                 token.selected = true;
-                console.log("Top tokens after filter token: ", token)
                 this.addSelectedTokenToInputList(token, true);
-                // this.addNewOutputToken();
             }
 
             this.recalcualteOvnInputValue();
@@ -1972,7 +1853,6 @@ export default defineComponent({
                         this.tokensQuotaCheckerSec = 0;
                         try {
                             // update
-                            console.log("UPDATE Proportion SECOND DATA")
                             this.recalculateProportion()
                         } catch (e) {
                             // ignore

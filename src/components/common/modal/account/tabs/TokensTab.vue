@@ -26,9 +26,16 @@
                 <label class="ml-2 coin-btn-label">USDT+</label>
             </v-btn>
 
+            <v-btn v-if="showWEth" class="coin-btn ma-1" @click="addwEthPlusToken">
+                <div class="coin-img">
+                    <v-img :src="require('@/assets/currencies/WETH+.svg')"/>
+                </div>
+                <label class="ml-2 coin-btn-label">wETH+</label>
+            </v-btn>
+
             <v-btn v-if="showEth" class="coin-btn ma-1" @click="addEthPlusToken">
                 <div class="coin-img">
-                    <v-img :src="require('@/assets/currencies/ethPlus.svg')"/>
+                    <v-img :src="require('@/assets/currencies/ETH+.svg')"/>
                 </div>
                 <label class="ml-2 coin-btn-label">ETH+</label>
             </v-btn>
@@ -39,6 +46,7 @@
                 </div>
                 <label class="ml-2 coin-btn-label">wUSD+</label>
             </v-btn>
+
             <v-btn v-if="networkId === 10" class="coin-btn ma-1" @click="addInsuranceToken">
                 <div class="coin-img">
                     <v-img :src="require('@/assets/currencies/insurance/round_insurance_optimism.svg')"/>
@@ -83,6 +91,10 @@ export default {
             return this.networkId === 42161;
         },
 
+        showWEth: function () {
+            return this.networkId === 42161;
+        },
+
         showWusd: function () {
             const allowedNetworkIds = [10,42161,8453,137];
             return allowedNetworkIds.includes(this.networkId);
@@ -97,7 +109,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addEthPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addEthPlusToken','addwEthPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
     },
 }
 </script>

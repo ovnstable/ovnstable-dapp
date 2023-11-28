@@ -429,8 +429,6 @@ export default {
                     }
 
                     this.payoutsTvlData = widgetDataTvl;
-                    console.log("Payouts data: ", this.payoutsApyData, this.payoutsTvlData);
-
                     this.isPayoutsLoading = false;
                 })
                 .catch(e => {

@@ -23,7 +23,7 @@
                                 v-if="networkId !== 42161"
                                 class="mx-n5"
                                 text="Available on Arbitrum chain"
-                                max-width="12px"
+                                :max-width="12"
                             />
                         </label>
 

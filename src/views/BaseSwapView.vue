@@ -19,12 +19,12 @@
                 <div class="row">
                     <div class="col-lg-5 col-md-6 col-sm-12">
                         <SwapForm
-                                :view-type="viewType"
-                                :update-path-view-func="updatePathView"
-                                :update-button-disabled-func="updateButtonDisabled"
-                                :update-is-loading-data-func="updateIsLoadingData"
-                                :handle-form-reset-func="handleFormReset"
-                                :update-stablecoins-list-func="updateStablecoinsList"/>
+                            :view-type="viewType"
+                            :update-path-view-func="updatePathView"
+                            :update-button-disabled-func="updateButtonDisabled"
+                            :update-is-loading-data-func="updateIsLoadingData"
+                            :handle-form-reset-func="handleFormReset"
+                            :update-stablecoins-list-func="updateStablecoinsList"/>
                     </div>
                     <div
                          class="col-lg-7 col-md-7 col-sm-12">
@@ -32,10 +32,11 @@
                             <SwapInformation/>
                         </div>
                         <div v-else>
-                            <PathView :path-object="pathViz"
-                                      :input-tokens="inputTokens"
-                                      :output-tokens="outputTokens"
-                                      :is-loading-data="isLoadingData"/>
+                            <PathView
+                                :path-object="pathViz"
+                                :input-tokens="inputTokens"
+                                :output-tokens="outputTokens"
+                                :is-loading-data="isLoadingData"/>
                         </div>
                     </div>
                 </div>

@@ -68,8 +68,7 @@ export default {
         }
       }
 
-        // await this.initEtsList();
-
+        await this.initEtsList();
         await this.initWeb3();
         await this.dappInitWalletConnect();
         this.initReferralCode();

@@ -158,8 +158,6 @@ export default {
     }),
 
     computed: {
-        ...mapGetters("statsData", ['currentTotalData',]),
-        ...mapGetters("statsUI", ['loadingCurrentTotalData']),
         ...mapGetters("network", ['assetName', 'assetDecimals', 'appApiUrl']),
         ...mapGetters("web3", ['contracts']),
     },

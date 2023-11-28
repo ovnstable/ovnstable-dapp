@@ -1,8 +1,7 @@
 <template>
     <div>
         <div v-if="!isAvailableOnNetwork">
-            <NetworkNotAvailable :network-name="networkName">
-            </NetworkNotAvailable>
+            <NetworkNotAvailable :network-name="networkName" />
         </div>
 
         <div v-else class="swap-container">
@@ -992,9 +991,7 @@ export default defineComponent({
                 return;
             }
 
-            this.updateIsLoadingDataFunc(true);
             this.isSumulateSwapLoading = true;
-
             let actualGas = await this.getActualGasPrice(this.networkId);
 
             let input = this.getRequestInputTokens(false);
@@ -1031,9 +1028,9 @@ export default defineComponent({
                         this.selectedOutputTokens)
                     this.pathViz = data.pathViz;
                 }).catch(e => {
-                console.error("Odos simulate swap request failed", e)
-                this.isSumulateSwapLoading = false;
-                this.updateIsLoadingDataFunc(false);
+                    console.error("Odos simulate swap request failed", e)
+                    this.isSumulateSwapLoading = false;
+                    this.updateIsLoadingDataFunc(false);
             })
         },
         // function get data.outTokens and data.outAmounts and find matches in selectedOutputTokens

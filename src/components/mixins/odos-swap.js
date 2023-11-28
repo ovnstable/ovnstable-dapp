@@ -212,7 +212,6 @@ export const odosSwap = {
 
         async initData(tokenSeparationScheme, listOfBuyTokensAddresses) {
             this.clearInputData();
-            this.isTokensLoadedAndFiltered = false;
 
             if (!tokenSeparationScheme) {
                 console.error("Not found separation scheme, when init data.")
@@ -786,7 +785,6 @@ export const odosSwap = {
             }
 
             // return first if usd+ not found
-            console.log('return first if usd+ not found')
             return this.secondTokens[0];
         },
 
@@ -888,7 +886,6 @@ export const odosSwap = {
         },
 
         maxAll() {
-            console.log("Max all");
             for (let i = 0; i < this.selectedInputTokens.length; i++) {
                 let token = this.selectedInputTokens[i];
                 console.log(token.selectedToken.balanceData.balance);
@@ -897,7 +894,6 @@ export const odosSwap = {
         },
 
         updateTokenValue(token, value) {
-            console.log('updateTokenValue: ', token, value)
             token.value = value;
             this.updateQuotaInfo();
 
@@ -912,10 +908,6 @@ export const odosSwap = {
                 let sum = token.decimals === 6 ? token.value * 100 + '' : token.value + '';
                 token.contractValue = this.web3.utils.toWei(sum, token.selectedToken.weiMarker);
                 token.usdValue = token.value * selectedToken.price;
-                console.log("updateTokenValue price: ", token, value, token.contractValue, selectedToken);
-                console.log("updateTokenValue price: ", token.usdValue);
-
-                console.log('updateTokenValue with selected token: ', token, value, token.contractValue);
 
                 if (selectedToken.address === '0x0000000000000000000000000000000000000000') {
                     console.log("Check approve in update value not available. its a root token: ", token);

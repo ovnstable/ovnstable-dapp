@@ -23,7 +23,6 @@ import AccountProfile from "./components/common/modal/account/AccountProfile";
 import GasSettings from "@/components/common/modal/gas/GasSettings";
 import {mapActions, mapGetters} from "vuex";
 import Navbar from "@/components/Navbar";
-import Web3 from "web3";
 
 export default {
     name: "Dapp",
@@ -52,10 +51,9 @@ export default {
         await this.initTheme();
 
       try {
-        let web3 = await new Web3(Web3.givenProvider);
-        let networkID = await web3.eth.net.getId();
-        networkID = networkID + '';
-        this.saveNetworkToLocalStore(networkID);
+        if (!window?.ethereum.chainId) return
+        const chainId = parseInt(window.ethereum.chainId)?.toString()
+        this.saveNetworkToLocalStore(chainId);
 
       } catch (e) {
         console.error("Load wallet error from init dapp ", e);
@@ -70,7 +68,7 @@ export default {
         }
       }
 
-        await this.initEtsList();
+        // await this.initEtsList();
 
         await this.initWeb3();
         await this.dappInitWalletConnect();

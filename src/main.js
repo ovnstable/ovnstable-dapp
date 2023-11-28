@@ -20,7 +20,6 @@ import {ResizeObserver} from 'vue-resize'
 import * as Sentry from "@sentry/vue";
 import { CaptureConsole } from '@sentry/integrations';
 import { BrowserTracing } from "@sentry/tracing";
-import Web3 from "web3";
 
 // global emit
 export const bus = new Vue();
@@ -87,10 +86,9 @@ if (process.env.NODE_ENV === 'production') {
 
 async function initNetwork() {
   try {
-    let web3 = await new Web3(Web3.givenProvider);
-    let networkID = await web3.eth.net.getId();
-    networkID = networkID + "";
-    store.dispatch('network/saveNetworkToLocalStore', networkID, {root: true});
+    if (!window?.ethereum.chainId) return
+    const chainId = parseInt(window.ethereum.chainId)?.toString()
+    store.dispatch('network/saveNetworkToLocalStore', chainId, {root: true});
     console.log('main created networkId: ', networkID);
   } catch (e) {
     console.log("Error when init network:", e)

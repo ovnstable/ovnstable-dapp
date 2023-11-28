@@ -291,11 +291,8 @@ const actions = {
                         etsOriginalBalance = etsBalance;
                         etsBalance = web3.web3.utils.fromWei(etsBalance, ets.etsTokenDecimals === 18 ? 'ether' : 'mwei');
                     } catch (e) {
-                        try {
-                            etsBalance = getters.etsBalance[ets.name];
-                            etsOriginalBalance = getters.etsOriginalBalance[ets.name];
-                        } catch (ex) {
-                        }
+                        etsBalance = getters.etsBalance[ets.name];
+                        etsOriginalBalance = getters.etsOriginalBalance[ets.name];
                     }
 
                     resultEtsBalance[ets.name] = etsBalance;
@@ -333,11 +330,8 @@ const actions = {
                         insuranceOriginalBalance = insuranceBalance;
                         insuranceBalance = web3.web3.utils.fromWei(insuranceBalance, 'ether');
                     } catch (e) {
-                        try {
-                            insuranceBalance = getters.insuranceBalance[insurance.chainName];
-                            insuranceOriginalBalance = getters.insuranceOriginalBalance[insurance.chainName];
-                        } catch (ex) {
-                        }
+                        insuranceBalance = getters.insuranceBalance[insurance.chainName];
+                        insuranceOriginalBalance = getters.insuranceOriginalBalance[insurance.chainName];
                     }
 
                     resultInsuranceBalance[insurance.chainName] = insuranceBalance;
@@ -375,7 +369,7 @@ const actions = {
                                 break;
                         }
                     } catch (e) {
-
+                        return
                     }
 
                     const assetProperty = ets.actionAsset + '_' + ets.actionTokenDecimals; // asset may be with different decimals.

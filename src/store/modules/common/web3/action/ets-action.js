@@ -12,7 +12,7 @@ const state = {
         // 'base',
         // 'linea'
     ],
-    etsList: null,
+    etsList: [],
 };
 
 const getters = {

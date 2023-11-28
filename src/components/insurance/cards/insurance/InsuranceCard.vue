@@ -227,7 +227,6 @@ export default {
             let url = "https://api.overnight.fi/optimism/usd+";
             insuranceApiService.getApyInfo(url)
                 .then(data => {
-                    console.log('Load avg apy info for insurance card', data);
                     this.apyData = data
                     this.isLoaded = true;
                 })
@@ -241,9 +240,7 @@ export default {
             let url = "https://api.overnight.fi/optimism/usd+";
             insuranceApiService.getPayouts(url)
                 .then(data => {
-                    console.log('Load payouts info for insurance card', data);
                     this.payoutsData = data.sort((o1, o2) => difference(o1.date, o2.date));
-                    console.log('Sorted payouts info for insurance card', this.payoutsData)
                 })
                 .catch(e => {
                     console.error('Error load payouts info for insurance card', e);

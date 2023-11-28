@@ -297,6 +297,8 @@ export default {
                     return baseIcon;
                 case 'linea':
                     return lineaIcon;
+                default:
+                    return ""
             }
         },
     },

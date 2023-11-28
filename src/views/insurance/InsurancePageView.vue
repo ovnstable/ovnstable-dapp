@@ -267,7 +267,6 @@ export default {
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
         ...mapGetters('insuranceData', ['insuranceRedemptionData']),
-        ...mapGetters("statsData", ['currentTotalData', 'stablecoinData']),
         ...mapGetters('magicEye', ['dataHidden']),
 
         activeTabOptimism: function () {
@@ -290,15 +289,10 @@ export default {
         },
     },
 
-    created() {
-      this.refreshInsuranceAssetData();
-      this.refreshInsuranceTotalData();
-    },
-
-    async mounted() {
+    mounted() {
         this.initTab();
         this.loadOvnPrice();
-        await this.refreshClientData();
+        this.refreshClientData();
     },
 
     methods: {
@@ -306,7 +300,6 @@ export default {
         ...mapActions('insuranceRiskModal', ['showRiskModal']),
         ...mapActions('insuranceData', ['refreshIsNeedRedemption']),
         ...mapActions('insuranceInvestModal', ['showInvestModal', 'showMintView', 'showRedeemView', 'showRedemptionRequestModal']),
-        ...mapActions('statsData', ['refreshInsuranceAssetData', 'refreshInsuranceTotalData']),
 
         loadOvnPrice() {
             let url = "https://api.overnight.fi/root/dapp";

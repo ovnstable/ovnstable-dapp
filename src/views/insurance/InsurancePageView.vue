@@ -304,10 +304,9 @@ export default {
         loadOvnPrice() {
             let url = "https://api.overnight.fi/root/dapp";
             ovnApiService.getOvnPrice(url).then(value => {
-                console.log("ovn price: ", value);
                 this.ovnPrice = value;
             }).catch(reason => {
-                console.log('Error get ovn price: ' + reason);
+                console.error('Error get ovn price: ' + reason);
             });
         },
 
@@ -338,31 +337,23 @@ export default {
         },
 
         async refreshClientData() {
-            console.log("refreshClientData 1")
             this.isClientDataLoading = true;
 
             if (!this.account){
-                console.log("refreshClientData 2")
                 this.isClientDataLoading = false;
                 return;
             }
 
-            console.log("refreshClientData 3")
             let account = this.account.toLowerCase();
-            // account = "0x6d1b0ba383cd362f180ccfe01733b19260ca2459";
             let url = "https://api.overnight.fi/optimism/usd+";
 
-            console.log("refreshClientData 4")
             insuranceApiService.getClientData(url, account)
                 .then(async value => {
-                    console.log("Client insurance data: ", value);
-                    console.log("refreshClientData 5", value)
                     this.clientProfitDay = value.profitLastDay
-                    // this.clientProfitDay = 20.123
                     await this.refreshIsNeedRedemption();
                     this.isClientDataLoading = false;
                 }).catch(reason => {
-                console.log('Error get insurance data client: ' + reason);
+                console.error('Error get insurance data client: ' + reason);
                 this.isClientDataLoading = false;
             })
         },

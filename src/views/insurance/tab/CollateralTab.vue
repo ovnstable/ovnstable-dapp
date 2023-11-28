@@ -108,6 +108,7 @@ import TableInsuranceStrategies from "@/components/stats/doughnut/TableInsurance
 import {strategiesApiService} from "@/services/strategies-api-service";
 import {collateralApiService} from "@/services/collateral-api-service";
 import {red} from "bn.js";
+import {OVN_INS_CONTRACT_ADDRESS_OPTIMISM} from "@/utils/const.js"
 
 export default {
     name: "InsuranceCollateralTab",
@@ -160,33 +161,9 @@ export default {
 
         explorerLink: function () {
             if (this.tabNetworkName === 'optimism') {
-                return 'https://optimistic.etherscan.io/token/0x5E3C33e152Be20835B9c33071C411B616688c754'
+                return `https://optimistic.etherscan.io/token/${OVN_INS_CONTRACT_ADDRESS_OPTIMISM}`
             }
 
-            /*if (this.tabNetworkName === 'arbitrum') {
-                return 'https://arbiscan.io/token/0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
-            }
-
-            if (this.tabNetworkName === 'zksync') {
-                return 'https://explorer.zksync.io/address/0x8E86e46278518EFc1C5CEd245cBA2C7e3ef11557'
-            }
-
-            if (this.tabNetworkName === 'bsc') {
-                return 'https://bscscan.com/token/0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
-            }
-
-            if (this.tabNetworkName === 'polygon') {
-                return 'https://polygonscan.com/token/0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
-            }
-
-
-            if (this.tabNetworkName === 'base') {
-                return 'https://basescan.org/token/0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
-            }
-
-            if (this.tabNetworkName === 'linea') {
-                return 'https://lineascan.build/token/0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
-            }*/
 
             console.error("Not found networkId type when return INSURANCE usd+ explorer link")
             return null;
@@ -194,36 +171,8 @@ export default {
 
         contractAddress: function () {
             if (this.tabNetworkName === 'optimism') {
-                return '0x5E3C33e152Be20835B9c33071C411B616688c754'
+                return OVN_INS_CONTRACT_ADDRESS_OPTIMISM
             }
-/*
-
-            if (this.tabNetworkName === 'arbitrum') {
-                return '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
-            }
-
-            if (this.tabNetworkName === 'zksync') {
-                return '0x8E86e46278518EFc1C5CEd245cBA2C7e3ef11557'
-            }
-
-            if (this.tabNetworkName === 'bsc') {
-                return '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
-            }
-
-            if (this.tabNetworkName === 'polygon') {
-                return '0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
-            }
-
-
-            if (this.tabNetworkName === 'base') {
-                return '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
-            }
-
-            if (this.tabNetworkName === 'linea') {
-                return '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
-            }
-*/
-
 
             console.error("Not found networkId type when return INSURANCE usd+ contract address")
             return null;
@@ -238,7 +187,6 @@ export default {
     },
 
     mounted() {
-        console.log('Tab Name: ', this.$route.query.tabName);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName);
             this.loadData();
@@ -270,9 +218,7 @@ export default {
 
         setTab(tabName) {
             this.tab = tabName;
-            // this.initTabName('/insurance/collateral/' + tabName, {tabName: this.tab});
             this.loadData();
-            console.log("NetworkParams : ", this.getParams(this.tab));
         },
 
         initTabName(path, queryParams) {
@@ -290,7 +236,6 @@ export default {
         loadCurrentTotalData(_apiUrl) {
             this.isCurrentTotalDataLoading = true;
 
-            console.log("ApiUrl insurance: ", _apiUrl);
             strategiesApiService.getStrategies(_apiUrl)
                 .then(data => {
                     let strategies = data;
@@ -314,12 +259,9 @@ export default {
 
                     this.currentTotalData = [];
                     this.totalValue = 0;
-                    console.log("ApiUrl insurance strategies: ", strategies);
-
 
                     for (let i = 0; i < strategies.length; i++) {
                         let element = strategies[i];
-                        console.log("Element:", element)
                         let currentTotalDataElement = {
                             type: element.type,
                             label: element.name,

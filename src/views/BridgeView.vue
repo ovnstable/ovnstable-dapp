@@ -37,6 +37,7 @@
 <script>
 import {defineComponent} from 'vue'
 import { mapActions, mapGetters } from "vuex";
+import { OVN_CONTRACT_ADDRESS_BASE,OVN_CONTRACT_ADDRESS_OPTIMISM } from "@/utils/const.js"
 import BridgeInformation from "@/components/bridge-module/BridgeInformation";
 
 export default defineComponent({
@@ -100,13 +101,13 @@ export default defineComponent({
                 defaultTokens: [
                     {
                         chainId: "8453",
-                        address: "0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396",
+                        address: OVN_CONTRACT_ADDRESS_BASE,
                         symbol: "OVN",
                         name: "OVN"
                     },
                     {
                         chainId: "10",
-                        address: "0x3b08fcd15280e7B5A6e404c4abb87F7C774D1B2e",
+                        address: OVN_CONTRACT_ADDRESS_OPTIMISM,
                         symbol: "OVN",
                         name: "OVN"
                     }
@@ -159,13 +160,13 @@ export default defineComponent({
                 defaultTokens: [
                     {
                         chainId: "8453",
-                        address: "0xA3d1a8DEB97B111454B294E2324EfAD13a9d8396",
+                        address: OVN_CONTRACT_ADDRESS_BASE,
                         symbol: "OVN",
                         name: "OVN"
                     },
                     {
                         chainId: "10",
-                        address: "0x3b08fcd15280e7B5A6e404c4abb87F7C774D1B2e",
+                        address: OVN_CONTRACT_ADDRESS_OPTIMISM,
                         symbol: "OVN",
                         name: "OVN"
                     }

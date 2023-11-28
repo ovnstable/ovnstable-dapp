@@ -181,6 +181,7 @@ import TableStrategies from "@/components/stats/doughnut/TableStrategies.vue";
 import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies.vue";
 import {collateralApiService} from "@/services/collateral-api-service";
 import {strategiesApiService} from "@/services/strategies-api-service";
+import {USDT_PLUS_CONTRACT_ADDRESS_BSC,USDT_PLUS_CONTRACT_ADDRESS_LINEA,USDT_PLUS_CONTRACT_ADDRESS_ARBITRUM} from "@/utils/const.js"
 
 export default {
     name: "CollateralView",
@@ -236,16 +237,15 @@ export default {
 
         explorerLink: function () {
             if (this.tabNetworkName === 'bsc') {
-                return 'https://bscscan.com/token/0x5335E87930b410b8C5BB4D43c3360ACa15ec0C8C'
+                return `https://bscscan.com/token/${USDT_PLUS_CONTRACT_ADDRESS_BSC}`
             }
 
-
             if (this.tabNetworkName === 'linea') {
-                return 'https://lineascan.build/token/0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
+                return `https://lineascan.build/token/${USDT_PLUS_CONTRACT_ADDRESS_LINEA}`
             }
 
             if (this.tabNetworkName === 'arbitrum') {
-                return 'https://arbiscan.io/token/0xb1084db8D3C05CEbd5FA9335dF95EE4b8a0edc30'
+                return `https://arbiscan.io/token/${USDT_PLUS_CONTRACT_ADDRESS_ARBITRUM}`
             }
 
             console.error("Not found networkId type when return usdt explorer link")
@@ -254,16 +254,16 @@ export default {
 
         contractAddress: function () {
             if (this.tabNetworkName === 'bsc') {
-                return '0x5335E87930b410b8C5BB4D43c3360ACa15ec0C8C'
+                return USDT_PLUS_CONTRACT_ADDRESS_BSC
             }
 
 
             if (this.tabNetworkName === 'linea') {
-                return '0x1E1F509963A6D33e169D9497b11c7DbFe73B7F13'
+                return USDT_PLUS_CONTRACT_ADDRESS_LINEA
             }
 
             if (this.tabNetworkName === 'arbitrum') {
-                return '0xb1084db8D3C05CEbd5FA9335dF95EE4b8a0edc30'
+                return USDT_PLUS_CONTRACT_ADDRESS_ARBITRUM
             }
 
             console.error("Not found networkId type when return usdt contract address")
@@ -282,7 +282,6 @@ export default {
     },
 
     mounted() {
-      console.log('Tab Name: ', this.$route.query.tabName);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName);
         } if (this.$route.query.tabName) {
@@ -304,7 +303,6 @@ export default {
             this.initTabName('/collateral/usdt', {tabName: tabName});
             this.loadCurrentTotalData()
             this.loadCollateralData()
-            console.log("NetworkParams : ", this.getParams(this.tab));
         },
 
         initTabName(path, queryParams) {
@@ -404,7 +402,6 @@ export default {
             for (let i = 0; i < this.etsList.length; i++) {
                 let ets = this.etsList[i]
                 let etsNameUp;
-                console.log("EtsListName: ", this.etsList)
 
                 if (ets.id === element.id) {
                     etsNameUp = ets.nameUp

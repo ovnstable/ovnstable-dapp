@@ -233,6 +233,15 @@ import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies";
 import {strategiesApiService} from "@/services/strategies-api-service";
 import {collateralApiService} from "@/services/collateral-api-service";
 import Tooltip from "@/components/common/element/Tooltip.vue";
+import {
+  USD_PLUS_CONTRACT_ADDRESS_OPTIMISM,
+  USD_PLUS_CONTRACT_ADDRESS_ARBITRUM,
+  USD_PLUS_CONTRACT_ADDRESS_ZKSYNC,
+  USD_PLUS_CONTRACT_ADDRESS_BSC,
+  USD_PLUS_CONTRACT_ADDRESS_POLYGON,
+  USD_PLUS_CONTRACT_ADDRESS_BASE,
+  USD_PLUS_CONTRACT_ADDRESS_LINEA
+} from "@/utils/const.js";
 
 export default {
     name: "CollateralView",
@@ -326,32 +335,31 @@ export default {
 
         explorerLink: function () {
             if (this.tabNetworkName === 'optimism') {
-                return 'https://optimistic.etherscan.io/token/0x73cb180bf0521828d8849bc8CF2B920918e23032'
+                return `https://optimistic.etherscan.io/token/${USD_PLUS_CONTRACT_ADDRESS_OPTIMISM}`
             }
 
             if (this.tabNetworkName === 'arbitrum') {
-                return 'https://arbiscan.io/token/0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
+                return `https://arbiscan.io/token/${USD_PLUS_CONTRACT_ADDRESS_ARBITRUM}`
             }
 
             if (this.tabNetworkName === 'zksync') {
-                return 'https://explorer.zksync.io/address/0x8E86e46278518EFc1C5CEd245cBA2C7e3ef11557'
+                return `https://explorer.zksync.io/address/${USD_PLUS_CONTRACT_ADDRESS_ZKSYNC}`
             }
 
             if (this.tabNetworkName === 'bsc') {
-                return 'https://bscscan.com/token/0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
+                return `https://bscscan.com/token/${USD_PLUS_CONTRACT_ADDRESS_BSC}`
             }
 
             if (this.tabNetworkName === 'polygon') {
-                return 'https://polygonscan.com/token/0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
+                return `https://polygonscan.com/token/${USD_PLUS_CONTRACT_ADDRESS_POLYGON}`
             }
 
-
             if (this.tabNetworkName === 'base') {
-                return 'https://basescan.org/token/0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
+                return `https://basescan.org/token/${USD_PLUS_CONTRACT_ADDRESS_BASE}`
             }
 
             if (this.tabNetworkName === 'linea') {
-                return 'https://lineascan.build/token/0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
+                return `https://lineascan.build/token/${USD_PLUS_CONTRACT_ADDRESS_LINEA}`
             }
 
             console.error("Not found networkId type when return usd+ explorer link")
@@ -360,34 +368,32 @@ export default {
 
         contractAddress: function () {
             if (this.tabNetworkName === 'optimism') {
-                return '0x73cb180bf0521828d8849bc8CF2B920918e23032'
+                return USD_PLUS_CONTRACT_ADDRESS_OPTIMISM
             }
 
             if (this.tabNetworkName === 'arbitrum') {
-                return '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
+                return USD_PLUS_CONTRACT_ADDRESS_ARBITRUM
             }
 
             if (this.tabNetworkName === 'zksync') {
-                return '0x8E86e46278518EFc1C5CEd245cBA2C7e3ef11557'
+                return USD_PLUS_CONTRACT_ADDRESS_ZKSYNC
             }
 
             if (this.tabNetworkName === 'bsc') {
-                return '0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65'
+                return USD_PLUS_CONTRACT_ADDRESS_BSC
             }
 
             if (this.tabNetworkName === 'polygon') {
-                return '0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f'
+                return USD_PLUS_CONTRACT_ADDRESS_POLYGON
             }
 
-
             if (this.tabNetworkName === 'base') {
-                return '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
+                return USD_PLUS_CONTRACT_ADDRESS_BASE
             }
 
             if (this.tabNetworkName === 'linea') {
-                return '0xB79DD08EA68A908A97220C76d19A6aA9cBDE4376'
+                return USD_PLUS_CONTRACT_ADDRESS_LINEA
             }
-
 
             console.error("Not found networkId type when return usd+ contract address")
             return null;
@@ -402,7 +408,6 @@ export default {
     },
 
     mounted() {
-        console.log('Tab Name: ', this.$route.query.tabName);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName);
             this.loadData();
@@ -429,7 +434,6 @@ export default {
             this.tab = tabName;
             this.initTabName('/collateral', {tabName: this.tab});
             this.loadData();
-            console.log("NetworkParams : ", this.getParams(this.tab));
         },
 
         initTabName(path, queryParams) {
@@ -473,7 +477,6 @@ export default {
 
                     for (let i = 0; i < strategies.length; i++) {
                         let element = strategies[i];
-                        console.log("Element:", element)
                         let currentTotalDataElement = {
                             type: element.type,
                             label: element.name,

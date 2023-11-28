@@ -181,6 +181,7 @@ import TableStrategies from "@/components/stats/doughnut/TableStrategies.vue";
 import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies.vue";
 import {collateralApiService} from "@/services/collateral-api-service";
 import {strategiesApiService} from "@/services/strategies-api-service";
+import {DAI_PLUS_CONTRACT_ADDRESS_OPTIMISM,DAI_PLUS_CONTRACT_ADDRESS_ARBITRUM,DAI_PLUS_CONTRACT_ADDRESS_BASE} from "@/utils/const.js"
 
 
 export default {
@@ -237,15 +238,15 @@ export default {
 
         explorerLink: function () {
             if (this.tabNetworkName === 'optimism') {
-                return 'https://optimistic.etherscan.io/token/0x970D50d09F3a656b43E11B0D45241a84e3a6e011'
+                return `https://optimistic.etherscan.io/token/${DAI_PLUS_CONTRACT_ADDRESS_OPTIMISM}`
             }
 
             if (this.tabNetworkName === 'arbitrum') {
-                return 'https://arbiscan.io/token/0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
+                return `https://arbiscan.io/token/${DAI_PLUS_CONTRACT_ADDRESS_ARBITRUM}`
             }
 
             if (this.tabNetworkName === 'base') {
-                return 'https://basescan.org/token/0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'
+                return `https://basescan.org/token/${DAI_PLUS_CONTRACT_ADDRESS_BASE}`
             }
 
             console.error("Not found networkId type when return dai explorer link")
@@ -254,15 +255,15 @@ export default {
 
         contractAddress: function () {
           if (this.tabNetworkName === 'optimism') {
-            return '0x970D50d09F3a656b43E11B0D45241a84e3a6e011'
+            return DAI_PLUS_CONTRACT_ADDRESS_OPTIMISM
           }
 
           if (this.tabNetworkName === 'arbitrum') {
-            return '0xeb8E93A0c7504Bffd8A8fFa56CD754c63aAeBFe8'
+            return DAI_PLUS_CONTRACT_ADDRESS_ARBITRUM
           }
 
             if (this.tabNetworkName === 'base') {
-                return '0x65a2508C429a6078a7BC2f7dF81aB575BD9D9275'
+                return DAI_PLUS_CONTRACT_ADDRESS_BASE
             }
 
 
@@ -283,7 +284,6 @@ export default {
     },
 
     mounted() {
-        console.log('Tab Name: ', this.$route.query.tabName);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName);
         } if (this.$route.query.tabName) {
@@ -306,7 +306,6 @@ export default {
             this.initTabName('/collateral/dai', {tabName: tabName});
             this.loadCurrentTotalData()
             this.loadCollateralData()
-            console.log("NetworkParams : ", this.getParams(this.tab));
         },
 
         initTabName(path, queryParams) {
@@ -408,7 +407,6 @@ export default {
             for (let i = 0; i < this.etsList.length; i++) {
                 let ets = this.etsList[i]
                 let etsNameUp;
-                console.log("EtsListName: ", this.etsList)
 
                 if (ets.id === element.id) {
                     etsNameUp = ets.nameUp
@@ -442,7 +440,6 @@ export default {
           this.collateralData = [];
           for (let i = 0; i < stablecoinList.length; i++) {
             let element = stablecoinList[i];
-            console.log("Elements:", element)
 
             try {
               this.collateralData.push(

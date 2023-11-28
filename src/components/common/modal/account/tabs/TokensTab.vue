@@ -84,7 +84,7 @@ export default {
           return this.networkId === 10 || this.networkId === 42161 || this.networkId === 8453;
         },
         showUsdt: function () {
-          return this.networkId === 56 || this.networkId === 59144;
+          return this.networkId === 56 || this.networkId === 59144 || this.networkId === 42161;
         },
 
         showEth: function () {

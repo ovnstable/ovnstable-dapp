@@ -218,7 +218,8 @@ export default {
             } else if (this.networkName === 'zksync') {
                 return '#8B8DFC';
             }
-            /* TODO: add widget stub */
+            
+            return ""
         },
 
         icon: function () {
@@ -237,6 +238,8 @@ export default {
                     return lineaIcon;
                 case 'zksync':
                     return zksyncIcon;
+                default:
+                    return ""
             }
         },
     },

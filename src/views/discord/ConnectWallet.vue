@@ -51,6 +51,7 @@
 <script>
 import UsdPlusImage from "@/assets/usdPlus.json";
 import {mapGetters} from 'vuex'
+import {USD_PLUS_CONTRACT_ADDRESS_POLYGON} from "@/utils/const.js"
 
 const connectIcon = require('@/assets/discord/connect.png');
 const loadingIcon = require('@/assets/discord/loading.png');
@@ -81,7 +82,6 @@ export default {
                 const parts = param.split('=');
                 parsedParams[parts[0]] = parts[1];
             });
-        console.log(parsedParams);
 
         const resp = await axios.post(this.appApiUrl + '/discord/get_user', parsedParams);
         localStorage.setItem('discord_backend_token', resp.data.token);
@@ -141,7 +141,7 @@ export default {
                     params: {
                         type: 'ERC20',
                         options: {
-                            address: "0x236eeC6359fb44CCe8f97E99387aa7F8cd5cdE1f",
+                            address: USD_PLUS_CONTRACT_ADDRESS_POLYGON,
                             symbol: "USD+",
                             decimals: 6,
                             image: UsdPlusImage.image,
@@ -149,7 +149,7 @@ export default {
                     },
                 })
             } catch (e) {
-                console.log(e)
+                console.error(e)
             }
         }
     }

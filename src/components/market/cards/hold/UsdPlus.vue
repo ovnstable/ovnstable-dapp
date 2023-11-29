@@ -163,6 +163,8 @@ export default {
                     return lineaIcon;
                 case 324:
                     return zksyncIcon;
+                default:
+                    return ""
             }
         },
 

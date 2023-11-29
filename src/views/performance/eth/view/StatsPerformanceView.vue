@@ -296,6 +296,8 @@ export default {
                     return arbitrumIcon;
                 case 'zksync':
                     return zksyncIcon;
+                default:
+                    return "";
             }
         },
     },

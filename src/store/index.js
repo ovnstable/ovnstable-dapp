@@ -23,9 +23,6 @@ import bscInfoModal from '@/store/modules/modals/bsc-info-modal';
 import dashboardData from '@/store/modules/views/dashboard/data';
 import dashboardUI from '@/store/modules/views/dashboard/ui';
 
-import statsData from "@/store/modules/views/stats/data";
-import statsUI from "@/store/modules/views/stats/ui";
-
 import swapData from "@/store/modules/views/swap/data";
 import swapUI from "@/store/modules/views/swap/ui";
 
@@ -108,9 +105,6 @@ export default new Vuex.Store({
 
         dashboardData,
         dashboardUI,
-
-        statsData,
-        statsUI,
 
         swapData,
         swapUI,

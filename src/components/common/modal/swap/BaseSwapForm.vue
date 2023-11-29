@@ -377,8 +377,10 @@ export default {
           return baseIcon;
       case 59144:
           return lineaIcon;
-        case 324:
+      case 324:
           return zksyncIcon;
+      default:
+          return ""
       }
     },
 

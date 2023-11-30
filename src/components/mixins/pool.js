@@ -440,6 +440,7 @@ export const pool = {
                 return;
             }
 
+            // promoting / exceptions
             if (pool.platform === 'Defiedge' && pool.address === '0xd1c33d0af58eb7403f7c01b21307713aa18b29d3') {
                 url = 'https://app.defiedge.io/s/optimism/' + pool.address;
                 window.open(url, '_blank').focus();
@@ -501,7 +502,7 @@ export const pool = {
             }
 
             if (pool.platform === 'Curve' && pool.address === '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013') {
-                url = 'https://curve.fi/#/arbitrum/pools/factory-v2-117/deposit'
+                url = 'https://www.convexfinance.com/stake/arbitrum/13'
                 window.open(url, '_blank').focus();
                 return;
             }

@@ -8,8 +8,9 @@
         <div class="mt-2">
             <v-list-item>
                 <v-list-item-title>
-                    <img :src="require('@/assets/logo.svg')" @click="swapOdosClick()"
-                         class="logo-img">
+                    <router-link to="/swap">
+                        <img :src="require('@/assets/logo.svg')" class="logo-img" />
+                    </router-link>
                 </v-list-item-title>
             </v-list-item>
         </div>

@@ -1,4 +1,4 @@
-import BN from "bn.js";
+import BN from "bignumber.js";
 import dayjs from "dayjs";
 
 let accounting = require("accounting-js")

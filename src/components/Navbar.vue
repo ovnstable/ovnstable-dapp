@@ -8,7 +8,7 @@
         <div class="mt-2">
             <v-list-item>
                 <v-list-item-title>
-                    <img :src="require('@/assets/logo.svg')" @click="openLinkToLanding('https://overnight.fi/')"
+                    <img :src="require('@/assets/logo.svg')" @click="swapOdosClick()"
                          class="logo-img">
                 </v-list-item-title>
             </v-list-item>

@@ -97,6 +97,7 @@ const LINEA_PARAMS = {
 }
 
 let dbNetworkName = localStorage.getItem('selectedNetwork');
+
 const state = {
     appApiUrl: _getParams(dbNetworkName).appApiUrl,
     apiUrl: "https://api.overnight.fi",

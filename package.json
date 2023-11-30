@@ -24,7 +24,6 @@
     "axios": "^0.21.4",
     "babel-loader": "^8.3.0",
     "bignumber.js": "^9.1.1",
-    "bn.js": "^5.2.0",
     "dayjs": "^1.11.6",
     "eth-block-tracker": "^6.1.0",
     "ethers": "^5.7.0",

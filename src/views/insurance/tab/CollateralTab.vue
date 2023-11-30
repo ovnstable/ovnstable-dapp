@@ -107,7 +107,6 @@ import {mapActions, mapGetters} from "vuex";
 import TableInsuranceStrategies from "@/components/stats/doughnut/TableInsuranceStrategies.vue";
 import {strategiesApiService} from "@/services/strategies-api-service";
 import {collateralApiService} from "@/services/collateral-api-service";
-import {red} from "bn.js";
 import {OVN_INS_CONTRACT_ADDRESS_OPTIMISM} from "@/utils/const.js"
 
 export default {
@@ -199,8 +198,6 @@ export default {
     methods: {
         ...mapActions('network', ['setWalletNetwork']),
         ...mapActions('insuranceInvestModal', ['showInvestModal', 'showMintView', 'showRedeemView', 'showRedemptionRequestModal']),
-
-        red,
 
         mintAction() {
             this.showMintView();

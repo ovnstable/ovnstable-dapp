@@ -759,6 +759,7 @@ export const pool = {
                 "0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197"
             ]
 
+            // if pool tvl too low
             const promotePools = [
                 "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
             ]
@@ -820,6 +821,13 @@ export const pool = {
 
             pools.forEach(entry => {
                 const { chain, apr } = entry;
+
+                // promoting pool in FEATURES
+                const featurePromote = [
+                    "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013"
+                ]
+
+                if (featurePromote.includes(entry.address)) topValuesByType[chain] = entry;
 
                 // ignore binance chain
                 if (entry.chainName === 'bsc') {

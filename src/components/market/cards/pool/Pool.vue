@@ -178,8 +178,6 @@ export default {
         ...mapGetters('network', ['networkId', 'getParams']),
         ...mapGetters('magicEye', ['dataHidden']),
 
-
-
         networkParams: function() {
             return this.getParams(this.networkName);
         },

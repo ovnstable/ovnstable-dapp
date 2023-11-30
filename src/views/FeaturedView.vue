@@ -189,15 +189,15 @@ export default {
     },
     },
     watch: {
-      networkName: function (newVal, oldVal) {
-          this.setTab(newVal);
-      },
+        networkName: function (newVal, oldVal) {
+            this.setTab(newVal);
+        },
 
-    isAllDataLoaded: function (newVal, oldVal) {
-      if (newVal) {
-        this.getUsdPlusAvgMonthApy();
-      }
-    },
+        isAllDataLoaded: function (newVal, oldVal) {
+            if (newVal) {
+                this.getUsdPlusAvgMonthApy();
+            }
+        },
     },
 
     created() {
@@ -210,7 +210,6 @@ export default {
             console.error("Track error:", e);
         }
 
-      console.log(this.$route.query.tabName);
       await this.loadPools();
       if (!this.$route.query.tabName) {
           this.setTab(this.networkName);
@@ -349,7 +348,9 @@ export default {
 
             return null;
         },
+        
         findTopPoolExcludeNetwork(pools, networkName) {
+            console.log(pools, 'findTopPoolExcludeNetwork')
             for (let i = 0; i < pools.length; i++) {
                 let pool = pools[i];
 

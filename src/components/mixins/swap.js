@@ -1,4 +1,4 @@
-import BN from "bn.js";
+import BigNumber from "bignumber.js";
 import {mapActions, mapGetters} from "vuex";
 
 export const swap = {
@@ -485,7 +485,8 @@ export const swap = {
                     this.estimatedGas = estimatedGasValue;
 
                     /* adding 10% to estimated gas */
-                    this.gas = new BN(Number.parseFloat(this.estimatedGas) * 1.1);
+                    this.gas = new BigNumber(this.estimatedGas).times(1.1);
+                    this.gas = this.gas.integerValue(BigNumber.ROUND_CEIL);
 
                     // todo 5
                     // this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");

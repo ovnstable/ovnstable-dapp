@@ -1,4 +1,4 @@
-import BN from "bn.js";
+import BN from "bignumber.js";
 
 
 export function _fromE6(value) {

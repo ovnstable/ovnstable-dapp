@@ -235,7 +235,7 @@ import {mapActions, mapGetters} from "vuex";
 import ErrorModal from "@/components/common/modal/action/ErrorModal";
 import WaitingModal from "@/components/common/modal/action/WaitingModal";
 import SuccessModal from "@/components/common/modal/action/SuccessModal";
-import BN from "bn.js";
+import BigNumber from "bignumber.js";
 import polygonIcon from "@/assets/network/polygon.svg";
 import optimismIcon from "@/assets/network/op.svg";
 import arbitrumIcon from "@/assets/network/ar.svg";
@@ -448,7 +448,6 @@ export default {
         loadOvnPrice() {
             let url = "https://api.overnight.fi/root/dapp";
             ovnApiService.getOvnPrice(url).then(value => {
-                console.log("ovn price: ", value);
                 this.ovnPrice = value;
             }).catch(reason => {
                 console.log('Error get ovn price: ' + reason);
@@ -512,7 +511,6 @@ export default {
           this.sumApproveCheckerId = intervalId;
         },
         async checkApprove() {
-          console.log("Check Approve action", this.sum);
 
           try {
             if (!this.sum || isNaN(this.sum) || !this.account) {
@@ -521,7 +519,6 @@ export default {
 
             let sum = this.web3.utils.toWei(this.sum, 'mwei');
             let allowApprove = await this.checkAllowance(sum);
-            console.log("allowApprove : ", allowApprove, sum)
             if (!allowApprove) {
               this.disapproveInsuranceToken();
               return false;
@@ -545,13 +542,11 @@ export default {
 
         async clearApprove(action) {
             try {
-                console.log("Click Approve action. ", action);
                 let contracts = this.contracts;
                 let from = this.account;
 
                 let allowanceValue = await this.getAllowanceValue();
                 if (allowanceValue === 0) {
-                    console.log("Allowance not needed");
                     return;
                 }
 
@@ -564,11 +559,9 @@ export default {
                     buyParams = {from: from, gasPrice: this.gasPriceGwei, gas: this.gas};
                 }
 
-                console.log("Action clear contract allowance")
                 await contracts.insurance.optimism_token.methods.decreaseAllowance( contracts.insurance.optimism_exchanger.options.address, allowanceValue)
                     .send(buyParams)
                     .on('transactionHash',  (hash) => {
-                        console.log("Success clear allowance. hash: ", hash)
                         this.isShowDecreaseAllowanceButton = false;
                     });
 
@@ -673,10 +666,12 @@ export default {
                 } else {
                     this.estimatedGas = estimatedGasValue;
 
-                    /* adding 10% to estimated gas */
-                    this.gas = new BN(Number.parseFloat(this.estimatedGas) * 1.1);
-                    this.gasAmountInMatic = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice)), "gwei");
-                    this.gasAmountInUsd = this.web3.utils.fromWei(this.gas.muln(Number.parseFloat(this.gasPrice) * Number.parseFloat(this.gasPriceStation.usdPrice)), "gwei");
+                    this.gas = new BigNumber(this.estimatedGas).multipliedBy(1.1).integerValue(BigNumber.ROUND_DOWN);
+                    let gasInWei = this.gas.multipliedBy(this.gasPrice).integerValue(BigNumber.ROUND_DOWN);
+                    this.gasAmountInMatic = this.web3.utils.fromWei(gasInWei.toFixed(), "gwei");
+                    let gasInWeiForUsd = this.gas.multipliedBy(this.gasPrice).multipliedBy(this.gasPriceStation.usdPrice).integerValue(BigNumber.ROUND_DOWN);
+                    this.gasAmountInUsd = this.web3.utils.fromWei(gasInWeiForUsd.toFixed(), "gwei");
+
 
                     await this.redeemAction();
                     this.closeWaitingModal();
@@ -748,7 +743,6 @@ export default {
             let from = this.account;
 
             let allowanceValue = await contracts.insurance.optimism_token.methods.allowance(from, contracts.insurance.optimism_exchanger.options.address).call();
-            console.log('allowanceValue: ', allowanceValue)
             return allowanceValue * 1;
         },
 

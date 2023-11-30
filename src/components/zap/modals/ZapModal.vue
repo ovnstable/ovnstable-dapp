@@ -6,8 +6,10 @@
                 width="700"
                 persistent
                 @click:outside="setShowFunc(false)">
-                <v-card class="container_body container-body airdrop-body pt-4 px-4"
-                        style="border-radius: 28px!important;">
+                <v-card
+                    class="container_body container-body airdrop-body pt-4 px-4"
+                    style="border-radius: 28px!important;"
+                >
                     <v-toolbar class="container_header container-header" flat>
                         <label class="title-modal">
                             Zap in

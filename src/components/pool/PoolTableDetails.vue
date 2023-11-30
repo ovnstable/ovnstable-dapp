@@ -147,10 +147,13 @@
             <div v-for="aggregator in pool.aggregators" :key="aggregator.id" class="row">
                 <div class="col-12 col-lg-12 col-md-12 col-sm-12">
                     <div v-if="$wu.isMobile()" class="d-block zap-btn">
-                        <v-btn v-if="aggregator.zappable"
-                               x-small
-                               class="button button-full-width btn-special btn-outlined mb-3"
-                               @click.stop="openZapInFunc(aggregator, 'pools')" outlined>
+                        <v-btn
+                            v-if="aggregator.zappable"
+                            x-small
+                            class="button button-full-width btn-special btn-outlined mb-3"
+                            @click.stop="openZapInFunc(aggregator, 'pools')"
+                            outlined
+                        >
                             ZAP IN
                         </v-btn>
                     </div>
@@ -171,9 +174,11 @@
                                 {{aggregator.platform}}
                             </div>
 
-                            <div v-if="!$wu.isMobile()"
-                                 v-bind:style="$wu.isMobile() ? 'right: -17px;' : 'right: -20px'"
-                                class="pool-platform-link">
+                            <div
+                                v-if="!$wu.isMobile()"
+                                :style="$wu.isMobile() ? 'right: -17px;' : 'right: -20px'"
+                                class="pool-platform-link"
+                            >
                                 <img
                                     :src="require('@/assets/icon/pool/platform-link.svg')"
                                     alt="link"

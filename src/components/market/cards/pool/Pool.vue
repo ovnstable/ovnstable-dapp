@@ -66,7 +66,7 @@
                             <div class="box">
                                 <label class="box-name mt-2">Chain</label>
                                 <div class="icon">
-                                    <v-img :src="'/assets/network/' + cardData.chainName + '.svg'"
+                                    <v-img :src="require('@/assets/network/' + cardData.chainName + '.svg')"
                                            class="mt-1"
                                            alt="chain icon"/>
                                 </div>
@@ -80,11 +80,11 @@
                             <div class="box">
                                 <label class="box-name mt-2">Staking Platform</label>
                                 <div class="icon platform-logo">
-                                    <v-img :src="'/assets/cards/platform/' + dexLogo + '.svg'"
+                                    <v-img :src="require('@/assets/cards/platform/' + dexLogo + '.svg')"
                                            class="mt-1"
                                            alt="platform icon"/>
                                 </div>
-                                <label class="platform-name mb-2 mt-1">{{ cardData.platform }}</label>
+                                <label class="chain-name mb-2 mt-1">{{ cardData.platform }}</label>
                             </div>
                         </v-row>
                     </v-col>

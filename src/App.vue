@@ -10,7 +10,7 @@ import {mapActions} from "vuex";
 export default {
     name: 'App',
     created() {
-      console.log('App created 5');
+      console.log('App created 6');
       this.loadDeprecatedShow();
     },
     methods: {

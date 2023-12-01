@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-6 col-lg-3 col-md-3 col-sm-3">
                             <div
-                                 class="filter-container text-center filter-checkbox-wrap">
+                                 class="filter-container text-center">
                                 <v-checkbox
                                     @click="showWithZap(!isShowOnlyZap)"
                                     class="filter-item">
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="col-6 col-lg-4 col-md-3 col-sm-3">
-                            <div class="filter-container text-center filter-checkbox-wrap">
+                            <div class="filter-container text-center">
                                 <v-checkbox
                                     @click="showAprLimit(!isShowAprLimit)"
                                     class="filter-item"

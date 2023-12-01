@@ -20,6 +20,7 @@ export default {
 </script>
 
 <style>
+
 /* mobile */
 @media all and (min-width:0px) and (max-width: 650px) {
 

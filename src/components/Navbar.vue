@@ -401,7 +401,7 @@
                     >
                         INSURANCE
                     </div>
-                    <div class="ml-5" >
+                    <div class="ml-3" >
                         <v-icon color="var(--secondary-gray-text)" >
                             {{ isShowInsurance ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
                         </v-icon>

@@ -14,7 +14,6 @@ import getAbroad from "@/router/midleware/governance/getAbroad";
 import Market from "./midleware/dapp/Market";
 import Featured from "./midleware/dapp/Featured";
 import Insurance from "./midleware/dapp/Insurance";
-import Reserves from "./midleware/dapp/Reserves";
 import Stats from "./midleware/dapp/Stats";
 import DaiStats from "./midleware/dapp/DaiStats";
 import UsdtStats from "./midleware/dapp/UsdtStats";
@@ -349,19 +348,6 @@ const routes = [
             },
         ],
     },
-
-    {
-        path: '/discord',
-        name: 'Discord Connections',
-        component: () => import('../Discord.vue'),
-        children: [
-            {
-                path: '/discord/connect_wallet',
-                name: 'Connect wallet',
-                component: () => import('../views/discord/ConnectWallet.vue')
-            }
-        ]
-    }
 ]
 
 const router = new VueRouter({

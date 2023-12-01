@@ -48,11 +48,11 @@ export default {
     }),
 
     async created() {
-        await this.initTheme();
+      await this.initTheme();
 
       try {
         if (!window?.ethereum.chainId) return
-        const chainId = parseInt(window.ethereum.chainId)?.toString()
+        const chainId = parseInt(window.ethereum?.chainId)?.toString()
         this.saveNetworkToLocalStore(chainId);
 
       } catch (e) {

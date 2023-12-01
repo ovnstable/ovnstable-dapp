@@ -190,7 +190,6 @@ export default defineComponent({
     align-items: center; /* vertically center */
     margin-bottom: 10px;
 }
-
 .networks-item-selected {
     border: 2px solid #1C95E7;
     color: #1C95E7;
@@ -264,6 +263,7 @@ export default defineComponent({
 }
 
 
+
 /* mobile */
 @media only screen and (max-width: 960px) {
     .networks-item {
@@ -280,4 +280,12 @@ export default defineComponent({
     }
 }
 
+
+
+</style>
+
+<style>
+.theme--light.v-icon {
+    color: var(--scrollbar-slider-color);
+}
 </style>

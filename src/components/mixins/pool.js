@@ -797,9 +797,10 @@ export const pool = {
                     '0x0627dcdca49d749583c6a00327eb5e3846e265d3',
                     '0x77ca2ddfd61d1d5e5d709cf07549fec3e2d80315'
                 ]
-                if (exception.includes(pool.address)) return pool
                 // if its tvl higher than restrictions and its promotoed, its gonna duplicate
                 if (pool.tvl > 300000 && pool.promoted) return false
+                
+                if (exception.includes(pool.address)) return pool
                 if (pool.tvl < 300000 && pool.tvl > 100000) return pool
                 if (pool.promoted !== false) return pool
 

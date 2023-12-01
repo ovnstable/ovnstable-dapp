@@ -818,58 +818,54 @@ export const pool = {
         },
 
         initFeature(pools) {
-            const topValuesByType = {};
-
-            pools.forEach(entry => {
-                const { chain, apr } = entry;
-
-                // promoting pool in FEATURES
-                const featurePromote = [
-                    "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013"
-                ]
-
-                if (featurePromote.includes(entry.address)) topValuesByType[chain] = entry;
+            const topAprByChain = pools.reduce((acc, curr) => {
+                const { chain, apr } = curr;
 
                 // ignore binance chain
-                if (entry.chainName === 'bsc') {
-                    return;
+                if (curr.chainName === 'bsc') {
+                    return acc;
                 }
 
-                if (entry.tvl < 500000) {
-                    return;
+                if (curr.tvl < 500000) {
+                    return acc;
+                }
+                
+                if (!acc[chain] || (apr > acc[chain].apr)) {
+                    acc[chain] = curr;
+                    return acc
                 }
 
-                if (!topValuesByType[chain] || (apr > topValuesByType[chain].apr)) {
-                    topValuesByType[chain] = entry;
-                }
-            });
+                return acc
+            }, {});
 
-            const topTvlArray = Object.values(topValuesByType);
-            topTvlArray.forEach(pool => {
-                if (pool.apr) {
-                    pool.feature = true;
+            const topAprByAddress = Object.values(topAprByChain).map((_) => _.address?.toLowerCase())
+
+            const newPools = pools.map((entry) => {
+                const { address } = entry;
+
+                // promoting special pool in FEATURES/all-pools
+                const featurePromote = [
+                    "0xb34a7d1444a707349bc7b981b7f2e1f20f81f013",
+                    "0x1b05e4e814b3431a48b8164c41eac834d9ce2da6"
+                ]
+                const loweredAdd = address?.toLowerCase()
+
+                if (featurePromote.includes(loweredAdd) || topAprByAddress.includes(loweredAdd)) {
+                    return {
+                        ...entry,
+                        feature: true
+                    }
                 }
+
+                return entry;
             })
 
-            return pools;
+            return newPools
         },
         initReversePools(pool) {
             pool.aggregators = [];
             // usd+ dola arb
             let poolAddress = pool.address;
-
-            if (poolAddress === '0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013_convex') {
-                let findedPool = this.pools.find(data=> data.address === "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013");
-                if (!pool) {
-                    console.error('Pool not found for aggregation reverse', poolAddress);
-                    return;
-                }
-
-                pool.aggregators.push({
-                    ...findedPool
-                })
-                return
-            }
 
             if (poolAddress === '0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197_Aerodrome') {
                 let findedPool = this.pools.find(data=> data.address === "0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197");

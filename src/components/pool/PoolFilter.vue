@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-6 col-lg-3 col-md-3 col-sm-3">
                             <div
-                                 class="filter-container text-center">
+                                 class="filter-container text-center theme-wrapper">
                                 <v-checkbox
                                     @click="showWithZap(!isShowOnlyZap)"
                                     class="filter-item">
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="col-6 col-lg-4 col-md-3 col-sm-3">
-                            <div class="filter-container text-center">
+                            <div class="filter-container text-center theme-wrapper">
                                 <v-checkbox
                                     @click="showAprLimit(!isShowAprLimit)"
                                     class="filter-item"
@@ -285,7 +285,10 @@ export default defineComponent({
 </style>
 
 <style>
-.theme--light.v-icon {
-    color: var(--scrollbar-slider-color);
+.theme-wrapper {
+    .theme--light.v-icon {
+        color: var(--scrollbar-slider-color);
+    }
 }
+
 </style>

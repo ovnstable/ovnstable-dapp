@@ -76,9 +76,6 @@ export default defineComponent({
             stablecoinTokens: []
         }
     },
-    mounted() {
-    },
-
     computed: {
         ...mapGetters('accountData', ['account']),
     },

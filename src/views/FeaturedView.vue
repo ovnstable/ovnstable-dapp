@@ -60,8 +60,8 @@
                 </v-row>
             </v-row>
 
-            <v-row v-else class="d-flex" justify="start">
-                <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
+            <v-row v-else class="cards-feature d-flex" justify="start">
+                <div
                        v-for="card in sortedCardList"
                        :key="card.id">
                     <v-row class="fill-height">
@@ -74,7 +74,7 @@
                             :pool="card.name === 'Pool' ? getPoolById(card.originalId) : null"
                         ></component>
                     </v-row>
-                </v-col>
+                </div>
             </v-row>
         </div>
 
@@ -399,6 +399,9 @@ export default {
 
 </script>
 <style scoped>
+.cards-feature {
+    gap: 30px;
+}
 
 /* mobile */
 @media only screen and (max-width: 960px) {

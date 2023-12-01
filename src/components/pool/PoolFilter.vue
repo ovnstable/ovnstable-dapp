@@ -167,19 +167,11 @@ export default defineComponent({
     }
 }
 
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
+@media  (min-width: 1300px) 
+{
     .networks-container {
         display: flex;
     }
-}
-.pool-filter-container {
-
 }
 
 .networks-item {
@@ -288,12 +280,4 @@ only screen and (                min-resolution: 2dppx)  and (min-width: 1300px)
     }
 }
 
-</style>
-
-
-<style>
-
-.theme--light.v-icon {
-    color: var(--scrollbar-slider-color)!important;
-}
 </style>

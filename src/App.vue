@@ -10,7 +10,7 @@ import {mapActions} from "vuex";
 export default {
     name: 'App',
     created() {
-      console.log('App created 5');
+      console.log('App created 6');
       this.loadDeprecatedShow();
     },
     methods: {
@@ -20,6 +20,7 @@ export default {
 </script>
 
 <style>
+
 /* mobile */
 @media all and (min-width:0px) and (max-width: 650px) {
 

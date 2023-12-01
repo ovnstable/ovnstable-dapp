@@ -69,8 +69,6 @@ export default {
         isRefundInfoOpen: false,
     }),
     computed: {
-        ...mapGetters('web3', ['web3', 'getWeiMarker']),
-
         gasRefundPercents: function() {
             if (!this.zksyncFeeHistory) {
                 return 0;
@@ -100,9 +98,6 @@ export default {
             return this.zksyncFeeHistory.startWeiBalance - this.zksyncFeeHistory.finalWeiBalance;
         },
     },
-    methods: {
-
-    }
 }
 </script>
 

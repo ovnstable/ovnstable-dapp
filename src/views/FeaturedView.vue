@@ -60,8 +60,8 @@
                 </v-row>
             </v-row>
 
-            <v-row v-else class="d-flex" justify="start">
-                <v-col :cols="$wu.isMobile() ? 12 : ($wu.isTablet() ? 6 : 4)"
+            <v-row v-else class="cards-feature d-flex" justify="start">
+                <div
                        v-for="card in sortedCardList"
                        :key="card.id">
                     <v-row class="fill-height">
@@ -74,7 +74,7 @@
                             :pool="card.name === 'Pool' ? getPoolById(card.originalId) : null"
                         ></component>
                     </v-row>
-                </v-col>
+                </div>
             </v-row>
         </div>
 
@@ -189,15 +189,15 @@ export default {
     },
     },
     watch: {
-      networkName: function (newVal, oldVal) {
-          this.setTab(newVal);
-      },
+        networkName: function (newVal, oldVal) {
+            this.setTab(newVal);
+        },
 
-    isAllDataLoaded: function (newVal, oldVal) {
-      if (newVal) {
-        this.getUsdPlusAvgMonthApy();
-      }
-    },
+        isAllDataLoaded: function (newVal, oldVal) {
+            if (newVal) {
+                this.getUsdPlusAvgMonthApy();
+            }
+        },
     },
 
     created() {
@@ -210,7 +210,6 @@ export default {
             console.error("Track error:", e);
         }
 
-      console.log(this.$route.query.tabName);
       await this.loadPools();
       if (!this.$route.query.tabName) {
           this.setTab(this.networkName);
@@ -349,7 +348,9 @@ export default {
 
             return null;
         },
+        
         findTopPoolExcludeNetwork(pools, networkName) {
+            console.log(pools, 'findTopPoolExcludeNetwork')
             for (let i = 0; i < pools.length; i++) {
                 let pool = pools[i];
 
@@ -398,6 +399,9 @@ export default {
 
 </script>
 <style scoped>
+.cards-feature {
+    gap: 30px;
+}
 
 /* mobile */
 @media only screen and (max-width: 960px) {

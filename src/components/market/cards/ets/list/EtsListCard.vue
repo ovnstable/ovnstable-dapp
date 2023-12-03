@@ -6,7 +6,7 @@
             <v-row class="ma-0" justify="start" align="center">
                 <div class="icon mr-2">
                     <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
-                           :title="cardData.data.chainName.toUpperCase()"/>
+                           :title="cardData.data?.chainName?.toUpperCase()"/>
                 </div>
                 <div class="icon mr-2">
                     <v-img :src="'@/assets/cards/platform/' + dexLogo + '.svg'"
@@ -123,7 +123,7 @@
                     <v-row justify="start" align="center">
                         <div class="icon mr-3">
                             <v-img :src="require('@/assets/network/' + cardData.data.chainName + '.svg')"
-                                   :title="cardData.data.chainName.toUpperCase()"/>
+                                   :title="cardData.data?.chainName?.toUpperCase()"/>
                         </div>
                     </v-row>
                 </v-col>
@@ -233,11 +233,9 @@ export default {
 
     computed: {
         ...mapGetters('network', ['networkId', 'networkName']),
-        ...mapGetters("marketData", ["etsStrategyData"]),
         ...mapGetters('accountData', ['etsBalance', 'account']),
         ...mapGetters('web3', ['contracts', "web3"]),
         ...mapGetters('overcapData', ['isOvercapAvailable']),
-
 
         dexLogo: function () {
             let dexName = this.cardData.data.dex;

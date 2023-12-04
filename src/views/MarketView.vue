@@ -328,14 +328,6 @@ export default {
               }
             };
 
-            await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress + '/account/' + account, fetchOptions)
-                .then(value => value.json())
-                .then(value => {
-                  profitDay = value.profit;
-                }).catch(reason => {
-                  console.log('Error get data: ' + reason);
-                })
-
             this.addEtsClientData({ name: refreshParams.strategyName, data: profitDay});
             this.isClientDataLoading = false;
           })

@@ -42,32 +42,12 @@ const routes = [
 
         children: [
             {
-                path: '/market',
-                name: 'MarketView',
-                component: () => import('../views/MarketView.vue'),
-                meta: {
-                    middleware: [
-                        Market
-                    ]
-                }
-            },
-            {
                 path: '/ets_about',
                 name: 'EtsAboutView',
                 component: () => import('../views/EtsAboutView.vue'),
                 meta: {
                     middleware: [
                         EtsAbout
-                    ]
-                }
-            },
-            {
-                path: '/market/archive',
-                name: 'MarketArchiveView',
-                component: () => import('../views/MarketArchiveView.vue'),
-                meta: {
-                    middleware: [
-                        Market
                     ]
                 }
             },

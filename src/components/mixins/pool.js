@@ -314,7 +314,7 @@ export const pool = {
                     url = 'https://meshswap.fi/exchange/pool/detail/';
                     break;
                 case 'Velodrome':
-                    url = 'https://app.velodrome.finance/liquidity/?query=usd%2B&filter=all';
+                    url = 'https://velodrome.finance/liquidity/?query=usd%2B&filter=all';
                     break;
                 case 'Aerodrome':
                     url = 'https://aerodrome.finance/liquidity/?query=usd%2B&filter=all';

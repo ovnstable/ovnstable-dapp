@@ -16,14 +16,6 @@
                     <br>
                     <br>
                     The unique feature of ETS is that it automatically administers a health factor on a lending protocol and rebalances your Lent/Borrowed amounts to maintain a stringent Health Factor meaning. Payouts are happening every day and are auto compounded back into the strategy to further amplify rewards.
-                    <div class="ets-links-container mt-5">
-                        <div class="links-text" @click="etsActiveClick()">
-                            Active ETS
-                        </div>
-                        <div class="links-text" @click="etsArchiveClick()">
-                            ETS Archive
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="how-container">
@@ -139,22 +131,6 @@ export default {
 
         openLink(url) {
             window.open(url, '_blank').focus();
-        },
-
-        goToActionByPath(path) {
-            this.$router.push({
-                path: path
-            });
-        },
-
-        etsActiveClick() {
-            this.selectTab('market');
-            this.goToActionByPath('/market');
-        },
-
-        etsArchiveClick() {
-            this.selectTab('market/archive');
-            this.goToActionByPath('/market/archive');
         },
     }
 };

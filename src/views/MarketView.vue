@@ -71,7 +71,6 @@
 import {mapGetters} from "vuex";
 import EtsListCard from "@/components/market/cards/ets/list/EtsListCard";
 import EtsListHeader from "@/components/market/cards/ets/list/EtsListHeader";
-import {productInfoApiService} from "@/services/product-info-api-service";
 import loadJSON from "@/utils/http-utils";
 
 export default {
@@ -267,16 +266,6 @@ export default {
       console.log('MarketData: refreshStrategyData', this.etsList);
 
       this.isProductsInfoLoading = false;
-
-      productInfoApiService.getAllProducts(this.appApiUrl)
-          .then(data => {
-            console.log("Products loaded: ", data);
-            this.sortedCardList = this.getSortedCardList(data);
-            this.isProductsInfoLoading = false;
-          }).catch(e => {
-            console.error("Error when load products. ", e);
-            this.isProductsInfoLoading = false;
-      });
     },
 
     async refreshClientData() {

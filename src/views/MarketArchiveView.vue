@@ -43,7 +43,6 @@
 import {mapGetters} from "vuex";
 import EtsListCard from "@/components/market/cards/ets/list/EtsListCard";
 import EtsListHeader from "@/components/market/cards/ets/list/EtsListHeader";
-import {productInfoApiService} from "@/services/product-info-api-service";
 
 export default {
   name: "MarketView",
@@ -222,25 +221,6 @@ export default {
 
       this.isProductsInfoLoading = true;
 
-      let originalArchiveList = await productInfoApiService.getAllArchivedProducts(this.appApiUrl)
-          .then(data => {
-            console.log("Archived Products loaded: ", data);
-            return data;
-          }).catch(e => {
-            console.error("Error when load products. ", e);
-            this.isProductsInfoLoading = false;
-            return [];
-        });
-
-        let oldArchiveList = await productInfoApiService.getAllArchivedProducts_old(this.appApiUrl)
-            .then(data => {
-                console.log("Old Archived Products loaded: ", data);
-                return data;
-            }).catch(e => {
-                console.error("Error when load old products. ", e);
-                this.isProductsInfoLoading = false;
-                return [];
-            });
 
         let data = [...oldArchiveList, ...originalArchiveList];
         console.log('All Archived Products loaded:', data)

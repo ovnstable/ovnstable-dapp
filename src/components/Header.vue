@@ -288,7 +288,7 @@ export default {
 
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 18px;
     line-height: 25px;
     letter-spacing: 0.02em;
   }
@@ -324,10 +324,9 @@ export default {
   .header-btn-connect {
     width: 210px;
     height: 36px;
-
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 20px;
     letter-spacing: 0.02em;
   }
@@ -339,35 +338,6 @@ export default {
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
-    line-height: 25px;
-    letter-spacing: 0.02em;
-  }
-}
-
-@media only screen and (min-width: 1300px) {
-  .progress {
-    width: 300px;
-  }
-
-  .header-btn,
-  .header-btn-connect {
-    width: 210px;
-    height: 36px;
-
-    font-style: normal;
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 20px;
-    letter-spacing: 0.02em;
-  }
-
-  .header-btn-presale {
-    width: 160px;
-    height: 42px;
-
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
     line-height: 25px;
     letter-spacing: 0.02em;
   }

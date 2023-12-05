@@ -13,7 +13,7 @@
             >
                 <template v-if="contractType !== 'ETH+'" v-slot:body="{items}">
                     <tbody>
-                        <tr v-for="item in items" v-bind:key="item.name" >
+                        <tr v-for="item in items" :key="item.name" >
                             <template v-if="!item.isHidden">
                                 <td @click="openOnScan(item.address)" class="strategy-name-col">
                                     {{ item.name }}
@@ -253,7 +253,7 @@ import { mapGetters } from "vuex";
 export default {
     name: "ChangeWeightPanel",
     props: [
-        'm2mItems', 'm2mTotal', 'financeLoading', 'hasChangeAccount', 'usdPlusLiquidityIndex',
+        'm2mItems', 'm2mTotal', 'financeLoading', 'hasChangeAccount',
         'contracts',
         'account',
         'explorerUrl', 'networkId', 'apiUrl', 'networkName',

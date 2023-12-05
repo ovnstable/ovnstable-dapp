@@ -240,9 +240,14 @@ export default defineComponent({
   margin-bottom: auto;
 }
 
-.bridge-container {
-  min-width: 40%;
+.body-container {
+  justify-content: space-between;
 }
+
+.loader-container {
+  min-width: 520px;
+}
+
 /* mobile */
 @media only screen and (max-width: 1024px) {
   .title-label {

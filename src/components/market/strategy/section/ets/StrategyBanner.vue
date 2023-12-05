@@ -385,7 +385,7 @@ export default {
   }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
   .currency-icon {
     width: 140px;
     height: 140px;

@@ -239,7 +239,7 @@ export default {
     }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .table-header-payouts-strategy {
         font-style: normal !important;
         font-weight: 400 !important;

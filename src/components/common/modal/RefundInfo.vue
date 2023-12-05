@@ -183,7 +183,7 @@ export default {
     }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .success-text-container {
         font-size: 30px;
         line-height: 40px;

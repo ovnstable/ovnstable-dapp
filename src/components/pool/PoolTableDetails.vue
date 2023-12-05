@@ -415,7 +415,7 @@ export default defineComponent({
     }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .card-label {
         font-size: 16px;
         line-height: 24px;

@@ -214,7 +214,7 @@ export default defineComponent({
 
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .title-container {
         font-style: normal;
         font-weight: 400;

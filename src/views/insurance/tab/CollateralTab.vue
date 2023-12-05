@@ -689,7 +689,7 @@ export default {
     }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .title-label {
         font-style: normal;
         font-weight: 300;
@@ -1132,7 +1132,7 @@ export default {
     }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .header-btn {
         font-style: normal !important;
         font-weight: 400 !important;

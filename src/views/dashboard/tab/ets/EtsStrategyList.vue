@@ -529,7 +529,7 @@ export default {
   }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
   .tab-btn {
     font-style: normal;
     font-weight: 400;

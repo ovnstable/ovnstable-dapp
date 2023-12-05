@@ -541,7 +541,7 @@ export default {
     }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .chart-title {
         margin-top: 30px !important;
         font-style: normal;

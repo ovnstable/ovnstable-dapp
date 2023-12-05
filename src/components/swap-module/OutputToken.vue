@@ -238,7 +238,7 @@ export default defineComponent({
     }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .select-token-item-text {
         font-size: 18px;
         line-height: 24px;

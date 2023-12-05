@@ -650,7 +650,7 @@ export default {
     }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .button {
         height: 36px !important;
 

@@ -1911,7 +1911,7 @@ export default defineComponent({
     }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .add-token-text {
         font-size: 16px;
         line-height: 24px;

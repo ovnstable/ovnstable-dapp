@@ -127,7 +127,7 @@ export default {
     }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .card-info {
         font-style: normal;
         font-weight: 300;

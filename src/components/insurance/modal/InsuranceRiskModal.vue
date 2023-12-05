@@ -178,7 +178,7 @@ export default {
     }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .container_header {
         margin-left: 5% !important;
         margin-right: 5% !important;

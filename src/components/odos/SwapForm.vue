@@ -1810,7 +1810,7 @@ export default defineComponent({
   }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
   .swap-container {
     padding: 30px 20px;
     gap: 8px;

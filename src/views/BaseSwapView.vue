@@ -139,7 +139,7 @@ export default defineComponent({
   }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
   .title-label {
     font-size: 54px;
     line-height: 60px;

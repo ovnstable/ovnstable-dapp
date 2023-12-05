@@ -128,7 +128,7 @@ export default {
 }
 
 /* mac */
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .main-container {
         margin-left: 3% !important;
         margin-right: 3% !important;

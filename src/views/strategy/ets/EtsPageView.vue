@@ -1065,7 +1065,7 @@ export default {
   }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
   .info-card-icon {
     width: 24px;
     height: 24px;

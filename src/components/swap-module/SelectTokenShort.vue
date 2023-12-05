@@ -113,7 +113,7 @@ export default defineComponent({
     }
 }
 
-@media (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
     .token-symbol {
         font-size: 18px;
         line-height: 24px;

@@ -1705,7 +1705,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.swap-form-wrap,
 .swap-container,
 .loader-container {
   height: 100%;

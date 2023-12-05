@@ -482,13 +482,6 @@ export default defineComponent({
   }
 }
 
-/* full */
-@media only screen and (min-width: 1400px) {
-}
-
-@media (min-width: 1300px) {
-}
-
 div {
   font-family: "Roboto", serif;
 }

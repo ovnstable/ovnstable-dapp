@@ -162,24 +162,6 @@ export default defineComponent({
     color: var(--main-gray-text);
 }
 
-@media only screen and (max-width: 960px) {
-
-}
-
-/* tablet */
-@media only screen and (min-width: 960px) and (max-width: 1400px) {
-
-}
-
-/* full */
-@media only screen and (min-width: 1400px) {
-
-}
-
-@media (min-width: 1300px) {
-
-}
-
 div {
     font-family: 'Roboto',serif;
 }

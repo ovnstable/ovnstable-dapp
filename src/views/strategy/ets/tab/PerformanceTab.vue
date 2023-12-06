@@ -346,7 +346,7 @@
                   v-if="borrowProtocolCheck"
                   :src="
                     require('@/assets/currencies/market/' +
-                      etsData.borrowProtocol +
+                      etsData.borrowProtocol?.toLowerCase() +
                       '.png')
                   "
                 />
@@ -403,7 +403,7 @@
                 <v-img
                   :src="
                     require('@/assets/currencies/market/' +
-                      etsData.borrowProtocol +
+                      etsData.borrowProtocol?.toLowerCase() +
                       '.png')
                   "
                 />

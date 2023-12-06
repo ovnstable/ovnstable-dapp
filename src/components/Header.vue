@@ -18,9 +18,7 @@
           icon
           @click="toggleTheme"
         >
-          <v-icon class="theme-icon">
-            {{ light ? "mdi-white-balance-sunny" : "mdi-moon-waxing-crescent" }}
-          </v-icon>
+          <img :src="light ? require('@/assets/icon/mdi-sun.svg') : require('@/assets/icon/moon_w.svg')">
         </v-btn>
       </div>
 

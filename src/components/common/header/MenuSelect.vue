@@ -4,7 +4,11 @@
             <div class="select-bar-main-container"
                  v-bind="attrs"
                  v-on="on">
-                <v-icon class="menu-icon">mdi-view-headline</v-icon>
+                 <img
+                    :src="light ? require('@/assets/icon/burger_black.svg') : require('@/assets/icon/burger_white.svg')"
+                    alt="Burger Icon"
+                    class="burger"
+                />
             </div>
         </template>
         <div class="main-container">
@@ -899,6 +903,11 @@ export default {
 .arrow {
     width: 12px;
     height: 12px;
+}
+
+.burger {
+    height: 20px;
+    widows: 20px;
 }
 
 

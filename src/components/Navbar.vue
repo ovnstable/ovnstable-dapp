@@ -111,10 +111,11 @@
                             USD+
                         </label>
                     </div>
-                    <div class="ml-14">
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowUsd ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                    <div class="ml-16">
+                        <img
+                            :src="light ? (isShowUsd ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowUsd ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
                     </div>
                 </div>
 
@@ -171,13 +172,14 @@
                     <div>
                         <label :class="selectedTab.startsWith('daiplus_') ? 'selected-page' : ''"
                                class="navbar-page-label pl-2">
-                            DAI+
+                            DAI+&nbsp;
                         </label>
                     </div>
-                    <div class="ml-15">
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowDai ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                    <div class="ml-16">
+                        <img
+                            :src="light ? (isShowDai ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowDai ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
                     </div>
                 </div>
 
@@ -239,10 +241,11 @@
                             USDT+
                         </label>
                     </div>
-                    <div class="ml-12">
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowUsdt ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                    <div class="ml-14">
+                        <img
+                            :src="light ? (isShowUsdt ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowUsdt ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
                     </div>
                 </div>
 
@@ -295,10 +298,11 @@
                             ETH+
                         </label>
                     </div>
-                    <div class="ml-14">
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowEth ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                    <div class="ml-16">
+                        <img
+                            :src="light ? (isShowEth ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowEth ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
                     </div>
                 </div>
 
@@ -401,10 +405,11 @@
                     >
                         INSURANCE
                     </div>
-                    <div class="ml-3" >
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowInsurance ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                    <div class="ml-5" >
+                        <img
+                            :src="light ? (isShowInsurance ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowInsurance ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
                     </div>
                 </div>
 

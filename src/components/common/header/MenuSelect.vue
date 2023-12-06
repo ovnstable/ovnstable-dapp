@@ -77,9 +77,12 @@
                         >
                             USD+
                         </div>
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowUsd ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                        <div class="ml-3">
+                            <img
+                            :src="light ? (isShowUsd ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowUsd ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
+                        </div>
                     </div>
                     <div
                         @click="statsClick"
@@ -128,9 +131,13 @@
                         >
                             DAI+
                         </div>
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowDai ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                        <div class="ml-4">
+                            <img
+                            :src="light ? (isShowDai ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowDai ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
+                        </div>
+
                     </div>
 
                     <div
@@ -180,9 +187,12 @@
                         >
                             USDT+
                         </div>
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowUsdt ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                        <div class="ml-1">
+                            <img
+                            :src="light ? (isShowUsdt ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowUsdt ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
+                        </div>
                     </div>
 
                     <div
@@ -227,9 +237,12 @@
                         >
                             ETH+
                         </div>
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowUsdt ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                        <div class="ml-3">
+                            <img
+                            :src="light ? (isShowEth ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowEth ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
+                        </div>
                     </div>
 
                     <div
@@ -312,9 +325,12 @@
                         >
                             Insurance
                         </div>
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowInsurance ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                        <div class="ml-2">
+                            <img
+                            :src="light ? (isShowInsurance ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowInsurance ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
+                        </div>
                     </div>
 
                     <div

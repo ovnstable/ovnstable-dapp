@@ -41,7 +41,7 @@
                     ></v-progress-circular>
 
                     <v-icon class="status-icon" v-else :class="txData.isError ? 'status-failed' : (txData.isCancelled ? 'status-cancelled' : 'status-success')">
-                        {{ (txData.isError || txData.isCancelled) ? 'mdi-close' : 'mdi-check' }}
+                        {{ (txData.isError || txData.isCancelled) ? require('@/assets/icon/swap/search-close.svg') : 'mdi-check' }}
                     </v-icon>
                 </template>
 
@@ -75,7 +75,7 @@
                 <v-row justify="start" align="center" class="mt-5 mb-1">
                     <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="deleteTx()">
                         Delete transaction from history
-                        <v-icon class="copy-icon" small>mdi-close</v-icon>
+                        <img :src="require('@/assets/icon/swap/search-close.svg')" alt="close icon">
                     </label>
                 </v-row>
             </template>

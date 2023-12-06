@@ -9,7 +9,7 @@
                 <v-toolbar class="container_header" flat>
                     <v-spacer></v-spacer>
                     <v-btn icon @click="close" class="mt-4">
-                        <v-icon class="close-icon">mdi-close</v-icon>
+                        <img :src="require('@/assets/icon/swap/search-close.svg')" alt="close icon">
                     </v-btn>
                 </v-toolbar>
 

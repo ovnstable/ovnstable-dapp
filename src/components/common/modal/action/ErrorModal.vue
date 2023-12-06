@@ -10,7 +10,7 @@
                     icon
                     class="ml-auto"
                 >
-                    <v-icon class="close-icon">mdi-close</v-icon>
+                <img :src="require('@/assets/icon/swap/search-close.svg')" alt="close icon">
                 </v-btn>
             </v-toolbar>
 

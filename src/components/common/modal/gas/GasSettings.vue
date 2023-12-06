@@ -13,7 +13,7 @@
                     </label>
                     <v-spacer></v-spacer>
                     <v-btn icon class="ml-auto" @click="close" dark>
-                        <v-icon class="close-icon">mdi-close</v-icon>
+                        <img :src="require('@/assets/icon/swap/search-close.svg')" alt="close icon">
                     </v-btn>
                 </v-row>
             </v-toolbar>

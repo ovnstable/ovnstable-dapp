@@ -7,7 +7,7 @@
         <v-card class="container_body align-center pt-4 px-8 pb-10">
             <v-toolbar class="container_header" flat>
                 <v-btn icon class="ml-auto mr-5 mt-10" @click="close">
-                    <v-icon class="close-icon">mdi-close</v-icon>
+                    <img :src="require('@/assets/icon/swap/search-close.svg')" alt="close icon">
                 </v-btn>
             </v-toolbar>
             <v-card-text class="px-5 pt-5">

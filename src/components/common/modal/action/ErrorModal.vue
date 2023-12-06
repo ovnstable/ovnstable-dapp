@@ -10,7 +10,7 @@
                     icon
                     class="ml-auto"
                 >
-                <img :src="require('@/assets/icon/swap/search-close.svg')" alt="close icon">
+                <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                 </v-btn>
             </v-toolbar>
 
@@ -120,6 +120,7 @@ export default {
 
     computed: {
         ...mapGetters('errorModal', ['show', 'errorType', 'errorMsg']),
+        ...mapGetters("theme", ["light"]),
     },
 
     created() {

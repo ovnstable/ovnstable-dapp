@@ -16,7 +16,7 @@
                         </label>
                         <v-spacer></v-spacer>
                         <v-btn icon @click="setShowFunc(false)">
-                            <img :src="require('@/assets/icon/swap/search-close.svg')" alt="close icon">
+                            <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                         </v-btn>
                     </v-toolbar>
 
@@ -37,6 +37,7 @@
 
 <script>
 import {defineComponent} from 'vue'
+import { mapGetters } from 'vuex';
 import ZapForm from "@/components/zap/ZapForm.vue";
 
 export default defineComponent({
@@ -77,7 +78,7 @@ export default defineComponent({
 
     },
     computed: {
-
+        ...mapGetters("theme", ["light"]),
     },
     watch: {
 

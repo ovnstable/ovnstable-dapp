@@ -12,7 +12,7 @@
                     </label>
                     <v-spacer></v-spacer>
                     <v-btn icon @click="close" class="mt-4">
-                        <img :src="require('@/assets/icon/swap/search-close.svg')" alt="close icon">
+                        <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                     </v-btn>
                 </v-toolbar>
 
@@ -54,6 +54,7 @@ export default  {
     computed: {
         ...mapGetters('swapModal', ['show']),
         ...mapGetters('swapModal', ['isMintView']),
+        ...mapGetters("theme", ["light"]),
     },
 
     data: () => ({

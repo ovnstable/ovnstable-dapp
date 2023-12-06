@@ -29,11 +29,7 @@
                             placeholder="Search by name or paste address"
                             class="input-style"/>
                     <div @click="clearSearchQuery()" class="search-input-close-container">
-                        <img
-                            :src="require('@/assets/icon/swap/search-close.svg')"
-                            alt="close"
-                            class="search-image-close-image"
-                        >
+                        <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon" class="search-image-close-image">
                     </div>
                 </div>
                 <div class="search-items-container">
@@ -90,9 +86,13 @@
 
 <script>
 import {defineComponent} from 'vue'
+import { mapGetters } from 'vuex';
+
 
 export default defineComponent({
     name: "SelectTokenWithSearch",
+
+
     props: {
         tokens: {
             type: Array,
@@ -159,7 +159,8 @@ export default defineComponent({
       },
       selectedCount: function () {
           return this.tokens.filter(item => item.selected).length
-      }
+      },
+      ...mapGetters("theme", ["light"]),
     },
     methods: {
         toggleToken(token, isSelect) {

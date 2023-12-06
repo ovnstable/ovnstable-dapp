@@ -65,11 +65,7 @@
                                     placeholder="Search"
                                     class="input-style"/>
                                 <div @click="clearSearchQuery()" class="search-input-close-container">
-                                    <img
-                                        :src="require('@/assets/icon/swap/search-close.svg')"
-                                        alt="close"
-                                        class="search-image-close-image"
-                                    >
+                                    <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon" class="search-image-close-image">
                                 </div>
                             </div>
                         </div>
@@ -82,7 +78,7 @@
 
 <script>
 import {defineComponent} from 'vue'
-import {mapGetters} from "vuex";
+import { mapGetters } from 'vuex';
 
 export default defineComponent({
     name: "PoolFilter",
@@ -125,6 +121,7 @@ export default defineComponent({
     computed: {
         ...mapGetters('network', ['allNetworkConfigs']),
         ...mapGetters('deprecated', ['isDeprecatedShow']),
+        ...mapGetters("theme", ["light"]),
     },
     methods: {
         showWithZap(isShow) {

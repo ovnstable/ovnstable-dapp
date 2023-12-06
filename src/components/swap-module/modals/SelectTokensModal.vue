@@ -25,7 +25,7 @@
 
                         <v-spacer></v-spacer>
                         <v-btn icon @click="setShowFunc(false)">
-                            <img :src="require('@/assets/icon/swap/search-close.svg')" alt="close icon">
+                            <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                         </v-btn>
                     </v-toolbar>
 
@@ -75,6 +75,7 @@
 
 <script>
 import {defineComponent} from 'vue'
+import { mapGetters } from 'vuex';
 import SelectTokenShort from "@/components/swap-module/SelectTokenShort.vue";
 import SelectTokenWithSearch from "@/components/swap-module/SelectTokenWithSearch.vue";
 
@@ -181,7 +182,8 @@ export default defineComponent({
             } else {
                 console.error("Odos Swap method not found.", this.swapMethod)
             }
-        }
+        },
+        ...mapGetters("theme", ["light"]),
     },
     watch: {
 

@@ -7,7 +7,7 @@
         <v-card class="container_body align-center pt-4 px-8 pb-10">
             <v-toolbar class="container_header" flat>
                 <v-btn icon class="ml-auto mr-5 mt-10" @click="close">
-                    <img :src="require('@/assets/icon/swap/search-close.svg')" alt="close icon">
+                    <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                 </v-btn>
             </v-toolbar>
             <v-card-text class="px-5 pt-5">
@@ -90,6 +90,7 @@ export default {
 
     computed: {
         ...mapGetters('network', ['explorerUrl']),
+        ...mapGetters("theme", ["light"]),
         ...mapGetters('successModal', ['show', 'successTxHash', 'successAction', 'etsData', 'zksyncFeeHistory']),
 
         actionSuccessToken: function () {

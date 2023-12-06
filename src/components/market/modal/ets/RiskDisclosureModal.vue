@@ -15,7 +15,7 @@
                 </label>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="close">
-                    <img :src="require('@/assets/icon/swap/search-close.svg')" alt="close icon">
+                    <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                 </v-btn>
             </v-toolbar>
 
@@ -49,6 +49,7 @@ export default {
 
     computed: {
         ...mapGetters('riskModal', ['show']),
+        ...mapGetters("theme", ["light"]),
 
         fullRiskText: function () {
             return"By depositing stablecoin into ETS, you are automatically borrowing an equal value of volatile asset from lending protocol at a rate roughly equal to the current price of volatile asset denoted above. " +

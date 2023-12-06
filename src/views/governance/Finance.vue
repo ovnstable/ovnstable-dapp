@@ -22,7 +22,6 @@
                     :m2m-total="m2mTotal"
                     :finance-loading="financeLoading"
                     :has-change-account="hasChangeAccount"
-                    :usd-plus-liquidity-index="usdPlusLiquidityIndex"
                     :contracts="contracts"
                     :account="account"
                     :explorer-url="explorerUrl"
@@ -48,7 +47,7 @@
 </template>
 
 <script>
-import ChangeWeightPanel from "../../components/governance/finance/ChangeWeightPanel";
+import ChangeWeightPanel from "@/components/governance/finance/ChangeWeightPanel";
 import {mapActions, mapGetters} from "vuex";
 import WeightActionsPanel from "@/components/governance/finance/WeightActionsPanel";
 
@@ -62,7 +61,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('governance', ['m2mItems', 'm2mTotal', 'financeLoading', 'hasChangeAccount', 'usdPlusLiquidityIndex', 'hasChangeAccount']),
+        ...mapGetters('governance', ['m2mItems', 'm2mTotal', 'financeLoading', 'hasChangeAccount', 'hasChangeAccount']),
         ...mapGetters('web3', ['contracts']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('network', ['explorerUrl', 'networkId', 'appApiUrl', 'apiUrl', 'networkName']),

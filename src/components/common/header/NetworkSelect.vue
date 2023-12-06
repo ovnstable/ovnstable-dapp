@@ -298,11 +298,4 @@ export default {
     right: 52px;
     top: -19px;
 }
-
-
-@media only screen and (min-width: 960px) {
-    .select-bar-main-container {
-        padding-right: 0;
-    }
-}
 </style>

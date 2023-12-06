@@ -16,7 +16,7 @@
             ></v-progress-circular>
           </v-row>
         </div>
-        <div class="iframe-container">
+        <div v-show="isIframeLoaded" class="iframe-container">
           <iframe
             id="iframe"
             style="border: none"
@@ -226,7 +226,8 @@ export default defineComponent({
       return `https://squid-widget-git-main-v2-0xsquid.vercel.app/iframe?config=${encodedConfig}`;
     },
 
-    handleIframeLoad(link) {
+    async handleIframeLoad(link) {
+      await new Promise((resolve) => setTimeout(() => resolve(), 2000));
       this.isIframeLoaded = true;
       console.log(`Iframe loaded with link: ${link}`);
     }
@@ -238,8 +239,17 @@ export default defineComponent({
 .iframe-container {
   margin-bottom: auto;
 }
+
+.body-container {
+  justify-content: space-between;
+}
+
+.loader-container {
+  min-width: 520px;
+}
+
 /* mobile */
-@media only screen and (max-width: 960px) {
+@media only screen and (max-width: 1024px) {
   .title-label {
     font-style: normal;
     font-weight: 300;
@@ -248,7 +258,7 @@ export default defineComponent({
   }
 
   .bridge-container {
-    max-width: 380px;
+    max-width: 100%;
     padding: 20px 0;
   }
 
@@ -258,7 +268,6 @@ export default defineComponent({
 
   .loader-container {
     padding-top: 10px;
-    padding-left: 350px;
     min-height: 40px;
   }
 
@@ -270,7 +279,7 @@ export default defineComponent({
 }
 
 /* tablet */
-@media only screen and (min-width: 960px) and (max-width: 1400px) {
+@media only screen and (min-width: 1024px) and (max-width: 1400px) {
   .title-label {
     font-style: normal;
     font-weight: 300;
@@ -292,7 +301,6 @@ export default defineComponent({
 
   .loader-container {
     padding-top: 10px;
-    padding-left: 410px;
     min-height: 40px;
   }
 }
@@ -308,7 +316,6 @@ export default defineComponent({
 
   .bridge-container {
     max-width: 520px;
-    padding-left: 40px;
   }
 
   .iframe-container {
@@ -321,17 +328,11 @@ export default defineComponent({
 
   .loader-container {
     padding-top: 10px;
-    padding-left: 450px;
     min-height: 40px;
   }
 }
 
-@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 1300px),
-  only screen and (min--moz-device-pixel-ratio: 2) and (min-width: 1300px),
-  only screen and (-o-min-device-pixel-ratio: 2/1) and (min-width: 1300px),
-  only screen and (min-device-pixel-ratio: 2) and (min-width: 1300px),
-  only screen and (min-resolution: 192dpi) and (min-width: 1300px),
-  only screen and (min-resolution: 2dppx) and (min-width: 1300px) {
+@media only screen and (min-width: 1300px) {
   .title-label {
     font-style: normal;
     font-weight: 300;
@@ -354,7 +355,6 @@ export default defineComponent({
 
   .loader-container {
     padding-top: 10px;
-    padding-left: 450px;
     min-height: 40px;
   }
 }
@@ -382,6 +382,6 @@ export default defineComponent({
 
 .body-container {
   display: flex;
-  gap: 50px;
+  gap: 25px;
 }
 </style>

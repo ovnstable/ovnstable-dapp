@@ -245,7 +245,7 @@ export default defineComponent({
   }
 
   .info-header {
-    font-size: 30px;
+    font-size: 24px;
     line-height: 40px;
   }
 
@@ -278,12 +278,6 @@ div {
   font-style: normal;
   font-weight: 400;
   color: var(--main-gray-text);
-}
-
-.info-body {
-}
-
-.info-item {
 }
 
 .info-item-bordered {

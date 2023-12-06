@@ -1,227 +1,250 @@
 <template>
-    <div>
-        <div v-if="!isAvailableOnNetwork">
-            <NetworkNotAvailable :network-name="networkName" />
-        </div>
+  <div class="swap-form-wrap">
+    <div v-if="!isAvailableOnNetwork">
+      <NetworkNotAvailable :network-name="networkName" />
+    </div>
 
-        <div v-else class="swap-container">
-            <div v-if="!isAllLoaded"
-                 class="loader-container">
-                <div class="row">
-                    <v-row align="center" justify="center">
-                        <v-progress-circular
-                                width="2"
-                                size="24"
-                                color="#8FA2B7"
-                                indeterminate
-                        ></v-progress-circular>
-                    </v-row>
+    <div v-else class="swap-container">
+      <div v-if="!isAllLoaded" class="loader-container">
+        <v-progress-circular
+          width="2"
+          size="24"
+          color="#8FA2B7"
+          indeterminate
+        ></v-progress-circular>
+      </div>
+
+      <div v-else>
+        <div class="swap-body">
+          <div>
+            <div class="input-swap-container">
+              <div class="swap-title pb-lg-2 mt-2">
+                <div>
+                  <span v-if="swapMethod === 'SELL'">
+                    <span v-if="viewType === 'SWIPE'">Swipe</span
+                    ><span v-else>Swap</span> from Overnight
+                  </span>
+                  <span v-else>
+                    <span v-if="viewType === 'SWIPE'">Swipe</span
+                    ><span v-else>Swap</span> from
+                  </span>
                 </div>
-            </div>
-
-            <div v-else>
-                <div class="swap-body">
-                    <div>
-                        <div class="input-swap-container">
-                            <div class="swap-title pb-lg-2 mt-2">
-                                <div>
-                                    <span v-if="swapMethod === 'SELL'">
-                                        <span v-if="viewType === 'SWIPE'">Swipe</span><span v-else>Swap</span> from Overnight
-                                    </span>
-                                    <span v-else>
-                                    <span v-if="viewType === 'SWIPE'">Swipe</span><span v-else>Swap</span> from
-                                </span>
-                                </div>
-                            </div>
-                            <div v-for="token in inputTokens" :key="token.id" class="input-component-container">
-<!--                                {{token.selectedToken ? token.selectedToken.address : '-'}}-->
-                                <div v-if="isShowDecreaseAllowance && token.selectedToken"
-                                     @click="disapproveToken(token)"
-                                     class="decrease-allowance">
-                                    Decrease Allowance
-                                </div>
-
-                                <InputToken
-                                        :token-info="token"
-                                        :remove-item-func="removeInputToken"
-                                        :is-token-removable="isInputTokensRemovable"
-                                        :select-token-func="selectInputToken"
-                                        :update-token-value-func="updateTokenValue"
-                                />
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div v-if="isInputTokensAddAvailable"
-                                            @click="addNewInputToken"
-                                            class="add-token-text">
-                                        + Select token
-                                    </div>
-                                </div>
-                                <div v-if="inputTokensWithSelectedTokensCount" class="col-6">
-                                    <div @click="maxAll"
-                                         class="add-token-text max-all">
-                                        Max all
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                       <div class="pt-5">
-                           <div @click="changeSwap()" class="change-swap-container">
-                               <div class="change-swap-image rotate" >
-                                   <img
-                                        :src="require('@/assets/icon/swap/change-swap-vector.svg')"
-                                        alt="change-swap"
-                                    >
-                               </div>
-                           </div>
-                       </div>
-
-                        <div class="out-swap-container">
-                            <div class="swap-title pb-2">
-                                <span v-if="swapMethod === 'BUY'">
-                                    <span v-if="viewType === 'SWIPE'">Swipe</span><span v-else>Swap</span> to Overnight
-                                </span>
-                                <span v-else>
-                                    <span v-if="viewType === 'SWIPE'">Swipe</span><span v-else>Swap</span> to
-                                </span>
-                            </div>
-                            <div v-for="token in outputTokens" :key="token.id" class="input-component-container">
-                                <OutputToken
-                                        :token-info="token"
-                                        :swap-method="swapMethod"
-                                        :remove-item-func="removeOutputToken"
-                                        :is-token-removable="isOutputTokensRemovable"
-                                        :is-token-without-slider="isTokenWithoutSlider"
-                                        :is-token-without-line-slider="getLastUnlockedToken && getLastUnlockedToken.id === token.id"
-                                        :lock-proportion-func="lockProportion"
-                                        :update-slider-value-func="updateSliderValue"
-                                        :select-token-func="selectOutputToken"
-                                        :is-tokens-prices-loading="isSumulateSwapLoading"
-                                        :free-output-tokens-percentage="freeOutputTokensPercentage"
-                                />
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-6">
-                                    <div v-if="isOutputTokensAddAvailable"
-                                         @click="addNewOutputToken"
-                                         class="add-token-text">
-                                        + Select token
-                                    </div>
-                                </div>
-                                <div v-if="outputTokensWithSelectedTokensCount >= 2" class="col-6">
-                                    <div @click="resetOutputs"
-                                         class="add-token-text max-all">
-                                        Reset output %
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+              </div>
+              <div
+                v-for="token in inputTokens"
+                :key="token.id"
+                class="input-component-container"
+              >
+                <!--                                {{token.selectedToken ? token.selectedToken.address : '-'}}-->
+                <div
+                  v-if="isShowDecreaseAllowance && token.selectedToken"
+                  @click="disapproveToken(token)"
+                  class="decrease-allowance"
+                >
+                  Decrease Allowance
                 </div>
 
-                <SwapSlippageSettings
-                    :currentSlippageChanged="handleCurrentSlippageChanged"
-                    :selected-input-tokens="selectedInputTokens"
-                    :selected-output-tokens="selectedOutputTokens"
+                <InputToken
+                  :token-info="token"
+                  :remove-item-func="removeInputToken"
+                  :is-token-removable="isInputTokensRemovable"
+                  :select-token-func="selectInputToken"
+                  :update-token-value-func="updateTokenValue"
                 />
-
-                <div v-if="networkName === 'zksync'" class="slippage-info-container">
-                    <div class="slippage-info-title">
-                        <img
-                            :src="require('@/assets/icon/swap/warn-info-icon.svg')"
-                            alt="info"
-                            style="margin-right: 2px;"
-                        />
-                        20-80% of the displayed gas fee on zkSync will be refunded automatically.
-                    </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div
+                    v-if="isInputTokensAddAvailable"
+                    @click="addNewInputToken"
+                    class="add-token-text"
+                  >
+                    + Select token
+                  </div>
                 </div>
-                <div class="odos-fees-container mt-5" v-if="ifMoreThanOneSelectedTokensAdded">
-                    <div>
-                        <v-img class="alert-icon mr-2" :src="require('@/assets/icon/alert-circle-outline.svg')"/>
-                    </div>
-                    <div>
-                        <label class="odos-fees-title">
-                            Odos collects 0.01% fee for multi-input/multi-output swaps. Single input/output swaps collects 0% fee.
-                        </label>
-                    </div>
-
+                <div v-if="inputTokensWithSelectedTokensCount" class="col-6">
+                  <div @click="maxAll" class="add-token-text max-all">
+                    Max all
+                  </div>
                 </div>
-
-                <div class="swap-footer pt-5">
-                    <div v-if="!account" class="swap-button-container">
-                        <div @click="connectWallet"
-                             class="swap-button">
-                            <div class="swap-button-title">
-                                <div>
-                                    CONNECT WALLET
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-else class="swap-button-container">
-                        <div v-if="isDisableButton"
-                             class="disable-button">
-                            <div class="disable-button-title">
-                                <div>
-                                    {{disableButtonMessage}}
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else-if="isAnyInputsNeedApprove"
-                             @click="approve(firstInputInQueueForToApprove)"
-                             class="swap-button">
-                            <div class="swap-button-title">
-                                <div>
-                                    <span v-if="viewType === 'SWIPE' && !firstSwipeClickOnApprove">
-                                        SWIPE
-                                    </span>
-                                    <span v-else>
-                                        APPROVE {{firstInputInQueueForToApprove.selectedToken.symbol}}
-                                    </span>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else
-                             @click="swap()"
-                             id="click_form_swap"
-                             class="swap-button">
-                            <div class="swap-button-title">
-                                <div>
-                                    <span v-if="viewType === 'SWIPE'">SWIPE LIQUIDITY</span><span v-else>SWAP</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="label-container pt-3">
-                        <div class="row">
-                            <div class="col-6 pr-1" style="padding-top:15px">
-                                <div class="powered-text">
-                                    Powered by
-                                </div>
-                            </div>
-                            <div class="col-6 pl-0">
-                                <div class="powered-image">
-                                    <img
-                                        :src="require('@/assets/icon/swap/powered-by-odos.svg')"
-                                        alt="powered by odos"
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+
+            <div class="pt-5">
+              <div @click="changeSwap()" class="change-swap-container">
+                <div class="change-swap-image rotate">
+                  <img
+                    :src="require('@/assets/icon/swap/change-swap-vector.svg')"
+                    alt="change-swap"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="out-swap-container">
+              <div class="swap-title pb-2">
+                <span v-if="swapMethod === 'BUY'">
+                  <span v-if="viewType === 'SWIPE'">Swipe</span
+                  ><span v-else>Swap</span> to Overnight
+                </span>
+                <span v-else>
+                  <span v-if="viewType === 'SWIPE'">Swipe</span
+                  ><span v-else>Swap</span> to
+                </span>
+              </div>
+              <div
+                v-for="token in outputTokens"
+                :key="token.id"
+                class="input-component-container"
+              >
+                <OutputToken
+                  :token-info="token"
+                  :swap-method="swapMethod"
+                  :remove-item-func="removeOutputToken"
+                  :is-token-removable="isOutputTokensRemovable"
+                  :is-token-without-slider="isTokenWithoutSlider"
+                  :is-token-without-line-slider="
+                    getLastUnlockedToken && getLastUnlockedToken.id === token.id
+                  "
+                  :lock-proportion-func="lockProportion"
+                  :update-slider-value-func="updateSliderValue"
+                  :select-token-func="selectOutputToken"
+                  :is-tokens-prices-loading="isSumulateSwapLoading"
+                  :free-output-tokens-percentage="freeOutputTokensPercentage"
+                />
+              </div>
+
+              <div class="row">
+                <div class="col-6">
+                  <div
+                    v-if="isOutputTokensAddAvailable"
+                    @click="addNewOutputToken"
+                    class="add-token-text"
+                  >
+                    + Select token
+                  </div>
+                </div>
+                <div
+                  v-if="outputTokensWithSelectedTokensCount >= 2"
+                  class="col-6"
+                >
+                  <div @click="resetOutputs" class="add-token-text max-all">
+                    Reset output %
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div v-if="quotaResponseInfo">
-            <div class="transaction-info-container">
-                <div class="transaction-info-body">
-<!--                    <div class="row py-2">
+        <SwapSlippageSettings
+          :currentSlippageChanged="handleCurrentSlippageChanged"
+          :selected-input-tokens="selectedInputTokens"
+          :selected-output-tokens="selectedOutputTokens"
+        />
+
+        <div v-if="networkName === 'zksync'" class="slippage-info-container">
+          <div class="slippage-info-title">
+            <img
+              :src="require('@/assets/icon/swap/warn-info-icon.svg')"
+              alt="info"
+              style="margin-right: 2px"
+            />
+            20-80% of the displayed gas fee on zkSync will be refunded
+            automatically.
+          </div>
+        </div>
+        <div
+          class="odos-fees-container mt-5"
+          v-if="ifMoreThanOneSelectedTokensAdded"
+        >
+          <div>
+            <v-img
+              class="alert-icon mr-2"
+              :src="require('@/assets/icon/alert-circle-outline.svg')"
+            />
+          </div>
+          <div>
+            <label class="odos-fees-title">
+              Odos collects 0.01% fee for multi-input/multi-output swaps. Single
+              input/output swaps collects 0% fee.
+            </label>
+          </div>
+        </div>
+
+        <div class="swap-footer pt-5">
+          <div v-if="!account" class="swap-button-container">
+            <div @click="connectWallet" class="swap-button">
+              <div class="swap-button-title">
+                <div>CONNECT WALLET</div>
+              </div>
+            </div>
+          </div>
+          <div v-else class="swap-button-container">
+            <div v-if="isDisableButton" class="disable-button">
+              <div class="disable-button-title">
+                <div>
+                  {{ disableButtonMessage }}
+                </div>
+              </div>
+            </div>
+            <div
+              v-else-if="isAnyInputsNeedApprove"
+              @click="approve(firstInputInQueueForToApprove)"
+              class="swap-button"
+            >
+              <div class="swap-button-title">
+                <div>
+                  <span
+                    v-if="viewType === 'SWIPE' && !firstSwipeClickOnApprove"
+                  >
+                    SWIPE
+                  </span>
+                  <span v-else>
+                    APPROVE
+                    {{ firstInputInQueueForToApprove.selectedToken.symbol }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div
+              v-else
+              @click="swap()"
+              id="click_form_swap"
+              class="swap-button"
+            >
+              <div class="swap-button-title">
+                <div>
+                  <span v-if="viewType === 'SWIPE'">SWIPE LIQUIDITY</span
+                  ><span v-else>SWAP</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="label-container pt-3">
+            <div class="row">
+              <div class="col-6 pr-1" style="padding-top: 15px">
+                <div class="powered-text">Powered by</div>
+              </div>
+              <div class="col-6 pl-0">
+                <div class="powered-image">
+                  <img
+                    :src="require('@/assets/icon/swap/powered-by-odos.svg')"
+                    alt="powered by odos"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="quotaResponseInfo">
+      <div class="transaction-info-container">
+        <div class="transaction-info-body">
+          <!--                    <div class="row py-2">
                         <div class="col-6 py-0">
                             <div class="transaction-info-title">
                                 Output Value
@@ -234,7 +257,7 @@
                         </div>
                     </div>-->
 
-<!--                    <div v-if="getTokenByAddress('0x0000000000000000000000000000000000000000')" class="row py-2">
+          <!--                    <div v-if="getTokenByAddress('0x0000000000000000000000000000000000000000')" class="row py-2">
                         <div class="col-6 py-0">
                             <div class="transaction-info-title">
                                 Gas estimate
@@ -250,1395 +273,1583 @@
                         </div>
                     </div>-->
 
-                    <div class="row py-2">
-                        <div class="col-6 py-0">
-                            <div class="transaction-info-title">
-                                Slippage
-                            </div>
-                        </div>
-                        <div class="col-6 py-0">
-                            <div class="transaction-info">
-                                {{slippagePercent*1}}% <span class="transaction-info-additional">
-                                ({{$utils.formatMoney(sumOfAllSelectedTokensInUsd * slippagePercent / 100, 3)}})$
-                            </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row py-2" v-if="ifMoreThanOneSelectedTokensAdded">
-                        <div class="col-6 py-0 with-tooltip">
-                            <div class="transaction-info-title">
-                                Multi-swap Odos fee
-                            </div>
-                            <div>
-                                <Tooltip
-                                    text="This fee is charged by Odos for using multi-input/multi-output"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-6 py-0">
-                            <div class="transaction-info">
-                                {{multiSwapOdosFeePercent*1}}% <span class="transaction-info-additional">
-                                ({{$utils.formatMoney(sumOfAllSelectedTokensInUsd * multiSwapOdosFeePercent / 100, 3)}})$
-                            </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row py-2">
-                        <div class="col-6 py-0 with-tooltip">
-                            <div class="transaction-info-title">
-                                Single-swap Odos fee
-                            </div>
-                            <div>
-                                <Tooltip
-                                    text="Single-input/output swaps are free"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-6 py-0">
-                            <div class="transaction-info">
-                                0.00% <span class="transaction-info-additional">(0)$</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row py-2">
-                        <div class="col-6 py-0">
-                            <div class="transaction-info-title">
-                                Minimum received
-                            </div>
-                        </div>
-                        <div class="col-6 py-0">
-                            <div class="transaction-info">
-                                {{$utils.formatMoney(sumOfAllSelectedTokensInUsd, 3)}}$
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="transaction-info-footer">
-                    <div class="row py-2">
-                        <div class="col-6 py-0">
-                            <div class="transaction-info-title">
-                                Recipient
-                            </div>
-                        </div>
-                        <div class="col-6 py-0">
-                            <div class="transaction-info-address">
-                                {{account.substring(0, 5) + '...' + account.substring(account.length - 4)}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <div class="row py-2">
+            <div class="col-6 py-0">
+              <div class="transaction-info-title">Slippage</div>
             </div>
+            <div class="col-6 py-0">
+              <div class="transaction-info">
+                {{ slippagePercent * 1 }}%
+                <span class="transaction-info-additional">
+                  ({{
+                    $utils.formatMoney(
+                      (sumOfAllSelectedTokensInUsd * slippagePercent) / 100,
+                      3
+                    )
+                  }})$
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row py-2" v-if="ifMoreThanOneSelectedTokensAdded">
+            <div class="col-6 py-0 with-tooltip">
+              <div class="transaction-info-title">Multi-swap Odos fee</div>
+              <div>
+                <Tooltip
+                  text="This fee is charged by Odos for using multi-input/multi-output"
+                />
+              </div>
+            </div>
+            <div class="col-6 py-0">
+              <div class="transaction-info">
+                {{ multiSwapOdosFeePercent * 1 }}%
+                <span class="transaction-info-additional">
+                  ({{
+                    $utils.formatMoney(
+                      (sumOfAllSelectedTokensInUsd * multiSwapOdosFeePercent) /
+                        100,
+                      3
+                    )
+                  }})$
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row py-2">
+            <div class="col-6 py-0 with-tooltip">
+              <div class="transaction-info-title">Single-swap Odos fee</div>
+              <div>
+                <Tooltip text="Single-input/output swaps are free" />
+              </div>
+            </div>
+            <div class="col-6 py-0">
+              <div class="transaction-info">
+                0.00% <span class="transaction-info-additional">(0)$</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row py-2">
+            <div class="col-6 py-0">
+              <div class="transaction-info-title">Minimum received</div>
+            </div>
+            <div class="col-6 py-0">
+              <div class="transaction-info">
+                {{ $utils.formatMoney(sumOfAllSelectedTokensInUsd, 3) }}$
+              </div>
+            </div>
+          </div>
         </div>
-
-        <SelectTokensModal :is-show="isShowSelectTokensModal"
-                           :set-show-func="showSelectTokensModals"
-                           :swap-method="swapMethod"
-                           :select-token-type="selectTokenType"
-                           :add-selected-token-to-list-func="addSelectedTokenToList"
-                           :remove-selected-token-from-list-func="removeSelectedTokenFromList"
-                           :second-tokens="secondTokens"
-                           :tokens="tokens"
-                           :is-all-data-loaded="isAllDataLoaded"
-                           :is-ovn-swap="true"
-                           :selected-token-count="selectTokenType === 'OVERNIGHT' ? secondTokensSelectedCount : tokensSelectedCount"
-                           :max-token-count="selectTokenType === 'OVERNIGHT' ? secondTokens.length : 6"
-
-        />
-
-        <SuccessOdosModal :is-show="isShowSuccessModal"
-                          :set-show-func="showSuccessModal"
-                          :success-data="successData"
-                          :view-type="viewType"
-        />
-
-        <WaitingModal/>
-        <ErrorModal/>
+        <div class="transaction-info-footer">
+          <div class="row py-2">
+            <div class="col-6 py-0">
+              <div class="transaction-info-title">Recipient</div>
+            </div>
+            <div class="col-6 py-0">
+              <div class="transaction-info-address">
+                {{
+                  account.substring(0, 5) +
+                  "..." +
+                  account.substring(account.length - 4)
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <SelectTokensModal
+      :is-show="isShowSelectTokensModal"
+      :set-show-func="showSelectTokensModals"
+      :swap-method="swapMethod"
+      :select-token-type="selectTokenType"
+      :add-selected-token-to-list-func="addSelectedTokenToList"
+      :remove-selected-token-from-list-func="removeSelectedTokenFromList"
+      :second-tokens="secondTokens"
+      :tokens="tokens"
+      :is-all-data-loaded="isAllDataLoaded"
+      :is-ovn-swap="true"
+      :selected-token-count="
+        selectTokenType === 'OVERNIGHT'
+          ? secondTokensSelectedCount
+          : tokensSelectedCount
+      "
+      :max-token-count="
+        selectTokenType === 'OVERNIGHT' ? secondTokens.length : 6
+      "
+    />
+
+    <SuccessOdosModal
+      :is-show="isShowSuccessModal"
+      :set-show-func="showSuccessModal"
+      :success-data="successData"
+      :view-type="viewType"
+    />
+
+    <WaitingModal />
+    <ErrorModal />
+  </div>
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import { defineComponent } from "vue";
 import InputToken from "@/components/swap-module/InputToken.vue";
 import OutputToken from "@/components/swap-module/OutputToken.vue";
 import SelectTokensModal from "@/components/swap-module/modals/SelectTokensModal.vue";
-import {mapActions, mapGetters} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import SwapSlippageSettings from "@/components/swap-module/SwapSlippageSettings.vue";
-import {odosSwap} from "@/components/mixins/odos-swap";
+import { odosSwap } from "@/components/mixins/odos-swap";
 import WaitingModal from "@/components/common/modal/action/WaitingModal.vue";
 import SuccessModal from "@/components/common/modal/action/SuccessModal.vue";
 import ErrorModal from "@/components/common/modal/action/ErrorModal.vue";
 import SuccessOdosModal from "@/components/odos/modals/SuccessOdosModal.vue";
 import NetworkNotAvailable from "@/components/swap-module/network-not-available.vue";
-import {contractApprove} from "@/components/mixins/contract-approve";
+import { contractApprove } from "@/components/mixins/contract-approve";
 import Tooltip from "@/components/common/element/Tooltip";
 
 export default defineComponent({
-    name: "SwapForm",
-    mixins: [
-        odosSwap,
-        contractApprove,
-    ],
-    components: {
-        Tooltip,
-        NetworkNotAvailable,
-        SuccessOdosModal,
-        ErrorModal,
-        SuccessModal,
-        WaitingModal,
-        SwapSlippageSettings,
-        SelectTokensModal,
-        InputToken,
-        OutputToken
+  name: "SwapForm",
+  mixins: [odosSwap, contractApprove],
+  components: {
+    Tooltip,
+    NetworkNotAvailable,
+    SuccessOdosModal,
+    ErrorModal,
+    SuccessModal,
+    WaitingModal,
+    SwapSlippageSettings,
+    SelectTokensModal,
+    InputToken,
+    OutputToken
+  },
+  props: {
+    viewType: {
+      type: String,
+      required: true
     },
-    props: {
-        viewType : {
-            type: String,
-            required: true
-        },
-        updatePathViewFunc: {
-            type: Function,
-            required: true
-        },
-        updateButtonDisabledFunc: {
-            type: Function,
-            required: true
-        },
-        updateIsLoadingDataFunc: {
-            type: Function,
-            required: true
-        },
-        handleFormResetFunc: {
-            type: Function,
-            required: true
-        },
-        updateStablecoinsListFunc: {
-            type: Function,
-            required: true
+    updatePathViewFunc: {
+      type: Function,
+      required: true
+    },
+    updateButtonDisabledFunc: {
+      type: Function,
+      required: true
+    },
+    updateIsLoadingDataFunc: {
+      type: Function,
+      required: true
+    },
+    handleFormResetFunc: {
+      type: Function,
+      required: true
+    },
+    updateStablecoinsListFunc: {
+      type: Function,
+      required: true
+    }
+  },
+  mounted() {
+    this.baseViewType = this.viewType;
+    this.tokenSeparationScheme = "OVERNIGHT_SWAP";
+    this.init();
+
+    if (!this.isAvailableOnNetwork) {
+      this.mintAction();
+      return;
+    }
+
+    try {
+      if (this.viewType === "SWIPE") {
+        this.trackClick({
+          action: "swipe_page_view",
+          event_category: "Page view",
+          event_label: "View swipe page"
+        });
+      } else if (this.viewType === "SWAP") {
+        this.trackClick({
+          action: "swap_page_view",
+          event_category: "Page view",
+          event_label: "View swap page"
+        });
+      } else {
+        console.log(
+          "Unknown view type for odos view tracking: ",
+          this.viewType
+        );
+      }
+    } catch (e) {
+      console.error("Track error:", e);
+    }
+
+    if (this.$route.query.action === "swap-in") {
+      // ignore
+    }
+
+    if (this.$route.query.action === "swap-out") {
+      this.changeSwap();
+    }
+  },
+  data() {
+    return {
+      inputTokens: [],
+      outputTokens: [],
+      maxInputTokens: 6,
+      maxOutputTokens: 6,
+
+      isShowSelectTokensModal: false,
+      swapMethod: "BUY", // BUY (secondTokens) / SELL (secondTokens)
+      selectTokenType: "OVERNIGHT", // OVERNIGHT / ALL
+
+      isShowSettingsModal: false,
+      isSwapLoading: false,
+      isSumulateSwapLoading: false,
+      pathViz: null,
+      slippagePercent: 0.05,
+      multiSwapOdosFeePercent: 0.01,
+
+      tokensQuotaCounterId: null,
+      tokensQuotaCheckerSec: 0,
+
+      firstSwipeClickOnApprove: false,
+      ifMoreThanOneTokensAdded: false
+    };
+  },
+  computed: {
+    ...mapGetters("network", ["getParams", "networkId", "networkName"]),
+    ...mapGetters("theme", ["light"]),
+    ...mapGetters("web3", ["web3", "getWeiMarker"]),
+    ...mapGetters("gasPrice", [
+      "show",
+      "gasPrice",
+      "gasPriceGwei",
+      "gasPriceStation"
+    ]),
+
+    isInputTokensRemovable() {
+      return this.inputTokens.length > 1;
+    },
+
+    isOutputTokensRemovable() {
+      return this.outputTokens.length > 1;
+    },
+
+    isTokenWithoutSlider() {
+      return this.outputTokens.length <= 1;
+    },
+
+    isInputTokensAddAvailable() {
+      return (
+        this.inputTokens.length < this.maxInputTokens &&
+        this.inputTokensWithoutSelectedTokensCount === 0
+      );
+    },
+
+    isOutputTokensAddAvailable() {
+      return (
+        this.outputTokens.length < this.maxOutputTokens &&
+        this.outputTokensWithoutSelectedTokensCount === 0
+      );
+    },
+
+    inputTokensWithoutSelectedTokensCount() {
+      return this.inputTokens.filter((item) => !item.selectedToken).length;
+    },
+
+    outputTokensWithoutSelectedTokensCount() {
+      return this.outputTokens.filter((item) => !item.selectedToken).length;
+    },
+
+    inputTokensWithSelectedTokensCount() {
+      return this.inputTokens.filter((item) => item.selectedToken).length;
+    },
+
+    outputTokensWithSelectedTokensCount() {
+      return this.outputTokens.filter((item) => item.selectedToken).length;
+    },
+
+    ifMoreThanOneSelectedTokensAdded() {
+      return this.inputTokens.length > 1 || this.outputTokens.length > 1;
+    },
+
+    outputUnlockedTokens() {
+      return this.outputTokens.filter((item) => !item.locked);
+    },
+
+    outputUnlockedTokensCount() {
+      return this.outputUnlockedTokens.length;
+    },
+
+    getLastUnlockedToken() {
+      if (this.outputUnlockedTokensCount === 1) {
+        return this.outputUnlockedTokens[0];
+      }
+
+      return null;
+    },
+
+    freeOutputTokensPercentage() {
+      let sumLockedTokens = 0;
+      let result = 100;
+
+      for (let i = 0; i < this.selectedOutputTokens.length; i++) {
+        let token = this.selectedOutputTokens[i];
+        if (token.locked) {
+          sumLockedTokens += token.value;
         }
+      }
+
+      result = 100 - sumLockedTokens;
+
+      return result;
     },
-    mounted() {
-        this.baseViewType = this.viewType;
-        this.tokenSeparationScheme = 'OVERNIGHT_SWAP'
-        this.init();
+
+    selectedInputTokens() {
+      //todo: add check balance
+      return this.inputTokens.filter((item) => item.selectedToken);
+    },
+    selectedOutputTokens() {
+      //todo: add check proportion values
+      return this.outputTokens.filter((item) => item.selectedToken);
+    },
+
+    isAnyInputsNeedApprove() {
+      return this.inputsNeedApproveCount > 0;
+    },
+    inputsNeedApproveCount() {
+      return this.allInputsWithNotApproved.length;
+    },
+    allInputsWithNotApproved() {
+      return this.selectedInputTokens.filter(
+        (token) => !token.selectedToken.approveData.approved && token.value > 0
+      );
+    },
+    firstInputInQueueForToApprove() {
+      return this.isAnyInputsNeedApprove
+        ? this.allInputsWithNotApproved[0]
+        : null;
+    },
+
+    isDisableButton() {
+      return (
+        this.inputTokensWithSelectedTokensCount === 0 ||
+        this.outputTokensWithSelectedTokensCount === 0 ||
+        this.swapResponseConfirmInfo.waitingConformation ||
+        !this.isAvailableOnNetwork ||
+        !this.isAnyTokensBalanceIsInsufficient ||
+        !this.isAmountEntered ||
+        this.isSwapLoading
+      );
+    },
+
+    disableButtonMessage() {
+      if (
+        this.inputTokensWithSelectedTokensCount === 0 ||
+        this.outputTokensWithSelectedTokensCount === 0
+      ) {
+        if (this.isAvailableOnNetwork) {
+          return "SELECT TOKENS";
+        }
+
+        return "SWITCH CHAIN";
+      }
+
+      if (!this.isAmountEntered) {
+        return "ENTER AMOUNT";
+      }
+
+      if (!this.isAnyTokensBalanceIsInsufficient) {
+        return "BALANCE IS INSUFFICIENT";
+      }
+
+      if (this.swapResponseConfirmInfo.waitingConformation) {
+        return (
+          "Confirm in your wallet (" +
+          this.swapResponseConfirmInfo.duration +
+          " sec)"
+        );
+      }
+
+      if (this.isSwapLoading) {
+        return "SWAP LOADING";
+      }
+
+      return null;
+    },
+
+    isAmountEntered() {
+      let tokens = this.selectedInputTokens;
+      for (let i = 0; i < tokens.length; i++) {
+        let token = tokens[i];
+        if (token.value > 0) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+
+    sumOfAllSelectedTokensInUsd() {
+      let sum = 0;
+      for (let i = 0; i < this.selectedInputTokens.length; i++) {
+        let token = this.selectedInputTokens[i];
+        let selectedTokenUsdValue = token.usdValue;
+        sum += selectedTokenUsdValue;
+      }
+
+      return sum;
+    },
+
+    isAnyTokensBalanceIsInsufficient() {
+      let tokens = this.selectedInputTokens;
+      for (let i = 0; i < tokens.length; i++) {
+        let token = tokens[i];
+        if (token.value * 1 > token.selectedToken.balanceData.balance * 1) {
+          return false; // any with value > balance
+        }
+      }
+
+      return true;
+    }
+  },
+  watch: {
+    outputTokensWithSelectedTokensCount: function (val, oldVal) {
+      // lock first
+      if (val === 1) {
+        let token = this.selectedOutputTokens[0];
+        if (!token.locked) {
+          this.lockProportion(true, token);
+        }
+        this.recalculateOutputTokensSum();
+        return;
+      }
+
+      if (val === 2 && oldVal === 1) {
+        let token = this.selectedOutputTokens[0];
+        if (token.locked) {
+          this.lockProportion(false, token);
+        }
+        this.recalculateOutputTokensSum();
+        return;
+      }
+    },
+    sumOfAllSelectedTokensInUsd: function (val, oldVal) {
+      this.recalculateOutputTokensSum();
+    },
+
+    isTokensLoadedAndFiltered: function (val, oldVal) {
+      if (val) {
+        this.clearForm();
+      }
+    },
+    networkId: function (newVal, oldVal) {
+      if (newVal) {
+        // hide swap form and clear all(watch function) data,
+        // after new token loaded collection
+        this.isTokensLoadedAndFiltered = false;
 
         if (!this.isAvailableOnNetwork) {
-            this.mintAction();
-            return;
+          this.mintAction();
         }
-
-        try {
-            if (this.viewType === 'SWIPE') {
-                this.trackClick({action: 'swipe_page_view', event_category: 'Page view', event_label: 'View swipe page' });
-            } else if (this.viewType === 'SWAP') {
-                this.trackClick({action: 'swap_page_view', event_category: 'Page view', event_label: 'View swap page' });
-            } else {
-                console.log("Unknown view type for odos view tracking: ", this.viewType);
-            }
-        } catch (e) {
-            console.error("Track error:", e);
-        }
-
-        if (this.$route.query.action === 'swap-in') {
-            // ignore
-        }
-
-        if (this.$route.query.action === 'swap-out') {
-            this.changeSwap()
-        }
+      }
     },
-    data() {
-        return {
-            inputTokens: [],
-            outputTokens: [],
-            maxInputTokens: 6,
-            maxOutputTokens: 6,
-
-            isShowSelectTokensModal: false,
-            swapMethod: 'BUY', // BUY (secondTokens) / SELL (secondTokens)
-            selectTokenType: 'OVERNIGHT', // OVERNIGHT / ALL
-
-            isShowSettingsModal: false,
-            isSwapLoading: false,
-            isSumulateSwapLoading: false,
-            pathViz: null,
-            slippagePercent: 0.05,
-            multiSwapOdosFeePercent: 0.01,
-
-            tokensQuotaCounterId: null,
-            tokensQuotaCheckerSec: 0,
-
-            firstSwipeClickOnApprove: false,
-            ifMoreThanOneTokensAdded: false
-        }
-    },
-    computed: {
-        ...mapGetters('network', ['getParams', 'networkId', 'networkName']),
-        ...mapGetters('theme', ['light']),
-        ...mapGetters('web3', ['web3', 'getWeiMarker']),
-        ...mapGetters('gasPrice', ['show', 'gasPrice', 'gasPriceGwei', 'gasPriceStation']),
-
-        isInputTokensRemovable() {
-          return this.inputTokens.length > 1;
-        },
-
-        isOutputTokensRemovable() {
-          return this.outputTokens.length > 1;
-        },
-
-        isTokenWithoutSlider() {
-          return this.outputTokens.length <= 1;
-        },
-
-        isInputTokensAddAvailable() {
-          return this.inputTokens.length < this.maxInputTokens && this.inputTokensWithoutSelectedTokensCount === 0;
-        },
-
-        isOutputTokensAddAvailable() {
-          return this.outputTokens.length < this.maxOutputTokens && this.outputTokensWithoutSelectedTokensCount === 0;
-        },
-
-        inputTokensWithoutSelectedTokensCount() {
-         return this.inputTokens.filter(item => !item.selectedToken).length;
-        },
-
-        outputTokensWithoutSelectedTokensCount() {
-            return this.outputTokens.filter(item => !item.selectedToken).length;
-        },
-
-        inputTokensWithSelectedTokensCount() {
-         return this.inputTokens.filter(item => item.selectedToken).length;
-        },
-
-        outputTokensWithSelectedTokensCount() {
-            return this.outputTokens.filter(item => item.selectedToken).length;
-        },
-
-        ifMoreThanOneSelectedTokensAdded() {
-            return this.inputTokens.length > 1 || this.outputTokens.length > 1;
-        },
-
-        outputUnlockedTokens() {
-            return this.outputTokens.filter(item => !item.locked);
-        },
-
-        outputUnlockedTokensCount() {
-            return this.outputUnlockedTokens.length;
-        },
-
-        getLastUnlockedToken() {
-            if (this.outputUnlockedTokensCount === 1) {
-                return this.outputUnlockedTokens[0]
-            }
-
-            return null;
-        },
-
-        freeOutputTokensPercentage() {
-            let sumLockedTokens = 0;
-            let result = 100;
-
-            for (let i = 0; i < this.selectedOutputTokens.length; i++) {
-                let token = this.selectedOutputTokens[i];
-                if (token.locked) {
-                    sumLockedTokens += token.value;
-                }
-            }
-
-            result = 100 - sumLockedTokens;
-
-            return result
-        },
-
-        selectedInputTokens() {
-            //todo: add check balance
-            return this.inputTokens.filter(item => item.selectedToken)
-        },
-        selectedOutputTokens() {
-            //todo: add check proportion values
-            return this.outputTokens.filter(item => item.selectedToken)
-        },
-
-        isAnyInputsNeedApprove() {
-            return this.inputsNeedApproveCount > 0
-        },
-        inputsNeedApproveCount() {
-            return this.allInputsWithNotApproved.length
-        },
-        allInputsWithNotApproved() {
-            return this.selectedInputTokens.filter(token => !token.selectedToken.approveData.approved && token.value > 0);
-        },
-        firstInputInQueueForToApprove() {
-            return this.isAnyInputsNeedApprove ? this.allInputsWithNotApproved[0] : null
-        },
-
-        isDisableButton() {
-            return this.inputTokensWithSelectedTokensCount === 0 ||
-                this.outputTokensWithSelectedTokensCount === 0 ||
-                this.swapResponseConfirmInfo.waitingConformation ||
-                !this.isAvailableOnNetwork ||
-                !this.isAnyTokensBalanceIsInsufficient ||
-                !this.isAmountEntered ||
-                this.isSwapLoading
-        },
-
-        disableButtonMessage() {
-            if (this.inputTokensWithSelectedTokensCount === 0 ||
-                this.outputTokensWithSelectedTokensCount === 0) {
-                if (this.isAvailableOnNetwork) {
-                    return 'SELECT TOKENS';
-                }
-
-                return "SWITCH CHAIN"
-            }
-
-            if (!this.isAmountEntered) {
-                return 'ENTER AMOUNT';
-            }
-
-            if (!this.isAnyTokensBalanceIsInsufficient) {
-                return 'BALANCE IS INSUFFICIENT';
-            }
-
-            if (this.swapResponseConfirmInfo.waitingConformation) {
-                return "Confirm in your wallet (" + this.swapResponseConfirmInfo.duration + " sec)"
-            }
-
-            if (this.isSwapLoading) {
-                return "SWAP LOADING"
-            }
-
-            return null;
-        },
-
-        isAmountEntered() {
-            let tokens = this.selectedInputTokens;
-            for (let i = 0; i < tokens.length; i++) {
-                let token = tokens[i];
-                if (token.value > 0) {
-                    return true;
-                }
-            }
-
-            return false;
-        },
-
-        sumOfAllSelectedTokensInUsd() {
-            let sum = 0
-            for (let i = 0; i < this.selectedInputTokens.length; i++) {
-                let token = this.selectedInputTokens[i];
-                let selectedTokenUsdValue = token.usdValue;
-                sum += selectedTokenUsdValue;
-            }
-
-            return sum;
-        },
-
-        isAnyTokensBalanceIsInsufficient () {
-            let tokens = this.selectedInputTokens;
-            for (let i = 0; i < tokens.length; i++) {
-                let token = tokens[i];
-                if (token.value*1 > token.selectedToken.balanceData.balance*1) {
-                    return false; // any with value > balance
-                }
-            }
-
-            return true;
-        },
-
-    },
-    watch: {
-        outputTokensWithSelectedTokensCount: function (val, oldVal) {
-
-            // lock first
-            if (val === 1) {
-                let token = this.selectedOutputTokens[0];
-                if (!token.locked) {
-                    this.lockProportion(true, token);
-                }
-                this.recalculateOutputTokensSum();
-                return;
-            }
-
-            if (val === 2 && oldVal === 1) {
-                let token = this.selectedOutputTokens[0];
-                if (token.locked) {
-                    this.lockProportion(false, token);
-                }
-                this.recalculateOutputTokensSum();
-                return;
-            }
-        },
-        sumOfAllSelectedTokensInUsd: function (val, oldVal) {
-            this.recalculateOutputTokensSum();
-        },
-
-        isTokensLoadedAndFiltered: function (val, oldVal) {
-            if (val) {
-                this.clearForm();
-            }
-        },
-        networkId: function (newVal, oldVal) {
-            if (newVal) {
-                // hide swap form and clear all(watch function) data,
-                // after new token loaded collection
-                this.isTokensLoadedAndFiltered = false;
-
-                if (!this.isAvailableOnNetwork) {
-                    this.mintAction();
-                }
-            }
-        },
-        isDisableButton: function (val, oldVal) {
-            if (val) {
-                this.clearQuotaInfo();
-            }
-            this.updateButtonDisabledFunc(val);
-        },
-
-        isFirstBalanceLoaded: function (val, oldVal) {
-            if (val) {
-                this.initTopInputTokensByBalance(this.stablecoinWithoutSecondTokens);
-            }
-        },
+    isDisableButton: function (val, oldVal) {
+      if (val) {
+        this.clearQuotaInfo();
+      }
+      this.updateButtonDisabledFunc(val);
     },
 
-    methods: {
-        ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
+    isFirstBalanceLoaded: function (val, oldVal) {
+      if (val) {
+        this.initTopInputTokensByBalance(this.stablecoinWithoutSecondTokens);
+      }
+    }
+  },
 
-        ...mapActions("errorModal", ['showErrorModal', 'showErrorModalWithMsg']),
-        ...mapActions("waitingModal", ['showWaitingModal', 'closeWaitingModal']),
-        ...mapActions('walletAction', ['connectWallet']),
-        ...mapActions('track', ['trackClick']),
+  methods: {
+    ...mapActions("swapModal", ["showSwapModal", "showMintView"]),
 
-        mintAction() {
-            this.showMintView();
-            this.showSwapModal();
-        },
+    ...mapActions("errorModal", ["showErrorModal", "showErrorModalWithMsg"]),
+    ...mapActions("waitingModal", ["showWaitingModal", "closeWaitingModal"]),
+    ...mapActions("walletAction", ["connectWallet"]),
+    ...mapActions("track", ["trackClick"]),
 
-        init() {
-            this.loadChains();
-            this.loadTokens();
-            this.initContractData();
+    mintAction() {
+      this.showMintView();
+      this.showSwapModal();
+    },
 
-            this.$bus.$on('odos-transaction-finished', (data) => {
-                this.finishTransaction();
+    init() {
+      this.loadChains();
+      this.loadTokens();
+      this.initContractData();
+
+      this.$bus.$on("odos-transaction-finished", (data) => {
+        this.finishTransaction();
+      });
+    },
+    addDefaultOvnToken() {
+      let symbol = this.$route.query.symbol ? this.$route.query.symbol : null;
+      let ovnSelectedToken = this.getDefaultSecondtoken(symbol);
+      if (!ovnSelectedToken) {
+        this.addNewInputToken();
+        this.addNewOutputToken();
+        return;
+      }
+
+      ovnSelectedToken.selected = true;
+
+      if (this.swapMethod === "BUY") {
+        this.addSelectedTokenToOutputList(ovnSelectedToken);
+        this.addNewInputToken();
+        return;
+      }
+
+      if (this.swapMethod === "SELL") {
+        this.addSelectedTokenToInputList(ovnSelectedToken);
+        this.addNewOutputToken();
+        return;
+      }
+
+      console.error(
+        "Error when add default ovn token. Method not found: ",
+        this.swapMethod
+      );
+    },
+    addNewOutputToken() {
+      const newToken = this.getNewOutputToken();
+      this.outputTokens.push(newToken);
+    },
+    removeOutputToken(id) {
+      this.removeToken(this.outputTokens, id);
+      this.resetOutputs();
+    },
+    addNewInputToken() {
+      this.inputTokens.push(this.getNewInputToken());
+    },
+    removeInputToken(id) {
+      this.removeToken(this.inputTokens, id);
+    },
+    removeToken(tokens, id) {
+      // removing by token.id or token.selectedToken.id
+      const index = tokens.findIndex(
+        (item) =>
+          item.id === id ||
+          (item.selectedToken ? item.selectedToken.id === id : false)
+      );
+
+      if (index !== -1) {
+        if (tokens[index].selectedToken) {
+          tokens[index].selectedToken.selected = false;
+        }
+
+        tokens.splice(index, 1);
+      }
+      this.updateQuotaInfo();
+    },
+
+    changeSwap() {
+      // Transform Input Tokens into Output format by adding temporary variable "tempOutputArray"
+      let tempOutputArray = [];
+      for (let i = 0; i < this.inputTokens.length; i++) {
+        let tokenIn = this.inputTokens[i];
+        if (!tokenIn.selectedToken) {
+          continue;
+        }
+
+        let transformInputToOutputToken = this.getNewOutputToken();
+        transformInputToOutputToken.id = tokenIn.id;
+        transformInputToOutputToken.selectedToken = tokenIn.selectedToken;
+        tempOutputArray.push(transformInputToOutputToken);
+      }
+
+      // Transform Output Tokens into Input format by adding temporary variable "tempInputArray"
+      let tempInputArray = [];
+      for (let i = 0; i < this.outputTokens.length; i++) {
+        let tokenOut = this.outputTokens[i];
+        if (!tokenOut.selectedToken) {
+          continue;
+        }
+
+        let transformOutputToInputToken = this.getNewInputToken();
+        transformOutputToInputToken.id = tokenOut.id;
+        transformOutputToInputToken.selectedToken = tokenOut.selectedToken;
+        tempInputArray.push(transformOutputToInputToken);
+      }
+
+      this.inputTokens = tempInputArray;
+      this.outputTokens = tempOutputArray;
+
+      let symbol = this.$route.query.symbol ? this.$route.query.symbol : null;
+
+      if (this.swapMethod === "BUY") {
+        this.setSwapMethod("SELL");
+        this.addTokensEmptyIsNeeded();
+        this.resetOutputs();
+
+        let params = null;
+        if (symbol) {
+          params = { action: "swap-out", symbol: symbol };
+        } else {
+          params = { action: "swap-out" };
+        }
+
+        this.initTabName("/swap", params);
+        return;
+      }
+
+      if (this.swapMethod === "SELL") {
+        this.setSwapMethod("BUY");
+        this.addTokensEmptyIsNeeded();
+        this.resetOutputs();
+
+        let params = null;
+        if (symbol) {
+          params = { action: "swap-in", symbol: symbol };
+        } else {
+          params = { action: "swap-in" };
+        }
+
+        this.initTabName("/swap", params);
+        return;
+      }
+
+      console.error("Change swap method not found.", this.swapMethod);
+    },
+
+    handleCurrentSlippageChanged(newSlippage) {
+      this.slippagePercent = newSlippage.value;
+    },
+
+    finishTransaction() {
+      this.clearForm();
+      this.handleFormResetFunc(true);
+    },
+
+    clearForm() {
+      this.clearAllSelectedTokens();
+
+      if (this.swapMethod === "BUY") {
+        this.addDefaultOvnToken();
+        return;
+      }
+
+      if (this.swapMethod === "SELL") {
+        this.addDefaultOvnToken();
+        return;
+      }
+
+      console.error("Clear form, swap method not found.", this.swapMethod);
+    },
+
+    resetOutputs() {
+      if (!this.selectedOutputTokens.length) {
+        return;
+      }
+
+      let totalValue = 100;
+      let totalTokens = this.selectedOutputTokens.length;
+      let proportion = Math.floor(totalValue / totalTokens);
+      let remains = totalValue % totalTokens;
+
+      for (let i = 0; i < totalTokens; i++) {
+        this.selectedOutputTokens[i].value = proportion;
+      }
+
+      for (let i = 0; i < remains; i++) {
+        this.selectedOutputTokens[i].value += 1;
+      }
+    },
+    async swap() {
+      if (this.isSwapLoading) {
+        console.debug(
+          this.getOdosLogMsg({
+            message: "Swap method not available, prev swap in process.",
+            swapSession: this.swapSessionId
+          })
+        );
+        return;
+      }
+
+      if (
+        this.inputTokensWithSelectedTokensCount < 1 ||
+        this.outputTokensWithSelectedTokensCount < 1
+      ) {
+        return;
+      }
+
+      this.swapSessionId = this.$utils.getRandomString(10);
+
+      try {
+        if (this.viewType === "SWIPE") {
+          this.trackClick({
+            action: "click_form_swipe",
+            event_category: "Click Button",
+            event_label: "Click on swipe",
+            value: this.sumOfAllSelectedTokensInUsd
+          });
+        } else if (this.viewType === "SWAP") {
+          this.trackClick({
+            action: "click_form_swap",
+            event_category: "Click Button",
+            event_label: "Click on swap",
+            value: this.sumOfAllSelectedTokensInUsd
+          });
+        } else {
+          console.error(
+            "Unknown view type for swap click tracking: ",
+            this.viewType
+          );
+        }
+      } catch (e) {
+        console.error(
+          this.getOdosLogMsg({
+            message: "Track error. ",
+            swapSession: this.swapSessionId,
+            data: this.viewType
+          })
+        );
+      }
+
+      this.isSwapLoading = true;
+
+      let actualGas = await this.getActualGasPrice(this.networkId);
+      let requestData = {
+        chainId: this.networkId,
+        inputTokens: this.getRequestInputTokens(),
+        outputTokens: this.getRequestOutputTokens(),
+        gasPrice: actualGas,
+        userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
+        slippageLimitPercent: this.getSlippagePercent(),
+        sourceBlacklist: this.getSourceBlackList(this.networkId),
+        sourceWhitelist: [],
+        simulate: true,
+        pathViz: true,
+        // disableRFQs: false
+        referralCode: this.odosReferalCode
+      };
+
+      console.debug(
+        this.getOdosLogMsg({
+          message: "Odos Swap quota request data",
+          swapSession: this.swapSessionId,
+          data: requestData,
+          actualGas: actualGas
+        })
+      );
+
+      this.swapRequest(requestData)
+        .then(async (data) => {
+          console.debug(
+            this.getOdosLogMsg({
+              message: "Odos Swap quota response data",
+              swapSession: this.swapSessionId,
+              data: data,
+              actualGas: actualGas
             })
-        },
-        addDefaultOvnToken() {
-            let symbol = this.$route.query.symbol ? this.$route.query.symbol : null;
-            let ovnSelectedToken = this.getDefaultSecondtoken(symbol);
-            if (!ovnSelectedToken) {
-                this.addNewInputToken();
-                this.addNewOutputToken();
-                return;
-            }
+          );
 
-            ovnSelectedToken.selected = true;
+          let assembleData = {
+            userAddr: this.web3.utils.toChecksumAddress(
+              this.account.toLowerCase()
+            ),
+            pathId: data.pathId,
+            simulate: true
+          };
 
-            if (this.swapMethod === 'BUY') {
-                this.addSelectedTokenToOutputList(ovnSelectedToken);
-                this.addNewInputToken();
-                return;
-            }
-
-            if (this.swapMethod === 'SELL') {
-                this.addSelectedTokenToInputList(ovnSelectedToken);
-                this.addNewOutputToken();
-                return;
-            }
-
-            console.error("Error when add default ovn token. Method not found: ", this.swapMethod);
-        },
-        addNewOutputToken() {
-            const newToken = this.getNewOutputToken();
-            this.outputTokens.push(newToken);
-        },
-        removeOutputToken(id) {
-            this.removeToken(this.outputTokens, id);
-            this.resetOutputs();
-        },
-        addNewInputToken() {
-            this.inputTokens.push(this.getNewInputToken());
-        },
-        removeInputToken(id) {
-            this.removeToken(this.inputTokens, id)
-        },
-        removeToken(tokens, id) {
-            // removing by token.id or token.selectedToken.id
-            const index = tokens.findIndex(item => item.id === id || (item.selectedToken ? item.selectedToken.id === id : false));
-
-            if (index !== -1) {
-                if (tokens[index].selectedToken) {
-                    tokens[index].selectedToken.selected = false;
-                }
-
-                tokens.splice(index, 1);
-            }
-            this.updateQuotaInfo();
-        },
-
-        changeSwap() {
-            // Transform Input Tokens into Output format by adding temporary variable "tempOutputArray"
-            let tempOutputArray = [];
-            for (let i = 0; i < this.inputTokens.length; i++) {
-                let tokenIn = this.inputTokens[i];
-                if (!tokenIn.selectedToken) {
-                   continue
-                }
-
-                let transformInputToOutputToken = this.getNewOutputToken()
-                transformInputToOutputToken.id = tokenIn.id
-                transformInputToOutputToken.selectedToken = tokenIn.selectedToken
-                tempOutputArray.push(transformInputToOutputToken)
-            }
-
-            // Transform Output Tokens into Input format by adding temporary variable "tempInputArray"
-            let tempInputArray = [];
-            for (let i = 0; i < this.outputTokens.length; i++) {
-                let tokenOut = this.outputTokens[i];
-                if (!tokenOut.selectedToken) {
-                    continue
-                }
-
-                let transformOutputToInputToken = this.getNewInputToken()
-                transformOutputToInputToken.id = tokenOut.id
-                transformOutputToInputToken.selectedToken = tokenOut.selectedToken
-                tempInputArray.push(transformOutputToInputToken)
-            }
-
-            this.inputTokens = tempInputArray;
-            this.outputTokens = tempOutputArray;
-
-            let symbol = this.$route.query.symbol ? this.$route.query.symbol : null;
-
-            if (this.swapMethod === 'BUY') {
-                this.setSwapMethod('SELL');
-                this.addTokensEmptyIsNeeded();
-                this.resetOutputs();
-
-                let params = null;
-                if (symbol) {
-                    params = {action: 'swap-out', symbol: symbol}
-                } else {
-                    params = {action: 'swap-out' }
-                }
-
-                this.initTabName('/swap', params)
-                return;
-            }
-
-            if (this.swapMethod === 'SELL') {
-                this.setSwapMethod('BUY');
-                this.addTokensEmptyIsNeeded();
-                this.resetOutputs();
-
-                let params = null;
-                if (symbol) {
-                    params = {action: 'swap-in', symbol: symbol}
-                } else {
-                    params = {action: 'swap-in' }
-                }
-
-                this.initTabName('/swap', params)
-                return;
-            }
-
-            console.error('Change swap method not found.', this.swapMethod);
-        },
-
-        handleCurrentSlippageChanged(newSlippage) {
-            this.slippagePercent = newSlippage.value;
-        },
-
-        finishTransaction() {
-            this.clearForm()
-            this.handleFormResetFunc(true);
-        },
-
-        clearForm() {
-            this.clearAllSelectedTokens();
-
-            if (this.swapMethod === 'BUY') {
-                this.addDefaultOvnToken();
-                return;
-            }
-
-            if (this.swapMethod === 'SELL') {
-                this.addDefaultOvnToken();
-                return;
-            }
-
-            console.error('Clear form, swap method not found.', this.swapMethod);
-        },
-
-        resetOutputs() {
-            if (!this.selectedOutputTokens.length) {
-                return;
-            }
-
-            let totalValue = 100;
-            let totalTokens = this.selectedOutputTokens.length;
-            let proportion = Math.floor(totalValue / totalTokens);
-            let remains = totalValue % totalTokens;
-
-            for (let i = 0; i < totalTokens; i++) {
-                this.selectedOutputTokens[i].value = proportion;
-            }
-
-            for (let i = 0; i < remains; i++) {
-                this.selectedOutputTokens[i].value += 1;
-            }
-        },
-        async swap() {
-            if (this.isSwapLoading) {
-                console.debug(this.getOdosLogMsg({message: 'Swap method not available, prev swap in process.', swapSession: this.swapSessionId}));
-                return;
-            }
-
-            if (this.inputTokensWithSelectedTokensCount < 1 || this.outputTokensWithSelectedTokensCount < 1) {
-                return;
-            }
-
-            this.swapSessionId = this.$utils.getRandomString(10);
-
-            try {
-                if (this.viewType === 'SWIPE') {
-                    this.trackClick({action: 'click_form_swipe', event_category: 'Click Button', event_label: 'Click on swipe', value: this.sumOfAllSelectedTokensInUsd });
-                } else if (this.viewType === 'SWAP') {
-                    this.trackClick({action: 'click_form_swap', event_category: 'Click Button', event_label: 'Click on swap', value: this.sumOfAllSelectedTokensInUsd });
-                } else {
-                    console.error("Unknown view type for swap click tracking: ", this.viewType);
-                }
-            } catch (e) {
-                console.error(this.getOdosLogMsg({message: "Track error. ",  swapSession: this.swapSessionId, data: this.viewType}));
-            }
-
-            this.isSwapLoading = true;
-
-            let actualGas = await this.getActualGasPrice(this.networkId);
-            let requestData = {
-                chainId: this.networkId,
-                inputTokens: this.getRequestInputTokens(),
-                outputTokens: this.getRequestOutputTokens(),
-                gasPrice: actualGas,
-                userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
-                slippageLimitPercent: this.getSlippagePercent(),
-                sourceBlacklist: this.getSourceBlackList(this.networkId),
-                sourceWhitelist: [],
-                simulate: true,
-                pathViz: true,
-                // disableRFQs: false
-                referralCode: this.odosReferalCode
-            }
-
-            console.debug(this.getOdosLogMsg({message: "Odos Swap quota request data", swapSession: this.swapSessionId, data: requestData, actualGas: actualGas}));
-
-            this.swapRequest(requestData)
-                .then(async data => {
-                    console.debug(this.getOdosLogMsg({message: "Odos Swap quota response data", swapSession: this.swapSessionId, data: data, actualGas: actualGas}));
-
-                    let assembleData = {
-                        "userAddr": this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
-                        "pathId": data.pathId,
-                        "simulate": true
-                    }
-
-                    console.debug(this.getOdosLogMsg({message: "Odos Assemble request data", swapSession: this.swapSessionId, data: assembleData, actualGas: actualGas}));
-                    this.assembleRequest(assembleData).then(async responseAssembleData => {
-                        console.debug(this.getOdosLogMsg({message: "Odos Assemble response data", swapSession: this.swapSessionId, data: responseAssembleData, actualGas: actualGas}));
-
-                        if (responseAssembleData.simulation && !responseAssembleData.simulation.isSuccess) {
-                            this.closeWaitingModal();
-                            let errMsg = responseAssembleData.simulation.simulationError && responseAssembleData.simulation.simulationError.errorMessage ? responseAssembleData.simulation.simulationError.errorMessage : 'Transaction simulation is failed';
-                            console.error(this.getOdosLogMsg({message: "Error before send swap transaction", swapSession: this.swapSessionId, data: errMsg, actualGas: actualGas}));
-
-                            if (errMsg && errMsg.toLowerCase().includes('slippage')) {
-                                this.showErrorModalWithMsg({errorType: 'slippage', errorMsg: errMsg},);
-                            } else {
-                                this.handleOdosRequestError({message: errMsg});
-                            }
-
-                            this.isSwapLoading = false;
-                            return;
-                        }
-
-                        await this.initWalletTransaction(responseAssembleData, this.selectedInputTokens, this.selectedOutputTokens);
-                        this.isSwapLoading = false;
-                    }).catch(e => {
-                        console.debug(this.getOdosLogMsg({message: "Odos assemble request failed swap form", swapSession: this.swapSessionId, data: e}));
-                        this.isSwapLoading = false;
-                    })
-                }).catch(e => {
-                console.error(this.getOdosLogMsg({message: "Odos swap request failed swap form", swapSession: this.swapSessionId, data: e}));
-                this.isSwapLoading = false;
+          console.debug(
+            this.getOdosLogMsg({
+              message: "Odos Assemble request data",
+              swapSession: this.swapSessionId,
+              data: assembleData,
+              actualGas: actualGas
             })
-        },
-        clearQuotaInfo() {
-            this.pathViz = null
-            this.quotaResponseInfo = null;
-            this.swapResponseInfo = null;
-            // this.updatePathViewFunc(this.pathViz, [], []);
-        },
-        async simulateSwap() {
-            if (this.isSumulateSwapLoading) {
-                return;
-            }
-
-            if (this.inputTokensWithSelectedTokensCount < 1 || this.outputTokensWithSelectedTokensCount < 1) {
-                return;
-            }
-
-            this.isSumulateSwapLoading = true;
-            let actualGas = await this.getActualGasPrice(this.networkId);
-
-            let input = this.getRequestInputTokens(false);
-            let output = this.getRequestOutputTokens(false);
-            if (!input.length || !output.length) {
-                this.isSumulateSwapLoading = false;
-                return;
-            }
-
-            let requestData = {
-                chainId: this.networkId,
-                inputTokens: input,
-                outputTokens: output,
-                gasPrice: actualGas,
-                userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
-                slippageLimitPercent: this.getSlippagePercent(),
-                sourceBlacklist: this.getSourceBlackList(this.networkId),
-                sourceWhitelist: [],
-                simulate: true,
-                pathViz: true,
-            }
-
-           this.clearQuotaInfo();
-
-            this.quoteRequest(requestData)
-                .then(data => {
-                    this.updateSelectedOutputTokens(data);
-
-                    this.isSumulateSwapLoading = false;
-                    this.updateIsLoadingDataFunc(false);
-
-                    this.updatePathViewFunc(data.pathViz,
-                        this.selectedInputTokens,
-                        this.selectedOutputTokens)
-                    this.pathViz = data.pathViz;
-                }).catch(e => {
-                    console.error("Odos simulate swap request failed", e)
-                    this.isSumulateSwapLoading = false;
-                    this.updateIsLoadingDataFunc(false);
-            })
-        },
-        // function get data.outTokens and data.outAmounts and find matches in selectedOutputTokens
-        // and update selectedOutputTokens with new values
-        updateSelectedOutputTokens(data) {
-            if (!data || !data.outTokens || !data.outAmounts) {
-                return;
-            }
-
-            let outTokens = data.outTokens;
-            let outAmounts = data.outAmounts;
-            let selectedOutputTokens = this.selectedOutputTokens;
-            let selectedOutputTokensCount = selectedOutputTokens.length;
-            let outTokensCount = outTokens.length;
-            let outAmountsCount = outAmounts.length;
-
-            if (selectedOutputTokensCount < 1 || outTokensCount < 1 || outAmountsCount < 1) {
-                return;
-            }
-
-            let selectedOutputTokensMap = {};
-            for (let i = 0; i < selectedOutputTokensCount; i++) {
-                let token = selectedOutputTokens[i];
-                selectedOutputTokensMap[token.selectedToken.address.toLowerCase()] = token;
-            }
-
-            for (let i = 0; i < outTokensCount; i++) {
-                let tokenAddress = outTokens[i];
-                let tokenAmount = outAmounts[i];
-                let token = selectedOutputTokensMap[tokenAddress.toLowerCase()];
-                if (token) {
-                    let selectedToken = token.selectedToken;
-                    let amount = this.web3.utils.fromWei(tokenAmount, this.getWeiMarker(selectedToken.decimals));
-                    token.sum = amount;
-                }
-            }
-        },
-
-        getSlippagePercent() {
-            return this.slippagePercent;
-        },
-
-        getSourceBlackList(networkId){
-            
-            if(networkId==324){
-                return ['Hashflow', 'Wombat','Maverick']
-            }else{
-                return ['Hashflow', 'Wombat']
-            }
-        },
-        
-        async disapproveToken(token) {
-            let selectedToken = token.selectedToken;
-            if (!selectedToken || !selectedToken.approveData.approved) {
-                return
-            }
-
-            let tokenContract = this.tokensContractMap[selectedToken.address];
-            this.clearApproveToken(tokenContract, this.routerContract.options.address)
-                .then(data => {
-                    this.checkApproveForToken(token);
-                    this.isShowDecreaseAllowanceButton = false;
-                }).catch(e => {
-                    this.isShowDecreaseAllowanceButton = true;
-                    console.error("Clear approve failed. ", e)
+          );
+          this.assembleRequest(assembleData)
+            .then(async (responseAssembleData) => {
+              console.debug(
+                this.getOdosLogMsg({
+                  message: "Odos Assemble response data",
+                  swapSession: this.swapSessionId,
+                  data: responseAssembleData,
+                  actualGas: actualGas
                 })
-        },
-        async checkApproveForToken(token, checkedAllowanceValue) { // checkedAllowanceValue in wei
-            let selectedToken = token.selectedToken;
-            if (selectedToken.address === '0x0000000000000000000000000000000000000000') {
-                selectedToken.approveData.approved = true
-                return;
-            }
+              );
 
-            let tokenContract = this.tokensContractMap[selectedToken.address];
-            let allowanceValue = await this.getAllowanceValue(tokenContract, this.account, this.routerContract.options.address);
-
-            selectedToken.approveData.allowanceValue = allowanceValue * 1;
-            if (!selectedToken.approveData.allowanceValue) {
-                selectedToken.approveData.approved = false
-                return;
-            }
-
-            if (!checkedAllowanceValue) {
-                selectedToken.approveData.approved = true
-                return;
-            }
-
-            selectedToken.approveData.approved = selectedToken.approveData.allowanceValue >= checkedAllowanceValue;
-        },
-
-        async approve(token) {
-            this.showWaitingModal('Approving in process');
-
-            this.firstSwipeClickOnApprove = true;
-
-            await this.checkApproveForToken(token, token.contractValue);
-            let selectedToken = token.selectedToken;
-            if (selectedToken.approveData.approved) {
+              if (
+                responseAssembleData.simulation &&
+                !responseAssembleData.simulation.isSuccess
+              ) {
                 this.closeWaitingModal();
+                let errMsg =
+                  responseAssembleData.simulation.simulationError &&
+                  responseAssembleData.simulation.simulationError.errorMessage
+                    ? responseAssembleData.simulation.simulationError
+                        .errorMessage
+                    : "Transaction simulation is failed";
+                console.error(
+                  this.getOdosLogMsg({
+                    message: "Error before send swap transaction",
+                    swapSession: this.swapSessionId,
+                    data: errMsg,
+                    actualGas: actualGas
+                  })
+                );
+
+                if (errMsg && errMsg.toLowerCase().includes("slippage")) {
+                  this.showErrorModalWithMsg({
+                    errorType: "slippage",
+                    errorMsg: errMsg
+                  });
+                } else {
+                  this.handleOdosRequestError({ message: errMsg });
+                }
+
+                this.isSwapLoading = false;
                 return;
-            }
-
-            let tokenContract = this.tokensContractMap[selectedToken.address];
-            // let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
-            let approveValue = this.web3.utils.toWei("10000000", token.selectedToken.weiMarker);
-
-            this.approveToken(tokenContract, this.routerContract.options.address, approveValue)
-                .then(data => {
-                    this.checkApproveForToken(token, token.contractValue);
-                    this.closeWaitingModal();
-                })
-                .catch(e => {
-                    console.error("Error when approve token.", e);
-                    this.closeWaitingModal();
-                    this.showErrorModalWithMsg({errorType: 'approve', errorMsg: e}, );
-                });
-        },
-
-        getRequestInputTokens(ignoreNullable) {
-            let inputTokens = [];
-            for (let i = 0; i < this.selectedInputTokens.length; i++) {
-                let token = this.selectedInputTokens[i];
-                let selectedToken = token.selectedToken;
-                if (!ignoreNullable && !token.value) {
-                    console.log("token value is 0: ", token);
-                    continue;
-                }
-
-                if (token.value > 0) {
-                    inputTokens.push({
-                        tokenAddress: selectedToken.address,
-                        amount: String(token.contractValue)
-                    })
-                }
-            }
-            return inputTokens;
-        },
-        getRequestOutputTokens(ignoreNullable) {
-            let outputTokens = [];
-            for (let i = 0; i < this.selectedOutputTokens.length; i++) {
-                let token = this.selectedOutputTokens[i];
-                let selectedToken = token.selectedToken;
-                if (!ignoreNullable && !token.value) {
-                    console.log("output token value is 0: ", token);
-                    continue;
-                }
-
-                outputTokens.push({
-                    tokenAddress: selectedToken.address,
-                    proportion: String(token.value)
-                })
-            }
-            return outputTokens;
-        },
-
-        lockProportion(isLock, token) {
-            if (this.outputTokensWithSelectedTokensCount <= 1 && !isLock) {
-                console.log("It's the first token, unlock is disabled");
-                return;
-            }
-
-            token.locked = isLock;
-            this.recalculateOutputTokensSum();
-        },
-        updateSliderValue(token, value) {
-            token.value = value;
-
-            this.subtraction(token, this.freeOutputTokensPercentage - value);
-            this.recalculateOutputTokensSum();
-
-            this.updateQuotaInfo();
-
-            if (token.value === 0 || !token.value) {
-                this.updateQuotaInfo();
-            }
-        },
-        recalculateOutputTokensSum() {
-            for (let i = 0; i < this.selectedOutputTokens.length; i++) {
-                let token = this.selectedOutputTokens[i];
-                let sum = this.sumOfAllSelectedTokensInUsd * token.value / 100;
-                sum = this.swapMethod === 'BUY' ? sum * token.selectedToken.price : sum / token.selectedToken.price;
-                // token.sum = this.$utils.formatMoney(sum, 4)
-            }
-        },
-
-        subtraction(token, difference) {
-            let tokens = this.getActiveTokens(token);
-
-            if (tokens.length === 0) {
-                return;
-            }
-
-            let proportion = Math.floor(difference / tokens.length);
-            let remains = difference % tokens.length;
-
-            this.calculateProportions(tokens, proportion);
-
-            // Distribute the remains among the tokens
-            for (let i = 0; i < remains; i++) {
-                tokens[i].value += 1;
-            }
-        },
-
-        calculateProportions(tokens, proportion) {
-            for (let i = 0; i < tokens.length; i++) {
-                tokens[i].value = proportion;
-            }
-
-            this.recalculateOutputTokensSum();
-        },
-
-        getOutputsTokensPercentage() {
-            let tokensPercentage = 0;
-            for(let token of this.outputTokens) {
-                tokensPercentage += token.value
-            }
-
-            return tokensPercentage;
-        },
-
-        addSelectedTokenToList(selectedToken, swapMethod, selectTokenType) {
-            if (this.isInputToken(swapMethod, selectTokenType)) {
-                this.addSelectedTokenToInputList(selectedToken);
-                this.removeOutputToken(selectedToken.id);
-                this.addTokensEmptyIsNeeded();
-                return;
-            }
-
-            this.addSelectedTokenToOutputList(selectedToken);
-            this.removeInputToken(selectedToken.id);
-            this.addTokensEmptyIsNeeded();
-        },
-        addTokensEmptyIsNeeded() {
-            this.addInputTokenEmptyIsNeeded()
-            this.addOutputTokenEmptyIsNeeded()
-        },
-        addInputTokenEmptyIsNeeded() {
-            if (this.inputTokens.length === 0) {
-                this.addNewInputToken();
-            }
-        },
-        addOutputTokenEmptyIsNeeded() {
-            if (this.outputTokens.length === 0) {
-                this.addNewOutputToken();
-            }
-        },
-        addSelectedTokenToInputList(selectedToken) {
-            let newInputToken = this.getNewInputToken()
-            newInputToken.selectedToken = selectedToken;
-            this.inputTokens.push(newInputToken);
-            this.removeAllWithoutSelectedTokens(this.inputTokens);
-
-            this.checkApproveForToken(newInputToken);
-        },
-        addSelectedTokenToOutputList(selectedToken) {
-            let newOutputToken = this.getNewOutputToken()
-            newOutputToken.selectedToken = selectedToken;
-            this.outputTokens.push(newOutputToken);
-            this.removeAllWithoutSelectedTokens(this.outputTokens);
-            this.recalculateOutputTokensSum();
-            this.resetOutputs();
-        },
-        removeSelectedTokenFromList(selectedToken, swapMethod, selectTokenType) {
-            if (this.isInputToken(swapMethod, selectTokenType)) {
-                this.removeInputToken(selectedToken.id);
-                if (this.inputTokens.length === 0) {
-                    this.addNewInputToken();
-                }
-                return;
-            }
-
-            this.removeOutputToken(selectedToken.id);
-            if (this.outputTokens.length === 0) {
-                this.addNewOutputToken();
-            }
-        },
-        removeAllWithoutSelectedTokens(tokens) {
-            let tokensToRemove = []
-            for (let i = 0; i < tokens.length; i++) {
-                if (tokens[i].selectedToken) {
-                    continue;
-                }
-
-                tokensToRemove.push(tokens[i]);
-            }
-
-            for (let i = 0; i < tokensToRemove.length; i++) {
-                this.removeToken(tokens, tokensToRemove[i].id);
-            }
-        },
-        clearAllSelectedTokens() {
-            for (let i = 0; i < this.inputTokens.length; i++) {
-                if (this.inputTokens[i].selectedToken) {
-                    this.inputTokens[i].selectedToken.selected = false;
-                }
-            }
-
-            for (let i = 0; i < this.outputTokens.length; i++) {
-                if (this.outputTokens[i].selectedToken) {
-                    this.outputTokens[i].selectedToken.selected = false;
-                }
-            }
-
-            this.clearAllTokens();
-        },
-        clearAllTokens() {
-            this.inputTokens = [];
-            this.outputTokens = [];
-        },
-        isInputToken(swapMethod, selectTokenType) {
-            if (swapMethod === 'BUY' && selectTokenType === 'ALL') {
-                return true;
-            }
-
-            if (swapMethod === 'SELL' && selectTokenType === 'OVERNIGHT') {
-                return true;
-            }
-
-            if (swapMethod === 'BUY' && selectTokenType === 'OVERNIGHT') {
-                return false;
-            }
-
-            if (swapMethod === 'SELL' && selectTokenType === 'ALL') {
-                return false;
-            }
-
-            console.error("Token type not detected by method and selected type.", swapMethod, selectTokenType);
-            throw Error;
-        },
-        isOutputToken(swapMethod, selectTokenType) {
-            return !this.isInputToken(swapMethod, selectTokenType);
-        },
-        isSlidersOutOfLimit(additionalPercent) {
-            if (!additionalPercent) {
-                additionalPercent = 0;
-            }
-            return this.getOutputsTokensPercentage() + additionalPercent > 100;
-        },
-        getActiveTokens(currentToken) {
-            // let count = 1
-            let sliders = [];
-            for (let i = 0; i < this.outputTokens.length; i++) {
-                let token = this.outputTokens[i];
-                if (token.id === currentToken.id || token.locked) {
-                    continue;
-                }
-
-                sliders.push(token);
-            }
-            console.log("Sliders array in getActiveTokens: ", sliders)
-            return sliders
-        },
-
-        showSelectTokensModals(isShow) {
-            this.isShowSelectTokensModal = isShow;
-        },
-        selectInputToken(token) {
-            if (this.swapMethod === "BUY") {
-                this.openModalWithSelectTokenAndBySwapMethod('ALL');
-                return;
-            }
-
-            if (this.swapMethod === "SELL") {
-                this.openModalWithSelectTokenAndBySwapMethod('OVERNIGHT');
-                return
-            }
-
-            console.error("Swap method type not found when select input tokens. ", this.swapMethod);
-        },
-        selectOutputToken(token) {
-            if (this.swapMethod === "BUY") {
-                this.openModalWithSelectTokenAndBySwapMethod('OVERNIGHT');
-                return;
-            }
-
-            if (this.swapMethod === "SELL") {
-                this.openModalWithSelectTokenAndBySwapMethod('ALL');
-                return
-            }
-
-            console.error("Swap method type not found when select output tokens. ", this.swapMethod);
-        },
-        openModalWithSelectTokenAndBySwapMethod(tokenType) {
-            this.setSelectTokenType(tokenType);
-            this.showSelectTokensModals(true)
-        },
-        setSwapMethod(method) {
-            this.swapMethod = method;
-        },
-        setSelectTokenType(type) {
-            this.selectTokenType = type;
-        },
-
-        updateQuotaInfo() {
-            if (!this.tokensQuotaCounterId) {
-                // first call
-                this.tokensQuotaCounterId = -1;
-                // update
-                this.simulateSwap()
-                return;
-            }
-
-            this.tokensQuotaCheckerSec = 0;
-            let intervalId = setInterval(async () => {
-                this.tokensQuotaCheckerSec++;
-
-                if (this.tokensQuotaCheckerSec >= 3) {
-                    if (this.tokensQuotaCounterId === intervalId) {
-                        this.tokensQuotaCheckerSec = 0;
-                        try {
-                            // update
-                            this.simulateSwap()
-                        } catch (e) {
-                            // ignore
-                        } finally {
-                            clearInterval(intervalId)
-                        }
-                    } else {
-                        clearInterval(intervalId)
-                    }
-
-                }
-            }, 1000);
-
-            this.tokensQuotaCounterId = intervalId;
-        },
-
-        initTopInputTokensByBalance(tokens) {
-            if (this.viewType !== 'SWIPE' || !tokens || tokens.length === 0) {
-                return
-            }
-
-              // find top 6 tokens by balance and order desc
-              let topTokens = tokens.sort((a, b) => {
-                  return b.balanceData.balance - a.balanceData.balance;
-              }).slice(0, 6);
-
-              // find all with balance
-              topTokens = topTokens.filter((token) => {
-                  return token.balanceData.balance > 0;
-              });
-
-              for (let i = 0; i < topTokens.length; i++) {
-                  let token = topTokens[i];
-                  token.selected = true;
-                  this.addSelectedTokenToInputList(token);
               }
 
-              setTimeout(() => {
-                  this.maxAll();
-                  this.updateStablecoinsListFunc(tokens);
-              })
-        },
-
-        initTabName(path, queryParams) {
-            this.$router.push({
-                path: path,
-                query: queryParams ? queryParams : {}
+              await this.initWalletTransaction(
+                responseAssembleData,
+                this.selectedInputTokens,
+                this.selectedOutputTokens
+              );
+              this.isSwapLoading = false;
+            })
+            .catch((e) => {
+              console.debug(
+                this.getOdosLogMsg({
+                  message: "Odos assemble request failed swap form",
+                  swapSession: this.swapSessionId,
+                  data: e
+                })
+              );
+              this.isSwapLoading = false;
             });
-        },
+        })
+        .catch((e) => {
+          console.error(
+            this.getOdosLogMsg({
+              message: "Odos swap request failed swap form",
+              swapSession: this.swapSessionId,
+              data: e
+            })
+          );
+          this.isSwapLoading = false;
+        });
+    },
+    clearQuotaInfo() {
+      this.pathViz = null;
+      this.quotaResponseInfo = null;
+      this.swapResponseInfo = null;
+      // this.updatePathViewFunc(this.pathViz, [], []);
+    },
+    async simulateSwap() {
+      if (this.isSumulateSwapLoading) {
+        return;
+      }
+
+      if (
+        this.inputTokensWithSelectedTokensCount < 1 ||
+        this.outputTokensWithSelectedTokensCount < 1
+      ) {
+        return;
+      }
+
+      this.isSumulateSwapLoading = true;
+      let actualGas = await this.getActualGasPrice(this.networkId);
+
+      let input = this.getRequestInputTokens(false);
+      let output = this.getRequestOutputTokens(false);
+      if (!input.length || !output.length) {
+        this.isSumulateSwapLoading = false;
+        return;
+      }
+
+      let requestData = {
+        chainId: this.networkId,
+        inputTokens: input,
+        outputTokens: output,
+        gasPrice: actualGas,
+        userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
+        slippageLimitPercent: this.getSlippagePercent(),
+        sourceBlacklist: this.getSourceBlackList(this.networkId),
+        sourceWhitelist: [],
+        simulate: true,
+        pathViz: true
+      };
+
+      this.clearQuotaInfo();
+
+      this.quoteRequest(requestData)
+        .then((data) => {
+          this.updateSelectedOutputTokens(data);
+
+          this.isSumulateSwapLoading = false;
+          this.updateIsLoadingDataFunc(false);
+
+          this.updatePathViewFunc(
+            data.pathViz,
+            this.selectedInputTokens,
+            this.selectedOutputTokens
+          );
+          this.pathViz = data.pathViz;
+        })
+        .catch((e) => {
+          console.error("Odos simulate swap request failed", e);
+          this.isSumulateSwapLoading = false;
+          this.updateIsLoadingDataFunc(false);
+        });
+    },
+    // function get data.outTokens and data.outAmounts and find matches in selectedOutputTokens
+    // and update selectedOutputTokens with new values
+    updateSelectedOutputTokens(data) {
+      if (!data || !data.outTokens || !data.outAmounts) {
+        return;
+      }
+
+      let outTokens = data.outTokens;
+      let outAmounts = data.outAmounts;
+      let selectedOutputTokens = this.selectedOutputTokens;
+      let selectedOutputTokensCount = selectedOutputTokens.length;
+      let outTokensCount = outTokens.length;
+      let outAmountsCount = outAmounts.length;
+
+      if (
+        selectedOutputTokensCount < 1 ||
+        outTokensCount < 1 ||
+        outAmountsCount < 1
+      ) {
+        return;
+      }
+
+      let selectedOutputTokensMap = {};
+      for (let i = 0; i < selectedOutputTokensCount; i++) {
+        let token = selectedOutputTokens[i];
+        selectedOutputTokensMap[token.selectedToken.address.toLowerCase()] =
+          token;
+      }
+
+      for (let i = 0; i < outTokensCount; i++) {
+        let tokenAddress = outTokens[i];
+        let tokenAmount = outAmounts[i];
+        let token = selectedOutputTokensMap[tokenAddress.toLowerCase()];
+        if (token) {
+          let selectedToken = token.selectedToken;
+          let amount = this.web3.utils.fromWei(
+            tokenAmount,
+            this.getWeiMarker(selectedToken.decimals)
+          );
+          token.sum = amount;
+        }
+      }
+    },
+
+    getSlippagePercent() {
+      return this.slippagePercent;
+    },
+
+    getSourceBlackList(networkId) {
+      if (networkId == 324) {
+        return ["Hashflow", "Wombat", "Maverick"];
+      } else {
+        return ["Hashflow", "Wombat"];
+      }
+    },
+
+    async disapproveToken(token) {
+      let selectedToken = token.selectedToken;
+      if (!selectedToken || !selectedToken.approveData.approved) {
+        return;
+      }
+
+      let tokenContract = this.tokensContractMap[selectedToken.address];
+      this.clearApproveToken(tokenContract, this.routerContract.options.address)
+        .then((data) => {
+          this.checkApproveForToken(token);
+          this.isShowDecreaseAllowanceButton = false;
+        })
+        .catch((e) => {
+          this.isShowDecreaseAllowanceButton = true;
+          console.error("Clear approve failed. ", e);
+        });
+    },
+    async checkApproveForToken(token, checkedAllowanceValue) {
+      // checkedAllowanceValue in wei
+      let selectedToken = token.selectedToken;
+      if (
+        selectedToken.address === "0x0000000000000000000000000000000000000000"
+      ) {
+        selectedToken.approveData.approved = true;
+        return;
+      }
+
+      let tokenContract = this.tokensContractMap[selectedToken.address];
+      let allowanceValue = await this.getAllowanceValue(
+        tokenContract,
+        this.account,
+        this.routerContract.options.address
+      );
+
+      selectedToken.approveData.allowanceValue = allowanceValue * 1;
+      if (!selectedToken.approveData.allowanceValue) {
+        selectedToken.approveData.approved = false;
+        return;
+      }
+
+      if (!checkedAllowanceValue) {
+        selectedToken.approveData.approved = true;
+        return;
+      }
+
+      selectedToken.approveData.approved =
+        selectedToken.approveData.allowanceValue >= checkedAllowanceValue;
+    },
+
+    async approve(token) {
+      this.showWaitingModal("Approving in process");
+
+      this.firstSwipeClickOnApprove = true;
+
+      await this.checkApproveForToken(token, token.contractValue);
+      let selectedToken = token.selectedToken;
+      if (selectedToken.approveData.approved) {
+        this.closeWaitingModal();
+        return;
+      }
+
+      let tokenContract = this.tokensContractMap[selectedToken.address];
+      // let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
+      let approveValue = this.web3.utils.toWei(
+        "10000000",
+        token.selectedToken.weiMarker
+      );
+
+      this.approveToken(
+        tokenContract,
+        this.routerContract.options.address,
+        approveValue
+      )
+        .then((data) => {
+          this.checkApproveForToken(token, token.contractValue);
+          this.closeWaitingModal();
+        })
+        .catch((e) => {
+          console.error("Error when approve token.", e);
+          this.closeWaitingModal();
+          this.showErrorModalWithMsg({ errorType: "approve", errorMsg: e });
+        });
+    },
+
+    getRequestInputTokens(ignoreNullable) {
+      let inputTokens = [];
+      for (let i = 0; i < this.selectedInputTokens.length; i++) {
+        let token = this.selectedInputTokens[i];
+        let selectedToken = token.selectedToken;
+        if (!ignoreNullable && !token.value) {
+          console.log("token value is 0: ", token);
+          continue;
+        }
+
+        if (token.value > 0) {
+          inputTokens.push({
+            tokenAddress: selectedToken.address,
+            amount: String(token.contractValue)
+          });
+        }
+      }
+      return inputTokens;
+    },
+    getRequestOutputTokens(ignoreNullable) {
+      let outputTokens = [];
+      for (let i = 0; i < this.selectedOutputTokens.length; i++) {
+        let token = this.selectedOutputTokens[i];
+        let selectedToken = token.selectedToken;
+        if (!ignoreNullable && !token.value) {
+          console.log("output token value is 0: ", token);
+          continue;
+        }
+
+        outputTokens.push({
+          tokenAddress: selectedToken.address,
+          proportion: String(token.value)
+        });
+      }
+      return outputTokens;
+    },
+
+    lockProportion(isLock, token) {
+      if (this.outputTokensWithSelectedTokensCount <= 1 && !isLock) {
+        console.log("It's the first token, unlock is disabled");
+        return;
+      }
+
+      token.locked = isLock;
+      this.recalculateOutputTokensSum();
+    },
+    updateSliderValue(token, value) {
+      token.value = value;
+
+      this.subtraction(token, this.freeOutputTokensPercentage - value);
+      this.recalculateOutputTokensSum();
+
+      this.updateQuotaInfo();
+
+      if (token.value === 0 || !token.value) {
+        this.updateQuotaInfo();
+      }
+    },
+    recalculateOutputTokensSum() {
+      for (let i = 0; i < this.selectedOutputTokens.length; i++) {
+        let token = this.selectedOutputTokens[i];
+        let sum = (this.sumOfAllSelectedTokensInUsd * token.value) / 100;
+        sum =
+          this.swapMethod === "BUY"
+            ? sum * token.selectedToken.price
+            : sum / token.selectedToken.price;
+        // token.sum = this.$utils.formatMoney(sum, 4)
+      }
+    },
+
+    subtraction(token, difference) {
+      let tokens = this.getActiveTokens(token);
+
+      if (tokens.length === 0) {
+        return;
+      }
+
+      let proportion = Math.floor(difference / tokens.length);
+      let remains = difference % tokens.length;
+
+      this.calculateProportions(tokens, proportion);
+
+      // Distribute the remains among the tokens
+      for (let i = 0; i < remains; i++) {
+        tokens[i].value += 1;
+      }
+    },
+
+    calculateProportions(tokens, proportion) {
+      for (let i = 0; i < tokens.length; i++) {
+        tokens[i].value = proportion;
+      }
+
+      this.recalculateOutputTokensSum();
+    },
+
+    getOutputsTokensPercentage() {
+      let tokensPercentage = 0;
+      for (let token of this.outputTokens) {
+        tokensPercentage += token.value;
+      }
+
+      return tokensPercentage;
+    },
+
+    addSelectedTokenToList(selectedToken, swapMethod, selectTokenType) {
+      if (this.isInputToken(swapMethod, selectTokenType)) {
+        this.addSelectedTokenToInputList(selectedToken);
+        this.removeOutputToken(selectedToken.id);
+        this.addTokensEmptyIsNeeded();
+        return;
+      }
+
+      this.addSelectedTokenToOutputList(selectedToken);
+      this.removeInputToken(selectedToken.id);
+      this.addTokensEmptyIsNeeded();
+    },
+    addTokensEmptyIsNeeded() {
+      this.addInputTokenEmptyIsNeeded();
+      this.addOutputTokenEmptyIsNeeded();
+    },
+    addInputTokenEmptyIsNeeded() {
+      if (this.inputTokens.length === 0) {
+        this.addNewInputToken();
+      }
+    },
+    addOutputTokenEmptyIsNeeded() {
+      if (this.outputTokens.length === 0) {
+        this.addNewOutputToken();
+      }
+    },
+    addSelectedTokenToInputList(selectedToken) {
+      let newInputToken = this.getNewInputToken();
+      newInputToken.selectedToken = selectedToken;
+      this.inputTokens.push(newInputToken);
+      this.removeAllWithoutSelectedTokens(this.inputTokens);
+
+      this.checkApproveForToken(newInputToken);
+    },
+    addSelectedTokenToOutputList(selectedToken) {
+      let newOutputToken = this.getNewOutputToken();
+      newOutputToken.selectedToken = selectedToken;
+      this.outputTokens.push(newOutputToken);
+      this.removeAllWithoutSelectedTokens(this.outputTokens);
+      this.recalculateOutputTokensSum();
+      this.resetOutputs();
+    },
+    removeSelectedTokenFromList(selectedToken, swapMethod, selectTokenType) {
+      if (this.isInputToken(swapMethod, selectTokenType)) {
+        this.removeInputToken(selectedToken.id);
+        if (this.inputTokens.length === 0) {
+          this.addNewInputToken();
+        }
+        return;
+      }
+
+      this.removeOutputToken(selectedToken.id);
+      if (this.outputTokens.length === 0) {
+        this.addNewOutputToken();
+      }
+    },
+    removeAllWithoutSelectedTokens(tokens) {
+      let tokensToRemove = [];
+      for (let i = 0; i < tokens.length; i++) {
+        if (tokens[i].selectedToken) {
+          continue;
+        }
+
+        tokensToRemove.push(tokens[i]);
+      }
+
+      for (let i = 0; i < tokensToRemove.length; i++) {
+        this.removeToken(tokens, tokensToRemove[i].id);
+      }
+    },
+    clearAllSelectedTokens() {
+      for (let i = 0; i < this.inputTokens.length; i++) {
+        if (this.inputTokens[i].selectedToken) {
+          this.inputTokens[i].selectedToken.selected = false;
+        }
+      }
+
+      for (let i = 0; i < this.outputTokens.length; i++) {
+        if (this.outputTokens[i].selectedToken) {
+          this.outputTokens[i].selectedToken.selected = false;
+        }
+      }
+
+      this.clearAllTokens();
+    },
+    clearAllTokens() {
+      this.inputTokens = [];
+      this.outputTokens = [];
+    },
+    isInputToken(swapMethod, selectTokenType) {
+      if (swapMethod === "BUY" && selectTokenType === "ALL") {
+        return true;
+      }
+
+      if (swapMethod === "SELL" && selectTokenType === "OVERNIGHT") {
+        return true;
+      }
+
+      if (swapMethod === "BUY" && selectTokenType === "OVERNIGHT") {
+        return false;
+      }
+
+      if (swapMethod === "SELL" && selectTokenType === "ALL") {
+        return false;
+      }
+
+      console.error(
+        "Token type not detected by method and selected type.",
+        swapMethod,
+        selectTokenType
+      );
+      throw Error;
+    },
+    isOutputToken(swapMethod, selectTokenType) {
+      return !this.isInputToken(swapMethod, selectTokenType);
+    },
+    isSlidersOutOfLimit(additionalPercent) {
+      if (!additionalPercent) {
+        additionalPercent = 0;
+      }
+      return this.getOutputsTokensPercentage() + additionalPercent > 100;
+    },
+    getActiveTokens(currentToken) {
+      // let count = 1
+      let sliders = [];
+      for (let i = 0; i < this.outputTokens.length; i++) {
+        let token = this.outputTokens[i];
+        if (token.id === currentToken.id || token.locked) {
+          continue;
+        }
+
+        sliders.push(token);
+      }
+      console.log("Sliders array in getActiveTokens: ", sliders);
+      return sliders;
+    },
+
+    showSelectTokensModals(isShow) {
+      this.isShowSelectTokensModal = isShow;
+    },
+    selectInputToken(token) {
+      if (this.swapMethod === "BUY") {
+        this.openModalWithSelectTokenAndBySwapMethod("ALL");
+        return;
+      }
+
+      if (this.swapMethod === "SELL") {
+        this.openModalWithSelectTokenAndBySwapMethod("OVERNIGHT");
+        return;
+      }
+
+      console.error(
+        "Swap method type not found when select input tokens. ",
+        this.swapMethod
+      );
+    },
+    selectOutputToken(token) {
+      if (this.swapMethod === "BUY") {
+        this.openModalWithSelectTokenAndBySwapMethod("OVERNIGHT");
+        return;
+      }
+
+      if (this.swapMethod === "SELL") {
+        this.openModalWithSelectTokenAndBySwapMethod("ALL");
+        return;
+      }
+
+      console.error(
+        "Swap method type not found when select output tokens. ",
+        this.swapMethod
+      );
+    },
+    openModalWithSelectTokenAndBySwapMethod(tokenType) {
+      this.setSelectTokenType(tokenType);
+      this.showSelectTokensModals(true);
+    },
+    setSwapMethod(method) {
+      this.swapMethod = method;
+    },
+    setSelectTokenType(type) {
+      this.selectTokenType = type;
+    },
+
+    updateQuotaInfo() {
+      if (!this.tokensQuotaCounterId) {
+        // first call
+        this.tokensQuotaCounterId = -1;
+        // update
+        this.simulateSwap();
+        return;
+      }
+
+      this.tokensQuotaCheckerSec = 0;
+      let intervalId = setInterval(async () => {
+        this.tokensQuotaCheckerSec++;
+
+        if (this.tokensQuotaCheckerSec >= 3) {
+          if (this.tokensQuotaCounterId === intervalId) {
+            this.tokensQuotaCheckerSec = 0;
+            try {
+              // update
+              this.simulateSwap();
+            } catch (e) {
+              // ignore
+            } finally {
+              clearInterval(intervalId);
+            }
+          } else {
+            clearInterval(intervalId);
+          }
+        }
+      }, 1000);
+
+      this.tokensQuotaCounterId = intervalId;
+    },
+
+    initTopInputTokensByBalance(tokens) {
+      if (this.viewType !== "SWIPE" || !tokens || tokens.length === 0) {
+        return;
+      }
+
+      // find top 6 tokens by balance and order desc
+      let topTokens = tokens
+        .sort((a, b) => {
+          return b.balanceData.balance - a.balanceData.balance;
+        })
+        .slice(0, 6);
+
+      // find all with balance
+      topTokens = topTokens.filter((token) => {
+        return token.balanceData.balance > 0;
+      });
+
+      for (let i = 0; i < topTokens.length; i++) {
+        let token = topTokens[i];
+        token.selected = true;
+        this.addSelectedTokenToInputList(token);
+      }
+
+      setTimeout(() => {
+        this.maxAll();
+        this.updateStablecoinsListFunc(tokens);
+      });
+    },
+
+    initTabName(path, queryParams) {
+      this.$router.push({
+        path: path,
+        query: queryParams ? queryParams : {}
+      });
     }
-})
+  }
+});
 </script>
 
 <style scoped>
+.swap-container,
+.loader-container {
+  height: 100%;
+}
+
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 @media only screen and (max-width: 960px) {
-    .swap-container {
-        padding: 10px 20px;
-        gap: 8px;
-        background: var(--swap-main-banner-background);
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
-        border-radius: 28px;
-        max-width: 600px;
-    }
+  .swap-container {
+    padding: 10px 20px;
+    gap: 8px;
+    background: var(--swap-main-banner-background);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 28px;
+    max-width: 600px;
+  }
 
-    .add-token-text {
-        font-size: 14px;
-        line-height: 24px;
-    }
+  .add-token-text {
+    font-size: 14px;
+    line-height: 24px;
+  }
 
-    .swap-title {
-        font-size: 18px;
-        line-height: 28px;
-    }
+  .swap-title {
+    font-size: 18px;
+    line-height: 28px;
+  }
 
-    .swap-button-title {
-        font-size: 16px;
-        line-height: 22px;
-    }
+  .swap-button-title {
+    font-size: 16px;
+    line-height: 22px;
+  }
 
-    .disable-button-title {
-        font-size: 16px;
-        line-height: 22px;
-    }
+  .disable-button-title {
+    font-size: 16px;
+    line-height: 22px;
+  }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .swap-container {
-        padding: 40px 30px;
-        gap: 8px;
-        background: var(--swap-main-banner-background);
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
-        border-radius: 28px;
-        max-width: 600px;
-    }
-    .add-token-text {
-        font-size: 16px;
-        line-height: 24px;
-    }
+  .swap-container {
+    padding: 40px 30px;
+    gap: 8px;
+    background: var(--swap-main-banner-background);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 28px;
+    max-width: 600px;
+  }
+  .add-token-text {
+    font-size: 16px;
+    line-height: 24px;
+  }
 
-    .swap-title {
-        font-size: 18px;
-        line-height: 28px;
-    }
+  .swap-title {
+    font-size: 18px;
+    line-height: 28px;
+  }
 
-    .swap-button-title {
-        font-size: 18px;
-        line-height: 22px;
-    }
+  .swap-button-title {
+    font-size: 18px;
+    line-height: 22px;
+  }
 
-    .disable-button-title {
-        font-size: 18px;
-        line-height: 22px;
-    }
+  .disable-button-title {
+    font-size: 18px;
+    line-height: 22px;
+  }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .swap-container {
-        padding: 40px 30px;
-        gap: 8px;
-        background: var(--swap-main-banner-background);
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
-        border-radius: 28px;
-        max-width: 600px;
-    }
+  .swap-container {
+    padding: 40px 30px;
+    gap: 8px;
+    background: var(--swap-main-banner-background);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 28px;
+    max-width: 600px;
+  }
 
-    .add-token-text {
-        font-size: 16px;
-        line-height: 24px;
-    }
+  .add-token-text {
+    font-size: 16px;
+    line-height: 24px;
+  }
 
-    .swap-title {
-        font-size: 18px;
-        line-height: 28px;
-    }
+  .swap-title {
+    font-size: 18px;
+    line-height: 28px;
+  }
 
-    .swap-button-title {
-        font-size: 18px;
-        line-height: 22px;
-    }
+  .swap-button-title {
+    font-size: 18px;
+    line-height: 22px;
+  }
 
-    .disable-button-title {
-        font-size: 18px;
-        line-height: 22px;
-    }
+  .disable-button-title {
+    font-size: 18px;
+    line-height: 22px;
+  }
 }
 
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 1300px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 1300px),
-only screen and (                min-resolution: 192dpi) and (min-width: 1300px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 1300px) {
-    .swap-container {
-        padding: 30px 20px;
-        gap: 8px;
-        background: var(--swap-main-banner-background);
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
-        border-radius: 28px;
-        max-width: 600px;
-    }
+@media only screen and (min-width: 1300px) {
+  .swap-container {
+    padding: 30px 20px;
+    gap: 8px;
+    background: var(--swap-main-banner-background);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 28px;
+    max-width: 600px;
+  }
 
-    .add-token-text {
-        font-size: 16px;
-        line-height: 24px;
-    }
+  .add-token-text {
+    font-size: 16px;
+    line-height: 24px;
+  }
 
-    .swap-title {
-        font-size: 18px;
-        line-height: 28px;
-    }
+  .swap-title {
+    font-size: 18px;
+    line-height: 28px;
+  }
 
-    .swap-button-title {
-        font-size: 18px;
-        line-height: 22px;
-    }
+  .swap-button-title {
+    font-size: 18px;
+    line-height: 22px;
+  }
 
-    .disable-button-title {
-        font-size: 18px;
-        line-height: 22px;
-    }
+  .disable-button-title {
+    font-size: 18px;
+    line-height: 22px;
+  }
 }
 
 div {
-    font-family: 'Roboto',serif;
+  font-family: "Roboto", serif;
 }
-
 
 .swap-header {
 }
 
 .swap-settings {
-    text-align: end;
-    cursor: pointer;
+  text-align: end;
+  cursor: pointer;
 }
 
 .swap-body {
@@ -1648,18 +1859,17 @@ div {
 }
 
 .add-token-text {
-    font-style: normal;
-    font-weight: 400;
+  font-style: normal;
+  font-weight: 400;
 
-    color: #1C95E7;
-    cursor: pointer;
+  color: #1c95e7;
+  cursor: pointer;
 }
 
 .add-token-text-disabled {
-    cursor: default!important;
-    color: #707A8B;
+  cursor: default !important;
+  color: #707a8b;
 }
-
 
 .input-swap-container {
 }
@@ -1668,234 +1878,234 @@ div {
 }
 
 .swap-title {
-    display: flex;
-    justify-content: space-between;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
+  display: flex;
+  justify-content: space-between;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
 
-    color: var(--main-gray-text);
-
+  color: var(--main-gray-text);
 }
 
 .input-component-container {
-    margin-bottom: 4px;
+  margin-bottom: 4px;
 }
 
 .max-all {
-    text-align: end;
+  text-align: end;
 }
 .change-swap-container {
-    width: 44px;
-    height: 44px;
+  width: 44px;
+  height: 44px;
 
-    background: var(--swap-arrow-bg);
-    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
-    cursor: pointer;
+  background: var(--swap-arrow-bg);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    display: table;
-    margin: 0 auto;
-    margin-bottom: 10px;
+  display: table;
+  margin: 0 auto;
+  margin-bottom: 10px;
 }
 
 .change-swap-image {
-    text-align: center; /* center the child element's content horizontally */
-    padding-top: 8px;
+  text-align: center; /* center the child element's content horizontally */
+  padding-top: 8px;
 }
 
 .powered-image {
 }
 
 .powered-text {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
 
-    color: #ADB3BD;
+  color: #adb3bd;
 
-    text-align: end;
+  text-align: end;
 }
 
 .swap-button {
-    text-align: center;
-    align-items: center;
-    gap: 8px;
+  text-align: center;
+  align-items: center;
+  gap: 8px;
 
-    width: 100%;
-    height: 48px;
+  width: 100%;
+  height: 48px;
 
-    padding-top: 15px;
+  padding-top: 15px;
 
-    /* Blue gradient */
+  /* Blue gradient */
 
-    background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%);
-    border-radius: 2px;
+  background: linear-gradient(
+    91.26deg,
+    #28a0f0 0%,
+    rgba(6, 120, 196, 0.9917) 100%
+  );
+  border-radius: 2px;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .swap-button-title {
-    font-style: normal;
-    font-weight: 400;
+  font-style: normal;
+  font-weight: 400;
 
-    color: #FFFFFF;
+  color: #ffffff;
 }
 
 .disable-button {
-    justify-content: center;
-    align-items: center;
-    padding: 8px 12px;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
 
-    height: 48px;
+  height: 48px;
 
-    background: var(--action-btn-bg);
-    border-radius: 2px;
+  background: var(--action-btn-bg);
+  border-radius: 2px;
 }
 
 .disable-button-title {
-    text-align: center;
-    align-items: center;
-    gap: 8px;
+  text-align: center;
+  align-items: center;
+  gap: 8px;
 
-    width: 100%;
+  width: 100%;
 
-    padding-top: 7px;
+  padding-top: 7px;
 
-    font-style: normal;
-    font-weight: 400;
+  font-style: normal;
+  font-weight: 400;
 
-    color: var(--progress-text);
+  color: var(--progress-text);
 }
 
 .decrease-allowance {
-    font-size: 14px;
-    font-weight: 400;
-    height: auto;
-    color: var(--main-gray-text);
-    letter-spacing: 0.1px;
-    line-height: 22px;
-    cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  height: auto;
+  color: var(--main-gray-text);
+  letter-spacing: 0.1px;
+  line-height: 22px;
+  cursor: pointer;
 }
 
 .transaction-info-container {
-    padding: 20px;
-    max-width: 600px;
+  padding: 20px;
+  max-width: 600px;
 }
 
 .transaction-info-title {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
 
-    color: #707A8B;
+  color: #707a8b;
 }
 
 .transaction-info {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 24px;
-    text-align: end;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: end;
 
-    color: var(--main-gray-text);
+  color: var(--main-gray-text);
 }
 
 .transaction-info-additional {
-    font-style: normal;
-    font-weight: 200;
-    font-size: 16px;
-    line-height: 24px;
+  font-style: normal;
+  font-weight: 200;
+  font-size: 16px;
+  line-height: 24px;
 
-    color: var(--main-gray-text);
+  color: var(--main-gray-text);
 }
 
 .transaction-info-address {
-    text-decoration: underline;
-    font-weight: bold;
-    text-align: end;
-    color: var(--main-gray-text);
+  text-decoration: underline;
+  font-weight: bold;
+  text-align: end;
+  color: var(--main-gray-text);
 }
 
 .transaction-info-footer {
-    border-top: 1px solid var(--dividers);
-    padding-top: 22px;
+  border-top: 1px solid var(--dividers);
+  padding-top: 22px;
 }
 
 .transaction-info-body {
-    padding-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .loader-container {
-    padding-top: 50px;
-    min-height: 80px;
+  padding-top: 50px;
+  min-height: 80px;
 }
 
 .rotate {
-    transform-origin: center;
-    transition: transform 0.7s ease;
+  transform-origin: center;
+  transition: transform 0.7s ease;
 }
 
 .rotate:hover {
-    transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .dont-work-on-network {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
 
-    color: #CF3F92;
+  color: #cf3f92;
 }
 
 .dont-work-on-network-container {
-    text-align: center;
+  text-align: center;
 }
 
-
 .slippage-info-container {
-    background: rgba(254, 127, 45, 0.1);
-    padding: 8px;
-    width: 100%;
-    margin-top: 10px;
-    text-align: center;
+  background: rgba(254, 127, 45, 0.1);
+  padding: 8px;
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
 }
 
 .slippage-info-title {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0em;
-    text-align: left;
-    color: rgba(254, 127, 45, 1);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0em;
+  text-align: left;
+  color: rgba(254, 127, 45, 1);
 }
 
 .odos-fees-container {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .odos-fees-title {
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    text-align: end;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: end;
 
-    color: var(--secondary-gray-text);
+  color: var(--secondary-gray-text);
 }
 
 .with-tooltip {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
-
 </style>

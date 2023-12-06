@@ -33,13 +33,13 @@
                   <label class="sub-info-text" @click="openIfBridgeNotLoad"
                     >The bridge widget doesn't load</label
                   >
-                  <v-icon color="var(--links-blue)">
-                    {{
-                      openIfBridgeNotLoad
-                        ? "mdi-chevron-up"
-                        : "mdi-chevron-down"
-                    }}
-                  </v-icon>
+                  <div class="ml-2 mb-1">
+                    <img
+                    :src="openIfBridgeNotLoad ? require('@/assets/icon/up_blue.svg') : require('@/assets/icon/down_blue.svg')"
+                    alt="down icon"
+                    style="color: var(--links-blue);"
+                  />
+                  </div>
                 </div>
                 <div v-if="openIfBridgeNotLoad">
                   <div class="list-text mb-8">

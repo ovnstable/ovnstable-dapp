@@ -75,9 +75,13 @@
                 <label class="show-more ml-2" @click="openPoolList = !openPoolList">Pools with TVL less than $300K</label>
                 <div class="select-bar-main-container ml-7" @click="openPoolList = !openPoolList">
                     <v-row justify="end" align="center" class="select-bar-container">
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ openPoolList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                        </v-icon>
+                        <img
+                        :src="light
+                            ? (openPoolList ? require('@/assets/icon/up_black.svg') : require('@/assets/icon/down_black.svg'))
+                            : (openPoolList ? require('@/assets/icon/up_w.svg') : require('@/assets/icon/down_w.svg'))"
+                        alt="Chevron Icon"
+                        class="arrow"
+                        />
                     </v-row>
                 </div>
             </v-row>
@@ -101,7 +105,7 @@
 
 <script>
 
-import {mapActions} from "vuex";
+import {mapActions,mapGetters} from "vuex";
 
 import ZapModal from "@/components/zap/modals/ZapModal.vue";
 import PoolFilter from "@/components/pool/PoolFilter.vue";
@@ -139,6 +143,7 @@ export default {
     }),
 
     computed: {
+        ...mapGetters("theme", ["light"]),
         filteredPools () {
             if (this.orderType === 'APR') {
                 // last step filter
@@ -465,5 +470,11 @@ export default {
 
 .prototypes-list-divider {
     border-color: var(--fourth-gray-text) !important;
+}
+
+.arrow {
+    margin-top: 5px;
+    width: 12px;
+    height: 12px;
 }
 </style>

@@ -54,9 +54,14 @@
         </v-col>
         <v-col cols="1">
             <v-row justify="end" align="center">
-                <v-icon color="var(--secondary-gray-text)" :class="$wu.isMobile() ? '' : 'mr-5'">
-                    {{ cardOpened ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                </v-icon>
+                <div :class="$wu.isMobile() ? '' : 'mr-5'">
+                    <img
+                        :src="light
+                        ? (cardOpened ? require('@/assets/icon/up_black.svg') : require('@/assets/icon/down_black.svg'))
+                        : (cardOpened ? require('@/assets/icon/up_w.svg') : require('@/assets/icon/down_w.svg'))"
+                        alt="Chevron Icon"
+                    />
+                </div>
             </v-row>
         </v-col>
 

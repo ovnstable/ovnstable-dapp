@@ -52,9 +52,11 @@
                         Disconnect
                     </v-btn>
                     <v-btn class="disconnect-wallet-btn-mobile" icon color="red" dark @click="disconnectWalletAction">
-                        <v-icon>
-                            mdi-logout
-                        </v-icon>
+                        <img
+                            :src="light ? require('@/assets/icon/exit_b.svg') : require('@/assets/icon/exit_w.svg')"
+                            alt="Exit Icon"
+                            class="exit_icon" 
+                        />
                     </v-btn>
                 </v-row>
 

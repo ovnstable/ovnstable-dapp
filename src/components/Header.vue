@@ -18,7 +18,7 @@
           icon
           @click="toggleTheme"
         >
-          <img :src="light ? require('@/assets/icon/mdi-sun.svg') : require('@/assets/icon/moon_w.svg')">
+          <img :src="light ? require('@/assets/icon/sun.svg') : require('@/assets/icon/moon_w.svg')">
         </v-btn>
       </div>
 

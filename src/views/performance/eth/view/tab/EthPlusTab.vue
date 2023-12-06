@@ -216,14 +216,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex"
-import TableStablecoins from "@/components/stats/pie/TableStablecoins.vue"
-import PieStablecoins from "@/components/stats/pie/PieStablecoins.vue"
-import TableStrategies from "@/components/stats/doughnut/TableStrategies.vue"
-import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies.vue"
-import { collateralApiService } from "@/services/collateral-api-service"
-import { strategiesApiService } from "@/services/strategies-api-service"
-import { ETH_PLUS_CONTRACT_ADDRESS_ARBITRUM } from "@/utils/const.js"
+import { mapActions, mapGetters } from "vuex";
+import TableStablecoins from "@/components/stats/pie/TableStablecoins.vue";
+import PieStablecoins from "@/components/stats/pie/PieStablecoins.vue";
+import TableStrategies from "@/components/stats/doughnut/TableStrategies.vue";
+import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies.vue";
+import { collateralApiService } from "@/services/collateral-api-service";
+import { strategiesApiService } from "@/services/strategies-api-service";
+import { ETH_PLUS_CONTRACT_ADDRESS_ARBITRUM } from "@/utils/const.js";
 
 export default {
   name: "CollateralView",
@@ -255,41 +255,43 @@ export default {
     ...mapGetters("etsAction", ["etsList"]),
 
     tabNetworkName: function () {
-      let params
-      params = this.getParams(this.tab)
+      let params;
+      params = this.getParams(this.tab);
 
-      return params.networkName
+      return params.networkName;
     },
 
     activeTabArbitrum: function () {
       return {
         "tab-button": this.tab === "arbitrum",
         "tab-button-in-active": this.tab !== "arbitrum"
-      }
+      };
     },
 
     explorerLink: function () {
       if (this.tabNetworkName === "arbitrum") {
-        return `https://arbiscan.io/token/${ETH_PLUS_CONTRACT_ADDRESS_ARBITRUM}`
+        return `https://arbiscan.io/token/${ETH_PLUS_CONTRACT_ADDRESS_ARBITRUM}`;
       }
 
-      console.error("Not found networkId type when return dai explorer link")
-      return null
+      console.error("Not found networkId type when return dai explorer link");
+      return null;
     },
 
     contractAddress: function () {
       if (this.tabNetworkName === "arbitrum") {
-        return ETH_PLUS_CONTRACT_ADDRESS_ARBITRUM
+        return ETH_PLUS_CONTRACT_ADDRESS_ARBITRUM;
       }
 
-      console.error("Not found networkId type when return dai contract address")
-      return null
+      console.error(
+        "Not found networkId type when return dai contract address"
+      );
+      return null;
     }
   },
 
   watch: {
     networkName: function (newVal, oldVal) {
-      this.setTab(newVal)
+      this.setTab(newVal);
     }
   },
 
@@ -297,10 +299,10 @@ export default {
 
   mounted() {
     if (!this.$route.query.tabName) {
-      this.setTab(this.networkName)
+      this.setTab(this.networkName);
     }
     if (this.$route.query.tabName) {
-      this.setTab(this.$route.query.tabName)
+      this.setTab(this.$route.query.tabName);
     }
   },
 
@@ -312,29 +314,29 @@ export default {
     ]),
 
     swapButtonIn() {
-      this.initTabName("/swap", { action: "swap-in", symbol: "ETH+" })
+      this.initTabName("/swap", { action: "swap-in", symbol: "ETH+" });
     },
 
     swapButtonOut() {
-      this.initTabName("/swap", { action: "swap-out", symbol: "ETH+" })
+      this.initTabName("/swap", { action: "swap-out", symbol: "ETH+" });
     },
 
     setTab(tabName) {
-      this.tab = tabName
-      this.initTabName("/collateral/eth", { tabName: tabName })
-      this.loadCurrentTotalData()
-      this.loadCollateralData()
+      this.tab = tabName;
+      this.initTabName("/collateral/eth", { tabName: tabName });
+      this.loadCurrentTotalData();
+      this.loadCollateralData();
     },
 
     initTabName(path, queryParams) {
       this.$router.push({
         path: path,
         query: queryParams ? queryParams : {}
-      })
+      });
     },
 
     openLink(url) {
-      window.open(url, "_blank").focus()
+      window.open(url, "_blank").focus();
     },
 
     shortAddress(address) {
@@ -343,20 +345,20 @@ export default {
           address.substring(0, 5) +
           "..." +
           address.substring(address.length - 4)
-        )
+        );
       } else {
-        return null
+        return null;
       }
     },
 
     loadCurrentTotalData() {
-      this.isCurrentTotalDataLoading = true
+      this.isCurrentTotalDataLoading = true;
 
       strategiesApiService
         .getStrategies(this.apiUrl + `/${this.tabNetworkName}/eth+`)
         .then((data) => {
-          let strategies = data
-          strategies.sort((a, b) => b.netAssetValue - a.netAssetValue)
+          let strategies = data;
+          strategies.sort((a, b) => b.netAssetValue - a.netAssetValue);
 
           let colors = [
             "#FCCA46",
@@ -372,15 +374,15 @@ export default {
             "#C8DE42",
             "#3FEFDA",
             "#DE42CE"
-          ]
+          ];
 
-          this.currentTotalData = []
-          this.totalValue = 0
+          this.currentTotalData = [];
+          this.totalValue = 0;
 
-          console.log(strategies, "strategies---")
+          console.log(strategies, "strategies---");
 
           for (let i = 0; i < strategies.length; i++) {
-            let element = strategies[i]
+            let element = strategies[i];
             let currentTotalDataElement = {
               type: element.type,
               label: "",
@@ -389,10 +391,10 @@ export default {
               liquidationValue: element.liquidationValue,
               color: colors[i],
               link: null
-            }
+            };
 
             if (element.type === "CORE" || element.type === "SMM") {
-              currentTotalDataElement.label = element.name
+              currentTotalDataElement.label = element.name;
               currentTotalDataElement.link =
                 element.address || element.explorerAddress
                   ? process.env.VUE_APP_DEBANK_EXPLORER +
@@ -400,62 +402,63 @@ export default {
                     (element.explorerAddress
                       ? element.explorerAddress
                       : element.address)
-                  : ""
+                  : "";
             }
 
             if (element.type === "ETS") {
-              let etsNameUp = this.getEtsNameUp(element)
-              currentTotalDataElement.label = `ETS ${etsNameUp}`
-              let etsName = this.getEtsName(element)
-              currentTotalDataElement.link =
-                process.env.VUE_APP_UD_REDIRECT_URI + "ets/" + etsName
+              let etsNameUp = this.getEtsNameUp(element);
+              currentTotalDataElement.label = `ETS ${etsNameUp}`;
+              let etsName = this.getEtsName(element);
+              currentTotalDataElement.link = "/ets/" + etsName;
             }
 
-            this.currentTotalData.push(currentTotalDataElement)
-            this.totalValue += element.netAssetValue ? element.netAssetValue : 0
+            this.currentTotalData.push(currentTotalDataElement);
+            this.totalValue += element.netAssetValue
+              ? element.netAssetValue
+              : 0;
           }
 
-          this.isCurrentTotalDataLoading = false
+          this.isCurrentTotalDataLoading = false;
         })
         .catch((e) => {
-          console.error("Error while adding stablecoins to list: " + e)
-          this.isCurrentTotalDataLoading = false
-        })
+          console.error("Error while adding stablecoins to list: " + e);
+          this.isCurrentTotalDataLoading = false;
+        });
     },
 
     getEtsName(element) {
       for (let i = 0; i < this.etsList.length; i++) {
-        let ets = this.etsList[i]
-        let etsName
+        let ets = this.etsList[i];
+        let etsName;
 
         if (ets.id === element.id) {
-          etsName = ets.name
-          return etsName
+          etsName = ets.name;
+          return etsName;
         }
       }
     },
 
     getEtsNameUp(element) {
       for (let i = 0; i < this.etsList.length; i++) {
-        let ets = this.etsList[i]
-        let etsNameUp
+        let ets = this.etsList[i];
+        let etsNameUp;
 
         if (ets.id === element.id) {
-          etsNameUp = ets.nameUp
-          return etsNameUp
+          etsNameUp = ets.nameUp;
+          return etsNameUp;
         }
       }
     },
 
     loadCollateralData() {
-      this.isCollateralLoading = true
+      this.isCollateralLoading = true;
 
       collateralApiService
         .getCollateralData(this.apiUrl + `/${this.tabNetworkName}/eth+`)
         .then((data) => {
-          let stablecoinList = data
-          stablecoinList.sort((a, b) => b.netAssetValue - a.netAssetValue)
-          stablecoinList = stablecoinList.filter((el) => el.netAssetValue > 0)
+          let stablecoinList = data;
+          stablecoinList.sort((a, b) => b.netAssetValue - a.netAssetValue);
+          stablecoinList = stablecoinList.filter((el) => el.netAssetValue > 0);
 
           let colors = [
             "#2775CA",
@@ -468,11 +471,11 @@ export default {
             "#3D8DFF",
             "#FE7F2D",
             "#B22174"
-          ]
+          ];
 
-          this.collateralData = []
+          this.collateralData = [];
           for (let i = 0; i < stablecoinList.length; i++) {
-            let element = stablecoinList[i]
+            let element = stablecoinList[i];
 
             try {
               this.collateralData.push({
@@ -483,21 +486,21 @@ export default {
                 logo: require("@/assets/currencies/stablecoins/" +
                   element.id.tokenName +
                   ".png")
-              })
+              });
             } catch (e) {
-              console.error("Error while adding stablecoin to list: " + e)
+              console.error("Error while adding stablecoin to list: " + e);
             }
           }
 
-          this.isCollateralLoading = false
+          this.isCollateralLoading = false;
         })
         .catch((e) => {
-          console.error("Error when get collateral data: ", e)
-          this.isCollateralLoading = false
-        })
+          console.error("Error when get collateral data: ", e);
+          this.isCollateralLoading = false;
+        });
     }
   }
-}
+};
 </script>
 
 <style scoped>

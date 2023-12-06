@@ -8,9 +8,14 @@
                 v-if="!$wu.isMobile()"
                 @click.stop="switchEye"
             >
-                <v-icon class="eye-icon">
-                    {{ dataHidden ? 'mdi-eye-off-outline' : 'mdi-eye-outline'}}
-                </v-icon>
+            <img
+            :src="light
+                ? (dataHidden ? require('@/assets/icon/eye_close_black.svg') : require('@/assets/icon/eye_open_black.svg'))
+                : (dataHidden ? require('@/assets/icon/eye_close_white.svg') : require('@/assets/icon/eye_open_white.svg'))"
+            alt="Eye Icon"
+            class="eye-icon"
+            />
+
             </div>
 
             <div class="wallet-bar__wrap" @click.stop="pendingTx? showTxHistory() : walletClickAction()">
@@ -245,10 +250,10 @@ export default {
 }
 
 .eye-icon {
-    color: var(--disabled-value) !important;
+    margin-top: 8px;
 }
 
-.wallet-bar-container:hover > .wallet-col > .eye-icon {
+.wallet-bar-container:hover > .wallet-col >  {
     color: var(--hover);
 }
 

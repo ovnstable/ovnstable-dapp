@@ -40,7 +40,7 @@
                 <div class="navbar-page-link mr-2">
                     <img
                         :src="require('@/assets/icon/menu/shuffle-variant.svg')"
-                         class="navbar-page-link"
+                         class="arrow navbar-page-link"
                     >
                 </div>
                 <div
@@ -79,6 +79,7 @@
                         </div>
                         <div class="ml-3">
                             <img
+                            class="arrow"
                             :src="light ? (isShowUsd ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowUsd ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
                             alt="right icon"
                         />
@@ -133,6 +134,7 @@
                         </div>
                         <div class="ml-4">
                             <img
+                            class="arrow"
                             :src="light ? (isShowDai ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowDai ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
                             alt="right icon"
                         />
@@ -189,6 +191,7 @@
                         </div>
                         <div class="ml-1">
                             <img
+                            class="arrow"
                             :src="light ? (isShowUsdt ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowUsdt ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
                             alt="right icon"
                         />
@@ -239,6 +242,7 @@
                         </div>
                         <div class="ml-3">
                             <img
+                            class="arrow"
                             :src="light ? (isShowEth ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowEth ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
                             alt="right icon"
                         />
@@ -327,6 +331,7 @@
                         </div>
                         <div class="ml-2">
                             <img
+                            class="arrow"
                             :src="light ? (isShowInsurance ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowInsurance ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
                             alt="right icon"
                         />
@@ -889,6 +894,11 @@ export default {
 .stroke-item {
     display: flex;
     align-items: center;
+}
+
+.arrow {
+    width: 12px;
+    height: 12px;
 }
 
 

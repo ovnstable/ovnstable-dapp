@@ -33,8 +33,8 @@
                   <label class="sub-info-text" @click="openIfBridgeNotLoad"
                     >The bridge widget doesn't load</label
                   >
-                  <div class="ml-2 mb-1">
-                    <img
+                  <div class="ml-2">
+                    <img class="bridge_open_info"
                     :src="openIfBridgeNotLoad ? require('@/assets/icon/up_blue.svg') : require('@/assets/icon/down_blue.svg')"
                     alt="down icon"
                     style="color: var(--links-blue);"
@@ -336,5 +336,10 @@ div {
 .dark_theme_img {
   width: 290px;
   height: auto;
+}
+
+.bridge_open_info{
+  width: 12px;
+  height: 12px;
 }
 </style>

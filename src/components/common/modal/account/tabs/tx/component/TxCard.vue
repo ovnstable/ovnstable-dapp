@@ -41,7 +41,7 @@
                     ></v-progress-circular>
 
                     <v-icon class="status-icon" v-else :class="txData.isError ? 'status-failed' : (txData.isCancelled ? 'status-cancelled' : 'status-success')">
-                        {{ (txData.isError || txData.isCancelled) ? ( light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')) : 'mdi-check' }}
+                        {{ (txData.isError || txData.isCancelled) ? ( light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')) : require('@/assets/icon/check.svg') }}
                     </v-icon>
                 </template>
 

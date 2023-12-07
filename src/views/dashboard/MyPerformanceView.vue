@@ -49,9 +49,11 @@
                                         <v-col cols="12" class="select-col">
                                             <label class="selected-slice-label">
                                                 {{ sliceLabel }}
-                                                <v-icon color="#1C95E7" class="mb-1">
-                                                    {{ openedSliceList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                                                </v-icon>
+                                                <img
+                                                :src="openedSliceList ? require('@/assets/icon/up_blue.svg') : require('@/assets/icon/down_blue.svg')"
+                                                alt="arrow down"
+                                                class="arrow"
+                                              />
                                             </label>
                                         </v-col>
                                     </v-row>
@@ -93,9 +95,11 @@
                                     <v-spacer></v-spacer>
                                     <label class="selected-slice-label mt-2">
                                         {{ sliceLabel }}
-                                        <v-icon color="#1C95E7" class="mb-1">
-                                            {{ openedSliceList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                                        </v-icon>
+                                        <img
+                                          :src="openedSliceList ? require('@/assets/icon/up_blue.svg') : require('@/assets/icon/down_blue.svg')"
+                                          alt="arrow down"
+                                          class="arrow"
+                                        />
                                     </label>
                                     <v-spacer></v-spacer>
                                 </v-row>
@@ -1271,5 +1275,11 @@ export default {
 .sticky {
   margin-right: 4% !important;
   position: fixed !important;
+}
+
+.arrow {
+  margin-left: 5px;
+  width: 12px;
+  height: 12px;
 }
 </style>

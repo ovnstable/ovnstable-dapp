@@ -34,13 +34,12 @@
               }}
             </label>
             <v-spacer></v-spacer>
-            <v-icon
-              v-if="cardData.data['prototype'] || cardData.data.openPrototype"
-              title="ETS is in prototype"
-              color="#FFFFFF"
-            >
-              mdi-test-tube
-            </v-icon>
+            <img
+            v-if="cardData.data['prototype'] || cardData.data.openPrototype"
+            :src="require('@/assets/icon/test-tube.svg') "
+            alt="Prototype Icon"
+            title="ETS is in prototype"
+          />
           </v-row>
           <v-row class="d-flex mt-5" v-if="cardData.monthApy">
             <label class="percentage">

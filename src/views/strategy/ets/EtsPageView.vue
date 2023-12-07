@@ -4,7 +4,12 @@
       <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'ml-3' : ''">
         <label class="parent-page-label" @click="goToAction('/market')">ETS</label>
         <label class="current-page-label">
-          <v-icon size="18" class="mx-2">mdi-chevron-right</v-icon>
+          <img
+            :src="light ? require('@/assets/icon/right_black.svg') : require('@/assets/icon/right_w.svg')"
+            alt="Chevron Icon"
+            class="mx-2 arrow"
+          />
+
           ETS {{ `${borrowProtocolCheck() ? etsData.borrowProtocol + '&' : ''}${etsData.dex}
                     ${etsData.token2}/${etsData.token1}` }}
         </label>
@@ -313,6 +318,7 @@ export default {
 
 
   computed: {
+    ...mapGetters("theme", ["light"]),
     ...mapGetters('network', ['networkId', 'networkName', 'polygonConfig', 'opConfig', 'bscConfig', 'arConfig', 'baseConfig', 'lineaConfig', 'zkConfig']),
     ...mapGetters('accountData', ['etsBalance', 'account']),
     ...mapGetters('supplyData', ['totalSupply']),
@@ -1319,6 +1325,11 @@ export default {
   padding: 10px;
 
   color: var(--secondary-gray-text);
+}
+
+.arrow {
+  width: 12px;
+  height: 12px;
 }
 </style>
 

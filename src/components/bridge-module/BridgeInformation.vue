@@ -226,13 +226,6 @@ export default defineComponent({
     display: flex;
     align-items: center;
   }
-
-  .help-info-text {
-    font-family: "Roboto", sans-serif;
-    font-size: 14px;
-    line-height: 22px;
-    font-weight: 400;
-  }
 }
 /* full */
 @media only screen and (min-width: 1400px) {
@@ -263,10 +256,6 @@ export default defineComponent({
     font-size: 18px;
     line-height: 28px;
   }
-}
-
-div {
-  font-family: "Roboto", serif;
 }
 
 .info-container {
@@ -324,13 +313,6 @@ div {
   display: flex;
   align-items: center;
   margin-top: 10px !important;
-}
-
-.help-info-text {
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
-  line-height: 22px;
-  font-weight: 400;
 }
 
 .dark_theme_img {

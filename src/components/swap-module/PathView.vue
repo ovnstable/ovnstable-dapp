@@ -472,9 +472,6 @@ export default defineComponent({
 }
 
 
-.div {
-    font-family: 'Roboto',serif;
-}
 
 .branch-container {
     padding: 12px 16px;

@@ -784,7 +784,6 @@ export default {
 }
 
 .title-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
@@ -797,13 +796,11 @@ export default {
 .parent-page-label {
     cursor: pointer;
 
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--links-blue);
 }
 
 .current-page-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text);
 }
@@ -813,7 +810,6 @@ export default {
 }
 
 .tab-btn {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text);
     margin-bottom: -2px;
@@ -848,7 +844,6 @@ export default {
     border-radius: 4px;
     box-shadow: none !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-align: center !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
@@ -882,21 +877,18 @@ export default {
 }
 
 .investor-card-title {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--fourth-gray-text);
 }
 
 .investor-card-sub-title {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--third-gray-text);
 }
 
 .investor-card-sub-title-value {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text);
 }
@@ -908,20 +900,17 @@ export default {
 }
 
 .fee-structure-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
 }
 
 .fee-structure-value {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--fee-structure-value);
 }
 
 .about-link-label {
-    font-family: 'Roboto', sans-serif !important;
     font-feature-settings: 'liga' off !important;
     color: var(--links-blue) !important;
     cursor: pointer !important;
@@ -937,7 +926,6 @@ export default {
 }
 
 .full-status-error-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #CF3F92;
 }

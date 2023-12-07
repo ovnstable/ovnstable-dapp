@@ -1102,14 +1102,12 @@ export default {
 }
 
 .v-text-field >>> input, .v-text-field >>> label, .v-text-field >>> button {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
 
     color: var(--links-blue) !important;
 }
 
 .balance-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
 }
@@ -1132,14 +1130,12 @@ export default {
 .buy {
     width: 100% !important;
     border-radius: 2px !important;
-    font-family: 'Roboto', sans-serif !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     box-shadow: none !important;
 }
 
 .exchange-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #8D95A3;
 }
@@ -1150,26 +1146,22 @@ export default {
 }
 
 .coin-title {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text);
 }
 
 .modal-link-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--links-blue);
     cursor: pointer;
 }
 
 .action-info-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
 }
 
 .action-info-sub-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
 }
@@ -1188,7 +1180,6 @@ export default {
     border-radius: 4px;
     box-shadow: none !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-align: center !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;

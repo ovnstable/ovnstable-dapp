@@ -461,8 +461,6 @@ export default {
     height: 36px;
     border-radius: 2px;
     box-shadow: none !important;
-
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal !important;
     font-weight: 400 !important;
     font-size: 16px !important;
@@ -503,7 +501,6 @@ export default {
 }
 
 .account-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
@@ -533,7 +530,6 @@ export default {
 }
 
 .tab-btn {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text);
     margin-bottom: -2px;

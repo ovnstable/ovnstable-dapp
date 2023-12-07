@@ -238,7 +238,6 @@ export default {
 }
 
 .balance-label, .account-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);

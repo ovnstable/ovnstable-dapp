@@ -261,9 +261,6 @@ export default defineComponent({
     }
 }
 
-div {
-    font-family: 'Roboto',serif;
-}
 
 .input-container {
     padding: 12px 20px;

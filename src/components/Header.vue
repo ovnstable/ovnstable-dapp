@@ -349,8 +349,6 @@ export default {
 .header-btn-connect {
   border-radius: 2px;
   box-shadow: none;
-
-  font-family: "Roboto", sans-serif;
   text-align: center;
   text-transform: uppercase;
   font-feature-settings: "pnum" on, "lnum" on;

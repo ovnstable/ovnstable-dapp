@@ -99,7 +99,6 @@ export default {
 
     .button {
         width: 95% !important;
-        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 14px !important;
@@ -144,7 +143,6 @@ export default {
     }
 
     .button {
-        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 14px !important;
@@ -180,7 +178,6 @@ export default {
     }
 
     .button {
-        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 14px !important;
@@ -223,7 +220,6 @@ export default {
     border-radius: 2px;
     box-shadow: none !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-align: center !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
@@ -247,7 +243,6 @@ export default {
 }
 
 .card-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--main-gray-text);
 }
@@ -265,7 +260,6 @@ export default {
 }
 
 .list-header-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--third-gray-text);
 }

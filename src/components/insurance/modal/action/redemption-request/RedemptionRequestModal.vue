@@ -292,14 +292,12 @@ export default {
 }
 
 .request-info-text {
-    font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text) !important;
 }
 
 .redemption-btn {
     border-radius: 2px !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     background: var(--blue-gradient);

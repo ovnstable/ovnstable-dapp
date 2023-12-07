@@ -167,13 +167,11 @@ export default {
 }
 
 .request-info-text {
-    font-family: 'Roboto', sans-serif;
     text-align: center !important;
     color: var(--secondary-gray-text);
 }
 
 .discord-link {
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal;
 
     cursor: pointer;

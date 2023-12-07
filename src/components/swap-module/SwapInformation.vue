@@ -172,9 +172,6 @@ export default defineComponent({
     line-height: 28px;
   }
 }
-div {
-  font-family: "Roboto", serif;
-}
 
 .info-container {
   background: var(--secondary);

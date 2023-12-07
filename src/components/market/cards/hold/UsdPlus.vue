@@ -608,20 +608,17 @@ export default {
 }
 
 .card-title {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #FFFFFF;
 }
 
 .percentage {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #FFFFFF;
 }
 
 .apy {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: rgba(255, 255, 255, 0.8);
     text-transform: uppercase;
@@ -630,7 +627,6 @@ export default {
 }
 
 .card-info {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
 }
@@ -649,7 +645,6 @@ export default {
 }
 
 .box-name {
-    font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: 12px;
     line-height: 16px;
@@ -664,7 +659,6 @@ export default {
 }
 
 .chain-name {
-    font-family: "Roboto", sans-serif;
     font-weight: 300;
     font-size: 16px;
     line-height: 24px;
@@ -672,7 +666,6 @@ export default {
 }
 
 .your-deposit {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-feature-settings: 'liga' off;
 }
@@ -686,7 +679,6 @@ export default {
     box-shadow: none !important;
     width: 49% !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-align: center !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
@@ -708,7 +700,6 @@ export default {
 }
 
 .footer-link {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: #707A8B;
 }
@@ -729,7 +720,6 @@ export default {
 }
 
 .progress-label-value {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
@@ -741,7 +731,6 @@ export default {
 }
 
 .full-status-error-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
 }
 </style>

@@ -874,7 +874,6 @@ export default {
 }
 
 .footer-item-label {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -885,7 +884,6 @@ export default {
 }
 
 .navbar-page-label {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -906,7 +904,6 @@ export default {
 }
 
 .navbar-list-header {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -918,7 +915,6 @@ export default {
 }
 
 .navbar-list-label {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

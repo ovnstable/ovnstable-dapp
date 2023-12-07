@@ -437,7 +437,6 @@ export default {
 }
 
 .title-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
@@ -445,7 +444,6 @@ export default {
 
 .updated-title {
     text-align: right;
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -458,7 +456,6 @@ export default {
 }
 
 .show-more {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
     font-size: 18px;

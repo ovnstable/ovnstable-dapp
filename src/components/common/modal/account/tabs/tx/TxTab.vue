@@ -115,12 +115,10 @@ export default {
 }
 
 .tx-history-label {
-    font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text);
 }
 
 .clear-btn-label {
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal;
 
     cursor: pointer;

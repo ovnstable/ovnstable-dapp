@@ -483,7 +483,6 @@ export default defineComponent({
 }
 
 div {
-  font-family: "Roboto", serif;
 }
 
 .pool-table-container {

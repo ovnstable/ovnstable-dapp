@@ -465,7 +465,6 @@ export default {
 }
 
 .card-label {
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     color: var(--secondary-gray-text);
@@ -518,7 +517,6 @@ export default {
 }
 
 .success-link {
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal;
 
     cursor: pointer;
@@ -526,7 +524,6 @@ export default {
 }
 
 .date-label {
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal;
 
     cursor: pointer;

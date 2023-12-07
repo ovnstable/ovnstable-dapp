@@ -218,7 +218,6 @@ export default {
 }
 
 .add-coins-label {
-    font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text);
 }
 
@@ -227,7 +226,6 @@ export default {
     border-radius: 4px !important;
     box-shadow: none !important;
 
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;

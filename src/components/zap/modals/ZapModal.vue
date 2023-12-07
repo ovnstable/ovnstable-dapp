@@ -92,9 +92,6 @@ export default defineComponent({
 
 <style scoped>
 
-div {
-    font-family: 'Roboto',serif;
-}
 
 .container_body {
     border-radius: 24px !important;

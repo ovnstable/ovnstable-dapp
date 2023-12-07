@@ -214,7 +214,6 @@ export default {
     }
 
     .title-modal {
-        font-family: "Roboto", sans-serif;
         font-size: 28px;
         line-height: 32px;
     }
@@ -254,14 +253,12 @@ export default {
 }
 
 .modal-info-text {
-    font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text) !important;
 }
 
 .understand-btn {
     border-radius: 2px !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     color: #CF3F92 !important;

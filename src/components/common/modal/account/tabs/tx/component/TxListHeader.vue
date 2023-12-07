@@ -104,7 +104,6 @@ export default {
 }
 
 .list-header-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--third-gray-text);
 }

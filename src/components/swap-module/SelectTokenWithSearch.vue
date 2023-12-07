@@ -345,13 +345,7 @@ export default defineComponent({
     }
 }
 
-div {
-    font-family: 'Roboto',serif;
-}
 
-.tokens-container {
-
-}
 
 .token-container {
     height: 56px;

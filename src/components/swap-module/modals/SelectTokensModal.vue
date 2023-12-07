@@ -235,10 +235,6 @@ export default defineComponent({
     }
 }
 
-div {
-    font-family: 'Roboto',serif;
-}
-
 .tokens-container {
     padding-top: 15px;
     padding-bottom: 15px;

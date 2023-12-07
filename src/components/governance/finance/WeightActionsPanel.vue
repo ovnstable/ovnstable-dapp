@@ -282,7 +282,6 @@ export default {
 
 .error-label {
     color: #CF3F92;
-    font-family: 'Raleway', sans-serif;
     font-style: normal;
     font-weight: 300;
     font-size: 14px;

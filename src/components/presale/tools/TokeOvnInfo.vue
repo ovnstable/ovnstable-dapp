@@ -57,7 +57,6 @@ export default {
 .logo-subtitle {
 
     /* Caption */
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 13px;
@@ -70,7 +69,6 @@ export default {
 }
 
 .logo-title {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
     font-size: 18px;
@@ -83,7 +81,6 @@ export default {
 }
 
 .logo-title-small {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;

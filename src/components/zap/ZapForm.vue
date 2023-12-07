@@ -1923,10 +1923,6 @@ export default defineComponent({
     }
 }
 
-div {
-    font-family: 'Roboto',serif;
-}
-
 .swap-container {
     //padding: 40px 30px;
     //gap: 8px;
@@ -1972,8 +1968,6 @@ div {
 }
 
 .swap-title {
-
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -2176,12 +2170,10 @@ div {
 }
 
 .odos-fees-title {
-    font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
     text-align: end;
-
     color: var(--secondary-gray-text);
 }
 

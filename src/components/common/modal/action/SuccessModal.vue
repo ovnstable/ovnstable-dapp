@@ -333,7 +333,6 @@ export default {
 
 .success-label {
     color: var(--secondary-gray-text);
-    font-family: 'Roboto', sans-serif;
     text-align: center !important;
 }
 
@@ -355,7 +354,6 @@ export default {
     height: 40px;
     border-radius: 2px;
 
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -372,14 +370,12 @@ export default {
 }
 
 .promo-label-title {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
 }
 
 .promo-label-text {
-    font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text);
 }
 

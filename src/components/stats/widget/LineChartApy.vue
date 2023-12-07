@@ -664,7 +664,6 @@ export default {
 
 .zoom-btn {
     border: none !important;
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal !important;
     font-weight: 400 !important;
     letter-spacing: 0.02em !important;
@@ -698,28 +697,24 @@ export default {
 
 .chart-title {
     margin-left: 4%;
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text) !important;
 }
 
 .chart-title-apy {
     margin-right: 4%;
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text) !important;
 }
 
 .chart-sub-title-apy {
     margin-right: 4%;
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: #707A8B !important;
 }
 
 .mobile-info-title {
     margin-left: 4%;
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text) !important;
 }

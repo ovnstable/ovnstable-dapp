@@ -307,7 +307,6 @@ body * {
 }
 
 .bn-onboard-custom .bn-onboard-modal-content-header-heading {
-  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 30px;
@@ -318,7 +317,6 @@ body * {
 }
 
 .bn-onboard-icon-button > span {
-  font-family: "Roboto", sans-serif;
   font-style: normal !important;
   font-weight: 400 !important;
   font-size: 16px;
@@ -330,7 +328,6 @@ body * {
 
 .bn-onboard-select-wallet-info {
   margin-left: 10px;
-  font-family: "Lato", sans-serif !important;
   color: var(--links-blue) !important;
   font-style: normal !important;
   font-weight: normal !important;
@@ -353,7 +350,6 @@ body * {
 }
 
 .v-slider__tick-label {
-  font-family: "Roboto", sans-serif !important;
   font-feature-settings: "pnum" on, "lnum" on !important;
   color: var(--main-gray-text) !important;
 }

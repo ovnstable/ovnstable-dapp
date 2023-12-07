@@ -152,14 +152,12 @@ export default {
 }
 
 .gas-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     text-transform: capitalize;
     color: var(--secondary-gray-text);
 }
 
 .gas-label-gwei {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--action-label-text);
 }

@@ -3,7 +3,11 @@
         <template v-if="m2mItems != null">
             <v-row class="ma-0 mt-n3">
                 <v-btn @click="updateM2MItems" outlined :disabled="financeLoading">
-                    <v-icon>mdi-refresh</v-icon>
+                    <img
+                        :src="require('@/assets/icon/refresh.svg')"
+                        alt="Refresh Icon"
+                        class="your-existing-classes-here"
+                    />
                     &nbsp;Refresh M2M
                 </v-btn>
             </v-row>

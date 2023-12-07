@@ -3,9 +3,19 @@
             <NavMenu/>
 
             <v-app-bar app>
-                <v-btn icon @click="updateBlockNumber"><v-icon>mdi-refresh</v-icon></v-btn>
+                <v-btn icon @click="updateBlockNumber">
+                    <img
+                        :src="require('@/assets/icon/refresh.svg')"
+                        alt="Refresh Icon"
+                    />
+                </v-btn>
                 Current block: {{currentBlock}}
-                <v-btn icon @click="mineBlock"><v-icon>mdi-data-matrix-plus</v-icon></v-btn>
+                <v-btn icon @click="mineBlock">
+                    <img
+                        :src="require('@/assets/icon/data-matrix-plus.svg')"
+                        alt="Data Matrix Plus Icon"
+                    />
+                </v-btn>
 
                 <v-btn @click="addOvnTokenAction">Add ovn</v-btn>
 

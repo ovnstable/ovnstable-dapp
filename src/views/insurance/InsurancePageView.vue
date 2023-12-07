@@ -142,8 +142,9 @@
                                             <img
                                                 :src="light
                                                     ? (insuranceRedemptionData.request === 'CAN_WITHDRAW' ? require('@/assets/icon/lock_open_variant.svg') : require('@/assets/icon/lock_black.svg'))
-                                                    : (insuranceRedemptionData.request === 'CAN_WITHDRAW' ? require('@/assets/icon/lock_open_variant_white.svg') : require('@/assets/icon/lock_white.svg'))"
+                                                    : (insuranceRedemptionData.request === 'CAN_WITHDRAW' ? require('@/assets/icon/lock_open_variant_white.svg') : require('@/assets/icon/lock_black.svg'))"
                                                 alt="Lock Icon"
+                                                class="icon-lock"
                                             />
                                         </div>
                                     </v-row>
@@ -940,7 +941,7 @@ export default {
     color: var(--progress-text) !important;
 }
 
-.lock-icon {
+.icon-lock {
     width: 24px;
     height: 24px;
 }

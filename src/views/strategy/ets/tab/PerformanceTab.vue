@@ -540,12 +540,9 @@
               openTokenOnScan(etsStrategyData[etsData.name].rebaseAddress)
             "
           >
-            <v-icon
-              size="20"
-              style="margin-top: -2px"
-              color="rgba(255, 255, 255, 0.5)"
-              >mdi-open-in-new</v-icon
-            >
+          <div style="margin-top: -2px">
+              <img :src="require('@/assets/icon/open-in-new_white.svg')" alt="Open In New Icon" />
+          </div>
           </div>
         </v-row>
         <v-row class="info-row footer-row mt-6" justify="start" align="center">
@@ -571,12 +568,9 @@
               openStrategyOnScan(etsStrategyData[etsData.name].exchangerAddress)
             "
           >
-            <v-icon
-              size="20"
-              style="margin-top: -2px"
-              color="rgba(255, 255, 255, 0.5)"
-              >mdi-open-in-new</v-icon
-            >
+          <div style="margin-top: -2px">
+              <img :src="require('@/assets/icon/open-in-new_white.svg')" alt="Open In New Icon" />
+          </div>
           </div>
         </v-row>
       </v-col>
@@ -605,12 +599,9 @@
               openStrategyOnScan(etsStrategyData[etsData.name].strategyAddress)
             "
           >
-            <v-icon
-              size="20"
-              style="margin-top: -2px"
-              color="rgba(255, 255, 255, 0.5)"
-              >mdi-open-in-new</v-icon
-            >
+          <div style="margin-top: -2px">
+              <img :src="require('@/assets/icon/open-in-new_white.svg')" alt="Open In New Icon" />
+          </div>
           </div>
         </v-row>
         <v-row class="info-row footer-row mt-6" justify="start" align="center">

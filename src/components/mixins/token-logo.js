@@ -28,10 +28,17 @@ export const tokenLogo = {
             }
         },
         getOvnCoinBaseImagePath(token) {
-            if (token.symbol === 'ETH+') {
-                return require('@/assets/currencies/stablecoins/' + token.symbol + '.svg');
+            try {
+                if (token.symbol === 'ETH+') {
+                    return require('@/assets/currencies/stablecoins/' + token.symbol + '.svg');
+                } else {
+                    return require('@/assets/currencies/stablecoins/' + token.symbol + '.png');
+                } 
+            }catch (error) {
+                return require('@/assets/currencies/undefined.svg');
             }
-            return require('@/assets/currencies/stablecoins/' + token.symbol + '.png');
+          
+
         },
         async loadCoingeckoOvernightTokenImage(symbol) {
             // example

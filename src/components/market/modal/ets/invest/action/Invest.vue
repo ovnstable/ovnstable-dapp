@@ -615,7 +615,6 @@ export default {
         async checkGalxeNft() {
           this.isGalxNftCheck = true;
           if (this.galxeNetworkList.indexOf(this.networkId) < 0 || !this.account) {
-            console.log('checkGalxeNft not needed', this.networkId);
             this.isGalxNftCheck = false;
             return;
           }

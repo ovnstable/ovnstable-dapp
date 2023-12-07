@@ -375,7 +375,7 @@ export default {
                       let etsNameUp = this.getEtsNameUp(element)
                       currentTotalDataElement.label = `ETS ${etsNameUp}`
                       let etsName = this.getEtsName(element)
-                      currentTotalDataElement.link = (process.env.VUE_APP_UD_REDIRECT_URI + 'ets/' + etsName)
+                      currentTotalDataElement.link = ('/ets/' + etsName)
                   }
 
                   this.currentTotalData.push(currentTotalDataElement);

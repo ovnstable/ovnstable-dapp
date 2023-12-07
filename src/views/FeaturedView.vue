@@ -365,7 +365,6 @@ export default {
 
         addUsdPlusApyData(usdPlusApyDataParams) {
             this.usdPlusApyData[usdPlusApyDataParams.name] = usdPlusApyDataParams.data;
-            console.log('MarketData: refreshUsdPlusPayoutsData this.usdPlusApyData', this.usdPlusApyData);
         },
 
         async getUsdPlusAvgMonthApy() {

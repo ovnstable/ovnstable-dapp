@@ -1,9 +1,14 @@
 <template>
   <div>
     <div class="mt-10">
-      <v-row align="center" justify="start" class="ma-0" :class="$wu.isMobile() ? 'ml-3' : ''">
-        <label class="parent-page-label" @click="goToAction('/market')">ETS</label>
+      <v-row
+        align="center"
+        justify="start"
+        class="ma-0"
+        :class="$wu.isMobile() ? 'ml-3' : ''"
+      >
         <label class="current-page-label">
+
           <img
             :src="light ? require('@/assets/icon/right_black.svg') : require('@/assets/icon/right_w.svg')"
             alt="Chevron Icon"
@@ -19,51 +24,115 @@
     <div v-if="!isAllDataLoaded">
       <v-row>
         <v-row align="center" justify="center" class="py-15">
-          <v-progress-circular width="2" size="24" color="#8FA2B7" indeterminate></v-progress-circular>
+          <v-progress-circular
+            width="2"
+            size="24"
+            color="#8FA2B7"
+            indeterminate
+          ></v-progress-circular>
         </v-row>
       </v-row>
     </div>
 
     <div v-else class="mt-1">
       <v-row align="start" justify="start" class="main-container ma-0">
-        <v-col :cols="$wu.isFull() ? 9 : 12" :class="$wu.isFull() ? 'ml-n3' : ''">
-          <StrategyBanner :ets-data="etsData" :ets-strategy-data="etsStrategyData" />
+        <v-col
+          :cols="$wu.isFull() ? 9 : 12"
+          :class="$wu.isFull() ? 'ml-n3' : 'px-0'"
+        >
+          <StrategyBanner
+            :ets-data="etsData"
+            :ets-strategy-data="etsStrategyData"
+          />
 
-          <v-row align="center" justify="start" class="ma-0 mt-5" v-if="!$wu.isFull()">
+          <v-row
+            align="center"
+            justify="start"
+            class="ma-0 mt-5"
+            v-if="!$wu.isFull()"
+          >
             <v-btn class="header-btn btn-filled-red" @click="showRiskModal">
               Investment risks
             </v-btn>
           </v-row>
 
-          <v-row class="ma-0 mt-5" justify="start" align="center" v-if="!$wu.isFull()">
+          <v-row
+            class="ma-0 mt-5"
+            justify="start"
+            align="center"
+            v-if="!$wu.isFull()"
+          >
             <v-col class="info-card-container-white" cols="12">
               <div class="my-4">
                 <template v-if="networkSupport">
                   <v-row align="center" class="ma-0">
                     <v-col cols="12">
                       <v-row align="center">
-                        <label class="investor-card-sub-title">Your balance in ETS, {{ etsData.actionTokenName }}</label>
+                        <label class="investor-card-sub-title"
+                          >Your balance in ETS,
+                          {{ etsData.actionTokenName }}</label
+                        >
                       </v-row>
                       <v-row align="center" class="mt-5">
-                        <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">
-                          {{ dataHidden ? '' : etsBalance[etsData.name] ?
-                            ($utils.formatMoneyComma(etsBalance[etsData.name], 2)) : '—' }}
+                        <label
+                          class="investor-card-sub-title-value"
+                          :class="dataHidden ? 'hidden-label' : ''"
+                        >
+                          {{
+                            dataHidden
+                              ? ""
+                              : etsBalance[etsData.name]
+                              ? $utils.formatMoneyComma(
+                                  etsBalance[etsData.name],
+                                  2
+                                )
+                              : "—"
+                          }}
                         </label>
                       </v-row>
                     </v-col>
                   </v-row>
                   <v-row align="center" class="ma-0">
                     <v-col cols="12">
-                      <v-row align="center" :class="$wu.isMobile() ? 'mt-2' : 'mt-4'">
-                        <label class="investor-card-sub-title">Profit/loss</label>
+                      <v-row
+                        align="center"
+                        :class="$wu.isMobile() ? 'mt-2' : 'mt-4'"
+                      >
+                        <label class="investor-card-sub-title"
+                          >Profit/loss</label
+                        >
                       </v-row>
-                      <v-row class="info-row mt-6" justify="start" align="center">
+                      <v-row
+                        class="info-row mt-6"
+                        justify="start"
+                        align="center"
+                      >
                         <label class="fee-structure-label mt-1">Last day</label>
                         <v-spacer></v-spacer>
-                        <label class="investor-card-sub-title-value"
-                          :class="dataHidden ? 'hidden-label mt-1' : (etsClientData[this.etsData.name] > 0 ? 'success-color' : '')">
-                          {{ dataHidden ? '' : (etsClientData[this.etsData.name] ? ((etsClientData[this.etsData.name] > 0
-                            ? '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—') }}
+                        <label
+                          class="investor-card-sub-title-value"
+                          :class="
+                            dataHidden
+                              ? 'hidden-label mt-1'
+                              : etsClientData[this.etsData.name] > 0
+                              ? 'success-color'
+                              : ''
+                          "
+                        >
+                          {{
+                            dataHidden
+                              ? ""
+                              : etsClientData[this.etsData.name]
+                              ? (etsClientData[this.etsData.name] > 0
+                                  ? "+"
+                                  : "") +
+                                "$" +
+                                $utils.formatMoneyComma(
+                                  etsClientData[this.etsData.name],
+                                  4
+                                )
+                              : "—"
+                          }}
                         </label>
                       </v-row>
                     </v-col>
@@ -71,19 +140,39 @@
                 </template>
 
                 <template v-if="networkSupport">
-                  <v-row align="center" justify="center" class="ma-0 mx-3" :class="$wu.isMobile() ? 'mt-10' : 'mt-12'"
-                    v-if="!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
-                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}.
-                      Please check status later.</label>
+                  <v-row
+                    align="center"
+                    justify="center"
+                    class="ma-0 mx-3"
+                    :class="$wu.isMobile() ? 'mt-10' : 'mt-12'"
+                    v-if="
+                      !isOvercapAvailable &&
+                      this.etsData.maxSupply &&
+                      totalSupply[etsData.name] >= etsData.maxSupply
+                    "
+                  >
+                    <label class="full-status-error-label"
+                      >TVL > ${{
+                        $utils.formatMoneyComma(etsData.maxSupply, 0)
+                      }}. Please check status later.</label
+                    >
                   </v-row>
 
-                  <v-row v-if="isShowGalxeInfo" align="center" justify="center" class="mt-6 px-5">
+                  <v-row
+                    v-if="isShowGalxeInfo"
+                    align="center"
+                    justify="center"
+                    class="mt-6 px-5"
+                  >
                     <v-row class="galxe-container">
                       <v-col>
                         To mint this ETS, you need to have NFT in your wallet.
                       </v-col>
-                      <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined
-                        @click="openGalaxeCompany">
+                      <v-btn
+                        class="header-btn btn-investor-invest btn-investor-outline"
+                        outlined
+                        @click="openGalaxeCompany"
+                      >
                         GET NFT ON GALXE
                       </v-btn>
                     </v-row>
@@ -96,7 +185,11 @@
                   </v-row>
 
                   <v-row align="center" justify="center" class="ma-0 mt-4">
-                    <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
+                    <v-btn
+                      class="header-btn btn-investor-invest btn-investor-outline"
+                      outlined
+                      @click="redeemAction"
+                    >
                       REDEEM ETS
                     </v-btn>
                   </v-row>
@@ -104,69 +197,129 @@
 
                 <template v-else>
                   <v-row align="center" justify="center" class="ma-0">
-                    <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork(etsData.chain.toString())">
-                      SWITCH TO {{ etsData.chainName.toUpperCase() }} TO MINT
+                    <v-btn
+                      class="header-btn btn-investor-invest"
+                      @click="setWalletNetwork(etsData.chain.toString())"
+                    >
+                      SWITCH TO {{ etsData.chainName?.toUpperCase() }} TO MINT
                     </v-btn>
                   </v-row>
                 </template>
               </div>
             </v-col>
 
-            <v-col class="info-card-container-white mt-4" cols="12" v-if="networkSupport">
+            <v-col
+              class="info-card-container-white mt-4"
+              cols="12"
+              v-if="networkSupport"
+            >
               <div class="my-4">
                 <v-row align="center" class="ma-0">
                   <label class="investor-card-title">One-time fees</label>
                   <div style="margin-top: -2px">
-                    <Tooltip v-if="minRedeemFee || minRedeemFee" :size="16"
-                      text="ETS rebalances at each mint/redeem. Every rebalance makes the impermanent loss, permanent, i.e. creating a fixed cost. The minimum fee is introduced to minimize the # of mint/redeems, thus minimizing the cost and maximizing the return for the users." />
-                    <Tooltip v-else :size="16"
-                      text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get." />
+                    <Tooltip
+                      v-if="minRedeemFee || minRedeemFee"
+                      :size="16"
+                      text="ETS rebalances at each mint/redeem. Every rebalance makes the impermanent loss, permanent, i.e. creating a fixed cost. The minimum fee is introduced to minimize the # of mint/redeems, thus minimizing the cost and maximizing the return for the users."
+                    />
+                    <Tooltip
+                      v-else
+                      :size="16"
+                      text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."
+                    />
                   </div>
                 </v-row>
-                <v-row class="info-row ma-0 mt-8" justify="start" align="center">
+                <v-row
+                  class="info-row ma-0 mt-8"
+                  justify="start"
+                  align="center"
+                >
                   <label class="fee-structure-label mt-1">Mint fee</label>
                   <v-spacer></v-spacer>
                   <label class="fee-structure-value mt-1">
-                    {{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '' }}
-                    {{ (minMintFee && minMintFee !== 0) ? ((entryFee ? ' (min $' : 'min $') +
-                      $utils.formatMoneyComma(minMintFee, 0) + (entryFee ? ')' : '')) : ('') }}
+                    {{
+                      entryFee ? $utils.formatMoneyComma(entryFee, 2) + "%" : ""
+                    }}
+                    {{
+                      minMintFee && minMintFee !== 0
+                        ? (entryFee ? " (min $" : "min $") +
+                          $utils.formatMoneyComma(minMintFee, 0) +
+                          (entryFee ? ")" : "")
+                        : ""
+                    }}
                   </label>
                 </v-row>
-                <v-row class="info-row ma-0 mt-4" justify="start" align="center">
+                <v-row
+                  class="info-row ma-0 mt-4"
+                  justify="start"
+                  align="center"
+                >
                   <label class="fee-structure-label mt-1">Redeem fee</label>
                   <v-spacer></v-spacer>
                   <label class="fee-structure-value mt-1">
-                    {{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '' }}
-                    {{ (minRedeemFee && minRedeemFee !== 0) ? ((exitFee ? ' (min $' : 'min $') +
-                      $utils.formatMoneyComma(minRedeemFee, 0) + (exitFee ? ')' : '')) : ('') }}
+                    {{
+                      exitFee ? $utils.formatMoneyComma(exitFee, 2) + "%" : ""
+                    }}
+                    {{
+                      minRedeemFee && minRedeemFee !== 0
+                        ? (exitFee ? " (min $" : "min $") +
+                          $utils.formatMoneyComma(minRedeemFee, 0) +
+                          (exitFee ? ")" : "")
+                        : ""
+                    }}
                   </label>
                 </v-row>
               </div>
             </v-col>
           </v-row>
 
-          <PerformanceTab :ets-data="etsData" :ets-strategy-data="etsStrategyData" :ets-apy-data="etsApyData"
-            :ets-tvl-data="etsTvlData" :usd-plus-apy-data="usdPlusApyData" />
+          <PerformanceTab
+            :ets-data="etsData"
+            :ets-strategy-data="etsStrategyData"
+            :ets-apy-data="etsApyData"
+            :ets-tvl-data="etsTvlData"
+            :usd-plus-apy-data="usdPlusApyData"
+          />
         </v-col>
 
         <v-col cols="3" v-if="$wu.isFull()">
-          <v-row align="center" justify="start" class="ma-0 sticky" style="width: 20%;">
+          <v-row
+            align="center"
+            justify="start"
+            class="ma-0 sticky"
+            style="width: 20%"
+          >
             <v-btn class="header-btn btn-filled-red" @click="showRiskModal">
               Investment risks
             </v-btn>
           </v-row>
 
-          <v-row class=" ma-0 sticky mt-15" justify="start" align="center" style="width: 20%;">
+          <v-row
+            class="ma-0 sticky mt-15"
+            justify="start"
+            align="center"
+            style="width: 20%"
+          >
             <v-col class="info-card-container-white" cols="12">
               <div class="my-6 mx-6">
                 <template v-if="networkSupport">
                   <v-row align="center">
-                    <label class="investor-card-sub-title">Your balance in ETS, {{ etsData.actionTokenName }}</label>
+                    <label class="investor-card-sub-title"
+                      >Your balance in ETS, {{ etsData.actionTokenName }}</label
+                    >
                   </v-row>
                   <v-row align="center" class="mt-5">
-                    <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">
-                      {{ dataHidden ? '' : etsBalance[etsData.name] ? ($utils.formatMoneyComma(etsBalance[etsData.name],
-                        2)) : '—' }}
+                    <label
+                      class="investor-card-sub-title-value"
+                      :class="dataHidden ? 'hidden-label' : ''"
+                    >
+                      {{
+                        dataHidden
+                          ? ""
+                          : etsBalance[etsData.name]
+                          ? $utils.formatMoneyComma(etsBalance[etsData.name], 2)
+                          : "—"
+                      }}
                     </label>
                   </v-row>
                   <v-row align="center" class="mt-10">
@@ -175,28 +328,65 @@
                   <v-row class="info-row mt-6" justify="start" align="center">
                     <label class="fee-structure-label mt-1">Last day</label>
                     <v-spacer></v-spacer>
-                    <label class="investor-card-sub-title-value"
-                      :class="dataHidden ? 'hidden-label mt-1' : (etsClientData[this.etsData.name] > 0 ? 'success-color' : '')">
-                      {{ dataHidden ? '' : (etsClientData[this.etsData.name] ? ((etsClientData[this.etsData.name] > 0 ?
-                        '+' : '') + '$' + $utils.formatMoneyComma(etsClientData[this.etsData.name], 4)) : '—') }}
+                    <label
+                      class="investor-card-sub-title-value"
+                      :class="
+                        dataHidden
+                          ? 'hidden-label mt-1'
+                          : etsClientData[this.etsData.name] > 0
+                          ? 'success-color'
+                          : ''
+                      "
+                    >
+                      {{
+                        dataHidden
+                          ? ""
+                          : etsClientData[this.etsData.name]
+                          ? (etsClientData[this.etsData.name] > 0 ? "+" : "") +
+                            "$" +
+                            $utils.formatMoneyComma(
+                              etsClientData[this.etsData.name],
+                              4
+                            )
+                          : "—"
+                      }}
                     </label>
                   </v-row>
                 </template>
 
                 <template v-if="networkSupport">
-                  <v-row align="center" justify="center" class="mt-15"
-                    v-if="!isOvercapAvailable && this.etsData.maxSupply && totalSupply[etsData.name] >= etsData.maxSupply">
-                    <label class="full-status-error-label">TVL > ${{ $utils.formatMoneyComma(etsData.maxSupply, 0) }}.
-                      Please check status later.</label>
+                  <v-row
+                    align="center"
+                    justify="center"
+                    class="mt-15"
+                    v-if="
+                      !isOvercapAvailable &&
+                      this.etsData.maxSupply &&
+                      totalSupply[etsData.name] >= etsData.maxSupply
+                    "
+                  >
+                    <label class="full-status-error-label"
+                      >TVL > ${{
+                        $utils.formatMoneyComma(etsData.maxSupply, 0)
+                      }}. Please check status later.</label
+                    >
                   </v-row>
 
-                  <v-row v-if="isShowGalxeInfo" align="center" justify="center" class="mt-6">
+                  <v-row
+                    v-if="isShowGalxeInfo"
+                    align="center"
+                    justify="center"
+                    class="mt-6"
+                  >
                     <v-row class="galxe-container">
                       <v-col>
                         To mint this ETS, you need to have NFT in your wallet.
                       </v-col>
-                      <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined
-                        @click="openGalaxeCompany">
+                      <v-btn
+                        class="header-btn btn-investor-invest btn-investor-outline"
+                        outlined
+                        @click="openGalaxeCompany"
+                      >
                         GET NFT ON GALXE
                       </v-btn>
                     </v-row>
@@ -209,7 +399,11 @@
                   </v-row>
 
                   <v-row align="center" justify="center" class="mt-6">
-                    <v-btn class="header-btn btn-investor-invest btn-investor-outline" outlined @click="redeemAction">
+                    <v-btn
+                      class="header-btn btn-investor-invest btn-investor-outline"
+                      outlined
+                      @click="redeemAction"
+                    >
                       REDEEM ETS
                     </v-btn>
                   </v-row>
@@ -217,22 +411,35 @@
 
                 <template v-else>
                   <v-row align="center" justify="center" class="mt-0">
-                    <v-btn class="header-btn btn-investor-invest" @click="setWalletNetwork(etsData.chain.toString())">
-                      SWITCH TO {{ etsData.chainName.toUpperCase() }} TO MINT
+                    <v-btn
+                      class="header-btn btn-investor-invest"
+                      @click="setWalletNetwork(etsData.chain.toString())"
+                    >
+                      SWITCH TO {{ etsData.chainName?.toUpperCase() }} TO MINT
                     </v-btn>
                   </v-row>
                 </template>
               </div>
             </v-col>
 
-            <v-col class="info-card-container-white mt-4" cols="12" v-if="networkSupport">
+            <v-col
+              class="info-card-container-white mt-4"
+              cols="12"
+              v-if="networkSupport"
+            >
               <div class="my-6 mx-6">
                 <v-row align="center">
                   <label class="investor-card-title">One-time fees</label>
-                  <Tooltip v-if="minRedeemFee || minRedeemFee" :size="16"
-                    text="ETS rebalances at each mint/redeem. Every rebalance makes the impermanent loss, permanent, i.e. creating a fixed cost. The minimum fee is introduced to minimize the # of mint/redeems, thus minimizing the cost and maximizing the return for the users." />
-                  <Tooltip v-else :size="16"
-                    text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get." />
+                  <Tooltip
+                    v-if="minRedeemFee || minRedeemFee"
+                    :size="16"
+                    text="ETS rebalances at each mint/redeem. Every rebalance makes the impermanent loss, permanent, i.e. creating a fixed cost. The minimum fee is introduced to minimize the # of mint/redeems, thus minimizing the cost and maximizing the return for the users."
+                  />
+                  <Tooltip
+                    v-else
+                    :size="16"
+                    text="Overnight retains part of the yield. APY figure is net of those retentions. You see what you get."
+                  />
                 </v-row>
 
                 <v-row class="mt-8" justify="start" align="center">
@@ -241,9 +448,18 @@
                       <label class="fee-structure-label">Mint fee</label>
                       <v-spacer></v-spacer>
                       <label class="fee-structure-value">
-                        {{ entryFee ? $utils.formatMoneyComma(entryFee, 2) + '%' : '' }}
-                        {{ (minMintFee && minMintFee !== 0) ? ((entryFee ? ' (min $' : 'min $') +
-                          $utils.formatMoneyComma(minMintFee, 0) + (entryFee ? ')' : '')) : ('') }}
+                        {{
+                          entryFee
+                            ? $utils.formatMoneyComma(entryFee, 2) + "%"
+                            : ""
+                        }}
+                        {{
+                          minMintFee && minMintFee !== 0
+                            ? (entryFee ? " (min $" : "min $") +
+                              $utils.formatMoneyComma(minMintFee, 0) +
+                              (entryFee ? ")" : "")
+                            : ""
+                        }}
                       </label>
                     </v-row>
                   </v-col>
@@ -255,9 +471,18 @@
                       <label class="fee-structure-label">Redeem fee</label>
                       <v-spacer></v-spacer>
                       <label class="fee-structure-value">
-                        {{ exitFee ? $utils.formatMoneyComma(exitFee, 2) + '%' : '' }}
-                        {{ (minRedeemFee && minRedeemFee !== 0) ? ((exitFee ? ' (min $' : 'min $') +
-                          $utils.formatMoneyComma(minRedeemFee, 0) + (exitFee ? ')' : '')) : ('') }}
+                        {{
+                          exitFee
+                            ? $utils.formatMoneyComma(exitFee, 2) + "%"
+                            : ""
+                        }}
+                        {{
+                          minRedeemFee && minRedeemFee !== 0
+                            ? (exitFee ? " (min $" : "min $") +
+                              $utils.formatMoneyComma(minRedeemFee, 0) +
+                              (exitFee ? ")" : "")
+                            : ""
+                        }}
                       </label>
                     </v-row>
                   </v-col>
@@ -276,13 +501,12 @@
 </template>
 
 <script>
-
 import StrategyBanner from "@/components/market/strategy/section/ets/StrategyBanner";
 import RiskDisclosureModal from "@/components/market/modal/ets/RiskDisclosureModal";
 import { mapActions, mapGetters } from "vuex";
 import Tooltip from "@/components/common/element/Tooltip";
 import PerformanceTab from "@/views/strategy/ets/tab/PerformanceTab";
-import { difference, unixTsToDateStr } from "@/utils/dates.js"
+import { difference, unixTsToDateStr } from "@/utils/dates.js";
 import { axios } from "@/plugins/http-axios";
 import loadJSON from "@/utils/http-utils";
 
@@ -313,9 +537,8 @@ export default {
     minRedeemFee: null,
 
     galxeNetworkList: [],
-    isClientExistNftForGalxe: false,
+    isClientExistNftForGalxe: false
   }),
-
 
   computed: {
     ...mapGetters("theme", ["light"]),
@@ -326,32 +549,50 @@ export default {
     ...mapGetters('overcapData', ['isOvercapAvailable']),
     ...mapGetters('magicEye', ['dataHidden']),
     ...mapGetters('web3', ['web3', 'contracts']),
+    ...mapGetters("network", [
+      "networkId",
+      "networkName",
+      "polygonConfig",
+      "opConfig",
+      "bscConfig",
+      "arConfig",
+      "baseConfig",
+      "lineaConfig",
+      "zkConfig"
+    ]),
 
     isShowGalxeInfo() {
-      return this.galxeNetworkList.indexOf(this.networkId) >= 0 && (!this.account || !this.isClientExistNftForGalxe);
+      return (
+        this.galxeNetworkList.indexOf(this.networkId) >= 0 &&
+        (!this.account || !this.isClientExistNftForGalxe)
+      );
     },
 
     isAllDataLoaded: function () {
-      return !this.isClientDataLoading && !this.isEtsStrategyDataLoading && !this.isUsdPlusApyDataLoading;
+      return (
+        !this.isClientDataLoading &&
+        !this.isEtsStrategyDataLoading &&
+        !this.isUsdPlusApyDataLoading
+      );
     },
 
     activeTabPerformance: function () {
       return {
-        'tab-button': this.tab === 1,
-        'tab-button-in-active': this.tab !== 1,
-      }
+        "tab-button": this.tab === 1,
+        "tab-button-in-active": this.tab !== 1
+      };
     },
 
     activeTabAbout: function () {
       return {
-        'tab-button': this.tab === 2,
-        'tab-button-in-active': this.tab !== 2,
-      }
+        "tab-button": this.tab === 2,
+        "tab-button-in-active": this.tab !== 2
+      };
     },
 
     entryFee: function () {
       if (this.strategyData && this.strategyData.fees) {
-        let result = this.strategyData.fees.find(x => x.id === 'buy');
+        let result = this.strategyData.fees.find((x) => x.id === "buy");
         return result ? result.value : null;
       } else {
         return null;
@@ -360,7 +601,7 @@ export default {
 
     exitFee: function () {
       if (this.strategyData && this.strategyData.fees) {
-        let result = this.strategyData.fees.find(x => x.id === 'redeem');
+        let result = this.strategyData.fees.find((x) => x.id === "redeem");
         return result ? result.value : null;
       } else {
         return null;
@@ -369,7 +610,7 @@ export default {
 
     performanceFee: function () {
       if (this.strategyData && this.strategyData.fees) {
-        let result = this.strategyData.fees.find(x => x.id === 'profit');
+        let result = this.strategyData.fees.find((x) => x.id === "profit");
         return result ? result.value : null;
       } else {
         return null;
@@ -378,7 +619,7 @@ export default {
 
     managementFee: function () {
       if (this.strategyData && this.strategyData.fees) {
-        let result = this.strategyData.fees.find(x => x.id === 'tvl');
+        let result = this.strategyData.fees.find((x) => x.id === "tvl");
         return result ? result.value : null;
       } else {
         return null;
@@ -395,7 +636,7 @@ export default {
       } else {
         return null;
       }
-    },
+    }
   },
 
   watch: {
@@ -424,13 +665,20 @@ export default {
   },
 
   methods: {
-    ...mapActions('network', ['setWalletNetwork']),
-    ...mapActions('riskModal', ['showRiskModal']),
-    ...mapActions('investModal', ['showInvestModal', 'showMintView', 'showRedeemView']),
-    ...mapActions('magicEye', ['switchEye']),
-    ...mapActions('marketData', ['refreshMarket']),
+    ...mapActions("network", ["setWalletNetwork"]),
+    ...mapActions("riskModal", ["showRiskModal"]),
+    ...mapActions("investModal", [
+      "showInvestModal",
+      "showMintView",
+      "showRedeemView"
+    ]),
+    ...mapActions("magicEye", ["switchEye"]),
+    ...mapActions("marketData", ["refreshMarket"]),
     borrowProtocolCheck() {
-      if (this.etsData.borrowProtocol !== undefined && this.etsData.borrowProtocol !== null) {
+      if (
+        this.etsData.borrowProtocol !== undefined &&
+        this.etsData.borrowProtocol !== null
+      ) {
         return this.etsData.borrowProtocol;
       }
     },
@@ -451,12 +699,11 @@ export default {
     },
 
     openGalaxeCompany() {
-      window.open("https://galxe.com/overnight/campaign/GCnGLU4ywn", '_target')
+      window.open("https://galxe.com/overnight/campaign/GCnGLU4ywn", "_target");
     },
 
     async checkGalxeNft() {
       if (this.galxeNetworkList.indexOf(this.networkId) < 0) {
-        console.log('checkGalxeNft not needed', this.networkId);
         return;
       }
 
@@ -466,13 +713,21 @@ export default {
         let account = this.account;
 
         let abiFile = await loadJSON(`/contracts/${this.networkName}/Nft.json`);
-        let nftContract = new this.web3.eth.Contract(abiFile.abi, abiFile.address);
+        let nftContract = new this.web3.eth.Contract(
+          abiFile.abi,
+          abiFile.address
+        );
 
-        let isNftExist = await nftContract.methods.balanceOf(account).call() * 1;
-        console.log("Is nft exist response: ", isNftExist);
+        let isNftExist =
+          (await nftContract.methods.balanceOf(account).call()) * 1;
         this.isClientExistNftForGalxe = !!isNftExist; // to boolean and a = b
       } catch (e) {
-        console.log("Is nft exist response error: ", this.networkId, this.networkName, e);
+        console.log(
+          "Is nft exist response error: ",
+          this.networkId,
+          this.networkName,
+          e
+        );
         this.isClientExistNftForGalxe = false;
       }
     },
@@ -484,10 +739,11 @@ export default {
 
     updateEtsData() {
       if (this.etsList) {
-
         // console.log("Ets loading eps page: ", )
-        let resultList = this.etsList.filter(ets => ets.name === this.$route.params.name);
-        this.etsData = (resultList && resultList.length > 0) ? resultList[0] : {};
+        let resultList = this.etsList.filter(
+          (ets) => ets.name === this.$route.params.name
+        );
+        this.etsData = resultList && resultList.length > 0 ? resultList[0] : {};
       }
     },
 
@@ -495,8 +751,13 @@ export default {
       let result = 0;
 
       try {
-        result = await this.contracts[this.etsData.exchangeContract].methods.buyMinFee().call();
-        result = this.web3.utils.fromWei(result, this.etsData.etsTokenDecimals === 18 ? 'ether' : 'mwei');
+        result = await this.contracts[this.etsData.exchangeContract].methods
+          .buyMinFee()
+          .call();
+        result = this.web3.utils.fromWei(
+          result,
+          this.etsData.etsTokenDecimals === 18 ? "ether" : "mwei"
+        );
 
         this.minMintFee = result;
       } catch (e) {
@@ -508,8 +769,13 @@ export default {
       let result = 0;
 
       try {
-        result = await this.contracts[this.etsData.exchangeContract].methods.redeemMinFee().call();
-        result = this.web3.utils.fromWei(result, this.etsData.etsTokenDecimals === 18 ? 'ether' : 'mwei');
+        result = await this.contracts[this.etsData.exchangeContract].methods
+          .redeemMinFee()
+          .call();
+        result = this.web3.utils.fromWei(
+          result,
+          this.etsData.etsTokenDecimals === 18 ? "ether" : "mwei"
+        );
 
         this.minRedeemFee = result;
       } catch (e) {
@@ -520,11 +786,12 @@ export default {
     async loadStrategyData() {
       this.isEtsStrategyDataLoading = true;
       let ets = this.etsData;
-      console.log("loadStrategyData this.etsData", this.etsData);
-      console.log("loadStrategyData this.etsData1", ets);
-      console.log("loadStrategyData this.etsData2", ets.name);
-      console.log("loadStrategyData this.etsData3", ets.address);
-      let refreshParams = { contractAddress: ets.address, strategyName: ets.name, chain: ets.chain };
+
+      let refreshParams = {
+        contractAddress: ets.address,
+        strategyName: ets.name,
+        chain: ets.chain
+      };
       let appApiUrl;
 
       switch (refreshParams.chain) {
@@ -564,39 +831,59 @@ export default {
       let avgApyStrategyMonth;
       let strategyData;
 
-      await fetch(appApiUrl + '/widget/avg-apy-info/month', fetchOptions)
-        .then(value => value.json())
-        .then(value => {
+      await fetch(appApiUrl + "/widget/avg-apy-info/month", fetchOptions)
+        .then((value) => value.json())
+        .then((value) => {
           avgApy = value;
           avgApy.date = unixTsToDateStr(avgApy.date / 1000, "DD MMM. ‘YY");
-        }).catch(reason => {
-          console.log('Error get data: ' + reason);
         })
+        .catch((reason) => {
+          console.log("Error get data: " + reason);
+        });
 
-      await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress + '/avg-apy-info/month', fetchOptions)
-        .then(value => value.json())
-        .then(value => {
+      await fetch(
+        appApiUrl +
+          "/hedge-strategies/" +
+          refreshParams.contractAddress +
+          "/avg-apy-info/month",
+        fetchOptions
+      )
+        .then((value) => value.json())
+        .then((value) => {
           avgApyStrategyMonth = value;
-          avgApyStrategyMonth.date = unixTsToDateStr(avgApyStrategyMonth.date / 1000, "DD MMM. ‘YY");
-        }).catch(reason => {
-          console.log('Error get data: ' + reason);
+          avgApyStrategyMonth.date = unixTsToDateStr(
+            avgApyStrategyMonth.date / 1000,
+            "DD MMM. ‘YY"
+          );
         })
+        .catch((reason) => {
+          console.log("Error get data: " + reason);
+        });
 
-      await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress, fetchOptions)
-        .then(value => value.json())
-        .then(value => {
-          console.log('hedge-strategies loaded', value)
+      await fetch(
+        appApiUrl + "/hedge-strategies/" + refreshParams.contractAddress,
+        fetchOptions
+      )
+        .then((value) => value.json())
+        .then((value) => {
           strategyData = value;
           strategyData.lastApy = strategyData.apy;
-          strategyData.apy = (avgApyStrategyMonth && avgApyStrategyMonth.value) ? (avgApyStrategyMonth.value) : strategyData.apy;
-          strategyData.diffApy = (avgApy && avgApy.value && strategyData.apy) ? (strategyData.apy - avgApy.value) : null;
+          strategyData.apy =
+            avgApyStrategyMonth && avgApyStrategyMonth.value
+              ? avgApyStrategyMonth.value
+              : strategyData.apy;
+          strategyData.diffApy =
+            avgApy && avgApy.value && strategyData.apy
+              ? strategyData.apy - avgApy.value
+              : null;
 
           /* TODO: get onChain */
           strategyData.targetHealthFactor = 1.2;
 
-          strategyData.payoutItems.sort((o1, o2) => difference(o1.payableDate, o2.payableDate));
+          strategyData.payoutItems.sort((o1, o2) =>
+            difference(o1.payableDate, o2.payableDate)
+          );
           strategyData.timeData.sort((o1, o2) => difference(o1.date, o2.date));
-
 
           let clientData = strategyData.timeData;
 
@@ -606,14 +893,15 @@ export default {
             datasets: [
               {
                 fill: false,
-                borderColor: '#1C95E7',
-                data: [],
+                borderColor: "#1C95E7",
+                data: []
               }
             ]
           };
 
-          [...clientData].forEach(item => {
-            widgetDataDict[unixTsToDateStr(item.date / 1000, 'DD.MM.YYYY')] = parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
+          [...clientData].forEach((item) => {
+            widgetDataDict[unixTsToDateStr(item.date / 1000, "DD.MM.YYYY")] =
+              parseFloat(item.apy ? item.apy : 0.0).toFixed(2);
           });
 
           for (let key in widgetDataDict) {
@@ -629,14 +917,15 @@ export default {
             datasets: [
               {
                 fill: false,
-                borderColor: '#1C95E7',
-                data: [],
+                borderColor: "#1C95E7",
+                data: []
               }
             ]
           };
 
-          [...clientData].forEach(item => {
-            widgetTvlDataDict[unixTsToDateStr(item.date / 1000, 'DD.MM.YYYY')] = parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
+          [...clientData].forEach((item) => {
+            widgetTvlDataDict[unixTsToDateStr(item.date / 1000, "DD.MM.YYYY")] =
+              parseFloat(item.tvl ? item.tvl : 0.0).toFixed(2);
           });
 
           for (let key in widgetTvlDataDict) {
@@ -645,20 +934,27 @@ export default {
           }
 
           this.etsTvlData[refreshParams.strategyName] = widgetData;
-        }).catch(reason => {
-          console.log('Error get data when load strategy ets data: ' + reason);
         })
+        .catch((reason) => {
+          console.log("Error get data when load strategy ets data: " + reason);
+        });
 
-      this.etsStrategyData[refreshParams.strategyName] = strategyData
+      this.etsStrategyData[refreshParams.strategyName] = strategyData;
       this.isEtsStrategyDataLoading = false;
     },
     async loadUsdPlusPayoutsData() {
-      console.log('MarketData: refreshUsdPlusPayoutsData');
       this.isUsdPlusApyDataLoading = true;
 
       await Promise.all(
-        ['polygon', 'bsc', 'optimism', 'arbitrum', 'base', 'zksync', 'linea'].map(async network => {
-
+        [
+          "polygon",
+          "bsc",
+          "optimism",
+          "arbitrum",
+          "base",
+          "zksync",
+          "linea"
+        ].map(async (network) => {
           let appApiUrl;
 
           switch (network) {
@@ -693,26 +989,28 @@ export default {
 
           let resultDataList;
 
-          axios.get(appApiUrl + `/dapp/payouts`, fetchOptions)
-            .then(value => {
-              let clientData = value.data;
-              let widgetDataDict = {};
+          axios.get(appApiUrl + `/dapp/payouts`, fetchOptions).then((value) => {
+            let clientData = value.data;
+            let widgetDataDict = {};
 
-              [...clientData].reverse().forEach(item => {
-                widgetDataDict[unixTsToDateStr(item.payableDate / 1000, 'DD.MM.YYYY')] = parseFloat(item.annualizedYield ? item.annualizedYield : 0.0).toFixed(2);
-              });
+            [...clientData].reverse().forEach((item) => {
+              widgetDataDict[
+                unixTsToDateStr(item.payableDate / 1000, "DD.MM.YYYY")
+              ] = parseFloat(
+                item.annualizedYield ? item.annualizedYield : 0.0
+              ).toFixed(2);
+            });
 
-              resultDataList = widgetDataDict;
+            resultDataList = widgetDataDict;
 
-              this.usdPlusApyData[network] = resultDataList;
-            })
+            this.usdPlusApyData[network] = resultDataList;
+          });
         })
       );
 
       this.isUsdPlusApyDataLoading = false;
     },
     async loadClientData() {
-      console.log('MarketData: loadClientData');
       this.isClientDataLoading = true;
 
       let ets = this.etsData;
@@ -721,9 +1019,12 @@ export default {
         return;
       }
 
-      let refreshParams = { contractAddress: ets.address, strategyName: ets.name, chain: ets.chain };
+      let refreshParams = {
+        contractAddress: ets.address,
+        strategyName: ets.name,
+        chain: ets.chain
+      };
       let appApiUrl;
-
 
       switch (refreshParams.chain) {
         case 137:
@@ -761,19 +1062,27 @@ export default {
         }
       };
 
-      await fetch(appApiUrl + '/hedge-strategies/' + refreshParams.contractAddress + '/account/' + account, fetchOptions)
-        .then(value => value.json())
-        .then(value => {
+      await fetch(
+        appApiUrl +
+          "/hedge-strategies/" +
+          refreshParams.contractAddress +
+          "/account/" +
+          account,
+        fetchOptions
+      )
+        .then((value) => value.json())
+        .then((value) => {
           profitDay = value.profit;
-        }).catch(reason => {
-          console.log('Error get data: ' + reason);
         })
+        .catch((reason) => {
+          console.log("Error get data: " + reason);
+        });
 
       this.etsClientData[refreshParams.strategyName] = profitDay;
       this.isClientDataLoading = false;
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -1176,7 +1485,6 @@ export default {
 
 .parent-page-label {
   cursor: pointer;
-
   font-feature-settings: 'liga' off;
   color: var(--links-blue);
 }
@@ -1222,12 +1530,12 @@ export default {
 
   text-align: center !important;
   text-transform: uppercase !important;
-  font-feature-settings: 'pnum' on, 'lnum' on !important;
+  font-feature-settings: "pnum" on, "lnum" on !important;
 }
 
 .btn-investor-invest {
   background: var(--blue-gradient);
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 .btn-investor-outline {
@@ -1239,12 +1547,12 @@ export default {
   width: 100%;
   height: 44px !important;
   background: rgba(207, 63, 146, 0.1) !important;
-  color: #CF3F92 !important;
+  color: #cf3f92 !important;
   border-radius: 4px;
 }
 
 .success-color {
-  color: #22ABAC !important;
+  color: #22abac !important;
 }
 
 .sticky {
@@ -1253,18 +1561,21 @@ export default {
 }
 
 .investor-card-title {
+
   text-transform: uppercase;
-  font-feature-settings: 'pnum' on, 'lnum' on;
+  font-feature-settings: "pnum" on, "lnum" on;
   color: var(--fourth-gray-text);
 }
 
 .investor-card-sub-title {
+
   text-transform: uppercase;
-  font-feature-settings: 'pnum' on, 'lnum' on;
+  font-feature-settings: "pnum" on, "lnum" on;
   color: var(--third-gray-text);
 }
 
 .investor-card-sub-title-value {
+
   font-feature-settings: 'liga' off;
   color: var(--secondary-gray-text);
 }
@@ -1276,13 +1587,15 @@ export default {
 }
 
 .fee-structure-label {
+
   font-feature-settings: 'pnum' on, 'lnum' on;
+
   color: var(--secondary-gray-text);
 }
 
 .fee-structure-value {
   text-transform: uppercase;
-  font-feature-settings: 'pnum' on, 'lnum' on;
+  font-feature-settings: "pnum" on, "lnum" on;
   color: var(--fee-structure-value);
 }
 
@@ -1298,7 +1611,7 @@ export default {
 
 .disabled-btn {
   background: var(--main-banner-background) !important;
-  color: #9DA4B0 !important;
+  color: #9da4b0 !important;
 }
 
 .full-status-error-label {
@@ -1321,4 +1634,3 @@ export default {
   height: 12px;
 }
 </style>
-

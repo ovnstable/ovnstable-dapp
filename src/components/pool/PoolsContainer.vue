@@ -71,7 +71,15 @@
 
         <template v-if="!isPoolsLoading && typeOfPool === 'ALL'">
             <v-row class="ma-0 mb-1 mt-5" align="center">
-                <v-icon class="circle-icon" :size="$wu.isFull() ? 20 : 16">mdi-circle-multiple-outline</v-icon>
+                <div class="circle-icon" :size="$wu.isFull() ? 20 : 16">
+                    <img
+                        :src="light
+                            ? require('@/assets/icon/circle-multiple-outline.svg')
+                            : require('@/assets/icon/circle-multiple-outline_white.svg')"
+                        alt="Circle Multiple Outline Icon"
+                        class="circle-img-icon"
+                    />
+                </div>
                 <label class="show-more ml-2" @click="openPoolList = !openPoolList">Pools with TVL less than $300K</label>
                 <div class="select-bar-main-container ml-7" @click="openPoolList = !openPoolList">
                     <v-row justify="end" align="center" class="select-bar-container">
@@ -473,5 +481,11 @@ export default {
     margin-top: 5px;
     width: 12px;
     height: 12px;
+}
+
+.circle-img-icon {
+    margin-top: 5px;
+    width: 20px;
+    height: 20px;
 }
 </style>

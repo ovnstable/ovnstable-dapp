@@ -8,8 +8,18 @@
                  v-on="on">
                 <div class="btn-icon">
                     <v-img class="selected-network-icon" :src="icon"/>
-                    <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="var(--secondary-gray-text)" v-if="alphaNetwork">mdi-alpha</v-icon>
-                    <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="var(--secondary-gray-text)" v-if="betaNetwork">mdi-beta</v-icon>
+                    <img
+                        :src="alphaNetwork ? (light ? require('@/assets/icon/alpha_black.svg') : require('@/assets/icon/alpha_white.svg')) : ''"
+                        alt="Alpha Icon"
+                        class="alpha"
+                        :class="$wu.isMobile() ? 'mb-4' : 'mb-5'"
+                        />
+                        <img
+                        :src="betaNetwork ? (light ? require('@/assets/icon/beta_black.svg') : require('@/assets/icon/beta_white.svg')) : ''"
+                        alt="Beta Icon"
+                        class="beta"
+                        :class="$wu.isMobile() ? 'mb-4' : 'mb-5'"
+                    />
                     <img
                         :src="light
                             ? (openedList ? require('@/assets/icon/up_w.svg') : require('@/assets/icon/down_w.svg'))  
@@ -301,6 +311,12 @@ export default {
 
 .arrow {
     margin-top: 8px;
+    width: 12px;
+    height: 12px;
+}
+
+.alpha,
+.beta {
     width: 12px;
     height: 12px;
 }

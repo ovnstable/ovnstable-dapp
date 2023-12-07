@@ -92,11 +92,15 @@
                         {{ dataHidden ? '' : (this.insuranceBalance.optimism && this.insuranceBalance.optimism > 0) ? ('$' +
                             $utils.formatMoneyComma((this.insuranceBalance.optimism * this.ovnPrice), 2)) : "—" }}
                     </label>
-                    <label class="your-deposit ml-1">
-                        <v-icon color="var(--disabled-value)">
-                            {{ insuranceRedemptionData.request === 'CAN_WITHDRAW' ? 'mdi-lock-open-variant' : 'mdi-lock' }}
-                        </v-icon>
-                    </label>
+                        <div class="ml-1 mt-1">
+                            <img
+                            :src="light
+                                ? (insuranceRedemptionData.request === 'CAN_WITHDRAW' ? require('@/assets/icon/lock_open_variant.svg') : require('@/assets/icon/lock_black.svg'))
+                                : (insuranceRedemptionData.request === 'CAN_WITHDRAW' ? require('@/assets/icon/lock_open_variant_white.svg') : require('@/assets/icon/lock_white.svg'))"
+                            alt="Lock Icon"
+                            class="lock-icon"
+                        />
+                        </div>
                 </v-row>
 
                 <v-row class="d-flex justify-space-between ma-0 mt-2">
@@ -179,6 +183,7 @@ export default {
         ...mapGetters("insuranceData", ['insuranceRedemptionData']),
         ...mapGetters("network", ["appApiUrl", "networkId", "networkName", "getParams"]),
         ...mapGetters('magicEye', ['dataHidden']),
+        ...mapGetters("theme", ["light"]),
 
         payouts: function () {
             let data = this.payoutsData;
@@ -812,5 +817,14 @@ export default {
 
 .info-container {
     position: relative;
+}
+
+.lock-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.image-lock {
+    margin-top: 5px;
 }
 </style>

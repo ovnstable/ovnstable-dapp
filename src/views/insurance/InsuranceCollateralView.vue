@@ -140,9 +140,15 @@
                                         <label class="investor-card-sub-title-value" :class="dataHidden ? 'hidden-label' : ''">
                                             {{ dataHidden ? '' : insuranceBalance.optimism ? ($utils.formatMoneyComma(insuranceBalance.optimism, 2)) + ' OVN' : '— OVN' }}
                                         </label>
-                                        <v-icon class="ml-1" color="var(&#45;&#45;disabled-value)">
-                                            {{ insuranceRedemptionData.request === 'CAN_WITHDRAW' ? 'mdi-lock-open-variant' : 'mdi-lock' }}
-                                        </v-icon>
+                                        <div class="ml-1 mt-1">
+                                            <img
+                                                :src="light
+                                                    ? (insuranceRedemptionData.request === 'CAN_WITHDRAW' ? require('@/assets/icon/lock_open_variant.svg') : require('@/assets/icon/lock_black.svg'))
+                                                    : (insuranceRedemptionData.request === 'CAN_WITHDRAW' ? require('@/assets/icon/lock_open_variant_white.svg') : require('@/assets/icon/lock_white.svg'))"
+                                                alt="Lock Icon"
+                                                class="lock-icon"
+                                            />
+                                        </div>
                                     </v-row>
                                     <v-row align="center" class="mt-10">
                                         <label class="investor-card-sub-title">Profit/loss</label>
@@ -270,6 +276,7 @@ export default {
         ...mapGetters('overcapData', ['isOvercapAvailable']),
         ...mapGetters('insuranceData', ['insuranceRedemptionData']),
         ...mapGetters('magicEye', ['dataHidden']),
+        ...mapGetters("theme", ["light"]),
 
         activeTabOptimism: function () {
             return {
@@ -938,4 +945,10 @@ export default {
 .theme--light.v-btn.v-btn--disabled {
     color: var(--progress-text) !important;
 }
+
+.lock-icon {
+    width: 24px;
+    height: 24px;
+}
+
 </style>

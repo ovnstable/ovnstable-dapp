@@ -116,7 +116,7 @@
                         <template v-slot:activator="{on}">
                             <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="copyTxIdToClipboard()">
                                 Copy tx ID
-                                <v-icon class="copy-icon" small>mdi-content-copy</v-icon>
+                                <img :src="require('@/assets/icon/content-copy_blue.svg')" alt="Copy Icon" />
                             </label>
                         </template>
                         <p class="my-0">Copied!</p>

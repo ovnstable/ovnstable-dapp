@@ -449,15 +449,13 @@ export default {
 }
 
 .table-header-don {
-  font-family: "Roboto", sans-serif !important;
-  font-feature-settings: "pnum" on, "lnum" on !important;
+  font-feature-settings: 'pnum' on, 'lnum' on !important;
   color: var(--third-gray-text) !important;
 }
 
 .table-label-don {
-  font-family: "Roboto", sans-serif;
-  font-feature-settings: "pnum" on, "lnum" on !important;
-  color: var(--secondary-gray-text) !important;
+   font-feature-settings: 'pnum' on, 'lnum' on !important;
+   color: var(--secondary-gray-text) !important;
 }
 
 .table-label-don {

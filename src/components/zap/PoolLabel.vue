@@ -162,9 +162,6 @@ export default defineComponent({
     color: var(--main-gray-text);
 }
 
-div {
-    font-family: 'Roboto',serif;
-}
 
 .pool-label-container-short {
     padding: 20px 10px;

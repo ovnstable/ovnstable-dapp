@@ -51,7 +51,6 @@ export default {
 }
 
 .header-info-text {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
     font-size: 60px;

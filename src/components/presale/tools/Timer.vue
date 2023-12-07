@@ -133,7 +133,6 @@ export default {
 
 .timer-info {
 
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 600;
     font-size: 25px;
@@ -148,7 +147,6 @@ export default {
 
 .timer-title {
     /* Secondary text bold */
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 800;
     font-size: 16px;

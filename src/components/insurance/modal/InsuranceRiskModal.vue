@@ -15,7 +15,7 @@
                 </label>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="close">
-                    <v-icon class="close-icon">mdi-close</v-icon>
+                    <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                 </v-btn>
             </v-toolbar>
 
@@ -47,6 +47,7 @@ export default {
 
     computed: {
         ...mapGetters('insuranceRiskModal', ['show']),
+        ...mapGetters("theme", ["light"])
     },
 
     data: () => ({
@@ -54,6 +55,7 @@ export default {
 
     methods: {
         ...mapActions('insuranceRiskModal', ['showRiskModal', 'closeRiskModal']),
+        ...mapGetters("theme", ["light"]),
 
         close() {
             this.closeRiskModal();
@@ -195,7 +197,6 @@ export default {
     }
 
     .title-modal {
-        font-family: "Roboto", sans-serif;
         font-size: 28px;
         line-height: 32px;
     }
@@ -235,14 +236,12 @@ export default {
 }
 
 .modal-info-text {
-    font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text) !important;
 }
 
 .understand-btn {
     border-radius: 2px !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     color: #CF3F92 !important;

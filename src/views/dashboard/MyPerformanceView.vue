@@ -49,9 +49,11 @@
                                         <v-col cols="12" class="select-col">
                                             <label class="selected-slice-label">
                                                 {{ sliceLabel }}
-                                                <v-icon color="#1C95E7" class="mb-1">
-                                                    {{ openedSliceList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                                                </v-icon>
+                                                <img
+                                                :src="openedSliceList ? require('@/assets/icon/up_blue.svg') : require('@/assets/icon/down_blue.svg')"
+                                                alt="arrow down"
+                                                class="arrow"
+                                              />
                                             </label>
                                         </v-col>
                                     </v-row>
@@ -93,9 +95,11 @@
                                     <v-spacer></v-spacer>
                                     <label class="selected-slice-label mt-2">
                                         {{ sliceLabel }}
-                                        <v-icon color="#1C95E7" class="mb-1">
-                                            {{ openedSliceList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                                        </v-icon>
+                                        <img
+                                          :src="openedSliceList ? require('@/assets/icon/up_blue.svg') : require('@/assets/icon/down_blue.svg')"
+                                          alt="arrow down"
+                                          class="arrow"
+                                        />
                                     </label>
                                     <v-spacer></v-spacer>
                                 </v-row>
@@ -1113,7 +1117,6 @@ export default {
 }
 
 .tab-btn {
-  font-family: 'Roboto', sans-serif;
   font-feature-settings: 'liga' off;
   color: var(--secondary-gray-text);
   margin-bottom: -2px;
@@ -1125,7 +1128,6 @@ export default {
 }
 
 .title-label {
-  font-family: 'Roboto', sans-serif;
   text-transform: uppercase;
   font-feature-settings: 'pnum' on, 'lnum' on;
   color: var(--main-gray-text);
@@ -1143,7 +1145,6 @@ export default {
 }
 
 .tab-btn-disabled {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     margin-bottom: -2px;
     cursor: default;
@@ -1157,7 +1158,6 @@ export default {
 }
 
 .selected-slice-label {
-  font-family: 'Roboto', sans-serif;
   text-transform: uppercase;
   font-feature-settings: 'pnum' on, 'lnum' on;
   color: var(--links-blue);
@@ -1169,7 +1169,6 @@ export default {
 }
 
 .slice-select-list-item {
-  font-family: 'Roboto', sans-serif !important;
   color: var(--secondary-gray-text);
 }
 
@@ -1183,13 +1182,11 @@ export default {
 }
 
 .container-body-title {
-  font-family: 'Roboto', sans-serif;
   font-feature-settings: 'liga' off;
   color: var(--main-gray-text);
 }
 
 .container-body-text {
-  font-family: 'Roboto', sans-serif;
   font-feature-settings: 'pnum' on, 'lnum' on;
   color: var(--main-gray-text);
 }
@@ -1200,13 +1197,11 @@ export default {
 }
 
 .container-info-sub-title {
-  font-family: 'Roboto', sans-serif;
   font-feature-settings: 'pnum' on, 'lnum' on;
   color: var(--third-gray-text);
 }
 
 .container-info-text {
-  font-family: 'Roboto', sans-serif;
   font-feature-settings: 'liga' off;
   color: var(--main-gray-text);
 }
@@ -1219,7 +1214,6 @@ export default {
   border-radius: 2px;
   box-shadow: none !important;
 
-  font-family: 'Roboto', sans-serif !important;
   text-align: center !important;
   text-transform: uppercase !important;
   font-feature-settings: 'pnum' on, 'lnum' on !important;
@@ -1240,7 +1234,6 @@ export default {
 }
 
 .table-scroll-label {
-  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -1251,14 +1244,12 @@ export default {
 }
 
 .useful-title {
-  font-family: 'Roboto';
   text-transform: uppercase;
   font-feature-settings: 'pnum' on, 'lnum' on;
   color: var(--main-gray-text);
 }
 
 .useful-link {
-  font-family: 'Roboto', sans-serif;
   font-feature-settings: 'pnum' on, 'lnum' on;
   color: var(--links-blue);
   cursor: pointer;
@@ -1271,5 +1262,11 @@ export default {
 .sticky {
   margin-right: 4% !important;
   position: fixed !important;
+}
+
+.arrow {
+  margin-left: 5px;
+  width: 12px;
+  height: 12px;
 }
 </style>

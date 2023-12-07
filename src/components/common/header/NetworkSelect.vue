@@ -8,13 +8,31 @@
                  v-on="on">
                 <div class="btn-icon">
                     <v-img class="selected-network-icon" :src="icon"/>
-                    <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="var(--secondary-gray-text)" v-if="alphaNetwork">mdi-alpha</v-icon>
-                    <v-icon :class="$wu.isMobile() ? 'mb-4' : 'mb-5'" small color="var(--secondary-gray-text)" v-if="betaNetwork">mdi-beta</v-icon>
-                    <v-icon class="btn-icon__chevron" :class="(alphaNetwork || betaNetwork) ? 'ml-n1' : 'ml-0'">
-                        {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                    </v-icon>
+                    <img
+                        :src="alphaNetwork ? (light ? require('@/assets/icon/alpha_black.svg') : require('@/assets/icon/alpha_white.svg')) : ''"
+                        alt="Alpha Icon"
+                        class="alpha"
+                        :class="$wu.isMobile() ? 'mb-4' : 'mb-5'"
+                        />
+                        <img
+                        :src="betaNetwork ? (light ? require('@/assets/icon/beta_black.svg') : require('@/assets/icon/beta_white.svg')) : ''"
+                        alt="Beta Icon"
+                        class="beta"
+                        :class="$wu.isMobile() ? 'mb-4' : 'mb-5'"
+                    />
+                    <img
+                        :src="light
+                            ? (openedList ? require('@/assets/icon/up_w.svg') : require('@/assets/icon/down_w.svg'))  
+                            : (openedList ? require('@/assets/icon/up_black.svg') : require('@/assets/icon/down_black.svg'))"
+                        alt="Chevron Icon"
+                        class="arrow"
+                        :class="(alphaNetwork || betaNetwork) ? 'ml-n1' : 'ml-2'"
+                />
                 </div>
             </div>
+
+
+
         </template>
         <v-list class="network-select-list">
             <v-list-item style="cursor: pointer" @click="setWalletNetwork('10')">
@@ -214,10 +232,6 @@ export default {
 .btn-icon {
     display: flex;
 }
-
-.btn-icon__chevron {
-    color: var(--secondary-gray-text);
-}
 .select-bar-main-container {
     display: flex;
     align-items: center;
@@ -230,10 +244,6 @@ export default {
 .select-bar-main-container:hover {
     background-color: rgba(6, 120, 196, 0.9);
     opacity: .9;
-
-    .btn-icon__chevron {
-        color: #fff;
-    }
 }
 .list-item-icon, .btn-icon, .selected-network-icon .v-image__image {
     width: 28px;
@@ -297,5 +307,17 @@ export default {
     position: absolute;
     right: 52px;
     top: -19px;
+}
+
+.arrow {
+    margin-top: 8px;
+    width: 12px;
+    height: 12px;
+}
+
+.alpha,
+.beta {
+    width: 12px;
+    height: 12px;
 }
 </style>

@@ -7,7 +7,7 @@
         <v-card class="container_body align-center pt-4 px-8 pb-10">
             <v-toolbar class="container_header" flat>
                 <v-btn icon class="ml-auto mr-5 mt-10" @click="close">
-                    <v-icon class="close-icon">mdi-close</v-icon>
+                    <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                 </v-btn>
             </v-toolbar>
             <v-card-text class="px-5 pt-5">
@@ -90,6 +90,7 @@ export default {
 
     computed: {
         ...mapGetters('network', ['explorerUrl']),
+        ...mapGetters("theme", ["light"]),
         ...mapGetters('successModal', ['show', 'successTxHash', 'successAction', 'etsData', 'zksyncFeeHistory']),
 
         actionSuccessToken: function () {
@@ -332,7 +333,6 @@ export default {
 
 .success-label {
     color: var(--secondary-gray-text);
-    font-family: 'Roboto', sans-serif;
     text-align: center !important;
 }
 
@@ -354,7 +354,6 @@ export default {
     height: 40px;
     border-radius: 2px;
 
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -371,14 +370,12 @@ export default {
 }
 
 .promo-label-title {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
 }
 
 .promo-label-text {
-    font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text);
 }
 

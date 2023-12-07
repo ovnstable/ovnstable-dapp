@@ -17,8 +17,10 @@
                     <v-img :src="selectedItem.image"/>
                 </div>
                 <span class="label-btn ml-2">{{ selectedItem.title }}</span>
-                <v-icon class="ml-2" style="color: white" v-if="!show && !readonly">mdi-chevron-down</v-icon>
-                <v-icon class="ml-2" style="color: white" v-if="show && !readonly">mdi-chevron-up</v-icon>
+                <div class="ml-2">
+                    <img v-if="!show && !readonly" :src="require('@/assets/icon/down_w.svg')" alt="Chevron Down" style="color: white">
+                    <img v-if="show && !readonly" :src="require('@/assets/icon/up_w.svg')" alt="Chevron Up" style="color: white">
+                </div>
             </v-btn>
         </template>
 

@@ -25,7 +25,7 @@
 
                         <v-spacer></v-spacer>
                         <v-btn icon @click="setShowFunc(false)">
-                            <v-icon class="close-icon">mdi-close</v-icon>
+                            <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                         </v-btn>
                     </v-toolbar>
 
@@ -75,6 +75,7 @@
 
 <script>
 import {defineComponent} from 'vue'
+import { mapGetters } from 'vuex';
 import SelectTokenShort from "@/components/swap-module/SelectTokenShort.vue";
 import SelectTokenWithSearch from "@/components/swap-module/SelectTokenWithSearch.vue";
 
@@ -181,7 +182,8 @@ export default defineComponent({
             } else {
                 console.error("Odos Swap method not found.", this.swapMethod)
             }
-        }
+        },
+        ...mapGetters("theme", ["light"]),
     },
     watch: {
 
@@ -231,10 +233,6 @@ export default defineComponent({
         font-size: 30px;
         line-height: 40px;
     }
-}
-
-div {
-    font-family: 'Roboto',serif;
 }
 
 .tokens-container {

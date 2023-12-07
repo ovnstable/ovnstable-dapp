@@ -759,14 +759,14 @@ export default {
 }
 
 .zoom-btn {
-  border: none !important;
-  font-family: "Roboto", sans-serif !important;
-  font-style: normal !important;
-  font-weight: 400 !important;
-  letter-spacing: 0.02em !important;
-  text-transform: uppercase !important;
-  font-feature-settings: "pnum" on, "lnum" on !important;
-  color: #707a8b !important;
+   border: none !important;
+   font-style: normal !important;
+   font-weight: 400 !important;
+   letter-spacing: 0.02em !important;
+   text-transform: uppercase !important;
+   font-feature-settings: 'pnum' on, 'lnum' on !important;
+   color: #707A8B !important;
+
 }
 
 .selected {
@@ -786,16 +786,14 @@ export default {
 }
 
 .chart-title {
-  font-family: "Roboto", sans-serif;
-  font-feature-settings: "liga" off;
-  color: var(--secondary-gray-text) !important;
+   font-feature-settings: 'liga' off;
+   color: var(--secondary-gray-text) !important;
 }
 
 .chart-title-apy {
-  margin-right: 4%;
-  font-family: "Roboto", sans-serif;
-  font-feature-settings: "pnum" on, "lnum" on;
-  color: var(--secondary-gray-text) !important;
+   margin-right: 4%;
+   font-feature-settings: 'pnum' on, 'lnum' on;
+   color: var(--secondary-gray-text) !important;
 }
 
 .chart-title-compound-container {
@@ -803,7 +801,6 @@ export default {
 }
 
 .chart-title-compound {
-  font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -813,7 +810,6 @@ export default {
 }
 
 .chart-title-compound-minus {
-  font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -823,15 +819,19 @@ export default {
 }
 
 .chart-sub-title-apy {
-  margin-right: 4%;
-  font-family: "Roboto", sans-serif;
-  font-feature-settings: "liga" off;
-  color: #707a8b !important;
+    margin-right: 4%;
+    font-feature-settings: 'liga' off;
+    color: #707A8B !important;
+}
+
+.mobile-info-title {
+   margin-left: 4%;
+   font-feature-settings: 'pnum' on, 'lnum' on;
+   color: var(--secondary-gray-text) !important;
 }
 
 .mobile-info-title {
   margin-left: 4%;
-  font-family: "Roboto", sans-serif;
   font-feature-settings: "pnum" on, "lnum" on;
   color: var(--secondary-gray-text) !important;
 }
@@ -846,9 +846,8 @@ export default {
 }
 
 .hold-checkbox-label {
-  font-family: "Roboto", sans-serif;
-  font-feature-settings: "pnum" on, "lnum" on;
-  color: #707a8b !important;
+   font-feature-settings: 'pnum' on, 'lnum' on;
+   color: #707A8B !important;
 }
 
 .tooltip-compound {

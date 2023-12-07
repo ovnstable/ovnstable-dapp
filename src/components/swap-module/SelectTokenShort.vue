@@ -130,9 +130,6 @@ export default defineComponent({
     }
 }
 
-div {
-    font-family: 'Roboto',serif;
-}
 
 .tokens-container {
 

@@ -132,7 +132,6 @@ export default {
   /*--w3o-text-color: "unset";*/
   --w3o-border-color: transparent;
   /*--w3o-action-color: "unset";*/
-  --w3o-font-family: "Roboto", sans-serif;
   --orange-gradient: linear-gradient(91.26deg, #fe7f2d 0%, #fcca46 100%);
   --blue-gradient: linear-gradient(
     91.26deg,
@@ -189,11 +188,6 @@ export default {
 
 html {
   overflow-y: auto !important;
-}
-
-html *,
-body * {
-  font-family: "Roboto", sans-serif;
 }
 
 #app {

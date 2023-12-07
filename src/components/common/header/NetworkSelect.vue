@@ -22,8 +22,8 @@
                     />
                     <img
                         :src="light
-                            ? (openedList ? require('@/assets/icon/up_w.svg') : require('@/assets/icon/down_w.svg'))  
-                            : (openedList ? require('@/assets/icon/up_black.svg') : require('@/assets/icon/down_black.svg'))"
+                            ? (openedList ? require('@/assets/icon/up_black.svg') : require('@/assets/icon/down_black.svg'))   
+                            : (openedList ? require('@/assets/icon/up_w.svg') : require('@/assets/icon/down_w.svg'))"
                         alt="Chevron Icon"
                         class="arrow"
                         :class="(alphaNetwork || betaNetwork) ? 'ml-n1' : 'ml-2'"
@@ -179,6 +179,7 @@ export default {
     computed: {
         ...mapGetters('network', ['networkId']),
         ...mapGetters('deprecated', ['isDeprecatedShow']),
+        ...mapGetters('theme', ['light']),
 
         icon: function () {
             switch (this.networkId){

@@ -10,8 +10,8 @@
             >
             <img
             :src="light
-                ? (dataHidden ? require('@/assets/icon/eye_close_black.svg') : require('@/assets/icon/eye_open_black.svg'))
-                : (dataHidden ? require('@/assets/icon/eye_close_white.svg') : require('@/assets/icon/eye_open_white.svg'))"
+                ? (dataHidden ? require('@/assets/icon/eye_close_white.svg') : require('@/assets/icon/eye_open_white.svg')) 
+                : (dataHidden ? require('@/assets/icon/eye_close_black.svg') : require('@/assets/icon/eye_open_black.svg'))"
             alt="Eye Icon"
             class="eye-icon"
             />
@@ -72,6 +72,7 @@ export default {
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('transaction', ['transactions']),
         ...mapGetters('magicEye', ['dataHidden']),
+        ...mapGetters('theme', ['light']),
 
         accountDisplay() {
             if (this.uns) {
@@ -249,6 +250,8 @@ export default {
 }
 
 .eye-icon {
+    width: 24px;
+    height: 24px;
     margin-top: 8px;
 }
 

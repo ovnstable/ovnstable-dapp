@@ -12,33 +12,33 @@
         <template v-slot:item.actions="{ item }">
             <template v-if="item.statusText === 'Active'">
                 <v-btn color="green" style="color: white" rounded @click="voteAction(item.id, FOR_VOTES)">
-                    <v-icon>mdi-account-multiple-check</v-icon>
+                    <img :src="require('@/assets/icon/account-multiple-check_white.svg')" alt="Account Multiple Check Icon" />
                 </v-btn>
                 <v-btn color="red" style="color: white" rounded @click="voteAction(item.id, AGAINST_VOTES)">
-                    <v-icon>mdi-account-multiple-minus</v-icon>
+                    <img :src="require('@/assets/icon/account-multiple-minus_white.svg')" alt="Account Multiple Minus Icon" />
                 </v-btn>
                 <v-btn color="grey" style="color: white" rounded @click="voteAction(item.id, ABSTAIN_VOTES)">
-                    <v-icon>mdi-account-lock</v-icon>
+                    <img :src="require('@/assets/icon/account-lock_white.svg')" alt="Account Lock Icon" />
                 </v-btn>
             </template>
 
             <template v-if="item.statusText === 'Succeeded'">
                 <v-btn color="green" style="color: white" rounded @click="sendToQueue(item.id)">
-                    <v-icon>mdi-av-timer</v-icon>
+                    <img :src="require('@/assets/icon/av-timer_white.svg')" alt="AV Timer Icon" />
                     Queue
                 </v-btn>
             </template>
 
             <template v-if="item.statusText === 'Queued'">
                 <v-btn color="green" style="color: white" rounded @click="sendToExecute(item.id)">
-                    <v-icon>mdi-alert-circle-check-outline</v-icon>
+                    <img :src="require('@/assets/icon/alert-circle-check-outline_white.svg')" alt="Alert Circle Check Outline Icon" />
                     Execute
                 </v-btn>
             </template>
 
             <template v-if="item.statusText === 'Defeated'">
                 <v-btn color="grey" style="color: white" rounded @click="sendToCancel(item.id)">
-                    <v-icon>mdi-cancel</v-icon>
+                    <img :src="require('@/assets/icon/cancel_white.svg')" alt="Cancel Icon" />
                     Cancel
                 </v-btn>
             </template>

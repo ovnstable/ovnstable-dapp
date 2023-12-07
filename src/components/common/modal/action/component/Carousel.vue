@@ -131,7 +131,6 @@ export default {
 }
 
 .title {
-    font-family: "Roboto", sans-serif;
     font-size: 24px;
     line-height: 36px;
     font-weight: 700;
@@ -139,7 +138,6 @@ export default {
 }
 
 .list-items {
-    font-family: "Roboto", sans-serif;
     font-size: 16px;
     line-height: 22px;
     font-weight: 400;

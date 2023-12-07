@@ -18,9 +18,7 @@
           icon
           @click="toggleTheme"
         >
-          <v-icon class="theme-icon">
-            {{ light ? "mdi-white-balance-sunny" : "mdi-moon-waxing-crescent" }}
-          </v-icon>
+          <img :src="light ? require('@/assets/icon/sun.svg') : require('@/assets/icon/moon_w.svg')">
         </v-btn>
       </div>
 
@@ -351,8 +349,6 @@ export default {
 .header-btn-connect {
   border-radius: 2px;
   box-shadow: none;
-
-  font-family: "Roboto", sans-serif;
   text-align: center;
   text-transform: uppercase;
   font-feature-settings: "pnum" on, "lnum" on;

@@ -98,7 +98,6 @@ export default {
 }
 
 .title {
-    font-family: "Roboto", sans-serif;
     font-weight: 700;
     font-size: 24px;
     line-height: 36px;
@@ -106,7 +105,6 @@ export default {
 }
 
 .subtitle {
-    font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;

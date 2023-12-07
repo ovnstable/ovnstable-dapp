@@ -34,13 +34,12 @@
               }}
             </label>
             <v-spacer></v-spacer>
-            <v-icon
-              v-if="cardData.data['prototype'] || cardData.data.openPrototype"
-              title="ETS is in prototype"
-              color="#FFFFFF"
-            >
-              mdi-test-tube
-            </v-icon>
+            <img
+            v-if="cardData.data['prototype'] || cardData.data.openPrototype"
+            :src="require('@/assets/icon/test-tube.svg') "
+            alt="Prototype Icon"
+            title="ETS is in prototype"
+          />
           </v-row>
           <v-row class="d-flex mt-5" v-if="cardData.monthApy">
             <label class="percentage">
@@ -824,26 +823,22 @@ export default {
 }
 
 .card-title {
-  font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   font-feature-settings: "pnum" on, "lnum" on;
   color: #ffffff;
 }
 
 .percentage {
-  font-family: "Roboto", sans-serif;
   font-feature-settings: "pnum" on, "lnum" on;
   color: #ffffff;
 }
 
 .apy {
-  font-family: "Roboto", sans-serif;
   font-feature-settings: "pnum" on, "lnum" on;
   color: #ffffff;
 }
 
 .card-info {
-  font-family: "Roboto", sans-serif;
   font-feature-settings: "pnum" on, "lnum" on;
   color: var(--main-gray-text);
 }
@@ -862,7 +857,6 @@ export default {
 }
 
 .box-name {
-  font-family: "Roboto", sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
@@ -884,7 +878,6 @@ export default {
 .chain-name,
 .platform-name,
 .token-pair-name {
-  font-family: "Roboto", sans-serif;
   font-weight: 300;
   font-size: 16px;
   line-height: 24px;
@@ -893,7 +886,6 @@ export default {
 
 .your-deposit,
 .your-deposit-disabled {
-  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-feature-settings: "liga" off;
 }
@@ -910,8 +902,6 @@ export default {
   border-radius: 2px;
   box-shadow: none !important;
   width: 100% !important;
-
-  font-family: "Roboto", sans-serif !important;
   text-align: center !important;
   text-transform: uppercase !important;
   font-feature-settings: "pnum" on, "lnum" on !important;
@@ -933,7 +923,6 @@ export default {
 }
 
 .footer-link {
-  font-family: "Roboto", sans-serif;
   font-feature-settings: "liga" off;
   color: #707a8b;
 }
@@ -958,19 +947,16 @@ export default {
 }
 
 .full-status-error-label {
-  font-family: "Roboto", sans-serif;
   font-feature-settings: "pnum" on, "lnum" on;
 }
 
 .progress-label-header {
-  font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   font-feature-settings: "pnum" on, "lnum" on;
   color: var(--third-gray-text);
 }
 
 .progress-label-value {
-  font-family: "Roboto", sans-serif;
   font-style: normal;
   text-transform: uppercase;
   font-feature-settings: "pnum" on, "lnum" on;

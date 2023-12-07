@@ -165,7 +165,6 @@ export default {
 <style scoped>
 
 .total-label {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 300;
     font-size: 16px;
@@ -175,7 +174,6 @@ export default {
 }
 
 .total-label-time {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 40px;

@@ -365,7 +365,6 @@ export default {
 
         addUsdPlusApyData(usdPlusApyDataParams) {
             this.usdPlusApyData[usdPlusApyDataParams.name] = usdPlusApyDataParams.data;
-            console.log('MarketData: refreshUsdPlusPayoutsData this.usdPlusApyData', this.usdPlusApyData);
         },
 
         async getUsdPlusAvgMonthApy() {
@@ -506,7 +505,6 @@ export default {
 
 
 .tab-btn {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text);
     margin-bottom: -2px;
@@ -532,7 +530,6 @@ export default {
 }
 
 .title-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);

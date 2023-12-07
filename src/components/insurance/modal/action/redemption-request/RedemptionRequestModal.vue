@@ -12,7 +12,7 @@
                     </label>
                     <v-spacer></v-spacer>
                     <v-btn icon @click="close" class="mt-4">
-                        <v-icon class="close-icon">mdi-close</v-icon>
+                        <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                     </v-btn>
                 </v-toolbar>
 
@@ -68,6 +68,7 @@ export default {
         ...mapGetters('network', ['networkId']),
         ...mapGetters('accountData', ['account']),
         ...mapGetters('gasPrice', ['gasPriceGwei']),
+        ...mapGetters("theme", ["light"]),
     },
 
     data: () => ({
@@ -291,14 +292,12 @@ export default {
 }
 
 .request-info-text {
-    font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text) !important;
 }
 
 .redemption-btn {
     border-radius: 2px !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     background: var(--blue-gradient);

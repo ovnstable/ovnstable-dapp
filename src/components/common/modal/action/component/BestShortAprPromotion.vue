@@ -76,36 +76,4 @@ export default {
     //box-shadow: 0 2px 3px 0px rgba(0, 0, 0, 0.2);
 }
 
-.container-title {
-    text-align: center;
-}
-
-.container-subtitle {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-}
-
-.title {
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 36px;
-    color: var(--main-gray-text);
-}
-
-.subtitle {
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: var(--links-blue);
-    cursor: pointer;
-}
-
-.arrow-icon {
-    cursor: pointer;
-}
 </style>

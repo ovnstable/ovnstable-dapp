@@ -13,9 +13,14 @@
                     <label class="gas-label-gwei">
                         &nbsp;/ {{ gasPriceStation[gasPriceType] }} Gwei
                     </label>
-                    <v-icon color="var(--secondary-gray-text)" class="mb-1">
-                        {{ openedList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                    </v-icon>
+                    <div class="mb-1">
+                        <img
+                            :src="light
+                            ? (openedList ? require('@/assets/icon/up_black.svg') : require('@/assets/icon/down_black.svg'))
+                            : (openedList ? require('@/assets/icon/up_w.svg') : require('@/assets/icon/down_w.svg'))"
+                            alt="icon up"
+                        />
+                    </div>
                 </v-row>
             </div>
         </template>
@@ -147,14 +152,12 @@ export default {
 }
 
 .gas-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     text-transform: capitalize;
     color: var(--secondary-gray-text);
 }
 
 .gas-label-gwei {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--action-label-text);
 }

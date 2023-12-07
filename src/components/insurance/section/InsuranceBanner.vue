@@ -260,13 +260,11 @@ export default {
 }
 
 .banner-title {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     color: white;
 }
 
 .info-title {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     letter-spacing: 0.03em;
     text-transform: uppercase;
@@ -275,7 +273,6 @@ export default {
 }
 
 .info-value {
-    font-family: 'Roboto', sans-serif;
     text-align: center;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: white;

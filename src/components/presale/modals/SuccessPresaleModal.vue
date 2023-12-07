@@ -10,7 +10,7 @@
                     <v-toolbar class="container_header container-header" flat>
                         <v-spacer></v-spacer>
                         <v-btn icon @click="setShowFunc(false)">
-                            <v-icon class="close-icon">mdi-close</v-icon>
+                            <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                         </v-btn>
                     </v-toolbar>
 
@@ -103,6 +103,7 @@ export default defineComponent({
     },
     computed: {
         ...mapGetters('network', ['networkId', 'getParams']),
+        ...mapGetters("theme", ["light"]),
 
     },
     watch: {
@@ -248,10 +249,6 @@ export default defineComponent({
     }
 }
 
-div {
-    font-family: 'Roboto',serif;
-}
-
 .tokens-container {
     padding-top: 15px;
     padding-bottom: 15px;
@@ -280,7 +277,6 @@ div {
     /* You successfully claimed $OVN token */
 
     /* Header/Header_3 R */
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 30px;
@@ -300,7 +296,6 @@ div {
 }
 
 .success-data-item-out {
-    font-family: Roboto;
     font-size: 16px;
     font-weight: 800;
     line-height: 24px;
@@ -357,7 +352,6 @@ div {
 
 .description-text {
     /* Caption */
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -392,7 +386,6 @@ div {
     cursor: pointer;
 
     /* Title 2 */
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;

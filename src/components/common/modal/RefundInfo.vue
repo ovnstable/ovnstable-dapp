@@ -208,9 +208,6 @@ export default {
     }
 }
 
-div {
-    font-family: 'Roboto',serif;
-}
 
 .tokens-container {
     padding-top: 15px;
@@ -254,7 +251,6 @@ div {
 }
 
 .success-data-item-out {
-    font-family: Roboto;
     font-size: 16px;
     font-weight: 800;
     line-height: 24px;

@@ -790,7 +790,6 @@ export default {
 
 .step-title {
     /* read information */
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
     font-size: 22px;
@@ -816,7 +815,6 @@ export default {
 
 .step-info-description {
     /* Secondary text regular */
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -838,7 +836,6 @@ export default {
 .info-sub-title {
 
     /* Caption */
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -849,7 +846,6 @@ export default {
 }
 
 .info-text {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -860,7 +856,6 @@ export default {
 }
 
 .info-text-blue {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -873,7 +868,6 @@ export default {
 }
 
 .info-text-black {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -886,7 +880,6 @@ export default {
 }
 
 .info-title {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 800;
     font-size: 16px;
@@ -1031,7 +1024,6 @@ export default {
 
 .funds-in-hard-cap-percent {
     position: relative;
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
     font-size: 16px;

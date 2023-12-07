@@ -8,7 +8,7 @@
           </label>
           <v-spacer></v-spacer>
           <v-btn icon @click="close" class="mt-4">
-            <v-icon class="close-icon">mdi-close</v-icon>
+            <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
           </v-btn>
         </v-toolbar>
 
@@ -53,6 +53,7 @@ export default {
   computed: {
     ...mapGetters("swapUsdtModal", ["show"]),
     ...mapGetters("swapUsdtModal", ["isMintView"]),
+    ...mapGetters("theme", ["light"]),
   },
 
   data: () => ({}),
@@ -155,7 +156,6 @@ export default {
 }
 
 .modal-link-label {
-  font-family: "Roboto", sans-serif;
   font-feature-settings: "liga" off;
   color: var(--links-blue);
   cursor: pointer;

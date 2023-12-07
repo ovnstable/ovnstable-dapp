@@ -166,13 +166,11 @@ export default {
 }
 
 .card-info {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
 }
 
 .card-info-title {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--main-gray-text);
 }

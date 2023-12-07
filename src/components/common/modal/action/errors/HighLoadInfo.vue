@@ -143,7 +143,6 @@ export default {
 
     color: var(--secondary-gray-text);
 
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 600;
     font-size: 24px;

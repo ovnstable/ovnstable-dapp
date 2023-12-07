@@ -12,7 +12,7 @@
                 </label>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="close">
-                    <v-icon class="close-icon">mdi-close</v-icon>
+                    <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                 </v-btn>
             </v-toolbar>
 
@@ -52,9 +52,11 @@
                         Disconnect
                     </v-btn>
                     <v-btn class="disconnect-wallet-btn-mobile" icon color="red" dark @click="disconnectWalletAction">
-                        <v-icon>
-                            mdi-logout
-                        </v-icon>
+                        <img
+                            :src="light ? require('@/assets/icon/exit_b.svg') : require('@/assets/icon/exit_w.svg')"
+                            alt="Exit Icon"
+                            class="exit_icon" 
+                        />
                     </v-btn>
                 </v-row>
 
@@ -187,6 +189,7 @@ export default {
         ...mapGetters('wrapUI', ['showWrap']),
         ...mapGetters('accountData', ['balance', 'account', 'uns']),
         ...mapGetters('etsAction', ['etsList']),
+        ...mapGetters("theme", ["light"]),
 
         accountDisplay: function () {
             if (this.uns) {
@@ -458,8 +461,6 @@ export default {
     height: 36px;
     border-radius: 2px;
     box-shadow: none !important;
-
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal !important;
     font-weight: 400 !important;
     font-size: 16px !important;
@@ -500,7 +501,6 @@ export default {
 }
 
 .account-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
@@ -530,7 +530,6 @@ export default {
 }
 
 .tab-btn {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text);
     margin-bottom: -2px;

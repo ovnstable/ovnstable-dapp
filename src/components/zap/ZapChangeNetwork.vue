@@ -99,11 +99,6 @@ export default defineComponent({
     }
 }
 
-div {
-    font-family: 'Roboto',serif;
-}
-
-
 .btn-filled {
     background: var(--blue-gradient);
     color: var(--secondary) !important;

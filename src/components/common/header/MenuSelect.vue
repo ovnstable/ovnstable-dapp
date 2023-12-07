@@ -4,7 +4,11 @@
             <div class="select-bar-main-container"
                  v-bind="attrs"
                  v-on="on">
-                <v-icon class="menu-icon">mdi-view-headline</v-icon>
+                 <img
+                    :src="light ? require('@/assets/icon/burger_black.svg') : require('@/assets/icon/burger_white.svg')"
+                    alt="Burger Icon"
+                    class="burger"
+                />
             </div>
         </template>
         <div class="main-container">
@@ -40,7 +44,7 @@
                 <div class="navbar-page-link mr-2">
                     <img
                         :src="require('@/assets/icon/menu/shuffle-variant.svg')"
-                         class="navbar-page-link"
+                         class="arrow navbar-page-link"
                     >
                 </div>
                 <div
@@ -77,9 +81,13 @@
                         >
                             USD+
                         </div>
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowUsd ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                        <div class="ml-3">
+                            <img
+                            class="arrow"
+                            :src="light ? (isShowUsd ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowUsd ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
+                        </div>
                     </div>
                     <div
                         @click="statsClick"
@@ -128,9 +136,14 @@
                         >
                             DAI+
                         </div>
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowDai ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                        <div class="ml-4">
+                            <img
+                            class="arrow"
+                            :src="light ? (isShowDai ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowDai ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
+                        </div>
+
                     </div>
 
                     <div
@@ -180,9 +193,13 @@
                         >
                             USDT+
                         </div>
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowUsdt ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                        <div class="ml-1">
+                            <img
+                            class="arrow"
+                            :src="light ? (isShowUsdt ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowUsdt ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
+                        </div>
                     </div>
 
                     <div
@@ -227,9 +244,13 @@
                         >
                             ETH+
                         </div>
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowUsdt ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                        <div class="ml-3">
+                            <img
+                            class="arrow"
+                            :src="light ? (isShowEth ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowEth ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
+                        </div>
                     </div>
 
                     <div
@@ -312,9 +333,13 @@
                         >
                             Insurance
                         </div>
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ isShowInsurance ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
-                        </v-icon>
+                        <div class="ml-2">
+                            <img
+                            class="arrow"
+                            :src="light ? (isShowInsurance ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/right_black.svg')) : (isShowInsurance ? require('@/assets/icon/down_w.svg') : require('@/assets/icon/right_w.svg'))"
+                            alt="right icon"
+                        />
+                        </div>
                     </div>
 
                     <div
@@ -702,7 +727,6 @@ export default {
 }
 
 .network-select-list-item {
-    font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text);
     cursor: pointer;
 }
@@ -734,7 +758,6 @@ export default {
 }
 
 .navbar-list-header {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -746,7 +769,6 @@ export default {
 }
 
 .navbar-list-label {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -757,7 +779,6 @@ export default {
 }
 
 .navbar-page-label-modal {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -777,7 +798,6 @@ export default {
 }
 
 .navbar-page-label {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -873,6 +893,16 @@ export default {
 .stroke-item {
     display: flex;
     align-items: center;
+}
+
+.arrow {
+    width: 12px;
+    height: 12px;
+}
+
+.burger {
+    height: 20px;
+    widows: 20px;
 }
 
 

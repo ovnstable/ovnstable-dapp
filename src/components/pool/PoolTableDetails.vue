@@ -304,7 +304,6 @@ export default defineComponent({
 
     .button {
         width: 95%;
-        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 14px;
@@ -364,7 +363,6 @@ export default defineComponent({
     }
 
     .button {
-        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 14px;
@@ -432,7 +430,6 @@ export default defineComponent({
 }
 
 div {
-    font-family: 'Roboto', sans-serif;
 }
 
 .button-full-width {
@@ -460,7 +457,6 @@ div {
     font-size: 14px;
     line-height: 18px ;
     letter-spacing: 0.03em;
-    font-family: 'Roboto', sans-serif;
     height: 28px!important;
     border-radius: 2px;
     box-shadow: none ;

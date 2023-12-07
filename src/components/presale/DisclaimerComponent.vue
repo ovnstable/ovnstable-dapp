@@ -28,7 +28,6 @@ export default {
 .disclaimer-title {
 
     /* Title 1 */
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -42,7 +41,6 @@ export default {
 }
 
 .disclaimer-content {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;

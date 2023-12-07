@@ -352,7 +352,6 @@ export default {
 }
 
 .chart-title {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text) !important;
 }

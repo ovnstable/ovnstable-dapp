@@ -123,7 +123,6 @@ export default {
 
 .loading-label {
     color: #FCCA46;
-    font-family: 'Roboto', sans-serif;
 }
 
 .loading-sub-label {

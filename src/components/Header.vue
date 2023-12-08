@@ -1,23 +1,36 @@
 <template>
   <div class="app-header mr-n3">
     <div class="app-header__container">
-      <div class="app-header__adv">
+      <div class="app-header__adv" v-if="arbOrBase && advNetworkData">
         <h2 class="app-header__adv-title mr-6">
-          Maximize Your Token+ yield via best APY
+          Maximize Your STABLE Tokens+ yield via best APY
         </h2>
         <div class="app-header__adv-data">
           <div class="app-header__adv-data__row mr-4">
             <img
               class="mr-1"
-              :src="require('@/assets/currencies/stablecoins/USD+.png')"
+              :src="
+                require(`@/assets/currencies/stablecoins/${advNetworkData.token0}.png`)
+              "
             />
-            <img :src="require('@/assets/currencies/stablecoins/FRAX.svg')" />
+            <img
+              :src="
+                require(`@/assets/currencies/stablecoins/${advNetworkData.token1}.svg`)
+              "
+            />
           </div>
-          <span class="mr-2">USD+/FRAX LP</span>
-          <span>~72% APR</span>
+          <span class="mr-2">{{ advTokensPair }}</span>
+          <span>~{{ advPoolApy }} APR</span>
           <div class="app-header__adv-data__row ml-6">
-            <img class="mr-2" :src="require('@/assets/network/arbitrum.svg')" />
-            <img :src="require('@/assets/cards/platform/Curve.svg')" />
+            <img
+              class="mr-2"
+              :src="require(`@/assets/network/${advNetworkData.network}.svg`)"
+            />
+            <img
+              :src="
+                require(`@/assets/cards/platform/${advNetworkData.platform}.svg`)
+              "
+            />
           </div>
         </div>
         <router-link class="app-header__adv-btn ml-6" to="/pools">
@@ -166,7 +179,58 @@ export default {
     ...mapGetters("web3", ["loadingWeb3"]),
     ...mapGetters("walletAction", ["walletConnected"]),
     ...mapGetters("accountData", ["account"]),
-    ...mapGetters("theme", ["light"])
+    ...mapGetters("theme", ["light"]),
+
+    arbOrBase() {
+      if ([42161, 8453].includes(this.networkId)) return true;
+      return false;
+    },
+
+    advPoolApy() {
+      if ([42161].includes(this.networkId)) {
+        return "55%";
+      }
+
+      if ([8453].includes(this.networkId)) {
+        return "21%";
+      }
+
+      return "";
+    },
+
+    advNetworkData() {
+      if ([42161].includes(this.networkId)) {
+        return {
+          network: "arbitrum",
+          platform: "Curve",
+          token0: "USD+",
+          token1: "FRAX"
+        };
+      }
+
+      if ([8453].includes(this.networkId)) {
+        return {
+          network: "base-light",
+          platform: "Aerodrome",
+          token0: "DAI+",
+          token1: "USD+"
+        };
+      }
+
+      return null;
+    },
+
+    advTokensPair() {
+      if ([42161].includes(this.networkId)) {
+        return "USD+/FRAXbp";
+      }
+
+      if ([8453].includes(this.networkId)) {
+        return "DAI+/USD+";
+      }
+
+      return "";
+    }
   },
 
   watch: {

@@ -282,20 +282,60 @@
 
                 <div class="navbar-list-divider "></div>
                 <label class="navbar-list-header mx-2">
-                    OVN TOKEN
+                    Yield Farming
                 </label>
 
-                <!--            <v-list-item @click="buyOvnClick" :class="selectedTab === 'buy-ovn' ? 'selected-page-item' : ''">
-                                <div class="navbar-page-link">
-                                    <img :src="require('@/assets/icon/menu/buy-ovn.svg')"
-                                         class="navbar-page-link" alt="">
-                                </div>
-                                <v-list-item-title class="mx-3">
-                                    <label class="navbar-page-label" :class="selectedTab === 'buy-ovn' ? 'selected-page' : ''">
-                                        BUY OVN
-                                    </label>
-                                </v-list-item-title>
-                            </v-list-item>-->
+                <div
+                    @click="featuredClick"
+                    :class="selectedTab === 'featured' ? 'selected-page-item' : ''"
+                    class="stroke-item pa-2"
+                >
+                    <div class="navbar-page-link mr-2">
+                        <svg
+                            width="24"
+                            height="22"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path d="M9.99984 12.8251L6.8665 14.7167L7.6915 11.1501L4.92484 8.75008L8.57484 8.44175L9.99984 5.07508L11.4248 8.44175L15.0748 8.75008L12.3082 11.1501L13.1332 14.7167M18.3332 7.70008L12.3415 7.19175L9.99984 1.66675L7.65817 7.19175L1.6665 7.70008L6.20817 11.6417L4.84984 17.5001L9.99984 14.3917L15.1498 17.5001L13.7832 11.6417L18.3332 7.70008Z" fill="#ADB3BD"/>
+                        </svg>
+                    </div>
+                    <div
+                        class="navbar-page-label"
+                        :class="selectedTab === 'featured' ? 'selected-page' : ''"
+                    >
+                        FEATURED
+                    </div>
+                </div>
+                <div
+                    @click="usdPlusPoolsClick"
+                    :class="selectedTab === 'pools' ? 'selected-page-item' : ''"
+                    class="stroke-item pa-2"
+                >
+                    <div class="navbar-page-link mr-2">
+                        <svg
+                            width="20"
+                            height="22"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path d="M12.5002 3.33325C14.2683 3.33325 15.964 4.03563 17.2142 5.28587C18.4645 6.53612 19.1668 8.23181 19.1668 9.99992C19.1668 11.768 18.4645 13.4637 17.2142 14.714C15.964 15.9642 14.2683 16.6666 12.5002 16.6666C10.7321 16.6666 9.03636 15.9642 7.78612 14.714C6.53587 13.4637 5.8335 11.768 5.8335 9.99992C5.8335 8.23181 6.53587 6.53612 7.78612 5.28587C9.03636 4.03563 10.7321 3.33325 12.5002 3.33325ZM12.5002 14.9999C13.8262 14.9999 15.098 14.4731 16.0357 13.5355C16.9734 12.5978 17.5002 11.326 17.5002 9.99992C17.5002 8.67384 16.9734 7.40207 16.0357 6.46439C15.098 5.5267 13.8262 4.99992 12.5002 4.99992C11.1741 4.99992 9.90231 5.5267 8.96463 6.46439C8.02695 7.40207 7.50016 8.67384 7.50016 9.99992C7.50016 11.326 8.02695 12.5978 8.96463 13.5355C9.90231 14.4731 11.1741 14.9999 12.5002 14.9999ZM2.50016 9.99992C2.50012 11.0332 2.82075 12.041 3.4178 12.8844C4.01485 13.7277 4.8589 14.365 5.8335 14.7083V16.4499C2.9585 15.7083 0.833496 13.1083 0.833496 9.99992C0.833496 6.89159 2.9585 4.29159 5.8335 3.54992V5.29159C3.89183 5.97492 2.50016 7.82492 2.50016 9.99992Z" fill="#ADB3BD"/>
+                        </svg>
+                    </div>
+                    <div
+                        :class="selectedTab === 'pools' ? 'selected-page' : ''"
+                        class="navbar-page-label"
+                    >
+                        ALL POOLS
+                    </div>
+                </div>
+
+                <div class="navbar-list-divider "></div>
+                <label class="navbar-list-header mx-2">
+                    OVN TOKEN
+                </label>
 
                 <div
                     @click="provideLpClick"
@@ -380,70 +420,8 @@
                             Premiums
                         </div>
                     </div>
-
-                    <!--
-
-                                    <v-list-item @click="insuranceCollateralClick" :class="selectedTab === 'insurance_collateral' ? 'selected-page-item' : ''">
-                                        <v-list-item-title>
-                                            <label class="navbar-list-label mx-5" :class="selectedTab === 'insurance_collateral' ? 'selected-page' : ''">
-                                                Collateral
-                                            </label>
-                                        </v-list-item-title>
-                                    </v-list-item>-->
                 </div>
 
-                <div class="navbar-list-divider mt-1 mb-1"></div>
-                <label class="navbar-list-header mx-2">
-                    Yield Farming
-                </label>
-
-                <div
-                    @click="featuredClick"
-                    :class="selectedTab === 'featured' ? 'selected-page-item' : ''"
-                    class="stroke-item pa-2"
-                >
-                    <div class="navbar-page-link mr-2">
-                        <svg
-                            width="24"
-                            height="22"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path d="M9.99984 12.8251L6.8665 14.7167L7.6915 11.1501L4.92484 8.75008L8.57484 8.44175L9.99984 5.07508L11.4248 8.44175L15.0748 8.75008L12.3082 11.1501L13.1332 14.7167M18.3332 7.70008L12.3415 7.19175L9.99984 1.66675L7.65817 7.19175L1.6665 7.70008L6.20817 11.6417L4.84984 17.5001L9.99984 14.3917L15.1498 17.5001L13.7832 11.6417L18.3332 7.70008Z" fill="#ADB3BD"/>
-                        </svg>
-                    </div>
-                    <div
-                        class="navbar-page-label"
-                        :class="selectedTab === 'featured' ? 'selected-page' : ''"
-                    >
-                        FEATURED
-                    </div>
-                </div>
-
-                <div
-                    @click="usdPlusPoolsClick"
-                    :class="selectedTab === 'pools' ? 'selected-page-item' : ''"
-                    class="stroke-item pa-2"
-                >
-                    <div class="navbar-page-link mr-2">
-                        <svg
-                            width="20"
-                            height="22"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path d="M12.5002 3.33325C14.2683 3.33325 15.964 4.03563 17.2142 5.28587C18.4645 6.53612 19.1668 8.23181 19.1668 9.99992C19.1668 11.768 18.4645 13.4637 17.2142 14.714C15.964 15.9642 14.2683 16.6666 12.5002 16.6666C10.7321 16.6666 9.03636 15.9642 7.78612 14.714C6.53587 13.4637 5.8335 11.768 5.8335 9.99992C5.8335 8.23181 6.53587 6.53612 7.78612 5.28587C9.03636 4.03563 10.7321 3.33325 12.5002 3.33325ZM12.5002 14.9999C13.8262 14.9999 15.098 14.4731 16.0357 13.5355C16.9734 12.5978 17.5002 11.326 17.5002 9.99992C17.5002 8.67384 16.9734 7.40207 16.0357 6.46439C15.098 5.5267 13.8262 4.99992 12.5002 4.99992C11.1741 4.99992 9.90231 5.5267 8.96463 6.46439C8.02695 7.40207 7.50016 8.67384 7.50016 9.99992C7.50016 11.326 8.02695 12.5978 8.96463 13.5355C9.90231 14.4731 11.1741 14.9999 12.5002 14.9999ZM2.50016 9.99992C2.50012 11.0332 2.82075 12.041 3.4178 12.8844C4.01485 13.7277 4.8589 14.365 5.8335 14.7083V16.4499C2.9585 15.7083 0.833496 13.1083 0.833496 9.99992C0.833496 6.89159 2.9585 4.29159 5.8335 3.54992V5.29159C3.89183 5.97492 2.50016 7.82492 2.50016 9.99992Z" fill="#ADB3BD"/>
-                        </svg>
-                    </div>
-                    <div
-                        :class="selectedTab === 'pools' ? 'selected-page' : ''"
-                        class="navbar-page-label"
-                    >
-                        ALL POOLS
-                    </div>
-                </div>
 
                 <div class="navbar-list-divider"></div>
 

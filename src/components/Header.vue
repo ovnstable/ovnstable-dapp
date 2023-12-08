@@ -1,24 +1,51 @@
 <template>
   <div class="app-header mr-n3">
     <div class="app-header__container">
-      <div :class="$wu.isMobile() ? 'mr-2' : ''">
-        <v-btn
-          :class="$wu.isMobile() ? 'mx-n6' : 'mr-2'"
-          class="header-btn-presale btn-filled"
-          @click="goToPresale"
-        >
-          PRESALE
-        </v-btn>
+      <div class="app-header__adv">
+        <h2 class="app-header__adv-title mr-6">
+          Maximize Your Token+ yield via best APY
+        </h2>
+        <div class="app-header__adv-data">
+          <div class="app-header__adv-data__row mr-4">
+            <img
+              class="mr-1"
+              :src="require('@/assets/currencies/stablecoins/USD+.png')"
+            />
+            <img :src="require('@/assets/currencies/stablecoins/FRAX.svg')" />
+          </div>
+          <span class="mr-2">USD+/FRAX LP</span>
+          <span>~72% APR</span>
+          <div class="app-header__adv-data__row ml-6">
+            <img class="mr-2" :src="require('@/assets/network/arbitrum.svg')" />
+            <img :src="require('@/assets/cards/platform/Curve.svg')" />
+          </div>
+        </div>
+        <router-link class="app-header__adv-btn ml-6" to="/pools">
+          <v-btn outlined>
+            <div class="app-header__adv-btn_arrows mr-2">
+              <img :src="require('@/assets/icon/arrow-left.svg')" />
+              <img :src="require('@/assets/icon/arrow-left.svg')" />
+              <img :src="require('@/assets/icon/arrow-left.svg')" />
+            </div>
+            CHECK
+          </v-btn>
+        </router-link>
       </div>
 
-      <div class="theme-toggle-group">
+      <div class="theme-toggle-group ml-auto">
         <v-btn
           outlined
           :class="light ? 'theme-toggle-btn-selected' : 'theme-toggle-btn'"
           icon
           @click="toggleTheme"
         >
-          <img :src="light ? require('@/assets/icon/sun.svg') : require('@/assets/icon/moon_w.svg')">
+          <img
+            :src="
+              light
+                ? require('@/assets/icon/sun.svg')
+                : require('@/assets/icon/moon_w.svg')
+            "
+          />
         </v-btn>
       </div>
 
@@ -192,6 +219,69 @@ export default {
 </script>
 
 <style scoped>
+.app-header__adv {
+  display: none;
+  justify-content: space-between;
+  margin-right: auto;
+  background: linear-gradient(90deg, #279fef 0%, #097bc6 100%);
+  padding: 6px 15px;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.app-header__adv-title {
+  max-width: 240px;
+  min-width: 150px;
+  font-size: 18px;
+}
+
+.app-header__adv-data {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  border: 2px solid #0657a2;
+  padding: 6px 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 127, 210, 0.5) 0%,
+    rgba(0, 59, 129, 0.5) 100%
+  );
+}
+
+.app-header__adv-data img {
+  width: 40px;
+  height: 40px;
+}
+
+.app-header__adv-data__row {
+  display: flex;
+  align-items: center;
+}
+
+.app-header__adv-data__row:last-child {
+  display: none;
+}
+
+.app-header__adv-data span {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.app-header__adv-btn {
+  height: auto;
+}
+
+.app-header__adv-btn button {
+  min-width: 100px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  height: 100% !important;
+}
+
+.app-header__adv-btn_arrows {
+  display: none;
+}
 .header-btn-connect.v-btn,
 .header-btn-presale.v-btn {
   height: 42px;
@@ -341,6 +431,29 @@ export default {
   }
 }
 
+@media only screen and (min-width: 1500px) {
+  .app-header__adv {
+    display: flex;
+  }
+}
+@media only screen and (min-width: 1750px) {
+  .app-header__adv {
+    min-width: 55%;
+    padding: 6px 20px;
+  }
+  .app-header__adv-data__row:last-child {
+    display: flex;
+  }
+
+  .app-header__adv-btn,
+  .app-header__adv-title {
+    font-size: 18px;
+  }
+
+  .app-header__adv-btn_arrows {
+    display: flex;
+  }
+}
 .progress {
   background: var(--blue-gradient);
 }

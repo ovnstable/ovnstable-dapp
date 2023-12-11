@@ -31,6 +31,7 @@
         </template>
         <v-list class="token-select-list">
             <v-list-item
+                v-if="checkNetworkIdToken('ETH+')"
                 style="cursor: pointer"
                 @click="selectToken('ethPlus', 'ETH+')"
             >
@@ -63,6 +64,7 @@
             <v-list-item
                 style="cursor: pointer"
                 @click="selectToken('daiPlus', 'DAI+')"
+                v-if="checkNetworkIdToken('DAI+')"
             >
                 <v-list-item-title class="token-select-list-item">
                     <div class="balance-container">
@@ -78,6 +80,7 @@
             <v-list-item
                 style="cursor: pointer"
                 @click="selectToken('usdtPlus', 'USDT+')"
+                v-if="checkNetworkIdToken('USDT+')"
             >
                 <v-list-item-title class="token-select-list-item">
                     <div class="balance-container">
@@ -93,6 +96,7 @@
             <v-list-item
                 style="cursor: pointer"
                 @click="selectToken('ovn', 'OVN')"
+                v-if="checkNetworkIdToken('OVN')"
             >
                 <v-list-item-title class="token-select-list-item">
                     <div class="balance-container">
@@ -173,6 +177,21 @@ export default {
             this.selectedItemLabel = tokenLabel;
             this.openedList = false;
         },
+
+        checkNetworkIdToken(token) {
+ 
+            const tokenNetworkConditions = [
+                { token: 'ETH+', networkIds: [42161] },
+                { token: 'USDT+', networkIds: [42161,59144,56]},
+                { token: 'DAI+', networkIds: [137,10,42161,8453]},
+                { token: 'OVN', networkIds: [10,42161,8453]}  
+            ];  
+      
+            const condition = tokenNetworkConditions.find(condition => condition.token === token);
+
+            return condition && condition.networkIds.includes(this.networkId);
+        },
+
 
         clickMenuOutside() {
             this.openedList = false;

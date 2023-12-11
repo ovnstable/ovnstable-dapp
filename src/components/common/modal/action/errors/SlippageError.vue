@@ -254,7 +254,6 @@ export default {
 }
 
 .error-message {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     color: var(--secondary-gray-text);
@@ -267,14 +266,12 @@ export default {
 
 
 .info-item {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     color: var(--secondary-gray-text);
 }
 
 .info-item-link {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -336,7 +333,6 @@ export default {
     padding: 5px 10px;
     border-radius: 10px;
 
-    font-family: Roboto, sans-serif;
     font-size: 14px;
     font-weight: 500;
 }

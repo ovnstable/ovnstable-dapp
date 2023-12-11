@@ -523,7 +523,6 @@ export default {
 }
 
 .section-title-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     text-transform: uppercase;
     color: var(--secondary-gray-text);
@@ -557,25 +556,21 @@ export default {
 }
 
 .title-card-text {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
 }
 
 .card-info {
-    font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text);
 }
 
 .card-info-value {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
 }
 
 .title-card-text-bottom {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
@@ -586,14 +581,12 @@ export default {
 }
 
 .title-card-debank {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #fe815f;
     cursor: pointer !important;
 }
 
 .table-scroll-label {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -611,7 +604,6 @@ export default {
 .rate-tab-btn {
     width: 100% !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-align: center !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;

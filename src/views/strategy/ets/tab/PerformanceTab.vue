@@ -540,12 +540,9 @@
               openTokenOnScan(etsStrategyData[etsData.name].rebaseAddress)
             "
           >
-            <v-icon
-              size="20"
-              style="margin-top: -2px"
-              color="rgba(255, 255, 255, 0.5)"
-              >mdi-open-in-new</v-icon
-            >
+          <div style="margin-top: -2px">
+              <img :src="require('@/assets/icon/open-in-new_white.svg')" alt="Open In New Icon" />
+          </div>
           </div>
         </v-row>
         <v-row class="info-row footer-row mt-6" justify="start" align="center">
@@ -571,12 +568,9 @@
               openStrategyOnScan(etsStrategyData[etsData.name].exchangerAddress)
             "
           >
-            <v-icon
-              size="20"
-              style="margin-top: -2px"
-              color="rgba(255, 255, 255, 0.5)"
-              >mdi-open-in-new</v-icon
-            >
+          <div style="margin-top: -2px">
+              <img :src="require('@/assets/icon/open-in-new_white.svg')" alt="Open In New Icon" />
+          </div>
           </div>
         </v-row>
       </v-col>
@@ -605,12 +599,9 @@
               openStrategyOnScan(etsStrategyData[etsData.name].strategyAddress)
             "
           >
-            <v-icon
-              size="20"
-              style="margin-top: -2px"
-              color="rgba(255, 255, 255, 0.5)"
-              >mdi-open-in-new</v-icon
-            >
+          <div style="margin-top: -2px">
+              <img :src="require('@/assets/icon/open-in-new_white.svg')" alt="Open In New Icon" />
+          </div>
           </div>
         </v-row>
         <v-row class="info-row footer-row mt-6" justify="start" align="center">
@@ -1052,7 +1043,6 @@ export default {
 }
 
 .section-title-label {
-  font-family: "Roboto", sans-serif;
   font-feature-settings: "pnum" on, "lnum" on;
   text-transform: uppercase;
   color: var(--secondary-gray-text);
@@ -1090,19 +1080,16 @@ export default {
 }
 
 .title-card-text {
-  font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   font-feature-settings: "pnum" on, "lnum" on;
   color: var(--secondary-gray-text);
 }
 
 .card-info {
-  font-family: "Roboto", sans-serif;
   color: var(--secondary-gray-text);
 }
 
 .card-info-value {
-  font-family: "Roboto", sans-serif;
   font-feature-settings: "pnum" on, "lnum" on;
   color: var(--secondary-gray-text);
 }
@@ -1116,7 +1103,6 @@ export default {
 }
 
 .title-card-text-bottom {
-  font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   font-feature-settings: "pnum" on, "lnum" on;
   color: var(--secondary-gray-text);
@@ -1127,14 +1113,12 @@ export default {
 }
 
 .title-card-debank {
-  font-family: "Roboto", sans-serif;
   font-feature-settings: "pnum" on, "lnum" on;
   color: #fe815f;
   cursor: pointer !important;
 }
 
 .table-scroll-label {
-  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -1152,7 +1136,6 @@ export default {
 .rate-tab-btn {
   width: 100% !important;
 
-  font-family: "Roboto", sans-serif !important;
   text-align: center !important;
   text-transform: uppercase !important;
   font-feature-settings: "pnum" on, "lnum" on !important;

@@ -33,9 +33,13 @@
         <v-col cols="1" class="my-1">
             <v-row class="ma-0" justify="end" align="end">
                  <label>
-                   <v-icon color="var(--secondary-gray-text)">
-                     {{ statistic.isOpen ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                   </v-icon>
+                    <img
+                        :src="statistic.isOpen
+                            ? (light ? require('@/assets/icon/up_black.svg') : require('@/assets/icon/up_w.svg'))
+                            : (light ? require('@/assets/icon/down_black.svg') : require('@/assets/icon/down_w.svg'))"
+                        alt="up arrow"
+                        class="arrow"
+                    />
                  </label>
             </v-row>
         </v-col>
@@ -46,6 +50,7 @@
 
 <script>
 
+import {mapGetters} from "vuex";
 export default {
     name: "StatisticListCard",
 
@@ -60,6 +65,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters("theme", ["light"]),
     },
 
     data: () => ({
@@ -93,7 +99,6 @@ export default {
 
     .button {
         width: 95% !important;
-        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 14px !important;
@@ -138,7 +143,6 @@ export default {
     }
 
     .button {
-        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 14px !important;
@@ -174,7 +178,6 @@ export default {
     }
 
     .button {
-        font-family: 'Roboto', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 14px !important;
@@ -217,7 +220,6 @@ export default {
     border-radius: 2px;
     box-shadow: none !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-align: center !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
@@ -241,7 +243,6 @@ export default {
 }
 
 .card-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--main-gray-text);
 }
@@ -259,7 +260,6 @@ export default {
 }
 
 .list-header-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--third-gray-text);
 }
@@ -271,5 +271,10 @@ export default {
 .icon > .v-image {
     border-radius: 9999px !important;
 
+}
+
+.arrow {
+    width: 12px;
+    height: 12px;
 }
 </style>

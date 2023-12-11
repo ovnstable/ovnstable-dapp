@@ -92,11 +92,15 @@
                         {{ dataHidden ? '' : (this.insuranceBalance.optimism && this.insuranceBalance.optimism > 0) ? ('$' +
                             $utils.formatMoneyComma((this.insuranceBalance.optimism * this.ovnPrice), 2)) : "—" }}
                     </label>
-                    <label class="your-deposit ml-1">
-                        <v-icon color="var(--disabled-value)">
-                            {{ insuranceRedemptionData.request === 'CAN_WITHDRAW' ? 'mdi-lock-open-variant' : 'mdi-lock' }}
-                        </v-icon>
-                    </label>
+                        <div class="ml-1 mt-1">
+                            <img
+                            :src="light
+                                ? (insuranceRedemptionData.request === 'CAN_WITHDRAW' ? require('@/assets/icon/lock_open_variant.svg') : require('@/assets/icon/lock_black.svg'))
+                                : (insuranceRedemptionData.request === 'CAN_WITHDRAW' ? require('@/assets/icon/lock_open_variant_white.svg') : require('@/assets/icon/lock_white.svg'))"
+                            alt="Lock Icon"
+                            class="lock-icon"
+                        />
+                        </div>
                 </v-row>
 
                 <v-row class="d-flex justify-space-between ma-0 mt-2">
@@ -179,6 +183,7 @@ export default {
         ...mapGetters("insuranceData", ['insuranceRedemptionData']),
         ...mapGetters("network", ["appApiUrl", "networkId", "networkName", "getParams"]),
         ...mapGetters('magicEye', ['dataHidden']),
+        ...mapGetters("theme", ["light"]),
 
         payouts: function () {
             let data = this.payoutsData;
@@ -686,20 +691,17 @@ export default {
 }
 
 .card-title {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #FFFFFF;
 }
 
 .percentage {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #FFFFFF;
 }
 
 .apy {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: #FFFFFF;
 }
@@ -712,7 +714,6 @@ export default {
 }
 
 .your-deposit {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-feature-settings: 'liga' off;
 }
@@ -726,7 +727,6 @@ export default {
     box-shadow: none !important;
     width: 100% !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-align: center !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
@@ -748,7 +748,6 @@ export default {
 }
 
 .footer-link {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: #707A8B;
 }
@@ -777,14 +776,12 @@ export default {
 }
 
 .apy-box-total-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
 }
 
 .apy-box-subtitle-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
@@ -796,12 +793,10 @@ export default {
 
 .card-info-label,
 .card-info-value {
-    font-family: 'Roboto', sans-serif;
     color: var(--main-gray-text);
 }
 
 .card-about-label {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -822,5 +817,14 @@ export default {
 
 .info-container {
     position: relative;
+}
+
+.lock-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.image-lock {
+    margin-top: 5px;
 }
 </style>

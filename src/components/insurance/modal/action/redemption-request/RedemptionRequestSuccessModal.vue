@@ -9,7 +9,7 @@
                 <v-toolbar class="container_header" flat>
                     <v-spacer></v-spacer>
                     <v-btn icon @click="close" class="mt-4">
-                        <v-icon class="close-icon">mdi-close</v-icon>
+                        <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                     </v-btn>
                 </v-toolbar>
 
@@ -64,6 +64,7 @@ export default {
 
     computed: {
         ...mapGetters('insuranceInvestModal', ['showRedemptionRequestSuccess', 'redemptionRequestHash']),
+        ...mapGetters("theme", ["light"]),
     },
 
     data: () => ({
@@ -166,13 +167,11 @@ export default {
 }
 
 .request-info-text {
-    font-family: 'Roboto', sans-serif;
     text-align: center !important;
     color: var(--secondary-gray-text);
 }
 
 .discord-link {
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal;
 
     cursor: pointer;

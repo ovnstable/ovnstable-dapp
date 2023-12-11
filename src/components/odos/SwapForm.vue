@@ -1841,7 +1841,6 @@ export default defineComponent({
 }
 
 div {
-  font-family: "Roboto", serif;
 }
 
 .swap-header {
@@ -1880,7 +1879,6 @@ div {
 .swap-title {
   display: flex;
   justify-content: space-between;
-  font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
 
@@ -2094,7 +2092,6 @@ div {
 }
 
 .odos-fees-title {
-  font-family: "Roboto", sans-serif;
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;

@@ -33,13 +33,13 @@
                   <label class="sub-info-text" @click="openIfBridgeNotLoad"
                     >The bridge widget doesn't load</label
                   >
-                  <v-icon color="var(--links-blue)">
-                    {{
-                      openIfBridgeNotLoad
-                        ? "mdi-chevron-up"
-                        : "mdi-chevron-down"
-                    }}
-                  </v-icon>
+                  <div class="ml-2">
+                    <img class="bridge_open_info"
+                    :src="openIfBridgeNotLoad ? require('@/assets/icon/up_blue.svg') : require('@/assets/icon/down_blue.svg')"
+                    alt="down icon"
+                    style="color: var(--links-blue);"
+                  />
+                  </div>
                 </div>
                 <div v-if="openIfBridgeNotLoad">
                   <div class="list-text mb-8">
@@ -226,13 +226,6 @@ export default defineComponent({
     display: flex;
     align-items: center;
   }
-
-  .help-info-text {
-    font-family: "Roboto", sans-serif;
-    font-size: 14px;
-    line-height: 22px;
-    font-weight: 400;
-  }
 }
 /* full */
 @media only screen and (min-width: 1400px) {
@@ -263,10 +256,6 @@ export default defineComponent({
     font-size: 18px;
     line-height: 28px;
   }
-}
-
-div {
-  font-family: "Roboto", serif;
 }
 
 .info-container {
@@ -326,15 +315,13 @@ div {
   margin-top: 10px !important;
 }
 
-.help-info-text {
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
-  line-height: 22px;
-  font-weight: 400;
-}
-
 .dark_theme_img {
   width: 290px;
   height: auto;
+}
+
+.bridge_open_info{
+  width: 12px;
+  height: 12px;
 }
 </style>

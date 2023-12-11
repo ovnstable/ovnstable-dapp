@@ -9,7 +9,7 @@
           <v-toolbar class="container_header container-header" flat>
             <v-spacer></v-spacer>
             <v-btn icon @click="setShowFunc(false)">
-              <v-icon class="close-icon">mdi-close</v-icon>
+              <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
             </v-btn>
           </v-toolbar>
 
@@ -258,7 +258,8 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters("network", ["getParams"]),
-    ...mapGetters("web3", ["web3", "getWeiMarker"])
+    ...mapGetters("web3", ["web3", "getWeiMarker"]),
+    ...mapGetters("theme", ["light"]),
   },
   watch: {
     successData: function (val, oldVal) {
@@ -500,10 +501,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-div {
-  font-family: "Roboto", serif;
-}
-
 .tokens-container {
   padding-top: 15px;
   padding-bottom: 15px;

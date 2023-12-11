@@ -71,13 +71,25 @@
 
         <template v-if="!isPoolsLoading && typeOfPool === 'ALL'">
             <v-row class="ma-0 mb-1 mt-5" align="center">
-                <v-icon class="circle-icon" :size="$wu.isFull() ? 20 : 16">mdi-circle-multiple-outline</v-icon>
+                <div class="circle-icon" :size="$wu.isFull() ? 20 : 16">
+                    <img
+                        :src="light
+                            ? require('@/assets/icon/circle-multiple-outline.svg')
+                            : require('@/assets/icon/circle-multiple-outline_white.svg')"
+                        alt="Circle Multiple Outline Icon"
+                        class="circle-img-icon"
+                    />
+                </div>
                 <label class="show-more ml-2" @click="openPoolList = !openPoolList">Pools with TVL less than $300K</label>
                 <div class="select-bar-main-container ml-7" @click="openPoolList = !openPoolList">
                     <v-row justify="end" align="center" class="select-bar-container">
-                        <v-icon color="var(--secondary-gray-text)" >
-                            {{ openPoolList ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                        </v-icon>
+                        <img
+                        :src="light
+                            ? (openPoolList ? require('@/assets/icon/up_black.svg') : require('@/assets/icon/down_black.svg'))
+                            : (openPoolList ? require('@/assets/icon/up_w.svg') : require('@/assets/icon/down_w.svg'))"
+                        alt="Chevron Icon"
+                        class="arrow"
+                        />
                     </v-row>
                 </div>
             </v-row>
@@ -101,7 +113,7 @@
 
 <script>
 
-import {mapActions} from "vuex";
+import {mapActions,mapGetters} from "vuex";
 
 import ZapModal from "@/components/zap/modals/ZapModal.vue";
 import PoolFilter from "@/components/pool/PoolFilter.vue";
@@ -139,6 +151,7 @@ export default {
     }),
 
     computed: {
+        ...mapGetters("theme", ["light"]),
         filteredPools () {
             if (this.orderType === 'APR') {
                 // last step filter
@@ -432,7 +445,6 @@ export default {
 }
 
 .title-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
@@ -440,7 +452,6 @@ export default {
 
 .updated-title {
     text-align: right;
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -453,7 +464,6 @@ export default {
 }
 
 .show-more {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
     font-size: 18px;
@@ -465,5 +475,17 @@ export default {
 
 .prototypes-list-divider {
     border-color: var(--fourth-gray-text) !important;
+}
+
+.arrow {
+    margin-top: 5px;
+    width: 12px;
+    height: 12px;
+}
+
+.circle-img-icon {
+    margin-top: 5px;
+    width: 20px;
+    height: 20px;
 }
 </style>

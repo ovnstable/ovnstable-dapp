@@ -14,7 +14,7 @@
                 </label>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="close">
-                    <v-icon class="close-icon">mdi-close</v-icon>
+                    <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                 </v-btn>
             </v-toolbar>
 
@@ -73,6 +73,7 @@ export default {
 
     computed: {
         ...mapGetters('bscInfoModal', ['show']),
+        ...mapGetters("theme", ["light"])
     },
 
     data: () => ({
@@ -224,23 +225,18 @@ export default {
 }
 
 .modal-info-text {
-    font-family: 'Roboto', sans-serif;
     color: var(--secondary-gray-text) !important;
 }
 
 .understand-btn {
     border-radius: 2px !important;
-
-    font-family: 'Roboto', sans-serif !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     color: #FCCA46 !important;
 }
 
 .discord-link {
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal;
-
     cursor: pointer;
     color: var(--links-blue);
 }

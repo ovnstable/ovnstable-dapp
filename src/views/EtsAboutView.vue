@@ -302,7 +302,6 @@ export default {
 }
 
 .title-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
@@ -310,7 +309,6 @@ export default {
 
 
 .info-text {
-    font-family: "Roboto", sans-serif;
     font-style: normal;
     font-weight: 300;
     font-size: 16px;
@@ -320,7 +318,6 @@ export default {
 }
 
 .how-title {
-    font-family: "Roboto", sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 30px;
@@ -343,7 +340,6 @@ export default {
 }
 
 .number {
-    font-family: "Roboto", sans-serif;
     font-weight: 600;
     font-size: 20px;
     color: var(--main-gray-text);
@@ -370,7 +366,6 @@ export default {
 }
 
 .subtitle-label {
-    font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: 18px;
     line-height: 28px;
@@ -378,7 +373,6 @@ export default {
 }
 
 .subtitle-info {
-    font-family: "Roboto", sans-serif;
     font-weight: 300;
     font-size: 16px;
     line-height: 24px;
@@ -393,7 +387,6 @@ export default {
 }
 
 .risk-info {
-    font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: 14px;
     line-height: 22px;
@@ -421,7 +414,6 @@ export default {
 .links-text {
     color: var(--links-blue);
     font-weight: 400;
-    font-family: "Roboto", sans-serif;
     cursor: pointer;
 }
 </style>

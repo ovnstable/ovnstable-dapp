@@ -981,11 +981,9 @@ export default {
 .header-btn {
   border-radius: 4px !important;
   box-shadow: none !important;
-
-  font-family: "Roboto", sans-serif !important;
   text-align: center !important;
   text-transform: uppercase !important;
-  font-feature-settings: "pnum" on, "lnum" on !important;
+  font-feature-settings: 'pnum' on, 'lnum' on !important;
 }
 
 .btn-filled {
@@ -1018,23 +1016,26 @@ export default {
 }
 
 .title-label {
-  font-family: "Roboto", sans-serif;
   text-transform: uppercase;
-  font-feature-settings: "pnum" on, "lnum" on;
+  font-feature-settings: 'pnum' on, 'lnum' on;
   color: var(--main-gray-text);
 }
 
 .section-title-label {
-  font-family: "Roboto", sans-serif;
-  font-feature-settings: "pnum" on, "lnum" on;
+  font-feature-settings: 'pnum' on, 'lnum' on;
   text-transform: none;
   color: var(--secondary-gray-text);
 }
 
 .currency-text {
-  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: 400;
+  color: var(--secondary-gray-text);
+}
+
+.section-title-label {
+  font-feature-settings: "pnum" on, "lnum" on;
+  text-transform: none;
   color: var(--secondary-gray-text);
 }
 
@@ -1044,10 +1045,9 @@ export default {
 }
 
 .address-text {
-  font-family: "Roboto", sans-serif;
-  font-style: normal;
-  font-weight: 300;
-  color: var(--secondary-gray-text);
+   font-style: normal;
+   font-weight: 300;
+   color: var(--secondary-gray-text);
 }
 
 .currency-box,
@@ -1060,11 +1060,10 @@ export default {
 }
 
 .tab-btn {
-  font-family: "Roboto", sans-serif;
-  font-feature-settings: "liga" off;
-  color: var(--secondary-gray-text);
-  margin-bottom: -2px;
-  cursor: pointer;
+   font-feature-settings: 'liga' off;
+   color: var(--secondary-gray-text);
+   margin-bottom: -2px;
+   cursor: pointer;
 }
 
 .tab-btn-disabled {
@@ -1083,11 +1082,11 @@ export default {
 }
 
 .risk-text {
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  color: #707a8b;
+   font-weight: 400;
+   font-size: 16px;
+   line-height: 24px;
+   color: #707A8B;
+
 }
 
 .link-to-docs {

@@ -1923,34 +1923,14 @@ export default defineComponent({
     }
 }
 
-div {
-    font-family: 'Roboto',serif;
-}
-
 .swap-container {
-    //padding: 40px 30px;
-    //gap: 8px;
-    //background: var(--swap-main-banner-background);
-    //box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
-    //border-radius: 28px;
-    //max-width: 600px;
     z-index: 48!important;
-}
-
-.swap-header {
 }
 
 .swap-settings {
     text-align: end;
     cursor: pointer;
 }
-
-.swap-body {
-}
-
-.swap-footer {
-}
-
 .add-token-text {
     font-style: normal;
     font-weight: 400;
@@ -1964,16 +1944,7 @@ div {
     color: #707A8B;
 }
 
-
-.input-swap-container {
-}
-
-.out-swap-container {
-}
-
 .swap-title {
-
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -2009,9 +1980,6 @@ div {
 .change-swap-image {
     text-align: center; /* center the child element's content horizontally */
     padding-top: 8px;
-}
-
-.powered-image {
 }
 
 .swap-button {
@@ -2176,12 +2144,10 @@ div {
 }
 
 .odos-fees-title {
-    font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
     text-align: end;
-
     color: var(--secondary-gray-text);
 }
 

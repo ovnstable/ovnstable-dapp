@@ -145,7 +145,6 @@ export default {
 
     color: var(--secondary-gray-text);
 
-    font-family: 'Roboto';
     font-style: normal;
     font-size: 20px;
     line-height: 30px;

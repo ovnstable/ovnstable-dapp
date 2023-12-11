@@ -436,13 +436,11 @@ export default {
 }
 
 .banner-title {
-  font-family: "Roboto", sans-serif;
   text-transform: none;
   color: white;
 }
 
 .info-title {
-  font-family: "Roboto", sans-serif;
   font-style: normal;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -451,14 +449,12 @@ export default {
 }
 
 .info-value {
-  font-family: "Roboto", sans-serif;
   text-align: center;
   font-feature-settings: "pnum" on, "lnum" on;
   color: white;
 }
 
 .info-value-max {
-  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: 400;
   letter-spacing: 0.1em;
@@ -500,7 +496,6 @@ export default {
 }
 
 .range-title {
-  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: 400;
   text-transform: uppercase;
@@ -509,7 +504,6 @@ export default {
 }
 
 .info-value-per100 {
-  font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   font-size: 30px;
@@ -524,7 +518,6 @@ export default {
 }
 
 .info-value-compound {
-  font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   font-size: 20px;

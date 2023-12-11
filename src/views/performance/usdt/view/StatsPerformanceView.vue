@@ -762,7 +762,6 @@ export default {
 }
 
 .title-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
@@ -786,7 +785,6 @@ export default {
 }
 
 .section-title-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'pnum' on, 'lnum' on;
     text-transform: capitalize;
     color: var(--secondary-gray-text);
@@ -798,7 +796,6 @@ export default {
 }
 
 .table-scroll-label {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -811,14 +808,12 @@ export default {
 .rate-tab-btn {
     width: 100% !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-align: center !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
 }
 
 .tab-btn {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--secondary-gray-text);
     margin-bottom: -2px;
@@ -843,7 +838,6 @@ export default {
 }
 
 .ready-label {
-    font-family: 'Roboto', sans-serif;
     font-feature-settings: 'liga' off;
     color: var(--main-gray-text);
 }
@@ -852,7 +846,6 @@ export default {
     border-radius: 4px !important;
     box-shadow: none !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-align: center !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
@@ -882,7 +875,6 @@ export default {
 }
 
 .section-text {
-  font-family: 'Roboto', sans-serif;
   font-weight: 300;
   color: var(--main-gray-text);
 }

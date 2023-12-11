@@ -494,7 +494,6 @@ background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%
 .warn-message {
 
     /* Caption */
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -512,7 +511,6 @@ background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%
 }
 
 .balance-detail {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -523,7 +521,6 @@ background: linear-gradient(91.26deg, #28A0F0 0%, rgba(6, 120, 196, 0.9917) 100%
 
 
 .info-title {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 800;
     font-size: 16px;

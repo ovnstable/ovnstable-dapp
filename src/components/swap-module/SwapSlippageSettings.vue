@@ -226,9 +226,6 @@ export default defineComponent({
 
 }
 
-div {
-    font-family: 'Roboto',serif;
-}
 
 .container-body {
     background: var(--secondary);
@@ -304,7 +301,6 @@ div {
 }
 
 .warn-message {
-    font-family: Roboto;
     font-size: 16px;
     font-weight: 400;
     line-height: 24px;

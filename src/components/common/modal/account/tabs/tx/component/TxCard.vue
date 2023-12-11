@@ -41,7 +41,7 @@
                     ></v-progress-circular>
 
                     <v-icon class="status-icon" v-else :class="txData.isError ? 'status-failed' : (txData.isCancelled ? 'status-cancelled' : 'status-success')">
-                        {{ (txData.isError || txData.isCancelled) ? 'mdi-close' : 'mdi-check' }}
+                        {{ (txData.isError || txData.isCancelled) ? ( light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')) : require('@/assets/icon/check.svg') }}
                     </v-icon>
                 </template>
 
@@ -54,9 +54,14 @@
         </v-col>
         <v-col cols="1">
             <v-row justify="end" align="center">
-                <v-icon color="var(--secondary-gray-text)" :class="$wu.isMobile() ? '' : 'mr-5'">
-                    {{ cardOpened ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                </v-icon>
+                <div :class="$wu.isMobile() ? '' : 'mr-5'">
+                    <img
+                        :src="light
+                        ? (cardOpened ? require('@/assets/icon/up_black.svg') : require('@/assets/icon/down_black.svg'))
+                        : (cardOpened ? require('@/assets/icon/up_w.svg') : require('@/assets/icon/down_w.svg'))"
+                        alt="Chevron Icon"
+                    />
+                </div>
             </v-row>
         </v-col>
 
@@ -75,7 +80,7 @@
                 <v-row justify="start" align="center" class="mt-5 mb-1">
                     <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="deleteTx()">
                         Delete transaction from history
-                        <v-icon class="copy-icon" small>mdi-close</v-icon>
+                        <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                     </label>
                 </v-row>
             </template>
@@ -111,7 +116,7 @@
                         <template v-slot:activator="{on}">
                             <label class="success-link" :class="$wu.isMobile() ? 'ml-3' : 'ml-5'" @click.stop="copyTxIdToClipboard()">
                                 Copy tx ID
-                                <v-icon class="copy-icon" small>mdi-content-copy</v-icon>
+                                <img :src="require('@/assets/icon/content-copy_blue.svg')" alt="Copy Icon" />
                             </label>
                         </template>
                         <p class="my-0">Copied!</p>
@@ -209,6 +214,7 @@ export default {
         ...mapGetters('network', ['opConfig', 'polygonConfig', 'bscConfig', 'arConfig', 'baseConfig', 'baseConfig', 'zkConfig']),
         ...mapGetters('etsAction', ['etsList']),
         ...mapGetters('network', ['networkId']),
+        ...mapGetters("theme", ["light"]),
 
         icon: function () {
             switch (this.txData.chain){
@@ -459,7 +465,6 @@ export default {
 }
 
 .card-label {
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;
     color: var(--secondary-gray-text);
@@ -512,7 +517,6 @@ export default {
 }
 
 .success-link {
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal;
 
     cursor: pointer;
@@ -520,7 +524,6 @@ export default {
 }
 
 .date-label {
-    font-family: 'Roboto', sans-serif !important;
     font-style: normal;
 
     cursor: pointer;

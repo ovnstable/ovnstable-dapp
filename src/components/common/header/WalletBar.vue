@@ -8,9 +8,14 @@
                 v-if="!$wu.isMobile()"
                 @click.stop="switchEye"
             >
-                <v-icon class="eye-icon">
-                    {{ dataHidden ? 'mdi-eye-off-outline' : 'mdi-eye-outline'}}
-                </v-icon>
+            <img
+            :src="light
+                ? (dataHidden ? require('@/assets/icon/eye_close_white.svg') : require('@/assets/icon/eye_open_white.svg')) 
+                : (dataHidden ? require('@/assets/icon/eye_close_black.svg') : require('@/assets/icon/eye_open_black.svg'))"
+            alt="Eye Icon"
+            class="eye-icon"
+            />
+
             </div>
 
             <div class="wallet-bar__wrap" @click.stop="pendingTx? showTxHistory() : walletClickAction()">
@@ -67,6 +72,7 @@ export default {
         ...mapGetters('walletAction', ['walletConnected']),
         ...mapGetters('transaction', ['transactions']),
         ...mapGetters('magicEye', ['dataHidden']),
+        ...mapGetters('theme', ['light']),
 
         accountDisplay() {
             if (this.uns) {
@@ -233,7 +239,6 @@ export default {
 }
 
 .balance-label, .account-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--secondary-gray-text);
@@ -245,10 +250,12 @@ export default {
 }
 
 .eye-icon {
-    color: var(--disabled-value) !important;
+    width: 24px;
+    height: 24px;
+    margin-top: 8px;
 }
 
-.wallet-bar-container:hover > .wallet-col > .eye-icon {
+.wallet-bar-container:hover > .wallet-col >  {
     color: var(--hover);
 }
 

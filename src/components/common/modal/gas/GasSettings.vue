@@ -13,7 +13,7 @@
                     </label>
                     <v-spacer></v-spacer>
                     <v-btn icon class="ml-auto" @click="close" dark>
-                        <v-icon class="close-icon">mdi-close</v-icon>
+                        <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
                     </v-btn>
                 </v-row>
             </v-toolbar>
@@ -120,6 +120,7 @@ export default {
 
     computed: {
         ...mapGetters('gasPrice', ['show', 'gasPrice', 'gasPriceGwei', 'gasPriceStation']),
+        ...mapGetters("theme", ["light"]),
     },
 
     data: () => ({

@@ -280,7 +280,6 @@ export default {
 }
 
 .title-label {
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
     font-feature-settings: 'pnum' on, 'lnum' on;
     color: var(--main-gray-text);
@@ -295,7 +294,6 @@ export default {
     color: var(--zoom-btn-color);
 
     font-weight: 400;
-    font-family: "Roboto", sans-serif;
 
     letter-spacing: 0.2;
     text-transform: uppercase;
@@ -331,14 +329,12 @@ export default {
 }
 
 .section-title-label {
-  font-family: 'Roboto', sans-serif;
   font-feature-settings: 'pnum' on, 'lnum' on;
   text-transform: none;
   color: var(--secondary-gray-text);
 }
 
 .section-text {
-  font-family: 'Roboto', sans-serif;
   font-weight: 300;
   color: var(--main-gray-text);
 }
@@ -347,7 +343,6 @@ export default {
     border-radius: 4px !important;
     box-shadow: none !important;
 
-    font-family: 'Roboto', sans-serif !important;
     text-align: center !important;
     text-transform: uppercase !important;
     font-feature-settings: 'pnum' on, 'lnum' on !important;

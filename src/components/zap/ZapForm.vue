@@ -1924,29 +1924,13 @@ export default defineComponent({
 }
 
 .swap-container {
-    //padding: 40px 30px;
-    //gap: 8px;
-    //background: var(--swap-main-banner-background);
-    //box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
-    //border-radius: 28px;
-    //max-width: 600px;
     z-index: 48!important;
-}
-
-.swap-header {
 }
 
 .swap-settings {
     text-align: end;
     cursor: pointer;
 }
-
-.swap-body {
-}
-
-.swap-footer {
-}
-
 .add-token-text {
     font-style: normal;
     font-weight: 400;
@@ -1958,13 +1942,6 @@ export default defineComponent({
 .add-token-text-disabled {
     cursor: default!important;
     color: #707A8B;
-}
-
-
-.input-swap-container {
-}
-
-.out-swap-container {
 }
 
 .swap-title {
@@ -2003,9 +1980,6 @@ export default defineComponent({
 .change-swap-image {
     text-align: center; /* center the child element's content horizontally */
     padding-top: 8px;
-}
-
-.powered-image {
 }
 
 .swap-button {

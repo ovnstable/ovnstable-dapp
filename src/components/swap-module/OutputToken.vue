@@ -88,7 +88,7 @@
                                     {{$utils.formatMoney(token.selectedToken.balanceData.balance, 2)}}
                                 </div>
                                 <div v-else>
-                                    0
+                                    0.00
                                 </div>
                             </div>
                         </div>

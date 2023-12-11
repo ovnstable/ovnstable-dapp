@@ -188,7 +188,7 @@ export default {
 
     advPoolApy() {
       if ([42161].includes(this.networkId)) {
-        return "55%";
+        return "32%";
       }
 
       if ([8453].includes(this.networkId)) {

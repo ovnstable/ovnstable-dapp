@@ -466,7 +466,6 @@ export const odosSwap = {
                 let isNeedIgnore = (key === "0x0000000000000000000000000000000000000000" || isNeedTokenIgnore);
                 // key === token address
                 if (ignoreBaseNetworkCurrency && isNeedIgnore) {
-                    console.log("Ignore item: ", item);
                     continue;
                 }
 
@@ -476,7 +475,6 @@ export const odosSwap = {
                     leftListTokensAddresses = leftListTokensAddresses.filter(address =>
                             address.toLowerCase() !== key.toLowerCase()
                     );
-                    console.log('Item of secondtoken: ',  key.toLowerCase(), leftListTokensAddresses.length, item)
                     continue;
                 }
 

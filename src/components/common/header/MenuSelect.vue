@@ -467,7 +467,6 @@ export default {
           }
 
         let lastNotify = localStorage.getItem('lastNotify');
-        console.log('lastNotify 1:', lastNotify)
 
         if (!lastNotify || lastNotify === 'null' || lastNotify === 'undefined') {
           localStorage.setItem('lastNotify', '2');
@@ -476,9 +475,7 @@ export default {
         }
 
         lastNotify = lastNotify * 1;
-        console.log('lastNotify 2: ', lastNotify)
         if (lastNotify <= 0) {
-          console.log('lastNotify 3: ', lastNotify)
           localStorage.setItem('lastNotify', '0');
           this.isShowSwipeNotification = false;
           return;

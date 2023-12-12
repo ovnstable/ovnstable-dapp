@@ -205,7 +205,7 @@
                     <div class="stroke-item pa-2">
                         <div class="navbar-page-link mr-2">
                             <img
-                            :src="light ? (isShowEth ? require('@/assets/icon/menu/ethPlusWhite.svg') : require('@/assets/icon/menu/ethPlusWhiteOff.svg')) : (isShowEth ? require('@/assets/icon/menu/ethPlusBlack.svg') : require('@/assets/icon/menu/ethPlusWhiteOff.svg'))"
+                                :src="light ? (isShowEth ? require('@/assets/icon/menu/ethPlusWhite.svg') : require('@/assets/icon/menu/ethPlusWhiteOff.svg')) : (isShowEth ? require('@/assets/icon/menu/ethPlusBlack.svg') : require('@/assets/icon/menu/ethPlusWhiteOff.svg'))"
                             >                  
                         </div>
                         <div

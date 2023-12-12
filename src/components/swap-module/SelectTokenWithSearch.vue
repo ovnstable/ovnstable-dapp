@@ -65,7 +65,7 @@
                                    <div class="balance-container">
                                        <div>
                                           <div class="token-balance">
-                                              {{token.balanceData.balance ? $utils.formatMoney(token.balanceData.balance, 2) : '0'}}
+                                              {{token.balanceData.balance ? $utils.formatMoney(token.balanceData.balance, $utils.fixedBySymbol(token.price)) : '0'}}
                                           </div>
                                        </div>
                                        <div>

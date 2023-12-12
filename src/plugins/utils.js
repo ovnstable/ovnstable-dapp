@@ -168,7 +168,7 @@ export default {
         }
     },
 
-    fixedBySymbol(price) {
+    fixedByPrice(price) {
         if (price==null){
             return 2
         } else {

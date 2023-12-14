@@ -130,11 +130,6 @@ export default defineComponent({
         }
     },
     methods: {
-        getToFixed(token) {
-            console.log(token)
-            return '00';
-        },
-
         isNumber: function(evt) {
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;

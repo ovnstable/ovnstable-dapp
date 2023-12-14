@@ -85,7 +85,7 @@
                             </div>
                             <div class="select-token-balance-text">
                                 <div v-if="token.selectedToken && token.selectedToken.balanceData.balance">
-                                    {{$utils.formatMoney(token.selectedToken.balanceData.balance, 2)}}
+                                    {{$utils.formatMoney(token.selectedToken.balanceData.balance, $utils.fixedByPrice(token.selectedToken.price))}}
                                 </div>
                                 <div v-else>
                                     0.00

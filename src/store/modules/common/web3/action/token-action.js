@@ -6,6 +6,7 @@ import wETHPlusImage from "@/assets/wEthPlus.json"
 import WrappedUsdPlusImage from "@/assets/wUsdPlus.json";
 import OptimismInsurance from "@/assets/optimism_insurance.json";
 import OvnImage from "@/assets/ovn.json";
+import { USDT_PLUS_CONTRACT_ADDRESS_BSC } from "@/utils/const";
 
 const state = {};
 
@@ -61,10 +62,11 @@ const actions = {
     },
 
     async addUsdtPlusToken({commit, dispatch, getters, rootState}) {
+        const address = rootState.web3.contracts.usdtPlus.options.address
         let option = {
-            address: rootState.web3.contracts.usdtPlus.options.address,
+            address: address,
             symbol: process.env.VUE_APP_USDT_TOKEN_NAME,
-            decimals: 6,
+            decimals: address == USDT_PLUS_CONTRACT_ADDRESS_BSC ? 18 : 6,
             image: UsdtPlusImage.image,
         };
 

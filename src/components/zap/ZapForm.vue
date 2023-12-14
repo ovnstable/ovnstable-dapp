@@ -1229,10 +1229,11 @@ export default defineComponent({
       returnedToUserEvent,
       lastPoolInfoData
     ) {
+      let approveAmount = 10 ** 24;
       let isGaugeApproved = await this.checkApproveForGauge(
         this.poolTokenContract,
         this.gaugeContract.options.address,
-        1000000000000000
+        approveAmount
       );
       if (!isGaugeApproved) {
         this.showWaitingModal("Approving gauge in process");

@@ -648,9 +648,10 @@ export const zap = {
       return allowanceValue >= checkedAllowanceValue;
     },
     async approveGaugeForStake() {
-      let approveValue = (10 ** 18).toString();
+      let approveValue = new BigNumber(10).pow(24);
       this.showWaitingModal("Approving gauge in process");
 
+      console.log(approveValue, "approveValue");
       let isGaugeApproved = this.checkApproveForGauge(
         this.poolTokenContract,
         this.gaugeContract.options.address,
@@ -684,7 +685,9 @@ export const zap = {
       ) {
         let poolAddress = this.zapPoolRoot.address;
         let poolInfo = this.poolsInfoMap[poolAddress];
-        return this.gaugeContract.methods.depositAll(poolInfo.poolId).send(params);
+        return this.gaugeContract.methods
+          .depositAll(poolInfo.poolId)
+          .send(params);
       }
 
       if (

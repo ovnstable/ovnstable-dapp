@@ -70,7 +70,7 @@ export const zap = {
         },
         Curve: {
           name: "Curve",
-          type: "LP_WITH_STAKE_IN_ONE_STEP",
+          type: "LP_STAKE_DIFF_STEPS",
           typeOfDepositConstructor: "BASE_CONSTRUCTOR"
         },
         Beefy: {
@@ -325,6 +325,14 @@ export const zap = {
           approveType: "TOKEN"
         },
 
+        // 3x tokens pool
+        "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013": {
+          // usd+/fraxbp
+          gauge: "0xF403C135812408BFbE8713b5A23a04b3D48AAE31",
+          poolId: 13,
+          approveType: "TOKEN"
+        },
+
         // Beefy
         "0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197_Aerodrome": {
           // ovn/usd+ Aerodrome volatile
@@ -354,6 +362,11 @@ export const zap = {
         return;
       }
 
+      console.log(
+        this.zapPlatformContractTypeMap,
+        "this.zapPlatformContractTypeMap"
+      );
+      console.log(this.zapPoolRoot.platform, "this.zapPoolRoot.platform");
       this.currentZapPlatformContractType =
         this.zapPlatformContractTypeMap[this.zapPoolRoot.platform];
       if (!this.currentZapPlatformContractType) {
@@ -364,8 +377,18 @@ export const zap = {
         return;
       }
 
+      let platformName = this.currentZapPlatformContractType.name;
+
+      // same platform as Curve zap, but different logic for staking
+      if (
+        this?.zapPoolRoot?.address ===
+        "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013"
+      ) {
+        platformName = "Convex";
+      }
+
       let abiFile = await loadJSON(
-        `/contracts/${this.zapPoolRoot.chainName}/${this.currentZapPlatformContractType.name}Zap.json`
+        `/contracts/${this.zapPoolRoot.chainName}/${platformName}Zap.json`
       );
       this.zapContract = this._loadContract(
         abiFile,
@@ -513,12 +536,14 @@ export const zap = {
 
       const output0InMoneyWithProportion = sumInputs * proportion0;
       const output1InMoneyWithProportion = sumInputs * (1 - proportion0);
+
       const inputTokens = inputTokensAddresses.map((address, index) => {
         return {
           tokenAddress: address,
           amount: inputTokensAmounts[index].toString()
         };
       });
+
       if (output0InMoneyWithProportion < tokenOut0) {
         const dif = tokenOut0 - output0InMoneyWithProportion;
         const token0AmountForSwap = new BigNumber(
@@ -530,6 +555,7 @@ export const zap = {
           tokenAddress: outputTokensAddresses[0],
           amount: token0AmountForSwap.toString()
         });
+
         return {
           outputTokens: [
             {
@@ -554,6 +580,7 @@ export const zap = {
           tokenAddress: outputTokensAddresses[1],
           amount: token1AmountForSwap.toString()
         });
+
         return {
           outputTokens: [
             {
@@ -567,44 +594,46 @@ export const zap = {
             .minus(token1AmountForSwap)
             .toFixed(0)
         };
-      }
+      } else {
+        const difToGetFromOdos0 = output0InMoneyWithProportion - tokenOut0;
+        const difToGetFromOdos1 = output1InMoneyWithProportion - tokenOut1;
 
-      const difToGetFromOdos0 = output0InMoneyWithProportion - tokenOut0;
-      const difToGetFromOdos1 = output1InMoneyWithProportion - tokenOut1;
-      return {
-        inputTokens: inputTokens,
-        outputTokens: [
-          {
-            tokenAddress: outputTokensAddresses[0],
-            proportion: Number.parseFloat(
-              (
-                difToGetFromOdos0 /
-                (difToGetFromOdos0 + difToGetFromOdos1)
-              ).toFixed(2)
-            )
-          },
-          {
-            tokenAddress: outputTokensAddresses[1],
-            proportion: Number.parseFloat(
-              (
-                difToGetFromOdos1 /
-                (difToGetFromOdos0 + difToGetFromOdos1)
-              ).toFixed(2)
-            )
-          }
-        ],
-        amountToken0Out: new BigNumber(
-          (tokenOut0 / outputTokensPrices[0]).toString()
-        )
-          .times(new BigNumber(10).pow(outputTokensDecimals[0]))
-          .toFixed(0),
-        amountToken1Out: new BigNumber(
-          (tokenOut1 / outputTokensPrices[1]).toString()
-        )
-          .times(new BigNumber(10).pow(outputTokensDecimals[1]))
-          .toFixed(0)
-      };
+        return {
+          inputTokens: inputTokens,
+          outputTokens: [
+            {
+              tokenAddress: outputTokensAddresses[0],
+              proportion: Number.parseFloat(
+                (
+                  difToGetFromOdos0 /
+                  (difToGetFromOdos0 + difToGetFromOdos1)
+                ).toFixed(2)
+              )
+            },
+            {
+              tokenAddress: outputTokensAddresses[1],
+              proportion: Number.parseFloat(
+                (
+                  difToGetFromOdos1 /
+                  (difToGetFromOdos0 + difToGetFromOdos1)
+                ).toFixed(2)
+              )
+            }
+          ],
+          amountToken0Out: new BigNumber(
+            (tokenOut0 / outputTokensPrices[0]).toString()
+          )
+            .times(new BigNumber(10).pow(outputTokensDecimals[0]))
+            .toFixed(0),
+          amountToken1Out: new BigNumber(
+            (tokenOut1 / outputTokensPrices[1]).toString()
+          )
+            .times(new BigNumber(10).pow(outputTokensDecimals[1]))
+            .toFixed(0)
+        };
+      }
     },
+
     async checkApproveForGauge(
       poolTokenContract,
       gaugeAddress,

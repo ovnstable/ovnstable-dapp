@@ -71,6 +71,7 @@ export default {
 
     computed: {
         ...mapGetters('gasPrice', ['gasPrice', 'gasPriceGwei', 'gasPriceStation', 'gasPriceType']),
+        ...mapGetters("theme", ["light"]),
     },
 
     data: () => ({

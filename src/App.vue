@@ -190,12 +190,9 @@ export default {
 html {
   overflow-y: auto !important;
 }
-
-html *,
 body * {
-  font-family: "Roboto", sans-serif;
+    font-family: "Roboto", sans-serif;
 }
-
 #app {
   background-color: var(--main-background);
 }

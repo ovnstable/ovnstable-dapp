@@ -4,7 +4,6 @@ export const contractApprove = {
     methods: {
         ...mapActions("gasPrice", ['refreshGasPrice']),
 
-
         async getAllowanceValue(contract, from, checkContractAddress) {
             return await contract.methods.allowance(from, checkContractAddress).call();
         },

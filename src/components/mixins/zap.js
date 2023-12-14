@@ -68,10 +68,10 @@ export const zap = {
           type: "LP_STAKE_DIFF_STEPS",
           typeOfDepositConstructor: "CONSTRUCTOR_STAKE_METHOD_AND_TOKEN_AMOUNT"
         },
-        Curve: {
-          name: "Curve",
+        Convex: {
+          name: "Convex",
           type: "LP_STAKE_DIFF_STEPS",
-          typeOfDepositConstructor: "BASE_CONSTRUCTOR"
+          typeOfDepositConstructor: "CONSTRUCTOR_WITH_TOKEN_ID"
         },
         Beefy: {
           name: "Beefy",
@@ -326,9 +326,12 @@ export const zap = {
         },
 
         // 3x tokens pool
+        // gauge is for deposit tokens
+        // gaugeForLP for LP tokens from gauge
         "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013": {
           // usd+/fraxbp
-          gauge: "0xF403C135812408BFbE8713b5A23a04b3D48AAE31",
+          gauge: "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
+          gaugeForLP: "0xF403C135812408BFbE8713b5A23a04b3D48AAE31",
           poolId: 13,
           approveType: "TOKEN"
         },
@@ -377,15 +380,7 @@ export const zap = {
         return;
       }
 
-      let platformName = this.currentZapPlatformContractType.name;
-
-      // same platform as Curve zap, but different logic for staking
-      if (
-        this?.zapPoolRoot?.address ===
-        "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013"
-      ) {
-        platformName = "Convex";
-      }
+      const platformName = this.currentZapPlatformContractType.name;
 
       let abiFile = await loadJSON(
         `/contracts/${this.zapPoolRoot.chainName}/${platformName}Zap.json`
@@ -401,6 +396,7 @@ export const zap = {
       }
     },
     async loadPoolTokenAndGaugeContracts() {
+      console.log("loadPoolTokenAndGaugeContracts");
       let poolAddress = this.zapPoolRoot.address;
       let poolInfo = this.poolsInfoMap[poolAddress];
       if (!poolInfo) {
@@ -411,10 +407,21 @@ export const zap = {
         return;
       }
 
-      let gaugeAddress = poolInfo.gauge;
+      let gaugeAddress = poolInfo.gaugeForLP
+        ? poolInfo.gaugeForLP
+        : poolInfo.gauge;
+
+      let abiGaugeContractFile = await loadJSON(
+        `/contracts/${this.zapPoolRoot.chainName}/${this.currentZapPlatformContractType.name}Gauge.json`
+      );
+      this.gaugeContract = this._loadContract(
+        abiGaugeContractFile,
+        this.web3,
+        gaugeAddress
+      );
 
       let abiPoolTokenContractFile = await loadJSON(
-        `/contracts/${this.zapPoolRoot.chainName}/${this.currentZapPlatformContractType.name}PoolToken.json`
+        `/contracts/${this.zapPoolRoot.chainName}/${this?.currentZapPlatformContractType?.name}PoolToken.json`
       );
 
       // exclude _ from pool address (aggregators)
@@ -426,15 +433,6 @@ export const zap = {
         abiPoolTokenContractFile,
         this.web3,
         poolAddress
-      );
-
-      let abiGaugeContractFile = await loadJSON(
-        `/contracts/${this.zapPoolRoot.chainName}/${this.currentZapPlatformContractType.name}Gauge.json`
-      );
-      this.gaugeContract = this._loadContract(
-        abiGaugeContractFile,
-        this.web3,
-        gaugeAddress
       );
     },
     _loadContract(file, web3, address) {
@@ -479,6 +477,8 @@ export const zap = {
           });
       }
 
+      console.log(gauge, "gauge---");
+      console.log(this.zapContract, " this.zapContract");
       return this.zapContract.methods
         .getProportion(gauge)
         .call()
@@ -682,7 +682,9 @@ export const zap = {
         this.currentZapPlatformContractType.typeOfDepositConstructor ===
         "CONSTRUCTOR_WITH_TOKEN_ID"
       ) {
-        return this.gaugeContract.methods.depositAll(0).send(params);
+        let poolAddress = this.zapPoolRoot.address;
+        let poolInfo = this.poolsInfoMap[poolAddress];
+        return this.gaugeContract.methods.depositAll(poolInfo.poolId).send(params);
       }
 
       if (

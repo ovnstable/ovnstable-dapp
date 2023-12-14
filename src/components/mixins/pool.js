@@ -778,10 +778,7 @@ export const pool = {
         return;
       }
 
-      if (
-        pool.platform === "Curve" &&
-        pool.address === "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013"
-      ) {
+      if (pool.address === "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013") {
         url = "https://www.convexfinance.com/stake/arbitrum/13";
         window.open(url, "_blank").focus();
         return;
@@ -938,6 +935,16 @@ export const pool = {
                     newName = newName.replace("USDC", "USDBC");
                   }
 
+                  let platform = pool.platform;
+
+                  // cases when LP staking platform differ from actual
+                  if (
+                    pool.id.address ===
+                    "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013"
+                  ) {
+                    platform = "Convex";
+                  }
+
                   this.pools.push({
                     id: pool.id.name + pool.tvl + pool.platform,
                     name: newName,
@@ -948,7 +955,7 @@ export const pool = {
                     chain: networkConfig.networkId,
                     chainName: networkConfig.networkName,
                     address: pool.id.address,
-                    platform: pool.platform,
+                    platform,
                     tvl: pool.tvl,
                     apr: pool.apr,
                     skimEnabled: pool.skimEnabled,

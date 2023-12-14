@@ -9,9 +9,15 @@ let accountingEightConfig = {
     thousand: " ",
 }
 
-let accountingConfig = {
+let accountingSixConfig = {
     symbol: "",
     precision: 6,
+    thousand: " ",
+}
+
+let accountingFiveConfig = {
+    symbol: "",
+    precision: 5,
     thousand: " ",
 }
 
@@ -144,7 +150,9 @@ export default {
             case 7:
                 return accounting.formatMoney(number, accountingSevenConfigComma);
             case 6:
-                return accounting.formatMoney(number, accountingConfig);
+                return accounting.formatMoney(number, accountingSixConfig);
+            case 5:
+                return accounting.formatMoney(number, accountingFiveConfig);
             case 4:
                 return accounting.formatMoney(number, accountingFourConfig);
             case 3:
@@ -155,8 +163,20 @@ export default {
                 return accounting.formatMoney(number, accountingFirstConfig);
             case 0:
                 return accounting.formatMoney(number, accountingZeroConfig);
+            default:
+                return accounting.formatMoney(number, accountingSecondConfig);    
         }
     },
+
+    fixedByPrice(price) {
+        if (price==null){
+            return 2
+        } else {
+            const orderOfMagnitude = Math.floor(Math.log10(price));
+            return Math.max(2, orderOfMagnitude + 2);
+        }
+    },
+      
 
     formatMoneyComma(number = 0, count = 6) {
 

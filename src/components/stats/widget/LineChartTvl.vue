@@ -111,7 +111,10 @@ export default {
 
     watch: {
         data: function (newVal, oldVal) {
-            this.redraw();
+            if(this.currentTotalData) {
+                this.redraw();
+            }
+           
         },
 
         light: function (newVal, oldVal) {
@@ -191,7 +194,9 @@ export default {
     },
 
     created() {
-        this.zoomChart("all");
+        if(this.currentTotalData) {
+            this.zoomChart("all");
+        }
     },
 
     methods: {
@@ -220,7 +225,6 @@ export default {
             if (this.chart) {
                 this.chart.destroy();
             }
-
             this.redraw();
         },
 
@@ -285,6 +289,7 @@ export default {
             }
 
             this.totalTvl = this.getTotalTvl();
+            
 
             let options = {
                 series: [{

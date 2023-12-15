@@ -4,7 +4,12 @@
       <NetworkNotAvailable :network-name="networkName" />
     </div>
 
-    <div v-else class="swap-container">
+    <div
+      v-else
+      :class="
+        !isAllLoaded ? 'swap-container swap-container-full' : 'swap-container'
+      "
+    >
       <div v-if="!isAllLoaded" class="loader-container">
         <v-progress-circular
           width="2"
@@ -1724,6 +1729,10 @@ export default defineComponent({
 <style scoped>
 .swap-form-wrap,
 .loader-container {
+  height: 100%;
+}
+
+.swap-container-full {
   height: 100%;
 }
 

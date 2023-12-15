@@ -308,12 +308,20 @@ export default {
             this.loadCollateralData()
         },
 
-        initTabName(path, queryParams) {
-            this.$router.push({
-                path: path,
-                query: queryParams ? queryParams : {}
-            });
-        },
+        
+    initTabName(path, queryParams) {
+        const currentRoute = this.$route.fullPath;
+
+        const newRoute = {
+            path: path,
+            query: queryParams ? queryParams : {}
+        };
+
+        const newRouteFullPath = this.$router.resolve(newRoute).href; 
+        if (currentRoute !== newRouteFullPath) {
+            this.$router.push(newRoute);
+        }
+    },
 
       openLink(url) {
           window.open(url, '_blank').focus();

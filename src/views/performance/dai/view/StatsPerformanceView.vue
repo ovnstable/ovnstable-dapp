@@ -317,7 +317,6 @@ export default {
     },
 
     mounted() {
-        console.log('Tab Name and chart type: ', this.$route.query.tabName,  this.$route.query.chart);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName, this.$route.query.chart);
         } if (this.$route.query.tabName) {
@@ -353,7 +352,6 @@ export default {
 
             this.initTabName('/stats/dai', tabParams);
             this.loadData();
-            console.log("NetworkParams : ", this.getParams(this.tab));
         },
 
         initTabName(path, queryParams) {

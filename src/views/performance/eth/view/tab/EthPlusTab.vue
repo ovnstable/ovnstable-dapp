@@ -328,11 +328,19 @@ export default {
       this.loadCollateralData();
     },
 
+
     initTabName(path, queryParams) {
-      this.$router.push({
-        path: path,
-        query: queryParams ? queryParams : {}
-      });
+      const currentRoute = this.$route.fullPath;
+
+      const newRoute = {
+          path: path,
+          query: queryParams ? queryParams : {}
+      };
+
+      const newRouteFullPath = this.$router.resolve(newRoute).href; 
+      if (currentRoute !== newRouteFullPath) {
+          this.$router.push(newRoute);
+      }
     },
 
     openLink(url) {
@@ -378,8 +386,6 @@ export default {
 
           this.currentTotalData = [];
           this.totalValue = 0;
-
-          console.log(strategies, "strategies---");
 
           for (let i = 0; i < strategies.length; i++) {
             let element = strategies[i];

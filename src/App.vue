@@ -191,9 +191,10 @@ html {
   overflow-y: auto !important;
 }
 body * {
-    font-family: "Roboto", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
-#app {
+#app,
+.v-main {
   background-color: var(--main-background);
 }
 

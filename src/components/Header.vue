@@ -528,7 +528,6 @@ export default {
   box-shadow: none;
   text-align: center;
   text-transform: uppercase;
-  font-feature-settings: "pnum" on, "lnum" on;
 }
 
 .btn-filled {
@@ -571,5 +570,8 @@ export default {
 
 .theme-icon-selected {
   color: var(--theme-icon-color-selected);
+}
+.header-btn-connect {
+  color: #fff;
 }
 </style>

@@ -1090,7 +1090,10 @@ export const odosSwap = {
     maxAll() {
       for (let i = 0; i < this.selectedInputTokens.length; i++) {
         let token = this.selectedInputTokens[i];
-        console.log(token.selectedToken.balanceData.balance);
+        console.log(
+          token.selectedToken.balanceData.balance,
+          "token.selectedToken.balanceData.balance"
+        );
         this.updateTokenValue(token, token.selectedToken.balanceData.balance);
       }
     },

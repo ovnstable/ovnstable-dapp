@@ -111,7 +111,7 @@ export default {
 
     watch: {
         data: function (newVal, oldVal) {
-            this.currentTotalData && this.redraw();
+           if (this.currentTotalData) this.redraw();
         },
 
         light: function (newVal, oldVal) {
@@ -191,7 +191,7 @@ export default {
     },
 
     created() {
-        this.currentTotalData && this.zoomChart("all");
+        if (this.currentTotalData) this.zoomChart("all");
     },
 
     methods: {

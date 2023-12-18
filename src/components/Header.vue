@@ -3,14 +3,20 @@
     <div class="app-header__container">
       <div class="christmas-btn mr-auto">
         <router-link to="/christmas_pools">
-          <v-btn class="header-btn-connect btn-filled">
-            Christmas Pools
-          </v-btn>
-          <img
-            class="red-hat"
-            src="https://res.cloudinary.com/freecodez/image/upload/v1701705719/images/guidvrtf8kre7pc3jdk5.webp"
-            alt=""
-          />
+          <div
+            class="btn-wrap"
+            @mouseenter="$event.target.classList.add(buttonClass)"
+          >
+            <v-btn class="header-btn-connect btn-filled">
+              Christmas Pools
+            </v-btn>
+            <img
+              @animationend="removeWrapClass"
+              class="red-hat"
+              src="https://res.cloudinary.com/freecodez/image/upload/v1701705719/images/guidvrtf8kre7pc3jdk5.webp"
+              alt="hat"
+            />
+          </div>
         </router-link>
       </div>
 
@@ -148,7 +154,11 @@ export default {
     ...mapGetters("web3", ["loadingWeb3"]),
     ...mapGetters("walletAction", ["walletConnected"]),
     ...mapGetters("accountData", ["account"]),
-    ...mapGetters("theme", ["light"])
+    ...mapGetters("theme", ["light"]),
+
+    buttonClass() {
+      return "button-hover-christmas";
+    }
   },
 
   watch: {
@@ -165,6 +175,11 @@ export default {
     ...mapActions("transaction", ["loadTransaction"]),
     ...mapActions("track", ["trackClick"]),
     ...mapActions("theme", ["switchTheme"]),
+
+    removeWrapClass() {
+      const el = document.querySelector(".btn-wrap");
+      el.classList.remove(this.buttonClass);
+    },
 
     switchToNetwork() {
       this.setWalletNetwork(this.networkId.toString());
@@ -500,5 +515,32 @@ export default {
 }
 .header-btn-connect {
   color: #fff;
+}
+
+.button-hover-christmas .red-hat {
+  animation: shake 1s ease-in-out;
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
 </style>

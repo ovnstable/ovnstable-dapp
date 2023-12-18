@@ -199,7 +199,7 @@ export default {
   width: 100%;
   border-radius: 8px;
   color: #fff;
-  margin: 20px 0;
+  margin: 20px 0 30px 0;
   padding: 40px 16px;
   background: radial-gradient(
     108.67% 595.92% at 100% -3.25%,

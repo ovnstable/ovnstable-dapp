@@ -3,12 +3,7 @@ import VueRouter from "vue-router";
 import store from "../store";
 
 // Governance sections
-import getOverview from "./midleware/governance/getOverview";
-import getRewardPools from "./midleware/governance/getRewardPools";
-import getProposals from "./midleware/governance/getProposals";
 import middlewarePipeline from "./middlewarePipeline";
-import getFinance from "@/router/midleware/governance/getFinance";
-import getAbroad from "@/router/midleware/governance/getAbroad";
 
 // Dapp Sections
 import Market from "./midleware/dapp/Market";
@@ -227,62 +222,6 @@ const routes = [
         component: () => import("../views/dashboard/MyPerformanceView"),
         meta: {
           middleware: [Dashboard]
-        }
-      }
-    ]
-  },
-
-  {
-    path: "/governance",
-    name: "Governance",
-    component: () => import("../Governance.vue"),
-    children: [
-      {
-        path: "/",
-        name: "Overview",
-        component: () => import("../views/governance/Overview.vue"),
-        meta: {
-          middleware: [getOverview]
-        }
-      },
-      {
-        path: "/governance/finance",
-        name: "Finance",
-        component: () => import("../views/governance/Finance.vue"),
-        meta: {
-          middleware: [getFinance]
-        }
-      },
-      {
-        path: "/governance/abroad",
-        name: "Abroad",
-        component: () => import("../views/governance/Abroad.vue"),
-        meta: {
-          middleware: [getAbroad]
-        }
-      },
-      {
-        path: "/governance/proposals",
-        name: "Proposals",
-        component: () => import("../views/governance/Proposals.vue"),
-        meta: {
-          middleware: [getProposals]
-        }
-      },
-      {
-        path: "/governance/control",
-        name: "Control",
-        component: () => import("../views/governance/Control.vue"),
-        meta: {
-          middleware: [getOverview]
-        }
-      },
-      {
-        path: "/governance/reward_program",
-        name: "Reward program",
-        component: () => import("../views/governance/RewardProgram.vue"),
-        meta: {
-          middleware: [getRewardPools]
         }
       }
     ]

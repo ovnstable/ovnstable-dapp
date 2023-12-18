@@ -1,47 +1,16 @@
 <template>
   <div class="app-header mr-n3">
     <div class="app-header__container">
-      <div class="app-header__adv" v-if="arbOrBase && advNetworkData">
-        <h2 class="app-header__adv-title mr-6">
-          Maximize Your STABLE Tokens+ yield via best APY
-        </h2>
-        <div class="app-header__adv-data">
-          <div class="app-header__adv-data__row mr-4">
-            <img
-              class="mr-1"
-              :src="
-                require(`@/assets/currencies/stablecoins/${advNetworkData.token0}.png`)
-              "
-            />
-            <img
-              :src="
-                require(`@/assets/currencies/stablecoins/${advNetworkData.token1}.svg`)
-              "
-            />
-          </div>
-          <span class="mr-2">{{ advTokensPair }}</span>
-          <span>~{{ advPoolApy }} APR</span>
-          <div class="app-header__adv-data__row ml-6">
-            <img
-              class="mr-2"
-              :src="require(`@/assets/network/${advNetworkData.network}.svg`)"
-            />
-            <img
-              :src="
-                require(`@/assets/cards/platform/${advNetworkData.platform}.svg`)
-              "
-            />
-          </div>
-        </div>
-        <router-link class="app-header__adv-btn ml-6" to="/pools">
-          <v-btn outlined>
-            <div class="app-header__adv-btn_arrows mr-2">
-              <img :src="require('@/assets/icon/arrow-left.svg')" />
-              <img :src="require('@/assets/icon/arrow-left.svg')" />
-              <img :src="require('@/assets/icon/arrow-left.svg')" />
-            </div>
-            CHECK
+      <div class="christmas-btn mr-auto">
+        <router-link to="/christmas_pools">
+          <v-btn class="header-btn-connect btn-filled">
+            Christmas Pools
           </v-btn>
+          <img
+            class="red-hat"
+            src="https://res.cloudinary.com/freecodez/image/upload/v1701705719/images/guidvrtf8kre7pc3jdk5.webp"
+            alt=""
+          />
         </router-link>
       </div>
 
@@ -77,7 +46,7 @@
             <WalletBar
               v-if="
                 ($wu.isMobile() && walletConnected && !switchToOtherNetwork) ||
-                !$wu.isMobile()
+                  !$wu.isMobile()
               "
             />
           </template>
@@ -179,62 +148,11 @@ export default {
     ...mapGetters("web3", ["loadingWeb3"]),
     ...mapGetters("walletAction", ["walletConnected"]),
     ...mapGetters("accountData", ["account"]),
-    ...mapGetters("theme", ["light"]),
-
-    arbOrBase() {
-      if ([42161, 8453].includes(this.networkId)) return true;
-      return false;
-    },
-
-    advPoolApy() {
-      if ([42161].includes(this.networkId)) {
-        return "32%";
-      }
-
-      if ([8453].includes(this.networkId)) {
-        return "21%";
-      }
-
-      return "";
-    },
-
-    advNetworkData() {
-      if ([42161].includes(this.networkId)) {
-        return {
-          network: "arbitrum",
-          platform: "Curve",
-          token0: "USD+",
-          token1: "FRAX"
-        };
-      }
-
-      if ([8453].includes(this.networkId)) {
-        return {
-          network: "base-light",
-          platform: "Aerodrome",
-          token0: "DAI+",
-          token1: "USD+"
-        };
-      }
-
-      return null;
-    },
-
-    advTokensPair() {
-      if ([42161].includes(this.networkId)) {
-        return "USD+/FRAXbp";
-      }
-
-      if ([8453].includes(this.networkId)) {
-        return "DAI+/USD+";
-      }
-
-      return "";
-    }
+    ...mapGetters("theme", ["light"])
   },
 
   watch: {
-    networkId: function (newValue, oldValue) {
+    networkId: function(newValue, oldValue) {
       if (newValue) {
         this.loadTransaction();
       }
@@ -283,6 +201,16 @@ export default {
 </script>
 
 <style scoped>
+.christmas-btn {
+  position: relative;
+}
+.red-hat {
+  position: absolute;
+  top: -15px;
+  left: -17px;
+  height: 44px;
+  filter: drop-shadow(0 2px 1px rgb(0 0 0 / 0.25));
+}
 .app-header__adv {
   display: none;
   justify-content: space-between;
@@ -545,7 +473,6 @@ export default {
   border: 1px solid transparent;
   height: 42px;
   display: flex;
-  overflow: hidden;
   align-items: center;
   justify-content: center;
 }

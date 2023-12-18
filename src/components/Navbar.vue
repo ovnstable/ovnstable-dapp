@@ -639,7 +639,6 @@ export default {
     randomNavbarLogo() {
       let randomNum = Math.round(Math.random() * 3);
       const url = require(`@/assets/header/ny_logo_${randomNum}.svg`);
-      console.log(url, "---rul");
       return url;
     },
 

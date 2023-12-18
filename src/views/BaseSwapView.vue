@@ -20,7 +20,7 @@
 
       <div class="pt-20">
         <div class="row">
-          <div class="col-lg-5 col-md-6 col-sm-12">
+          <div class="swaps-form col-lg-5 col-md-6 col-sm-12">
             <SwapForm
               :view-type="viewType"
               :update-path-view-func="updatePathView"

@@ -7,14 +7,27 @@
     <div class="christmas-banner">
       <div class="christmas-banner__content">
         <h1>
-          Christmas offer with best APY
+          Boosted Christmas Pools!
         </h1>
+        <div class="christmas-banner__content__list mt-4">
+          <h2>
+            - maximize Your USD+, ETH+ rewards
+          </h2>
+          <h2>
+            - 5 weeks boosted program
+          </h2>
+          <h2>
+            - best APY in the market
+          </h2>
+        </div>
+      </div>
+      <div class="christmas-banner_images">
         <img
-          class="christmas-banner__network ml-auto"
+          class="christmas-banner__network"
           :src="require('@/assets/network/arbitrum.svg')"
         />
+        <img class="christmas-banner__char" src="/christmas_char.png" />
       </div>
-      <img class="christmas-banner__img ml-auto" src="/christmas_char.png" />
     </div>
 
     <div class="mt-7 cards-list-container">
@@ -34,7 +47,7 @@
 </template>
 
 <script>
-import Pool from "@/components/market/cards/pool/Pool.vue";
+import Pool from "@/views/christmas/Pool.vue";
 
 export default {
   name: "ChristmasPoolsView",
@@ -52,6 +65,9 @@ export default {
         apr: 41.73340959313001,
         chain: 42161,
         chainName: "arbitrum",
+        description:
+          "Pool proportion is 90%/10%, here You can provide 90USD+/10USDC.e and maximize rewards to the highest yield of USD+",
+        link: "https://pancakeswap.finance/pools",
         data: {
           aggregators: [],
           apr: 41.73340959313001,
@@ -67,10 +83,10 @@ export default {
         name: "Pool",
         originalId: "USD+/FRAX276742.1266166399Curve",
         overcapEnabled: false,
-        platform: "Convex",
+        platform: "Pancake",
         prototype: false,
         title: "USDC.e/USD+",
-        tvl: 276742.1266166399,
+        tvl: "0",
         type: "Pool",
         zappable: false,
         addToSync: true,
@@ -87,6 +103,9 @@ export default {
         apr: 20.73340959313001,
         chain: 42161,
         chainName: "arbitrum",
+        description:
+          "Pool proportion is 50%/50%, here You can provide 50USD+/50ETH+ and maximize rewards to the highest yield of USD+ and ETH+ both",
+        link: "https://pancakeswap.finance/pools",
         data: {
           aggregators: [],
           apr: 20.73340959313001,
@@ -102,10 +121,10 @@ export default {
         name: "Pool",
         originalId: "USD+/FRAX276742.1266166399Curve",
         overcapEnabled: false,
-        platform: "Convex",
+        platform: "Pancake",
         prototype: false,
         title: "USD+/ETH+",
-        tvl: 276742.1266166399,
+        tvl: "0",
         type: "Pool",
         zappable: false,
         token0Icon: require("@/assets/currencies/USD+.png"),
@@ -121,6 +140,9 @@ export default {
         apr: 19.73340959313001,
         chain: 42161,
         chainName: "arbitrum",
+        description:
+          "Pool proportion is 90%/10%, here You can provide 90ETH+/10WETH and maximize rewards to the highest yield of WETH+",
+        link: "https://pancakeswap.finance/pools",
         data: {
           aggregators: [],
           apr: 41.73340959313001,
@@ -136,10 +158,10 @@ export default {
         name: "Pool",
         originalId: "USD+/FRAX276742.1266166399Curve",
         overcapEnabled: false,
-        platform: "Convex",
+        platform: "Pancake",
         prototype: false,
         title: "ETH+/WETH",
-        tvl: 276742.1266166399,
+        tvl: "0",
         type: "Pool",
         zappable: false,
         token0Icon: require("@/assets/currencies/ETH+.svg"),
@@ -151,24 +173,37 @@ export default {
   })
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .christmas-banner {
   position: relative;
   display: flex;
   justify-content: space-between;
   width: 100%;
   border-radius: 8px;
-  min-height: ;
+  min-height: 300px;
   color: #fff;
   margin: 20px 0 30px 0;
-  padding: 40px 16px;
+  padding: 40px 24px;
   background-image: url("/christmas_banner.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  cursor: pointer;
+  box-shadow: 0 0 4px 3px rgb(53, 158, 213);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: unset;
+  }
 }
 
-.christmas-banner__img {
+.christmas-banner__images {
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+}
+
+.christmas-banner__char {
   position: absolute;
   bottom: 0;
   right: 20px;
@@ -182,7 +217,8 @@ export default {
 }
 
 .christmas-banner__network {
-  position: relative;
+  position: absolute;
+  right: 50px;
   width: 100%;
   z-index: 2;
   width: 120px;
@@ -194,11 +230,18 @@ export default {
 .christmas-banner h1 {
   position: relative;
   z-index: 2;
-  max-width: 400px;
+  max-width: 700px;
   font-size: 36px;
 }
 .cards-feature {
   gap: 30px;
+}
+
+.christmas-banner__content__list {
+  background-color: rgba(45, 55, 75, 0.2);
+  padding: 12px 20px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
 }
 
 /* mobile */

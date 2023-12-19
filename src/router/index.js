@@ -38,7 +38,7 @@ const routes = [
       {
         path: "/christmas_pools",
         name: "ChristmasPoolsView",
-        component: () => import("@/views/ChristmasPoolsView.vue")
+        component: () => import("@/views/christmas/ChristmasPoolsView.vue")
       },
       {
         path: "/ets_about",

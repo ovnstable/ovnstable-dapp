@@ -5,56 +5,16 @@
     </div>
 
     <div class="christmas-banner">
-      <h1>
-        CHRISTMAS POOLS OFFER
-      </h1>
-      <img
-        class="christmas-banner__network"
-        :src="require('@/assets/network/arbitrum.svg')"
-      />
-      <div
-        class="snowflakes"
-        aria-hidden="true"
-        v-for="item in [1, 2, 3]"
-        :key="item"
-      >
-        <div class="snowflake">
-          <div class="inner">❅</div>
-        </div>
-        <div class="snowflake">
-          <div class="inner">❅</div>
-        </div>
-        <div class="snowflake">
-          <div class="inner">❅</div>
-        </div>
-        <div class="snowflake">
-          <div class="inner">❅</div>
-        </div>
-        <div class="snowflake">
-          <div class="inner">❅</div>
-        </div>
-        <div class="snowflake">
-          <div class="inner">❅</div>
-        </div>
-        <div class="snowflake">
-          <div class="inner">❅</div>
-        </div>
-        <div class="snowflake">
-          <div class="inner">❅</div>
-        </div>
-        <div class="snowflake">
-          <div class="inner">❅</div>
-        </div>
-        <div class="snowflake">
-          <div class="inner">❅</div>
-        </div>
-        <div class="snowflake">
-          <div class="inner">❅</div>
-        </div>
-        <div class="snowflake">
-          <div class="inner">❅</div>
-        </div>
+      <div class="christmas-banner__content">
+        <h1>
+          Christmas offer with best APY
+        </h1>
+        <img
+          class="christmas-banner__network ml-auto"
+          :src="require('@/assets/network/arbitrum.svg')"
+        />
       </div>
+      <img class="christmas-banner__img ml-auto" src="/christmas_char.png" />
     </div>
 
     <div class="mt-7 cards-list-container">
@@ -198,24 +158,37 @@ export default {
   justify-content: space-between;
   width: 100%;
   border-radius: 8px;
+  min-height: ;
   color: #fff;
   margin: 20px 0 30px 0;
   padding: 40px 16px;
-  background: radial-gradient(
-    108.67% 595.92% at 100% -3.25%,
-    #001845 0%,
-    #001845 27.05%,
-    #0c255b 52.07%,
-    #29a0f0 100%
-  );
+  background-image: url("/christmas_banner.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.christmas-banner__img {
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+  height: 100%;
+  object-fit: contain;
+}
+
+.christmas-banner__content {
+  display: flex;
+  flex-direction: column;
 }
 
 .christmas-banner__network {
   position: relative;
+  width: 100%;
   z-index: 2;
   width: 120px;
   height: 120px;
-  margin-right: 100px;
+  margin-right: 20%;
+  margin-left: auto;
 }
 
 .christmas-banner h1 {
@@ -228,6 +201,12 @@ export default {
   gap: 30px;
 }
 
+/* mobile */
+@media only screen and (max-width: 650px) {
+  .christmas-banner {
+    display: none;
+  }
+}
 /* mobile */
 @media only screen and (max-width: 960px) {
   .tab-btn {
@@ -360,137 +339,5 @@ export default {
 
 .text-deprecated {
   color: #707a8b;
-}
-
-.snowflake,
-.snowflake .inner {
-  animation-iteration-count: infinite;
-  animation-play-state: running;
-}
-@keyframes snowflakes-fall {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(110vh);
-  }
-}
-@keyframes snowflakes-shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(80px);
-  }
-}
-
-.snowflakes {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-}
-
-.snowflake {
-  color: #a3dfff;
-  font-size: 1em;
-  font-family: Arial, sans-serif;
-  text-shadow: 0 0 5px #000;
-}
-
-.snowflake {
-  position: absolute;
-  top: -30px;
-  z-index: 1;
-  -webkit-user-select: none;
-  user-select: none;
-  cursor: default;
-  animation-name: snowflakes-shake;
-  animation-duration: 3s;
-  animation-timing-function: ease-in-out;
-}
-.snowflake .inner {
-  animation-duration: 10s;
-  animation-name: snowflakes-fall;
-  animation-timing-function: linear;
-}
-.snowflake:nth-of-type(0) {
-  left: 1%;
-  animation-delay: 0s;
-}
-.snowflake:nth-of-type(0) .inner {
-  animation-delay: 0s;
-}
-.snowflake:first-of-type {
-  left: 10%;
-  animation-delay: 1s;
-}
-.snowflake:first-of-type .inner,
-.snowflake:nth-of-type(8) .inner {
-  animation-delay: 1s;
-}
-.snowflake:nth-of-type(2) {
-  left: 20%;
-  animation-delay: 0.5s;
-}
-.snowflake:nth-of-type(2) .inner,
-.snowflake:nth-of-type(6) .inner {
-  animation-delay: 6s;
-}
-.snowflake:nth-of-type(3) {
-  left: 30%;
-  animation-delay: 2s;
-}
-.snowflake:nth-of-type(11) .inner,
-.snowflake:nth-of-type(3) .inner {
-  animation-delay: 4s;
-}
-.snowflake:nth-of-type(4) {
-  left: 40%;
-  animation-delay: 2s;
-}
-.snowflake:nth-of-type(10) .inner,
-.snowflake:nth-of-type(4) .inner {
-  animation-delay: 2s;
-}
-.snowflake:nth-of-type(5) {
-  left: 50%;
-  animation-delay: 3s;
-}
-.snowflake:nth-of-type(5) .inner {
-  animation-delay: 8s;
-}
-.snowflake:nth-of-type(6) {
-  left: 60%;
-  animation-delay: 2s;
-}
-.snowflake:nth-of-type(7) {
-  left: 70%;
-  animation-delay: 1s;
-}
-.snowflake:nth-of-type(7) .inner {
-  animation-delay: 2.5s;
-}
-.snowflake:nth-of-type(8) {
-  left: 80%;
-  animation-delay: 0s;
-}
-.snowflake:nth-of-type(9) {
-  left: 90%;
-  animation-delay: 1.5s;
-}
-.snowflake:nth-of-type(9) .inner {
-  animation-delay: 3s;
-}
-.snowflake:nth-of-type(10) {
-  left: 25%;
-  animation-delay: 0s;
-}
-.snowflake:nth-of-type(11) {
-  left: 65%;
-  animation-delay: 2.5s;
 }
 </style>

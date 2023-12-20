@@ -16,13 +16,13 @@
           </h1>
           <div class="christmas-banner__content__list mt-4">
             <h2>
-              - maximize Your USD+, ETH+ rewards
+              - maximize Your OVN rewards
             </h2>
             <h2>
               - 5 weeks boosted program
             </h2>
             <h2>
-              - best APY in the market
+              - more USD+/ETH+ provide, more rewards you get
             </h2>
           </div>
         </div>
@@ -120,12 +120,12 @@ export default {
         pair: "usdc.e / usd+",
         networkName: "arbitrum",
         address: "0xd01075f7314a6436e8B74fc18069848229D0c555",
-        aggregators: Array[0],
+        aggregators: [],
         apr: 0,
         chain: 42161,
         chainName: "arbitrum",
         description:
-          "Pool proportion is 90%/10%, here You can provide 90USD+/10USDC.e and maximize rewards to the highest yield of USD+",
+          "Pool proportion is 90/10, here You can provide 90USD+/10USDC.e to earn biggest OVN rewards",
         link: "https://pancakeswap.finance/liquidity/6345?chain=arb",
         data: {
           aggregators: [],
@@ -133,7 +133,7 @@ export default {
           id: {
             address: "0xd01075f7314a6436e8B74fc18069848229D0c555",
             chain: "ARBITRUM",
-            name: "USDC.e/USD+"
+            name: "USDC/USD+"
           }
         },
         hasCap: true,
@@ -158,12 +158,12 @@ export default {
         pair: "USD+/ETH+",
         networkName: "arbitrum",
         address: "0x06c75011479E47280e8B7E72E9e0315C8b3A634d",
-        aggregators: Array[0],
+        aggregators: [],
         apr: 0,
         chain: 42161,
         chainName: "arbitrum",
         description:
-          "Pool proportion is 50%/50%, here You can provide 50USD+/50ETH+ and maximize rewards to the highest yield of USD+ and ETH+ both",
+          "Pool proportion is 50/50, here You can provide 50USD+/50ETH+ to earn biggest OVN rewards",
         link: "https://pancakeswap.finance/liquidity/6342?chain=arb",
         data: {
           aggregators: [],
@@ -195,12 +195,12 @@ export default {
         pair: "ETH+/WETH",
         networkName: "arbitrum",
         address: "0xdAA80a051E22A7f7b0cfC33Aa29572fbDE65183E",
-        aggregators: Array[0],
+        aggregators: [],
         apr: 0,
         chain: 42161,
         chainName: "arbitrum",
         description:
-          "Pool proportion is 90%/10%, here You can provide 90ETH+/10WETH and maximize rewards to the highest yield of WETH+",
+          "Pool proportion is 90/10, here You can provide 90ETH+/10WETH to earn biggest OVN rewards",
         link: "https://pancakeswap.finance/liquidity/6346?chain=arb",
         data: {
           aggregators: [],

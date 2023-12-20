@@ -31,7 +31,18 @@
     </div>
 
     <div class="mt-7 cards-list-container">
-      <v-row class="cards-feature d-flex">
+      <v-row v-if="isLoading">
+        <v-row align="center" justify="center" class="py-15">
+          <v-progress-circular
+            width="2"
+            size="24"
+            color="#8FA2B7"
+            indeterminate
+          ></v-progress-circular>
+        </v-row>
+      </v-row>
+
+      <v-row v-else class="cards-feature d-flex">
         <Pool
           v-for="card in poolsArr"
           :key="card.id"
@@ -47,6 +58,8 @@
 </template>
 
 <script>
+// https://routing-api.pancakeswap.com/v0/v3-pools-tvl/42161
+// https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-arb
 import Pool from "@/views/christmas/Pool.vue";
 
 export default {
@@ -56,13 +69,14 @@ export default {
   },
 
   data: () => ({
+    isLoading: true,
     poolsArr: [
       {
         pair: "usdc.e / usd+",
         networkName: "arbitrum",
-        address: "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
+        address: "0xd01075f7314a6436e8B74fc18069848229D0c555",
         aggregators: Array[0],
-        apr: 41.73340959313001,
+        apr: 0,
         chain: 42161,
         chainName: "arbitrum",
         description:
@@ -70,9 +84,9 @@ export default {
         link: "https://pancakeswap.finance/pools",
         data: {
           aggregators: [],
-          apr: 41.73340959313001,
+          apr: 0,
           id: {
-            address: "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
+            address: "0xd01075f7314a6436e8B74fc18069848229D0c555",
             chain: "ARBITRUM",
             name: "USDC.e/USD+"
           }
@@ -98,9 +112,9 @@ export default {
       {
         pair: "USD+/ETH+",
         networkName: "arbitrum",
-        address: "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
+        address: "0x06c75011479E47280e8B7E72E9e0315C8b3A634d",
         aggregators: Array[0],
-        apr: 20.73340959313001,
+        apr: 0,
         chain: 42161,
         chainName: "arbitrum",
         description:
@@ -108,9 +122,9 @@ export default {
         link: "https://pancakeswap.finance/pools",
         data: {
           aggregators: [],
-          apr: 20.73340959313001,
+          apr: 0,
           id: {
-            address: "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
+            address: "0x06c75011479E47280e8B7E72E9e0315C8b3A634d",
             chain: "ARBITRUM",
             name: "USD+/ETH+"
           }
@@ -135,9 +149,9 @@ export default {
       {
         pair: "ETH+/WETH",
         networkName: "arbitrum",
-        address: "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
+        address: "0xdAA80a051E22A7f7b0cfC33Aa29572fbDE65183E",
         aggregators: Array[0],
-        apr: 19.73340959313001,
+        apr: 0,
         chain: 42161,
         chainName: "arbitrum",
         description:
@@ -145,9 +159,9 @@ export default {
         link: "https://pancakeswap.finance/pools",
         data: {
           aggregators: [],
-          apr: 41.73340959313001,
+          apr: 0,
           id: {
-            address: "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
+            address: "0xdAA80a051E22A7f7b0cfC33Aa29572fbDE65183E",
             chain: "ARBITRUM",
             name: "ETH+/WETH"
           }
@@ -170,7 +184,43 @@ export default {
         token3Icon: undefined
       }
     ]
-  })
+  }),
+
+  async mounted() {
+    const query =
+      "query getVolume($days: Int!, $address: String!) {  poolDayDatas(first: $days, orderBy: date, orderDirection: desc, where: { pool: $address }) {    volumeUSD    tvlUSD    feesUSD    protocolFeesUSD  }}";
+
+    this.poolsArr = await Promise.all(
+      this.poolsArr.map(async (_) => {
+        const response = await fetch(
+          "https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-arb",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json"
+            },
+            body: JSON.stringify({
+              operationName: "getVolume",
+              query,
+              variables: {
+                address: _.address?.toLowerCase(),
+                days: 7
+              }
+            })
+          }
+        );
+        const data = (await response.json())?.data;
+
+        return {
+          ..._,
+          tvl: data?.poolDayDatas[0]?.tvlUSD ?? "0"
+        };
+      })
+    );
+
+    this.isLoading = false;
+  }
 };
 </script>
 <style lang="scss" scoped>

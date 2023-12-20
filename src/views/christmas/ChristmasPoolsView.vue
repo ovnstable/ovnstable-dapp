@@ -4,31 +4,76 @@
       <label class="title-label">Christmas Pools</label>
     </div>
 
-    <div class="christmas-banner">
-      <div class="christmas-banner__content">
-        <h1>
-          Boosted Christmas Pools!
-        </h1>
-        <div class="christmas-banner__content__list mt-4">
-          <h2>
-            - maximize Your USD+, ETH+ rewards
-          </h2>
-          <h2>
-            - 5 weeks boosted program
-          </h2>
-          <h2>
-            - best APY in the market
-          </h2>
+    <a
+      class="banner-link"
+      target="_blank"
+      href="https://pancakeswap.finance/liquidity/6345?chain=arb"
+    >
+      <div class="christmas-banner">
+        <div class="christmas-banner__content">
+          <h1>
+            Boosted Christmas Pools!
+          </h1>
+          <div class="christmas-banner__content__list mt-4">
+            <h2>
+              - maximize Your USD+, ETH+ rewards
+            </h2>
+            <h2>
+              - 5 weeks boosted program
+            </h2>
+            <h2>
+              - best APY in the market
+            </h2>
+          </div>
+        </div>
+        <div class="christmas-banner_images">
+          <img
+            class="christmas-banner__network"
+            :src="require('@/assets/network/arbitrum.svg')"
+          />
+          <img class="christmas-banner__char" src="/christmas_char.png" />
+        </div>
+
+        <div class="snowflakes" aria-hidden="true">
+          <div class="snowflake">
+            <div class="inner">❅</div>
+          </div>
+          <div class="snowflake">
+            <div class="inner">❅</div>
+          </div>
+          <div class="snowflake">
+            <div class="inner">❅</div>
+          </div>
+          <div class="snowflake">
+            <div class="inner">❅</div>
+          </div>
+          <div class="snowflake">
+            <div class="inner">❅</div>
+          </div>
+          <div class="snowflake">
+            <div class="inner">❅</div>
+          </div>
+          <div class="snowflake">
+            <div class="inner">❅</div>
+          </div>
+          <div class="snowflake">
+            <div class="inner">❅</div>
+          </div>
+          <div class="snowflake">
+            <div class="inner">❅</div>
+          </div>
+          <div class="snowflake">
+            <div class="inner">❅</div>
+          </div>
+          <div class="snowflake">
+            <div class="inner">❅</div>
+          </div>
+          <div class="snowflake">
+            <div class="inner">❅</div>
+          </div>
         </div>
       </div>
-      <div class="christmas-banner_images">
-        <img
-          class="christmas-banner__network"
-          :src="require('@/assets/network/arbitrum.svg')"
-        />
-        <img class="christmas-banner__char" src="/christmas_char.png" />
-      </div>
-    </div>
+    </a>
 
     <div class="mt-7 cards-list-container">
       <v-row v-if="isLoading">
@@ -81,7 +126,7 @@ export default {
         chainName: "arbitrum",
         description:
           "Pool proportion is 90%/10%, here You can provide 90USD+/10USDC.e and maximize rewards to the highest yield of USD+",
-        link: "https://pancakeswap.finance/pools",
+        link: "https://pancakeswap.finance/liquidity/6345?chain=arb",
         data: {
           aggregators: [],
           apr: 0,
@@ -119,7 +164,7 @@ export default {
         chainName: "arbitrum",
         description:
           "Pool proportion is 50%/50%, here You can provide 50USD+/50ETH+ and maximize rewards to the highest yield of USD+ and ETH+ both",
-        link: "https://pancakeswap.finance/pools",
+        link: "https://pancakeswap.finance/liquidity/6342?chain=arb",
         data: {
           aggregators: [],
           apr: 0,
@@ -156,7 +201,7 @@ export default {
         chainName: "arbitrum",
         description:
           "Pool proportion is 90%/10%, here You can provide 90ETH+/10WETH and maximize rewards to the highest yield of WETH+",
-        link: "https://pancakeswap.finance/pools",
+        link: "https://pancakeswap.finance/liquidity/6346?chain=arb",
         data: {
           aggregators: [],
           apr: 0,
@@ -244,6 +289,11 @@ export default {
 
   &:hover {
     box-shadow: unset;
+
+    .snowflakes {
+      visibility: visible;
+      opacity: 1;
+    }
   }
 }
 
@@ -432,5 +482,132 @@ export default {
 
 .text-deprecated {
   color: #707a8b;
+}
+
+.snowflake {
+  color: #fff;
+  font-size: 1em;
+  font-family: Arial, sans-serif;
+  text-shadow: 0 0 5px #000;
+}
+
+.snowflake,
+.snowflake .inner {
+  animation-iteration-count: infinite;
+  animation-play-state: running;
+}
+@keyframes snowflakes-fall {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(110vh);
+  }
+}
+@keyframes snowflakes-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(80px);
+  }
+}
+.snowflakes {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.4s ease, opacity 0.4s ease;
+}
+.snowflake {
+  position: fixed;
+  top: -10%;
+  z-index: 9999;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+  animation-name: snowflakes-shake;
+  animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+}
+.snowflake .inner {
+  animation-duration: 10s;
+  animation-name: snowflakes-fall;
+  animation-timing-function: linear;
+}
+.snowflake:nth-of-type(0) {
+  left: 1%;
+  animation-delay: 0s;
+}
+.snowflake:nth-of-type(0) .inner {
+  animation-delay: 0s;
+}
+.snowflake:first-of-type {
+  left: 10%;
+  animation-delay: 1s;
+}
+.snowflake:first-of-type .inner,
+.snowflake:nth-of-type(8) .inner {
+  animation-delay: 1s;
+}
+.snowflake:nth-of-type(2) {
+  left: 20%;
+  animation-delay: 0.5s;
+}
+.snowflake:nth-of-type(2) .inner,
+.snowflake:nth-of-type(6) .inner {
+  animation-delay: 6s;
+}
+.snowflake:nth-of-type(3) {
+  left: 30%;
+  animation-delay: 2s;
+}
+.snowflake:nth-of-type(11) .inner,
+.snowflake:nth-of-type(3) .inner {
+  animation-delay: 4s;
+}
+.snowflake:nth-of-type(4) {
+  left: 40%;
+  animation-delay: 2s;
+}
+.snowflake:nth-of-type(10) .inner,
+.snowflake:nth-of-type(4) .inner {
+  animation-delay: 2s;
+}
+.snowflake:nth-of-type(5) {
+  left: 50%;
+  animation-delay: 3s;
+}
+.snowflake:nth-of-type(5) .inner {
+  animation-delay: 8s;
+}
+.snowflake:nth-of-type(6) {
+  left: 60%;
+  animation-delay: 2s;
+}
+.snowflake:nth-of-type(7) {
+  left: 70%;
+  animation-delay: 1s;
+}
+.snowflake:nth-of-type(7) .inner {
+  animation-delay: 2.5s;
+}
+.snowflake:nth-of-type(8) {
+  left: 80%;
+  animation-delay: 0s;
+}
+.snowflake:nth-of-type(9) {
+  left: 90%;
+  animation-delay: 1.5s;
+}
+.snowflake:nth-of-type(9) .inner {
+  animation-delay: 3s;
+}
+.snowflake:nth-of-type(10) {
+  left: 25%;
+  animation-delay: 0s;
+}
+.snowflake:nth-of-type(11) {
+  left: 65%;
+  animation-delay: 2.5s;
 }
 </style>

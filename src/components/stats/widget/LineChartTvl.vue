@@ -111,7 +111,7 @@ export default {
 
     watch: {
         data: function (newVal, oldVal) {
-            this.redraw();
+           if (this.currentTotalData) this.redraw();
         },
 
         light: function (newVal, oldVal) {
@@ -191,7 +191,7 @@ export default {
     },
 
     created() {
-        this.zoomChart("all");
+        if (this.currentTotalData) this.zoomChart("all");
     },
 
     methods: {
@@ -220,7 +220,6 @@ export default {
             if (this.chart) {
                 this.chart.destroy();
             }
-
             this.redraw();
         },
 
@@ -237,16 +236,20 @@ export default {
         },
 
         changeZoomBtnStyle() {
+        const zoomBtn = document.getElementById(this.zoom + "-zoom-btn-tvl");
+
+        if (zoomBtn) {
             document.getElementById("week-zoom-btn-tvl").classList.remove("selected");
             document.getElementById("month-zoom-btn-tvl").classList.remove("selected");
             document.getElementById("all-zoom-btn-tvl").classList.remove("selected");
 
-            document.getElementById(this.zoom + "-zoom-btn-tvl").classList.add("selected");
-        },
+            zoomBtn.classList.add("selected");
+        } 
+    },
+
 
         getTotalTvl() {
             let sum = 0;
-
             if (this.currentTotalData?.length === 0) return 0;
             this.currentTotalData.forEach(dataItem => {
                 sum += dataItem.value
@@ -281,6 +284,7 @@ export default {
             }
 
             this.totalTvl = this.getTotalTvl();
+            
 
             let options = {
                 series: [{

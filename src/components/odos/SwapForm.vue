@@ -4,7 +4,12 @@
       <NetworkNotAvailable :network-name="networkName" />
     </div>
 
-    <div v-else class="swap-container">
+    <div
+      v-else
+      :class="
+        !isAllLoaded ? 'swap-container swap-container-full' : 'swap-container'
+      "
+    >
       <div v-if="!isAllLoaded" class="loader-container">
         <v-progress-circular
           width="2"
@@ -174,21 +179,23 @@
 
         <div class="swap-footer pt-5">
           <div v-if="!account" class="swap-button-container">
-            <div @click="connectWallet" class="swap-button">
+            <v-btn elevated large @click="connectWallet" class="swap-button">
               <div class="swap-button-title">
                 <div>CONNECT WALLET</div>
               </div>
-            </div>
+            </v-btn>
           </div>
           <div v-else class="swap-button-container">
-            <div v-if="isDisableButton" class="disable-button">
+            <div elevated large v-if="hideSwapButton" class="disable-button">
               <div class="disable-button-title">
                 <div>
                   {{ disableButtonMessage }}
                 </div>
               </div>
             </div>
-            <div
+            <v-btn
+              elevated
+              large
               v-else-if="isAnyInputsNeedApprove"
               @click="approve(firstInputInQueueForToApprove)"
               class="swap-button"
@@ -206,20 +213,19 @@
                   </span>
                 </div>
               </div>
-            </div>
-            <div
+            </v-btn>
+            <v-btn
               v-else
+              elevated
+              large
               @click="swap()"
               id="click_form_swap"
               class="swap-button"
+              :loading="isLoadingSwap"
             >
-              <div class="swap-button-title">
-                <div>
-                  <span v-if="viewType === 'SWIPE'">SWIPE LIQUIDITY</span
-                  ><span v-else>SWAP</span>
-                </div>
-              </div>
-            </div>
+              <span v-if="viewType === 'SWIPE'">SWIPE LIQUIDITY</span
+              ><span v-else>SWAP</span>
+            </v-btn>
           </div>
 
           <div class="label-container pt-3">
@@ -506,6 +512,7 @@ export default defineComponent({
       isShowSettingsModal: false,
       isSwapLoading: false,
       isSumulateSwapLoading: false,
+      isSumulateIntervalStarted: false,
       pathViz: null,
       slippagePercent: 0.05,
       multiSwapOdosFeePercent: 0.01,
@@ -632,7 +639,15 @@ export default defineComponent({
         : null;
     },
 
-    isDisableButton() {
+    isLoadingSwap() {
+      return (
+        this.isSwapLoading ||
+        this.isSumulateSwapLoading ||
+        this.isSumulateIntervalStarted
+      );
+    },
+
+    hideSwapButton() {
       return (
         this.inputTokensWithSelectedTokensCount === 0 ||
         this.outputTokensWithSelectedTokensCount === 0 ||
@@ -755,7 +770,7 @@ export default defineComponent({
         }
       }
     },
-    isDisableButton: function (val, oldVal) {
+    hideSwapButton: function (val, oldVal) {
       if (val) {
         this.clearQuotaInfo();
       }
@@ -1148,6 +1163,7 @@ export default defineComponent({
       // this.updatePathViewFunc(this.pathViz, [], []);
     },
     async simulateSwap() {
+      console.log("simulateSwap");
       if (this.isSumulateSwapLoading) {
         return;
       }
@@ -1166,6 +1182,7 @@ export default defineComponent({
       let output = this.getRequestOutputTokens(false);
       if (!input.length || !output.length) {
         this.isSumulateSwapLoading = false;
+        this.isSumulateIntervalStarted = false;
         return;
       }
 
@@ -1189,6 +1206,7 @@ export default defineComponent({
           this.updateSelectedOutputTokens(data);
 
           this.isSumulateSwapLoading = false;
+          this.isSumulateIntervalStarted = false;
           this.updateIsLoadingDataFunc(false);
 
           this.updatePathViewFunc(
@@ -1201,6 +1219,7 @@ export default defineComponent({
         .catch((e) => {
           console.error("Odos simulate swap request failed", e);
           this.isSumulateSwapLoading = false;
+          this.isSumulateIntervalStarted = false;
           this.updateIsLoadingDataFunc(false);
         });
     },
@@ -1633,6 +1652,7 @@ export default defineComponent({
     },
 
     updateQuotaInfo() {
+      console.log("updateQuotaInfo");
       if (!this.tokensQuotaCounterId) {
         // first call
         this.tokensQuotaCounterId = -1;
@@ -1643,9 +1663,11 @@ export default defineComponent({
 
       this.tokensQuotaCheckerSec = 0;
       let intervalId = setInterval(async () => {
+        this.isSumulateIntervalStarted = true;
         this.tokensQuotaCheckerSec++;
 
         if (this.tokensQuotaCheckerSec >= 3) {
+          console.log("INTERVAL STARTED > 3");
           if (this.tokensQuotaCounterId === intervalId) {
             this.tokensQuotaCheckerSec = 0;
             try {
@@ -1705,9 +1727,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.swap-container,
 .swap-form-wrap,
 .loader-container {
+  height: 100%;
+}
+
+.swap-container-full {
   height: 100%;
 }
 
@@ -1871,12 +1896,6 @@ div {
   color: #707a8b;
 }
 
-.input-swap-container {
-}
-
-.out-swap-container {
-}
-
 .swap-title {
   display: flex;
   justify-content: space-between;
@@ -1916,9 +1935,6 @@ div {
   padding-top: 8px;
 }
 
-.powered-image {
-}
-
 .powered-text {
   font-style: normal;
   font-weight: 400;
@@ -1931,14 +1947,18 @@ div {
 }
 
 .swap-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   align-items: center;
   gap: 8px;
+  color: #fff;
 
   width: 100%;
   height: 48px;
 
-  padding-top: 15px;
+  padding: 15px 0;
 
   /* Blue gradient */
 
@@ -2045,7 +2065,6 @@ div {
 }
 
 .loader-container {
-  padding-top: 50px;
   min-height: 80px;
 }
 

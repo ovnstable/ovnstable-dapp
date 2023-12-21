@@ -52,12 +52,6 @@ import transaction from '@/store/modules/views/account/transaction';
 
 import menuUI from '@/store/modules/views/menu/ui';
 
-
-// Governance
-import governance from '@/store/modules_governance/governance';
-import ethers from '@/store/modules_governance/ethers';
-
-
 // Web3
 import network from "@/store/modules/common/web3/network";
 import walletAction from "@/store/modules/common/web3/action/wallet-action";
@@ -136,9 +130,6 @@ export default new Vuex.Store({
         transaction,
 
         menuUI,
-
-        governance,
-        ethers,
 
         network,
         walletAction,

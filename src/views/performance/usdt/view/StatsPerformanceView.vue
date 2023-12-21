@@ -315,7 +315,6 @@ export default {
     },
 
     mounted() {
-        console.log('Tab Name and chart type: ', this.$route.query.tabName,  this.$route.query.chart);
         if (!this.$route.query.tabName) {
             this.setTab(this.networkName, this.$route.query.chart);
         } if (this.$route.query.tabName) {
@@ -349,18 +348,22 @@ export default {
                 }
             }
 
-            console.log("Tab Params : ", tabParams)
             this.initTabName('/stats/usdt', tabParams);
-
             this.loadData();
-            console.log("NetworkParams : ", this.getParams(this.tab));
         },
 
         initTabName(path, queryParams) {
-            this.$router.push({
+            const currentRoute = this.$route.fullPath;
+
+            const newRoute = {
                 path: path,
                 query: queryParams ? queryParams : {}
-            });
+            };
+
+            const newRouteFullPath = this.$router.resolve(newRoute).href; 
+            if (currentRoute !== newRouteFullPath) {
+                this.$router.push(newRoute);
+            }
         },
 
         openLink(url) {

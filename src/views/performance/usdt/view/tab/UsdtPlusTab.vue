@@ -369,11 +369,19 @@ export default {
       this.loadCollateralData();
     },
 
+
     initTabName(path, queryParams) {
-      this.$router.push({
-        path: path,
-        query: queryParams ? queryParams : {}
-      });
+      const currentRoute = this.$route.fullPath;
+
+      const newRoute = {
+          path: path,
+          query: queryParams ? queryParams : {}
+      };
+
+      const newRouteFullPath = this.$router.resolve(newRoute).href; 
+      if (currentRoute !== newRouteFullPath) {
+          this.$router.push(newRoute);
+      }
     },
 
     openLink(url) {
@@ -445,7 +453,6 @@ export default {
             }
 
             if (element.type === "ETS") {
-              console.log(element, "element--");
               let etsNameUp = this.getEtsNameUp(element);
               currentTotalDataElement.label = `ETS ${etsNameUp}`;
               let etsName = this.getEtsName(element);

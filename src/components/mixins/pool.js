@@ -1101,11 +1101,20 @@ export const pool = {
         "0x61366A4e6b1DB1b85DD701f2f4BFa275EF271197"
       ];
 
+      const convexDuplicatePromote =
+        "0xb34a7d1444a707349bc7b981b7f2e1f20f81f013_convex";
+
       // if pool tvl too low
       const promotePools = ["0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013"];
 
       // execute revert aggregator
-      pools = pools.filter((pool) => !revertAgg.includes(pool.address));
+      pools = pools.filter((pool) => {
+        if (!revertAgg.includes(pool.address)) false;
+        if (pool.address?.toLowerCase() === convexDuplicatePromote) {
+          return false;
+        }
+        return true;
+      });
 
       if (!isOnvPools) {
         topPools = pools.filter((pool) =>
@@ -1135,16 +1144,21 @@ export const pool = {
         // this is for new pools which TVL do not pass pool.tvl < 300000 && pool.tvl > 100000
         // but its should be displayed
         const exception = [
-          "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
           "0x0627dcdca49d749583c6a00327eb5e3846e265d3",
           "0x77ca2ddfd61d1d5e5d709cf07549fec3e2d80315"
         ];
+
+        // convex duplicating
+        const removeFromSecondPools = [
+          "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013"
+        ];
+        if (removeFromSecondPools.includes(pool.address)) return false;
         // if its tvl higher than restrictions and its promotoed, its gonna duplicate
         if (pool.tvl > 300000 && pool.promoted) return false;
 
-        if (exception.includes(pool.address)) return pool;
-        if (pool.tvl < 300000 && pool.tvl > 100000) return pool;
-        if (pool.promoted !== false) return pool;
+        if (exception.includes(pool.address)) return true;
+        if (pool.tvl < 300000 && pool.tvl > 100000) return true;
+        if (pool.promoted !== false) return true;
 
         return false;
       });
@@ -1188,12 +1202,29 @@ export const pool = {
         const { address } = entry;
 
         // promoting special pool in FEATURES/all-pools
-        const featurePromote = [
-          "0xb34a7d1444a707349bc7b981b7f2e1f20f81f013",
-          "0x1b05e4e814b3431a48b8164c41eac834d9ce2da6"
-        ];
+        const featurePromote = ["0x1b05e4e814b3431a48b8164c41eac834d9ce2da6"];
+        const convexPromote = ["0xb34a7d1444a707349bc7b981b7f2e1f20f81f013"];
         const loweredAdd = address?.toLowerCase();
 
+        // remove after CONVEX PROMO
+        if (
+          convexPromote.includes(loweredAdd) ||
+          topAprByAddress.includes(loweredAdd)
+        ) {
+          const aprConvex = pools.find(
+            (_) =>
+              _?.address.toLowerCase() ===
+              "0xb34a7d1444a707349bc7b981b7f2e1f20f81f013_convex"
+          );
+
+          return {
+            ...entry,
+            apr: aprConvex?.apr ?? entry.apr,
+            feature: true
+          };
+        }
+
+        // for all other PROMO FEATURED pools
         if (
           featurePromote.includes(loweredAdd) ||
           topAprByAddress.includes(loweredAdd)

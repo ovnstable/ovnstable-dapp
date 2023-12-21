@@ -1144,16 +1144,21 @@ export const pool = {
         // this is for new pools which TVL do not pass pool.tvl < 300000 && pool.tvl > 100000
         // but its should be displayed
         const exception = [
-          "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
           "0x0627dcdca49d749583c6a00327eb5e3846e265d3",
           "0x77ca2ddfd61d1d5e5d709cf07549fec3e2d80315"
         ];
+
+        // convex duplicating
+        const removeFromSecondPools = [
+          "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013"
+        ];
+        if (removeFromSecondPools.includes(pool.address)) return false;
         // if its tvl higher than restrictions and its promotoed, its gonna duplicate
         if (pool.tvl > 300000 && pool.promoted) return false;
 
-        if (exception.includes(pool.address)) return pool;
-        if (pool.tvl < 300000 && pool.tvl > 100000) return pool;
-        if (pool.promoted !== false) return pool;
+        if (exception.includes(pool.address)) return true;
+        if (pool.tvl < 300000 && pool.tvl > 100000) return true;
+        if (pool.promoted !== false) return true;
 
         return false;
       });

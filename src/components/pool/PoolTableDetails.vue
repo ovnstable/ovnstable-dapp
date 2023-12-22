@@ -203,7 +203,7 @@
                             <template v-if="aggregator.tvl >= 1000000">
                                 ${{ $utils.formatNumberToMln(aggregator.tvl, 2) }}M
                             </template>
-                            <template v-else>
+                            <template v-if="aggregator.tvl < 1000000">
                                 ${{ $utils.formatNumberToThousands(aggregator.tvl, 0) }}K
                             </template>
                         </label>

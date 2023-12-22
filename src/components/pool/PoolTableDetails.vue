@@ -200,12 +200,7 @@
                 <div class="col-2 col-xl-2 col-lg-2 col-md-2 col-sm-2">
                     <div class="pool-table-header-item">
                         <label v-if="aggregator.tvl" class="card-label">
-                            <template v-if="aggregator.tvl >= 1000000">
-                                ${{ $utils.formatNumberToMln(aggregator.tvl, 2) }}M
-                            </template>
-                            <template v-else>
-                                ${{ $utils.formatNumberToThousands(aggregator.tvl, 0) }}K
-                            </template>
+                            ${{ $utils.formatNumberToThousands(aggregator.tvl, 0) }}K
                         </label>
                         <label v-else class="card-label see-on-dex-label see-on-dex-another">
                             see on platform

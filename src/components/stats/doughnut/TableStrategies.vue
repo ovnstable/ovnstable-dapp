@@ -30,7 +30,7 @@
         :key="item.label + (item.value + '')"
         class="current-table-row"
         @click="
-          item.type === 'CORE' || item.type === 'SMM'
+          item.type === 'CORE' || item.type === 'SMM' || item.type === 'SPER'
             ? openInNewTab(item.link)
             : openInDapp(item.link)
         "

@@ -313,103 +313,19 @@ const actions = {
         }
     },
 
-    async getCustomWallets({commit, dispatch, getters, rootState}) {
-        let customWallets = []; // include custom (not natively supported) injected wallet modules here
-
-        // ARGENT is zk-wallet
-        const customArgent = {
-            // The label that will be displayed in the wallet selection modal
-            label: 'Argent',
-            // The property on the window where the injected provider is defined
-            // Example: window.ethereum
-            injectedNamespace: 'ethereum',
-            // A function that returns a bool indicating whether or not the provider is
-            // of a certain identity. In this case, a unique property on the provider
-            // is used to identify the provider.
-            // In most cases this is in the format: is<provider-name>.
-            // You may also include custom logic here if checking for the property
-            // isn't sufficient.
-            checkProviderIdentity: ({ provider }) => true, //!!provider && !!provider[ProviderIdentityFlag.MetaMask],
-
-            // A method that returns a string of the wallet icon which will be displayed
-            getIcon: async () => "https://images.prismic.io/argentwebsite/313db37e-055d-42ee-9476-a92bda64e61d_logo.svg?auto=format%2Ccompress&amp;fit=max&amp;q=50",
-            // Returns a valid EIP1193 provider. In some cases the provider will need to be patched to satisfy the EIP1193 Provider interface
-            getInterface: async () => {
-                const { createEIP1193Provider } = await import('@web3-onboard/common');
-
-                // //  Create WalletConnect Provider for argent
-                const wcprovider = await EthereumProvider.init({
-                    projectId: WC_PROJECT_ID,
-                    rpcMap: {
-                        ['324']: "https://mainnet.era.zksync.io",
-                        ['42161']: "https://arb1.arbitrum.io/rpc",
-                        ['8453']: "https://mainnet.base.org",
-                        ['59144']: "https://linea.drpc.org",
-                        ['10']: "https://optimism.llamarpc.com",
-                        ['56']: "https://bsc-dataseed.binance.org",
-                        ['137']: "https://polygon-rpc.com/"
-                    },
-                    optionalChains: [324],
-                    showQrModal: true,
-                    chainId: 324
-                });
-
-                wcprovider.on('connect', async data => {
-                    localStorage.setItem('walletName', 'WalletConnect');
-                    window.location.reload();
-                })
-
-                wcprovider.on('accountsChanged', async function (accounts) {
-                    console.log(accounts, 'accountsChanged');
-                    dispatch('accountChanged', accounts);
-                });
-
-                wcprovider.on('chainChanged', async function (newNetworkId) {
-                    dispatch('chainChanged', newNetworkId);
-                });
-
-                await wcprovider.enable();
-
-                const provider = createEIP1193Provider(wcprovider, {
-                    eth_chainId: ({ baseRequest }) => {
-                        return `0x${parseInt(324).toString(16)}`;
-                    }
-                });
-
-                return { provider };
-            },
-            // A list of platforms that this wallet supports
-            platforms: ['desktop']
-        }
-
-        let networkId = rootState.network.networkId;
-        if (networkId === 324) {
-            // argent only on ZkSync Network
-            customWallets.push(customArgent);
-        }
-
-        return customWallets;
-    },
-
     async getMainWalletsConfig({commit, dispatch, getters, rootState}) {
-        let customWallets = await dispatch('getCustomWallets');
 
         const injected = injectedModule({
-            custom: customWallets,
-            // display all wallets even if they are unavailable
-            displayUnavailable: false,
             filter: await dispatch('getWalletsFilter'),
             sort: (wallets) => {
                 const metaMask = wallets.find(({ label }) => label === ProviderLabel.MetaMask)
                 const coinbase = wallets.find(({ label }) => label === ProviderLabel.Coinbase)
-
+                const rabby = wallets.find(({ label }) => label === ProviderLabel.Rabby);
                 return (
                     [
                         metaMask,
                         coinbase,
-                        ...wallets.filter(
-                            ({ label }) => label !== ProviderLabel.MetaMask && label !== ProviderLabel.Coinbase
-                        )
+                        rabby
                     ]
                         // remove undefined values
                         .filter((wallet) => wallet)
@@ -431,11 +347,13 @@ const actions = {
         const coinbaseWalletSdk = coinbaseWalletModule({ darkMode: true })
 
         return [
-            injected,
-            walletConnect,
-            coinbaseWalletSdk,
-            // ... other wallets
-        ];
+          injected,
+          walletConnect,
+          coinbaseWalletSdk
+          // ... other wallets
+        ].filter(
+          (wallet) => wallet.label !== "Argent" && wallet.label !== "Phantom"
+        );
     },
 
     async setNetwork({commit, dispatch, getters, rootState}, newNetworkId){

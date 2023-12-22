@@ -27,35 +27,30 @@
 
                     <div class="row">
                         <div class="col-6 col-lg-3 col-md-3 col-sm-3">
-                            <div
-                                 class="filter-container text-center">
-                                <v-checkbox
-                                    @click="showWithZap(!isShowOnlyZap)"
-                                    class="filter-item">
-                                    <template v-slot:label>
-                                        <span id="filter-title-zap">
-                                            Zappable
-                                        </span>
-                                    </template>
-                                </v-checkbox>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-4 col-md-3 col-sm-3">
                             <div class="filter-container text-center">
-                                <v-checkbox
-                                    @click="showAprLimit(!isShowAprLimit)"
+                                <input
+                                    type="checkbox"
+                                    @click="showWithZap(!isShowOnlyZap)"
                                     class="filter-item"
-                                    false-value="red"
-                                >
-                                    <template v-slot:label>
-                                        <span id="filter-title-apr">
-                                            Over 15% APR
-                                        </span>
-                                    </template>
-                                </v-checkbox>
+                                    id="checkbox-zap"
+                                    v-model="isShowOnlyZap"
+                                />
+                                <label for="checkbox-zap" class="checkbox-text-zappable" id="filter-title-zap">Zappable</label>
                             </div>
                         </div>
 
+                        <div class="col-6 col-lg-4 col-md-3 col-sm-3">
+                            <div class="filter-container text-center">
+                                <input
+                                    type="checkbox"
+                                    @click="showAprLimit(!isShowAprLimit)"
+                                    class="filter-item"
+                                    id="checkbox-apr"
+                                    v-model="isShowAprLimit"
+                                />
+                                <label for="checkbox-apr" id="filter-title-apr">Over 15% APR</label>
+                                </div>
+                        </div>
                         <div class="col-12 col-lg-5 col-md-6 col-sm-6">
                             <div class="search-input-container">
                                 <input
@@ -197,20 +192,24 @@ export default defineComponent({
 }
 
 .filter-container {
+    margin-top: 10px;
     cursor: pointer;
     color: var(--main-gray-text);
 }
 
 .filter-item {
+    margin-right: 5px;
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
     line-height: 28px;
     color: var(--main-gray-text)!important;
     cursor: pointer;
+    height: 15px;
+    width: 15px;
 }
-
 .filter-item label {
+    margin-bottom: 40px;
     font-style: normal;
     font-weight: 400;
     font-size: 18px;

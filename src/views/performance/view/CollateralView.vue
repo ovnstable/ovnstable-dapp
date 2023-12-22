@@ -613,7 +613,7 @@ export default {
               link: null
             };
 
-            if (element.type === "CORE" || element.type === "SMM") {
+            if (element.type === "CORE" || element.type === "SMM" || element.type === "SPER") {
               currentTotalDataElement.link =
                 element.address || element.explorerAddress
                   ? process.env.VUE_APP_DEBANK_EXPLORER +

@@ -1,7 +1,7 @@
 <template>
   <div class="app-header mr-n3">
     <div class="app-header__container">
-      <div class="christmas-btn mr-auto">
+      <!-- <div class="christmas-btn mr-auto">
         <router-link to="/christmas_pools">
           <div
             class="btn-wrap"
@@ -18,7 +18,7 @@
             />
           </div>
         </router-link>
-      </div>
+      </div> -->
 
       <div class="theme-toggle-group ml-auto">
         <v-btn

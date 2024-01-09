@@ -357,8 +357,8 @@
               <div class="transaction-info-address">
                 {{
                   account.substring(0, 5) +
-                  "..." +
-                  account.substring(account.length - 4)
+                    "..." +
+                    account.substring(account.length - 4)
                 }}
               </div>
             </div>
@@ -640,11 +640,7 @@ export default defineComponent({
     },
 
     isLoadingSwap() {
-      return (
-        this.isSwapLoading ||
-        this.isSumulateSwapLoading ||
-        this.isSumulateIntervalStarted
-      );
+      return this.isSwapLoading || this.isSumulateSwapLoading;
     },
 
     hideSwapButton() {
@@ -730,7 +726,7 @@ export default defineComponent({
     }
   },
   watch: {
-    outputTokensWithSelectedTokensCount: function (val, oldVal) {
+    outputTokensWithSelectedTokensCount: function(val, oldVal) {
       // lock first
       if (val === 1) {
         let token = this.selectedOutputTokens[0];
@@ -750,16 +746,16 @@ export default defineComponent({
         return;
       }
     },
-    sumOfAllSelectedTokensInUsd: function (val, oldVal) {
+    sumOfAllSelectedTokensInUsd: function(val, oldVal) {
       this.recalculateOutputTokensSum();
     },
 
-    isTokensLoadedAndFiltered: function (val, oldVal) {
+    isTokensLoadedAndFiltered: function(val, oldVal) {
       if (val) {
         this.clearForm();
       }
     },
-    networkId: function (newVal, oldVal) {
+    networkId: function(newVal, oldVal) {
       if (newVal) {
         // hide swap form and clear all(watch function) data,
         // after new token loaded collection
@@ -770,14 +766,14 @@ export default defineComponent({
         }
       }
     },
-    hideSwapButton: function (val, oldVal) {
+    hideSwapButton: function(val, oldVal) {
       if (val) {
         this.clearQuotaInfo();
       }
       this.updateButtonDisabledFunc(val);
     },
 
-    isFirstBalanceLoaded: function (val, oldVal) {
+    isFirstBalanceLoaded: function(val, oldVal) {
       if (val) {
         this.initTopInputTokensByBalance(this.stablecoinWithoutSecondTokens);
       }
@@ -1248,8 +1244,9 @@ export default defineComponent({
       let selectedOutputTokensMap = {};
       for (let i = 0; i < selectedOutputTokensCount; i++) {
         let token = selectedOutputTokens[i];
-        selectedOutputTokensMap[token.selectedToken.address.toLowerCase()] =
-          token;
+        selectedOutputTokensMap[
+          token.selectedToken.address.toLowerCase()
+        ] = token;
       }
 
       for (let i = 0; i < outTokensCount; i++) {
@@ -1674,7 +1671,8 @@ export default defineComponent({
               // update
               this.simulateSwap();
             } catch (e) {
-              // ignore
+              console.error(e);
+              clearInterval(intervalId);
             } finally {
               clearInterval(intervalId);
             }

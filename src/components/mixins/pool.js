@@ -911,7 +911,7 @@ export const pool = {
                   }
                 }
 
-                if (pool && pool.tvl && pool.tvl >= 0) {
+                if (pool && pool?.tvl >= 0) {
                   // todo move to backend
                   if (
                     this.zapPlatformSupportList.includes(pool.platform) &&

@@ -6,9 +6,7 @@
 
     <div
       v-else
-      :class="
-        !isAllLoaded ? 'swap-container swap-container-full' : 'swap-container'
-      "
+      :class="!isAllLoaded ? 'swap-container swap-container-full' : 'swap-container'"
     >
       <div v-if="!isAllLoaded" class="loader-container">
         <v-progress-circular
@@ -68,9 +66,7 @@
                   </div>
                 </div>
                 <div v-if="inputTokensWithSelectedTokensCount" class="col-6">
-                  <div @click="maxAll" class="add-token-text max-all">
-                    Max all
-                  </div>
+                  <div @click="maxAll" class="add-token-text max-all">Max all</div>
                 </div>
               </div>
             </div>
@@ -129,10 +125,7 @@
                     + Select token
                   </div>
                 </div>
-                <div
-                  v-if="outputTokensWithSelectedTokensCount >= 2"
-                  class="col-6"
-                >
+                <div v-if="outputTokensWithSelectedTokensCount >= 2" class="col-6">
                   <div @click="resetOutputs" class="add-token-text max-all">
                     Reset output %
                   </div>
@@ -155,14 +148,10 @@
               alt="info"
               style="margin-right: 2px"
             />
-            20-80% of the displayed gas fee on zkSync will be refunded
-            automatically.
+            20-80% of the displayed gas fee on zkSync will be refunded automatically.
           </div>
         </div>
-        <div
-          class="odos-fees-container mt-5"
-          v-if="ifMoreThanOneSelectedTokensAdded"
-        >
+        <div class="odos-fees-container mt-5" v-if="ifMoreThanOneSelectedTokensAdded">
           <div>
             <v-img
               class="alert-icon mr-2"
@@ -202,9 +191,7 @@
             >
               <div class="swap-button-title">
                 <div>
-                  <span
-                    v-if="viewType === 'SWIPE' && !firstSwipeClickOnApprove"
-                  >
+                  <span v-if="viewType === 'SWIPE' && !firstSwipeClickOnApprove">
                     SWIPE
                   </span>
                   <span v-else>
@@ -313,8 +300,7 @@
                 <span class="transaction-info-additional">
                   ({{
                     $utils.formatMoney(
-                      (sumOfAllSelectedTokensInUsd * multiSwapOdosFeePercent) /
-                        100,
+                      (sumOfAllSelectedTokensInUsd * multiSwapOdosFeePercent) / 100,
                       3
                     )
                   }})$
@@ -356,9 +342,7 @@
             <div class="col-6 py-0">
               <div class="transaction-info-address">
                 {{
-                  account.substring(0, 5) +
-                    "..." +
-                    account.substring(account.length - 4)
+                  account.substring(0, 5) + "..." + account.substring(account.length - 4)
                 }}
               </div>
             </div>
@@ -379,13 +363,9 @@
       :is-all-data-loaded="isAllDataLoaded"
       :is-ovn-swap="true"
       :selected-token-count="
-        selectTokenType === 'OVERNIGHT'
-          ? secondTokensSelectedCount
-          : tokensSelectedCount
+        selectTokenType === 'OVERNIGHT' ? secondTokensSelectedCount : tokensSelectedCount
       "
-      :max-token-count="
-        selectTokenType === 'OVERNIGHT' ? secondTokens.length : 6
-      "
+      :max-token-count="selectTokenType === 'OVERNIGHT' ? secondTokens.length : 6"
     />
 
     <SuccessOdosModal
@@ -429,33 +409,33 @@ export default defineComponent({
     SwapSlippageSettings,
     SelectTokensModal,
     InputToken,
-    OutputToken
+    OutputToken,
   },
   props: {
     viewType: {
       type: String,
-      required: true
+      required: true,
     },
     updatePathViewFunc: {
       type: Function,
-      required: true
+      required: true,
     },
     updateButtonDisabledFunc: {
       type: Function,
-      required: true
+      required: true,
     },
     updateIsLoadingDataFunc: {
       type: Function,
-      required: true
+      required: true,
     },
     handleFormResetFunc: {
       type: Function,
-      required: true
+      required: true,
     },
     updateStablecoinsListFunc: {
       type: Function,
-      required: true
-    }
+      required: true,
+    },
   },
   mounted() {
     this.baseViewType = this.viewType;
@@ -472,19 +452,16 @@ export default defineComponent({
         this.trackClick({
           action: "swipe_page_view",
           event_category: "Page view",
-          event_label: "View swipe page"
+          event_label: "View swipe page",
         });
       } else if (this.viewType === "SWAP") {
         this.trackClick({
           action: "swap_page_view",
           event_category: "Page view",
-          event_label: "View swap page"
+          event_label: "View swap page",
         });
       } else {
-        console.log(
-          "Unknown view type for odos view tracking: ",
-          this.viewType
-        );
+        console.log("Unknown view type for odos view tracking: ", this.viewType);
       }
     } catch (e) {
       console.error("Track error:", e);
@@ -521,19 +498,14 @@ export default defineComponent({
       tokensQuotaCheckerSec: 0,
 
       firstSwipeClickOnApprove: false,
-      ifMoreThanOneTokensAdded: false
+      ifMoreThanOneTokensAdded: false,
     };
   },
   computed: {
     ...mapGetters("network", ["getParams", "networkId", "networkName"]),
     ...mapGetters("theme", ["light"]),
     ...mapGetters("web3", ["web3", "getWeiMarker"]),
-    ...mapGetters("gasPrice", [
-      "show",
-      "gasPrice",
-      "gasPriceGwei",
-      "gasPriceStation"
-    ]),
+    ...mapGetters("gasPrice", ["show", "gasPrice", "gasPriceGwei", "gasPriceStation"]),
 
     isInputTokensRemovable() {
       return this.inputTokens.length > 1;
@@ -634,9 +606,7 @@ export default defineComponent({
       );
     },
     firstInputInQueueForToApprove() {
-      return this.isAnyInputsNeedApprove
-        ? this.allInputsWithNotApproved[0]
-        : null;
+      return this.isAnyInputsNeedApprove ? this.allInputsWithNotApproved[0] : null;
     },
 
     isLoadingSwap() {
@@ -677,9 +647,7 @@ export default defineComponent({
 
       if (this.swapResponseConfirmInfo.waitingConformation) {
         return (
-          "Confirm in your wallet (" +
-          this.swapResponseConfirmInfo.duration +
-          " sec)"
+          "Confirm in your wallet (" + this.swapResponseConfirmInfo.duration + " sec)"
         );
       }
 
@@ -723,10 +691,10 @@ export default defineComponent({
       }
 
       return true;
-    }
+    },
   },
   watch: {
-    outputTokensWithSelectedTokensCount: function(val, oldVal) {
+    outputTokensWithSelectedTokensCount: function (val, oldVal) {
       // lock first
       if (val === 1) {
         let token = this.selectedOutputTokens[0];
@@ -746,16 +714,16 @@ export default defineComponent({
         return;
       }
     },
-    sumOfAllSelectedTokensInUsd: function(val, oldVal) {
+    sumOfAllSelectedTokensInUsd: function (val, oldVal) {
       this.recalculateOutputTokensSum();
     },
 
-    isTokensLoadedAndFiltered: function(val, oldVal) {
+    isTokensLoadedAndFiltered: function (val, oldVal) {
       if (val) {
         this.clearForm();
       }
     },
-    networkId: function(newVal, oldVal) {
+    networkId: function (newVal, oldVal) {
       if (newVal) {
         // hide swap form and clear all(watch function) data,
         // after new token loaded collection
@@ -766,18 +734,18 @@ export default defineComponent({
         }
       }
     },
-    hideSwapButton: function(val, oldVal) {
+    hideSwapButton: function (val, oldVal) {
       if (val) {
         this.clearQuotaInfo();
       }
       this.updateButtonDisabledFunc(val);
     },
 
-    isFirstBalanceLoaded: function(val, oldVal) {
+    isFirstBalanceLoaded: function (val, oldVal) {
       if (val) {
         this.initTopInputTokensByBalance(this.stablecoinWithoutSecondTokens);
       }
-    }
+    },
   },
 
   methods: {
@@ -848,8 +816,7 @@ export default defineComponent({
       // removing by token.id or token.selectedToken.id
       const index = tokens.findIndex(
         (item) =>
-          item.id === id ||
-          (item.selectedToken ? item.selectedToken.id === id : false)
+          item.id === id || (item.selectedToken ? item.selectedToken.id === id : false)
       );
 
       if (index !== -1) {
@@ -979,7 +946,7 @@ export default defineComponent({
         console.debug(
           this.getOdosLogMsg({
             message: "Swap method not available, prev swap in process.",
-            swapSession: this.swapSessionId
+            swapSession: this.swapSessionId,
           })
         );
         return;
@@ -1000,27 +967,24 @@ export default defineComponent({
             action: "click_form_swipe",
             event_category: "Click Button",
             event_label: "Click on swipe",
-            value: this.sumOfAllSelectedTokensInUsd
+            value: this.sumOfAllSelectedTokensInUsd,
           });
         } else if (this.viewType === "SWAP") {
           this.trackClick({
             action: "click_form_swap",
             event_category: "Click Button",
             event_label: "Click on swap",
-            value: this.sumOfAllSelectedTokensInUsd
+            value: this.sumOfAllSelectedTokensInUsd,
           });
         } else {
-          console.error(
-            "Unknown view type for swap click tracking: ",
-            this.viewType
-          );
+          console.error("Unknown view type for swap click tracking: ", this.viewType);
         }
       } catch (e) {
         console.error(
           this.getOdosLogMsg({
             message: "Track error. ",
             swapSession: this.swapSessionId,
-            data: this.viewType
+            data: this.viewType,
           })
         );
       }
@@ -1040,7 +1004,7 @@ export default defineComponent({
         simulate: true,
         pathViz: true,
         // disableRFQs: false
-        referralCode: this.odosReferalCode
+        referralCode: this.odosReferalCode,
       };
 
       console.debug(
@@ -1048,7 +1012,7 @@ export default defineComponent({
           message: "Odos Swap quota request data",
           swapSession: this.swapSessionId,
           data: requestData,
-          actualGas: actualGas
+          actualGas: actualGas,
         })
       );
 
@@ -1059,16 +1023,14 @@ export default defineComponent({
               message: "Odos Swap quota response data",
               swapSession: this.swapSessionId,
               data: data,
-              actualGas: actualGas
+              actualGas: actualGas,
             })
           );
 
           let assembleData = {
-            userAddr: this.web3.utils.toChecksumAddress(
-              this.account.toLowerCase()
-            ),
+            userAddr: this.web3.utils.toChecksumAddress(this.account.toLowerCase()),
             pathId: data.pathId,
-            simulate: true
+            simulate: true,
           };
 
           console.debug(
@@ -1076,7 +1038,7 @@ export default defineComponent({
               message: "Odos Assemble request data",
               swapSession: this.swapSessionId,
               data: assembleData,
-              actualGas: actualGas
+              actualGas: actualGas,
             })
           );
           this.assembleRequest(assembleData)
@@ -1086,7 +1048,7 @@ export default defineComponent({
                   message: "Odos Assemble response data",
                   swapSession: this.swapSessionId,
                   data: responseAssembleData,
-                  actualGas: actualGas
+                  actualGas: actualGas,
                 })
               );
 
@@ -1098,22 +1060,21 @@ export default defineComponent({
                 let errMsg =
                   responseAssembleData.simulation.simulationError &&
                   responseAssembleData.simulation.simulationError.errorMessage
-                    ? responseAssembleData.simulation.simulationError
-                        .errorMessage
+                    ? responseAssembleData.simulation.simulationError.errorMessage
                     : "Transaction simulation is failed";
                 console.error(
                   this.getOdosLogMsg({
                     message: "Error before send swap transaction",
                     swapSession: this.swapSessionId,
                     data: errMsg,
-                    actualGas: actualGas
+                    actualGas: actualGas,
                   })
                 );
 
                 if (errMsg && errMsg.toLowerCase().includes("slippage")) {
                   this.showErrorModalWithMsg({
                     errorType: "slippage",
-                    errorMsg: errMsg
+                    errorMsg: errMsg,
                   });
                 } else {
                   this.handleOdosRequestError({ message: errMsg });
@@ -1135,7 +1096,7 @@ export default defineComponent({
                 this.getOdosLogMsg({
                   message: "Odos assemble request failed swap form",
                   swapSession: this.swapSessionId,
-                  data: e
+                  data: e,
                 })
               );
               this.isSwapLoading = false;
@@ -1146,7 +1107,7 @@ export default defineComponent({
             this.getOdosLogMsg({
               message: "Odos swap request failed swap form",
               swapSession: this.swapSessionId,
-              data: e
+              data: e,
             })
           );
           this.isSwapLoading = false;
@@ -1192,7 +1153,7 @@ export default defineComponent({
         sourceBlacklist: this.getSourceBlackList(this.networkId),
         sourceWhitelist: [],
         simulate: true,
-        pathViz: true
+        pathViz: true,
       };
 
       this.clearQuotaInfo();
@@ -1233,20 +1194,14 @@ export default defineComponent({
       let outTokensCount = outTokens.length;
       let outAmountsCount = outAmounts.length;
 
-      if (
-        selectedOutputTokensCount < 1 ||
-        outTokensCount < 1 ||
-        outAmountsCount < 1
-      ) {
+      if (selectedOutputTokensCount < 1 || outTokensCount < 1 || outAmountsCount < 1) {
         return;
       }
 
       let selectedOutputTokensMap = {};
       for (let i = 0; i < selectedOutputTokensCount; i++) {
         let token = selectedOutputTokens[i];
-        selectedOutputTokensMap[
-          token.selectedToken.address.toLowerCase()
-        ] = token;
+        selectedOutputTokensMap[token.selectedToken.address.toLowerCase()] = token;
       }
 
       for (let i = 0; i < outTokensCount; i++) {
@@ -1296,9 +1251,7 @@ export default defineComponent({
     async checkApproveForToken(token, checkedAllowanceValue) {
       // checkedAllowanceValue in wei
       let selectedToken = token.selectedToken;
-      if (
-        selectedToken.address === "0x0000000000000000000000000000000000000000"
-      ) {
+      if (selectedToken.address === "0x0000000000000000000000000000000000000000") {
         selectedToken.approveData.approved = true;
         return;
       }
@@ -1339,16 +1292,9 @@ export default defineComponent({
 
       let tokenContract = this.tokensContractMap[selectedToken.address];
       // let approveValue = selectedToken.balanceData.originalBalance*1 ? selectedToken.balanceData.originalBalance : (10000000000000 + '');
-      let approveValue = this.web3.utils.toWei(
-        "10000000",
-        token.selectedToken.weiMarker
-      );
+      let approveValue = this.web3.utils.toWei("10000000", token.selectedToken.weiMarker);
 
-      this.approveToken(
-        tokenContract,
-        this.routerContract.options.address,
-        approveValue
-      )
+      this.approveToken(tokenContract, this.routerContract.options.address, approveValue)
         .then((data) => {
           this.checkApproveForToken(token, token.contractValue);
           this.closeWaitingModal();
@@ -1373,7 +1319,7 @@ export default defineComponent({
         if (token.value > 0) {
           inputTokens.push({
             tokenAddress: selectedToken.address,
-            amount: String(token.contractValue)
+            amount: String(token.contractValue),
           });
         }
       }
@@ -1391,7 +1337,7 @@ export default defineComponent({
 
         outputTokens.push({
           tokenAddress: selectedToken.address,
-          proportion: String(token.value)
+          proportion: String(token.value),
         });
       }
       return outputTokens;
@@ -1717,10 +1663,10 @@ export default defineComponent({
     initTabName(path, queryParams) {
       this.$router.push({
         path: path,
-        query: queryParams ? queryParams : {}
+        query: queryParams ? queryParams : {},
       });
-    }
-  }
+    },
+  },
 });
 </script>
 
@@ -1960,11 +1906,7 @@ div {
 
   /* Blue gradient */
 
-  background: linear-gradient(
-    91.26deg,
-    #28a0f0 0%,
-    rgba(6, 120, 196, 0.9917) 100%
-  );
+  background: linear-gradient(91.26deg, #28a0f0 0%, rgba(6, 120, 196, 0.9917) 100%);
   border-radius: 2px;
 
   cursor: pointer;

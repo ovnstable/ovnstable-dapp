@@ -274,8 +274,8 @@
                 <div
                   v-if="
                     currentZapPlatformContractType &&
-                    currentZapPlatformContractType.type ===
-                      'LP_STAKE_DIFF_STEPS'
+                      currentZapPlatformContractType.type ===
+                        'LP_STAKE_DIFF_STEPS'
                   "
                 >
                   DEPOSIT
@@ -653,16 +653,16 @@ export default defineComponent({
     }
   },
   watch: {
-    sumOfAllSelectedTokensInUsd: function (val, oldVal) {
+    sumOfAllSelectedTokensInUsd: function(val, oldVal) {
       this.recalculateOutputTokensSum();
     },
 
-    isTokensLoadedAndFiltered: function (val, oldVal) {
+    isTokensLoadedAndFiltered: function(val, oldVal) {
       if (val) {
         this.clearForm();
       }
     },
-    networkId: function (newVal, oldVal) {
+    networkId: function(newVal, oldVal) {
       if (newVal) {
         // hide swap form and clear all(watch function) data,
         // after new token loaded collection
@@ -682,14 +682,14 @@ export default defineComponent({
         }
       }
     },
-    isDisableButton: function (val, oldVal) {
+    isDisableButton: function(val, oldVal) {
       if (val) {
         this.clearQuotaInfo();
       }
       // this.updateButtonDisabledFunc(val);
     },
 
-    isFirstBalanceLoaded: function (val, oldVal) {
+    isFirstBalanceLoaded: function(val, oldVal) {
       if (val) {
         // if router with path /claim
         if (this.$route.path === "/presale/claim") {
@@ -717,6 +717,9 @@ export default defineComponent({
 
       this.tokenSeparationScheme = "POOL_SWAP";
       this.typeOfPoolScheme = this.typeOfPool;
+
+      console.log(this.poolTokensForZapMap, "this.poolTokensForZapMap");
+      console.log(this.zapPool.address, "this.zapPool.address");
 
       // todo: move to backend
       let poolTokens = this.poolTokensForZapMap[this.zapPool.address];
@@ -1043,8 +1046,10 @@ export default defineComponent({
         referralCode: this.odosReferalCode
       };
 
+      console.log(JSON.stringify(requestData), "----requestData11");
       this.swapRequest(requestData)
         .then(async (data) => {
+          console.log(data, "----data222");
           let assembleData = {
             userAddr: this.web3.utils.toChecksumAddress(
               request.userAddr.toLowerCase()
@@ -1123,15 +1128,16 @@ export default defineComponent({
 
     getSourceLiquidityBlackList() {
       let sourceBlacklist = [...this.sourceLiquidityBlacklist];
-      let excludeLiquidityByPlatform =
-        this.mapExcludeLiquidityPlatform[this.zapPool.platform];
+      let excludeLiquidityByPlatform = this.mapExcludeLiquidityPlatform[
+        this.zapPool.platform
+      ];
       if (excludeLiquidityByPlatform && excludeLiquidityByPlatform.length) {
         sourceBlacklist = [...sourceBlacklist, ...excludeLiquidityByPlatform];
       }
 
       return sourceBlacklist;
     },
-    toApproveAndDepositSteps: async function (data, lastPoolInfoData) {
+    toApproveAndDepositSteps: async function(data, lastPoolInfoData) {
       let putIntoPoolEvent;
       let returnedToUserEvent;
       for (const key of Object.keys(data.events)) {
@@ -1301,7 +1307,7 @@ export default defineComponent({
       this.lastReturnedToUserEvent = null;
       this.lastZapResponseData = null;
     },
-    finishSingleStepTransaction: function (data) {
+    finishSingleStepTransaction: function(data) {
       let putIntoPoolEvent;
       let returnedToUserEvent;
       for (const key of Object.keys(data.events)) {
@@ -1398,10 +1404,17 @@ export default defineComponent({
           gauge: gaugeAddress,
           amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out]
         };
+      } else if (zapPool.platform === "HorizaSwap") {
+        gaugeData = {
+          amountsOut: [
+            proportions.amountToken0Out,
+            proportions.amountToken1Out
+          ],
+          pair: gaugeAddress
+        };
       } else {
         gaugeData = {
-          gauge: gaugeAddress,
-          amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out]
+          gauge: gaugeAddress
         };
       }
 

@@ -61,13 +61,13 @@ export default defineComponent({
   components: {
     PathView,
     SwapInformation,
-    SwapForm
+    SwapForm,
   },
   props: {
     viewType: {
       type: String,
-      default: "SWAP"
-    }
+      default: "SWAP",
+    },
   },
   data() {
     return {
@@ -77,11 +77,11 @@ export default defineComponent({
       buttonDisabled: true,
       isLoadingData: true,
       isFirstInitializationForPath: true,
-      stablecoinTokens: []
+      stablecoinTokens: [],
     };
   },
   computed: {
-    ...mapGetters("accountData", ["account"])
+    ...mapGetters("accountData", ["account"]),
   },
   methods: {
     ...mapActions("swapModal", ["showSwapModal", "showMintView"]),
@@ -107,8 +107,8 @@ export default defineComponent({
     },
     updateStablecoinsList(stablecoinTokens) {
       this.stablecoinTokens = stablecoinTokens;
-    }
-  }
+    },
+  },
 });
 </script>
 

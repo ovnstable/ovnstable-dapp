@@ -681,6 +681,9 @@ export const pool = {
         case "Convex": // aggregator of Curve
           url = "https://www.convexfinance.com/stake/arbitrum/13";
           break;
+        case "HorizaSwap":
+          url = "https://app.horiza.io/liquidity";
+          break;
         case "Baseswapdefiedge":
           url = "https://baseswap.defiedge.io/s/base/";
           break;
@@ -707,7 +710,8 @@ export const pool = {
         pool.platform === "Shekel" ||
         pool.platform === "Maverick" ||
         pool.platform === "Alienbase" ||
-        pool.platform === "Convex"
+        pool.platform === "Convex" ||
+        pool.platform === "HorizaSwap"
       ) {
         window.open(url, "_blank").focus();
         return;

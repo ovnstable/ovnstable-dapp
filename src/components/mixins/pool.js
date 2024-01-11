@@ -1247,10 +1247,7 @@ export const pool = {
         const loweredAdd = address?.toLowerCase();
 
         // remove after CONVEX PROMO
-        if (
-          convexPromote.includes(loweredAdd) ||
-          topAprByAddress.includes(loweredAdd)
-        ) {
+        if (convexPromote.includes(loweredAdd)) {
           const aprConvex = pools.find(
             (_) =>
               _?.address.toLowerCase() ===

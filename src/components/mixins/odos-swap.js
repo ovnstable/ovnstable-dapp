@@ -106,7 +106,7 @@ export const odosSwap = {
     ...mapGetters("network", ["getParams", "networkName", "networkId"]),
     ...mapGetters("accountData", ["account"]),
 
-    isAllLoaded: function () {
+    isAllLoaded: function() {
       // form swap window show
       if (this.baseViewType === "SWIPE") {
         return this.account
@@ -121,7 +121,7 @@ export const odosSwap = {
       return true;
     },
 
-    isAllDataLoaded: function () {
+    isAllDataLoaded: function() {
       return !this.isChainsLoading && !this.isTokensLoading;
     },
     isShowDecreaseAllowance() {
@@ -162,7 +162,7 @@ export const odosSwap = {
     }
   },
   watch: {
-    isAllDataLoaded: async function (newVal, oldValue) {
+    isAllDataLoaded: async function(newVal, oldValue) {
       if (newVal && !this.dataBeInited) {
         await this.initData(
           this.tokenSeparationScheme,
@@ -172,12 +172,12 @@ export const odosSwap = {
       }
     },
 
-    account: function (newVal, oldVal) {
+    account: function(newVal, oldVal) {
       if (newVal) {
         this.initAccountData();
       }
     },
-    networkId: async function (newVal, oldVal) {
+    networkId: async function(newVal, oldVal) {
       if (newVal) {
         this.isFirstBalanceLoaded = false;
         this.isBalancesLoading = false;

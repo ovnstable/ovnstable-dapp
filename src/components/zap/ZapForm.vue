@@ -1414,7 +1414,8 @@ export default defineComponent({
         };
       } else {
         gaugeData = {
-          gauge: gaugeAddress
+          gauge: gaugeAddress,
+          amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out]
         };
       }
 

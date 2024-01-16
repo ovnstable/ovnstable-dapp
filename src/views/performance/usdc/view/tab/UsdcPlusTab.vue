@@ -18,21 +18,9 @@
           <v-row class="ma-0 mt-10 toggle-row">
             <label
               class="tab-btn mr-4"
-              @click="setTab('bsc')"
-              v-bind:class="activeTabBsc"
-              >Bsc</label
-            >
-            <label
-              class="tab-btn mx-4"
-              @click="setTab('linea')"
-              v-bind:class="activeTabLinea"
-              >Linea</label
-            >
-            <label
-              class="tab-btn mx-4"
-              @click="setTab('arbitrum')"
-              v-bind:class="activeTabArbitrum"
-              >Arbitrum</label
+              @click="setTab('base')"
+              v-bind:class="activeTabBase"
+              >Base</label
             >
           </v-row>
         </v-col>
@@ -60,14 +48,14 @@
       </v-row>
     </v-row>
     <v-row
-      v-else
+      v-else-if="collateralData?.length > 0"
       class="ma-0 info-card-container mt-3"
       justify="start"
       align="start"
     >
       <v-col class="info-card-body-bottom">
         <v-row align="start" justify="start" class="ma-0">
-          <label class="section-title-label"> USDT+ collateral assets </label>
+          <label class="section-title-label">USDC+ collateral assets </label>
         </v-row>
 
         <v-row align="start" justify="center">
@@ -115,7 +103,7 @@
     >
       <v-col class="info-card-body-bottom">
         <v-row align="center" justify="start" class="ma-0">
-          <label class="section-title-label"> USDT+ portfolio </label>
+          <label class="section-title-label"> USDC+ portfolio </label>
         </v-row>
         <v-row class="ma-0 mt-5 align-center">
           <div>
@@ -137,8 +125,8 @@
             <TableStrategies
               v-if="!$wu.isMobile()"
               :data="currentTotalData"
-              asset-type="USDT"
-              total-title="Total USDT+ in circulation"
+              asset-type="USDC"
+              total-title="Total USDC+ in circulation"
               :total-supply="totalValue"
               :network-name="tab"
             />
@@ -147,8 +135,8 @@
               v-else
               minimized
               :data="currentTotalData"
-              asset-type="USDT"
-              total-title="Total USDT+ in circulation"
+              asset-type="USDC"
+              total-title="Total USDC+ in circulation"
               :total-supply="totalValue"
               :network-name="tab"
             />
@@ -176,17 +164,17 @@
       >
         <v-img
           class="currency"
-          :src="require('@/assets/currencies/USDT+.svg')"
+          :src="require('@/assets/currencies/usdc+.svg')"
         />
       </div>
       <div
         class="info-card-container-box"
         :class="$wu.isMobile() ? 'mt-5 mb-5 mr-5' : 'mt-0'"
       >
-        <label class="section-title-label label-about">About USDT+</label>
+        <label class="section-title-label label-about">About USDC+</label>
         <label class="section-text"
-          >USDT+ is the equivalent of USD+, pegged to USDT 1:1. USDT+ consist of
-          aUSDT (Aave) and USD+. It has been designed for boosted pools
+          >USDC+ is the equivalent of USD+, pegged to USDT 1:1. USDC+ consist of
+          aUSDC (Aave) and USD+. It has been designed for boosted pools
           (Balancer and Beethoven) on Bsc. It cannot be minted
           separately.</label
         >
@@ -203,10 +191,10 @@
           <div>
             <v-img
               class="currency-usdt"
-              :src="require('@/assets/currencies/USDT+.svg')"
+              :src="require('@/assets/currencies/usdc+.svg')"
             />
           </div>
-          <label class="currency-text ml-2">USDT+ token address</label>
+          <label class="currency-text ml-2">USDC+ token address</label>
 
           <v-spacer></v-spacer>
 
@@ -235,11 +223,7 @@ import TableStrategies from "@/components/stats/doughnut/TableStrategies.vue";
 import DoughnutStrategies from "@/components/stats/doughnut/DoughnutStrategies.vue";
 import { collateralApiService } from "@/services/collateral-api-service";
 import { strategiesApiService } from "@/services/strategies-api-service";
-import {
-  USDT_PLUS_CONTRACT_ADDRESS_BSC,
-  USDT_PLUS_CONTRACT_ADDRESS_LINEA,
-  USDT_PLUS_CONTRACT_ADDRESS_ARBITRUM
-} from "@/utils/const.js";
+import { USDC_PLUS_CONTRACT_ADDRESS_BASE } from "@/utils/const.js";
 
 export default {
   name: "CollateralView",
@@ -277,38 +261,16 @@ export default {
       return params.networkName;
     },
 
-    activeTabBsc: function() {
+    activeTabBase: function() {
       return {
-        "tab-button": this.tab === "bsc",
-        "tab-button-in-active": this.tab !== "bsc"
-      };
-    },
-
-    activeTabLinea: function() {
-      return {
-        "tab-button": this.tab === "linea",
-        "tab-button-in-active": this.tab !== "linea"
-      };
-    },
-
-    activeTabArbitrum: function() {
-      return {
-        "tab-button": this.tab === "arbitrum",
-        "tab-button-in-active": this.tab !== "arbitrum"
+        "tab-button": this.tab === "base",
+        "tab-button-in-active": this.tab !== "base"
       };
     },
 
     explorerLink: function() {
-      if (this.tabNetworkName === "bsc") {
-        return `https://bscscan.com/token/${USDT_PLUS_CONTRACT_ADDRESS_BSC}`;
-      }
-
-      if (this.tabNetworkName === "linea") {
-        return `https://lineascan.build/token/${USDT_PLUS_CONTRACT_ADDRESS_LINEA}`;
-      }
-
-      if (this.tabNetworkName === "arbitrum") {
-        return `https://arbiscan.io/token/${USDT_PLUS_CONTRACT_ADDRESS_ARBITRUM}`;
+      if (this.tabNetworkName === "base") {
+        return `https://arbiscan.io/token/${USDC_PLUS_CONTRACT_ADDRESS_BASE}`;
       }
 
       console.error("Not found networkId type when return usdt explorer link");
@@ -316,16 +278,8 @@ export default {
     },
 
     contractAddress: function() {
-      if (this.tabNetworkName === "bsc") {
-        return USDT_PLUS_CONTRACT_ADDRESS_BSC;
-      }
-
-      if (this.tabNetworkName === "linea") {
-        return USDT_PLUS_CONTRACT_ADDRESS_LINEA;
-      }
-
-      if (this.tabNetworkName === "arbitrum") {
-        return USDT_PLUS_CONTRACT_ADDRESS_ARBITRUM;
+      if (this.tabNetworkName === "base") {
+        return USDC_PLUS_CONTRACT_ADDRESS_BASE;
       }
 
       console.error(
@@ -355,16 +309,16 @@ export default {
 
   methods: {
     swapButtonIn() {
-      this.initTabName("/swap", { action: "swap-in", symbol: "USDT+" });
+      this.initTabName("/swap", { action: "swap-in", symbol: "USDC+" });
     },
 
     swapButtonOut() {
-      this.initTabName("/swap", { action: "swap-out", symbol: "USDT+" });
+      this.initTabName("/swap", { action: "swap-out", symbol: "USDC+" });
     },
 
     setTab(tabName) {
       this.tab = tabName;
-      this.initTabName("/collateral/usdt", { tabName: tabName });
+      this.initTabName("/collateral/usdc", { tabName: tabName });
       this.loadCurrentTotalData();
       this.loadCollateralData();
     },
@@ -403,7 +357,7 @@ export default {
       this.isCurrentTotalDataLoading = true;
 
       strategiesApiService
-        .getStrategies(this.apiUrl + `/${this.tabNetworkName}/usdt+`)
+        .getStrategies(this.apiUrl + `/${this.tabNetworkName}/usdc+`)
         .then((data) => {
           let strategies = data;
           strategies.sort((a, b) => b.netAssetValue - a.netAssetValue);
@@ -497,7 +451,7 @@ export default {
       this.isCollateralLoading = true;
 
       collateralApiService
-        .getCollateralData(this.apiUrl + `/${this.tabNetworkName}/usdt+`)
+        .getCollateralData(this.apiUrl + `/${this.tabNetworkName}/usdc+`)
         .then((data) => {
           let stablecoinList = data;
           stablecoinList.sort((a, b) => b.netAssetValue - a.netAssetValue);

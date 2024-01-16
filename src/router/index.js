@@ -16,6 +16,7 @@ import EthStats from "./midleware/dapp/EthStats";
 import Collateral from "./midleware/dapp/Collateral";
 import CollateralDai from "./midleware/dapp/CollateralDai";
 import CollateralUsdt from "./midleware/dapp/CollateralUsdt";
+import CollateralUsdc from "./midleware/dapp/CollateralUsdc";
 import CollateralEth from "./midleware/dapp/CollateralEth";
 import Dashboard from "./midleware/dapp/Dashboard";
 import Pools from "./midleware/dapp/Pools";
@@ -163,6 +164,15 @@ const routes = [
         }
       },
       {
+        path: "/collateral/usdc",
+        name: "CollateralUsdcView",
+        component: () =>
+          import("../views/performance/usdc/view/CollateralView.vue"),
+        meta: {
+          middleware: [CollateralUsdc]
+        }
+      },
+      {
         path: "/collateral/usdt",
         name: "CollateralUsdtView",
         component: () =>
@@ -196,6 +206,15 @@ const routes = [
           import("../views/performance/dai/view/StatsPerformanceView.vue"),
         meta: {
           middleware: [DaiStats]
+        }
+      },
+      {
+        path: "/stats/usdc",
+        name: "StatsUsdcPerformanceView",
+        component: () =>
+          import("../views/performance/usdc/view/StatsPerformanceView.vue"),
+        meta: {
+          middleware: [UsdtStats]
         }
       },
       {

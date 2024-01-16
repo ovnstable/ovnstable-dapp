@@ -15,7 +15,7 @@
         </v-btn>
       </v-col>
       <v-col
-        v-if="usdplusAvailibleNetworks.includes(networkName)"
+        v-if="usdcplusAvailibleNetworks.includes(networkName)"
         class="col-lg-3 col-md-3 col-sm-6"
       >
         <v-btn
@@ -117,6 +117,7 @@ export default defineComponent({
         "base",
         "linea"
       ],
+      usdcplusAvailibleNetworks: ["base"],
       daiplusAvailibleNetworks: ["optimism", "arbitrum", "base"],
       usdtplusAvailibleNetworks: ["bsc", "linea", "arbitrum"],
       ethplusAvailibleNetworks: ["arbitrum"],

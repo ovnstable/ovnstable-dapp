@@ -22,21 +22,9 @@
           <v-row class="ma-0 mt-10 toggle-row ml-3">
             <label
               class="tab-btn mr-4"
-              @click="setTab('bsc')"
-              v-bind:class="activeTabBsc"
-              >BSC</label
-            >
-            <label
-              class="tab-btn mr-4"
-              @click="setTab('linea')"
-              v-bind:class="activeTabLinea"
-              >Linea</label
-            >
-            <label
-              class="tab-btn mr-4"
-              @click="setTab('arbitrum')"
-              v-bind:class="activeTabArbitrum"
-              >Arbitrum</label
+              @click="setTab('base')"
+              v-bind:class="activeTabBase"
+              >Base</label
             >
           </v-row>
         </v-col>
@@ -216,9 +204,22 @@
           (Balancer and Beethoven) on BSC. It cannot be minted separately.
         </label>
         <div class="section-text font-weight-bold">
-          Switch to BSC, Linea or Arbitrum chain to see USDC+ collateral.
+          Switch to Base chain to see USDC+ collateral.
         </div>
       </div>
+    </div>
+
+    <div
+      v-if="networkId !== 8453"
+      :class="$wu.isMobile() ? 'flex-column' : ''"
+      class="mt-3 buttons-div"
+    >
+      <v-btn
+        class="footer-btn btn-filled mr-5"
+        @click.stop="setWalletNetwork('8453')"
+      >
+        switch to base to mint
+      </v-btn>
     </div>
 
     <resize-observer v-if="!isPayoutsLoading" @notify="$forceUpdate()" />
@@ -251,7 +252,7 @@ export default {
   },
 
   data: () => ({
-    tab: "bsc",
+    tab: "base",
     rateTab: 1,
     zoomType: "all",
 
@@ -280,23 +281,10 @@ export default {
       return params.networkName;
     },
 
-    activeTabBsc: function() {
+    activeTabBase: function() {
       return {
-        "tab-button": this.tab === "bsc",
-        "tab-button-in-active": this.tab !== "bsc"
-      };
-    },
-
-    activeTabLinea: function() {
-      return {
-        "tab-button": this.tab === "linea",
-        "tab-button-in-active": this.tab !== "linea"
-      };
-    },
-    activeTabArbitrum: function() {
-      return {
-        "tab-button": this.tab === "arbitrum",
-        "tab-button-in-active": this.tab !== "arbitrum"
+        "tab-button": this.tab === "base",
+        "tab-button-in-active": this.tab !== "base"
       };
     },
 

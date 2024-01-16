@@ -29,6 +29,18 @@
         </div>
       </div>
     </div>
+    <div
+      v-if="networkId !== 8453"
+      :class="$wu.isMobile() ? 'flex-column' : ''"
+      class="mt-3 buttons-div"
+    >
+      <v-btn
+        class="footer-btn btn-filled mr-5"
+        @click.stop="setWalletNetwork('8453')"
+      >
+        switch to base to mint
+      </v-btn>
+    </div>
   </div>
 </template>
 

@@ -1,9 +1,7 @@
 <template>
   <div class="page-container">
     <div v-if="!isCollateralLoading">
-      <v-row
-        v-if="networkId === 56 || networkId === 59144 || networkId === 42161"
-      >
+      <v-row v-if="networkId === 7453">
         <template v-if="$wu.isMobile()">
           <v-col cols="12" align="center" class="mt-5">
             <v-btn class="header-btn btn-filled mr-5" @click="swapButtonIn">
@@ -270,7 +268,7 @@ export default {
 
     explorerLink: function() {
       if (this.tabNetworkName === "base") {
-        return `https://arbiscan.io/token/${USDC_PLUS_CONTRACT_ADDRESS_BASE}`;
+        return `https://basescan.org/token/${USDC_PLUS_CONTRACT_ADDRESS_BASE}`;
       }
 
       console.error("Not found networkId type when return usdc explorer link");

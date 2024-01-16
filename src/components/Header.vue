@@ -94,6 +94,7 @@
     <!-- TODO, remove that in swapmodal -->
     <SwapDaiModal />
     <SwapUsdtModal />
+    <SwapUsdcModal />
     <SwapEthModal />
     <!-- TODO, remove that -->
 
@@ -116,6 +117,7 @@ import MenuSelect from "@/components/common/header/MenuSelect";
 import SwapModal from "@/components/swap/SwapModal";
 import SwapDaiModal from "@/components/swap/dai/SwapDaiModal";
 import SwapUsdtModal from "@/components/swap/usdt/SwapUsdtModal";
+import SwapUsdcModal from "@/components/swap/usdc/SwapUsdcModal";
 import SwapEthModal from "@/components/swap/eth/SwapEthModal";
 import UsdWrapModal from "@/components/swap/wusd/WrapModal";
 import EthWrapModal from "@/components/swap/weth/WrapModal";
@@ -136,6 +138,7 @@ export default {
     SwapDaiModal,
     SwapUsdtModal,
     SwapEthModal,
+    SwapUsdcModal,
     UsdWrapModal,
     EthWrapModal,
     MenuSelect,

@@ -1,27 +1,26 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-
+import Vue from "vue";
+import Vuex from "vuex";
 
 // Modals
-import errorModal from '@/store/modules/modals/error-modal';
-import waitingModal from '@/store/modules/modals/waiting-modal';
-import successModal from '@/store/modules/modals/success-modal';
-import riskModal from '@/store/modules/modals/market/risk-disclosure-modal';
-import insuranceRiskModal from '@/store/modules/modals/insurance/insuranse-risk-modal';
-import insuranceInvestModal from '@/store/modules/modals/insurance/insurance-invest-modal';
-import investModal from '@/store/modules/modals/market/invest-modal';
-import swapModal from '@/store/modules/modals/swap/swap-modal';
-import swapDaiModal from '@/store/modules/modals/swap/swap-dai-modal';
-import swapUsdtModal from '@/store/modules/modals/swap/swap-usdt-modal';
-import swapEthModal from '@/store/modules/modals/swap/swap-eth-modal';
-import wrapModal from '@/store/modules/modals/wrap/wrap-modal';
-import ethWrapModal from '@/store/modules/modals/wrap/eth-wrap-modal';
-import bscInfoModal from '@/store/modules/modals/bsc-info-modal';
-
+import errorModal from "@/store/modules/modals/error-modal";
+import waitingModal from "@/store/modules/modals/waiting-modal";
+import successModal from "@/store/modules/modals/success-modal";
+import riskModal from "@/store/modules/modals/market/risk-disclosure-modal";
+import insuranceRiskModal from "@/store/modules/modals/insurance/insuranse-risk-modal";
+import insuranceInvestModal from "@/store/modules/modals/insurance/insurance-invest-modal";
+import investModal from "@/store/modules/modals/market/invest-modal";
+import swapModal from "@/store/modules/modals/swap/swap-modal";
+import swapDaiModal from "@/store/modules/modals/swap/swap-dai-modal";
+import swapUsdtModal from "@/store/modules/modals/swap/swap-usdt-modal";
+import swapUsdcModal from "@/store/modules/modals/swap/swap-usdc-modal";
+import swapEthModal from "@/store/modules/modals/swap/swap-eth-modal";
+import wrapModal from "@/store/modules/modals/wrap/wrap-modal";
+import ethWrapModal from "@/store/modules/modals/wrap/eth-wrap-modal";
+import bscInfoModal from "@/store/modules/modals/bsc-info-modal";
 
 // Views
-import dashboardData from '@/store/modules/views/dashboard/data';
-import dashboardUI from '@/store/modules/views/dashboard/ui';
+import dashboardData from "@/store/modules/views/dashboard/data";
+import dashboardUI from "@/store/modules/views/dashboard/ui";
 
 import swapData from "@/store/modules/views/swap/data";
 import swapUI from "@/store/modules/views/swap/ui";
@@ -46,11 +45,11 @@ import wrapEthData from "@/store/modules/views/wrap/WETH";
 import wrapData from "@/store/modules/views/wrap/data";
 import wrapUI from "@/store/modules/views/wrap/ui";
 
-import accountUI from '@/store/modules/views/account/ui';
-import accountData from '@/store/modules/views/account/data';
-import transaction from '@/store/modules/views/account/transaction';
+import accountUI from "@/store/modules/views/account/ui";
+import accountData from "@/store/modules/views/account/data";
+import transaction from "@/store/modules/views/account/transaction";
 
-import menuUI from '@/store/modules/views/menu/ui';
+import menuUI from "@/store/modules/views/menu/ui";
 
 // Web3
 import network from "@/store/modules/common/web3/network";
@@ -65,8 +64,8 @@ import dappUIAction from "@/store/modules/common/web3/action/dapp/dapp-ui-action
 import etsAction from "@/store/modules/common/web3/action/ets-action";
 
 // Common
-import gasPrice from '@/store/modules/common/gas-price';
-import supplyData from '@/store/modules/common/supply';
+import gasPrice from "@/store/modules/common/gas-price";
+import supplyData from "@/store/modules/common/supply";
 import referral from "@/store/modules/common/referral";
 import track from "@/store/modules/common/track";
 
@@ -81,78 +80,77 @@ import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-    modules: {
-        errorModal,
-        waitingModal,
-        successModal,
-        investModal,
-        swapModal,
-        swapDaiModal,
-        swapUsdtModal,
-        swapEthModal,
-        wrapModal,
-        ethWrapModal,
-        riskModal,
-        insuranceRiskModal,
-        insuranceInvestModal,
-        bscInfoModal,
+  modules: {
+    errorModal,
+    waitingModal,
+    successModal,
+    investModal,
+    swapModal,
+    swapDaiModal,
+    swapUsdtModal,
+    swapEthModal,
+    wrapModal,
+    ethWrapModal,
+    riskModal,
+    insuranceRiskModal,
+    insuranceInvestModal,
+    bscInfoModal,
 
-        dashboardData,
-        dashboardUI,
+    dashboardData,
+    dashboardUI,
 
-        swapData,
-        swapUI,
+    swapData,
+    swapUI,
 
-        swapDaiData,
-        swapDaiUI,
+    swapDaiData,
+    swapDaiUI,
 
-        swapUsdtData,
-        swapUsdtUI,
+    swapUsdtData,
+    swapUsdcModal,
+    swapUsdtUI,
 
-        swapEthData,
-        swapEthUI,
+    swapEthData,
+    swapEthUI,
 
-        wrapData,
-        wrapEthData,
-        wrapUI,
+    wrapData,
+    wrapEthData,
+    wrapUI,
 
-        overcapData,
+    overcapData,
 
-        marketData,
-        marketUI,
+    marketData,
+    marketUI,
 
-        insuranceData,
-        insuranceUI,
+    insuranceData,
+    insuranceUI,
 
-        accountUI,
-        accountData,
+    accountUI,
+    accountData,
 
-        transaction,
+    transaction,
 
-        menuUI,
+    menuUI,
 
-        network,
-        walletAction,
-        contractAction,
-        web3,
-        tokenAction,
-        dappDataAction,
-        dappUIAction,
+    network,
+    walletAction,
+    contractAction,
+    web3,
+    tokenAction,
+    dappDataAction,
+    dappUIAction,
 
-        etsAction,
+    etsAction,
 
-        gasPrice,
-        supplyData,
-        referral,
-        track,
+    gasPrice,
+    supplyData,
+    referral,
+    track,
 
-        theme,
-        deprecated,
+    theme,
+    deprecated,
 
-        magicEye
-    },
+    magicEye
+  },
 
-    plugins: [
-        createPersistedState({paths: ['transaction']})
-    ]
+  plugins: [createPersistedState({ paths: ["transaction"] })]
 });

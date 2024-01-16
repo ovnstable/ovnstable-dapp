@@ -173,7 +173,7 @@
       >
         <label class="section-title-label label-about">About USDC+</label>
         <label class="section-text"
-          >USDC+ is the equivalent of USD+, pegged to USDT 1:1. USDC+ consist of
+          >USDC+ is the equivalent of USD+, pegged to USDC 1:1. USDC+ consist of
           aUSDC (Aave) and USD+. It has been designed for boosted pools
           (Balancer and Beethoven) on Bsc. It cannot be minted
           separately.</label
@@ -273,7 +273,7 @@ export default {
         return `https://arbiscan.io/token/${USDC_PLUS_CONTRACT_ADDRESS_BASE}`;
       }
 
-      console.error("Not found networkId type when return usdt explorer link");
+      console.error("Not found networkId type when return usdc explorer link");
       return null;
     },
 
@@ -283,7 +283,7 @@ export default {
       }
 
       console.error(
-        "Not found networkId type when return usdt contract address"
+        "Not found networkId type when return usdc contract address"
       );
       return null;
     }

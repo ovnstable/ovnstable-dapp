@@ -12,6 +12,7 @@ import Insurance from "./midleware/dapp/Insurance";
 import Stats from "./midleware/dapp/Stats";
 import DaiStats from "./midleware/dapp/DaiStats";
 import UsdtStats from "./midleware/dapp/UsdtStats";
+import UsdcStats from "./midleware/dapp/UsdcStats";
 import EthStats from "./midleware/dapp/EthStats";
 import Collateral from "./midleware/dapp/Collateral";
 import CollateralDai from "./midleware/dapp/CollateralDai";
@@ -214,7 +215,7 @@ const routes = [
         component: () =>
           import("../views/performance/usdc/view/StatsPerformanceView.vue"),
         meta: {
-          middleware: [UsdtStats]
+          middleware: [UsdcStats]
         }
       },
       {

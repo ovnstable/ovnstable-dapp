@@ -346,13 +346,13 @@
           @click="usdcStatsClick"
           v-if="isShowUsdc"
           :class="
-            selectedTab === 'usdtplus_performance' ? 'selected-page-item' : ''
+            selectedTab === 'usdcplus_performance' ? 'selected-page-item' : ''
           "
           class="list-item-hover mb-1"
         >
           <div
             :class="
-              selectedTab === 'usdtplus_performance' ? 'selected-page' : ''
+              selectedTab === 'usdcplus_performance' ? 'selected-page' : ''
             "
             class="navbar-list-label pa-1 pl-11"
           >
@@ -364,13 +364,13 @@
           @click="usdcCollateralClick"
           v-if="isShowUsdc"
           :class="
-            selectedTab === 'usdtplus_collateral' ? 'selected-page-item' : ''
+            selectedTab === 'usdcplus_collateral' ? 'selected-page-item' : ''
           "
           class="list-item-hover mb-1"
         >
           <div
             :class="
-              selectedTab === 'usdtplus_collateral' ? 'selected-page' : ''
+              selectedTab === 'usdcplus_collateral' ? 'selected-page' : ''
             "
             class="navbar-list-label pa-1 pl-11"
           >

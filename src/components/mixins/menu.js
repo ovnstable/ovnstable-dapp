@@ -129,7 +129,6 @@ export const menu = {
     insuranceStatsClick() {
       this.selectTab("insurance_performance");
       this.goToActionByPath("/insurance/network/optimism");
-      // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
     },
 
     insuranceAboutClick() {
@@ -142,7 +141,6 @@ export const menu = {
       // this.goToActionByPath('/insurance/collateral/optimism');
       this.goToActionByPath("/insurance/collateral/optimism");
       //
-      // this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
     },
 
     swapOdosClick() {
@@ -179,25 +177,21 @@ export const menu = {
     dashBoardClick() {
       this.selectTab("dashboard");
       this.goToActionByPath("/dashboard");
-      // this.trackClick({action: 'dashboard-click', event_category: 'View Page', event_label: 'Open dashboard page', value: 1 });
     },
 
     collateralClick() {
       this.selectTab("usdplus_collateral");
       this.goToActionByPath("/collateral");
-      // this.trackClick({action: 'collateral-click', event_category: 'View Page', event_label: 'Open collateral page', value: 1 });
     },
 
     daiCollateralClick() {
       this.selectTab("daiplus_collateral");
       this.goToActionByPath("/collateral/dai");
-      // this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
     },
 
     usdtCollateralClick() {
       this.selectTab("usdtplus_collateral");
       this.goToActionByPath("/collateral/usdt");
-      // this.trackClick({action: 'usdt-collateral-click', event_category: 'View Page', event_label: 'Open usdt collateral page', value: 1 });
     },
 
     usdcCollateralClick() {
@@ -208,7 +202,6 @@ export const menu = {
     ethCollateralClick() {
       this.selectTab("ethplus_collateral");
       this.goToActionByPath("/collateral/eth");
-      // this.trackClick({action: 'usdt-collateral-click', event_category: 'View Page', event_label: 'Open usdt collateral page', value: 1 });
     },
 
     usdPlusPoolsClick() {
@@ -229,22 +222,21 @@ export const menu = {
     statsClick() {
       this.selectTab("usdplus_performance");
       this.goToActionByPath("/stats");
-      // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open stats page', value: 1 });
     },
 
     daiStatsClick() {
       this.selectTab("daiplus_performance");
       this.goToActionByPath("/stats/dai");
-      // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
     },
 
     usdtStatsClick() {
+      console.log("usdtStatsClick");
       this.selectTab("usdtplus_performance");
       this.goToActionByPath("/stats/usdt");
-      // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
     },
 
     usdcStatsClick() {
+      console.log("usdcStatsClick");
       this.selectTab("usdcplus_performance");
       this.goToActionByPath("/stats/usdc");
     },

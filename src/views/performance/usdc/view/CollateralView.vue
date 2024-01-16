@@ -12,7 +12,7 @@
       >
         <v-img
           class="currency"
-          :src="require('@/assets/currencies/USDT+.svg')"
+          :src="require('@/assets/currencies/usdc+.svg')"
         />
       </div>
       <div

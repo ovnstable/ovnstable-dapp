@@ -97,6 +97,12 @@ const actions = {
         let usdtPlus;
         let originUsdtPlus;
 
+        let usdcPlus;
+        let originUsdcPlus;
+
+        let usdcNative;
+        let originalUsdcNative;
+
         let ethPlus;
         let originEthPlus;
 
@@ -168,6 +174,26 @@ const actions = {
         } catch (e) {
             dai = getters.balance.dai;
             originDai = getters.originalBalance.dai
+        }
+
+        if (networkId === 8453) {
+            try {
+                usdcPlus = await web3.contracts.usdcPlus.methods.balanceOf(getters.account).call();
+                originUsdcPlus = usdcPlus;
+                usdcPlus = usdcPlus ? web3.web3.utils.fromWei(usdcPlus, 'mwei') : usdcPlus;
+            } catch (e) {
+                usdcPlus = getters.balance.usdcPlus;
+                originUsdcPlus = getters.originalBalance.usdcPlus
+            }
+
+            try {
+                usdcNative = await web3.contracts.usdcNative.methods.balanceOf(getters.account).call();
+                originalUsdcNative = usdcNative;
+                usdcNative = usdcNative ? web3.web3.utils.fromWei(usdcNative, 'mwei') : usdcNative;
+            } catch (e) {
+                usdcNative = getters.balance.usdcNative;
+                originalUsdcNative = getters.originalBalance.usdcNative
+            }
         }
 
         if (networkId === 56 || networkId === 59144 || networkId === 42161) {
@@ -249,9 +275,11 @@ const actions = {
             usdPlus: usdPlus,
             daiPlus: daiPlus,
             usdtPlus: usdtPlus,
+            usdcPlus: usdcPlus,
             ethPlus: ethPlus,
             dai: dai,
             usdt: usdt,
+            usdcNative: usdcNative,
             weth: weth,
             asset: asset,
             asset_two: asset_two,
@@ -260,13 +288,16 @@ const actions = {
             ovn: ovn,
         });
 
+        // original meaning without decimals
         commit('setOriginalBalance', {
             usdPlus: originUsdPlus,
             daiPlus: originDaiPlus,
             usdtPlus: originUsdtPlus,
+            usdcPlus: originUsdcPlus,
             ethPlus: originEthPlus,
             dai: originDai,
             usdt: originUsdt,
+            usdcNative: originalUsdcNative,
             weth: originWeth,
             asset: originAsset,
             asset_two: originAsset_two,

@@ -1,246 +1,269 @@
-
-
 export const menu = {
-    data() {
-        return {
-            isShowEts: false,
-            isShowUsd: false,
-            isShowDai: false,
-            isShowUsdt: false,
-            isShowEth: false,
-            isShowInsurance: false,
-        }
+  data() {
+    return {
+      isShowEts: false,
+      isShowUsd: false,
+      isShowDai: false,
+      isShowUsdt: false,
+      isShowUsdc: false,
+      isShowEth: false,
+      isShowInsurance: false
+    };
+  },
+  methods: {
+    goToAction(id) {
+      this.$router.push(id);
     },
-    methods: {
-        goToAction(id) {
-            this.$router.push(id);
-        },
 
-        goToActionByPath(path, queryParams) {
-            this.$router.push({
-                path: path,
-                query: queryParams ? queryParams : {}
-            });
-        },
+    goToActionByPath(path, queryParams) {
+      this.$router.push({
+        path: path,
+        query: queryParams ? queryParams : {}
+      });
+    },
 
-        toggleUsdPlus(isShow) {
-            if (isShow) {
-                this.toggleEts(false);
-                this.toggleDaiPlus(false);
-                this.toggleUsdtPlus(false);
-                this.toggleEthPlus(false);
-                this.toggleInsurance(false);
-            }
+    toggleUsdPlus(isShow) {
+      if (isShow) {
+        this.toggleEts(false);
+        this.toggleDaiPlus(false);
+        this.toggleUsdtPlus(false);
+        this.toggleEthPlus(false);
+        this.toggleInsurance(false);
+      }
 
-            this.isShowUsd = isShow;
-        },
+      this.isShowUsd = isShow;
+    },
 
-        toggleDaiPlus(isShow) {
-            if (isShow) {
-                this.toggleEts(false);
-                this.toggleUsdPlus(false);
-                this.toggleUsdtPlus(false);
-                this.toggleEthPlus(false);
-                this.toggleInsurance(false);
-            }
+    toggleDaiPlus(isShow) {
+      if (isShow) {
+        this.toggleEts(false);
+        this.toggleUsdPlus(false);
+        this.toggleUsdtPlus(false);
+        this.toggleEthPlus(false);
+        this.toggleInsurance(false);
+      }
 
-            this.isShowDai = isShow;
-        },
+      this.isShowDai = isShow;
+    },
 
-        toggleUsdtPlus(isShow) {
-            if (isShow) {
-                this.toggleEts(false);
-                this.toggleUsdPlus(false);
-                this.toggleDaiPlus(false);
-                this.toggleEthPlus(false);
-                this.toggleInsurance(false);
-            }
+    toggleUsdcPlus(isShow) {
+      if (isShow) {
+        this.toggleEts(false);
+        this.toggleUsdPlus(false);
+        this.toggleDaiPlus(false);
+        this.toggleEthPlus(false);
+        this.toggleInsurance(false);
+      }
 
-            this.isShowUsdt = isShow;
-        },
+      this.isShowUsdc = isShow;
+    },
 
-        toggleEthPlus(isShow) {
-            if (isShow) {
-                this.toggleEts(false);
-                this.toggleUsdPlus(false);
-                this.toggleDaiPlus(false);
-                this.toggleUsdtPlus(false);
-                this.toggleInsurance(false);
-            }
+    toggleUsdtPlus(isShow) {
+      if (isShow) {
+        this.toggleEts(false);
+        this.toggleUsdPlus(false);
+        this.toggleDaiPlus(false);
+        this.toggleEthPlus(false);
+        this.toggleInsurance(false);
+      }
 
-            this.isShowEth = isShow;
-        },
+      this.isShowUsdt = isShow;
+    },
 
-        toggleInsurance(isShow) {
-            if (isShow) {
-                this.toggleEts(false);
-                this.toggleUsdPlus(false);
-                this.toggleUsdtPlus(false);
-                this.toggleEthPlus(false);
-                this.toggleDaiPlus(false);
-            }
+    toggleEthPlus(isShow) {
+      if (isShow) {
+        this.toggleEts(false);
+        this.toggleUsdPlus(false);
+        this.toggleDaiPlus(false);
+        this.toggleUsdtPlus(false);
+        this.toggleInsurance(false);
+      }
 
-            this.isShowInsurance = isShow;
-        },
+      this.isShowEth = isShow;
+    },
 
-        toggleEts(isShow) {
-            if (isShow) {
-                this.toggleUsdPlus(false);
-                this.toggleDaiPlus(false);
-                this.toggleUsdtPlus(false);
-                this.toggleEthPlus(false);
-                this.toggleInsurance(false);
-            }
+    toggleInsurance(isShow) {
+      if (isShow) {
+        this.toggleEts(false);
+        this.toggleUsdPlus(false);
+        this.toggleUsdtPlus(false);
+        this.toggleEthPlus(false);
+        this.toggleDaiPlus(false);
+      }
 
-            this.isShowEts = isShow;
-        },
+      this.isShowInsurance = isShow;
+    },
 
-        featuredClick() {
-            this.selectTab('featured');
-            this.goToActionByPath('/featured');
-        },
+    toggleEts(isShow) {
+      if (isShow) {
+        this.toggleUsdPlus(false);
+        this.toggleDaiPlus(false);
+        this.toggleUsdtPlus(false);
+        this.toggleEthPlus(false);
+        this.toggleInsurance(false);
+      }
 
+      this.isShowEts = isShow;
+    },
 
-        buyOvnClick() {
-            this.selectTab('buy-ovn');
-            this.goToActionByPath('/buy-ovn');
-        },
+    featuredClick() {
+      this.selectTab("featured");
+      this.goToActionByPath("/featured");
+    },
 
-        provideLpClick() {
-            this.selectTab('provide-lp');
-            this.goToActionByPath('/provide-lp');
-        },
+    buyOvnClick() {
+      this.selectTab("buy-ovn");
+      this.goToActionByPath("/buy-ovn");
+    },
 
-        insuranceClick() {
-            this.selectTab('insurance');
-            this.goToActionByPath('/insurance');
-        },
+    provideLpClick() {
+      this.selectTab("provide-lp");
+      this.goToActionByPath("/provide-lp");
+    },
 
-        insuranceStatsClick() {
-            this.selectTab('insurance_performance');
-            this.goToActionByPath('/insurance/network/optimism');
-            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
-        },
+    insuranceClick() {
+      this.selectTab("insurance");
+      this.goToActionByPath("/insurance");
+    },
 
-        insuranceAboutClick() {
-            this.selectTab('insurance_about');
-            this.goToActionByPath('/insurance');
-        },
+    insuranceStatsClick() {
+      this.selectTab("insurance_performance");
+      this.goToActionByPath("/insurance/network/optimism");
+    },
 
+    insuranceAboutClick() {
+      this.selectTab("insurance_about");
+      this.goToActionByPath("/insurance");
+    },
 
-        insuranceCollateralClick() {
-            this.selectTab('insurance_collateral');
-            // this.goToActionByPath('/insurance/collateral/optimism');
-            this.goToActionByPath('/insurance/collateral/optimism');
-            //
-            // this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
-        },
+    insuranceCollateralClick() {
+      this.selectTab("insurance_collateral");
+      // this.goToActionByPath('/insurance/collateral/optimism');
+      this.goToActionByPath("/insurance/collateral/optimism");
+      //
+    },
 
-        swapOdosClick() {
-            this.selectTab('swap-odos');
-            this.goToActionByPath('/swap', {tabName: 'swap-odos'});
+    swapOdosClick() {
+      this.selectTab("swap-odos");
+      this.goToActionByPath("/swap", { tabName: "swap-odos" });
 
-            try {
-                this.trackClick({action: 'click_menu_swap', event_category: 'Click button', event_label: 'Click swap menu button' });
-            } catch (e) {
-                console.error("Track error:", e);
-            }
-        },
-        bridgeClick() {
-            this.selectTab('bridge');
-            this.goToActionByPath('/bridge', {tabName: 'bridge'});
+      try {
+        this.trackClick({
+          action: "click_menu_swap",
+          event_category: "Click button",
+          event_label: "Click swap menu button"
+        });
+      } catch (e) {
+        console.error("Track error:", e);
+      }
+    },
+    bridgeClick() {
+      this.selectTab("bridge");
+      this.goToActionByPath("/bridge", { tabName: "bridge" });
 
-            try {
-                this.trackClick({action: 'click_menu_bridge', event_category: 'Click button', event_label: 'Click bridge menu button' });
-            } catch (e) {
-                console.error("Track error:", e);
-            }
+      try {
+        this.trackClick({
+          action: "click_menu_bridge",
+          event_category: "Click button",
+          event_label: "Click bridge menu button"
+        });
+      } catch (e) {
+        console.error("Track error:", e);
+      }
 
-            this.checkIsNotified(true);
-        },
+      this.checkIsNotified(true);
+    },
 
-        dashBoardClick() {
-            this.selectTab('dashboard');
-            this.goToActionByPath('/dashboard');
-            // this.trackClick({action: 'dashboard-click', event_category: 'View Page', event_label: 'Open dashboard page', value: 1 });
-        },
+    dashBoardClick() {
+      this.selectTab("dashboard");
+      this.goToActionByPath("/dashboard");
+    },
 
-        collateralClick() {
-            this.selectTab('usdplus_collateral');
-            this.goToActionByPath('/collateral');
-            // this.trackClick({action: 'collateral-click', event_category: 'View Page', event_label: 'Open collateral page', value: 1 });
-        },
+    collateralClick() {
+      this.selectTab("usdplus_collateral");
+      this.goToActionByPath("/collateral");
+    },
 
-        daiCollateralClick() {
-            this.selectTab('daiplus_collateral');
-            this.goToActionByPath('/collateral/dai');
-            // this.trackClick({action: 'dai-collateral-click', event_category: 'View Page', event_label: 'Open dai collateral page', value: 1 });
-        },
+    daiCollateralClick() {
+      this.selectTab("daiplus_collateral");
+      this.goToActionByPath("/collateral/dai");
+    },
 
-        usdtCollateralClick() {
-            this.selectTab('usdtplus_collateral');
-            this.goToActionByPath('/collateral/usdt');
-            // this.trackClick({action: 'usdt-collateral-click', event_category: 'View Page', event_label: 'Open usdt collateral page', value: 1 });
-        },
+    usdtCollateralClick() {
+      this.selectTab("usdtplus_collateral");
+      this.goToActionByPath("/collateral/usdt");
+    },
 
-        ethCollateralClick() {
-            this.selectTab('ethplus_collateral');
-            this.goToActionByPath('/collateral/eth');
-            // this.trackClick({action: 'usdt-collateral-click', event_category: 'View Page', event_label: 'Open usdt collateral page', value: 1 });
-        },
+    usdcCollateralClick() {
+      this.selectTab("usdcplus_collateral");
+      this.goToActionByPath("/collateral/usdc");
+    },
 
-        usdPlusPoolsClick() {
-            this.selectTab('pools');
-            this.goToActionByPath('/pools');
+    ethCollateralClick() {
+      this.selectTab("ethplus_collateral");
+      this.goToActionByPath("/collateral/eth");
+    },
 
-            try {
-                this.trackClick({action: 'click_menu_pools', event_category: 'Click button', event_label: 'Click pools menu button' });
-            } catch (e) {
-                console.error("Track error:", e);
-            }
-        },
+    usdPlusPoolsClick() {
+      this.selectTab("pools");
+      this.goToActionByPath("/pools");
 
-        statsClick() {
-            this.selectTab('usdplus_performance');
-            this.goToActionByPath('/stats');
-            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open stats page', value: 1 });
-        },
+      try {
+        this.trackClick({
+          action: "click_menu_pools",
+          event_category: "Click button",
+          event_label: "Click pools menu button"
+        });
+      } catch (e) {
+        console.error("Track error:", e);
+      }
+    },
 
-        daiStatsClick() {
-            this.selectTab('daiplus_performance');
-            this.goToActionByPath('/stats/dai');
-            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open dai stats page', value: 1 });
-        },
+    statsClick() {
+      this.selectTab("usdplus_performance");
+      this.goToActionByPath("/stats");
+    },
 
-        usdtStatsClick() {
-            this.selectTab('usdtplus_performance');
-            this.goToActionByPath('/stats/usdt');
-            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
-        },
+    daiStatsClick() {
+      this.selectTab("daiplus_performance");
+      this.goToActionByPath("/stats/dai");
+    },
 
-        ethStatsClick() {
-            this.selectTab('ethplus_performance');
-            this.goToActionByPath('/stats/eth');
-            // this.trackClick({action: 'stats-click', event_category: 'View Page', event_label: 'Open usdt stats page', value: 1 });
-        },
+    usdtStatsClick() {
+      console.log("usdtStatsClick");
+      this.selectTab("usdtplus_performance");
+      this.goToActionByPath("/stats/usdt");
+    },
 
-        aboutEtsClick() {
-            this.selectTab('about');
-            this.goToActionByPath('/ets_about');
-        },
+    usdcStatsClick() {
+      console.log("usdcStatsClick");
+      this.selectTab("usdcplus_performance");
+      this.goToActionByPath("/stats/usdc");
+    },
 
+    ethStatsClick() {
+      this.selectTab("ethplus_performance");
+      this.goToActionByPath("/stats/eth");
+    },
 
-        toggleTheme(mode) {
-            if ((mode === 'light' && !this.light) || (mode === 'dark' && this.light)) {
-                this.switchTheme();
-                /*this.trackClick({
+    aboutEtsClick() {
+      this.selectTab("about");
+      this.goToActionByPath("/ets_about");
+    },
+
+    toggleTheme(mode) {
+      if (
+        (mode === "light" && !this.light) ||
+        (mode === "dark" && this.light)
+      ) {
+        this.switchTheme();
+        /*this.trackClick({
                     action: 'toggle-theme',
                     event_category: 'Theme',
                     event_label: 'Switch theme',
                     value: 1
                 });*/
-            }
-        },
-
+      }
     }
-}
+  }
+};

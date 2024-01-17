@@ -299,6 +299,88 @@
 
       <template>
         <div
+          @click="toggleUsdcPlus(!isShowUsdc)"
+          class="single-item pa-1 list-item-hover mb-1"
+        >
+          <div class="navbar-page-link pl-1">
+            <img
+              :src="
+                light
+                  ? isShowUsdc
+                    ? require('@/assets/icon/menu/usdcPlusWhite.svg')
+                    : require('@/assets/icon/menu/usdcPlusWhiteOff.svg')
+                  : isShowUsdc
+                  ? require('@/assets/icon/menu/usdcPlusBlack.svg')
+                  : require('@/assets/icon/menu/usdcPlusWhiteOff.svg')
+              "
+            />
+          </div>
+          <div>
+            <label
+              :class="
+                selectedTab.startsWith('usdcplus_') ? 'selected-page' : ''
+              "
+              class="navbar-page-label pl-2"
+            >
+              USDC+
+            </label>
+          </div>
+          <div class="ml-14">
+            <img
+              class="arrow"
+              :src="
+                light
+                  ? isShowUsdc
+                    ? require('@/assets/icon/down_black.svg')
+                    : require('@/assets/icon/right_black.svg')
+                  : isShowUsdc
+                  ? require('@/assets/icon/down_w.svg')
+                  : require('@/assets/icon/right_w.svg')
+              "
+              alt="right icon"
+            />
+          </div>
+        </div>
+
+        <div
+          @click="usdcStatsClick"
+          v-if="isShowUsdc"
+          :class="
+            selectedTab === 'usdcplus_performance' ? 'selected-page-item' : ''
+          "
+          class="list-item-hover mb-1"
+        >
+          <div
+            :class="
+              selectedTab === 'usdcplus_performance' ? 'selected-page' : ''
+            "
+            class="navbar-list-label pa-1 pl-11"
+          >
+            Performance
+          </div>
+        </div>
+
+        <div
+          @click="usdcCollateralClick"
+          v-if="isShowUsdc"
+          :class="
+            selectedTab === 'usdcplus_collateral' ? 'selected-page-item' : ''
+          "
+          class="list-item-hover mb-1"
+        >
+          <div
+            :class="
+              selectedTab === 'usdcplus_collateral' ? 'selected-page' : ''
+            "
+            class="navbar-list-label pa-1 pl-11"
+          >
+            Collateral
+          </div>
+        </div>
+      </template>
+
+      <template>
+        <div
           @click="toggleEthPlus(!isShowEth)"
           class="single-item pa-1 list-item-hover mb-1"
         >
@@ -642,7 +724,7 @@ export default {
       return url;
     },
 
-    changeIconColor: function () {
+    changeIconColor: function() {
       if (this.light) {
         return this.iconColor ? "#000000" : "#ADB3BD";
       }
@@ -650,7 +732,7 @@ export default {
       return this.iconColor ? "#FFFFFF" : "#ADB3BD";
     },
 
-    usdPlusIconColor: function () {
+    usdPlusIconColor: function() {
       if (this.light) {
         return this.isShowUsd ? "#000000" : "#ADB3BD";
       }
@@ -658,7 +740,7 @@ export default {
       return this.isShowUsd ? "#FFFFFF" : "#ADB3BD";
     },
 
-    daiPlusIconColor: function () {
+    daiPlusIconColor: function() {
       if (this.light) {
         return this.isShowDai ? "#000000" : "#ADB3BD";
       }
@@ -666,7 +748,7 @@ export default {
       return this.isShowDai ? "#FFFFFF" : "#ADB3BD";
     },
 
-    usdtPlusIconColor: function () {
+    usdtPlusIconColor: function() {
       if (this.light) {
         return this.isShowUsdt ? "#000000" : "#ADB3BD";
       }
@@ -674,7 +756,7 @@ export default {
       return this.isShowUsdt ? "#FFFFFF" : "#ADB3BD";
     },
 
-    insuranceIconColor: function () {
+    insuranceIconColor: function() {
       if (this.light) {
         return this.isShowInsurance ? "#000000" : "#ADB3BD";
       }
@@ -682,7 +764,7 @@ export default {
       return this.isShowInsurance ? "#FFFFFF" : "#ADB3BD";
     },
 
-    etsIconColor: function () {
+    etsIconColor: function() {
       if (this.light) {
         return this.isShowEts ? "#000000" : "#ADB3BD";
       }

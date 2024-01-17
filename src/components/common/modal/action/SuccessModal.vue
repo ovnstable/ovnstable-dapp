@@ -174,6 +174,10 @@ export default {
                     return require('@/assets/currencies/insurance/round_insurance_optimism.svg');
                 case 'swapOdosUsdPlus':
                     return require('@/assets/icon/minted.svg');
+                case 'mintUsdcPlus':
+                    return require('@/assets/icon/usdcMinted.svg');
+                case 'redeemUsdcPlus':
+                    return require('@/assets/icon/usdcRedeemed.svg');    
                 default:
                     return ''
             }

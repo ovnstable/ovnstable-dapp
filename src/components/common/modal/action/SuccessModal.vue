@@ -186,7 +186,7 @@ export default {
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addwUsdPlusToken', 'addEthPlusToken','addwEthPlusToken', 'addEtsToken', 'addInsuranceToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addwUsdPlusToken', 'addEthPlusToken','addwEthPlusToken', 'addEtsToken', 'addInsuranceToken','addUsdcPlusToken']),
         ...mapActions('swapModal', ['closeSwapModal']),
         ...mapActions('wrapModal', ['closeWrapModal']),
         ...mapActions('investModal', ['closeInvestModal']),
@@ -242,7 +242,7 @@ export default {
                 case 'mintInsurance':
                 case 'withdrawInsurance':
                     this.addInsuranceToken();
-                    break;
+                    break;  
                 default:
                     break;
             }

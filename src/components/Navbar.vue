@@ -307,11 +307,11 @@
               :src="
                 light
                   ? isShowUsdc
-                    ? require('@/assets/icon/menu/usdtPlusWhite.svg')
-                    : require('@/assets/icon/menu/usdtPlusWhiteOff.svg')
+                    ? require('@/assets/icon/menu/usdcPlusWhite.svg')
+                    : require('@/assets/icon/menu/usdcPlusWhiteOff.svg')
                   : isShowUsdc
-                  ? require('@/assets/icon/menu/usdtPlusBlack.svg')
-                  : require('@/assets/icon/menu/usdtPlusWhiteOff.svg')
+                  ? require('@/assets/icon/menu/usdcPlusBlack.svg')
+                  : require('@/assets/icon/menu/usdcPlusWhiteOff.svg')
               "
             />
           </div>

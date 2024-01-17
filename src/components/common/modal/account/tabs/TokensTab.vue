@@ -53,6 +53,14 @@
                 </div>
                 <label class="ml-2 coin-btn-label">OVN INS</label>
             </v-btn>
+
+            <v-btn v-if="showUSDC" class="coin-btn ma-1" @click="addUsdcPlusToken">
+                <div class="coin-img">
+                    <v-img :src="require('@/assets/currencies/USDC+.svg')"/>
+                </div>
+                <label class="ml-2 coin-btn-label">USDC+</label>
+            </v-btn>
+
         </v-row>
 
         <resize-observer @notify="$forceUpdate()"/>
@@ -98,7 +106,11 @@ export default {
         showWusd: function () {
             const allowedNetworkIds = [10,42161,8453,137];
             return allowedNetworkIds.includes(this.networkId);
-        }
+        },
+
+        showUSDC: function () {
+            return this.networkId === 8453;
+        },
 
     },
 
@@ -109,7 +121,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addEthPlusToken','addwEthPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addEthPlusToken','addwEthPlusToken', 'addwUsdPlusToken', 'addEtsToken', 'addInsuranceToken','addUsdcPlusToken']),
     },
 }
 </script>

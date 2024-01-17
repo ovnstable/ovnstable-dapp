@@ -121,6 +121,10 @@ export default {
                     return 'ETS ' + (this.etsData ? this.etsData.nameToken : '');
                 case 'swapOdosUsdPlus':
                     return 'USD+'
+                case 'mintUsdcPlus':
+                    return 'USDC+'   
+                case 'redeemUsdcPlus':
+                    return 'USDC+'       
                 default:
                     return ''
             }
@@ -243,6 +247,10 @@ export default {
                 case 'withdrawInsurance':
                     this.addInsuranceToken();
                     break;  
+                case 'mintUsdcPlus':
+                case 'redeemUsdcPlus':
+                    this.addUsdcPlusToken();
+                    break;    
                 default:
                     break;
             }

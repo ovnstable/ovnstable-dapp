@@ -479,7 +479,7 @@ export const pool = {
             name: "USD+",
             address: "0x73cb180bf0521828d8849bc8CF2B920918e23032"
           }
-        ],
+        ]
       }
     };
   },
@@ -1112,7 +1112,11 @@ export const pool = {
         "0xb34a7d1444a707349bc7b981b7f2e1f20f81f013_convex";
 
       // if pool tvl too low
-      const promotePools = ["0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013"];
+      const promotePools = [
+        "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
+        "0xd01075f7314a6436e8b74fc18069848229d0c555",
+        "0xb9c2d906f94b27bc403ab76b611d2c4490c2ae3f"
+      ];
 
       // execute revert aggregator
       pools = pools.filter((pool) => {

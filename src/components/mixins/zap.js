@@ -355,18 +355,6 @@ export const zap = {
           poolId: 0,
           approveType: "TOKEN"
         },
-
-        // HORIZON
-        "0xcc78afece206d8432e687294f038b7dea1046b40": {
-          gauge: "0xcc78afece206d8432e687294f038b7dea1046b40",
-          poolId: 0,
-          approveType: "TOKEN"
-        },
-        "0xc12f901efffe113252d0fe2478f62e9f0f87e2d3": {
-          gauge: "0xc12f901efffe113252d0fe2478f62e9f0f87e2d3",
-          poolId: 0,
-          approveType: "TOKEN"
-        }
       }
     };
   },

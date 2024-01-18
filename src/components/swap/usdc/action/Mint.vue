@@ -217,7 +217,7 @@
               contracts.usdcExchange,
               'mint',
               contracts.usdcNative,
-              { successAction: 'mintusdcPlus' },
+              { successAction: 'mintUsdcPlus' },
               finalizeFunc,
               disapproveAsset,
               approveAsset

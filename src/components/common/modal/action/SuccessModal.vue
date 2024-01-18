@@ -121,6 +121,10 @@ export default {
                     return 'ETS ' + (this.etsData ? this.etsData.nameToken : '');
                 case 'swapOdosUsdPlus':
                     return 'USD+'
+                case 'mintUsdcPlus':
+                    return 'USDC+'   
+                case 'redeemUsdcPlus':
+                    return 'USDC+'       
                 default:
                     return ''
             }
@@ -170,6 +174,10 @@ export default {
                     return require('@/assets/currencies/insurance/round_insurance_optimism.svg');
                 case 'swapOdosUsdPlus':
                     return require('@/assets/icon/minted.svg');
+                case 'mintUsdcPlus':
+                    return require('@/assets/icon/usdcMinted.svg');
+                case 'redeemUsdcPlus':
+                    return require('@/assets/icon/usdcRedeemed.svg');    
                 default:
                     return ''
             }
@@ -186,7 +194,7 @@ export default {
     methods: {
         ...mapActions('successModal', ['showSuccessModal', 'closeSuccessModal']),
         ...mapActions('swapModal', ['showSwapModal', 'showMintView']),
-        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addwUsdPlusToken', 'addEthPlusToken','addwEthPlusToken', 'addEtsToken', 'addInsuranceToken']),
+        ...mapActions('tokenAction', ['addUsdPlusToken', 'addDaiPlusToken', 'addUsdtPlusToken', 'addwUsdPlusToken', 'addEthPlusToken','addwEthPlusToken', 'addEtsToken', 'addInsuranceToken','addUsdcPlusToken']),
         ...mapActions('swapModal', ['closeSwapModal']),
         ...mapActions('wrapModal', ['closeWrapModal']),
         ...mapActions('investModal', ['closeInvestModal']),
@@ -242,7 +250,11 @@ export default {
                 case 'mintInsurance':
                 case 'withdrawInsurance':
                     this.addInsuranceToken();
-                    break;
+                    break;  
+                case 'mintUsdcPlus':
+                case 'redeemUsdcPlus':
+                    this.addUsdcPlusToken();
+                    break;    
                 default:
                     break;
             }

@@ -480,29 +480,6 @@ export const pool = {
             address: "0x73cb180bf0521828d8849bc8CF2B920918e23032"
           }
         ],
-
-        // HORIZON
-        "0xcc78afece206d8432e687294f038b7dea1046b40": [
-          {
-            name: "USDC",
-            address: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
-          },
-          {
-            name: "USD+",
-            address: USD_PLUS_CONTRACT_ADDRESS_ARBITRUM
-          }
-        ],
-
-        "0xc12f901efffe113252d0fe2478f62e9f0f87e2d3": [
-          {
-            name: "USD+",
-            address: USD_PLUS_CONTRACT_ADDRESS_ARBITRUM
-          },
-          {
-            name: "USDT+",
-            address: USDT_PLUS_CONTRACT_ADDRESS_ARBITRUM
-          }
-        ]
       }
     };
   },
@@ -1135,12 +1112,7 @@ export const pool = {
         "0xb34a7d1444a707349bc7b981b7f2e1f20f81f013_convex";
 
       // if pool tvl too low
-      const promotePools = [
-        "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
-        // HORIZON
-        "0xcc78afece206d8432e687294f038b7dea1046b40",
-        "0xc12f901efffe113252d0fe2478f62e9f0f87e2d3"
-      ];
+      const promotePools = ["0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013"];
 
       // execute revert aggregator
       pools = pools.filter((pool) => {
@@ -1237,12 +1209,7 @@ export const pool = {
         const { address } = entry;
 
         // promoting special pool in FEATURES/all-pools
-        const featurePromote = [
-          "0x1b05e4e814b3431a48b8164c41eac834d9ce2da6",
-          // HORIZON
-          "0xcc78afece206d8432e687294f038b7dea1046b40",
-          "0xc12f901efffe113252d0fe2478f62e9f0f87e2d3"
-        ];
+        const featurePromote = ["0x1b05e4e814b3431a48b8164c41eac834d9ce2da6"];
         const convexPromote = ["0xb34a7d1444a707349bc7b981b7f2e1f20f81f013"];
         const loweredAdd = address?.toLowerCase();
 

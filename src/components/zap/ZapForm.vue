@@ -1404,7 +1404,7 @@ export default defineComponent({
           gauge: gaugeAddress,
           amountsOut: [proportions.amountToken0Out, proportions.amountToken1Out]
         };
-      } else if (zapPool.platform === "HorizaSwap") {
+      } else if (zapPool.platform === "Pancake") {
         gaugeData = {
           amountsOut: [
             proportions.amountToken0Out,

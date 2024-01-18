@@ -499,6 +499,11 @@ export default defineComponent({
         return;
       }
 
+      if (this.successData.pool.platform === "Pancake") {
+        window.open(`https://pancakeswap.finance/info/v3/arb/pairs/${this.successData.pool.address}`, "_blank").focus();
+        return;
+      }
+
       console.error(
         "Open Position failed, dex not found.",
         this.successData.pool.platform

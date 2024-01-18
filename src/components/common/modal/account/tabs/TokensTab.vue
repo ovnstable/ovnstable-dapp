@@ -56,7 +56,7 @@
 
             <v-btn v-if="showUSDC" class="coin-btn ma-1" @click="addUsdcPlusToken">
                 <div class="coin-img">
-                    <v-img :src="require('@/assets/currencies/USDC+.svg')"/>
+                    <v-img :src="require('@/assets/currencies/usdc+.svg')"/>
                 </div>
                 <label class="ml-2 coin-btn-label">USDC+</label>
             </v-btn>

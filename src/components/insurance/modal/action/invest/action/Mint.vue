@@ -248,7 +248,7 @@
     <resize-observer @notify="$forceUpdate()" />
   </v-col>
 </template>
-
+<!-- eslint-disable vue/no-side-effects-in-computed-properties -->
 <script>
 import { mapActions, mapGetters } from "vuex";
 import ErrorModal from "@/components/common/modal/action/ErrorModal";

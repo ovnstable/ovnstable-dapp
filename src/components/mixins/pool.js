@@ -3,7 +3,7 @@ import { poolApiService } from "@/services/pool-api-service";
 import {
   USDT_PLUS_CONTRACT_ADDRESS_ARBITRUM,
   USD_PLUS_CONTRACT_ADDRESS_ARBITRUM
-} from "../../utils/const";
+} from "@/utils/const";
 
 export const pool = {
   computed: {
@@ -50,10 +50,10 @@ export const pool = {
         // 'Defiedge',
         // 'Baseswap',
         "Velocimeter",
-        "HorizaSwap",
         "Alienbase",
         "Swapbased",
         "Curve",
+        "Pancake",
         "Beefy"
       ],
       poolTokensForZapMap: {
@@ -480,6 +480,29 @@ export const pool = {
             address: "0x73cb180bf0521828d8849bc8CF2B920918e23032"
           }
         ],
+
+        // PANCAKE ZAPS
+        "0xd01075f7314a6436e8b74fc18069848229d0c555": [
+          {
+            name: "USD+",
+            address: USD_PLUS_CONTRACT_ADDRESS_ARBITRUM
+          },
+          {
+            name: "USDC",
+            address: "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8"
+          }
+        ],
+
+        "0xb9c2d906f94b27bc403ab76b611d2c4490c2ae3f": [
+          {
+            name: "USDT+",
+            address: USDT_PLUS_CONTRACT_ADDRESS_ARBITRUM
+          },
+          {
+            name: "USD+",
+            address: USD_PLUS_CONTRACT_ADDRESS_ARBITRUM
+          }
+        ]
       }
     };
   },
@@ -658,8 +681,8 @@ export const pool = {
         case "Convex": // aggregator of Curve
           url = "https://www.convexfinance.com/stake/arbitrum/13";
           break;
-        case "HorizaSwap":
-          url = "https://app.horiza.io/liquidity";
+        case "Pancake":
+          url = `https://pancakeswap.finance/info/v3/arb/pairs/${pool.address}`;
           break;
         case "Baseswapdefiedge":
           url = "https://baseswap.defiedge.io/s/base/";
@@ -688,7 +711,7 @@ export const pool = {
         pool.platform === "Maverick" ||
         pool.platform === "Alienbase" ||
         pool.platform === "Convex" ||
-        pool.platform === "HorizaSwap"
+        pool.platform === "Pancake"
       ) {
         window.open(url, "_blank").focus();
         return;
@@ -1112,7 +1135,11 @@ export const pool = {
         "0xb34a7d1444a707349bc7b981b7f2e1f20f81f013_convex";
 
       // if pool tvl too low
-      const promotePools = ["0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013"];
+      const promotePools = [
+        "0xb34a7d1444a707349Bc7b981B7F2E1f20F81F013",
+        "0xd01075f7314a6436e8b74fc18069848229d0c555",
+        "0xb9c2d906f94b27bc403ab76b611d2c4490c2ae3f"
+      ];
 
       // execute revert aggregator
       pools = pools.filter((pool) => {

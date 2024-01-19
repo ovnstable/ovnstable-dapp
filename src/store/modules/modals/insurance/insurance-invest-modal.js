@@ -1,5 +1,6 @@
 const state = {
     isMintView: true,
+    networkToMint: 10,
 
     show: false,
     showRedemptionRequest: false,
@@ -101,6 +102,10 @@ const mutations = {
 
     setIsMintView(state, value) {
         state.isMintView = value;
+    },
+
+    setNetworkMint(state, value) {
+        state.networkToMint = value;
     },
 
     setShow(state, value) {

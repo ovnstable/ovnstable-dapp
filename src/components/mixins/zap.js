@@ -78,8 +78,13 @@ export const zap = {
           type: "LP_STAKE_DIFF_STEPS",
           typeOfDepositConstructor: "BASE_CONSTRUCTOR"
         },
-        HorizaSwap: {
-          name: "HorizaSwap",
+        "0xd01075f7314a6436e8b74fc18069848229d0c555": {
+          name: "Pancake8020",
+          type: "LP_WITH_STAKE_IN_ONE_STEP",
+          typeOfDepositConstructor: "BASE_CONSTRUCTOR"
+        },
+        "0xb9c2d906f94b27bc403ab76b611d2c4490c2ae3f": {
+          name: "PancakeEqual",
           type: "LP_WITH_STAKE_IN_ONE_STEP",
           typeOfDepositConstructor: "BASE_CONSTRUCTOR"
         }
@@ -355,6 +360,18 @@ export const zap = {
           poolId: 0,
           approveType: "TOKEN"
         },
+
+        // PANCAKE
+        "0xd01075f7314a6436e8b74fc18069848229d0c555": {
+          // usdc/usd+
+          gauge: "0xd01075f7314a6436e8b74fc18069848229d0c555",
+          approveType: "TOKEN"
+        },
+        "0xb9c2d906f94b27bc403ab76b611d2c4490c2ae3f": {
+          // usdt+/usd+
+          gauge: "0xb9c2d906f94b27bc403ab76b611d2c4490c2ae3f",
+          approveType: "TOKEN"
+        }
       }
     };
   },
@@ -370,9 +387,15 @@ export const zap = {
         return;
       }
 
-      this.currentZapPlatformContractType = this.zapPlatformContractTypeMap[
-        this.zapPoolRoot.platform
-      ];
+      this.currentZapPlatformContractType =
+        this.zapPlatformContractTypeMap[this.zapPoolRoot.platform] ??
+        this.zapPlatformContractTypeMap[this.zapPoolRoot.address];
+
+      console.log(this.zapPoolRoot, "this.zapPoolRoot");
+      console.log(
+        this.zapPlatformContractTypeMap[this.zapPoolRoot.address],
+        "---this.zapPlatformContractTypeMap[this.zapPoolRoot.address]"
+      );
       if (!this.currentZapPlatformContractType) {
         console.error(
           "Error when load zap contract name. Contract not found.",
@@ -476,6 +499,8 @@ export const zap = {
             );
           });
       }
+
+      console.log(this.zapContract, "----this.zapContract");
 
       return this.zapContract.methods
         .getProportion(gauge)

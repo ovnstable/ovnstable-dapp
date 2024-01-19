@@ -39,7 +39,6 @@ import marketData from "@/store/modules/views/market/data";
 import marketUI from "@/store/modules/views/market/ui";
 
 import insuranceData from "@/store/modules/views/insurance/data";
-import insuranceUI from "@/store/modules/views/insurance/ui";
 
 import wrapEthData from "@/store/modules/views/wrap/WETH";
 import wrapData from "@/store/modules/views/wrap/data";
@@ -122,7 +121,6 @@ export default new Vuex.Store({
     marketUI,
 
     insuranceData,
-    insuranceUI,
 
     accountUI,
     accountData,

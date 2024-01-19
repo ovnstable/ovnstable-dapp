@@ -269,6 +269,14 @@ export default {
     }
   },
 
+  watch: {
+    chainName: function() {
+      this.loadApyDataInfo();
+      this.loadPayouts();
+      this.loadOvnPrice();
+    }
+  },
+
   mounted() {
     this.loadApyDataInfo();
     this.loadPayouts();

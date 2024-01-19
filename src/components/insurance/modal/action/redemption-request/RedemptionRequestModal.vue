@@ -1,312 +1,342 @@
 <template>
-    <div v-if="showRedemptionRequest">
-        <v-dialog
-                v-model="showRedemptionRequest"
-                width="650"
-                persistent
-                @click:outside="close">
-            <v-card class="container_body airdrop-body">
-                <v-toolbar class="container_header" flat>
-                    <label class="title-modal mt-4">
-                        Redeem Insurance
-                    </label>
-                    <v-spacer></v-spacer>
-                    <v-btn icon @click="close" class="mt-4">
-                        <img :src="light ? require('@/assets/icon/swap/search-close.svg') : require('@/assets/icon/light-close.svg')" alt="close icon">
-                    </v-btn>
-                </v-toolbar>
+  <div v-if="showRedemptionRequest">
+    <v-dialog
+      v-model="showRedemptionRequest"
+      width="650"
+      persistent
+      @click:outside="close"
+    >
+      <v-card class="container_body airdrop-body">
+        <v-toolbar class="container_header" flat>
+          <label class="title-modal mt-4">
+            Redeem Insurance
+          </label>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="close" class="mt-4">
+            <img
+              :src="
+                light
+                  ? require('@/assets/icon/swap/search-close.svg')
+                  : require('@/assets/icon/light-close.svg')
+              "
+              alt="close icon"
+            />
+          </v-btn>
+        </v-toolbar>
 
-                <v-card-text class="pt-8 content-container">
-                    <v-row class="invest-body-row mx-n2" align="center">
-                        <label class="request-info-text">
-                            By design redemptions take 72 hours from the time of your request. You will have 96 hours to withdraw redemption. After this time in order to withdraw your deposit you would need to submit another request.
-                            <br/><br/>After sending redemption request your funds continue to generate profits and are subject to risk.
-                        </label>
-                    </v-row>
+        <v-card-text class="pt-8 content-container">
+          <v-row class="invest-body-row mx-n2" align="center">
+            <label class="request-info-text">
+              By design redemptions take 72 hours from the time of your request.
+              You will have 96 hours to withdraw redemption. After this time in
+              order to withdraw your deposit you would need to submit another
+              request.
+              <br /><br />After sending redemption request your funds continue
+              to generate profits and are subject to risk.
+            </label>
+          </v-row>
 
-                    <v-row class="invest-body-row mx-n2 mt-10 mb-2" align="center">
-                        <v-btn class="redemption-btn"
-                               :class="redemptionRequestSent ? 'disabled-redemption-btn' : ''"
-                               @click="sendRedemptionRequest"
-                               :disabled="redemptionRequestSent">
-                            <v-progress-circular
-                                v-if="redemptionRequestSent"
-                                class="mr-2"
-                                width="2"
-                                :size="18"
-                                indeterminate
-                            ></v-progress-circular>
-                            send redemption request
-                        </v-btn>
-                    </v-row>
-                </v-card-text>
-            </v-card>
-        </v-dialog>
+          <v-row class="invest-body-row mx-n2 mt-10 mb-2" align="center">
+            <v-btn
+              class="redemption-btn"
+              :class="redemptionRequestSent ? 'disabled-redemption-btn' : ''"
+              @click="sendRedemptionRequest"
+              :disabled="redemptionRequestSent"
+            >
+              <v-progress-circular
+                v-if="redemptionRequestSent"
+                class="mr-2"
+                width="2"
+                :size="18"
+                indeterminate
+              ></v-progress-circular>
+              send redemption request
+            </v-btn>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
-        <ErrorModal/>
+    <ErrorModal />
 
-        <resize-observer @notify="$forceUpdate()"/>
-    </div>
+    <resize-observer @notify="$forceUpdate()" />
+  </div>
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import ErrorModal from "@/components/common/modal/action/ErrorModal";
 
 export default {
-    name: "RedemptionRequestModal",
+  name: "RedemptionRequestModal",
 
-    components: {
-        ErrorModal
+  components: {
+    ErrorModal
+  },
+
+  props: {},
+
+  computed: {
+    ...mapGetters("insuranceInvestModal", ["showRedemptionRequest"]),
+    ...mapGetters("web3", ["web3", "contracts"]),
+    ...mapGetters("network", ["networkId"]),
+    ...mapGetters("accountData", ["account"]),
+    ...mapGetters("gasPrice", ["gasPriceGwei"]),
+    ...mapGetters("theme", ["light"])
+  },
+
+  data: () => ({
+    redemptionRequestSent: false
+  }),
+
+  mounted() {},
+
+  methods: {
+    ...mapActions("insuranceInvestModal", ["closeRedemptionRequestModal"]),
+    ...mapActions("errorModal", ["showErrorModalWithMsg"]),
+    ...mapActions("insuranceData", ["refreshIsNeedRedemption"]),
+    ...mapActions("insuranceInvestModal", [
+      "setRedemptionRequestInfo",
+      "showRedemptionRequestSuccessModal"
+    ]),
+
+    openLink(link) {
+      window.open(link, "_blank").focus();
     },
 
-    props: {},
-
-    computed: {
-        ...mapGetters('insuranceInvestModal', ['showRedemptionRequest']),
-        ...mapGetters('web3', ['web3', 'contracts']),
-        ...mapGetters('network', ['networkId']),
-        ...mapGetters('accountData', ['account']),
-        ...mapGetters('gasPrice', ['gasPriceGwei']),
-        ...mapGetters("theme", ["light"]),
+    close() {
+      this.closeRedemptionRequestModal();
     },
 
-    data: () => ({
-        redemptionRequestSent: false,
-    }),
+    async sendRedemptionRequest() {
+      let insurance = {
+        // chainName: 'polygon'
+        chainName: "optimism"
+      };
 
-    mounted() {
+      let estimateResult = await this.estimateRedemptionRequest(insurance);
+
+      if (estimateResult.haveError) {
+        this.showErrorModalWithMsg({
+          errorType: "redemptionRequest",
+          errorMsg: estimateResult
+        });
+      } else {
+        this.redemptionRequestSent = true;
+
+        let requestParams = { from: this.account, gasPrice: this.gasPriceGwei };
+
+        try {
+          let tx = await this.contracts.insurance[
+            insurance.chainName + "_exchanger"
+          ].methods
+            .requestWithdraw()
+            .send(requestParams);
+
+          try {
+            this.setRedemptionRequestInfo(tx.transactionHash);
+          } catch (e) {
+            console.log(e);
+          }
+
+          await this.refreshIsNeedRedemption();
+          this.showRedemptionRequestSuccessModal();
+
+          this.redemptionRequestSent = false;
+
+          this.close();
+        } catch (e) {
+          this.redemptionRequestSent = false;
+        }
+      }
     },
 
-    methods: {
-        ...mapActions('insuranceInvestModal', ['closeRedemptionRequestModal']),
-        ...mapActions('errorModal', ['showErrorModalWithMsg']),
-        ...mapActions('insuranceData', ['refreshIsNeedRedemption']),
-        ...mapActions('insuranceInvestModal', ['setRedemptionRequestInfo', 'showRedemptionRequestSuccessModal']),
+    async estimateRedemptionRequest(insurance) {
+      let result;
 
-        openLink(link) {
-            window.open(link, '_blank').focus();
-        },
+      try {
+        let blockNum = await this.web3.eth.getBlockNumber();
+        let contract = this.contracts.insurance[
+          insurance.chainName + "_exchanger"
+        ];
+        let estimateOptions = {
+          from: this.account,
+          gasPrice: this.gasPriceGwei
+        };
 
-        close() {
-            this.closeRedemptionRequestModal();
-        },
-
-        async sendRedemptionRequest() {
-            let insurance = {
-                // chainName: 'polygon'
-                chainName: 'optimism'
-            }
-
-            let estimateResult = await this.estimateRedemptionRequest(insurance);
-
-            if (estimateResult.haveError) {
-                this.showErrorModalWithMsg({errorType: 'redemptionRequest', errorMsg: estimateResult});
+        await contract.methods
+          .requestWithdraw()
+          .estimateGas(estimateOptions)
+          .then(function(gasAmount) {
+            result = {
+              haveError: false,
+              gas: gasAmount
+            };
+          })
+          .catch(function(error) {
+            if (error && error.message) {
+              result = {
+                haveError: true,
+                from: this.account,
+                to: contract.options.address,
+                gas: null,
+                gasPrice: parseInt(estimateOptions.gasPrice, 16),
+                method: contract.methods.requestWithdraw().encodeABI(),
+                message: error.message,
+                block: blockNum
+              };
             } else {
-                this.redemptionRequestSent = true;
-
-                let requestParams = {from: this.account, gasPrice: this.gasPriceGwei};
-
-                try {
-                    let tx = await this.contracts.insurance[insurance.chainName + '_exchanger'].methods.requestWithdraw().send(requestParams);
-
-                    try {
-                        this.setRedemptionRequestInfo(tx.transactionHash);
-                    } catch (e) {
-                        console.log(e);
-                    }
-
-                    await this.refreshIsNeedRedemption();
-                    this.showRedemptionRequestSuccessModal();
-
-                    this.redemptionRequestSent = false;
-
-                    this.close();
-                } catch (e) {
-                    this.redemptionRequestSent = false;
-                }
+              result = {
+                haveError: true,
+                message: "Unexpected error"
+              };
             }
-        },
+          });
+      } catch (e) {
+        result = {
+          haveError: true,
+          message: "Unexpected error"
+        };
+      }
 
-        async estimateRedemptionRequest(insurance) {
-
-            let result;
-
-            try {
-                let blockNum = await this.web3.eth.getBlockNumber();
-                let contract = this.contracts.insurance[insurance.chainName + '_exchanger'];
-                let estimateOptions = {from: this.account, "gasPrice": this.gasPriceGwei};
-
-                await contract.methods.requestWithdraw().estimateGas(estimateOptions)
-                    .then(function (gasAmount) {
-                        result = {
-                            haveError: false,
-                            gas: gasAmount,
-                        };
-                    })
-                    .catch(function (error) {
-                        if (error && error.message) {
-                            result = {
-                                haveError: true,
-                                from: this.account,
-                                to: contract.options.address,
-                                gas: null,
-                                gasPrice: parseInt(estimateOptions.gasPrice, 16),
-                                method: contract.methods.requestWithdraw().encodeABI(),
-                                message: error.message,
-                                block: blockNum
-                            };
-                        } else {
-                            result = {
-                                haveError: true,
-                                message: "Unexpected error",
-                            };
-                        }
-                    });
-            } catch (e) {
-                result = {
-                    haveError: true,
-                    message: "Unexpected error",
-                };
-            }
-
-            return result;
-        },
-
-        async redemptionRequest(insurance) {
-            await this.contracts.insurance[insurance.chainName + '_exchanger'].methods.requestWithdraw().call();
-        },
+      return result;
     },
-}
+
+    async redemptionRequest(insurance) {
+      await this.contracts.insurance[insurance.chainName + "_exchanger"].methods
+        .requestWithdraw()
+        .call();
+    }
+  }
+};
 </script>
 
 <style scoped>
-
 /* mobile */
 @media only screen and (max-width: 960px) {
-    .airdrop-body {
-        width: 100% !important;
-    }
+  .airdrop-body {
+    width: 100% !important;
+  }
 
-    .request-info-text {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 22px;
-    }
+  .request-info-text {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 22px;
+  }
 
-    .redemption-btn {
-        width: 100%;
-        height: 42px !important;
+  .redemption-btn {
+    width: 100%;
+    height: 42px !important;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 16px !important;
-        line-height: 20px !important;
-        letter-spacing: 0.04em !important;
-    }
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    letter-spacing: 0.04em !important;
+  }
 }
 
 /* tablet */
 @media only screen and (min-width: 960px) and (max-width: 1400px) {
-    .airdrop-body {
-        width: 100% !important;
-    }
+  .airdrop-body {
+    width: 100% !important;
+  }
 
-    .container_header {
-        margin-left: 5% !important;
-        margin-right: 5% !important;
-    }
+  .container_header {
+    margin-left: 5% !important;
+    margin-right: 5% !important;
+  }
 
-    .invest-body-row {
-        margin-left: 5% !important;
-        margin-right: 5% !important;
-    }
+  .invest-body-row {
+    margin-left: 5% !important;
+    margin-right: 5% !important;
+  }
 
-    .request-info-text {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 18px;
-        line-height: 28px;
-    }
+  .request-info-text {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 28px;
+  }
 
-    .redemption-btn {
-        width: 100%;
-        height: 48px !important;
+  .redemption-btn {
+    width: 100%;
+    height: 48px !important;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 20px !important;
-        line-height: 24px !important;
-        letter-spacing: 0.04em !important;
-    }
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 20px !important;
+    line-height: 24px !important;
+    letter-spacing: 0.04em !important;
+  }
 }
 
 /* full */
 @media only screen and (min-width: 1400px) {
-    .airdrop-body {
-        width: 100% !important;
-    }
+  .airdrop-body {
+    width: 100% !important;
+  }
 
-    .container_header {
-        margin-left: 5% !important;
-        margin-right: 5% !important;
-    }
+  .container_header {
+    margin-left: 5% !important;
+    margin-right: 5% !important;
+  }
 
-    .invest-body-row {
-        margin-left: 5% !important;
-        margin-right: 5% !important;
-    }
+  .invest-body-row {
+    margin-left: 5% !important;
+    margin-right: 5% !important;
+  }
 
-    .request-info-text {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 18px;
-        line-height: 28px;
-    }
+  .request-info-text {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 28px;
+  }
 
-    .redemption-btn {
-        width: 100%;
-        height: 48px !important;
+  .redemption-btn {
+    width: 100%;
+    height: 48px !important;
 
-        font-style: normal !important;
-        font-weight: 400 !important;
-        font-size: 20px !important;
-        line-height: 24px !important;
-        letter-spacing: 0.04em !important;
-    }
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 20px !important;
+    line-height: 24px !important;
+    letter-spacing: 0.04em !important;
+  }
 }
 
 .airdrop-body {
-    z-index: 48;
+  z-index: 48;
 }
 
 .container_body {
-    background-color: var(--secondary) !important;
-    box-shadow: 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12), 0px 7px 8px -4px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
+  background-color: var(--secondary) !important;
+  box-shadow: 0px 12px 17px 2px rgba(0, 0, 0, 0.14),
+    0px 5px 22px 4px rgba(0, 0, 0, 0.12), 0px 7px 8px -4px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
 }
 
 .container_header {
-    background-color: var(--secondary) !important;
+  background-color: var(--secondary) !important;
 }
 
 .request-info-text {
-    color: var(--secondary-gray-text) !important;
+  color: var(--secondary-gray-text) !important;
 }
 
 .redemption-btn {
-    border-radius: 2px !important;
+  border-radius: 2px !important;
 
-    text-transform: uppercase !important;
-    font-feature-settings: 'pnum' on, 'lnum' on !important;
-    background: var(--blue-gradient);
-    color: white !important;
+  text-transform: uppercase !important;
+  font-feature-settings: "pnum" on, "lnum" on !important;
+  background: var(--blue-gradient);
+  color: white !important;
 }
 
 .disabled-redemption-btn {
-    background: var(--main-banner-background) !important;
-    color: #9DA4B0 !important;
+  background: var(--main-banner-background) !important;
+  color: #9da4b0 !important;
 }
-
 </style>

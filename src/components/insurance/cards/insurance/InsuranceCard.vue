@@ -1,5 +1,5 @@
 <template>
-  <v-row class="card-container" v-on:click.prevent @click="openInsurance">
+  <v-row class="card-container" @click.self="openInsurance">
     <v-col cols="12" align-self="start">
       <v-row
         class="d-flex flex-row align-center header-row"
@@ -176,7 +176,7 @@
               <v-row>
                 <v-btn
                   class="button btn-outlined"
-                  @click="setWalletNetwork(chainId.toString())"
+                  @click.prevent="setWalletNetwork(chainId.toString())"
                   outlined
                 >
                   SWITCH TO {{ chainName }} TO MINT

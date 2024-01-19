@@ -79,7 +79,7 @@ export default {
   computed: {
     ...mapGetters("insuranceInvestModal", ["showRedemptionRequest"]),
     ...mapGetters("web3", ["web3", "contracts"]),
-    ...mapGetters("network", ["networkId"]),
+    ...mapGetters("network", ["networkId", "networkName"]),
     ...mapGetters("accountData", ["account"]),
     ...mapGetters("gasPrice", ["gasPriceGwei"]),
     ...mapGetters("theme", ["light"])
@@ -111,12 +111,15 @@ export default {
     async sendRedemptionRequest() {
       let insurance = {
         // chainName: 'polygon'
-        chainName: "optimism"
+        chainName: ["optimism", "arbitrum"]
       };
 
       let estimateResult = await this.estimateRedemptionRequest(insurance);
 
-      if (estimateResult.haveError) {
+      if (!insurance.chainName.includes(this.networkName)) return;
+
+      console.log(this.networkName, estimateResult, "sendRedemptionRequest---");
+      if (estimateResult?.haveError) {
         this.showErrorModalWithMsg({
           errorType: "redemptionRequest",
           errorMsg: estimateResult
@@ -128,7 +131,7 @@ export default {
 
         try {
           let tx = await this.contracts.insurance[
-            insurance.chainName + "_exchanger"
+            this.networkName + "_exchanger"
           ].methods
             .requestWithdraw()
             .send(requestParams);
@@ -154,10 +157,12 @@ export default {
     async estimateRedemptionRequest(insurance) {
       let result;
 
+      if (!insurance.chainName.includes(insurance)) return;
+
       try {
         let blockNum = await this.web3.eth.getBlockNumber();
         let contract = this.contracts.insurance[
-          insurance.chainName + "_exchanger"
+          this.networkName + "_exchanger"
         ];
         let estimateOptions = {
           from: this.account,
@@ -203,7 +208,9 @@ export default {
     },
 
     async redemptionRequest(insurance) {
-      await this.contracts.insurance[insurance.chainName + "_exchanger"].methods
+      if (!insurance.chainName.includes(insurance)) return;
+
+      await this.contracts.insurance[this.networkName + "_exchanger"].methods
         .requestWithdraw()
         .call();
     }

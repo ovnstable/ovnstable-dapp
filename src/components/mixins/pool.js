@@ -1236,7 +1236,10 @@ export const pool = {
         const { address } = entry;
 
         // promoting special pool in FEATURES/all-pools
-        const featurePromote = ["0x1b05e4e814b3431a48b8164c41eac834d9ce2da6"];
+        const featurePromote = [
+          "0x1b05e4e814b3431a48b8164c41eac834d9ce2da6",
+          "0xb9c2d906f94b27bc403ab76b611d2c4490c2ae3f"
+        ];
         const convexPromote = ["0xb34a7d1444a707349bc7b981b7f2e1f20f81f013"];
         const loweredAdd = address?.toLowerCase();
 

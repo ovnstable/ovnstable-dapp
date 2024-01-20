@@ -80,13 +80,13 @@ export const zap = {
         },
         "0xd01075f7314a6436e8b74fc18069848229d0c555": {
           name: "Pancake8020",
-          type: "LP_WITH_STAKE_IN_ONE_STEP",
-          typeOfDepositConstructor: "BASE_CONSTRUCTOR"
+          type: "LP_STAKE_DIFF_STEPS",
+          typeOfDepositConstructor: "CONSTRUCTOR_WITH_NFT_ID"
         },
         "0xb9c2d906f94b27bc403ab76b611d2c4490c2ae3f": {
           name: "PancakeEqual",
-          type: "LP_WITH_STAKE_IN_ONE_STEP",
-          typeOfDepositConstructor: "BASE_CONSTRUCTOR"
+          type: "LP_STAKE_DIFF_STEPS",
+          typeOfDepositConstructor: "CONSTRUCTOR_WITH_NFT_ID"
         }
       },
       zapContract: null,
@@ -365,12 +365,18 @@ export const zap = {
         "0xd01075f7314a6436e8b74fc18069848229d0c555": {
           // usdc/usd+
           gauge: "0xd01075f7314a6436e8b74fc18069848229d0c555",
-          approveType: "TOKEN"
+          gaugeForLP: "0x46A15B0b27311cedF172AB29E4f4766fbE7F4364",
+          approveType: "NFT",
+          // pool token differ from pool address
+          poolTokenType: "DIFFERENT"
         },
         "0xb9c2d906f94b27bc403ab76b611d2c4490c2ae3f": {
           // usdt+/usd+
           gauge: "0xb9c2d906f94b27bc403ab76b611d2c4490c2ae3f",
-          approveType: "TOKEN"
+          gaugeForLP: "0x46A15B0b27311cedF172AB29E4f4766fbE7F4364",
+          approveType: "NFT",
+          // pool token differ from pool address
+          poolTokenType: "DIFFERENT"
         }
       }
     };
@@ -452,11 +458,18 @@ export const zap = {
         poolAddress = poolAddress.split("_")[0];
       }
 
-      this.poolTokenContract = this._loadContract(
+      console.log(
         abiPoolTokenContractFile,
-        this.web3,
-        poolAddress
+        poolInfo,
+        "--abiPoolTokenContractFile"
       );
+      this.poolTokenContract = poolInfo.poolTokenType
+        ? this._loadContract(
+            abiPoolTokenContractFile,
+            this.web3,
+            abiPoolTokenContractFile.address
+          )
+        : this._loadContract(abiPoolTokenContractFile, this.web3, poolAddress);
     },
     _loadContract(file, web3, address) {
       if (!address) {
@@ -499,8 +512,6 @@ export const zap = {
             );
           });
       }
-
-      console.log(this.zapContract, "----this.zapContract");
 
       return this.zapContract.methods
         .getProportion(gauge)

@@ -439,7 +439,9 @@ export default {
               link: null
             };
 
-            if (element.type === "CORE" || element.type === "SMM") {
+            console.log(element, "ELEMENT----");
+
+            if (["SMM", "CORE", "SPER"].includes(element.type)) {
               currentTotalDataElement.label = element.name;
               currentTotalDataElement.link =
                 element.address || element.explorerAddress

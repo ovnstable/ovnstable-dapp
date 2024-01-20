@@ -33,7 +33,7 @@
               :data="currentTotalData"
               asset-type="USDC"
               :total-title="'Total USD+ in circulation'"
-              :network-name="tab"
+              :network-name="chainName"
             />
 
             <TableInsuranceStrategies
@@ -43,7 +43,7 @@
               :data="currentTotalData"
               asset-type="USDC"
               :total-title="'Total USD+ in circulation'"
-              :network-name="tab"
+              :network-name="chainName"
             />
           </v-col>
         </v-row>
@@ -306,7 +306,7 @@ export default {
               link: null
             };
 
-            if (element.type === "CORE" || element.type === "SMM") {
+            if (["CORE", "TYPE", "SPER"].includes(element.type)) {
               currentTotalDataElement.link =
                 element.address || element.explorerAddress
                   ? process.env.VUE_APP_DEBANK_EXPLORER +

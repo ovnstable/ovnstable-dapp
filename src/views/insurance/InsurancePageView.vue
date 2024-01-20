@@ -163,7 +163,7 @@
                   <v-row align="center" justify="center" class="ma-0">
                     <v-btn
                       class="header-btn btn-investor-invest"
-                      @click="setWalletNetwork(this.tab)"
+                      @click="setWalletNetwork(tab)"
                     >
                       SWITCH TO {{ this.activeTabName }} TO MINT
                     </v-btn>

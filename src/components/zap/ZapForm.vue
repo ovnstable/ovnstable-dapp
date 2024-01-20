@@ -718,9 +718,6 @@ export default defineComponent({
       this.tokenSeparationScheme = "POOL_SWAP";
       this.typeOfPoolScheme = this.typeOfPool;
 
-      console.log(this.poolTokensForZapMap, "this.poolTokensForZapMap");
-      console.log(this.zapPool.address, "this.zapPool.address");
-
       // todo: move to backend
       let poolTokens = this.poolTokensForZapMap[this.zapPool.address];
       if (!poolTokens) {
@@ -986,7 +983,6 @@ export default defineComponent({
 
       // formulaOutputTokens sorted by pool pair and with zero for not exist in output formula.
       formulaOutputTokens = formulaResultOutputWithZero;
-      console.log(formulaResultOutputWithZero, "formulaResultOutputWithZero");
 
       let inputDecimals = formulaInputTokens.map((token) => token.decimals);
       let inputAddresses = formulaInputTokens.map((token) => token.address);

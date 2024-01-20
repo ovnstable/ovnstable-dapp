@@ -571,9 +571,6 @@ export const odosSwap = {
         }
       }
 
-      console.log(listTokensAddresses, "listTokensAddresses--");
-      console.log(tokens, "tokens--");
-
       // order tokens like as list addresses.
       if (isIncludeInListAddresses) {
         if (listTokensAddresses.length === tokens.length) {

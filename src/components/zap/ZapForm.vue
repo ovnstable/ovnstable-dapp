@@ -416,8 +416,8 @@ export default defineComponent({
         // Schema for hot exclude: {'Ovn pool platform name from db': ['odos', 'api/info/liquidity-sources', 'related', 'with', 'platform'] }
         Chronos: ["Chronos Volatile"], //"Chronos Stable"
         Pancake: ["PancakeSwap", "PancakeSwap V3"],
-        Beefy: ["Aerodrome Stable", "Aerodrome Volatile"],
-        Aerodrome: ["Aerodrome Stable", "Aerodrome Volatile"],
+        // Beefy: ["Aerodrome Stable", "Aerodrome Volatile"],
+        // Aerodrome: ["Aerodrome Volatile"],
         Velodrome: [
           "Velodrome Stable",
           "Velodrome Volatile",
@@ -425,8 +425,8 @@ export default defineComponent({
           "Velodrome V2 Stable",
           "Velodrome V2 Volatile"
         ],
-        Alienbase: ["Alien Base", "Alien Base Stable"],
-        Convex: ["Curve Crypto Registry", "Curve Factory", "Curve Registry"]
+        // Alienbase: ["Alien Base", "Alien Base Stable"],
+        // Convex: ["Curve Crypto Registry", "Curve Factory", "Curve Registry"]
       }
     };
   },
@@ -1054,6 +1054,10 @@ export default defineComponent({
         referralCode: this.odosReferalCode
       };
 
+      console.log(
+        this.getSourceLiquidityBlackList(),
+        "--this.getSourceLiquidityBlackList()"
+      );
       console.log(JSON.stringify(requestData), "----requestData11");
       this.swapRequest(requestData)
         .then(async (data) => {

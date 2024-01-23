@@ -414,7 +414,19 @@ export default defineComponent({
       sourceLiquidityBlacklist: ["Hashflow", "Wombat"], // "Overnight Exchange"
       mapExcludeLiquidityPlatform: {
         // Schema for hot exclude: {'Ovn pool platform name from db': ['odos', 'api/info/liquidity-sources', 'related', 'with', 'platform'] }
-        Chronos: ["Chronos Volatile"] //"Chronos Stable"
+        Chronos: ["Chronos Volatile"], //"Chronos Stable"
+        Pancake: ["PancakeSwap", "PancakeSwap V3"],
+        Beefy: ["Aerodrome Stable", "Aerodrome Volatile"],
+        Aerodrome: ["Aerodrome Stable", "Aerodrome Volatile"],
+        Velodrome: [
+          "Velodrome Stable",
+          "Velodrome Volatile",
+          "Velodrome V2 Converter",
+          "Velodrome V2 Stable",
+          "Velodrome V2 Volatile"
+        ],
+        Alienbase: ["Alien Base", "Alien Base Stable"],
+        Convex: ["Curve Crypto Registry", "Curve Factory", "Curve Registry"]
       }
     };
   },
@@ -1010,7 +1022,7 @@ export default defineComponent({
       });
 
       proportions.outputTokens = proportions.outputTokens.filter(
-        (item, index) => item.proportion > 0
+        (item) => item.proportion > 0
       );
 
       // let requestOutputTokens = this.getRequestOutputTokens();
@@ -1124,6 +1136,7 @@ export default defineComponent({
 
     getSourceLiquidityBlackList() {
       let sourceBlacklist = [...this.sourceLiquidityBlacklist];
+      // excluding platform for big liquidities zapins
       let excludeLiquidityByPlatform = this.mapExcludeLiquidityPlatform[
         this.zapPool.platform
       ];

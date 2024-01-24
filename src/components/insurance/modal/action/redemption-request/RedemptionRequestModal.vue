@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showRedemptionRequest">
+  <div>
     <v-dialog
       v-model="showRedemptionRequest"
       width="650"
@@ -74,8 +74,6 @@ export default {
     ErrorModal
   },
 
-  props: {},
-
   computed: {
     ...mapGetters("insuranceInvestModal", ["showRedemptionRequest"]),
     ...mapGetters("web3", ["web3", "contracts"]),
@@ -88,8 +86,6 @@ export default {
   data: () => ({
     redemptionRequestSent: false
   }),
-
-  mounted() {},
 
   methods: {
     ...mapActions("insuranceInvestModal", ["closeRedemptionRequestModal"]),
@@ -129,6 +125,12 @@ export default {
 
         let requestParams = { from: this.account, gasPrice: this.gasPriceGwei };
 
+        console.log(requestParams, "---requestParams");
+        console.log(
+          this.networkName + "_exchanger",
+          'this.networkName + "_exchanger"'
+        );
+        console.log(this.contracts.insurance, "--this.contracts.insurance");
         try {
           let tx = await this.contracts.insurance[
             this.networkName + "_exchanger"

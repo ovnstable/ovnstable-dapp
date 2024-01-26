@@ -500,6 +500,7 @@ export default {
 
   methods: {
     ...mapActions("insuranceData", ["refreshInsurance"]),
+    ...mapActions("insuranceInvestModal", ["closeInvestModal"]),
     ...mapActions("insuranceInvestModal", [
       "showMintView",
       "approveInsuranceToken",
@@ -662,6 +663,7 @@ export default {
 
     redemptionRequestAction() {
       this.showRedemptionRequestModal();
+      this.closeInvestModal();
     },
 
     async redeemAction() {
@@ -716,7 +718,6 @@ export default {
             `Insurance blockchain. Withdraw action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`
           );
 
-          console.log("REDEEEM", sum);
           await contracts.insurance[`${this.networkName}_exchanger`].methods
             .redeem({ amount: sum })
             .send(buyParams)
@@ -889,7 +890,7 @@ export default {
       ].methods
         .allowance(
           from,
-          contracts.insurance[`${this.networkName}_token`].options.address
+          contracts.insurance[`${this.networkName}_exchanger`].options.address
         )
         .call();
       return allowanceValue * 1;

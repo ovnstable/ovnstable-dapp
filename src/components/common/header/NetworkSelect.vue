@@ -58,9 +58,7 @@
             <v-img :src="require('@/assets/network/op.svg')" />
           </div>
         </v-list-item-avatar>
-        <v-list-item-title class="network-select-list-item">
-          Optimism
-        </v-list-item-title>
+        <v-list-item-title class="network-select-list-item"> Optimism </v-list-item-title>
       </v-list-item>
       <v-list-item style="cursor: pointer" @click="setWalletNetwork('42161')">
         <v-list-item-avatar>
@@ -68,9 +66,7 @@
             <v-img :src="require('@/assets/network/ar.svg')" />
           </div>
         </v-list-item-avatar>
-        <v-list-item-title class="network-select-list-item">
-          Arbitrum
-        </v-list-item-title>
+        <v-list-item-title class="network-select-list-item"> Arbitrum </v-list-item-title>
       </v-list-item>
       <v-list-item style="cursor: pointer" @click="setWalletNetwork('8453')">
         <v-list-item-avatar>
@@ -78,9 +74,7 @@
             <v-img :src="require('@/assets/network/base.svg')" />
           </div>
         </v-list-item-avatar>
-        <v-list-item-title class="network-select-list-item">
-          Base
-        </v-list-item-title>
+        <v-list-item-title class="network-select-list-item"> Base </v-list-item-title>
       </v-list-item>
       <v-list-item style="cursor: pointer" @click="setWalletNetwork('59144')">
         <v-list-item-avatar>
@@ -105,11 +99,7 @@
         </v-list-item-avatar>
         <v-list-item-title class="network-select-list-item">
           BSC
-          <v-icon
-            class="mb-5"
-            small
-            color="var(--secondary-gray-text)"
-          ></v-icon>
+          <v-icon class="mb-5" small color="var(--secondary-gray-text)"></v-icon>
         </v-list-item-title>
       </v-list-item>
       <v-list-item style="cursor: pointer" @click="setWalletNetwork('324')">
@@ -118,9 +108,7 @@
             <v-img :src="require('@/assets/network/zk.svg')" />
           </div>
         </v-list-item-avatar>
-        <v-list-item-title class="network-select-list-item">
-          ZkSync
-        </v-list-item-title>
+        <v-list-item-title class="network-select-list-item"> ZkSync </v-list-item-title>
       </v-list-item>
 
       <div class="divider-container">
@@ -139,10 +127,7 @@
         </div>
       </v-list-item>
 
-      <v-list-item
-        @click.stop="toggleDeprecatedType()"
-        class="switch-container"
-      >
+      <v-list-item @click.stop="toggleDeprecatedType()" class="switch-container">
         <img
           v-if="isDeprecatedShow"
           :src="require('@/assets/icon/deprecated-on.svg')"
@@ -168,18 +153,12 @@
         <v-list-item style="cursor: pointer" @click="setWalletNetwork('137')">
           <v-list-item-avatar>
             <div class="list-item-icon">
-              <v-img
-                :src="require('@/assets/network/polygon-deprecated.svg')"
-              />
+              <v-img :src="require('@/assets/network/polygon-deprecated.svg')" />
             </div>
           </v-list-item-avatar>
           <v-list-item-title class="network-select-list-item name-deprecated">
             Polygon
-            <v-icon
-              class="mb-5"
-              small
-              color="var(--secondary-gray-text)"
-            ></v-icon>
+            <v-icon class="mb-5" small color="var(--secondary-gray-text)"></v-icon>
           </v-list-item-title>
         </v-list-item>
       </v-list-item>
@@ -207,7 +186,7 @@ export default {
   data: () => ({
     openedList: false,
     alphaNetworks: [],
-    betaNetworks: []
+    betaNetworks: [],
   }),
 
   computed: {
@@ -242,7 +221,7 @@ export default {
 
     betaNetwork: function () {
       return this.betaNetworks.includes(this.networkId);
-    }
+    },
   },
 
   methods: {
@@ -258,8 +237,8 @@ export default {
     },
     openDeprecatedDocsLink() {
       window.open("https://docs.overnight.fi/advanced/deprecation", "_blank");
-    }
-  }
+    },
+  },
 };
 </script>
 

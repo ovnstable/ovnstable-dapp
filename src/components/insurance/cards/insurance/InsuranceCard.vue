@@ -17,9 +17,7 @@
         </span>
         <v-row class="d-flex flex-column align-start mr-3 ml-8">
           <v-row class="d-flex" align="center">
-            <label class="card-title">
-              Insurance
-            </label>
+            <label class="card-title"> Insurance </label>
           </v-row>
           <v-row class="d-flex" align="center">
             <label class="card-title"> ON {{ chainName }} </label>
@@ -30,9 +28,7 @@
                 apyData ? $utils.formatMoneyComma(last30DayApy, 0) + "%" : "—"
               }}
             </label>
-            <label class="apy ml-3">
-              30-DAY APY
-            </label>
+            <label class="apy ml-3"> 30-DAY APY </label>
           </v-row>
         </v-row>
       </v-row>
@@ -70,9 +66,7 @@
         <v-row
           class="ma-0 insurance-card-info-row d-flex justify-space-between"
         >
-          <label class="card-info-label mt-2">
-            Value of vault
-          </label>
+          <label class="card-info-label mt-2"> Value of vault </label>
           <label class="card-info-value mt-2">
             ${{
               apyData && apyData.supply
@@ -114,9 +108,7 @@
     <v-col align-self="end">
       <v-container :class="$wu.isFull() ? 'mb-6' : 'mb-6'">
         <v-row class="d-flex ma-0" align="center">
-          <label class="your-deposit">
-            Your deposit
-          </label>
+          <label class="your-deposit"> Your deposit </label>
           <v-spacer></v-spacer>
           <label class="your-deposit" :class="dataHidden ? 'hidden-label' : ''">
             {{
@@ -270,7 +262,7 @@ export default {
   },
 
   watch: {
-    chainName: function() {
+    chainName() {
       this.loadApyDataInfo();
       this.loadPayouts();
       this.loadOvnPrice();
@@ -293,13 +285,11 @@ export default {
 
     loadOvnPrice() {
       let url = "https://api.overnight.fi/root/dapp";
-      ovnApiService
-        .getOvnPrice(url)
-        .then((value) => {
+      ovnApiService.getOvnPrice(url).the,
+        n((value) => {
           console.log("ovn price: ", value);
           this.ovnPrice = value;
-        })
-        .catch((reason) => {
+        }).catch((reason) => {
           console.log("Error get ovn price: " + reason);
         });
     },

@@ -480,7 +480,7 @@ export default {
 
   created() {
     this.currencies.push({
-      id: "usdc",
+      id: "usdcNative",
       title: this.assetName,
       image: require("@/assets/currencies/stablecoins/" +
         this.assetName +

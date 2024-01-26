@@ -568,10 +568,6 @@ export const swap = {
             let errorMessage =
               "Original max value not exist, when buy action. type: " + action;
             console.error(errorMessage);
-            this.showErrorModalWithMsg({
-              errorType: "buy",
-              errorMsg: { code: 1, message: errorMessage }
-            });
             return;
           }
         } else {

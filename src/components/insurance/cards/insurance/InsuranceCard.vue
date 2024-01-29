@@ -285,13 +285,11 @@ export default {
 
     loadOvnPrice() {
       let url = "https://api.overnight.fi/root/dapp";
-      ovnApiService
-        .getOvnPrice(url)
-        .then((value) => {
+      ovnApiService.getOvnPrice(url).the,
+        n((value) => {
           console.log("ovn price: ", value);
           this.ovnPrice = value;
-        })
-        .catch((reason) => {
+        }).catch((reason) => {
           console.log("Error get ovn price: " + reason);
         });
     },

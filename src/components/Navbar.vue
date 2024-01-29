@@ -4,7 +4,7 @@
       <v-list-item>
         <v-list-item-title>
           <router-link to="/swap">
-            <img :src="randomNavbarLogo" class="logo-img" />
+            <img :src="require('@/assets/logo.svg')" class="logo-img" />
           </router-link>
         </v-list-item-title>
       </v-list-item>
@@ -717,12 +717,6 @@ export default {
     ...mapGetters("network", ["networkId", "networkName"]),
     ...mapGetters("menuUI", ["selectedTab"]),
     ...mapGetters("theme", ["light"]),
-
-    randomNavbarLogo() {
-      let randomNum = Math.round(Math.random() * 3);
-      const url = require(`@/assets/header/ny_logo_${randomNum}.svg`);
-      return url;
-    },
 
     changeIconColor: function() {
       if (this.light) {

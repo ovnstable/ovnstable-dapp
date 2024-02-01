@@ -407,7 +407,11 @@ export default {
               let etsNameUp = this.getEtsNameUp(element);
               currentTotalDataElement.label = `ETS ${etsNameUp}`;
               let etsName = this.getEtsName(element);
-              currentTotalDataElement.link = "/ets/" + etsName;
+              currentTotalDataElement.link = etsName
+                ? `/ets/${etsName}`
+                : process.env.VUE_APP_DEBANK_EXPLORER +
+                  "profile/" +
+                  element.address;
             }
 
             this.currentTotalData.push(currentTotalDataElement);

@@ -29,11 +29,7 @@
         v-for="item in data"
         :key="item.label + (item.value + '')"
         class="current-table-row"
-        @click="
-          item.type === 'CORE' || item.type === 'SMM' || item.type === 'SPER'
-            ? openInNewTab(item.link)
-            : openInDapp(item.link)
-        "
+        @click="openInNewTab(item.link)"
       >
         <td class="table-label-don text-right" v-if="!minimized">
           <div
@@ -204,7 +200,7 @@ export default {
   },
 
   watch: {
-    networkName: function (val, oldVal) {
+    networkName: function(val, oldVal) {
       if (val) {
         this.totalSupply = null;
         this.initTotalTvl();
@@ -449,13 +445,13 @@ export default {
 }
 
 .table-header-don {
-  font-feature-settings: 'pnum' on, 'lnum' on !important;
+  font-feature-settings: "pnum" on, "lnum" on !important;
   color: var(--third-gray-text) !important;
 }
 
 .table-label-don {
-   font-feature-settings: 'pnum' on, 'lnum' on !important;
-   color: var(--secondary-gray-text) !important;
+  font-feature-settings: "pnum" on, "lnum" on !important;
+  color: var(--secondary-gray-text) !important;
 }
 
 .table-label-don {

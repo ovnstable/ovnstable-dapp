@@ -714,6 +714,7 @@ export default {
             };
           }
 
+          console.log(buyParams, "---buyParams");
           console.debug(
             `Insurance blockchain. Withdraw action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`
           );
@@ -772,6 +773,7 @@ export default {
         }
 
         let estimatedGasValue = await this.estimateGas(sum);
+        console.log(estimatedGasValue, "-estimatedGasValue");
         if (estimatedGasValue === -1 || estimatedGasValue === undefined) {
           this.gas = null;
           this.gasAmountInMatic = null;
@@ -897,18 +899,19 @@ export default {
     },
 
     async estimateGas(sum) {
-      let contracts = this.contracts;
-      let from = this.account;
+      const contracts = this.contracts;
+      const from = this.account;
 
       let result;
 
       try {
         let estimateOptions = { from: from, gasPrice: this.gasPriceGwei };
         let blockNum = await this.web3.eth.getBlockNumber();
-        let errorApi = this.opApi;
+        // let errorApi = this.opApi;
+        const networkScoped = this.networkName;
 
-        await contracts.insurance[`${this.networkName}_exchanger`].methods
-          .redeem({ amount: sum })
+        await contracts.insurance[`${networkScoped}_exchanger`].methods
+          .mint({ amount: sum })
           .estimateGas(estimateOptions)
           .then(function(gasAmount) {
             result = gasAmount;
@@ -922,12 +925,12 @@ export default {
                 data: {
                   from: from,
                   to:
-                    contracts.insurance[`${this.networkName}_exchanger`].options
+                    contracts.insurance[`${networkScoped}_exchanger`].options
                       .address,
                   gas: null,
                   gasPrice: parseInt(estimateOptions.gasPrice, 16),
                   method: contracts.insurance[
-                    `${this.networkName}_exchanger`
+                    `${networkScoped}_exchanger`
                   ].methods
                     .redeem({ amount: sum })
                     .encodeABI(),
@@ -936,7 +939,7 @@ export default {
                 }
               };
 
-              axios.post(errorApi + "/error/log", errorMsg);
+              // axios.post(errorApi + "/error/log", errorMsg);
 
               console.log(errorMsg);
             } else {

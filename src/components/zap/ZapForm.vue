@@ -415,7 +415,7 @@ export default defineComponent({
       mapExcludeLiquidityPlatform: {
         // Schema for hot exclude: {'Ovn pool platform name from db': ['odos', 'api/info/liquidity-sources', 'related', 'with', 'platform'] }
         Chronos: ["Chronos Volatile"], //"Chronos Stable"
-        Pancake: ["PancakeSwap", "PancakeSwap V3"],
+        // Pancake: ["PancakeSwap", "PancakeSwap V3"],
         // Beefy: ["Aerodrome Stable", "Aerodrome Volatile"],
         // Aerodrome: ["Aerodrome Volatile"],
         Velodrome: [

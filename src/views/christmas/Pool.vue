@@ -27,11 +27,7 @@
           <v-row class="d-flex" align="center">
             <label class="card-title" style="text-transform: none;">
               {{
-                pool.chainName === "arbitrum"
-                  ? cardData.data.id.name
-                      .toUpperCase()
-                      .replace("USDC", "USDC.e")
-                  : cardData.data.id.name.toUpperCase()
+                cardData.data.id.name.toUpperCase()
               }}
               LP
             </label>

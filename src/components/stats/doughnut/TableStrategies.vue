@@ -43,14 +43,7 @@
               class="link-label link-name align-center"
               :title="item.fullName"
             >
-              {{
-                networkName === "arbitrum"
-                  ? item.label
-                      .replace("USDC", "USDC.e")
-                      .replace(/null/g, "")
-                      .replace(/undefined/g, "")
-                  : item.label.replace(/null/g, "").replace(/undefined/g, "")
-              }}
+              {{ item.label.replace(/null/g, "").replace(/undefined/g, "") }}
             </label>
             <v-spacer></v-spacer>
             <label class="link-label mr-6" v-if="!$wu.isFull()">

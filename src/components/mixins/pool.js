@@ -956,13 +956,7 @@ export const pool = {
                   // todo move to backend
                   pool = this.initAggregators(pool);
 
-                  const name = networkConfig.networkName;
-                  let newName = pool.id.name.toUpperCase();
-
-                  if (name === "base") {
-                    newName = newName.replace("USDC", "USDBC");
-                  }
-
+                  const newName = pool.id.name.toUpperCase();
                   let platform = pool.platform;
 
                   // cases when LP staking platform differ from actual

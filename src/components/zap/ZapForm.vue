@@ -1054,14 +1054,8 @@ export default defineComponent({
         referralCode: this.odosReferalCode
       };
 
-      console.log(
-        this.getSourceLiquidityBlackList(),
-        "--this.getSourceLiquidityBlackList()"
-      );
-      console.log(JSON.stringify(requestData), "----requestData11");
       this.swapRequest(requestData)
         .then(async (data) => {
-          console.log(data, "----data222");
           let assembleData = {
             userAddr: this.web3.utils.toChecksumAddress(
               request.userAddr.toLowerCase()

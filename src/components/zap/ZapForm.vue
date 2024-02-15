@@ -415,7 +415,7 @@ export default defineComponent({
       mapExcludeLiquidityPlatform: {
         // Schema for hot exclude: {'Ovn pool platform name from db': ['odos', 'api/info/liquidity-sources', 'related', 'with', 'platform'] }
         Chronos: ["Chronos Volatile"], //"Chronos Stable"
-        Pancake: ["PancakeSwap", "PancakeSwap V3"],
+        // Pancake: ["PancakeSwap", "PancakeSwap V3"],
         // Beefy: ["Aerodrome Stable", "Aerodrome Volatile"],
         // Aerodrome: ["Aerodrome Volatile"],
         Velodrome: [
@@ -1054,14 +1054,8 @@ export default defineComponent({
         referralCode: this.odosReferalCode
       };
 
-      console.log(
-        this.getSourceLiquidityBlackList(),
-        "--this.getSourceLiquidityBlackList()"
-      );
-      console.log(JSON.stringify(requestData), "----requestData11");
       this.swapRequest(requestData)
         .then(async (data) => {
-          console.log(data, "----data222");
           let assembleData = {
             userAddr: this.web3.utils.toChecksumAddress(
               request.userAddr.toLowerCase()

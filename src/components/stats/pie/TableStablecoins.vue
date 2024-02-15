@@ -28,7 +28,7 @@
             <td class="table-label-don text-left">
                 <v-row>
                     <label class="link-label">
-                        {{ networkName === 'arbitrum' ? item.label.replace('USDC', 'USDC.e') : item.label }}
+                        {{ item.label }}
                     </label>
                     <template v-if="!onlyPercents">
                         <v-spacer></v-spacer>

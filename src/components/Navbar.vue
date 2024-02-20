@@ -676,6 +676,12 @@
         >
           <img :src="require('@/assets/social/twitterSocial.svg')" />
         </div>
+        <div
+          @click="openLink('https://t.me/overnight_fi')"
+          class="footer-social-link ml-1"
+        >
+          <img :src="require('@/assets/social/telegramSocial.svg')" />
+        </div>
 
         <div
           @click="openLink('https://discord.gg/overnight-fi')"

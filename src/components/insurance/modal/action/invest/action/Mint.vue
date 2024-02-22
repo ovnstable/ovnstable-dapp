@@ -698,6 +698,12 @@ export default {
           console.debug(
             `Insurance blockchain. Mit action Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}. SlidersPercent: ${this.sliderPercent}`
           );
+          console.log(
+            contracts.insurance[`${this.networkName}_exchanger`],
+            "contract"
+          );
+          console.log(mintParams, "---mintParams");
+          console.log(buyParams, "---buyParams");
           let buyResult = await contracts.insurance[
             `${this.networkName}_exchanger`
           ].methods
@@ -773,6 +779,7 @@ export default {
         } else {
           this.estimatedGas = estimatedGasValue;
 
+          console.log(this.estimatedGas, "---this.estimatedGas");
           this.gas = new BigNumber(this.estimatedGas)
             .multipliedBy(1.1)
             .integerValue(BigNumber.ROUND_DOWN);
@@ -889,6 +896,7 @@ export default {
     async estimateGas(sum) {
       let contracts = this.contracts;
       let from = this.account;
+      const self = this;
 
       let result;
 
@@ -897,15 +905,23 @@ export default {
         let blockNum = await this.web3.eth.getBlockNumber();
         let errorApi = this.optimismApi;
 
+        if (this.networkId === 10) return -1;
+
         let mintParams = {
           amount: sum
         };
 
+        console.log(
+          contracts.insurance[`${this.networkName}_exchanger`],
+          "--сcontract"
+        );
+        console.log(mintParams, "--mintParams");
         await contracts.insurance[`${this.networkName}_exchanger`].methods
           .mint(mintParams)
           .estimateGas(estimateOptions)
           .then(function(gasAmount) {
             result = gasAmount;
+            console.log(result, "--result");
           })
           .catch(function(error) {
             if (error && error.message) {
@@ -916,12 +932,12 @@ export default {
                 data: {
                   from: from,
                   to:
-                    contracts.insurance[`${this.networkName}_exchanger`].options
+                    contracts.insurance[`${self.networkName}_exchanger`].options
                       .address,
                   gas: null,
                   gasPrice: parseInt(estimateOptions.gasPrice, 16),
                   method: contracts.insurance[
-                    `${this.networkName}_exchanger`
+                    `${self.networkName}_exchanger`
                   ].methods
                     .mint(mintParams)
                     .encodeABI(),

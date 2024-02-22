@@ -687,6 +687,12 @@ export const pool = {
         case "Baseswapdefiedge":
           url = "https://baseswap.defiedge.io/s/base/";
           break;
+        case "Lynex":
+          url = "https://app.lynex.fi/liquidity";
+          break;
+        case "Frax Finance":
+          url = "https://app.frax.finance/staking/";
+          break;
 
         default:
           url = pool.explorerUrl + "/address/";
@@ -711,8 +717,15 @@ export const pool = {
         pool.platform === "Maverick" ||
         pool.platform === "Alienbase" ||
         pool.platform === "Convex" ||
-        pool.platform === "Pancake"
+        pool.platform === "Pancake" ||
+        pool.platform === "Lynex"
       ) {
+        window.open(url, "_blank").focus();
+        return;
+      }
+
+      if (pool.platform === "Frax Finance") {
+        url = url + "convex-usdplus-fraxbp";
         window.open(url, "_blank").focus();
         return;
       }
@@ -876,6 +889,10 @@ export const pool = {
                 let token3Icon;
 
                 let tokenNames = pool.id.name.split("/");
+
+                if (pool?.id?.name === "Convex USD+FRAXBP") {
+                  tokenNames = ["FXS", "CRV", "CVX", "OVN"];
+                }
 
                 try {
                   token0Icon = require("@/assets/currencies/farm/" +
@@ -1133,7 +1150,9 @@ export const pool = {
         "0xb9c2d906f94b27bc403ab76b611d2c4490c2ae3f",
         // LYNEX
         "0x58aacbccaec30938cb2bb11653cad726e5c4194a",
-        "0xc5f4c5c2077bbbac5a8381cf30ecdf18fde42a91"
+        "0xc5f4c5c2077bbbac5a8381cf30ecdf18fde42a91",
+        // FRAX
+        "0x56390acF12bce9675ab3922060D8d955149BE286"
       ];
 
       // execute revert aggregator

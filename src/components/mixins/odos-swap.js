@@ -915,6 +915,7 @@ export const odosSwap = {
     },
 
     getDefaultSecondtoken(symbol) {
+      console.log(this.tokenSeparationScheme, "-tokenSeparationScheme");
       if (this.tokenSeparationScheme === "OVERNIGHT_SWAP") {
         return this.innerGetDefaultSecondtokenBySymobl(
           symbol ? symbol : SECONDTOKEN_DEFAULT_SYMBOL
@@ -947,6 +948,7 @@ export const odosSwap = {
       );
     },
     innerGetDefaultSecondtokenByIndex(index) {
+      console.log(this.secondTokens, "-this.secondTokens");
       if (!this.secondTokens.length || this.secondTokens.length < index + 1) {
         console.log(
           "Inner get default token by index fail, secondTokens is empty or index not exist",

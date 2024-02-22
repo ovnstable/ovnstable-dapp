@@ -424,7 +424,7 @@ export default defineComponent({
           "Velodrome V2 Converter",
           "Velodrome V2 Stable",
           "Velodrome V2 Volatile"
-        ],
+        ]
         // Alienbase: ["Alien Base", "Alien Base Stable"],
         // Convex: ["Curve Crypto Registry", "Curve Factory", "Curve Registry"]
       }
@@ -768,6 +768,9 @@ export default defineComponent({
     addDefaultPoolToken() {
       let poolSelectedToken = this.getDefaultSecondtoken();
       let ovnSelectSelectedToken = this.getSecondDefaultSecondtoken();
+
+      console.log(poolSelectedToken, "--poolSelectedToken");
+      console.log(ovnSelectSelectedToken, "--ovnSelectSelectedToken");
       if (!poolSelectedToken || !ovnSelectSelectedToken) {
         this.addNewInputToken();
         this.addNewOutputToken();
@@ -852,6 +855,7 @@ export default defineComponent({
     },
 
     clearForm() {
+      console.log("CLEAR");
       this.clearAllSelectedTokens();
 
       if (this.swapMethod === "BUY") {
@@ -933,6 +937,7 @@ export default defineComponent({
         reserves.token0Amount * outputToken0Price +
         reserves.token1Amount * outputToken1Price;
 
+      console.log(sumReserves, "--sumReserves");
       let userInputTokens = this.selectedInputTokens;
       let poolOutputTokens = this.selectedOutputTokens;
       let formulaInputTokens = [];
@@ -1009,6 +1014,20 @@ export default defineComponent({
       );
       let outputPrices = formulaOutputTokens.map((token) => token.price);
 
+      console.log(
+        {
+          inputTokensDecimals: [...inputDecimals],
+          inputTokensAddresses: [...inputAddresses],
+          inputTokensAmounts: [...inputAmounts],
+          inputTokensPrices: [...inputPrices],
+          outputTokensDecimals: [...outputDecimals],
+          outputTokensAddresses: [...outputAddresses],
+          outputTokensAmounts: [...outputAmounts],
+          outputTokensPrices: [...outputPrices],
+          proportion0: (reserves[0] * outputPrices[0]) / sumReserves
+        },
+        "----proportions1"
+      );
       const proportions = this.calculateProportionForPool({
         inputTokensDecimals: [...inputDecimals],
         inputTokensAddresses: [...inputAddresses],
@@ -1025,6 +1044,7 @@ export default defineComponent({
         (item) => item.proportion > 0
       );
 
+      console.log(proportions, "----proportions");
       // let requestOutputTokens = this.getRequestOutputTokens();
       // let requestInputTokens = this.getRequestInputTokens();
 
@@ -1194,7 +1214,7 @@ export default defineComponent({
           this.gaugeContract.methods
             .approve(this.poolTokenContract.options.address, tokenId)
             .send(params)
-            .then((data) => {
+            .then(() => {
               this.additionalSwapStepType = "DEPOSIT";
               this.closeWaitingModal();
               this.depositGauge(
@@ -1433,6 +1453,9 @@ export default defineComponent({
         gasPrice: this.gasPriceGwei
       };
 
+      console.log(txData, "---txData");
+      console.log(gaugeData, "---gaugeData");
+      console.log(params, "---params");
       this.zapContract.methods
         .zapIn(txData, gaugeData)
         .send(params)

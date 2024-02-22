@@ -664,6 +664,7 @@ export default {
           );
         }
 
+        console.log(sum, this.fromValue, "---sum");
         if (!(await this.checkApprove())) {
           console.debug(
             `Invest insurance. Buy action Approve not pass. Sum: ${sum} usdSum: ${this.sum}. Account: ${this.account}.`

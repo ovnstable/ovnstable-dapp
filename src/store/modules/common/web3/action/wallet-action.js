@@ -333,7 +333,6 @@ const actions = {
   async getMainWalletsConfig({ commit, dispatch, getters, rootState }) {
     const injected = injectedModule({
       filter: await dispatch("getWalletsFilter"),
-      displayUnavailable: true,
       sort: (wallets) => {
         const metaMask = wallets.find(
           ({ label }) => label === ProviderLabel.MetaMask

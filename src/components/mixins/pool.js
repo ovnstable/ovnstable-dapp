@@ -891,7 +891,7 @@ export const pool = {
                 let tokenNames = pool.id.name.split("/");
 
                 if (pool?.id?.name === "Convex USD+FRAXBP") {
-                  tokenNames = ["FXS", "CRV", "CVX", "OVN"];
+                  tokenNames = ["USD+", "FRAX"];
                 }
 
                 try {

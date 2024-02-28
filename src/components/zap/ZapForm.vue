@@ -338,6 +338,7 @@
 
 <script>
 import { defineComponent } from "vue";
+import BigNumber from "bignumber.js";
 import InputToken from "@/components/swap-module/InputToken.vue";
 import OutputToken from "@/components/swap-module/OutputToken.vue";
 import { odosSwap } from "@/components/mixins/odos-swap";
@@ -1262,7 +1263,7 @@ export default defineComponent({
       returnedToUserEvent,
       lastPoolInfoData
     ) {
-      let approveAmount = 10 ** 24;
+      let approveAmount = new BigNumber(10).pow(24).toFixed(0);
       let isGaugeApproved = await this.checkApproveForGauge(
         this.poolTokenContract,
         this.gaugeContract.options.address,

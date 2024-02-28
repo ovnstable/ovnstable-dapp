@@ -1,5 +1,5 @@
 import loadJSON from "@/utils/http-utils";
-const { default: BigNumber } = require("bignumber.js");
+import BigNumber from "bignumber.js";
 
 export const zap = {
   data() {
@@ -682,7 +682,7 @@ export const zap = {
       return allowanceValue >= checkedAllowanceValue;
     },
     async approveGaugeForStake() {
-      let approveValue = new BigNumber(10).pow(24);
+      let approveValue = new BigNumber(10).pow(24).toFixed(0);
       this.showWaitingModal("Approving gauge in process");
 
       console.log(approveValue, "approveValue");

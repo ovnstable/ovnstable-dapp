@@ -37,23 +37,23 @@ Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;
 
-Vue.use(VueYandexMetrika, {
-  id: 86928892,
-  router: router,
-  env: process.env.NODE_ENV,
-  options: {
-    clickmap: true,
-    trackLinks: true,
-    accurateTrackBounce: true,
-    webvisor: false
-  }
-})
+// Vue.use(VueYandexMetrika, {
+//   id: 86928892,
+//   router: router,
+//   env: process.env.NODE_ENV,
+//   options: {
+//     clickmap: true,
+//     trackLinks: true,
+//     accurateTrackBounce: true,
+//     webvisor: false
+//   }
+// })
 
-Vue.use(VueGtm, {
-  id: 'GTM-P265VFK',
-  enabled: true,
-  vueRouter: router
-});
+// Vue.use(VueGtm, {
+//   id: 'GTM-P265VFK',
+//   enabled: true,
+//   vueRouter: router
+// });
 
 
 if (process.env.NODE_ENV === 'production') {

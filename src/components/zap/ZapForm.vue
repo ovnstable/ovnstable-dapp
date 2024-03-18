@@ -943,6 +943,8 @@ export default defineComponent({
       let poolOutputTokens = this.selectedOutputTokens;
       let formulaInputTokens = [];
       let formulaOutputTokens = [];
+
+      console.log(userInputTokens, "---userInputTokens");
       for (let i = 0; i < userInputTokens.length; i++) {
         let inputToken = userInputTokens[i];
         let userInputToken = inputToken.selectedToken;

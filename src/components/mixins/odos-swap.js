@@ -924,11 +924,6 @@ export const odosSwap = {
       if (this.tokenSeparationScheme === "POOL_SWAP") {
         return this.innerGetDefaultSecondtokenByIndex(0);
       }
-
-      console.error(
-        "TOKEN SEPARATION SCHEME NOT FOUND FOR GET DEFAULT",
-        this.tokenSeparationScheme
-      );
     },
     getSecondDefaultSecondtoken() {
       if (this.tokenSeparationScheme === "OVERNIGHT_SWAP") {
@@ -940,19 +935,9 @@ export const odosSwap = {
       if (this.tokenSeparationScheme === "POOL_SWAP") {
         return this.innerGetDefaultSecondtokenByIndex(1);
       }
-
-      console.error(
-        "TOKEN SEPARATION SCHEME NOT FOUND FOR GET SECOND DEFAULT",
-        this.tokenSeparationScheme
-      );
     },
     innerGetDefaultSecondtokenByIndex(index) {
-      console.log(this.secondTokens, "-this.secondTokens");
       if (!this.secondTokens.length || this.secondTokens.length < index + 1) {
-        console.log(
-          "Inner get default token by index fail, secondTokens is empty or index not exist",
-          this.secondTokens
-        );
         return null;
       }
 
@@ -960,10 +945,6 @@ export const odosSwap = {
     },
     innerGetDefaultSecondtokenBySymobl(symbolName) {
       if (!this.secondTokens.length) {
-        console.log(
-          "Inner get default token by symbol fail, secondTokens is empty.",
-          this.secondTokens
-        );
         return null;
       }
 

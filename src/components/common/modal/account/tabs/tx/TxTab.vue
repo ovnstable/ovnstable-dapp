@@ -32,7 +32,6 @@ export default {
         ...mapGetters('transaction', ['transactions']),
 
         transactionsList() {
-            console.log(this.transactions, 'transactions')
             return this.transactions.slice().reverse()
         },
     },

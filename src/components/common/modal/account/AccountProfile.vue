@@ -258,7 +258,6 @@ export default {
             let url = "https://app.overnight.fi/api/presale";
             balanceApiService.checkHistoryBalance(url, this.account).then((response) => {
                 if (response.error) {
-                    console.log("checkHistoryBalance failed", response, response.message);
                     this.isHistoryCheckLoading = false;
                     this.historyCheckErrorMessage = response.message;
                     return;
@@ -268,7 +267,6 @@ export default {
                 this.isHistoryCached = true;
                 // save data to local storage
                 localStorage.setItem('historyBalanceChecked', 'true');
-                console.log("checkHistoryBalance success", response);
             }).catch((error) => {
                 console.log("checkHistoryBalance failed", error);
                 this.isHistoryCheckLoading = false;

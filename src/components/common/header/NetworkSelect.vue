@@ -232,7 +232,6 @@ export default {
       this.openedList = false;
     },
     toggleDeprecatedType() {
-      console.log("toggleDeprecatedType", this.isDeprecatedShow);
       this.updateDeprecatedShow(!this.isDeprecatedShow);
     },
     openDeprecatedDocsLink() {

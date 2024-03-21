@@ -77,7 +77,7 @@ export const odosSwap = {
       typeOfPoolScheme: null, // OVN, ALL, null
 
       listOfBuyTokensAddresses: null, // for POOL_SWAP scheme
-      odosReferalCode: 3000000001,
+      odosReferalCode: 3000000004,
 
       swapSessionId: null
     };

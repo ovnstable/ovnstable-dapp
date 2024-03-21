@@ -75,7 +75,6 @@ export default {
                 this.isCopied = true;
 
                 // Log the value of isCopied to the console
-                console.log(this.isCopied);
 
                 // Use a setTimeout to reset isCopied after a certain time (e.g., 2 seconds)
                 setTimeout(() => {

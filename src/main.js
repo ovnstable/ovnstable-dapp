@@ -89,7 +89,6 @@ async function initNetwork() {
     if (!window?.ethereum.chainId) return
     const chainId = parseInt(window.ethereum.chainId)?.toString()
     store.dispatch('network/saveNetworkToLocalStore', chainId, {root: true});
-    console.log('main created networkId: ', networkID);
   } catch (e) {
     console.log("Error when init network:", e)
     //ignore

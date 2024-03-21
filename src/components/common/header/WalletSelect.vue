@@ -291,7 +291,6 @@ export default {
     },
 
     toggleDeprecatedType() {
-      console.log("toggleDeprecatedType", this.isDeprecatedShow);
       this.updateDeprecatedShow(!this.isDeprecatedShow);
     },
 

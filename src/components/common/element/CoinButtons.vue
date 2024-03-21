@@ -170,7 +170,6 @@ export default defineComponent({
     initNeededModal() {
       if (this.$route.query.symbol) {
         setTimeout(() => {
-          console.log("this.$route.query.asset", this.$route.query.symbol);
           if (this.$route.query.symbol === "wUSD+") {
             this.swapWusdAction();
           } else if (this.$route.query.symbol === "DAI+") {

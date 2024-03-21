@@ -443,6 +443,8 @@ export const zap = {
       let abiGaugeContractFile = await loadJSON(
         `/contracts/${this.zapPoolRoot.chainName}/${this.currentZapPlatformContractType.name}Gauge.json`
       );
+
+      console.log(abiGaugeContractFile, "--abiGaugeContractFile");
       this.gaugeContract = this._loadContract(
         abiGaugeContractFile,
         this.web3,

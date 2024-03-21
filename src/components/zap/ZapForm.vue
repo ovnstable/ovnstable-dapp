@@ -1077,6 +1077,7 @@ export default defineComponent({
         referralCode: this.odosReferalCode
       };
 
+      console.log(requestData, "---this.requestData");
       this.swapRequest(requestData)
         .then(async (data) => {
           let assembleData = {
@@ -1456,9 +1457,11 @@ export default defineComponent({
         gasPrice: this.gasPriceGwei
       };
 
+      console.log(zapPool, "----zapPool");
       console.log(txData, "---txData");
       console.log(gaugeData, "---gaugeData");
       console.log(params, "---params");
+      console.log(this.zapContract, "---this.zapContract");
       this.zapContract.methods
         .zapIn(txData, gaugeData)
         .send(params)

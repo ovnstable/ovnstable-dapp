@@ -77,7 +77,7 @@ export const odosSwap = {
       typeOfPoolScheme: null, // OVN, ALL, null
 
       listOfBuyTokensAddresses: null, // for POOL_SWAP scheme
-      odosReferalCode: 3000000004,
+      odosReferalCode: 7777777,
 
       swapSessionId: null
     };
@@ -208,7 +208,6 @@ export const odosSwap = {
           this.isChainsLoading = false;
         })
         .catch((e) => {
-          console.log("Error load chains", e);
           this.isChainsLoading = false;
         });
     },
@@ -983,14 +982,6 @@ export const odosSwap = {
       let actualGasPriceObject = await odosApiService.getActualGasPrice(
         networkId
       );
-      console.log(
-        this.getOdosLogMsg({
-          message: "Actual price for gas.",
-          swapSession: this.swapSessionId,
-          data: actualGasPriceObject
-        })
-      );
-
       if (
         (this.networkName === "polygon" || this.networkName === "bsc") &&
         actualGasPriceObject.prices &&
@@ -1005,13 +996,6 @@ export const odosSwap = {
         actualGasPriceObject.prices &&
         actualGasPriceObject.prices.length
       ) {
-        console.error(
-          this.getOdosLogMsg({
-            message: "Actual price for gas when not found base fee.",
-            swapSession: this.swapSessionId,
-            data: actualGasPriceObject
-          })
-        );
         return actualGasPriceObject.prices[0].fee;
       }
 
@@ -1089,10 +1073,6 @@ export const odosSwap = {
     maxAll() {
       for (let i = 0; i < this.selectedInputTokens.length; i++) {
         let token = this.selectedInputTokens[i];
-        console.log(
-          token.selectedToken.balanceData.balance,
-          "token.selectedToken.balanceData.balance"
-        );
         this.updateTokenValue(token, token.selectedToken.balanceData.balance);
       }
     },
@@ -1120,10 +1100,6 @@ export const odosSwap = {
         if (
           selectedToken.address === "0x0000000000000000000000000000000000000000"
         ) {
-          console.log(
-            "Check approve in update value not available. its a root token: ",
-            token
-          );
           selectedToken.approveData.approved = true;
           return;
         }
